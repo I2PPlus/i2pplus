@@ -70,7 +70,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
                 _consecNotRunning = 0;
             } else {
                 if (_consecNotRunning++ >= MAX_CONSEC_NOT_RUNNING) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Closing tunnels on idle");
                     _util.disconnect();
                     _mgr.addMessage(_util.getString("No more torrents running.") + ' ' +
@@ -109,7 +109,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         int obtunnels = Integer.parseInt(_util.getI2CPOptions().get("outbound.quantity"));
         if (ibtunnels > 1 || obtunnels > 1)
 //            _mgr.addMessage(_util.getString("Idle connection, reducing tunnel count; will restore tunnels when needed."));
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Reducing I2PSnark tunnels on idle");
         setTunnels("1", "1", "0", "0");
     }
@@ -119,7 +119,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      *  @param peerCount greater than zero
      */
     private void restoreTunnels(int peerCount) {
-        if (_isIdle && _log.shouldLog(Log.INFO))
+        if (_isIdle && _log.shouldInfo())
             _log.info("Restoring tunnels on activity");
         _isIdle = false;
         Map<String, String> opts = _util.getI2CPOptions();
@@ -170,7 +170,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         if (mgr != null) {
             I2PSession sess = mgr.getSession();
             if (sess != null) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Tunnel settings updated: [" + i + " inbound / " + o + " outbound / " + ib + " inbound backup / " + ob + " outbound backup]");
                 Properties newProps = new Properties();
                 newProps.setProperty("inbound.quantity", i);

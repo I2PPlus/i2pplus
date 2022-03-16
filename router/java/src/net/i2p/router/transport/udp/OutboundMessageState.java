@@ -475,7 +475,7 @@ class OutboundMessageState implements CDPQEntry {
             System.arraycopy(_messageBuf, start, out, outOffset, toSend);
             return toSend;
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error: " + start + '/' + end + '/' + outOffset + '/' + out.length);
         }
         return -1;

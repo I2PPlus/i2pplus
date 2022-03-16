@@ -81,7 +81,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
         lastActivityOn = -1;
         startedOn = Clock.getInstance().now();
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("OutproxyRunner started");
         _runnerId = __runnerId.incrementAndGet();
         setName("OutproxyRunner " + _runnerId);
@@ -142,7 +142,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                 // this does not increment totalReceived
                 out.write(initialSocketData);
             }
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Initial data (" + (initialI2PData != null ? initialI2PData.length : 0)
                            + " bytes) written to the outproxy, " + (initialSocketData != null ? initialSocketData.length : 0)
                            + " bytes written to the socket, starting forwarders...");
@@ -160,12 +160,12 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                     finishLock.wait();
                 }
             }
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("At least one forwarder completed, closing and joining");
 
             // this task is useful for the httpclient
             if (onTimeout != null) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Runner has a timeout job, totalReceived = " + totalReceived
                                + " totalSent = " + totalSent + " job = " + onTimeout);
                 // Run even if totalSent > 0, as that's probably POST data.
@@ -176,32 +176,32 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             // now one connection is dead - kill the other as well, after making sure we flush
             close(out, in, i2pout, i2pin, s, i2ps, t1, t2);
         } catch (InterruptedException ex) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Interrupted", ex);
         } catch (SSLException she) {
             _log.error("SSL error", she);
         } catch (IOException ex) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Error forwarding", ex);
         } catch (IllegalStateException ise) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("gnu?", ise);
         } catch (RuntimeException e) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Internal error", e);
         } finally {
             try {
                 if (s != null)
                     s.close();
             } catch (IOException ex) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Could not close java socket", ex);
             }
             if (i2ps != null) {
                 try {
                     i2ps.close();
                 } catch (IOException ex) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Could not close Socket", ex);
                 }
             }
@@ -281,7 +281,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             String from = "todo";
             String to = "todo";
 
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 _log.debug(direction + ": Forwarding between "
                            + from + " and " + to);
             }
@@ -301,7 +301,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                     }
 
                     if (in.available() == 0) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug(direction + ": " + len + " bytes flushed through " + (_toI2P ? "to " : "from ")
                                        + "outproxy");
                         if (_toI2P) {
@@ -323,39 +323,39 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                 // this *will* occur when the other threads closes the socket
                 synchronized (finishLock) {
                     if (!finished) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug(direction + ": Socket closed - error reading and writing",
                                        ex);
                     }
                 }
             } catch (InterruptedIOException ex) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn(direction + ": Closing connection due to timeout (error: \""
                               + ex.getMessage() + "\")");
             } catch (IOException ex) {
                 if (!finished) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn(direction + ": Error forwarding", ex);
                 }
             } finally {
                 _cache.release(ba);
-                if (_log.shouldLog(Log.INFO)) {
+                if (_log.shouldInfo()) {
                     _log.info(direction + ": Done forwarding between ["
                               + from + "] and [" + to + "]");
                 }
                 try {
                     in.close();
                 } catch (IOException ex) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn(direction + ": Error closing input stream", ex);
                 }
                 try {
                     if (!(onTimeout != null && (!_toI2P) && totalReceived <= 0))
                         out.close();
-                    else if (_log.shouldLog(Log.INFO))
+                    else if (_log.shouldInfo())
                         _log.info(direction + ": Not closing so we can write the error message");
                 } catch (IOException ioe) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn(direction + ": Error flushing to close", ioe);
                 }
                 synchronized (finishLock) {

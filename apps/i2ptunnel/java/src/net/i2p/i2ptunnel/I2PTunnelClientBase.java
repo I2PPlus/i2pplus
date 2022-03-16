@@ -219,7 +219,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                            Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.newDestOnResume"))) {
                     // build a new socket manager and a new dest if the session is closed.
                     getTunnel().removeSession(sess);
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("[" + getTunnel().getClientOptions().getProperty("inbound.nickname") + "] Built new destination for client tunnel on resume");
                     // make sure the old one is closed
                     // if it's shared client, it will be destroyed in getSocketManager()
@@ -284,7 +284,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         if (socketManager != null && !socketManager.isDestroyed()) {
             I2PSession s = socketManager.getSession();
             if (s.isClosed() && _socketManagerState != SocketManagerState.INIT) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Building a new socket manager as old one closed [s=" + s + "]");
                 tunnel.removeSession(s);
                 // make sure the old one is closed
@@ -296,11 +296,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
    since we enabled ratchet by default, we're not compatible with ancient servers anyway.
                 // FIXME may not be the right place for this
                 I2PSession sub = addSubsession(tunnel);
-                if (sub != null && _log.shouldLog(Log.WARN))
+                if (sub != null && _log.shouldWarn())
                     _log.warn("Added subsession " + sub);
 */
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Not building a new socket manager as old one is open [s=" + s + "]");
                 // If some other tunnel created the session, we need to add it
                 // as our session too.
@@ -308,14 +308,14 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 tunnel.addSession(s);
             }
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Building a new socket manager as there is no other one");
             socketManager = buildSocketManager(tunnel, pkf);
 /*
    since we enabled ratchet by default, we're not compatible with ancient servers anyway.
 
             I2PSession sub = addSubsession(tunnel);
-            if (sub != null && _log.shouldLog(Log.WARN))
+            if (sub != null && _log.shouldWarn())
                 _log.warn("Added subsession: " + sub);
 */
         }
@@ -347,7 +347,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             return socketManager.addSubsession(null, props);
         } catch (I2PSessionException ise) {
             Log log = tunnel.getContext().logManager().getLog(I2PTunnelClientBase.class);
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Failed to add subsession:", ise);
             return null;
         }
@@ -452,7 +452,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 try { fis.close(); } catch (IOException ioe) {}
         }
         sockManager.setName("Client");
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Built a new socket manager: " + sockManager.getSession());
         tunnel.addSession(sockManager.getSession());
         return sockManager;
@@ -557,7 +557,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     private void startup() {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
 //            _log.debug("Startup " + _clientId, new Exception("I did it"));
             _log.debug("Startup [ClientID " + _clientId + "]");
         // prevent JVM exit when running outside the router
@@ -866,7 +866,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *  @return success
      */
     public boolean close(boolean forced) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("close() called: forced = " + forced + " open = " + open + " sockMgr = " + sockMgr);
         if (!open) return true;
         // FIXME: here we might have to wait quite a long time if

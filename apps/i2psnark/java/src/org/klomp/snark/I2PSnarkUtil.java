@@ -261,7 +261,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (_manager == null) {
             _connecting = true;
             // try to find why reconnecting after stop
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Connecting to I2P...", new Exception("I did it"));
 //                _log.debug("Connecting to I2P...");
             Properties opts = _context.getProperties();
@@ -403,7 +403,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         _manager = null;
         _banlist.clear();
         if (mgr != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Disconnecting from I2P...", new Exception("I did it"));
             mgr.destroySocketManager();
         }
@@ -479,7 +479,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param retries if &gt; 0, set timeout to a few seconds
      */
     public File get(String url, boolean rewrite, int retries) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Fetching [" + url + "] proxy=" + _proxyHost + ":" + _proxyPort + ": " + _shouldProxy);
         File out = null;
         try {
@@ -523,11 +523,11 @@ public class I2PSnarkUtil implements DisconnectListener {
                                  .replace("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p", "torrfreedom.i2p")
                                  .replace("http://", "");
         if (get.fetch(timeout)) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Request successful [" + convertedurl.substring(0, truncate) + "...] (Size: " + out.length() + " bytes)");
             return out;
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Timeout (" + timeout / 1000 + "s) requesting [" + convertedurl.substring(0, truncate) + "...]");
             out.delete();
             return null;
@@ -543,7 +543,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @since 0.9.4
      */
     public byte[] get(String url, boolean rewrite, int retries, int initialSize, int maxSize) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Fetching [" + url + "] to memory");
         String fetchURL = url;
         if (rewrite)
@@ -573,11 +573,11 @@ public class I2PSnarkUtil implements DisconnectListener {
                                  .replace("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p", "torrfreedom.i2p")
                                  .replace("http://", "");
         if (get.fetch(timeout)) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Request successful [" + convertedurl.substring(0, truncate) + "...] (Size: " + out.size() + " bytes)");
             return out.toByteArray();
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Timeout (" + timeout / 1000 + "s) requesting [" + convertedurl.substring(0, truncate) + "...]");
             return null;
         }
@@ -647,7 +647,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                         if (b != null) {
                             //Hash h = new Hash(b);
                             Hash h = Hash.create(b);
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Using existing session for lookup of [" + ip + "]");
                             try {
                                 return sess.lookupDest(h, 15*1000);
@@ -656,11 +656,11 @@ public class I2PSnarkUtil implements DisconnectListener {
                         }
                     }
                 }
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Using naming service for lookup of [" + ip + "]");
                 return _context.namingService().lookup(ip);
             }
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Creating Destination for [" + ip + "]");
             try {
                 return new Destination(ip.substring(0, ip.length()-4)); // sans .i2p
@@ -668,7 +668,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                 return null;
             }
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Creating Destination for [" + ip + "]");
             try {
                 return new Destination(ip);

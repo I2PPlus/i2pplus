@@ -78,7 +78,7 @@ public class ShellService implements ClientApp {
 
         ArrayList<String> procArgs = trimArgs(args);
 
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             _log.debug("ShellService: Process: " + procArgs.toString());
             _log.debug("ShellService: Name: " + this.getName() + ", DisplayName: " + this.getDisplayName());
         }
@@ -87,12 +87,12 @@ public class ShellService implements ClientApp {
 
         File exe = new File(_commandPath);
         if (!exe.exists()) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("ShellService: Command does not exist: " + _commandPath);
             throw new RuntimeException("Command does not exist: " + _commandPath);
         }
         if (!exe.canExecute()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("ShellService: Command is not executable: " + _commandPath + " marking it executable");
             exe.setExecutable(true);
         }
@@ -127,7 +127,7 @@ public class ShellService implements ClientApp {
         _outputLog = new File(pluginDir, "output.log");
         _pb.redirectOutput(_outputLog);
         _pb.redirectError(_errorLog);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("ShellService: Logs: " + _errorLog.getAbsolutePath() + ", " + _outputLog.getAbsolutePath());
 
 
@@ -156,7 +156,7 @@ public class ShellService implements ClientApp {
                     i++;
                 }
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Adding arg: " + args[i]);
                 newargs.add(args[i]);
             }
@@ -188,17 +188,17 @@ public class ShellService implements ClientApp {
     public synchronized void startup() throws Throwable {
         File exe = new File(_commandPath);
         if (!exe.exists()) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("ShellService: Command does not exist: " + _commandPath);
             throw new RuntimeException("Command does not exist: " + _commandPath);
         }
         if (!exe.canExecute()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("ShellService: Command is not executable: " + _commandPath + " marking it executable");
             exe.setExecutable(true);
         }
         if (getName().equals("unnamedClient")) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("ShellService: ShellService has no name, not starting");
             return;
         }
@@ -206,19 +206,19 @@ public class ShellService implements ClientApp {
         boolean start = isProcessStopped();
         if (start) {
             _p = _pb.start();
-            if (!_p.isAlive() && _log.shouldLog(Log.ERROR))
+            if (!_p.isAlive() && _log.shouldError())
                 _log.error("ShellService: Error getting Process of application from recently instantiated shellservice " + _pb.command()+" "+_p.exitValue());
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("ShellService: Started " + getName() + "process");
         }
         if (_p.isAlive())
             changeState(ClientAppState.RUNNING, "ShellService: " + getName() + " started");
         Boolean reg = _cmgr.register(this);
         if (reg) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("ShellService: " + getName() + " registered with the router");
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("ShellService: " + getName() + " failed to register with the router");
             _cmgr.unregister(this);
             _cmgr.register(this);
@@ -247,7 +247,7 @@ public class ShellService implements ClientApp {
     public boolean isProcessRunning() {
         if (_p == null)
             return false;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("ShellService: Checking process status " + getName() + _p.isAlive());
         return _p.isAlive();
     }
@@ -259,13 +259,13 @@ public class ShellService implements ClientApp {
      */
     public synchronized void shutdown(String[] args) throws Throwable {
         if (getName().equals("unnamedClient")) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("ShellService: ShellService has no name, not shutting down");
             return;
         }
         changeState(ClientAppState.STOPPING, "ShellService: " + getName() + " stopping");
         if (_p != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("ShellService: Stopping " + getName() + "process started with ShellService " + getName() + "...");
             _p.destroy();
         }
@@ -282,7 +282,7 @@ public class ShellService implements ClientApp {
      */
     public ClientAppState getState() {
         if (!isProcessRunning()) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("ShellService: Process is not running " + getName());
             changeState(ClientAppState.STOPPED, "ShellService: " + getName() + " stopped");
             _cmgr.unregister(this);

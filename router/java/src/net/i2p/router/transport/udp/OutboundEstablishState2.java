@@ -107,7 +107,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _mtu = mtu;
         // TODO if RI too big, give up now
         if (addr.getIntroducerCount() > 0) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("new outbound establish to " + remotePeer.calculateHash() + ", with address: " + addr);
             _currentState = OutboundState.OB_STATE_PENDING_INTRO;
         } else {
@@ -367,7 +367,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     public synchronized void receiveSessionCreated(UDPPacket packet) throws GeneralSecurityException {
         ////// todo fix state check
         if (_currentState == OutboundState.OB_STATE_VALIDATION_FAILED) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Session created already failed");
             return;
         }

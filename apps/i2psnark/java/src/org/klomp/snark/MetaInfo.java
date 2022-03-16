@@ -153,7 +153,7 @@ public class MetaInfo
    */
   public MetaInfo(Map<String, BEValue> m) throws InvalidBEncodingException
   {
-    if (_log.shouldLog(Log.DEBUG))
+    if (_log.shouldDebug())
         _log.debug("Creating a metaInfo: " + m, new Exception("source"));
     BEValue val = m.get("announce");
     // Disabled check, we can get info from a magnet now
@@ -616,7 +616,7 @@ public class MetaInfo
         // to Storage.putPiece()
 //        _log.warn("Error checking piece " + piece + " for " + name, ioe);
 
-    if (_log.shouldLog(Log.DEBUG))
+    if (_log.shouldDebug())
         _log.debug("Error checking piece [" + piece + "] for " + name);
         return false;
     }
@@ -785,7 +785,7 @@ public class MetaInfo
   private byte[] calculateInfoHash()
   {
     Map<String, BEValue> info = createInfoMap();
-    if (_log.shouldLog(Log.DEBUG)) {
+    if (_log.shouldDebug()) {
         StringBuilder buf = new StringBuilder(128);
         buf.append("info: ");
         for (Map.Entry<String, BEValue> entry : info.entrySet()) {
@@ -800,7 +800,7 @@ public class MetaInfo
     //_log.debug("info bencoded: [" + Base64.encode(infoBytes, true) + "]");
         MessageDigest digest = SHA1.getInstance();
         byte hash[] = digest.digest(infoBytes);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("[InfoHash " + I2PSnarkUtil.toHex(hash) + "]");
         return hash;
   }

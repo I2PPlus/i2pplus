@@ -45,7 +45,7 @@ class DevSU3UpdateRunner extends UpdateRunner {
             return;
         }
         String zipURL = _currentURI.toString();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Starting signed dev update URL: " + zipURL);
         try {
             // 40 retries!!

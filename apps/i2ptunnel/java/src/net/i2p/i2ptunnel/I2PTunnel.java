@@ -233,7 +233,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
             case NOGUI:  // --nogui
                 gui = false;
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn(getPrefix() + "The `-nogui' option of I2PTunnel is deprecated.\n"
                           + "Use `-cli', `-nocli' (aka `-wait') or `-die' instead.");
 
@@ -373,7 +373,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     void addSession(I2PSession session) {
         if (session == null) return;
         boolean added = _sessions.add(session);
-        if (added && _log.shouldLog(Log.INFO))
+        if (added && _log.shouldInfo())
 //            _log.info(getPrefix() + " Session added: " + session, new Exception());
             _log.info("Session added: " + session);
     }
@@ -384,7 +384,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     void removeSession(I2PSession session) {
         if (session == null) return;
         boolean removed = _sessions.remove(session);
-        if (removed && _log.shouldLog(Log.INFO))
+        if (removed && _log.shouldInfo())
 //            _log.info(getPrefix() + " Session removed: " + session, new Exception());
             _log.info("Session removed: " + session);
     }
@@ -409,11 +409,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             tsk.setId(next_task_id);
             next_task_id++;
             tasks.add(tsk);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
 //                _log.info(getPrefix().replace("]:", "]") + " Adding task: " + tsk);
                 _log.info("Adding task: " + tsk);
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
 //                _log.info(getPrefix().replace("]:", "]") + " Not adding task that isn't open: " + tsk);
                 _log.info("Not adding task that isn't open: " + tsk);
         }
@@ -1619,7 +1619,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             if (args[argindex].equalsIgnoreCase("all")) {
                 boolean error = false;
                 if (tasks.isEmpty()) {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info(getPrefix() + " runClose(all) no tasks");
                 }
                 for (I2PTunnelTask t : tasks) {
@@ -1863,7 +1863,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         _log.debug(getPrefix() + "closetask(): looking for task " + num);
             for (I2PTunnelTask t : tasks) {
                 int id = t.getId();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug(getPrefix() + "closetask(): parsing task " + id + " (" + t.toString() + ")");
                 if (id == num) {
                     closed = closetask(t, mode, l);
@@ -1881,7 +1881,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *
      */
     private boolean closetask(I2PTunnelTask t, CloseMode mode, Logging l) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Closing task " + t.getId() + " mode: " + mode);
         //l.log("Closing task " + t.getId() + (forced ? " forced..." : "..."));
         boolean success;
@@ -1892,7 +1892,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         else  // DESTROY
             success = t.destroy();
         if (success) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Task " + t.getId() + " closed.");
             //l.log("Task " + t.getId() + " closed.");
         }
@@ -1920,7 +1920,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void log(String s) {
         System.out.println(s);
-        //if (_log.shouldLog(Log.INFO))
+        //if (_log.shouldInfo())
         //    _log.info(getPrefix() + "Display: " + s);
     }
 
@@ -2041,14 +2041,14 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 result.fromByteArray(content);
                 return result;
             } catch (RuntimeException ex) {
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("File is not a binary destination - trying base64");
                 try {
                     byte decoded[] = Base64.decode(new String(content));
                     result.fromByteArray(decoded);
                     return result;
                 } catch (DataFormatException dfe) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("File is not a base64 destination either - failing!");
                     return null;
                 }
@@ -2087,7 +2087,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 session.connect();
                 d = session.lookupDest(name);
             } catch (I2PSessionException ise) {
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("Lookup via router failed", ise);
             } finally {
                 if (session != null) {

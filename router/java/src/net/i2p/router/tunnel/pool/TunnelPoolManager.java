@@ -139,7 +139,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {
             return pool.selectTunnel();
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Want the Inbound tunnel for " + destination.toBase32() +
                      " but there isn't a pool?");
         return null;
@@ -215,7 +215,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {
             return pool.selectTunnel(closestTo);
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Want the Inbound tunnel for " + destination.toBase32() +
                      " but there isn't a pool?");
         return null;
@@ -415,7 +415,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {
         Hash dest = client.calculateHash();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Building tunnels for client " + client.toBase32() + ": " + settings);
         TunnelPool inbound = null;
         TunnelPool outbound = null;
@@ -468,14 +468,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             TunnelPool inbound = _clientInboundPools.get(h);
             TunnelPool outbound = _clientOutboundPools.get(h);
             if (inbound != null || outbound != null) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Already have alias " + dest.toBase32());
                 return false;
             }
             TunnelPool eInbound = _clientInboundPools.get(e);
             TunnelPool eOutbound = _clientOutboundPools.get(e);
             if (eInbound == null || eOutbound == null) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Primary not found " + existingClient);
                 return false;
             }
@@ -492,7 +492,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             inbound.startup();
             outbound.startup();
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Added " + dest.toBase32() + " as alias for " + existingClient.toBase32() +  settings);
         return true;
     }
@@ -562,11 +562,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Removing tunnels for client " + destination.toBase32());
         if (_context.clientManager().isLocal(destination)) {
             // race with buildTunnels() on restart of a client
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
 //                _log.warn("Not removing pool still registered with client manager: " + destination.toBase32(), new Exception("i did it"));
                 _log.warn("Not removing pool still registered with client manager: " + destination.toBase32());
             return;
@@ -789,7 +789,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         for (TunnelInfo tun : pool.listTunnels()) {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(1).equals(peer)) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Removing Outbound tunnel as first hop [" + peer.toBase64().substring(0,6) + "] is banlisted" + tun);
                 pool.tunnelFailed(tun, peer);
             }
@@ -805,7 +805,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         for (TunnelInfo tun : pool.listTunnels()) {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(len - 2).equals(peer)) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Removing Inbound tunnel as previous hop [" + peer.toBase64().substring(0,6) + "] is banlisted" + tun);
                 pool.tunnelFailed(tun, peer);
             }

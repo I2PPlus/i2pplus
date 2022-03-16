@@ -159,10 +159,10 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             t.setPriority(Thread.MAX_PRIORITY);
             t.run();
         } catch (IOException ex) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error connecting: " + ex.getMessage());
         } catch (I2PException ex) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error connecting: " + ex.getMessage());
         } finally {
             // only because we are running it inline
@@ -180,7 +180,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         synchronized(_addrs) {
             int size = _addrs.size();
             if (size <= 0) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("No client targets?!");
                 return null;
             }

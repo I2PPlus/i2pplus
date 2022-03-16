@@ -327,7 +327,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public String checkAvailable(UpdateType type, String id, long maxWait) {
         if (isCheckInProgress(type, id) || isUpdateInProgress(type, id)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Check or update already in progress for: " + type + ' ' + id);
             return null;
         }
@@ -338,7 +338,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 synchronized(_activeCheckers) {
                     t = r.checker.check(type, r.method, id, current, maxWait);
                     if (t != null) {
-                         if (_log.shouldLog(Log.INFO))
+                         if (_log.shouldInfo())
                              _log.info("Starting " + r, new Exception());
                         _activeCheckers.add(t);
                         t.start();
@@ -371,7 +371,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public void check(UpdateType type, String id) {
         if (isCheckInProgress(type, id)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Check already in progress for: " + type + ' ' + id);
             return;
         }
@@ -381,7 +381,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 synchronized(_activeCheckers) {
                     UpdateTask t = r.checker.check(type, r.method, id, current, DEFAULT_CHECK_TIME);
                     if (t != null) {
-                         if (_log.shouldLog(Log.INFO))
+                         if (_log.shouldInfo())
                              _log.info("Starting " + r, new Exception());
                         _activeCheckers.add(t);
                         t.start();
@@ -596,7 +596,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             va = new VersionAvailable("", "", method, uris);
             _available.putIfAbsent(item, va);
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Install plugin: " + name + ' ' + va);
         return update(PLUGIN, name);
     }
@@ -640,7 +640,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public boolean update(UpdateType type, String id, long maxTime) {
         if (isCheckInProgress(type, id)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Check already in progress for: " + type + ' ' + id);
             return false;
         }
@@ -656,14 +656,14 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     private boolean update_fromCheck(UpdateType type, String id, long maxTime) {
         if (isUpdateInProgress(type, id)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Update already in progress for: " + type + ' ' + id);
             return false;
         }
         UpdateItem ui = new UpdateItem(type, id);
         VersionAvailable va = _available.get(ui);
         if (va == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No version available for: " + type + ' ' + id);
             return false;
         }
@@ -695,21 +695,21 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     if (t != null) {
                         // race window here
                         //  store the remaining ones for retrying
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Starting " + r, new Exception());
                         _downloaders.put(t, toTry);
                         t.start();
                         return t;
                     } else {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Updater refused: " + r + " for " + meth + ' ' + e.getValue());
                     }
                 }
             }
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Nothing left to try for: " + r);
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Nothing left to try for: " + ui);
         return null;
     }
@@ -723,49 +723,49 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if ((type == ROUTER_SIGNED || type == ROUTER_UNSIGNED ||
              type == ROUTER_SIGNED_SU3 || type == ROUTER_DEV_SU3) &&
             NewsHelper.dontInstall(_context)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Ignoring registration for " + type + ", router updates disabled");
             return;
         }
         if (type == ROUTER_SIGNED_SU3 && !ConfigUpdateHandler.USE_SU3_UPDATE) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Ignoring registration for " + type + ", SU3 updates disabled");
             return;
         }
         if (method == TORRENT && !_allowTorrent) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Ignoring torrent registration");
             return;
         }
         RegisteredUpdater ru = new RegisteredUpdater(updater, type, method, priority);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Registering " + ru);
         if (!_registeredUpdaters.add(ru)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Duplicate registration " + ru);
         }
     }
 
     public void unregister(Updater updater, UpdateType type, UpdateMethod method) {
         RegisteredUpdater ru = new RegisteredUpdater(updater, type, method, 0);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Unregistering " + ru);
         _registeredUpdaters.remove(ru);
     }
 
     public void register(Checker updater, UpdateType type, UpdateMethod method, int priority) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, priority);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Registering " + rc);
         if (!_registeredCheckers.add(rc)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Duplicate registration " + rc);
         }
     }
 
     public void unregister(Checker updater, UpdateType type, UpdateMethod method) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, 0);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Unregistering " + rc);
         _registeredCheckers.remove(rc);
     }
@@ -780,7 +780,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     public void register(UpdatePostProcessor upp, UpdateType type, int fileType) {
         Integer key = Integer.valueOf(type.toString().hashCode() ^ fileType);
         UpdatePostProcessor old = _registeredPostProcessors.put(key, upp);
-        if (old != null && _log.shouldLog(Log.WARN))
+        if (old != null && _log.shouldWarn())
             _log.warn("Duplicate registration " + upp);
     }
 
@@ -833,17 +833,17 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
             VersionAvailable newVA = new VersionAvailable(newVersion, minVersion, method, updateSources);
             Version old = _installed.get(ui);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("notifyVersionAvailable " + ui + ' ' + newVA + " old: " + old);
             if (old != null && old.compareTo(newVA) >= 0) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn(ui.toString() + ' ' + old + " already installed");
                 // don't bother updating sources
                 return false;
             }
             old = _downloaded.get(ui);
             if (old != null && old.compareTo(newVA) >= 0) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn(ui.toString() + ' ' + old + " already downloaded");
                 // don't bother updating sources
                 return false;
@@ -852,7 +852,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             if (oldVA != null)  {
                 int comp = oldVA.compareTo(newVA);
                 if (comp > 0) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn(ui.toString() + ' ' + oldVA + " already available");
                     continue;
                 } else if (comp == 0) {
@@ -860,20 +860,20 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     if (oldSources == null) {
                         // merge with existing VersionAvailable
                         // new method
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn(ui.toString() + ' ' + oldVA + " updated with new source method");
                     } else if (!oldSources.containsAll(updateSources)) {
                         // merge with existing VersionAvailable
                         // new sources to existing method
                         for (URI uri : updateSources) {
                             if (!oldSources.contains(uri)) {
-                                if (_log.shouldLog(Log.WARN))
+                                if (_log.shouldWarn())
                                     _log.warn(ui.toString() + ' ' + oldVA + " adding " + uri + " to method " + method);
                                 oldSources.add(uri);
                             }
                         }
                     } else {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn(ui.toString() + ' ' + oldVA + " already available");
                     }
                     continue;
@@ -881,7 +881,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             }
 
             // Use the new VersionAvailable
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(ui.toString() + ' ' + newVA + " now available");
             _available.put(ui, newVA);
             shouldUpdate = true;
@@ -921,11 +921,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                       isUpdateInProgress(ROUTER_SIGNED_SU3) ||
                       isUpdateInProgress(ROUTER_DEV_SU3) ||
                       isUpdateInProgress(ROUTER_UNSIGNED))) {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Updating " + ui + " after notify");
                     update_fromCheck(type, id, DEFAULT_MAX_TIME);
                 } else {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Not updating " + ui + ", update disabled or in progress");
                 }
                 // ConfigUpdateHandler, SummaryHelper, SummaryBarRenderer handle status display
@@ -960,22 +960,22 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         UpdateItem ui = new UpdateItem(type, id);
         Version old = _installed.get(ui);
         VersionAvailable newVA = new VersionAvailable(newVersion, message);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("notifyVersionConstraint " + ui + ' ' + newVA + " old: " + old);
         if (old != null && old.compareTo(newVA) >= 0) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn(ui.toString() + ' ' + old + " already installed");
             return;
         }
         old = _downloaded.get(ui);
         if (old != null && old.compareTo(newVA) >= 0) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn(ui.toString() + ' ' + old + " already downloaded");
             return;
         }
         VersionAvailable oldVA = _available.get(ui);
         if (oldVA != null)  {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn(ui.toString() + ' ' + oldVA + " already available");
             if (oldVA.compareTo(newVA) >= 0)
                 return;
@@ -985,7 +985,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             // replace constrained one
         }
         // Use the new VersionAvailable
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info(ui.toString() + ' ' + newVA + " now available");
         _available.put(ui, newVA);
     }
@@ -994,7 +994,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Called by the Updater after check() was called and all notifyVersionAvailable() callbacks are finished
      */
     public void notifyCheckComplete(UpdateTask task, boolean newer, boolean success) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Checker " + task + " for " + task.getType() + " complete");
         synchronized(_activeCheckers) {
             _activeCheckers.remove(task);
@@ -1070,7 +1070,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param t may be null
      */
     public void notifyAttemptFailed(UpdateTask task, String reason, Throwable t) {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Attempt failed " + task + " for " + task.getType() + ": " + reason, t);
     }
 
@@ -1090,7 +1090,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             if (va != null) {
                 UpdateTask next = retry(ui, va.sourceMap, toTry, DEFAULT_MAX_TIME);  // fixme old maxtime lost
                 if (next != null) {
-                   if (_log.shouldLog(Log.WARN))
+                   if (_log.shouldWarn())
                        _log.warn("Retrying with " + next);
                 }
             }
@@ -1136,7 +1136,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @return true if valid, false if corrupt
      */
     public boolean notifyComplete(UpdateTask task, String actualVersion, File file) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Updater " + task + " for " + task.getType() + " complete");
         boolean rv = false;
         UpdateType utype = task.getType();
@@ -1196,12 +1196,12 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         UpdateItem ui = new UpdateItem(type, id);
         if (version == null) {
             _installed.remove(ui);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(ui + " removed");
             return;
         }
         Version ver = new Version(version);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info(ui + " " + ver + " installed");
         _installed.put(ui, ver);
         Version old = _downloaded.get(ui);
@@ -1220,7 +1220,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private void notifyDownloaded(UpdateType type, String id, String version) {
         UpdateItem ui = new UpdateItem(type, id);
         Version ver = new Version(version);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info(ui + " " + ver + " downloaded");
         _downloaded.put(ui, ver);
         // one trumps the other
@@ -1571,7 +1571,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext(); ) {
                         UpdateTask t = iter.next();
                         if (!t.isRunning()) {
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Failsafe remove checker " + t);
                             iter.remove();
                         }
@@ -1582,7 +1582,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 for (Iterator<UpdateTask> iter = _downloaders.keySet().iterator(); iter.hasNext(); ) {
                     UpdateTask t = iter.next();
                     if (!t.isRunning()) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Failsafe remove downloader " + t);
                         iter.remove();
                     }

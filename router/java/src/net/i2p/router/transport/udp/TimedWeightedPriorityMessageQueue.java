@@ -100,7 +100,7 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
             _bytesQueued[queue] += size;
         }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Added a " + size + " byte message to queue " + queue);
 
         synchronized (_nextLock) {
@@ -144,7 +144,7 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
                         }
                         int sz = _queue[currentQueue].size();
                         _context.statManager().addRateData("udp.messageQueueSize", sz, currentQueue);
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Pulling a message off queue " + currentQueue + " with "
                                        + sz + " remaining");
 
@@ -155,14 +155,14 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
 
                     // nothing waiting, or only choked peers
                     _messagesFlushed[currentQueue] = 0;
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Nothing available on queue " + currentQueue);
                 }
             }
 
             long remaining = blockUntil - _context.clock().now();
             if ( (blockUntil > 0) && (remaining < 0) ) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Nonblocking, or block time has expired");
                 return null;
             }
@@ -174,7 +174,7 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
                         // so we can safely wait for the full period.  otoh,
                         // even if this is true, we might be able to safely
                         // wait, but it doesn't hurt to loop again.
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Waiting for activity (up to " + remaining + "ms)");
                         if (blockUntil < 0)
                             _nextLock.wait();

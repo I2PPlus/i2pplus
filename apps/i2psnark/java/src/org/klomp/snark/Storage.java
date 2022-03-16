@@ -296,7 +296,7 @@ public class Storage implements Closeable
         File[] files = f.listFiles();
         if (files == null)
           {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("WARNING: Skipping '" + f
                         + "' not a normal file.");
             return;
@@ -763,7 +763,7 @@ public class Storage implements Closeable
     if (files == null)
       {
         // Create base as file.
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Creating/Checking file: " + _base);
         // createNewFile() can throw a "Permission denied" IOE even if the file exists???
         // so do it second
@@ -782,7 +782,7 @@ public class Storage implements Closeable
     else
       {
         // Create base as dir.
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Creating/Checking directory: " + _base);
         if (!_base.mkdir() && !_base.isDirectory())
           throw new IOException("Could not create directory " + _base);
@@ -835,21 +835,21 @@ public class Storage implements Closeable
       bitfield = savedBitField;
       needed = metainfo.getPieces() - bitfield.count();
       _probablyComplete = complete();
-      if (_log.shouldLog(Log.INFO))
+      if (_log.shouldInfo())
           _log.info("Found saved state and files unchanged, skipping check");
     } else {
       // the following sets the needed variable
       changed = true;
-      if (_log.shouldLog(Log.INFO))
+      if (_log.shouldInfo())
           _log.info("Forcing integrity check");
       checkCreateFiles(false);
     }
     if (complete()) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Torrent is complete");
     } else {
         // fixme saved priorities
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Still need " + needed + " out of " + metainfo.getPieces() + " pieces");
     }
   }
@@ -1314,7 +1314,7 @@ public class Storage implements Closeable
         else
             rv = new ByteArray(new byte[len]);
     } catch (OutOfMemoryError oom) {
-      if (_log.shouldLog(Log.WARN))
+      if (_log.shouldWarn())
           _log.warn("Out of memory, can't honor request for piece " + piece, oom);
       return null;
     }
@@ -1377,7 +1377,7 @@ public class Storage implements Closeable
                           // Obviously this could take a while.
                           // Once we have written to it, it isn't empty/sparse any more.
                           if (tf.priority >= 0) {
-                              if (_log.shouldLog(Log.INFO))
+                              if (_log.shouldInfo())
                                   _log.info("Ballooning " + tf);
                               tf.balloonFile();
                           } else {
@@ -1437,7 +1437,7 @@ public class Storage implements Closeable
       if (needed > 0) {
         if (listener != null)
             listener.setWantedPieces(this);
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("WARNING: Not really done, missing " + needed
                     + " pieces");
       }

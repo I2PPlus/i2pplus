@@ -193,7 +193,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		Service service;
 		synchronized(lock) {
 			if (!isNATPresent()) {
-				if (_log.shouldLog(Log.WARN))
+				if (_log.shouldWarn())
 					_log.warn("No UP&P device found, detection of the external ip address using the plugin has failed");
 				return null;
 			}
@@ -202,7 +202,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		
 		final String natAddress = getNATAddress(service);
                 if (natAddress == null || natAddress.length() <= 0) {
-			if (_log.shouldLog(Log.WARN))
+			if (_log.shouldWarn())
 				_log.warn("No external address returned");
 			return null;
 		}
@@ -213,14 +213,14 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			short status = DetectedIP.NOT_SUPPORTED;
 			thinksWeAreDoubleNatted = !TransportUtil.isPubliclyRoutable(detectedIP.getAddress(), false);
 			// If we have forwarded a port AND we don't have a private address
-			if (_log.shouldLog(Log.WARN))
+			if (_log.shouldWarn())
 				_log.warn("NATAddress: \"" + natAddress + "\" detectedIP: " + detectedIP + " double? " + thinksWeAreDoubleNatted);
 			if((portsForwarded.size() > 1) && (!thinksWeAreDoubleNatted))
 				status = DetectedIP.FULL_INTERNET;
 			
 			result = new DetectedIP(detectedIP, status);
 			
-			if (_log.shouldLog(Log.WARN))
+			if (_log.shouldWarn())
 				_log.warn("Successful UP&P discovery :" + result);
 			
 			return new DetectedIP[] { result };
@@ -420,7 +420,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		if (fpc != null)
 			fpc.portForwardStatus(removeMap);
 
-		if (_log.shouldLog(Log.WARN))
+		if (_log.shouldWarn())
 			_log.warn("UP&P IGD found : " + name + " UDN: " + udn + " lease time: " + dev.getLeaseTime());
 		
 		if (!subscriptionFailed) {
@@ -512,7 +512,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				Thread.sleep(5000);	
 			} catch (InterruptedException e) {}
 		}
-		if (_log.shouldLog(Log.WARN))
+		if (_log.shouldWarn())
 			_log.warn((isPortForwarded ? "Mapping is successful!" : "Mapping has failed!") + " ("+ nbOfTries + " tries)");
 		return isPortForwarded;
 	}
@@ -534,7 +534,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		if (!dev.hasUDN())
 			return;
                 String udn = dev.getUDN();
-		if (_log.shouldLog(Log.WARN))
+		if (_log.shouldWarn())
 			_log.warn("UP&P device removed : " + dev.getFriendlyName() + " UDN: " + udn);
 		ForwardPortCallback fpc = null;
 		Map<ForwardPort, ForwardPortStatus> removeMap = null;
@@ -549,7 +549,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			   dev.isRootDevice() &&
 			   stringEquals(_router.getFriendlyName(), dev.getFriendlyName()) &&
 			   stringEquals(_router.getUDN(), udn)) {
-				if (_log.shouldLog(Log.WARN))
+				if (_log.shouldWarn())
 					_log.warn("UP&P IGD device removed : " + dev.getFriendlyName());
 				runSearch = true;
 				_router = null;
@@ -1293,7 +1293,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		Action add = service.getAction("AddPortMapping");
 		if(add == null) {
                     if (_serviceLacksAPM) {
-			if (_log.shouldLog(Log.WARN))
+			if (_log.shouldWarn())
 			    _log.warn("Couldn't find AddPortMapping action!");
 		    } else {	
 			_serviceLacksAPM = true;
@@ -1308,7 +1308,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		// bugfix, see below for details
 		String intf = _router.getInterfaceAddress();
 		String us = getOurAddress(intf);
-		if (_log.shouldLog(Log.WARN) && !us.equals(intf))
+		if (_log.shouldWarn() && !us.equals(intf))
 			_log.warn("Requesting port forward to " + us + ':' + port +
 			          " when cybergarage wanted " + intf);
 		add.setArgumentValue("NewInternalClient", us);
@@ -1586,7 +1586,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	private boolean removeMappingV4(Service service, String protocol, int port, ForwardPort fp, boolean noLog) {
 		Action remove = service.getAction("DeletePortMapping");
 		if(remove == null) {
-		    if (_log.shouldLog(Log.WARN))
+		    if (_log.shouldWarn())
 			_log.warn("Couldn't find DeletePortMapping action!");
 		    return false;
 		}
@@ -1668,7 +1668,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	public void onChangePublicPorts(Set<ForwardPort> ports, ForwardPortCallback cb) {
 		Set<ForwardPort> portsToDumpNow = null;
 		Set<ForwardPort> portsToForwardNow = null;
-		if (_log.shouldLog(Log.INFO))
+		if (_log.shouldInfo())
 			_log.info("UP&P Forwarding "+ports.size()+" ports...", new Exception());
 		synchronized(lock) {
 			if(forwardCallback != null && forwardCallback != cb && cb != null) {
@@ -1760,7 +1760,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				portsToForward.addAll(ports);
 			}
 			if(_router == null) {
-				if (_log.shouldLog(Log.WARN))
+				if (_log.shouldWarn())
 					_log.warn("No UPnP router available to update");
 				return; // When one is found, we will do the forwards
 			}
@@ -1790,7 +1790,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
          */
 	private void registerPorts(Set<ForwardPort> portsToForwardNow) {
 		if (_serviceLacksAPM && portsToForwardNow != null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
 			_log.warn("UPnP device does not support port forwarding");
 		    Map<ForwardPort, ForwardPortStatus> map =
 			new HashMap<ForwardPort, ForwardPortStatus>(portsToForwardNow.size());
@@ -1866,7 +1866,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
          *  so throw this in a thread.
          */
 	private void unregisterPorts(Set<ForwardPort> portsToForwardNow) {
-		if (_log.shouldLog(Log.INFO))
+		if (_log.shouldInfo())
 			_log.info("Starting thread to un-forward " + portsToForwardNow.size() + " ports");
 	        Thread t = new I2PThread(new UnregisterPortsThread(portsToForwardNow));
 		t.setName("UPnP Port Closer " + __id.incrementAndGet());

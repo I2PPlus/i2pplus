@@ -39,7 +39,7 @@ class IterativeLookupJob extends JobImpl {
                 // dsrm.getFromHash() can't be trusted - check against the list of
                 // those we sent the search to in _search
                 if (!_search.wasQueried(from)) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("[Job" + _search.getJobId() + "] IterativeLookup -> DbSearchReplyMsg from unqueried peer " + _dsrm);
                     return;
                 }
@@ -101,7 +101,7 @@ class IterativeLookupJob extends JobImpl {
                         oldPeers++;
                     }
                 }
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[Job " + _search.getJobId() + "] IterativeLookup -> DbSearchReplyMsg" +
                               "\n* Processed: " + newPeers + " new, " + oldPeers + " old, and " + invalidPeers + " invalid hashes");
                 long timeSent = _search.timeSent(from);

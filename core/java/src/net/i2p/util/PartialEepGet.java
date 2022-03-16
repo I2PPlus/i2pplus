@@ -182,7 +182,7 @@ public class PartialEepGet extends EepGet {
         int port = url.getPort();
         String path = url.getRawPath();
         String query = url.getRawQuery();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Requesting " + _actualURL);
         // RFC 2616 sec 5.1.2 - full URL if proxied, absolute path only if not proxied
         String urlToSend;
@@ -232,7 +232,7 @@ public class PartialEepGet extends EepGet {
         }
         buf.append("\r\n");
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Request: " + buf.toString());
         return buf.toString();
     }

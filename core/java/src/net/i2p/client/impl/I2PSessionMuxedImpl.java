@@ -380,13 +380,13 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
             try {
                 _msgs.put(new MsgData((int)(msgId & 0xffffffff), size, proto, fromPort, toPort));
             } catch (InterruptedException ie) {}
-            if (!_alive && _log.shouldLog(Log.WARN))
+            if (!_alive && _log.shouldWarn())
                 _log.warn(getPrefix() + "Message available but notifier not running");
         }
 
         @Override
         public void run() {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(getPrefix() + "Starting muxed availability notifier");
             _msgs.clear();
             _alive=true;
@@ -395,7 +395,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
                 try {
                     msg = _msgs.take();
                 } catch (InterruptedException ie) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("I2PSessionMuxedImpl.run() InterruptedException " +
                                     String.valueOf(_msgs.size()) + " Messages, Alive " + _alive);
                     continue;

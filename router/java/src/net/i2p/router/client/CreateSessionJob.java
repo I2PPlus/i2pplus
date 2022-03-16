@@ -32,7 +32,7 @@ class CreateSessionJob extends JobImpl {
         super(context);
         _log = context.logManager().getLog(CreateSessionJob.class);
         _config = config;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("CreateSessionJob for config: " + config);
     }
 
@@ -40,7 +40,7 @@ class CreateSessionJob extends JobImpl {
 
     public void runJob() {
         Hash dest = _config.getDestination().calculateHash();
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Requesting LeaseSet for destination: " + dest);
         ClientTunnelSettings settings = new ClientTunnelSettings(dest);
         Properties props = new Properties();

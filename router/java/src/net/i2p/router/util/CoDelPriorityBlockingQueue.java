@@ -193,7 +193,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     protected void timestamp(E o) {
         super.timestamp(o);
         o.setEnqueueTime(_context.clock().now());
-        if (o.getPriority() < MIN_PRIORITY && _log.shouldLog(Log.WARN))
+        if (o.getPriority() < MIN_PRIORITY && _log.shouldWarn())
             _log.warn(_name + " added item with low priority " + o.getPriority() + ": " + o);
     }
 
@@ -311,7 +311,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         // round down for the stat
         int priority = entry.getPriority() / 100 * 100;
         _context.statManager().addRateData(STAT_DROP + priority, delay);
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("[CDPQ " + _id + "] " + _name + " dropped item \n* Delay: " + delay + "ms; Priority: " +
                       entry.getPriority() + "; Seq: " +
                       entry.getSeqNum() + "\n* Time since first drop: " +

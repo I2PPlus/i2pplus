@@ -282,7 +282,7 @@ public class TestSwarm {
             _totalReceived += len;
             if ( (!_outOfSync) && (len % 32*1024 != 0) ) {
                 _outOfSync = true;
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Out of sync (len=" + len + " after " + (_totalReceived-len) + ")");
             }
             _context.statManager().addRateData("swarm." + getConnectionId() + ".totalReceived", _totalReceived, 0);

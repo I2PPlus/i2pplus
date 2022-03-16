@@ -93,7 +93,7 @@ class UDPSender {
      *  Cannot be restarted (socket is final)
      */
     public synchronized void startup() {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Starting the runner: " + _name);
         _keepRunning = true;
         I2PThread t = new I2PThread(_runner, _name, true);
@@ -188,7 +188,7 @@ class UDPSender {
             _context.statManager().addRateData("udp.sendQueueFailed", remaining, lifetime);
         if (removed > 0)
             _context.statManager().addRateData("udp.sendQueueTrimmed", removed, remaining);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Added the packet onto the queue with " + remaining + " remaining and a lifetime of " + lifetime);
         return remaining;
      ********/
@@ -223,7 +223,7 @@ class UDPSender {
         }
         //size = _outboundQueue.size();
         //_context.statManager().addRateData("udp.sendQueueSize", size, lifetime);
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             _log.debug("Added UDP packet (" + psz + " bytes) to queue with lifetime of " + packet.getLifetime() + "ms");
         }
     }
@@ -232,7 +232,7 @@ class UDPSender {
         //private volatile boolean _socketChanged;
 
         public void run() {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Running the UDP sender");
             //_socketChanged = false;
             while (_keepRunning) {
@@ -243,7 +243,7 @@ class UDPSender {
 
                 UDPPacket packet = getNextPacket();
                 if (packet != null) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Attempting to send UDP packet to known peer" + packet);
                     // ?? int size2 = packet.getPacket().getLength();
                     int size = packet.getPacket().getLength();
@@ -267,7 +267,7 @@ class UDPSender {
 
                     long afterBW = _context.clock().now();
 
-                    //if (_log.shouldLog(Log.DEBUG)) {
+                    //if (_log.shouldDebug()) {
                         //if (len > 128)
                         //    len = 128;
                         //_log.debug("Sending packet: (size="+size + "/"+size2 +")\nraw: " + Base64.encode(packet.getPacket().getData(), 0, size));
@@ -283,16 +283,16 @@ class UDPSender {
                             // synchronization lets us update safely
                             //_log.debug("Break out datagram for " + packet);
                             DatagramPacket dp = packet.getPacket();
-                            //if (_log.shouldLog(Log.DEBUG))
+                            //if (_log.shouldDebug())
                             //    _log.debug("Just before socket.send of " + packet);
                             _socket.send(dp);
-                            //if (_log.shouldLog(Log.DEBUG))
+                            //if (_log.shouldDebug())
                             //    _log.debug("Just after socket.send of " + packet);
                         //}
                         //long sendTime = _context.clock().now() - before;
                         // less than 50 microsec
                         //_context.statManager().addRateData("udp.socketSendTime", sendTime, packet.getLifetime());
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Sent UDP packet " + packet);
                         long throttleTime = afterBW - acquireTime;
                         if (throttleTime > 10)
@@ -303,7 +303,7 @@ class UDPSender {
                         _context.statManager().addRateData("udp.sendPacketSize", size);
                     } catch (IOException ioe) {
                         String ipaddress = packet.getPacket().getAddress().toString().replace("/", "");
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
 //                            _log.warn("Error sending to " + packet.getPacket().getAddress(), ioe);
                             _log.warn("Error sending to " + ipaddress + "\n* Error: " + ioe.getMessage());
                         _context.statManager().addRateData("udp.sendException", 1);
@@ -319,7 +319,7 @@ class UDPSender {
                     packet.release();
                 }
             }
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Stop sending on " + _endpoint);
             _outboundQueue.clear();
         }

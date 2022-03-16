@@ -153,7 +153,7 @@ class MessageReceiver {
                 //if (remaining > 0)
                 //    _context.statManager().addRateData("udp.inboundRemaining", remaining, 0);
                 int size = message.getCompleteSize();
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("Full message received (" + message.getMessageId() + ") after " + message.getLifetime());
                 //long afterRead = -1;
                 try {
@@ -201,7 +201,7 @@ class MessageReceiver {
                     off += len;
                 }
                 if (off != sz) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Hmm, offset of the fragments = " + off + " while the state says " + sz);
                     return null;
                 }
@@ -213,7 +213,7 @@ class MessageReceiver {
             m.setUniqueId(state.getMessageId());
             return m;
         } catch (I2NPMessageException ime) {
-            if (_log.shouldLog(Log.WARN)) {
+            if (_log.shouldWarn()) {
                 ByteArray ba;
                 if (state.getFragmentCount() > 1)
                     ba = buf;
@@ -240,7 +240,7 @@ class MessageReceiver {
             return null;
         } catch (RuntimeException e) {
             // e.g. AIOOBE
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error handling a message: " + state, e);
             _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(), "error: " + e.toString() + ": " + state.toString());
             return null;

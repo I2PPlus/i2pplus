@@ -132,14 +132,14 @@ abstract class FloodSearchJob extends JobImpl {
             dlm.setReplyTunnel(replyTunnel.getReceiveTunnelId(0));
             dlm.setSearchKey(_key);
 
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Floodfill search for " + _key.toBase64() + " to " + peer.toBase64());
             getContext().tunnelDispatcher().dispatchOutbound(dlm, outTunnel.getSendTunnelId(0), peer);
             _lookupsRemaining++;
         }
 
         if (_lookupsRemaining <= 0) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Floodfill search for " + _key.toBase64() + " had no peers to send to");
             // no floodfill peers, go to the normal ones
             getContext().messageRegistry().unregisterPending(out);
@@ -180,7 +180,7 @@ abstract class FloodSearchJob extends JobImpl {
         if (_dead) return;
         _dead = true;
         int timeRemaining = (int)(_expiration - getContext().clock().now());
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[Job " + getJobId() + "] Floodfill search for " + _key.toBase64() + " failed with " + timeRemaining);
         if (timeRemaining > 0) {
             _facade.searchFull(_key, _onFind, _onFailed, timeRemaining, _isLease);
@@ -206,7 +206,7 @@ abstract class FloodSearchJob extends JobImpl {
 /****
         throw new UnsupportedOperationException("use override");
         if (_dead) return;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[Job " + getJobId() + "] Floodfill search for " + _key.toBase64() + " successful");
         _dead = true;
         _facade.complete(_key);
@@ -256,7 +256,7 @@ abstract class FloodSearchJob extends JobImpl {
                 _search.success();
             } else {
                 int remaining = _search.getLookupsRemaining();
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info(getJobId() + "/" + _search.getJobId() + ": got a reply looking for "
                               + _search.getKey().toBase64() + ", with " + remaining + " outstanding searches");
                 // netDb reply pointing us at other people

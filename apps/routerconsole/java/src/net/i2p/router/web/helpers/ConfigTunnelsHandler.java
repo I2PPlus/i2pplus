@@ -41,7 +41,7 @@ public class ConfigTunnelsHandler extends FormHandler {
         boolean saveRequired = false;
         Map<String, String> changes = new HashMap<String, String>();
         
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Saving changes, with props = " + _settings + ".");
         
         int updated = 0;
@@ -111,14 +111,14 @@ public class ConfigTunnelsHandler extends FormHandler {
             }
             
             if ("exploratory".equals(poolName)) {
-                if (_log.shouldLog(Log.DEBUG)) {
+                if (_log.shouldDebug()) {
                     _log.debug("Inbound exploratory settings: " + in);
                     _log.debug("Outbound exploratory settings: " + out);
                 }
                 _context.tunnelManager().setInboundSettings(in);
                 _context.tunnelManager().setOutboundSettings(out);
             } else {
-                if (_log.shouldLog(Log.DEBUG)) {
+                if (_log.shouldDebug()) {
                     _log.debug("Inbound settings for " + client.toBase64() + ": " + in);
                     _log.debug("Outbound settings for " + client.toBase64() + ": " + out);
                 }

@@ -66,11 +66,11 @@ public class ClientMessagePool {
         if (!isDefinitelyRemote &&
             (_context.clientManager().isLocal(msg.getDestination()) ||
              _context.clientManager().isLocal(msg.getDestinationHash()))) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Adding message for local delivery");
             _context.clientManager().messageReceived(msg);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Adding message for remote delivery");
             OutboundClientMessageOneShotJob j = new OutboundClientMessageOneShotJob(_context, _cache, msg);
             if (true) // blocks the I2CP reader for a nontrivial period of time

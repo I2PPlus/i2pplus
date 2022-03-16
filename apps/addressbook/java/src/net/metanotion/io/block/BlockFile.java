@@ -354,11 +354,11 @@ public class BlockFile implements Closeable {
 				if (flb == null)
 					flb = new FreeListBlock(file, freeListStart);
 				if(!flb.isEmpty()) {
-					if (log.shouldLog(Log.DEBUG))
+					if (log.shouldDebug())
 						log.debug("Alloc from " + flb);
 					return flb.takePage();
 				} else {
-					if (log.shouldLog(Log.DEBUG))
+					if (log.shouldDebug())
 						log.debug("Alloc returning empty " + flb);
 					freeListStart = flb.getNextPage();
 					writeSuperBlock();
@@ -393,7 +393,7 @@ public class BlockFile implements Closeable {
 				freeListStart = page;
 				FreeListBlock.initPage(file, page);
 				writeSuperBlock();
-				if (log.shouldLog(Log.DEBUG))
+				if (log.shouldDebug())
 					log.debug("Freed page " + page + " as new FLB");
 				return;
 			}
@@ -402,7 +402,7 @@ public class BlockFile implements Closeable {
 					flb = new FreeListBlock(file, freeListStart);
 				if(flb.isFull()) {
 					// Make the free page a new FLB
-					if (log.shouldLog(Log.DEBUG))
+					if (log.shouldDebug())
 						log.debug("Full: " + flb);
 					FreeListBlock.initPage(file, page);
 					if(flb.getNextPage() == 0) {
@@ -417,12 +417,12 @@ public class BlockFile implements Closeable {
 						freeListStart = page;
 						writeSuperBlock();
 					}
-					if (log.shouldLog(Log.DEBUG))
+					if (log.shouldDebug())
 						log.debug("Freed page " + page + " to full " + flb);
 					return;
 				}
 				flb.addPage(page);
-				if (log.shouldLog(Log.DEBUG))
+				if (log.shouldDebug())
 					log.debug("Freed page " + page + " to " + flb);
 			} catch (IOException ioe) {
 				log.error("Discarding corrupt free list block page " + freeListStart, ioe);
@@ -606,7 +606,7 @@ public class BlockFile implements Closeable {
 	 *  @return true if the levels were modified.
 	 */
 	public boolean bfck(boolean fix) {
-		if (log.shouldLog(Log.INFO)) {
+		if (log.shouldInfo()) {
 			log.info("magic bytes " + magicBytes);
 			log.info("fileLen " + fileLen);
 			log.info("freeListStart " + freeListStart);
@@ -617,17 +617,17 @@ public class BlockFile implements Closeable {
 		}
 		boolean rv = metaIndex.bslck(fix, true);
 		if (rv) {
-			if (log.shouldLog(Log.WARN))
+			if (log.shouldWarn())
 				log.warn("Repaired meta index in blockfile " + file);
 		} else {
-			if (log.shouldLog(Log.INFO))
+			if (log.shouldInfo())
 				log.info("No errors in meta index in blockfile " + file);
 		}
 		int items = 0;
 		for (SkipIterator iter = metaIndex.iterator(); iter.hasNext(); ) {
 			String slname = (String) iter.nextKey();
 			Integer page = (Integer) iter.next();
-			if (log.shouldLog(Log.INFO))
+			if (log.shouldInfo())
 				log.info("List " + slname + " page " + page);
 			try {
 				// This uses IdentityBytes, so the value class won't be right, but at least
@@ -661,7 +661,7 @@ public class BlockFile implements Closeable {
 				log.error("Free list error", ioe);
 			}
 		} else {
-			if (log.shouldLog(Log.INFO))
+			if (log.shouldInfo())
 				log.info("No freelist");
 		}
 		return rv;

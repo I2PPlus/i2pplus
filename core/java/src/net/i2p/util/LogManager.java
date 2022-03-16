@@ -231,7 +231,7 @@ public class LogManager implements Flushable {
         Log old = _logs.putIfAbsent(log.getScope(), log);
         updateLimit(log);
         if (old != null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Duplicate log for " + log.getName());
         }
     }
@@ -335,7 +335,7 @@ public class LogManager implements Flushable {
      */
     void rereadConfig() {
         // perhaps check modification time
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Rereading configuration file");
         loadConfig();
     }
@@ -354,7 +354,7 @@ public class LogManager implements Flushable {
         File cfgFile = _locationFile;
         if (!cfgFile.exists()) {
             if (!_alreadyNoticedMissingConfig) {
-                //if (_log.shouldLog(Log.WARN))
+                //if (_log.shouldWarn())
                 //    _log.warn("Log file " + _locationFile.getAbsolutePath() + " does not exist");
                 _alreadyNoticedMissingConfig = true;
             }
@@ -365,7 +365,7 @@ public class LogManager implements Flushable {
         _alreadyNoticedMissingConfig = false;
 
         if ((_configLastRead > 0) && (_configLastRead >= cfgFile.lastModified())) {
-            //if (_log.shouldLog(Log.INFO))
+            //if (_log.shouldInfo())
             //    _log.info("Short circuiting config read (last read: "
             //               + (_context.clock().now() - _configLastRead) + "ms ago, config file modified "
             //               + (_context.clock().now() - cfgFile.lastModified()) + "ms ago");
@@ -456,7 +456,7 @@ public class LogManager implements Flushable {
         String str = config.getProperty(PROP_DUP);
         _dropDuplicates = str == null || Boolean.parseBoolean(str);
 
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Log set to use the base log file as " + _baseLogfilename);
 
         parseLimits(config);

@@ -76,7 +76,7 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
             // we still haven't been authorized for everything, keep on waiting
             _currentRequest.waitForNextAllocation();
             if (_currentRequest.getAborted()) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Request aborted while trying to read " + len + " (actually read " + read + ")");
                 break;
             }
@@ -99,7 +99,7 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
             // we still haven't been authorized for everything, keep on waiting
             _currentRequest.waitForNextAllocation();
             if (_currentRequest.getAborted()) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Request aborted while trying to skip " + numBytes);
                 break;
             }

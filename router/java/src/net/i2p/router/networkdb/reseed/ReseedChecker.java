@@ -168,7 +168,7 @@ public class ReseedChecker {
                 return false;
             }
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Reseed already in progress");
             return false;
         }
@@ -198,7 +198,7 @@ public class ReseedChecker {
                 return false;
             }
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Reseed already in progress");
             return false;
         }

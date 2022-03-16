@@ -134,7 +134,7 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
             // we do not receive payload messages, so we do not need an AvailabilityNotifier
             // ... or an Idle timer, or a VerifyUsage
             success = true;
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(getPrefix() + " simple session connected");
         } catch (InterruptedException ie) {
             throw new I2PSessionException("Interrupted", ie);

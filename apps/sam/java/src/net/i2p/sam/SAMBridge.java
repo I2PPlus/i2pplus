@@ -164,7 +164,7 @@ public class SAMBridge implements Runnable, ClientApp {
         try {
             openSocket();
         } catch (IOException e) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error starting SAM Bridge on "
                            + (listenHost == null ? "0.0.0.0" : listenHost)
                            + ":" + listenPort, e);
@@ -191,12 +191,12 @@ public class SAMBridge implements Runnable, ClientApp {
             serverSocket = ServerSocketChannel.open();
             if (_listenHost != null && !_listenHost.equals("0.0.0.0")) {
                 serverSocket.socket().bind(new InetSocketAddress(_listenHost, _listenPort));
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("SAM Bridge listening on "
                                + _listenHost + ":" + _listenPort);
             } else {
                 serverSocket.socket().bind(new InetSocketAddress(_listenPort));
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("SAM Bridge listening on 0.0.0.0:" + _listenPort);
             }
         }
@@ -401,7 +401,7 @@ public class SAMBridge implements Runnable, ClientApp {
         try {
             openSocket();
         } catch (IOException e) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error starting SAM Bridge on "
                            + (_listenHost == null ? "0.0.0.0" : _listenHost)
                            + ":" + _listenPort, e);
@@ -715,7 +715,7 @@ public class SAMBridge implements Runnable, ClientApp {
         try {
             while (acceptConnections) {
                 SocketChannel s = serverSocket.accept();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("New connection from "
                                + s.socket().getInetAddress().toString() + ":"
                                + s.socket().getPort());
@@ -734,7 +734,7 @@ public class SAMBridge implements Runnable, ClientApp {
                         try {
                             SAMHandler handler = SAMHandlerFactory.createSAMHandler(s, i2cpProps, parent);
                             if (handler == null) {
-                                if (_log.shouldLog(Log.DEBUG))
+                                if (_log.shouldDebug())
                                     _log.debug("SAM handler has not been instantiated");
                                 try {
                                     s.close();
@@ -743,7 +743,7 @@ public class SAMBridge implements Runnable, ClientApp {
                             }
                             handler.startHandling();
                         } catch (SAMException e) {
-                            if (_log.shouldLog(Log.ERROR))
+                            if (_log.shouldError())
                                 _log.error("SAM error: " + e.getMessage(), e);
                             String reply = "HELLO REPLY RESULT=I2P_ERROR MESSAGE=\"" + e.getMessage() + "\"\n";
                             SAMHandler.writeString(reply, s);
@@ -772,7 +772,7 @@ public class SAMBridge implements Runnable, ClientApp {
             changeState(STOPPING, e);
         } finally {
             try {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Shutting down, closing server socket");
                 if (serverSocket != null)
                     serverSocket.close();

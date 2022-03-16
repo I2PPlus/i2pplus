@@ -62,7 +62,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
      */
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Opening DCC connection to " + _dest + ':' + _remotePort);
         Destination dest = _context.namingService().lookup(_dest);
         if (dest == null) {

@@ -176,7 +176,7 @@ public class OutboundMessageRegistry {
         msg.setOnReplyJob(onReply);
         msg.setReplySelector(replySelector);
         registerPending(msg, true);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Registered: " + replySelector + " with reply job " + onReply +
                        " and timeout job " + onTimeout);
         return msg;
@@ -219,7 +219,7 @@ public class OutboundMessageRegistry {
                     multi.add(msg);
                     _selectorToMessage.put(sel, multi);
                 }
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("A single message selector [" + sel + "] with multiple messages (" + multi + ")");
             }
         }
@@ -288,7 +288,7 @@ public class OutboundMessageRegistry {
                     }
                 }
             }
-            boolean log = _log.shouldLog(Log.DEBUG);
+            boolean log = _log.shouldDebug();
             if (!removing.isEmpty()) {
                 for (MessageSelector sel : removing) {
                     OutNetMessage msg = null;

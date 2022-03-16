@@ -72,7 +72,7 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
             //out.start();
             out.run();
         } catch (SOCKSException e) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error from SOCKS connection", e);
         } finally {
             // only because we are running it inline

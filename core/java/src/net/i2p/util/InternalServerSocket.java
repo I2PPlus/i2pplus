@@ -47,13 +47,13 @@ public class InternalServerSocket extends ServerSocket {
              throw new IOException("Internal port in use: " + port);
          _running = true;
          _acceptQueue = new LinkedBlockingQueue<InternalSocket>();
-         //if (_log.shouldLog(Log.DEBUG))
+         //if (_log.shouldDebug())
          //    _log.debug("Registered " + _port);
     }
 
     @Override
     public void close() {
-         //if (_log.shouldLog(Log.DEBUG))
+         //if (_log.shouldDebug())
          //   _log.debug("Closing " + _port);
         _running = false;
         _sockets.remove(_port);
@@ -68,7 +68,7 @@ public class InternalServerSocket extends ServerSocket {
     public Socket accept() throws IOException {
         InternalSocket serverSock = null;
         while (_running) {
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Accepting " + _port);
             try {
                 serverSock = _acceptQueue.take();
@@ -79,7 +79,7 @@ public class InternalServerSocket extends ServerSocket {
             }
             if (serverSock.getInputStream() == null) // poison
                 throw new IOException("closed");
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Accepted " + _port);
             break;
         }
@@ -112,7 +112,7 @@ public class InternalServerSocket extends ServerSocket {
     private void queueConnection(InternalSocket sock) throws IOException {
         if (!_running)
              throw new IOException("Server closed for port: " + _port);
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Queueing " + _port);
         try {
             _acceptQueue.put(sock);

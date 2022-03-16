@@ -113,7 +113,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      *  @return null on failure
      */
     private File get() {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Requesting [" + _url + "]");
         File out = null;
         try {
@@ -139,11 +139,11 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _eepGet.addStatusListener(this);
         _eepGet.addHeader("User-Agent", I2PSnarkUtil.EEPGET_USER_AGENT);
         if (_eepGet.fetch()) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Transfer successful [" + _url + "] (Size:" + out.length() + " bytes)");
             return out;
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Transfer failed [" + _url + ']');
             out.delete();
             return null;

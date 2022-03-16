@@ -74,7 +74,7 @@ public class StreamSinkClient {
             if (fis != null) try { fis.close(); } catch (IOException ioe) {}
         }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Send " + _sendSize + "KB to " + peer.calculateHash().toBase64());
 
         while (true) {
@@ -87,7 +87,7 @@ public class StreamSinkClient {
                 for (int i = 0; (_sendSize < 0) || (i < _sendSize); i+= buf.length/1024) {
                     rand.nextBytes(buf);
                     out.write(buf);
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Wrote " + ((1+i*buf.length)/1024) + "/" + _sendSize + "KB");
                     if (_writeDelay > 0) {
                         try { Thread.sleep(_writeDelay); } catch (InterruptedException ie) {}
@@ -95,7 +95,7 @@ public class StreamSinkClient {
                 }
                 sock.close();
                 long afterSending = System.currentTimeMillis();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Sent " + _sendSize + "KB in " + (afterSending-beforeSending) + "ms");
             } catch (InterruptedIOException iie) {
                 _log.error("Timeout connecting to the peer", iie);

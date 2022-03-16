@@ -222,7 +222,7 @@ public class LoadClientAppsJob extends JobImpl {
      */
     public static void runClientInline(String className, String clientName, String args[],
                                        Log log, ClassLoader cl) throws Exception {
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Loading up the client application " + clientName + ": " + className + " " + Arrays.toString(args));
         if (args == null)
             args = new String[0];
@@ -252,7 +252,7 @@ public class LoadClientAppsJob extends JobImpl {
      */
     public static void runClient(String className, String clientName, String args[], RouterContext ctx, Log log,
                                  ThreadGroup threadGroup, ClassLoader cl) {
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Loading up the client application " + clientName + ": " + className + " " + Arrays.toString(args));
         I2PThread t;
         if (threadGroup != null)

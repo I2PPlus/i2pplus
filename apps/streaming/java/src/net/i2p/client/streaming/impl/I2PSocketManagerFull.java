@@ -227,7 +227,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _connectionManager = new ConnectionManager(_context, _session, _defaultOptions, connectionFilter);
         _serverSocket = new I2PServerSocketFull(this);
 
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             _log.info("Socket manager created. \n\tDefault Options:\n" + _defaultOptions.toString()
                       .replace(" ", "\n\t").replace("=", " = ")
                       + "\n\n\tOriginal Properties:\n\t" + opts.toString()
@@ -313,7 +313,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         ConnectionOptions defaultOptions = new ConnectionOptions(opts);
         int protocol = defaultOptions.getEnforceProtocol() ? I2PSession.PROTO_STREAMING : I2PSession.PROTO_ANY;
         rv.addMuxedSessionListener(_connectionManager.getMessageHandler(), protocol, defaultOptions.getLocalPort());
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Added subsession: " + rv);
         return rv;
     }
@@ -348,10 +348,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _session.removeSubsession(session);
         boolean removed = _subsessions.remove(session);
         if (removed) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Removed subsession " + session);
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Subsession not found to remove " + session);
         }
     }
@@ -481,7 +481,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public void setDefaultOptions(I2PSocketOptions options) {
         if (!(options instanceof ConnectionOptions))
             throw new IllegalArgumentException();
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Changing options from:\n " + _defaultOptions + "\nto:\n " + options);
         _defaultOptions.updateAll((ConnectionOptions) options);
         _connectionManager.updateOptions();
@@ -565,7 +565,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         else
             opts = new ConnectionOptions(options);
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Connecting to [" + peer.calculateHash().toBase64().substring(0,6)
                       + "]\nOptions: " + opts);
         // pick the subsession here

@@ -325,12 +325,12 @@ abstract class IRCFilter {
                 rv = "PING " + field[idx];
                 expectedPong.append("PONG ").append(field[idx + 1]).append(" :").append(field[idx]); // PONG serverLocation nonce
             } else {
-                //if (_log.shouldLog(Log.ERROR))
+                //if (_log.shouldError())
                 //    _log.error("IRC client sent a PING we don't understand, filtering it (\"" + s + "\")");
                 rv = null;
             }
             
-            //if (_log.shouldLog(Log.WARN))
+            //if (_log.shouldWarn())
             //    _log.warn("sending ping [" + rv + "], waiting for [" + expectedPong + "] orig was [" + s  + "]");
             
             return rv;

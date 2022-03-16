@@ -162,7 +162,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             notifyAll();
         }
        cancelResend();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
 //            _log.debug("Cancelled! " + toString(), new Exception("cancelled"));
             _log.debug("Resend cancelled! " + toString());
     }
@@ -196,13 +196,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             evt.fastRetransmit();
             // the predicate used to be '+', changing to '-' --zab
 
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 final String log = String.format("%s NACKS and retransmits. \n* Criteria: nacks=%d, retransmitted=%b,"+
                     " numSends=%d, lastSend=%d, now=%d",
                     toString(), cnt, _retransmitted, _numSends.get(), _lastSend, _context.clock().now());
                     _log.debug(log);
             }
-        } else if (_log.shouldLog(Log.DEBUG)) {
+        } else if (_log.shouldDebug()) {
             final String log = String.format("%s NACK but no retransmit. \n* Criteria: nacks=%d, retransmitted=%b,"+
                     " numSends=%d, lastSend=%d, now=%d",
                     toString(), cnt, _retransmitted, _numSends.get(), _lastSend, _context.clock().now());
@@ -345,7 +345,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 _acceptedOn = -1;
                 releasePayload();
             }
-            if ( (_acceptedOn - before > 1000) && (_log.shouldLog(Log.DEBUG)) )  {
+            if ( (_acceptedOn - before > 1000) && (_log.shouldDebug()) )  {
                 int queued = _connection.getUnackedPacketsSent();
                 int window = _connection.getOptions().getWindowSize();
                 int afterQueued = _connection.getUnackedPacketsSent();

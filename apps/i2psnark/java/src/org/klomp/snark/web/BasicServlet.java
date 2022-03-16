@@ -133,7 +133,7 @@ class BasicServlet extends HttpServlet
             //throw new UnavailableException("Resource base does not exist: " + base);
         }
         _resourceBase = base;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("I2PSnark data directory: " + _resourceBase);
     }
 
@@ -146,7 +146,7 @@ class BasicServlet extends HttpServlet
         if (!base.endsWith("/"))
             base = base + '/';
         _warBase = base;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("War base directory: " + _warBase);
     }
 
@@ -222,30 +222,30 @@ class BasicServlet extends HttpServlet
 
             // Handle resource
             if (content == null) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Not found: " + pathInContext);
                 response.sendError(404);
             } else {
                 if (passConditionalHeaders(request, response, content)) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Sending: " + content);
                     sendData(request, response, content);
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Not modified: " + content);
                 }
             }
         }
         catch(IllegalArgumentException e)
         {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error sending " + pathInContext, e);
             if(!response.isCommitted())
                 response.sendError(500, e.getMessage());
         }
         catch(IOException e)
         {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 // typical browser abort
                 //_log.warn("Error sending", e);
                 _log.warn("Error sending " + pathInContext + ": " + e);
@@ -331,7 +331,7 @@ class BasicServlet extends HttpServlet
         try {
             in = content.getInputStream();
         } catch (IOException e) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Not found: " + content);
             response.sendError(404);
             return;
@@ -355,7 +355,7 @@ class BasicServlet extends HttpServlet
             writeHeaders(response,content,content_length);
             if (content_length >= 0  && request.getMethod().equals("HEAD")) {
                 // if we know the content length, don't send it to be counted
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("HEAD: " + content);
             } else {
                 // GET or unknown size for HEAD

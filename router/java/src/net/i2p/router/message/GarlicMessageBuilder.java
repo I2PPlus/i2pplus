@@ -176,13 +176,13 @@ public class GarlicMessageBuilder {
         if (key.getType() != EncType.ELGAMAL_2048)
             throw new IllegalArgumentException();
         
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Encrypted with public key to expire on " + new Date(config.getExpiration()));
 
         SessionKey curKey = skm.getCurrentOrNewKey(key);
         SessionTag curTag = skm.consumeNextAvailableTag(key, curKey);
 
-            if (log.shouldLog(Log.DEBUG)) {
+            if (log.shouldDebug()) {
                 int availTags = skm.getAvailableTags(key, curKey);
                 log.debug("Available tags for encryption: " + availTags + "; Low threshold: " + lowTagsThreshold);
             }
@@ -190,7 +190,7 @@ public class GarlicMessageBuilder {
             if (numTagsToDeliver > 0 && skm.shouldSendTags(key, curKey, lowTagsThreshold)) {
                 for (int i = 0; i < numTagsToDeliver; i++)
                     wrappedTags.add(new SessionTag(true));
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Too few tags available so we're including " + numTagsToDeliver);
             }
 
@@ -239,7 +239,7 @@ public class GarlicMessageBuilder {
 
         long timeFromNow = config.getExpiration() - ctx.clock().now();
         if (timeFromNow < 1*1000) {
-            if (log.shouldLog(Log.DEBUG))
+            if (log.shouldDebug())
                 log.debug("Building a message expiring in " + timeFromNow + "ms: " + config, new Exception("created by"));
             return null;
         }

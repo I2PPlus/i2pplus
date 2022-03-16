@@ -158,7 +158,7 @@ public class TrackerClient implements Runnable {
 
   public synchronized void start() {
       if (!stop) {
-          if (_log.shouldLog(Log.WARN))
+          if (_log.shouldWarn())
               _log.warn("Already started: " + _threadName);
           return;
       }
@@ -182,23 +182,23 @@ public class TrackerClient implements Runnable {
   public synchronized void halt(boolean fast) {
     boolean wasStopped = stop;
     if (wasStopped) {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Already stopped: " + _threadName);
     } else {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Stopping: " + _threadName);
         stop = true;
     }
     SimpleTimer2.TimedEvent e = _event;
     if (e != null) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Cancelling next announce " + _threadName);
         e.cancel();
         _event = null;
     }
     Thread t = _thread;
     if (t != null) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Interrupting " + t.getName());
         t.interrupt();
     }
@@ -240,7 +240,7 @@ public class TrackerClient implements Runnable {
    */
   public void run() {
       long begin = _util.getContext().clock().now();
-      if (_log.shouldLog(Log.DEBUG))
+      if (_log.shouldDebug())
           _log.debug("Start " + Thread.currentThread().getName());
       try {
           if (!_initialized) {
@@ -266,7 +266,7 @@ public class TrackerClient implements Runnable {
       } finally {
           // don't hold ref
           _thread = null;
-          if (_log.shouldLog(Log.DEBUG))
+          if (_log.shouldDebug())
               _log.debug("Finish " + Thread.currentThread().getName() +
                          " after " + DataHelper.formatDuration(_util.getContext().clock().now() - begin));
       }
@@ -294,10 +294,10 @@ public class TrackerClient implements Runnable {
     if (primary != null) {
         if (isNewValidTracker(trackerHashes, primary)) {
             trackers.add(new TCTracker(primary, true));
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Announce: [" + primary + "] [InfoHash " + infoHash + "]");
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Skipping invalid or non-i2p announce: " + primary + "\n* + Torrent: " + snark.getBaseName());
         }
     } else {
@@ -314,7 +314,7 @@ public class TrackerClient implements Runnable {
                     if (!isNewValidTracker(trackerHashes, url))
                         continue;
                     trackers.add(new TCTracker(url, trackers.isEmpty()));
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Additional announce (list): [" + url + "] for [InfoHash " + infoHash + "]");
                 }
             }
@@ -336,7 +336,7 @@ public class TrackerClient implements Runnable {
                 continue;
             // opentrackers are primary if we don't have primary
             trackers.add(new TCTracker(url, trackers.isEmpty()));
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Additional announce: [" + url + "] for [InfoHash " + infoHash + "]");
         }
     }
@@ -349,7 +349,7 @@ public class TrackerClient implements Runnable {
             if (!isNewValidTracker(trackerHashes, url))
                 continue;
             backupTrackers.add(new TCTracker(url, false));
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Backup announce: [" + url + "] for [InfoHash " + infoHash + "]");
         }
         if (backupTrackers.isEmpty()) {
@@ -371,7 +371,7 @@ public class TrackerClient implements Runnable {
   private boolean isNewValidTracker(Set<Hash> existing, String ann) {
       Hash h = getHostHash(ann);
       if (h == null) {
-          if (_log.shouldLog(Log.WARN))
+          if (_log.shouldWarn())
               _log.warn("Bad announce URL: [" + ann + "] \n* Torrent:" + snark.getBaseName());
           return false;
       }
@@ -379,19 +379,19 @@ public class TrackerClient implements Runnable {
       if (h.equals(DSA_ONLY_TRACKER)) {
           Destination dest = _util.getMyDestination();
           if (dest != null && dest.getSigType() != SigType.DSA_SHA1) {
-              if (_log.shouldLog(Log.WARN))
+              if (_log.shouldWarn())
                   _log.warn("Skipping incompatible tracker: " + ann + "\n* Torrent: " + snark.getBaseName());
               return false;
           }
       }
       if (existing.size() >= MAX_TRACKERS) {
-          if (_log.shouldLog(Log.INFO))
+          if (_log.shouldInfo())
               _log.info("Not using announce URL, we have enough: [" + ann + "] \n* Torrent: " + snark.getBaseName());
           return false;
       }
       boolean rv = existing.add(h);
       if (!rv) {
-          if (_log.shouldLog(Log.INFO))
+          if (_log.shouldInfo())
              _log.info("Duplicate announce URL: [" + ann + "] \n* Torrent: " + snark.getBaseName());
       }
       return rv;
@@ -469,7 +469,7 @@ public class TrackerClient implements Runnable {
 
                 if (delay > 20*1000) {
                   // put ourselves on SimpleTimer2
-                  if (_log.shouldLog(Log.DEBUG))
+                  if (_log.shouldDebug())
                       _log.debug("Requeueing in " + DataHelper.formatDuration(delay) + ": " + Thread.currentThread().getName());
                   queueLoop(delay);
                   return;
@@ -553,7 +553,7 @@ public class TrackerClient implements Runnable {
                         _util.getContext().clock().now() > _startedOn + 30*60*1000 &&
                         snark.getTotalLength() > 0 &&
                         uploaded >= snark.getTotalLength() / 2) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Auto stopping " + snark.getBaseName());
                         snark.setAutoStoppable(false);
                         snark.stopTorrent();
@@ -592,7 +592,7 @@ public class TrackerClient implements Runnable {
                 catch (IOException ioe)
                   {
                     // Probably not fatal (if it doesn't last too long...)
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Error communicating with tracker [" + tr.announce
                                   .replace("ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p", "tracker2.postman.i2p")
                                   .replace("lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p", "tracker2.postman.i2p")
@@ -620,7 +620,7 @@ public class TrackerClient implements Runnable {
                             !completed ||              // no use retrying if we aren't seeding
                             tplc.startsWith(ERROR_GOT_HTML) ||   // fake msg from doRequest()
                             (!tr.isPrimary && tr.registerFails > MAX_REGISTER_FAILS / 2))
-                          if (_log.shouldLog(Log.WARN))
+                          if (_log.shouldWarn())
                               _log.warn("No longer announcing to " + tr.announce + " : " +
                                         tr.trackerProblems + " after " + tr.registerFails + " failures");
                           tr.stop = true;
@@ -633,7 +633,7 @@ public class TrackerClient implements Runnable {
                     }
                   }
               } else {
-                  if (_log.shouldLog(Log.INFO))
+                  if (_log.shouldInfo())
                       _log.info("Not announcing to " + tr.announce + "\n* Last announce: " +
                                new Date(tr.lastRequestTime) + " (interval: " + DataHelper.formatDuration(tr.interval) + ")");
               }
@@ -653,7 +653,7 @@ public class TrackerClient implements Runnable {
             if (coordinator.needOutboundPeers() && (meta == null || !meta.isPrivate()) && !stop) {
                 Set<PeerID> pids = coordinator.getPEXPeers();
                 if (!pids.isEmpty()) {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Received " + pids.size() + " from PEX");
                     List<Peer> peers = new ArrayList<Peer>(pids.size());
                     for (PeerID pID : pids) {
@@ -673,7 +673,7 @@ public class TrackerClient implements Runnable {
                     pids.clear();
                 }
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Not requesting PEX peers for [" + snark.getInfoHash() + "]");
             }
             return rv;
@@ -706,9 +706,9 @@ public class TrackerClient implements Runnable {
                 } else {
                     lastDHTAnnounce = 0;
                 }
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Received " + hashes.size() + " peer hashes from DHT");
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("DHT Peers: " + hashes);
 
                 // now try these peers
@@ -732,7 +732,7 @@ public class TrackerClient implements Runnable {
                     }
                 }
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Not getting DHT peers");
             }
             return rv;
@@ -832,7 +832,7 @@ public class TrackerClient implements Runnable {
      }
 
      public void run() {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Running unannounce " + _threadName + " to " + tr.announce);
         long uploaded = coordinator.getUploaded();
         long downloaded = coordinator.getDownloaded();
@@ -892,7 +892,7 @@ public class TrackerClient implements Runnable {
     else
         buf.append(_util.getMaxConnections());
     String s = buf.toString();
-    if (_log.shouldLog(Log.DEBUG))
+    if (_log.shouldDebug())
         _log.debug("Sending TrackerClient request\n* URL: " + s);
 
     tr.lastRequestTime = System.currentTimeMillis();
@@ -912,7 +912,7 @@ public class TrackerClient implements Runnable {
 
         TrackerInfo info = new TrackerInfo(in, snark.getID(),
                                            snark.getInfoHash(), snark.getMetaInfo(), _util);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("TrackerClient " + tr.host + " response: " + info);
 
         String failure = info.getFailureReason();

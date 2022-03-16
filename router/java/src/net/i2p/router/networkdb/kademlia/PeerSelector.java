@@ -79,7 +79,7 @@ abstract class PeerSelector {
             if (peerHashes.size() >= maxNumRouters) break;
             peerHashes.add(iter.next());
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Searching for " + maxNumRouters + " peers close to " + key + ": "
                        + peerHashes + " (not including " + peersToIgnore + ") [allHashes.size = "
                        + allHashes.size() + "]");
@@ -103,7 +103,7 @@ abstract class PeerSelector {
         MatchSelectionCollector matches = new MatchSelectionCollector(key, peersToIgnore);
         kbuckets.getAll(matches);
         List<Hash> rv = matches.get(maxNumRouters);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Searching for " + maxNumRouters + " peers close to [" + key.toBase64().substring(0,6) + "]" +
                        "\n* All Hashes: " + matches.size() +
                        "\n* Ignoring: " + peersToIgnore +
@@ -161,7 +161,7 @@ abstract class PeerSelector {
         for (Iterator iter = peerHashes.iterator(); iter.hasNext(); ) {
             Hash cur = (Hash)iter.next();
             if (_context.profileOrganizer().isFailing(cur)) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Peer " + cur.toBase64() + " is failing, don't include them in the peer selection");
                 if (failing == null)
                     failing = new ArrayList(4);
@@ -173,7 +173,7 @@ abstract class PeerSelector {
                     if (failing == null)
                         failing = new ArrayList(4);
                     failing.add(cur);
-                    if (_log.shouldLog(Log.WARN)) {
+                    if (_log.shouldWarn()) {
                         PeerProfile profile = _context.profileOrganizer().getProfile(cur);
                         if (profile != null) {
                             RateStat invalidReplyRateStat = profile.getDBHistory().getInvalidReplyRate();

@@ -423,7 +423,7 @@ public class Reseeder {
                 tot += sample.longValue();
             }
             long avg = tot / _bandwidths.size();
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Bandwidth average: " + avg + " KBps from " + _bandwidths.size() + " samples");
             // TODO _context.bandwidthLimiter().....
         }
@@ -433,7 +433,7 @@ public class Reseeder {
             // Since readURL() runs an EepGet with 0 retries,
             // we can report errors with attemptFailed() instead of transferFailed().
             // It has the benefit of providing cause of failure, which helps resolve issues.
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("EepGet failed on " + url + "\n* " + cause);
             else
                 _log.logAlways(Log.WARN, "EepGet failed on " + url + "\n* " + cause);
@@ -465,7 +465,7 @@ public class Reseeder {
                             _context.clock().setNow(now, RouterClock.DEFAULT_STRATUM - 2);
                         else
                             _context.clock().setNow(now, RouterClock.DEFAULT_STRATUM - 1);
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Reseed adjusting clock by " +
                                       DataHelper.formatDuration(Math.abs(offset)));
                     } else {
@@ -699,7 +699,7 @@ public class Reseeder {
                     if (ourB64 == null || !name.contains(ourB64)) {
                         urls.add(name);
                     } else {
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Skipping our own RI");
                     }
                     cur = end + 1;
@@ -731,7 +731,7 @@ public class Reseeder {
                                 System.out.println();
                         }
                     } catch (RuntimeException e) {
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Failed fetch", e);
                         errors++;
                     }
@@ -816,7 +816,7 @@ public class Reseeder {
                     long sz = contentRaw.length();
                     long bw = 1000 * sz / totalTime;
                     _bandwidths.add(Long.valueOf(bw));
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Received " + sz + " bytes in " + totalTime + " ms " + getDisplayString(seedURL));
                 }
                 int[] stats;
@@ -935,7 +935,7 @@ public class Reseeder {
                         !name.startsWith(ROUTERINFO_PREFIX) ||
                         !name.endsWith(ROUTERINFO_SUFFIX) ||
                         !f.isFile()) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Skipping " + f);
                         f.delete();
                         errors++;
@@ -1121,7 +1121,7 @@ public class Reseeder {
             // don't overwrite recent file
             // TODO: even better would be to compare to last-mod date from eepget
             if (file.exists() && file.lastModified() > _context.clock().now() - 60*60*1000) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Skipping RouterInfo; local copy is more recent: " + file);
                 return false;
             }
@@ -1129,7 +1129,7 @@ public class Reseeder {
             try {
                 fos = new SecureFileOutputStream(file);
                 fos.write(data);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Saved RouterInfo (" + data.length + " bytes) to " + file);
             } finally {
                 try {

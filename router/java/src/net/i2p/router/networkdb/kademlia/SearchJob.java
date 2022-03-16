@@ -114,7 +114,7 @@ class SearchJob extends JobImpl {
         _expiration = getContext().clock().now() + timeoutMs;
         getContext().statManager().addRateData("netDb.searchCount", 1);
 /*
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
 //            _log.debug("Search (" + getClass().getName() + ") for [" + key.toBase64().substring(0,6) + "]", new Exception("Search enqueued by"));
             _log.debug("Searching for (" + getClass().getName() + ") for [" + key.toBase64().substring(0,6) + "]"); // new Exception("Search enqueued by"));
 */
@@ -123,7 +123,7 @@ class SearchJob extends JobImpl {
     public void runJob() {
         if (_startedOn <= 0)
             _startedOn = getContext().clock().now();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("[Job " + getJobId() + "] Searching for [" + _state.getTarget().toBase64().substring(0,6) + "]"); // , getAddedBy());
         searchNext();
     }
@@ -215,32 +215,32 @@ class SearchJob extends JobImpl {
      */
     protected void searchNext() {
         if (_state.completed()) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[Job " + getJobId() + "] Exploratory Search already completed");
             return;
         }
         if (_state.isAborted()) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Exploratory Search aborted");
             _state.complete();
             fail();
             return;
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[Job " + getJobId() + "]" + _state);
         if (isLocal()) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Key found locally");
             _state.complete();
             succeed();
         } else if (isExpired()) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
 //                _log.info("[Job " + getJobId() + "] Key search expired");
                 _log.debug("[Job " + getJobId() + "] Search for [" + _state.getTarget().toBase64().substring(0,6) + "] expired");
             _state.complete();
             fail();
         } else if (_state.getAttempted().size() > MAX_PEERS_QUERIED) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Too many peers queried (more than " + MAX_PEERS_QUERIED + ")");
             _state.complete();
             fail();
@@ -271,19 +271,19 @@ class SearchJob extends JobImpl {
      */
     protected void continueSearch() {
         if (_state.completed()) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[Job " + getJobId() + "] Search already completed", new Exception("already completed"));
             return;
         }
         if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
             SEARCH_BREDTH = SEARCH_BREDTH - 3;
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[Job " + getJobId() + "] Reducing number of parallel peer searches - router under load");
         }
         int toCheck = getBredth() - _state.getPending().size();
         if (toCheck <= 0) {
             // too many already pending
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Throttling search (pending: " +
                           _state.getPending().size() + ", max: " + getBredth() + ")");
             requeuePending();
@@ -295,7 +295,7 @@ class SearchJob extends JobImpl {
             //boolean onlyFloodfill = onlyQueryFloodfillPeers(getContext());
             boolean onlyFloodfill = true;
             if (_floodfillPeersExhausted && onlyFloodfill && _state.getPending().isEmpty()) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("[Job " + getJobId() + "] No non-Floodfill peers left, and no more pending. Searched: " +
                               _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
                 fail();
@@ -305,13 +305,13 @@ class SearchJob extends JobImpl {
             if ( (closestHashes == null) || (closestHashes.isEmpty()) ) {
                 if (_state.getPending().isEmpty()) {
                     // we tried to find some peers, but there weren't any and no one else is going to answer
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("[Job " + getJobId() + "] No peers left, and none pending! Already searched: " +
                                   _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
                     fail();
                 } else {
                     // no more to try, but we might get data or close peers from some outstanding requests
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("[Job " + getJobId() + "] No peers left, but some are pending!\n* Pending: " +
                                   _state.getPending().size() + "\n* Queried: " + _state.getAttempted().size() +
                                   "\n* Failed: " + _state.getFailed().size());
@@ -323,12 +323,12 @@ class SearchJob extends JobImpl {
                 for (Hash peer : closestHashes) {
                     DatabaseEntry ds = _facade.getDataStore().get(peer);
                     if (ds == null) {
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Next closest peer [" + peer.toBase64().substring(0,6) +
                                       "] was only recently referred to us, sending a search for them");
                         getContext().netDb().lookupRouterInfo(peer, null, null, _timeoutMs);
                     } else if (!(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("[Job " + getJobId() + "] Error selecting closest hash that wasn't a router! "
                                       + peer + " : " + ds.getClass().getName());
                         _state.replyTimeout(peer);
@@ -354,7 +354,7 @@ class SearchJob extends JobImpl {
                     // the (potentially) last peers being searched for could not be,
                     // er, searched for, so lets retry ASAP (causing either another
                     // peer to be selected, or the whole search to fail)
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("[Job " + getJobId() + "] No new peer queued up, so we are going to requeue " +
                                   "ourselves in our search for " + _state.getTarget().toBase64());
                     requeuePending(0);
@@ -398,7 +398,7 @@ class SearchJob extends JobImpl {
      */
     private List<Hash> getClosestRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("[Job " + getJobId() + "] Checked current routing key [" + rkey.toBase64().substring(0,6) +
                        "] for [" + key.toBase64().substring(0,6) + "]");
         return _peerSelector.selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
@@ -411,11 +411,11 @@ class SearchJob extends JobImpl {
     protected void sendSearch(RouterInfo router) {
         if (router.getIdentity().equals(getContext().router().getRouterInfo().getIdentity())) {
             // don't search ourselves
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("[Job " + getJobId() + "] Don't send search to ourselves - why did we try?");
             return;
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Search for [" + _state.getTarget().toBase64().substring(0,6) +
                           "] sent to [" + router.getIdentity().getHash().toBase64().substring(0,6) +
                           "] - " + (getPerPeerTimeoutMs(router.getIdentity().calculateHash()) / 1000) + "s timeout");
@@ -480,7 +480,7 @@ class SearchJob extends JobImpl {
         TunnelId outTunnelId = outTunnel.getSendTunnelId(0);
 
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("[Job " + getJobId() + "] Sending search to [" + to.toBase64().substring(0,6) +
                        "] for [" + getState().getTarget().toBase64().substring(0,6) + "]\n* Replies: through [" +
                        inTunnel.getPeer(0).toBase64().substring(0,6) + "] via [Tunnel " + inTunnelId + "]");
@@ -512,7 +512,7 @@ class SearchJob extends JobImpl {
             return;
         }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("[Job " + getJobId() + "] Sending router search directly to [" +
                        to.toBase64().substring(0,6) +
                        "] for [" + _state.getTarget().toBase64().substring(0,6) + "]");
@@ -616,12 +616,12 @@ class SearchJob extends JobImpl {
             if (_state.completed()) return;
             _state.replyTimeout(_peer);
             if (_penalizePeer) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] Penalizing [" +  _peer.toBase64().substring(0,6) + "] for search timeout after " +
                               (getContext().clock().now() - _sentOn) + "ms");
                 getContext().profileManager().dbLookupFailed(_peer);
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] NOT (!!) penalizing [" + _peer.toBase64().substring(0,6) + "] for search timeout");
             }
             getContext().statManager().addRateData("netDb.failedPeers", 1);
@@ -634,10 +634,10 @@ class SearchJob extends JobImpl {
      * Search was totally successful
      */
     private void succeed() {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[Job " + getJobId() + "] Successful search for [" + _state.getTarget().toBase64().substring(0,6) +
                       "] after " + _state.getAttempted().size() + " peers queried");
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
 //            _log.debug("[Job " + getJobId() + "] State of successful search: " + _state);
             _log.debug("[Job " + getJobId() + "] " + _state);
 
@@ -715,13 +715,13 @@ class SearchJob extends JobImpl {
         TunnelInfo outTunnel = getContext().tunnelManager().selectOutboundExploratoryTunnel(to);
 
         if (outTunnel != null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Resending LeaseSet to " + to + " through " + outTunnel + ": " + msg);
             // TODO pass a priority to the dispatcher
             getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), null, to);
             return true;
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to resend a LeaseSet - no Outbound Exploratory tunnels");
             return false;
         }
@@ -732,16 +732,16 @@ class SearchJob extends JobImpl {
      */
     protected void fail() {
         if (isLocal()) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("[Job " + getJobId() + "] Why did we fail if the target is local? [" +
                            _state.getTarget().toBase64().substring(0,6) + "]", new Exception("failure cause"));
             succeed();
             return;
         }
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[Job " + getJobId() + "] Search for [" + _state.getTarget().toBase64().substring(0,6) + "] failed");
-//        if (_log.shouldLog(Log.DEBUG))
+//        if (_log.shouldDebug())
 //            _log.debug("[Job " + getJobId() + "] Failed: " + _state);
 
         long time = getContext().clock().now() - _state.getWhenStarted();
@@ -773,7 +773,7 @@ class SearchJob extends JobImpl {
 
         if (!ok) {
             // race between adding deferred and search completing
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Race deferred before searchCompleting?  our onFind=" + _onSuccess + " new one: " + onFind);
 
             // the following /shouldn't/ be necessary, but it doesn't hurt
@@ -841,7 +841,7 @@ class SearchJob extends JobImpl {
     boolean add(Hash peer) {
         boolean rv = _facade.getKBuckets().add(peer);
         if (rv) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[Job " + getJobId() + "] Queueing up search for next time: [" + peer.toBase64().substring(0,6) + "]");
             Set<Hash> s = Collections.singleton(peer);
             _facade.queueForExploration(s);

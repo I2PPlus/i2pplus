@@ -167,7 +167,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 					SkipSpan<K, V> ssres = (SkipSpan<K, V>)res[1];
 					if (bottom.firstKey().equals(ssres.firstKey())) {
 						// bottom copied the next span to itself
-						if (_log.shouldLog(Log.INFO)) {
+						if (_log.shouldInfo()) {
 							_log.info("First Level, bottom.remove() copied and did not return itself!!!! in remove " + key);
 							_log.info("Us:     " + print());
 							_log.info("next:   " + levels[0].print());
@@ -183,15 +183,15 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 							if (i >= replace.levels.length)
 								break;
 							if (levels[i].key().equals(replace.key())) {
-								if (_log.shouldLog(Log.INFO))
+								if (_log.shouldInfo())
 							        	_log.info("equal level " + i);
 								levels[i] = replace.levels[i];
-							} else if (_log.shouldLog(Log.INFO)) {
+							} else if (_log.shouldInfo()) {
 								_log.info("not equal level " + i + ' ' + levels[i].key());
 							}
 						}
 						this.flush();
-						if (_log.shouldLog(Log.INFO))
+						if (_log.shouldInfo())
 							_log.info("new Us: " + print());
 						replace.killInstance();
 					}

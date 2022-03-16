@@ -200,7 +200,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      */
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Service " + req.getMethod() + " \"" + req.getContextPath() + "\" \"" + req.getServletPath() + "\" \"" + req.getPathInfo() + '"');
         // since we are not overriding handle*(), do this here
         String method = req.getMethod();
@@ -1581,7 +1581,7 @@ public class I2PSnarkServlet extends BasicServlet {
                             Set<File> dirs = storage.getDirectories();
                             if (dirs == null)
                                 break;  // directory deleted out from under us
-                            if (_log.shouldLog(Log.INFO))
+                            if (_log.shouldInfo())
                                 _log.info("Dirs to delete: " + DataHelper.toString(dirs));
                             boolean ok = false;
                             for (File df : dirs) {
@@ -1591,7 +1591,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                 } else if (df.exists()) {
                                     ok = false;
                                     _manager.addMessage(_t("Directory could not be deleted: {0}", df.getAbsolutePath()));
-                                    if (_log.shouldLog(Log.WARN))
+                                    if (_log.shouldWarn())
                                         _log.warn("Could not delete dir " + df);
                                 // else already gone
                                 }

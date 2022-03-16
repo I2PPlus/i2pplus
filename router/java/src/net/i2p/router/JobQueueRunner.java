@@ -40,7 +40,7 @@ class JobQueueRunner extends I2PThread {
                 Job job = _context.jobQueue().getNext();
                 if (job == null) {
                     if (_context.router().isAlive())
-                        if (_log.shouldLog(Log.ERROR))
+                        if (_log.shouldError())
                             _log.error("getNext returned null - dead?");
                     continue;
                 }
@@ -59,7 +59,7 @@ class JobQueueRunner extends I2PThread {
 
                 _currentJob = job;
                 _lastJob = null;
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("[Job " + job.getJobId() + "] " + job.getName() + " -> [Runner " + _id + "] running");
                 long origStartAfter = job.getTiming().getStartAfter();
                 long doStart = _context.clock().now();
@@ -81,7 +81,7 @@ class JobQueueRunner extends I2PThread {
 //                if (duration > 1000) {
                 if (duration > 1500) {
                     _context.statManager().addRateData("jobQueue.jobRunSlow", duration, duration);
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         if (doStart-origStartAfter > 0)
                             _log.warn(_currentJob + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
                         else
@@ -90,10 +90,10 @@ class JobQueueRunner extends I2PThread {
 
 //                if (diff > 100) {
                 if (diff > 1000) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Updating stats for '" + job.getName() + "' took too long (" + diff + "ms)");
                 }
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     if (doStart-origStartAfter > 0)
                         _log.info("[Job " + job.getJobId() + "] " + job.getName() + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
                     else

@@ -76,7 +76,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
             throw new IllegalArgumentException("Bad size");
         _current = new ConcurrentHashSet<ArrayWrapper>(128);
         _previous = new ConcurrentHashSet<ArrayWrapper>(128);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("New DHS " + name + " entryBytes = " + entryBytes +
                      " cycle (s) = " + (durationMs / 1000));
         // try to get a handle on memory usage vs. false positives
@@ -197,7 +197,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
             _currentDuplicates = 0;
         } finally { releaseWriteLock(); }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Decaying the " + _name + " filter after inserting " + currentCount
                        + " elements and " + dups + " false positives");
         _context.statManager().addRateData("router.decayingHashSet." + _name + ".size",

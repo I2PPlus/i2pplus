@@ -140,7 +140,7 @@ class IntroductionManager {
             added = true;
             _inbound.put(Long.valueOf(id2), peer);
         }
-        if (added &&_log.shouldLog(Log.DEBUG))
+        if (added &&_log.shouldDebug())
             _log.debug("Adding peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]" + peer.getRemoteHostId() + ", weRelayToThemAs "
                        + id + ", theyRelayToUsAs " + id2);
     }
@@ -154,7 +154,7 @@ class IntroductionManager {
         if (id2 > 0) {
             _inbound.remove(Long.valueOf(id2));
         }
-        if ((id > 0 || id2 > 0) &&_log.shouldLog(Log.DEBUG))
+        if ((id > 0 || id2 > 0) &&_log.shouldDebug())
             _log.debug("Removing peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]" + peer.getRemoteHostId() + ", weRelayToThemAs "
                        + id + ", theyRelayToUsAs " + id2);
     }
@@ -192,7 +192,7 @@ class IntroductionManager {
      */
     public int pickInbound(RouterAddress current, boolean ipv6, Properties ssuOptions, int howMany) {
         int start = _context.random().nextInt();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Picking inbound out of " + _inbound.size());
         if (_inbound.isEmpty()) return 0;
         List<PeerState> peers = new ArrayList<PeerState>(_inbound.values());
@@ -234,7 +234,7 @@ class IntroductionManager {
                 continue;
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(cur.getRemotePeer());
             if (ri == null) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("No local RouterInfo for selected peer [" + cur + "]");
                 continue;
             }
@@ -242,14 +242,14 @@ class IntroductionManager {
             // but requires RelayRequest support, see below
             List<RouterAddress> ras = _transport.getTargetAddresses(ri);
             if (ras.isEmpty()) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Selected peer has no SSU address: " + ri);
                 continue;
             }
             if ( /* _context.profileOrganizer().isFailing(cur.getRemotePeer()) || */
                 _context.banlist().isBanlisted(cur.getRemotePeer()) ||
                 _transport.wasUnreachable(cur.getRemotePeer())) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Peer is failing, blocklisted or was unreachable: " + cur);
                 continue;
             }
@@ -259,7 +259,7 @@ class IntroductionManager {
             // if they are approaching max connections (see EstablishmentManager)
             // FIXED, was ||, is this OK now?
             if (cur.getLastReceiveTime() < inactivityCutoff && cur.getLastSendTime() < inactivityCutoff) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Peer has been idle too long: " + cur);
                 continue;
             }
@@ -284,7 +284,7 @@ class IntroductionManager {
                 // IPv6/IPv4 and vice versa allowed as of 0.9.50
                 if (((!ipv6 && ip.length == 16) || (ipv6 && ip.length == 4)) &&
                     VersionComparator.comp(ri.getVersion(), MIN_IPV6_INTRODUCER_VERSION) < 0) {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Would have picked IPv6 introducer for IPv4 or IPv4 introducer for IPv6 but they don't support it: " + cur);
                     continue;
                 }
@@ -299,7 +299,7 @@ class IntroductionManager {
                 if (found - oldFound >= 2)
                     break;
             }
-            if (oldFound != found && _log.shouldLog(Log.INFO))
+            if (oldFound != found && _log.shouldInfo())
                 _log.info("Selecting introducer: " + cur);
         }
 
@@ -395,7 +395,7 @@ class IntroductionManager {
         for (PeerState cur : _inbound.values()) {
             if (cur.getIntroducerTime() > pingCutoff &&
                 cur.getLastSendTime() < inactivityCutoff) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Pinging introducer: " + cur);
                 cur.setLastSendTime(now);
                 UDPPacket ping;
@@ -451,7 +451,7 @@ class IntroductionManager {
         _context.statManager().addRateData("udp.receiveRelayIntro", 1);
 
         if (!_transport.allowConnection()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Dropping RelayIntro (router connection limit reached)");
             return;
         }
@@ -463,13 +463,13 @@ class IntroductionManager {
 
         // allow IPv6 as of 0.9.50
         if ((!isValid(ip, port, true)) || (!isValid(bob.getIP(), bob.getPort(), true))) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Bad RelayIntro received from " + bob + " for: " + Addresses.toString(ip, port));
             _context.statManager().addRateData("udp.relayBadIP", 1);
             return;
         }
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Received RelayIntro from " + bob + " for: " + Addresses.toString(ip, port));
 
         InetAddress to = null;
@@ -477,7 +477,7 @@ class IntroductionManager {
             to = InetAddress.getByAddress(ip);
         } catch (UnknownHostException uhe) {
             // banlist Bob?
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("IP address for Alice to hole punch to is invalid", uhe);
             _context.statManager().addRateData("udp.relayBadIP", 1);
             return;
@@ -485,7 +485,7 @@ class IntroductionManager {
 
         RemoteHostId alice = new RemoteHostId(ip, port);
         if (_transport.getPeerState(alice) != null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Ignoring RelayIntro, already have a session to: " + to);
             return;
         }
@@ -494,12 +494,12 @@ class IntroductionManager {
             if (establisher.getInboundState(alice) != null) {
                 // This check may be common, as Alice sends RelayRequests to
                 // several introducers at once.
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Ignoring RelayIntro, establishment in progress to: " + to);
                 return;
             }
             if (!establisher.shouldAllowInboundEstablishment()) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Dropping RelayIntro (too many establishments in progress) - for: " + to);
                 return;
             }
@@ -522,14 +522,14 @@ class IntroductionManager {
             }
         }
         if (tooMany) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Dropping RelayIntro (too many requests) for: " + to);
             return;
         }
         if (already) {
             // This check will trigger a lot, as Alice sends RelayRequests to
             // several introducers at once.
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Ignoring duplicate RelayIntro for: " + to);
             return;
         }
@@ -605,13 +605,13 @@ class IntroductionManager {
 
         PeerState charlie = get(tag);
         if (charlie == null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Received RelayRequest from: " + alice +
                           " with unknown tag " + tag);
             _context.statManager().addRateData("udp.receiveRelayRequestBadTag", 1);
             return;
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Received RelayRequest from: " + alice +
                       " for tag " + tag +
                       " and relaying with " + charlie);
@@ -639,10 +639,10 @@ class IntroductionManager {
             reader.getRelayRequestReader().readAliceIntroKey(key, 0);
             cipherKey = new SessionKey(key);
             macKey = cipherKey;
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Sending RelayResponse (with intro key) to: " + alice);
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Sending RelayResponse (in-session) to: " + alice);
         }
         _transport.send(_builder.buildRelayResponse(alice, charlie, rrReader.readNonce(),

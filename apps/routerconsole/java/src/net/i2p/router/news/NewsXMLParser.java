@@ -378,13 +378,13 @@ public class NewsXMLParser {
                           case ABORT:
                             throw ipe;
                           case SKIP_ENTRY:
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Skipping entry", ipe);
                             e = null;
                             break;
                           case REMOVE_ATTRIBUTE:
                           case REMOVE_ELEMENT:
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Removing element", ipe);
                             continue;
                           case ALLOW_ALL:
@@ -512,7 +512,7 @@ public class NewsXMLParser {
      */
     private boolean validate(Node node) throws I2PParserException {
         String name = node.getName();
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Validating element: " + name);
         if (!xhtmlWhitelist.contains(name.toLowerCase(Locale.US))) {
             switch (_mode) {
@@ -521,12 +521,12 @@ public class NewsXMLParser {
                 throw new I2PParserException("Invalid XHTML element \"" + name + '"');
               case REMOVE_ATTRIBUTE:
               case REMOVE_ELEMENT:
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Removing element: " + node);
                 node.getParentNode().removeNode(node);
                 return true;
               case ALLOW_ALL:
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Allowing non-whitelisted element by configuration: " + node);
                 break;
             }
@@ -540,19 +540,19 @@ public class NewsXMLParser {
                   case SKIP_ENTRY:
                     throw new I2PParserException("Invalid XHTML element \"" + name + "\" due to attribute " + aname);
                   case REMOVE_ELEMENT:
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Removing element: " + node + " due to attribute " + aname);
                     node.getParentNode().removeNode(node);
                     return true;
                   case REMOVE_ATTRIBUTE:
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Removing attribute: " + aname + " from " + node);
                     // sadly, no removeAttribute(int)
                     if (node.removeAttribute(attr))
                         i--;
                     break;
                   case ALLOW_ALL:
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Allowing blacklisted attribute by configuration: " + node);
                     break;
                 }

@@ -61,7 +61,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 	@Override
 	@SuppressWarnings("unchecked")
 	public SkipSpan<K, V> newInstance(SkipList<K, V> sl) {
-		if (bf.log.shouldLog(Log.DEBUG))
+		if (bf.log.shouldDebug())
 			bf.log.debug("Splitting page " + this.page + " containing " + this.nKeys + '/' + this.spanSize);
 		try {
 			int newPage = bf.allocPage();
@@ -87,9 +87,9 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 				this.firstKey = keys[0];
 			this.keys = null;
 			this.vals = null;
-			if (bf.log.shouldLog(Log.DEBUG))
+			if (bf.log.shouldDebug())
 				bf.log.debug("Flushed data for page " + this.page + " containing " + this.nKeys + '/' + this.spanSize);
-		} else if (bf.log.shouldLog(Log.DEBUG)) {
+		} else if (bf.log.shouldDebug()) {
 			// if keys is null, we are (hopefully) just updating the prev/next pages on an unloaded span
 			bf.log.debug("Flushed pointers for for unloaded page " + this.page + " containing " + this.nKeys + '/' + this.spanSize);
 		}
@@ -104,7 +104,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 		super.loadData();
 		if (this.nKeys > 0)
 			this.firstKey = this.keys[0];
-		if (bf.log.shouldLog(Log.DEBUG))
+		if (bf.log.shouldDebug())
 			bf.log.debug("Loaded data for page " + this.page + " containing " + this.nKeys + '/' + this.spanSize + " first key: " + this.firstKey);
 	}
 
@@ -131,7 +131,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 			bf.log.error("Null deserialized first key in page " + curPage);
 			repair(1);
 		}
-		if (bf.log.shouldLog(Log.DEBUG))
+		if (bf.log.shouldDebug())
 			bf.log.debug("Loaded header for page " + this.page + " containing " + this.nKeys + '/' + this.spanSize + " first key: " + this.firstKey);
 	}
 
@@ -259,7 +259,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 
 	public IBSkipSpan(BlockFile bf, BSkipList<K, V> bsl, int spanPage, Serializer<K> key, Serializer<V> val) throws IOException {
 		super(bf, bsl);
-		if (bf.log.shouldLog(Log.DEBUG))
+		if (bf.log.shouldDebug())
 			bf.log.debug("New ibss page " + spanPage);
 		BSkipSpan.loadInit(this, bf, bsl, spanPage, key, val);
 		loadFirstKey();
@@ -387,7 +387,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 	 */
 	@Override
 	public Object[] remove(K key, SkipList<K, V> sl) {
-		if (bf.log.shouldLog(Log.DEBUG))
+		if (bf.log.shouldDebug())
 			bf.log.debug("Remove " + key + " in " + this);
 		if (nKeys <= 0)
 			return null;
@@ -395,7 +395,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 			seekAndLoadData();
 			if (this.nKeys == 1 && this.prev == null && this.next != null && this.next.keys == null) {
 				// fix for NPE in SkipSpan if next is not loaded
-				if (bf.log.shouldLog(Log.INFO))
+				if (bf.log.shouldInfo())
 					bf.log.info("Loading next data for remove");
 				((IBSkipSpan)this.next).seekAndLoadData();
 			}

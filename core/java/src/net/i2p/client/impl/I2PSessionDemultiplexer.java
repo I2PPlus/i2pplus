@@ -45,10 +45,10 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         } else {
             // no listener, throw it out
             if (_listeners.isEmpty()) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("No listeners for incoming message");
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("No listener found for proto: " + proto + " port: " + toport + " msg id: " + msgId +
                            " from pool of " + _listeners.size() + " listeners");
             }
@@ -91,7 +91,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         if (_log.shouldInfo())
             _log.info("Old addListener() " + l + ' ' + proto + ' ' + port);
         I2PSessionListener old = _listeners.put(key(proto, port), new NoPortsListener(l));
-        if (old != null && _log.shouldLog(Log.WARN))
+        if (old != null && _log.shouldWarn())
             _log.warn("Listener " + l + " replaces " + old + " for proto: " + proto + " port: " + port);
     }
 
@@ -105,7 +105,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         if (_log.shouldInfo())
             _log.info("addMuxedListener() " + l + ' ' + proto + ' ' + port);
         I2PSessionListener old = _listeners.put(key(proto, port), l);
-        if (old != null && _log.shouldLog(Log.WARN))
+        if (old != null && _log.shouldWarn())
             _log.warn("Listener " + l + " replaces " + old + " for proto: " + proto + " port: " + port);
     }
 

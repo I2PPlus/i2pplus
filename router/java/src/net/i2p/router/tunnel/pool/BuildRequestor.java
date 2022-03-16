@@ -218,12 +218,12 @@ abstract class BuildRequestor {
                         replySKM = ctx.sessionKeyManager();
                     }
                 }
-                if (pairedTunnel != null && log.shouldLog(Log.INFO))
+                if (pairedTunnel != null && log.shouldInfo())
                     log.info("Couldn't find a paired tunnel, using Exploratory tunnel instead for: " + cfg);
             }
         }
         if (pairedTunnel == null) {
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Tunnel build failed - couldn't find a paired tunnel " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
             // Not even an exploratory tunnel? We are in big trouble.
@@ -239,7 +239,7 @@ abstract class BuildRequestor {
         I2NPMessage msg = createTunnelBuildMessage(ctx, pool, cfg, pairedTunnel, exec);
         //long createTime = System.currentTimeMillis()-beforeCreate;
         if (msg == null) {
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Tunnel build failed - couldn't create the tunnel build message " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
             return false;
@@ -277,7 +277,7 @@ abstract class BuildRequestor {
                 }
             }
 
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Sending tunnel build request [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel + " to ["
                           + ibgw.toBase64().substring(0,6) + "] for " + cfg + " Waiting for reply of "
                           + cfg.getReplyMessageId() + "...");
@@ -286,7 +286,7 @@ abstract class BuildRequestor {
             // pairedTunnel is zero-hop, but no way to do that?
             ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
         } else {
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Sending tunnel build request direct to [" + cfg.getPeer(1).toBase64().substring(0,6)
                           + "] for " + cfg + " Waiting for reply of " + cfg.getReplyMessageId()
                           + " via " + pairedTunnel
@@ -300,7 +300,7 @@ abstract class BuildRequestor {
             // TunnelBuildFirstHopFailJob fires before the 13s build expiration.
             RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(cfg.getPeer(1));
             if (peer == null) {
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("Couldn't find the next hop to send Outbound request to " + cfg);
                 exec.buildComplete(cfg, OTHER_FAILURE);
                 return false;
@@ -329,7 +329,7 @@ abstract class BuildRequestor {
                 return false;
             }
         }
-        //if (log.shouldLog(Log.DEBUG))
+        //if (log.shouldDebug())
         //    log.debug("Tunnel build message " + msg.getUniqueId() + " created in " + createTime
         //              + "ms and dispatched in " + (System.currentTimeMillis()-beforeDispatch));
         return true;
@@ -475,7 +475,7 @@ abstract class BuildRequestor {
         Collections.shuffle(order, ctx.random()); // randomized placement within the message
         cfg.setReplyOrder(order);
 
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug("Build order: " + order + " for " + cfg);
 
         for (int i = 0; i < msg.getRecordCount(); i++) {
@@ -488,7 +488,7 @@ abstract class BuildRequestor {
                 Hash peer = cfg.getPeer(hop);
                 RouterInfo peerInfo = ctx.netDb().lookupRouterInfoLocally(peer);
                 if (peerInfo == null) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("Peer selected for hop " + i + "/" + hop + " was not found locally: "
                                   + peer + " for " + cfg);
                     return null;
@@ -496,7 +496,7 @@ abstract class BuildRequestor {
                     key = peerInfo.getIdentity().getPublicKey();
                 }
             }
-            if (log.shouldLog(Log.DEBUG)) {
+            if (log.shouldDebug()) {
                 if (key != null)
                     log.debug("[ReplyMsgID " + cfg.getReplyMessageId() + "] Record " + i + "/" + hop + " has key " + key);
                 else
@@ -513,7 +513,7 @@ abstract class BuildRequestor {
 
     private static void buildZeroHop(RouterContext ctx, PooledTunnelCreatorConfig cfg, BuildExecutor exec) {
         Log log = ctx.logManager().getLog(BuildRequestor.class);
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug("Build zero hop tunnel " + cfg);
 
         boolean ok;

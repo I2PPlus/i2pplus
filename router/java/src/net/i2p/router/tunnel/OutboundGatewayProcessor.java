@@ -35,12 +35,12 @@ class OutboundGatewayProcessor {
      *               Should always be 1024 bytes.
      */
     public void process(byte orig[], int offset, int length) {
-        //if (_log.shouldLog(Log.DEBUG)) {
+        //if (_log.shouldDebug()) {
         //    _log.debug("Original random IV: " + Base64.encode(orig, offset, IV_LENGTH));
         //    _log.debug("data:  " + Base64.encode(orig, IV_LENGTH, length - IV_LENGTH));
         //}
         decrypt(_config, orig, offset, length);
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Finished processing the preprocessed data for first hop from our Outbound Gateway.");
     }
 

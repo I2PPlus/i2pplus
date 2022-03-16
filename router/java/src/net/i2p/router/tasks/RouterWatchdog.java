@@ -46,7 +46,7 @@ public class RouterWatchdog implements Runnable {
         if (howLongAgo > MAX_JOB_RUN_LAG) {
             Job cur = _context.jobQueue().getLastJob();
             if (cur != null) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Last job was queued up " + DataHelper.formatDuration(howLongAgo)
                                + " ago: " + cur);
                 return false;
@@ -76,7 +76,7 @@ public class RouterWatchdog implements Runnable {
     }
 
     private void dumpStatus() {
-        if (_log.shouldLog(Log.ERROR)) {
+        if (_log.shouldError()) {
             RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
             Rate r = null;
             if (rs != null)

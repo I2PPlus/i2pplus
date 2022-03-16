@@ -111,7 +111,7 @@ public class DCCClientManager extends EventReceiver {
             cTunnel.attachEventDispatcher(this);
             cTunnel.startRunning();
             int lport = cTunnel.getLocalPort();
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Opened client tunnel at port " + lport +
                           " pointing to " + b32 + ':' + port);
             _incoming.put(Integer.valueOf(lport), cTunnel);
@@ -193,7 +193,7 @@ public class DCCClientManager extends EventReceiver {
         I2PTunnelDCCClient c = _incoming.remove(lport);
         if (c != null) {
             _active.put(lport, client);
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Added client tunnel for port " + lport +
                           " pending count now: " + _incoming.size() +
                           " active count now: " + _active.size() +
@@ -208,7 +208,7 @@ public class DCCClientManager extends EventReceiver {
         tun = _active.remove(lport);
         if (tun != null)
             _complete.put(lport, tun);
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Removed client tunnel for port " + lport +
                       " pending count now: " + _incoming.size() +
                       " active count now: " + _active.size() +

@@ -495,7 +495,7 @@ public class I2PSSLSocketFactory {
         int adds = KeyStoreUtil.addCerts(dir, ks);
         int totalAdds = adds;
         if (adds > 0) {
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Loaded " + adds + " trusted certificates from " + dir.getAbsolutePath());
         }
 
@@ -506,7 +506,7 @@ public class I2PSSLSocketFactory {
                 adds = KeyStoreUtil.addCerts(dir2, ks);
                 totalAdds += adds;
                 if (adds > 0) {
-                    if (log.shouldLog(Log.INFO))
+                    if (log.shouldInfo())
                         log.info("Loaded " + adds + " trusted certificates from " + dir.getAbsolutePath());
                 }
             }
@@ -515,7 +515,7 @@ public class I2PSSLSocketFactory {
             dir2 = dir;
         }
         if (totalAdds > 0 || loadSystemCerts) {
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Loaded total of " + totalAdds + " new trusted certificates");
         } else {
             String msg = "No trusted certificates loaded (looked in " +
@@ -622,10 +622,10 @@ public class I2PSSLSocketFactory {
         for (String s : toEnable) {
             if (supported.contains(s)) {
                 if (selected.add(s)) {
-                   if (log.shouldLog(Log.INFO))
+                   if (log.shouldInfo())
                        log.info("Added, previously disabled: " + s);
                 }
-            } else if (log.shouldLog(Log.INFO)) {
+            } else if (log.shouldInfo()) {
                 log.info("Not supported in this JVM: " + s);
             }
         }
@@ -634,7 +634,7 @@ public class I2PSSLSocketFactory {
             log.logAlways(Log.WARN, "No TLS support for SSLEepGet, falling back");
             return enabledArr;
         }
-        if (log.shouldLog(Log.DEBUG)) {
+        if (log.shouldDebug()) {
             List<String> foo = new ArrayList<String>(selected);
             Collections.sort(foo);
             log.debug("Selected: " + foo);

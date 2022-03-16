@@ -552,7 +552,7 @@ class PacketBuilder2 {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = SHORT_HEADER_SIZE;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending peer test " + nonce + " to Bob");
         
         // now for the body
@@ -601,7 +601,7 @@ class PacketBuilder2 {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = SHORT_HEADER_SIZE;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending peer test " + nonce + " to Alice");
         
         // now for the body
@@ -638,7 +638,7 @@ class PacketBuilder2 {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = SHORT_HEADER_SIZE;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending peer test " + nonce + " to Charlie");
         
         // now for the body
@@ -675,7 +675,7 @@ class PacketBuilder2 {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = SHORT_HEADER_SIZE;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending peer test " + nonce + " to Bob");
         
         // now for the body
@@ -705,7 +705,7 @@ class PacketBuilder2 {
      */
     public UDPPacket buildHolePunch(InetAddress to, int port) {
         UDPPacket packet = UDPPacket.acquire(_context, false);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Sending relay hole punch to " + to + ":" + port);
 
         // the packet is empty and does not need to be authenticated, since

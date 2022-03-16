@@ -129,7 +129,7 @@ abstract class SAMHandler implements Runnable, Handler {
      */
     protected final boolean writeString(String str) {
         synchronized (socketWLock) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Sending client: [" + str + "]");
             return writeString(str, socket);
         }

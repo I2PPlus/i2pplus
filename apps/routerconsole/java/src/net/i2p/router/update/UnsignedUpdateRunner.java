@@ -46,7 +46,7 @@ class UnsignedUpdateRunner extends UpdateRunner {
                 return;
             }
             String zipURL = _currentURI.toString();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Starting unsigned update URL: " + zipURL);
             try {
                 // 40 retries!!

@@ -160,7 +160,7 @@ class OutboundClientMessageJobHelper {
                                                    TunnelInfo replyTunnel, boolean requireAck,
                                                    LeaseSet bundledReplyLeaseSet, SessionKeyManager skm) {
         Log log = ctx.logManager().getLog(OutboundClientMessageJobHelper.class);
-        if (replyToken >= 0 && log.shouldLog(Log.DEBUG))
+        if (replyToken >= 0 && log.shouldDebug())
             log.debug("Reply token: " + replyToken);
         // need random CloveSet ID as it's checked in receiver MessageValidator pre-0.9.44
         // See GarlicMessageReceiver
@@ -191,7 +191,7 @@ class OutboundClientMessageJobHelper {
 
         config.setRecipientPublicKey(recipientPK);
 
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Creating garlic config to be encrypted to " + recipientPK
                      + "\n* Destination: [" + dest.calculateHash().toBase64().substring(0,6) + "]");
 
@@ -210,7 +210,7 @@ class OutboundClientMessageJobHelper {
         Log log = ctx.logManager().getLog(OutboundClientMessageJobHelper.class);
 
         if (replyToTunnel == null) {
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Unable to send client message from [" + from.toBase64().substring(0,6)
                          + "] - no inbound tunnels available");
             return null;
@@ -218,7 +218,7 @@ class OutboundClientMessageJobHelper {
 
         TunnelId replyToTunnelId = replyToTunnel.getReceiveTunnelId(0); // tunnel id on that gateway
         Hash replyToTunnelRouter = replyToTunnel.getPeer(0); // inbound tunnel gateway
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug("ACK for the data message will come back along [Tunnel " + replyToTunnelId
                       + "]: " + replyToTunnel);
 
@@ -238,7 +238,7 @@ class OutboundClientMessageJobHelper {
         if (lsk == null || lsk.isSupported(EncType.ELGAMAL_2048)) {
             msg = wrapDSM(ctx, skm, dsm, expiration);
             if (msg == null) {
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("Failed to wrap ACK clove");
                 return null;
             }
@@ -255,7 +255,7 @@ class OutboundClientMessageJobHelper {
         // defaults
         //ackClove.setRequestAck(false);
 
-        //if (log.shouldLog(Log.DEBUG))
+        //if (log.shouldDebug())
         //    log.debug("Delivery status message is targeting us ["
         //              + ackClove.getRecipient().getIdentity().getHash().toBase64()
         //              + "] via tunnel " + replyToTunnelId.getTunnelId() + " on "

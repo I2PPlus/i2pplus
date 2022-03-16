@@ -187,7 +187,7 @@ public class JobQueue {
         long start = job.getTiming().getStartAfter();
         if (start > now + 3*24*60*60*1000L) {
             // catch bugs, Job.requeue() argument is a delay not a time
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn(job + " scheduled far in the future: " + (new Date(start)));
         }
         synchronized (_jobLock) {
@@ -200,7 +200,7 @@ public class JobQueue {
                 // Always remove and re-add, since it needs to be
                 // re-sorted in the TreeSet.
                 boolean removed = _timedJobs.remove(job);
-                if (removed && _log.shouldLog(Log.WARN))
+                if (removed && _log.shouldWarn())
                     _log.warn(job + " rescheduled");
             }
 
@@ -230,7 +230,7 @@ public class JobQueue {
         _context.statManager().addRateData("jobQueue.queuedJobs", _timedJobs.size());
         if (dropped) {
             _context.statManager().addRateData("jobQueue.droppedJobs", 1);
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn(job + " dropped due to backlog: " + numReady + " jobs already queued");
             String key = job.getName();
             JobStats stats = _jobStats.get(key);
@@ -398,7 +398,7 @@ public class JobQueue {
         _runnerId.set(0);
 
       /********
-        if (_log.shouldLog(Log.WARN)) {
+        if (_log.shouldWarn()) {
             StringBuilder buf = new StringBuilder(1024);
             buf.append("current jobs: \n");
             for (Iterator iter = _queueRunners.values().iterator(); iter.hasNext(); ) {
@@ -495,7 +495,7 @@ public class JobQueue {
                 return j;
             } catch (InterruptedException ie) {}
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Job no longer alive; returning null");
         return null;
     }
@@ -513,7 +513,7 @@ public class JobQueue {
             // we've already enabled parallel operation, so grow to however many are
             // specified
             if (_queueRunners.size() < numThreads) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Increasing the number of queue runners from "
                               + _queueRunners.size() + " to " + numThreads);
                 for (int i = _queueRunners.size(); i < numThreads; i++) {
@@ -566,7 +566,7 @@ public class JobQueue {
                                 // find jobs due to start before now
                                 long timeLeft = j.getTiming().getStartAfter() - now;
                                 if (lastJob != null && lastTime > j.getTiming().getStartAfter()) {
-                                    if (_log.shouldLog(Log.INFO))
+                                    if (_log.shouldInfo())
                                         _log.info(lastJob + " out of order with " + j + "\n* Difference: " +
                                                    DataHelper.formatDuration(lastTime - j.getTiming().getStartAfter()));
                                 }
@@ -592,14 +592,14 @@ public class JobQueue {
                                     // failsafe - remove and re-add, peek at the next job,
                                     // break and go around again
                                     if (timeToWait > 10*1000 && iter.hasNext()) {
-                                        if (_log.shouldLog(Log.INFO))
+                                        if (_log.shouldInfo())
                                             _log.info(j + " deferred for " + DataHelper.formatDuration(timeToWait));
                                         iter.remove();
                                         Job nextJob = iter.next();
                                         _timedJobs.add(j);
                                         long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
                                         if (timeToWait > nextTimeLeft) {
-                                            if (_log.shouldLog(Log.INFO))
+                                            if (_log.shouldInfo())
                                                 _log.info(j + " out of order with " + nextJob + "\n* Difference: " +
                                                            DataHelper.formatDuration(timeToWait - nextTimeLeft));
                                             timeToWait = Math.max(10, nextTimeLeft);
@@ -615,7 +615,7 @@ public class JobQueue {
                                     timeToWait = 100;
                                 else if (timeToWait > 10*1000)
                                     timeToWait = 10*1000;
-                                //if (_log.shouldLog(Log.DEBUG))
+                                //if (_log.shouldDebug())
                                 //    _log.debug("Waiting " + timeToWait + " before rechecking the timed queue");
                                 _nextPumperRun = _context.clock().now() + timeToWait;
                                 _jobLock.wait(timeToWait);
@@ -623,7 +623,7 @@ public class JobQueue {
                     } catch (InterruptedException ie) {}
                 } // while (_alive)
             } catch (Throwable t) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Pumper killed?!", t);
             } finally {
                 _context.clock().removeUpdateListener(this);
@@ -711,7 +711,7 @@ public class JobQueue {
         }
 
         if (dieMsg != null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn(dieMsg);
             if (hist != null)
                 hist.messageProcessingError(-1, JobQueue.class.getName(), dieMsg);
@@ -720,7 +720,7 @@ public class JobQueue {
         if ( (lag > _lagFatal) && (uptime > _warmupTime) ) {
             // this is fscking bad - the network at this size shouldn't have this much real contention
             // so we're going to DIE DIE DIE
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.log(Log.WARN, "Router is incredibly overloaded or there's an error.");
             //try { Thread.sleep(5000); } catch (InterruptedException ie) {}
             //Router.getInstance().shutdown();
@@ -729,7 +729,7 @@ public class JobQueue {
 
         if ( (uptime > _warmupTime) && (duration > _runFatal) ) {
             // slow CPUs can get hosed with ElGamal, but 10s is too much.
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.log(Log.WARN, "Router is incredibly overloaded (slow cpu?) or there's an error.");
             //try { Thread.sleep(5000); } catch (InterruptedException ie) {}
             //Router.getInstance().shutdown();

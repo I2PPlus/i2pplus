@@ -63,7 +63,7 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      */
     public void commErrorOccurred(Hash peer) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Comm error occurred for peer " + peer.toBase64(), new Exception("Comm error"));
         PeerProfile data = getProfile(peer);
         //if (data == null) return;

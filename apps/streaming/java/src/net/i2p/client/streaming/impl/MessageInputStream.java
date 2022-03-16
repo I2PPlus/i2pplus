@@ -268,7 +268,7 @@ class MessageInputStream extends InputStream {
      * @param timeout how long read calls should block, 0 for nonblocking, negative to indefinitely block
      */
     public void setReadTimeout(int timeout) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Changing read timeout from " + _readTimeout + " to " + timeout + ": " + hashCode());
         _readTimeout = timeout;
     }
@@ -280,7 +280,7 @@ class MessageInputStream extends InputStream {
      */
     public void closeReceived() {
         synchronized (_dataLock) {
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 StringBuilder buf = new StringBuilder(128);
                 buf.append("Close received, ready bytes: ");
                 long available = 0;
@@ -324,12 +324,12 @@ class MessageInputStream extends InputStream {
      * @return true if this is a new packet, false if it is a dup
      */
     public boolean messageReceived(long messageId, ByteArray payload) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Received [MsgID " + messageId + "] with " +
                        (payload != null ? payload.getValid() + " bytes" : "no payload"));
         synchronized (_dataLock) {
             if (messageId <= _highestReadyBlockId) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Ignoring duplicate [MsgID " + messageId + "]");
                 return false; // already received
             }
@@ -338,7 +338,7 @@ class MessageInputStream extends InputStream {
 
             if (_highestReadyBlockId + 1 == messageId) {
                 if (!_locallyClosed && payload.getValid() > 0) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Accepting bytes as ready: " + payload.getValid());
                     _readyDataBlocks.add(payload);
                 }
@@ -351,7 +351,7 @@ class MessageInputStream extends InputStream {
                         _readyDataBlocks.add(ba);
                     }
 
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Making ready the block " + cur);
                     cur++;
                     _highestReadyBlockId++;
@@ -422,7 +422,7 @@ class MessageInputStream extends InputStream {
                             throw new IOException("Input stream closed");
 
                         if ( (_notYetReadyBlocks.isEmpty()) && (_closeReceived) ) {
-                            if (_log.shouldLog(Log.INFO))
+                            if (_log.shouldInfo())
                                 _log.info("read(...," + offset + ", " + length + ")[" + i
                                            + "] got EOF after " + _readTotal + ": " + hashCode());
                             return -1;
@@ -468,7 +468,7 @@ class MessageInputStream extends InputStream {
                                 if (readTimeout > 0) {
                                     long remaining = expiration - System.currentTimeMillis();
                                     if (remaining <= 0) {
-                                        if (_log.shouldLog(Log.INFO))
+                                        if (_log.shouldInfo())
                                             _log.info("read(...," + offset+", " + length+ ")[" + i
                                                        + "] timed out: " + hashCode());
                                         throw new SocketTimeoutException();
@@ -528,7 +528,7 @@ class MessageInputStream extends InputStream {
                     numBytes += cur.getValid();
             }
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("available(): " + numBytes + ": " + hashCode());
 
         return numBytes;
@@ -580,7 +580,7 @@ class MessageInputStream extends InputStream {
     @Override
     public void close() {
         synchronized (_dataLock) {
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 StringBuilder buf = new StringBuilder(128);
                 buf.append("close(), ready bytes: ");
                 long available = 0;

@@ -795,7 +795,7 @@ class Packet {
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
             if (_transientExpires < ctx.clock().now()) {
                 Log l = ctx.logManager().getLog(Packet.class);
-                if (l.shouldLog(Log.WARN))
+                if (l.shouldWarn())
                     l.warn("Offline signature expired " + toString());
                 return false;
             }
@@ -812,7 +812,7 @@ class Packet {
             boolean ok = baos.verifySignature(ctx, _offlineSignature, spk);
             if (!ok) {
                 Log l = ctx.logManager().getLog(Packet.class);
-                if (l.shouldLog(Log.WARN))
+                if (l.shouldWarn())
                     l.warn("Offline signature failed on " + toString());
                 return false;
             }
@@ -822,7 +822,7 @@ class Packet {
         SigType type = spk.getType();
         if (type == null || !type.isAvailable()) {
             Log l = ctx.logManager().getLog(Packet.class);
-            if (l.shouldLog(Log.WARN))
+            if (l.shouldWarn())
                 l.warn("Unknown sig type in " + spk + " cannot verify " + toString());
             return false;
         }
@@ -848,13 +848,13 @@ class Packet {
         } catch (IllegalArgumentException iae) {
             // sigtype mismatch
             Log l = ctx.logManager().getLog(Packet.class);
-            if (l.shouldLog(Log.WARN))
+            if (l.shouldWarn())
                 l.warn("Signature failed on " + toString(), iae);
             ok = false;
         }
         if (!ok) {
             Log l = ctx.logManager().getLog(Packet.class);
-            if (l.shouldLog(Log.WARN))
+            if (l.shouldWarn())
                 l.warn("Signature failed on " + toString() + " using SPK " + spk);
         }
         return ok;

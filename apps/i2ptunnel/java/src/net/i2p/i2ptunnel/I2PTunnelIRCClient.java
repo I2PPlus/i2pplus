@@ -129,7 +129,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     protected void clientConnectionRun(Socket s) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[IRC Client] New connection - local address is: " + s.getLocalAddress() +
                       " from: " + s.getInetAddress());
         I2PSocket i2ps = null;
@@ -156,7 +156,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             out.run();
         } catch (IOException ex) {
             // generally NoRouteToHostException
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("[IRC Client] Error connecting: " + ex.getMessage());
             try {
                 // Send a response so the user doesn't just see a disconnect
@@ -166,7 +166,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                 s.getOutputStream().write(DataHelper.getUTF8(msg));
             } catch (IOException ioe) {}
         } catch (I2PException ex) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("[IRC Client] Error connecting: " + ex.getMessage());
             try {
                 // Send a response so the user doesn't just see a disconnect
@@ -192,7 +192,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         synchronized(_addrs) {
             int size = _addrs.size();
             if (size <= 0) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("[IRC Client] No client targets?!");
                 return null;
             }
@@ -278,7 +278,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         I2PTunnelDCCServer server;
         synchronized(this) {
             if (_DCCServer == null) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[IRC Client] Starting DCC Server...");
                 _DCCServer = new I2PTunnelDCCServer(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
                 // TODO add some prudent tunnel options (or is it too late?)
@@ -287,7 +287,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             server = _DCCServer;
         }
         int rv = server.newOutgoing(ip, port, type);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[IRC Client] New outgoing " + type + ' ' + port + " returns " + rv);
         return rv;
     }
@@ -296,7 +296,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         DCCClientManager tracker;
         synchronized(this) {
             if (_DCCClientManager == null) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[IRC Client] Starting DCC Client...");
                 _DCCClientManager = new DCCClientManager(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
             }
@@ -304,7 +304,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         }
         // The tracker starts our client
         int rv = tracker.newIncoming(b32, port, type);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[IRC Client] New incoming " + type + ' ' + b32 + ' ' + port + " returns " + rv);
         return rv;
     }

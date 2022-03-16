@@ -165,13 +165,13 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     protected ServerSocket getServerSocket() throws IOException {
         ServerSocket rv;
         if (_bindAllInterfaces) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Listening on port " + _port + " on all interfaces");
             rv = _factory.createServerSocket(_port);
         } else {
             String listenInterface = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST, 
                                                           ClientManagerFacadeImpl.DEFAULT_HOST);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Listening on port " + _port + " of the specific interface: " + listenInterface);
             rv = _factory.createServerSocket(_port, 0, InetAddress.getByName(listenInterface));
         }
@@ -207,7 +207,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
             socket.setSoTimeout(oldTimeout);
             return rv;
         } catch (IOException ioe) {}
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
              _log.warn("Peer did not authenticate themselves as I2CP quickly enough, dropping");
         return false;
     }

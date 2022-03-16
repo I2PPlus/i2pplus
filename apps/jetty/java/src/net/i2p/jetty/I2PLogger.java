@@ -54,7 +54,7 @@ public class I2PLogger implements Logger
     
     public boolean isDebugEnabled()
     {
-        return _log.shouldLog(Log.DEBUG);
+        return _log.shouldDebug();
     }
     
     public void setDebugEnabled(boolean enabled)
@@ -72,7 +72,7 @@ public class I2PLogger implements Logger
             _log.info(msg);
         } else if (arg0 != null && arg1 == null && arg0 instanceof Throwable) {
             _log.info(msg, (Throwable) arg0);
-        } else if (_log.shouldLog(Log.INFO)) {
+        } else if (_log.shouldInfo()) {
             synchronized(_buffer) {
                 format(msg,arg0,arg1);
                 if (arg1 != null && arg1 instanceof Throwable)
@@ -94,7 +94,7 @@ public class I2PLogger implements Logger
             _log.debug(msg);
         } else if (arg0 != null && arg1 == null && arg0 instanceof Throwable) {
             _log.debug(msg, (Throwable) arg0);
-        } else if (_log.shouldLog(Log.DEBUG)) {
+        } else if (_log.shouldDebug()) {
             synchronized(_buffer) {
                 format(msg,arg0,arg1);
                 if (arg1 != null && arg1 instanceof Throwable)
@@ -111,7 +111,7 @@ public class I2PLogger implements Logger
             _log.warn(msg);
         } else if (arg0 != null && arg1 == null && arg0 instanceof Throwable) {
             warn(msg, (Throwable) arg0);
-        } else if (_log.shouldLog(Log.WARN)) {
+        } else if (_log.shouldWarn()) {
             synchronized(_buffer) {
                 format(msg,arg0,arg1);
                 if (arg1 != null && arg1 instanceof Throwable)
@@ -127,7 +127,7 @@ public class I2PLogger implements Logger
         // some of these are serious, some aren't
         // no way to get it right
         if (th != null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn(msg, th);
             else if (!(th instanceof ClosedChannelException))
                 _log.logAlways(Log.WARN, msg + ": " + th);

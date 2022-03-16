@@ -128,7 +128,7 @@ public class TunnelHistory {
     public RateStat getFailedRate() { return _failRate; }
 
     public void coalesceStats() {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Coalescing Profile Manager stats");
         _rejectRate.coalesceStats();
         _failRate.coalesceStats();
@@ -202,10 +202,10 @@ public class TunnelHistory {
         _lifetimeRejected.set(getLong(props, "tunnels.lifetimeRejected"));
         try {
             _rejectRate.load(props, "tunnelHistory.rejectRate", true);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Loading tunnelHistory.rejectRate");
             _failRate.load(props, "tunnelHistory.failRate", true);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Loading tunnelHistory.failRate");
         } catch (IllegalArgumentException iae) {
             _log.warn("TunnelHistory rates are corrupt, resetting...", iae);

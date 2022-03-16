@@ -125,7 +125,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             isInboundExploratory = false;
         }
         if (replyTunnelInfo == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No inbound tunnels to get a reply from");
             _facade.verifyFinished(_key);
             return;
@@ -143,7 +143,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             outTunnel = ctx.tunnelManager().selectOutboundTunnel(_client, _target);
         }
         if (outTunnel == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No outbound tunnels to verify a store");
             _facade.verifyFinished(_key);
             return;
@@ -152,7 +152,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         // garlic encrypt to hide contents from the OBEP
         RouterInfo peer = _facade.lookupRouterInfoLocally(_target);
         if (peer == null) {
-             if (_log.shouldLog(Log.WARN))
+             if (_log.shouldWarn())
                  _log.warn("Failed to find target RouterInfo for Floodfill");
             _facade.verifyFinished(_key);
             return;
@@ -193,7 +193,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     // garlic encrypt
                     sess = MessageWrapper.generateSession(ctx, _client, VERIFY_TIMEOUT, !supportsRatchet);
                     if (sess == null) {
-                         if (_log.shouldLog(Log.WARN))
+                         if (_log.shouldWarn())
                              _log.warn("No SessionKeyManager to reply to");
                         _facade.verifyFinished(_key);
                         return;
@@ -226,7 +226,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 fromKey = _client;
             _wrappedMessage = MessageWrapper.wrap(ctx, lookup, fromKey, peer);
             if (_wrappedMessage == null) {
-                 if (_log.shouldLog(Log.WARN))
+                 if (_log.shouldWarn())
                     _log.warn("Garlic encryption failure");
                 _facade.verifyFinished(_key);
                 return;
@@ -237,14 +237,14 @@ class FloodfillVerifyStoreJob extends JobImpl {
             // or forces ECIES for ECIES peer
             sent = MessageWrapper.wrap(ctx, lookup, peer);
             if (sent == null) {
-                 if (_log.shouldLog(Log.WARN))
+                 if (_log.shouldWarn())
                     _log.warn("Garlic encryption failure");
                 _facade.verifyFinished(_key);
                 return;
             }
         }
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[" + getJobId() + "] Starting verify" +
                       "\n* Stored: Key [" + _key.toBase64().substring(0,6) + "]" + " to [" + _sentTo.toBase64().substring(0,6) + "]" +
                       "\n* Querying: [" + _target.toBase64().substring(0,6) + "]");
@@ -288,11 +288,11 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         _ipSet.addAll(peerIPs);
                         return peer;
                     } else {
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("[Job " + getJobId() + "] Skipping floodfill verify with Router [" + peer.toBase64().substring(0,6) + "] - too close to the store");
                     }
                 } else {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("[Job " + getJobId() + "] Skipping floodfill verify with Router [" + peer.toBase64().substring(0,6) + "] - too old");
                 }
                 _ignore.add(peer);
@@ -303,7 +303,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 return peers.get(0);
         }
 
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("[Job " + getJobId() + "] No other peers to verify floodfill with, using the one we sent to");
         return _sentTo;
     }
@@ -387,7 +387,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     if (_sentTo != null)
                         pm.dbStoreSuccessful(_sentTo);
                     ctx.statManager().addRateData("netDb.floodfillVerifyOK", delay);
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("[Job " + getJobId() + "] Verify via Floodfill succeeded for [" + _key.toBase64().substring(0,6) + "]");
                     if (_isRouterInfo)
                         _facade.routerInfoPublishSuccessful();
@@ -395,14 +395,14 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 }
                 if (_log.shouldWarn()) {
                     _log.warn("[Job " + getJobId() + "] Verify via Floodfill failed (older) for [" + _key.toBase64().substring(0,6) + "]");
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] Received older data: " + dsm.getEntry());
             } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
                 DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage) _message;
                 // assume 0 old, all new, 0 invalid, 0 dup
                 pm.dbLookupReply(_target,  0,
                                 dsrm.getNumReplies(), 0, 0, delay);
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("[Job " + getJobId() + "] Verify via Floodfill failed (DbSearchReplyMsg) for [" + _key.toBase64().substring(0,6) + "]");
                 // only for RI... LS too dangerous?
                 if (_isRouterInfo)
@@ -481,7 +481,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             //if (_sentTo != null)
             //    getContext().profileManager().dbStoreFailed(_sentTo);
             getContext().statManager().addRateData("netDb.floodfillVerifyTimeout", getContext().clock().now() - _sendTime);
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("[Job " + getJobId() + "] Floodfill verify timed out for [" + _key.toBase64().substring(0,6) + "]");
             if (_attempted < MAX_PEERS_TO_TRY) {
                 // Don't resend, simply rerun FVSJ.this inline and

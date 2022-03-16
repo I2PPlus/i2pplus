@@ -61,7 +61,7 @@ public class GeoIPv6 {
         File geoFile = new File(context.getBaseDir(), GEOIP_DIR_DEFAULT);
         geoFile = new File(geoFile, GEOIP_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("GeoIP file not found: " + geoFile.getAbsolutePath());
             return new String[0];
         }
@@ -116,13 +116,13 @@ public class GeoIPv6 {
                 }
             }
         } catch (IOException ioe) {
-            if (log.shouldLog(Log.ERROR))
+            if (log.shouldError())
                 log.error("Error reading the geoFile", ioe);
         } finally {
             if (in != null) try { in.close(); } catch (IOException ioe) {}
         }
 
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("GeoIPv6 processing finished, time: " + (System.currentTimeMillis() - start));
         return rv;
     }
@@ -201,7 +201,7 @@ public class GeoIPv6 {
                 System.err.println("Read " + count + " entries from " + geoFile);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
-                //if (_log.shouldLog(Log.ERROR))
+                //if (_log.shouldError())
                 //    _log.error("Error reading the geoFile", ioe);
                 return false;
             } finally {
@@ -265,7 +265,7 @@ public class GeoIPv6 {
             System.err.println("Wrote " + entries.size() + " entries to " + outFile);
         } catch (IOException ioe) {
             ioe.printStackTrace();
-            //if (_log.shouldLog(Log.ERROR))
+            //if (_log.shouldError())
             //    _log.error("Error reading the geoFile", ioe);
             return false;
         } finally {

@@ -100,7 +100,7 @@ class LoadRouterInfoJob extends JobImpl {
                 // Catch this here before it all gets worse
                 if (!info.isValid())
                     throw new DataFormatException("Our RouterInfo has a bad signature");
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Reading in RouterInfo from " + rif.getAbsolutePath() + " and it has " + info.getAddresses().size() + " addresses");
                 // don't reuse if family name changed
                 if (DataHelper.eq(info.getOption(FamilyKeyCrypto.OPT_NAME),

@@ -42,14 +42,14 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
         int length = getLength(settings);
         if (length < 0) {
-            if (log.shouldLog(Log.DEBUG))
+            if (log.shouldDebug())
                 log.debug("Tunnel length requested is zero: " + settings);
             return null;
         }
 
         //if (false && shouldSelectExplicit(settings)) {
         //    List<Hash> rv = selectExplicit(settings, length);
-        //    if (l.shouldLog(Log.DEBUG))
+        //    if (l.shouldDebug())
         //        l.debug("Explicit peers selected: " + rv);
         //    return rv;
         //}
@@ -98,23 +98,23 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 // connected to and so they have our real RI - to maximize the chance
                 // that the adjacent hop can connect to us.
                 // use only connected peers so we don't make more connections
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Selecting all Non-Failing peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
                 // SANFP adds all not-connected to exclude, so make a copy
                 Set<Hash> SANFPExclude = new HashSet<Hash>(closestExclude);
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, closest, ipRestriction, ipSet);
                 if (closest.isEmpty()) {
                     // ANFP does not fall back to non-connected
-                    if (log.shouldLog(Log.INFO))
+                    if (log.shouldInfo())
                         log.info("Selecting Fast peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
                     ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 }
             } else if (exploreHighCap) {
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Selecting High Capacity peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
                 ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest, ipRestriction, ipSet);
             } else {
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Selecting Non-Failing peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
                 ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
             }
@@ -154,14 +154,14 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             }
             if (pickFurthest) {
                 Set<Hash> furthest = new HashSet<Hash>(1);
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Selecting all Non-Failing peers, excluding " + exclude.size() + " furthest Outbound");
                 // ANFP adds all not-connected to exclude, so make a copy
                 Set<Hash> SANFPExclude = new HashSet<Hash>(exclude);
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, furthest, ipRestriction, ipSet);
                 if (furthest.isEmpty()) {
                     // ANFP does not fall back to non-connected
-                    if (log.shouldLog(Log.INFO))
+                    if (log.shouldInfo())
                         log.info("Selecting Fast peers, excluding " + exclude.size() + " furthest Outbound");
                     ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                 }
@@ -183,7 +183,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
 
         if (length > 0) {
             if (exploreHighCap) {
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Selecting " + length + " High Capacity peers for " + (isInbound ? " Inbound" : " Outbound") + " Exploratory tunnel, excluding " + exclude.size());
                 ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches, ipRestriction, ipSet);
             } else {
@@ -192,7 +192,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 // Peer org credits existing items in matches
                 if (length > 2)
                     ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Selecting " + length + " Non-Failing peers for " + (isInbound ? " Inbound" : " Outbound") + " Exploratory tunnel, excluding " + exclude.size());
                 ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet);
             }
@@ -286,7 +286,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         } else {
             failPct = getExploratoryFailPercentage();
             //Log l = ctx.logManager().getLog(getClass());
-            //if (l.shouldLog(Log.DEBUG))
+            //if (l.shouldDebug())
             //    l.debug("Normalized Fail pct: " + failPct);
             // always try a little, this helps keep the failPct stat accurate too
             if (failPct > 100 - MIN_NONFAILING_PCT)
@@ -310,7 +310,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         int c = getFailPercentage("Client");
         int e = getFailPercentage("Exploratory");
         //Log l = ctx.logManager().getLog(getClass());
-        //if (l.shouldLog(Log.DEBUG))
+        //if (l.shouldDebug())
         //    l.debug("Client, Expl. Fail pct: " + c + ", " + e);
         if (e <= c || e <= 25) // doing very well (unlikely)
             return 0;

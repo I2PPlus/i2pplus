@@ -166,7 +166,7 @@ class OutboundEstablishState {
         _introductionNonce = -1;
         _keyFactory = dh;
         if (addr.getIntroducerCount() > 0) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("New Outbound establish to " + remotePeer.calculateHash() + ", with address: " + addr);
             _currentState = OutboundState.OB_STATE_PENDING_INTRO;
         } else {
@@ -205,7 +205,7 @@ class OutboundEstablishState {
         _introductionNonce = -1;
         _keyFactory = null;
         if (addr.getIntroducerCount() > 0) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("new outbound establish to " + remotePeer.calculateHash() + ", with address: " + addr);
             _currentState = OutboundState.OB_STATE_PENDING_INTRO;
         } else {
@@ -266,7 +266,7 @@ class OutboundEstablishState {
         // chance of a duplicate here in a race, that's ok
         if (!_queuedMessages.contains(msg))
             _queuedMessages.offer(msg);
-        else if (_log.shouldLog(Log.WARN))
+        else if (_log.shouldWarn())
              _log.warn("Attempt to add duplicate msg to queue: " + msg);
     }
 
@@ -327,12 +327,12 @@ class OutboundEstablishState {
 
     public synchronized void receiveSessionCreated(UDPPacketReader.SessionCreatedReader reader) {
         if (_currentState == OutboundState.OB_STATE_VALIDATION_FAILED) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("SessionCreated already failed");
             return;
         }
         if (_receivedY != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("SessionCreated already received, ignoring");
             return; // already received
         }
@@ -361,7 +361,7 @@ class OutboundEstablishState {
         _receivedIV = new byte[UDPPacket.IV_SIZE];
         reader.readIV(_receivedIV, 0);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("[Receive session created] Sig: " + Base64.encode(_receivedEncryptedSignature)
                        + "; ReceivedIV: " + Base64.encode(_receivedIV)
                        + "; AliceIP: " + Addresses.toString(_aliceIP)
@@ -393,12 +393,12 @@ class OutboundEstablishState {
      */
     public synchronized boolean validateSessionCreated() {
         if (_currentState == OutboundState.OB_STATE_VALIDATION_FAILED) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("SessionCreated already failed");
             return false;
         }
         if (_receivedSignature != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("SessionCreated already validated");
             return true;
         }
@@ -407,7 +407,7 @@ class OutboundEstablishState {
         try {
             generateSessionKey();
         } catch (DHSessionKeyBuilder.InvalidPublicParameterException ippe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Peer " + getRemoteHostId() + " sent us an invalid DH parameter", ippe);
             valid = false;
         }
@@ -415,11 +415,11 @@ class OutboundEstablishState {
             decryptSignature();
 
         if (valid && verifySessionCreated()) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("SessionCreated passed validation");
             return true;
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("SessionCreated failed validation -> Clearing state for: " + _remoteHostId.toString());
             fail();
             return false;
@@ -466,7 +466,7 @@ class OutboundEstablishState {
         ByteArray extra = _keyBuilder.getExtraBytes();
         _macKey = new SessionKey(new byte[SessionKey.KEYSIZE_BYTES]);
         System.arraycopy(extra.getData(), 0, _macKey.getData(), 0, SessionKey.KEYSIZE_BYTES);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Established outbound keys. Cipher: " + _sessionKey
                        + " mac: " + _macKey);
     }
@@ -497,7 +497,7 @@ class OutboundEstablishState {
         } else {
             _receivedSignature = new Signature(type, _receivedEncryptedSignature);
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Decrypted received signature: " + Base64.encode(_receivedSignature.getData()));
     }
 
@@ -531,7 +531,7 @@ class OutboundEstablishState {
         off += 4;
         DataHelper.toLong(signed, off, 4, _receivedSignedOnTime);
         boolean valid = _context.dsa().verifySignature(_receivedSignature, signed, _remotePeer.getSigningPublicKey());
-        if (_log.shouldLog(Log.DEBUG) || (_log.shouldLog(Log.WARN) && !valid)) {
+        if (_log.shouldDebug() || (_log.shouldWarn() && !valid)) {
             StringBuilder buf = new StringBuilder(128);
             buf.append("Signed session created");
             buf.append("\n* Signature: ").append(Base64.encode(_receivedSignature.getData()));
@@ -541,7 +541,7 @@ class OutboundEstablishState {
             buf.append("\n* RelayTag: ").append(_receivedRelayTag);
             if (valid)
                 _log.debug(buf.toString());
-            else if (_log.shouldLog(Log.WARN))
+            else if (_log.shouldWarn())
                 _log.warn("Invalid " + buf.toString());
         }
         return valid;
@@ -611,7 +611,7 @@ class OutboundEstablishState {
         }
         _confirmedSentCount++;
         _nextSend = _lastSend + delay;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Send confirm packets, nextSend in " + delay + "ms");
         if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
             _currentState == OutboundState.OB_STATE_PENDING_INTRO ||
@@ -640,7 +640,7 @@ class OutboundEstablishState {
         }
         _requestSentCount++;
         _nextSend = _lastSend + delay;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sent a SessionRequest packet; next send in " + delay + "ms");
         if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
             _currentState == OutboundState.OB_STATE_INTRODUCED)
@@ -702,7 +702,7 @@ class OutboundEstablishState {
             _bobPort = bobPort;
             _remoteHostId = new RemoteHostId(bobIP, bobPort);
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Introduced to " + _remoteHostId + ", now let's get on with establishing");
     }
 
@@ -718,7 +718,7 @@ class OutboundEstablishState {
         if (_requestSentCount > 0)
             return false;
         long now = _context.clock().now();
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info(toString() + " accelerating SessionRequest by " + (_nextSend - now) + " ms");
         _nextSend = now;
         return true;
@@ -763,7 +763,7 @@ class OutboundEstablishState {
      */
     protected void packetReceived() {
         _nextSend = _context.clock().now();
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Received a packet, nextSend == now");
     }
 

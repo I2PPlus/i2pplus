@@ -116,7 +116,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
             }
             long waited = System.currentTimeMillis()-before;
             _context.statManager().addRateData("prng.bufferWaitTime", waited, 0);
-            if (waited > 10*1000 && _log.shouldLog(Log.WARN))
+            if (waited > 10*1000 && _log.shouldWarn())
                 _log.warn(Thread.currentThread().getName() + ": Took " + waited
                                    + "ms for a full PRNG buffer to be found");
             _currentBuffer = nextBuffer;

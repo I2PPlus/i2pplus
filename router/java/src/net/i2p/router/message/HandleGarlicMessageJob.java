@@ -52,7 +52,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
     public HandleGarlicMessageJob(RouterContext context, GarlicMessage msg, RouterIdentity from, Hash fromHash) {
         super(context);
         _log = context.logManager().getLog(HandleGarlicMessageJob.class);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Garlic Message not down a tunnel from [" + from + "]");
         _message = msg;
         //_from = from;
@@ -72,7 +72,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
     public void handleClove(DeliveryInstructions instructions, I2NPMessage data) {
         switch (instructions.getDeliveryMode()) {
             case DeliveryInstructions.DELIVERY_MODE_LOCAL:
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Local delivery instructions for clove: " + data);
                 getContext().inNetMessagePool().add(data, null, null);
                 return;
@@ -82,11 +82,11 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                 return;
             case DeliveryInstructions.DELIVERY_MODE_ROUTER:
                 if (getContext().routerHash().equals(instructions.getRouter())) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Router delivery instructions targeting us");
                     getContext().inNetMessagePool().add(data, null, null);
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Router delivery instructions targeting ["
                                    + instructions.getRouter().toBase64().substring(0,6) + "] for " + data);
                     SendMessageDirectJob j = new SendMessageDirectJob(getContext(), data,
@@ -102,7 +102,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                 gw.setMessage(data);
                 gw.setTunnelId(instructions.getTunnelId());
                 gw.setMessageExpiration(data.getMessageExpiration());
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Tunnel delivery instructions targeting ["
                                + instructions.getRouter().toBase64().substring(0,6) + "] for " + data);
                 SendMessageDirectJob job = new SendMessageDirectJob(getContext(), gw,

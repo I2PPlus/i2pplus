@@ -192,7 +192,7 @@ public class TunnelDispatcher implements Service {
      *  @return success; false if Tunnel ID is a duplicate
      */
     public boolean joinOutbound(PooledTunnelCreatorConfig cfg) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Outbound Gateway built successfully: " + cfg);
         TunnelGateway gw;
         if (cfg.getLength() > 1) {
@@ -223,7 +223,7 @@ public class TunnelDispatcher implements Service {
      *  @return success; false if Tunnel ID is a duplicate
      */
     public boolean joinInbound(TunnelCreatorConfig cfg) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Inbound Endpoint built successfully " + cfg);
 
         if (cfg.getLength() > 1) {
@@ -250,7 +250,7 @@ public class TunnelDispatcher implements Service {
      *  @return success; false if Tunnel ID is a duplicate
      */
     public boolean joinParticipant(HopConfig cfg) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Joining tunnel as participant " + cfg);
         TunnelId recvId = cfg.getReceiveTunnel();
         TunnelParticipant participant = new TunnelParticipant(_context, cfg, new HopProcessor(_context, cfg, _validator));
@@ -276,7 +276,7 @@ public class TunnelDispatcher implements Service {
      *  @return success; false if Tunnel ID is a duplicate
      */
     public boolean joinOutboundEndpoint(HopConfig cfg) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Joining tunnel as Outbound Endpoint " + cfg);
         TunnelId recvId = cfg.getReceiveTunnel();
         OutboundTunnelEndpoint endpoint = new OutboundTunnelEndpoint(_context, cfg, new HopProcessor(_context, cfg, _validator));
@@ -303,7 +303,7 @@ public class TunnelDispatcher implements Service {
      *  @return success; false if Tunnel ID is a duplicate
      */
     public boolean joinInboundGateway(HopConfig cfg) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Joining tunnel as Inbound Gateway " + cfg);
         TunnelGateway.QueuePreprocessor preproc = createPreprocessor(cfg);
         TunnelGateway.Sender sender = new InboundSender(_context, cfg);
@@ -397,7 +397,7 @@ public class TunnelDispatcher implements Service {
     public void remove(TunnelCreatorConfig cfg) {
         if (cfg.isInbound()) {
             TunnelId recvId = cfg.getConfig(cfg.getLength()-1).getReceiveTunnel();
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Removing our own Inbound tunnel...\n* " + cfg);
             TunnelParticipant participant = _participants.remove(recvId);
             if (participant == null) {
@@ -416,7 +416,7 @@ public class TunnelDispatcher implements Service {
                 }
             }
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Removing our own Outbound tunnel...\n*  " + cfg);
             TunnelId outId = cfg.getConfig(0).getSendTunnel();
             TunnelGateway gw = _outboundGateways.remove(outId);
@@ -444,11 +444,11 @@ public class TunnelDispatcher implements Service {
 
         boolean removed = (null != _participatingConfig.remove(recvId));
         if (removed) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Removing Participating tunnel config... " + cfg /* , new Exception() */ );
         } else {
             // this is normal, this can get called twice
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Participating in tunnel, but no longer listed in participatingConfig? " + cfg); /* , new Exception() */
         }
 
@@ -473,7 +473,7 @@ public class TunnelDispatcher implements Service {
         TunnelParticipant participant = _participants.get(msg.getTunnelIdObj());
         if (participant != null) {
             // we are either just a random participant or the inbound endpoint
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Dispatch to: " + participant + " [MsgID " + msg.getUniqueId() + "] from ["
                            + recvFrom.toBase64().substring(0,6) + "]");
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(), msg.getTunnelId(), "participant");
@@ -483,7 +483,7 @@ public class TunnelDispatcher implements Service {
             OutboundTunnelEndpoint endpoint = _outboundEndpoints.get(msg.getTunnelIdObj());
             if (endpoint != null) {
                 // we are the outobund endpoint
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Dispatch where we are the Outbound Endpoint:\n* " + endpoint + ": "
                                + msg + " from [" + recvFrom.toBase64().substring(0,6) + "]");
                 _context.messageHistory().tunnelDispatched(msg.getUniqueId(), msg.getTunnelId(), "outbound endpoint");
@@ -502,7 +502,7 @@ public class TunnelDispatcher implements Service {
         }
 
         //long dispatchTime = System.currentTimeMillis() - before;
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Dispatch data time: " + dispatchTime + " participant? " + participant);
         //_context.statManager().addRateData("tunnel.dispatchDataTime", dispatchTime, dispatchTime);
     }
@@ -524,7 +524,7 @@ public class TunnelDispatcher implements Service {
         if (submsg == null)
             throw new IllegalArgumentException("TGM message is null");
         if (gw != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Dispatch where we are the Inbound gateway:\n* " + gw + ": " + msg);
             long minTime = before - Router.CLOCK_FUDGE_FACTOR;
             long maxTime = before + MAX_FUTURE_EXPIRATION;
@@ -532,7 +532,7 @@ public class TunnelDispatcher implements Service {
             long subexp = submsg.getMessageExpiration();
             if (exp < minTime || subexp < minTime ||
                 exp > maxTime || subexp > maxTime) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Not dispatching GatewayMessage for [TunnelID " + id.getTunnelId()
                                + "]\n* Wrapper's expiration -> " + DataHelper.formatDuration(exp - before)
                                + " and/or content expiration -> " + DataHelper.formatDuration(subexp - before)
@@ -563,7 +563,7 @@ public class TunnelDispatcher implements Service {
 
         //long dispatchTime = _context.clock().now() - before;
 
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Dispatch in gw time: " + dispatchTime + " gateway? " + gw);
         //_context.statManager().addRateData("tunnel.dispatchGatewayTime", dispatchTime, dispatchTime);
     }
@@ -596,23 +596,23 @@ public class TunnelDispatcher implements Service {
         long before = _context.clock().now();
         TunnelGateway gw = _outboundGateways.get(outboundTunnel);
         if (gw != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Dispatch Outbound through " + outboundTunnel.getTunnelId()
                            + ": " + msg);
             if (msg.getMessageExpiration() < before - Router.CLOCK_FUDGE_FACTOR) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Why are we sending a tunnel message that expired "
                                + (before-msg.getMessageExpiration()) + "ms ago? "
                                + msg, new Exception("cause"));
                 return;
             } else if (msg.getMessageExpiration() < before) {
                 // nonfatal, as long as it was remotely created
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Why are we sending a tunnel message that expired "
                                + (before-msg.getMessageExpiration()) + "ms ago? "
                                + msg, new Exception("cause"));
             } else if (msg.getMessageExpiration() > before + MAX_FUTURE_EXPIRATION) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Why are we sending a tunnel message that expires "
                                + (msg.getMessageExpiration() - before) + "ms from now? "
                                + msg, new Exception("cause"));
@@ -638,7 +638,7 @@ public class TunnelDispatcher implements Service {
 
         //long dispatchTime = _context.clock().now() - before;
         //if (dispatchTime > 1000) {
-        //    if (_log.shouldLog(Log.WARN))
+        //    if (_log.shouldWarn())
         //        _log.warn("slow? took " + dispatchTime + " to dispatch " + msg + " out " + outboundTunnel + " in " + gw);
         //}
         //if (gw instanceof TunnelGatewayZeroHop)
@@ -746,7 +746,7 @@ public class TunnelDispatcher implements Service {
         }
         boolean reject = ! _context.bandwidthLimiter().sentParticipatingMessage(length, factor);
         if (reject) {
-            if (_log.shouldLog(Log.WARN)) {
+            if (_log.shouldWarn()) {
                 _log.warn("Dropping Participating message [factor=" + factor
                           + ' ' + loc + ' ' + type + ' ' + length + "]");
             }
@@ -767,14 +767,14 @@ public class TunnelDispatcher implements Service {
 
        List<HopConfig> partTunnels = listParticipatingTunnels();
        if ((partTunnels == null) || (partTunnels.isEmpty())) {
-           if (_log.shouldLog(Log.ERROR))
+           if (_log.shouldError())
                _log.error("Not dropping tunnel, since partTunnels was null or had 0 items!");
            return;
        }
 
        long periodWithoutDrop = _context.clock().now() - _lastDropTime;
        if (periodWithoutDrop < DROP_BASE_INTERVAL) {
-           if (_log.shouldLog(Log.WARN))
+           if (_log.shouldWarn())
                _log.warn("Not dropping tunnel, since last drop was " + periodWithoutDrop + " ms ago!");
            return;
        }
@@ -806,12 +806,12 @@ public class TunnelDispatcher implements Service {
        }
 
        if (biggest == null) {
-           if (_log.shouldLog(Log.ERROR))
+           if (_log.shouldError())
                _log.error("Not dropping tunnel, since no suitable tunnel was found.");
            return;
        }
 
-       if (_log.shouldLog(Log.WARN))
+       if (_log.shouldWarn())
            _log.warn("Dropping tunnel with " + biggestRate + " messages/s and " + biggestMessages +
                       " messages, last drop was " + (periodWithoutDrop / 1000) + " s ago.");
        remove(biggest);
@@ -893,7 +893,7 @@ public class TunnelDispatcher implements Service {
                 long exp = cur.getExpiration() + (2 * Router.CLOCK_FUDGE_FACTOR) + LEAVE_BATCH_TIME;
                 if (exp < now) {
                     _configs.poll();
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Expiring Participating tunnel... " + cur);
                     remove(cur);
                 } else {

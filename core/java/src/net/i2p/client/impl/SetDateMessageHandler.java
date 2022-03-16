@@ -26,7 +26,7 @@ class SetDateMessageHandler extends HandlerImpl {
     }
     
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Handle " + message);
         SetDateMessage msg = (SetDateMessage) message;
         // Only do this if we are NOT in the router context;

@@ -82,10 +82,10 @@ public class SendGarlicJob extends JobImpl {
                                                      getContext().sessionKeyManager());
         long after = getContext().clock().now();
         if ( (after - before) > 1000) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Building the garlic took too long [" + (after-before)+" ms]");
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Building the garlic was fast! " + (after - before) + " ms");
         }
         getContext().jobQueue().addJob(new SendJob(getContext()));

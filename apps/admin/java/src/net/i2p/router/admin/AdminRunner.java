@@ -53,7 +53,7 @@ class AdminRunner implements Runnable {
                 _generator.generateStatsPage(new OutputStreamWriter(out), true);
                 out.close();
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error writing out the admin reply");
                 throw ioe;
             }
@@ -68,7 +68,7 @@ class AdminRunner implements Runnable {
                 _context.routerAppManager().renderStatusHTML(new OutputStreamWriter(out));
                 out.close();
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error writing out the admin reply");
                 throw ioe;
             }
@@ -86,7 +86,7 @@ class AdminRunner implements Runnable {
             out.write(DataHelper.getASCII(reply.toString()));
             out.close();
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error writing out the admin reply:\n" + content);
             throw ioe;
         }
@@ -103,7 +103,7 @@ class AdminRunner implements Runnable {
             out.write(DataHelper.getASCII(reply.toString()));
             out.close();
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error writing out the admin reply:\n" + content);
             throw ioe;
         }

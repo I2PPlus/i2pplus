@@ -121,7 +121,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     private boolean getWriteLock() {
         try {
             boolean rv = _bucketsLock.writeLock().tryLock(3000, TimeUnit.MILLISECONDS);
-            if ((!rv) && _log.shouldLog(Log.WARN))
+            if ((!rv) && _log.shouldWarn())
                 _log.warn("No lock, size is: " + _bucketsLock.getQueueLength(), new Exception("rats!"));
             return rv;
         } catch (InterruptedException ie) {}
@@ -145,22 +145,22 @@ public class KBucketSet<T extends SimpleDataStructure> {
         } finally { releaseReadLock(); }
         if (bucket != null) {
             if (bucket.add(peer)) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Peer [" + peer.toBase64().substring(0,6) + "] added to bucket\n* " + bucket);
                 if (shouldSplit(bucket)) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Splitting bucket " + bucket);
                     split(bucket.getRangeBegin());
                     //testAudit(this, _log);
                 }
                 return true;
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Peer [" + peer.toBase64().substring(0,6) + "] NOT added to bucket - already known\n* " + bucket);
                 return false;
             }
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Failed to add, probably us: " + peer);
             return false;
         }
@@ -227,7 +227,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
                 s2 = s1 + ((1 + e2 - s1) / 2);
             }
             e1 = s2 - 1;
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Splitting (" + s1 + ',' + e2 + ") -> (" + s1 + ',' + e1 + ") (" + s2 + ',' + e2 + ')');
             KBucket<T> b1 = createBucket(s1, e1);
             KBucket<T> b2 = createBucket(s2, e2);
@@ -239,18 +239,18 @@ public class KBucketSet<T extends SimpleDataStructure> {
             }
             _buckets.set(b, b1);
             _buckets.add(b + 1, b2);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Split bucket at idx " + b +
                            ":\n* " + b0 +
                            "\n* into: " + b1 +
                            "\n* and: " + b2);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("State is now: " + toString());
 
             if (b2.getKeyCount() > BUCKET_SIZE) {
                 // should be rare... too hard to call _trimmer from here
                 // (and definitely not from inside the write lock)
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("All went into 2nd bucket after split");
             }
             // loop if all the entries went in the first bucket
@@ -607,7 +607,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
             variance = variance.or(nonz);
         }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("SB(" + obegin + ',' + oend + ") KB(" + begin + ',' + end + ") fixed=" + fixed + " fixedBits=" + fixedBits + " numNonZ=" + numNonZero);
         byte data[] = variance.toByteArray();
         T key = makeKey(data);
@@ -687,7 +687,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
                             int extra = xor.clearBit(highbit).shiftRight(toShift).intValue();
                             range += extra;
                             //Log log = I2PAppContext.getGlobalContext().logManager().getLog(KBucketSet.class);
-                            //if (log.shouldLog(Log.DEBUG))
+                            //if (log.shouldDebug())
                             //    log.debug("highbit " + highbit + " toshift " + toShift + " extra " + extra + " new " + range);
                         }
                     }

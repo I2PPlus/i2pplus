@@ -75,7 +75,7 @@ public class SendMessageDirectJob extends JobImpl {
         _message = message;
         _targetHash = toPeer;
         if (timeoutMs < 10*1000) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
 //                _log.warn("Very little time given [" + timeoutMs + "], resetting to 5s", new Exception("Stingy caller!"));
                 _log.warn("Very little time given (" + timeoutMs + "ms) - resetting to 10s");
             _expiration = ctx.clock().now() + 10*1000;
@@ -99,7 +99,7 @@ public class SendMessageDirectJob extends JobImpl {
         long now = getContext().clock().now();
 
         if (_expiration < now) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Timed out sending message " + _message + " directly (expiration = "
                            + new Date(_expiration) + ") to [" + _targetHash.toBase64().substring(0,6) + "]");
             if (_onFail != null)
@@ -108,25 +108,25 @@ public class SendMessageDirectJob extends JobImpl {
         }
 
         if (_router != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Router specified, sending");
             send();
         } else {
             _router = getContext().netDb().lookupRouterInfoLocally(_targetHash);
             if (_router != null) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Router not specified but lookup found it");
                 send();
             } else {
                 if (!_alreadySearched) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Router not specified, so we're looking for it...");
                     getContext().netDb().lookupRouterInfo(_targetHash, this, this,
                                                           _expiration - getContext().clock().now());
                     _searchOn = getContext().clock().now();
                     _alreadySearched = true;
                 } else {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Unable to find router [" + _targetHash.toBase64().substring(0,6)
                                   + "] to send to after searching for " + (getContext().clock().now()-_searchOn)
                                   + "ms\n* " + _message);
@@ -139,7 +139,7 @@ public class SendMessageDirectJob extends JobImpl {
 
     private void send() {
         if (_sent) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Not resending!", new Exception("blah"));
             return;
         }
@@ -162,7 +162,7 @@ public class SendMessageDirectJob extends JobImpl {
 
             getContext().inNetMessagePool().add(_message, _router.getIdentity(), null);
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Adding " + _message.getClass().getName()
                            + " to inbound message pool as it was destined for ourselves");
             //_log.debug("debug", _createdBy);
@@ -174,7 +174,7 @@ public class SendMessageDirectJob extends JobImpl {
             msg.setOnSendJob(_onSend);
             msg.setReplySelector(_selector);
             getContext().outNetMessagePool().add(msg);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Adding " + _message.getClass().getName()
                            + " to outbound message pool targeting "
                            + _router.getIdentity().getHash().toBase64());

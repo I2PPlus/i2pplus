@@ -220,7 +220,7 @@ public class BaseBean
      */
     protected void debug(String msg) {
         Log log = _context.logManager().getLog(getClass());
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug(msg);
     }
 
@@ -229,7 +229,7 @@ public class BaseBean
      */
     protected void warn(Throwable t) {
         Log log = _context.logManager().getLog(getClass());
-        if (log.shouldLog(Log.WARN))
+        if (log.shouldWarn())
             log.warn("SusiDNS", t);
     }
 }

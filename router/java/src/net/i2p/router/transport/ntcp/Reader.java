@@ -68,7 +68,7 @@ class Reader {
                 _pendingConnections.notify();
             }
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("wantsRead: " + con + " already live? " + already);
     }
 
@@ -89,7 +89,7 @@ class Reader {
         public void stop() { _stop = true; }
 
         public void run() {
-            if (_log.shouldLog(Log.INFO)) _log.info("Starting NTCP Reader...");
+            if (_log.shouldInfo()) _log.info("Starting NTCP Reader...");
             NTCPConnection con = null;
             while (!_stop) {
                 try {
@@ -114,7 +114,7 @@ class Reader {
                     }
                 } catch (InterruptedException ie) {}
                 if (!_stop && (con != null) ) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Begin read for " + con);
                     try {
                         processRead(con);
@@ -135,11 +135,11 @@ class Reader {
                     } catch (RuntimeException re) {
                         _log.error("Error in the NTCP Reader", re);
                     }
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("End read for " + con);
                 }
             }
-            if (_log.shouldLog(Log.INFO)) _log.info("Stopping NTCP Reader...");
+            if (_log.shouldInfo()) _log.info("Stopping NTCP Reader...");
         }
     }
 

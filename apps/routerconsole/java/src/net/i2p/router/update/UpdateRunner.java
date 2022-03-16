@@ -194,13 +194,13 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
                 (_method == HTTPS_CLEARNET && !"https".equals(uri.getScheme())) ||
                 uri.getHost() == null ||
                 (_method != HTTP && uri.getHost().toLowerCase(Locale.US).endsWith(".i2p"))) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Bad update URI " + uri + " for method " + _method);
                 continue;
             }
 
             updateStatus("<b>" + _t("Updating from {0}", linkify(updateURL)) + "</b>");
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Selected update URL: " + updateURL);
 
             // Check the first 56 bytes for the version
@@ -248,7 +248,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     // with a couple of adjustments depending on which mode.
 
     public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Attempt failed on " + url, cause);
         // ignored
         _mgr.notifyAttemptFailed(this, url, null);
@@ -277,7 +277,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
                 _newVersion = newVersion;
             } else {
                 updateStatus("<b>" + _t("No new version found at {0}", linkify(url)) + "</b>");
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Found old version \"" + newVersion + "\" at " + url);
             }
             return;
@@ -296,7 +296,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     /** subclasses should override */
     public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
         // don't display bytesTransferred as it is meaningless
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Update from " + url + " did not download completely (" +
                            bytesRemaining + " remaining after " + currentAttempt + " tries)");
         updateStatus("<b>" + _t("Transfer of {0} failed", linkify(url)) + "</b>");

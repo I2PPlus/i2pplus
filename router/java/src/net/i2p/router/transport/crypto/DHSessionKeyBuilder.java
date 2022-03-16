@@ -107,7 +107,7 @@ public class DHSessionKeyBuilder {
             builder.setPeerPublicValue(Y);
             return builder;
         } catch (InvalidPublicParameterException ippe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Key exchange failed (hostile peer?)", ippe);
             return null;
         }
@@ -280,7 +280,7 @@ public class DHSessionKeyBuilder {
             // non-caching version
             SHA256Generator.getInstance().calculateHash(buf, 0, buf.length, remaining, 0);
             _extraExchangedBytes.setData(remaining);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Storing " + remaining.length + " bytes from the DH exchange by SHA256 the session key");
         } else {
             // Will always be here, typ buf is 256 or 257 bytes
@@ -290,7 +290,7 @@ public class DHSessionKeyBuilder {
             byte remaining[] = new byte[buf.length - val.length];
             System.arraycopy(buf, val.length, remaining, 0, remaining.length);
             _extraExchangedBytes.setData(remaining);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Storing " + remaining.length + " bytes from the end of the DH exchange");
         }
         key.setData(val);
@@ -299,9 +299,9 @@ public class DHSessionKeyBuilder {
 
         I2PAppContext.getGlobalContext().statManager().addRateData("crypto.dhCalculateSessionTime", diff);
         //if (diff > 1000) {
-        //    if (_log.shouldLog(Log.WARN)) _log.warn("Generating session key took too long (" + diff + " ms");
+        //    if (_log.shouldWarn()) _log.warn("Generating session key took too long (" + diff + " ms");
         //} else {
-        //    if (_log.shouldLog(Log.DEBUG)) _log.debug("Generating session key " + diff + " ms");
+        //    if (_log.shouldDebug()) _log.debug("Generating session key " + diff + " ms");
         //}
         return key;
     }
@@ -468,7 +468,7 @@ public class DHSessionKeyBuilder {
             _maxSize = ctx.getProperty(PROP_DH_PRECALC_MAX, defaultMax);
             _calcDelay = ctx.getProperty(PROP_DH_PRECALC_DELAY, DEFAULT_DH_PRECALC_DELAY);
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("DH Precalc (minimum: " + _minSize + " max: " + _maxSize + ", delay: "
                            + _calcDelay + ")");
             _builders = new LinkedBlockingQueue<DHSessionKeyBuilder>(_maxSize);
@@ -528,7 +528,7 @@ public class DHSessionKeyBuilder {
                 //long end = System.currentTimeMillis();
                 //int numCalc = curSize - startSize;
                 //if (numCalc > 0) {
-                //    if (_log.shouldLog(Log.DEBUG))
+                //    if (_log.shouldDebug())
                 //        _log.debug("Precalced " + numCalc + " to " + curSize + " in "
                 //                   + (end - start - CALC_DELAY * numCalc) + "ms (not counting "
                 //                   + (CALC_DELAY * numCalc) + "ms relief).  now sleeping");
@@ -552,7 +552,7 @@ public class DHSessionKeyBuilder {
             _context.statManager().addRateData("crypto.DHUsed", 1);
             DHSessionKeyBuilder builder = _builders.poll();
             if (builder == null) {
-                if (_log.shouldLog(Log.INFO)) _log.info("No more builders, creating one now");
+                if (_log.shouldInfo()) _log.info("No more builders, creating one now");
                 _context.statManager().addRateData("crypto.DHEmpty", 1);
                 builder = precalc();
                 // stop sleeping, wake up, make some more
@@ -568,10 +568,10 @@ public class DHSessionKeyBuilder {
             long diff = end - start;
             _context.statManager().addRateData("crypto.dhGeneratePublicTime", diff);
             if (diff > 1000) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Took more than a second (" + diff + "ms) to generate local DH value");
             } else {
-                if (_log.shouldLog(Log.DEBUG)) _log.debug("Took " + diff + "ms to generate local DH value");
+                if (_log.shouldDebug()) _log.debug("Took " + diff + "ms to generate local DH value");
             }
             return builder;
         }

@@ -63,7 +63,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         _maxSize = ctx.getProperty(PROP_DH_PRECALC_MAX, defaultMax);
         _calcDelay = ctx.getProperty(PROP_DH_PRECALC_DELAY, DEFAULT_DH_PRECALC_DELAY);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("EDH Precalc (minimum: " + _minSize + " max: " + _maxSize + ", delay: "
                        + _calcDelay + ")");
         _keys = new LinkedBlockingQueue<Elg2KeyPair>(_maxSize);
@@ -157,7 +157,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         } while (enc == null);
         long diff = System.currentTimeMillis() - start;
         _context.statManager().addRateData("crypto.EDHGenerateTime", diff);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Took " + i + " tries and " + diff + "ms to generate local DH value");
         return new Elg2KeyPair(rv.getPublic(), rv.getPrivate(), enc);
     }

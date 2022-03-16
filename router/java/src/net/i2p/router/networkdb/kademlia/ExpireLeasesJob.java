@@ -74,7 +74,7 @@ class ExpireLeasesJob extends JobImpl {
                 LeaseSet ls = (LeaseSet)obj;
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR))
                     toExpire.add(entry.getKey());
-                else if (_log.shouldLog(Log.DEBUG))
+                else if (_log.shouldDebug())
                     if (ls.getDestination() != null)
                         _log.debug("Lease [" + ls.getDestination().calculateHash().toBase64().substring(0,6) + "] is current - not expiring");
                     else

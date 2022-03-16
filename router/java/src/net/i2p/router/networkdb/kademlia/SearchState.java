@@ -184,7 +184,7 @@ class SearchState {
 
     @Override
     public String toString() {
-        Boolean debug = _log.shouldLog(Log.DEBUG);
+        Boolean debug = _log.shouldDebug();
         StringBuilder buf = new StringBuilder(256);
         buf.append(" Search for [").append(_searchKey.toBase64().substring(0,6)).append("]");
         if (_successfulPeers.size() <= 0)

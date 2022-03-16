@@ -57,14 +57,14 @@ class OutboundMessageDistributor {
     public void distribute(I2NPMessage msg, Hash target, TunnelId tunnel) {
         if (shouldDrop(target)) {
             _context.statManager().addRateData("tunnel.dropAtOBEP", 1);
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                  _log.warn("Dropping " + msg + " at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] (new connection throttle) \n* Target: ["
                             + target.toBase64().substring(0,6) + "]");
             return;
         }
         RouterInfo info = _context.netDb().lookupRouterInfoLocally(target);
         if (info == null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Outbound distributor to [" + target.toBase64().substring(0,6)
                            + "]." + (tunnel != null ? tunnel.getTunnelId() + "" : "")
                            + ": no info locally, searching...");
@@ -112,7 +112,7 @@ class OutboundMessageDistributor {
         }
 
         if (_context.routerHash().equals(target.getIdentity().calculateHash())) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Queueing Inbound message to ourselves: " + m);
             // TODO if UnknownI2NPMessage, convert it.
             // See FragmentHandler.receiveComplete()
@@ -121,7 +121,7 @@ class OutboundMessageDistributor {
         } else {
             OutNetMessage out = new OutNetMessage(_context, m, _context.clock().now() + MAX_DISTRIBUTE_TIME, _priority, target);
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Queueing Outbound message to: [" + target.getIdentity().calculateHash().toBase64().substring(0,6) + "]");
             _context.outNetMessagePool().add(out);
         }
@@ -145,14 +145,14 @@ class OutboundMessageDistributor {
             RouterInfo info = getContext().netDb().lookupRouterInfoLocally(_target);
             int stat;
             if (info != null) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Outbound distributor to " + _target
                            + "." + (_tunnel != null ? _tunnel.getTunnelId() + "" : "")
                            + ": found on search");
                 distribute(_message, info, _tunnel);
                 stat = 1;
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Outbound distributor to " + _target
                            + "." + (_tunnel != null ? _tunnel.getTunnelId() + "" : "")
                            + ": NOT found on search");

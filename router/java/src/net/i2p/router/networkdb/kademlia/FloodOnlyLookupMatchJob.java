@@ -23,7 +23,7 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
 
     public void runJob() {
         if (getContext().netDb().lookupLocally(_search.getKey()) != null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + _search.getJobId() + "] Search for [" + _search.getKey().toBase64().substring(0,6) +
                           "] found locally");
             _search.success();
@@ -46,7 +46,7 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
         }
         try {
             DatabaseStoreMessage dsm = (DatabaseStoreMessage)message;
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + _search.getJobId() + "] Received a DbStoreMsg for ["
                           + dsm.getKey().toBase64().substring(0,6) + "]");
             // This store will be duplicated by HFDSMJ
@@ -73,7 +73,7 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
             _search.failed();
             return;
         } catch (IllegalArgumentException iae) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
 //                _log.warn(_search.getJobId() + ": Received invalid store reply", iae);
                 _log.warn("[Job" + _search.getJobId() + "] Received invalid store reply\n* " + iae.getMessage());
         }

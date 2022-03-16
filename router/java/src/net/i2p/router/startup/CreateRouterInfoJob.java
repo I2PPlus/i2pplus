@@ -168,7 +168,7 @@ public class CreateRouterInfoJob extends JobImpl {
 
             ctx.keyManager().setKeys(pubkey, privkey, signingPubKey, signingPrivKey);
 
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Router info created and stored at " + ifile.getAbsolutePath() + " with private keys stored at " + kfile.getAbsolutePath() + " [" + info + "]");
             ctx.router().eventLog().addEvent(EventLog.REKEYED, ident.calculateHash().toBase64());
         } catch (GeneralSecurityException gse) {

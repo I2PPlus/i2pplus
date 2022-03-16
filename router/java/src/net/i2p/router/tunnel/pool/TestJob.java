@@ -53,7 +53,7 @@ public class TestJob extends JobImpl {
             _pool = pool;
         else
             _pool = cfg.getTunnelPool();
-        if ( (_pool == null) && (_log.shouldLog(Log.ERROR)) )
+        if ( (_pool == null) && (_log.shouldError()) )
             _log.error("Invalid tunnel test configuration: no pool for " + cfg, new Exception("origin"));
         getTiming().setStartAfter(getDelay() + ctx.clock().now());
         // stats are created in TunnelPoolManager
@@ -67,7 +67,7 @@ public class TestJob extends JobImpl {
         final RouterContext ctx = getContext();
         long lag = ctx.jobQueue().getMaxLag();
         if (lag > 250) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Deferred test due to job lag (" + lag + "ms) -> " + _cfg);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             scheduleRetest();
@@ -95,7 +95,7 @@ public class TestJob extends JobImpl {
         }
 
         if ( (_replyTunnel == null) || (_outTunnel == null) ) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             scheduleRetest();
@@ -150,7 +150,7 @@ public class TestJob extends JobImpl {
             return;
         }
         _id = __id.getAndIncrement();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending garlic test [" + _id + "] of " + _outTunnel + " / " + _replyTunnel);
         ctx.tunnelDispatcher().dispatchOutbound(msg, _outTunnel.getSendTunnelId(0),
                                                          _replyTunnel.getReceiveTunnelId(0),
@@ -175,7 +175,7 @@ public class TestJob extends JobImpl {
         if (_otherTunnel.getLength() > 1)
             _otherTunnel.testJobSuccessful(ms);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Tunnel test [" + _id + "] succeeded in " + ms + "ms -> " + _cfg);
         scheduleRetest();
     }
@@ -198,7 +198,7 @@ public class TestJob extends JobImpl {
             getContext().statManager().addRateData("tunnel.testExploratoryFailedTime", timeToFail);
         else
             getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail);
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Tunnel test [" + _id + "] failed in " + timeToFail + "ms -> " + _cfg);
         boolean keepGoing = _cfg.tunnelFailed();
         // blame the expl. tunnel too
@@ -337,7 +337,7 @@ public class TestJob extends JobImpl {
         public String getName() { return "Timeout Tunnel Test"; }
 
         public void runJob() {
-            //if (_log.shouldLog(Log.WARN))
+            //if (_log.shouldWarn())
             //    _log.warn("Tunnel test [" + _id + "] timed out -> Found? " + _found);
             if (!_found) {
                 // don't clog up the SKM with old one-tag tagsets

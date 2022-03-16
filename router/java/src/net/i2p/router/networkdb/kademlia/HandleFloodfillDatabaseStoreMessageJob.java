@@ -61,7 +61,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     }
 
     public void runJob() {
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Handling database store message");
 
         long recvBegin = System.currentTimeMillis();
@@ -76,7 +76,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         int type = entry.getType();
         if (DatabaseEntry.isLeaseSet(type)) {
             getContext().statManager().addRateData("netDb.storeLeaseSetHandled", 1);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Handling DbStore of LeaseSet" + _message);
                 //_log.info("Handling DbStore of leasset " + key + " with expiration of "
                 //          + new Date(_message.getLeaseSet().getEarliestLeaseDate()));
@@ -109,7 +109,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (!ls.getReceivedAsReply())
                     ls.setReceivedAsPublished(true);
                 //boolean rap = ls.getReceivedAsPublished();
-                //if (_log.shouldLog(Log.INFO))
+                //if (_log.shouldInfo())
                 //    _log.info("oldrap? " + oldrap + " oldrar? " + oldrar + " newrap? " + rap);
                 LeaseSet match = getContext().netDb().store(key, ls);
                 if (match == null) {
@@ -152,7 +152,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
             RouterInfo ri = (RouterInfo) entry;
             getContext().statManager().addRateData("netDb.storeRouterInfoHandled", 1);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Handling DbStore of Router [" + key.toBase64().substring(0,6) + "]\n* Published: "
                           + new Date(ri.getPublished()));
             try {
@@ -174,9 +174,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (wasNew) {
                     if (prevNetDb == null) {
                         if ((!getContext().banlist().isBanlistedForever(key)) && getContext().blocklist().isBlocklisted(ri)) {
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "] " + ri);
-                            else if (_log.shouldLog(Log.WARN))
+                            else if (_log.shouldWarn())
                                 _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]");
                         }
                     } else {
@@ -185,9 +185,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if ((!newAddr.equals(oldAddr)) &&
                             (!getContext().banlist().isBanlistedForever(key)) &&
                             getContext().blocklist().isBlocklisted(ri)) {
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "] " + ri);
-                            else if (_log.shouldLog(Log.WARN))
+                            else if (_log.shouldWarn())
                                 _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "]");
                         }
                     }
@@ -199,7 +199,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 invalidMessage = iae.getMessage();
             }
         } else {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Invalid DbStoreMessage data type - " + entry.getType()
                            + ": " + _message);
             // don't ack or flood
@@ -224,13 +224,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 getContext().statManager().addRateData("netDb.storeHandled", ackEnd-recvEnd);
             } else {
                 // Should we record in the profile?
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.warn("Peer sent us invalid data \n* " + invalidMessage + _from);
-                else if (_log.shouldLog(Log.WARN))
+                else if (_log.shouldWarn())
                     _log.warn("Peer sent us invalid data \n* " + invalidMessage);
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
 //                _log.warn("Unknown peer sent bad data\n* " + invalidMessage);
                 _log.warn("Peer [unknown] sent us invalid data \n* " + invalidMessage);
         }
@@ -243,7 +243,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 // DOS prevention
                 // Note this does not throttle the ack above
                 if (_facade.shouldThrottleFlood(key)) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Too many recent stores, not flooding key: " + key);
                     getContext().statManager().addRateData("netDb.floodThrottled", 1);
                     return;
@@ -396,7 +396,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             // pick tunnel with endpoint closest to toPeer
             TunnelInfo outTunnel = getContext().tunnelManager().selectOutboundExploratoryTunnel(toPeer);
             if (outTunnel == null) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("No Outbound tunnel could be found");
                 return;
             }

@@ -136,7 +136,7 @@ public class Peer implements Comparable<Peer>
     byte[] id  = handshake(in, out);
     this.peerID = new PeerID(id, sock.getPeerDestination());
     _id = __id.incrementAndGet();
-    if (_log.shouldLog(Log.DEBUG))
+    if (_log.shouldDebug())
         _log.debug("Creating a new peer " + peerID.toString(), new Exception("creating " + _id));
     _isIncoming = true;
   }
@@ -244,7 +244,7 @@ public class Peer implements Comparable<Peer>
     if (state != null)
       throw new IllegalStateException("Peer already started");
 
-    if (_log.shouldLog(Log.DEBUG))
+    if (_log.shouldDebug())
         _log.debug("Running connection to " + peerID.toString(), new Exception("connecting"));
     try
       {
@@ -253,7 +253,7 @@ public class Peer implements Comparable<Peer>
           {
             // Outgoing connection
             sock = util.connect(peerID);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Connected to " + peerID + ": " + sock);
             if ((sock == null) || (sock.isClosed())) {
                 throw new IOException("Unable to reach " + peerID);
@@ -265,7 +265,7 @@ public class Peer implements Comparable<Peer>
             if (expected_id == null) {
                 peerID.setID(id);
             } else if (Arrays.equals(expected_id, id)) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Handshake got matching IDs with " + toString());
             } else {
                 throw new IOException("Unexpected peerID '"
@@ -275,13 +275,13 @@ public class Peer implements Comparable<Peer>
             }
           } else {
             // Incoming connection
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Already have din [" + sock + "] with " + toString());
           }
 
         // bad idea?
         if (metainfo == null && (options & OPTION_EXTENSION) == 0) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Peer does not support extensions and we need metainfo, dropping");
             throw new IOException("Peer does not support extensions and we need metainfo, dropping");
         }
@@ -291,7 +291,7 @@ public class Peer implements Comparable<Peer>
         PeerState s = new PeerState(this, listener, metainfo, in, out);
 
         if ((options & OPTION_EXTENSION) != 0) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Peer supports extensions, sending reply message");
             int metasize = metainfo != null ? metainfo.getInfoBytesLength() : -1;
             boolean pexAndMetadata = metainfo == null || !metainfo.isPrivate();
@@ -309,7 +309,7 @@ public class Peer implements Comparable<Peer>
         magnetState = mState;
         listener.connected(this);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Start running the reader with " + toString());
         // Use this thread for running the incoming connection.
         // The outgoing connection creates its own Thread.
@@ -321,7 +321,7 @@ public class Peer implements Comparable<Peer>
       {
         // Ignore, probably just the other side closing the connection.
         // Or refusing the connection, timing out, etc.
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug(this.toString(), eofe);
       }
     catch(Throwable t)
@@ -364,7 +364,7 @@ public class Peer implements Comparable<Peer>
     dout.write(my_id);
     dout.flush();
 
-    if (_log.shouldLog(Log.DEBUG))
+    if (_log.shouldDebug())
         _log.debug("Wrote our shared hash and ID to [" + toString() + "]");
 
     // Handshake read - header
@@ -391,7 +391,7 @@ public class Peer implements Comparable<Peer>
 
     // Handshake read - peer id
     din.readFully(bs);
-    if (_log.shouldLog(Log.DEBUG))
+    if (_log.shouldDebug())
         _log.debug("Read the remote side's hash and peerID fully from " + toString());
 
     if (DataHelper.eq(my_id, bs))
@@ -399,7 +399,7 @@ public class Peer implements Comparable<Peer>
 
     if (options != 0) {
         // send them something in runConnection() above
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Peer supports options 0x" + Long.toHexString(options) + ": " + toString());
     }
 

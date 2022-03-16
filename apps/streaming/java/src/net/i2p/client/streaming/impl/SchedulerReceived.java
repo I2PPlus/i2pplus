@@ -22,7 +22,7 @@ class SchedulerReceived extends SchedulerImpl {
 
     public void eventOccurred(Connection con) {
         if (con.getUnackedPacketsReceived() <= 0) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("hmm, state is received, but no unacked packets received?");
             return;
         }
@@ -30,7 +30,7 @@ class SchedulerReceived extends SchedulerImpl {
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
         if (timeTillSend <= 0) {
             if (con.getNextSendTime() > 0) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Received connection... send a packet");
                 con.sendAvailable();
                 con.setNextSendTime(-1);
@@ -39,7 +39,7 @@ class SchedulerReceived extends SchedulerImpl {
                 reschedule(con.getOptions().getSendAckDelay(), con);
             }
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Received connection... time until next send: " + timeTillSend);
             reschedule(timeTillSend, con);
         }

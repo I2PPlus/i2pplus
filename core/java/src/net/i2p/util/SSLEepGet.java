@@ -398,7 +398,7 @@ public class SSLEepGet extends EepGet {
             _log.error("Key Store init error");
             return null;
         }
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             int count = KeyStoreUtil.countCerts(ks);
             _log.info("Loaded " + count + " default trusted certificates");
         }
@@ -406,13 +406,13 @@ public class SSLEepGet extends EepGet {
         File dir = new File(_context.getBaseDir(), CERT_DIR);
         int adds = KeyStoreUtil.addCerts(dir, ks);
         int totalAdds = adds;
-        if (adds > 0 && _log.shouldLog(Log.INFO))
+        if (adds > 0 && _log.shouldInfo())
             _log.info("Loaded " + adds + " trusted certificates from " + dir.getAbsolutePath());
         if (!_context.getBaseDir().getAbsolutePath().equals(_context.getConfigDir().getAbsolutePath())) {
             dir = new File(_context.getConfigDir(), CERT_DIR);
             adds = KeyStoreUtil.addCerts(dir, ks);
             totalAdds += adds;
-            if (adds > 0 && _log.shouldLog(Log.INFO))
+            if (adds > 0 && _log.shouldInfo())
                 _log.info("Loaded " + adds + " trusted certificates from " + dir.getAbsolutePath());
         }
         dir = new File(System.getProperty("user.dir"));
@@ -420,10 +420,10 @@ public class SSLEepGet extends EepGet {
             dir = new File(_context.getConfigDir(), CERT_DIR);
             adds = KeyStoreUtil.addCerts(dir, ks);
             totalAdds += adds;
-            if (adds > 0 && _log.shouldLog(Log.INFO))
+            if (adds > 0 && _log.shouldInfo())
                 _log.info("Loaded " + adds + " trusted certificates from " + dir.getAbsolutePath());
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Loaded total of " + totalAdds + " new trusted certificates");
 
         try {
@@ -434,7 +434,7 @@ public class SSLEepGet extends EepGet {
             _stm = new SavingTrustManager(defaultTrustManager);
             sslc.init(null, new TrustManager[] {_stm}, null);
         /****
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 SSLEngine eng = sslc.createSSLEngine();
                 SSLParameters params = sslc.getDefaultSSLParameters();
                 String[] s = eng.getSupportedProtocols();
@@ -626,7 +626,7 @@ public class SSLEepGet extends EepGet {
             return;
         }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Headers read completely, reading " + _bytesRemaining);
 
         boolean strictSize = (_bytesRemaining >= 0);
@@ -789,7 +789,7 @@ public class SSLEepGet extends EepGet {
                 }
 
                 if (_shouldProxy) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Connecting to " + _proxyType + " proxy");
                     switch (_proxyType) {
                       case HTTP:
@@ -819,7 +819,7 @@ public class SSLEepGet extends EepGet {
                         _proxy = _sslContext.getSocketFactory().createSocket(_proxy, host, port, true);
                     else
                         _proxy = ((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(_proxy, host, port, true);
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug(_proxyType + " proxy headers read completely");
                 } else if (ip != null) {
                     // DoH, create the socket with the IP, then create the SSL socket with the host
@@ -901,7 +901,7 @@ public class SSLEepGet extends EepGet {
 
         _proxyIn = new BufferedInputStream(_proxyIn);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Request flushed");
     }
 

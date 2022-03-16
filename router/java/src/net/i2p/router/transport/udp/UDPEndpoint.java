@@ -52,7 +52,7 @@ class UDPEndpoint implements SocketListener {
      *  Can be restarted.
      */
     public synchronized void startup() throws SocketException {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Starting up the UDP endpoint");
         shutdown();
         _socket = getSocket();
@@ -94,7 +94,7 @@ class UDPEndpoint implements SocketListener {
             _receiver.updateListeningPort(_socket, newPort);
             _listenPort = newPort;
         } catch (SocketException se) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Unable to bind on " + _listenPort);
         }
     }
@@ -135,7 +135,7 @@ class UDPEndpoint implements SocketListener {
                  }
                  break;
              } catch (SocketException se) {
-                 if (_log.shouldLog(Log.WARN))
+                 if (_log.shouldWarn())
                      _log.warn("Binding to port " + port + " failed", se);
              }
              port = -1;

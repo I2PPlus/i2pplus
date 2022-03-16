@@ -60,7 +60,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
             _job.decrementOutstandingFloodfillSearches();
 
         I2NPMessage message = _message;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[Job " + getJobId() + "] Reply from [" + _peer.toBase64().substring(0,6)
                       + "] with " + message.getClass().getSimpleName().replace("Database", "Db").replace("Message", "Msg"));
 
@@ -93,7 +93,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
                 _state.abort();
                 // searchNext() will call fail()
             } catch (IllegalArgumentException iae) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
 //                    _log.warn("Peer " + _peer + " sent us invalid data: ", iae);
                     _log.warn("Peer [" + _peer.toBase64().substring(0,6) + "] sent us invalid data\n* " + iae.getMessage());
                 // blame the peer
@@ -102,7 +102,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
             _job.replyFound((DatabaseSearchReplyMessage)message, _peer);
         } else {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("[Job" + getJobId() + "] What?! Reply job matched a strange message: " + message);
             return;
         }

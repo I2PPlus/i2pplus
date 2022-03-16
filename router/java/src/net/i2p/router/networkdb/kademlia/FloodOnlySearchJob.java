@@ -91,11 +91,11 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         if (floodfillPeers.isEmpty()) {
             // ask anybody, they may not return the answer but they will return a few ff peers we can go look up,
             // so this situation should be temporary
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Running NetDb searches against Floodfills, but we don't know any");
             floodfillPeers = new ArrayList<Hash>(_facade.getAllRouters());
             if (floodfillPeers.isEmpty()) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("We don't know any peers at all");
                 failed();
                 return;
@@ -135,7 +135,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
             // have changed since the last time we were running
             if (floodfillPeers.size() - failcount <= 2)
                 _shouldProcessDSRM = true;
-            if (_log.shouldLog(Log.INFO) && failcount > 0)
+            if (_log.shouldInfo() && failcount > 0)
                 _log.info("[Job " + getJobId() + "] " + failcount + " of " + floodfillPeers.size() + " floodfills are not heard from, unprofiled, failing, unreachable or banlisted");
             floodfillPeers = ffp;
         } else {
@@ -174,7 +174,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
             dlm.setSearchKey(_key);
             dlm.setSearchType(_isLease ? DatabaseLookupMessage.Type.LS : DatabaseLookupMessage.Type.RI);
 
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Floodfill search for " + _key + " to " + peer);
             getContext().tunnelDispatcher().dispatchOutbound(dlm, outTunnel.getSendTunnelId(0), peer);
             count++;
@@ -182,7 +182,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         }
 
         if (count <= 0) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Floodfill search for " + _key + " had no peers to send to");
             // no floodfill peers, fail
             failed();
@@ -213,7 +213,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         }
         getContext().messageRegistry().unregisterPending(_out);
         long time = System.currentTimeMillis() - _created;
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
              int timeRemaining = (int)(_expiration - getContext().clock().now());
             _log.info("[Job " + getJobId() + "] Floodfill search for " + _key + " failed with " + timeRemaining + " remaining after " + time);
         }
@@ -236,7 +236,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
             _dead = true;
             super.success();
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[Job " + getJobId() + "] Floodfill search for " + _key + " successful");
         // Sadly, we don't know which of the two replied, unless the first one sent a DSRM
         // before the second one sent the answer, which isn't that likely.

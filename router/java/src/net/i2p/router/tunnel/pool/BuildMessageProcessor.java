@@ -169,7 +169,7 @@ class BuildMessageProcessor {
                         // i2pd bug
                         boolean isBad = SessionKey.INVALID_KEY.equals(rv.readReplyKey());
                         if (isBad) {
-                            if (log.shouldLog(Log.WARN))
+                            if (log.shouldWarn())
                                 log.warn("[MsgID " + msg.getUniqueId() + "] Bad reply key " + rv);
                             ctx.statManager().addRateData("tunnel.buildRequestBadReplyKey", 1);
                             return null;
@@ -182,14 +182,14 @@ class BuildMessageProcessor {
                         int off = isEC ? BuildRequestRecord.OFF_REPLY_KEY_EC : BuildRequestRecord.OFF_REPLY_KEY;
                         boolean isDup = _filter.add(rv.getData(), off, 32);
                         if (isDup) {
-                            if (log.shouldLog(Log.WARN))
+                            if (log.shouldWarn())
                             log.warn("[MsgID " + msg.getUniqueId() + "] Duplicate " + privKey.getType() + " record received " + rv);
                             ctx.statManager().addRateData("tunnel.buildRequestDup", 1);
                             return null;
                         }
                     }
 
-                    if (log.shouldLog(Log.DEBUG))
+                    if (log.shouldDebug())
                         log.debug("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() + " record found " + rv);
                     ourHop = i;
                     // TODO should we keep looking for a second match and fail if found?
@@ -197,7 +197,7 @@ class BuildMessageProcessor {
                 } catch (DataFormatException dfe) {
                     // For ECIES routers, this is relatively common due to old routers that don't
                     // check enc type sending us ElG requests
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
 //                        log.warn(msg.getUniqueId() + ": Matching record decryption failure " + privKey.getType(), dfe);
                         log.warn("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() + " record decryption failure \n* " +
                                  dfe.getMessage());
@@ -210,7 +210,7 @@ class BuildMessageProcessor {
         if (rv == null) {
             // none of the records matched, b0rk
 // Info presented elsewhere
-//            if (log.shouldLog(Log.WARN))
+//            if (log.shouldWarn())
 //                log.warn("[MsgID " + msg.getUniqueId() + "] No record decrypted");
             return null;
         }
@@ -221,7 +221,7 @@ class BuildMessageProcessor {
             for (int i = 0; i < msg.getRecordCount(); i++) {
                 if (i != ourHop) {
                     EncryptedBuildRecord data = msg.getRecord(i);
-                    //if (log.shouldLog(Log.DEBUG))
+                    //if (log.shouldDebug())
                     //    log.debug("Encrypting record " + i + "/? with replyKey " + replyKey.toBase64() + "/" + Base64.encode(iv));
                     // encrypt in-place, corrupts SDS
                     byte[] bytes = data.getData();
@@ -236,7 +236,7 @@ class BuildMessageProcessor {
             for (int i = 0; i < msg.getRecordCount(); i++) {
                 if (i != ourHop) {
                     EncryptedBuildRecord data = msg.getRecord(i);
-                    //if (log.shouldLog(Log.DEBUG))
+                    //if (log.shouldDebug())
                     //    log.debug("Encrypting record " + i + "/? with replyKey " + replyKey.toBase64() + "/" + Base64.encode(iv));
                     // encrypt in-place, corrupts SDS
                     byte[] bytes = data.getData();

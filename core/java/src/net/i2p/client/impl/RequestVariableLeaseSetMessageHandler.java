@@ -36,7 +36,7 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
     
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Handle " + message);
         RequestVariableLeaseSetMessage msg = (RequestVariableLeaseSetMessage) message;
         boolean isLS2 = requiresLS2(session);

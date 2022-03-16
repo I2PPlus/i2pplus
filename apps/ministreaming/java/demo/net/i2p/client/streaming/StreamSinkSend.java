@@ -75,7 +75,7 @@ public class StreamSinkSend {
                     break;
                 out.write(buf, 0, read);
                 size += read;
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Wrote " + read);
                 if (_writeDelay > 0) {
                     try { Thread.sleep(_writeDelay); } catch (InterruptedException ie) {}

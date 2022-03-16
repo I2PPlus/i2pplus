@@ -451,7 +451,7 @@ class ClientConnectionRunner {
         for (Iterator<SessionParams> iter = _sessions.values().iterator(); iter.hasNext(); ) {
             SessionParams sp = iter.next();
             if (id.equals(sp.sessionId)) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Destroying client session " + id);
                 iter.remove();
                 // Tell client manger
@@ -478,7 +478,7 @@ class ClientConnectionRunner {
         if (isPrimary && !_sessions.isEmpty()) {
             // kill all the others also
             for (SessionParams sp : _sessions.values()) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Destroying remaining client subsession " + sp.sessionId);
                 _manager.unregisterSession(sp.sessionId, sp.dest);
                 LeaseSet ls = sp.currentLeaseSet;
@@ -562,7 +562,7 @@ class ClientConnectionRunner {
     public int sessionEstablished(SessionConfig config) {
         Destination dest = config.getDestination();
         Hash destHash = dest.calculateHash();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("SessionEstablished called for destination " + destHash);
         if (_sessions.size() > MAX_SESSIONS)
             return SessionStatusMessage.STATUS_REFUSED;
@@ -691,12 +691,12 @@ class ClientConnectionRunner {
             if (state == null) {
                 // We got the LS after the timeout?
                 // ClientMessageEventListener told the router to publish.
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("LeaseRequest is null and we've received a new lease? " + ls);
                 return;
             } else {
                 state.setIsSuccessful(true);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("LeaseSet created fully: " + state + '\n' + ls);
                 sp.leaseRequest = null;
                 _consecutiveLeaseRequestFails = 0;
@@ -751,7 +751,7 @@ class ClientConnectionRunner {
      * @since 0.8.2
      */
     void disconnectClient(String reason, int logLevel) {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Disconnecting the client - " + reason);
         DisconnectMessage msg = new DisconnectMessage();
         if (reason.length() > 255)
@@ -760,7 +760,7 @@ class ClientConnectionRunner {
         try {
             doSend(msg);
         } catch (I2CPMessageException ime) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error writing out the disconnect message", ime);
         }
         // give it a little time to get sent out...
@@ -792,7 +792,7 @@ class ClientConnectionRunner {
         if ((!_dontSendMSM) && message.getNonce() != 0)
             _acceptedPending.add(id);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("** Receiving message " + id.getMessageId() + " with payload of size "
                        + payload.getSize() + " for session " + message.getSessionId());
         //long beforeDistribute = _context.clock().now();
@@ -803,7 +803,7 @@ class ClientConnectionRunner {
                                        id, message.getNonce(), expiration, flags);
         // else log error?
         //long timeToDistribute = _context.clock().now() - beforeDistribute;
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.warn("Time to distribute in the manager to "
         //              + dest.calculateHash().toBase64() + ": "
         //              + timeToDistribute);
@@ -822,7 +822,7 @@ class ClientConnectionRunner {
     void ackSendMessage(SessionId sid, MessageId id, long nonce) {
         if (_dontSendMSM || nonce == 0)
             return;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("ACKing message send [accepted]" + id + " / " + nonce + " for sessionId "
                        + sid);
         MessageStatusMessage status = new MessageStatusMessage();
@@ -835,7 +835,7 @@ class ClientConnectionRunner {
             doSend(status);
             _acceptedPending.remove(id);
         } catch (I2CPMessageException ime) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error writing out the message status message", ime);
         }
     }
@@ -874,7 +874,7 @@ class ClientConnectionRunner {
     boolean receiveMessage(Hash toHash, Destination fromDest, Payload payload) {
         SessionParams sp = _sessions.get(toHash);
         if (sp == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No session found for receiveMessage()");
             return false;
         }
@@ -909,7 +909,7 @@ class ClientConnectionRunner {
      */
     void requestLeaseSet(Hash h, LeaseSet set, long expirationTime, Job onCreateJob, Job onFailedJob) {
         if (_dead) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Requesting LeaseSet from a dead client: " + set);
             if (onFailedJob != null)
                 _context.jobQueue().addJob(onFailedJob);
@@ -917,7 +917,7 @@ class ClientConnectionRunner {
         }
         SessionParams sp = _sessions.get(h);
         if (sp == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Requesting LeaseSet for an unknown sesssion");
             return;
         }
@@ -954,7 +954,7 @@ class ClientConnectionRunner {
                 }
             }
 
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Current " + current + "; New LeaseSet: " + set);
 
             state = sp.leaseRequest;
@@ -965,7 +965,7 @@ class ClientConnectionRunner {
                 if ( ( (requested != null) && (requested.getEarliestLeaseDate() > ours) ) ||
                      ( (granted != null) && (granted.getEarliestLeaseDate() > ours) ) ) {
                     // theirs is newer
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Already requesting, theirs is newer; doing nothing: " + state);
                 } else {
                     // ours is newer, so wait a few secs and retry
@@ -973,7 +973,7 @@ class ClientConnectionRunner {
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
                     timer.schedule(3*1000);
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Already requesting, ours is newer; waiting 3 sec: " + state);
                 }
                 // fire onCreated?
@@ -987,7 +987,7 @@ class ClientConnectionRunner {
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
                     timer.schedule(1000);
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("No current LeaseSet and no Outbound tunnels, waiting 1 sec for [" + h.toBase64().substring(0,6) + "]");
                     return;
                 } else {
@@ -999,7 +999,7 @@ class ClientConnectionRunner {
                     long earliest = (current != null) ? current.getEarliestLeaseDate() : 0;
                     sp.leaseRequest = state = new LeaseRequestState(onCreateJob, onFailedJob, earliest,
                                                                 _context.clock().now() + expirationTime, set);
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("New request: " + state);
                 }
             }
@@ -1029,13 +1029,13 @@ class ClientConnectionRunner {
             Hash h = _ls.getDestination().calculateHash();
             SessionParams sp = _sessions.get(h);
             if (sp == null) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,6) +"] - session went away");
                 return;
             }
             synchronized(ClientConnectionRunner.this) {
                 if (sp.rerequestTimer != Rerequest.this) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,6) + "] - newer request came in");
                     return;
                 }
@@ -1045,7 +1045,7 @@ class ClientConnectionRunner {
     }
 
     void disconnected() {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.warn("Disconnected", new Exception("Disconnected?"));
         stopRunning();
     }
@@ -1067,7 +1067,7 @@ class ClientConnectionRunner {
                 msg.writeMessage(_out);
                 _out.flush();
             //}
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("after writeMessage("+ msg.getClass().getName() + "): "
             //               + (_context.clock().now()-before) + "ms");
         } catch (I2CPMessageException ime) {
@@ -1075,11 +1075,11 @@ class ClientConnectionRunner {
             stopRunning();
         } catch (EOFException eofe) {
             // only warn if client went away
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error sending I2CP message - client went away", eofe);
             stopRunning();
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("IO Error sending I2CP message to client \n* Error: " + ioe.getMessage());
             stopRunning();
         } catch (Throwable t) {
@@ -1089,7 +1089,7 @@ class ClientConnectionRunner {
         //    long after = _context.clock().now();
         //    long lag = after - before;
         //    if (lag > 300) {
-        //        if (_log.shouldLog(Log.WARN))
+        //        if (_log.shouldWarn())
         //            _log.warn("synchronization on the i2cp message send took too long (" + lag
         //                      + "ms): " + msg);
         //    }
@@ -1103,7 +1103,7 @@ class ClientConnectionRunner {
     void doSend(I2CPMessage msg) throws I2CPMessageException {
         if (_out == null) throw new I2CPMessageException("Output stream is not initialized");
         if (msg == null) throw new I2CPMessageException("Null message?!");
-        //if (_log.shouldLog(Log.DEBUG)) {
+        //if (_log.shouldDebug()) {
         //    if ( (_config == null) || (_config.getDestination() == null) )
         //        _log.debug("before doSend of a "+ msg.getClass().getName()
         //                   + " message on for establishing i2cp con");
@@ -1113,7 +1113,7 @@ class ClientConnectionRunner {
         //                   + _config.getDestination().calculateHash().toBase64());
         //}
         _writer.addMessage(msg);
-        //if (_log.shouldLog(Log.DEBUG)) {
+        //if (_log.shouldDebug()) {
         //    if ( (_config == null) || (_config.getDestination() == null) )
         //        _log.debug("after doSend of a "+ msg.getClass().getName()
         //                   + " message on for establishing i2cp con");
@@ -1194,7 +1194,7 @@ class ClientConnectionRunner {
                           + MessageStatusMessage.getStatusString(msg.getStatus())
                           + " for " + _sessId);
                 } else {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Almost sent an update for message " + _messageId + " to "
                           + MessageStatusMessage.getStatusString(msg.getStatus())
                           + " for " + _sessId
@@ -1229,14 +1229,14 @@ class ClientConnectionRunner {
             if (alreadyProcessed) return;
 
             if (_lastTried > 0) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.info("Updating message status for message " + _messageId + " to "
                               + MessageStatusMessage.getStatusString(msg.getStatus())
                               + " for " + _sessId
                               + " (with nonce=2), retrying after "
                               + (_context.clock().now() - _lastTried));
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Updating message status for message " + _messageId + " to "
                                + MessageStatusMessage.getStatusString(msg.getStatus())
                                + " for " + _sessId + " (with nonce=2)");
@@ -1245,7 +1245,7 @@ class ClientConnectionRunner {
             try {
                 doSend(msg);
             } catch (I2CPMessageException ime) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error updating the status for message ID " + _messageId, ime);
             }
         }

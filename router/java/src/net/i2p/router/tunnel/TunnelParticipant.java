@@ -94,7 +94,7 @@ class TunnelParticipant {
             ok = _inboundEndpointProcessor.retrievePreprocessedData(data, 0, data.length, recvFrom);
 
         if (!ok) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Failed to dispatch " + msg + "\n* Processor: " + _processor
                            + "\n* Inbound Endpoint: " + _inboundEndpointProcessor);
             if (_config != null)
@@ -108,7 +108,7 @@ class TunnelParticipant {
             if (ri == null)
                 ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
             if (ri != null) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Despatched " + msg + " directly to nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "]");
                 send(_config, msg, ri);
                 // see comments below
@@ -116,7 +116,7 @@ class TunnelParticipant {
                 //    incrementThroughput(_config.getReceiveFrom());
             } else {
                 // It should be rare to forget the router info for the next peer
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Looking up nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "] for " + msg);
                 _context.netDb().lookupRouterInfo(_config.getSendTo(), new SendJob(_context, msg),
                                                   new TimeoutJob(_context, msg), MAX_LOOKUP_TIME);
@@ -127,7 +127,7 @@ class TunnelParticipant {
             cfg.incrementProcessedMessages();
             ok = _handler.receiveTunnelMessage(data, 0, data.length);
             if (ok) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Received fragment on " + _config + ": " + msg);
             } else {
                 // blame everybody equally
@@ -136,7 +136,7 @@ class TunnelParticipant {
                     int pct = 100 / (lenm1);
                     for (int i = 0; i < lenm1; i++) {
                         Hash h = cfg.getPeer(i);
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn(toString() + ": Blaming [" + h.toBase64().substring(0,6) + "] -> " + pct + '%');
                         _context.profileManager().tunnelFailed(h, pct);
                     }
@@ -191,7 +191,7 @@ class TunnelParticipant {
 
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Receive complete: on " + _config + ": " + msg);
             _inboundDistributor.distribute(msg, toRouter, toTunnel);
         }
@@ -210,7 +210,7 @@ class TunnelParticipant {
         msg.setMessageExpiration(_context.clock().now() + 10*1000);
         msg.setTunnelId(config.getSendTunnel());
         OutNetMessage m = new OutNetMessage(_context, msg, msg.getMessageExpiration(), PRIORITY, ri);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Forward on from " + _config + ": " + msg);
         _context.outNetMessagePool().add(m);
     }
@@ -236,7 +236,7 @@ class TunnelParticipant {
                     send(_config, _msg, ri);
                     stat = 1;
                 } else {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Lookup the nextHop (" + _config.getSendTo()
                                   + " failed! Where do we go for " + _config + "?  msg dropped: " + _msg);
                     stat = 0;
@@ -263,11 +263,11 @@ class TunnelParticipant {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
             if (ri != null) {
                 _nextHopCache = ri;
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Lookup the nextHop (" + _config.getSendTo()
                               + " failed, but we found it!! Where do we go for " + _config + "?  msg dropped: " + _msg);
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Lookup the nextHop (" + _config.getSendTo()
                               + " failed! Where do we go for " + _config + "?  msg dropped: " + _msg);
             }

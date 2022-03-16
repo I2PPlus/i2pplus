@@ -76,7 +76,7 @@ public class I2NPMessageHandler {
         } catch (I2NPMessageException ime) {
             throw ime;
         } catch (RuntimeException e) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error reading the stream", e);
             throw new I2NPMessageException("Unknown error reading the " + msg.getClass().getSimpleName(), e); 
         }

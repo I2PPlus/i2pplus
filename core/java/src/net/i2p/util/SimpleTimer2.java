@@ -315,11 +315,11 @@ public class SimpleTimer2 {
          *  Does nothing if already scheduled.
          */
         public synchronized void schedule(long timeoutMs) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Scheduling: " + this + " (timeout: " + timeoutMs + "ms) [" + _state + "]");
             if (timeoutMs <= 0) {
                 // streaming timers do call with timeoutMs == 0
-                if (timeoutMs < 0 && _log.shouldLog(Log.DEBUG))
+                if (timeoutMs < 0 && _log.shouldDebug())
                     _log.warn("Scheduled timeout < 0ms (" + timeoutMs + "ms): " + this + " [" + _state + "]");
                 timeoutMs = 1; // otherwise we may execute before _future is updated, which is fine
                                // except it triggers 'early execution' warning logging
@@ -387,7 +387,7 @@ public class SimpleTimer2 {
                     return;
                 }
                 if (scheduled && (now + timeoutMs) < _nextRun) {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Rescheduling: " + truncClass + " (timeout: " + timeoutMs + "ms); old timeout was " + oldTimeout + "ms; State: " + _state);
                     cancel();
                 }
@@ -445,7 +445,7 @@ public class SimpleTimer2 {
         }
 
         private void run2() {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Running: " + this);
             long before = System.currentTimeMillis();
             long delay = 0;
@@ -488,7 +488,7 @@ public class SimpleTimer2 {
             // none of these _future checks should be necessary anymore
             if (_future != null)
                 delay = _future.getDelay(TimeUnit.MILLISECONDS);
-            else if (_log.shouldLog(Log.WARN))
+            else if (_log.shouldWarn())
                 _log.warn(_pool + " no _future " + this);
             // This can be an incorrect warning especially after a schedule(0)
             if (_log.shouldWarn()) {
@@ -527,11 +527,11 @@ public class SimpleTimer2 {
                 }
             }
             long time = System.currentTimeMillis() - before;
-            if (time > 500 && _log.shouldLog(Log.WARN))
+            if (time > 500 && _log.shouldWarn())
                 _log.warn(_pool + " event execution took " + time + "ms: " + this);
             else if (_log.shouldDebug())
                 _log.debug("Execution finished in " + time + "ms: " + this);
-            if (_log.shouldLog(Log.INFO)) {
+            if (_log.shouldInfo()) {
                  // this call is slow - iterates through a HashMap -
                  // would be better to have a local AtomicLong if we care
                  long completed = _pool.getCompletedTaskCount();

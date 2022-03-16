@@ -249,24 +249,24 @@ public class SessionConfig extends DataStructureImpl {
      */
     public boolean verifySignature() {
         if (getSignature() == null) {
-            //if (_log.shouldLog(Log.WARN)) _log.warn("Signature is null!");
+            //if (_log.shouldWarn()) _log.warn("Signature is null!");
             return false;
         }
         if (getDestination() == null) {
-            //if (_log.shouldLog(Log.WARN)) _log.warn("Destination is null!");
+            //if (_log.shouldWarn()) _log.warn("Destination is null!");
             return false;
         }
         if (getCreationDate() == null) {
-            //if (_log.shouldLog(Log.WARN)) _log.warn("Date is null!");
+            //if (_log.shouldWarn()) _log.warn("Date is null!");
             return false;
         }
         if (tooOld()) {
-            //if (_log.shouldLog(Log.WARN)) _log.warn("Too old!");
+            //if (_log.shouldWarn()) _log.warn("Too old!");
             return false;
         }
         byte data[] = getBytes();
         if (data == null) {
-            //if (_log.shouldLog(Log.WARN)) _log.warn("Bytes could not be found");
+            //if (_log.shouldWarn()) _log.warn("Bytes could not be found");
             return false;
         }
 
@@ -299,7 +299,7 @@ public class SessionConfig extends DataStructureImpl {
         boolean ok = DSAEngine.getInstance().verifySignature(getSignature(), data, spk);
         if (!ok) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(SessionConfig.class);
-            if (log.shouldLog(Log.WARN)) log.warn("DSA signature failed!");
+            if (log.shouldWarn()) log.warn("DSA signature failed!");
         }
         return ok;
     }

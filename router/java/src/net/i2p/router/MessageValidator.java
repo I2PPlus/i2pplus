@@ -41,12 +41,12 @@ public class MessageValidator {
 
         boolean isDuplicate = noteReception(messageId, expiration);
         if (isDuplicate) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Rejecting message " + messageId + " duplicate", new Exception("Duplicate origin"));
             _context.statManager().addRateData("router.duplicateMessageId", 1);
             return "duplicate";
         } else {
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Accepting message " + messageId + " because it is NOT a duplicate", new Exception("Original origin"));
             return null;
         }
@@ -58,12 +58,12 @@ public class MessageValidator {
     public String validateMessage(long expiration) {
         long now = _context.clock().now();
         if (now - (Router.CLOCK_FUDGE_FACTOR * 3 / 2) >= expiration) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Rejecting message expired " + (now-expiration) + "ms ago");
             _context.statManager().addRateData("router.invalidMessageTime", (now-expiration));
             return "expired " + (now-expiration) + "ms ago";
         } else if (now + 4*Router.CLOCK_FUDGE_FACTOR < expiration) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Rejecting message expiring too far in the future (" + (expiration-now) + "ms)");
             _context.statManager().addRateData("router.invalidMessageTime", (now-expiration));
             return "expire too far in the future (" + (expiration-now) + "ms)";
@@ -87,7 +87,7 @@ public class MessageValidator {
         ////val ^= (messageExpiration & TIME_MASK) << 16;
         val ^= (messageExpiration & TIME_MASK);
         boolean dup = _filter.add(val);
-        if (dup && _log.shouldLog(Log.WARN)) {
+        if (dup && _log.shouldWarn()) {
             _log.warn("Duplicate with " + _filter.getCurrentDuplicateCount()
                       + " other dups, " + _filter.getInsertedCount()
                       + " other entries, and a false positive rate of "

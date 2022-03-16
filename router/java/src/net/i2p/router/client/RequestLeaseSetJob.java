@@ -85,7 +85,7 @@ class RequestLeaseSetJob extends JobImpl {
             long fudge = MAX_FUDGE - (diff / (10*60*1000 / MAX_FUDGE));
             endTime += fudge;
         }
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Adding fudge " + fudge);
 
         SessionId id = _runner.getSessionId(requested.getDestination().calculateHash());
@@ -109,7 +109,7 @@ class RequestLeaseSetJob extends JobImpl {
                     nl.setTunnelId(lease.getTunnelId());
                     nl.setEndDate(endTime);
                     lease = nl;
-                    //if (_log.shouldLog(Log.INFO))
+                    //if (_log.shouldInfo())
                     //    _log.info("Adjusted end date to " + endTime + " for " + lease);
                 }
                 rmsg.addEndpoint(lease);
@@ -162,7 +162,7 @@ class RequestLeaseSetJob extends JobImpl {
 
         public void runJob() {
             if (_runner.isDead()) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Runner is already dead, not trying to expire the LeaseSet lookup");
                 return;
             }
@@ -172,7 +172,7 @@ class RequestLeaseSetJob extends JobImpl {
                 return;
             } else {
                 CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
-                if (_log.shouldLog(Log.ERROR)) {
+                if (_log.shouldError()) {
                     long waited = System.currentTimeMillis() - _start;
                     _log.error("Failed to receive a LeaseSet in the time allotted (" + waited + "ms): " + _requestState);
                 }

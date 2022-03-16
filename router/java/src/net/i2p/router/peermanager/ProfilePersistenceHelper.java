@@ -100,7 +100,7 @@ class ProfilePersistenceHelper {
             if (fos != null) try { fos.close(); } catch (IOException ioe) {}
         }
         long delay = _context.clock().now() - before;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Writing " + f.getName() + " took " + delay + "ms");
     }
 
@@ -246,7 +246,7 @@ class ProfilePersistenceHelper {
                 profiles.add(profile);
         }
         long duration = _context.clock().now() - start;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Loaded " + profiles.size() + " profiles in " + duration + "ms");
         return profiles;
     }
@@ -337,7 +337,7 @@ class ProfilePersistenceHelper {
                 caps = DataHelper.stripHTML(info.getCapabilities()).toUpperCase();
 
             if (isExpired(lastSentToSuccessfully)) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Dropping stale profile: " + file.getName());
                 file.delete();
                 return null;
@@ -399,13 +399,13 @@ class ProfilePersistenceHelper {
 //                profile.getPeerTestResponseTime().load(props, "peerTestResponseTime", true);
             }
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Loaded the profile for [" + peer.toBase64().substring(0,6) + "] from " + file.getName());
 
             fixupFirstHeardAbout(profile);
             return profile;
         } catch (IOException e) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error loading properties from " + file.getAbsolutePath(), e);
             file.delete();
             return null;
@@ -494,12 +494,12 @@ class ProfilePersistenceHelper {
             fin.reset();
             if (c == '#') {
                 // uncompressed
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Loading " + file.getName());
                 DataHelper.loadProps(props, fin);
             } else {
                 // compressed (or corrupt...)
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Loading " + file.getName());
                 DataHelper.loadProps(props, new GZIPInputStream(fin));
             }

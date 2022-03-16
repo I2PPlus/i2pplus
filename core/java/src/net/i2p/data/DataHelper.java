@@ -1845,7 +1845,7 @@ public class DataHelper {
             out.finish();
             out.flush();
             byte rv[] = out.getData();
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Compression of " + orig.length + " into " + rv.length + " (or " + 100.0d
             //               * (((double) orig.length) / ((double) rv.length)) + "% savings)");
 

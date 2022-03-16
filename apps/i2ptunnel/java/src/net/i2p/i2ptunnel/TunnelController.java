@@ -296,12 +296,12 @@ public class TunnelController implements Logging {
                 }
             }
         } catch (I2PException ie) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error creating new destination", ie);
             log("Error creating new destination: " + ie.getMessage());
             return false;
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error creating writing the destination to " + keyFile.getAbsolutePath(), ioe);
             log("Error writing the keys to " + keyFile.getAbsolutePath());
             return false;
@@ -422,7 +422,7 @@ public class TunnelController implements Logging {
         synchronized (this) {
             if (_state != TunnelState.STOPPED && _state != TunnelState.START_ON_LOAD) {
                 if (_state == TunnelState.RUNNING) {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Already running");
                     log("Tunnel " + getName() + " is already running");
                 }
@@ -453,7 +453,7 @@ public class TunnelController implements Logging {
         String type = getType();
         if ( (type == null) || (type.length() <= 0) ) {
             changeState(TunnelState.STOPPED);
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Cannot start tunnel - no type specified");
             return;
         }
@@ -499,7 +499,7 @@ public class TunnelController implements Logging {
             startStreamrServer();
         } else {
             changeState(TunnelState.STOPPED);
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Cannot start tunnel - unknown type [" + type + "]");
             return;
         }
@@ -619,7 +619,7 @@ public class TunnelController implements Logging {
         if (!sessions.isEmpty()) {
             for (int i = 0; i < sessions.size(); i++) {
                 I2PSession session = sessions.get(i);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Acquiring session " + session);
                 TunnelControllerGroup group = TunnelControllerGroup.getInstance();
                 if (group != null)
@@ -627,7 +627,7 @@ public class TunnelController implements Logging {
             }
             _sessions = sessions;
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("No sessions to acquire for " + getName() + " (standby mode)");
         }
     }
@@ -639,7 +639,7 @@ public class TunnelController implements Logging {
     private void release(Collection<I2PSession> sessions) {
         if (!sessions.isEmpty()) {
             for (I2PSession s : sessions) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Releasing session " + s);
                 TunnelControllerGroup group = TunnelControllerGroup.getInstance();
                 if (group != null)
@@ -647,7 +647,7 @@ public class TunnelController implements Logging {
             }
             // _sessions.clear() ????
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("No sessions to release for " + getName());
         }
     }
@@ -968,7 +968,7 @@ public class TunnelController implements Logging {
 
         synchronized (this) {
             if (_state != TunnelState.RUNNING) {
-                if (_log.shouldLog(Log.DEBUG)) {
+                if (_log.shouldDebug()) {
                     _log.debug("Not running, not updating sessions");
                 }
                 return;
@@ -986,17 +986,17 @@ public class TunnelController implements Logging {
         // Running, so check sessions
         Collection<I2PSession> sessions = getAllSessions();
         if (sessions.isEmpty()) {
-             if (_log.shouldLog(Log.DEBUG))
+             if (_log.shouldDebug())
                  _log.debug("Running but no sessions to update");
         }
         for (I2PSession s : sessions) {
             // tell the router via the session
             if (!s.isClosed()) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Session is open, updating: " + s);
                 s.updateOptions(_tunnel.getClientOptions());
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Session is closed, not updating: " + s);
             }
         }
@@ -1382,7 +1382,7 @@ public class TunnelController implements Logging {
             while (_messages.size() > 10)
                 _messages.remove(0);
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info(s);
     }
 

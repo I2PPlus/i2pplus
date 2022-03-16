@@ -143,9 +143,9 @@ class ExploreJob extends SearchJob {
         for (Hash h : dontIncludePeers) {
             buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug(buf.toString());
-//        else if (_log.shouldLog(Log.INFO))
+//        else if (_log.shouldInfo())
 //            _log.info("Excluding our " + (dontIncludePeers.size() - 1) + " closest peers from exploration");
 //            _log.debug("Peers we don't want to hear about: " + dontIncludePeers);
 
@@ -187,7 +187,7 @@ class ExploreJob extends SearchJob {
             }
             // may be null
             outMsg = MessageWrapper.wrap(ctx, msg, peer);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[Job " + getJobId() + "] Encrypted Exploratory DbLookupMessage for [" +
                            getState().getTarget().toBase64().substring(0,6) + "] sent to [" +
                            ident.calculateHash().toBase64().substring(0,6) + "]");
@@ -202,15 +202,15 @@ class ExploreJob extends SearchJob {
     protected int getBredth() {
         String exploreBredth = getContext().getProperty(PROP_EXPLORE_BREDTH);
         if (exploreBredth == null && getContext().netDb().getKnownRouters() > 4000) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search...");
             return EXPLORE_BREDTH;
         } else if (exploreBredth == null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search - max " + EXPLORE_BREDTH * 2 + " concurrent (less than 4000 known peers)");
             return EXPLORE_BREDTH * 2;
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search - max " + exploreBredth + " concurrent");
             return Integer.valueOf(exploreBredth);
         }
@@ -225,7 +225,7 @@ class ExploreJob extends SearchJob {
     protected void newPeersFound(int numNewPeers) {
         // who cares about how many new peers.  well, maybe we do.  but for now,
         // we'll do the simplest thing that could possibly work.
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             if (numNewPeers == 1)
                 _log.info("[Job " + getJobId() + "] Found " + numNewPeers + " new peer via Exploratory Search");
             else if (numNewPeers > 1)

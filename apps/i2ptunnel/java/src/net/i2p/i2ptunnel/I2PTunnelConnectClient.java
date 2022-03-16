@@ -171,7 +171,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     break;
                 }
                 line = line.trim();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     if (line != null)
                         _log.debug(getPrefix(requestId) + "Request: " + line);
 
@@ -228,7 +228,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                             // The request must be forwarded to a outproxy
                             currentProxy = selectProxy(hostLowerCase);
                             if (currentProxy == null) {
-                                if (_log.shouldLog(Log.WARN))
+                                if (_log.shouldWarn())
                                     _log.warn("No outproxy configured for connection to: " + hostLowerCase);
                                 writeErrorMessage(ERR_NO_OUTPROXY, out);
                                 return;
@@ -247,7 +247,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     }
                     targetRequest = host;
 
-                    if (_log.shouldLog(Log.DEBUG)) {
+                    if (_log.shouldDebug()) {
                         _log.debug(getPrefix(requestId) + "METHOD:" + method + ":\n" +
                                    "HOST:" + host + ":\n" +
                                    "PORT:" + remotePort + ":\n" +
@@ -318,7 +318,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             // Authorization
             AuthResult result = authorize(s, requestId, method, authorization);
             if (result != AuthResult.AUTH_GOOD) {
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     if (authorization != null)
                         _log.warn(getPrefix(requestId) + "Auth failed, sending 407 again");
                     else

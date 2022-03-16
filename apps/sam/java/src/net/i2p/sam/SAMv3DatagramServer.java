@@ -275,7 +275,7 @@ class SAMv3DatagramServer implements Handler {
 		/** @since 0.9.22 */
 		private static void warn(String s, Throwable t) {
 			Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3DatagramServer.class);
-			if (log.shouldLog(Log.WARN))
+			if (log.shouldWarn())
 				log.warn(s, t);
 		}
 	}

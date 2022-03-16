@@ -97,7 +97,7 @@ class PumpedTunnelGateway extends TunnelGateway {
     @Override
     public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         OutboundGatewayMessage cur = new OutboundGatewayMessage(msg, toRouter, toTunnel);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Outbound PumpedTunnelGateway added [Type " + msg.getType() + "] at priority: " + cur.getPriority());
         add(cur);
     }
@@ -127,7 +127,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         // before fragmentation, where we have priority queueing (for OBGW)
         int max;
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
-        if (backlogged && _log.shouldLog(Log.INFO))
+        if (backlogged && _log.shouldInfo())
             _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound);
         if (backlogged)
@@ -197,7 +197,7 @@ class PumpedTunnelGateway extends TunnelGateway {
                        + "; Queue flush: " + (complete-afterExpire));
         }
         queueBuf.clear();
-        if (rv && _log.shouldLog(Log.INFO))
+        if (rv && _log.shouldInfo())
             _log.info("PumpedTunnelGateway remaining to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound + "; Backlogged? " + backlogged);
         return rv;

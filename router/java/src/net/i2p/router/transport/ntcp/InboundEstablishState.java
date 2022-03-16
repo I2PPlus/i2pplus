@@ -202,7 +202,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         }
         if(ip != null)
            _transport.setIP(aliceHash, ip);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug(prefix() + "verification successful for " + _con);
 
         // Adjust skew calculation now that we know RTT
@@ -228,7 +228,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _log.warn("Excessive clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_SKEW;
             return false;
-        } else if (_log.shouldLog(Log.DEBUG)) {
+        } else if (_log.shouldDebug()) {
             _log.debug(prefix() + "Clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");
         }
         return true;
@@ -248,7 +248,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         boolean rv = aliceID == _context.router().getNetworkID();
         if (!rv) {
             Hash aliceHash = alice.getHash();
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Dropping inbound connection from wrong network: " + aliceID + " [" + aliceHash + "]");
             // So next time we will not accept the con from this IP,
             // rather than doing the whole handshake
@@ -358,7 +358,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (v != 0 && v != _context.router().getNetworkID()) {
                 byte[] ip = _con.getRemoteIP();
                 if (ip != null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Dropping inbound connection from wrong network: " + Addresses.toString(ip));
                     // So next time we will not accept the con from this IP
                     _context.blocklist().add(ip);

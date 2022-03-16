@@ -218,17 +218,17 @@ public class PluginStarter implements Runnable {
         int updated = 0;
         for (Map.Entry<String, String> entry : toUpdate.entrySet()) {
             String appName = entry.getKey();
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Checking for update plugin: " + appName);
 
             // blocking
             if (mgr.checkAvailable(PLUGIN, appName, 60*1000) == null) {
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("No update available for plugin: " + appName);
                 continue;
             }
 
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Updating plugin: " + appName);
             // non-blocking
             // mgr.update(PLUGIN, appName, 30*60*1000); // 30 minutes sidebar notification persistence
@@ -301,7 +301,7 @@ public class PluginStarter implements Runnable {
                         iter.remove();
                         changed = true;
                     } else {
-                        if (log.shouldLog(Log.WARN))
+                        if (log.shouldWarn())
                             log.warn("Deferred deletion of " + pluginDir + " failed");
                     }
                 }
@@ -413,7 +413,7 @@ public class PluginStarter implements Runnable {
             throw new Exception(foo);
         }
 
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Starting plugin: " + appName);
 
         // register themes
@@ -473,7 +473,7 @@ public class PluginStarter implements Runnable {
                         }
                         String enabled = wprops.getProperty(RouterConsoleRunner.PREFIX + warName + ENABLED);
                         if (! "false".equals(enabled)) {
-                            if (log.shouldLog(Log.INFO))
+                            if (log.shouldInfo())
                                 log.info("Starting webapp: " + warName + "...");
                             String path = files[i].getCanonicalPath();
                             WebAppStarter.startWebApp(ctx, server, warName, path, appName);
@@ -574,7 +574,7 @@ public class PluginStarter implements Runnable {
             log.error("Cannot stop nonexistent plugin: " + appName);
             return false;
         }
-        if (log.shouldLog(Log.WARN))
+        if (log.shouldWarn())
             log.warn("Stopping plugin: " + appName);
 
         ClientApp client = ctx.clientAppManager().getRegisteredApp(appName);
@@ -582,7 +582,7 @@ public class PluginStarter implements Runnable {
             try{
                 client.shutdown(null);
             }catch(Throwable t){
-                if (log.shouldLog(Log.ERROR))
+                if (log.shouldError())
                     log.error("Error stopping client app: " + appName, t);
             }
         } else {
@@ -1022,22 +1022,22 @@ public class PluginStarter implements Runnable {
         boolean isProcessRunning = false;
         ClientApp client = ctx.clientAppManager().getRegisteredApp(pluginName);
         if (client != null) {
-            if (log.shouldLog(Log.DEBUG))
+            if (log.shouldDebug())
                 log.debug("Checking state of client " + pluginName + client.getState());
             if (client.getState() == ClientAppState.RUNNING) {
                 isProcessRunning = true;
             }
         } else {
-            if (log.shouldLog(Log.DEBUG))
+            if (log.shouldDebug())
                 log.debug("No client found for plugin " + pluginName);
         }
 
         boolean isClientThreadRunning = isClientThreadRunning(pluginName, ctx);
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug("[" + pluginName + "] - Threads running? " + isClientThreadRunning + "; WebApp running? " + isWarRunning + "; Jobs running? " + isJobRunning + "; process running? " + isProcessRunning);
         return isClientThreadRunning || isWarRunning || isJobRunning || isProcessRunning;
         //
-        //if (log.shouldLog(Log.DEBUG))
+        //if (log.shouldDebug())
         //    log.debug("plugin name = <" + pluginName + ">; threads running? " + isClientThreadRunning(pluginName) + "; webapp running? " + WebAppStarter.isWebAppRunning(pluginName) + "; jobs running? " + isJobRunning);
         //return isClientThreadRunning(pluginName) || WebAppStarter.isWebAppRunning(pluginName) || isJobRunning;
         //
@@ -1068,7 +1068,7 @@ public class PluginStarter implements Runnable {
                     if (!"org.eclipse.jetty.util.RolloverFileOutputStream".equals(name) &&
                         !name.startsWith("HSQLDB Timer"))
                         notRollover = true;
-                    if (log.shouldLog(Log.DEBUG))
+                    if (log.shouldDebug())
 //                        log.debug("Found " + activeThreads[i].getState() + " thread " + name + "\n* Plugin: " + pluginName + ": " + name);
                         log.debug("[" + pluginName + "] Found " + activeThreads[i].getState() + " thread: " + name);
                 }
@@ -1096,7 +1096,7 @@ public class PluginStarter implements Runnable {
             }
             try {
                 addPath(f.toURI().toURL());
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("INFO: Adding plugin to classpath: " + f);
             } catch (Exception e) {
                 log.error("Plugin client " + clientName + " bad classpath element: " + f, e);
@@ -1120,7 +1120,7 @@ public class PluginStarter implements Runnable {
             }
             try {
                 urls.add(f.toURI().toURL());
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("INFO: Adding plugin to classpath: " + f);
             } catch (IOException e) {
                 log.error("Plugin client " + clientName + " bad classpath element: " + f, e);

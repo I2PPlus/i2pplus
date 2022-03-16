@@ -104,7 +104,7 @@ public abstract class NamingService {
             result.fromBase64(hostname);
             return result;
         } catch (DataFormatException dfe) {
-            if (_log.shouldLog(Log.WARN)) _log.warn("Bad B64 dest [" + hostname + "]", dfe);
+            if (_log.shouldWarn()) _log.warn("Bad B64 dest [" + hostname + "]", dfe);
             return null;
         }
     }

@@ -315,25 +315,25 @@ public final class KeyGenerator {
                 Log log = _context.logManager().getLog(KeyGenerator.class);
                 String pname = kpg.getProvider().getName();
                 if ("BC".equals(pname)) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("BC KPG failed for " + type, pe);
                     throw new GeneralSecurityException("BC KPG for " + type, pe);
                 }
                 if (!ECConstants.isBCAvailable())
                     throw new GeneralSecurityException(pname + " KPG failed for " + type, pe);
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn(pname + " KPG failed for " + type + ", trying BC"  /* , pe */ );
                 try {
                     kpg = KeyPairGenerator.getInstance(type.getBaseAlgorithm().getName(), "BC");
                     kpg.initialize(type.getParams(), _context.random());
                     kp = kpg.generateKeyPair();
                 } catch (ProviderException pe2) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("BC KPG failed for " + type + " also", pe2);
                     // throw original exception
                     throw new GeneralSecurityException(pname + " KPG for " + type, pe);
                 } catch (GeneralSecurityException gse) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("BC KPG failed for " + type + " also", gse);
                     // throw original exception
                     throw new GeneralSecurityException(pname + " KPG for " + type, pe);

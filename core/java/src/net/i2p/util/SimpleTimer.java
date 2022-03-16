@@ -170,13 +170,13 @@ public class SimpleTimer {
             _events.notifyAll();
         }
         if (time.longValue() > eventTime + 100) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Lots of timer congestion, had to push " + event + " back "
                            + (time.longValue()-eventTime) + "ms (# events: " + totalEvents + ")");
         }
         long timeToAdd = System.currentTimeMillis() - now;
         if (timeToAdd > 50) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("timer contention: took " + timeToAdd + "ms to add a job with " + totalEvents + " queued");
         }
             
@@ -240,7 +240,7 @@ public class SimpleTimer {
                         }
                         if (eventsToFire.isEmpty()) { 
                             if (nextEventDelay != -1) {
-                                if (_log.shouldLog(Log.DEBUG))
+                                if (_log.shouldDebug())
                                     _log.debug("Next event in " + nextEventDelay + ": " + nextEvent);
                                 _events.wait(nextEventDelay);
                             } else {

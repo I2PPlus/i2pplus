@@ -158,7 +158,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
             if (_lastChanged == now)
                 now++;
             _lastChanged = now;
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Routing modifier generated: " + HexDump.dump(mod));
         }
         return changed;

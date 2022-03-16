@@ -33,7 +33,7 @@ class SearchMessageSelector implements MessageSelector {
         _exp = expiration;
         _state = state;
         _id = __searchSelectorId.incrementAndGet();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("[ID " + _id + "] Created: " + toString());
     }
 
@@ -53,7 +53,7 @@ class SearchMessageSelector implements MessageSelector {
             return true;
 
         if (_found) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[ID " + _id + "] Don't continue matching! Looking for reply from [" +
                            _peer.toBase64().substring(0,6) + "] concerning [" + _state.getTarget().toBase64().substring(0,6) + "]");
             return false;
@@ -69,7 +69,7 @@ class SearchMessageSelector implements MessageSelector {
         if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
             DatabaseStoreMessage msg = (DatabaseStoreMessage)message;
             if (msg.getKey().equals(_state.getTarget())) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("[ID " + _id + "] Received DbStore of the key we're looking for. " +
                                "May not have been from peer we're checking against though, " +
                                "but DBStore doesn't include that info");
@@ -80,7 +80,7 @@ class SearchMessageSelector implements MessageSelector {
             DatabaseSearchReplyMessage msg = (DatabaseSearchReplyMessage)message;
             if (_peer.equals(msg.getFromHash())) {
                 if (msg.getSearchKey().equals(_state.getTarget())) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("[ID " + _id + "] Received DbSearchReply from queried peer for a key we're looking for");
                     _found = true;
                     return true;

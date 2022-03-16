@@ -139,12 +139,12 @@ class SAMDatagramSession extends SAMMessageSession {
                 payload = dgramDissector.extractPayload();
             }
         } catch (DataFormatException e) {
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 _log.debug("Dropping ill-formatted I2P repliable datagram", e);
             }
             return;
         } catch (I2PInvalidDatagramException e) {
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 _log.debug("Dropping ill-signed I2P repliable datagram", e);
             }
             return;

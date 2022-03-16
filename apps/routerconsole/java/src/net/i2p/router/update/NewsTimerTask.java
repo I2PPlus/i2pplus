@@ -36,7 +36,7 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
         boolean isNew = (ctx.clock().now() - installed) < 30*60*1000L;
         long delay = isNew ? NEW_INSTALL_DELAY : INITIAL_DELAY;
         delay += _context.random().nextLong(INITIAL_DELAY);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Scheduling first news check in " + DataHelper.formatDuration(delay));
         ctx.simpleTimer2().addPeriodicEvent(this, delay, RUN_DELAY);
         // UpdateManager calls NewsFetcher to check the existing news at startup
@@ -79,12 +79,12 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
             if (lastFetch + ms < _context.clock().now()) {
                 return true;
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Last fetched " + DataHelper.formatDuration(_context.clock().now() - lastFetch) + " ago");
                 return false;
             }
         } catch (NumberFormatException nfe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Invalid refresh frequency: " + freq);
             return false;
         }

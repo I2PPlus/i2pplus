@@ -43,7 +43,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         msg.setData(encrypted);
         msg.setTunnelId(_config.getConfig(0).getSendTunnel());
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Received encrypted message, sending out via " + _config + ": " + msg);
         RouterInfo ri = _nextHopCache;
         if (ri == null) {
@@ -55,7 +55,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             return msg.getUniqueId();
         } else {
             // It should be rare to forget the router info for a peer in our own tunnel.
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Lookup of " + _config.getPeer(1)
                            + " required for " + msg);
             _context.netDb().lookupRouterInfo(_config.getPeer(1), new SendJob(_context, msg),
@@ -74,7 +74,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     }
 
     private void send(TunnelDataMessage msg, RouterInfo ri) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Forwarding encrypted message via " + _config + " [MsgID" + msg.getUniqueId() + "]");
         OutNetMessage m = new OutNetMessage(_context, msg, msg.getMessageExpiration(), _priority, ri);
         // set a job to fail the tunnel if we can't send the message
@@ -95,7 +95,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
 
         public void runJob() {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getPeer(1));
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Lookup of " + _config.getPeer(1)
                            + " successful? " + (ri != null));
             int stat;
@@ -122,7 +122,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         public String getName() { return "Timeout OBGW Lookup"; }
 
         public void runJob() {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Lookup of " + _config.getPeer(1)
                            + " failed for " + _config);
             _context.statManager().addRateData("tunnel.outboundLookupSuccess", 0);

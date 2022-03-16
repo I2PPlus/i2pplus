@@ -27,7 +27,7 @@ class SessionStatusMessageHandler extends HandlerImpl {
     }
 
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Handle " + message);
         SessionStatusMessage msg = (SessionStatusMessage) message;
         session.setSessionId(msg.getSessionId());
@@ -50,7 +50,7 @@ class SessionStatusMessageHandler extends HandlerImpl {
             _log.info("Session status updated");
             break;
         default:
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unknown session status sent: " + msg.getStatus());
         }
         return;

@@ -45,7 +45,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      *  @throws IllegalArgumentException if already added
      */
     public boolean addAndStart(ClientApp app, String[] args) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Client " + app.getDisplayName() + " ADDED");
         String[] old = _clients.putIfAbsent(app, args);
         if (old != null)
@@ -115,13 +115,13 @@ public class RouterAppManager extends ClientAppManagerImpl {
         switch(state) {
           case UNINITIALIZED:
           case INITIALIZED:
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Client " + app.getDisplayName() + " is now " + state);
             break;
 
           case STARTING:
           case RUNNING:
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Client " + app.getDisplayName() + " is now " + state);
             break;
 
@@ -135,7 +135,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
             }
             if (message == null)
                 message = "";
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Client " + app.getDisplayName() + " is now " + state +
                           ' ' + message, e);
             break;
@@ -168,11 +168,11 @@ public class RouterAppManager extends ClientAppManagerImpl {
         if (!_clients.containsKey(app)) {
             // Allow registration even if we didn't start it,
             // useful for plugins
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Registering untracked client " + app.getName());
             //return false;
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Client " + app.getDisplayName() + " REGISTERED AS " + app.getName());
         // TODO if old app in there is not running and != this app, allow replacement
         return super.register(app);

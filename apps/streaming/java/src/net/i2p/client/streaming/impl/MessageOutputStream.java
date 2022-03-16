@@ -92,12 +92,12 @@ class MessageOutputStream extends OutputStream {
         //_sendPeriodBeginTime = ctx.clock().now();
         //_context.statManager().createRateStat("stream.sendBps", "How fast we pump data through the stream", "Stream", new long[] { 60*1000, 5*60*1000, 60*60*1000 });
         _flusher = new Flusher(timer);
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("MessageOutputStream created");
     }
 
     public void setWriteTimeout(int ms) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Changing write timeout from " + _writeTimeout + " to " + ms);
 
         _writeTimeout = ms;
@@ -124,7 +124,7 @@ class MessageOutputStream extends OutputStream {
     @Override
     public void write(byte b[], int off, int len) throws IOException {
         if (_closed.get()) throw new IOException("Output stream closed");
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("write(b[], " + off + ", " + len + ") ");
         int cur = off;
         int remaining = len;
@@ -161,7 +161,7 @@ class MessageOutputStream extends OutputStream {
                     remaining -= toWrite;
                     cur += toWrite;
                     _valid = maxBuffer;
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("write() direct valid = " + _valid);
                     ws = _dataReceiver.writeData(_buf, 0, _valid);
                     _written += _valid;
@@ -170,7 +170,7 @@ class MessageOutputStream extends OutputStream {
                 }
             }
             if (ws != null) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Waiting " + _writeTimeout + "ms for accept of " + ws);
                 // ok, we've actually added a new packet - lets wait until
                 // its accepted into the queue before moving on (so that we
@@ -183,18 +183,18 @@ class MessageOutputStream extends OutputStream {
                     throw ioe2;
                 }
                 if (!ws.writeAccepted()) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Write not accepted of " + ws);
                     if (_writeTimeout > 0)
                         throw new InterruptedIOException("Write not accepted within timeout: " + ws);
                     else
                         throw new IOException("Write not accepted into the queue: " + ws);
                 } else {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("After waitForAccept of " + ws);
                 }
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Queued " + len + " bytes without sending to the receiver");
             }
         }
@@ -271,12 +271,12 @@ class MessageOutputStream extends OutputStream {
                 // So perhaps it IS wise to be "overly worried" ...
 //                forceReschedule(_passiveFlushDelay);
                 forceReschedule(pfd);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
 //                    _log.debug("Rescheduling the flusher to run in " + _passiveFlushDelay + "ms");
                     _log.debug("Rescheduling the flusher to run in " + pfd + "ms");
                 _enqueued = true;
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("NOT rescheduling the flusher");
             }
         }
@@ -286,7 +286,7 @@ class MessageOutputStream extends OutputStream {
                 return;
             _enqueued = false;
             long timeLeft = (_lastBuffered + _passiveFlushDelay - _context.clock().now());
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Flusher time reached with " + timeLeft + "ms remaining");
             if (timeLeft > 0)
                 enqueue();
@@ -302,7 +302,7 @@ class MessageOutputStream extends OutputStream {
             synchronized (_dataLock) {
                 long flushTime = _lastBuffered + _passiveFlushDelay;
                 if ( (_valid > 0) && (flushTime <= _context.clock().now()) ) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("doFlush() valid = " + _valid);
                     if (_buf != null) {
                         ws = _dataReceiver.writeData(_buf, 0, _valid);
@@ -312,12 +312,12 @@ class MessageOutputStream extends OutputStream {
                         sent = true;
                     }
                 } else {
-                    if (_log.shouldLog(Log.INFO) && _valid > 0)
+                    if (_log.shouldInfo() && _valid > 0)
                         _log.info("doFlush() rejected... valid = " + _valid);
                 }
             }
             // ignore the ws
-            if (sent && _log.shouldLog(Log.DEBUG))
+            if (sent && _log.shouldDebug())
                 _log.debug("Passive flush of " + ws);
         }
     }
@@ -353,7 +353,7 @@ class MessageOutputStream extends OutputStream {
     private void flush(boolean wait_for_accept_only) throws IOException {
         long begin = _log.shouldDebug() ? _context.clock().now() : 0;
         WriteStatus ws = null;
-        if (_log.shouldLog(Log.DEBUG) && _valid > 0)
+        if (_log.shouldDebug() && _valid > 0)
             _log.debug("flush() valid = " + _valid);
 
         synchronized (_dataLock) {
@@ -382,7 +382,7 @@ class MessageOutputStream extends OutputStream {
         }
 
         // Wait a loooooong time, until we have the ACK
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("before waiting " + _writeTimeout + "ms for completion of " + ws);
         try {
             if (_closed.get() &&
@@ -398,7 +398,7 @@ class MessageOutputStream extends OutputStream {
             ioe2.initCause(ie);
             throw ioe2;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("After waiting " + _writeTimeout + "ms for completion of " + ws);
         if (ws.writeFailed() && (_writeTimeout > 0) )
             throw new InterruptedIOException("Timed out during write");
@@ -436,7 +436,7 @@ class MessageOutputStream extends OutputStream {
         // should we? To be researched further.
         // false -> wait for completion, not just accept.
         flush(false);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Output stream closed after writing " + _written);
         ByteArray ba = null;
         synchronized (_dataLock) {
@@ -468,7 +468,7 @@ class MessageOutputStream extends OutputStream {
 
     private void clearData(boolean shouldFlush) {
         ByteArray ba = null;
-        if (_log.shouldLog(Log.DEBUG) && _valid > 0)
+        if (_log.shouldDebug() && _valid > 0)
             _log.debug("clearData() valid = " + _valid);
 
         synchronized (_dataLock) {
@@ -518,7 +518,7 @@ class MessageOutputStream extends OutputStream {
     void flushAvailable(DataReceiver target, boolean blocking) throws IOException {
         WriteStatus ws = null;
         long before = System.currentTimeMillis();
-        if (_log.shouldLog(Log.DEBUG) && _valid > 0)
+        if (_log.shouldDebug() && _valid > 0)
             _log.debug("flushAvailable() valid = " + _valid);
         synchronized (_dataLock) {
             // if valid == 0 return ??? - no, this could flush a CLOSE packet too.
@@ -531,7 +531,7 @@ class MessageOutputStream extends OutputStream {
             _dataLock.notifyAll();
         }
         long afterBuild = System.currentTimeMillis();
-        if ( (afterBuild - before > 1000) && (_log.shouldLog(Log.DEBUG)) )
+        if ( (afterBuild - before > 1000) && (_log.shouldDebug()) )
             _log.debug("Took " + (afterBuild-before) + "ms to build a packet?  " + ws);
 
         if (blocking && ws != null) {
@@ -548,7 +548,7 @@ class MessageOutputStream extends OutputStream {
                 throw new InterruptedIOException("Flush available timed out (" + _writeTimeout + "ms)");
         }
         long afterAccept = System.currentTimeMillis();
-        if ( (afterAccept - afterBuild > 1000) && (_log.shouldLog(Log.DEBUG)) )
+        if ( (afterAccept - afterBuild > 1000) && (_log.shouldDebug()) )
             _log.debug("Took " + (afterAccept-afterBuild) + "ms to accept a packet? " + ws);
         return;
     }

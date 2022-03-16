@@ -60,13 +60,13 @@ class ClientListenerRunner implements Runnable {
      */
     protected ServerSocket getServerSocket() throws IOException {
         if (_bindAllInterfaces) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Listening on port " + _port + " on all interfaces");
             return new ServerSocket(_port);
         } else {
             String listenInterface = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST, 
                                                           ClientManagerFacadeImpl.DEFAULT_HOST);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Listening on port " + _port + " of the specific interface: " + listenInterface);
             return new ServerSocket(_port, 0, InetAddress.getByName(listenInterface));
         }
@@ -90,7 +90,7 @@ class ClientListenerRunner implements Runnable {
             try {
                 _socket = getServerSocket();
                 
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("ServerSocket created, before accept: " + _socket);
                 if (_port > 0) {
                     // not for DomainClientListenerRunner
@@ -102,12 +102,12 @@ class ClientListenerRunner implements Runnable {
                     try {
                         Socket socket = _socket.accept();
                         if (validate(socket)) {
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Connection received");
                             socket.setKeepAlive(true);
                             runConnection(socket);
                         } else {
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Refused connection from " + socket.getInetAddress());
                             try {
                                 socket.close();
@@ -177,7 +177,7 @@ class ClientListenerRunner implements Runnable {
             socket.setSoTimeout(0);
             return rv;
         } catch (IOException ioe) {}
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
              _log.warn("Peer did not authenticate themselves as I2CP quickly enough, dropping");
         return false;
     }

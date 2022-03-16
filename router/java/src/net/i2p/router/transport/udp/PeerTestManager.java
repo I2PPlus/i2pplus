@@ -180,12 +180,12 @@ class PeerTestManager {
      */
     public synchronized void runTest(InetAddress bobIP, int bobPort, SessionKey bobCipherKey, SessionKey bobMACKey) {
         if (_currentTest != null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("We are already running a test: " + _currentTest + ", aborting test with Bob [" + bobIP + "]");
             return;
         }
         if (_transport.isTooClose(bobIP.getAddress())) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Not running test with Bob too close to us [" + bobIP + "]");
             return;
         }
@@ -198,7 +198,7 @@ class PeerTestManager {
         _currentTest = test;
         _currentTestComplete = false;
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Start new test: " + test);
         while (_recentTests.size() > MAX_RECENT_TESTS)
             _recentTests.poll();
@@ -232,7 +232,7 @@ class PeerTestManager {
                 if (timeSinceSend >= RESEND_TIMEOUT) {
                     int sent = state.incrementPacketsRelayed();
                     if (sent > MAX_RELAYED_PER_TEST_ALICE) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Sent too many packets: " + state);
                         if (!_currentTestComplete)
                             testComplete();
@@ -272,7 +272,7 @@ class PeerTestManager {
     private void sendTestToBob() {
         PeerTestState test = _currentTest;
         if (!expired()) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Sending test to Bob: " + test);
             test.setLastSendTime(_context.clock().now());
             _transport.send(_packetBuilder.buildPeerTestFromAlice(test.getBobIP(), test.getBobPort(),
@@ -287,7 +287,7 @@ class PeerTestManager {
     private void sendTestToCharlie() {
         PeerTestState test = _currentTest;
         if (!expired()) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Sending test to Charlie: " + test);
             test.setLastSendTime(_context.clock().now());
             _transport.send(_packetBuilder.buildPeerTestFromAlice(test.getCharlieIP(), test.getCharliePort(),
@@ -349,7 +349,7 @@ class PeerTestManager {
                 // Stop the test.
                 // Sometimes, the first response has an IP but a later one does not,
                 // check every time.
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Bad IP length " + ipSize + " from Bob's reply: " + from);
                 // reset all state
                 // so testComplete() will return UNKNOWN
@@ -372,12 +372,12 @@ class PeerTestManager {
                 } // else ignore IP/port
                 test.setReceiveBobTime(_context.clock().now());
 
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Receive test reply from Bob: " + test);
                 if (test.getAlicePortFromCharlie() > 0)
                     testComplete();
             } catch (UnknownHostException uhe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Unable to get our IP (length " + ipSize +
                                ") from Bob's reply: " + from, uhe);
                 _context.statManager().addRateData("udp.testBadIP", 1);
@@ -390,7 +390,7 @@ class PeerTestManager {
             if ( (charlieSession != null) &&
                  ( (charlieSession.getLastACKSend() > recentBegin) ||
                    (charlieSession.getLastSendTime() > recentBegin) ) ) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Bob chose a Charlie we already have a session to, cancelling the test and rerunning... \n* Bob: "
                               + _currentTest + ", Charlie: " + from);
                 // why are we doing this instead of calling testComplete() ?
@@ -417,25 +417,25 @@ class PeerTestManager {
                     testInfo.readIP(ip, 0);
                     InetAddress addr = InetAddress.getByAddress(ip);
                     test.setAliceIPFromCharlie(addr);
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Receive test reply from Charlie: " + test);
                     if (test.getReceiveBobTime() > 0)
                         testComplete();
                 } catch (UnknownHostException uhe) {
-                    if (_log.shouldLog(Log.ERROR))
+                    if (_log.shouldError())
                         _log.error("Charlie @ " + from + " said we have an invalid IP address: " + uhe.getMessage(), uhe);
                     _context.statManager().addRateData("udp.testBadIP", 1);
                 }
             } else {
                 if (test.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_ALICE) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Sent too many packets on the test: " + test);
                     if (!_currentTestComplete)
                         testComplete();
                     return;
                 }
 
-                if (_log.shouldLog(Log.INFO) && charlieSession != null)
+                if (_log.shouldInfo() && charlieSession != null)
                     _log.info("Bob chose a Charlie we last ACKed " + DataHelper.formatDuration(_context.clock().now() -
                               charlieSession.getLastACKSend()) + " last sent " + DataHelper.formatDuration(_context.clock().now() -
                               charlieSession.getLastSendTime()) + " (Bob: " + _currentTest + ", Charlie: " + from + ")");
@@ -448,11 +448,11 @@ class PeerTestManager {
                 try {
                     test.setCharlieIP(InetAddress.getByAddress(from.getIP()));
                     test.setCharliePort(from.getPort());
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Receive test from Charlie: " + test);
                     sendTestToCharlie();
                 } catch (UnknownHostException uhe) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Charlie's IP is b0rked: " + from);
                     _context.statManager().addRateData("udp.testBadIP", 1);
                 }
@@ -501,7 +501,7 @@ class PeerTestManager {
             status = Status.UNKNOWN;
         }
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Test complete: " + test);
 
         honorStatus(status, isIPv6);
@@ -515,7 +515,7 @@ class PeerTestManager {
      *  @param isIPv6 Is the change an IPv6 change?
      */
     private void honorStatus(Status status, boolean isIPv6) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Test results (IPv6? " + isIPv6 + "): status = " + status);
         _transport.setReachabilityStatus(status, isIPv6);
     }
@@ -541,7 +541,7 @@ class PeerTestManager {
             _transport.isTooClose(fromIP) ||
             _context.blocklist().isBlocklisted(fromIP)) {
             // spoof check, and don't respond to privileged ports
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Invalid PeerTest address: " + Addresses.toString(fromIP, fromPort));
             _context.statManager().addRateData("udp.testBadIP", 1);
             return;
@@ -561,7 +561,7 @@ class PeerTestManager {
                                 (testIP.length != 4 && testIP.length != 16) ||
                                 _context.blocklist().isBlocklisted(testIP)))) {
             // spoof check, and don't respond to privileged ports
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Invalid address in PeerTest: " + Addresses.toString(testIP, testPort));
             _context.statManager().addRateData("udp.testBadIP", 1);
             return;
@@ -583,14 +583,14 @@ class PeerTestManager {
         // we are Bob or Charlie, we are helping Alice
 
         if (_throttle.shouldThrottle(fromIP)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("PeerTest throttle from " + Addresses.toString(fromIP, fromPort));
             return;
         }
 
         // use the same counter for both from and to IPs
         if (testIP != null && _throttle.shouldThrottle(testIP)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("PeerTest throttle to " + Addresses.toString(testIP, testPort));
             return;
         }
@@ -603,11 +603,11 @@ class PeerTestManager {
             // the field should be us there.
             // Let's also eliminate anybody in the same /16
             if (_recentTests.contains(lNonce)) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Received delayed reply on nonce " + nonce +
                               " from: " + Addresses.toString(fromIP, fromPort));
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Nearby address in PeerTest: " + Addresses.toString(testIP, testPort) +
                               " from: " + Addresses.toString(fromIP, fromPort) +
                               " state? " + state);
@@ -621,18 +621,18 @@ class PeerTestManager {
             if ( (testIP == null) || (testPort <= 0) ) {
                 // we are bob, since we haven't seen this nonce before AND its coming from alice
                 if (_activeTests.size() >= MAX_ACTIVE_TESTS) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Too many active tests, droppping from Alice " + Addresses.toString(fromIP, fromPort));
                     return;
                 }
                 if (!inSession || fromPeer == null) {
                     // Require an existing session to start a test,
                     // as a way of preventing trouble
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No session, dropping new test from Alice " + Addresses.toString(fromIP, fromPort));
                     return;
                 }
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Test IP/port are blank coming from " + from + ", assuming we are Bob and they are Alice");
                 receiveFromAliceAsBob(from, fromPeer, testInfo, nonce, null);
             } else {
@@ -641,11 +641,11 @@ class PeerTestManager {
                     // initiated test
                 } else {
                     if (_activeTests.size() >= MAX_ACTIVE_TESTS) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Too many active tests, droppping from Bob " + Addresses.toString(fromIP, fromPort));
                         return;
                     }
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("We are Charlie, as the testIP/port is " + Addresses.toString(testIP, testPort) + " and the state is unknown for " + nonce);
                     // we are charlie, since alice never sends us her IP and port, only bob does (and,
                     // erm, we're not alice, since it isn't our nonce)
@@ -668,7 +668,7 @@ class PeerTestManager {
                            (fromPort == state.getCharliePort()) ) {
                     receiveFromCharlieAsBob(from, fromPeer, inSession, state);
                 } else {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Received from a fourth party as Bob! Alice: " + state.getAliceIP() + ", Charlie: " + state.getCharlieIP() + ", Dave: " + from);
                 }
             } else if (state.getOurRole() == CHARLIE) {
@@ -707,7 +707,7 @@ class PeerTestManager {
             state = new PeerTestState(CHARLIE, sz == 16, nonce, now);
         } else {
             if (state.getReceiveBobTime() > now - (RESEND_TIMEOUT / 2)) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Too soon, not retransmitting: " + state);
                 return;
             }
@@ -739,12 +739,12 @@ class PeerTestManager {
 
             // we send two packets below, but increment just once
             if (state.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_CHARLIE) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Too many, not retransmitting: " + state);
                 return;
             }
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Receive from Bob: " + state);
 
             if (isNew) {
@@ -762,7 +762,7 @@ class PeerTestManager {
                                                          _transport.getIntroKey(), nonce);
             _transport.send(packet);
         } catch (UnknownHostException uhe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to build the AliceIP from " + from + ", ip size: " + sz + " ip val: " + Base64.encode(aliceIPData), uhe);
             _context.statManager().addRateData("udp.testBadIP", 1);
         }
@@ -786,7 +786,7 @@ class PeerTestManager {
         boolean isIPv6 = sz == 16;
         if (state == null) { // pick a new charlie
             //if (from.getIP().length != 4) {
-            //    if (_log.shouldLog(Log.WARN))
+            //    if (_log.shouldWarn())
             //        _log.warn("PeerTest over IPv6 from Alice as Bob? " + from);
             //    return;
             //}
@@ -795,13 +795,13 @@ class PeerTestManager {
             charlie = _transport.getPeerState(new RemoteHostId(state.getCharlieIP().getAddress(), state.getCharliePort()));
         }
         if (charlie == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to pick a Charlie (no peer), IPv6? " + isIPv6);
             return;
         }
         charlieInfo = _context.netDb().lookupRouterInfoLocally(charlie.getRemotePeer());
         if (charlieInfo == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to pick a Charlie (no RI), IPv6? " + isIPv6);
             return;
         }
@@ -816,14 +816,14 @@ class PeerTestManager {
 
             RouterAddress raddr = _transport.getTargetAddress(charlieInfo);
             if (raddr == null) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Unable to pick a Charlie (no addr), IPv6? " + isIPv6);
                 return;
             }
             UDPAddress addr = new UDPAddress(raddr);
             byte[] ikey = addr.getIntroKey();
             if (ikey == null) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Unable to pick a Charlie (no ikey), IPv6? " + isIPv6);
                 return;
             }
@@ -839,7 +839,7 @@ class PeerTestManager {
                 state = new PeerTestState(BOB, isIPv6, nonce, now);
             } else {
                 if (state.getReceiveAliceTime() > now - (RESEND_TIMEOUT / 2)) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Too soon, not retransmitting: " + state);
                     return;
                 }
@@ -854,7 +854,7 @@ class PeerTestManager {
             state.setReceiveAliceTime(now);
 
             if (state.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_BOB) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Too many, not retransmitting: " + state);
                 return;
             }
@@ -871,12 +871,12 @@ class PeerTestManager {
                                                                      charlie.getCurrentCipherKey(),
                                                                      charlie.getCurrentMACKey());
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Receive from Alice: " + state);
 
             _transport.send(packet);
         } catch (UnknownHostException uhe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to build the AliceIP from " + from, uhe);
             _context.statManager().addRateData("udp.testBadIP", 1);
         }
@@ -901,13 +901,13 @@ class PeerTestManager {
 
         long now = _context.clock().now();
         if (state.getReceiveCharlieTime() > now - (RESEND_TIMEOUT / 2)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Too soon, not retransmitting: " + state);
             return;
         }
 
         if (state.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_BOB) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Too many, not retransmitting: " + state);
             return;
         }
@@ -919,7 +919,7 @@ class PeerTestManager {
                                                                state.getAliceCipherKey(), state.getAliceMACKey(),
                                                                state.getCharlieIntroKey(), state.getNonce());
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Receive from Charlie, sending Alice back the OK: " + state);
 
         _transport.send(packet);
@@ -935,13 +935,13 @@ class PeerTestManager {
                                            long nonce, PeerTestState state) {
         long now = _context.clock().now();
         if (state.getReceiveAliceTime() > now - (RESEND_TIMEOUT / 2)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Too soon, not retransmitting: " + state);
             return;
         }
 
         if (state.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_CHARLIE) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Too many, not retransmitting: " + state);
             return;
         }
@@ -954,12 +954,12 @@ class PeerTestManager {
             testInfo.readIntroKey(aliceIntroKey.getData(), 0);
             UDPPacket packet = _packetBuilder.buildPeerTestToAlice(aliceIP, from.getPort(), aliceIntroKey, _transport.getIntroKey(), nonce);
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Receive from Alice: " + state);
 
             _transport.send(packet);
         } catch (UnknownHostException uhe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to build the AliceIP from " + from, uhe);
             _context.statManager().addRateData("udp.testBadIP", 1);
         }

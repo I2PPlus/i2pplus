@@ -76,7 +76,7 @@ public class GarlicMessageReceiver {
                     decryptionKey2 = null;
                 }
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Not decrypting " + message + " for disconnected client \n* Destination: " + _clientDestination.toBase32());
                 return;
             }
@@ -97,7 +97,7 @@ public class GarlicMessageReceiver {
                 handleClove(clove);
             }
         } else {
-            if (_log.shouldLog(Log.WARN)) {
+            if (_log.shouldWarn()) {
                 String d = (_clientDestination != null) ? _clientDestination.toBase32() : "Our Router";
                 String keys = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
                 _log.warn("Failed to decrypt " + message + " with " + keys + "\n* Destination: " + d);
@@ -115,11 +115,11 @@ public class GarlicMessageReceiver {
      */
     private void handleClove(GarlicClove clove) {
         if (!isValid(clove)) {
-            //if (_log.shouldLog(Log.WARN))
+            //if (_log.shouldWarn())
             //    _log.warn("Invalid clove received " + clove);
             return;
         }
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Valid clove received " + clove);
         _receiver.handleClove(clove.getInstructions(), clove.getData());
     }
@@ -139,7 +139,7 @@ public class GarlicMessageReceiver {
         boolean rv = invalidReason == null;
         if (!rv) {
             String howLongAgo = DataHelper.formatDuration(_context.clock().now()-clove.getExpiration());
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Clove is NOT valid: id=" + clove.getCloveId()
                            + " expiration " + howLongAgo + " ago", new Exception("Invalid within..."));
             else if (_log.shouldWarn())

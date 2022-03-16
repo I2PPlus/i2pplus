@@ -311,21 +311,21 @@ class BlindCache {
                     storeInCache(bd);
                     count++;
                 } catch (IllegalArgumentException iae) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("Error reading cache entry: " + line, iae);
                 } catch (DataFormatException dfe) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("Error reading cache entry: " + line, dfe);
                 }
             }
             _changed = false;
         } catch (IOException ioe) {
-            if (log.shouldLog(Log.WARN) && file.exists())
+            if (log.shouldWarn() && file.exists())
                 log.warn("Error reading the blinding cache file", ioe);
         } finally {
             if (br != null) try { br.close(); } catch (IOException ioe) {}
         }
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Loaded " + count + " entries from " + file);
     }
 
@@ -347,12 +347,12 @@ class BlindCache {
                 throw new IOException("Failed write to " + file);
             _changed = false;
         } catch (IOException ioe) {
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Error writing the blinding cache File", ioe);
         } finally {
             if (out != null) out.close();
         }
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Stored " + count + " entries to " + file);
     }
 

@@ -153,7 +153,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                     responseLine = DataHelper.getUTF8(_headerBuffer.getData(), 0, i+1); // includes NL
                     responseLine = filterResponseLine(responseLine);
                     responseLine = (responseLine.trim() + "\r\n");
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Response: " + responseLine.trim());
                     out.write(DataHelper.getUTF8(responseLine));
                 } else {
@@ -170,7 +170,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                             else
                                 val = DataHelper.getUTF8(_headerBuffer.getData(), j+2, valLen).trim();
 
-                            if (_log.shouldLog(Log.INFO))
+                            if (_log.shouldInfo())
                                 _log.info("Response header sent\n* " + key + ": " + val);
 
                             String lcKey = key.toLowerCase(Locale.US);
@@ -211,7 +211,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                                         lcVal.contains("domain=.i2p")) {
                                         // Strip privacy-damaging "supercookies" for i2p and b32.i2p
                                         // See RFC 6265 and http://publicsuffix.org/
-                                        if (_log.shouldLog(Log.INFO))
+                                        if (_log.shouldInfo())
                                             _log.info("Stripping \"" + key + ": " + val + "\" from response ");
                                         break;
                                     }
@@ -234,7 +234,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         finishHeaders();
 
         boolean shouldCompress = shouldCompress();
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("After headers: gzip? " + _gzip + " compress? " + shouldCompress);
 
         // done, shove off
@@ -255,7 +255,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
 
     @Override
     public void close() throws IOException {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
 //            _log.info("Closing " + out + " Threaded? " + shouldCompress(), new Exception("I did it"));
             _log.info("Closing " + out + " Threaded? " + shouldCompress());
         synchronized(this) {

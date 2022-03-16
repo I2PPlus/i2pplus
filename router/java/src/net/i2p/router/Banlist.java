@@ -95,7 +95,7 @@ public class Banlist {
                 //if (prof != null)
                 //    prof.unbanlist();
                 _context.messageHistory().unbanlist(peer);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Removing router [" + peer.toBase64().substring(0,6) + "] from banlist (ban has expired)");
             }
 
@@ -178,7 +178,7 @@ public class Banlist {
             return false;
         }
         boolean wasAlready = false;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Banlisting [" + peer.toBase64().substring(0,6) + "] " +
  //              ((transport != null) ? " on transport " + transport : ""), new Exception("Banlist cause: " + reason));
                ((transport != null) ? " on transport " + transport : "") + "(" + reason + ")");
@@ -236,7 +236,7 @@ public class Banlist {
 
     private void unbanlistRouter(Hash peer, boolean realUnbanlist, String transport) {
         if (peer == null) return;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Removing ban from [" + peer.toBase64().substring(0,6) + "]"
                       + (transport != null ? "/" + transport : ""));
         boolean fully = false;
@@ -260,7 +260,7 @@ public class Banlist {
             //        prof.unbanlist();
             //}
             _context.messageHistory().unbanlist(peer);
-            if (_log.shouldLog(Log.INFO) && e != null)
+            if (_log.shouldInfo() && e != null)
                 _log.info("Unbanlisting router " + peer.toBase64()
                           + (transport != null ? "/" + transport : ""));
         }
@@ -290,7 +290,7 @@ public class Banlist {
             //if (prof != null)
             //    prof.unbanlist();
             _context.messageHistory().unbanlist(peer);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Unbanlisting (expired) " + peer.toBase64());
         }
 

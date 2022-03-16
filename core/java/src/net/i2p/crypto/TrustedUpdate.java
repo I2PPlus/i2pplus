@@ -207,7 +207,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
                 addKey(e.getKey(), e.getValue());
             }
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("TrustedUpdate created, trusting " + _trustedKeys.size() + " keys.");
     }
 
@@ -227,7 +227,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      *  @return true if successful
      */
     public boolean addKey(String key, String name) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Adding " + name + ": " + key);
         SigningPublicKey signingPublicKey = new SigningPublicKey();
         try {
@@ -690,12 +690,12 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
             fileInputStream = new FileInputStream(privateKeyFile);
             signingPrivateKey.readBytes(fileInputStream);
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to load the signing key", ioe);
 
             return null;
         } catch (DataFormatException dfe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to load the signing key", dfe);
 
             return null;
@@ -759,7 +759,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
             signature = _context.dsa().sign(bytesToSignInputStream, signingPrivateKey);
 
         } catch (IOException e) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error signing", e);
 
             return null;
@@ -778,7 +778,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
             DataHelper.copy(fileInputStream, fileOutputStream);
             fileOutputStream.close();
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.log(Log.WARN, "Error writing signed file " + signedFile, ioe);
 
             return null;
@@ -814,7 +814,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
                 return true;
         }
 
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("None of the keys match");
 
         return false;
@@ -856,12 +856,12 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
             fileInputStream = new FileInputStream(signedFile);
             signingPublicKey.readBytes(fileInputStream);
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to load the signature", ioe);
 
             return false;
         } catch (DataFormatException dfe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to load the signature", dfe);
 
             return false;
@@ -898,12 +898,12 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
 
             return _context.dsa().verifySignature(signature, fileInputStream, signingPublicKey);
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error reading " + signedFile + " to verify", ioe);
 
             return false;
         } catch (DataFormatException dfe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error reading the signature", dfe);
 
             return false;

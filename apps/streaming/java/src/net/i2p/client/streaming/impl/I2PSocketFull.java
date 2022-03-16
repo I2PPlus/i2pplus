@@ -51,7 +51,7 @@ class I2PSocketFull implements I2PSocket {
         }
         Connection c = _connection;
         if (c == null) return;
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
 //            log.info("close() called, connected? " + c.getIsConnected() + " : " + c, new Exception());
             log.info("close() called, connected? " + c.getIsConnected() + " : " + c);
         if (c.getIsConnected()) {
@@ -83,7 +83,7 @@ class I2PSocketFull implements I2PSocket {
     public void reset() throws IOException {
         Connection c = _connection;
         if (c == null) return;
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("reset() called, connected? " + c.getIsConnected() + " : " + c, new Exception());
         if (c.getIsConnected()) {
             c.disconnect(false);

@@ -54,7 +54,7 @@ public class GarlicMessageParser {
         byte encData[] = message.getData();
         byte decrData[];
         try {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Decrypting with private key " + encryptionKey);
             EncType type = encryptionKey.getType();
             if (type == EncType.ELGAMAL_2048) {
@@ -86,13 +86,13 @@ public class GarlicMessageParser {
                 return null;
             }
         } catch (DataFormatException dfe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error decrypting", dfe);
             return null;
         }
         if (decrData == null) {
             // This is the usual error path and it's logged at WARN level in GarlicMessageReceiver
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Decryption of garlic message failed", new Exception("Decrypt fail"));
             return null;
         } else {
@@ -102,7 +102,7 @@ public class GarlicMessageParser {
                     _log.debug("Got cloves: " + rv.getCloveCount());
                 return rv;
             } catch (DataFormatException dfe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Unable to read cloveSet", dfe);
                 return null;
             }
@@ -139,7 +139,7 @@ public class GarlicMessageParser {
                 }
             }
         } catch (DataFormatException dfe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Muxed decrypt fail", dfe);
             rv = null;
         }
@@ -158,18 +158,18 @@ public class GarlicMessageParser {
     public CloveSet readCloveSet(byte data[], int offset) throws DataFormatException {
         int numCloves = data[offset] & 0xff;
         offset++;
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Numer of cloves to read: " + numCloves);
         if (numCloves <= 0 || numCloves > MAX_CLOVES)
             throw new DataFormatException("bad clove count " + numCloves);
         GarlicClove[] cloves = new GarlicClove[numCloves];
         for (int i = 0; i < numCloves; i++) {
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Reading clove " + i);
                 GarlicClove clove = new GarlicClove(_context);
                 offset += clove.readBytes(data, offset);
                 cloves[i] = clove;
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("After reading clove " + i);
         }
         //Certificate cert = new Certificate();

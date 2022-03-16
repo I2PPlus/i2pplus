@@ -116,7 +116,7 @@ public class OutNetMessage implements CDPQEntry {
         //_createdBy = new Exception("Created by");
         _created = context.clock().now();
         Log log = context.logManager().getLog(OutNetMessage.class);
-        _shouldTimestamp = log.shouldLog(Log.INFO);
+        _shouldTimestamp = log.shouldInfo();
         if (_shouldTimestamp)
             timestamp("Created");
         //_context.messageStateMonitor().outboundMessageAdded();

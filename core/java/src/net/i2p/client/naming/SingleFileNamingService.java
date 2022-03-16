@@ -94,7 +94,7 @@ public class SingleFileNamingService extends NamingService {
         } catch (IOException ioe) {
             if (_file.exists())
                 _log.error("Error loading hosts file " + _file, ioe);
-            else if (_log.shouldLog(Log.WARN))
+            else if (_log.shouldWarn())
                 _log.warn("Error loading hosts file " + _file, ioe);
         }
         return null;
@@ -126,7 +126,7 @@ public class SingleFileNamingService extends NamingService {
         } catch (IOException ioe) {
             if (_file.exists())
                 _log.error("Error loading hosts file " + _file, ioe);
-            else if (_log.shouldLog(Log.WARN))
+            else if (_log.shouldWarn())
                 _log.warn("Error loading hosts file " + _file, ioe);
             return null;
         } finally {
@@ -361,7 +361,7 @@ public class SingleFileNamingService extends NamingService {
             searchOpt = options.getProperty("search");
             startsWith = options.getProperty("startsWith");
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Searching " + " starting with " + startsWith + " search string " + searchOpt);
         BufferedReader in = null;
         getReadLock();
@@ -595,7 +595,7 @@ public class SingleFileNamingService extends NamingService {
     private boolean getWriteLock() {
         try {
             boolean rv = _fileLock.writeLock().tryLock(10000, TimeUnit.MILLISECONDS);
-            if ((!rv) && _log.shouldLog(Log.WARN))
+            if ((!rv) && _log.shouldWarn())
                 _log.warn("no lock, size is: " + _fileLock.getQueueLength(), new Exception("rats"));
             return rv;
         } catch (InterruptedException ie) {}

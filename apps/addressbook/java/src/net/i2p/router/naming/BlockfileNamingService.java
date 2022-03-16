@@ -292,7 +292,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 total += count;
                 _log.logAlways(Log.INFO, "Migrating " + count + " hosts from " + file + " to new hosts database");
             }
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("DB init took " + DataHelper.formatDuration(_context.clock().now() - start));
             if (total <= 0)
                 _log.logAlways(Log.WARN, "No hosts.txt files found, Initialized hosts database with zero entries");
@@ -343,12 +343,12 @@ public class BlockfileNamingService extends DummyNamingService {
             }
             _needsUpgrade = needsUpgrade(bf);
             if (_needsUpgrade) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Upgrading database from version " + _version + " to " + VERSION +
                               ", created " + (new Date(createdOn)).toString() +
                               " containing lists: " + list);
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Found database version " + _version +
                               " created " + (new Date(createdOn)).toString() +
                               " containing lists: " + list);
@@ -359,7 +359,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 skiplists.add(FALLBACK_LIST);
             _lists.addAll(skiplists);
 
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("DB init took " + DataHelper.formatDuration(_context.clock().now() - start));
             return bf;
         } catch (RuntimeException e) {
@@ -402,7 +402,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 SkipList<Integer, Properties> rev = _bf.getIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
                 if (rev == null) {
                     rev = _bf.makeIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Created reverse index");
                 }
                 setVersion("2");
@@ -418,7 +418,7 @@ public class BlockfileNamingService extends DummyNamingService {
                      i++;
                 }
                 // i may be greater than skiplist keys if there are dups
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Updated reverse index with " + i + " entries");
                 setVersion("3");
             }
@@ -491,7 +491,7 @@ public class BlockfileNamingService extends DummyNamingService {
         info.setProperty(PROP_VERSION, version);
         info.setProperty(PROP_UPGRADED, Long.toString(_context.clock().now()));
         hdr.put(PROP_INFO, info);
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Upgraded database from version " + _version + " to version " + version);
         _version = version;
     }
@@ -1150,7 +1150,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 skip = Integer.parseInt(sk);
             } catch (NumberFormatException nfe) {}
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Searching " + listname + " beginning with " + beginWith +
                        " starting with " + startsWith + " search string " + search +
                        " limit=" + limit + " skip=" + skip);
@@ -1160,7 +1160,7 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 SkipList<String, DestEntry> sl = _bf.getIndex(listname, _stringSerializer, _destSerializer);
                 if (sl == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No skiplist found for lookup in " + listname);
                     return Collections.emptyMap();
                 }
@@ -1254,7 +1254,7 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 SkipList<String, DestEntry> sl = _bf.getIndex(listname, _stringSerializer, _destSerializer);
                 if (sl == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No skiplist found for lookup in " + listname);
                     return Collections.emptyMap();
                 }
@@ -1346,7 +1346,7 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 SkipList<String, DestEntry> sl = _bf.getIndex(listname, _stringSerializer, _destSerializer);
                 if (sl == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No skiplist found for lookup in " + listname);
                     return;
                 }
@@ -1479,7 +1479,7 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 SkipList<String, DestEntry> sl = _bf.getIndex(listname, _stringSerializer, _destSerializer);
                 if (sl == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No skiplist found for lookup in " + listname);
                     return Collections.emptySet();
                 }
@@ -1828,10 +1828,10 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 _bf.close();
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error closing", ioe);
             } catch (RuntimeException e) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error closing", e);
             }
             try {

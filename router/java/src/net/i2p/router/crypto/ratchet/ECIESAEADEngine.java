@@ -178,7 +178,7 @@ public final class ECIESAEADEngine {
         if (targetPrivateKey.getType() != EncType.ECIES_X25519)
             throw new IllegalArgumentException();
         if (data == null) {
-            if (_log.shouldLog(Log.ERROR)) _log.error("Null data being decrypted?");
+            if (_log.shouldError()) _log.error("Null data being decrypted?");
             return null;
         }
         if (data.length < MIN_ENCRYPTED_SIZE) {

@@ -57,21 +57,21 @@ class FragmentedMessage {
      */
     public boolean receive(int fragmentNum, byte payload[], int offset, int length, boolean isLast) {
         if (fragmentNum <= 0 || fragmentNum >= MAX_FRAGMENTS) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Bad followon fragment # == " + fragmentNum + " for messageId " + _messageId);
             return false;
         }
         if (length <= 0 || length > MAX_FRAGMENT_SIZE) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Length is impossible (" + length + ") for messageId " + _messageId);
             return false;
         }
         if (offset + length > payload.length) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Length is impossible (" + length + "/" + offset + " out of " + payload.length + ") for [MsgID " + _messageId + "]");
             return false;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Received [MsgID " + _messageId + "] fragment " + fragmentNum + " with " + length + " bytes (last? " + isLast + ") offset = " + offset);
         // we should just use payload[] and use an offset/length on it
         ByteArray ba = _cache.acquire(); //new ByteArray(payload, offset, length); //new byte[length]);
@@ -79,7 +79,7 @@ class FragmentedMessage {
         ba.setValid(length);
         ba.setOffset(0);
         //System.arraycopy(payload, offset, ba.getData(), 0, length);
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("fragment[" + fragmentNum + "/" + offset + "/" + length + "]: "
         //               + Base64.encode(ba.getData(), ba.getOffset(), ba.getValid()));
 
@@ -103,16 +103,16 @@ class FragmentedMessage {
      */
     public boolean receive(byte payload[], int offset, int length, boolean isLast, Hash toRouter, TunnelId toTunnel) {
         if (length <= 0 || length > MAX_FRAGMENT_SIZE) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Invalid length (" + length + ") for [MsgID " + _messageId + "]");
             return false;
         }
         if (offset + length > payload.length) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Invalid length (" + length + "/" + offset + " out of " + payload.length + ") for [MsgID " + _messageId + "]");
             return false;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Receiving [MsgID " + _messageId + "] with " + length + " bytes (last? " + isLast + ") targeting [" +
                        toRouter + "] / " + toTunnel + " offset=" + offset);
         ByteArray ba = _cache.acquire(); // new ByteArray(payload, offset, length); // new byte[length]);
@@ -120,7 +120,7 @@ class FragmentedMessage {
         ba.setValid(length);
         ba.setOffset(0);
         //System.arraycopy(payload, offset, ba.getData(), 0, length);
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("fragment[0/" + offset + "/" + length + "]: "
         //               + Base64.encode(ba.getData(), ba.getOffset(), ba.getValid()));
         _fragments[0] = ba;

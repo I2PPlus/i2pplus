@@ -87,11 +87,11 @@ class PeerAcceptor
         // Single torrent - is this working right?
         try {
           peerInfoHash = readHash(in);
-          if (_log.shouldLog(Log.INFO))
+          if (_log.shouldInfo())
               _log.info("Infohash read from " + socket.getPeerDestination().calculateHash().toBase64()
                         + ": " + Base64.encode(peerInfoHash));
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Unable to read the infohash from " + socket.getPeerDestination().calculateHash().toBase64());
             throw ioe;
         }
@@ -124,7 +124,7 @@ class PeerAcceptor
                     cur.addPeer(peer);
                     return;
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                       _log.debug("Rejecting new peer for " + cur.getName());
                     socket.close();
                     return;

@@ -50,20 +50,20 @@ abstract class PersistDHT {
                     count++;
                     // TODO limit number? this will flush the router's SDS caches
                 } catch (IllegalArgumentException iae) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("Error reading DHT entry", iae);
                 } catch (DataFormatException dfe) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("Error reading DHT entry", dfe);
                 }
             }
         } catch (IOException ioe) {
-            if (log.shouldLog(Log.WARN) && file.exists())
+            if (log.shouldWarn() && file.exists())
                 log.warn("Error reading the DHT File", ioe);
         } finally {
             if (br != null) try { br.close(); } catch (IOException ioe) {}
         }
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Loaded " + count + " nodes from " + file);
     }
 
@@ -90,12 +90,12 @@ abstract class PersistDHT {
             if (out.checkError())
                 throw new IOException("Failed write to " + file);
         } catch (IOException ioe) {
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Error writing the DHT File", ioe);
         } finally {
             if (out != null) out.close();
         }
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Wrote " + count + " nodes to " + file);
     }
 }

@@ -42,7 +42,7 @@ public class OutNetMessagePool {
             return;
         }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Adding message to OutNetMessagePool" + msg);
 
         if (selector != null) {
@@ -57,7 +57,7 @@ public class OutNetMessagePool {
      */
     private boolean validate(OutNetMessage msg) {
         if (msg.getMessage() == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Null message in the OutNetMessage - expired too soon");
             return false;
         }
@@ -70,7 +70,7 @@ public class OutNetMessagePool {
             return false;
         }
         if (msg.getExpiration() <= _context.clock().now()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Dropping expired outbound message" + msg, new Exception());
             return false;
         }

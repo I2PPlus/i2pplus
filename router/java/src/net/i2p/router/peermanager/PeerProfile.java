@@ -406,7 +406,7 @@ public class PeerProfile {
         else
             _tunnelTestResponseTimeAvg = 0.75f * _tunnelTestResponseTimeAvg + .25f * ms;
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
 */
@@ -420,7 +420,7 @@ public class PeerProfile {
             _peerTestResponseTimeAvg = 10*1000; // default timeout * 2
         else
              _peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_peerTestResponseTimeAvg) + "ms");
     }
@@ -496,7 +496,7 @@ public class PeerProfile {
                 }
             }
 
-            if (_log.shouldLog(Log.DEBUG) ) {
+            if (_log.shouldDebug() ) {
                 StringBuilder buf = new StringBuilder(128);
                 buf.append("1 minute throughput for [");
                 buf.append(_peer.toBase64().substring(0,6));
@@ -648,7 +648,7 @@ public class PeerProfile {
         coalesceOnly(false);
         updateValues();
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Coalesced stats: Speed [" + _speedValue + "] Capacity [" + _capacityValue + "] Integration [" + _integrationValue + "]");
     }
 

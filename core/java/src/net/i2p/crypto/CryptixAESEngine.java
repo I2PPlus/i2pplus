@@ -122,7 +122,7 @@ public final class CryptixAESEngine extends AESEngine {
                 release(cipher);
                 return;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Java encrypt fail", gse);
             }
         }
@@ -170,7 +170,7 @@ public final class CryptixAESEngine extends AESEngine {
                 release(cipher);
                 return;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Java decrypt fail", gse);
             }
         }
@@ -179,7 +179,7 @@ public final class CryptixAESEngine extends AESEngine {
         if (length % 16 != 0) {
             // may not work, it will overrun payload length and could AIOOBE
             numblock++;
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("not %16 " + length, new Exception());
         }
 

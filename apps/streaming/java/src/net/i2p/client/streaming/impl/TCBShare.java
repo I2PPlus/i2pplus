@@ -59,7 +59,7 @@ class TCBShare {
         _cleaner = new CleanEvent(timer);
         _cleaner.schedule(CLEAN_TIME);
 
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             String log = "Creating TCBCache with rttDamp=%s, rttDevDamp=%s, wdwDamp=%s, "+
                     "expire=%d, clean=%d";
             log = String.format(log,_rttDampening,_rttDevDampening,_wdwDampening,
@@ -93,7 +93,7 @@ class TCBShare {
             rttDev = e.getRTTDev();
             wdw = e.getWindowSize();
         }
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             _log.debug("From cache: " +
                        con.getSession().getMyDestination().calculateHash().toBase64().substring(0, 4) +
                        '-' +
@@ -132,7 +132,7 @@ class TCBShare {
                 e.setRTTDev(opts.getRTTDev());
             }
         }
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             _log.debug("To cache: " +
                        con.getSession().getMyDestination().calculateHash().toBase64().substring(0, 6) +
                        '-' +

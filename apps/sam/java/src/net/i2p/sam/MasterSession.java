@@ -286,14 +286,14 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 	// I2PSessionMuxedImpl interface
 
         public void disconnected(I2PSession session) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("I2P session disconnected");
             close();
         }
 
         public void errorOccurred(I2PSession session, String message,
                                   Throwable error) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("I2P error: " + message, error);
             close();
         }
@@ -353,12 +353,12 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 				} catch (SocketTimeoutException ste) {
 					continue;
 				} catch (ConnectException ce) {
-					if (_log.shouldLog(Log.WARN))
+					if (_log.shouldWarn())
 						_log.warn("Error accepting", ce);
 					try { Thread.sleep(50); } catch (InterruptedException ie) {}
 					continue;
 				} catch (I2PException ipe) {
-					if (_log.shouldLog(Log.WARN))
+					if (_log.shouldWarn())
 						_log.warn("Error accepting", ipe);
 					break;
 				}
@@ -397,7 +397,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 						try { i2ps.reset(); } catch (IOException ioe) {}
 					}
 				} else {
-					if (_log.shouldLog(Log.WARN))
+					if (_log.shouldWarn())
 						_log.warn("No subsession found for incoming streaming connection on port " + port);
 				}
 			}

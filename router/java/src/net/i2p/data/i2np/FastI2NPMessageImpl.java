@@ -89,7 +89,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
         readMessage(data, cur, sz, type);
         cur += sz;
         _hasChecksum = true;
-        if (VERIFY_TEST && _log.shouldLog(Log.INFO))
+        if (VERIFY_TEST && _log.shouldInfo())
             _log.info("Ignored c/s " + getClass().getSimpleName());
         return cur - offset;
     }
@@ -110,7 +110,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     public int toByteArray(byte buffer[]) {
         if (_hasChecksum)
             return toByteArrayWithSavedChecksum(buffer);
-        if (VERIFY_TEST && _log.shouldLog(Log.INFO))
+        if (VERIFY_TEST && _log.shouldInfo())
             _log.info("Generating new c/s " + getClass().getSimpleName());
         return super.toByteArray(buffer);
     }
@@ -132,7 +132,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
                     _log.log(Log.CRIT, "DUMP:\n" + HexDump.dump(buffer, HEADER_LENGTH, writtenLen - HEADER_LENGTH));
                     _log.log(Log.CRIT, "RAW:\n" + Base64.encode(buffer, HEADER_LENGTH, writtenLen - HEADER_LENGTH));
                     _checksum = h[0];
-                } else if (_log.shouldLog(Log.INFO)) {
+                } else if (_log.shouldInfo()) {
                     _log.info("Using saved c/s " + getClass().getSimpleName() + ' ' + _checksum);
                 }
                 SimpleByteCache.release(h);

@@ -58,7 +58,7 @@ public class XMLParser extends JaxpParser {
         NamedNodeMap attrs = domNode.getAttributes(); 
         int arrrsLen = (attrs != null) ? attrs.getLength() : 0;
 
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             String val = domNodeValue != null ?
                          " = \"" + domNodeValue.replace("\n", "\\n").replace("\r", "\\r") + '"' :
                          "";
@@ -96,7 +96,7 @@ public class XMLParser extends JaxpParser {
                 text.setName(TEXT_NAME);
                 text.setValue(oldValue);
                 parentNode.addNode(text);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Converted value to node");
             }
             parentNode.addNode(node);

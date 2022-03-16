@@ -35,7 +35,7 @@ class TransientDataStore implements DataStore {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _data = new ConcurrentHashMap<Hash, DatabaseEntry>(1024);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Transient DataStore initialized");
     }
 
@@ -119,7 +119,7 @@ class TransientDataStore implements DataStore {
      */
     public boolean put(Hash key, DatabaseEntry data) {
         if (data == null) return false;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Storing key [" + key.toBase64().substring(0,6) + "]");
         DatabaseEntry old = _data.putIfAbsent(key, data);
         boolean rv = false;
@@ -132,21 +132,21 @@ class TransientDataStore implements DataStore {
             if (old != null) {
                 RouterInfo ori = (RouterInfo)old;
                 if (ri.getPublished() < ori.getPublished()) {
-//                    if (_log.shouldLog(Log.INFO))
+//                    if (_log.shouldInfo())
 //                        _log.info("Almost clobbered a RouterInfo! [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ori.getPublished()) +
 //                                  "\n* New: " + new Date(ri.getPublished()));
                 } else if (ri.getPublished() == ori.getPublished()) {
-//                    if (_log.shouldLog(Log.INFO))
+//                    if (_log.shouldInfo())
 //                        _log.info("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
                 } else {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Updated RouterInfo [" + key.toBase64().substring(0,6) + "]\n* Old: "
                                   + new Date(ori.getPublished()) + "\n* New: " + new Date(ri.getPublished()));
                     _data.put(key, data);
                     rv = true;
                 }
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("New RouterInfo [" + key.toBase64().substring(0,6) + "]\n* Published: " + new Date(ri.getPublished()));
                 rv = true;
             }
@@ -167,26 +167,26 @@ class TransientDataStore implements DataStore {
                 }
 
                 if (newDate < oldDate) {
-//                    if (_log.shouldLog(Log.INFO))
+//                    if (_log.shouldInfo())
 //                        _log.info("Almost clobbered a LeaseSet! [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
 //                                  "\n* New: " + new Date(ls.getEarliestLeaseDate()));
                 } else if (newDate == oldDate) {
-//                    if (_log.shouldLog(Log.INFO))
+//                    if (_log.shouldInfo())
 //                        _log.info("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
                 } else {
-                    if (_log.shouldLog(Log.DEBUG)) {
+                    if (_log.shouldDebug()) {
                         _log.debug("Updated LeaseSet [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
                                   "\n* New: " + new Date(newDate) + ']');
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("ReceivedAsPublished? [" + ls.getReceivedAsPublished() + "] ReceivedAsReply? [" + ls.getReceivedAsReply() + "]");
                     }
                     _data.put(key, data);
                     rv = true;
                 }
             } else {
-                if (_log.shouldLog(Log.INFO)) {
+                if (_log.shouldInfo()) {
                     _log.info("New LeaseSet [" + key.toBase64().substring(0,6) + "]\n* Expires: " + new Date(ls.getEarliestLeaseDate()));
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("ReceivedAsPublished? [" + ls.getReceivedAsPublished() + "] ReceivedAsReply? [" + ls.getReceivedAsReply() + "]");
                 }
                 rv = true;
@@ -217,7 +217,7 @@ class TransientDataStore implements DataStore {
 
     public DatabaseEntry remove(Hash key) {
 // logged elsewhere
-//        if (_log.shouldLog(Log.DEBUG))
+//        if (_log.shouldDebug())
 //            _log.debug("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
         return _data.remove(key);
     }
