@@ -82,24 +82,22 @@ class BuildHandler implements Runnable {
     /** TODO these may be too high, review and adjust */
 //    private static final int MIN_QUEUE = 18;
 //    private static final int MAX_QUEUE = 192;
-//    private static final int MIN_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 18 : 36;
-//    private static final int MAX_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 192 : 384;
-    private static final int MIN_QUEUE = 8;
+    private static final int MIN_QUEUE = 16;
     private static final int MAX_QUEUE = 256;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
 
 //    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 20*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 7*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
 
     /** limits on concurrent next-hop RI lookup */
 //    private static final int MIN_LOOKUP_LIMIT = 10;
 //    private static final int MAX_LOOKUP_LIMIT = 100;
     private static final int MIN_LOOKUP_LIMIT = 16;
-    private static final int MAX_LOOKUP_LIMIT = 128;
+    private static final int MAX_LOOKUP_LIMIT = 160;
     /** limit lookups to this % of current participating tunnels */
 //    private static final int PERCENT_LOOKUP_LIMIT = 3;
-    private static final int PERCENT_LOOKUP_LIMIT = 5;
+    private static final int PERCENT_LOOKUP_LIMIT = 4;
 
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
@@ -645,11 +643,11 @@ class BuildHandler implements Runnable {
             _currentLookups.decrementAndGet();
             getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
             getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
-            if (_log.shouldInfo()) {
+            if (_log.shouldWarn()) {
                 Hash from = _state.fromHash;
                 if (from == null && _state.from != null)
                     from = _state.from.calculateHash();
-                _log.info("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT / 1000 + "s) locating peer for next hop " + _req
+                _log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT / 1000 + "s) locating peer for next hop " + _req
                           + "\n* From: " + from
                           + " [MsgID " + _state.msg.getUniqueId() + "]");
             }
@@ -1310,7 +1308,7 @@ class BuildHandler implements Runnable {
             //getContext().tunnelDispatcher().remove(_cfg);
             getContext().statManager().addRateData("tunnel.rejectTimeout2", 1);
             Log log = getContext().logManager().getLog(BuildHandler.class);
-            if (log.shouldInfo())
+            if (log.shouldWarn())
                 log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop" + _cfg);
         }
     }

@@ -158,7 +158,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
         int sz = rv.size();
         if (sz == 0) {
-            log.logAlways(Log.WARN, "No valid explicit peers found, building zero hop");
+            log.logAlways(Log.WARN, "No valid explicit peers found, building zero hop tunnel...");
         } else if (sz > 1) {
             Collections.shuffle(rv, ctx.random());
         }
