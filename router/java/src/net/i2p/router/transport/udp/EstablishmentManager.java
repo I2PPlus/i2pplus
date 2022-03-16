@@ -566,8 +566,8 @@ class EstablishmentManager {
             } else {
                 // we got an IB even though we were firewalled, hidden, not high cap, etc.
             }
-            if (_log.shouldInfo())
-                _log.info("Received NEW SessionRequest: " + state);
+            if (_log.shouldDebug())
+                _log.debug("Received NEW SessionRequest: " + state);
         } else {
             if (_log.shouldDebug())
                 _log.debug("Received duplicate SessionRequest from: " + state);
@@ -644,11 +644,10 @@ class EstablishmentManager {
             }
         }
 
-        if (isNew) {
-            if (_log.shouldInfo())
-                _log.info("Received NEW session/token request " + state);
-        } else {
-            if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
+            if (isNew)
+                _log.debug("Received NEW session/token request " + state);
+            else
                 _log.debug("Receive DUP session/token request from: " + state);
         }
         // call for both Session and Token request, why not
@@ -1277,8 +1276,8 @@ class EstablishmentManager {
         long nonce = reader.getRelayResponseReader().readNonce();
         OutboundEstablishState state = _liveIntroductions.remove(Long.valueOf(nonce));
         if (state == null) {
-            if (_log.shouldInfo())
-                _log.info("Duplicate or unknown RelayResponse: [Nonce " + nonce + "]");
+            if (_log.shouldDebug())
+                _log.debug("Duplicate or unknown RelayResponse: [Nonce " + nonce + "]");
             return; // already established
         }
 
@@ -1303,8 +1302,8 @@ class EstablishmentManager {
             return;
         }
         _context.statManager().addRateData("udp.receiveIntroRelayResponse", state.getLifetime());
-        if (_log.shouldInfo())
-            _log.info("Received RelayResponse for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) + "]\n* Address: "
+        if (_log.shouldDebug())
+            _log.debug("Received RelayResponse for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) + "]\n* Address: "
                       + addr.toString().replace("/", "") + ":" + port + " (according to " + bob + ") [Nonce " + nonce + "]");
         synchronized (state) {
             RemoteHostId oldId = state.getRemoteHostId();
@@ -1761,8 +1760,8 @@ class EstablishmentManager {
         // remove only if value == state
         _outboundStates.remove(outboundState.getRemoteHostId(), outboundState);
         if (outboundState.getState() != OB_STATE_CONFIRMED_COMPLETELY) {
-            if (_log.shouldInfo())
-                _log.info("Session with " + outboundState + " has expired; Lifetime: " + outboundState.getLifetime() + "ms ");
+            if (_log.shouldDebug())
+                _log.debug("Session with " + outboundState + " has expired; Lifetime: " + outboundState.getLifetime() + "ms ");
             OutNetMessage msg;
             while ((msg = outboundState.getNextQueuedMessage()) != null) {
                 _transport.failed(msg, "Expired during failed establishment attempt");
