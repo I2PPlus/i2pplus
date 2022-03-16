@@ -244,9 +244,7 @@ input.trackerhome, input.trackerannounce {width: 210px}
 td.graphicStatus {padding-left: 2px}
 .peerCount {padding-left: 0; padding-right: 0; width: 1%; min-width: 50px; white-space: nowrap}
 th.peerCount a img {margin-left: -5px}
-td.peerCount {text-align: left; font-weight: 700}
-.nopeers.zero td.peerCount, .stopped.zero td.peerCount {text-align: center}
-td.peerCount:empty {text-align: center}
+.zero .peerCount b {display: none}
 .peerCount .left, .peerCount .right {min-width: 12px; display: inline-block}
 .peerCount .left {padding-left: 2px; text-align: left}
 .peerCount .right {padding-right: 2px; text-align: right}
@@ -260,8 +258,8 @@ tr:not(:hover) .torrentName a, tr:not(:hover) .snarkFileName a {-webkit-text-str
 .rowOdd, .rowEven {background: var(--tr)}
 .rowOdd td, .rowEven td {border-bottom: 1px solid #000}
 .rowOdd td, .rowEven td {color: #bb7}
-.torrentName {padding: 0 0 0 2px; line-height: .9}
-.torrentName a, .dirInfo td.snarkFileName a {padding: 4px 0; width: 100%; display: inline-block; font-weight: 700}
+.torrentName {padding-left: 2px; line-height: .9}
+.torrentName a, .dirInfo td.snarkFileName a {padding: 4px 0; width: 100%; display: inline-block; vertical-align: middle; font-weight: 700}
 .torrentName a:hover, .snarkFileName a:hover {border-radius: 0 15px 15px 0; box-shadow: none; background: linear-gradient(90deg, rgba(0,0,0,.2), rgba(0,0,0,.3) 40%)}
 .torrentName a:active, .snarkFileName a:active {box-shadow: inset 3px 3px 3px 3px rgba(0,0,0,.3)}
 .torrentETA, .torrentDownloaded, .torrentUploaded {width: 1%; white-space: nowrap; text-align: center}
@@ -771,6 +769,8 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 .trackerLink {padding: 0; width: 0; min-width: 0; font-size: 0}
 .trackerLink img {display: none}
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {top: -16px}
+.peerCount {padding-right: 5px}
+.peerCount b {padding: 2px 4px; min-width: 48px; display: inline-block; vertical-align: middle; text-align: center; background: var(--badge)}
 }
 
 @media screen and (max-width: 1199px) {
