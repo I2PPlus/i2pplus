@@ -83,6 +83,7 @@ public class LogManager implements Flushable {
     public final static String DEFAULT_ROTATIONLIMIT = "3";
     public final static String DEFAULT_DEFAULTLEVEL = Log.STR_ERROR;
     public final static String DEFAULT_ONSCREENLEVEL = Log.STR_CRIT;
+    private static final int MIN_FILESIZE_LIMIT = 16*1024;
 
     private final I2PAppContext _context;
     private final Log _log;
@@ -415,7 +416,7 @@ public class LogManager implements Flushable {
         else
             setBaseLogfilename(filename);
 
-        _fileSize = getFileSize(config.getProperty(PROP_FILESIZE, DEFAULT_FILESIZE));
+        _fileSize = Math.max(MIN_FILESIZE_LIMIT, getFileSize(config.getProperty(PROP_FILESIZE, DEFAULT_FILESIZE)));
 
         _rotationLimit = -1;
         try {
@@ -541,7 +542,7 @@ public class LogManager implements Flushable {
      */
     public void setFileSize(int numBytes) {
         if (numBytes > 0)
-            _fileSize = numBytes;
+            _fileSize = Math.max(MIN_FILESIZE_LIMIT, numBytes);
     }
 
     public String getDefaultLimit() { return Log.toLevelString(_defaultLimit); }
@@ -568,7 +569,7 @@ public class LogManager implements Flushable {
      * Size may be k, m, or g; a trailing b is ignored. Upper-case is allowed.
      * Spaces between the number and letter is are allowed.
      * The number may be in floating point.
-     * 4096 min, 2 GB max (returns int)
+     * 16K min, 2 GB max (returns int)
      */
     public static int getFileSize(String size) {
         try {
@@ -597,7 +598,7 @@ public class LogManager implements Flushable {
                     // blah, noop
                     break;
             }
-            if (val < 4096 || val > Integer.MAX_VALUE)
+            if (val < MIN_FILESIZE_LIMIT || val > Integer.MAX_VALUE)
                 return -1;
             return (int) val;
         } catch (Throwable t) {
