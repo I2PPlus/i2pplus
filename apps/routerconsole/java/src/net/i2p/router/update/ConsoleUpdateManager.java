@@ -1100,7 +1100,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         // any other types that shouldn't display?
         if (task.getURI() != null && task.getType() != TYPE_DUMMY) {
             StringBuilder buf = new StringBuilder(256);
-            buf.append("<b>");
+            buf.append("<b id=\"updatefailed\">");
             String uri = task.getURI().toString();
             if (uri.startsWith("file:") || task.getMethod() == FILE) {
                 uri = DataHelper.stripHTML(task.getURI().getPath());
