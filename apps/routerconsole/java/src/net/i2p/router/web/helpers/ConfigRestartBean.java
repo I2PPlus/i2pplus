@@ -64,14 +64,14 @@ public class ConfigRestartBean {
         long timeRemaining = ctx.router().getShutdownTimeRemaining();
         StringBuilder buf = new StringBuilder(128);
         if ((shuttingDown || restarting) && timeRemaining <= 5*1000) {
-            buf.append("<h4 id=\"sb_shutdownStatus\"><span>");
+            buf.append("<h4 id=\"sb_shutdownStatus\" class=\"volatile\"><span>");
             if (restarting)
                 buf.append(_t("Restart imminent", ctx));
             else
                 buf.append(_t("Shutdown imminent", ctx));
             buf.append("</span></h4>");
         } else if (shuttingDown) {
-            buf.append("<h4 id=\"sb_shutdownStatus\"><span>");
+            buf.append("<h4 id=\"sb_shutdownStatus\" class=\"volatile\"><span>");
             buf.append(_t("Shutdown in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             int tuns = ctx.tunnelManager().getParticipatingCount();
             if (tuns > 0) {
@@ -82,7 +82,7 @@ public class ConfigRestartBean {
             buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET1);
         } else if (restarting) {
-            buf.append("<h4 id=\"sb_shutdownStatus\"><span>");
+            buf.append("<h4 id=\"sb_shutdownStatus\" class=\"volatile\"><span>");
             buf.append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             int tuns = ctx.tunnelManager().getParticipatingCount();
             if (tuns > 0) {
