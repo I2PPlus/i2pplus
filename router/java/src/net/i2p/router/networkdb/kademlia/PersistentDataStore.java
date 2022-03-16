@@ -305,7 +305,7 @@ public class PersistentDataStore extends TransientDataStore {
         File dbFile = null;
 
         try {
-            String MIN_VERSION = "0.9.52";
+            String MIN_VERSION = "0.9.53";
             String v = MIN_VERSION;
             boolean unreachable = false;
             if (ri != null) {
@@ -572,7 +572,7 @@ public class PersistentDataStore extends TransientDataStore {
                     RouterInfo ri = new RouterInfo();
                     ri.readBytes(fis, true);  // true = verify sig on read
                     String v = ri.getVersion();
-                    String MIN_VERSION = "0.9.52";
+                    String MIN_VERSION = "0.9.53";
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldLog(Log.ERROR))
