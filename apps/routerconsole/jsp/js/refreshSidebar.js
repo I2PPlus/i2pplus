@@ -83,10 +83,12 @@ function refreshSidebar(timestamp) {
             }
           }
         } else {
-          var redirect = document.createElement("meta");
-          redirect.httpEquiv = "refresh";
-          redirect.content = "60;url=./";
-          document.head.appendChild(redirect);
+          setTimeout(function() {
+            var redirect = document.createElement("meta");
+            redirect.httpEquiv = "refresh";
+            redirect.content = "60";
+            document.head.appendChild(redirect);
+          }, 60000);
         }
       } else {
         function isDown() {
