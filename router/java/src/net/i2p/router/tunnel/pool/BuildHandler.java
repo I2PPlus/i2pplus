@@ -1306,11 +1306,12 @@ class BuildHandler implements Runnable {
             //  This doesn't seem to be a reliable indication of actual failure,
             //  as we sometimes get subsequent tunnel messages.
             //  Until this is investigated and fixed, don't remove the tunnel.
-            getContext().tunnelDispatcher().remove(_cfg);
+            //getContext().tunnelDispatcher().remove(_cfg);
             getContext().statManager().addRateData("tunnel.rejectTimeout2", 1);
             Log log = getContext().logManager().getLog(BuildHandler.class);
             if (log.shouldWarn())
-                log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop, removing tunnel..." + _cfg);
+//                log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop, dropping tunnel..." + _cfg);
+                log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop" + _cfg);
         }
     }
 
