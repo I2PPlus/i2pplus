@@ -85,10 +85,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final MaskedIPSet _ipSet;
     private final Set<Hash> _skippedPeers;
 
-    private static final int MAX_NON_FF = 3;
+//    private static final int MAX_NON_FF = 3;
+    private static final int MAX_NON_FF = 2;
     /** Max number of peers to query */
 //    private static final int TOTAL_SEARCH_LIMIT = 5;
-    private static final int TOTAL_SEARCH_LIMIT = 6;
+    private static final int TOTAL_SEARCH_LIMIT = 4;
     /** Max number of peers to query if we are ff */
     private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 3;
     /** Extra peers to get from peer selector, as we may discard some before querying */
@@ -119,8 +120,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default _maxConcurrent
      */
-//    private static final int MAX_CONCURRENT = 1;
-    private static final int MAX_CONCURRENT = SystemVersion.isSlow() ? 1 : 2;
+    private static final int MAX_CONCURRENT = 1;
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
@@ -184,7 +184,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
         if (isLease)
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", SystemVersion.isSlow() ? MAX_CONCURRENT * 2 : MAX_CONCURRENT * 3);
         else
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
         _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
