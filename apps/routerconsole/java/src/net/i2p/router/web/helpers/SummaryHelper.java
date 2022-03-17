@@ -1022,7 +1022,7 @@ public class SummaryHelper extends HelperBase {
         String source = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         boolean needSpace = false;
         if (status.length() > 0) {
-            buf.append("<h4 class=\"sb_info sb_update\">").append(status).append("</h4>\n");
+            buf.append("<h4 class=\"sb_info sb_update volatile\">").append(status).append("</h4>\n");
             needSpace = true;
         }
         String dver = NewsHelper.updateVersionDownloaded();
@@ -1037,7 +1037,7 @@ public class SummaryHelper extends HelperBase {
             else
                 needSpace = true;
             if (!_context.router().gracefulShutdownInProgress()) {
-                buf.append("<h4 id=\"restartRequired\" class=\"sb_info sb_update\" title=\"");
+                buf.append("<h4 id=\"restartRequired\" class=\"sb_info sb_update volatile\" title=\"");
                 if (_context.hasWrapper() || NewsHelper.isExternalRestartPending())
                     buf.append(_t("Click Restart to install").replace("Click ", ""));
                 else
@@ -1049,7 +1049,7 @@ public class SummaryHelper extends HelperBase {
                    .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
                    .append("</b></h4>");
             } else {
-                buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update\"><b>")
+                buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update\" class=\"volatile\"><b>")
                    .append(_t("Updating after restart")).append("&hellip;</b></h4>");
             }
         }

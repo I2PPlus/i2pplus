@@ -103,7 +103,7 @@ public class ConfigRestartBean {
 
     /** @param s value,class,label,... triplets */
     private static void buttons(RouterContext ctx, StringBuilder buf, String url, String nonce, String[] s) {
-        buf.append("<form id=\"sb_routerControl\" action=\"").append(url).append("\" method=\"POST\">\n");
+        buf.append("<form id=\"sb_routerControl\" class=\"volatile\" action=\"").append(url).append("\" method=\"POST\">\n");
         buf.append("<input type=\"hidden\" name=\"consoleNonce\" value=\"").append(nonce).append("\" >\n");
         for (int i = 0; i < s.length; i+= 3) {
             buf.append("<button type=\"submit\" name=\"action\" value=\"")
