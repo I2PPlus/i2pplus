@@ -167,7 +167,7 @@ class PeerTestManager {
         _recentTests = new LinkedBlockingQueue<Long>();
         _packetBuilder = transport.getBuilder();
         _throttle = new IPThrottler(MAX_PER_IP, THROTTLE_CLEAN_TIME);
-        _context.statManager().createRateStat("udp.statusKnownCharlie", "How often the Bob we pick passes us to a Charlie we already have a session with", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.statusKnownCharlie", "Bob we picked passes us to known Charlie (session already established) with", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.receiveTestReply", "How often we get a reply to our peer test", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.receiveTest", "How often we get a packet requesting us to participate in a peer test", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.testBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
@@ -178,23 +178,21 @@ class PeerTestManager {
      *
      *  @param bobIP IPv4 only
      */
-    public synchronized void runTest(InetAddress bobIP, int bobPort, SessionKey bobCipherKey, SessionKey bobMACKey) {
+    public synchronized void runTest(PeerState bob) {
         if (_currentTest != null) {
             if (_log.shouldWarn())
-                _log.warn("We are already running a test: " + _currentTest + ", aborting test with Bob [" + bobIP + "]");
+                _log.warn("We are already running a test: " + _currentTest + ", aborting test with Bob [" + bob + "]");
             return;
         }
+        InetAddress bobIP = bob.getRemoteIPAddress();
         if (_transport.isTooClose(bobIP.getAddress())) {
             if (_log.shouldWarn())
                 _log.warn("Not running test with Bob too close to us [" + bobIP + "]");
             return;
         }
-        PeerTestState test = new PeerTestState(ALICE, bobIP instanceof Inet6Address,
+        PeerTestState test = new PeerTestState(ALICE, bob, bobIP instanceof Inet6Address,
                                                _context.random().nextLong(MAX_NONCE),
                                                _context.clock().now());
-        test.setBobIP(bobIP);
-        test.setBobPort(bobPort);
-        test.setBobKeys(bobCipherKey, bobMACKey);
         _currentTest = test;
         _currentTestComplete = false;
 
@@ -704,7 +702,7 @@ class PeerTestManager {
         boolean isNew = false;
         if (state == null) {
             isNew = true;
-            state = new PeerTestState(CHARLIE, sz == 16, nonce, now);
+            state = new PeerTestState(CHARLIE, bob, sz == 16, nonce, now);
         } else {
             if (state.getReceiveBobTime() > now - (RESEND_TIMEOUT / 2)) {
                 if (_log.shouldWarn())
@@ -732,10 +730,7 @@ class PeerTestManager {
             state.setAliceIP(aliceIP);
             state.setAlicePort(alicePort);
             state.setAliceIntroKey(aliceIntroKey);
-            state.setBobIP(bobIP);
-            state.setBobPort(from.getPort());
             state.setReceiveBobTime(now);
-            state.setBobKeys(bob.getCurrentCipherKey(), bob.getCurrentMACKey());
 
             // we send two packets below, but increment just once
             if (state.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_CHARLIE) {
@@ -836,7 +831,7 @@ class PeerTestManager {
             boolean isNew = false;
             if (state == null) {
                 isNew = true;
-                state = new PeerTestState(BOB, isIPv6, nonce, now);
+                state = new PeerTestState(BOB, null, isIPv6, nonce, now);
             } else {
                 if (state.getReceiveAliceTime() > now - (RESEND_TIMEOUT / 2)) {
                     if (_log.shouldWarn())
