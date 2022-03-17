@@ -87,7 +87,7 @@ class BuildHandler implements Runnable {
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
 
 //    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 6*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 10*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
 
     /** limits on concurrent next-hop RI lookup */
@@ -643,16 +643,17 @@ class BuildHandler implements Runnable {
             _currentLookups.decrementAndGet();
             getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
             getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
+            Hash from = _state.fromHash;
             if (_log.shouldWarn()) {
-                Hash from = _state.fromHash;
                 if (from == null && _state.from != null)
                     from = _state.from.calculateHash();
-                _log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT / 1000 + "s) locating peer for next hop " + _req
-                          + "\n* From: " + from
-                          + " [MsgID " + _state.msg.getUniqueId() + "]");
+                    _log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT / 1000 + "s) locating peer for next hop " + _req +
+                              "\n* From: " + from + " [MsgID " + _state.msg.getUniqueId() + "]");
             }
-
-            // ???  should we blame the peer here?   getContext().profileManager().tunnelTimedOut(_nextPeer);
+            if (_nextPeer != null)
+                _context.commSystem().mayDisconnect(_nextPeer);
+            // ???  should we blame the peer here?
+            getContext().profileManager().tunnelTimedOut(_nextPeer);
             getContext().messageHistory().tunnelRejected(_state.fromHash, new TunnelId(_req.readReceiveTunnelId()), _nextPeer,
                                                          // this is all disabled anyway
                                                          //"rejected because we couldn't find " + _nextPeer + ": " +
@@ -1305,11 +1306,11 @@ class BuildHandler implements Runnable {
             //  This doesn't seem to be a reliable indication of actual failure,
             //  as we sometimes get subsequent tunnel messages.
             //  Until this is investigated and fixed, don't remove the tunnel.
-            //getContext().tunnelDispatcher().remove(_cfg);
+            getContext().tunnelDispatcher().remove(_cfg);
             getContext().statManager().addRateData("tunnel.rejectTimeout2", 1);
             Log log = getContext().logManager().getLog(BuildHandler.class);
             if (log.shouldWarn())
-                log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop" + _cfg);
+                log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop, removing tunnel..." + _cfg);
         }
     }
 
