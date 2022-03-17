@@ -54,7 +54,7 @@
  *	07/24/04
  *		- Thanks for Stefano Lenzi <kismet-sl@users.sourceforge.net>
  *		- Added getParentDevice().
- *	10/20/04 
+ *	10/20/04
  *		- Brent Hills <bhills@openshores.com>
  *		- Changed postSearchResponse() to add MYNAME header.
  *	11/19/04
@@ -81,7 +81,7 @@
  * 		- Changed getDescriptionData() to add a XML declaration at first line.
  * 	04/25/05
  *		- Thanks for Mikael Hakman <mhakman@dkab.net>
- *		- Added a new setActionListener() and serQueryListner() to include the sub devices. 
+ *		- Added a new setActionListener() and serQueryListner() to include the sub devices.
  *	07/24/05
  *		- Thanks for Stefano Lenzi <kismet-sl@users.sourceforge.net>
  *		- Fixed a bug of getParentDevice() to return the parent device normally.
@@ -91,7 +91,7 @@
  *		- Added setUserData() and getUserData() to set a user original data object.
  *	03/29/08
  *		- Added isRunning() to know whether the device is running.
- * 
+ *
  ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -491,7 +491,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	// Thanks for Stefano Lenzi (07/24/04)
 
 	/**
-	 * 
+	 *
 	 * @return A Device that contain this object.<br>
 	 *         Return <code>null</code> if this is a root device.
 	 */
@@ -507,7 +507,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 
 	/**
 	 * Add a Service to device without checking for duplicate or syntax error
-	 * 
+	 *
 	 * @param s
 	 *            Add Service s to the Device
 	 */
@@ -526,7 +526,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	 * <br>
 	 * Note: This method should be used to create a dynamic<br>
 	 * Device withtout writing any XML that describe the device<br>
-	 * 
+	 *
 	 * @param d Add Device d to the Device
 	 */
 	public void addDevice(Device d) {
@@ -1328,7 +1328,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 			if (icon.isURL(uri))
 				return icon;
 		}
-		
+
 		return null;
 	}
 
@@ -1689,7 +1689,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @return SSDPIPv4MulticastAddress
 	 * @since 1.8
 	 */
@@ -1698,7 +1698,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @param ip
 	 * @since 1.8
 	 */
@@ -1707,7 +1707,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @return SSDPIPv6MulticastAddress
 	 * @since 1.8
 	 */
@@ -1716,7 +1716,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @param ip
 	 * @since 1.8
 	 */
@@ -2044,7 +2044,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @param port
 	 *            The port to use for binding the SSDP service
 	 */
@@ -2053,7 +2053,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @return The port to use for binding the SSDP service
 	 */
 	public int getSSDPPort() {
@@ -2061,7 +2061,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @param inets
 	 *            The IP that will be used for binding the SSDP service. Use
 	 *            <code>null</code> to get the default beahvior
@@ -2071,7 +2071,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @return inets The IP that will be used for binding the SSDP service. null
 	 *         means the default setted by the class UPnP
 	 */
@@ -2080,7 +2080,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @param ip
 	 *            The IPv4 address used for Multicast comunication
 	 */
@@ -2089,7 +2089,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @return The IPv4 address used for Multicast comunication
 	 */
 	public String getMulticastIPv4Address() {
@@ -2097,7 +2097,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @param ip
 	 *            The IPv address used for Multicast comunication
 	 */
@@ -2106,7 +2106,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @return The IPv address used for Multicast comunication
 	 */
 	public String getMulticastIPv6Address() {
@@ -2297,16 +2297,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 	 * public void output(PrintWriter ps) { ps.println("deviceType = " +
 	 * getDeviceType()); ps.println("freindlyName = " + getFriendlyName());
 	 * ps.println("presentationURL = " + getPresentationURL());
-	 * 
+	 *
 	 * DeviceList devList = getDeviceList(); ps.println("devList = " +
 	 * devList.size());
-	 * 
+	 *
 	 * ServiceList serviceList = getServiceList(); ps.println("serviceList = " +
 	 * serviceList.size());
-	 * 
+	 *
 	 * IconList iconList = getIconList(); ps.println("iconList = " +
 	 * iconList.size()); }
-	 * 
+	 *
 	 * public void print() { PrintWriter pr = new PrintWriter(System.out);
 	 * output(pr); pr.flush(); }
 	 */

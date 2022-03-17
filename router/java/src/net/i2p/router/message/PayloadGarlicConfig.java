@@ -1,9 +1,9 @@
 package net.i2p.router.message;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -24,20 +24,20 @@ public class PayloadGarlicConfig extends GarlicConfig {
     public PayloadGarlicConfig(Certificate cert, long id, long expiration,
                                DeliveryInstructions di, I2NPMessage message) {
 	super(null, cert, id, expiration, di);
-	_payload = message; 
+	_payload = message;
     }
-    
+
     /**
      * Specify the I2NP message to be sent - if this is set, no other cloves can be included
      * in this block
      */
     public I2NPMessage getPayload() { return _payload; }
- 
+
     @Override
-    protected String getSubData() { 
+    protected String getSubData() {
 	StringBuilder buf = new StringBuilder();
 	buf.append("<payloadMessage>").append(_payload).append("</payloadMessage>");
-	return buf.toString(); 
+	return buf.toString();
     }
 
     /**

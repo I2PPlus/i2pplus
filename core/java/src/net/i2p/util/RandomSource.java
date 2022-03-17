@@ -2,9 +2,9 @@ package net.i2p.util;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -20,7 +20,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.crypto.EntropyHarvester;
 
 /**
- * Singleton for whatever PRNG i2p uses.  
+ * Singleton for whatever PRNG i2p uses.
  *
  * @author jrandom
  */
@@ -45,7 +45,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     * Singleton for whatever PRNG i2p uses.  
+     * Singleton for whatever PRNG i2p uses.
      * Same as I2PAppContext.getGlobalContext().random();
      * use context.random() if you have a context already.
      * @return I2PAppContext.getGlobalContext().random()
@@ -58,7 +58,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * According to the java docs (http://java.sun.com/j2se/1.4.1/docs/api/java/util/Random.html#nextInt(int))
      * nextInt(n) should return a number between 0 and n (including 0 and excluding n).  However, their pseudocode,
      * as well as sun's, kaffe's, and classpath's implementation INCLUDES NEGATIVE VALUES.
-     * Ok, so we're going to have it return between 0 and n (including 0, excluding n), since 
+     * Ok, so we're going to have it return between 0 and n (including 0, excluding n), since
      * thats what it has been used for.
      *
      * This code unused, see FortunaRandomSource override
@@ -114,12 +114,12 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     public EntropyHarvester harvester() { return _entropyHarvester; }
- 
+
     public void feedEntropy(String source, long data, int bitoffset, int bits) {
         if (bitoffset == 0)
             setSeed(data);
     }
-    
+
     public void feedEntropy(String source, byte[] data, int offset, int len) {
         if ( (offset == 0) && (len == data.length) ) {
             setSeed(data);
@@ -142,9 +142,9 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         nextBytes(buf);
         writeSeed(buf);
     }
-    
+
     private static final String SEEDFILE = "prngseed.rnd";
-    
+
     public static final void writeSeed(byte buf[]) {
         File f = new File(I2PAppContext.getGlobalContext().getConfigDir(), SEEDFILE);
         FileOutputStream fos = null;
@@ -157,7 +157,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
             if (fos != null) try { fos.close(); } catch (IOException ioe) {}
         }
     }
- 
+
     /**
      *  May block up to 10 seconds
      */
@@ -192,7 +192,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         ok = seedFromFile(localFile, buf) || ok;
         return ok;
     }
-    
+
     /**
      *  Thread to prevent hanging on init,
      *  presumably due to /dev/random blocking,

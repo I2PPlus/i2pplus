@@ -12,7 +12,7 @@
 *		- first revision.
 *	06/18/04
 *		- Changed to advertise every 25%-50% of the periodic notification cycle for NMPR;
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.device;
@@ -30,7 +30,7 @@ public class Advertiser extends ThreadCore
 	{
 		setDevice(dev);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Member
 	////////////////////////////////////////////////
@@ -41,7 +41,7 @@ public class Advertiser extends ThreadCore
 	{
 		device = dev;
 	}
-	
+
 	public Device getDevice()
 	{
 		return device;
@@ -50,8 +50,8 @@ public class Advertiser extends ThreadCore
 	////////////////////////////////////////////////
 	//	Thread
 	////////////////////////////////////////////////
-	
-	public void run() 
+
+	public void run()
 	{
 		Device dev = getDevice();
 		long leaseTime = dev.getLeaseTime();

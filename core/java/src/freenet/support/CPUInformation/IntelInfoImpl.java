@@ -24,7 +24,7 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
     private static boolean isHaswellCompatible;
     private static boolean isBroadwellCompatible;
     private static boolean isSkylakeCompatible;
-    
+
     // If modelString != null, the cpu is considered correctly identified.
     private static final String smodel = identifyCPU();
     public boolean IsPentiumCompatible(){ return isPentiumCompatible; }
@@ -51,10 +51,10 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
         if (smodel != null)
             return smodel;
         throw new UnknownCPUException("Unknown Intel CPU; Family="+CPUID.getCPUFamily() + '/' + CPUID.getCPUExtendedFamily()+
-                                      ", Model="+CPUID.getCPUModel() + '/' + CPUID.getCPUExtendedModel());    	// 
+                                      ", Model="+CPUID.getCPUModel() + '/' + CPUID.getCPUExtendedModel());    	//
 
     }
-    
+
     private static String identifyCPU()
     {
         // http://en.wikipedia.org/wiki/Cpuid
@@ -298,7 +298,7 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                         isSandyCompatible = true;
                         modelString = "Sandy Bridge";
                         break;
-                    // Details unknown, please add a proper model string if 0x2B model is found 
+                    // Details unknown, please add a proper model string if 0x2B model is found
                     case 0x2b:
                         modelString = "Core i7/i5 (32nm)";
                         break;
@@ -432,7 +432,7 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                         isCore2Compatible = false;
                         isCoreiCompatible = false;
                         modelString = "Quark";
-                        break;                
+                        break;
                     // Silvermont 22 nm
                     // Supports SSE 4.2
                     case 0x4d:

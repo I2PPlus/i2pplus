@@ -14,7 +14,7 @@ import net.i2p.data.Destination;
 import net.i2p.util.Log;
 
 /**
- * Simple streaming lib test app that connects to a given destination and sends 
+ * Simple streaming lib test app that connects to a given destination and sends
  * the contents of a file, then disconnects.  See the {@link #main}
  *
  */
@@ -23,7 +23,7 @@ public class StreamSinkSend {
     private String _sendFile;
     private int _writeDelay;
     private String _peerDestFile;
-    
+
     /**
      * Build the client but don't fire it up.
      * @param filename file to send
@@ -36,7 +36,7 @@ public class StreamSinkSend {
         _peerDestFile = serverDestFile;
         _log = I2PAppContext.getGlobalContext().logManager().getLog(StreamSinkClient.class);
     }
-    
+
     /**
      * Actually connect and run the client - this call blocks until completion.
      *
@@ -45,7 +45,7 @@ public class StreamSinkSend {
         I2PSocketManager mgr = I2PSocketManagerFactory.createManager();
         Destination peer = null;
         FileInputStream fis = null;
-        try { 
+        try {
             fis = new FileInputStream(_peerDestFile);
             peer = new Destination();
             peer.readBytes(fis);
@@ -58,10 +58,10 @@ public class StreamSinkSend {
         } finally {
             if (fis != null) try { fis.close(); } catch (IOException ioe) {}
         }
-        
-        
+
+
         System.out.println("Send " + _sendFile + " to " + peer.calculateHash().toBase64());
-        
+
         try {
             I2PSocket sock = mgr.connect(peer);
             byte buf[] = new byte[32*1024];
@@ -79,7 +79,7 @@ public class StreamSinkSend {
                     _log.debug("Wrote " + read);
                 if (_writeDelay > 0) {
                     try { Thread.sleep(_writeDelay); } catch (InterruptedException ie) {}
-                }   
+                }
             }
             fis.close();
             sock.close();

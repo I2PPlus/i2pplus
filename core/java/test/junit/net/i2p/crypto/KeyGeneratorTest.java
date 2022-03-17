@@ -1,13 +1,13 @@
 package net.i2p.crypto;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
- 
+
 import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -36,7 +36,7 @@ public class KeyGeneratorTest extends TestCase{
         SigningPublicKey fake = (SigningPublicKey) obj[0];
         for (int i = 0; i < 10; i++) {
             Object keys[] = KeyGenerator.getInstance().generateSigningKeypair();
-            
+
             Signature sig = DSAEngine.getInstance().sign(src, (SigningPrivateKey) keys[1]);
             assertTrue(DSAEngine.getInstance().verifySignature(sig, src, (SigningPublicKey) keys[0]));
             assertFalse(DSAEngine.getInstance().verifySignature(sig, src, fake));

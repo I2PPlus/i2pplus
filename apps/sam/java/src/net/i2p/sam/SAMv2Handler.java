@@ -56,7 +56,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		{
 			super(s, verMajor, verMinor, i2cpProps, parent);
 		}
-		
+
 		@Override
 		public boolean verifVersion()
 		{
@@ -68,8 +68,8 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		{
 			return new SAMv2StreamSession(destKeystream, direction, props, this) ;
 		}
-		
-		
+
+
 		/* Parse and execute a STREAM message */
 		@Override
 		protected boolean execStreamMessage ( String opcode, Properties props )
@@ -104,11 +104,11 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 				return false;
 			}
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 		private boolean execStreamReceive ( Properties props )
 		{
 			if (props.isEmpty())
@@ -143,7 +143,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 			}
 
 			boolean nolimit = false;
-			
+
 			long limit = 0;
 			{
 				String strsize = props.getProperty ( "LIMIT" );
@@ -159,7 +159,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 				{
 					nolimit = true ;
 				}
-				else 
+				else
 				{
 					try
 					{

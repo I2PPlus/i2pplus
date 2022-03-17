@@ -9,7 +9,7 @@ package net.i2p.sam;
  */
 
 import java.util.Properties;
-	
+
 /**
  *  The values in the SessionsDB
  *
@@ -23,7 +23,7 @@ class SessionRecord {
 
 	public SessionRecord( String dest, Properties props, SAMv3Handler handler )
 	{
-		m_dest = dest; 
+		m_dest = dest;
 		m_props = new Properties() ;
 		m_props.putAll(props);
 		m_handler = handler ;

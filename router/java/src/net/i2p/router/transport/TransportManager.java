@@ -239,7 +239,7 @@ public class TransportManager implements TransportEventListener {
     X25519KeyFactory getXDHFactory() {
         return _xdhThread;
     }
-    
+
     private void addTransport(Transport transport) {
         if (transport == null) return;
         Transport old = _transports.put(transport.getStyle(), transport);

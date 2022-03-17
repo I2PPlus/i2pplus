@@ -711,7 +711,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 	 *
 	 * Payload (plaintext) and message (encrypted) may be in the same buffer
 	 * and have the same offset.
-	 * 
+	 *
 	 * @param message Buffer containing the incoming handshake
 	 * that was read from the transport.
 	 * @param messageOffset Offset of the first message byte.

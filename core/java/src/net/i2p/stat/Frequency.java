@@ -40,9 +40,9 @@ public class Frequency {
             return _lastEvent;
     }
 
-    /** 
-     * on average over the last $period, after how many milliseconds are events coming in, 
-     * as calculated during the last event occurrence? 
+    /**
+     * on average over the last $period, after how many milliseconds are events coming in,
+     * as calculated during the last event occurrence?
      * @return milliseconds; returns period + 1 if no events in previous period
      */
     public synchronized double getAverageInterval() {
@@ -101,7 +101,7 @@ public class Frequency {
             return _count;
     }
 
-    /** 
+    /**
      * Take note that a new event occurred, recalculating all the averages and frequencies
      *
      */
@@ -109,7 +109,7 @@ public class Frequency {
         recalculate(true);
     }
 
-    /** 
+    /**
      * Recalculate the averages
      *
      */
@@ -152,7 +152,7 @@ public class Frequency {
     private final static long now() {
         return System.currentTimeMillis();
     }
-    
+
     /**
      * Appends the data of this frequency to the specified StringBuilder
      * @param dest to append data to

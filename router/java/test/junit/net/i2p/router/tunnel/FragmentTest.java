@@ -29,24 +29,24 @@ import net.i2p.router.RouterContext;
  *
  */
 public class FragmentTest {
-    
+
     protected static RouterContext _context;
-    
+
     @BeforeClass
     public static void globalSetUp() {
         _context = new RouterContext(null);
     }
-    
+
     @Before
     public void set() {
         _context.random().nextBoolean();
         FragmentHandler.MAX_DEFRAGMENT_TIME = 10*1000;
     }
-    
+
     protected TunnelGateway.QueuePreprocessor createPreprocessor(RouterContext ctx) {
         return new TrivialPreprocessor(ctx);
     }
-    
+
     /**
      * Send a message that fits inside a single fragment through
      *
@@ -69,7 +69,7 @@ public class FragmentTest {
             fail("should have thrown UOE");
         } catch (UnsupportedOperationException expected){}
     }
-    
+
     /**
      * Send a message with two fragments through with no delay
      *
@@ -79,20 +79,20 @@ public class FragmentTest {
         PendingGatewayMessage pending = createPending(2048, false, false);
         ArrayList<PendingGatewayMessage> messages = new ArrayList<PendingGatewayMessage>();
         messages.add(pending);
-        
+
         TunnelGateway.QueuePreprocessor pre = createPreprocessor(_context);
         SenderImpl sender = new SenderImpl();
         DefragmentedReceiverImpl handleReceiver = new DefragmentedReceiverImpl(pending.getData());
         FragmentHandler handler = new FragmentHandler(_context, handleReceiver);
         ReceiverImpl receiver = new ReceiverImpl(handler, 0);
         byte msg[] = pending.getData();
-            
+
         try {
             pre.preprocessQueue(messages, new SenderImpl(), receiver);
             fail("should have thrown UOE");
         } catch (UnsupportedOperationException expected){}
     }
-    
+
     /**
      * Send a fragmented message, except wait a while between each fragment, causing
      * the defragmentation to fail (since the fragments will expire)
@@ -107,7 +107,7 @@ public class FragmentTest {
         FragmentHandler handler = new FragmentHandler(_context, new DefragmentedReceiverImpl(pending.getData()));
         ReceiverImpl receiver = new ReceiverImpl(handler, 11*1000);
         byte msg[] = pending.getData();
-        
+
         boolean keepGoing = true;
         while (keepGoing) {
             keepGoing = pre.preprocessQueue(messages, new SenderImpl(), receiver);
@@ -115,7 +115,7 @@ public class FragmentTest {
                 try { Thread.sleep(100); } catch (InterruptedException ie) {}
         }
     }
-    
+
     public void runVaried() {
         for (int i = 0; i <= 4096; i++) {
             assertTrue(runVaried(i, false, false));
@@ -123,29 +123,29 @@ public class FragmentTest {
             assertTrue(runVaried(i, true, true));
         }
     }
-    
+
     protected boolean runVaried(int size, boolean includeRouter, boolean includeTunnel) {
         PendingGatewayMessage pending = createPending(size, includeRouter, includeTunnel);
         ArrayList<PendingGatewayMessage> messages = new ArrayList<PendingGatewayMessage>();
         messages.add(pending);
-        
+
         DefragmentedReceiverImpl handleReceiver = new DefragmentedReceiverImpl(pending.getData());
         TunnelGateway.QueuePreprocessor pre = createPreprocessor(_context);
         SenderImpl sender = new SenderImpl();
         FragmentHandler handler = new FragmentHandler(_context, handleReceiver);
         ReceiverImpl receiver = new ReceiverImpl(handler, 0);
         byte msg[] = pending.getData();
-            
+
         boolean keepGoing = true;
         while (keepGoing) {
             keepGoing = pre.preprocessQueue(messages, new SenderImpl(), receiver);
             if (keepGoing)
                 try { Thread.sleep(100); } catch (InterruptedException ie) {}
         }
-        
+
         return handleReceiver.receivedOk();
     }
-    
+
     protected PendingGatewayMessage createPending(int size, boolean includeRouter, boolean includeTunnel) {
         DataMessage m = new DataMessage(_context);
         byte data[] = new byte[size];
@@ -153,7 +153,7 @@ public class FragmentTest {
         m.setData(data);
         m.setUniqueId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));
         m.setMessageExpiration(_context.clock().now() + 60*1000);
-        
+
         Hash toRouter = null;
         TunnelId toTunnel = null;
         if (includeRouter) {
@@ -164,7 +164,7 @@ public class FragmentTest {
             toTunnel = new TunnelId(1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE));
         return new PendingGatewayMessage(m, toRouter, toTunnel);
     }
-    
+
     protected class SenderImpl implements TunnelGateway.Sender {
         public long sendPreprocessed(byte[] preprocessed, TunnelGateway.Receiver receiver) {
             return receiver.receiveEncrypted(preprocessed);
@@ -173,8 +173,8 @@ public class FragmentTest {
     protected class ReceiverImpl implements TunnelGateway.Receiver {
         private FragmentHandler _handler;
         private int _delay;
-        public ReceiverImpl(FragmentHandler handler, int delay) { 
-            _handler = handler; 
+        public ReceiverImpl(FragmentHandler handler, int delay) {
+            _handler = handler;
             _delay = delay;
         }
         public long receiveEncrypted(byte[] encrypted) {
@@ -188,7 +188,7 @@ public class FragmentTest {
             return null;
         }
     }
-    
+
     protected class DefragmentedReceiverImpl implements FragmentHandler.DefragmentedReceiver {
         private volatile byte _expected[];
         private volatile byte _expected2[];
@@ -219,9 +219,9 @@ public class FragmentTest {
                 _received++;
             //_log.info("** equal? " + ok);
         }
-        
+
         public boolean receivedOk() {
-            if ( (_expected != null) && (_expected2 != null) && (_expected3 != null) ) 
+            if ( (_expected != null) && (_expected2 != null) && (_expected3 != null) )
                 return _received == 3;
             else if ( (_expected != null) && (_expected2 != null) )
                 return _received == 2;

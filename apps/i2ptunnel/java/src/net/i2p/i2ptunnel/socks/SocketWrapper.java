@@ -73,11 +73,11 @@ class SocketWrapper implements I2PSocket {
         return null;
     }
 
-    /** 
+    /**
      * Does nothing
      */
     public void setOptions(I2PSocketOptions options) {}
-    
+
     public long getReadTimeout() {
         return -1;
     }
@@ -88,7 +88,7 @@ class SocketWrapper implements I2PSocket {
         socket.close();
     }
 
-    /** 
+    /**
      * Just calls close()
      * @since 0.9.30
      */

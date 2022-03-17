@@ -7,7 +7,7 @@ package net.i2p.update;
  *  @since 0.9.4
  */
 public interface Checker {
-    
+
     /**
      *  Check for updates.
      *  Should not block.

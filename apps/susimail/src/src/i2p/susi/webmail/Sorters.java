@@ -78,12 +78,12 @@ class Sorters {
 			String as = a.sender.replace("\"", "").replace("<", "").replace(">", "");
 			String bs = b.sender.replace("\"", "").replace("<", "").replace(">", "");
 			return collator.compare(as, bs);
-		}		
+		}
 	}
 
 	/**
 	 * sorts Mail objects by to: fields
-	 * 
+	 *
 	 * @since 0.9.43
 	 */
 	public static class ToSorter extends SorterBase {
@@ -93,7 +93,7 @@ class Sorters {
 		public ToSorter(MailCache mailCache) {
 			super(mailCache);
 		}
-		
+
 		protected int compare(Mail a, Mail b) {
 			if (a.to == null)
 				return b.to == null ? 0 : -1;
@@ -106,7 +106,7 @@ class Sorters {
 				int rv = collator.compare(as, bs);
 				if (rv != 0)
 					return rv;
-			}		
+			}
 			if (a.to.length > minsz)
 				return 1;
 			if (b.to.length > minsz)

@@ -2,9 +2,9 @@ package net.i2p.client.impl;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -33,7 +33,7 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
     public RequestVariableLeaseSetMessageHandler(I2PAppContext context) {
         super(context, RequestVariableLeaseSetMessage.MESSAGE_TYPE);
     }
-    
+
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug())

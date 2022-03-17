@@ -12,13 +12,13 @@ import java.math.BigInteger;
 
 /**
  * 9-block Identicon renderer.
- * 
+ *
  * <p>
  * Current implementation uses only the lower 32 bits of identicon code.
  * </p>
- * 
+ *
  * @author don
- * 
+ *
  */
 public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
@@ -90,7 +90,7 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 */
 	public NineBlockIdenticonRenderer2() {
 		setPatchSize(DEFAULT_PATCH_SIZE);
@@ -99,7 +99,7 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 	/**
 	 * Returns the size in pixels at which each patch will be rendered before
 	 * they are scaled down to requested identicon size.
-	 * 
+	 *
 	 * @return the size
 	 */
 	public float getPatchSize() {
@@ -111,7 +111,7 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 	 * are scaled down to requested identicon size. Default size is 20 pixels
 	 * which means, for 9-block identicon, a 60x60 image will be rendered and
 	 * scaled down.
-	 * 
+	 *
 	 * @param size
 	 *            patch size in pixels
 	 */
@@ -158,13 +158,13 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
 	/**
 	 * Returns rendered identicon image for given identicon code.
-	 * 
+	 *
 	 * <p>
 	 * Size of the returned identicon image is determined by patchSize set using
 	 * {@link #setPatchSize}. Since a 9-block identicon consists of 3x3 patches,
 	 * width and height will be 3 times the patch size.
 	 * </p>
-	 * 
+	 *
 	 * @param code
 	 *            identicon code
 	 * @param size
@@ -301,7 +301,7 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
 	/**
 	 * Returns distance between two colors.
-	 * 
+	 *
 	 * @param c1
 	 * @param c2
 	 * @return the distance
@@ -315,7 +315,7 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
 	/**
 	 * Returns complementary color.
-	 * 
+	 *
 	 * @param color
 	 * @return the complement
 	 */

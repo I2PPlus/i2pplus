@@ -22,7 +22,7 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
     private RouterContext _context;
     private Log _log;
     private FIFOBandwidthLimiter.Request _currentRequest;
-    
+
     public BandwidthLimitedOutputStream(RouterContext context, OutputStream source, RouterIdentity peer) {
         super(source);
         _context = context;
@@ -34,9 +34,9 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
         _log = context.logManager().getLog(BandwidthLimitedOutputStream.class);
         _currentRequest = null;
     }
-    
+
     public FIFOBandwidthLimiter.Request getCurrentRequest() { return _currentRequest; }
-    
+
     @Override
     public void write(int val) throws IOException {
         if (_log.shouldDebug())
@@ -61,10 +61,10 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
         if (src == null) return;
         if (len <= 0) return;
         if (len + off > src.length)
-            throw new IllegalArgumentException("what are you thinking?  len=" + len 
+            throw new IllegalArgumentException("what are you thinking?  len=" + len
                                                + ", off=" + off + ", data=" + src.length);
         _currentRequest = _context.bandwidthLimiter().requestOutbound(len, 0, _peerTarget);
-        
+
         int written = 0;
         while (written < len) {
             int allocated = len - _currentRequest.getPendingRequested();
@@ -85,7 +85,7 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
             _currentRequest = null;
         }
     }
-    
+
     @Override
     public void close() throws IOException {
         synchronized (this) {

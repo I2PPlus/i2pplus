@@ -27,7 +27,7 @@ public class I2PTunnelHTTPBidirServer extends I2PTunnelHTTPServer {
     }
 
     private void finishSetupI2PTunnelHTTPBidirServer(Logging l, int proxyport) {
-        
+
         localPort = proxyport;
         bidir = true;
 

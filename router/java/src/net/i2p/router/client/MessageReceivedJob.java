@@ -44,7 +44,7 @@ class MessageReceivedJob extends JobImpl {
         _payload = payload;
         _sendDirect = sendDirect;
     }
-    
+
     public String getName() { return "Deliver New Message"; }
 
     public void runJob() {
@@ -81,13 +81,13 @@ class MessageReceivedJob extends JobImpl {
             return false;
         }
     }
-    
+
     /**
      * Deliver notification to the client that the given message is available.
      */
     private void messageAvailable(MessageId id, long size) throws I2CPMessageException {
         //if (_log.shouldDebug())
-        //    _log.debug("Sending message available: " + id + " to sessionId " + _runner.getSessionId() 
+        //    _log.debug("Sending message available: " + id + " to sessionId " + _runner.getSessionId()
         //               + " (with nonce=1)", new Exception("available"));
         MessageStatusMessage msg = new MessageStatusMessage();
         msg.setMessageId(id.getMessageId());
@@ -104,7 +104,7 @@ class MessageReceivedJob extends JobImpl {
         msg.setStatus(MessageStatusMessage.STATUS_AVAILABLE);
         _runner.doSend(msg);
     }
-    
+
     /**
      *  Deliver the message directly, skip notification
      *  @since 0.9.4

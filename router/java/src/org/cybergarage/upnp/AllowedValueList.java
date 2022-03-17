@@ -12,7 +12,7 @@
 *		- first revision.
 *	02/28/05
 *		- Changed to use AllowedValue instead of String as the member.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -25,15 +25,15 @@ public class AllowedValueList extends Vector<AllowedValue>
 	////////////////////////////////////////////////
 	//	Constants
 	////////////////////////////////////////////////
-	
+
 	public final static String ELEM_NAME = "allowedValueList";
 
 
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
-	public AllowedValueList() 
+
+	public AllowedValueList()
 	{
 	}
 
@@ -41,14 +41,14 @@ public class AllowedValueList extends Vector<AllowedValue>
 		for (int i = 0; i < values.length; i++) {
 			add(new AllowedValue(values[i]));
 		};
-		
+
 	}
 
-	
+
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public AllowedValue getAllowedValue(int n)
 	{
 		return get(n);

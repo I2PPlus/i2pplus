@@ -440,7 +440,7 @@ public class PeerState {
         _currentACKsResend = null;
         _ackedMessages = null;
     }
-    
+
     /**
      * @since 0.9.54
      */

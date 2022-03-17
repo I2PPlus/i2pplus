@@ -6,11 +6,11 @@ import java.util.ResourceBundle;
 import com.vuze.plugins.mlab.tools.ndt.swingemu.JOptionPane;
 
 /**
- * 
+ *
  * Class to hold constants. These constants include both Protocol related
  * constants and non-protocol related ones which are used by the software. The
  * different sections of constants are listed under appropriate "sections".
- * 
+ *
  */
 public class NDTConstants {
 
@@ -121,32 +121,32 @@ public class NDTConstants {
 	public static final String RTT_STR = "rtt"; // round trip time
 
 	// Section: RFC 1323 options ( Seems like 0/1/2/3 are the options available)
-	
+
 	public static final int RFC_1323_DISABLED = 0;
 	public static final int RFC_1323_ENABLED = 1;
  	// Note Self disabled from servers standpoint i.e. disabled by server
  	public static final int RFC_1323_SELF_DISABLED = 2;
  	public static final int RFC_1323_PEER_DISABLED = 3;
- 	
+ 
  	// Section: RFC2018 SAck
  	public static final int RFC_2018_ENABLED = 1;
- 	
+ 
  	// Section: RFC2018 Nagle
  	public static final int RFC_896_ENABLED = 1;
- 	
+ 
  	// Section: RFC3168
  	public static final int RFC_3168_ENABLED = 1;
  	// Note Self disabled from servers standpoint i.e. disabled by server
  	public static final int RFC_3168_SELF_DISABLED = 2;
  	public static final int RFC_3168_PEER_DISABLED = 3;
- 	
+ 
 	// Section: Buffer limitation test thresholds
 	public static final float BUFFER_LIMITED = 0.15f; //unused right now
-	
-	
+
+
 	// Section: TCP constants
 	public static final int TCP_MAX_RECV_WIN_SIZE = 65535;
-	 
+
 	// Section: Data units
 	public static final int KILO = 1000; // Used in conversions from seconds->mS,
 	public static final int KILO_BITS = 1024;// Used in kilobits->bits conversions
@@ -161,15 +161,15 @@ public class NDTConstants {
 	public static final int DUPLEX_SWITCH_FULL_HOST_HALF_POSS = 4;
 	public static final int DUPLEX_SWITCH_HALF_HOST_FULL_POSS = 5;
 	public static final int DUPLEX_SWITCH_HALF_HOST_FULL_WARN = 7;
-	
+
 	// Section: cable status indicators
 	public static final int CABLE_STATUS_OK = 0;
 	public static final int CABLE_STATUS_BAD = 1;
-	
+
 	// Section: Congestion status
 	public static final int CONGESTION_NONE = 0;
 	public static final int CONGESTION_FOUND = 1;
-	
+
 	// Section: miscellaneous
 	public static final int SOCKET_FREE_PORT_INDICATOR = 0;
 	public static final String LOOPBACK_ADDRS_STRING = "127.0.0.1";
@@ -183,7 +183,7 @@ public class NDTConstants {
 
 	/**
 	 * Initializes a few constants
-	 * 
+	 *
 	 * @param paramLocale
 	 *            local Locale object
 	 * */
@@ -202,7 +202,7 @@ public class NDTConstants {
 
 	/**
 	 * Initializes a few constants
-	 * 
+	 *
 	 * @param paramStrLang
 	 *            local Language String
 	 * @param paramStrCountry
@@ -222,7 +222,7 @@ public class NDTConstants {
 
 	/**
 	 * Getter method for to fetch from resourceBundle
-	 * 
+	 *
 	 * @param paramStrName
 	 *            name of parameter to be fetched
 	 * @return Value of parameter input

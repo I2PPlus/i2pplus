@@ -24,7 +24,7 @@ public class CRLEntry {
                DataHelper.eq(id, e.id) &&
                DataHelper.eq(data, e.data);
     }
-    
+
     @Override
     public int hashCode() {
         return (int) updated;

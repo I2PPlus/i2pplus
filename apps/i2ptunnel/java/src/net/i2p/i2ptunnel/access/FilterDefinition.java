@@ -27,9 +27,9 @@ class FilterDefinition {
         this.recorders = recorders;
 
         int maxSeconds = defaultThreshold.getSeconds();
-        for (FilterDefinitionElement element : elements) 
+        for (FilterDefinitionElement element : elements)
             maxSeconds = Math.max(maxSeconds, element.getThreshold().getSeconds());
-        for (Recorder recorder : recorders) 
+        for (Recorder recorder : recorders)
             maxSeconds = Math.max(maxSeconds, recorder.getThreshold().getSeconds());
 
         this.purgeSeconds = maxSeconds;

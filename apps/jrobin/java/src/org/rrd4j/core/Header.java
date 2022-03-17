@@ -36,7 +36,7 @@ public class Header implements RrdUpdater<Header> {
 
         String initSignature = null;
         if(rrdDef != null) {
-            version = rrdDef.getVersion(); 
+            version = rrdDef.getVersion();
             initSignature = SIGNATURE + ", " + VERSIONS[version - 1];
         }
         else {

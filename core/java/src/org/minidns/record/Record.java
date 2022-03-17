@@ -32,7 +32,7 @@ public final class Record<D extends Data> {
 
     /**
      * The resource record type.
-     * 
+     *
      * @see <a href=
      *      "http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4">
      *      IANA DNS Parameters - Resource Record (RR) TYPEs</a>
@@ -149,7 +149,7 @@ public final class Record<D extends Data> {
 
         /**
          * Create a new record type.
-         * 
+         *
          * @param value The binary value of this type.
          */
         TYPE(int value) {
@@ -297,7 +297,7 @@ public final class Record<D extends Data> {
 
     /**
      * The value of the class field of a RR.
-     * 
+     *
      * According to RFC 2671 (OPT RR) this is not necessarily representable
      * using clazz field and unicastQuery bit
      */

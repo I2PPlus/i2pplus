@@ -7,7 +7,7 @@ import net.i2p.router.RouterContext;
  * @since 0.9.42
  */
 public class TCConfig extends TunnelCreatorConfig {
-    
+
     public TCConfig(RouterContext ctx, int length, boolean isInbound) {
         super(ctx, length, isInbound);
     }

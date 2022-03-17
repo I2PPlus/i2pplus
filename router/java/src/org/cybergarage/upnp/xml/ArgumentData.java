@@ -17,7 +17,7 @@ package org.cybergarage.upnp.xml;
 
 public class ArgumentData extends NodeData
 {
-	public ArgumentData() 
+	public ArgumentData()
 	{
 	}
 
@@ -26,7 +26,7 @@ public class ArgumentData extends NodeData
 	////////////////////////////////////////////////
 
 	private String value = "";
-	
+
 	public String getValue()
 	{
 		return value;

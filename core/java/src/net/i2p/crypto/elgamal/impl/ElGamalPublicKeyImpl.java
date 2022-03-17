@@ -19,7 +19,7 @@ public class ElGamalPublicKeyImpl
     implements ElGamalPublicKey, DHPublicKey
 {
     private static final long serialVersionUID = 8712728417091216948L;
-        
+
     private BigInteger              y;
     private ElGamalParameterSpec    elSpec;
 
@@ -36,7 +36,7 @@ public class ElGamalPublicKeyImpl
         this.y = spec.getY();
         this.elSpec = new ElGamalParameterSpec(spec.getP(), spec.getG());
     }
-    
+
     public ElGamalPublicKeyImpl(
         ElGamalPublicKey    key)
     {
@@ -50,7 +50,7 @@ public class ElGamalPublicKeyImpl
         this.y = key.getY();
         this.elSpec = new ElGamalParameterSpec(key.getParams().getP(), key.getParams().getG());
     }
-    
+
     public ElGamalPublicKeyImpl(
         BigInteger              y,
         ElGamalParameterSpec    elSpec)
@@ -58,7 +58,7 @@ public class ElGamalPublicKeyImpl
         this.y = y;
         this.elSpec = elSpec;
     }
-    
+
     public ElGamalPublicKeyImpl(
         X509EncodedKeySpec spec)
     {
@@ -152,7 +152,7 @@ public class ElGamalPublicKeyImpl
     {
         return elSpec;
     }
-    
+
     public DHParameterSpec getParams()
     {
         return new DHParameterSpec(elSpec.getP(), elSpec.getG());

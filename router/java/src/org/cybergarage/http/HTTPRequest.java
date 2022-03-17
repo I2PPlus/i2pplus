@@ -66,9 +66,9 @@ import java.util.StringTokenizer;
 
 import org.cybergarage.util.Debug;
 /**
- * 
+ *
  * This class rappresnet an HTTP <b>request</b>, and act as HTTP client when it sends the request<br>
- * 
+ *
  * @author Satoshi "skonno" Konno
  * @author Stefano "Kismet" Lenzi
  * @version 1.8
@@ -79,7 +79,7 @@ public class HTTPRequest extends HTTPPacket
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public HTTPRequest()
 	{
 		setVersion(HTTP.VERSION_10);
@@ -106,7 +106,7 @@ public class HTTPRequest extends HTTPPacket
 	{
 		method = value;
 	}
-		
+
 	public String getMethod()
 	{
 		if (method != null)
@@ -136,7 +136,7 @@ public class HTTPRequest extends HTTPPacket
 	{
 		return isMethod(HTTP.HEAD);
 	}
-	
+
 	public boolean isSubscribeRequest()
 	{
 		return isMethod(HTTP.SUBSCRIBE);
@@ -151,7 +151,7 @@ public class HTTPRequest extends HTTPPacket
 	{
 		return isMethod(HTTP.NOTIFY);
 	}
- 
+
 	////////////////////////////////////////////////
 	//	URI
 	////////////////////////////////////////////////
@@ -182,7 +182,7 @@ public class HTTPRequest extends HTTPPacket
 	////////////////////////////////////////////////
 	//	URI Parameter
 	////////////////////////////////////////////////
-	
+
 	public ParameterList getParameterList()
 	{
 		ParameterList paramList = new ParameterList();
@@ -203,13 +203,13 @@ public class HTTPRequest extends HTTPPacket
 		}
 		return paramList;
 	}
-	
+
 	public String getParameterValue(String name)
 	{
 		ParameterList paramList = getParameterList();
 		return paramList.getValue(name);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	SOAPAction
 	////////////////////////////////////////////////
@@ -220,11 +220,11 @@ public class HTTPRequest extends HTTPPacket
 	}
 
 	////////////////////////////////////////////////
-	// Host / Port	
+	// Host / Port
 	////////////////////////////////////////////////
-	
+
 	private String requestHost = "";
-	
+
 	public void setRequestHost(String host)
 	{
 		requestHost = host;
@@ -236,7 +236,7 @@ public class HTTPRequest extends HTTPPacket
 	}
 
 	private int requestPort = -1;
-	
+
 	public void setRequestPort(int host)
 	{
 		requestPort = host;
@@ -246,7 +246,7 @@ public class HTTPRequest extends HTTPPacket
 	{
 		return requestPort;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Socket
 	////////////////////////////////////////////////
@@ -257,7 +257,7 @@ public class HTTPRequest extends HTTPPacket
 	{
 		httpSocket = value;
 	}
-		
+
 	public HTTPSocket getSocket()
 	{
 		return httpSocket;
@@ -269,12 +269,12 @@ public class HTTPRequest extends HTTPPacket
 
 	public String getLocalAddress()
 	{
-		return getSocket().getLocalAddress();	
+		return getSocket().getLocalAddress();
 	}
 
 	public int getLocalPort()
 	{
-		return getSocket().getLocalPort();	
+		return getSocket().getLocalPort();
 	}
 
 	////////////////////////////////////////////////
@@ -315,23 +315,23 @@ public class HTTPRequest extends HTTPPacket
 	////////////////////////////////////////////////
 	//	getHeader
 	////////////////////////////////////////////////
-	
+
 	public String getHeader()
 	{
 		StringBuffer str = new StringBuffer();
-		
+
 		str.append(getFirstLineString());
-		
-		String headerString  = getHeaderString();		
+
+		String headerString  = getHeaderString();
 		str.append(headerString);
-		
+
 		return str.toString();
 	}
-	
+
 	////////////////////////////////////////////////
 	//	isKeepAlive
 	////////////////////////////////////////////////
-	
+
 	public boolean isKeepAlive()
 	{
 		if (isCloseConnection() == true)
@@ -348,12 +348,12 @@ public class HTTPRequest extends HTTPPacket
 	////////////////////////////////////////////////
 	//	read
 	////////////////////////////////////////////////
-	
+
 	public boolean read()
 	{
 		return super.read(getSocket());
 	}
-	
+
 	////////////////////////////////////////////////
 	//	POST (Response)
 	////////////////////////////////////////////////
@@ -368,13 +368,13 @@ public class HTTPRequest extends HTTPPacket
 			long lastPos = getContentRangeLastPosition();
 
 			// Thanks for Brent Hills (10/26/04)
-			if (lastPos <= 0) 
+			if (lastPos <= 0)
 				lastPos = length - 1;
 			if ((firstPos > length ) || (lastPos > length))
 				return returnResponse(HTTPStatus.INVALID_RANGE);
 			httpRes.setContentRange(firstPos, lastPos, length);
 			httpRes.setStatusCode(HTTPStatus.PARTIAL_CONTENT);
-			
+
 			offset = firstPos;
 			length = lastPos - firstPos + 1;
 		}
@@ -385,9 +385,9 @@ public class HTTPRequest extends HTTPPacket
 	////////////////////////////////////////////////
 	//	POST (Request)
 	////////////////////////////////////////////////
-	
+
 	private Socket postSocket = null;
-	
+
 	private String bindTo = null;
 
 	/**
@@ -403,14 +403,14 @@ public class HTTPRequest extends HTTPPacket
 		HTTPResponse httpRes = new HTTPResponse();
 
 		setHost(host);
-		
+
 		setConnection((isKeepAlive == true) ? HTTP.KEEP_ALIVE : HTTP.CLOSE);
-		
+
 		boolean isHeaderRequest = isHeadRequest();
-		
+
 		OutputStream out = null;
 		InputStream in = null;
-		
+
  		try {
  			if (postSocket == null) {
 				// Mod for I2P
@@ -442,14 +442,14 @@ public class HTTPRequest extends HTTPPacket
 			PrintStream pout = new PrintStream(out);
 			pout.print(getHeader());
 			pout.print(HTTP.CRLF);
-			
+
 			boolean isChunkedRequest = isChunked();
-			
+
 			String content = getContentString();
 			int contentLength = 0;
 			if (content != null)
 				contentLength = content.length();
-			
+
 			if (0 < contentLength) {
 				if (isChunkedRequest == true) {
 					// Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
@@ -466,11 +466,11 @@ public class HTTPRequest extends HTTPPacket
 				pout.print("0");
 				pout.print(HTTP.CRLF);
 			}
-			
+
 			pout.flush();
 
 			in = postSocket.getInputStream();
-			httpRes.set(in, isHeaderRequest);		
+			httpRes.set(in, isHeaderRequest);
 		} catch (SocketException e) {
 			httpRes.setStatusCode(HTTPStatus.INTERNAL_SERVER_ERROR);
 			Debug.warning(e);
@@ -480,7 +480,7 @@ public class HTTPRequest extends HTTPPacket
 			httpRes.setStatusCode(HTTPStatus.INTERNAL_SERVER_ERROR);
 			Debug.warning(e);
 		} finally {
-			if (isKeepAlive == false) {	
+			if (isKeepAlive == false) {
 				try {
 					in.close();
 				} catch (Exception e) {};
@@ -495,7 +495,7 @@ public class HTTPRequest extends HTTPPacket
 				postSocket = null;
 			}
 		}
-		
+
 		return httpRes;
 	}
 
@@ -539,7 +539,7 @@ public class HTTPRequest extends HTTPPacket
 	////////////////////////////////////////////////
 	//	toString
 	////////////////////////////////////////////////
-	
+
 	public String toString()
 	{
 		StringBuffer str = new StringBuffer();
@@ -547,7 +547,7 @@ public class HTTPRequest extends HTTPPacket
 		str.append(getHeader());
 		str.append(HTTP.CRLF);
 		str.append(getContentString());
-		
+
 		return str.toString();
 	}
 

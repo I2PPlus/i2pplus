@@ -15,38 +15,38 @@
 
 package org.cybergarage.xml;
 
-public class Attribute 
+public class Attribute
 {
-	private String name = new String(); 
-	private String value = new String(); 
+	private String name = new String();
+	private String value = new String();
 
-	public Attribute() 
+	public Attribute()
 	{
 	}
 
-	public Attribute(String name, String value) 
+	public Attribute(String name, String value)
 	{
 		this();
 		setName(name);
 		setValue(value);
 	}
 
-	public Attribute(Attribute otherAttr) 
+	public Attribute(Attribute otherAttr)
 	{
 		this();
 		set(otherAttr);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	name
 	////////////////////////////////////////////////
 
-	public void setName(String name) 
+	public void setName(String name)
 	{
 		this.name = name;
 	}
 
-	public String getName() 
+	public String getName()
 	{
 		return name;
 	}
@@ -55,12 +55,12 @@ public class Attribute
 	//	value
 	////////////////////////////////////////////////
 
-	public void setValue(String value) 
+	public void setValue(String value)
 	{
 		this.value = value;
 	}
 
-	public String getValue() 
+	public String getValue()
 	{
 		return value;
 	}
@@ -69,7 +69,7 @@ public class Attribute
 	//	set
 	////////////////////////////////////////////////
 
-	public void set(Attribute otherAttr) 
+	public void set(Attribute otherAttr)
 	{
 		setName(otherAttr.getName());
 		setValue(otherAttr.getValue());

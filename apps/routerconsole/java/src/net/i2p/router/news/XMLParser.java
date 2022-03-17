@@ -55,7 +55,7 @@ public class XMLParser extends JaxpParser {
         int domNodeType = domNode.getNodeType();
         String domNodeName = domNode.getNodeName();
         String domNodeValue = domNode.getNodeValue();
-        NamedNodeMap attrs = domNode.getAttributes(); 
+        NamedNodeMap attrs = domNode.getAttributes();
         int arrrsLen = (attrs != null) ? attrs.getLength() : 0;
 
         if (_log.shouldDebug()) {
@@ -112,17 +112,17 @@ public class XMLParser extends JaxpParser {
                 node.setAttribute(attrName, attrValue);
             }
         }
-        
+
         org.w3c.dom.Node child = domNode.getFirstChild();
-        if (child == null) { 
-            node.setValue(""); 
-            return node; 
+        if (child == null) {
+            node.setValue("");
+            return node;
         }
         do{
             parse(node, child, rank+1);
             child = child.getNextSibling();
-        } while (child != null);        
-        
+        } while (child != null);
+
         return node;
     }
 
@@ -145,7 +145,7 @@ public class XMLParser extends JaxpParser {
             buf.append(value);
             return;
         }
-        
+
         buf.append('<').append(name);
         int nAttributes = node.getNAttributes();
         for (int n = 0; n < nAttributes; n++) {
@@ -155,7 +155,7 @@ public class XMLParser extends JaxpParser {
 
         // As in Node, output either the nodes or the value.
         // If mixed values and nodes, the values must be text nodes. See parser above.
-        if (node.hasNodes()) {        
+        if (node.hasNodes()) {
             buf.append('>');
             int nChildNodes = node.getNNodes();
             for (int n = 0; n < nChildNodes; n++) {

@@ -10,7 +10,7 @@ import java.util.List;
  *  @since 0.9.4
  */
 public interface Updater {
-    
+
     /**
      *  Start a download and return a handle to the download task.
      *  Should not block.

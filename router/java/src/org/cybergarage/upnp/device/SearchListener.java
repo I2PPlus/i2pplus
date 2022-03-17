@@ -10,7 +10,7 @@
 *
 *	11/18/02b
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.device;

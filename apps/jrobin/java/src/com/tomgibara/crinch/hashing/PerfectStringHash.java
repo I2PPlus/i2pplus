@@ -1,6 +1,6 @@
 /*
  * Copyright 2010 Tom Gibara
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package com.tomgibara.crinch.hashing;
 
@@ -28,7 +28,7 @@ import java.util.Comparator;
  * array. A negative has value will typically be returned for a string that is
  * not in the array.
  * </p>
- * 
+ *
  * <p>
  * However, the supplied array is <em>not</em> retained. This means that the
  * implementation cannot necessarily confirm that a string is not in the
@@ -37,21 +37,21 @@ import java.util.Comparator;
  * circumstances will a hash value be returned that is greater than or equal to
  * <em>n</em>.
  * </p>
- * 
+ *
  * <p>
  * <strong>IMPORTANT NOTE:</strong> The array of strings supplied to the
  * constructor will be mutated: it is re-ordered so that
  * <code>hash(a[i]) == i</code>. Application code must generally use this
  * information to map hash values back onto the appropriate string value.
  * </p>
- * 
+ *
  * <p>
  * <strong>NOTE:</strong> Good performance of this algorithm is predicated on
  * string hash values being cached by the <code>String</code> class. Experience
  * indicates that is is a good assumption.
  * </p>
- * 
- * 
+ *
+ *
  * @author Tom Gibara
  */
 
@@ -82,7 +82,7 @@ public class PerfectStringHash implements Hash<String> {
     /**
      * Builds a (typically v. small) decision tree for distinguishing strings
      * that share the same hash value.
-     * 
+     *
      * @param values
      *            the string values to distinguish
      * @param start
@@ -178,7 +178,7 @@ public class PerfectStringHash implements Hash<String> {
 
     /**
      * Constructs a minimal perfect string hashing over the supplied strings.
-     * 
+     *
      * @param values
      *            an array of unique non-null strings that will be reordered
      *            such that <code>hash(values[i]) == i</code>.
@@ -278,7 +278,7 @@ public class PerfectStringHash implements Hash<String> {
 
     /**
      * Generates a hashcode for the supplied string.
-     * 
+     *
      * @param value
      *            any string, not null
      * @return a minimal hashcode for the supplied string, or -1

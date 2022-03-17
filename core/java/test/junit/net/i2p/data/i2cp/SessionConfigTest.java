@@ -1,9 +1,9 @@
 package net.i2p.data.i2cp;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -35,7 +35,7 @@ public class SessionConfigTest extends StructureTest {
         options.setProperty("routerSecret", "blah");
         cfg.setOptions(options);
         cfg.signSessionConfig((SigningPrivateKey)(new SigningPrivateKeyTest()).createDataStructure());
-        return cfg; 
+        return cfg;
     }
     public DataStructure createStructureToRead() { return new SessionConfig(); }
 }

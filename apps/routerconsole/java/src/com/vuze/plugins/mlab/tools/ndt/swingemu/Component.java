@@ -1,7 +1,7 @@
 /*
  * Created on May 20, 2010
  * Created by Paul Gardner
- * 
+ *
  * Copyright 2010 Vuze, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,125 +23,125 @@
 
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
-public class 
-Component 
+public class
+Component
 {
 	public void
 	setTitle(
 		String	s )
 	{
 	}
-	
+
 	public void
 	add(
 		Component c )
-	{	
+	{
 	}
-	
+
 	public void
 	add( String str, Component c )
-	{	
+	{
 	}
-	
+
 	public void
 	add( int i, Component c )
-	{	
+	{
 	}
-	
+
 	public void
 	setEnabled(
 		boolean	b )
 	{
 	}
-	
+
 	public void
 	setVisible(
 		boolean b )
 	{
 	}
-	
+
 	public void
 	setEditable(
 		boolean	b )
-	{	
+	{
 	}
-	
+
 	public void
 	setResizable(
 		boolean	b )
-	{	
+	{
 	}
-	
+
 	public void
 	setSize(
 		int	i, int j )
 	{
 	}
-	
+
 	public void
 	setPreferredSize(
 		Dimension d )
-	{	
+	{
 	}
-	
+
 	public void
 	setBorder(
 		Component	c )
 	{
 	}
-	
+
 	public void
 	setLayout(
 		BorderLayout l )
 	{
 	}
-	
+
 	public void
 	setLayout(
 		BoxLayout l )
 	{
 	}
-	
+
 	public void
 	setCursor(
 		Cursor c )
-	{	
+	{
 	}
-	
+
 	public void
 	setForeground(
 		Color	c )
 	{
 	}
-	
+
 	public void
 	pack()
 	{
-		
+
 	}
 	public void
 	repaint()
 	{
-		
+
 	}
-	
+
 	public Toolkit
 	getToolkit()
 	{
 		return( new Toolkit());
 	}
-	
+
 	public void
 	addMouseListener(
 		MouseAdapter	l )
 	{
-		
+
 	}
-	
+
 	public void
 	addWindowListener(
 		WindowAdapter l )
 	{
-		
+
 	}
 }

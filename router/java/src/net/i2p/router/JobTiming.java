@@ -21,13 +21,13 @@ public class JobTiming implements Clock.ClockUpdateListener {
     private volatile long _actualStart;
     private volatile long _actualEnd;
     private final RouterContext _context;
-    
+
     public JobTiming(RouterContext context) {
         _context = context;
         _start = context.clock().now();
         //context.clock().addUpdateListener(this);
     }
-    
+
     /**
      * # of milliseconds after the epoch to start the job
      *
@@ -38,8 +38,8 @@ public class JobTiming implements Clock.ClockUpdateListener {
      * WARNING - this does not force a resort of the job queue any more...
      * ALWAYS call JobImpl.requeue() instead if job is already queued.
      */
-    public void setStartAfter(long startTime) { 
-        _start = startTime; 
+    public void setStartAfter(long startTime) {
+        _start = startTime;
         // sure, this current job object may not already be on the queue, so
         // telling the queue of the update may be irrelevent...
         // but...
@@ -47,7 +47,7 @@ public class JobTiming implements Clock.ClockUpdateListener {
         // who cares?   this helps in the case where it is on the queue
         //_context.jobQueue().timingUpdated();
     }
-    
+
     /**
      * # of milliseconds after the epoch the job actually started
      *
@@ -73,7 +73,7 @@ public class JobTiming implements Clock.ClockUpdateListener {
         _actualEnd = _context.clock().now();
         //_context.clock().removeUpdateListener(this);
     }
-    
+
     public void offsetChanged(long delta) {
         if (_start != 0)
             _start += delta;

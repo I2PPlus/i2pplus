@@ -24,7 +24,7 @@ import java.util.Locale;
  * Note that as per <a href="https://tools.ietf.org/html/rfc2181#section-11">RFC 2181 § 11</a> DNS labels may contain
  * any byte.
  * </p>
- * 
+ *
  * @see <a href="https://tools.ietf.org/html/rfc5890#section-2.2">RFC 5890 § 2.2. DNS-Related Terminology</a>
  * @author Florian Schmaus
  *
@@ -173,7 +173,7 @@ public abstract class DnsLabel implements CharSequence, Comparable<DnsLabel> {
     public static class LabelToLongException extends IllegalArgumentException {
 
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

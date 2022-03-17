@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -12,9 +12,9 @@ package net.i2p.data;
 import net.i2p.I2PAppContext;
 
 /**
- * Component to manage the munging of hashes into routing keys - given a hash, 
+ * Component to manage the munging of hashes into routing keys - given a hash,
  * perform some consistent transformation against it and return the result.
- * This transformation is fed by the current "mod data".  
+ * This transformation is fed by the current "mod data".
  *
  * As of 0.9.16, this is essentially just an interface.
  * Implementation moved to net.i2p.data.router.RouterKeyGenerator.

@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -28,13 +28,13 @@ import java.io.OutputStream;
  * Beware of other avenues of corruption, such as directly modifying data
  * stored in byte[] objects.
  *</p>
- * 
+ *
  * @author jrandom
  */
 public interface DataStructure /* extends Serializable */ {
 
     /**
-     * Load up the current object with data from the given stream.  Data loaded 
+     * Load up the current object with data from the given stream.  Data loaded
      * this way must match the I2P data structure specification.
      *
      * Warning - many classes will throw IllegalStateException if data is already set.
@@ -55,7 +55,7 @@ public interface DataStructure /* extends Serializable */ {
      */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException;
 
-    /** 
+    /**
      * render the structure into modified base 64 notation
      * @return null on error
      */

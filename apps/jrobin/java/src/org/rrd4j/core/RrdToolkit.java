@@ -322,7 +322,7 @@ public class RrdToolkit {
 
     private static void copyFile(String sourcePath, String destPath, boolean saveBackup)
             throws IOException {
-        
+
         Path source = Paths.get(sourcePath);
         Path destination = Paths.get(destPath);
         if (saveBackup) {

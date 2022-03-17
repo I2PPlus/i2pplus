@@ -2,7 +2,7 @@ package org.rrd4j.core;
 
 /**
  * An exception indicating a corrupted RRD.
- * 
+ *
  * @since 3.4
  */
 public class InvalidRrdException extends RrdException {

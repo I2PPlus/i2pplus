@@ -371,7 +371,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             long tsA = DataHelper.fromLong(options, 8, 4);
             long now = _context.clock().now();
             // Will be adjusted for RTT in verifyInbound()
-            _peerSkew = (now - (tsA * 1000) + 500) / 1000; 
+            _peerSkew = (now - (tsA * 1000) + 500) / 1000;
             if (_peerSkew > MAX_SKEW || _peerSkew < 0 - MAX_SKEW) {
                 long diff = 1000*Math.abs(_peerSkew);
                 _context.statManager().addRateData("ntcp.invalidInboundSkew", diff);

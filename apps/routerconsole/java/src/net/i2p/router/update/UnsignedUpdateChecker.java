@@ -25,7 +25,7 @@ class UnsignedUpdateChecker extends UpdateRunner {
     private boolean _unsignedUpdateAvailable;
 
     public UnsignedUpdateChecker(RouterContext ctx, ConsoleUpdateManager mgr,
-                                 List<URI> uris, long lastUpdateTime) { 
+                                 List<URI> uris, long lastUpdateTime) {
         super(ctx, mgr, UpdateType.ROUTER_UNSIGNED, uris);
         _ms = lastUpdateTime;
     }

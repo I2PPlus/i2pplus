@@ -60,7 +60,7 @@ public class VMCommSystem extends CommSystemFacade {
      */
     @Override
     public X25519KeyFactory getXDHFactory() { return _xdhThread; }
-    
+
     public int countActivePeers() { return _commSystemFacades.size() - 1; }
 
     public int countActiveSendPeers()  { return _commSystemFacades.size() - 1; }

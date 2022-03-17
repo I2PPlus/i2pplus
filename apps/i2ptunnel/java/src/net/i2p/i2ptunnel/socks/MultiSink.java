@@ -21,7 +21,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
     public MultiSink(Map<Integer, S> cache) {
         this.cache = cache;
     }
-    
+
     /** Don't use this - put sinks in the cache */
     public void setSink(Sink sink) {}
 

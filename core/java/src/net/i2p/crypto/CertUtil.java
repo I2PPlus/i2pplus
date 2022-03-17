@@ -52,7 +52,7 @@ import net.i2p.util.SystemVersion;
  *  @since 0.9.9
  */
 public final class CertUtil {
-        
+
     private static final String CERT_DIR = "certificates";
     private static final String REVOCATION_DIR = "revocations";
     private static final int LINE_LENGTH = 64;
@@ -648,7 +648,7 @@ public final class CertUtil {
                                 continue;
                             }
                             long exp = cert.getNotAfter().getTime() - now;
-                            if (exp < CHECK) {                            
+                            if (exp < CHECK) {
                                 System.out.println("**** WARNING: Cert " + f + " expires in " + DataHelper.formatDuration(exp));
                                 soon++;
                             } else {

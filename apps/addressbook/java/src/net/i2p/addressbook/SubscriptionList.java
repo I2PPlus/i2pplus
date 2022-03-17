@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2004 Ragnarok
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,9 +31,9 @@ import java.util.Map;
 
 /**
  * A list of Subscriptions loaded from a file.
- * 
+ *
  * @author Ragnarok
- *  
+ *
  */
 class SubscriptionList implements Iterable<AddressBook> {
 
@@ -49,7 +49,7 @@ class SubscriptionList implements Iterable<AddressBook> {
      * Construct a SubscriptionList using the urls from locationsFile and, if
      * available, the etags and last-modified headers loaded from etagsFile and
      * lastModifiedFile.
-     * 
+     *
      * @param locationsFile
      *            A file containing one url on each line.
      * @param etagsFile
@@ -64,7 +64,7 @@ class SubscriptionList implements Iterable<AddressBook> {
      * @param proxyPort proxy port number
      */
     public SubscriptionList(File locationsFile, File etagsFile,
-            File lastModifiedFile, File lastFetchedFile, long delay, List<String> defaultSubs, String proxyHost, 
+            File lastModifiedFile, File lastFetchedFile, long delay, List<String> defaultSubs, String proxyHost,
             int proxyPort) {
         this.subscriptions = new ArrayList<Subscription>(4);
         this.etagsFile = etagsFile;
@@ -76,7 +76,7 @@ class SubscriptionList implements Iterable<AddressBook> {
         Map<String, String> etags;
         Map<String, String> lastModified;
         Map<String, String> lastFetched;
-        List<String> locations = ConfigParser.parseSubscriptions(locationsFile, 
+        List<String> locations = ConfigParser.parseSubscriptions(locationsFile,
                 defaultSubs);
         try {
             etags = ConfigParser.parse(etagsFile);
@@ -99,10 +99,10 @@ class SubscriptionList implements Iterable<AddressBook> {
                                    lastFetched.get(location)));
         }
     }
-    
+
     /**
      * Testing only.
-     * 
+     *
      * @param hoststxt path to a local file used as the test 'subscription' input
      * @since 0.9.26
      */
@@ -117,15 +117,15 @@ class SubscriptionList implements Iterable<AddressBook> {
         Subscription sub = new Subscription("file:" + hoststxt, null, null, null);
         this.subscriptions = Collections.singletonList(sub);
     }
-    
+
     /**
      * Return an iterator over the AddressBooks represented by the Subscriptions
      * in this SubscriptionList.
-     * 
+     *
      * @return A SubscriptionIterator.
      */
     public SubscriptionIterator iterator() {
-        return new SubscriptionIterator(this.subscriptions, this.delay, this.proxyHost, 
+        return new SubscriptionIterator(this.subscriptions, this.delay, this.proxyHost,
                 this.proxyPort);
     }
 

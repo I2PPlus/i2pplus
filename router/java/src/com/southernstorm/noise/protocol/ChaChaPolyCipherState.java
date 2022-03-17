@@ -45,7 +45,7 @@ public class ChaChaPolyCipherState implements CipherState {
 	private byte[] initialKey;
 
 	private static final boolean DEBUG = false;
-	
+
 	/**
 	 * Constructs a new cipher state for the "ChaChaPoly" algorithm.
 	 */

@@ -1,8 +1,8 @@
 /*
  * Created on Nov 23, 2004
- * 
+ *
  *  This file is part of susimail project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2004-2005  <susi23@mail.i2p>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  *  $Revision: 1.2 $
  */
 package i2p.susi.webmail;
@@ -59,7 +59,7 @@ import net.i2p.util.Log;
  * @author user
  */
 class MailCache {
-	
+
 	public enum FetchMode {
 		HEADER, ALL, CACHE_ONLY
 	}
@@ -74,7 +74,7 @@ class MailCache {
 	private boolean _isLoaded;
 	private final boolean _isDrafts;
 	private final Log _log;
-	
+
 	/** Includes header, headers are generally 1KB to 1.5 KB,
 	 *  and bodies will compress well.
          */
@@ -93,7 +93,7 @@ class MailCache {
 		mails = new HashMap<String, Mail>();
 		disk = new PersistentMailCache(ctx, host, port, user, pass, folderName);
 		_context = ctx;
-		Folder<String> folder = new Folder<String>();	
+		Folder<String> folder = new Folder<String>();
 		// setElements() sorts, so configure the sorting first
 		//sessionObject.folder.addSorter( SORT_ID, new IDSorter( sessionObject.mailCache ) );
 		if (folderName.equals(WebMail.DIR_DRAFTS) || folderName.equals(WebMail.DIR_SENT))
@@ -242,7 +242,7 @@ class MailCache {
 	/**
 	 * Threaded. Returns immediately.
 	 * This will not access the mailbox. Mailbox need not be ready.
-	 * 
+	 *
 	 * @return success false if in progress already and nml will NOT be called back, true if nml will be called back
 	 * @since 0.9.13
 	 */
@@ -290,7 +290,7 @@ class MailCache {
 	/**
 	 * Blocking. Only call once!
 	 * This will not access the mailbox. Mailbox need not be ready.
-	 * 
+	 *
 	 * @since 0.9.13
 	 */
 	private void blockingLoadFromDisk() {
@@ -307,10 +307,10 @@ class MailCache {
 	/**
 	 * The ones known locally, which will include any known on the server, if connected.
 	 * Will not include any marked for deletion.
-	 * 
+	 *
 	 * This will not access the mailbox. Mailbox need not be ready.
 	 * loadFromDisk() must have been called first.
-	 * 
+	 *
 	 * @return non-null
 	 * @since 0.9.13
 	 */
@@ -329,7 +329,7 @@ class MailCache {
 	 * Fetch any needed data from pop3 server, unless mode is CACHE_ONLY,
 	 * or this isn't the Inbox.
 	 * Blocking unless mode is CACHE_ONLY.
-	 * 
+	 *
 	 * @param uidl message id to get
 	 * @param mode CACHE_ONLY to not pull from pop server
 	 * @return An e-mail or null
@@ -365,7 +365,7 @@ class MailCache {
 		long sz = mail.getSize();
 		if (mode == FetchMode.HEADER && sz > 0 && sz <= FETCH_ALL_SIZE)
 			mode = FetchMode.ALL;
-			
+
 		if (mode == FetchMode.HEADER) {
 			if (!mail.hasHeader()) {
 				Buffer buf = mailbox.getHeader(uidl);
@@ -396,9 +396,9 @@ class MailCache {
 	 * After this, call getUIDLs() to get all known mail UIDLs.
 	 * MUST already be connected, otherwise returns false.
 	 * Call only on inbox!
-	 * 
+	 *
 	 * Blocking.
-	 * 
+	 *
 	 * @param mode HEADER or ALL only
 	 * @return true if any were fetched
 	 * @since 0.9.13
@@ -412,7 +412,7 @@ class MailCache {
 			return false;
 		}
 		boolean hOnly = mode == FetchMode.HEADER;
-		
+
 		Collection<String> popKnown = mailbox.getUIDLs();
 		if (popKnown == null)
 			return false;
@@ -542,7 +542,7 @@ class MailCache {
 	 * Send delete requests to POP3 then quit and reconnect.
 	 * No success/failure indication is returned.
 	 * Does not delete from folder.
-	 * 
+	 *
 	 * @since 0.9.13
 	 */
 	public void delete(String uidl) {
@@ -554,7 +554,7 @@ class MailCache {
 	 * Send delete requests to POP3 then quit and reconnect.
 	 * No success/failure indication is returned.
 	 * Does not delete from folder.
-	 * 
+	 *
 	 * @since 0.9.13
 	 */
 	public void delete(Collection<String> uidls) {

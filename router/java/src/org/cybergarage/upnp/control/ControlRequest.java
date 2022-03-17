@@ -18,7 +18,7 @@
 *	09/02/03
 *		- Giordano Sassaroli <sassarol@cefriel.it> / Suzan Foster
 *		- Problem : NullpointerException thrown for devices whose description use absolute urls
-*		- Error : the presence of a base url is not mandatory, the API code makes the assumption that control and event subscription urls are relative. 
+*		- Error : the presence of a base url is not mandatory, the API code makes the assumption that control and event subscription urls are relative.
 *		  If the baseUrl is not present, the request host and port should be extracted from the control/subscription url
 *		- Description: The method setRequestHost/setService should be changed as follows
 *	02/17/04
@@ -26,11 +26,11 @@
 *		- Fixed to set a URLBase from the SSDP header when the URLBase of the description is null.
 *	02/18/04
 *		- Andre <andre@antiheld.net>
-*		- The xml nodes controlUrl and eventSubUrl can contain absolut urls, but these absolut urls may have 
-*		  different ports than the base url! (so seen on my SMC 7004ABR Barricade Router, where xml files are 
-*		  requested from port 80, but soap requests are made on port 5440). Therefore whenever a request is made, 
-*		  the port specified by the controlUrl or eventSubUrl node should be used, else no response will be returned 
-*		  (oddly, there was a response returned even on port 80, but with empty body tags. but the correct response 
+*		- The xml nodes controlUrl and eventSubUrl can contain absolut urls, but these absolut urls may have
+*		  different ports than the base url! (so seen on my SMC 7004ABR Barricade Router, where xml files are
+*		  requested from port 80, but soap requests are made on port 5440). Therefore whenever a request is made,
+*		  the port specified by the controlUrl or eventSubUrl node should be used, else no response will be returned
+*		  (oddly, there was a response returned even on port 80, but with empty body tags. but the correct response
 *		  finally came from port 5440).
 *		- Fixed to get the port from the control url when it is absolute.
 *	03/20/04
@@ -56,7 +56,7 @@ public class ControlRequest extends SOAPRequest
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public ControlRequest()
 	{
 	}
@@ -74,7 +74,7 @@ public class ControlRequest extends SOAPRequest
 	{
 		return isSOAPAction(Control.QUERY_SOAPACTION);
 	}
-	
+
 	public boolean isActionControl()
 	{
 		return !isQueryControl();
@@ -111,7 +111,7 @@ public class ControlRequest extends SOAPRequest
 		String postURL = "";
 		if (HTTP.isAbsoluteURL(ctrlURL) == true)
 			postURL = ctrlURL;
-		
+
 		if (postURL == null || postURL.length() <= 0)
 			postURL = service.getRootDevice().getURLBase();
 
@@ -124,13 +124,13 @@ public class ControlRequest extends SOAPRequest
 			boolean preferIPv6 = WAN_IPV6_CONNECTION.equals(type);
 			postURL = service.getRootDevice().getLocation(preferIPv6);
 		}
-		
+
 		String reqHost = HTTP.getHost(postURL);
 		int reqPort = HTTP.getPort(postURL);
-		
+
 		setHost(reqHost, reqPort);
 		setRequestHost(reqHost);
 		setRequestPort(reqPort);
 	}
-	
+
 }

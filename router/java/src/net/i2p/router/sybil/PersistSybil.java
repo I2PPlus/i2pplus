@@ -101,7 +101,7 @@ public class PersistSybil {
         for (File file : files) {
             try {
                 String name = file.getName();
-                long d = Long.parseLong(name.substring(PFX.length(), name.length() - SFX.length())); 
+                long d = Long.parseLong(name.substring(PFX.length(), name.length() - SFX.length()));
                 rv.add(Long.valueOf(d));
             } catch (NumberFormatException nfe) {}
         }
@@ -213,7 +213,7 @@ public class PersistSybil {
         for (File file : files) {
             try {
                 String name = file.getName();
-                long d = Long.parseLong(name.substring(PFX.length(), name.length() - SFX.length())); 
+                long d = Long.parseLong(name.substring(PFX.length(), name.length() - SFX.length()));
                 if (d < cutoff) {
                     if (file.delete())
                         deleted++;

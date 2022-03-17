@@ -73,7 +73,7 @@ public class SimpleTimer {
         }
         context.addShutdownTask(new Shutdown());
     }
-    
+
     /**
      * @since 0.8.8
      */
@@ -100,28 +100,28 @@ public class SimpleTimer {
     }
 
     /**
-     * 
+     *
      * @param event
      * @param timeoutMs
      */
     public void reschedule(TimedEvent event, long timeoutMs) {
         addEvent(event, timeoutMs, false);
     }
-    
+
     /**
      * Queue up the given event to be fired no sooner than timeoutMs from now.
      * However, if this event is already scheduled, the event will be scheduled
-     * for the earlier of the two timeouts, which may be before this stated 
+     * for the earlier of the two timeouts, which may be before this stated
      * timeout.  If this is not the desired behavior, call removeEvent first.
      *
      * @param event
-     * @param timeoutMs 
+     * @param timeoutMs
      */
     public void addEvent(TimedEvent event, long timeoutMs) { addEvent(event, timeoutMs, true); }
     /**
-     * @param event 
-     * @param timeoutMs 
-     * @param useEarliestTime if its already scheduled, use the earlier of the 
+     * @param event
+     * @param timeoutMs
+     * @param useEarliestTime if its already scheduled, use the earlier of the
      *                        two timeouts, else use the later
      */
     public void addEvent(TimedEvent event, long timeoutMs, boolean useEarliestTime) {
@@ -154,7 +154,7 @@ public class SimpleTimer {
                 time = Long.valueOf(time.longValue() + 1);
             _events.put(time, event);
             _eventTimes.put(event, time);
-            
+
             if ( (_events.size() != _eventTimes.size()) ) {
                 _log.error("Skewed events: " + _events.size() + " for " + _eventTimes.size());
                 for (TimedEvent evt : _eventTimes.keySet()) {
@@ -165,7 +165,7 @@ public class SimpleTimer {
                     }
                 }
             }
-            
+
             totalEvents = _events.size();
             _events.notifyAll();
         }
@@ -179,9 +179,9 @@ public class SimpleTimer {
             if (_log.shouldWarn())
                 _log.warn("timer contention: took " + timeToAdd + "ms to add a job with " + totalEvents + " queued");
         }
-            
+
     }
-    
+
     public boolean removeEvent(TimedEvent evt) {
         if (evt == null) return false;
         synchronized (_events) {
@@ -191,19 +191,19 @@ public class SimpleTimer {
             return null != when;
         }
     }
-    
+
     /**
      * Simple interface for events to be queued up and notified on expiration
      */
     public interface TimedEvent {
-        /** 
+        /**
          * the time requested has been reached (this call should NOT block,
          * otherwise the whole SimpleTimer gets backed up)
          *
          */
         public void timeReached();
     }
-    
+
     private long _occurredTime;
     private long _occurredEventCount;
     // not used
@@ -228,17 +228,17 @@ public class SimpleTimer {
                             Long when = _events.firstKey();
                             if (when.longValue() <= now) {
                                 TimedEvent evt = _events.remove(when);
-                                if (evt != null) {                            
+                                if (evt != null) {
                                     _eventTimes.remove(evt);
                                     eventsToFire.add(evt);
-                                } 
+                                }
                             } else {
                                 nextEventDelay = when.longValue() - now;
                                 nextEvent = _events.get(when);
                                 break;
                             }
                         }
-                        if (eventsToFire.isEmpty()) { 
+                        if (eventsToFire.isEmpty()) {
                             if (nextEventDelay != -1) {
                                 if (_log.shouldDebug())
                                     _log.debug("Next event in " + nextEventDelay + ": " + nextEvent);
@@ -260,12 +260,12 @@ public class SimpleTimer {
                         t.printStackTrace();
                     }
                 }
-                
+
                 long now = System.currentTimeMillis();
                 now = now - (now % 1000);
 
                 synchronized (_readyEvents) {
-                    for (int i = 0; i < eventsToFire.size(); i++) 
+                    for (int i = 0; i < eventsToFire.size(); i++)
                         _readyEvents.add(eventsToFire.get(i));
                     _readyEvents.notifyAll();
                 }

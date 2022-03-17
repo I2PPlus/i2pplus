@@ -669,7 +669,7 @@ public class RrdDef {
      * with {@link org.rrd4j.core.RrdDefTemplate} class.</p>
      * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous RRD4J's versions, using
      * a path, instead of an URI.</p>
-     * 
+     *
      *
      * @param compatible Compatible with previous versions.
      * @return XML formatted string representing this RrdDef object

@@ -412,14 +412,14 @@ public class LookupService {
     public List<String> getAllCountryNames() {
         return Arrays.asList(Arrays.copyOf(countryName, countryName.length));
     }
-    
+
     /**
      * @return The list of all known country codes
      */
     public List<String> getAllCountryCodes() {
         return Arrays.asList(Arrays.copyOf(countryCode, countryCode.length));
     }
-    
+
     /**
      * Returns the country the IP address is in.
      *

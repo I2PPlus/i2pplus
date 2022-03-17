@@ -94,7 +94,7 @@ public class RRSIG extends Data {
                 signature);
     }
 
-    private  RRSIG(TYPE typeCovered, SignatureAlgorithm algorithm, byte algorithmByte, byte labels, long originalTtl, Date signatureExpiration, 
+    private  RRSIG(TYPE typeCovered, SignatureAlgorithm algorithm, byte algorithmByte, byte labels, long originalTtl, Date signatureExpiration,
             Date signatureInception, int keyTag, DnsName signerName, byte[] signature) {
         this.typeCovered = typeCovered;
 
@@ -111,12 +111,12 @@ public class RRSIG extends Data {
         this.signature = signature;
     }
 
-    public RRSIG(TYPE typeCovered, int algorithm, byte labels, long originalTtl, Date signatureExpiration, 
+    public RRSIG(TYPE typeCovered, int algorithm, byte labels, long originalTtl, Date signatureExpiration,
             Date signatureInception, int keyTag, DnsName signerName, byte[] signature) {
             this(typeCovered, null, (byte) algorithm, labels, originalTtl, signatureExpiration, signatureInception, keyTag, signerName, signature);
     }
 
-    public RRSIG(TYPE typeCovered, int algorithm, byte labels, long originalTtl, Date signatureExpiration, 
+    public RRSIG(TYPE typeCovered, int algorithm, byte labels, long originalTtl, Date signatureExpiration,
             Date signatureInception, int keyTag, String signerName, byte[] signature) {
             this(typeCovered, null, (byte) algorithm, labels, originalTtl, signatureExpiration, signatureInception, keyTag, DnsName.from(signerName), signature);
     }

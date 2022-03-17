@@ -15,9 +15,9 @@ import junit.framework.TestCase;
 abstract class StreamingITBase extends TestCase {
 
     // TODO: this may need to start a full router
-    
+
     protected abstract Properties getProperties();
-    
+
     protected I2PSession createSession() throws Exception {
         I2PClient client = I2PClientFactory.createClient();
         ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
@@ -28,9 +28,9 @@ abstract class StreamingITBase extends TestCase {
         sess.connect();
         return sess;
     }
-    
+
     protected abstract Runnable getClient(I2PAppContext ctx, I2PSession session);
-    
+
     protected final Thread runClient(I2PAppContext ctx, I2PSession session) {
         Thread t = new Thread(getClient(ctx,session));
         t.setName("client");
@@ -38,22 +38,22 @@ abstract class StreamingITBase extends TestCase {
         t.start();
         return t;
     }
-    
+
     protected abstract class RunnerBase implements Runnable {
-        
+
         protected final I2PAppContext _context;
         protected final I2PSession _session;
         protected final Log _log;
-        
+
         protected RunnerBase(I2PAppContext ctx, I2PSession session) {
             _context = ctx;
             _session = session;
             _log = ctx.logManager().getLog(this.getClass());
         }
     }
-    
+
     protected abstract Runnable getServer(I2PAppContext ctx, I2PSession session);
-   
+
     protected final Thread runServer(I2PAppContext ctx, I2PSession session) {
         Thread t = new Thread(getServer(ctx,session));
         t.setName("servert");

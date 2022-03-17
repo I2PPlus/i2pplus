@@ -1,7 +1,7 @@
 package net.i2p.i2ptunnel.access;
 
 /**
- * Definition of a Threshold.  
+ * Definition of a Threshold.
  *
  * A Threshold is defined by a number of connections over a period of seconds
  *
@@ -29,7 +29,7 @@ class Threshold {
     int getConnections() {
         return connections;
     }
-    
+
     int getSeconds() {
         return seconds;
     }

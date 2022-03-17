@@ -10,13 +10,13 @@ import net.i2p.util.Log;
 
 public class TestHello {
     private static Log _log = new Log(TestHello.class);
-    
+
     private static void runTest(String samHost, int samPort) {
         testValidVersion(samHost, samPort);
         testInvalidVersion(samHost, samPort);
         testCorruptLine(samHost, samPort);
     }
-    
+
     private static void testValidVersion(String host, int port) {
         _log.info("\n\nTesting valid version (should come back with an OK)\n\n\n");
         try {
@@ -31,7 +31,7 @@ public class TestHello {
             _log.error("Error testing for valid version", e);
         }
     }
-    
+
     private static void testInvalidVersion(String host, int port) {
         _log.info("\n\nTesting invalid version (should come back with an error)\n\n\n");
         try {
@@ -46,7 +46,7 @@ public class TestHello {
             _log.error("Error testing for valid version", e);
         }
     }
-        
+
     private static void testCorruptLine(String host, int port) {
         _log.info("\n\nTesting corrupt line (should come back with an error)\n\n\n");
         try {
@@ -62,7 +62,7 @@ public class TestHello {
         }
     }
 
-    
+
     public static void main(String args[]) {
         try {
             TestUtil.startupBridge(6000);

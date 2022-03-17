@@ -12,7 +12,7 @@
 *		- first revision.
 *	05/09/05
 *		- Changed getActionName() to return when the delimiter is not found.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.control;
@@ -28,7 +28,7 @@ public class ActionRequest extends ControlRequest
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public ActionRequest()
 	{
 	}
@@ -41,7 +41,7 @@ public class ActionRequest extends ControlRequest
 	////////////////////////////////////////////////
 	//	Action
 	////////////////////////////////////////////////
-	
+
 	public Node getActionNode()
 	{
 		Node bodyNode = getBodyNode();
@@ -84,11 +84,11 @@ public class ActionRequest extends ControlRequest
 	////////////////////////////////////////////////
 	//	setRequest
 	////////////////////////////////////////////////
-	
+
 	public void setRequest(Action action, ArgumentList argList)
 	{
-		Service service = action.getService();		
-		
+		Service service = action.getService();
+
 		setRequestHost(service);
 
 		setEnvelopeNode(SOAP.createEnvelopeBodyNode());
@@ -115,7 +115,7 @@ public class ActionRequest extends ControlRequest
 	{
 		String actionName = action.getName();
 		String serviceType = service.getServiceType();
-		
+
 		Node actionNode = new Node();
 		actionNode.setName(Control.NS, actionName);
 		actionNode.setNameSpace(Control.NS, serviceType);
@@ -128,7 +128,7 @@ public class ActionRequest extends ControlRequest
 			argNode.setValue(arg.getValue());
 			actionNode.addNode(argNode);
 		}
-		
+
 		return actionNode;
 	}
 

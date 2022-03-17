@@ -8,9 +8,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Hash;
 
-/** 
+/**
  * Defines a wrapper for SHA-256 operation.
- * 
+ *
  * As of release 0.8.7, uses java.security.MessageDigest by default.
  * As of release 0.9.25, uses only MessageDigest.
  * GNU-Crypto gnu.crypto.hash.Sha256Standalone
@@ -25,11 +25,11 @@ public final class SHA256Generator {
     public SHA256Generator(I2PAppContext context) {
         _digests = new LinkedBlockingQueue<MessageDigest>(32);
     }
-    
+
     public static final SHA256Generator getInstance() {
         return I2PAppContext.getGlobalContext().sha();
     }
-    
+
     /**
      * Calculate the SHA-256 hash of the source and cache the result.
      * @param source what to hash
@@ -50,7 +50,7 @@ public final class SHA256Generator {
         release(digest);
         return Hash.create(rv);
     }
-    
+
     /**
      * Use this if you only need the data, not a Hash object.
      * Does not cache.
@@ -67,7 +67,7 @@ public final class SHA256Generator {
             release(digest);
         }
     }
-    
+
     private MessageDigest acquire() {
         MessageDigest rv = _digests.poll();
         if (rv != null)
@@ -76,11 +76,11 @@ public final class SHA256Generator {
             rv = getDigestInstance();
         return rv;
     }
-    
+
     private void release(MessageDigest digest) {
         _digests.offer(digest);
     }
-    
+
     /**
      *  Return a new MessageDigest from the system libs.
      *  @since 0.8.7, public since 0.8.8 for FortunaStandalone

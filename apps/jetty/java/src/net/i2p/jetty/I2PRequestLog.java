@@ -12,7 +12,7 @@
 //limitations under the License.
 //========================================================================
 
-package net.i2p.jetty; 
+package net.i2p.jetty;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -35,7 +35,7 @@ import org.eclipse.jetty.util.Utf8StringBuilder;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.log.Log;
 
-/** 
+/**
  * This {@link RequestLog} implementation outputs logs in the pseudo-standard NCSA common log format.
  * Configuration options allow a choice between the standard Common Log Format (as used in the 3 log format)
  * and the Combined Log Format (single log format).
@@ -57,7 +57,7 @@ import org.eclipse.jetty.util.log.Log;
  *
  * @author Greg Wilkins
  * @author Nigel Canonizado
- * 
+ *
  */
 public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
 {
@@ -76,7 +76,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     private boolean _logCookies = false;
     private boolean _logServer = false;
     private boolean _b64;
-    
+
     private transient OutputStream _out;
     private transient OutputStream _fileOut;
     private transient DateCache _logDateCache;
@@ -85,14 +85,14 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     private transient ArrayList<Utf8StringBuilder> _buffers;
     private transient char[] _copy;
 
-    
+
     public I2PRequestLog()
     {
         _extended = true;
         _append = true;
         _retainDays = 31;
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * @param filename The filename for the request log. This may be in the format expected by {@link RolloverFileOutputStream}
@@ -104,34 +104,34 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
         _retainDays = 31;
         setFilename(filename);
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * @param filename The filename for the request log. This may be in the format expected by {@link RolloverFileOutputStream}
      */
     public void setFilename(String filename)
     {
-        if (filename != null) 
+        if (filename != null)
         {
             filename = filename.trim();
             if (filename.length() == 0)
                 filename = null;
-        }    
+        }
         _filename = filename;
     }
-    
-    public String getFilename() 
+
+    public String getFilename()
     {
         return _filename;
     }
-    
+
     public String getDatedFilename()
     {
         if (_fileOut instanceof RolloverFileOutputStream)
             return ((RolloverFileOutputStream)_fileOut).getDatedFilename();
         return null;
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * @param format Format for the timestamps in the log file.  If not set,
@@ -141,77 +141,77 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     {
         _logDateFormat = format;
     }
-    
-    public String getLogDateFormat() 
+
+    public String getLogDateFormat()
     {
         return _logDateFormat;
     }
-    
+
     public void setLogLocale(Locale logLocale)
     {
         _logLocale = logLocale;
     }
-    
+
     public Locale getLogLocale()
     {
         return _logLocale;
     }
-    
-    public void setLogTimeZone(String tz) 
+
+    public void setLogTimeZone(String tz)
     {
         _logTimeZone = tz;
     }
-    
+
     public String getLogTimeZone()
     {
         return _logTimeZone;
     }
-    
+
     public void setRetainDays(int retainDays)
     {
         _retainDays = retainDays;
     }
-    
+
     public int getRetainDays()
     {
         return _retainDays;
     }
-    
+
     public void setExtended(boolean extended)
     {
         _extended = extended;
     }
-    
-    public boolean isExtended() 
+
+    public boolean isExtended()
     {
         return _extended;
     }
-    
+
     public void setAppend(boolean append)
     {
         _append = append;
     }
-    
+
     public boolean isAppend()
     {
         return _append;
     }
-    
-    public void setIgnorePaths(String[] ignorePaths) 
+
+    public void setIgnorePaths(String[] ignorePaths)
     {
         _ignorePaths = ignorePaths;
     }
-    
+
     public String[] getIgnorePaths()
     {
         return _ignorePaths;
     }
-    
-    public void setLogCookies(boolean logCookies) 
+
+    public void setLogCookies(boolean logCookies)
     {
         _logCookies = logCookies;
     }
-    
+
     public boolean getLogCookies()
     {
         return _logCookies;
@@ -226,17 +226,17 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     {
         _logServer=logServer;
     }
-    
-    public void setLogLatency(boolean logLatency) 
+
+    public void setLogLatency(boolean logLatency)
     {
         _logLatency = logLatency;
     }
-    
+
     public boolean getLogLatency()
     {
         return _logLatency;
     }
-    
+
     public void setPreferProxiedForAddress(boolean preferProxiedForAddress)
     {
         _preferProxiedForAddress = preferProxiedForAddress;
@@ -246,7 +246,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      * @param b64 true to enable base 64 logging. False for base 32 logging. Default false.
      * @since 0.9.24
      */
-    public void setB64(boolean b64) 
+    public void setB64(boolean b64)
     {
         _b64 = b64;
     }
@@ -254,14 +254,14 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     /* ------------------------------------------------------------ */
     public void log(Request request, Response response)
     {
-        if (!isStarted()) 
+        if (!isStarted())
             return;
-        
-        try 
+
+        try
         {
             if (_ignorePathMap != null && _ignorePathMap.getMatch(request.getRequestURI()) != null)
                 return;
-            
+
             if (_fileOut == null)
                 return;
 
@@ -273,7 +273,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                 u8buf = size==0?new Utf8StringBuilder(160):_buffers.remove(size-1);
                 buf = u8buf.getStringBuilder();
             }
-            
+
             synchronized(buf) // for efficiency until we can use StringBuilder
             {
                 if (_logServer)
@@ -283,7 +283,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                 }
 
                 String addr = null;
-                if (_preferProxiedForAddress) 
+                if (_preferProxiedForAddress)
                 {
                     addr = request.getHeader("X-Forwarded-For");
                 }
@@ -312,13 +312,13 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                     //buf.append(request.getTimeStampBuffer().toString());
                     // TODO SimpleDateFormat or something
                     buf.append(request.getTimeStamp());
-                    
+
                 buf.append("] \"");
                 buf.append(request.getMethod());
                 buf.append(' ');
-                
+
                 u8buf.append(request.getRequestURI());
-                
+
                 buf.append(' ');
                 buf.append(request.getProtocol());
                 buf.append("\" ");
@@ -347,7 +347,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                     buf.append(' ');
                     if (responseLength > 99999)
                         buf.append(Long.toString(responseLength));
-                    else 
+                    else
                     {
                         if (responseLength > 9999)
                             buf.append((char)('0' + ((responseLength / 10000)%10)));
@@ -361,7 +361,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                     }
                     buf.append(' ');
                 }
-                else 
+                else
                     buf.append(" - ");
 
             }
@@ -373,12 +373,12 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                     buf.append(System.getProperty("line.separator", "\n"));
                     int l=buf.length();
                     if (l>_copy.length)
-                        l=_copy.length;  
-                    buf.getChars(0,l,_copy,0); 
+                        l=_copy.length;
+                    buf.getChars(0,l,_copy,0);
                     _writer.write(_copy,0,l);
                     _writer.flush();
                     u8buf.reset();
-                    _buffers.add(u8buf); 
+                    _buffers.add(u8buf);
                 }
             }
             else
@@ -387,11 +387,11 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                 {
                     int l=buf.length();
                     if (l>_copy.length)
-                        l=_copy.length;  
-                    buf.getChars(0,l,_copy,0); 
+                        l=_copy.length;
+                    buf.getChars(0,l,_copy,0);
                     _writer.write(_copy,0,l);
                     u8buf.reset();
-                    _buffers.add(u8buf); 
+                    _buffers.add(u8buf);
 
                     // TODO do outside synchronized scope
                     if (_extended)
@@ -400,13 +400,13 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                     // TODO do outside synchronized scope
                     if (_logCookies)
                     {
-                        Cookie[] cookies = request.getCookies(); 
+                        Cookie[] cookies = request.getCookies();
                         if (cookies == null || cookies.length == 0)
                             _writer.write(" -");
                         else
                         {
                             _writer.write(" \"");
-                            for (int i = 0; i < cookies.length; i++) 
+                            for (int i = 0; i < cookies.length; i++)
                             {
                                 if (i != 0)
                                     _writer.write(';');
@@ -428,29 +428,29 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                     _writer.flush();
                 }
             }
-        } 
-        catch (IOException e) 
+        }
+        catch (IOException e)
         {
             Log.getLogger((String)null).warn(e);
         }
-        
+
     }
 
     /* ------------------------------------------------------------ */
-    protected void logExtended(Request request, 
-                               Response response, 
-                               java.io.Writer writer) throws IOException 
+    protected void logExtended(Request request,
+                               Response response,
+                               java.io.Writer writer) throws IOException
     {
         String referer = request.getHeader("Referer");
-        if (referer == null) 
+        if (referer == null)
             writer.write("\"-\" ");
-        else 
+        else
         {
             writer.write('"');
             writer.write(referer);
             writer.write("\" ");
         }
-        
+
         String agent = request.getHeader("User-Agent");
         if (agent == null)
             writer.write("\"-\" ");
@@ -459,37 +459,37 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
             writer.write('"');
             writer.write(agent);
             writer.write('"');
-        }          
+        }
     }
 
     /* ------------------------------------------------------------ */
     protected void doStart() throws Exception
     {
         if (_logDateFormat!=null)
-        {       
+        {
             _logDateCache = new DateCache(_logDateFormat, _logLocale, _logTimeZone);
         }
-        
-        if (_filename != null) 
+
+        if (_filename != null)
         {
             _fileOut = new RolloverFileOutputStream(_filename,_append,_retainDays,TimeZone.getTimeZone(_logTimeZone),_filenameDateFormat,null);
             _closeOut = true;
             Log.getLogger((String)null).info("Opened "+getDatedFilename());
         }
-        else 
+        else
             _fileOut = System.err;
-        
+
         _out = _fileOut;
-        
+
         if (_ignorePaths != null && _ignorePaths.length > 0)
         {
             _ignorePathMap = new PathMap<String>();
-            for (int i = 0; i < _ignorePaths.length; i++) 
+            for (int i = 0; i < _ignorePaths.length; i++)
                 _ignorePathMap.put(_ignorePaths[i], _ignorePaths[i]);
         }
-        else 
+        else
             _ignorePathMap = null;
-        
+
         _writer = new OutputStreamWriter(_out, "UTF-8");
         _buffers = new ArrayList<Utf8StringBuilder>();
         _copy = new char[1024];
@@ -501,9 +501,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     {
         super.doStop();
         try {if (_writer != null) _writer.flush();} catch (IOException e) {Log.getLogger((String)null).ignore(e);}
-        if (_out != null && _closeOut) 
+        if (_out != null && _closeOut)
             try {_out.close();} catch (IOException e) {Log.getLogger((String)null).ignore(e);}
-            
+
         _out = null;
         _fileOut = null;
         _closeOut = false;

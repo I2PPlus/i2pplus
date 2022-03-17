@@ -12,7 +12,7 @@ import net.i2p.I2PAppContext;
  *  @since 0.9.30
  */
 public class ClientAppManagerImpl implements ClientAppManager {
-    
+
     // registered name to client
     protected final ConcurrentHashMap<String, ClientApp> _registered;
 
@@ -29,7 +29,7 @@ public class ClientAppManagerImpl implements ClientAppManager {
      *  @param e may be null
      */
     public void notify(ClientApp app, ClientAppState state, String message, Exception e) {}
-    
+
     /**
      *  Register with the manager under the given name,
      *  so that other clients may find it.
@@ -41,7 +41,7 @@ public class ClientAppManagerImpl implements ClientAppManager {
     public boolean register(ClientApp app) {
         return _registered.putIfAbsent(app.getName(), app) == null;
     }
-    
+
     /**
      *  Unregister with the manager. Name must be the same as that from register().
      *  Only required for apps used by other apps.
@@ -51,7 +51,7 @@ public class ClientAppManagerImpl implements ClientAppManager {
     public void unregister(ClientApp app) {
         _registered.remove(app.getName(), app);
     }
-    
+
     /**
      *  Get a registered app.
      *  Only used for apps finding other apps.

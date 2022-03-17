@@ -60,7 +60,7 @@ class SearchReplyJob extends JobImpl {
 
         // either they didn't tell us anything new or we have verified
         // (or failed to verify) all of them.  we're done
-        getContext().profileManager().dbLookupReply(_peer, _newPeers, _seenPeers, 
+        getContext().profileManager().dbLookupReply(_peer, _newPeers, _seenPeers,
                                                     0, _duplicatePeers, _duration);
         if (_newPeers > 0)
             _searchJob.newPeersFound(_newPeers);

@@ -144,7 +144,7 @@ public class Base64 {
     /** The 64 valid Base64 values for I2P. */
     private final static byte[] ALPHABET_ALT = DataHelper.getASCII(ALPHABET_I2P);
 
-    /** 
+    /**
      * Translates a Base64 value to either its 6-bit reconstruction value
      * or a negative number indicating some other meaning.
      * As of 0.9.14 this is the decoding for the I2P alphabet. See safeDecode().
@@ -351,7 +351,7 @@ public class Base64 {
      * Encodes up to three bytes of the array <var>source</var>
      * and writes the resulting four Base64 bytes to <var>destination</var>.
      * The source and destination arrays can be manipulated
-     * anywhere along their length by specifying 
+     * anywhere along their length by specifying
      * <var>srcOffset</var> and <var>destOffset</var>.
      * This method does not check to make sure your arrays
      * are large enough to accomodate <var>srcOffset</var> + 3 for
@@ -370,7 +370,7 @@ public class Base64 {
      */
 /***** unused (standard alphabet)
     private static byte[] encode3to4(byte[] source, int srcOffset, int numSigBytes, byte[] destination, int destOffset) {
-        //           1         2         3  
+        //           1         2         3
         // 01234567890123456789012345678901 Bit position
         // --------000000001111111122222222 Array position from threeBytes
         // --------|    ||    ||    ||    | Six bit groups to index ALPHABET
@@ -417,7 +417,7 @@ public class Base64 {
      *  @param alpha alphabet
      */
     private static void encode3to4(byte[] source, int srcOffset, int numSigBytes, StringBuilder buf, byte alpha[]) {
-        //           1         2         3  
+        //           1         2         3
         // 01234567890123456789012345678901 Bit position
         // --------000000001111111122222222 Array position from threeBytes
         // --------|    ||    ||    ||    | Six bit groups to index ALPHABET
@@ -541,7 +541,7 @@ public class Base64 {
         return buf.toString();
     }
 ******/
-        
+
     /**
      * Encodes a byte array into Base64 notation.
      *
@@ -555,7 +555,7 @@ public class Base64 {
         //int len43 = len * 4 / 3;
         //byte[] outBuff = new byte[(len43) // Main 4:3
         //                          + ((len % 3) > 0 ? 4 : 0) // Account for padding
-        //                          + (breakLines ? (len43 / MAX_LINE_LENGTH) : 0)]; // New lines      
+        //                          + (breakLines ? (len43 / MAX_LINE_LENGTH) : 0)]; // New lines
         int d = 0;
         int len2 = len - 2;
         int lineLength = 0;
@@ -594,7 +594,7 @@ public class Base64 {
     } // end encodeString
 ******/
 
-    
+
 
     /* ********  D E C O D I N G   M E T H O D S  ******** */
 
@@ -625,15 +625,15 @@ public class Base64 {
      * and writes the resulting bytes (up to three of them)
      * to <var>destination</var>.
      * The source and destination arrays can be manipulated
-     * anywhere along their length by specifying 
+     * anywhere along their length by specifying
      * <var>srcOffset</var> and <var>destOffset</var>.
      * This method does not check to make sure your arrays
      * are large enough to accomodate <var>srcOffset</var> + 4 for
      * the <var>source</var> array or <var>destOffset</var> + 3 for
      * the <var>destination</var> array.
-     * This method returns the actual number of bytes that 
+     * This method returns the actual number of bytes that
      * were converted from the Base64 encoding.
-     * 
+     *
      *
      * @param source the array to convert
      * @param srcOffset the index where conversion begins

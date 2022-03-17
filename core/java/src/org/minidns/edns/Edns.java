@@ -74,7 +74,7 @@ public class Edns {
     /**
      * 8-bit extended return code.
      *
-     * RFC 6891 § 6.1.3 EXTENDED-RCODE 
+     * RFC 6891 § 6.1.3 EXTENDED-RCODE
      */
     public final int extendedRcode;
 

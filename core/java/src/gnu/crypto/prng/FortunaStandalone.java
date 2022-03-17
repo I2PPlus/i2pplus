@@ -138,7 +138,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
       init(props);
       fillBlock();
   }
-  
+
   public void setup(Map<String, byte[]> attributes)
   {
     lastReseed = 0;
@@ -341,7 +341,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         }
     }
   }
-  
+
 /*****
   public static void main(String args[]) {
       byte in[] = new byte[16];
@@ -361,7 +361,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
           long after = System.currentTimeMillis();
           System.out.println("encrypting 4MB took " + (after-beforeAll));
       } catch (Exception e) { e.printStackTrace(); }
-      
+
       try {
         CryptixAESKeyCache.KeyCacheEntry buf = CryptixAESKeyCache.createNew();
         Object cryptixKey = CryptixRijndael_Algorithm.makeKey(key, 16, buf);

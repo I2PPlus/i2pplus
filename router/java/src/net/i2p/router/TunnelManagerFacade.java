@@ -1,9 +1,9 @@
 package net.i2p.router;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -20,7 +20,7 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 /**
  * Build and maintain tunnels throughout the network.
  *
- */ 
+ */
 public interface TunnelManagerFacade extends Service {
 
     /**
@@ -61,7 +61,7 @@ public interface TunnelManagerFacade extends Service {
      * @return null if none
      */
     TunnelInfo selectOutboundTunnel(Hash destination);
-    
+
     /**
      * Pick the inbound exploratory tunnel with the gateway closest to the given hash.
      * By using this instead of the random selectTunnel(),
@@ -72,8 +72,8 @@ public interface TunnelManagerFacade extends Service {
      * @return null if none
      * @since 0.8.10
      */
-    public TunnelInfo selectInboundExploratoryTunnel(Hash closestTo); 
-    
+    public TunnelInfo selectInboundExploratoryTunnel(Hash closestTo);
+
     /**
      * Pick the inbound tunnel with the gateway closest to the given hash
      * from the given destination's pool.
@@ -87,7 +87,7 @@ public interface TunnelManagerFacade extends Service {
      * @since 0.8.10
      */
     public TunnelInfo selectInboundTunnel(Hash destination, Hash closestTo);
-    
+
     /**
      * Pick the outbound exploratory tunnel with the endpoint closest to the given hash.
      * By using this instead of the random selectTunnel(),
@@ -99,7 +99,7 @@ public interface TunnelManagerFacade extends Service {
      * @since 0.8.10
      */
     public TunnelInfo selectOutboundExploratoryTunnel(Hash closestTo);
-    
+
     /**
      * Pick the outbound tunnel with the endpoint closest to the given hash
      * from the given destination's pool.
@@ -116,7 +116,7 @@ public interface TunnelManagerFacade extends Service {
 
     /** Is a tunnel a valid member of the pool? */
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel);
-    
+
     /** how many tunnels are we participating in? */
     public int getParticipatingCount();
     /** how many free inbound tunnels do we have available? */
@@ -130,19 +130,19 @@ public interface TunnelManagerFacade extends Service {
     /** how many outbound client tunnels in this pool? */
     public int getOutboundClientTunnelCount(Hash destination);
     public double getShareRatio();
-    
+
     /** When does the last tunnel we are participating in expire? */
     public long getLastParticipatingExpiration();
-    
+
     /** count how many inbound tunnel requests we have received but not yet processed */
     public int getInboundBuildQueueSize();
-    
+
     /** @return Set of peers that should not be allowed to be in another tunnel */
     public Set<Hash> selectPeersInTooManyTunnels();
 
-    /** 
+    /**
      * the client connected (or updated their settings), so make sure we have
-     * the tunnels for them, and whenever necessary, ask them to authorize 
+     * the tunnels for them, and whenever necessary, ask them to authorize
      * leases.
      *
      */
@@ -168,7 +168,7 @@ public interface TunnelManagerFacade extends Service {
      *  @since 0.9.21
      */
     public void removeAlias(Destination dest);
-    
+
     public TunnelPoolSettings getInboundSettings();
     public TunnelPoolSettings getOutboundSettings();
     public TunnelPoolSettings getInboundSettings(Hash client);

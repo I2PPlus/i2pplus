@@ -40,7 +40,7 @@ public class SendGarlicJob extends JobImpl {
     private GarlicMessage _message;
     private SessionKey _wrappedKey;
     private Set<SessionTag> _wrappedTags;
-    
+
     /**
      *
      * @param config ???
@@ -73,9 +73,9 @@ public class SendGarlicJob extends JobImpl {
         _wrappedKey = wrappedKey;
         _wrappedTags = wrappedTags;
     }
-    
+
     public String getName() { return "Build Garlic Message"; }
-    
+
     public void runJob() {
         long before = getContext().clock().now();
         _message = GarlicMessageBuilder.buildMessage(getContext(), _config, _wrappedKey, _wrappedTags,
@@ -90,7 +90,7 @@ public class SendGarlicJob extends JobImpl {
         }
         getContext().jobQueue().addJob(new SendJob(getContext()));
     }
-    
+
     private class SendJob extends JobImpl {
         public SendJob(RouterContext enclosingContext) {
             super(enclosingContext);
@@ -104,7 +104,7 @@ public class SendGarlicJob extends JobImpl {
             sendGarlic();
         }
     }
-    
+
     private void sendGarlic() {
         long when = _message.getMessageExpiration(); // + Router.CLOCK_FUDGE_FACTOR;
         OutNetMessage msg = new OutNetMessage(getContext(), _message, when, _priority, _config.getRecipient());

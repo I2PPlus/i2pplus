@@ -189,7 +189,7 @@ class PacketBuilder {
      */
     static final int PRIORITY_HIGH = 550;
     private static final int PRIORITY_LOW = OutNetMessage.PRIORITY_LOWEST;
-    
+
     /**
      *  No state, all methods are thread-safe.
      *

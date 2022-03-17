@@ -5,7 +5,7 @@ import net.i2p.data.Base64;
 import net.i2p.util.Log;
 
 /**
- * Receive the preprocessed data for an outbound gateway, encrypt all of the 
+ * Receive the preprocessed data for an outbound gateway, encrypt all of the
  * layers, and forward it on to the first hop.
  *
  */
@@ -14,16 +14,16 @@ class OutboundSender implements TunnelGateway.Sender {
     //private final Log _log;
     private final TunnelCreatorConfig _config;
     private final OutboundGatewayProcessor _processor;
-    
+
     //static final boolean USE_ENCRYPTION = HopProcessor.USE_ENCRYPTION;
-    
+
     public OutboundSender(I2PAppContext ctx, TunnelCreatorConfig config) {
         //_context = ctx;
         //_log = ctx.logManager().getLog(OutboundSender.class);
         _config = config;
         _processor = new OutboundGatewayProcessor(ctx, config);
     }
-    
+
     public long sendPreprocessed(byte[] preprocessed, TunnelGateway.Receiver receiver) {
         //if (_log.shouldDebug())
         //    _log.debug("preprocessed data going out " + _config + ": " + Base64.encode(preprocessed));

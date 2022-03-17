@@ -1,8 +1,8 @@
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by mihi in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by mihi in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  */
 package net.i2p.client.naming;
@@ -26,9 +26,9 @@ import net.i2p.data.Destination;
  */
 public class HostsTxtNamingService extends MetaNamingService {
 
-    /** 
-     * The naming service should only be constructed and accessed through the 
-     * application context.  This constructor should only be used by the 
+    /**
+     * The naming service should only be constructed and accessed through the
+     * application context.  This constructor should only be used by the
      * appropriate application context itself.
      *
      */
@@ -38,7 +38,7 @@ public class HostsTxtNamingService extends MetaNamingService {
             addNamingService(new SingleFileNamingService(context, name), false);
         }
     }
-    
+
     /**
      * If this system property is specified, the tunnel will read the
      * given file for hostname=destKey values when resolving names
@@ -46,7 +46,7 @@ public class HostsTxtNamingService extends MetaNamingService {
     public final static String PROP_HOSTS_FILE = "i2p.hostsfilelist";
 
     /** default hosts.txt filenames */
-    public final static String DEFAULT_HOSTS_FILE = 
+    public final static String DEFAULT_HOSTS_FILE =
         "privatehosts.txt,userhosts.txt,hosts.txt";
 
     private List<String> getFilenames() {
@@ -57,7 +57,7 @@ public class HostsTxtNamingService extends MetaNamingService {
             rv.add(tok.nextToken());
         return rv;
     }
-    
+
     @Override
     public Destination lookup(String hostname, Properties lookupOptions, Properties storedOptions) {
         // If it's long, assume it's a key.
@@ -92,7 +92,7 @@ public class HostsTxtNamingService extends MetaNamingService {
             file = options.getProperty("file");
         if (file == null)
             return super.getNames(options);
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
              String name = ns.getName();
              if (name.equals(file) || name.endsWith('/' + file) || name.endsWith('\\' + file))
                  return ns.getNames(options);

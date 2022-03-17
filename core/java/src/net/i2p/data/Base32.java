@@ -1,8 +1,8 @@
 package net.i2p.data;
 
 /*
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 
 import java.io.ByteArrayOutputStream;
@@ -37,7 +37,7 @@ public class Base32 {
                                             'w', 'x', 'y', 'z',
                                             '2', '3', '4', '5', '6', '7'};
 
-    /** 
+    /**
      * Translates a Base32 value to either its 5-bit reconstruction value
      * or a negative number indicating some other meaning.
      * Allow upper or lower case.

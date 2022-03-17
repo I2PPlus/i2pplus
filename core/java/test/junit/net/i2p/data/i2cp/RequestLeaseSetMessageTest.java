@@ -1,9 +1,9 @@
 package net.i2p.data.i2cp;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -27,7 +27,7 @@ public class RequestLeaseSetMessageTest extends I2CPTstBase {
         msg.setEndDate(new Date(1000*60*60*12));
         byte h[] = new byte[Hash.HASH_LENGTH];
         msg.addEndpoint(new Hash(h), (TunnelId)(new TunnelIdTest()).createDataStructure());
-        return msg; 
+        return msg;
     }
     public I2CPMessageImpl createStructureToRead() { return new RequestLeaseSetMessage(); }
 }

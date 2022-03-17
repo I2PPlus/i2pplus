@@ -1,9 +1,9 @@
 package net.i2p.router.client;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -40,7 +40,7 @@ class ClientListenerRunner implements Runnable {
     protected final boolean _bindAllInterfaces;
     protected volatile boolean _running;
     protected volatile boolean _listening;
-    
+
     public static final String BIND_ALL_INTERFACES = "i2cp.tcp.bindAllInterfaces";
 
     public ClientListenerRunner(RouterContext context, ClientManager manager, int port) {
@@ -50,10 +50,10 @@ class ClientListenerRunner implements Runnable {
         _port = port;
         _bindAllInterfaces = context.getBooleanProperty(BIND_ALL_INTERFACES);
     }
-    
+
     public boolean isListening() { return _running && _listening; }
-    
-    /** 
+
+    /**
      * Get a ServerSocket.
      * Split out so it can be overridden for SSL.
      * @since 0.8.3
@@ -64,7 +64,7 @@ class ClientListenerRunner implements Runnable {
                 _log.info("Listening on port " + _port + " on all interfaces");
             return new ServerSocket(_port);
         } else {
-            String listenInterface = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST, 
+            String listenInterface = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST,
                                                           ClientManagerFacadeImpl.DEFAULT_HOST);
             if (_log.shouldInfo())
                 _log.info("Listening on port " + _port + " of the specific interface: " + listenInterface);
@@ -74,9 +74,9 @@ class ClientListenerRunner implements Runnable {
 
     public void run() { runServer(); }
 
-    /** 
+    /**
      * Start up the socket listener, listens for connections, and
-     * fires those connections off via {@link #runConnection runConnection}.  
+     * fires those connections off via {@link #runConnection runConnection}.
      * This only returns if the socket cannot be opened or there is a catastrophic
      * failure.
      *
@@ -89,13 +89,13 @@ class ClientListenerRunner implements Runnable {
         while (_running) {
             try {
                 _socket = getServerSocket();
-                
+
                 if (_log.shouldDebug())
                     _log.debug("ServerSocket created, before accept: " + _socket);
                 if (_port > 0) {
                     // not for DomainClientListenerRunner
                     _context.portMapper().register(portMapperService, _socket.getInetAddress().getHostAddress(), _port);
-                }                
+                }
                 curDelay = 1000;
                 _listening = true;
                 while (_running) {
@@ -114,33 +114,33 @@ class ClientListenerRunner implements Runnable {
                             } catch (IOException ioe) {}
                         }
                     } catch (IOException ioe) {
-                        if (isAlive()) 
+                        if (isAlive())
                             _log.error("Server error accepting", ioe);
                     } catch (Throwable t) {
-                        if (isAlive()) 
+                        if (isAlive())
                             _log.error("Fatal error running client listener - killing the thread!", t);
                         _listening = false;
                         return;
                     }
                 }
             } catch (IOException ioe) {
-                if (isAlive()) 
+                if (isAlive())
                     _log.error("Error listening on port " + _port, ioe);
             } finally {
                 if (_port > 0) {
                     // not for DomainClientListenerRunner
                     _context.portMapper().unregister(portMapperService);
-                }                
+                }
             }
-            
+
             _listening = false;
             if (_socket != null) {
                 try { _socket.close(); } catch (IOException ioe) {}
-                _socket = null; 
+                _socket = null;
             }
-            
+
             if (!isAlive()) break;
-            
+
             if (curDelay < 60*1000)
                 _log.error("Error listening, waiting " + (curDelay/1000) + "s before we try again");
             else
@@ -153,15 +153,15 @@ class ClientListenerRunner implements Runnable {
             _log.error("CANCELING I2CP LISTEN", new Exception("I2CP Listen cancelled!!!"));
         _running = false;
     }
-    
-    /** 
+
+    /**
      *  Just so unit tests don't NPE, where router could be null.
      *  @since 0.9.20
      */
     private boolean isAlive() {
         Router r = _context.router();
         return r == null || r.isAlive();
-    }	
+    }
 
     /** give the i2cp client 5 seconds to show that they're really i2cp clients */
     protected final static int CONNECT_TIMEOUT = 5*1000;
@@ -190,11 +190,11 @@ class ClientListenerRunner implements Runnable {
         ClientConnectionRunner runner = new ClientConnectionRunner(_context, _manager, socket);
         _manager.registerConnection(runner);
     }
-    
-    public void stopListening() { 
-        _running = false; 
-        if (_socket != null) try { 
-            _socket.close(); 
+
+    public void stopListening() {
+        _running = false;
+        if (_socket != null) try {
+            _socket.close();
             _socket = null;
         } catch (IOException ioe) {}
     }

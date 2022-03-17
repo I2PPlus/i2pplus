@@ -18,17 +18,17 @@ import net.i2p.util.Log;
  *
  */
 public class RouterManager {
-	
+
     /** @return non-null */
     private static I2PAppContext getAppContext() {
         return I2PAppContext.getGlobalContext();
     }
-    
+
     /**
      * Start an I2P router instance.
      * This method has limited knowledge
      * (there is no I2P instance running to collect information from).
-     * 
+     *
      * It determines the I2P location using the I2PAppContext.
      */
     public static void start() {
@@ -43,7 +43,7 @@ public class RouterManager {
             log.log(Log.WARN, "Failed to start I2P", e);
         }
     }
-    
+
     /**
      * Restart the running I2P instance.
      */
@@ -61,7 +61,7 @@ public class RouterManager {
         //    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);
         ctx.router().shutdownGracefully(Router.EXIT_HARD);
     }
-    
+
     /**
      * Restart the running I2P instance.
      * @since 0.9.26

@@ -25,7 +25,7 @@ public class I2PSinkAnywhere implements Sink {
     public I2PSinkAnywhere(I2PSession sess, boolean raw) {
         this.sess = sess;
         this.raw = raw;
-        
+
         // create maker
         if (raw) {
             this.maker = null;
@@ -34,7 +34,7 @@ public class I2PSinkAnywhere implements Sink {
             this.maker.setI2PDatagramMaker(this.sess);
         }
     }
-    
+
     /**
      *  @param to - where it's going
      *  @throws RuntimeException if session is closed
@@ -42,7 +42,7 @@ public class I2PSinkAnywhere implements Sink {
     public void send(Destination to, byte[] data) {
         send(to, I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED, data);
     }
-    
+
     /**
      *  @param to - where it's going
      *  @param fromPort I2CP port 0 - 65535
@@ -60,7 +60,7 @@ public class I2PSinkAnywhere implements Sink {
         } else {
             payload = data;
         }
-        
+
         // send message
         try {
             this.sess.sendMessage(to, payload,

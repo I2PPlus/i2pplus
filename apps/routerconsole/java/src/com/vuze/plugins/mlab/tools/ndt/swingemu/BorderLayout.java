@@ -1,7 +1,7 @@
 /*
  * Created on May 20, 2010
  * Created by Paul Gardner
- * 
+ *
  * Copyright 2010 Vuze, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,5 +27,5 @@ public class BorderLayout {
 
 	public static final int NORTH = 1;
 	public static final int SOUTH = 2;
-		
+
 }

@@ -62,8 +62,8 @@ public interface EventDispatcher {
 
     /**
      * Deliver an event
-     * 
-     * @param event name of the event 
+     *
+     * @param event name of the event
      * @param args data being stored for that event
      */
     public void notifyEvent(String event, Object args);
@@ -72,7 +72,7 @@ public interface EventDispatcher {
      * Retrieve the value currently associated with the specified
      * event value
      *
-     * @param name name of the event to query for 
+     * @param name name of the event to query for
      * @return value (or null if none are available)
      */
     public Object getEventValue(String name);

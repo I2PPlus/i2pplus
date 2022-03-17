@@ -50,7 +50,7 @@ class SAMv2StreamSession extends SAMStreamSession
 		 * @param recv Object that will receive incoming data
 		 * @throws IOException
 		 * @throws DataFormatException
-		 * @throws SAMException 
+		 * @throws SAMException
 		 */
 		public SAMv2StreamSession ( String dest, String dir, Properties props,
 		                            SAMStreamReceiver recv ) throws IOException, DataFormatException, SAMException
@@ -69,7 +69,7 @@ class SAMv2StreamSession extends SAMStreamSession
 		 * @param recv Object that will receive incoming data
 		 * @throws IOException
 		 * @throws DataFormatException
-		 * @throws SAMException 
+		 * @throws SAMException
 		 */
 		public SAMv2StreamSession ( InputStream destStream, String dir,
 		                            Properties props,  SAMStreamReceiver recv ) throws IOException, DataFormatException, SAMException
@@ -123,7 +123,7 @@ class SAMv2StreamSession extends SAMStreamSession
 		}
 
 		/**
-		 * SAM STREAM socket connecter, running in its own thread.  
+		 * SAM STREAM socket connecter, running in its own thread.
 		 *
 		 * @author mkvore
 		 */
@@ -213,11 +213,11 @@ class SAMv2StreamSession extends SAMStreamSession
 		/**
 		 * Lets us push data through the stream without blocking, (even after exceeding
 		 * the I2PSocket's buffer)
-		 * 
+		 *
 		 * @param s I2PSocket
 		 * @param id Socket ID
 		 * @return v2StreamSender
-		 * @throws IOException 
+		 * @throws IOException
 		 */
 		@Override
 		protected StreamSender newStreamSender ( I2PSocket s, int id ) throws IOException
@@ -226,7 +226,7 @@ class SAMv2StreamSession extends SAMStreamSession
 		}
 
 		@Override
-		protected SAMStreamSessionSocketReader 
+		protected SAMStreamSessionSocketReader
 				newSAMStreamSessionSocketReader(I2PSocket s, int id ) throws IOException
 		{
 			return new SAMv2StreamSessionSocketReader(s,id);
@@ -511,7 +511,7 @@ class SAMv2StreamSession extends SAMStreamSession
 								if ( !stillRunning )
 									break ;
 							}
-							
+
 							// not ByteBuffer to avoid Java 8/9 issues
 							((Buffer)data).clear();
 							read = Channels.newChannel(in).read ( data );

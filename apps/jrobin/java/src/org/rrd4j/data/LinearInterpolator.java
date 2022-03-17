@@ -135,14 +135,14 @@ public class LinearInterpolator extends Plottable {
      * <li><code>INTERPOLATE_LINEAR: 200</code>
      * </ul>
      * <p>If not set, interpolation method defaults to <code>INTERPOLATE_LINEAR</code>.</p>
-     * 
+     *
      * <p>The fourth available interpolation method is INTERPOLATE_REGRESSION. This method uses
      * simple linear regression to interpolate supplied data with a simple straight line which does not
      * necessarily pass through all data points. The slope of the best-fit line will be chosen so that the
      * total square distance of real data points from from the best-fit line is at minimum.</p>
-     * 
+     *
      * <p>This method is deprecated, one should use {@link #setInterpolationMethod(Method) setInterpolationMethod()} instead.</p>
-     * 
+     *
      * <p>The full explanation of this interpolation method can be found
      * <a href="http://www.JerryDallal.com/LHSP/slr.htm">here</a>.</p>
      *
@@ -172,12 +172,12 @@ public class LinearInterpolator extends Plottable {
      * <li><code>LINEAR: 200</code>
      * </ul>
      * <p>If not set, interpolation method defaults to <code>INTERPOLATE_LINEAR</code>.</p>
-     * 
+     *
      * <p>The fourth available interpolation method is REGRESSION. This method uses
      * simple linear regression to interpolate supplied data with a simple straight line which does not
      * necessarily pass through all data points. The slope of the best-fit line will be chosen so that the
      * total square distance of real data points from from the best-fit line is at minimum.</p>
-     * 
+     *
      * <p>The full explanation of this interpolation method can be found
      * <a href="http://www.JerryDallal.com/LHSP/slr.htm">here</a>.</p>
      *

@@ -63,7 +63,7 @@ public class SOCKSHeader {
         System.arraycopy(DataHelper.getASCII(b32), 0, this.header, beg.length, 60);
         DataHelper.toLong(header, beg.length + 60, 2, port);
     }
-    
+
     /**
      *  As of 0.9.53, returns IP address as a string for address types 1 and 4.
      *
@@ -81,7 +81,7 @@ public class SOCKSHeader {
             return Addresses.toString(Arrays.copyOfRange(header, 4, 16));
         return null;
     }
-    
+
     /**
      *  @return 0 - 65535
      *  @since 0.9.53

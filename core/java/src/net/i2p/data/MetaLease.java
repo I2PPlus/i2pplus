@@ -54,7 +54,7 @@ public class MetaLease extends Lease {
     public void setTunnelId(TunnelId id) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _gateway = Hash.create(in);
@@ -64,7 +64,7 @@ public class MetaLease extends Lease {
         _cost = in.read();
         _end = DataHelper.readLong(in, 4) * 1000;
     }
-    
+
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_gateway == null)
@@ -76,7 +76,7 @@ public class MetaLease extends Lease {
         out.write(_cost);
         DataHelper.writeLong(out, 4, _end / 1000);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -87,13 +87,13 @@ public class MetaLease extends Lease {
                && _cost == lse._cost
                && DataHelper.eq(_gateway, lse.getGateway());
     }
-    
+
     @Override
     public int hashCode() {
         return (int) _end ^ DataHelper.hashCode(_gateway)
                ^ _cost;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);

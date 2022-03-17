@@ -21,7 +21,7 @@ public class ConfigStatsHandler extends FormHandler {
     private boolean _explicitFilter;
     private String _explicitFilterValue;
     private boolean _isFull;
-    
+
     public ConfigStatsHandler() {
         super();
         _stats = new ArrayList<String>();
@@ -29,14 +29,14 @@ public class ConfigStatsHandler extends FormHandler {
         _explicitFilter = false;
         _isFull = false;
     }
-    
+
     @Override
     protected void processForm() {
         if (_action != null && _action.equals("foo")) {
             saveChanges();
         }
     }
-    
+
     public void setFilename(String filename) {
         _filename = (filename != null ? filename.trim() : null);
     }
@@ -71,7 +71,7 @@ public class ConfigStatsHandler extends FormHandler {
     public void setExplicitFilter(String foo) { _explicitFilter = true; }
     public void setExplicitFilterValue(String filter) { _explicitFilterValue = filter; }
     public void setIsFull(String foo) { _isFull = true; }
-    
+
     /**
      * The user made changes to the config and wants to save them, so
      * lets go ahead and do so.
@@ -82,12 +82,12 @@ public class ConfigStatsHandler extends FormHandler {
         if (_filename == null)
             _filename = StatManager.DEFAULT_STAT_FILE;
         changes.put(StatManager.PROP_STAT_FILE, _filename);
-        
+
         if (_explicitFilter) {
             _stats.clear();
             if (_explicitFilterValue == null)
                 _explicitFilterValue = "";
-            
+
             if (_explicitFilterValue.indexOf(',') != -1) {
                 StringTokenizer tok = new StringTokenizer(_explicitFilterValue, ",");
                 while (tok.hasMoreTokens()) {
@@ -101,14 +101,14 @@ public class ConfigStatsHandler extends FormHandler {
                     _stats.add(stat);
             }
         }
-        
+
         StringBuilder stats = new StringBuilder();
         for (int i = 0; i < _stats.size(); i++) {
             stats.append(_stats.get(i));
             if (i + 1 < _stats.size())
                 stats.append(',');
         }
-            
+
         changes.put(StatManager.PROP_STAT_FILTER, stats.toString());
         boolean graphsChanged = !_graphs.equals(_context.getProperty("stat.summaries"));
         changes.put("stat.summaries", _graphs);
@@ -127,5 +127,5 @@ public class ConfigStatsHandler extends FormHandler {
         if (graphsChanged)
             addFormNoticeNoEscape(_t("Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}", "<a href=\"graphs\">", "</a>"));
     }
-    
+
 }

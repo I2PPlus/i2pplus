@@ -16,7 +16,7 @@ public class RrdMemoryBackend extends ByteBufferBackend {
      * <p>Constructor for RrdMemoryBackend.</p>
      *
      * @param path a {@link java.lang.String} object.
-     * @param refbb 
+     * @param refbb
      */
     protected RrdMemoryBackend(String path, AtomicReference<ByteBuffer> refbb) {
         super(path);

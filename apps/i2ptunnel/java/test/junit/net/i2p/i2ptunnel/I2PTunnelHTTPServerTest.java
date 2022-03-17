@@ -13,7 +13,7 @@ import net.i2p.I2PAppContext;
 import junit.framework.TestCase;
 
 public class I2PTunnelHTTPServerTest extends TestCase {
-	
+
 	public InputStream fillInputStream(String headers) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(baos));
@@ -22,7 +22,7 @@ public class I2PTunnelHTTPServerTest extends TestCase {
 		byte[] bytes = baos.toByteArray();
 		return new ByteArrayInputStream(bytes);
 	}
-	
+
 	public void testSimpleHeader() throws IOException {
 		String headerString = "GET /blah HTTP/1.1\r\n";
 		headerString += "BLAH: something\r\n";
@@ -31,7 +31,7 @@ public class I2PTunnelHTTPServerTest extends TestCase {
 		Map<String, List<String>> headers = I2PTunnelHTTPServer.readHeaders(null, in, new StringBuilder(128), new String[0], I2PAppContext.getGlobalContext());
 		assertEquals(headers.size(), 1); //One header
 	}
-	
+
 	public void testDuplicateHeader() throws IOException {
 		String headerString = "GET /something HTTP/1.1\r\n";
 		headerString += "someHeader: blabla bla bloooo\r\n";
@@ -42,7 +42,7 @@ public class I2PTunnelHTTPServerTest extends TestCase {
 		assertEquals(headers.size(), 1);
 		assertEquals(headers.get("someHeader").size(), 2);
 	}
-	
+
 	public void testDuplicateHeadersFormat() throws IOException {
 		String headerString = "GET /something HTTP/1.1\r\n";
 		headerString += "abc: def\r\n";

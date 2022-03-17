@@ -115,7 +115,7 @@ class OutboundClientMessageJobHelper {
      */
     static GarlicMessage createGarlicMessage(RouterContext ctx, long replyToken, long expiration, PublicKey recipientPK,
                                              PayloadGarlicConfig dataClove, Hash from, Destination dest, TunnelInfo replyTunnel,
-                                             int tagsToSendOverride, int lowTagsOverride, SessionKey wrappedKey, 
+                                             int tagsToSendOverride, int lowTagsOverride, SessionKey wrappedKey,
                                              Set<SessionTag> wrappedTags, boolean requireAck, LeaseSet bundledReplyLeaseSet,
                                              ReplyCallback callback) {
 

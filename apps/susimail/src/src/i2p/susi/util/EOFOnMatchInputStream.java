@@ -69,7 +69,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
      *  @return true if we returned EOF because we hit the match
      */
     public boolean wasFound() {
-        return pos <= 0; 
+        return pos <= 0;
     }
 
     /**
@@ -101,7 +101,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
 
     @Override
     public int read() throws IOException {
-        if (pos <= 0) 
+        if (pos <= 0)
             return -1;
         while(true) {
             // read, pushback, compare
@@ -124,7 +124,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
                 return pop();
             }
             // partial or full match
-            if (pos <= 0) 
+            if (pos <= 0)
                 return -1;   // full match
             // partial match, go around again
         }
@@ -172,9 +172,9 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
 /****
     public static void main(String[] args) {
         String match = "xxa";
-        String test = "xxbxaxoaaxxyyyyyyxxxazzzz"; 
+        String test = "xxbxaxoaaxxyyyyyyxxxazzzz";
         byte[] m = DataHelper.getASCII(match);
-        byte[] in = DataHelper.getASCII(test); 
+        byte[] in = DataHelper.getASCII(test);
         try {
             InputStream eof = new EOFOnMatchInputStream(new java.io.ByteArrayInputStream(in), m);
             byte[] out = new byte[in.length + 10];
@@ -191,4 +191,4 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
         }
     }
 ****/
-}    
+}

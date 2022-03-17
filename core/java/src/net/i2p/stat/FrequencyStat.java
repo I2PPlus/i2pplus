@@ -68,7 +68,7 @@ public class FrequencyStat {
     /**
      * @return lifetime event count
      * @since 0.8.2
-     */	
+     */
     public long getEventCount() {
         if ( (_frequencies == null) || (_frequencies.length <= 0) ) return 0;
         return _frequencies[0].getEventCount();
@@ -77,7 +77,7 @@ public class FrequencyStat {
     /**
      * @return lifetime average frequency in millisedonds, i.e. the average time between events, or Long.MAX_VALUE if no events ever
      * @since 0.8.2
-     */	
+     */
     public long getFrequency() {
         if ( (_frequencies == null) || (_frequencies.length <= 0) ) return Long.MAX_VALUE;
         double d = _frequencies[0].getStrictAverageInterval();
@@ -97,9 +97,9 @@ public class FrequencyStat {
         if ((obj == null) || !(obj instanceof FrequencyStat)) return false;
         return _statName.equals(((FrequencyStat)obj)._statName);
     }
-    
+
     private final static String NL = System.getProperty("line.separator");
-    
+
     /**
      * Serializes this FrequencyStat to the provided OutputStream
      * @param out to write to

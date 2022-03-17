@@ -66,7 +66,7 @@ import org.freenetproject.ForwardPortStatus;
  * ==================
  *
  * This plugin implements UP&amp;P support on a Freenet node.
- * 
+ *
  * @author Florent Daigni&egrave;re &lt;nextgens@freenetproject.org&gt;
  *
  *
@@ -79,16 +79,16 @@ import org.freenetproject.ForwardPortStatus;
  * @since 0.7.4
  */
 
-/* 
+/*
  * TODO: Advertise the node like the MDNS plugin does
  * TODO: Implement EventListener and react on ip-change
  *
  * Public for CommandLine main()
- */ 
+ */
 public class UPnP extends ControlPoint implements DeviceChangeListener, EventListener {
 	private final Log _log;
 	private final I2PAppContext _context;
-	
+
 	/** some schemas */
 	private static final String ROUTER_DEVICE = "urn:schemas-upnp-org:device:InternetGatewayDevice:1";
 	private static final String WAN_DEVICE = "urn:schemas-upnp-org:device:WANDevice:1";
@@ -115,7 +115,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	private final Object lock = new Object();
 	// FIXME: detect it for real and deal with it! @see #2524
 	private volatile boolean thinksWeAreDoubleNatted = false;
-	
+
 	/** List of ports we want to forward */
 	private final Set<ForwardPort> portsToForward;
 	/** List of ports we have actually forwarded */
@@ -127,7 +127,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	private static final String PROP_IGNORE = "i2np.upnp.ignore";
 	/** set to true to talk to UPnP on the same host as us, probably for testing */
 	private static final boolean ALLOW_SAME_HOST = false;
-	
+
 	public UPnP(I2PAppContext context, int ssdpPort, int httpPort, InetAddress[] binds) {
 		super(ssdpPort, httpPort, binds);
 		_context = context;
@@ -137,7 +137,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		_otherUDNs = new HashMap<String, Device>(4);
 		_eventVars = new HashMap<String, String>(4);
 	}
-	
+
 	public synchronized boolean runPlugin() {
 		addDeviceChangeListener(this);
 		addEventListener(this);
@@ -179,7 +179,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			_permanentLeasesOnly = false;
 		}
 	}
-	
+
 	/**
 	 *  As we only support a single active IGD, and we don't currently have any way
 	 *  to get any IPv6 addresses, this will return at most one IPv4 address.
@@ -199,7 +199,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			}
 			service = _service;
 		}
-		
+
 		final String natAddress = getNATAddress(service);
                 if (natAddress == null || natAddress.length() <= 0) {
 			if (_log.shouldWarn())
@@ -217,19 +217,19 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				_log.warn("NATAddress: \"" + natAddress + "\" detectedIP: " + detectedIP + " double? " + thinksWeAreDoubleNatted);
 			if((portsForwarded.size() > 1) && (!thinksWeAreDoubleNatted))
 				status = DetectedIP.FULL_INTERNET;
-			
+
 			result = new DetectedIP(detectedIP, status);
-			
+
 			if (_log.shouldWarn())
 				_log.warn("Successful UP&P discovery :" + result);
-			
+
 			return new DetectedIP[] { result };
 		} catch (UnknownHostException e) {
 			_log.error("Caught an UnknownHostException resolving " + natAddress, e);
 			return null;
 		}
 	}
-	
+
 	/**
 	 *  DeviceChangeListener
 	 */
@@ -257,7 +257,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			}
 			return; // ignore non-IGD devices
 		}
-		
+
 		boolean ignore = false;
 		String toIgnore = _context.getProperty(PROP_IGNORE);
 		if (toIgnore != null) {
@@ -422,7 +422,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
 		if (_log.shouldWarn())
 			_log.warn("UP&P IGD found : " + name + " UDN: " + udn + " lease time: " + dev.getLeaseTime());
-		
+
 		if (!subscriptionFailed) {
 			for (Service svc : services) {
 				boolean ok = subscribe(svc);
@@ -437,7 +437,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
 		registerPortMappings();
 	}
-	
+
 	private void registerPortMappings() {
 		Set<ForwardPort> ports;
 		synchronized(lock) {
@@ -467,7 +467,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 					type = current2.getDeviceType();
 					if (!(WANCON_DEVICE.equals(type) || WANCON_DEVICE_2.equals(type)))
 						continue;
-					
+
 					Service service = current2.getService(WAN_IP_CONNECTION_2);
 					if (service == null) {
 						service = current2.getService(WAN_IP_CONNECTION);
@@ -494,7 +494,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
 		return null;
 	}
-	
+
 	private boolean tryAddMapping(String protocol, int port, String description, ForwardPort fp) {
 		if (_log.shouldWarn())
 			_log.warn("Registering a port mapping for " + port + "/" + protocol + " IPv" + (fp.isIP6 ? '6' : '4'));
@@ -509,14 +509,14 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			if (++nbOfTries >= maxTries)
 				break;
 			try {
-				Thread.sleep(5000);	
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {}
 		}
 		if (_log.shouldWarn())
 			_log.warn((isPortForwarded ? "Mapping is successful!" : "Mapping has failed!") + " ("+ nbOfTries + " tries)");
 		return isPortForwarded;
 	}
-	
+
 	public void unregisterPortMappings() {
 		Set<ForwardPort> ports;
 		synchronized(lock) {
@@ -526,7 +526,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			return;
 		this.unregisterPorts(ports);
 	}
-	
+
 	/**
 	 *  DeviceChangeListener
 	 */
@@ -579,7 +579,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			search();
 		}
 	}
-	
+
 	/**
 	 *  EventListener callback -
 	 *  unused for now - supported in miniupnpd as of 1.1
@@ -883,7 +883,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		    return -1;
 		}
 	}
-	
+
 	/**
 	 * @return the reported downstream bit rate in bits per second. -1 if it's not available. Blocking.
 	 */
@@ -908,7 +908,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		    return -1;
 		}
 	}
-	
+
 	/** debug only */
 	private static void listStateTable(Service serv, StringBuilder sb) {
 		ServiceStateTable table;
@@ -942,7 +942,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		}
 		sb.append("</ol>");
 	}
-	
+
 	/** debug only */
 	private static void listActions(Service service, StringBuilder sb) {
 		ActionList al = service.getActionList();
@@ -956,7 +956,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		}
 		sb.append("</ul>");
 	}
-	
+
 	/**
 	 * A blocking toString(). That's interesting.
          * Cache the last ArgumentList to speed it up some.
@@ -1120,7 +1120,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		}
 		sb.append("</ul>\n");
 	}
-	
+
 	private void listSubDev(String prefix, Device dev, StringBuilder sb){
                 if (prefix == null)
 			sb.append("<p><b>").append(_t("Found Device")).append(":</b> ");
@@ -1136,7 +1136,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				sb.append("<br>UDN: ").append(DataHelper.escapeHTML(udn));
 		}
 		listSubServices(dev, sb);
-		
+
 		DeviceList dl = dev.getDeviceList();
 		if (dl.isEmpty())
 			return;
@@ -1148,12 +1148,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		}
 		sb.append("</ul>\n");
 	}
-	
+
 	/** warning - slow */
 	public String renderStatusHTML() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<h3 id=\"upnp\">").append(_t("UPnP Status")).append("</h3><div id=\"upnpscan\">");
-		
+
 		Device router;
 		Service service;
 		Service service6;
@@ -1234,7 +1234,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 					sb.append(_t("{0} port {1,number,#####} was not forwarded by UPnP.", protoToString(port.protocol), port.portNumber));
 			}
 		}
-		
+
 		sb.append("</p></div>");
 		return sb.toString();
 	}
@@ -1256,7 +1256,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			return Collator.getInstance().compare(ls, rs);
 		}
 	}
-	
+
 	/**
 	 *  This always requests that the external port == the internal port, for now.
 	 *  Blocking!
@@ -1295,14 +1295,14 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
                     if (_serviceLacksAPM) {
 			if (_log.shouldWarn())
 			    _log.warn("Couldn't find AddPortMapping action!");
-		    } else {	
+		    } else {
 			_serviceLacksAPM = true;
 			_log.logAlways(Log.WARN, "UPnP device does not support port forwarding");
 		    }
 		    return false;
 		}
-		    
-		
+
+
 		add.setArgumentValue("NewRemoteHost", "");
 		add.setArgumentValue("NewExternalPort", port);
 		// bugfix, see below for details
@@ -1320,7 +1320,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
                 // MUST be longer than max RI republish which is 52 minutes
 		int leaseTime = _permanentLeasesOnly ? 0 : LEASE_TIME_SECONDS;
 		add.setArgumentValue("NewLeaseDuration", leaseTime);
-		
+
 		boolean rv = add.postControlAction();
 		if(rv) {
 			synchronized(lock) {
@@ -1370,7 +1370,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
 		return rv;
 	}
-	
+
 	/**
 	 *  This always requests that the external port == the internal port, for now.
 	 *  Blocking!
@@ -1400,7 +1400,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			fp.setUID(uid);
 		}
 		add.setArgumentValue("UniqueID", uid);
-		
+
 		// I2P - bind the POST socket to the given IP if we're sending to IPv6
 		boolean rv;
 		String hisIP = service.getRootDevice().getLocation(true);
@@ -1590,16 +1590,16 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			_log.warn("Couldn't find DeletePortMapping action!");
 		    return false;
 		}
-		
+
 		// remove.setArgumentValue("NewRemoteHost", "");
 		remove.setArgumentValue("NewExternalPort", port);
 		remove.setArgumentValue("NewProtocol", protocol);
-		
+
 		boolean retval = remove.postControlAction();
 		synchronized(lock) {
 			portsForwarded.remove(fp);
 		}
-		
+
 		int level = retval ? Log.INFO : Log.WARN;
 		if (!noLog && _log.shouldLog(level)) {
 			if (retval)
@@ -1932,12 +1932,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		 *  @param expires absolute time
 		 */
 		public synchronized void setExpiration(long expires) { _expires = expires; }
-	
+
 		@Override
 		public int hashCode() {
 			return _ip.hashCode() ^ super.hashCode();
 		}
-	
+
 		/**
 		 *  Ignores UID
 		 */

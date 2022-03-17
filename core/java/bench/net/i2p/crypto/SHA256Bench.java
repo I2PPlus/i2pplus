@@ -32,7 +32,7 @@ import net.i2p.data.Hash;
  * <li>One println included
  * <li>Also shows GNU impl time (removed in 0.9.28)
  * </ul><pre>
- * JVM		strlen	GNU ms	JVM  ms 
+ * JVM		strlen	GNU ms	JVM  ms
  * Oracle	387	  3861	 3565
  * Oracle	 40	   825	  635
  * Harmony	387	  8082	 5158

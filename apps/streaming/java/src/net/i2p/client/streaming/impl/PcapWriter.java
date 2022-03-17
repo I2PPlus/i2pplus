@@ -367,7 +367,7 @@ public class PcapWriter implements Closeable, Flushable {
     }
 
     /** one's complement 2-byte checksum update */
-    private static int update(int checksum, byte[] b) {   
+    private static int update(int checksum, byte[] b) {
         return update(checksum, b, b.length);
     }
 

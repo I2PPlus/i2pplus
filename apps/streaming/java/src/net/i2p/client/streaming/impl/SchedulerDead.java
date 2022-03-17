@@ -30,18 +30,18 @@ class SchedulerDead extends SchedulerImpl {
     public SchedulerDead(I2PAppContext ctx) {
         super(ctx);
     }
-    
+
     public boolean accept(Connection con) {
         if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getDisconnectScheduledOn();
-        boolean nothingLeftToDo = (con.getDisconnectScheduledOn() > 0) && 
+        boolean nothingLeftToDo = (con.getDisconnectScheduledOn() > 0) &&
                                   (timeSinceClose >= Connection.DISCONNECT_TIMEOUT);
-        boolean timedOut = (con.getOptions().getConnectTimeout() < con.getLifetime()) && 
+        boolean timedOut = (con.getOptions().getConnectTimeout() < con.getLifetime()) &&
                            con.getSendStreamId() <= 0 &&
                            con.getLifetime() >= Connection.DISCONNECT_TIMEOUT;
         return nothingLeftToDo || timedOut;
     }
-    
+
     public void eventOccurred(Connection con) {
         con.disconnectComplete();
     }

@@ -218,7 +218,7 @@ public class CreateRouterInfoJob extends JobImpl {
             cstype = EncType.ELGAMAL_2048;
         return cstype;
     }
-    
+
     /**
      * We probably don't want to expose the exact time at which a router published its info.
      * perhaps round down to the nearest minute?  10 minutes?  30 minutes?  day?

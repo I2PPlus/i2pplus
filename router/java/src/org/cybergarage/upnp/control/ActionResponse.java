@@ -14,7 +14,7 @@
 *		- Giordano Sassaroli <sassarol@cefriel.it>
 *		- Problem : Action Responses do not contain the mandatory header field EXT
 *		- Error : ActionResponse class does not set the EXT header
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.control;
@@ -29,7 +29,7 @@ public class ActionResponse extends ControlResponse
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public ActionResponse()
 	{
 		setHeader(HTTP.EXT, "");
@@ -49,7 +49,7 @@ public class ActionResponse extends ControlResponse
 	public void setResponse(Action action)
 	{
 		setStatusCode(HTTPStatus.OK);
-	
+
 		Node bodyNode = getBodyNode();
 		Node resNode = createResponseNode(action);
 		bodyNode.addNode(resNode);
@@ -62,14 +62,14 @@ public class ActionResponse extends ControlResponse
 	{
 		String actionName = action.getName();
 		Node actionNameResNode = new Node(SOAP.METHODNS + SOAP.DELIM + actionName + SOAP.RESPONSE);
-		
+
 		Service service = action.getService();
 		if (service != null) {
 			actionNameResNode.setAttribute(
 				"xmlns:" + SOAP.METHODNS,
 					service.getServiceType());
 		}
-		
+
 		ArgumentList argList = action.getArgumentList();
 		int nArgs = argList.size();
 		for (int n=0; n<nArgs; n++) {
@@ -81,7 +81,7 @@ public class ActionResponse extends ControlResponse
 			argNode.setValue(arg.getValue());
 			actionNameResNode.addNode(argNode);
 		}
-		
+
 		return actionNameResNode;
 	}
 
@@ -96,16 +96,16 @@ public class ActionResponse extends ControlResponse
 			return null;
 		return bodyNode.getNode(0);
 	}
-	
-	
+
+
 	public ArgumentList getResponse()
 	{
 		ArgumentList argList = new ArgumentList();
-		
+
 		Node resNode = getActionResponseNode();
 		if (resNode == null)
 			return argList;
-			
+
 		int nArgs = resNode.getNNodes();
 		for (int n=0; n<nArgs; n++) {
 			Node node = resNode.getNode(n);
@@ -114,7 +114,7 @@ public class ActionResponse extends ControlResponse
 			Argument arg = new Argument(name, value);
 			argList.add(arg);
 		}
-		
+
 		return argList;
 	}
 }

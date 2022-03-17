@@ -129,17 +129,17 @@ class MagnetState {
             throw new IllegalArgumentException("complete");
         int rand = RandomSource.getInstance().nextInt(totalChunks);
         for (int i = 0; i < totalChunks; i++) {
-            int chk = (i + rand) % totalChunks; 
+            int chk = (i + rand) % totalChunks;
             if (!(have.get(chk) || requested.get(chk))) {
                 requested.set(chk);
-                return chk; 
+                return chk;
             }
         }
         // all requested - end game
         for (int i = 0; i < totalChunks; i++) {
-            int chk = (i + rand) % totalChunks; 
+            int chk = (i + rand) % totalChunks;
             if (!have.get(chk))
-                return chk; 
+                return chk;
         }
         throw new IllegalArgumentException("complete");
     }

@@ -8,7 +8,7 @@ import java.net.Socket;
 /**
  * Class aggregating operations that can be performed for
  * sending/receiving/reading Protocol messages
- * 
+ *
  * */
 
 public class Protocol {
@@ -18,7 +18,7 @@ public class Protocol {
 
 	/**
 	 * Constructor that accepts socket over which to communicate as parameter
-	 * 
+	 *
 	 * @param ctlSocketParam
 	 *            socket used to send the protocol messages over
 	 * @throws IOException
@@ -32,14 +32,14 @@ public class Protocol {
 
 	/**
 	 * Send message given its Type and data byte
-	 * 
+	 *
 	 * @param bParamType
 	 *            Control Message Type
 	 * @param bParamToSend
 	 *            Data value to send
 	 * @throws IOException
 	 *             If data cannot be successfully written to the Output Stream
-	 * 
+	 *
 	 * */
 	public void send_msg(byte bParamType, byte bParamToSend) throws IOException {
 		byte[] tab = new byte[] { bParamToSend };
@@ -107,14 +107,14 @@ public class Protocol {
 
 	/**
 	 * Send protocol messages given their type and data byte array
-	 * 
+	 *
 	 * @param bParamType
 	 *            Control Message Type
 	 * @param bParamToSend
 	 *            Data value array to send
 	 * @throws IOException
 	 *             If data cannot be successfully written to the Output Stream
-	 * 
+	 *
 	 * */
 	public void send_msg(byte bParamType, byte[] bParamToSend)
 			throws IOException {
@@ -133,7 +133,7 @@ public class Protocol {
 	/**
 	 * Populate Message byte array with specific number of bytes of data from
 	 * socket input stream
-	 * 
+	 *
 	 * @param msgParam
 	 *            Message object to be populated
 	 * @param iParamAmount
@@ -146,7 +146,7 @@ public class Protocol {
 		int read = 0;
 		int tmp;
 		msgParam.initBodySize(iParamAmount);
-		while (read != iParamAmount) {			
+		while (read != iParamAmount) {
 			tmp = _ctlInStream
 					.read(msgParam._yaBody, read, iParamAmount - read);
 			if (tmp <= 0) {
@@ -159,7 +159,7 @@ public class Protocol {
 
 	/**
 	 * Receive message at end-point of socket
-	 * 
+	 *
 	 * @param msgParam
 	 *            Message object
 	 * @return integer with values:
@@ -184,7 +184,7 @@ public class Protocol {
 		if (readn(msgParam, 3) != 3) {
 			return 1;
 		}
-		
+
 		byte[] yaMsgBody = msgParam.getBody();
 		msgParam.setType(yaMsgBody[0]);
 

@@ -108,15 +108,15 @@ public class BuildTestMessageJob extends JobImpl {
         instructions.setDeliveryMode(DeliveryInstructions.DELIVERY_MODE_ROUTER);
         instructions.setRouter(_target.getIdentity().getHash());
         instructions.setTunnelId(null);
-        
+
         GarlicConfig config = new GarlicConfig(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null),
                                                getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                _timeoutMs+getContext().clock().now()+2*Router.CLOCK_FUDGE_FACTOR,
                                                instructions);
-        
+
         PayloadGarlicConfig ackClove = buildAckClove();
         config.addClove(ackClove);
-        
+
         config.setRecipient(_target);
 
         return config;
@@ -136,7 +136,7 @@ public class BuildTestMessageJob extends JobImpl {
         msg.setMessageId(_testMessageKey);
         if (_log.shouldDebug())
             _log.debug("Delivery status message key: " + _testMessageKey + " arrival: " + msg.getArrival());
-        
+
         PayloadGarlicConfig ackClove = new PayloadGarlicConfig(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null),
                                                                getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                                _timeoutMs+getContext().clock().now(),

@@ -2,16 +2,16 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
 
 /**
  * Defines the SessionKey as defined by the I2P data structure spec.
- * A session key is a 32 byte Integer. 
+ * A session key is a 32 byte Integer.
  *
  * To create one with random data, use I2PAppContext.keyGenerator().generateSessionKey().
  *
@@ -26,7 +26,7 @@ public class SessionKey extends SimpleDataStructure {
 
     public SessionKey() {
         super();
-    } 
+    }
 
     public SessionKey(byte data[]) {
         super(data);
@@ -46,8 +46,8 @@ public class SessionKey extends SimpleDataStructure {
     public void setData(byte[] data) {
         super.setData(data);
     }
-    
-    /** 
+
+    /**
      * retrieve an internal representation of the session key, as known
      * by the AES engine used.  this can be reused safely
      */

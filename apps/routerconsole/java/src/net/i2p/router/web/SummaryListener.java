@@ -259,7 +259,7 @@ public class SummaryListener implements RateSummaryListener {
     RrdDb getData() { return _db; }
 
     long now() { return _context.clock().now(); }
-    
+
     /** @since 0.9.46 */
     RrdBackendFactory getBackendFactory() {
         return getBackendFactory(_isPersistent);

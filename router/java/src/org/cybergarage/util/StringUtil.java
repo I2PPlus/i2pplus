@@ -25,7 +25,7 @@ public final class StringUtil
 			return false;
 		return true;
 	}
-	
+
 	public final static int toInteger(String value)
 	{
 		try {
@@ -57,11 +57,11 @@ public final class StringUtil
 		while (true) {
 			if (0 < offset) {
 				if (endIdx < idx)
-					break; 
+					break;
 			}
 			else {
 				if (idx < endIdx)
-					break; 
+					break;
 			}
 			char strc = str.charAt(idx);
 			int noEqualCnt = 0;
@@ -82,27 +82,27 @@ public final class StringUtil
 		}
 		return -1;
 	}
-	
+
 	public final static int findFirstOf(String str, String chars)
 	{
 		return findOf(str, chars, 0, (str.length()-1), 1, true);
 	}
-	
+
 	public final static int findFirstNotOf(String str, String chars)
 	{
 		return findOf(str, chars, 0, (str.length()-1), 1, false);
 	}
-	
+
 	public final static int findLastOf(String str, String chars)
 	{
 		return findOf(str, chars, (str.length()-1), 0, -1, true);
 	}
-	
+
 	public final static int findLastNotOf(String str, String chars)
 	{
 		return findOf(str, chars, (str.length()-1), 0, -1, false);
 	}
-	
+
 	public final static String trim(String trimStr, String trimChars)
 	{
 		int spIdx = findFirstNotOf(trimStr, trimChars);

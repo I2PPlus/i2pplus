@@ -20,7 +20,7 @@ public class LookaheadInputStream extends FilterInputStream {
     // Next byte to read.
     private int index;
     private static final InputStream _fakeInputStream = new ByteArrayInputStream(new byte[0]);
-    
+
     /**
      *  Configure a stream that hides a number of bytes from the reader.
      *  The last n bytes will never be available from read(),
@@ -35,9 +35,9 @@ public class LookaheadInputStream extends FilterInputStream {
         _footerLookahead = new byte[lookaheadSize];
         size = lookaheadSize;
     }
-    
+
     public boolean getEOFReached() { return _eofReached; }
-        
+
     /**
      *  Start the LookaheadInputStream with the given input stream.
      *  Resets everything if the LookaheadInputStream was previously used.
@@ -51,10 +51,10 @@ public class LookaheadInputStream extends FilterInputStream {
         index = 0;
         DataHelper.read(in, _footerLookahead);
     }
-    
+
     @Override
     public int read() throws IOException {
-        if (_eofReached) 
+        if (_eofReached)
             return -1;
         int c = in.read();
         if (c == -1) {
@@ -71,7 +71,7 @@ public class LookaheadInputStream extends FilterInputStream {
 
     @Override
     public int read(byte buf[], int off, int len) throws IOException {
-        if (_eofReached) 
+        if (_eofReached)
             return -1;
         for (int i = 0; i < len; i++) {
             int c = read();
@@ -86,7 +86,7 @@ public class LookaheadInputStream extends FilterInputStream {
         }
         return len;
     }
-    
+
     /**
      * Grab the lookahead footer.
      * This will be of size lookaheadsize given in constructor.
@@ -100,7 +100,7 @@ public class LookaheadInputStream extends FilterInputStream {
         System.arraycopy(_footerLookahead, 0, rv, size - index, index);
         return rv;
     }
-    
+
     /**
      *  @since 0.9.33
      */
@@ -113,7 +113,7 @@ public class LookaheadInputStream extends FilterInputStream {
         }
         return rv;
     }
-    
+
 /*******
     public static void main(String args[]) {
         byte buf[] = new byte[32];
@@ -135,7 +135,7 @@ public class LookaheadInputStream extends FilterInputStream {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         for (int i = 9; i < 32*1024; i++) {
             if (!test(i)) {
                 System.out.println("Everything is NOT fine at size=" + i);
@@ -144,7 +144,7 @@ public class LookaheadInputStream extends FilterInputStream {
         }
         System.out.println("Everything is fine in general");
     }
-    
+
     private static boolean test(int size) {
         byte buf[] = new byte[size];
         new java.util.Random().nextBytes(buf);

@@ -29,15 +29,15 @@ public class NodeData
 	////////////////////////////////////////////////
 
 	private Node node;
-	
+
 	public void setNode(Node node)
 	{
 		this.node = node;
 	}
-	
+
 	public Node getNode()
 	{
-		return node;	
+		return node;
 	}
 }
 

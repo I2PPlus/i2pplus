@@ -2,9 +2,9 @@ package net.i2p.data.router;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -27,9 +27,9 @@ import net.i2p.util.HexDump;
 import net.i2p.util.Log;
 
 /**
- * Component to manage the munging of hashes into routing keys - given a hash, 
+ * Component to manage the munging of hashes into routing keys - given a hash,
  * perform some consistent transformation against it and return the result.
- * This transformation is fed by the current "mod data".  
+ * This transformation is fed by the current "mod data".
  *
  * Right now the mod data is the current date (GMT) as a string: "yyyyMMdd",
  * and the transformation takes the original hash, appends the bytes of that mod data,
@@ -41,7 +41,7 @@ import net.i2p.util.Log;
  * into play layer on about making periodic updates to the routing key for data elements
  * to mess with Sybil.  This may be good enough though.
  *
- * Also - the method generateDateBasedModData() should be called after midnight GMT 
+ * Also - the method generateDateBasedModData() should be called after midnight GMT
  * once per day to generate the correct routing keys!
  *
  * @since 0.9.16 moved from net.i2p.data.RoutingKeyGenerator..
@@ -59,7 +59,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         // ensure non-null mod data
         generateDateBasedModData();
     }
-    
+
     private volatile byte _currentModData[];
     private volatile byte _nextModData[];
     private volatile long _nextMidnight;
@@ -128,7 +128,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      */
     private byte[] generateModDataFromCal() {
         Date today = _cal.getTime();
-        
+
         String modVal = _fmt.format(today);
         if (modVal.length() != LENGTH)
             throw new IllegalStateException();
@@ -163,7 +163,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         }
         return changed;
     }
-    
+
     /**
      * Generate a modified (yet consistent) hash from the origKey by generating the
      * SHA256 of the targetKey with the current modData appended to it
@@ -176,7 +176,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     public Hash getRoutingKey(Hash origKey) {
         return getKey(origKey, _currentModData);
     }
-    
+
     /**
      * Get the routing key using tomorrow's modData, not today's
      *
@@ -185,7 +185,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     public Hash getNextRoutingKey(Hash origKey) {
         return getKey(origKey, _nextModData);
     }
-    
+
     /**
      * Get the routing key for the specified date, not today's
      *
@@ -202,7 +202,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         byte[] mod = DataHelper.getASCII(modVal);
         return getKey(origKey, mod);
     }
-    
+
     /**
      * Generate a modified (yet consistent) hash from the origKey by generating the
      * SHA256 of the targetKey with the specified modData appended to it

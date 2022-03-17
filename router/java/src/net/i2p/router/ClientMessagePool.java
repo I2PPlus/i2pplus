@@ -1,9 +1,9 @@
 package net.i2p.router;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -24,14 +24,14 @@ public class ClientMessagePool {
     private final Log _log;
     private final RouterContext _context;
     private final OutboundCache _cache;
-    
+
     public ClientMessagePool(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(ClientMessagePool.class);
         _cache = new OutboundCache(_context);
         OutboundClientMessageOneShotJob.init(_context);
     }
-  
+
     /**
      *  @since 0.8.8
      */
@@ -47,7 +47,7 @@ public class ClientMessagePool {
     }
 
     /**
-     * Add a new message to the pool.  The message can either be locally or 
+     * Add a new message to the pool.  The message can either be locally or
      * remotely destined.
      *
      */
@@ -56,7 +56,7 @@ public class ClientMessagePool {
     }
     /**
      * If we're coming from the client subsystem itself, we already know whether
-     * the target is definitely remote and as such don't need to recheck 
+     * the target is definitely remote and as such don't need to recheck
      * ourselves, but if we aren't certain, we want it to check for us.
      *
      * @param isDefinitelyRemote true if we know for sure that the target is not local
@@ -79,7 +79,7 @@ public class ClientMessagePool {
                 _context.jobQueue().addJob(j);
         }
     }
-    
+
 /******
     private boolean isGuaranteed(ClientMessage msg) {
         Properties opts = null;

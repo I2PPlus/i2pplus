@@ -17,7 +17,7 @@ public class ElGamalParameterSpec implements AlgorithmParameterSpec {
     /**
      * Constructs a parameter set for Diffie-Hellman, using a prime modulus
      * <code>p</code> and a base generator <code>g</code>.
-     * 
+     *
      * @param p the prime modulus
      * @param g the base generator
      */

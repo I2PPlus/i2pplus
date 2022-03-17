@@ -29,7 +29,7 @@ class InternalSocketRunner extends I2PAppThread {
         this.client = client;
         this.port = client.getLocalPort();
     }
-    
+
     @Override
     public final void run() {
         try {

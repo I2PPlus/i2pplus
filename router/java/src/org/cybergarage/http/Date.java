@@ -56,7 +56,7 @@ public class Date
 	{
 		return getCalendar().get(Calendar.SECOND);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	paint
 	////////////////////////////////////////////////
@@ -71,7 +71,7 @@ public class Date
 		// Thanks for Theo Beisch (10/20/04)
 		return new Date(Calendar.getInstance(TimeZone.getTimeZone("GMT")));
 	}
-	
+
 	////////////////////////////////////////////////
 	//	getDateString
 	////////////////////////////////////////////////
@@ -105,7 +105,7 @@ public class Date
 			return MONTH_STRING[value];
 		return "";
 	}
-	
+
 	private final static String WEEK_STRING[] = {
 		"Sun",
 		"Mon",
@@ -132,13 +132,13 @@ public class Date
 		str += Integer.toString(value);
 		return str;
 	}
-	
+
 	public String getDateString()
 	{
 		// Thanks for Theo Beisch (10/20/04)
 		Calendar cal = getCalendar();
 		return
-			toWeekString(cal.get(Calendar.DAY_OF_WEEK)) +", " + 
+			toWeekString(cal.get(Calendar.DAY_OF_WEEK)) +", " +
 			toTimeString(cal.get(Calendar.DATE)) + " " +
 			toMonthString(cal.get(Calendar.MONTH)) + " " +
 			Integer.toString(cal.get(Calendar.YEAR)) + " " +
@@ -150,7 +150,7 @@ public class Date
 	////////////////////////////////////////////////
 	//	getTimeString
 	////////////////////////////////////////////////
-	
+
 	public String getTimeString()
 	{
 		// Thanks for Theo Beisch (10/20/04)
@@ -160,6 +160,6 @@ public class Date
 			(((cal.get(Calendar.SECOND) % 2) == 0) ? ":" : " ") +
 			toDateString(cal.get(Calendar.MINUTE));
 	}
-		
+
 }
 

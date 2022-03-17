@@ -27,7 +27,7 @@ import net.i2p.util.Translate;
  *  Full access to router context.
  */
 class InternalTrayManager extends TrayManager {
-	
+
     private final RouterContext _context;
     private final Log log;
     private final Main _main;
@@ -59,7 +59,7 @@ class InternalTrayManager extends TrayManager {
 
     public synchronized PopupMenu getMainMenu() {
         PopupMenu popup = new PopupMenu();
-        
+
         final MenuItem statusItem = new MenuItem("");
 
         final MenuItem browserLauncher;
@@ -73,7 +73,7 @@ class InternalTrayManager extends TrayManager {
                         protected Object doInBackground() throws Exception {
                             return null;
                         }
-                        
+
                         @Override
                         protected void done() {
                             launchBrowser();
@@ -226,7 +226,7 @@ class InternalTrayManager extends TrayManager {
             popup.add(restartItem2);
         popup.add(stopItem2);
         popup.add(cancelItem);
-        
+
         _statusItem = statusItem;
         _browserItem = browserLauncher;
         _configItem = desktopguiConfigurationLauncher;
@@ -243,7 +243,7 @@ class InternalTrayManager extends TrayManager {
 
     public synchronized JPopupMenu getSwingMainMenu() {
         JPopupMenu popup = new JPopupMenu();
-        
+
         final JMenuItem statusItem = new JMenuItem("");
 
         final JMenuItem browserLauncher;
@@ -257,7 +257,7 @@ class InternalTrayManager extends TrayManager {
                         protected Object doInBackground() throws Exception {
                             return null;
                         }
-                        
+
                         @Override
                         protected void done() {
                             launchBrowser();
@@ -410,7 +410,7 @@ class InternalTrayManager extends TrayManager {
             popup.add(restartItem2);
         popup.add(stopItem2);
         popup.add(cancelItem);
-        
+
         _jstatusItem = statusItem;
         _jbrowserItem = browserLauncher;
         _jconfigItem = desktopguiConfigurationLauncher;
@@ -534,6 +534,6 @@ class InternalTrayManager extends TrayManager {
             launcher.openUrl(url);
         } catch (IOException e1) {
             log.log(Log.WARN, "Failed to open browser!", e1);
-        }    
+        }
     }
 }

@@ -185,7 +185,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
          * has detected concurrent modification.
          */
         int expectedModCount = modCount;
-        
+
         public boolean hasNext() {
             return cursor != _size;
         }

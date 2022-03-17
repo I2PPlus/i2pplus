@@ -23,7 +23,7 @@
 * 		- Changed run() to catch IOException of HTTPMUSocket::receive().
 *	01/10/08
 *		- Changed start() not to abort when the interface infomation is null on Android m3-rc37a.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -41,14 +41,14 @@ import org.cybergarage.upnp.device.*;
 public class SSDPSearchSocket extends HTTPMUSocket implements Runnable
 {
 	private boolean useIPv6Address;
-	
+
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
 
 
 	/**
-	 * 
+	 *
 	 * @param bindAddr The address to bind the service
 	 * @param port The port used for accepting message
 	 * @param multicast The multicast address to use as destination
@@ -59,7 +59,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable
 	}
 
 	/**
-	 * 
+	 *
 	 * @param bindAddr the binding address for sending multicast packet
 	 * @since 1.8
 	 */
@@ -78,13 +78,13 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable
 		useIPv6Address = false;
 		return open(SSDP.ADDRESS, SSDP.PORT, bindAddr);
 	}
-	
+
 	public boolean open(Inet6Address bindAddr){
 		useIPv6Address = true;
 		return open(SSDP.getIPv6Address(), SSDP.PORT, bindAddr);
 	}
-	
-	public boolean open(String bind,String multicast){		
+
+	public boolean open(String bind,String multicast){
 		if ((HostInterface.isIPv6Address(bind) ) && (HostInterface.isIPv6Address(multicast))){
 			useIPv6Address = true;
 		}else if(HostInterface.isIPv4Address(bind) && (HostInterface.isIPv4Address(multicast))){
@@ -96,7 +96,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable
 	}
 
 	/**
-	 * 
+	 *
 	 * @param bindAddr the hostname of the interface to use for sending multicast packet
 	 * @return true if and only if it open the socket
 	 * @see org.cybergarage.upnp.ssdp for default multicast and port destination of the packets
@@ -111,22 +111,22 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable
 		}
 		return open(addr, SSDP.PORT, bindAddr);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	deviceSearch
 	////////////////////////////////////////////////
 
 	private ListenerList deviceSearchListenerList = new ListenerList();
-	 	
+	 
 	public void addSearchListener(SearchListener listener)
 	{
 		deviceSearchListenerList.add(listener);
-	}		
+	}
 
 	public void removeSearchListener(SearchListener listener)
 	{
 		deviceSearchListenerList.remove(listener);
-	}		
+	}
 
 	public void performSearchListener(SSDPPacket ssdpPacket)
 	{
@@ -135,18 +135,18 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable
 			SearchListener listener = (SearchListener)deviceSearchListenerList.get(n);
 			listener.deviceSearchReceived(ssdpPacket);
 		}
-	}		
-	
+	}
+
 	////////////////////////////////////////////////
-	//	run	
+	//	run
 	////////////////////////////////////////////////
 
 	private Thread deviceSearchThread = null;
-		
+
 	public void run()
 	{
 		Thread thisThread = Thread.currentThread();
-		
+
 		while (deviceSearchThread == thisThread) {
 			Thread.yield();
 
@@ -155,20 +155,20 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable
 			try {
 				packet = receive();
 			}
-			catch (IOException e) { 
+			catch (IOException e) {
 				break;
 			}
-			
+
 			// Thanks for Mikael Hakman (04/20/05)
 			if (packet == null)
 				continue;
-				
+
 			//TODO perform delegation with Thread Pooling
 			if (packet.isDiscover() == true)
 				performSearchListener(packet);
 		}
 	}
-	
+
 	public void start() {
 		StringBuffer name = new StringBuffer("Cyber.SSDPSearchSocket/");
 		String localAddr = this.getLocalAddress();
@@ -183,12 +183,12 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable
 		deviceSearchThread = new Thread(this,name.toString());
 		deviceSearchThread.start();
 	}
-	
+
 	public void stop()
 	{
 		// Thanks for Mikael Hakman (04/20/05)
 		close();
-		
+
 		deviceSearchThread = null;
 	}
 }

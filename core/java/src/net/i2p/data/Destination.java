@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -116,8 +116,8 @@ public class Destination extends KeysAndCert {
     /**
      *  Deprecated, used only by Packet.java in streaming.
      *  Broken for sig types P521 and RSA before 0.9.15
-     *  @return the written length (NOT the new offset)    
-     */    
+     *  @return the written length (NOT the new offset)
+     */
     public int writeBytes(byte target[], int offset) {
         int cur = offset;
         System.arraycopy(_publicKey.getData(), 0, target, cur, PublicKey.KEYSIZE_BYTES);
@@ -132,7 +132,7 @@ public class Destination extends KeysAndCert {
         cur += _certificate.writeBytes(target, cur);
         return cur - offset;
     }
-    
+
     /**
      * deprecated was used only by Packet.java in streaming, now unused
      * Warning - used by i2p-bote. Does NOT support alternate key types. DSA-SHA1 only.
@@ -143,21 +143,21 @@ public class Destination extends KeysAndCert {
     @Deprecated
     public int readBytes(byte source[], int offset) throws DataFormatException {
         if (source == null) throw new DataFormatException("Null source");
-        if (source.length <= offset + PublicKey.KEYSIZE_BYTES + SigningPublicKey.KEYSIZE_BYTES) 
+        if (source.length <= offset + PublicKey.KEYSIZE_BYTES + SigningPublicKey.KEYSIZE_BYTES)
             throw new DataFormatException("Not enough data (len=" + source.length + " off=" + offset + ")");
         if (_publicKey != null || _signingKey != null || _certificate != null)
             throw new IllegalStateException();
         int cur = offset;
-        
+
         _publicKey = PublicKey.create(source, cur);
         cur += PublicKey.KEYSIZE_BYTES;
-        
+
         _signingKey = SigningPublicKey.create(source, cur);
         cur += SigningPublicKey.KEYSIZE_BYTES;
-        
+
         _certificate = Certificate.create(source, cur);
         cur += _certificate.size();
-        
+
         return cur - offset;
     }
 

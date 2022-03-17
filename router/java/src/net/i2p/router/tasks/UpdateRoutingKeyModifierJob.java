@@ -1,9 +1,9 @@
 package net.i2p.router.tasks;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -25,7 +25,7 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
     // Run every 15 minutes in case of time zone change, clock skew, etc.
     private static final long MAX_DELAY_FAILSAFE = 15*60*1000;
 
-    public UpdateRoutingKeyModifierJob(RouterContext ctx) { 
+    public UpdateRoutingKeyModifierJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(getClass());
     }

@@ -7,27 +7,27 @@ import java.util.Map;
 import org.json.simple.JsonObject;
 
 
-/** 
- * Represents a JSON-RPC 2.0 notification. 
+/**
+ * Represents a JSON-RPC 2.0 notification.
  *
- * <p>Notifications provide a mean for calling a remote procedure without 
- * generating a response. Note that notifications are inherently unreliable 
+ * <p>Notifications provide a mean for calling a remote procedure without
+ * generating a response. Note that notifications are inherently unreliable
  * as no confirmation is sent back to the caller.
  *
  * <p>Notifications have the same JSON structure as requests, except that they
  * lack an identifier:
  * <ul>
  *     <li>{@code method} The name of the remote method to call.
- *     <li>{@code params} The required method parameters (if any), which can 
+ *     <li>{@code params} The required method parameters (if any), which can
  *         be packed into a JSON array or object.
- *     <li>{@code jsonrpc} A string indicating the JSON-RPC protocol version 
+ *     <li>{@code jsonrpc} A string indicating the JSON-RPC protocol version
  *         set to "2.0".
  * </ul>
  *
  * <p>Here is a sample JSON-RPC 2.0 notification string:
  *
  * <pre>
- * {  
+ * {
  *    "method"  : "progressNotify",
  *    "params"  : ["75%"],
  *    "jsonrpc" : "2.0"
@@ -36,8 +36,8 @@ import org.json.simple.JsonObject;
  *
  * <p>This class provides two methods to obtain a request object:
  * <ul>
- *     <li>Pass a JSON-RPC 2.0 notification string to the static 
- *         {@link #parse} method, or 
+ *     <li>Pass a JSON-RPC 2.0 notification string to the static
+ *         {@link #parse} method, or
  *     <li>Invoke one of the constructors with the appropriate arguments.
  * </ul>
  *
@@ -45,9 +45,9 @@ import org.json.simple.JsonObject;
  *
  * <pre>
  * String jsonString = "{\"method\":\"progressNotify\",\"params\":[\"75%\"],\"jsonrpc\":\"2.0\"}";
- * 
+ *
  * JSONRPC2Notification notification = null;
- * 
+ *
  * try {
  *         notification = JSONRPC2Notification.parse(jsonString);
  *
@@ -57,7 +57,7 @@ import org.json.simple.JsonObject;
  * </pre>
  *
  * <p>Example 2: Recreating the above request:
- * 
+ *
  * <pre>
  * String method = "progressNotify";
  * List&lt;Object&gt; params = new Vector&lt;Object&gt;();
@@ -68,8 +68,8 @@ import org.json.simple.JsonObject;
  * System.out.println(notification);
  * </pre>
  *
- * <p id="map">The mapping between JSON and Java entities (as defined by the 
- * underlying JSON Smart library): 
+ * <p id="map">The mapping between JSON and Java entities (as defined by the
+ * underlying JSON Smart library):
  *
  * <pre>
  *     true|false  &lt;---&gt;  java.lang.Boolean
@@ -79,18 +79,18 @@ import org.json.simple.JsonObject;
  *     object      &lt;---&gt;  java.util.Map
  *     null        &lt;---&gt;  null
  * </pre>
- * 
+ *
  * @author Vladimir Dzhuvinov
  */
 public class JSONRPC2Notification extends JSONRPC2Message {
 
 
-	/** 
-	 * The requested method name. 
+	/**
+	 * The requested method name.
 	 */
 	private String method;
 
-	
+
 	/**
 	 * The positional parameters, {@code null} if none.
 	 */
@@ -101,188 +101,188 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 	 * The named parameters, {@code null} if none.
 	 */
 	private Map<String,Object> namedParams;
-	
-	
-	/** 
-	 * Parses a JSON-RPC 2.0 notification string. This method is 
+
+
+	/**
+	 * Parses a JSON-RPC 2.0 notification string. This method is
 	 * thread-safe.
 	 *
-	 * @param jsonString The JSON-RPC 2.0 notification string, UTF-8 
+	 * @param jsonString The JSON-RPC 2.0 notification string, UTF-8
 	 *                   encoded. Must not be {@code null}.
 	 *
 	 * @return The corresponding JSON-RPC 2.0 notification object.
 	 *
-	 * @throws JSONRPC2ParseException With detailed message if parsing 
+	 * @throws JSONRPC2ParseException With detailed message if parsing
 	 *                                failed.
 	 */
 	public static JSONRPC2Notification parse(final String jsonString)
 		throws JSONRPC2ParseException {
-	
+
 		return parse(jsonString, false, false, false);
 	}
-	
-	
-	/** 
-	 * Parses a JSON-RPC 2.0 notification string. This method is 
+
+
+	/**
+	 * Parses a JSON-RPC 2.0 notification string. This method is
 	 * thread-safe.
 	 *
-	 * @param jsonString    The JSON-RPC 2.0 notification string, UTF-8 
+	 * @param jsonString    The JSON-RPC 2.0 notification string, UTF-8
 	 *                      encoded. Must not be {@code null}.
-	 * @param preserveOrder {@code true} to preserve the order of JSON 
+	 * @param preserveOrder {@code true} to preserve the order of JSON
 	 *                      object members in parameters.
 	 *
 	 * @return The corresponding JSON-RPC 2.0 notification object.
 	 *
-	 * @throws JSONRPC2ParseException With detailed message if parsing 
+	 * @throws JSONRPC2ParseException With detailed message if parsing
 	 *                                failed.
 	 */
-	public static JSONRPC2Notification parse(final String jsonString, 
+	public static JSONRPC2Notification parse(final String jsonString,
 		                                 final boolean preserveOrder)
 		throws JSONRPC2ParseException {
-		
+
 		return parse(jsonString, preserveOrder, false, false);
 	}
-	
-	
-	/** 
-	 * Parses a JSON-RPC 2.0 notification string. This method is 
+
+
+	/**
+	 * Parses a JSON-RPC 2.0 notification string. This method is
 	 * thread-safe.
 	 *
-	 * @param jsonString    The JSON-RPC 2.0 notification string, UTF-8 
+	 * @param jsonString    The JSON-RPC 2.0 notification string, UTF-8
 	 *                      encoded. Must not be {@code null}.
-	 * @param preserveOrder {@code true} to preserve the order of JSON 
+	 * @param preserveOrder {@code true} to preserve the order of JSON
 	 *                      object members in parameters.
-	 * @param ignoreVersion {@code true} to skip a check of the 
-	 *                      {@code "jsonrpc":"2.0"} version attribute in the 
+	 * @param ignoreVersion {@code true} to skip a check of the
+	 *                      {@code "jsonrpc":"2.0"} version attribute in the
 	 *                      JSON-RPC 2.0 message.
 	 *
 	 * @return The corresponding JSON-RPC 2.0 notification object.
 	 *
-	 * @throws JSONRPC2ParseException With detailed message if parsing 
+	 * @throws JSONRPC2ParseException With detailed message if parsing
 	 *                                failed.
 	 */
-	public static JSONRPC2Notification parse(final String jsonString, 
-		                                 final boolean preserveOrder, 
+	public static JSONRPC2Notification parse(final String jsonString,
+		                                 final boolean preserveOrder,
 		                                 final boolean ignoreVersion)
 		throws JSONRPC2ParseException {
-		
+
 		return parse(jsonString, preserveOrder, ignoreVersion, false);
 	}
-	
-	
-	/** 
-	 * Parses a JSON-RPC 2.0 notification string. This method is 
+
+
+	/**
+	 * Parses a JSON-RPC 2.0 notification string. This method is
 	 * thread-safe.
 	 *
-	 * @param jsonString            The JSON-RPC 2.0 notification string, 
+	 * @param jsonString            The JSON-RPC 2.0 notification string,
 	 *                              UTF-8 encoded. Must not be {@code null}.
 	 * @param preserveOrder         {@code true} to preserve the order of
 	 *                              JSON object members in parameters.
-	 * @param ignoreVersion         {@code true} to skip a check of the 
-	 *                              {@code "jsonrpc":"2.0"} version 
+	 * @param ignoreVersion         {@code true} to skip a check of the
+	 *                              {@code "jsonrpc":"2.0"} version
 	 *                              attribute in the JSON-RPC 2.0 message.
 	 * @param parseNonStdAttributes {@code true} to parse non-standard
-	 *                              attributes found in the JSON-RPC 2.0 
+	 *                              attributes found in the JSON-RPC 2.0
 	 *                              message.
 	 *
 	 * @return The corresponding JSON-RPC 2.0 notification object.
 	 *
-	 * @throws JSONRPC2ParseException With detailed message if parsing 
+	 * @throws JSONRPC2ParseException With detailed message if parsing
 	 *                                failed.
 	 */
-	public static JSONRPC2Notification parse(final String jsonString, 
-	                                         final boolean preserveOrder, 
-						 final boolean ignoreVersion, 
+	public static JSONRPC2Notification parse(final String jsonString,
+	                                         final boolean preserveOrder,
+						 final boolean ignoreVersion,
 						 final boolean parseNonStdAttributes)
 		throws JSONRPC2ParseException {
-		
+
 		JSONRPC2Parser parser = new JSONRPC2Parser(preserveOrder, ignoreVersion, parseNonStdAttributes);
-		
+
 		return parser.parseJSONRPC2Notification(jsonString);
 	}
-	
-	
-	/** 
+
+
+	/**
 	 * Constructs a new JSON-RPC 2.0 notification with no parameters.
 	 *
-	 * @param method The name of the requested method. Must not be 
+	 * @param method The name of the requested method. Must not be
 	 *               {@code null}.
 	 */
 	public JSONRPC2Notification(final String method) {
-		
+
 		setMethod(method);
 		setParams(null);
 	}
 
 
-	/** 
-	 * Constructs a new JSON-RPC 2.0 notification with positional (JSON 
+	/**
+	 * Constructs a new JSON-RPC 2.0 notification with positional (JSON
 	 * array) parameters.
 	 *
-	 * @param method           The name of the requested method. Must not 
+	 * @param method           The name of the requested method. Must not
 	 *                         be {@code null}.
-	 * @param positionalParams The positional (JSON array) parameters, 
+	 * @param positionalParams The positional (JSON array) parameters,
 	 *                         {@code null} if none.
 	 */
-	public JSONRPC2Notification(final String method, 
+	public JSONRPC2Notification(final String method,
 		                    final List<Object> positionalParams) {
-		
+
 		setMethod(method);
 		setPositionalParams(positionalParams);
 	}
-		
-	
-	/** 
+
+
+	/**
 	 * Constructs a new JSON-RPC 2.0 notification with named (JSON object)
 	 * parameters.
 	 *
 	 * @param method      The name of the requested method.
-	 * @param namedParams The named (JSON object) parameters, {@code null} 
+	 * @param namedParams The named (JSON object) parameters, {@code null}
 	 *                    if none.
 	 */
-	public JSONRPC2Notification(final String method, 
+	public JSONRPC2Notification(final String method,
 		                    final Map <String,Object> namedParams) {
-		
+
 		setMethod(method);
 		setNamedParams(namedParams);
 	}
-	
-	
-	/** 
+
+
+	/**
 	 * Gets the name of the requested method.
 	 *
 	 * @return The method name.
 	 */
 	public String getMethod() {
-		
+
 		return method;
 	}
-	
-	
+
+
 	/**
 	 * Sets the name of the requested method.
 	 *
 	 * @param method The method name. Must not be {@code null}.
 	 */
 	public void setMethod(final String method) {
-		
+
 		// The method name is mandatory
 		if (method == null)
 			throw new IllegalArgumentException("The method name must not be null");
 
 		this.method = method;
 	}
-	
-	
-	/** 
-	 * Gets the parameters type ({@link JSONRPC2ParamsType#ARRAY positional}, 
-	 * {@link JSONRPC2ParamsType#OBJECT named} or 
+
+
+	/**
+	 * Gets the parameters type ({@link JSONRPC2ParamsType#ARRAY positional},
+	 * {@link JSONRPC2ParamsType#OBJECT named} or
 	 * {@link JSONRPC2ParamsType#NO_PARAMS none}).
 	 *
 	 * @return The parameters type.
 	 */
 	public JSONRPC2ParamsType getParamsType() {
-	
+
 		if (positionalParams == null && namedParams == null)
 			return JSONRPC2ParamsType.NO_PARAMS;
 
@@ -295,8 +295,8 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 		else
 			return JSONRPC2ParamsType.NO_PARAMS;
 	}
-	
-	/** 
+
+	/**
 	 * Gets the notification parameters.
 	 *
 	 * <p>This method was deprecated in version 1.30. Use
@@ -308,7 +308,7 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 	 */
 	@Deprecated
 	public Object getParams() {
-		
+
 		switch (getParamsType()) {
 
 			case ARRAY:
@@ -342,22 +342,22 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 	 *
 	 * @since 1.30
 	 *
-	 * @return The named (JSON object) parameters, {@code null} if none or 
+	 * @return The named (JSON object) parameters, {@code null} if none or
 	 *         positional.
 	 */
 	public Map<String,Object> getNamedParams() {
 
 		return namedParams;
 	}
-	
-	
+
+
 	/**
 	 * Sets the notification parameters.
 	 *
 	 * <p>This method was deprecated in version 1.30. Use
 	 * {@link #setPositionalParams} or {@link #setNamedParams} instead.
 	 *
-	 * @param params The parameters. For positional (JSON array) pass a 
+	 * @param params The parameters. For positional (JSON array) pass a
 	 *               {@code List&lt;Object&gt;}. For named (JSON object)
 	 *               pass a {@code Map&lt;String,Object&gt;}. If there are
 	 *               no parameters pass {@code null}.
@@ -365,7 +365,7 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 	@Deprecated
 	@SuppressWarnings("unchecked")
 	public void setParams(final Object params) {
-	
+
 		if (params == null) {
 			positionalParams = null;
 			namedParams = null;
@@ -384,7 +384,7 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 	 *
 	 * @since 1.30
 	 *
-	 * @param positionalParams The positional (JSON array) request 
+	 * @param positionalParams The positional (JSON array) request
 	 *                         parameters, {@code null} if none.
 	 */
 	public void setPositionalParams(final List<Object> positionalParams) {
@@ -411,15 +411,15 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 
 		this.namedParams = namedParams;
 	}
-	
-	
+
+
 	@Override
 	public JsonObject toJSONObject() {
-	
+
 		JsonObject notf = new JsonObject();
-		
+
 		notf.put("method", method);
-		
+
 		// The params can be omitted if none
 		switch (getParamsType()) {
 
@@ -431,18 +431,18 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 				notf.put("params", namedParams);
 				break;
 		}
-		
+
 		notf.put("jsonrpc", "2.0");
-		
-		
+
+
 		Map <String,Object> nonStdAttributes = getNonStdAttributes();
-		
+
 		if (nonStdAttributes != null) {
-		
+
 			for (final Map.Entry<String,Object> attr: nonStdAttributes.entrySet())
 				notf.put(attr.getKey(), attr.getValue());
 		}
-		
+
 		return notf;
 	}
 }

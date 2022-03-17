@@ -58,7 +58,7 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.14
  */
 class PersistentMailCache {
-	
+
 	/**
 	 *  One lock for each user in the whole JVM, to protect against multiple sessions.
 	 *  One big lock for the whole cache dir, not one for each file or subdir.
@@ -115,7 +115,7 @@ class PersistentMailCache {
 
 	/**
 	 * Fetch all mails from disk.
-	 * 
+	 *
 	 * @return a new collection
 	 */
 	public Collection<Mail> getMails() {
@@ -145,7 +145,7 @@ class PersistentMailCache {
 		int sz = fq.size();
 		if (sz <= 0)
 			return Collections.emptyList();
-		
+
 		// thread the read-in
 		long begin = _context.clock().now();
 		Queue<Mail> rv = new LinkedBlockingQueue<Mail>();
@@ -195,7 +195,7 @@ class PersistentMailCache {
 
 	/**
 	 * Fetch any needed data from disk.
-	 * 
+	 *
 	 * @return success
 	 */
 	public boolean getMail(Mail mail, boolean headerOnly) {
@@ -226,7 +226,7 @@ class PersistentMailCache {
 
 	/**
 	 * Save data to disk.
-	 * 
+	 *
 	 * @return success
 	 */
 	public boolean saveMail(Mail mail) {
@@ -258,7 +258,7 @@ class PersistentMailCache {
 	}
 
 	/**
-	 * 
+	 *
 	 * Delete data from disk.
 	 */
 	public void deleteMail(Mail mail) {
@@ -266,7 +266,7 @@ class PersistentMailCache {
 	}
 
 	/**
-	 * 
+	 *
 	 * Delete data from disk.
 	 */
 	public void deleteMail(String uidl) {
@@ -345,7 +345,7 @@ class PersistentMailCache {
 
 	/**
 	 * Save data to disk.
-	 * 
+	 *
 	 * @return success
 	 */
 	private boolean write(Buffer rb, File f) {
@@ -363,9 +363,9 @@ class PersistentMailCache {
 			rb.readComplete(false);
 			return false;
 		} finally {
-			if (in != null) 
+			if (in != null)
 				try { in.close(); } catch (IOException ioe) {}
-			if (out != null) 
+			if (out != null)
 				try { out.close(); } catch (IOException ioe) {}
 		}
 	}
@@ -443,7 +443,7 @@ class PersistentMailCache {
 					_log.error("Import failed " + f, ioe);
 					continue;
 				} finally {
-					if (in != null) 
+					if (in != null)
 						try { in.close(); } catch (IOException ioe) {}
 				}
 				if (uidl == null)
@@ -466,9 +466,9 @@ class PersistentMailCache {
 					_log.error("Import failed " + f, ioe);
 					continue;
 				} finally {
-					if (in != null) 
+					if (in != null)
 						try { in.close(); } catch (IOException ioe) {}
-					if (out != null) 
+					if (out != null)
 						try { out.close(); } catch (IOException ioe) {}
 				}
 				f.delete();

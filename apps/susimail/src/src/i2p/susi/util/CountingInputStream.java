@@ -12,21 +12,21 @@ import java.io.InputStream;
 public class CountingInputStream extends FilterInputStream implements ReadCounter {
 
     protected long count;
-    
+
     /**
      *
      */
     public CountingInputStream(InputStream in) {
         super(in);
     }
-    
+
     @Override
     public long skip(long n) throws IOException {
 	long rv = in.skip(n);
         count += rv;
         return rv;
     }
-    
+
     public long getRead() {
         return count;
     }
@@ -46,5 +46,5 @@ public class CountingInputStream extends FilterInputStream implements ReadCounte
             count += rv;
         return rv;
     }
-    
+
 }

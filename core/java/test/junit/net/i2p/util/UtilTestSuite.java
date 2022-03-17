@@ -9,17 +9,17 @@ import junit.framework.TestSuite;
  * @author comwiz
  */
 public class UtilTestSuite {
-    
+
     public static Test suite() {
         TestSuite suite = new TestSuite("net.i2p.util.UtilTestSuite");
-        
+
         suite.addTestSuite(LogSettingsTest.class);
         suite.addTestSuite(LookAheadInputStreamTest.class);
         suite.addTestSuite(ResettableGZIPInputStreamTest.class);
         suite.addTestSuite(ResettableGZIPOutputStreamTest.class);
         suite.addTestSuite(ReusableGZIPInputStreamTest.class);
         suite.addTestSuite(ReusableGZIPOutputStreamTest.class);
-        
+
         return suite;
     }
 }

@@ -577,7 +577,7 @@ public final class SigUtil {
             }
             return out.toByteArray();
         } finally {
-            if (in != null) 
+            if (in != null)
                 try { in.close(); } catch (IOException ioe) {}
         }
     }
@@ -788,7 +788,7 @@ public final class SigUtil {
         int sublen = len / 2;
         int rlen = asn[++idx];
         if ((rlen & 0x80) != 0) {
-            if ((rlen & 0xff) == 0x81) { 
+            if ((rlen & 0xff) == 0x81) {
                 rlen = asn[++idx] & 0xff;
             } else if ((rlen & 0xff) == 0x82) {
                 rlen = asn[++idx] & 0xff;
@@ -812,7 +812,7 @@ public final class SigUtil {
             throw new SignatureException("asn[s] = " + (asn[idx] & 0xff));
         int slen = asn[++idx];
         if ((slen & 0x80) != 0) {
-            if ((slen & 0xff) == 0x81) { 
+            if ((slen & 0xff) == 0x81) {
                 slen = asn[++idx] & 0xff;
             } else if ((slen & 0xff) == 0x82) {
                 slen = asn[++idx] & 0xff;

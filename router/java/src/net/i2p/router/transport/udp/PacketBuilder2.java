@@ -41,7 +41,7 @@ class PacketBuilder2 {
     private final RouterContext _context;
     private final Log _log;
     private final UDPTransport _transport;
-    
+
     /**
      *  For debugging and stats only - does not go out on the wire.
      *  These are chosen to be higher than the highest I2NP message type,
@@ -80,7 +80,7 @@ class PacketBuilder2 {
      */
     static final int PRIORITY_HIGH = 550;
     private static final int PRIORITY_LOW = OutNetMessage.PRIORITY_LOWEST;
-    
+
     // every this many packets
     private static final int DATETIME_SEND_FREQUENCY = 256;
 
@@ -214,7 +214,7 @@ class PacketBuilder2 {
         } else if (_log.shouldDebug()) {
             _log.debug("No room for acks, MTU: " + currentMTU + " data: " + dataSize + " available: " + availableForAcks);
         }
-        
+
         // now write each fragment
         for (int i = 0; i < numFragments; i++) {
             Fragment frag = fragments.get(i);
@@ -271,7 +271,7 @@ class PacketBuilder2 {
         setTo(packet, peer.getRemoteIPAddress(), peer.getRemotePort());
         //if (_log.shouldDebug())
         //    _log.debug("Packet " + pktNum + " after encryption:\n" + HexDump.dump(data, 0, pkt.getLength()));
-        
+
         // FIXME ticket #2675
         // the packet could have been built before the current mtu got lowered, so
         // compare to LARGE_MTU
@@ -287,7 +287,7 @@ class PacketBuilder2 {
                        " Fragments: " + DataHelper.toString(fragments), new Exception());
             }
         }
-        
+
         packet.setPriority(priority);
         if (fragments.isEmpty()) {
             peer.getAckedMessages().set(pktNum); // not ack-eliciting
@@ -304,7 +304,7 @@ class PacketBuilder2 {
         }
         return packet;
     }
-    
+
     /**
      * A DATA packet with padding only.
      * We use this for keepalive purposes.
@@ -346,11 +346,11 @@ class PacketBuilder2 {
         Block block = new SSU2Payload.TerminationBlock(reason, peer.getReceivedMessages().getHighestSet());
         return buildPacket(Collections.emptyList(), Collections.singletonList(block), peer);
     }
-    
+
     /**
-     * Build a new SessionRequest packet for the given peer, encrypting it 
+     * Build a new SessionRequest packet for the given peer, encrypting it
      * as necessary.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildTokenRequestPacket(OutboundEstablishState2 state) {
@@ -367,11 +367,11 @@ class PacketBuilder2 {
         state.tokenRequestSent(pkt);
         return packet;
     }
-    
+
     /**
-     * Build a new SessionRequest packet for the given peer, encrypting it 
+     * Build a new SessionRequest packet for the given peer, encrypting it
      * as necessary.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildSessionRequestPacket(OutboundEstablishState2 state) {
@@ -388,11 +388,11 @@ class PacketBuilder2 {
         state.requestSent(pkt);
         return packet;
     }
-    
+
     /**
-     * Build a new SessionCreated packet for the given peer, encrypting it 
+     * Build a new SessionCreated packet for the given peer, encrypting it
      * as necessary.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildSessionCreatedPacket(InboundEstablishState2 state) {
@@ -400,7 +400,7 @@ class PacketBuilder2 {
         UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, SESSION_CREATED_FLAG_BYTE,
                                                  state.getRcvConnID(), state.getToken());
         DatagramPacket pkt = packet.getPacket();
-        
+
         byte sentIP[] = state.getSentIP();
         pkt.setLength(LONG_HEADER_SIZE);
         int port = state.getSentPort();
@@ -413,11 +413,11 @@ class PacketBuilder2 {
         state.createdPacketSent(pkt);
         return packet;
     }
-    
+
     /**
-     * Build a new Retry packet for the given peer, encrypting it 
+     * Build a new Retry packet for the given peer, encrypting it
      * as necessary.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildRetryPacket(InboundEstablishState2 state) {
@@ -425,7 +425,7 @@ class PacketBuilder2 {
         UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, RETRY_FLAG_BYTE,
                                                  state.getRcvConnID(), state.getToken());
         DatagramPacket pkt = packet.getPacket();
-        
+
         byte sentIP[] = state.getSentIP();
         pkt.setLength(LONG_HEADER_SIZE);
         int port = state.getSentPort();
@@ -438,17 +438,17 @@ class PacketBuilder2 {
         state.retryPacketSent();
         return packet;
     }
-    
+
     /**
-     * Build a new series of SessionConfirmed packets for the given peer, 
+     * Build a new series of SessionConfirmed packets for the given peer,
      * encrypting it as necessary.
      *
      * Note that while a SessionConfirmed could in theory be fragmented,
      * in practice a RouterIdentity is 387 bytes and a single fragment is 512 bytes max,
      * so it will never be fragmented.
-     * 
+     *
      * @return ready to send packets, or null if there was a problem
-     * 
+     *
      * TODO: doesn't really return null, and caller doesn't handle null return
      * (null SigningPrivateKey should cause this?)
      * Should probably return null if buildSessionConfirmedPacket() returns null for any fragment
@@ -509,7 +509,7 @@ class PacketBuilder2 {
 
     /**
      * Build a new SessionConfirmed packet for the given peer
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     private UDPPacket buildSessionConfirmedPacket(OutboundEstablishState2 state, int numFragments, byte ourInfo[], int len, boolean gzip) {
@@ -528,9 +528,9 @@ class PacketBuilder2 {
     }
 
     /**
-     * Build a packet as if we are Alice and we either want Bob to begin a 
+     * Build a packet as if we are Alice and we either want Bob to begin a
      * peer test or Charlie to finish a peer test.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
 /*
@@ -540,9 +540,9 @@ class PacketBuilder2 {
 */
 
     /**
-     * Build a packet as if we are Alice and we either want Bob to begin a 
+     * Build a packet as if we are Alice and we either want Bob to begin a
      * peer test or Charlie to finish a peer test.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
 /*
@@ -554,7 +554,7 @@ class PacketBuilder2 {
         int off = SHORT_HEADER_SIZE;
         if (_log.shouldDebug())
             _log.debug("Sending peer test " + nonce + " to Bob");
-        
+
         // now for the body
         DataHelper.toLong(data, off, 4, nonce);
         off += 4;
@@ -563,7 +563,7 @@ class PacketBuilder2 {
         off += 2;
         System.arraycopy(aliceIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
-        
+
         pkt.setLength(off);
         authenticate(packet, toCipherKey, toMACKey);
         setTo(packet, toIP, toPort);
@@ -588,7 +588,7 @@ class PacketBuilder2 {
 
     /**
      * Build a packet as if we are either Bob or Charlie and we are helping test Alice.
-     * 
+     *
      * @param aliceCipherKey the intro key if we are Charlie
      * @param aliceMACKey the intro key if we are Charlie
      * @return ready to send packet, or null if there was a problem
@@ -603,7 +603,7 @@ class PacketBuilder2 {
         int off = SHORT_HEADER_SIZE;
         if (_log.shouldDebug())
             _log.debug("Sending peer test " + nonce + " to Alice");
-        
+
         // now for the body
         DataHelper.toLong(data, off, 4, nonce);
         off += 4;
@@ -615,7 +615,7 @@ class PacketBuilder2 {
         off += 2;
         System.arraycopy(charlieIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
-        
+
         pkt.setLength(off);
         authenticate(packet, aliceCipherKey, aliceMACKey);
         setTo(packet, aliceIP, alicePort);
@@ -627,12 +627,12 @@ class PacketBuilder2 {
 
     /**
      * Build a packet as if we are Bob sending Charlie a packet to help test Alice.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
 /*
-    public UDPPacket buildPeerTestToCharlie(InetAddress aliceIP, int alicePort, SessionKey aliceIntroKey, long nonce, 
-                                            InetAddress charlieIP, int charliePort, 
+    public UDPPacket buildPeerTestToCharlie(InetAddress aliceIP, int alicePort, SessionKey aliceIntroKey, long nonce,
+                                            InetAddress charlieIP, int charliePort,
                                             SessionKey charlieCipherKey, SessionKey charlieMACKey) {
         UDPPacket packet = buildShortPacketHeader(PEER_TEST_FLAG_BYTE);
         DatagramPacket pkt = packet.getPacket();
@@ -640,7 +640,7 @@ class PacketBuilder2 {
         int off = SHORT_HEADER_SIZE;
         if (_log.shouldDebug())
             _log.debug("Sending peer test " + nonce + " to Charlie");
-        
+
         // now for the body
         DataHelper.toLong(data, off, 4, nonce);
         off += 4;
@@ -652,7 +652,7 @@ class PacketBuilder2 {
         off += 2;
         System.arraycopy(aliceIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
-        
+
         pkt.setLength(off);
         authenticate(packet, charlieCipherKey, charlieMACKey);
         setTo(packet, charlieIP, charliePort);
@@ -661,10 +661,10 @@ class PacketBuilder2 {
         return packet;
     }
 */
-    
+
     /**
      * Build a packet as if we are Charlie sending Bob a packet verifying that we will help test Alice.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
 /*
@@ -677,7 +677,7 @@ class PacketBuilder2 {
         int off = SHORT_HEADER_SIZE;
         if (_log.shouldDebug())
             _log.debug("Sending peer test " + nonce + " to Bob");
-        
+
         // now for the body
         DataHelper.toLong(data, off, 4, nonce);
         off += 4;
@@ -689,7 +689,7 @@ class PacketBuilder2 {
         off += 2;
         System.arraycopy(aliceIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
-        
+
         pkt.setLength(off);
         authenticate(packet, bobCipherKey, bobMACKey);
         setTo(packet, bobIP, bobPort);
@@ -712,12 +712,12 @@ class PacketBuilder2 {
         // its just for hole punching
         packet.getPacket().setLength(0);
         setTo(packet, to, port);
-        
+
         packet.setMessageType(TYPE_PUNCH);
         packet.setPriority(PRIORITY_HIGH);
         return packet;
     }
-    
+
     /**
      *  @param pktNum 0 - 0xFFFFFFFF
      *  @return a packet with the first 32 bytes filled in
@@ -733,7 +733,7 @@ class PacketBuilder2 {
         DataHelper.toLong8(data, 24, token);
         return packet;
     }
-    
+
     /**
      *  @param pktNum 0 - 0xFFFFFFFF
      *  @return a packet with the first 16 bytes filled in

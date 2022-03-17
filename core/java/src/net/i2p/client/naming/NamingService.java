@@ -1,8 +1,8 @@
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by mihi in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by mihi in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  */
 package net.i2p.client.naming;
@@ -40,10 +40,10 @@ public abstract class NamingService {
     private static final String DEFAULT_IMPL = "net.i2p.router.naming.BlockfileNamingService";
     private static final String OLD_DEFAULT_IMPL = "net.i2p.client.naming.BlockfileNamingService";
     private static final String BACKUP_IMPL = "net.i2p.client.naming.HostsTxtNamingService";
-    
-    /** 
-     * The naming service should only be constructed and accessed through the 
-     * application context.  This constructor should only be used by the 
+
+    /**
+     * The naming service should only be constructed and accessed through the
+     * application context.  This constructor should only be used by the
      * appropriate application context itself.
      *
      */
@@ -53,7 +53,7 @@ public abstract class NamingService {
         _listeners = new CopyOnWriteArraySet<NamingServiceListener>();
         _updaters = new CopyOnWriteArraySet<NamingServiceUpdater>();
     }
-    
+
     /**
      * Look up a host name.
      * @return the Destination for this host name, or

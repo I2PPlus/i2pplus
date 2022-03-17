@@ -2,7 +2,7 @@ package net.i2p.crypto;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * No warranty of any kind, either expressed or implied.  
+ * No warranty of any kind, either expressed or implied.
  */
 
 import net.i2p.data.SimpleDataStructure;
@@ -15,7 +15,7 @@ import net.i2p.data.SimpleDataStructure;
 public class Hash384 extends SimpleDataStructure {
 
     public final static int HASH_LENGTH = 48;
-    
+
     public Hash384() {
         super();
     }

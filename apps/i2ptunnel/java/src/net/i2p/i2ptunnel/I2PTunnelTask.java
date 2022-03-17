@@ -39,7 +39,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     public void setTunnel(I2PTunnel pTunnel) {
         tunnel = pTunnel;
     }
-    
+
     public I2PTunnel getTunnel() { return tunnel; }
 
     public int getId() {

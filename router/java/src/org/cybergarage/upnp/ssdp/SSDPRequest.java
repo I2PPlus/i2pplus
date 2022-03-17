@@ -13,7 +13,7 @@
 *	03/16/04
 *		- Thanks for Darrell Young
 *		- Fixed to set v1.1 to the HTTP version.;
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -27,7 +27,7 @@ public class SSDPRequest extends HTTPRequest
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public SSDPRequest()
 	{
 		setVersion(HTTP.VERSION_11);
@@ -37,7 +37,7 @@ public class SSDPRequest extends HTTPRequest
 	{
 		super(in);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	NT
 	////////////////////////////////////////////////

@@ -480,7 +480,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
   public boolean isChoked() {
       return false;
   }
-  
+
   @Override
   public long getInactiveTime() {
       if (lastRcvd <= 0)

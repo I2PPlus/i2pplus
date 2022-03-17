@@ -44,7 +44,7 @@ public class ExternalMain implements ClientApp, NotificationService {
         _mgr = _appContext.clientAppManager();
         log = _appContext.logManager().getLog(ExternalMain.class);
     }
-    
+
     public static void main(String[] args) {
         // early check so we can bail out when started via CLI
         if (!SystemTray.isSupported()) {
@@ -54,10 +54,10 @@ public class ExternalMain implements ClientApp, NotificationService {
         ExternalMain main = new ExternalMain();
         main.beginStartup(args);
     }
-    
+
     /**
      * Start the tray icon code (loads tray icon in the tray area).
-     * @throws AWTException on startup error, including systray not supported 
+     * @throws AWTException on startup error, including systray not supported
      */
     private synchronized void startUp() throws Exception {
         final TrayManager trayManager;
@@ -94,12 +94,12 @@ public class ExternalMain implements ClientApp, NotificationService {
                 } catch(Exception e) {
                     log.error("Failed while running desktopgui!", e);
                 }
-                
+
             }
-            
+
         });
     }
-    
+
     /**
      *  Unless we do this, when we start DesktopGUI we get a Java coffee cup
      *  in the tray.
@@ -138,7 +138,7 @@ public class ExternalMain implements ClientApp, NotificationService {
                 log.warn("Can't set OSX Dock icon", e);
         }
     }
-    
+
     /**
      * Avoids the app terminating because no Window is opened anymore.
      * More info: http://java.sun.com/javase/6/docs/api/java/awt/doc-files/AWTThreadIssues.html#Autoshutdown

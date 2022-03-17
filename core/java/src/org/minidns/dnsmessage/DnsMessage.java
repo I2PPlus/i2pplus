@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  * section.
  * A message can either be parsed ({@link #DnsMessage(byte[])}) or serialized
  * ({@link DnsMessage#toArray()}).
- * 
+ *
  * @see <a href="https://www.ietf.org/rfc/rfc1035.txt">RFC 1035</a>
  */
 public class DnsMessage {
@@ -53,7 +53,7 @@ public class DnsMessage {
 
     /**
      * Possible DNS response codes.
-     * 
+     *
      * @see <a href=
      *      "http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6">
      *      IANA Domain Name System (DNS) Paramters - DNS RCODEs</a>
@@ -133,7 +133,7 @@ public class DnsMessage {
 
     /**
      * Symbolic DNS Opcode values.
-     * 
+     *
      * @see <a href=
      *      "http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-5">
      *      IANA Domain Name System (DNS) Paramters - DNS OpCodes</a>
@@ -221,7 +221,7 @@ public class DnsMessage {
     /**
      * The QR flag of the DNS message header. Note that this will be <code>true</code> if the message is a
      * <b>response</b> and <code>false</code> if it is a <b>query</b>.
-     * 
+     *
      * @see <a href="https://www.ietf.org/rfc/rfc1035.txt">RFC 1035 § 4.1.1</a>
      */
     public final boolean qr;
@@ -289,7 +289,7 @@ public class DnsMessage {
      * The additional section. It eventually contains RRs which relate to the query.
      * <p>
      * This list is unmodifiable.
-     * </p> 
+     * </p>
      */
     public final List<Record<? extends Data>> additionalSection;
 
@@ -1194,7 +1194,7 @@ public class DnsMessage {
          * Note that some networks and firewalls are known to block big UDP payloads. 1280 should be a reasonable value,
          * everything below 512 is treated as 512 and should work on all networks.
          * </p>
-         * 
+         *
          * @return a EDNS builder.
          */
         public Edns.Builder getEdnsBuilder() {

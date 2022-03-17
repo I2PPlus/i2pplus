@@ -49,7 +49,7 @@ import org.minidns.idna.MiniDnsIdna;
 public final class DnsName implements CharSequence, Serializable, Comparable<DnsName> {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 

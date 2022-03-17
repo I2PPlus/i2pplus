@@ -17,7 +17,7 @@ import java.util.Map;
  *  @since 0.9.4
  */
 public interface UpdateManager {
-    
+
     /**
      *  The name we register with the ClientAppManager
      *  @since 0.9.12
@@ -130,7 +130,7 @@ public interface UpdateManager {
      *  @return true if valid, false if corrupt
      */
     public boolean notifyComplete(UpdateTask task, String actualVersion, File file);
-    
+
     /**
      *  Is an update available?
      *  Blocking.
@@ -140,7 +140,7 @@ public interface UpdateManager {
      *  @since 0.9.21
      */
     public String checkAvailable(UpdateType type);
-    
+
     /**
      *  Is an update available?
      *  Blocking.
@@ -151,7 +151,7 @@ public interface UpdateManager {
      *  @since 0.9.21
      */
     public String checkAvailable(UpdateType type, long maxWait);
-    
+
     /**
      *  Is an update available?
      *  Blocking.
@@ -163,14 +163,14 @@ public interface UpdateManager {
      *  @since 0.9.21
      */
     public String checkAvailable(UpdateType type, String id, long maxWait);
-    
+
     /**
      *  Is a router update being downloaded?
      *  @return true iff router update is being downloaded
      *  @since 0.9.21
      */
     public boolean isUpdateInProgress();
-    
+
     /**
      *  Is a router update being downloaded?
      *  @param type the UpdateType of this request
@@ -178,7 +178,7 @@ public interface UpdateManager {
      *  @since 0.9.21
      */
     public boolean isUpdateInProgress(UpdateType type);
-    
+
     /**
      *  Is a router update being downloaded?
      *  @param type the UpdateType of this request
@@ -192,46 +192,46 @@ public interface UpdateManager {
      *  Non-blocking. Does not check.
      *  Fails if check or update already in progress.
      *  If returns true, then call isUpdateInProgress() in a loop
-     *  @param type the UpdateType of this request   
+     *  @param type the UpdateType of this request
      *  @return true if task started
      *  @since 0.9.21
      */
     public boolean update(UpdateType type);
-    
+
     /**
      *  Non-blocking. Does not check.
      *  Fails if check or update already in progress.
      *  If returns true, then call isUpdateInProgress() in a loop
-     *  @param type the UpdateType of this request   
+     *  @param type the UpdateType of this request
      *  @param id id of this request
      *  @return true if task started
      *  @since 0.9.21
      */
     public boolean update(UpdateType type, String id);
-    
+
     /**
      *  Non-blocking. Does not check.
      *  Fails if check or update already in progress.
      *  If returns true, then call isUpdateInProgress() in a loop
-     *  @param type the UpdateType of this request   
+     *  @param type the UpdateType of this request
      *  @param maxTime not honored by all Updaters
      *  @return true if task started
      *  @since 0.9.21
      */
     public boolean update(UpdateType type, long maxTime);
-    
+
     /**
      *  Non-blocking. Does not check.
      *  Fails if check or update already in progress.
      *  If returns true, then call isUpdateInProgress() in a loop
-     *  @param type the UpdateType of this request   
+     *  @param type the UpdateType of this request
      *  @param maxTime not honored by all Updaters
      *  @param id id of this request
      *  @return true if task started
      *  @since 0.9.21
      */
     public boolean update(UpdateType type, String id, long maxTime);
-    
+
     /**
      *  The status on any update current or last finished.
      *  @return status or ""

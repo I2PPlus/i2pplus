@@ -111,7 +111,7 @@ class SSLUtil {
         return success;
     }
 
-    /** 
+    /**
      *  Pull the cert back OUT of the keystore and save it as ascii
      *  so the clients can get to it.
      *
@@ -132,7 +132,7 @@ class SSLUtil {
         }
     }
 
-    /** 
+    /**
      *  Sets up the SSLContext and sets the socket factory.
      *  No option prefix allowed.
      *

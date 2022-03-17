@@ -112,7 +112,7 @@ public class DataProcessor implements DataHolder {
      * Creates new DataProcessor object for the given time span. Ending date may be set to null.
      * In that case, the class will try to find optimal ending date based on the last update time of
      * RRD files processed with the {@link #processData()} method.
-     * 
+     *
      * It use the time zone for starting calendar date.
      *
      * @param gc1 Starting Calendar date
@@ -336,7 +336,7 @@ public class DataProcessor implements DataHolder {
 
     /**
      * Extract the variable value from an already define Variable datasource (a VDEF)
-     * 
+     *
      * @param sourceName Datasource name
      * @return A combined time and value extracted calculated from the datasource
      */
@@ -352,7 +352,7 @@ public class DataProcessor implements DataHolder {
 
     /**
      * Returns single aggregated value for a single datasource.
-     * 
+     *
      * @param sourceName Datasource name
      * @param var variable that will generate value
      * @return A combined time and value extracted calculated from the datasource
@@ -979,7 +979,7 @@ public class DataProcessor implements DataHolder {
         Map<URI, RrdDb> openRrd = new HashMap<>(defSources.length);
         Set<RrdDb> newDb = new HashSet<>(defSources.length);
         try {
-            // Storing of the RrdDb in a array to batch open/close, useful if a pool 
+            // Storing of the RrdDb in a array to batch open/close, useful if a pool
             // is used.
             int d = 0;
             for (Def def: defSources) {

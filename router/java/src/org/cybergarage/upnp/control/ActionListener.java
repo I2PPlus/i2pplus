@@ -10,7 +10,7 @@
 *
 *	01/16/03
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.control;

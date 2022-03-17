@@ -3,13 +3,13 @@ package org.xlattice.crypto.filters;
 /**
  * Given a key, populates arrays determining word and bit offsets into
  * a Bloom filter.
- * 
+ *
  * @author <A HREF="mailto:jddixon@users.sourceforge.net">Jim Dixon</A>
  *
  * BloomSHA1.java and KeySelector.java are BSD licensed from the xlattice
  * app - http://xlattice.sourceforge.net/
- * 
- * minor tweaks by jrandom, exposing unsynchronized access and 
+ *
+ * minor tweaks by jrandom, exposing unsynchronized access and
  * allowing larger M and K.  changes released into the public domain.
  *
  * As of 0.8.11, bitoffset and wordoffset out parameters moved from fields
@@ -17,12 +17,12 @@ package org.xlattice.crypto.filters;
  * ALl methods are now thread-safe.
  */
 public class KeySelector {
-   
+
     private final int m;
     private final int k;
     private final BitSelector  bitSel;
     private final WordSelector wordSel;
-    
+
     public interface BitSelector {
         /**
          *  @param bitOffset Out parameter of length k
@@ -40,7 +40,7 @@ public class KeySelector {
     }
 
     /** AND with byte to expose index-many bits */
-    private final static int[] UNMASK = { 
+    private final static int[] UNMASK = {
  // 0  1  2  3   4   5   6    7    8   9     10   11     12    13     14     15
     0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767};
     /** AND with byte to zero out index-many bits */
@@ -49,11 +49,11 @@ public class KeySelector {
 
     private final static int TWO_UP_15 = 32 * 1024;
 
-    /** 
+    /**
      * Creates a key selector for a Bloom filter.  When a key is presented
-     * to the getOffsets() method, the k 'hash function' values are 
+     * to the getOffsets() method, the k 'hash function' values are
      * extracted and used to populate bitOffset and wordOffset arrays which
-     * specify the k flags to be set or examined in the filter.  
+     * specify the k flags to be set or examined in the filter.
      *
      * @param m    size of the filter as a power of 2
      * @param k    number of 'hash functions'
@@ -66,7 +66,7 @@ public class KeySelector {
      * It isn't clear how to fix this.
      */
     public KeySelector (int m, int k) {
-        //if ( (m < 2) || (m > 20)|| (k < 1) 
+        //if ( (m < 2) || (m > 20)|| (k < 1)
         //             || (bitOffset == null) || (wordOffset == null)) {
         //    throw new IllegalArgumentException();
         //}
@@ -75,15 +75,15 @@ public class KeySelector {
         bitSel  = new GenericBitSelector();
         wordSel = new GenericWordSelector();
     }
-    
-    /** 
-     * Extracts the k bit offsets from a key, suitable for general values 
+
+    /**
+     * Extracts the k bit offsets from a key, suitable for general values
      * of m and k.
      */
     public class GenericBitSelector implements BitSelector {
         /** Do the extraction */
         public void getBitSelectors(byte[] b, int offset, int length, int[] bitOffset) {
-            int curBit = 8 * offset; 
+            int curBit = 8 * offset;
             int curByte;
             for (int j = 0; j < k; j++) {
                 curByte = curBit / 8;
@@ -102,7 +102,7 @@ public class KeySelector {
 //                  // DEBUG
 //                  System.out.println(
 //                      "    before shifting: " + btoh(b[curByte])
-//                  + "\n    after shifting:  " 
+//                  + "\n    after shifting:  "
 //                          + itoh( (0xff & b[curByte]) >> (bitsUnused - 5))
 //                  + "\n    mask:            " + itoh(UNMASK[5]) );
 //                  // END
@@ -110,7 +110,7 @@ public class KeySelector {
                     bitOffset[j] = b[curByte] & UNMASK[5];
                 } else {
                     bitOffset[j] = (b[curByte]          & UNMASK[bitsUnused])
-                              | (((0xff & b[curByte + 1]) >> 3) 
+                              | (((0xff & b[curByte + 1]) >> 3)
                                                         &   MASK[bitsUnused]);
 //                  // DEBUG
 //                  System.out.println(
@@ -128,9 +128,9 @@ public class KeySelector {
 //              // END
                 curBit += 5;
             }
-        } 
+        }
     }
-    /** 
+    /**
      * Extracts the k word offsets from a key.  Suitable for general
      * values of m and k. See above for formula for max m and k.
      */
@@ -139,7 +139,7 @@ public class KeySelector {
         public void getWordSelectors(byte[] b, int offset, int length, int[] wordOffset) {
             int stride = m - 5;
             //assert true: stride<16;
-            int curBit = (k * 5) + (offset * 8); 
+            int curBit = (k * 5) + (offset * 8);
             int curByte;
             for (int j = 0; j < k; j++) {
                 curByte = curBit / 8;
@@ -147,9 +147,9 @@ public class KeySelector {
 
 //              // DEBUG
 //              System.out.println (
-//                  "curr 3 bytes: " + btoh(b[curByte]) 
+//                  "curr 3 bytes: " + btoh(b[curByte])
 //                  + (curByte < 19 ?
-//                      " " + btoh(b[curByte + 1]) : "") 
+//                      " " + btoh(b[curByte + 1]) : "")
 //                  + (curByte < 18 ?
 //                      " " + btoh(b[curByte + 2]) : "")
 //                  + "; curBit=" + curBit + ", curByte= " + curByte
@@ -158,8 +158,8 @@ public class KeySelector {
 
                 if (bitsUnused > stride) {
                     // the value is entirely within the current byte
-                    wordOffset[j] = ((0xff & b[curByte]) 
-                                        >> (bitsUnused - stride)) 
+                    wordOffset[j] = ((0xff & b[curByte])
+                                        >> (bitsUnused - stride))
                                                 & UNMASK[stride];
                 } else if (bitsUnused == stride) {
                     // the value fills the current byte
@@ -183,17 +183,17 @@ public class KeySelector {
 //                          (0xff & b[curByte + 1]) << bitsUnused
 //                      ));
 //                      // END
-                        
+
                         // bits from third byte
                         bitsToGet -= 8;
                         if (bitsToGet > 0) {
                             // AIOOBE here if m and k too big (23,11 is the max)
                             // for a 32-byte key - see above
-                            wordOffset[j] |= 
+                            wordOffset[j] |=
                                 ((0xff & b[curByte + 2]) >> (8 - bitsToGet))
                                                     << (stride - bitsToGet) ;
 //                          // DEBUG
-//                          System.out.println("    third byte contributes " 
+//                          System.out.println("    third byte contributes "
 //                              + itoh(
 //                              (((0xff & b[curByte + 2]) >> (8 - bitsToGet))
 //                                                  << (stride - bitsToGet))
@@ -223,13 +223,13 @@ public class KeySelector {
 //              // END
                 curBit += stride;
             }
-        } 
+        }
     }
 
     /**
      * Given a key, populate the word and bit offset arrays, each
      * of which has k elements.
-     * 
+     *
      * @param key cryptographic key used in populating the arrays
      * @param bitOffset Out parameter of length k
      * @param wordOffset Out parameter of length k
@@ -242,7 +242,7 @@ public class KeySelector {
     /**
      * Given a key, populate the word and bit offset arrays, each
      * of which has k elements.
-     * 
+     *
      * @param key cryptographic key used in populating the arrays
      * @param bitOffset Out parameter of length k
      * @param wordOffset Out parameter of length k
@@ -258,7 +258,7 @@ public class KeySelector {
         //        "key must be at least 20 bytes long");
         //}
 //      // DEBUG
-//      System.out.println("KeySelector.getOffsets for " 
+//      System.out.println("KeySelector.getOffsets for "
 //                                          + BloomSHA1.keyToString(b));
 //      // END
         bitSel.getBitSelectors(key, off, len, bitOffset);

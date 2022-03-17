@@ -248,7 +248,7 @@ public class EepHead extends EepGet {
             else
                 timeout.setInactivityTimeout(INACTIVITY_TIMEOUT);
         }
-        
+
         // Should we even follow redirects for HEAD?
         if (_redirectLocation != null) {
             try {

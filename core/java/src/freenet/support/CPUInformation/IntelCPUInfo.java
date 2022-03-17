@@ -2,9 +2,9 @@
  * Created on Jul 17, 2004
  *
  * free (adj.): unencumbered; not under the control of others
- * Written by Iakin in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by Iakin in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might. Use at your own risk.
  */
 package freenet.support.CPUInformation;
@@ -48,7 +48,7 @@ public interface IntelCPUInfo extends CPUInfo {
     /**
      * @return true if the CPU implements at least a Pentium M level instruction/feature set.
      */
-    public boolean IsPentiumMCompatible();	
+    public boolean IsPentiumMCompatible();
 
     /**
      * Supports the SSE 2 and SSE 3 instructions.
@@ -73,7 +73,7 @@ public interface IntelCPUInfo extends CPUInfo {
      * @return true if the CPU implements at least a Corei level instruction/feature set.
      */
     public boolean IsCoreiCompatible();
-    
+
     /**
      * Supports the SSE 3, 4.1, 4.2 instructions.
      * Supports the AVX 1 instructions.
@@ -82,7 +82,7 @@ public interface IntelCPUInfo extends CPUInfo {
      * @since 0.9.26
      */
     public boolean IsSandyCompatible();
-    
+
     /**
      * Supports the SSE 3, 4.1, 4.2 instructions.
      * Supports the AVX 1 instructions.
@@ -96,7 +96,7 @@ public interface IntelCPUInfo extends CPUInfo {
      * @since 0.9.26
      */
     public boolean IsIvyCompatible();
-    
+
     /**
      * Supports the SSE 3, 4.1, 4.2 instructions.
      * Supports the AVX 1, 2 instructions.
@@ -118,7 +118,7 @@ public interface IntelCPUInfo extends CPUInfo {
      * @since 0.9.26
      */
     public boolean IsHaswellCompatible();
-    
+
     /**
      * Supports the SSE 3, 4.1, 4.2 instructions.
      * Supports the AVX 1, 2 instructions.

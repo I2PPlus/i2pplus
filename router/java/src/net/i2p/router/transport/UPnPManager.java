@@ -94,7 +94,7 @@ class UPnPManager {
         _delayedCallback = (_scannerCallback != null) ? new DelayedCallback() : null;
         _rescanner = new Rescanner();
     }
-    
+
     /**
      *  Blocking, may take a while.
      *  May be called even if already running.
@@ -250,7 +250,7 @@ class UPnPManager {
             reschedule((_upnp.getSearchMx() * 1000) + 500, false);
         }
     }
-    
+
     /**
      * Call when the ports might have changed
      * The transports can call this pretty quickly at startup,
@@ -304,7 +304,7 @@ class UPnPManager {
      *  It calls the TransportManager callbacks.
      */
     private class UPnPCallback implements ForwardPortCallback {
-	
+
         /** Called to indicate status on one or more forwarded ports. */
         public void portForwardStatus(Map<ForwardPort,ForwardPortStatus> statuses) {
             if (_log.shouldDebug())

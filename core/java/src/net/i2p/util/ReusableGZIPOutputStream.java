@@ -42,10 +42,10 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
             rv = _available.poll();
         if (rv == null) {
             rv = new ReusableGZIPOutputStream();
-        } 
+        }
         return rv;
     }
-    
+
     /**
      * Release an instance back into the cache (this will discard any
      * state)
@@ -62,7 +62,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
             try { out.destroy(); } catch (IOException ioe) {}
         }
     }
-    
+
     private final ByteArrayOutputStream _buffer;
 
     private ReusableGZIPOutputStream() {
@@ -72,19 +72,19 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
 
     /** clear the data so we can start again afresh */
     @Override
-    public void reset() { 
+    public void reset() {
         super.reset();
         _buffer.reset();
         def.setLevel(Deflater.BEST_COMPRESSION);
     }
 
-    public void setLevel(int level) { 
+    public void setLevel(int level) {
         def.setLevel(level);
     }
 
     /** pull the contents of the stream written */
     public byte[] getData() { return _buffer.toByteArray(); }
-    
+
     /**
      *  Clear the cache.
      *  @since 0.9.21
@@ -108,14 +108,14 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
     }
     private static void test() {
         byte b[] = "hi, how are you today?".getBytes();
-        try { 
+        try {
             ReusableGZIPOutputStream o = ReusableGZIPOutputStream.acquire();
             o.write(b);
             o.finish();
             o.flush();
             byte compressed[] = o.getData();
             ReusableGZIPOutputStream.release(o);
-            
+
             ResettableGZIPInputStream in = new ResettableGZIPInputStream(new java.io.ByteArrayInputStream(compressed));
             byte rv[] = new byte[128];
             int read = in.read(rv);
@@ -125,7 +125,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
                 System.out.println("match, w00t");
         } catch (Exception e) { e.printStackTrace(); }
     }
-    
+
     private static boolean test(int size) {
         byte b[] = new byte[size];
         RandomSource.getInstance().nextBytes(b);
@@ -136,7 +136,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
             o.flush();
             byte compressed[] = o.getData();
             ReusableGZIPOutputStream.release(o);
-            
+
             ResettableGZIPInputStream in = new ResettableGZIPInputStream(new java.io.ByteArrayInputStream(compressed));
             ByteArrayOutputStream baos2 = new ByteArrayOutputStream(size);
             byte rbuf[] = new byte[128];
@@ -153,9 +153,9 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
                 System.out.println("match, w00t @ " + size);
                 return true;
             }
-        } catch (Exception e) { 
+        } catch (Exception e) {
             System.out.println("Error on size=" + size + ": " + e.getMessage());
-            e.printStackTrace(); 
+            e.printStackTrace();
             return false;
         }
     }

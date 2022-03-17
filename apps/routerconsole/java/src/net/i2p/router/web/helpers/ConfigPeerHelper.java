@@ -14,7 +14,7 @@ import net.i2p.util.Addresses;
 public class ConfigPeerHelper extends HelperBase {
 
     private static final int MAX_DISPLAY = 1000;
-    
+
     public String getBlocklistSummary() {
         StringWriter out = new StringWriter(4*1024);
         Blocklist bl = _context.blocklist();

@@ -107,7 +107,7 @@ public final class MatrixToImageWriter {
    * @deprecated use {@link #writeToPath(BitMatrix, String, Path, MatrixToImageConfig)}
    */
   @Deprecated
-  public static void writeToFile(BitMatrix matrix, String format, File file, MatrixToImageConfig config) 
+  public static void writeToFile(BitMatrix matrix, String format, File file, MatrixToImageConfig config)
       throws IOException {
     writeToPath(matrix, format, file.toPath(), config);
   }
@@ -151,8 +151,8 @@ public final class MatrixToImageWriter {
    * @param config output configuration
    * @throws IOException if writes to the stream fail
    */
-  public static void writeToStream(BitMatrix matrix, String format, OutputStream stream, MatrixToImageConfig config) 
-      throws IOException {  
+  public static void writeToStream(BitMatrix matrix, String format, OutputStream stream, MatrixToImageConfig config)
+      throws IOException {
     BufferedImage image = toBufferedImage(matrix, config);
     if (!ImageIO.write(image, format, stream)) {
       throw new IOException("Could not write an image of format " + format);

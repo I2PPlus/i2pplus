@@ -1,9 +1,9 @@
 package net.i2p.router;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -26,23 +26,23 @@ import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.util.Translate;
 
 /**
- * Manages the communication subsystem between peers, including connections, 
+ * Manages the communication subsystem between peers, including connections,
  * listeners, transports, connection keys, etc.
  *
- */ 
+ */
 public abstract class CommSystemFacade implements Service {
 
     /** @since 0.9.45 */
     protected static final String ROUTER_BUNDLE_NAME = "net.i2p.router.util.messages";
 
     public abstract void processMessage(OutNetMessage msg);
-    
+
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException { }
     public void renderStatusHTML(Writer out) throws IOException { renderStatusHTML(out, null, 0); }
-    
+
     /** Create the list of RouterAddress structures based on the router's config */
     public List<RouterAddress> createAddresses() { return Collections.emptyList(); }
-    
+
     /**
      *  How many peers are we currently connected to, that we have
      *  sent a message to or received a message from in the last five minutes.
@@ -60,19 +60,19 @@ public abstract class CommSystemFacade implements Service {
     public boolean haveOutboundCapacity(int pct) { return true; }
     public boolean haveHighOutboundCapacity() { return true; }
     public List<String> getMostRecentErrorMessages() { return Collections.emptyList(); }
-    
+
     /**
      * Median clock skew of connected peers in seconds, or null if we cannot answer.
      * CommSystemFacadeImpl overrides this.
      */
     public Long getMedianPeerClockSkew() { return null; }
-    
+
     /**
      * Return framed average clock skew of connected peers in seconds, or null if we cannot answer.
      * CommSystemFacadeImpl overrides this.
      */
     public long getFramedAveragePeerClockSkew(int percentToInclude) { return 0; }
-    
+
     /**
      * Determine under what conditions we are remotely reachable.
      * For internal use only.
@@ -83,7 +83,7 @@ public abstract class CommSystemFacade implements Service {
      */
     @Deprecated
     public short getReachabilityStatus() { return (short) getStatus().getCode(); }
-    
+
     /**
      * Determine under what conditions we are remotely reachable.
      * @since 0.9.20
@@ -109,7 +109,7 @@ public abstract class CommSystemFacade implements Service {
     public abstract boolean isEstablished(Hash peer);
     public byte[] getIP(Hash dest) { return null; }
     public void queueLookup(byte[] ip) {}
-    
+
     /**
      * Tell the comm system that we may disconnect from this peer.
      * This is advisory only.
@@ -117,7 +117,7 @@ public abstract class CommSystemFacade implements Service {
      * @since 0.9.24
      */
     public void mayDisconnect(Hash peer) {}
-    
+
     /**
      * Tell the comm system to disconnect from this peer.
      *
@@ -142,7 +142,7 @@ public abstract class CommSystemFacade implements Service {
     public String renderPeerHTML(Hash peer) {
         return peer.toBase64().substring(0, 4);
     }
-    
+
     /**
      *  @return SortedMap of style to Transport (a copy)
      *  @since 0.9.31
@@ -150,7 +150,7 @@ public abstract class CommSystemFacade implements Service {
     public SortedMap<String, Transport> getTransports() {
         return new TreeMap<String, Transport>();
     }
-    
+
     /**
      *  Get all the peers we are connected to.
      *  This should be more efficient than repeated calls to isEstablished()
@@ -160,25 +160,25 @@ public abstract class CommSystemFacade implements Service {
      *  @since 0.9.34
      */
     public abstract Set<Hash> getEstablished();
-    
+
     /** @since 0.8.13 */
     public boolean isDummy() { return true; }
 
     /** @since 0.9.53 */
     public boolean isRunning() { return true; }
 
-    /** 
+    /**
      * Tell other transports our address changed
      */
     public void notifyReplaceAddress(RouterAddress address) {}
 
-    /** 
+    /**
      * Tell other transports our address changed
      * @since 0.9.20
      */
     public void notifyRemoveAddress(RouterAddress address) {}
 
-    /** 
+    /**
      * Tell other transports our address changed
      * @since 0.9.20
      */
@@ -244,7 +244,7 @@ public abstract class CommSystemFacade implements Service {
      *	hosed		HOSED 13
      */
 
-    /** 
+    /**
      * These must be increasing in "badness" (see TransportManager.java),
      * but UNKNOWN must be last.
      *
@@ -253,7 +253,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_OK = 0;
 
-    /** 
+    /**
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We can receive unsolicited connections on IPv4.
      *  We might be able to receive unsolicited connections on IPv6.
@@ -261,7 +261,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_IPV4_OK_IPV6_UNKNOWN = 2;
 
-    /** 
+    /**
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We can receive unsolicited connections on IPv4.
      *  We cannot receive unsolicited connections on IPv6.
@@ -269,7 +269,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_IPV4_OK_IPV6_FIREWALLED = 1;
 
-    /** 
+    /**
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We may be able to receive unsolicited connections on IPv4.
      *  We can receive unsolicited connections on IPv6.
@@ -277,7 +277,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_IPV4_UNKNOWN_IPV6_OK = 4;
 
-    /** 
+    /**
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We cannot receive unsolicited connections on IPv4.
      *  We can receive unsolicited connections on IPv6.
@@ -285,7 +285,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_IPV4_FIREWALLED_IPV6_OK = 3;
 
-    /** 
+    /**
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  IPv4 is disabled.
      *  We can receive unsolicited connections on IPv6.
@@ -294,7 +294,7 @@ public abstract class CommSystemFacade implements Service {
     public static final short STATUS_IPV4_DISABLED_IPV6_OK = 5;
 
     /**
-     *  We are behind a symmetric NAT which will make our 'from' address look 
+     *  We are behind a symmetric NAT which will make our 'from' address look
      *  differently when we talk to multiple people
      *  We can receive unsolicited connections on IPv6.
      *  @since 0.9.20
@@ -302,21 +302,21 @@ public abstract class CommSystemFacade implements Service {
     public static final short STATUS_IPV4_SNAT_IPV6_OK = 6;
 
     /**
-     * We are behind a symmetric NAT which will make our 'from' address look 
+     * We are behind a symmetric NAT which will make our 'from' address look
      * differently when we talk to multiple people
      *
      */
     public static final short STATUS_DIFFERENT = 7;
 
     /**
-     *  We are behind a symmetric NAT which will make our 'from' address look 
+     *  We are behind a symmetric NAT which will make our 'from' address look
      *  differently when we talk to multiple people
      *  We might be able to receive unsolicited connections on IPv6.
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_SNAT_IPV6_UNKNOWN = 8;
 
-    /** 
+    /**
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We cannot receive unsolicited connections on IPv4.
      *  We might be able to receive unsolicited connections on IPv6.
@@ -331,7 +331,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_REJECT_UNSOLICITED = 9;
 
-    /** 
+    /**
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We may be able to receive unsolicited connections on IPv4.
      *  We cannot receive unsolicited connections on IPv6.
@@ -339,7 +339,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_IPV4_UNKNOWN_IPV6_FIREWALLED = 11;
 
-    /** 
+    /**
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  IPv4 is disabled.
      *  We might be able to receive unsolicited connections on IPv6.
@@ -347,7 +347,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_IPV4_DISABLED_IPV6_UNKNOWN = 13;
 
-    /** 
+    /**
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  IPv4 is disabled.
      *  We can receive unsolicited connections on IPv6.
@@ -371,7 +371,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_UNKNOWN = 16;
 
-    /** 
+    /**
      *  Since the codes may change.
      *  @since 0.9.20
      */
@@ -409,7 +409,7 @@ public abstract class CommSystemFacade implements Service {
             return code;
         }
 
-        /** 
+        /**
          *  merge the new Status with the old Status
          */
         public static Status merge(Status oldStatus, Status newStatus) {
@@ -652,7 +652,7 @@ public abstract class CommSystemFacade implements Service {
             }
         }
 
-        /** 
+        /**
          *  Readable status, not translated
          */
         public String toStatusString() {
@@ -671,8 +671,8 @@ public abstract class CommSystemFacade implements Service {
         public String toString() {
             return super.toString() + " (" + code + "; " + status + ')';
         }
-    
-        /** 
+
+        /**
          *  Tag for translation.
          */
         private static String _x(String s) { return s; }
@@ -684,6 +684,6 @@ class DummyCommSystemFacade extends CommSystemFacade {
     public void shutdown() {}
     public void startup() {}
     public void restart() {}
-    public void processMessage(OutNetMessage msg) { }    
+    public void processMessage(OutNetMessage msg) { }
 }
 **/

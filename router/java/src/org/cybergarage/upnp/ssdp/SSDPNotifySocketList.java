@@ -22,19 +22,19 @@ import org.cybergarage.net.*;
 
 import org.cybergarage.upnp.*;
 
-public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> 
+public class SSDPNotifySocketList extends Vector<SSDPNotifySocket>
 {
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	private InetAddress[] binds = null;
 
 	public SSDPNotifySocketList() {
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param binds The host to bind the service <code>null</code> means to bind to default.
 	 * @since 1.8
 	 */
@@ -45,7 +45,7 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket>
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public SSDPNotifySocket getSSDPNotifySocket(int n)
 	{
 		return get(n);
@@ -67,23 +67,23 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket>
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public boolean open(){
 		InetAddress[] binds=this.binds ;
 		String[] bindAddresses;
-		if(binds!=null){			
+		if(binds!=null){
 			bindAddresses = new String[binds.length];
 			for (int i = 0; i < binds.length; i++) {
 				bindAddresses[i] = binds[i].getHostAddress();
 			}
 		}else{
 			int nHostAddrs = HostInterface.getNHostAddresses();
-			bindAddresses = new String[nHostAddrs]; 
+			bindAddresses = new String[nHostAddrs];
 			for (int n=0; n<nHostAddrs; n++) {
 				bindAddresses[n] = HostInterface.getHostAddress(n);
 			}
-		}		
-		
+		}
+
 		for (int i = 0; i < bindAddresses.length; i++) {
 			if(bindAddresses[i]!=null){
 				SSDPNotifySocket ssdpNotifySocket = new SSDPNotifySocket(bindAddresses[i]);
@@ -92,7 +92,7 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket>
 		}
 		return true;
 	}
-	
+
 	public void close()
 	{
 		int nSockets = size();
@@ -102,11 +102,11 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket>
 		}
 		clear();
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public void start()
 	{
 		int nSockets = size();
@@ -124,6 +124,6 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket>
 			sock.stop();
 		}
 	}
-	
+
 }
 

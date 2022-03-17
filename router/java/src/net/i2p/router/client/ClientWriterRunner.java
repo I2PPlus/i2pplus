@@ -25,7 +25,7 @@ class ClientWriterRunner implements Runnable {
     //private static long __id = 0;
 
     private static final int QUEUE_SIZE = 256;
-    
+
     public ClientWriterRunner(RouterContext context, ClientConnectionRunner runner) {
         //_log = context.logManager().getLog(ClientWriterRunner.class);
         _messagesToWrite = new LinkedBlockingQueue<I2CPMessage>(QUEUE_SIZE);

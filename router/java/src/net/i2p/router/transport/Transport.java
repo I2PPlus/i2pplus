@@ -1,9 +1,9 @@
 package net.i2p.router.transport;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -163,15 +163,15 @@ public interface Transport {
 
     /** The unique identity of this Transport */
     public String getStyle();
-    
+
     /**
      * @return may or may not be modifiable; check implementation
      * @since 0.9.34
      */
-    public Set<Hash> getEstablished();    
+    public Set<Hash> getEstablished();
 
-    public int countPeers();    
-    public int countActivePeers();    
+    public int countPeers();
+    public int countActivePeers();
     public int countActiveSendPeers();
     public boolean haveCapacity();
     public boolean haveCapacity(int pct);
@@ -182,7 +182,7 @@ public interface Transport {
     public List<Long> getClockSkews();
 
     public List<String> getMostRecentErrorMessages();
-    
+
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException;
 
     /**
@@ -222,7 +222,7 @@ public interface Transport {
      * This is NOT reset if the peer contacts us and it is never expired.
      */
     public boolean wasUnreachable(Hash peer);
-    
+
     public boolean isUnreachable(Hash peer);
     public boolean isEstablished(Hash peer);
 

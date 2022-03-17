@@ -22,7 +22,7 @@ public class ConfigAdvancedHandler extends FormHandler {
     private boolean _shouldSave;
     private String _oldConfig, _config;
     private String _ff;
-    
+
     @Override
     protected void processForm() {
         if (_shouldSave) {
@@ -37,10 +37,10 @@ public class ConfigAdvancedHandler extends FormHandler {
             // noop
         }
     }
-    
+
     public void setShouldsave(String moo) { _shouldSave = true; }
     //public void setRestart(String moo) { _forceRestart = true; }
-    
+
     /** @since 0.9.20 */
     public void setFf(String ff) { _ff = ff; }
 
@@ -52,7 +52,7 @@ public class ConfigAdvancedHandler extends FormHandler {
     public void setNofilter_oldConfig(String val) {
         _oldConfig = val;
     }
-    
+
     /**
      * The user made changes to the config and wants to save them, so
      * lets go ahead and do so.
@@ -89,11 +89,11 @@ public class ConfigAdvancedHandler extends FormHandler {
             // what's remaining in unsetKeys will be deleted
 
             boolean saved = _context.router().saveConfig(props, unsetKeys);
-            if (saved) 
+            if (saved)
                 addFormNotice(_t("Configuration saved successfully"));
             else
                 addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
-            
+
             //if (_forceRestart) {
             //    addFormNotice("Performing a soft restart");
             //    _context.router().restart();
@@ -111,7 +111,7 @@ public class ConfigAdvancedHandler extends FormHandler {
             // this will rebuild the RI, log in the event log, etc.
             fndf.setFloodfillEnabled(isFF);
         }
-        if (saved) 
+        if (saved)
             addFormNotice(_t("Configuration saved successfully"));
         else
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));

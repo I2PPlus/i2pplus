@@ -23,7 +23,7 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
     private RouterContext _context;
     private boolean _pullFromOutbound;
     private FIFOBandwidthLimiter.Request _currentRequest;
-    
+
     public BandwidthLimitedInputStream(RouterContext context, InputStream source, RouterIdentity peer) {
         this(context, source, peer, false);
     }
@@ -40,14 +40,14 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
         _pullFromOutbound = pullFromOutbound;
         _log = context.logManager().getLog(BandwidthLimitedInputStream.class);
     }
-    
+
     @Override
     public int read() throws IOException {
         if (_pullFromOutbound)
             _currentRequest = _context.bandwidthLimiter().requestOutbound(1, 0, _peerSource);
         else
             _currentRequest = _context.bandwidthLimiter().requestInbound(1, _peerSource);
-        
+
         // since its only a single byte, we dont need to loop
         // or check how much was allocated
         _currentRequest.waitForNextAllocation();
@@ -56,22 +56,22 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
         }
         return in.read();
     }
-    
+
     @Override
     public int read(byte dest[]) throws IOException {
         return read(dest, 0, dest.length);
     }
-    
+
     @Override
     public int read(byte dest[], int off, int len) throws IOException {
         int read = in.read(dest, off, len);
         if (read == -1) return -1;
-        
+
         if (_pullFromOutbound)
             _currentRequest = _context.bandwidthLimiter().requestOutbound(read, 0, _peerSource);
         else
             _currentRequest = _context.bandwidthLimiter().requestInbound(read, _peerSource);
-        
+
         while (_currentRequest.getPendingRequested() > 0) {
             // we still haven't been authorized for everything, keep on waiting
             _currentRequest.waitForNextAllocation();
@@ -89,12 +89,12 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
     @Override
     public long skip(long numBytes) throws IOException {
         long skip = in.skip(numBytes);
-        
+
         if (_pullFromOutbound)
             _currentRequest = _context.bandwidthLimiter().requestOutbound((int)skip, 0, _peerSource);
         else
             _currentRequest = _context.bandwidthLimiter().requestInbound((int)skip, _peerSource);
-        
+
         while (_currentRequest.getPendingRequested() > 0) {
             // we still haven't been authorized for everything, keep on waiting
             _currentRequest.waitForNextAllocation();
@@ -106,7 +106,7 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
         }
         return skip;
     }
-    
+
     @Override
     public void close() throws IOException {
         synchronized (this) {

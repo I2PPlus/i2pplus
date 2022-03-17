@@ -14,7 +14,7 @@ import net.i2p.util.Log;
 
 /**
  * Periodically query a series of NTP servers and update any associated
- * listeners.  It tries the NTP servers in order, contacting them using 
+ * listeners.  It tries the NTP servers in order, contacting them using
  * SNTP (UDP port 123).
  *
  * @since 0.9.1 moved from net.i2p.time
@@ -36,7 +36,7 @@ public class RouterTimestamper extends Timestamper {
     private volatile boolean _isRunning;
     private Thread _timestamperThread;
     private final Zones _zones;
-    
+
     private static final int MIN_QUERY_FREQUENCY = 5*60*1000;
     private static final int DEFAULT_QUERY_FREQUENCY = 11*60*1000;
     private static final String DEFAULT_SERVER_LIST = "0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org";
@@ -47,23 +47,23 @@ public class RouterTimestamper extends Timestamper {
     private static final int DEFAULT_TIMEOUT = 10*1000;
     private static final int SHORT_TIMEOUT = 5*1000;
     private static final long MAX_WAIT_INITIALIZATION = 45*1000;
-    
+
     public static final String PROP_QUERY_FREQUENCY = "time.queryFrequencyMs";
     public static final String PROP_SERVER_LIST = "time.sntpServerList";
     public static final String PROP_DISABLED = "time.disabled";
     public static final String PROP_CONCURRING_SERVERS = "time.concurringServers";
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
-    
+
     /** if different SNTP servers differ by more than 10s, someone is b0rked */
     private static final int MAX_VARIANCE = 10*1000;
-        
+
     /**
      *  Does not start. Caller MUST call startTimestamper()
      */
     public RouterTimestamper(I2PAppContext ctx) {
         this(ctx, null, true);
     }
-    
+
     /**
      *  Does not start. Caller MUST call startTimestamper()
      */
@@ -100,22 +100,22 @@ public class RouterTimestamper extends Timestamper {
         _zones = new Zones(ctx);
         updateConfig();
     }
-    
-    public int getServerCount() { 
+
+    public int getServerCount() {
         synchronized (_servers) {
-            return _servers.size(); 
+            return _servers.size();
         }
     }
-    public String getServer(int index) { 
+    public String getServer(int index) {
         synchronized (_servers) {
-            return _servers.get(index); 
+            return _servers.get(index);
         }
     }
-    
+
     public int getQueryFrequencyMs() { return _queryFrequency; }
-    
+
     public boolean getIsDisabled() { return _disabled; }
-    
+
     public void addListener(UpdateListener lsnr) {
             _listeners.add(lsnr);
     }
@@ -128,7 +128,7 @@ public class RouterTimestamper extends Timestamper {
     public UpdateListener getListener(int index) {
             return _listeners.get(index);
     }
-    
+
     public void startTimestamper() {
         if (_disabled || _initialized)
             return;
@@ -138,17 +138,17 @@ public class RouterTimestamper extends Timestamper {
         _timestamperThread.start();
         _context.addShutdownTask(new Shutdown());
     }
-    
+
     @Override
     public void waitForInitialization() {
-        try { 
+        try {
             synchronized (this) {
                 if (!_initialized)
                     wait(MAX_WAIT_INITIALIZATION);
             }
         } catch (InterruptedException ie) {}
     }
-    
+
     /**
      *  Update the time immediately.
      *  @since 0.8.8
@@ -158,7 +158,7 @@ public class RouterTimestamper extends Timestamper {
          if (_initialized && _isRunning && (!_disabled) && _timestamperThread != null)
              _timestamperThread.interrupt();
     }
-    
+
     /** @since 0.8.8 */
     private class Shutdown implements Runnable {
         public void run() {
@@ -167,7 +167,7 @@ public class RouterTimestamper extends Timestamper {
                  _timestamperThread.interrupt();
         }
     }
-    
+
     @Override
     public void run() {
         boolean lastFailed = false;
@@ -207,7 +207,7 @@ public class RouterTimestamper extends Timestamper {
                         }
                     }
                 }
-                
+
                 boolean wasInitialized;
                 synchronized (this) {
                     wasInitialized = _initialized;
@@ -264,7 +264,7 @@ public class RouterTimestamper extends Timestamper {
             t.printStackTrace();
         }
     }
-    
+
     /**
      * True if the time was queried successfully, false if it couldn't be
      */
@@ -323,7 +323,7 @@ public class RouterTimestamper extends Timestamper {
         }
         return true;
     }
-    
+
     /**
      * Notify the listeners
      *
@@ -337,7 +337,7 @@ public class RouterTimestamper extends Timestamper {
         if (_log != null && _log.shouldDebug())
             _log.debug("Stamped the time as " + now + " (delta=" + (now-before) + ")");
     }
- 
+
     /**
      * Reload all the config elements from the appContext.
      * No logging allowed here
@@ -382,16 +382,16 @@ public class RouterTimestamper extends Timestamper {
             if (val.length() > 0)
                 _servers.add(val);
         }
-        
+
         _queryFrequency = Math.max(MIN_QUERY_FREQUENCY,
                                    _context.getProperty(PROP_QUERY_FREQUENCY, DEFAULT_QUERY_FREQUENCY));
-        
+
         _disabled = _context.getProperty(PROP_DISABLED, DEFAULT_DISABLED);
-        
+
         _concurringServers = Math.min(4, Math.max(1,
                               _context.getProperty(PROP_CONCURRING_SERVERS, DEFAULT_CONCURRING_SERVERS)));
     }
-    
+
 /****
     public static void main(String args[]) {
         System.setProperty(PROP_DISABLED, "false");

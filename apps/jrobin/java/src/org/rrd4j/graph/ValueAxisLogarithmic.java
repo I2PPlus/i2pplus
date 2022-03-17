@@ -181,7 +181,7 @@ class ValueAxisLogarithmic extends Axis {
     }
 
     /**
-     * Compute logarithm for the purposes of y-axis. 
+     * Compute logarithm for the purposes of y-axis.
      */
     static double log10(double v) {
         double lv = Math.log10(Math.abs(v));

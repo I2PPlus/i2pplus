@@ -20,7 +20,7 @@ public class ElGamalPrivateKeyImpl
     implements ElGamalPrivateKey, DHPrivateKey
 {
     private static final long serialVersionUID = 4819350091141529678L;
-        
+
     private BigInteger x;
     private ElGamalParameterSpec elSpec;
 
@@ -41,7 +41,7 @@ public class ElGamalPrivateKeyImpl
         this.x = key.getX();
         this.elSpec = new ElGamalParameterSpec(key.getParams().getP(), key.getParams().getG());
     }
-    
+
     public ElGamalPrivateKeyImpl(
         ElGamalPrivateKeySpec    spec)
     {
@@ -55,7 +55,7 @@ public class ElGamalPrivateKeyImpl
         this.x = spec.getX();
         this.elSpec = new ElGamalParameterSpec(spec.getP(), spec.getG());
     }
-    
+
     public ElGamalPrivateKeyImpl(
         BigInteger x,
         ElGamalParameterSpec elSpec)
@@ -71,7 +71,7 @@ public class ElGamalPrivateKeyImpl
         //this.x = spec.getX();
         //this.elSpec = new ElGamalParameterSpec(spec.getP(), spec.getG());
     }
-    
+
     public String getAlgorithm()
     {
         return "ElGamal";
@@ -162,7 +162,7 @@ public class ElGamalPrivateKeyImpl
     {
         return new DHParameterSpec(elSpec.getP(), elSpec.getG());
     }
-    
+
     public BigInteger getX()
     {
         return x;

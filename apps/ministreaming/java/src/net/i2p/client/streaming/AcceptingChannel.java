@@ -6,7 +6,7 @@ import java.nio.channels.SelectableChannel;
 
 /**
  *  As this does not (yet) extend ServerSocketChannel it cannot be returned by StandardServerSocket.getChannel(),
- *  until we implement an I2P SocketAddress class.		
+ *  until we implement an I2P SocketAddress class.
  *
  *  Warning, this interface and implementation is preliminary and subject to change without notice.
  *

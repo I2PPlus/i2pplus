@@ -23,18 +23,18 @@ import java.util.Vector;
 import org.cybergarage.net.HostInterface;
 import org.cybergarage.upnp.Device;
 
-public class HTTPServerList extends Vector<HTTPServer> 
+public class HTTPServerList extends Vector<HTTPServer>
 {
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	private InetAddress[] binds = null;
 	private int port = Device.HTTP_DEFAULT_PORT;
-	
+
 	public HTTPServerList() {
 	}
-	
+
 	public HTTPServerList(InetAddress[] list, int port) {
 		this.binds = list;
 		this.port = port;
@@ -51,8 +51,8 @@ public class HTTPServerList extends Vector<HTTPServer>
 			HTTPServer server = getHTTPServer(n);
 			server.addRequestListener(listener);
 		}
-	}		
-	
+	}
+
 	public HTTPServer getHTTPServer(int n)
 	{
 		return get(n);
@@ -74,18 +74,18 @@ public class HTTPServerList extends Vector<HTTPServer>
 	public int open(){
 		InetAddress[] binds=this.binds;
 		String[] bindAddresses;
-		if(binds!=null){			
+		if(binds!=null){
 			bindAddresses = new String[binds.length];
 			for (int i = 0; i < binds.length; i++) {
 				bindAddresses[i] = binds[i].getHostAddress();
 			}
 		}else{
 			int nHostAddrs = HostInterface.getNHostAddresses();
-			bindAddresses = new String[nHostAddrs]; 
+			bindAddresses = new String[nHostAddrs];
 			for (int n=0; n<nHostAddrs; n++) {
 				bindAddresses[n] = HostInterface.getHostAddress(n);
 			}
-		}		
+		}
 		int j=0;
 		for (int i = 0; i < bindAddresses.length; i++) {
 			HTTPServer httpServer = new HTTPServer();
@@ -99,18 +99,18 @@ public class HTTPServerList extends Vector<HTTPServer>
 		}
 		return j;
 	}
-	
-	
-	public boolean open(int port) 
+
+
+	public boolean open(int port)
 	{
 		this.port=port;
 		return open()!=0;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	start/stop
 	////////////////////////////////////////////////
-	
+
 	public void start()
 	{
 		int nServers = size();

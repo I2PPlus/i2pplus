@@ -15,7 +15,7 @@ import net.i2p.update.*;
 class DummyHandler implements Checker, Updater {
     private final RouterContext _context;
     private final ConsoleUpdateManager _mgr;
-    
+
     public DummyHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;
         _mgr = mgr;

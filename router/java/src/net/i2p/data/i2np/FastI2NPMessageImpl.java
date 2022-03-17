@@ -42,11 +42,11 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     protected byte _checksum;
     // We skip the fiction that CHECKSUM_LENGTH will ever be anything but 1
     protected boolean _hasChecksum;
-    
+
     public FastI2NPMessageImpl(I2PAppContext context) {
         super(context);
     }
-    
+
     /**
      *  Ignore, but save, the checksum, to be used later if necessary.
      *
@@ -78,11 +78,11 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
         cur++;
 
         if (cur + size > data.length || headerSize + size > maxLen)
-            throw new I2NPMessageException("Payload is too short [" 
+            throw new I2NPMessageException("Payload is too short ["
                                            + "data.len=" + data.length
                                            + "maxLen=" + maxLen
                                            + " offset=" + offset
-                                           + " cur=" + cur 
+                                           + " cur=" + cur
                                            + " wanted=" + size + "]: " + getClass().getSimpleName());
 
         int sz = Math.min(size, maxLen - headerSize);
@@ -93,7 +93,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
             _log.info("Ignored c/s " + getClass().getSimpleName());
         return cur - offset;
     }
-    
+
     /**
      *  This tests the reuse-checksum feature.
      *  The results are that mostly UnknownI2NPMessages (from inside a TGM),
@@ -114,7 +114,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
             _log.info("Generating new c/s " + getClass().getSimpleName());
         return super.toByteArray(buffer);
     }
-    
+
     /**
      *  Use a previously-computed checksum for speed
      */
@@ -147,7 +147,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
             DataHelper.toLong(buffer, off, 2, payloadLen);
             off += 2;
             buffer[off] = _checksum;
-            return writtenLen;                     
+            return writtenLen;
         } catch (I2NPMessageException ime) {
             _context.logManager().getLog(getClass()).log(Log.CRIT, "Error writing", ime);
             throw new IllegalStateException("Unable to serialize the message " + getClass().getSimpleName(), ime);

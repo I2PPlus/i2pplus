@@ -10,31 +10,31 @@ import net.i2p.util.Log;
 
 public class TestNaming {
     private static Log _log = new Log(TestNaming.class);
-    
+
     private static void runTest(String samHost, int samPort, String conOptions) {
         testMe(samHost, samPort, conOptions);
         testDuck(samHost, samPort, conOptions);
         testUnknown(samHost, samPort, conOptions);
     }
-    
+
     private static void testMe(String host, int port, String conOptions) {
         testName(host, port, conOptions, "ME");
         _log.debug("\n\nTest of ME complete\n\n\n");
         try { Thread.sleep(10*1000); } catch (InterruptedException ie) {}
     }
-    
+
     private static void testDuck(String host, int port, String conOptions) {
         testName(host, port, conOptions, "duck.i2p");
         _log.debug("\n\nTest of duck complete\n\n\n");
         try { Thread.sleep(10*1000); } catch (InterruptedException ie) {}
     }
-    
+
     private static void testUnknown(String host, int port, String conOptions) {
         testName(host, port, conOptions, "www.odci.gov");
         _log.debug("\n\nTest of unknown host complete\n\n\n");
         try { Thread.sleep(10*1000); } catch (InterruptedException ie) {}
     }
-    
+
     private static void testName(String host, int port, String conOptions, String name) {
         _log.info("\n\nTesting a name lookup (should come back with 'NAMING REPLY RESULT=OK VALUE=someName)\n\n\n");
         try {
@@ -60,10 +60,10 @@ public class TestNaming {
             _log.error("Error testing for valid version", e);
         }
     }
-    
+
     public static void main(String args[]) {
         // "i2cp.tcp.host=www.i2p.net i2cp.tcp.port=7765";
-        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0"; 
+        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         String conOptions = "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         if (args.length > 0) {
             conOptions = "";

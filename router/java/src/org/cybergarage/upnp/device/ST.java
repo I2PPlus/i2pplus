@@ -15,7 +15,7 @@
 
 package org.cybergarage.upnp.device;
 
-public class ST 
+public class ST
 {
 	public final static String ALL_DEVICE = "ssdp:all";
 	public final static String ROOT_DEVICE = "upnp:rootdevice";
@@ -31,7 +31,7 @@ public class ST
 			return true;
 		return value.equals("\"" + ALL_DEVICE + "\"");
 	}
-	
+
 	public final static boolean isRootDevice(String value)
 	{
 		if (value == null)

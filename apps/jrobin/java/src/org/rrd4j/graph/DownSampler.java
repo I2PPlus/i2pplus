@@ -3,9 +3,9 @@ package org.rrd4j.graph;
 import java.util.Arrays;
 
 /**
- * 
+ *
  * A class that implement a downsampler, used to reduce the number of point to display.
- * 
+ *
  * @author Fabrice Bacchella
  *
  */

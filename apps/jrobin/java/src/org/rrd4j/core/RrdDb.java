@@ -173,7 +173,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
 
         /**
          * Set the rrd as readonly
-         * 
+         *
          * @return the same builder.
          */
         public Builder readOnly() {

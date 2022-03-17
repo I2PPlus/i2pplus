@@ -20,7 +20,7 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     protected EncryptedBuildRecord _records[];
     protected int RECORD_COUNT;
     public static final int MAX_RECORD_COUNT = 8;
-    
+
     public TunnelBuildMessageBase(I2PAppContext context) {
         this(context, MAX_RECORD_COUNT);
     }
@@ -47,17 +47,17 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
 
     /** @since 0.7.12 */
     public int getRecordCount() { return RECORD_COUNT; }
-    
+
     public static final int RECORD_SIZE = 512+16;
-    
+
     protected int calculateWrittenLength() { return RECORD_SIZE * RECORD_COUNT; }
 
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
-        if (type != getType()) 
+        if (type != getType())
             throw new I2NPMessageException("Message type is incorrect for this message");
-        if (dataSize != calculateWrittenLength()) 
+        if (dataSize != calculateWrittenLength())
             throw new I2NPMessageException("Wrong length (expects " + calculateWrittenLength() + ", recv " + dataSize + ")");
-        
+
         for (int i = 0; i < RECORD_COUNT; i++) {
             int off = offset + (i * RECORD_SIZE);
             byte rec[] = new byte[RECORD_SIZE];
@@ -65,7 +65,7 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
             setRecord(i, new EncryptedBuildRecord(rec));
         }
     }
-    
+
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         int remaining = out.length - (curIndex + calculateWrittenLength());
         if (remaining < 0)

@@ -2,7 +2,7 @@ package org.rrd4j.graph;
 
 /**
  * The elements of the graph. For use in {@link RrdGraphDef#setColor(ElementsNames, java.awt.Paint)} method.
- * 
+ *
  * @author Fabrice Bacchella
  *
  */

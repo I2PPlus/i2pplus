@@ -159,7 +159,7 @@ class SSU2Bitfield {
         // now get ranges
         if (acnt < highest - offset) {
             // cur + 1 is set, cur is unset, start at cur
-            long cur = highest - (acnt + 1); 
+            long cur = highest - (acnt + 1);
             for (int r = 0; r < maxRanges; r++) {
                 int ncnt = 0;
                 for ( ; cur >= offset && ncnt < 255; cur--) {

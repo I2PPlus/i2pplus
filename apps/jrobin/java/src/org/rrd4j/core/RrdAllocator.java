@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class RrdAllocator {
     private long allocationPointer = 0L;
-    
+
     RrdAllocator() {
         super();
     }

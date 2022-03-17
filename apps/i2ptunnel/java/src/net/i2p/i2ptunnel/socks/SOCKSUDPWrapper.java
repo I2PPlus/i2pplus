@@ -21,7 +21,7 @@ public class SOCKSUDPWrapper implements Source, Sink {
     public SOCKSUDPWrapper(Map<I2PSocketAddress, SOCKSHeader> cache) {
         this.cache = cache;
     }
-    
+
     public void setSink(Sink sink) {
         this.sink = sink;
     }

@@ -1,9 +1,9 @@
 package net.i2p.data;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -15,7 +15,7 @@ import java.io.OutputStream;
 /**
  * Defines the tunnel ID that messages are passed through on a set of routers.
  * This is not globally unique, but must be unique on each router making up
- * the tunnel (otherwise they would get confused and send messages down the 
+ * the tunnel (otherwise they would get confused and send messages down the
  * wrong one).
  *
  * Note that a TunnelId must be greater than zero,
@@ -32,10 +32,10 @@ import java.io.OutputStream;
  */
 public class TunnelId {
     private long _tunnelId;
-    
+
     public static final long MAX_ID_VALUE = 0xffffffffL;
-    
-    public TunnelId() { 
+
+    public TunnelId() {
         _tunnelId = -1;
     }
 
@@ -43,7 +43,7 @@ public class TunnelId {
      *  @param id 1 to 0xffffffff
      *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
      */
-    public TunnelId(long id) { 
+    public TunnelId(long id) {
         setTunnelId(id);
     }
 
@@ -53,16 +53,16 @@ public class TunnelId {
      *  @param id 1 to 0xffffffff
      *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
      */
-    public void setTunnelId(long id) { 
+    public void setTunnelId(long id) {
         if (id <= 0 || id > MAX_ID_VALUE)
             throw new IllegalArgumentException("bad id " + id);
-        _tunnelId = id; 
+        _tunnelId = id;
     }
-    
+
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _tunnelId = DataHelper.readLong(in, 4);
     }
-    
+
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         // writeLong() will throw DFE on negative value
         //if (_tunnelId < 0) throw new DataFormatException("Invalid tunnel ID: " + _tunnelId);
@@ -76,12 +76,12 @@ public class TunnelId {
             return false;
         return _tunnelId == ((TunnelId)obj)._tunnelId;
     }
-    
+
     @Override
     public int hashCode() {
-        return (int)_tunnelId; 
+        return (int)_tunnelId;
     }
-    
+
     @Override
     public String toString() { return String.valueOf(_tunnelId); }
 }

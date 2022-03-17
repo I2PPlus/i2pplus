@@ -62,7 +62,7 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
         }
         _firstRun = false;
     }
-    
+
     private boolean shouldFetchNews() {
         if (_context.router().gracefulShutdownInProgress())
             return false;
@@ -75,7 +75,7 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
             long ms = Long.parseLong(freq);
             if (ms <= 0)
                 return false;
-            
+
             if (lastFetch + ms < _context.clock().now()) {
                 return true;
             } else {
@@ -94,14 +94,14 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
     private void fetchNews() {
         _mgr.checkAvailable(NEWS, 60*1000);
     }
-    
+
     private boolean shouldFetchUnsigned() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         return url != null && url.length() > 0 &&
                _context.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) &&
                !NewsHelper.dontInstall(_context);
     }
-    
+
     /** @since 0.9.20 */
     private boolean shouldFetchDevSU3() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL);

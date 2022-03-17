@@ -186,7 +186,7 @@ class RpnCalculator {
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Double.isInfinite(c.pop()) ? 1 : 0);
-            }            
+            }
         },
         TKN_LT("LT") {
             @Override

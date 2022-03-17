@@ -17,20 +17,20 @@ import net.i2p.data.TunnelId;
 public interface TunnelInfo {
     /** how many peers are there in the tunnel (including the creator)? */
     public int getLength();
-    
+
     /**
-     * retrieve the tunnelId that the given hop receives messages on.  
+     * retrieve the tunnelId that the given hop receives messages on.
      * the gateway is hop 0.
      *
      */
     public TunnelId getReceiveTunnelId(int hop);
     /**
-     * retrieve the tunnelId that the given hop sends messages on.  
+     * retrieve the tunnelId that the given hop sends messages on.
      * the gateway is hop 0.
      *
      */
     public TunnelId getSendTunnelId(int hop);
-    
+
     /** retrieve the peer at the given hop.  the gateway is hop 0 */
     public Hash getPeer(int hop);
 
@@ -60,16 +60,16 @@ public interface TunnelInfo {
 
     /** if this is a client tunnel, what destination is it for? */
     public Hash getDestination();
-    
+
     public long getExpiration();
-    /** 
-     * take note that the tunnel was able to measurably Do Good 
-     * in the given time 
+    /**
+     * take note that the tunnel was able to measurably Do Good
+     * in the given time
      */
     public void testSuccessful(int responseTime);
-    
+
     public int getProcessedMessagesCount();
-    
+
     /** we know for sure that this many bytes travelled through the tunnel in its lifetime */
     public long getVerifiedBytesTransferred();
 

@@ -12,16 +12,16 @@ public class AdminManager implements Service {
     private RouterContext _context;
     public final static String PARAM_ADMIN_PORT = "router.adminPort";
     public final static int DEFAULT_ADMIN_PORT = 7655;
-    
+
     private AdminListener _listener;
-    
+
     public AdminManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(AdminManager.class);
     }
-    
+
     public void renderStatusHTML(Writer out) { }
-    
+
     public void shutdown() {
         if (_listener != null) {
             _log.info("Shutting down admin listener");
@@ -29,11 +29,11 @@ public class AdminManager implements Service {
             _listener = null;
         }
     }
-    
+
     public void restart() {
         startup();
     }
-    
+
     public void startup() {
         int port = DEFAULT_ADMIN_PORT;
         String str = _context.router().getConfigSetting(PARAM_ADMIN_PORT);
@@ -50,7 +50,7 @@ public class AdminManager implements Service {
         }
         startup(port);
     }
-    
+
     private void startup(int port) {
         if (_listener == null) {
             _listener = new AdminListener(_context, port);

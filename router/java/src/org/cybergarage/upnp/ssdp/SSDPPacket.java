@@ -29,12 +29,12 @@ import org.cybergarage.http.*;
 
 import org.cybergarage.upnp.device.*;
 
-public class SSDPPacket 
+public class SSDPPacket
 {
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public SSDPPacket(byte[] buf, int length)
 	{
 		dgmPacket = new DatagramPacket(buf, length);
@@ -43,7 +43,7 @@ public class SSDPPacket
 	////////////////////////////////////////////////
 	//	DatagramPacket
 	////////////////////////////////////////////////
-	
+
 	private DatagramPacket dgmPacket = null;
 
 	public DatagramPacket getDatagramPacket()
@@ -54,31 +54,31 @@ public class SSDPPacket
 	////////////////////////////////////////////////
 	//	addr
 	////////////////////////////////////////////////
-	
+
 	private String localAddr = "";
-	
+
 	public void setLocalAddress(String addr)
 	{
 		localAddr = addr;
 	}
-	
+
 	public String getLocalAddress()
 	{
 		return localAddr;
 	}
 
-	
+
 	////////////////////////////////////////////////
 	//	Time
 	////////////////////////////////////////////////
 
 	private long timeStamp;
-	
+
 	public void setTimeStamp(long value)
 	{
 		timeStamp = value;
 	}
-		
+
 	public long getTimeStamp()
 	{
 		return timeStamp;
@@ -92,7 +92,7 @@ public class SSDPPacket
 	{
 		return getDatagramPacket().getAddress();
 	}
-	
+
 	public String getRemoteAddress()
 	{
 		// Thanks for Theo Beisch (11/09/04)
@@ -103,23 +103,23 @@ public class SSDPPacket
 	{
 		return getDatagramPacket().getPort();
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Access Methods
 	////////////////////////////////////////////////
 
 	public byte[] packetBytes = null;
-	
+
 	public byte[] getData()
 	{
 		if (packetBytes != null)
 			return packetBytes;
-		
+
 		DatagramPacket packet = getDatagramPacket();
 		int packetLen = packet.getLength();
 		String packetData = new String(packet.getData(), 0, packetLen);
 		packetBytes = packetData.getBytes();
-		
+
 		return packetBytes;
 	}
 
@@ -136,7 +136,7 @@ public class SSDPPacket
 	{
 		return HTTPHeader.getValue(getData(), HTTP.CACHE_CONTROL);
 	}
-	
+
 	public String getLocation()
 	{
 		return HTTPHeader.getValue(getData(), HTTP.LOCATION);
@@ -196,11 +196,11 @@ public class SSDPPacket
 		InetSocketAddress isockaddr = new InetSocketAddress(addrStr, 0);
 		return isockaddr.getAddress();
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Access Methods (Extension)
 	////////////////////////////////////////////////
-	
+
 	public boolean isRootDevice()
 	{
 		if (NT.isRootDevice(getNT()) == true)
@@ -215,7 +215,7 @@ public class SSDPPacket
 	{
 		return MAN.isDiscover(getMAN());
 	}
-	
+
 	public boolean isAlive()
 	{
 		return NTS.isAlive(getNTS());

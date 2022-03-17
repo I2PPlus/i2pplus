@@ -27,16 +27,16 @@ class UDPAddress {
     private final long _introTags[];
     private final long _introExps[];
     private final int _mtu;
-    
+
     public static final String PROP_PORT = RouterAddress.PROP_PORT;
     public static final String PROP_HOST = RouterAddress.PROP_HOST;
     public static final String PROP_INTRO_KEY = "key";
     public static final String PROP_MTU = "mtu";
-    
+
     public static final String PROP_CAPACITY = "caps";
     public static final char CAPACITY_TESTING = 'B';
     public static final char CAPACITY_INTRODUCER = 'C';
-    
+
     public static final String PROP_INTRO_HOST_PREFIX = "ihost";
     public static final String PROP_INTRO_PORT_PREFIX = "iport";
     public static final String PROP_INTRO_KEY_PREFIX = "ikey";
@@ -83,7 +83,7 @@ class UDPAddress {
         _port = addr.getPort();
 
         int cmtu = 0;
-        try { 
+        try {
             String mtu = addr.getOption(PROP_MTU);
             if (mtu != null) {
                 boolean isIPv6 = _host != null && _host.contains(":");
@@ -102,7 +102,7 @@ class UDPAddress {
         } else {
             _introKey = null;
         }
-        
+
         byte[][] cintroKeys = null;
         long[] cintroTags = null;
         int[] cintroPorts = null;
@@ -122,8 +122,8 @@ class UDPAddress {
             String t = addr.getOption(PROP_INTRO_TAG[i]);
             if (t == null) continue;
             int p;
-            try { 
-                p = Integer.parseInt(port); 
+            try {
+                p = Integer.parseInt(port);
                 if (!TransportUtil.isValidPort(p)) continue;
             } catch (NumberFormatException nfe) {
                 continue;
@@ -158,7 +158,7 @@ class UDPAddress {
             cintroTags[i] = tag;
             cintroExps[i] = exp;
         }
-        
+
         int numOK = 0;
         if (cintroHosts != null) {
             // Validate the intro parameters, and shrink the
@@ -167,7 +167,7 @@ class UDPAddress {
             // We don't bother shrinking the other arrays,
             // we just remove the invalid entries.
             for (int i = 0; i < cintroHosts.length; i++) {
-                if ( (cintroKeys[i] != null) && 
+                if ( (cintroKeys[i] != null) &&
                      (cintroPorts[i] > 0) &&
                      (cintroTags[i] > 0) &&
                      (cintroHosts[i] != null) )
@@ -176,7 +176,7 @@ class UDPAddress {
             if (numOK != cintroHosts.length) {
                 int cur = 0;
                 for (int i = 0; i < cintroHosts.length; i++) {
-                    if ( (cintroKeys[i] != null) && 
+                    if ( (cintroKeys[i] != null) &&
                          (cintroPorts[i] > 0) &&
                          (cintroTags[i] > 0) &&
                          (cintroHosts[i] != null) ) {
@@ -201,7 +201,7 @@ class UDPAddress {
         _introAddresses = cintroAddresses;
         _introExps = cintroExps;
     }
-    
+
     public String getHost() { return _host; }
 
     /**
@@ -224,7 +224,7 @@ class UDPAddress {
      *  @return shouldn't be null but will be if invalid
      */
     byte[] getIntroKey() { return _introKey; }
-    
+
     int getIntroducerCount() { return (_introAddresses == null ? 0 : _introAddresses.length); }
 
     /**
@@ -234,7 +234,7 @@ class UDPAddress {
      *  @throws ArrayIndexOutOfBoundsException if i &lt; 0 or i &gt;= getIntroducerCount()
      *  @return null if invalid
      */
-    InetAddress getIntroducerHost(int i) { 
+    InetAddress getIntroducerHost(int i) {
         if (_introAddresses[i] == null)
             _introAddresses[i] = getByName(_introHosts[i]);
         return _introAddresses[i];
@@ -268,7 +268,7 @@ class UDPAddress {
      *  @since 0.9.30
      */
     long getIntroducerExpiration(int i) { return _introExps[i]; }
-        
+
     /**
      *  @return 0 if unset or invalid; recitified via MTU.rectify()
      *  @since 0.9.2
@@ -276,7 +276,7 @@ class UDPAddress {
     int getMTU() {
         return _mtu;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder rv = new StringBuilder(64);

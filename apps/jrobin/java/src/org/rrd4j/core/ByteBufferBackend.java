@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * A backend that store and provides access to data using a {@link java.nio.ByteBuffer}, using java internal methods for
  * long, integer and others types.
- * 
+ *
  * @author Fabrice Bacchella
  * @since 3.4
  *
@@ -168,7 +168,7 @@ public abstract class ByteBufferBackend extends RrdBackend {
     /**
      * Ensure that the conversion from long offset to integer offset will not overflow
      * @param offset
-     * @throws RrdException 
+     * @throws RrdException
      */
     private void checkOffsetAndByteBuffer(long offset) throws RrdException {
         if (offset < 0 || offset > Integer.MAX_VALUE) {

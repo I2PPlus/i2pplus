@@ -3,25 +3,25 @@ package net.i2p.router.transport.udp;
  * Copyright (c) 2000 - 2004 The Legion Of The Bouncy Castle
  * (http://www.bouncycastle.org)
  *
- * Permission is hereby granted, free of charge, to any person 
- * obtaining a copy of this software and associated 
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to 
+ * without restriction, including without limitation the rights to
  * use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following 
+ * Software is furnished to do so, subject to the following
  * conditions:
  *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
  */
@@ -70,7 +70,7 @@ class I2PHMac
      */
     @Deprecated
     public I2PHMac(MessageDigest digest) {
-        this(digest, digest.getDigestLength()); 
+        this(digest, digest.getDigestLength());
     }
 
     /**
@@ -79,7 +79,7 @@ class I2PHMac
      */
     public I2PHMac(MessageDigest digest, int sz) {
         this.digest = digest;
-        this.digestSize = sz; 
+        this.digestSize = sz;
     }
 
     public String getAlgorithmName()
@@ -95,7 +95,7 @@ class I2PHMac
     //public void init(
     //    CipherParameters params)
     //{
-    public void init(byte key[]) 
+    public void init(byte key[])
     {
         digest.reset();
 
@@ -169,7 +169,7 @@ class I2PHMac
             reset();
         }
     }
-    
+
     private static byte[] acquireTmp(int sz) {
         byte[] rv = SimpleByteCache.acquire(sz);
         Arrays.fill(rv, (byte)0x0);

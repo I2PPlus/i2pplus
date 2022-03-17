@@ -30,12 +30,12 @@ public class Pinger implements Source, Runnable {
     public void setSink(Sink sink) {
         this.sink = sink;
     }
-    
+
     public void start() {
         this.running = true;
         this.thread.start();
     }
-    
+
     public void stop() {
         this.running = false;
         synchronized(this.waitlock) {
@@ -50,7 +50,7 @@ public class Pinger implements Source, Runnable {
                 log.debug("Sent unsubscribe from port " + fromPort);
         } catch (RuntimeException re) {}
     }
-    
+
     public void run() {
         // send subscribe-message
         byte[] data = new byte[1];

@@ -15,17 +15,17 @@
 
 package org.cybergarage.upnp.device;
 
-public class USN 
+public class USN
 {
 	public final static String ROOTDEVICE = "upnp:rootdevice";
-	
+
 	public final static boolean isRootDevice(String usnValue)
 	{
 		if (usnValue == null)
 			return false;
 		return usnValue.endsWith(ROOTDEVICE);
 	}
-	
+
 	public final static String getUDN(String usnValue)
 	{
 		if (usnValue == null)

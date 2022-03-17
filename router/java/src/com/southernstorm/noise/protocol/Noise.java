@@ -39,14 +39,14 @@ public final class Noise {
 	 * Maximum length for Noise packets.
 	 */
 	public static final int MAX_PACKET_LEN = 65535;
-	
+
 	/**
 	 * Creates a cipher object from its Noise protocol name.
-	 * 
+	 *
 	 * @param name The name of the cipher algorithm; e.g. "AESGCM", "ChaChaPoly", etc.
-	 * 
+	 *
 	 * @return The cipher object if the name is recognized.
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException The name is not recognized as a
 	 * valid Noise protocol name, or there is no cryptography provider
 	 * in the system that implements the algorithm.
@@ -58,14 +58,14 @@ public final class Noise {
 		}
 		throw new NoSuchAlgorithmException("Unknown Noise cipher algorithm name: " + name);
 	}
-	
+
 	/**
 	 * Creates a hash object from its Noise protocol name.
-	 * 
+	 *
 	 * @param name The name of the hash algorithm; e.g. "SHA256", "BLAKE2s", etc.
-	 * 
+	 *
 	 * @return The hash object if the name is recognized.
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException The name is not recognized as a
 	 * valid Noise protocol name, or there is no cryptography provider
 	 * in the system that implements the algorithm.
@@ -90,7 +90,7 @@ public final class Noise {
 
 	/**
 	 * Destroys the contents of a byte array.
-	 * 
+	 *
 	 * @param array The array whose contents should be destroyed.
 	 */
 	static void destroy(byte[] array)
@@ -100,11 +100,11 @@ public final class Noise {
 
 	/**
 	 * Makes a copy of part of an array.
-	 * 
+	 *
 	 * @param data The buffer containing the data to copy.
 	 * @param offset Offset of the first byte to copy.
 	 * @param length The number of bytes to copy.
-	 * 
+	 *
 	 * @return A new array with a copy of the sub-array.
 	 */
 	static byte[] copySubArray(byte[] data, int offset, int length)
@@ -113,12 +113,12 @@ public final class Noise {
 		System.arraycopy(data, offset, copy, 0, length);
 		return copy;
 	}
-	
+
 	/**
 	 * Throws an instance of AEADBadTagException.
-	 * 
+	 *
 	 * @throws BadPaddingException The AEAD exception.
-	 * 
+	 *
 	 * If the underlying JDK does not have the AEADBadTagException
 	 * class, then this function will instead throw an instance of
 	 * the superclass BadPaddingException.

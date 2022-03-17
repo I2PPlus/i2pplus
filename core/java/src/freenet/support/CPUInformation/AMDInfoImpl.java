@@ -41,7 +41,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
     public boolean IsK10Compatible(){ return isK10Compatible; }
 
     public boolean IsBobcatCompatible(){ return isBobcatCompatible; }
-    
+
     public boolean IsJaguarCompatible(){ return isJaguarCompatible; }
 
     public boolean IsBulldozerCompatible(){ return isBulldozerCompatible; }
@@ -64,7 +64,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
      */
     public boolean IsZen2Compatible() { return isZen2Compatible; }
 
-    
+
     public String getCPUModelString() throws UnknownCPUException
     {
         String smodel = identifyCPU();
@@ -73,7 +73,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
         throw new UnknownCPUException("Unknown AMD CPU; Family="+CPUID.getCPUFamily() + '/' + CPUID.getCPUExtendedFamily()+
                                       ", Model="+CPUID.getCPUModel() + '/' + CPUID.getCPUExtendedModel());
     }
-    
+
     private String identifyCPU()
     {
         // http://en.wikipedia.org/wiki/Cpuid
@@ -87,7 +87,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
         }
 
         switch (family) {
-        //i486 class (Am486, 5x86) 
+        //i486 class (Am486, 5x86)
           case 4: {
             switch (model) {
                 case 3:
@@ -115,7 +115,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //i586 class (K5/K6/K6-2/K6-III) 
+        //i586 class (K5/K6/K6-2/K6-III)
         // ref: http://support.amd.com/TechDocs/20734.pdf
           case 5: {
             isK6Compatible = true;
@@ -162,7 +162,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //i686 class (Athlon/Athlon XP/Duron/K7 Sempron) 
+        //i686 class (Athlon/Athlon XP/Duron/K7 Sempron)
         // ref: http://support.amd.com/TechDocs/20734.pdf
           case 6: {
             isK6Compatible = true;
@@ -202,7 +202,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //AMD64 class (A64/Opteron/A64 X2/K8 Sempron/Turion/Second-Generation Opteron/Athlon Neo) 
+        //AMD64 class (A64/Opteron/A64 X2/K8 Sempron/Turion/Second-Generation Opteron/Athlon Neo)
         // ref: http://support.amd.com/TechDocs/33610.PDF
           case 15: {
             isK6Compatible = true;
@@ -232,7 +232,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
                     break;
                 case 15:
                     modelString = "Athlon 64/Sempron (Clawhammer S939, 130 nm)";
-                    break;                    
+                    break;
                 // everything below here was broken prior to 0.9.16
                 case 18:
                     modelString = "Sempron (Palermo, 90 nm)";
@@ -334,7 +334,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //Stars (Phenom II/Athlon II/Third-Generation Opteron/Opteron 4100 & 6100/Sempron 1xx) 
+        //Stars (Phenom II/Athlon II/Third-Generation Opteron/Opteron 4100 & 6100/Sempron 1xx)
           case 16: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -371,7 +371,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //K8 mobile+HT3 (Turion X2/Athlon X2/Sempron) 
+        //K8 mobile+HT3 (Turion X2/Athlon X2/Sempron)
           case 17: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -413,7 +413,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
             isAthlon64Compatible = true;
             isBobcatCompatible = true;
             switch (model) {
-                case 1:                    
+                case 1:
                 // Case 3 is uncertain but most likely a Bobcat APU
                 case 3:
                     modelString = "AMD Bobcat APU";

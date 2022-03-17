@@ -1,7 +1,7 @@
 /*
  * Created on May 20, 2010
  * Created by Paul Gardner
- * 
+ *
  * Copyright 2010 Vuze, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,36 +23,36 @@
 
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
-public class 
-JCheckBox 
+public class
+JCheckBox
 	extends Component
 {
 	boolean	selected;
-	
-	public 
+
+	public
 	JCheckBox(
 		String	str )
 	{
-		
+
 	}
-	
+
 	public void
 	setSelected(
 		boolean	b )
 	{
 		selected = b;
 	}
-	
+
 	public boolean
 	isSelected()
 	{
 		return( selected );
 	}
-	
+
 	public void
 	addActionListener(
 		ActionListener	l )
 	{
-		
+
 	}
 }

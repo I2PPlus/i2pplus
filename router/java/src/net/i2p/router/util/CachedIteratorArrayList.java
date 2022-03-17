@@ -10,15 +10,15 @@ import java.util.NoSuchElementException;
 /**
  * ArrayList that uses a single iterator.  Useful to avoid object churn
  * while keeping the conveniences of an iterator.
- * 
+ *
  * @since 0.9.4 moved from net.i2p.util in 0.9.24
- * 
+ *
  * @author zab
  */
 public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
     private static final long serialVersionUID = 4863212596318574111L;
-    
+
     private final CachedIterator iterator = new CachedIterator();
 
     public CachedIteratorArrayList() {
@@ -32,7 +32,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
     public CachedIteratorArrayList(int initialCapacity) {
         super(initialCapacity);
     }
-    
+
     @Override
     public Iterator<E> iterator() {
         iterator.reset();
@@ -58,7 +58,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
          * has detected concurrent modification.
          */
         int expectedModCount = modCount;
-        
+
         void reset() {
             cursor = 0;
             lastRet = -1;
@@ -105,5 +105,5 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         }
 
     }
-    
+
 }

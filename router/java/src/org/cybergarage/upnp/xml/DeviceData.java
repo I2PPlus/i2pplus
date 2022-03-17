@@ -36,7 +36,7 @@ import org.cybergarage.upnp.device.*;
  */
 public class DeviceData extends NodeData
 {
-	public DeviceData() 
+	public DeviceData()
 	{
 	}
 
@@ -44,9 +44,9 @@ public class DeviceData extends NodeData
 	// description
 	////////////////////////////////////////////////
 
-	private String descriptionURI = null; 
+	private String descriptionURI = null;
 	private File descriptionFile = null;
-	
+
 	public File getDescriptionFile() {
 		return descriptionFile;
 	}
@@ -69,7 +69,7 @@ public class DeviceData extends NodeData
 
 	private String location = "";
 	private String location_ipv6 = "";
-	
+
 	public String getLocation() {
 		return getLocation(false);
 	}
@@ -93,7 +93,7 @@ public class DeviceData extends NodeData
 
 	public void setLocation(String location) {
 		if (location != null) {
-			try {	
+			try {
 				URL url = new URL(location);
 				String host = url.getHost();
 				if (host != null && host.startsWith("[")) {
@@ -109,26 +109,26 @@ public class DeviceData extends NodeData
 	}
 
 	////////////////////////////////////////////////
-	//	LeaseTime 
+	//	LeaseTime
 	////////////////////////////////////////////////
 
 	private int leaseTime = Device.DEFAULT_LEASE_TIME;
-	
-	public int getLeaseTime() 
+
+	public int getLeaseTime()
 	{
 		return leaseTime;
 	}
 
-	public void setLeaseTime(int val) 
+	public void setLeaseTime(int val)
 	{
 		leaseTime = val;
 	}
 
 	////////////////////////////////////////////////
-	//	HTTPServer 
+	//	HTTPServer
 	////////////////////////////////////////////////
 
-	private HTTPServerList httpServerList = null;		
+	private HTTPServerList httpServerList = null;
 
 	public HTTPServerList getHTTPServerList() {
 		if(this.httpServerList==null){
@@ -136,19 +136,19 @@ public class DeviceData extends NodeData
 		}
 		return this.httpServerList;
 	}
-	
+
 	private InetAddress[] httpBinds = null;
-	
+
 	public void setHTTPBindAddress(InetAddress[] inets){
 		this.httpBinds=inets;
 	}
-	
+
 	public InetAddress[] getHTTPBindAddress(){
 		return this.httpBinds;
 	}
 
 	////////////////////////////////////////////////
-	//	httpPort 
+	//	httpPort
 	////////////////////////////////////////////////
 
 	private int httpPort = Device.HTTP_DEFAULT_PORT;
@@ -180,24 +180,24 @@ public class DeviceData extends NodeData
 	////////////////////////////////////////////////
 	// SSDPSearchSocket
 	////////////////////////////////////////////////
-	
+
 	private SSDPSearchSocketList ssdpSearchSocketList = null;
 	private String ssdpMulticastIPv4 = SSDP.ADDRESS;
 	private String ssdpMulticastIPv6 = SSDP.getIPv6Address();
 	private int ssdpPort = SSDP.PORT;
 	private InetAddress[] ssdpBinds = null;
-	
+
 	public SSDPSearchSocketList getSSDPSearchSocketList() {
 		if(this.ssdpSearchSocketList==null){
-			this.ssdpSearchSocketList = new SSDPSearchSocketList(this.ssdpBinds,ssdpPort,ssdpMulticastIPv4,ssdpMulticastIPv6);			
+			this.ssdpSearchSocketList = new SSDPSearchSocketList(this.ssdpBinds,ssdpPort,ssdpMulticastIPv4,ssdpMulticastIPv6);
 		}
 		return ssdpSearchSocketList;
 	}
-	
+
 	/**
-	 * 
-	 * @param port The port to use for binding the SSDP service. 
-	 * 		The port will be used as source port for all SSDP messages 
+	 *
+	 * @param port The port to use for binding the SSDP service.
+	 * 		The port will be used as source port for all SSDP messages
 	 * @since 1.8
 	 */
 	public void setSSDPPort(int port){
@@ -205,40 +205,40 @@ public class DeviceData extends NodeData
 	}
 
 	/**
-	 * 
-	 * @return The port used for binding the SSDP service. 
-	 * 		The port will be used as source port for all SSDP messages 
+	 *
+	 * @return The port used for binding the SSDP service.
+	 * 		The port will be used as source port for all SSDP messages
 	 */
 	public int getSSDPPort(){
 		return this.ssdpPort;
 	}
-	
-	
+
+
 	/**
-	 * 
-	 * @param inets The <code>InetAddress</code> that will be binded for listing this service. 
-	 * 		Use <code>null</code> for the default behaviur. 
+	 *
+	 * @param inets The <code>InetAddress</code> that will be binded for listing this service.
+	 * 		Use <code>null</code> for the default behaviur.
 	 * @see org.cybergarage.upnp.ssdp
 	 * @see org.cybergarage.upnp
 	 * @see org.cybergarage.net.HostInterface
-	 * @since 1.8 
+	 * @since 1.8
 	 */
 	public void setSSDPBindAddress(InetAddress[] inets){
 		this.ssdpBinds=inets;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return inets The <code>InetAddress</code> that will be binded for this service
 	 * 		<code>null</code> means that defulat behaviur will be used
 	 * @since 1.8
-	 */	
+	 */
 	public InetAddress[] getSSDPBindAddress(){
 		return this.ssdpBinds;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param ip The IPv4 address used as destination address for Multicast comunication
 	 * @since 1.8
 	 */
@@ -247,15 +247,15 @@ public class DeviceData extends NodeData
 	}
 
 	/**
-	 * 
+	 *
 	 * @return The IPv4 address used for Multicast comunication
 	 */
 	public String getMulticastIPv4Address(){
 		return this.ssdpMulticastIPv4;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param ip The IPv6 address used as destination address for Multicast comunication
 	 * @since 1.8
 	 */
@@ -264,27 +264,27 @@ public class DeviceData extends NodeData
 	}
 
 	/**
-	 * 
+	 *
 	 * @return The IPv6 address used as destination address for Multicast comunication
 	 * @since 1.8
 	 */
 	public String getMulticastIPv6Address(){
 		return this.ssdpMulticastIPv6;
 	}
-	
-	
+
+
 
 	////////////////////////////////////////////////
 	// SSDPPacket
 	////////////////////////////////////////////////
-	
+
 	private SSDPPacket ssdpPacket = null;
 	private SSDPPacket ssdpPacket_ipv6 = null;
-	
+
 	public SSDPPacket getSSDPPacket() {
 		return getSSDPPacket(false);
 	}
-	
+
 	/**
 	 *  I2P for multiple location support
 	 *
@@ -305,7 +305,7 @@ public class DeviceData extends NodeData
 	public void setSSDPPacket(SSDPPacket packet) {
 		String location = packet.getLocation();
 		if (location != null) {
-			try {	
+			try {
 				URL url = new URL(location);
 				String host = url.getHost();
 				if (host != null && host.startsWith("[")) {
@@ -325,13 +325,13 @@ public class DeviceData extends NodeData
 	////////////////////////////////////////////////
 
 	private Advertiser advertiser = null;
-	
-	public void setAdvertiser(Advertiser adv) 
+
+	public void setAdvertiser(Advertiser adv)
 	{
 		advertiser = adv;
 	}
-	
-	public Advertiser getAdvertiser() 
+
+	public Advertiser getAdvertiser()
 	{
 		return advertiser;
 	}

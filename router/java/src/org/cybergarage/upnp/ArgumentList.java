@@ -17,26 +17,26 @@ package org.cybergarage.upnp;
 
 import java.util.Vector;
 
-public class ArgumentList extends Vector<Argument> 
+public class ArgumentList extends Vector<Argument>
 {
 	////////////////////////////////////////////////
 	//	Constants
 	////////////////////////////////////////////////
-	
+
 	public final static String ELEM_NAME = "argumentList";
 
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
-	public ArgumentList() 
+
+	public ArgumentList()
 	{
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public Argument getArgument(int n)
 	{
 		return get(n);
@@ -77,15 +77,15 @@ public class ArgumentList extends Vector<Argument>
 	}
 
 	/**
-	 * Set all the Argument which are Input Argoument to the given value in 
+	 * Set all the Argument which are Input Argoument to the given value in
 	 * the argument list
-	 * 
+	 *
 	 * @param inArgList
 	 */
 	public void setReqArgs(ArgumentList inArgList)
 	{
         int nArgs = size();
-        for (int n=0; n<nArgs; n++) { 
+        for (int n=0; n<nArgs; n++) {
             Argument arg = getArgument(n);
             if (arg.isInDirection()){
 	            String argName = arg.getName();
@@ -97,9 +97,9 @@ public class ArgumentList extends Vector<Argument>
         }
 	}
 	/**
-	 * Set all the Argument which are Output Argoument to the given value in 
+	 * Set all the Argument which are Output Argoument to the given value in
 	 * the argument list
-	 * 
+	 *
 	 * @param outArgList
 	 */
 	public void setResArgs(ArgumentList outArgList)

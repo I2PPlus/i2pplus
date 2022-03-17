@@ -1,9 +1,9 @@
 package net.i2p.data.i2np;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -51,7 +51,7 @@ public class DeliveryInstructionsTest extends StructureTest {
 		//instructions.setEncrypted(true);
 		//SessionKey key = new SessionKey();
 		//byte keyData[] = new byte[SessionKey.KEYSIZE_BYTES];
-		//for (int i = 0; i < keyData.length; i++) 
+		//for (int i = 0; i < keyData.length; i++)
 		//    keyData[i] = (byte)i;
 		//key.setData(keyData);
 		//instructions.setEncryptionKey(key);
@@ -64,7 +64,7 @@ public class DeliveryInstructionsTest extends StructureTest {
 		TunnelId id = new TunnelId();
 		id.setTunnelId(666);
 		instructions.setTunnelId(id);
-		
+
 		return instructions;
     }
     public DataStructure createStructureToRead() { return new DeliveryInstructions(); }

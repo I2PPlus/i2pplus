@@ -1,9 +1,9 @@
 package net.i2p.sam;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by human in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by human in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -26,7 +26,7 @@ interface SAMStreamReceiver {
      * @throws IOException
      */
     public void streamSendAnswer( int id, String result, String bufferState ) throws IOException;
-	
+
     /**
      * Notifies that the outwards buffer is free for writing
      * @param id stream ID
@@ -39,7 +39,7 @@ interface SAMStreamReceiver {
      *
      * @param id New connection id
      * @param dest Destination
-     * @throws IOException 
+     * @throws IOException
      */
     public void notifyStreamIncomingConnection ( int id, Destination dest ) throws IOException;
 
@@ -49,7 +49,7 @@ interface SAMStreamReceiver {
      * @param id New connection id
      * @param result message result
      * @param msg Message
-     * @throws IOException 
+     * @throws IOException
      */
     public void notifyStreamOutgoingConnection(int id, String result, String msg) throws IOException;
 
@@ -58,7 +58,7 @@ interface SAMStreamReceiver {
      *
      * @param id Connection id
      * @param data Byte array to be received
-     * @throws IOException 
+     * @throws IOException
      */
     public void receiveStreamBytes(int id, ByteBuffer data) throws IOException;
 
@@ -69,7 +69,7 @@ interface SAMStreamReceiver {
      * @param id Connection id
      * @param result Disconnection reason ("OK" or something else)
      * @param msg Error message, if any
-     * @throws IOException 
+     * @throws IOException
      */
     public void notifyStreamDisconnection(int id, String result, String msg) throws IOException;
 

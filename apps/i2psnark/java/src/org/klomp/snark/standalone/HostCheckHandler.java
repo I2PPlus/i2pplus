@@ -47,7 +47,7 @@ public class HostCheckHandler extends AbstractHandler {
             }
         }
     }
-    
+
     /**
      *  Unused, we can't get here from RunStandalone
      *

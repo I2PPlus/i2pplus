@@ -14,9 +14,9 @@ import net.i2p.util.SimpleByteCache;
  *
  */
 public abstract class HMACGenerator {
-    
+
     public HMACGenerator() {}
-    
+
     /**
      * Calculate the HMAC of the data with the given key
      *
@@ -25,7 +25,7 @@ public abstract class HMACGenerator {
      * @throws IllegalArgumentException for bad key or target too small
      */
     public abstract void calculate(SessionKey key, byte data[], int offset, int length, byte target[], int targetOffset);
-    
+
     /**
      * Verify the MAC inline, reducing some unnecessary memory churn.
      *
@@ -40,7 +40,7 @@ public abstract class HMACGenerator {
      */
     public abstract boolean verify(SessionKey key, byte curData[], int curOffset, int curLength,
                                    byte origMAC[], int origMACOffset, int origMACLength);
-    
+
 
     /**
      * 32 bytes from the byte array cache.

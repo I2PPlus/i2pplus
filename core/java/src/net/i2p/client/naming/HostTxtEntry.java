@@ -30,7 +30,7 @@ import net.i2p.util.RandomSource;
  * Includes methods to sign and verify the entry.
  * Used by addressbook to parse subscription data,
  * and by i2ptunnel to generate signed metadata.
- * 
+ *
  * @since 0.9.26
  */
 public class HostTxtEntry {

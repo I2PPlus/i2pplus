@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * An object cache which is safe to use by multiple threads without blocking.
- * 
+ *
  * @author zab
  *
  * @param <T>
@@ -25,13 +25,13 @@ public class TryCache<T> {
     public static interface ObjectFactory<T> {
         T newInstance();
     }
-    
+
     private final ObjectFactory<T> factory;
     protected final int capacity;
     protected final List<T> items;
     protected final Lock lock = new ReentrantLock();
     protected long _lastUnderflow;
-    
+
     /**
      * @param factory to be used for creating new instances
      * @param capacity cache up to this many items
@@ -41,7 +41,7 @@ public class TryCache<T> {
         this.capacity = capacity;
         this.items = new ArrayList<>(capacity);
     }
-    
+
     /**
      * @return a cached or newly created item from this cache
      */
@@ -58,13 +58,13 @@ public class TryCache<T> {
                 lock.unlock();
             }
         }
-        
+
         if (rv == null) {
             rv = factory.newInstance();
         }
         return rv;
     }
-    
+
     /**
      * Tries to return this item to the cache but it may fail if
      * the cache has reached capacity or it's lock is held by
@@ -94,7 +94,7 @@ public class TryCache<T> {
             }
         }
     }
-    
+
     /**
      * Clears all cached items.  This is the only method
      * that blocks until it acquires the lock.

@@ -23,7 +23,7 @@ class Stack extends SourcedPlotElement {
             }
             else {
                 values[i] = parentValues[i] + procValues[i];
-                
+
             }
         }
     }

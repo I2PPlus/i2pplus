@@ -22,7 +22,7 @@ public final class HKDF {
 
     private final I2PAppContext _context;
     private static final byte[] ONE = new byte[] { 1 };
-    
+
     /**
      * Thread safe, no state, can be reused
      */

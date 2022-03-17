@@ -10,7 +10,7 @@
 *
 *	11/19/02
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -35,12 +35,12 @@ public class SSDPSearchRequest extends SSDPRequest
 		setHeader(HTTP.MX, Integer.toString(mx));
 		setHeader(HTTP.MAN, "\"" + MAN.DISCOVER + "\"");
 	}
-	
+
 	public SSDPSearchRequest(String serachTarget)
 	{
 		this(serachTarget, SSDP.DEFAULT_MSEARCH_MX);
 	}
-	
+
 	public SSDPSearchRequest()
 	{
 		this(ST.ROOT_DEVICE);
@@ -49,7 +49,7 @@ public class SSDPSearchRequest extends SSDPRequest
 	////////////////////////////////////////////////
 	//	HOST
 	////////////////////////////////////////////////
-	
+
 	public void setLocalAddress(String bindAddr)
 	{
 		String ssdpAddr = SSDP.ADDRESS;

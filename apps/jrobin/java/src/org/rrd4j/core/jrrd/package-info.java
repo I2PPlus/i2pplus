@@ -1,6 +1,6 @@
 /**
  * <p>This package provides read-only access to natives RRD file.</p>
- * 
+ *
  * Currently this can read RRD files that were generated big or little endian machines, 32 or 64 bits word, and 4 or 8 bytes alignment.
  * So it's know to work on a least
  * <ul>

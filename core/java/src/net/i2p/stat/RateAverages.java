@@ -2,12 +2,12 @@ package net.i2p.stat;
 
 /**
  * Storage space for computations of various averages.
- * 
+ *
  * @author zab
  * @since 0.9.4
  */
 public class RateAverages {
-    
+
     /** thread-local temp instance */
     private static final ThreadLocal<RateAverages> TEMP =
             new ThreadLocal<RateAverages>() {
@@ -15,7 +15,7 @@ public class RateAverages {
             return new RateAverages();
         }
     };
-    
+
     /**
      * @since 0.9.4
      * @return thread-local temp instance.
@@ -23,10 +23,10 @@ public class RateAverages {
     public static RateAverages getTemp() {
         return TEMP.get();
     }
-    
+
     private double average, current, last, totalValues;
     private long totalEventCount;
-    
+
     void reset() {
         average = 0;
         current = 0;
@@ -74,7 +74,7 @@ public class RateAverages {
     void setLast(double last) {
         this.last = last;
     }
-    
+
     /**
      * @since 0.9.4
      * @return the total event count == current + last event counts
@@ -82,11 +82,11 @@ public class RateAverages {
     public long getTotalEventCount() {
         return totalEventCount;
     }
-    
+
     void setTotalEventCount(long totalEventCount) {
         this.totalEventCount = totalEventCount;
     }
-    
+
     /**
      * @since 0.9.4
      * @return the total values == current + last values
@@ -94,9 +94,9 @@ public class RateAverages {
     public double getTotalValues() {
         return totalValues;
     }
-    
+
     void setTotalValues(double totalValues) {
         this.totalValues = totalValues;
     }
-    
+
 }

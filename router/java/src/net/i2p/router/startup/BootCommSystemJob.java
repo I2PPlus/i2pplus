@@ -19,16 +19,16 @@ import net.i2p.util.SystemVersion;
 /** This actually boots almost everything */
 class BootCommSystemJob extends JobImpl {
     private final Log _log;
-    
+
     public static final String PROP_USE_TRUSTED_LINKS = "router.trustedLinks";
-    
+
     public BootCommSystemJob(RouterContext context) {
         super(context);
         _log = context.logManager().getLog(BootCommSystemJob.class);
     }
-    
+
     public String getName() { return "Boot Communication System"; }
-    
+
     public void runJob() {
         // The netDb and the peer manager both take a long time to start up,
         // as they may have to read in ~1000 files or more each
@@ -55,7 +55,7 @@ class BootCommSystemJob extends JobImpl {
 
         ((RouterClock) getContext().clock()).addShiftListener(getContext().router());
     }
-        
+
     private void startupDb() {
         Job bootDb = new BootNetworkDbJob(getContext());
         boolean useTrusted = getContext().getBooleanProperty(PROP_USE_TRUSTED_LINKS);

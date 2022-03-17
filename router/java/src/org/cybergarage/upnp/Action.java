@@ -44,7 +44,7 @@ public class Action
 	////////////////////////////////////////////////
 	//	Constants
 	////////////////////////////////////////////////
-	
+
 	public final static String ELEM_NAME = "action";
 
 	////////////////////////////////////////////////
@@ -63,7 +63,7 @@ public class Action
 	{
 		return new Service(getServiceNode());
 	}
-	
+
 	void setService(Service s){
 		serviceNode=s.getServiceNode();
 		/*To ensure integrity of the XML structure*/
@@ -71,21 +71,21 @@ public class Action
 		while (i.hasNext()) {
 			Argument arg = i.next();
 			arg.setService(s);
-		}		
+		}
 	}
-	
+
 	public Node getActionNode()
 	{
 		return actionNode;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
 	public Action(Node serviceNode){
 		//TODO Test
 		this.serviceNode = serviceNode;
-		this.actionNode = new Node(Action.ELEM_NAME);		
+		this.actionNode = new Node(Action.ELEM_NAME);
 	}
 
 	public Action(Node serviceNode, Node actionNode)
@@ -103,19 +103,19 @@ public class Action
 	////////////////////////////////////////////////
 	// Mutex
 	////////////////////////////////////////////////
-	
+
 	private Mutex mutex = new Mutex();
-	
+
 	public void lock()
 	{
 		mutex.lock();
 	}
-	
+
 	public void unlock()
 	{
 		mutex.unlock();
 	}
-	
+
 	////////////////////////////////////////////////
 	//	isActionNode
 	////////////////////////////////////////////////
@@ -130,7 +130,7 @@ public class Action
 	////////////////////////////////////////////////
 
 	private final static String NAME = "name";
-	
+
 	public void setName(String value)
 	{
 		getActionNode().setNode(NAME, value);
@@ -158,10 +158,10 @@ public class Action
 				continue;
 			Argument argument = new Argument(getServiceNode(), node);
 			argumentList.add(argument);
-		} 
+		}
 		return argumentList;
-	}	
-	
+	}
+
 	public void setArgumentList(ArgumentList al){
 		Node argumentListNode = getActionNode().getNode(ArgumentList.ELEM_NAME);
 		if (argumentListNode == null){
@@ -176,7 +176,7 @@ public class Action
 			a.setService(getService());
 			argumentListNode.addNode(a.getArgumentNode());
 		}
-		
+
 	}
 
 	public ArgumentList getInputArgumentList()
@@ -206,7 +206,7 @@ public class Action
 		}
 		return argList;
 	}
-	
+
 	public Argument getArgument(String name)
 	{
 		ArgumentList argList = getArgumentList();
@@ -225,7 +225,7 @@ public class Action
 	/**
 	 * @deprecated You should use one of the following methods instead:<br>
 	 *  - {@link #setInArgumentValues(ArgumentList)} <br>
-	 *  - {@link #setOutArgumentValues(ArgumentList)} 
+	 *  - {@link #setOutArgumentValues(ArgumentList)}
 	 */
 	@Deprecated
 	public void setArgumentValues(ArgumentList argList)
@@ -234,17 +234,17 @@ public class Action
 	}
 
 	/**
-	 * 
+	 *
 	 * @param argList
 	 * @since 1.8.0
 	 */
 	public void setInArgumentValues(ArgumentList argList)
 	{
-		getArgumentList().setReqArgs(argList); 
+		getArgumentList().setReqArgs(argList);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param argList
 	 * @since 1.8.0
 	 */
@@ -252,7 +252,7 @@ public class Action
 	{
 		getArgumentList().setResArgs(argList);
 	}
-	
+
 	public void setArgumentValue(String name, String value)
 	{
 		Argument arg = getArgument(name);
@@ -277,7 +277,7 @@ public class Action
 			arg.setValue("");
 		}
 	}
-	
+
 	public String getArgumentValue(String name)
 	{
 		Argument arg = getArgument(name);
@@ -293,7 +293,7 @@ public class Action
 			return 0;
 		return arg.getIntegerValue();
 	}
-	
+
 	////////////////////////////////////////////////
 	//	UserData
 	////////////////////////////////////////////////
@@ -309,21 +309,21 @@ public class Action
 		}
 		return userData;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	controlAction
 	////////////////////////////////////////////////
 
-	public ActionListener getActionListener() 
+	public ActionListener getActionListener()
 	{
 		return getActionData().getActionListener();
 	}
 
-	public void setActionListener(ActionListener listener) 
+	public void setActionListener(ActionListener listener)
 	{
 		getActionData().setActionListener(listener);
 	}
-	
+
 	public boolean performActionListener(ActionRequest actionReq)
 	{
 		ActionListener listener = getActionListener();
@@ -349,16 +349,16 @@ public class Action
 	//	ActionControl
 	////////////////////////////////////////////////
 
-	private ControlResponse getControlResponse() 
+	private ControlResponse getControlResponse()
 	{
 		return getActionData().getControlResponse();
 	}
 
-	private void setControlResponse(ControlResponse res) 
+	private void setControlResponse(ControlResponse res)
 	{
 		getActionData().setControlResponse(res);
 	}
-	
+
 	public UPnPStatus getControlStatus()
 	{
 		return getControlResponse().getUPnPError();
@@ -383,7 +383,7 @@ public class Action
 	{
 		// Thanks for Giordano Sassaroli <sassarol@cefriel.it> (08/30/03)
 		ArgumentList actionArgList = getArgumentList();
-		ArgumentList actionInputArgList = getInputArgumentList();		
+		ArgumentList actionInputArgList = getInputArgumentList();
 		ActionRequest ctrlReq = new ActionRequest();
 		ctrlReq.setRequest(this, actionInputArgList);
 		if (fromHost != null)
@@ -426,41 +426,41 @@ public class Action
 			Debug.message(" [" + n + "] = " + dir + ", " + name + ", " + value);
 		}
 	}
-	
+
 	////////////////////////////////////////////////
 	//	UPnPStatus
 	////////////////////////////////////////////////
 
 	private UPnPStatus upnpStatus = new UPnPStatus();
-	
+
 	public void setStatus(int code, String descr)
 	{
 		upnpStatus.setCode(code);
 		upnpStatus.setDescription(descr);
 	}
-	
+
 	public void setStatus(int code)
 	{
 		setStatus(code, UPnPStatus.code2String(code));
 	}
-		
+
 	public UPnPStatus getStatus()
 	{
 		return upnpStatus;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	userData
 	////////////////////////////////////////////////
 
-	private Object userData = null; 
-	
-	public void setUserData(Object data) 
+	private Object userData = null;
+
+	public void setUserData(Object data)
 	{
 		userData = data;
 	}
 
-	public Object getUserData() 
+	public Object getUserData()
 	{
 		return userData;
 	}

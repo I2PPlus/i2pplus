@@ -14,7 +14,7 @@
 *		- Improved the HTTP server using multithreading.
 *	08/27/04
 *		- Changed accept() to set a default timeout, HTTP.DEFAULT_TIMEOUT, to the socket.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.http;
@@ -28,12 +28,12 @@ import org.cybergarage.util.Debug;
 import org.cybergarage.util.ListenerList;
 
 /**
- * 
+ *
  * This class identifies an HTTP over TCP server<br>
  * The server must be initialized iether by the {@link HTTPServer#open(InetAddress, int)} or the {@link HTTPServer#open(String, int)} method.<br>
  * Optionally a set of {@link HTTPRequestListener} may be set<br>
  * The server then can be started or stopped by the method {@link HTTPServer#start()} and {@link HTTPServer#stop()}
- * 
+ *
  * @author Satoshi "skonno" Konno
  * @author Stefano "Kismet" Lenzi
  * @version 1.8
@@ -49,7 +49,7 @@ public class HTTPServer implements Runnable
 	public final static String VERSION = "1.0";
 
 	public final static int DEFAULT_PORT = 80;
-	
+
 	/**
 	 * Default timeout connection for HTTP comunication
 	 * @since 1.8
@@ -57,22 +57,22 @@ public class HTTPServer implements Runnable
         // I2P fix
 	//public final static int DEFAULT_TIMEOUT = DEFAULT_PORT * 1000;
 	public final static int DEFAULT_TIMEOUT = 10 * 1000;
-	
+
 	public static String getName()
 	{
 		String osName = System.getProperty("os.name");
 		String osVer = System.getProperty("os.version");
 		return osName + "/"  + osVer + " " + NAME + "/" + VERSION;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public HTTPServer()
 	{
 		serverSock = null;
-		
+
 	}
 
 	////////////////////////////////////////////////
@@ -87,7 +87,7 @@ public class HTTPServer implements Runnable
 	 * The variable should be accessed by getter and setter metho
 	 */
 	protected int timeout = DEFAULT_TIMEOUT;
-	
+
 	public ServerSocket getServerSock()
 	{
 		return serverSock;
@@ -104,13 +104,13 @@ public class HTTPServer implements Runnable
 	{
 		return bindPort;
 	}
-	
-	
-	
+
+
+
 	////////////////////////////////////////////////
 	//	open/close
 	////////////////////////////////////////////////
-	
+
 	/**
 	 * Get the current socket timeout
 	 * @since 1.8
@@ -138,7 +138,7 @@ public class HTTPServer implements Runnable
 		}
 		return true;
 	}
-	
+
 	public boolean open(String addr, int port)
 	{
 		if (serverSock != null)
@@ -196,16 +196,16 @@ public class HTTPServer implements Runnable
 	////////////////////////////////////////////////
 
 	private ListenerList httpRequestListenerList = new ListenerList();
-	 	
+	 
 	public void addRequestListener(HTTPRequestListener listener)
 	{
 		httpRequestListenerList.add(listener);
-	}		
+	}
 
 	public void removeRequestListener(HTTPRequestListener listener)
 	{
 		httpRequestListenerList.remove(listener);
-	}		
+	}
 
 	public void performRequestListener(HTTPRequest httpReq)
 	{
@@ -214,21 +214,21 @@ public class HTTPServer implements Runnable
 			HTTPRequestListener listener = (HTTPRequestListener)httpRequestListenerList.get(n);
 			listener.httpRequestRecieved(httpReq);
 		}
-	}		
-	
+	}
+
 	////////////////////////////////////////////////
-	//	run	
+	//	run
 	////////////////////////////////////////////////
 
 	private Thread httpServerThread = null;
-		
+
 	public void run()
 	{
 		if (isOpened() == false)
 			return;
-			
+
 		Thread thisThread = Thread.currentThread();
-		
+
 		while (httpServerThread == thisThread) {
 			Thread.yield();
 			Socket sock;
@@ -243,11 +243,11 @@ public class HTTPServer implements Runnable
 				break;
 			}
 			HTTPServerThread httpServThread = new HTTPServerThread(this, sock);
-			httpServThread.start(); 
+			httpServThread.start();
 			Debug.message("httpServThread ...");
 		}
 	}
-	
+
 	public boolean start(){
 		StringBuffer name = new StringBuffer("Cyber.HTTPServer/");
 		// I2P hide address from thread dumps
@@ -256,7 +256,7 @@ public class HTTPServer implements Runnable
 		httpServerThread.start();
 		return true;
 	}
-	
+
 	public boolean stop()
 	{
 		httpServerThread = null;

@@ -46,7 +46,7 @@ public class JaxpParser extends Parser
 	{
 		super();
 	}
-	
+
 	////////////////////////////////////////////////
 	//	parse (Node)
 	////////////////////////////////////////////////
@@ -56,10 +56,10 @@ public class JaxpParser extends Parser
 		int domNodeType = domNode.getNodeType();
 //		if (domNodeType != Node.ELEMENT_NODE)
 //			return;
-			
+
 		String domNodeName = domNode.getNodeName();
 		String domNodeValue = domNode.getNodeValue();
-		NamedNodeMap attrs = domNode.getAttributes(); 
+		NamedNodeMap attrs = domNode.getAttributes();
 		int arrrsLen = (attrs != null) ? attrs.getLength() : 0;
 
 //		Debug.message("[" + rank + "] ELEM : " + domNodeName + ", " + domNodeValue + ", type = " + domNodeType + ", attrs = " + arrrsLen);
@@ -81,7 +81,7 @@ public class JaxpParser extends Parser
 		if (parentNode != null)
 			parentNode.addNode(node);
 
-		NamedNodeMap attrMap = domNode.getAttributes(); 
+		NamedNodeMap attrMap = domNode.getAttributes();
 		if (attrMap != null) {
 			int attrLen = attrMap.getLength();
 			//Debug.message("attrLen = " + attrLen);
@@ -92,17 +92,17 @@ public class JaxpParser extends Parser
 				node.setAttribute(attrName, attrValue);
 			}
 		}
-		
+
 		org.w3c.dom.Node child = domNode.getFirstChild();
-		if(child==null){ 
-			node.setValue(""); 
-			return node; 
+		if(child==null){
+			node.setValue("");
+			return node;
 		}
 		do{
 			parse(node, child, rank+1);
 			child = child.getNextSibling();
-		}while (child != null);		
-		
+		}while (child != null);
+
 		return node;
 	}
 
@@ -117,7 +117,7 @@ public class JaxpParser extends Parser
 	public Node parse(InputStream inStream) throws ParserException
 	{
 		org.cybergarage.xml.Node root = null;
-		
+
 		try {
 			// https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -150,7 +150,7 @@ public class JaxpParser extends Parser
 /*
 			NodeList rootList = doc.getElementsByTagName("root");
 			Debug.message("rootList = " + rootList.getLength());
-			
+
 			if (0 < rootList.getLength())
 				root = parse(root, rootList.item(0));
 */
@@ -158,7 +158,7 @@ public class JaxpParser extends Parser
 		catch (Exception e) {
 			throw new ParserException(e);
 		}
-		
+
 		return root;
 	}
 

@@ -200,7 +200,7 @@ class PeerCheckerTask implements Runnable {
                     // Make sure download is good if we are uploading
                     worstdownload = download;
                     worstDownloader = peer;
-                } else if (upload < worstdownload && coordinator.completed() & 
+                } else if (upload < worstdownload && coordinator.completed() &
                     // give new peers a better chance to get their first four pieces
                     (peer.completed() >= 4 || random.nextInt(8) == 0)) {
                     // Make sure upload is good if we are seeding

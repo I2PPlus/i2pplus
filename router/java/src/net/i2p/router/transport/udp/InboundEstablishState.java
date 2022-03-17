@@ -148,7 +148,7 @@ class InboundEstablishState {
         _keyBuilder = null;
         _queuedMessages = new LinkedBlockingQueue<OutNetMessage>();
     }
-    
+
     /**
      * @since 0.9.54
      */

@@ -15,7 +15,7 @@ import net.i2p.util.SystemVersion;
  *
  *  @since 0.8.12 moved from Router.java
  */
-public class OOMListener implements I2PThread.OOMEventListener { 
+public class OOMListener implements I2PThread.OOMEventListener {
     private final RouterContext _context;
     private final AtomicBoolean _wasCalled = new AtomicBoolean();
 
@@ -23,31 +23,31 @@ public class OOMListener implements I2PThread.OOMEventListener {
         _context = ctx;
     }
 
-    public void outOfMemory(OutOfMemoryError oom) { 
-        try { 
+    public void outOfMemory(OutOfMemoryError oom) {
+        try {
             // prevent multiple parallel shutdowns (when you OOM, you OOM a lot...)
             if (_context.router().isFinalShutdownInProgress())
                 return;
         } catch (OutOfMemoryError oome) {}
-        try { 
+        try {
             // Only do this once
             if (_wasCalled.getAndSet(true))
                 return;
         } catch (OutOfMemoryError oome) {}
 
-        try { 
+        try {
             // boost priority to help us shut down
             // this may or may not do anything...
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY - 1);
         } catch (OutOfMemoryError oome) {}
-        try { 
+        try {
             Router.clearCaches();
         } catch (OutOfMemoryError oome) {}
         Log log = null;
-        try { 
+        try {
             log = _context.logManager().getLog(Router.class);
             log.log(Log.CRIT, "Thread ran out of memory, shutting down I2P", oom);
-            log.log(Log.CRIT, "free mem: " + Runtime.getRuntime().freeMemory() + 
+            log.log(Log.CRIT, "free mem: " + Runtime.getRuntime().freeMemory() +
                               " total mem: " + Runtime.getRuntime().totalMemory());
             String path = getWrapperConfigPath(_context);
             if (_context.hasWrapper()) {
@@ -61,14 +61,14 @@ public class OOMListener implements I2PThread.OOMEventListener {
                                   path);
             }
         } catch (OutOfMemoryError oome) {}
-        try { 
+        try {
             ThreadDump.dump(_context, 1);
         } catch (OutOfMemoryError oome) {}
-        try { 
+        try {
             _context.router().eventLog().addEvent(EventLog.OOM);
         } catch (OutOfMemoryError oome) {}
-        try { 
-            _context.router().shutdown(Router.EXIT_OOM); 
+        try {
+            _context.router().shutdown(Router.EXIT_OOM);
         } catch (OutOfMemoryError oome) {}
     }
 

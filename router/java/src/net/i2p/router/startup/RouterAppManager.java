@@ -177,7 +177,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
         // TODO if old app in there is not running and != this app, allow replacement
         return super.register(app);
     }
-    
+
     /**
      *  Unregister with the manager. Name must be the same as that from register().
      *  Only required for apps used by other apps.

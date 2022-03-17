@@ -29,7 +29,7 @@ public class KBucketSetTest extends TestCase{
         private Log log;
 	private static final int K = 8;
 	private static final int B = 1;
-	
+
 	public void setUp(){
 		context = I2PAppContext.getGlobalContext();
 		log = context.logManager().getLog(KBucketSet.class);
@@ -41,7 +41,7 @@ public class KBucketSetTest extends TestCase{
 		// tests may be run in any order so prime it
 		addRandom(1000);
 	}
-	
+
 	public void testRandom(){
 		addRandom(1000);
 	}
@@ -55,7 +55,7 @@ public class KBucketSetTest extends TestCase{
 			assertTrue(set.add(h) || h.equals(usHash));
 		}
 	}
-    
+
     public void testSelf() {
         // new implementation will never include myself
         assertFalse(set.add(usHash));

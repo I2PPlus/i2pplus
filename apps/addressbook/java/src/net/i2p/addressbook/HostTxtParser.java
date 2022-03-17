@@ -24,7 +24,7 @@ import net.i2p.util.SystemVersion;
 /**
  * Utility class providing methods to parse and write files in a hosts.txt file
  * format, and subscription file format.
- * 
+ *
  * @since 0.9.26 modified from ConfigParser
  */
 class HostTxtParser {
@@ -37,16 +37,16 @@ class HostTxtParser {
      * starting with '#' or ';' are considered comments, and ignored. Lines that
      * are obviously not in the format key=value are also ignored.
      * The key is converted to lower case.
-     * 
+     *
      * Returned map will not contain null ("remove") entries.
-     * 
+     *
      * @param input
      *            A BufferedReader with lines in key=value format to parse into
      *            a Map.
      * @return A Map containing the key, value pairs from input.
      * @throws IOException
      *             if the BufferedReader cannot be read.
-     *  
+     *
      */
     private static Map<String, HostTxtEntry> parse(BufferedReader input) throws IOException {
         try {
@@ -66,7 +66,7 @@ class HostTxtParser {
 
     /**
      * Return a HostTxtEntry from the contents of the inputLine.
-     * 
+     *
      * @param inputLine key=value[#!k1=v1#k2=v2...]
      * @param allowCommandOnly if true, a line starting with #! will return
      *                         a HostTxtEntry with a null name and dest and non-null props.
@@ -126,9 +126,9 @@ class HostTxtParser {
     /**
      * Return a Map using the contents of the File file. See parse(BufferedReader)
      * for details of the input format.
-     * 
+     *
      * Returned map will not contain null ("remove") entries.
-     * 
+     *
      * @param file
      *            A File to parse.
      * @return A Map containing the key, value pairs from file.
@@ -155,9 +155,9 @@ class HostTxtParser {
     /**
      * Return a Map using the contents of the File file. If file cannot be read,
      * use map instead, and write the result to where file should have been.
-     * 
+     *
      * Returned map will not contain null ("remove") entries.
-     * 
+     *
      * @param file
      *            A File to attempt to parse.
      * @param map
@@ -186,7 +186,7 @@ class HostTxtParser {
     /**
      * Write contents of Map map to BufferedWriter output. Output is written
      * with one key, value pair on each line, in the format: key=value.
-     * 
+     *
      * @param map
      *            A Map to write to output.
      * @param output

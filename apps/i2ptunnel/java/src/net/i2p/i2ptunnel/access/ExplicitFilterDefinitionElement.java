@@ -5,7 +5,7 @@ import java.util.Map;
 import net.i2p.data.Hash;
 
 /**
- * A filter definition element that includes a single, explicitly defined 
+ * A filter definition element that includes a single, explicitly defined
  * remote destination
  *
  * @since 0.9.40

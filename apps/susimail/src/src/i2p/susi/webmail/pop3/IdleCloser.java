@@ -111,9 +111,9 @@ class IdleCloser {
 						timer.schedule(remaining + 5000);
 					}
 				}
-			} finally {		
+			} finally {
 				isClosing = false;
-			}		
+			}
 		}
 	}
 }

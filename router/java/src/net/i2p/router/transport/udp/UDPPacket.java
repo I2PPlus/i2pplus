@@ -325,7 +325,7 @@ class UDPPacket implements CDPQEntry {
      *
      * SSU 1 only.
      * SSU 2 decryption is in PacketHandler.
-     * 
+     *
      */
     public synchronized void decrypt(SessionKey cipherKey) {
         verifyNotReleased();

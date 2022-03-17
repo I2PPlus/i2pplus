@@ -15,12 +15,12 @@
 
 package org.cybergarage.upnp.device;
 
-public class NTS 
+public class NTS
 {
 	public final static String ALIVE = "ssdp:alive";
 	public final static String BYEBYE = "ssdp:byebye";
 	public final static String PROPCHANGE = "upnp:propchange";
-	
+
 	public final static boolean isAlive(String ntsValue)
 	{
 		if (ntsValue == null)

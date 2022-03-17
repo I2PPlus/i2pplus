@@ -12,7 +12,7 @@
 *		- first revision.
 *	09/03/03
 *		- Added CONTINUE_STATUS.
-*	10/20/04 
+*	10/20/04
 *		- Brent Hills <bhills@openshores.com>
 *		- Added PARTIAL_CONTENT and INVALID_RANGE;
 *	10/22/04
@@ -20,7 +20,7 @@
 *	10/29/04
 *		- Fixed set() to set the version and the response code when the mothod is null.
 *		- Fixed set() to read multi words of the response sring such as Not Found.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.http;
@@ -29,12 +29,12 @@ import java.util.StringTokenizer;
 
 import org.cybergarage.util.Debug;
 
-public class HTTPStatus 
+public class HTTPStatus
 {
 	////////////////////////////////////////////////
 	//	Code
 	////////////////////////////////////////////////
-	
+
 	public static final int CONTINUE = 100;
 	public static final int OK = 200;
 	//	Thanks for Brent Hills (10/20/04)
@@ -60,7 +60,7 @@ public class HTTPStatus
 		}
 		 return "";
 	}
- 	
+ 
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
@@ -71,7 +71,7 @@ public class HTTPStatus
 		setStatusCode(0);
 		setReasonPhrase("");
 	}
-	
+
 	public HTTPStatus(String ver, int code, String reason)
 	{
 		setVersion(ver);
@@ -83,7 +83,7 @@ public class HTTPStatus
 	{
 		set(lineStr);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Member
 	////////////////////////////////////////////////
@@ -96,27 +96,27 @@ public class HTTPStatus
 	{
 		version = value;
 	}
-	
+
 	public void setStatusCode(int value)
 	{
 		statusCode = value;
 	}
-	
+
 	public void setReasonPhrase(String value)
 	{
 		reasonPhrase = value;
 	}
-	
+
 	public String getVersion()
 	{
 		return version;
 	}
-	
+
 	public int getStatusCode()
 	{
 		return statusCode;
 	}
-	
+
 	public String getReasonPhrase()
 	{
 		return reasonPhrase;
@@ -132,7 +132,7 @@ public class HTTPStatus
 			return true;
 		return false;
 	}
-	
+
 	public boolean isSuccessful()
 	{
 		return isSuccessful(getStatusCode());
@@ -141,7 +141,7 @@ public class HTTPStatus
 	////////////////////////////////////////////////
 	//	set
 	////////////////////////////////////////////////
-	
+
 	public void set(String lineStr)
 	{
 		if (lineStr == null) {
@@ -153,12 +153,12 @@ public class HTTPStatus
 
 		try {
 			StringTokenizer st = new StringTokenizer(lineStr, HTTP.STATUS_LINE_DELIM);
-		
+
 			if (st.hasMoreTokens() == false)
 				return;
 			String ver = st.nextToken();
 			setVersion(ver.trim());
-			
+
 			if (st.hasMoreTokens() == false)
 				return;
 			String codeStr = st.nextToken();
@@ -168,7 +168,7 @@ public class HTTPStatus
 			}
 			catch (Exception e1) {}
 			setStatusCode(code);
-			
+
 			String reason = "";
 			while (st.hasMoreTokens() == true) {
 				if (0 <= reason.length())
@@ -181,5 +181,5 @@ public class HTTPStatus
 			Debug.warning(e);
 		}
 
-	}	
+	}
 }

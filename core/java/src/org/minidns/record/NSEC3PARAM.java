@@ -25,13 +25,13 @@ public class NSEC3PARAM extends Data {
 
     /**
      * The cryptographic hash algorithm used.
-     * 
+     *
      */
     public final HashAlgorithm hashAlgorithm;
 
     /**
      * The cryptographic hash algorithm used.
-     * 
+     *
      */
     public final byte hashAlgorithmByte;
 

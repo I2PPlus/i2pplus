@@ -287,7 +287,7 @@ public class FIFOBandwidthLimiter {
         rv.append(" Burst max: ").append(_maxInboundBurst).append('/').append(_maxOutboundBurst).append("; ");
         return rv;
     }
-    
+
     /**
      *  @since 0.9.53
      */
@@ -299,7 +299,7 @@ public class FIFOBandwidthLimiter {
         rv.append(" Burst max: ").append(_maxInboundBurst).append("; ");
         return rv;
     }
-    
+
     /**
      *  @since 0.9.53
      */

@@ -90,7 +90,7 @@ public class RouterWatchdog implements Runnable {
             double bps = (r != null ? r.getAverageValue() : 0);
             long max = Runtime.getRuntime().maxMemory();
             long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            _log.error("Watchdog status:" + 
+            _log.error("Watchdog status:" +
                        "\n* Comm system: " + _context.commSystem().getStatus() +
                        "\n* Peers: " + _context.commSystem().countActivePeers() +
                        "\n* Ready and waiting jobs: " + _context.jobQueue().getReadyCount() +
@@ -99,7 +99,7 @@ public class RouterWatchdog implements Runnable {
                        "\n* Send processing time: " + DataHelper.formatDuration((long)processTime) +
                        "\n* Send rate: " + DataHelper.formatSize((long)bps) + "Bps" +
                        "\n* Memory: " + DataHelper.formatSize(used) + "B / " + DataHelper.formatSize(max) + 'B');
-            
+
             if (_consecutiveErrors == 1) {
                 _log.log(Log.CRIT, "Router appears hung, or there is severe network congestion. Watchdog starts barking!");
                  _context.router().eventLog().addEvent(EventLog.WATCHDOG);

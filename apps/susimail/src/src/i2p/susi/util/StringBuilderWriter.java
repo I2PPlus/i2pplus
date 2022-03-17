@@ -8,7 +8,7 @@ import java.io.Writer;
  * @since 0.9.35
  */
 public class StringBuilderWriter extends Writer {
-    
+
     private final StringBuilder buf;
 
     public StringBuilderWriter() { this(128); }
@@ -17,19 +17,19 @@ public class StringBuilderWriter extends Writer {
         super();
         buf = new StringBuilder(capacity);
     }
-    
+
     @Override
     public Writer append(char c) {
         buf.append(c);
         return this;
     }
-    
+
     @Override
     public Writer append(CharSequence str) {
         buf.append(str);
         return this;
     }
-    
+
     @Override
     public Writer append(CharSequence str, int off, int len) {
         buf.append(str, off, len);

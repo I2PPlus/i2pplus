@@ -4492,7 +4492,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
 	/** bigly */
 	private ThreadGroup _thread_group;
-	
+
 	/**
 	 * bigly -- must have been started with main() or runIt()
 	 */
@@ -4542,7 +4542,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 					}
 				}
 			}
-			
+
 			if ( done == 0 ){
 				_log.warn("TG destroy");
 				try{
@@ -4552,36 +4552,36 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 					_log.debug("TG", e);
 				}
 			}
-			
+
 			try{
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {}
 		}
 	}
-	
+
 	/** bigly */
 	public synchronized void
 	runIt()
 	{
 		//final AESemaphore sem = new AESemaphore( "waiter" );
-		
-		_thread_group = new 
+
+		_thread_group = new
 			ThreadGroup( "NDT" )
 			{
 				@Override
 				public void
 				uncaughtException(
-					Thread t, 
-					Throwable e) 
+					Thread t,
+					Throwable e)
 				{
 					_log.warn("TG", e);
 				}
 			};
-		
+
 		_thread_group.setDaemon( true );
-		
-		Thread t = 
-			new I2PAppThread( 
+
+		Thread t =
+			new I2PAppThread(
 				_thread_group,
 				new Runnable()
 				{
@@ -4592,7 +4592,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 						try{
 							new TestWorker().run();
 						}catch( Throwable e ){
-						
+
 							if ( !( e instanceof ThreadDeath )){
 								_log.warn("TG", e);
 							}
@@ -4602,7 +4602,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 					}
 				},
 				"TestWorker");
-		
+
 		t.setDaemon( true );
 		t.start();
 		//sem.reserve();

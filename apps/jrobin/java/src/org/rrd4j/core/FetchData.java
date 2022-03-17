@@ -154,7 +154,7 @@ public class FetchData {
     /**
      * Returns a set of values created by applying RPN expression to the fetched data.
      * For example, if you have two datasources named <code>x</code> and <code>y</code>
-     * in this FetchData and you want to calculate values for <code>(x+y)/2</code> use something like: 
+     * in this FetchData and you want to calculate values for <code>(x+y)/2</code> use something like:
      * <p>
      * <code>getRpnValues("x,y,+,2,/");</code>
      *
@@ -308,7 +308,7 @@ public class FetchData {
     /**
      * Returns aggregated value for a set of values calculated by applying an RPN expression to the
      * fetched data. For example, if you have two datasources named <code>x</code> and <code>y</code>
-     * in this FetchData and you want to calculate MAX value of <code>(x+y)/2</code> use something like: 
+     * in this FetchData and you want to calculate MAX value of <code>(x+y)/2</code> use something like:
      * <p>
      * <code>getRpnAggregate("x,y,+,2,/", "MAX");</code>
      *
@@ -343,7 +343,7 @@ public class FetchData {
      * Returns all aggregated values for a set of values calculated by applying an RPN expression to the
      * fetched data. For example, if you have two datasources named <code>x</code> and <code>y</code>
      * in this FetchData and you want to calculate MIN, MAX, LAST, FIRST, AVERAGE and TOTAL value
-     * of <code>(x+y)/2</code> use something like: 
+     * of <code>(x+y)/2</code> use something like:
      * <p>
      * <code>getRpnAggregates("x,y,+,2,/");</code>
      *

@@ -10,7 +10,7 @@
 *
 *	01/05/04
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.device;
@@ -28,7 +28,7 @@ public class Disposer extends ThreadCore
 	{
 		setControlPoint(ctrlp);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Member
 	////////////////////////////////////////////////
@@ -39,7 +39,7 @@ public class Disposer extends ThreadCore
 	{
 		ctrlPoint = ctrlp;
 	}
-	
+
 	public ControlPoint getControlPoint()
 	{
 		return ctrlPoint;
@@ -48,13 +48,13 @@ public class Disposer extends ThreadCore
 	////////////////////////////////////////////////
 	//	Thread
 	////////////////////////////////////////////////
-	
-	public void run() 
+
+	public void run()
 	{
 		Thread.currentThread().setName("UPnP-Disposer");
 		ControlPoint ctrlp = getControlPoint();
 		long monitorInterval = ctrlp.getExpiredDeviceMonitoringInterval() * 1000;
-		
+
 		while (isRunnable() == true) {
 			try {
 				Thread.sleep(monitorInterval);

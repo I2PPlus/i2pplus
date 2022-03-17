@@ -1,8 +1,8 @@
 /*
  * Created on Sep 02, 2005
- * 
+ *
  *  This file is part of susidns project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2005 <susi23@mail.i2p>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  * $Revision: 1.3 $
  */
 
@@ -36,10 +36,10 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.OrderedProperties;
 
 public class ConfigBean extends BaseBean implements Serializable {
-	
+
 	private String config;
 	private boolean saved;
-	
+
 	public String getfileName() {
 		return configFile().toString();
 	}
@@ -55,7 +55,7 @@ public class ConfigBean extends BaseBean implements Serializable {
 		reload();
 		return config;
 	}
-	
+
 	@Override
 	protected void reload()
 	{
@@ -68,7 +68,7 @@ public class ConfigBean extends BaseBean implements Serializable {
 		config = buf.toString();
 		saved = true;
 	}
-	
+
 	private void save()
 	{
 		try {
@@ -103,7 +103,7 @@ public class ConfigBean extends BaseBean implements Serializable {
 					reload();
 					message = _t("Configuration reloaded.");
 				}
-			}			
+			}
 			else {
 				message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.")
                                           + ' ' +

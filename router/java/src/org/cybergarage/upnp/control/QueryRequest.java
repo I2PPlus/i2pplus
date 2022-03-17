@@ -13,7 +13,7 @@
 *	09/02/03
 *		- Giordano Sassaroli <sassarol@cefriel.it>
 *		- Error : redundant code, the setRequest method in QueryRequest invokes setURI even if after a couple of rows setRequestHost is invoked
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.control;
@@ -29,7 +29,7 @@ public class QueryRequest extends ControlRequest
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public QueryRequest()
 	{
 	}
@@ -57,7 +57,7 @@ public class QueryRequest extends ControlRequest
 			return null;
 		return queryStateVarNode.getNode(0);
 	}
-	
+
 	public String getVarName()
 	{
 		Node node = getVarNameNode();
@@ -69,11 +69,11 @@ public class QueryRequest extends ControlRequest
 	////////////////////////////////////////////////
 	//	setRequest
 	////////////////////////////////////////////////
-	
+
 	public void setRequest(StateVariable stateVar)
 	{
-		Service service = stateVar.getService();		
-		
+		Service service = stateVar.getService();
+
 		//String ctrlURL = service.getControlURL();
 
 		setRequestHost(service);
@@ -102,10 +102,10 @@ public class QueryRequest extends ControlRequest
 		varNode.setName(Control.NS, Control.VAR_NAME);
 		varNode.setValue(stateVar.getName());
 		queryVarNode.addNode(varNode);
-		
+
 		return queryVarNode;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	post
 	////////////////////////////////////////////////

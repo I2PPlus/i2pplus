@@ -10,11 +10,11 @@ import java.util.zip.InflaterInputStream;
 import net.i2p.data.DataHelper;
 
 /**
- * GZIP implementation per 
- * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing 
+ * GZIP implementation per
+ * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing
  * java's standard CRC32 and Inflater and InflaterInputStream implementations.
- * The main difference is that this implementation allows its state to be 
- * reset to initial values, and hence reused, while the standard 
+ * The main difference is that this implementation allows its state to be
+ * reset to initial values, and hence reused, while the standard
  * GZIPInputStream reads the GZIP header from the stream on instantiation.
  *
  */
@@ -27,14 +27,14 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     private final CRC32 _crc32;
     private final byte _buf1[] = new byte[1];
     private boolean _complete;
-    
+
     /**
      * Build a new GZIP stream without a bound compressed stream.  You need
      * to initialize this with initialize(compressedStream) when you want to
      * decompress a stream.
      */
     public ResettableGZIPInputStream() {
-        // compressedStream -> 
+        // compressedStream ->
         //   LookaheadInputStream that removes last 8 bytes ->
         //     ExtraByteInputStream that adds 1 byte ->
         //       InflaterInputStream
@@ -53,7 +53,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         this();
         initialize(compressedStream);
     }
-    
+
     /**
      * Blocking call to initialize this stream with the data from the given
      * compressed stream.
@@ -73,7 +73,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         // lookahead stream
         verifyHeader();
     }
-    
+
     @Override
     public int read() throws IOException {
         int read = read(_buf1, 0, 1);
@@ -81,7 +81,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             return -1;
         return _buf1[0] & 0xff;
     }
-    
+
     @Override
     public int read(byte buf[]) throws IOException {
         return read(buf, 0, buf.length);
@@ -93,7 +93,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     @Override
     public int read(byte buf[], int off, int len) throws IOException {
         if (_complete) {
-            // shortcircuit so the inflater doesn't try to refill 
+            // shortcircuit so the inflater doesn't try to refill
             // with the footer's data (which would fail, causing ZLIB err)
             return -1;
         }
@@ -116,14 +116,14 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             return read;
         }
     }
-    
+
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *  @since 0.8.9
      */
     public long getTotalRead() {
         try {
-            return inf.getBytesRead(); 
+            return inf.getBytesRead();
         } catch (RuntimeException e) {
             return 0;
         }
@@ -133,22 +133,9 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *  @since 0.8.9
      */
-    public long getTotalExpanded() { 
+    public long getTotalExpanded() {
         try {
-            return inf.getBytesWritten(); 
-        } catch (RuntimeException e) {
-            // possible NPE in some implementations
-            return 0;
-        }
-    }
-
-    /**
-     *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
-     *  @since 0.8.9
-     */
-    public long getRemaining() { 
-        try {
-            return inf.getRemaining(); 
+            return inf.getBytesWritten();
         } catch (RuntimeException e) {
             // possible NPE in some implementations
             return 0;
@@ -159,9 +146,22 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *  @since 0.8.9
      */
-    public boolean getFinished() { 
+    public long getRemaining() {
         try {
-            return inf.finished(); 
+            return inf.getRemaining();
+        } catch (RuntimeException e) {
+            // possible NPE in some implementations
+            return 0;
+        }
+    }
+
+    /**
+     *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     *  @since 0.8.9
+     */
+    public boolean getFinished() {
+        try {
+            return inf.finished();
         } catch (RuntimeException e) {
             // possible NPE in some implementations
             return true;
@@ -197,25 +197,25 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *  @since 0.8.9
      */
     @Override
-    public String toString() { 
+    public String toString() {
         return "Read: " + getTotalRead() + " expanded: " + getTotalExpanded() + " remaining: " + getRemaining() + " finished: " + getFinished();
     }
 
     private void verifyFooter() throws IOException {
         byte footer[] = _lookaheadStream.getFooter();
-        
+
         long actualSize = inf.getTotalOut();
         long expectedSize = DataHelper.fromLongLE(footer, 4, 4);
         if (expectedSize != actualSize)
             throw new IOException("gunzip expected " + expectedSize + " bytes, got " + actualSize);
-        
+
         long actualCRC = _crc32.getValue();
         long expectedCRC = DataHelper.fromLongLE(footer, 0, 4);
         if (expectedCRC != actualCRC)
             throw new IOException("gunzip CRC fail expected 0x" + Long.toHexString(expectedCRC) +
                                   " bytes, got 0x" + Long.toHexString(actualCRC));
     }
-    
+
     /**
      * Make sure the header is valid, throwing an IOException if its b0rked.
      */
@@ -226,9 +226,9 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         if (c != 0x8B) throw new IOException("Second magic byte was wrong [" + c + "]");
         c = in.read();
         if (c != 0x08) throw new IOException("Compression format is invalid [" + c + "]");
-        
+
         int flags = in.read();
-        
+
         // snag (and ignore) the MTIME
         c = in.read();
         if (c == -1) throw new IOException("EOF on MTIME0 [" + c + "]");
@@ -238,13 +238,13 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         if (c == -1) throw new IOException("EOF on MTIME2 [" + c + "]");
         c = in.read();
         if (c == -1) throw new IOException("EOF on MTIME3 [" + c + "]");
-        
+
         c = in.read();
-        if ( (c != 0x00) && (c != 0x02) && (c != 0x04) ) 
+        if ( (c != 0x00) && (c != 0x02) && (c != 0x04) )
             throw new IOException("Invalid extended flags [" + c + "]");
-        
+
         c = in.read(); // ignore creator OS
-        
+
         // handle flags...
         if (0 != (flags & (1<<5))) {
             // extra header, read and ignore
@@ -255,14 +255,14 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             c = in.read();
             if (c == -1) throw new IOException("EOF reading the extra header");
             _len += (c << 8);
-            
+
             // now skip that data
             for (int i = 0; i < _len; i++) {
                 c = in.read();
                 if (c == -1) throw new IOException("EOF reading the extra header's body");
             }
         }
-        
+
         if (0 != (flags & (1 << 4))) {
             // ignore the name
             c = in.read();
@@ -271,7 +271,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
                 c = in.read();
             }
         }
-        
+
         if (0 != (flags & (1 << 3))) {
             // ignore the comment
             c = in.read();
@@ -280,7 +280,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
                 c = in.read();
             }
         }
-        
+
         if (0 != (flags & (1 << 6))) {
             // ignore the header CRC16 (we still check the body CRC32)
             c = in.read();
@@ -289,7 +289,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             if (c == -1) throw new IOException("EOF reading the CRC16");
         }
     }
-    
+
     /**
      *  Essentially a SequenceInputStream(in, new ByteArrayInputStream(new byte[1])),
      *  except that this is resettable.
@@ -381,7 +381,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             return in;
         }
     }
-    
+
 /******
     public static void main(String args[]) {
 
@@ -391,7 +391,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             r.nextBytes(b);
             if (!test(b)) return;
         }
-        
+
         try {
             ResettableGZIPInputStream i = new ResettableGZIPInputStream();
             for (int k = 1; k < 1599; k++) {
@@ -404,7 +404,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
                 o.flush();
                 o.close();
                 byte compressed[] = baos.toByteArray();
-            
+
                 i.initialize(new java.io.ByteArrayInputStream(compressed));
                 byte readBuf[] = new byte[k];
                 int read = DataHelper.read(i, readBuf);
@@ -426,17 +426,17 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             e.printStackTrace();
         }
     }
-    
+
     private static boolean test(byte[] b) {
         int size = b.length;
-        try { 
+        try {
             java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(size);
             java.util.zip.GZIPOutputStream o = new java.util.zip.GZIPOutputStream(baos);
             o.write(b);
             o.finish();
             o.flush();
             byte compressed[] = baos.toByteArray();
-            
+
             ResettableGZIPInputStream in = new ResettableGZIPInputStream(new java.io.ByteArrayInputStream(compressed));
             java.io.ByteArrayOutputStream baos2 = new java.io.ByteArrayOutputStream(size);
             byte rbuf[] = new byte[512];
@@ -449,16 +449,16 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             byte rv[] = baos2.toByteArray();
             if (rv.length != b.length)
                 throw new RuntimeException("read length: " + rv.length + " expected: " + b.length);
-            
+
             if (!net.i2p.data.DataHelper.eq(rv, 0, b, 0, b.length)) {
                 throw new RuntimeException("foo, read=" + rv.length);
             } else {
                 //System.out.println("match, w00t @ " + size);
                 return true;
             }
-        } catch (Exception e) { 
+        } catch (Exception e) {
             System.out.println("Error dealing with size=" + size + ": " + e.getMessage());
-            e.printStackTrace(); 
+            e.printStackTrace();
             return false;
         }
     }

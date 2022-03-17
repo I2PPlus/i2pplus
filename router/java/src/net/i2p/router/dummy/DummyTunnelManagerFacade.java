@@ -1,9 +1,9 @@
 package net.i2p.router.dummy;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -26,18 +26,18 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 /**
  * Build and maintain tunnels throughout the network.
  *
- */ 
+ */
 public class DummyTunnelManagerFacade implements TunnelManagerFacade {
-    
+
     /** @deprecated unused */
     @Deprecated
     public TunnelInfo getTunnelInfo(TunnelId id) { return null; }
     public TunnelInfo selectInboundTunnel() { return null; }
-    public TunnelInfo selectInboundTunnel(Hash destination) { return null; } 
+    public TunnelInfo selectInboundTunnel(Hash destination) { return null; }
     public TunnelInfo selectOutboundTunnel() { return null; }
     public TunnelInfo selectOutboundTunnel(Hash destination) { return null; }
     public TunnelInfo selectInboundExploratoryTunnel(Hash closestTo) { return null; }
-    public TunnelInfo selectInboundTunnel(Hash destination, Hash closestTo) { return null; } 
+    public TunnelInfo selectInboundTunnel(Hash destination, Hash closestTo) { return null; }
     public TunnelInfo selectOutboundExploratoryTunnel(Hash closestTo) { return null; }
     public TunnelInfo selectOutboundTunnel(Hash destination, Hash closestTo) { return null; }
 
@@ -64,7 +64,7 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings) {}
     public int getInboundBuildQueueSize() { return 0; }
     public Set<Hash> selectPeersInTooManyTunnels() { return null; }
-    
+
     public void renderStatusHTML(Writer out) throws IOException {}
     public void restart() {}
     public void shutdown() {}

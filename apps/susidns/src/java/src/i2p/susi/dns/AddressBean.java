@@ -1,8 +1,8 @@
 /*
  * Created on Sep 02, 2005
- * 
+ *
  *  This file is part of susidns project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2005 <susi23@mail.i2p>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  * $Revision: 1.1 $
  */
 
@@ -59,7 +59,7 @@ public class AddressBean
 		this.destination = destination;
 	}
 
-	public String getDestination() 
+	public String getDestination()
 	{
 		return destination;
 	}
@@ -162,7 +162,7 @@ public class AddressBean
 	}
 
 	/** @since 0.8.7 */
-	public String getB32() 
+	public String getB32()
 	{
 		byte[] dest = Base64.decode(destination);
 		if (dest == null)
@@ -172,7 +172,7 @@ public class AddressBean
 	}
 
 	/** @since 0.9 */
-	public String getB64() 
+	public String getB64()
 	{
 		byte[] dest = Base64.decode(destination);
 		if (dest == null)

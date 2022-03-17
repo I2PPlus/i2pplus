@@ -28,9 +28,9 @@ public class StatusPanel extends JPanel {
 
 	/*
 	 * Constructor
-	 * 
+	 *
 	 * @param testsNum Total number of tests scheduled to be run
-	 * 
+	 *
 	 * @param sParamaEnableMultiple String indicating whether multiple tests
 	 * have been scheduled
 	 */
@@ -93,7 +93,7 @@ public class StatusPanel extends JPanel {
 
 	/**
 	 * Get intention to stop tests
-	 * 
+	 *
 	 * @return boolean indicating intention to stop or not
 	 * */
 	public synchronized boolean wantToStop() {
@@ -110,7 +110,7 @@ public class StatusPanel extends JPanel {
 
 	/**
 	 * Sets a string explaining progress of tests
-	 * 
+	 *
 	 * @param sParamText
 	 *            String status of test-run
 	 * */

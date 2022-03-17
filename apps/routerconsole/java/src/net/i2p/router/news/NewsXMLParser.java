@@ -78,7 +78,7 @@ public class NewsXMLParser {
         ALLOW_ALL
     }
 
-    public NewsXMLParser(I2PAppContext ctx) { 
+    public NewsXMLParser(I2PAppContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(NewsXMLParser.class);
         _mode = XHTMLMode.REMOVE_ELEMENT;

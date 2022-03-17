@@ -61,7 +61,7 @@ abstract class MigrateJetty {
     private static final String BASE_CONTEXT = "contexts/base-context.xml";
     private static final String CGI_CONTEXT = "contexts/cgi-context.xml";
     private static final String PROP_JETTY9_MIGRATED = "router.startup.jetty9.migrated";
-    
+
     /**
      *  For each entry in apps, if the main class is an old Jetty class,
      *  migrate it to the new Jetty class, and update the Jetty config files.

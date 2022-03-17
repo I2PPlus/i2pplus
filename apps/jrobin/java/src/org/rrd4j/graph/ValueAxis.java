@@ -163,7 +163,7 @@ class ValueAxis extends Axis {
      * If the graph covers positive and negative on the y-axis, then
      * desiredMinimumLabelCount is checked as well, to ensure the chosen YLabel definition
      * will result in the required number of labels
-     * 
+     *
      * Returns null if none are acceptable (none the right size or with
      * enough labels)
      */
@@ -179,14 +179,14 @@ class ValueAxis extends Axis {
                 if(im.minval < 0.0 && im.maxval > 0.0) {
                     //The graph covers positive and negative values, so we need the
                     // desiredMinimumLabelCount number of labels, which is going to
-                    // usually be 3, then maybe 2, then only as a last resort, 1. 
+                    // usually be 3, then maybe 2, then only as a last resort, 1.
                     // So, we need to find out what the label factor would be
                     // if we chose this ylab definition
                     labelFactor = findLabelFactor(thisYLabel);
                     if(labelFactor == -1) {
-                        //Default to too many to satisfy the label count test, unless we're looking for just 1	
+                        //Default to too many to satisfy the label count test, unless we're looking for just 1
                         // in which case be sure to satisfy the label count test
-                        labelFactor = desiredMinimumLabelCount==1?1:desiredMinimumLabelCount+1; 
+                        labelFactor = desiredMinimumLabelCount==1?1:desiredMinimumLabelCount+1;
                     }
                     //Adding one?  Think fenceposts (need one more than just dividing length by space between)
                     int labelCount = ((int)(scaledrange/thisYLabel.grid)/labelFactor)+1;

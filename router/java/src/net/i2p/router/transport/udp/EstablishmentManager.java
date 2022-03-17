@@ -661,8 +661,8 @@ class EstablishmentManager {
         }
         notifyActivity();
     }
-    
-    /** 
+
+    /**
      * got a SessionConfirmed (should only happen as part of an inbound
      * establishment)
      *
@@ -685,8 +685,8 @@ class EstablishmentManager {
     }
 
     /**
-     * got a SessionConfirmed (should only happen as part of an inbound 
-     * establishment) 
+     * got a SessionConfirmed (should only happen as part of an inbound
+     * establishment)
      *
      * SSU 2 only.
      * @param state non-null
@@ -708,7 +708,7 @@ class EstablishmentManager {
         if (_log.shouldDebug())
             _log.debug("Receive session confirmed from: " + state);
     }
-    
+
     /**
      * Got a SessionCreated (in response to our outbound SessionRequest)
      *
@@ -752,7 +752,7 @@ class EstablishmentManager {
         if (_log.shouldDebug())
             _log.debug("Receive session created from: " + state);
     }
-    
+
     /**
      * Got a Retry (in response to our outbound SessionRequest or TokenRequest)
      *
@@ -1083,7 +1083,7 @@ class EstablishmentManager {
                 dbsm = getOurInfo();
             }
         }
-        
+
         List<OutNetMessage> msgs = new ArrayList<OutNetMessage>(8);
         OutNetMessage msg;
         while ((msg = state.getNextQueuedMessage()) != null) {

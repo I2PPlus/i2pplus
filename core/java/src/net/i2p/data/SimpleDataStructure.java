@@ -90,7 +90,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     protected int read(InputStream in, byte target[]) throws IOException {
         return DataHelper.read(in, target);
     }
-    
+
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_data == null) throw new DataFormatException("No data to write out");
         out.write(_data);

@@ -58,11 +58,11 @@ abstract class IRCFilter {
      *  @return the original or modified line, or null if it should be dropped.
      */
     public static String inboundFilter(String s, StringBuffer expectedPong, DCCHelper helper) {
-        
+
         String field[] = DataHelper.split(s, " ", 5);
         String command;
         int idx=0;
-        
+
 
         try {
             // https://www.unrealircd.org/docs/Message_tags
@@ -86,13 +86,13 @@ abstract class IRCFilter {
             return s;
         } catch(NumberFormatException nfe){}
 
-        
+
         if ("PONG".equals(command)) {
             // Turn the received ":irc.freshcoffee.i2p PONG irc.freshcoffee.i2p :127.0.0.1"
             // into ":127.0.0.1 PONG 127.0.0.1 " so that the caller can append the client's extra parameter
             // though, does 127.0.0.1 work for irc clients connecting remotely?  and for all of them?  sure would
             // be great if irc clients actually followed the RFCs here, but i guess thats too much to ask.
-            // If we haven't PINGed them, or the PING we sent isn't something we know how to filter, this 
+            // If we haven't PINGed them, or the PING we sent isn't something we know how to filter, this
             // is blank.
             //
             // String pong = expectedPong.length() > 0 ? expectedPong.toString() : null;
@@ -101,12 +101,12 @@ abstract class IRCFilter {
             expectedPong.setLength(0);
             return pong;
         }
-        
+
         // Allow all allowedCommands
         if (_allowedInbound.contains(command)) {
                 return s;
         }
-        
+
         // Allow PRIVMSG, but block CTCP.
         if("PRIVMSG".equals(command) || "NOTICE".equals(command))
         {
@@ -287,11 +287,11 @@ abstract class IRCFilter {
 
         if(field[0].length()==0)
             return null; // W T F?
-        
-        
+
+
         if(field[0].charAt(0)==':')
             return null; // ???
-        
+
         int idx = 0;
         // https://www.unrealircd.org/docs/Message_tags
         // https://ircv3.net/specs/extensions/message-tags.html
@@ -329,17 +329,17 @@ abstract class IRCFilter {
                 //    _log.error("IRC client sent a PING we don't understand, filtering it (\"" + s + "\")");
                 rv = null;
             }
-            
+
             //if (_log.shouldWarn())
             //    _log.warn("sending ping [" + rv + "], waiting for [" + expectedPong + "] orig was [" + s  + "]");
-            
+
             return rv;
         }
 
         // Allow all allowedCommands
         if (_allowedOutbound.contains(command))
             return s;
-        
+
         // mIRC sends "NOTICE user :DCC Send file (IP)"
         // in addition to the CTCP version
         if("NOTICE".equals(command))
@@ -351,14 +351,14 @@ abstract class IRCFilter {
                 return filterDCCOut(field[idx - 1] + ' ' + field[idx] + " :DCC ", msg.substring(5), helper);
             // fall through
         }
-        
+
         // Allow PRIVMSG, but block CTCP (except ACTION).
         if("PRIVMSG".equals(command) || "NOTICE".equals(command))
         {
             if (field.length < idx + 2)
                 return s;  // invalid, allow server response
             String msg = field[idx + 1];
-        
+
             if(msg.indexOf(0x01) >= 0) // CTCP marker ^A can be anywhere, not just immediately after the ':'
             {
                     // CTCP
@@ -389,7 +389,7 @@ abstract class IRCFilter {
             }
             return s;
         }
-        
+
         if("USER".equals(command)) {
             if (field.length < idx + 2)
                 return s;  // invalid, allow server response
@@ -405,11 +405,11 @@ abstract class IRCFilter {
             // hide client message
             return "PART " + field[idx] + " :leaving";
         }
-        
+
         if ("QUIT".equals(command)) {
             return "QUIT :leaving";
         }
-        
+
         // Block the rest
         return null;
     }

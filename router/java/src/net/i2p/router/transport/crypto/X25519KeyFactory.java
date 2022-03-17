@@ -65,7 +65,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         if (!SystemVersion.isWindows())
             setPriority(Thread.NORM_PRIORITY - 1);
     }
-        
+
     /**
      *  Note that this stops the singleton precalc thread.
      *  You don't want to do this if there are multiple routers in the JVM.

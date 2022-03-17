@@ -23,7 +23,7 @@ import net.i2p.data.Hash;
  *  @author zzz
  */
 public class ConvertToHash {
-    
+
     /**
      *  Convert any kind of destination String to a hash
      *

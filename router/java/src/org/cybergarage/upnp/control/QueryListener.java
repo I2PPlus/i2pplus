@@ -12,7 +12,7 @@
 *		- first revision.
 *	01/04/04
 *		- Changed the interface.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.control;

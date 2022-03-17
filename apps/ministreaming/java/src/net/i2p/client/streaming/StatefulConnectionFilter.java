@@ -8,7 +8,7 @@ public interface StatefulConnectionFilter extends IncomingConnectionFilter {
 
     /**
      * Tells this filter to start
-     */ 
+     */
     public void start();
 
     /**

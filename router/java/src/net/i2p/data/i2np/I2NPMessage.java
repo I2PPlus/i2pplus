@@ -1,9 +1,9 @@
 package net.i2p.data.i2np;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -31,7 +31,7 @@ public interface I2NPMessage {
      * fragmentation, and the transports.
      */
     public static final int MAX_SIZE = 64*1024;
-    
+
     /**
      * Read the body into the data structures, after the initial type byte, using
      * the current class's format as defined by the I2NP specification
@@ -77,19 +77,19 @@ public interface I2NPMessage {
      */
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException;
     public void readMessage(byte data[], int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException;
-    
+
     /**
      * Return the unique identifier for this type of I2NP message, as defined in
      * the I2NP spec
      */
     public int getType();
-    
+
     /**
      * Replay resistant message ID
      */
-    public long getUniqueId(); 
+    public long getUniqueId();
     public void setUniqueId(long id);
-    
+
     /**
      * Date after which the message should be dropped (and the associated uniqueId forgotten)
      *
@@ -97,7 +97,7 @@ public interface I2NPMessage {
     public long getMessageExpiration();
     public void setMessageExpiration(long exp);
 
-    
+
     /** How large the message is, including any checksums, i.e. full 16 byte header */
     public int getMessageSize();
 
@@ -109,20 +109,20 @@ public interface I2NPMessage {
      */
     public byte[] toByteArray();
 
-    /** 
+    /**
      * Write the message to the buffer, returning the new offset (NOT the length).
      * the data is formatted so as to be self contained, with the type, size,
-     * expiration, unique id, as well as a checksum bundled along.  
+     * expiration, unique id, as well as a checksum bundled along.
      * Full 16 byte header for NTCP 1.
      *
      * @return the new offset (NOT the length)
      */
     public int toByteArray(byte buffer[]);
 
-    /** 
+    /**
      * Write the message to the buffer, returning the new offset (NOT the length).
      * the data is formatted so as to be self contained, with the type, size,
-     * expiration, unique id, as well as a checksum bundled along.  
+     * expiration, unique id, as well as a checksum bundled along.
      * Full 16 byte header for NTCP 1.
      *
      * @param off the offset to start writing at

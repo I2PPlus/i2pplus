@@ -27,7 +27,7 @@ import net.i2p.util.EventDispatcher;
  * @author sponge
  */
 public class I2PTunnelHTTPBidirProxy extends I2PTunnelHTTPClient implements Runnable {
-  
+
 
     /**
      *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,

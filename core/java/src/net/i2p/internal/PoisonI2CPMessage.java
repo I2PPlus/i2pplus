@@ -51,7 +51,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
         if ((object != null) && (object instanceof PoisonI2CPMessage)) {
             return true;
         }
-        
+
         return false;
     }
 

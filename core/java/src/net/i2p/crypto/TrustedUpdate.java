@@ -39,7 +39,7 @@ import net.i2p.util.VersionComparator;
  * java net.i2p.crypto.TrustedUpdate verifyupdate <i>signedFile</i>
  * java net.i2p.crypto.TrustedUpdate verifyversion <i>signedFile</i>
  * </pre>
- * 
+ *
  * @author jrandom and smeghead
  */
 public class TrustedUpdate {
@@ -181,7 +181,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
     /**
      * Constructs a new <code>TrustedUpdate</code> with the given
      * {@link net.i2p.I2PAppContext}.
-     * 
+     *
      * @param context An instance of <code>I2PAppContext</code>.
      */
     public TrustedUpdate(I2PAppContext context) {
@@ -273,7 +273,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      * Parses command line arguments when this class is used from the command
      * line.
      * Exits 1 on failure so this can be used in scripts.
-     * 
+     *
      * @param args Command line parameters.
      */
     public static void main(String[] args) {
@@ -303,10 +303,10 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
 
     /**
      * Checks if the given version is newer than the given current version.
-     * 
+     *
      * @param currentVersion The current version.
      * @param newVersion     The version to test.
-     * 
+     *
      * @return <code>true</code> if the given version is newer than the current
      *         version, otherwise <code>false</code>.
      */
@@ -437,19 +437,19 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
 
     /**
      * Fetches the trusted keys for the current instance.
-     * 
+     *
      * @return An <code>ArrayList</code> containting the trusted keys.
      */
 /***
     public ArrayList getTrustedKeys() {
         return _trustedKeys;
     }
-***/    
-    
+***/
+
     /**
      * Fetches the trusted keys for the current instance.
      * We could sort it but don't bother.
-     * 
+     *
      * @return A <code>String</code> containing the trusted keys,
      * delimited by CR LF line breaks.
      */
@@ -460,16 +460,16 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
             if (buf.length() > 0) buf.append("\r\n");
             buf.append(spk.toBase64());
         }
-            
+
         return buf.toString();
     }
 
-    
+
     /**
      * Reads the version string from a signed update file.
-     * 
+     *
      * @param signedFile A signed update file.
-     * 
+     *
      * @return The version string read, or an empty string if no version string
      *         is present.
      */
@@ -486,7 +486,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
                 return "";
             }
 
-            for (int i = 0; i < VERSION_BYTES; i++) 
+            for (int i = 0; i < VERSION_BYTES; i++)
                 if (data[i] == 0x00) {
                     return new String(data, 0, i, "UTF-8");
                 }
@@ -504,12 +504,12 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
                 }
         }
     }
-    
+
     /**
      * Reads the version string from an input stream
-     * 
+     *
      * @param inputStream containing at least 56 bytes
-     * 
+     *
      * @return The version string read, or an empty string if no version string
      *         is present.
      *
@@ -525,7 +525,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
                 return "";
             }
 
-            for (int i = 0; i < VERSION_BYTES; i++) 
+            for (int i = 0; i < VERSION_BYTES; i++)
                 if (data[i] == 0x00) {
                     return new String(data, 0, i, "UTF-8");
                 }
@@ -552,10 +552,10 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
     /**
      * Verifies that the version of the given signed update file is newer than
      * <code>currentVersion</code>.
-     * 
+     *
      * @param currentVersion The current version to check against.
      * @param signedFile     The signed update file.
-     * 
+     *
      * @return <code>true</code> if the signed update file's version is newer
      *         than the current version, otherwise <code>false</code>.
      */
@@ -568,18 +568,18 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      * Verifies the signature of a signed update file, and if it's valid and the
      * file's version is newer than the given current version, migrates the data
      * out of <code>signedFile</code> and into <code>outputFile</code>.
-     * 
+     *
      * As of 0.8.8, the embedded file must be a zip file with
      * a standard zip header and a UTF-8 zip file comment
      * matching the version in the sud header. This prevents spoofing the version,
      * since the sud signature does NOT cover the version in the header.
      * (We do this for sud/su2 files but not plugin xpi2p files -
      * don't use this method for plugin files)
-     * 
+     *
      * @param currentVersion The current version to check against.
      * @param signedFile     A signed update file.
      * @param outputFile     The file to write the verified data to.
-     * 
+     *
      * @return <code>null</code> if the signature and version were valid and the
      *         data was moved, and an error <code>String</code> otherwise.
      */
@@ -606,7 +606,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      * Verify the version in the sud header matches the version in the zip comment
      * (and that the embedded file is a zip file at all)
      * isUpdatedVersion() must be called first to set _newVersion.
-     * 
+     *
      * @return true if matches
      *
      * @since 0.8.8
@@ -622,10 +622,10 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
 
     /**
      * Extract the file. Skips and ignores the signature and version. No verification.
-     * 
+     *
      * @param signedFile     A signed update file.
      * @param outputFile     The file to write the verified data to.
-     * 
+     *
      * @return <code>null</code> if the
      *         data was moved, and an error <code>String</code> otherwise.
      *
@@ -671,14 +671,14 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      * the input file's version string encoded in UTF-8 (padded with trailing
      * <code>0h</code> characters if necessary), and the remaining bytes are the
      * raw bytes of the input file.
-     * 
+     *
      * @param inputFile      The file to be signed.
      * @param signedFile     The signed update file to write.
      * @param privateKeyFile The name of the file containing the private key to
      *                       sign <code>inputFile</code> with.
      * @param version        The version string of the input file. If this is
      *                       longer than 16 characters it will be truncated.
-     * 
+     *
      * @return An instance of {@link net.i2p.data.Signature}, or
      *         <code>null</code> if there was an error.
      */
@@ -717,14 +717,14 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      * signature, the next 16 bytes are the input file's version string encoded
      * in UTF-8 (padded with trailing <code>0h</code> characters if necessary),
      * and the remaining bytes are the raw bytes of the input file.
-     * 
+     *
      * @param inputFile         The file to be signed.
      * @param signedFile        The signed update file to write.
      * @param signingPrivateKey An instance of <code>SigningPrivateKey</code>
      *                          to sign <code>inputFile</code> with.
      * @param version           The version string of the input file. If this is
      *                          longer than 16 characters it will be truncated.
-     * 
+     *
      * @return An instance of {@link net.i2p.data.Signature}, or
      *         <code>null</code> if there was an error.
      */
@@ -801,9 +801,9 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
 
     /**
      * Verifies the DSA signature of a signed update file.
-     * 
+     *
      * @param signedFile The signed update file to check.
-     * 
+     *
      * @return <code>true</code> if the file has a valid signature, otherwise
      *         <code>false</code>.
      */
@@ -822,9 +822,9 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
 
     /**
      * Verifies the DSA signature of a signed update file.
-     * 
+     *
      * @param signedFile The signed update file to check.
-     * 
+     *
      * @return signer (could be empty string) or null if invalid
      * @since 0.7.12
      */
@@ -840,11 +840,11 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
 
     /**
      * Verifies the DSA signature of a signed update file.
-     * 
+     *
      * @param signedFile    The signed update file to check.
      * @param publicKeyFile A file containing the public key to use for
      *                      verification.
-     * 
+     *
      * @return <code>true</code> if the file has a valid signature, otherwise
      *         <code>false</code>.
      */
@@ -878,12 +878,12 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
 
     /**
      * Verifies the DSA signature of a signed update file.
-     * 
+     *
      * @param signedFile       The signed update file to check.
      * @param signingPublicKey An instance of
      *                         {@link net.i2p.data.SigningPublicKey} to use for
      *                         verification.
-     * 
+     *
      * @return <code>true</code> if the file has a valid signature, otherwise
      *         <code>false</code>.
      */
