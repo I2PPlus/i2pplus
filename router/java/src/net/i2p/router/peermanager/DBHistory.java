@@ -229,7 +229,7 @@ public class DBHistory {
     public void setUnpromptedDbStoreOld(long num) { _unpromptedDbStoreOld = num; }
 
     public void coalesceStats() {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Coalescing Profile Manager stats");
         _failedLookupRate.coalesceStats();
         _invalidReplyRate.coalesceStats();

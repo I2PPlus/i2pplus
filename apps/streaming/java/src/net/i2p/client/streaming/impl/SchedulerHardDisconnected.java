@@ -3,7 +3,7 @@ package net.i2p.client.streaming.impl;
 import net.i2p.I2PAppContext;
 
 /**
- * <p>Scheduler used after we've locally done a hard disconnect, 
+ * <p>Scheduler used after we've locally done a hard disconnect,
  * but the final timeout hasn't passed.</p>
  *
  * <h2>Entry conditions:</h2>
@@ -31,17 +31,17 @@ class SchedulerHardDisconnected extends SchedulerImpl {
     public SchedulerHardDisconnected(I2PAppContext ctx) {
         super(ctx);
     }
-    
+
     public boolean accept(Connection con) {
         if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getCloseSentOn();
         if (con.getResetSent())
             timeSinceClose = _context.clock().now() - con.getResetSentOn();
-        boolean ok = (con.getHardDisconnected() || con.getResetSent()) && 
+        boolean ok = (con.getHardDisconnected() || con.getResetSent()) &&
                      (timeSinceClose < Connection.DISCONNECT_TIMEOUT);
         return ok || con.getResetReceived();
     }
-    
+
     public void eventOccurred(Connection con) {
         // noop.  we do the timeout through the simpleTimer anyway
     }

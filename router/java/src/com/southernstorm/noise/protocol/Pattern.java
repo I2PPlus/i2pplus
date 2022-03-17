@@ -26,7 +26,7 @@ package com.southernstorm.noise.protocol;
  * Information about all supported handshake patterns.
  */
 class Pattern {
-	
+
 	private Pattern() {}
 
 	// Token codes.
@@ -39,7 +39,7 @@ class Pattern {
 	public static final short F = 7;
 	public static final short FF = 8;
 	public static final short FLIP_DIR = 255;
-	
+
 	// Pattern flag bits.
 	public static final short FLAG_LOCAL_STATIC = 0x0001;
 	public static final short FLAG_LOCAL_EPHEMERAL = 0x0002;
@@ -99,7 +99,7 @@ class Pattern {
 
 	/**
 	 * Look up the description information for a pattern.
-	 * 
+	 *
 	 * @param name The name of the pattern.
 	 * @return The pattern description or null.
 	 */
@@ -116,7 +116,7 @@ class Pattern {
 
 	/**
 	 * Reverses the local and remote flags for a pattern.
-	 * 
+	 *
 	 * @param flags The flags, assuming that the initiator is "local".
 	 * @return The reversed flags, with the responder now being "local".
 	 */

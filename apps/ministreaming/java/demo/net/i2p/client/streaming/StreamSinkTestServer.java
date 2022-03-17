@@ -9,9 +9,9 @@ public class StreamSinkTestServer {
         //System.setProperty(I2PClient.PROP_TCP_HOST, "dev.i2p.net");
         //System.setProperty(I2PClient.PROP_TCP_PORT, "4101");
         System.setProperty("tunnels.depthInbound", "0");
-        
-        new Thread(new Runnable() { 
-            public void run() { 
+
+        new Thread(new Runnable() {
+            public void run() {
                 StreamSinkServer.main(new String[] { "streamSinkTestLiveDir", "streamSinkTestLiveServer.key" });
             }
         }, "server").start();

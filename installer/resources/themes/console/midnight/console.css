@@ -1086,7 +1086,6 @@ p.infowarn, td.infowarn, p.infohelp, td.infohelp {line-height: 1.6; background-s
 p.infowarn, td.infowarn, #sybilanalysis {padding: 20px 25px 20px 55px; border: var(--border_inner); background: var(--infowarn) no-repeat 15px center, linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,#200 2px, #000 4px); background-size: 28px, 100%, 100% 4px}
 p.infohelp, p#debugmode, p.sybilinfo, #sybilanalysis {border: var(--border_inner)}
 p.notfound {margin-top: -1px}
-p#javaclienthelp {padding: 10px 25px 10px 55px; border: var(--border_inner); background: var(--infohelp) no-repeat 15px center / 28px}
 
 #servicelogs a {padding-left: 12px}
 th.th_title {padding: 9px 10px; text-align: left; box-shadow: var(--highlight)}
@@ -1101,7 +1100,7 @@ td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inn
 #tunnelconfig th:not(.th_title)[colspan="3"] {padding: 12px 10px 12px 34px; text-transform: none; letter-spacing: 0; word-spacing: 0; text-shadow: 0 1px 1px #000; box-shadow: var(--highlight), inset 0 0 2px 1px #f00; background: var(--infowarn) no-repeat 10px center, linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,#400 2px, #100 4px); background-size: 18px, 100%, 100% 4px}
 #upnpscan {padding: 5px 15px; margin: -11px 0 10px; border: var(--border_inner); background: #000}
 
-.routerid img {margin-right: 2px}
+.routerid img {margin-right: 2px; box-shadow: var(--outline)}
 .flag {margin-right: 3px}
 
 /* configpeers banlist */

@@ -44,7 +44,7 @@ class MessageReceivedJob extends JobImpl {
         _payload = payload;
         _sendDirect = sendDirect;
     }
-    
+
     public String getName() { return "Deliver New Message"; }
 
     public void runJob() {
@@ -81,19 +81,19 @@ class MessageReceivedJob extends JobImpl {
             return false;
         }
     }
-    
+
     /**
      * Deliver notification to the client that the given message is available.
      */
     private void messageAvailable(MessageId id, long size) throws I2CPMessageException {
-        //if (_log.shouldLog(Log.DEBUG))
-        //    _log.debug("Sending message available: " + id + " to sessionId " + _runner.getSessionId() 
+        //if (_log.shouldDebug())
+        //    _log.debug("Sending message available: " + id + " to sessionId " + _runner.getSessionId()
         //               + " (with nonce=1)", new Exception("available"));
         MessageStatusMessage msg = new MessageStatusMessage();
         msg.setMessageId(id.getMessageId());
         SessionId sid = _runner.getSessionId(_toDest.calculateHash());
         if (sid == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No session for " + _toDest.toBase32());
             return;
         }
@@ -104,7 +104,7 @@ class MessageReceivedJob extends JobImpl {
         msg.setStatus(MessageStatusMessage.STATUS_AVAILABLE);
         _runner.doSend(msg);
     }
-    
+
     /**
      *  Deliver the message directly, skip notification
      *  @since 0.9.4
@@ -114,7 +114,7 @@ class MessageReceivedJob extends JobImpl {
         msg.setMessageId(id);
         SessionId sid = _runner.getSessionId(_toDest.calculateHash());
         if (sid == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No session for " + _toDest.toBase32());
             return;
         }

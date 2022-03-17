@@ -223,10 +223,10 @@ class OutboundMessageFragments {
     public void add(PeerState peer, int size) {
         boolean added = _activePeers.add(peer);
         if (added) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Adding a new message to new peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Adding a new message to an existing peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
         }
         _context.statManager().addRateData("udp.outboundActivePeers", _activePeers.size());
@@ -254,7 +254,7 @@ class OutboundMessageFragments {
              } else {
                  int remaining = state.finishMessages();
                  if (remaining <= 0) {
-                     if (_log.shouldLog(Log.DEBUG))
+                     if (_log.shouldDebug())
                          _log.debug("No more pending messages for " + state.getRemotePeer().toBase64());
                      iter.remove();
                  }
@@ -299,7 +299,7 @@ class OutboundMessageFragments {
                         if (remaining <= 0) {
                             // race with add()
                             _iterator.remove();
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("No more pending messages for [" + p.getRemotePeer().toBase64().substring(0,6) + "]");
                             continue;
                         }
@@ -320,7 +320,7 @@ class OutboundMessageFragments {
                         }
                     }
 
-                    //if (peer != null && _log.shouldLog(Log.DEBUG))
+                    //if (peer != null && _log.shouldDebug())
                     //    _log.debug("Done looping, next peer we are sending for: " +
                     //               peer.getRemotePeer());
 
@@ -334,8 +334,8 @@ class OutboundMessageFragments {
                         // use max of 1 second so finishMessages() and/or PeerState.finishMessages()
                         // gets called regularly
                         int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
-                        if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Waiting for " + toWait + "ms before sending next packet...");
+                        if (_log.shouldDebug())
+                            _log.debug("Waiting for " + toWait + "ms before sending next message...");
 
                         nextSendDelay = Integer.MAX_VALUE;
                         // wait.. or somethin'
@@ -344,18 +344,18 @@ class OutboundMessageFragments {
                                 _activePeers.wait(toWait);
                             } catch (InterruptedException ie) {
                                 // noop
-                                if (_log.shouldLog(Log.DEBUG))
+                                if (_log.shouldDebug())
                                      _log.debug("Woken up while waiting");
                             }
                         }
                     //} else {
-                    //    if (_log.shouldLog(Log.DEBUG))
+                    //    if (_log.shouldDebug())
                     //        _log.debug("don't wait: alive=" + _alive + " state = " + state);
                     }
 
         } // while alive && state == null
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending to " + peer + DataHelper.toString(states));
 
         List<UDPPacket> packets = preparePackets(states, peer);
@@ -432,7 +432,7 @@ class OutboundMessageFragments {
                 // _packetsRetransmitted += toSend; // lifetime for the transport
                 _context.statManager().addRateData("udp.peerPacketsRetransmitted", peer.getPacketsRetransmitted(), peer.getPacketsTransmitted());
                 _context.statManager().addRateData("udp.packetsRetransmitted", state.getLifetime(), peer.getPacketsTransmitted());
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Retransmitting " + state + " to " + peer);
                 _context.statManager().addRateData("udp.sendVolleyTime", state.getLifetime(), queued);
             }
@@ -484,7 +484,7 @@ class OutboundMessageFragments {
                                 maxAvail = PacketBuilder.getMaxAdditionalFragmentSize(peer, sendNext.size(), curTotalDataSize);
                             else
                                 maxAvail = PacketBuilder2.getMaxAdditionalFragmentSize(peer, sendNext.size(), curTotalDataSize);
-                            if (_log.shouldLog(Log.INFO))
+                            if (_log.shouldInfo())
                                 _log.info("Adding in additional " + next + " to: " + peer);
                             // if less than 16, just use it for acks, don't even try to look for a tiny fragment
                             if (maxAvail < 16)
@@ -505,7 +505,7 @@ class OutboundMessageFragments {
                               " data bytes)\n* Target: " + peer);
                 _context.statManager().addRateData("udp.sendFragmentsPerPacket", sendNext.size());
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.info("Building UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
                 sendNext.clear();
                 continue;

@@ -57,7 +57,7 @@ abstract class TrayManager {
         _appContext = ctx;
         _useSwing = useSwing;
     }
-    
+
     /**
      * Add the tray icon to the system tray and start everything up.
      */
@@ -163,7 +163,7 @@ abstract class TrayManager {
             trayIcon = null;
         }
     }
-    
+
     public synchronized void languageChanged() {
         if (trayIcon != null) {
             if (!_useSwing)
@@ -171,26 +171,26 @@ abstract class TrayManager {
             // else TODO
         }
     }
-    
+
     /**
      * Build a popup menu, adding callbacks to the different items.
      * @return popup menu
      */
     protected abstract PopupMenu getMainMenu();
-    
+
     /**
      * Build a popup menu, adding callbacks to the different items.
      * @return popup menu
      * @since 0.9.26
      */
     protected abstract JPopupMenu getSwingMainMenu();
-    
+
     /**
      * Update the menu
      * @since 0.9.26
      */
     protected abstract void updateMenu();
-    
+
     /**
      * Get tray icon image from the desktopgui resources in the jar file.
      * @return image used for the tray icon
@@ -210,7 +210,7 @@ abstract class TrayManager {
         Image image = Toolkit.getDefaultToolkit().getImage(url);
         return image;
     }
-    
+
     /**
      *  Send a notification to the user.
      *
@@ -282,7 +282,7 @@ abstract class TrayManager {
     protected String _t(String s) {
         return DesktopguiTranslator._t(_appContext, s);
     }
-    
+
     /**
      * @since 0.9.26
      */

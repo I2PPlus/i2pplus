@@ -1,9 +1,9 @@
 package net.i2p.router.dummy;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -20,7 +20,7 @@ import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
 
 /**
- * Manage all interactions with clients 
+ * Manage all interactions with clients
  *
  * @author jrandom
  */
@@ -33,22 +33,22 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
     public boolean isLocal(Destination dest) { return true; }
     public void reportAbuse(Destination dest, String reason, int severity) { }
     public void messageReceived(ClientMessage msg) {}
-    public void requestLeaseSet(Destination dest, LeaseSet set, long timeout, 
-                                Job onCreateJob, Job onFailedJob) { 
+    public void requestLeaseSet(Destination dest, LeaseSet set, long timeout,
+                                Job onCreateJob, Job onFailedJob) {
         _context.jobQueue().addJob(onFailedJob);
     }
-    public void startup() {}    
+    public void startup() {}
     public void stopAcceptingClients() { }
     public void shutdown() {}
     public void shutdown(String msg) {}
     public void restart() {}
-    
+
     public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long msgNonce, int status) {}
-    
+
     public SessionConfig getClientSessionConfig(Destination _dest) { return null; }
     public SessionKeyManager getClientSessionKeyManager(Hash _dest) { return null; }
-    
+
     public void requestLeaseSet(Hash dest, LeaseSet set) {}
-    
+
 }
 

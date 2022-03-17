@@ -25,12 +25,12 @@ public class FilterFactory {
      * @param context the context this is running in
      * @param definition file containing the filter definition
      */
-    public static StatefulConnectionFilter createFilter(I2PAppContext context, 
+    public static StatefulConnectionFilter createFilter(I2PAppContext context,
                                                         File definition)
         throws IOException, InvalidDefinitionException {
         List<String> linesList = new ArrayList<String>();
 
-        BufferedReader reader = null; 
+        BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(definition));
             String line;

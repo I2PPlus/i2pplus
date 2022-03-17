@@ -105,13 +105,13 @@ class MessageState {
         while (true) {
             long timeToWait = expiration - _context.clock().now();
             if (timeToWait <= 0) {
-                if (_log.shouldLog(Log.WARN)) 
+                if (_log.shouldWarn())
                     _log.warn(_prefix + "Expired waiting for the status");
                 return;
             }
             synchronized (this) {
                 if (_state != State.INIT) {
-                    if (_log.shouldLog(Log.DEBUG)) 
+                    if (_log.shouldDebug())
                         _log.debug(_prefix + "Received a confirm (one way or the other)");
                     return;
                 }

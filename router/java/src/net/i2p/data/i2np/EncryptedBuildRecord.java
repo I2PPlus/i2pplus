@@ -2,7 +2,7 @@ package net.i2p.data.i2np;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * No warranty of any kind, either expressed or implied.  
+ * No warranty of any kind, either expressed or implied.
  */
 
 import net.i2p.data.SimpleDataStructure;

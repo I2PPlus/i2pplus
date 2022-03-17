@@ -480,7 +480,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
   public boolean isChoked() {
       return false;
   }
-  
+
   @Override
   public long getInactiveTime() {
       if (lastRcvd <= 0)
@@ -570,7 +570,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
               this.notifyAll();
               return true;
           } else {
-              if (_log.shouldLog(Log.WARN))
+              if (_log.shouldWarn())
                   _log.warn("Got dup from coord: " + pp);
               pp.release();
           }
@@ -589,7 +589,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
       if (interesting && lastRequest == null) {
           interesting = false;
           out.sendInterest(false);
-          if (_log.shouldLog(Log.DEBUG))
+          if (_log.shouldDebug())
               _log.debug(peer + " nothing more to request, now uninteresting");
       }
 */

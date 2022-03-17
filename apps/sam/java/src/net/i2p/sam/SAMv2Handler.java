@@ -56,7 +56,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		{
 			super(s, verMajor, verMinor, i2cpProps, parent);
 		}
-		
+
 		@Override
 		public boolean verifVersion()
 		{
@@ -68,8 +68,8 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		{
 			return new SAMv2StreamSession(destKeystream, direction, props, this) ;
 		}
-		
-		
+
+
 		/* Parse and execute a STREAM message */
 		@Override
 		protected boolean execStreamMessage ( String opcode, Properties props )
@@ -98,22 +98,22 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 			}
 			else
 			{
-				if (_log.shouldLog(Log.DEBUG))
+				if (_log.shouldDebug())
 					_log.debug ( "Unrecognized RAW message opcode: \""
 						+ opcode + "\"" );
 				return false;
 			}
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 		private boolean execStreamReceive ( Properties props )
 		{
 			if (props.isEmpty())
 			{
-				if (_log.shouldLog(Log.DEBUG))
+				if (_log.shouldDebug())
 					_log.debug ( "No parameters specified in STREAM RECEIVE message" );
 				return false;
 			}
@@ -125,7 +125,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 
 				if ( strid == null )
 				{
-					if (_log.shouldLog(Log.DEBUG))
+					if (_log.shouldDebug())
 						_log.debug ( "ID not specified in STREAM RECEIVE message" );
 					return false;
 				}
@@ -136,21 +136,21 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 				}
 				catch ( NumberFormatException e )
 				{
-					if (_log.shouldLog(Log.DEBUG))
+					if (_log.shouldDebug())
 						_log.debug ( "Invalid STREAM RECEIVE ID specified: " + strid );
 					return false;
 				}
 			}
 
 			boolean nolimit = false;
-			
+
 			long limit = 0;
 			{
 				String strsize = props.getProperty ( "LIMIT" );
 
 				if ( strsize == null )
 				{
-					if (_log.shouldLog(Log.DEBUG))
+					if (_log.shouldDebug())
 						_log.debug ( "Limit not specified in STREAM RECEIVE message" );
 					return false;
 				}
@@ -159,7 +159,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 				{
 					nolimit = true ;
 				}
-				else 
+				else
 				{
 					try
 					{
@@ -167,14 +167,14 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 					}
 					catch ( NumberFormatException e )
 					{
-						if (_log.shouldLog(Log.DEBUG))
+						if (_log.shouldDebug())
 							_log.debug ( "Invalid STREAM RECEIVE size specified: " + strsize );
 						return false;
 					}
 
 					if ( limit < 0 )
 					{
-						if (_log.shouldLog(Log.DEBUG))
+						if (_log.shouldDebug())
 							_log.debug ( "Specified limit (" + limit
 								+ ") is out of protocol limits" );
 						return false;

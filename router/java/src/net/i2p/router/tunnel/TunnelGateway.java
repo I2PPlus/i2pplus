@@ -103,7 +103,7 @@ abstract class TunnelGateway {
         synchronized (_queue) {
             _queue.add(cur);
             afterAdded = System.currentTimeMillis();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Added before direct flush preprocessing: " + _queue);
             delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
             afterPreprocess = System.currentTimeMillis();
@@ -115,7 +115,7 @@ abstract class TunnelGateway {
             for (int i = 0; i < _queue.size(); i++) {
                 Pending m = _queue.get(i);
                 if (m.getExpiration() + Router.CLOCK_FUDGE_FACTOR < _lastFlush) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Expire on the queue (size=" + _queue.size() + "): " + m);
                     _queue.remove(i);
                     i--;
@@ -123,7 +123,7 @@ abstract class TunnelGateway {
             }
             afterExpire = System.currentTimeMillis();
             remaining = _queue.size();
-            if ( (remaining > 0) && (_log.shouldLog(Log.DEBUG)) )
+            if ( (remaining > 0) && (_log.shouldDebug()) )
                 _log.debug("Remaining after preprocessing: " + _queue);
         }
 
@@ -131,7 +131,7 @@ abstract class TunnelGateway {
             _delayedFlush.reschedule(delayAmount);
         }
         _context.statManager().addRateData("tunnel.lockedGatewayAdd", afterAdded-beforeLock, remaining);
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             long complete = System.currentTimeMillis();
             _log.debug("Time to add the message " + msg.getUniqueId() + ": " + (complete-startAdd)
                        + " delayed? " + delayedFlush + " remaining: " + remaining
@@ -209,12 +209,12 @@ abstract class TunnelGateway {
                 //    System.out.println("foo!");
                 //afterChecked = _context.clock().now();
                 if (!_queue.isEmpty()) {
-                    //if ( (remaining > 0) && (_log.shouldLog(Log.DEBUG)) )
+                    //if ( (remaining > 0) && (_log.shouldDebug()) )
                     //    _log.debug("Remaining before delayed flush preprocessing: " + _queue);
                     wantRequeue = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
                     if (wantRequeue) {
                         delayAmount = _preprocessor.getDelayAmount();
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Remaining after delayed flush preprocessing: " + _queue);
                     }
                 }

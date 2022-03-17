@@ -49,7 +49,7 @@ class RepublishLeaseSetJob extends JobImpl {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null) {
                     if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Not publishing a stale LOCAL LeaseSet [" + _dest.toBase32().substring(0,6) + "]", new Exception("Publish expired LOCAL lease?"));
                     } else {
                         if (_log.shouldInfo())
@@ -59,17 +59,17 @@ class RepublishLeaseSetJob extends JobImpl {
                         _lastPublished = getContext().clock().now();
                     }
                 } else {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Client [" + _dest.toBase32().substring(0,6) + "] is local, but no valid LeaseSet found; being rebuilt?");
                 }
                 return;
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Client [" + _dest.toBase32().substring(0,6) + "] is no longer local; not republishing LeaseSet");
             }
             _facade.stopPublishing(_dest);
         } catch (RuntimeException re) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Uncaught error republishing the LeaseSet", re);
             _facade.stopPublishing(_dest);
             throw re;

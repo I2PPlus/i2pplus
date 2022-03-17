@@ -1,9 +1,9 @@
 package net.i2p.router.client;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -12,7 +12,7 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.PrivateKey;
 import net.i2p.router.Job;
 
-/** 
+/**
  * Bundle up the data points necessary when asynchronously requesting a lease
  * from a client
  *
@@ -32,7 +32,7 @@ class LeaseRequestState {
      *  @param currentEarliestLeastDate absolute time, the earliest expiration in
      *         the current LS (NOT the requested one), or 0 if none
      *  @param expiration absolute time, when the request expires (not when the LS expires)
-     *  @param requested LeaseSet with requested leases - this object must be updated to contain the 
+     *  @param requested LeaseSet with requested leases - this object must be updated to contain the
      *             signed version (as well as any changed/added/removed Leases)
      *             The LeaseSet contains Leases and destination only, it is unsigned.
      */
@@ -44,7 +44,7 @@ class LeaseRequestState {
         _expiration = expiration;
         _requestedLeaseSet = requested;
     }
-    
+
     /** created lease set from client - FIXME always null */
     public LeaseSet getGranted() { return _grantedLeaseSet; }
 
@@ -63,7 +63,7 @@ class LeaseRequestState {
     //public SigningPrivateKey getSigningPrivateKey() { return _leaseSetSigningPrivateKey; }
     //public void setSigningPrivateKey(SigningPrivateKey spk) { _leaseSetSigningPrivateKey = spk; }
 
-    /** what to do once the lease set is created */    
+    /** what to do once the lease set is created */
     public Job getOnGranted() { return _onGranted; }
     //public void setOnGranted(Job jb) { _onGranted = jb; }
 
@@ -87,10 +87,10 @@ class LeaseRequestState {
     public void setIsSuccessful(boolean is) { _successful = is; }
 
     @Override
-    public String toString() { 
-        return "leaseSet request asking for " + _requestedLeaseSet 
-               + " having received " + _grantedLeaseSet 
+    public String toString() {
+        return "leaseSet request asking for " + _requestedLeaseSet
+               + " having received " + _grantedLeaseSet
                + " succeeding? " + _successful
-               + " expiring on " + _expiration; 
+               + " expiring on " + _expiration;
     }
 }

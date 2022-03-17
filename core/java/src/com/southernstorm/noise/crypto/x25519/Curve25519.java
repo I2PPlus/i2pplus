@@ -26,15 +26,15 @@ import java.util.Arrays;
 
 /**
  * Implementation of the Curve25519 elliptic curve algorithm.
- * 
+ *
  * This implementation is based on that from arduinolibs:
  * https://github.com/rweather/arduinolibs
  *
  * Differences in this version are due to using 26-bit limbs for the
  * representation instead of the 8/16/32-bit limbs in the original.
- * 
+ *
  * References: http://cr.yp.to/ecdh.html, RFC 7748
- * 
+ *
  * @since 0.9.36 moved from router to core in 0.9.38
  */
 public final class Curve25519 {
@@ -82,7 +82,7 @@ public final class Curve25519 {
 		t1 = new long [NUM_LIMBS_510BIT];
 		t2 = new int [NUM_LIMBS_510BIT];
 	}
-	
+
 
 	/**
 	 * Destroy all sensitive data in this object.
@@ -110,13 +110,13 @@ public final class Curve25519 {
 	/**
 	 * Reduces a number modulo 2^255 - 19 where it is known that the
 	 * number can be reduced with only 1 trial subtraction.
-	 * 
+	 *
 	 * @param x The number to reduce, and the result.
 	 */
 	private void reduceQuick(int[] x)
 	{
 		int index, carry;
-		
+
 	    // Perform a trial subtraction of (2^255 - 19) from "x" which is
 	    // equivalent to adding 19 and subtracting 2^255.  We add 19 here;
 	    // the subtraction of 2^255 occurs in the next step.
@@ -141,7 +141,7 @@ public final class Curve25519 {
 
 	/**
 	 * Reduce a number modulo 2^255 - 19.
-	 * 
+	 *
 	 * @param result The result.
 	 * @param x The value to be reduced.  This array will be
 	 * modified during the reduction.
@@ -150,7 +150,7 @@ public final class Curve25519 {
 	private void reduce(int[] result, int[] x, int size)
 	{
 		int index, limb, carry;
-		
+
 	    // Calculate (x mod 2^255) + ((x / 2^255) * 19) which will
 	    // either produce the answer we want or it will produce a
 	    // value of the form "answer + j * (2^255 - 19)".  There are
@@ -197,7 +197,7 @@ public final class Curve25519 {
 
 	/**
 	 * Multiplies two numbers modulo 2^255 - 19.
-	 * 
+	 *
 	 * @param result The result.
 	 * @param x The first number to multiply.
 	 * @param y The second number to multiply.
@@ -205,7 +205,7 @@ public final class Curve25519 {
 	private void mul(int[] result, int[] x, int[] y)
 	{
 		int i, j;
-		
+
 		// Multiply the two numbers to create the intermediate result.
 		long v = x[0];
 		for (i = 0; i < NUM_LIMBS_255BIT; ++i) {
@@ -218,7 +218,7 @@ public final class Curve25519 {
 			}
 			t1[i + NUM_LIMBS_255BIT - 1] = v * y[NUM_LIMBS_255BIT - 1];
 		}
-		
+
 		// Propagate carries and convert back into 26-bit words.
 		v = t1[0];
 		t2[0] = ((int)v) & 0x03FFFFFF;
@@ -226,14 +226,14 @@ public final class Curve25519 {
 			v = (v >> 26) + t1[i];
 			t2[i] = ((int)v) & 0x03FFFFFF;
 		}
-		
+
 		// Reduce the result modulo 2^255 - 19.
 		reduce(result, t2, NUM_LIMBS_255BIT);
 	}
-	
+
 	/**
 	 * Squares a number modulo 2^255 - 19.
-	 * 
+	 *
 	 * @param result The result.
 	 * @param x The number to square.
 	 */
@@ -244,7 +244,7 @@ public final class Curve25519 {
 
 	/**
 	 * Multiplies a number by the a24 constant, modulo 2^255 - 19.
-	 * 
+	 *
 	 * @param result The result.
 	 * @param x The number to multiply by a24.
 	 */
@@ -264,7 +264,7 @@ public final class Curve25519 {
 
 	/**
 	 * Adds two numbers modulo 2^255 - 19.
-	 * 
+	 *
 	 * @param result The result.
 	 * @param x The first number to add.
 	 * @param y The second number to add.
@@ -283,7 +283,7 @@ public final class Curve25519 {
 
 	/**
 	 * Subtracts two numbers modulo 2^255 - 19.
-	 * 
+	 *
 	 * @param result The result.
 	 * @param x The first number to subtract.
 	 * @param y The second number to subtract.
@@ -291,7 +291,7 @@ public final class Curve25519 {
 	private static void sub(int[] result, int[] x, int[] y)
 	{
 		int index, borrow;
-		
+
 	    // Subtract y from x to generate the intermediate result.
 		borrow = 0;
 		for (index = 0; index < NUM_LIMBS_255BIT; ++index) {
@@ -312,10 +312,10 @@ public final class Curve25519 {
 		}
 		result[NUM_LIMBS_255BIT - 1] &= 0x001FFFFF;
 	}
-	
+
 	/**
 	 * Conditional swap of two values.
-	 * 
+	 *
 	 * @param select Set to 1 to swap, 0 to leave as-is.
 	 * @param x The first value.
 	 * @param y The second value.
@@ -333,14 +333,14 @@ public final class Curve25519 {
 
 	/**
 	 * Raise x to the power of (2^250 - 1).
-	 * 
+	 *
 	 * @param result The result.  Must not overlap with x.
 	 * @param x The argument.
 	 */
 	private void pow250(int[] result, int[] x)
 	{
 		int i, j;
-		
+
 	    // The big-endian hexadecimal expansion of (2^250 - 1) is:
 	    // 03FFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF
 	    //
@@ -374,7 +374,7 @@ public final class Curve25519 {
 
 	/**
 	 * Computes the reciprocal of a number modulo 2^255 - 19.
-	 * 
+	 *
 	 * @param result The result.  Must not overlap with x.
 	 * @param x The argument.
 	 */
@@ -399,7 +399,7 @@ public final class Curve25519 {
 
 	/**
 	 * Evaluates the curve for every bit in a secret key.
-	 * 
+	 *
 	 * @param s The 32-byte secret key.
 	 */
 	private void evalCurve(byte[] s)
@@ -464,7 +464,7 @@ public final class Curve25519 {
 
 	/**
 	 * Evaluates the Curve25519 curve.
-	 * 
+	 *
 	 * @param result Buffer to place the result of the evaluation into.
 	 * @param offset Offset into the result buffer.
 	 * @param privateKey The private key to use in the evaluation.
@@ -508,7 +508,7 @@ public final class Curve25519 {
 			System.arraycopy(state.x_1, 0, state.x_3, 0, state.x_1.length);  // x_3 = x_1
 			//Arrays.fill(state.z_3, 0);			// z_3 = 1
 			state.z_3[0] = 1;
-			
+
 			// Evaluate the curve for every bit of the private key.
 			state.evalCurve(privateKey);
 

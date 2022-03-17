@@ -16,10 +16,10 @@
 *	03/16/04
 *		- Thanks for Darrell Young
 *		- Fixed to set v1.1 to the HTTP version.
-*	10/20/04 
+*	10/20/04
 *		- Brent Hills <bhills@openshores.com>
 *		- Added setMYNAME() and getMYNAME().
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -33,7 +33,7 @@ public class SSDPResponse extends HTTPResponse
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public SSDPResponse()
 	{
 		setVersion(HTTP.VERSION_11);
@@ -43,7 +43,7 @@ public class SSDPResponse extends HTTPResponse
 	{
 		super(in);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	ST (SearchTarget)
 	////////////////////////////////////////////////
@@ -99,7 +99,7 @@ public class SSDPResponse extends HTTPResponse
 	{
 		return getHeaderValue(HTTP.MYNAME);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	CacheControl
 	////////////////////////////////////////////////
@@ -128,19 +128,19 @@ public class SSDPResponse extends HTTPResponse
 	{
 		return getIntegerHeaderValue(HTTP.BOOTID_UPNP_ORG);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	getHeader (Override)
 	////////////////////////////////////////////////
-	
+
 	public String getHeader()
 	{
 		StringBuffer str = new StringBuffer();
-	
+
 		str.append(getStatusLineString());
 		str.append(getHeaderString());
 		str.append(HTTP.CRLF); // for Intel UPnP control points.
-		
+
 		return str.toString();
 	}
 

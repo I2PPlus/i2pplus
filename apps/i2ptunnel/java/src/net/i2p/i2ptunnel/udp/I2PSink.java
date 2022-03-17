@@ -47,7 +47,7 @@ public class I2PSink implements Sink {
         this.dest = dest;
         this.raw = raw;
         this.toPort = toPort;
-        
+
         // create maker
         if (raw) {
             this.maker = null;
@@ -56,7 +56,7 @@ public class I2PSink implements Sink {
             this.maker.setI2PDatagramMaker(this.sess);
         }
     }
-    
+
     /**
      *  @param src ignored
      *  @param fromPort I2CP port
@@ -75,7 +75,7 @@ public class I2PSink implements Sink {
         } else {
             payload = data;
         }
-        
+
         // send message
         try {
             this.sess.sendMessage(this.dest, payload,

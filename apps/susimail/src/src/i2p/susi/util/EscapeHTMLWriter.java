@@ -15,7 +15,7 @@ import net.i2p.data.DataHelper;
  * @since 0.9.34
  */
 public class EscapeHTMLWriter extends FilterWriter {
-    
+
     private static final String AMP = "&amp;";
     private static final String QUOT = "&quot;";
     private static final String LT = "&lt;";
@@ -30,7 +30,7 @@ public class EscapeHTMLWriter extends FilterWriter {
     public EscapeHTMLWriter(Writer out) {
         super(out);
     }
-    
+
     @Override
     public void write(int c) throws IOException {
         switch (c) {

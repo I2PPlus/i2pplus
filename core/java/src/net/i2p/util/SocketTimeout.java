@@ -70,7 +70,7 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
             }
         }
     }
-    
+
     /**
      *  Change in return value from void to boolean in
      *  0.9.3 accidentally broke Syndie, sorry.
@@ -103,7 +103,7 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
      *
      *  @param timeoutPeriod Time since constructed, or less than or equal to zero to disable
      */
-    public void setTotalTimeoutPeriod(long timeoutPeriod) { 
+    public void setTotalTimeoutPeriod(long timeoutPeriod) {
         if (timeoutPeriod > 0)
             _totalTimeoutTime = _startTime + timeoutPeriod;
         else
@@ -114,7 +114,7 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
      *  If non-null, will be run when the timer expires.
      */
     public void setTimeoutCommand(Runnable job) { _command = job; }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

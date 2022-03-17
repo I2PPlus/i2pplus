@@ -11,11 +11,11 @@ import org.junit.BeforeClass;
 
 /**
  * Base class for tests that need a functioning router set up.
- * 
+ *
  * @author zab
  */
 public abstract class RouterITBase {
-    
+
     protected static RouterContext _context;
     protected static TunnelCreatorConfig _config;
 
@@ -32,7 +32,7 @@ public abstract class RouterITBase {
         r.setRouterInfo(rInfo);
         _config = prepareConfig(8);
     }
-    
+
     private static TunnelCreatorConfig prepareConfig(int numHops) {
         Hash peers[] = new Hash[numHops];
         long tunnelIds[] = new long[numHops];
@@ -42,7 +42,7 @@ public abstract class RouterITBase {
             _context.random().nextBytes(peers[i].getData());
             tunnelIds[i] = 1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE);
         }
-        
+
         TunnelCreatorConfig config = new TCConfig(_context, numHops, false);
         for (int i = 0; i < numHops; i++) {
             config.setPeer(i, peers[i]);
@@ -60,7 +60,7 @@ public abstract class RouterITBase {
         }
         return config;
     }
-    
+
     private static class TestRouterIdentity extends RouterIdentity {
         @Override
         public Hash getHash() {

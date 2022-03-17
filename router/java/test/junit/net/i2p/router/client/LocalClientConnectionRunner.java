@@ -20,7 +20,7 @@ import net.i2p.router.RouterContext;
  *  @since 0.9.8
  */
 class LocalClientConnectionRunner extends ClientConnectionRunner {
-    
+
     /**
      * Create a new runner with the given queues
      *
@@ -28,7 +28,7 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
     public LocalClientConnectionRunner(RouterContext context, ClientManager manager, Socket socket) {
         super(context, manager, socket);
     }
-    
+
     /**
      *  Custom listener
      */
@@ -36,7 +36,7 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
     protected I2CPMessageReader.I2CPMessageEventListener createListener() {
         return new LocalClientMessageEventListener(_context, this, true);
     }
-    
+
     /**
      *  Just send the message directly,
      *  don't instantiate a RequestLeaseSetJob

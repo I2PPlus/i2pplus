@@ -10,7 +10,7 @@
 *
 *	07/07/04
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.control;
@@ -21,7 +21,7 @@ import org.cybergarage.upnp.*;
 public class RenewSubscriber extends ThreadCore
 {
 	public final static long INTERVAL = 120;
-	
+
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
@@ -30,7 +30,7 @@ public class RenewSubscriber extends ThreadCore
 	{
 		setControlPoint(ctrlp);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Member
 	////////////////////////////////////////////////
@@ -41,7 +41,7 @@ public class RenewSubscriber extends ThreadCore
 	{
 		ctrlPoint = ctrlp;
 	}
-	
+
 	public ControlPoint getControlPoint()
 	{
 		return ctrlPoint;
@@ -50,8 +50,8 @@ public class RenewSubscriber extends ThreadCore
 	////////////////////////////////////////////////
 	//	Thread
 	////////////////////////////////////////////////
-	
-	public void run() 
+
+	public void run()
 	{
 		ControlPoint ctrlp = getControlPoint();
 		long renewInterval = INTERVAL * 1000;

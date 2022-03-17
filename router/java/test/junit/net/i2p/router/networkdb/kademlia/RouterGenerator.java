@@ -1,9 +1,9 @@
 package net.i2p.router.networkdb.kademlia;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -42,7 +42,7 @@ public class RouterGenerator {
 		break;
 	}
     }
-    
+
     private void createRouters(int numRouters, String outDir) {
 	File dir = new File(outDir);
 	if (!dir.exists())
@@ -56,10 +56,10 @@ public class RouterGenerator {
 		if ( (i % 100) == 0) System.out.println();
 		continue;
 	    }
-	    
+
 	    System.out.println("Router " + i + " created: \t" + hash);
 	    numSuccess++;
-	    
+
 	    FileOutputStream fos = null;
 	    try {
 		fos = new FileOutputStream(new File(dir, "routerInfo-" + hash + ".dat"));
@@ -73,22 +73,22 @@ public class RouterGenerator {
 	    }
 	}
     }
-    
+
     private static PublicKey pubkey = null;
     private static PrivateKey privkey = null;
     private static SigningPublicKey signingPubKey = null;
     private static SigningPrivateKey signingPrivKey = null;
     private static Object keypair[] = KeyGenerator.getInstance().generatePKIKeypair();
     private static Object signingKeypair[] = KeyGenerator.getInstance().generateSigningKeypair();
-    
+
     static {
 	pubkey = (PublicKey)keypair[0];
 	privkey = (PrivateKey)keypair[1];
 	signingPubKey = (SigningPublicKey)signingKeypair[0];
 	signingPrivKey = (SigningPrivateKey)signingKeypair[1];
     }
-    
-    
+
+
     static RouterInfo createRouterInfo(int num) {
 	RouterInfo info = new RouterInfo();
 	try {
@@ -104,7 +104,7 @@ public class RouterGenerator {
 	    ident.setPublicKey(pubkey);
 	    ident.setSigningPublicKey(signingPubKey);
 	    info.setIdentity(ident);
-	    
+
 	    info.sign(signingPrivKey);
 	} catch (Exception e) {
 	    System.err.println("Error building router " + num + ": " + e.getMessage());
@@ -112,7 +112,7 @@ public class RouterGenerator {
 	}
 	return info;
     }
-    
+
     static Set<RouterAddress> createAddresses(int num) {
 	Set<RouterAddress> addresses = new HashSet<RouterAddress>();
 	RouterAddress addr = createTCPAddress(num);
@@ -120,7 +120,7 @@ public class RouterGenerator {
 	    addresses.add(addr);
 	return addresses;
     }
-    
+
     private static RouterAddress createTCPAddress(int num) {
 	OrderedProperties props = new OrderedProperties();
 	String name = "blah.random.host.org";
@@ -130,5 +130,5 @@ public class RouterGenerator {
 	RouterAddress addr = new RouterAddress("TCP", props, 10);
 	return addr;
     }
-    
+
 }

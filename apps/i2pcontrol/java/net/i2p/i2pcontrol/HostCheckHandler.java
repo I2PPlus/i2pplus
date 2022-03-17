@@ -41,7 +41,7 @@ public class HostCheckHandler extends HandlerWrapper
         _context = ctx;
         _listenHosts = new HashSet<String>(8);
     }
-    
+
     /**
      *  Set the legal hosts.
      *  Not synched. Call this BEFORE starting.

@@ -43,12 +43,12 @@ import net.i2p.util.SimpleByteCache;
 class SSUHMACGenerator extends HMACGenerator {
     /** set of available HMAC instances for calculate */
     private final LinkedBlockingQueue<I2PHMac> _available;
-    
+
     public SSUHMACGenerator() {
         super();
         _available = new LinkedBlockingQueue<I2PHMac>(32);
     }
-    
+
     /**
      * Calculate the HMAC of the data with the given key
      *
@@ -59,14 +59,14 @@ class SSUHMACGenerator extends HMACGenerator {
     public void calculate(SessionKey key, byte data[], int offset, int length, byte target[], int targetOffset) {
         if ((key == null) || (key.getData() == null) || (data == null))
             throw new NullPointerException("Null arguments for HMAC");
-        
+
         I2PHMac mac = acquire();
         mac.init(key.getData());
         mac.update(data, offset, length);
         mac.doFinal(target, targetOffset);
         release(mac);
     }
-    
+
     /**
      * Verify the MAC inline, reducing some unnecessary memory churn.
      *
@@ -83,19 +83,19 @@ class SSUHMACGenerator extends HMACGenerator {
                           byte origMAC[], int origMACOffset, int origMACLength) {
         if ((key == null) || (key.getData() == null) || (curData == null))
             throw new NullPointerException("Null arguments for HMAC");
-        
+
         I2PHMac mac = acquire();
         mac.init(key.getData());
         mac.update(curData, curOffset, curLength);
         byte rv[] = acquireTmp();
         mac.doFinal(rv, 0);
         release(mac);
-        
+
         boolean eq = DataHelper.eqCT(rv, 0, origMAC, origMACOffset, origMACLength);
         releaseTmp(rv);
         return eq;
     }
-    
+
     private I2PHMac acquire() {
         I2PHMac rv = _available.poll();
         if (rv != null)

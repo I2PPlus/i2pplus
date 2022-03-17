@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 
 public class RateStatTest extends TestCase {
-    
+
     @Test
     public void testNoRates() throws Exception {
         final long emptyArray[] = new long[0];
@@ -17,7 +17,7 @@ public class RateStatTest extends TestCase {
             fail("created a rate stat with no periods");
         } catch (IllegalArgumentException expected){}
     }
-    
+
     @Test
     public void testGettersEtc() throws Exception{
         final long periods[] = new long[]{10};
@@ -33,7 +33,7 @@ public class RateStatTest extends TestCase {
         assertEquals(0, rs.getLifetimeEventCount());
         assertNull(rs.getRate(2000));
     }
-    
+
     @SuppressWarnings("deprecation")
     @Test
     public void testAddingAndRemovingThrows() throws Exception {
@@ -60,7 +60,7 @@ public class RateStatTest extends TestCase {
         }
         rs.coalesceStats();
         java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(2048);
-        
+
         rs.store(baos, "rateStat.test");
         byte data[] = baos.toByteArray();
 
@@ -73,6 +73,6 @@ public class RateStatTest extends TestCase {
         loadedRs.load(props, "rateStat.test", true);
 
         assertEquals(rs, loadedRs);
-        
+
     }
 }

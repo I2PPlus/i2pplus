@@ -146,7 +146,7 @@ public class SSLClientUtil {
         return success;
     }
 
-    /** 
+    /**
      *  Pull the cert back OUT of the keystore and save it as ascii
      *  so the clients can get to it.
      *
@@ -168,7 +168,7 @@ public class SSLClientUtil {
         }
     }
 
-    /** 
+    /**
      *  Sets up the SSLContext and sets the socket factory.
      *  No option prefix allowed.
      *

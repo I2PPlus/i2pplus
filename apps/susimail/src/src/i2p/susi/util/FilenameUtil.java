@@ -132,14 +132,14 @@ public class FilenameUtil {
 								a = (byte) (a - 'A' + 10);
 							else if(a >= 'a' && a <= 'f')
 								a = (byte) (a - 'a' + 10);
-	
+
 							if( b >= '0' && b <= '9' )
 								b -= '0';
 							else if( b >= 'A' && b <= 'F' )
 								b = (byte) (b - 'A' + 10);
 							else if(b >= 'a' && b <= 'f')
 								b = (byte) (b - 'a' + 10);
-							
+
 							out.write(a*16 + b);
 						}
 						else if( a == '\r' && b == '\n' ) {

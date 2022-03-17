@@ -62,7 +62,7 @@ public class UIMessages {
     public synchronized int getLastMessageID() {
         return _count - 1;
     }
-    
+
     /**
      * Newest last, or empty list.
      * Provide id of last one back to clearThrough().
@@ -73,7 +73,7 @@ public class UIMessages {
             return Collections.emptyList();
         return new ArrayList<Message>(_messages);
     }
-    
+
     /**
      * Newest last, or empty list.
      * @return a copy
@@ -88,12 +88,12 @@ public class UIMessages {
         }
         return rv;
     }
-    
+
     /** clear all */
     public synchronized void clear() {
         _messages.clear();
     }
-    
+
     /** clear all up to and including this id */
     public synchronized void clearThrough(int id) {
         Message m = _messages.peekLast();
@@ -111,7 +111,7 @@ public class UIMessages {
             }
         }
     }
-    
+
     /**
      * @since 0.9.46
      */

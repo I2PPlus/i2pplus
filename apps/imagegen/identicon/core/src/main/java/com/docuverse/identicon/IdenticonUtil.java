@@ -12,7 +12,7 @@ import java.security.MessageDigest;
  * <strong>IMPORTANT</strong>: <code>inetSalt</code> value must be set to
  * reasonably long random string prior to invoking this method.
  * </p>
- * 
+ *
  * @author don
  */
 public class IdenticonUtil {
@@ -30,7 +30,7 @@ public class IdenticonUtil {
 
 	/**
 	 * Returns current IP address mask. Default is 0xffffffff.
-	 * 
+	 *
 	 * @return current IP address mask
 	 */
 	public static int getInetMask() {
@@ -39,7 +39,7 @@ public class IdenticonUtil {
 
 	/**
 	 * Sets current IP address mask. Default is 0xffffffff.
-	 * 
+	 *
 	 * @param inetMask
 	 */
 	public static void setInetMask(int inetMask) {
@@ -48,7 +48,7 @@ public class IdenticonUtil {
 
 	/**
 	 * Returns current inetSalt value.
-	 * 
+	 *
 	 * @return the value
 	 */
 	public static String getInetSalt() {
@@ -57,7 +57,7 @@ public class IdenticonUtil {
 
 	/**
 	 * Sets current inetSalt value.
-	 * 
+	 *
 	 * @param inetSalt
 	 */
 	public static void setInetSalt(String inetSalt) {
@@ -72,7 +72,7 @@ public class IdenticonUtil {
 	 * Also, since salt is a string for convenience sake, int(mask(ip)) is
 	 * converetd into a string and combined with inetSalt prior to hashing.
 	 * </p>
-	 * 
+	 *
 	 * @param inetAddr
 	 *            IP address
 	 * @return identicon code for <code>inetAddr</code>
@@ -106,12 +106,12 @@ public class IdenticonUtil {
 	 * This method is a convenience method intended to be used by servlets like
 	 * below:
 	 * </p>
-	 * 
+	 *
 	 * <pre>
 	 * int code = IdenticonUtil.getIdenticonCode(request.getParameter(&quot;code&quot;), request
 	 * 		.getRemoteAddr());
 	 * </pre>
-	 * 
+	 *
 	 * @param codeParam
 	 *            code parameter, if <code>null</code> remoteAddr parameter
 	 *            will be used to determine the value.

@@ -11,13 +11,13 @@ import java.io.OutputStream;
  * @since 0.9.34
  */
 public class CountingOutputStream extends FilterOutputStream {
-    
+
     private long count;
 
     public CountingOutputStream(OutputStream out) {
         super(out);
     }
-    
+
     public long getWritten() {
         return count;
     }

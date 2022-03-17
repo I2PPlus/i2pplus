@@ -65,16 +65,16 @@ public interface I2PSocket extends Closeable {
     @Deprecated
     public SelectableChannel getChannel() throws IOException;
 
-    /** 
+    /**
      * @return socket's configuration
      */
     public I2PSocketOptions getOptions();
-    /** 
+    /**
      * Configure the socket
      * @param options I2PSocketOptions to set
      */
     public void setOptions(I2PSocketOptions options);
-    
+
     /**
      * How long we will wait blocked on a read() operation.  This is simply a
      * helper to query the I2PSocketOptions
@@ -85,7 +85,7 @@ public interface I2PSocket extends Closeable {
 
     /**
      * Define how long we will wait blocked on a read() operation (-1 will make
-     * the socket wait forever).  This is simply a helper to adjust the 
+     * the socket wait forever).  This is simply a helper to adjust the
      * I2PSocketOptions
      *
      * @param ms timeout in ms
@@ -112,7 +112,7 @@ public interface I2PSocket extends Closeable {
      *  @since 0.8.9
      */
     public int getLocalPort();
-    
+
     /**
      *  Resets and closes this socket. Sends a RESET indication to the far-end.
      *  This is the equivalent of setSoLinger(true, 0) followed by close() on a Java Socket.
@@ -133,7 +133,7 @@ public interface I2PSocket extends Closeable {
      * Allow notification of underlying errors communicating across I2P without
      * waiting for any sort of cleanup process.  For example, if some data could
      * not be sent, this listener is notified immediately, and while the input/output
-     * streams are notified through IOExceptions, they are told only after the 
+     * streams are notified through IOExceptions, they are told only after the
      * TCP-like stream is closed (which may be a minute later, if the close message
      * times out as well).  This is not fired on normal close() activity.
      *

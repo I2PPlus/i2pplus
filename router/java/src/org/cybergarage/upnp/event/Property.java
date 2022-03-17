@@ -16,7 +16,7 @@
 *		- Error : the method contains a bug:
 *	06/18/03
 *		- Fixed a bug when a null value is received to the name and the value of property.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.event;
@@ -26,7 +26,7 @@ public class Property
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public Property()
 	{
 	}

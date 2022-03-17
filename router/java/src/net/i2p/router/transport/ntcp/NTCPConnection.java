@@ -477,14 +477,14 @@ public class NTCPConnection implements Closeable {
             _log.logCloseLoop("NTCPConnection", this);
             return;
         }
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
 //            _log.info("Closing connection " + toString(), new Exception("cause"));
             _log.info("Closing " + toString());
         }
         NTCPConnection toClose = locked_close(allowRequeue);
         if (toClose != null && toClose != this) {
             // won't happen as of 0.9.37
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Multiple connections on remove, closing " + toClose + " (already closed " + this + ")");
             _context.statManager().addRateData("ntcp.multipleCloseOnRemove", toClose.getUptime());
             toClose.close();
@@ -585,7 +585,7 @@ public class NTCPConnection implements Closeable {
             return false;
         if (_outbound.isBacklogged()) { // bloody arbitrary.  well, it's half the average message lifetime...
             int size = _outbound.size();
-            if (_log.shouldLog(Log.WARN)) {
+            if (_log.shouldWarn()) {
                 int writeBufs = _writeBufs.size();
                 boolean currentOutboundSet;
                 long seq;
@@ -679,7 +679,7 @@ public class NTCPConnection implements Closeable {
         long now = _context.clock().now();
         /* synchronized (_currentOutbound) */  {
             if (!_currentOutbound.isEmpty()) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Attempting to send multiple outbound messages with " + _currentOutbound.size() +
                               " already waiting and " + _outbound.size() + " queued");
                 return;
@@ -737,7 +737,7 @@ public class NTCPConnection implements Closeable {
             blocks.add(block);
             size += block.getTotalLength();
             _nextMetaTime = now + (META_FREQUENCY / 2) + _context.random().nextInt(META_FREQUENCY / 2);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Sending NTCP2 datetime block...");
         }
         // 1024 is an estimate, do final check below
@@ -1192,7 +1192,7 @@ public class NTCPConnection implements Closeable {
                 // stats once is fine for all of them
                 _context.statManager().addRateData("ntcp.sendTime", msgs.get(0).getSendTime());
                 for (OutNetMessage msg : msgs) {
-                    if (_log.shouldLog(Log.DEBUG)) {
+                    if (_log.shouldDebug()) {
                         _log.debug("I2NP message " + _messagesWritten + "/" + msg.getMessageId() + " sent after "
                                   + msg.getSendTime() + "/"
                                   + msg.getLifetime()
@@ -1285,14 +1285,14 @@ public class NTCPConnection implements Closeable {
         long ourTs = (_context.clock().now() + 500) / 1000;
         long newSkew = (ourTs - ts);
         if (Math.abs(newSkew*1000) > Router.CLOCK_FUDGE_FACTOR) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Peer's skew jumped too far (from " + _clockSkew + "s to " + newSkew + "s): " + toString());
             _context.statManager().addRateData("ntcp.corruptSkew", newSkew);
             close();
             return;
         }
         _context.statManager().addRateData("ntcp.receiveMeta", newSkew);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Received NTCP metadata, old skew of " + _clockSkew + "s, new skew of " + newSkew + "s");
         // FIXME does not account for RTT
         _clockSkew = newSkew;
@@ -1394,7 +1394,7 @@ public class NTCPConnection implements Closeable {
         NTCPConnection toClose = _transport.inboundEstablished(this);
         if (toClose != null && toClose != this) {
             int drained = toClose.drainOutboundTo(_outbound);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Old connection closed: " + toClose + " replaced by " + this + "; drained " + drained);
             _context.statManager().addRateData("ntcp.inboundEstablishedDuplicate", toClose.getUptime());
             toClose.close();

@@ -141,7 +141,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
 
     @Override
     protected void blockingHandle(I2PSocket socket) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Incoming connection to '" + toString() + "' port " + socket.getLocalPort() +
                       "\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
         try {
@@ -177,7 +177,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             } finally {
                  try { socket.close(); } catch (IOException ioe) {}
             }
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
         } catch (EOFException ex) {
             try {
@@ -188,7 +188,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             } finally {
                  try { socket.close(); } catch (IOException ioe) {}
             }
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
         } catch (SocketTimeoutException ex) {
             try {
@@ -199,7 +199,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             } finally {
                  try { socket.close(); } catch (IOException ioe) {}
             }
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
         } catch (SocketException ex) {
             try {
@@ -210,19 +210,19 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             try {
                 socket.close();
             } catch (IOException ioe) {}
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error connecting to IRC server " + remoteHost + ':' + remotePort, ex);
         } catch (IOException ex) {
             try {
                 socket.reset();
             } catch (IOException ioe) {}
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
         } catch (OutOfMemoryError oom) {
             try {
                 socket.reset();
             } catch (IOException ioe) {}
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("OOM in IRC server", oom);
         }
     }
@@ -279,7 +279,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             if (System.currentTimeMillis() > expire)
                 throw new SocketTimeoutException("Headers took too long");
             s = s.trim();
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Received line: " + s);
 
             String field[] = DataHelper.split(s, " ", 5);
@@ -310,7 +310,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             if ("SERVER".equals(command))
                 break;
         }
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("All done, sending: " + buf.toString());
         return buf.toString();
     }

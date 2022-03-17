@@ -1,6 +1,6 @@
 /*
  * I2P - An anonymous, secure, and fully-distributed communication network.
- * 
+ *
  * ShellCommand.java
  * 2004 The I2P Project
  * http://www.i2p.net
@@ -25,7 +25,7 @@ import net.i2p.I2PAppContext;
  * output.
  * <p>
  * This class must be kept <code>gcj</code>-compatible.
- * 
+ *
  * @author hypercubus
  */
 public class ShellCommand {
@@ -49,7 +49,7 @@ public class ShellCommand {
 
     /**
      * Executes a shell command in its own thread.
-     * 
+     *
      * @author hypercubus
      */
     private class CommandThread extends I2PAppThread {
@@ -82,7 +82,7 @@ public class ShellCommand {
      * during a <code>Process.waitFor()</code> loop and thereby allow the
      * process to exit properly. This class makes no attempt to preserve the
      * consumed data.
-     * 
+     *
      * @author hypercubus
      */
     private static class StreamConsumer extends I2PAppThread {
@@ -111,9 +111,9 @@ public class ShellCommand {
     /**
      * Reads data from a <code>java.io.InputStream</code> and writes it to
      * <code>STDOUT</code>.
-     * 
+     *
      * UNUSED, only for NO_CONSUME_OUTPUT
-     * 
+     *
      * @author hypercubus
      */
     private static class StreamReader extends I2PAppThread {
@@ -145,9 +145,9 @@ public class ShellCommand {
     /**
      * Reads data from <code>STDIN</code> and writes it to a
      * <code>java.io.OutputStream</code>.
-     * 
+     *
      * UNUSED, only for NO_CONSUME_OUTPUT
-     * 
+     *
      * @author hypercubus
      */
     private static class StreamWriter extends I2PAppThread {
@@ -185,10 +185,10 @@ public class ShellCommand {
      * as appropriate, and can be read via {@link #getOutputStream()} and
      * {@link #getErrorStream()}, respectively. Input can be passed to the
      * <code>STDIN</code> of the shell process via {@link #getInputStream()}.
-     * 
+     *
      * Warning, no good way to quote or escape spaces in arguments with this method.
      * @deprecated unused
-     * 
+     *
      * @param shellCommand The command for the shell to execute.
      */
     @Deprecated
@@ -204,10 +204,10 @@ public class ShellCommand {
      * {@link #getOutputStream()} and {@link #getErrorStream()}, respectively.
      * Input can be passed to the <code>STDIN</code> of the shell process via
      * {@link #getInputStream()}.
-     * 
+     *
      * Warning, no good way to quote or escape spaces in arguments with this method.
      * @deprecated unused
-     * 
+     *
      * @param  shellCommand The command for the shell to execute.
      * @return              <code>true</code> if the spawned shell process
      *                      returns an exit status of 0 (indicating success),
@@ -226,10 +226,10 @@ public class ShellCommand {
      * as appropriate, and can be read via {@link #getOutputStream()} and
      * {@link #getErrorStream()}, respectively. Input can be passed to the
      * <code>STDIN</code> of the shell process via {@link #getInputStream()}.
-     * 
+     *
      * Warning, no good way to quote or escape spaces in arguments with this method.
      * @deprecated unused
-     * 
+     *
      * @param  shellCommand The command for the shell to execute.
      * @param  seconds      The method will return <code>true</code> if this
      *                      number of seconds elapses without the process
@@ -260,10 +260,10 @@ public class ShellCommand {
      * Passes a command to the shell for execution and returns immediately
      * without waiting for an exit status. Any output produced by the executed
      * command will not be displayed.
-     * 
+     *
      * Warning, no good way to quote or escape spaces in arguments with this method.
      * @deprecated unused
-     * 
+     *
      * @param  shellCommand The command for the shell to execute.
      * @throws IOException
      */
@@ -276,9 +276,9 @@ public class ShellCommand {
      * Passes a command to the shell for execution. This method blocks until
      * all of the command's resulting shell processes have completed. Any output
      * produced by the executed command will not be displayed.
-     * 
+     *
      * Warning, no good way to quote or escape spaces in arguments with this method.
-     * 
+     *
      * @param  shellCommand The command for the shell to execute.
      * @return              <code>true</code> if the spawned shell process
      *                      returns an exit status of 0 (indicating success),
@@ -294,7 +294,7 @@ public class ShellCommand {
      * Passes a command to the shell for execution. This method blocks until
      * all of the command's resulting shell processes have completed. Any output
      * produced by the executed command will not be displayed.
-     * 
+     *
      * @param  commandArray The command for the shell to execute,
      *                      as a String[].
      *                      See Runtime.exec(String[]) for more info.
@@ -312,10 +312,10 @@ public class ShellCommand {
      * all of the command's resulting shell processes have completed unless a
      * specified number of seconds has elapsed first. Any output produced by the
      * executed command will not be displayed.
-     * 
+     *
      * Warning, no good way to quote or escape spaces in arguments when shellCommand is a String.
      * Use a String array for best results, especially on Windows.
-     * 
+     *
      * @param  shellCommand The command for the shell to execute, as a String.
      *                      You can't quote arguments successfully.
      *                      See Runtime.exec(String) for more info.
@@ -337,7 +337,7 @@ public class ShellCommand {
      * all of the command's resulting shell processes have completed unless a
      * specified number of seconds has elapsed first. Any output produced by the
      * executed command will not be displayed.
-     * 
+     *
      * @param  commandArray The command for the shell to execute,
      *                      as a String[].
      *                      See Runtime.exec(String[]) for more info.
@@ -417,10 +417,10 @@ public class ShellCommand {
         }
 	try {
             Runtime.getRuntime().exec(args);
-	} catch (IOException ioe) { ioe.printStackTrace(); } 
+	} catch (IOException ioe) { ioe.printStackTrace(); }
         return;
     }
-    
+
     /**
      *  @param shellCommand either a String or a String[] (since 0.8.3) - quick hack
      *  @param consumeOutput always true, false is unused, possibly untested

@@ -124,7 +124,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Handle " + message);
         RequestLeaseSetMessage msg = (RequestLeaseSetMessage) message;
         boolean isLS2 = requiresLS2(session);
@@ -258,7 +258,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 for (Map.Entry<Destination, LeaseInfo> e : _existingLeaseSets.entrySet()) {
                     if (pk.equals(e.getKey().getPublicKey())) {
                         privKeys.addAll(e.getValue().getPrivateKeys());
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Creating LeaseInfo for [" + dest.toBase32().substring(0,6) + "] with private key from [" + e.getKey().toBase32().substring(0,6) + "]");
                         break;
                     }
@@ -285,7 +285,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             }
             _existingLeaseSets.put(dest, li);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Caching old LeaseInfo keys for [" + dest.toBase32().substring(0,6) + "]");
         }
 

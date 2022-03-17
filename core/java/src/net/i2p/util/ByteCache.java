@@ -156,7 +156,7 @@ public final class ByteCache extends TryCache<ByteArray> {
             return;
         if (entry.getData().length != _entrySize) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(ByteCache.class);
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Bad size", new Exception("I did it"));
             return;
         }

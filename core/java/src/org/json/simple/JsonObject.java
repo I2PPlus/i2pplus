@@ -47,7 +47,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
 	public JsonObject(final Map<String, ?> map){
 		super(map);
 	}
-	
+
 	/** Ensures the given keys are present.
 	 * @param keys represents the keys that must be present.
 	 * @throws NoSuchElementException if any of the given keys are missing.

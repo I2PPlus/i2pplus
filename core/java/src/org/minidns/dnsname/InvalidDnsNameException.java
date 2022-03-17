@@ -24,7 +24,7 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
 
     public static class LabelTooLongException extends InvalidDnsNameException {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
 
     public static class DNSNameTooLongException extends InvalidDnsNameException {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

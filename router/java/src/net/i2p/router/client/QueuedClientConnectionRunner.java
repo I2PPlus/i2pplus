@@ -16,7 +16,7 @@ import net.i2p.router.RouterContext;
  */
 class QueuedClientConnectionRunner extends ClientConnectionRunner {
     private final I2CPMessageQueue queue;
-    
+
     /**
      * Create a new runner with the given queues
      *
@@ -25,7 +25,7 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
         super(context, manager, null);
         this.queue = queue;
     }
-    
+
 
 
     /**
@@ -36,7 +36,7 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
         _reader = new QueuedI2CPMessageReader(this.queue, new ClientMessageEventListener(_context, this, false));
         _reader.startReading();
     }
-    
+
     /**
      * Calls super() to stop the reader, and sends a poison message to the client.
      */
@@ -46,7 +46,7 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
         queue.close();
         // queue = null;
     }
-    
+
     /**
      *  In super(), doSend queues it to the writer thread and
      *  the writer thread calls writeMessage() to write to the output stream.
@@ -56,7 +56,7 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
     void writeMessage(I2CPMessage msg) {
         throw new RuntimeException("huh?");
     }
-    
+
     /**
      * Actually send the I2CPMessage to the client.
      * Nonblocking.

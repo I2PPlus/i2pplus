@@ -285,7 +285,7 @@ class UDPPacket implements CDPQEntry {
             if (!eq) {
                 // this is relatively frequent, as you can get old keys in PacketHandler.
                 Log log = _context.logManager().getLog(UDPPacket.class);
-                if (log.shouldLog(Log.INFO)) {
+                if (log.shouldInfo()) {
                     byte[] calc = new byte[32];
                     hmac.calculate(macKey, _validateBuf, 0, off, calc, 0);
                     StringBuilder str = new StringBuilder(512);
@@ -309,7 +309,7 @@ class UDPPacket implements CDPQEntry {
             }
         } else {
             Log log = _context.logManager().getLog(UDPPacket.class);
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Payload length is " + payloadLength + ", too short! From: " + getRemoteHost() + '\n' +
                          net.i2p.util.HexDump.dump(_data, _packet.getOffset(), _packet.getLength()));
         }
@@ -325,7 +325,7 @@ class UDPPacket implements CDPQEntry {
      *
      * SSU 1 only.
      * SSU 2 decryption is in PacketHandler.
-     * 
+     *
      */
     public synchronized void decrypt(SessionKey cipherKey) {
         verifyNotReleased();

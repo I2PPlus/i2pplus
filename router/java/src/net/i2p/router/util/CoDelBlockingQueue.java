@@ -329,7 +329,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private void drop(E entry) {
         long delay = _context.clock().now() - entry.getEnqueueTime();
         _context.statManager().addRateData(STAT_DROP, delay);
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("CDQ #" + _id + ' ' + _name + " dropped item with " + delay + "ms delay \n* " +
                       DataHelper.formatDuration(_context.clock().now() - _first_above_time) + " since first above, " +
                       DataHelper.formatDuration(_context.clock().now() - _drop_next) + " since drop next, " +

@@ -12,7 +12,7 @@ package org.minidns.dnslabel;
 
 /**
  * A LDH (<b>L</b>etters, <b>D</b>igits, <b>H</b>yphen) label, which is the classical label form.
- * 
+ *
  * @see <a href="https://tools.ietf.org/html/rfc5890#section-2.3.1">RFC 5890 § 2.3.1. LDH Label</a>
  *
  */

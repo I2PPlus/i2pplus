@@ -85,7 +85,7 @@ class SAMv3Handler extends SAMv1Handler
     public SAMv3Handler(SocketChannel s, int verMajor, int verMinor, Properties i2cpProps, SAMBridge parent) throws SAMException, IOException {
         super(s, verMajor, verMinor, i2cpProps, parent);
         sendPorts = (verMajor == 3 && verMinor >= 2) || verMajor > 3;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("SAMv3Handler instantiated");
     }
 
@@ -161,7 +161,7 @@ class SAMv3Handler extends SAMv1Handler
         Properties props;
 
         this.thread.setName("SAMv3Handler " + _id);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("SAMv3Handler started");
 
         try {
@@ -170,7 +170,7 @@ class SAMv3Handler extends SAMv1Handler
             boolean gotFirstLine = false;
             while (true) {
                 if (shouldStop()) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Stop request received for SAMv3Handler");
                     break;
                 }
@@ -236,18 +236,18 @@ class SAMv3Handler extends SAMv1Handler
                     line = buf.toString();
                 }
 
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("New message received: [" + line + ']');
                 props = SAMUtils.parseParams(line);
                 domain = (String) props.remove(SAMUtils.COMMAND);
                 if (domain == null) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Ignoring newline in SAMv3 command");
                     continue;
                 }
                 gotFirstLine = true;
                 opcode = (String) props.remove(SAMUtils.OPCODE);
-                if (_log.shouldLog(Log.DEBUG)) {
+                if (_log.shouldDebug()) {
                     _log.debug("SAMv3Handler parsing [" + domain + " -> " + opcode + "]");
                 }
 
@@ -290,7 +290,7 @@ class SAMv3Handler extends SAMv1Handler
                 } else if (domain.equals("AUTH")) {
                     canContinue = execAuthMessage(opcode, props);
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Unrecognized message domain: \"" + domain + "\"");
                     break;
                 }
@@ -300,7 +300,7 @@ class SAMv3Handler extends SAMv1Handler
                 }
             } // while
         } catch (IOException e) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Caught IOException in handler" + "\n* Error: " + e.getMessage());
             writeString(SESSION_ERROR, e.getMessage());
         } catch (SAMException e) {
@@ -310,7 +310,7 @@ class SAMv3Handler extends SAMv1Handler
             _log.error("Unexpected exception for message [" + msg + ']' + "\n* Error: " + e.getMessage());
             writeString(SESSION_ERROR, e.getMessage());
         } finally {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Stopping SAMv3Handler");
 
             if (!this.stolenSocket) {
@@ -400,25 +400,25 @@ class SAMv3Handler extends SAMv1Handler
             if (opcode.equals("CREATE")) {
                 if ((this.getRawSession()!= null) || (this.getDatagramSession() != null) ||
                     (this.getStreamSession() != null)) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Trying to create a session, but one still exists");
                     return writeString(SESSION_ERROR, "Session already exists");
                 }
                 if (props.isEmpty()) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("No parameters specified in SESSION CREATE message");
                     return writeString(SESSION_ERROR, "No parameters for SESSION CREATE");
                 }
 
                 dest = (String) props.remove("DESTINATION");
                 if (dest == null) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("SESSION DESTINATION parameter not specified");
                     return writeString(SESSION_ERROR, "DESTINATION not specified");
                 }
 
                 if (dest.equals("TRANSIENT")) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("TRANSIENT destination requested");
                     String sigTypeStr = (String) props.remove("SIGNATURE_TYPE");
                     SigType sigType;
@@ -435,7 +435,7 @@ class SAMv3Handler extends SAMv1Handler
 
                     dest = Base64.encode(priv.toByteArray());
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Custom destination specified [" + dest + "]");
                     if (!SAMUtils.checkPrivateDestination(dest))
                         return writeString("SESSION STATUS RESULT=INVALID_KEY\n");
@@ -463,7 +463,7 @@ class SAMv3Handler extends SAMv1Handler
                 try {
                     sSessionsHash.put( nick, new SessionRecord(dest, allProps, this) ) ;
                 } catch (SessionsDB.ExistingIdException e) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("SESSION ID parameter already in use");
                     return writeString("SESSION STATUS RESULT=DUPLICATED_ID\n");
                 } catch (SessionsDB.ExistingDestException e) {
@@ -499,7 +499,7 @@ class SAMv3Handler extends SAMv1Handler
                     this.session = v3;
                     v3.start();
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Unrecognized SESSION STYLE: \"" + style +"\"");
                     return writeString(SESSION_ERROR, "Unrecognized SESSION STYLE");
                 }
@@ -522,7 +522,7 @@ class SAMv3Handler extends SAMv1Handler
                 else
                     return writeString(SESSION_ERROR + " ID=\"" + nick + '"', msg);
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Unrecognized SESSION message opcode: \"" + opcode + "\"");
                 return writeString(SESSION_ERROR, "Unrecognized opcode");
             }
@@ -571,7 +571,7 @@ class SAMv3Handler extends SAMv1Handler
 
         nick = (String) props.remove("ID");
         if (nick == null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("SESSION ID parameter not specified");
             try {
                 notifyStreamResult(true, "I2P_ERROR", "ID not specified");
@@ -581,7 +581,7 @@ class SAMv3Handler extends SAMv1Handler
 
         rec = sSessionsHash.get(nick);
         if ( rec==null ) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("STREAM SESSION ID does not exist");
             try {
                 notifyStreamResult(true, "INVALID_ID", "STREAM SESSION ID " + nick + " does not exist");
@@ -591,7 +591,7 @@ class SAMv3Handler extends SAMv1Handler
 
         streamSession = rec.getHandler().streamSession;
         if (streamSession==null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("specified ID is not a stream session");
             try {
                 notifyStreamResult(true, "I2P_ERROR",  "specified ID " + nick + " is not a STREAM session");
@@ -606,7 +606,7 @@ class SAMv3Handler extends SAMv1Handler
         } else if ( opcode.equals ( "FORWARD") ) {
             return execStreamForwardIncoming( props );
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug ( "Unrecognized STREAM message opcode: \"" + opcode + "\"" );
             try {
                 notifyStreamResult(true, "I2P_ERROR",  "Unrecognized STREAM message opcode: "+opcode );
@@ -623,7 +623,7 @@ class SAMv3Handler extends SAMv1Handler
         try {
             if (props.isEmpty()) {
                 notifyStreamResult(verbose, "I2P_ERROR","No parameters specified in STREAM CONNECT message");
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("No parameters specified in STREAM CONNECT message");
                 return false;
             }
@@ -631,7 +631,7 @@ class SAMv3Handler extends SAMv1Handler
             String dest = (String) props.remove("DESTINATION");
             if (dest == null) {
                 notifyStreamResult(verbose, "I2P_ERROR", "Destination not specified in STREAM CONNECT message");
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Destination not specified in STREAM CONNECT message");
                 return false;
             }
@@ -640,23 +640,23 @@ class SAMv3Handler extends SAMv1Handler
                 ((SAMv3StreamSession)streamSession).connect( this, dest, props );
                 return true ;
             } catch (DataFormatException e) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Invalid destination in STREAM CONNECT message");
                 notifyStreamResult ( verbose, "INVALID_KEY", e.getMessage());
             } catch (ConnectException e) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( verbose, "CONNECTION_REFUSED", e.getMessage());
             } catch (NoRouteToHostException e) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
             notifyStreamResult ( verbose, "CANT_REACH_PEER", e.getMessage());
             } catch (InterruptedIOException e) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
             notifyStreamResult ( verbose, "TIMEOUT", e.getMessage());
             } catch (I2PException e) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
             }
@@ -675,7 +675,7 @@ class SAMv3Handler extends SAMv1Handler
                 notifyStreamResult( true, "OK", null );
                 return true ;
             } catch (SAMException e) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Forwarding STREAM connections failed" + "\n* Error: " + e.getMessage());
             notifyStreamResult ( true, "I2P_ERROR", "Forwarding failed : " + e.getMessage() );
             }
@@ -693,15 +693,15 @@ class SAMv3Handler extends SAMv1Handler
                 ((SAMv3StreamSession)streamSession).accept(this, verbose);
                 return true ;
             } catch (InterruptedIOException e) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
                     notifyStreamResult( verbose, "TIMEOUT", e.getMessage() );
             } catch (I2PException e) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
                     notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
             } catch (SAMException e) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( verbose, "ALREADY_ACCEPTING", e.getMessage());
             }

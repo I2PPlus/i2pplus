@@ -28,7 +28,7 @@ import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 
 /**
- * Data for a new connection being established, where we initiated the 
+ * Data for a new connection being established, where we initiated the
  * connection with a remote peer.  In other words, we are Alice and
  * they are Bob.
  *
@@ -61,6 +61,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     private static final long MAX_SKEW = 2*60*1000L;
 
     /**
+     *  Prepare to start a new handshake with the given peer.
+     *
+     *  Caller must then check getState() and build a
+     *  Token Request or Session Request to send to the peer.
+     *
      *  @param claimedAddress an IP/port based RemoteHostId, or null if unknown
      *  @param remoteHostId non-null, == claimedAddress if direct, or a hash-based one if indirect
      *  @param remotePeer must have supported sig type
@@ -107,7 +112,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _mtu = mtu;
         // TODO if RI too big, give up now
         if (addr.getIntroducerCount() > 0) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("new outbound establish to " + remotePeer.calculateHash() + ", with address: " + addr);
             _currentState = OutboundState.OB_STATE_PENDING_INTRO;
         } else {
@@ -155,7 +160,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _handshakeState.getLocalKeyPair().setKeys(_transport.getSSU2StaticPrivKey(), 0,
                                                   _transport.getSSU2StaticPubKey(), 0);
     }
-    
+
     public synchronized void restart(long token) {
         _token = token;
         HandshakeState old = _handshakeState;
@@ -274,7 +279,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     /////////////////////////////////////////////////////////
     // end payload callbacks
     /////////////////////////////////////////////////////////
-    
+
     // SSU 1 overrides
 
     @Override
@@ -367,7 +372,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     public synchronized void receiveSessionCreated(UDPPacket packet) throws GeneralSecurityException {
         ////// todo fix state check
         if (_currentState == OutboundState.OB_STATE_VALIDATION_FAILED) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Session created already failed");
             return;
         }

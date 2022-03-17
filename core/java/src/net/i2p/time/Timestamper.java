@@ -10,23 +10,23 @@ package net.i2p.time;
  * Deprecated outside of the router.
  */
 public class Timestamper implements Runnable {
-    
+
     /** dummy */
     public Timestamper() {}
-    
+
     /** dummy */
     public void waitForInitialization() {}
-    
+
     /**
      *  Update the time immediately.
      *  Dummy
      *  @since 0.8.8
      */
     public void timestampNow() {}
-    
+
     /** dummy */
     public void run() {}
-    
+
     /**
      * Interface to receive update notifications for when we query the time
      * Only used by Clock.

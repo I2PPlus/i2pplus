@@ -482,7 +482,7 @@ public class GeoIP {
             geoFile = new File(_context.getBaseDir(), geoDir);
         geoFile = new File(geoFile, GEOIP2_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("GeoIP2 file not found: " + geoFile.getAbsolutePath());
             return null;
         }
@@ -528,7 +528,7 @@ public class GeoIP {
             geoFile = new File(_context.getBaseDir(), geoDir);
         geoFile = new File(geoFile, COUNTRY_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Country file not found: " + geoFile.getAbsolutePath());
             return;
         }
@@ -550,7 +550,7 @@ public class GeoIP {
                 }
             }
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error reading the Country File", ioe);
         } finally {
             if (br != null) try { br.close(); } catch (IOException ioe) {}
@@ -590,7 +590,7 @@ public class GeoIP {
             geoFile = new File(_context.getBaseDir(), geoDir);
         geoFile = new File(geoFile, GEOIP_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("GeoIP file not found: " + geoFile.getAbsolutePath());
             return new String[0];
         }
@@ -626,7 +626,7 @@ public class GeoIP {
                 }
             }
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error reading the geoFile", ioe);
         } finally {
             if (br != null) try { br.close(); } catch (IOException ioe) {}
@@ -787,6 +787,11 @@ public class GeoIP {
      * @param ip IPv4 or IPv6
      */
     public void add(byte ip[]) {
+        // skip he.net tunnel 2001:470:: so we will get correct geoip from IPv4
+        if (ip.length == 16 &&
+            ip[0] == 0x20 && ip[1] == 0x01 &&
+            ip[2] == 0x04 && ip[3] == 0x70)
+            return;
         add(toLong(ip));
     }
 
@@ -820,6 +825,11 @@ public class GeoIP {
      * @return lower-case code, generally two letters, or null.
      */
     String get(byte ip[]) {
+        // skip he.net tunnel 2001:470:: so we will get correct geoip from IPv4
+        if (ip.length == 16 &&
+            ip[0] == 0x20 && ip[1] == 0x01 &&
+            ip[2] == 0x04 && ip[3] == 0x70)
+            return null;
         return get(toLong(ip));
     }
 

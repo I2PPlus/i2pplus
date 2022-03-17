@@ -136,7 +136,7 @@ public class DecayingBloomFilter {
             _decayEvent = new DecayEvent();
             _decayEvent.schedule(_durationMs);
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
            _log.warn("New DBF " + name + " m = " + m + " k = " + k + " entryBytes = " + entryBytes +
                      " numExtenders = " + numExtenders + " cycle (s) = " + (durationMs / 1000));
         // try to get a handle on memory usage vs. false positives
@@ -306,7 +306,7 @@ public class DecayingBloomFilter {
         try {
             BloomSHA1 tmp = _previous;
             currentCount = _current.size();
-            if (_log.shouldLog(Log.DEBUG) && currentCount > 0)
+            if (_log.shouldDebug() && currentCount > 0)
                 fpr = _current.falsePositives();
             _previous = _current;
             _current = tmp;
@@ -314,7 +314,7 @@ public class DecayingBloomFilter {
             dups = _currentDuplicates;
             _currentDuplicates = 0;
         } finally { releaseWriteLock(); }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Decaying the " + _name + " filter after inserting " + currentCount
                        + " elements and " + dups + " false positives with FPR = " + fpr);
         _context.statManager().addRateData("router.decayingBloomFilter." + _name + ".size",
@@ -323,7 +323,7 @@ public class DecayingBloomFilter {
             _context.statManager().addRateData("router.decayingBloomFilter." + _name + ".dups",
                                                1000l*1000*dups/currentCount);
         if (fpr > 0d) {
-            // only if log.shouldLog(Log.DEBUG) ...
+            // only if log.shouldDebug() ...
             long exponent = (long) Math.log10(fpr);
             _context.statManager().addRateData("router.decayingBloomFilter." + _name + ".log10(falsePos)",
                                                exponent);

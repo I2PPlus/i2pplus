@@ -77,7 +77,7 @@ public class BuildTestMessageJob extends JobImpl {
 
         // This is a test message - build a garlic with a DeliveryStatusMessage that
         // first goes to the peer then back to us.
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Building garlic message to test " + _target.getIdentity().getHash().toBase64());
         GarlicConfig config = buildGarlicCloveConfig();
         // TODO: make the last params on this specify the correct sessionKey and tags used
@@ -101,22 +101,22 @@ public class BuildTestMessageJob extends JobImpl {
 
     private GarlicConfig buildGarlicCloveConfig() {
         _testMessageKey = getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Test message key: " + _testMessageKey);
 
         DeliveryInstructions instructions = new DeliveryInstructions();
         instructions.setDeliveryMode(DeliveryInstructions.DELIVERY_MODE_ROUTER);
         instructions.setRouter(_target.getIdentity().getHash());
         instructions.setTunnelId(null);
-        
+
         GarlicConfig config = new GarlicConfig(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null),
                                                getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                _timeoutMs+getContext().clock().now()+2*Router.CLOCK_FUDGE_FACTOR,
                                                instructions);
-        
+
         PayloadGarlicConfig ackClove = buildAckClove();
         config.addClove(ackClove);
-        
+
         config.setRecipient(_target);
 
         return config;
@@ -134,9 +134,9 @@ public class BuildTestMessageJob extends JobImpl {
         DeliveryStatusMessage msg = new DeliveryStatusMessage(getContext());
         msg.setArrival(getContext().clock().now());
         msg.setMessageId(_testMessageKey);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Delivery status message key: " + _testMessageKey + " arrival: " + msg.getArrival());
-        
+
         PayloadGarlicConfig ackClove = new PayloadGarlicConfig(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null),
                                                                getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                                _timeoutMs+getContext().clock().now(),

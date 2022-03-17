@@ -19,14 +19,14 @@ public class SimpleStore {
 
     /**
      * set the answer
-     * 
-     * @param x 
+     *
+     * @param x
      */
     public void setAnswer(boolean x) {
         answer = x;
     }
     /**
-     * 
+     *
      * @return boolean
      */
     public boolean getAnswer() {

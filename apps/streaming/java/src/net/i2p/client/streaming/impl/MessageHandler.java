@@ -57,17 +57,17 @@ class MessageHandler implements I2PSessionMuxedListener {
             data = session.receiveMessage(msgId);
         } catch (I2PSessionException ise) {
             _context.statManager().addRateData("stream.packetReceiveFailure", 1);
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error receiving the message", ise);
             return;
         }
         if (data == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Received null data on " + session + "\n* Protocol: " + proto +
                           " fromPort: " + fromPort + " toPort: " + toPort);
             return;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Received " + data.length + " bytes on " + session +
                        "\n* " + _manager +
                        "\n* Protocol: " + proto +
@@ -84,7 +84,7 @@ class MessageHandler implements I2PSessionMuxedListener {
                 _log.warn("Received an invalid packet", ioobe);
         } catch (IllegalArgumentException iae) {
             _context.statManager().addRateData("stream.packetReceiveFailure", 1);
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Received an invalid packet", iae);
         }
     }
@@ -95,7 +95,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      * @param severity how bad the abuse is
      */
     public void reportAbuse(I2PSession session, int severity) {
-        if (_log.shouldLog(Log.ERROR))
+        if (_log.shouldError())
             _log.error("Abuse reported with severity " + severity);
         _manager.disconnectAllHard();
     }
@@ -106,7 +106,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      * @param session that has been terminated
      */
     public void disconnected(I2PSession session) {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("I2PSession disconnected");
         _manager.disconnectAllHard();
         // kill anybody waiting in accept()
@@ -131,7 +131,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      */
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         _restartPending.set(message.contains("restart"));
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Error occurred: " + message, error);
         //_manager.disconnectAllHard();
     }

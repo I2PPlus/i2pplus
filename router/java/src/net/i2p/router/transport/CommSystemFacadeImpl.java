@@ -138,7 +138,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         // Going to calculate, sort them
         Collections.sort(skews);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Peer clock skews (ms): \n* " + skews);
         // Calculate frame size
         int frameSize = Math.max((skews.size() * percentToInclude / 100), 1);
@@ -148,7 +148,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         long sum = 0;
         for (int i = first; i <= last; i++) {
             long value = skews.get(i).longValue();
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Adding clock skew " + i + " valued " + value + " s.");
             sum = sum + value;
         }
@@ -282,7 +282,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         List<RouterAddress> addresses = new ArrayList<RouterAddress>(_manager.getAddresses());
         if (addresses.size() > 1)
             Collections.sort(addresses, new AddrComparator());
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Creating addresses: " + addresses, new Exception("creator"));
         return addresses;
     }
@@ -476,7 +476,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         public void run() {
             long start = System.currentTimeMillis();
             _geoIP.blockingLookup();
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
         }
     }

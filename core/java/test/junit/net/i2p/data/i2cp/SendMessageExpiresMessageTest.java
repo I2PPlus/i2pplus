@@ -1,9 +1,9 @@
 package net.i2p.data.i2cp;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by str4d in 2012 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by str4d in 2012 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -21,9 +21,9 @@ import net.i2p.data.DateAndFlagsTest;
  *
  * @author str4d
  */
- 
+
  public class SendMessageExpiresMessageTest extends I2CPTstBase {
-    
+
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         SendMessageExpiresMessage msg = new SendMessageExpiresMessage();
         msg.setDestination((Destination)(new DestinationTest()).createDataStructure());
@@ -33,8 +33,8 @@ import net.i2p.data.DateAndFlagsTest;
         DateAndFlags daf = (DateAndFlags)(new DateAndFlagsTest()).createDataStructure();
         msg.setExpiration(daf.getDate());
         msg.setFlags(daf.getFlags());
-        return msg; 
+        return msg;
     }
-    public I2CPMessageImpl createStructureToRead() { return new SendMessageExpiresMessage(); }  
-    
+    public I2CPMessageImpl createStructureToRead() { return new SendMessageExpiresMessage(); }
+
 }

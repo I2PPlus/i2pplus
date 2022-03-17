@@ -83,7 +83,7 @@ class LocalHash extends Hash {
                 _xorCache.put(key, distance);
             }
           /****
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 // explicit buffer, since the compiler can't guess how long it'll be
                 StringBuilder buf = new StringBuilder(128);
                 buf.append("miss [").append(cached).append("] from ");
@@ -94,7 +94,7 @@ class LocalHash extends Hash {
           ****/
         } else {
           /****
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 // explicit buffer, since the compiler can't guess how long it'll be
                 StringBuilder buf = new StringBuilder(128);
                 buf.append("hit from ");

@@ -69,7 +69,7 @@ class ConnectionAcceptor implements Runnable
    */
   public synchronized void startAccepting() {
       stop = false;
-      if (_log.shouldLog(Log.WARN))
+      if (_log.shouldWarn())
           _log.warn("ConnectionAcceptor: start accepting new thread? " + (thread == null));
       if (thread == null) {
           thread = new I2PAppThread(this, "I2PSnark acceptor");
@@ -185,14 +185,14 @@ class ConnectionAcceptor implements Runnable
                 Hash h = socket.getPeerDestination().calculateHash();
                 if (socket.getLocalPort() == 80) {
                      _badCounter.increment(h);
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.error("Dropping incoming HTTP from [" + h.toBase64().substring(0,6) + "]");
                     try { socket.close(); } catch (IOException ioe) {}
                     continue;
                 }
                 int bad = _badCounter.count(h);
                 if (bad >= MAX_BAD) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Rejecting incoming connection from [" + h.toBase64().substring(0,6) +
                                   "] after " + bad + " failures (max is " + MAX_BAD + ")");
                     try { socket.close(); } catch (IOException ioe) {}
@@ -244,7 +244,7 @@ class ConnectionAcceptor implements Runnable
           }
         // catch oom?
       }
-      if (_log.shouldLog(Log.WARN))
+      if (_log.shouldWarn())
           _log.warn("ConnectionAcceptor closed");
   }
 
@@ -261,16 +261,16 @@ class ConnectionAcceptor implements Runnable
               OutputStream out = _socket.getOutputStream();
               // this is for the readahead in PeerAcceptor.connection()
               in = new BufferedInputStream(in);
-              if (_log.shouldLog(Log.DEBUG))
+              if (_log.shouldDebug())
                   _log.debug("Handling socket from [" + _socket.getPeerDestination().calculateHash() + "]");
               peeracceptor.connection(_socket, in, out);
           } catch (PeerAcceptor.ProtocolException ihe) {
               _badCounter.increment(_socket.getPeerDestination().calculateHash());
-              if (_log.shouldLog(Log.INFO))
+              if (_log.shouldInfo())
                   _log.info("Protocol error from [" + _socket.getPeerDestination().calculateHash() + "]", ihe);
               try { _socket.close(); } catch (IOException ignored) { }
           } catch (IOException ioe) {
-              if (_log.shouldLog(Log.DEBUG))
+              if (_log.shouldDebug())
                   _log.debug("Error handling connection from [" + _socket.getPeerDestination().calculateHash() + "]", ioe);
               try { _socket.close(); } catch (IOException ignored) { }
           }

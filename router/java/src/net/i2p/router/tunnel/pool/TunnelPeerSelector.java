@@ -90,11 +90,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Log log = ctx.logManager().getLog(TunnelPeerSelector.class);
             // no tunnels to build tunnels with
             if (settings.getAllowZeroHop()) {
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("no outbound tunnels or free inbound tunnels, but we do allow zeroHop: " + settings);
                 return 0;
             } else {
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("No outbound tunnels or free inbound tunnels, and we don't allow zeroHop: " + settings);
                 return -1;
             }
@@ -147,18 +147,18 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 if (ctx.profileOrganizer().isSelectable(peer)) {
                     rv.add(peer);
                 } else {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("Explicit peer [" + peerStr + "] is not selectable");
                 }
             } catch (DataFormatException dfe) {
-                if (log.shouldLog(Log.ERROR))
+                if (log.shouldError())
                     log.error("Explicit peer [" + peerStr + "] is improperly formatted", dfe);
             }
         }
 
         int sz = rv.size();
         if (sz == 0) {
-            log.logAlways(Log.WARN, "No valid explicit peers found, building zero hop");
+            log.logAlways(Log.WARN, "No valid explicit peers found, building zero hop tunnel...");
         } else if (sz > 1) {
             Collections.shuffle(rv, ctx.random());
         }
@@ -177,7 +177,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Collections.shuffle(rv, ctx.random());
         }
 
-        if (log.shouldLog(Log.INFO)) {
+        if (log.shouldInfo()) {
             StringBuilder buf = new StringBuilder();
             if (settings.getDestinationNickname() != null)
                 buf.append("peers for ").append(settings.getDestinationNickname());
@@ -455,11 +455,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             } else if (infoAge > 5*24*60*60*1000) {
                 // Only exclude long-unseen peers if we haven't just started up
                 if (ctx.router().getUptime() < DONT_EXCLUDE_PERIOD) {
-                    if (log.shouldLog(Log.DEBUG))
+                    if (log.shouldDebug())
                         log.debug("Not excluding a long-unseen peer, since we just started up.");
                     return false;
                 } else {
-                    if (log.shouldLog(Log.DEBUG))
+                    if (log.shouldDebug())
                         log.debug("Excluding a long-unseen peer.");
                     return true;
                 }

@@ -1,9 +1,9 @@
 package net.i2p.kademlia;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -21,7 +21,7 @@ import net.i2p.data.SimpleDataStructure;
  */
 public interface KBucket<T extends SimpleDataStructure> {
 
-    /** 
+    /**
      * Lowest order high bit for difference keys.
      * The lower-bounds distance of this bucket is 2**begin.
      * If begin == 0, this is the closest bucket.
@@ -53,7 +53,7 @@ public interface KBucket<T extends SimpleDataStructure> {
      * @return true if the key existed in the bucket before removing it, else false
      */
     public boolean remove(T key);
-    
+
     /**
      *  Update the last-changed timestamp to now.
      */

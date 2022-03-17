@@ -15,14 +15,14 @@ public class ReseedHandler extends HelperBase {
         _context = ctx;
     }
 
-    public void setReseedNonce(String nonce) { 
+    public void setReseedNonce(String nonce) {
         if (nonce == null) return;
         if (nonce.equals(System.getProperty("net.i2p.router.web.ReseedHandler.nonce")) ||
             nonce.equals(System.getProperty("net.i2p.router.web.ReseedHandler.noncePrev"))) {
             requestReseed();
         }
     }
-    
+
     private void requestReseed() {
         _context.netDb().reseedChecker().requestReseed();
     }

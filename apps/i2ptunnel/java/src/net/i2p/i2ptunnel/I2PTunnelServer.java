@@ -620,7 +620,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     public void run() {
         i2pss = sockMgr.getServerSocket();
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             if (_usePool)
                 _log.info("Starting executor with " + getHandlerCount() + " threads max");
             else
@@ -691,7 +691,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
                 if (!open)
                     break;
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
 //                    _log.error("Error accepting", ce);
                     _log.error("Error accepting server socket connection \n* " + ce.getMessage());
                 try {
@@ -705,7 +705,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
             } catch (RuntimeException e) {
                 // streaming borkage
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Uncaught exception accepting", e);
                 if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
                 // not killing the server..
@@ -778,7 +778,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  See PROP_USE_POOL, DEFAULT_USE_POOL, PROP_HANDLER_COUNT, DEFAULT_HANDLER_COUNT
      */
     protected void blockingHandle(I2PSocket socket) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Incoming connection to " + toString() + " (port " + socket.getLocalPort() +
                       ")\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
         long afterAccept = getTunnel().getContext().clock().now();
@@ -798,14 +798,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
             long afterHandle = getTunnel().getContext().clock().now();
             long timeToHandle = afterHandle - afterAccept;
-            if ( (timeToHandle > 1500) && (_log.shouldLog(Log.INFO)) )
+            if ( (timeToHandle > 1500) && (_log.shouldInfo()) )
                 _log.info("Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
                           "\n* Socket create: " + (afterSocket-afterAccept) + "ms");
         } catch (SocketException ex) {
             try {
                 socket.reset();
             } catch (IOException ioe) {}
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error connecting to server " + remoteHost + ':' + remotePort, ex);
         } catch (IOException ex) {
             _log.error("Error while waiting for I2PConnections", ex);

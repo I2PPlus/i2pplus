@@ -257,7 +257,7 @@ class UDPPacketReader {
         public long readSignedOnTime() {
             int offset = readBodyOffset() + Y_LENGTH + 1 + readIPSize() + 2 + 4;
             long rv = DataHelper.fromLong(_message, offset, 4);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Signed on time offset: " + offset + "; Val: " + rv
             //               + "\n* RawCreated: " + Base64.encode(_message, _payloadBeginOffset, _payloadLength));
             return rv;
@@ -708,14 +708,14 @@ class UDPPacketReader {
     public class RelayRequestReader extends Reader {
         public long readTag() {
             long rv = DataHelper.fromLong(_message, readBodyOffset(), 4);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Read Alice tag: " + rv);
             return rv;
         }
         public int readIPSize() {
             int offset = readBodyOffset() + 4;
             int rv = _message[offset] & 0xff;
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Read Alice ip size: " + rv);
             return rv;
         }
@@ -726,7 +726,7 @@ class UDPPacketReader {
             int size = _message[offset] & 0xff;
             offset++;
             System.arraycopy(_message, offset, target, targetOffset, size);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Read Alice ip: " + Base64.encode(target, targetOffset, size));
         }
         public int readPort() {
@@ -734,7 +734,7 @@ class UDPPacketReader {
             offset += _message[offset] & 0xff;
             offset++;
             int rv = (int)DataHelper.fromLong(_message, offset, 2);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Read Alice port: " + rv);
             return rv;
         }
@@ -745,7 +745,7 @@ class UDPPacketReader {
             offset += _message[offset] & 0xff;
             offset += 1 + 2;
             int rv = _message[offset] & 0xff;
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Read challenge size: " + rv);
             return rv;
         }
@@ -758,7 +758,7 @@ class UDPPacketReader {
             int sz = _message[offset] & 0xff;
             offset++;
             System.arraycopy(_message, offset, target, targetOffset, sz);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Read challenge data: " + Base64.encode(target));
         }
         public void readAliceIntroKey(byte target[], int targetOffset) {
@@ -769,7 +769,7 @@ class UDPPacketReader {
             offset++;
             offset += sz;
             System.arraycopy(_message, offset, target, targetOffset, SessionKey.KEYSIZE_BYTES);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Read Alice intro key: " + Base64.encode(target, targetOffset, SessionKey.KEYSIZE_BYTES)
             //              + " packet size: " + _payloadLength + " off: " + offset + " data: " + Base64.encode(_message));
         }
@@ -782,7 +782,7 @@ class UDPPacketReader {
             offset += sz;
             offset += SessionKey.KEYSIZE_BYTES;
             long rv = DataHelper.fromLong(_message, offset, 4);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Read request nonce: " + rv);
             return rv;
         }

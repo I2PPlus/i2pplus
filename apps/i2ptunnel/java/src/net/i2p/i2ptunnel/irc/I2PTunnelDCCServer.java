@@ -90,7 +90,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
      */
     @Override
     protected void blockingHandle(I2PSocket socket) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Incoming connection to '" + toString() + "' \n* From: " + socket.getPeerDestination().calculateHash().toBase64());
 
         try {
@@ -99,14 +99,14 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
             // Port is a one-time-use only
             LocalAddress local = _outgoing.remove(Integer.valueOf(myPort));
             if (local == null) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Rejecting incoming DCC connection for unknown port " + myPort);
                 try {
                     socket.close();
                 } catch (IOException ioe) {}
                 return;
             }
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Incoming DCC connection for I2P port " + myPort +
                           " sending to " + local.ia + ':' + local.port);
             try {

@@ -111,7 +111,7 @@ public interface IRandomStandalone extends Cloneable {
 
    /**
      * <p>Returns the next 8 bits of random data generated from this instance.</p>
-     * 
+     *
      * @return the next 8 bits of random data generated from this instance.
      * @throws IllegalStateException if the instance is not yet initialised.
      * theoretical limit for generating non-repetitive pseudo-random data.
@@ -122,7 +122,7 @@ public interface IRandomStandalone extends Cloneable {
      * <p>Fills the designated byte array, starting from byte at index
      * <code>offset</code>, for a maximum of <code>length</code> bytes with the
      * output of this generator instance.
-     * 
+     *
      * @param out the placeholder to contain the generated random bytes.
      * @param offset the starting index in <i>out</i> to consider. This method
      * does nothing if this parameter is not within <code>0</code> and

@@ -15,7 +15,7 @@
 *		- Added XML header, <?xml version="1.0"?> to setContent().
 *	05/11/04
 *		- Changed the XML header to <?xml version="1.0" encoding="utf-8"?> in setContent().
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.soap;
@@ -30,7 +30,7 @@ public class SOAPResponse extends HTTPResponse
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public SOAPResponse()
 	{
 		setRootNode(SOAP.createEnvelopeBodyNode());
@@ -56,17 +56,17 @@ public class SOAPResponse extends HTTPResponse
 	////////////////////////////////////////////////
 
 	private Node rootNode;
-	
+
 	private void setRootNode(Node node)
 	{
 		rootNode = node;
 	}
-	
+
 	private Node getRootNode()
 	{
 		return rootNode;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	SOAP Basic
 	////////////////////////////////////////////////
@@ -80,7 +80,7 @@ public class SOAPResponse extends HTTPResponse
 	{
 		return getRootNode();
 	}
-	
+
 	public Node getBodyNode()
 	{
 		Node envNode = getEnvelopeNode();
@@ -145,7 +145,7 @@ public class SOAPResponse extends HTTPResponse
 			return "";
 		return node.getValue();
 	}
-	
+
 	public String getFaultString()
 	{
 		Node node = getFaultStringNode();
@@ -153,7 +153,7 @@ public class SOAPResponse extends HTTPResponse
 			return "";
 		return node.getValue();
 	}
-	
+
 	public String getFaultActor()
 	{
 		Node node = getFaultActorNode();
@@ -165,21 +165,21 @@ public class SOAPResponse extends HTTPResponse
 	////////////////////////////////////////////////
 	//	XML Contents
 	////////////////////////////////////////////////
-	
+
 	public void setContent(Node node)
 	{
 		// Thanks for Ralf G. R. Bergs <Ralf@Ber.gs>, Inma Marin Lopez <inma@dif.um.es>.
 		String conStr = "";
 		conStr += SOAP.VERSION_HEADER;
 		conStr += "\n";
-		conStr += node.toString(); 
+		conStr += node.toString();
 		setContent(conStr);
 	}
 
 	////////////////////////////////////////////////
 	//	print
 	////////////////////////////////////////////////
-	
+
 	public void print()
 	{
 		Debug.message(toString());

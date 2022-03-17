@@ -144,7 +144,7 @@ class EventPumper implements Runnable {
     }
 
     public synchronized void startPumping() {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Starting NTCP pumper...");
         try {
             _selector = Selector.open();
@@ -179,7 +179,7 @@ class EventPumper implements Runnable {
      *  why this needs a queue.
      */
     public void register(ServerSocketChannel chan) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Registering ServerSocketChannel...");
         _wantsRegister.offer(chan);
         _selector.wakeup();
@@ -189,7 +189,7 @@ class EventPumper implements Runnable {
      *  Outbound
      */
     public void registerConnect(NTCPConnection con) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Registering " + con + "...");
         _context.statManager().addRateData("ntcp.registerConnect", 1);
         _wantsConRegister.offer(con);
@@ -223,10 +223,10 @@ class EventPumper implements Runnable {
                 } catch (ClosedSelectorException cse) {
                     continue;
                 } catch (IOException ioe) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Error selecting", ioe);
                 } catch (CancelledKeyException cke) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Error selecting", cke);
                     continue;
                 }
@@ -292,7 +292,7 @@ class EventPumper implements Runnable {
                                 if ((!key.isValid()) &&
                                     (!((SocketChannel)key.channel()).isConnectionPending()) &&
                                     con.getTimeSinceCreated(now) > 2 * NTCPTransport.ESTABLISH_TIMEOUT) {
-                                    if (_log.shouldLog(Log.INFO))
+                                    if (_log.shouldInfo())
                                         _log.info("Removing invalid key for: " + con);
                                     // this will cancel the key, and it will then be removed from the keyset
                                     con.close();
@@ -307,7 +307,7 @@ class EventPumper implements Runnable {
                                         // the data queued to be sent has already passed through
                                         // the bw limiter and really just wants to get shoved
                                         // out the door asap.
-                                        if (_log.shouldLog(Log.INFO))
+                                        if (_log.shouldInfo())
                                             _log.info("Failsafe write for " + con);
                                         setInterest(key, SelectionKey.OP_WRITE);
                                         failsafeWrites++;
@@ -351,7 +351,7 @@ class EventPumper implements Runnable {
                     // another 100% CPU workaround
                     // TODO remove or only if we appear to be looping with no interest ops
                     if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("EventPumper throttle " + loopCount + " loops in " +
                                       (now - lastFailsafeIteration) + " ms");
                         _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
@@ -370,7 +370,7 @@ class EventPumper implements Runnable {
         }
         try {
             if (_selector.isOpen()) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Closing down the event pumper with selection keys remaining");
                 Set<SelectionKey> keys = _selector.keys();
                 for (SelectionKey key : keys) {
@@ -391,7 +391,7 @@ class EventPumper implements Runnable {
                 }
                 _selector.close();
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Closing down the event pumper with no selection keys remaining");
             }
         } catch (IOException e) {
@@ -415,7 +415,7 @@ class EventPumper implements Runnable {
                 boolean connect = (ops & SelectionKey.OP_CONNECT) != 0;
                 boolean read = (ops & SelectionKey.OP_READ) != 0;
                 boolean write = (ops & SelectionKey.OP_WRITE) != 0;
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("ready ops for : " + key
                 //               + " accept? " + accept + " connect? " + connect
                 //               + " read? " + read
@@ -439,11 +439,11 @@ class EventPumper implements Runnable {
                     processWrite(key);
                 }
                 //if (!(accept || connect || read || write)) {
-                //    if (_log.shouldLog(Log.INFO))
+                //    if (_log.shouldInfo())
                 //        _log.info("key wanted nothing? con: " + key.attachment());
                 //}
             } catch (CancelledKeyException cke) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Key cancelled");
             }
         }
@@ -502,7 +502,7 @@ class EventPumper implements Runnable {
 
             if (!_transport.allowConnection()) {
                 String ip = chan.socket().getInetAddress().toString().replace("/", "");
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Refusing SessionRequest from " + ip + " -> NTCP connection limit reached");
                 try { chan.close(); } catch (IOException ioe) { }
                 return;
@@ -511,7 +511,7 @@ class EventPumper implements Runnable {
             byte[] ip = chan.socket().getInetAddress().getAddress();
             if (_context.blocklist().isBlocklisted(ip)) {
 // Already logged in Establishment Manager
-//                if (_log.shouldLog(Log.WARN))
+//                if (_log.shouldWarn())
 //                    _log.warn("Received SessionRequest from blocklisted IP address: " + chan.socket().getInetAddress());
                 try { chan.close(); } catch (IOException ioe) { }
                 return;
@@ -521,7 +521,7 @@ class EventPumper implements Runnable {
             int count = _blockedIPs.count(ba);
             if (count > 0) {
                 count = _blockedIPs.increment(ba);
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                    _log.warn("Blocking accept of IP address: " + Addresses.toString(ip) + " (count: " + count + ")");
                 _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
                 try { chan.close(); } catch (IOException ioe) { }
@@ -547,7 +547,7 @@ class EventPumper implements Runnable {
         final SocketChannel chan = con.getChannel();
         try {
             boolean connected = chan.finishConnect();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Processing connect for " + con + ": connected? " + connected);
             if (connected) {
                 if (shouldSetKeepAlive(chan))
@@ -564,7 +564,7 @@ class EventPumper implements Runnable {
                 _context.statManager().addRateData("ntcp.connectFailedTimeout", 1);
             }
         } catch (IOException ioe) {   // this is the usual failure path for a timeout or connect refused
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
 //                _log.info("Failed outbound " + con, ioe);
                 _log.info("Failed outbound " + con + " (" + ioe.getMessage() + ")");
             con.closeOnTimeout("Connect failed (10s timeout exceeded or connection refused) -> marking unreachable", ioe);
@@ -572,7 +572,7 @@ class EventPumper implements Runnable {
             _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
         } catch (NoConnectionPendingException ncpe) {
             // ignore
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error connecting on " + con, ncpe);
         }
     }
@@ -618,17 +618,17 @@ class EventPumper implements Runnable {
                             byte[] ip = addr.getAddress();
                             ByteArray ba = new ByteArray(ip);
                             count = _blockedIPs.increment(ba);
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("EOF on Inbound connection before receiving any data " +
                                           "\n* Blocking IP address: " + Addresses.toString(ip) + " (count: " + count + ") -> " + con);
                         } else {
                             count = 1;
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("EOF on Inbound connection before receiving any data: " + con);
                         }
                         _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
                     } else {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("EOF on " + con);
                     }
                     con.close();
@@ -643,12 +643,12 @@ class EventPumper implements Runnable {
                     int consec = con.gotZeroRead();
                     if (consec >= 5) {
                         _context.statManager().addRateData("ntcp.zeroReadDrop", 1);
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Fail safe zero read close " + con);
                         con.close();
                     } else {
                         _context.statManager().addRateData("ntcp.zeroRead", consec);
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Nothing to read for " + con + ", but remaining interested");
                     }
                     break;
@@ -685,8 +685,8 @@ class EventPumper implements Runnable {
         } catch (CancelledKeyException cke) {
             if (buf != null)
                 releaseBuf(buf);
-//            if (_log.shouldLog(Log.WARN)) _log.warn("Error reading on " + con, cke);
-            if (_log.shouldLog(Log.WARN)) _log.warn("Error reading on " + con + "\n* " + cke.getMessage());
+//            if (_log.shouldWarn()) _log.warn("Error reading on " + con, cke);
+            if (_log.shouldWarn()) _log.warn("Error reading on " + con + "\n* " + cke.getMessage());
             con.close();
             _context.statManager().addRateData("ntcp.readError", 1);
         } catch (IOException ioe) {
@@ -699,18 +699,18 @@ class EventPumper implements Runnable {
                 if (ip != null) {
                     ByteArray ba = new ByteArray(ip);
                     count = _blockedIPs.increment(ba);
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
 //                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + "): " + con, ioe);
                         _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + ") -> " + con +
                                   "\n* IO Error: " +  ioe.getMessage());
                 } else {
                     count = 1;
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("IO Error on Inbound before receiving any data: " + con);
                 }
                 _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
 //                    _log.info("Error reading on: " + con, ioe);
                     _log.warn("Error reading on: " + con + " (" + ioe.getMessage() + ")");
             }
@@ -731,7 +731,7 @@ class EventPumper implements Runnable {
                 releaseBuf(buf);
             // ???
             clearInterest(key, SelectionKey.OP_READ);
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error reading on: " + con, nyce);
         }
     }
@@ -801,14 +801,14 @@ class EventPumper implements Runnable {
             }
         // catch and close outside the write lock to avoid deadlocks in NTCPCon.locked_close()
         } catch (CancelledKeyException cke) {
-//            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con + "\n* Reason: " + cke.getMessage());
-            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con + "\n* Reason: Cancelled Key Exception");
+//            if (_log.shouldWarn()) _log.warn("Error writing on: " + con + "\n* Reason: " + cke.getMessage());
+            if (_log.shouldWarn()) _log.warn("Error writing on: " + con + "\n* Reason: Cancelled Key Exception");
             _context.statManager().addRateData("ntcp.writeError", 1);
             con.close();
             rv = true;
         } catch (IOException ioe) {
-//            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con + "\n* Reason: " + ioe.getMessage());
-            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con + "\n* Reason: IO Error");
+//            if (_log.shouldWarn()) _log.warn("Error writing on: " + con + "\n* Reason: " + ioe.getMessage());
+            if (_log.shouldWarn()) _log.warn("Error writing on: " + con + "\n* Reason: IO Error");
             _context.statManager().addRateData("ntcp.writeError", 1);
             con.close();
             rv = true;
@@ -829,7 +829,7 @@ class EventPumper implements Runnable {
                 setInterest(key, SelectionKey.OP_READ);
             } catch (CancelledKeyException cke) {
                 // ignore, we remove/etc elsewhere
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
 //                    _log.warn("Run Delayed Events: Cancelled Key Exception [1]", cke);
                     _log.warn("Run Delayed Events: Cancelled Key Exception [1]");
             } catch (IllegalArgumentException iae) {
@@ -846,7 +846,7 @@ class EventPumper implements Runnable {
                 //   at gnu.java.nio.EpollSelectorImpl.epoll_modify(EpollSelectorImpl.java:313)
                 //   at gnu.java.nio.EpollSelectionKeyImpl.interestOps(EpollSelectionKeyImpl.java:97)
                 //   ...4 more
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("gnu?", iae);
             }
         }
@@ -864,13 +864,13 @@ class EventPumper implements Runnable {
                 try {
                     setInterest(key, SelectionKey.OP_WRITE);
                 } catch (CancelledKeyException cke) {
-                   if (_log.shouldLog(Log.WARN))
+                   if (_log.shouldWarn())
 //                       _log.warn("Run Delayed Events: Cancelled Key Exception [2]", cke);
                        _log.warn("Run Delayed Events: Cancelled Key Exception [2]");
                     // ignore
                 } catch (IllegalArgumentException iae) {
                     // see above
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("gnu?", iae);
                 }
             }
@@ -883,7 +883,7 @@ class EventPumper implements Runnable {
                 SelectionKey key = chan.register(_selector, SelectionKey.OP_ACCEPT);
                 key.attach(chan);
             } catch (ClosedChannelException cce) {
-                if (_log.shouldLog(Log.WARN)) _log.warn("Error registering", cce);
+                if (_log.shouldWarn()) _log.warn("Error registering", cce);
             }
         }
 
@@ -908,14 +908,14 @@ class EventPumper implements Runnable {
                         processConnect(key);
                     }
                 } catch (IOException ioe) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
 //                        _log.warn("Error connecting to: " + Addresses.toString(naddr.getIP(), naddr.getPort()), ioe);
                         _log.warn("Error connecting to: " + Addresses.toString(naddr.getIP(), naddr.getPort()) + "\n* Error: " + ioe.getMessage());
                     _context.statManager().addRateData("ntcp.connectFailedIOE", 1);
                     _transport.markUnreachable(con.getRemotePeer().calculateHash());
                     con.close(true);
                 } catch (UnresolvedAddressException uae) {
-                    if (_log.shouldLog(Log.WARN)) _log.warn("Unresolved address connecting", uae);
+                    if (_log.shouldWarn()) _log.warn("Unresolved address connecting", uae);
                     _context.statManager().addRateData("ntcp.connectFailedUnresolved", 1);
                     _transport.markUnreachable(con.getRemotePeer().calculateHash());
                     con.close(true);
@@ -923,7 +923,7 @@ class EventPumper implements Runnable {
                     con.close(false);
                 }
             } catch (ClosedChannelException cce) {
-                if (_log.shouldLog(Log.WARN)) _log.warn("Error registering", cce);
+                if (_log.shouldWarn()) _log.warn("Error registering", cce);
             }
         }
 

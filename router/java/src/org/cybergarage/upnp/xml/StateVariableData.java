@@ -21,7 +21,7 @@ import org.cybergarage.upnp.control.*;
 
 public class StateVariableData extends NodeData
 {
-	public StateVariableData() 
+	public StateVariableData()
 	{
 	}
 
@@ -52,19 +52,19 @@ public class StateVariableData extends NodeData
 	public void setQueryListener(QueryListener queryListener) {
 		this.queryListener = queryListener;
 	}
-	
+
 	////////////////////////////////////////////////
 	// QueryResponse
 	////////////////////////////////////////////////
 
 	private QueryResponse queryRes = null;
 
-	public QueryResponse getQueryResponse() 
+	public QueryResponse getQueryResponse()
 	{
 		return queryRes;
 	}
 
-	public void setQueryResponse(QueryResponse res) 
+	public void setQueryResponse(QueryResponse res)
 	{
 		queryRes = res;
 	}

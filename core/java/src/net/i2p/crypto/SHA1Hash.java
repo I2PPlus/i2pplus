@@ -2,9 +2,9 @@ package net.i2p.crypto;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -25,12 +25,12 @@ public class SHA1Hash extends SimpleDataStructure {
     private int _cachedHashCode;
 
     public final static int HASH_LENGTH = SHA1.HASH_LENGTH;
-    
+
     /** @since 0.9.9 */
     public SHA1Hash() {
         super();
     }
-    
+
     /** @throws IllegalArgumentException if data is not 20 bytes (null is ok) */
     public SHA1Hash(byte data[]) {
         super(data);
@@ -52,7 +52,7 @@ public class SHA1Hash extends SimpleDataStructure {
         super.readBytes(in);
         _cachedHashCode = super.hashCode();
     }
-    
+
     /** a Hash is a hash, so just use the first 4 bytes for speed */
     @Override
     public int hashCode() {

@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
  *
  */
 interface EstablishState {
-    
+
     /**
      * Parse the contents of the buffer as part of the handshake.
      *

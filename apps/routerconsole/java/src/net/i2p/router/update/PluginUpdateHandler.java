@@ -54,7 +54,7 @@ class PluginUpdateHandler implements Checker, Updater {
         if (xpi2pURL != null) {
             xpi2pURL = xpi2pURL.replace("$OS", SystemVersion.getOS());
             xpi2pURL = xpi2pURL.replace("$ARCH", SystemVersion.getArch());
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Checking for updates for " + appName + ": " + xpi2pURL);
             try {
                 updateSources = Collections.singletonList(new URI(xpi2pURL));

@@ -46,7 +46,7 @@ public class RouterWatchdog implements Runnable {
         if (howLongAgo > MAX_JOB_RUN_LAG) {
             Job cur = _context.jobQueue().getLastJob();
             if (cur != null) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Last job was queued up " + DataHelper.formatDuration(howLongAgo)
                                + " ago: " + cur);
                 return false;
@@ -76,7 +76,7 @@ public class RouterWatchdog implements Runnable {
     }
 
     private void dumpStatus() {
-        if (_log.shouldLog(Log.ERROR)) {
+        if (_log.shouldError()) {
             RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
             Rate r = null;
             if (rs != null)
@@ -90,7 +90,7 @@ public class RouterWatchdog implements Runnable {
             double bps = (r != null ? r.getAverageValue() : 0);
             long max = Runtime.getRuntime().maxMemory();
             long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            _log.error("Watchdog status:" + 
+            _log.error("Watchdog status:" +
                        "\n* Comm system: " + _context.commSystem().getStatus() +
                        "\n* Peers: " + _context.commSystem().countActivePeers() +
                        "\n* Ready and waiting jobs: " + _context.jobQueue().getReadyCount() +
@@ -99,7 +99,7 @@ public class RouterWatchdog implements Runnable {
                        "\n* Send processing time: " + DataHelper.formatDuration((long)processTime) +
                        "\n* Send rate: " + DataHelper.formatSize((long)bps) + "Bps" +
                        "\n* Memory: " + DataHelper.formatSize(used) + "B / " + DataHelper.formatSize(max) + 'B');
-            
+
             if (_consecutiveErrors == 1) {
                 _log.log(Log.CRIT, "Router appears hung, or there is severe network congestion. Watchdog starts barking!");
                  _context.router().eventLog().addEvent(EventLog.WATCHDOG);

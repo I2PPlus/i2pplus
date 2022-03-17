@@ -1,8 +1,8 @@
 package net.i2p.client;
 
 /*
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 
 import java.io.IOException;

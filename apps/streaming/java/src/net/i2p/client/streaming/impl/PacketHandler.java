@@ -97,7 +97,7 @@ class PacketHandler {
     }
 
     void receivePacketDirect(Packet packet, boolean queueIfNoConn) {
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("packet received: " + packet);
 
         long sendId = packet.getSendStreamId();
@@ -142,12 +142,12 @@ class PacketHandler {
             if (packet.getSendStreamId() > 0) {
                 if (con.getOptions().getAnswerPings())
                     receivePing(con, packet);
-                else if (_log.shouldLog(Log.WARN))
+                else if (_log.shouldWarn())
                     _log.warn("Dropping ECHO packet on existing con: " + packet);
             } else if (packet.getReceiveStreamId() > 0) {
                 receivePong(packet);
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("ECHO packet received with no stream IDs: " + packet);
             }
             packet.releasePayload();
@@ -157,23 +157,23 @@ class PacketHandler {
         // the packet is pointed at a stream ID we're receiving on
         if (isValidMatch(con.getSendStreamId(), packet.getReceiveStreamId())) {
             // the packet's receive stream ID also matches what we expect
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("receive valid: " + packet);
             try {
                 con.getPacketHandler().receivePacket(packet, con);
             } catch (I2PException ie) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Received forged packet for " + con, ie);
             }
         } else {
             if (packet.isFlagSet(Packet.FLAG_RESET)) {
                 // refused
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Received reset: " + packet);
                 try {
                     con.getPacketHandler().receivePacket(packet, con);
                 } catch (I2PException ie) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Received forged reset for " + con, ie);
                 }
             } else {
@@ -192,7 +192,7 @@ class PacketHandler {
                             // ok, as expected...
                         } else {
                             // Apparently an i2pd bug...
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Received a SYN packet with the wrong IDs: [" + con + "]\n* Packet: " + packet);
                             sendReset(packet);
                             packet.releasePayload();
@@ -214,7 +214,7 @@ class PacketHandler {
                         }
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Received a SYN packet with the wrong IDs, sending reset: " + packet);
                     sendReset(packet);
                     packet.releasePayload();
@@ -222,7 +222,7 @@ class PacketHandler {
                     if (!con.getResetSent()) {
                         // someone is sending us a packet on the wrong stream
                         // It isn't a SYN so it isn't likely to have a FROM to send a reset back to
-                        if (_log.shouldLog(Log.WARN)) {
+                        if (_log.shouldWarn()) {
                             StringBuilder buf = new StringBuilder(512);
                             buf.append("Received a packet on the wrong stream: ");
                             buf.append(packet);
@@ -256,7 +256,7 @@ class PacketHandler {
         boolean ok = packet.verifySignature(_context, ba.getData());
         _cache.release(ba);
         if (!ok) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Can't send reset after receiving spoofed packet: " + packet);
             return;
         }
@@ -291,27 +291,27 @@ class PacketHandler {
             if (packet.getSendStreamId() > 0) {
                 if (_manager.answerPings())
                     receivePing(null, packet);
-                else if (_log.shouldLog(Log.WARN))
+                else if (_log.shouldWarn())
                     _log.warn("Dropping ECHO packet on unknown connection: " + packet);
             } else if (packet.getReceiveStreamId() > 0) {
                 receivePong(packet);
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("ECHO packet received with no stream IDs: " + packet);
             }
             packet.releasePayload();
         } else {
             // this happens a lot
-            if (_log.shouldLog(Log.INFO) && !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
+            if (_log.shouldInfo() && !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
                 _log.info("Packet received on an unknown stream (and not an ECHO or SYN): " + packet);
             if (sendId <= 0) {
                 Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
                 if (con != null) {
                     if ( (con.getHighestAckedThrough() <= 5) && (packet.getSequenceNum() <= 5) ) {
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Received additional packet without SendStreamID after the SYN\n* " + con + ": " + packet);
                     } else {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("hrmph, received while ACK of SYN was in flight\n* " + con + ": " + packet + " ACKed: " + con.getAckedPackets());
                         // allow unlimited packets without a SendStreamID for now
                     }
@@ -320,7 +320,7 @@ class PacketHandler {
                 }
             } else {
                 // if it has a send ID, it's almost certainly for a recently removed connection.
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     boolean recent = _manager.wasRecentlyClosed(packet.getSendStreamId());
                     _log.warn("Dropping packet with send ID but no connection found; recently disconnected? " +
                               recent + ' ' + packet);
@@ -348,10 +348,10 @@ class PacketHandler {
                 // We fix this by putting this packet on the syn queue too!
                 // Then ConnectionHandler.accept() will check the connection list
                 // and call receivePacket() above instead of receiveConnection().
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     _log.warn("Packet belongs to no other connections, putting on the SYN queue: " + packet);
                 }
-                if (_log.shouldLog(Log.DEBUG)) {
+                if (_log.shouldDebug()) {
                     StringBuilder buf = new StringBuilder(128);
                     for (Connection con : _manager.listConnections()) {
                         buf.append(con.toString()).append(" ");
@@ -382,7 +382,7 @@ class PacketHandler {
         boolean ok = packet.verifySignature(_context, spk, ba.getData());
         _cache.release(ba);
         if (!ok) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Bad ping, dropping: " + packet);
         } else {
             _manager.receivePing(con, packet);

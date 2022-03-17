@@ -28,7 +28,7 @@ public final class SimpleByteCache {
     /**
      * Get a cache responsible for objects of the given size
      *
-     * @param cacheSize how large we want the cache to grow 
+     * @param cacheSize how large we want the cache to grow
      *                  (number of objects, NOT memory size)
      *                  before discarding released objects.
      * @param size how large should the objects cached be?
@@ -56,7 +56,7 @@ public final class SimpleByteCache {
 
     private final TryCache<byte[]> _available;
     private final int _entrySize;
-    
+
     /** @since 0.9.36 */
     private static class ByteArrayFactory implements TryCache.ObjectFactory<byte[]> {
         private final int sz;
@@ -74,12 +74,12 @@ public final class SimpleByteCache {
         _available = new TryCache<byte[]>(new ByteArrayFactory(entrySize), maxCachedEntries);
         _entrySize = entrySize;
     }
-    
+
     private void resize(int maxCachedEntries) {
         // _available is now final, and getInstance() is not used anywhere,
         // all call sites just use static acquire()
     }
-    
+
     /**
      * Get the next available array, either from the cache or a brand new one
      */
@@ -93,7 +93,7 @@ public final class SimpleByteCache {
     private byte[] acquire() {
         return _available.acquire();
     }
-    
+
     /**
      * Put this array back onto the available cache for reuse
      */
@@ -113,7 +113,7 @@ public final class SimpleByteCache {
         //Arrays.fill(entry, (byte) 0);
         _available.release(entry);
     }
-    
+
     /**
      *  Clear everything (memory pressure)
      */

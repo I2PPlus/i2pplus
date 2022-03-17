@@ -24,30 +24,30 @@ import java.util.Vector;
 import org.cybergarage.net.HostInterface;
 import org.cybergarage.upnp.device.SearchListener;
 
-public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> 
+public class SSDPSearchSocketList extends Vector<SSDPSearchSocket>
 {
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	private InetAddress[] binds = null;
 	private String multicastIPv4 = SSDP.ADDRESS;
 	private String multicastIPv6 = SSDP.getIPv6Address();
 	private int port = SSDP.PORT;
 
-	public SSDPSearchSocketList() 
+	public SSDPSearchSocketList()
 	{
 	}
 	/**
-	 * 
-	 * @param binds The IP address that we will used for bindind the service 
+	 *
+	 * @param binds The IP address that we will used for bindind the service
 	 */
 	public SSDPSearchSocketList(InetAddress[] binds) {
 		this.binds = binds;
-	}	
+	}
 
 	/**
-	 * 
+	 *
 	 * @param binds The IP address that we will used for bindind the service
 	 * @param port	The port that we will used for bindind the service
 	 * @param multicastIPv4 The IPv4 address that we will used for multicast comunication
@@ -64,12 +64,12 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket>
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public SSDPSearchSocket getSSDPSearchSocket(int n)
 	{
 		return get(n);
 	}
-	
+
 	public void addSearchListener(SearchListener listener)
 	{
 		int nServers = size();
@@ -77,28 +77,28 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket>
 			SSDPSearchSocket sock = getSSDPSearchSocket(n);
 			sock.addSearchListener(listener);
 		}
-	}		
+	}
 
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public boolean open() {
 		InetAddress[] binds=this.binds;
 		String[] bindAddresses;
-		if(binds!=null){			
+		if(binds!=null){
 			bindAddresses = new String[binds.length];
 			for (int i = 0; i < binds.length; i++) {
 				bindAddresses[i] = binds[i].getHostAddress();
 			}
 		}else{
 			int nHostAddrs = HostInterface.getNHostAddresses();
-			bindAddresses = new String[nHostAddrs]; 
+			bindAddresses = new String[nHostAddrs];
 			for (int n=0; n<nHostAddrs; n++) {
 				bindAddresses[n] = HostInterface.getHostAddress(n);
 			}
-		}		
-		
+		}
+
 		for (int i = 0; i < bindAddresses.length; i++) {
 			if(bindAddresses[i]!=null){
 				SSDPSearchSocket ssdpSearchSocket;
@@ -111,7 +111,7 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket>
 		}
 		return true;
 	}
-		
+
 	public void close()
 	{
 		int nSockets = size();
@@ -121,11 +121,11 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket>
 		}
 		clear();
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public void start()
 	{
 		int nSockets = size();

@@ -239,11 +239,11 @@ public class TransportManager implements TransportEventListener {
     X25519KeyFactory getXDHFactory() {
         return _xdhThread;
     }
-    
+
     private void addTransport(Transport transport) {
         if (transport == null) return;
         Transport old = _transports.put(transport.getStyle(), transport);
-        if (old != null && old != transport && _log.shouldLog(Log.WARN))
+        if (old != null && old != transport && _log.shouldWarn())
             _log.warn("Replacing transport [" + transport.getStyle() + "]");
         transport.setListener(this);
     }
@@ -252,7 +252,7 @@ public class TransportManager implements TransportEventListener {
         if (transport == null) return;
         transport.setListener(null);
         Transport old = _transports.remove(transport.getStyle());
-        if (old != null && _log.shouldLog(Log.WARN))
+        if (old != null && _log.shouldWarn())
             _log.warn("Removing transport [" + transport.getStyle() + "]");
     }
 
@@ -470,7 +470,7 @@ public class TransportManager implements TransportEventListener {
         }
         for (Transport t : tps) {
             t.startListening();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Transport [" + t.getStyle() + "] started");
         }
         // kick UPnP - Do this to get the ports opened even before UDP registers an address
@@ -613,7 +613,7 @@ public class TransportManager implements TransportEventListener {
             if ((tempSkews == null) || (tempSkews.isEmpty())) continue;
             skews.addAll(tempSkews);
         }
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Transport manager returning " + skews.size() + " peer clock skews.");
         return skews;
     }
@@ -850,7 +850,7 @@ public class TransportManager implements TransportEventListener {
         Set<String> failedTransports = msg.getFailedTransports();
         for (Transport t : _transports.values()) {
             if (failedTransports.contains(t.getStyle())) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Skipping transport [" + t.getStyle() + "] as it already failed");
                 continue;
             }
@@ -859,11 +859,11 @@ public class TransportManager implements TransportEventListener {
             // to us via TCP, send via TCP)
             TransportBid bid = t.bid(msg.getTarget(), msg.getMessageSize());
             if (bid != null) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Transport [" + t.getStyle() + "] Bid: " + bid);
                 rv.add(bid);
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Transport [" + t.getStyle() + "] did not produce a bid");
             }
         }
@@ -884,7 +884,7 @@ public class TransportManager implements TransportEventListener {
                 continue;
             }
             if (failedTransports.contains(t.getStyle())) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Skipping transport [" + t.getStyle() + "] as it has already failed");
                 continue;
             }
@@ -898,11 +898,11 @@ public class TransportManager implements TransportEventListener {
                     msg.transportFailed(t.getStyle());
                 else if ( (rv == null) || (rv.getLatencyMs() > bid.getLatencyMs()) )
                     rv = bid;
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Transport [" + t.getStyle() + "] Bid: " + bid + " currently winning? " + (rv == bid)
                                + " (winning latency: " + rv.getLatencyMs() + " / " + rv + ")");
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Transport [" + t.getStyle() + "] did not produce a bid");
                 if (t.isUnreachable(peer))
                     unreachableTransports++;
@@ -951,14 +951,14 @@ public class TransportManager implements TransportEventListener {
      * @param fromRouterHash may be null, calculated from fromRouter if null
      */
     public void messageReceived(I2NPMessage message, RouterIdentity fromRouter, Hash fromRouterHash) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("I2NPMessage received: " + message.getClass().getSimpleName() /*, new Exception("Where did I come from again?") */ );
         try {
             _context.inNetMessagePool().add(message, fromRouter, fromRouterHash);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Added to in pool");
         } catch (IllegalArgumentException iae) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error receiving message", iae);
         }
     }

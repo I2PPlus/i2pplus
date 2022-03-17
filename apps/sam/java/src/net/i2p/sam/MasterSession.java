@@ -50,12 +50,12 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 	 * registered with the given nickname.
 	 *
 	 * Caller MUST call start().
-	 * 
+	 *
 	 * @param nick nickname of the session
 	 * @throws IOException
 	 * @throws DataFormatException
 	 */
-	public MasterSession(String nick, SAMv3DatagramServer dgServer, SAMv3Handler handler, Properties props) 
+	public MasterSession(String nick, SAMv3DatagramServer dgServer, SAMv3Handler handler, Properties props)
 			throws IOException, DataFormatException, SAMException {
 		super(nick);
 		for (int i = 0; i < INVALID_OPTS.length; i++) {
@@ -216,7 +216,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 	 *  Does nothing.
 	 */
 	public void stopDatagramReceiving() {}
-	
+
 	/**
 	 *  @throws IOException always
 	 */
@@ -282,22 +282,22 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 		sessions.clear();
 		super.close();
 	}
-        
+
 	// I2PSessionMuxedImpl interface
 
         public void disconnected(I2PSession session) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("I2P session disconnected");
             close();
         }
 
         public void errorOccurred(I2PSession session, String message,
                                   Throwable error) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("I2P error: " + message, error);
             close();
         }
-            
+
         public void messageAvailable(I2PSession session, int msgId, long size) {
             messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
                              I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
@@ -316,7 +316,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 close();
             }
         }
-        
+
         public void reportAbuse(I2PSession session, int severity) {
             _log.warn("Abuse reported (severity: " + severity + ")");
             close();
@@ -329,12 +329,12 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 	}
 
 	private class StreamAcceptor implements Runnable {
-		
+
 		private volatile boolean stop;
 
 		public StreamAcceptor() {
 		}
-		
+
 		public void stopRunning() {
 			stop = true;
 		}
@@ -353,12 +353,12 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 				} catch (SocketTimeoutException ste) {
 					continue;
 				} catch (ConnectException ce) {
-					if (_log.shouldLog(Log.WARN))
+					if (_log.shouldWarn())
 						_log.warn("Error accepting", ce);
 					try { Thread.sleep(50); } catch (InterruptedException ie) {}
 					continue;
 				} catch (I2PException ipe) {
-					if (_log.shouldLog(Log.WARN))
+					if (_log.shouldWarn())
 						_log.warn("Error accepting", ipe);
 					break;
 				}
@@ -397,7 +397,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 						try { i2ps.reset(); } catch (IOException ioe) {}
 					}
 				} else {
-					if (_log.shouldLog(Log.WARN))
+					if (_log.shouldWarn())
 						_log.warn("No subsession found for incoming streaming connection on port " + port);
 				}
 			}

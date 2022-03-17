@@ -131,7 +131,8 @@ ul {margin: 0; padding: 0}
 #sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 5px center / 16px}
 #sidebar #sb_localtunnels a {margin-top: -1px; padding: 3px 0; width: 100%; max-width: 156px; display: inline-block; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1; border-radius: 0 10px 10px 0; box-shadow: none}
 #sb_localtunnels a:active {box-shadow: inset 2px 2px 2px #000; background: linear-gradient(90deg, rgba(0,0,0,0), #020)}
-#sb_services img, #sb_localtunnels img {display: none}
+#sb_services img {display: none}
+#sb_localtunnels img {opacity: 0}
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {padding: 1px 3px; display: inline-block; vertical-align: middle}
 #sb_version {margin-top: 6px; margin-bottom: 5px}
 #sb_uptime {margin-bottom: -5px}
@@ -186,7 +187,8 @@ p:empty + .sb_notice {margin-top: 9px}
 
 /* update bar */
 #sidebar .sb_update {padding: 7px 5px 22px; width: calc(100% - 1px); position: relative}
-.sb_update b {margin: 3px 0 1px; display: inline-block;color: var(--ink)}
+#sidebar #shutdownInProgress {padding: 5px 5px 8px; width: calc(100% - 9px)}
+.sb_update b {margin: 3px 0; display: block; color: var(--ink)}
 .sb_updatestatus {margin: -7px -5px -2px; padding: 5px 2px; width: calc(100% - 2px); line-height: 1.3; font-style: italic; border-bottom: var(--border); box-shadow: var(--bevel)}
 #sidebar .sb_info .percentBarOuter {margin: 0 !important; width: calc(100% - 12px); display: inline-block; position: absolute; left: 1px; right: 1px; bottom: 1px; box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
 .sb_info .percentBarText {padding-top: 2px}
@@ -247,23 +249,6 @@ p:empty + .sb_notice {margin-top: 9px}
 .tunnelBuildStatus.hidden {color: #999}
 .tunnelBuildStatus.hidden::before {background: var(--tunn_hidden) var(--center) / 15px}
 
-/* console error messages */
-h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20px 20px 70px; min-width: 595px; word-wrap: break-word; text-align: justify; font-size: 10pt; border: var(--border); border-radius: 0 0 4px 4px; box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000; background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px); background-size: 44px, 100%, 100% 4px}
-#error500 #warning.sorry {border-radius: 0}
-.sorry p {line-height: 1.3}
-#warning2 {margin: -17px 2px 18px 226px; padding: 10px 20px 5px; min-width: 610px; background: #010}
-#error500 #sidebar a {line-height: 2}
-#error500 #warning2 {border: var(--border_hard); background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left; background-size: 100% 4px}
-#error500 #stacktrace {margin-top: 20px; margin-bottom: 20px}
-#error500 #warning2 p:first-child {text-decoration: none}
-#warning2 h3 {margin: -11px -20px 0; padding: 10px; text-align: left; border-width: 1px; border-radius: 0; border-left: none; border-right: none; box-shadow: inset 0 0 0 1px #700}
-#warning2 p {font-size: 9pt; text-align: left}
-#stacktrace p:first-of-type {margin-top: 20px}
-#stacktrace p {margin-bottom: 40px}
-#warning2 p + h3 {margin-top: -5px}
-#warning2 b {margin-right: 5px; min-width: 140px; display: inline-block; line-height: 1.5; text-align: right}
-.sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
-
 /* main section */
 .sb, .main, h1, #news, .confignav, .tab, .tab2, table.search, .applink, .sitemapLink, .sitemapLabel {border: var(--border_hard)}
 .main, #news, h1, .sorry {margin-left: 226px}
@@ -306,7 +291,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #newspage {margin: 18px 5px}
 
 /* top navigation */
-.confignav {margin: -1px -11px -1px; padding: 7px 7px 8px; font-weight: 700; line-height: 1.36; text-align: center; box-shadow: var(--bevel); background: var(--topnav); background-size: var(--topnav_size)}
+.confignav {margin: -1px -11px -1px; padding: 7px 7px 8px; font-weight: 700; line-height: 1.36; text-align: center; box-shadow: var(--bevel); background: var(--topnav)}
 #debug .confignav {margin-bottom: -4px; z-index: 999}
 #netdb .confignav {margin-bottom: 11px}
 .tab, .tab2 {margin: 0 -3px -1px -3px; padding: 1px 0 2px; min-width: 60px; display: inline-block; position: relative; box-sizing: border-box; vertical-align: middle; background: #000}
@@ -391,6 +376,16 @@ input[type=file] {background: none}
 #sb_manualReseed {background: var(--download) no-repeat center left 6px / 14px, var(--btn)}
 #sb_manualReseed:hover, #sb_manualReseed:focus, #sb_manualReseed:active {background: var(--download_hover) no-repeat center left 6px / 14px, var(--btn_hover_radial)}
 
+.sidebarlogo {text-align: center}
+#sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
+#sidebar button.download {margin: 5px 0 4px; padding: 6px 12px; width: calc(100% - 20px); border-radius: 20px; border: 1px solid #151; box-shadow: inset 0 0 3px 0 rgba(16,56,16,.2), inset 0 -2px 4px 0 rgba(0,0,0,.4), inset 0 0 3px 1px rgba(32,80,32,.2), inset 0 2px 8px 2px rgba(0,48,0,.7), 0 -2px 2px 1px #000; background: var(--glow_bottom), linear-gradient(180deg, #000a00, #000400)}
+#sidebar button.download:hover, #sidebar button.download:focus {border: 1px solid #f60; box-shadow: inset 0 0 2px 0 rgba(96,32,0,.3), inset 0 0 3px 1px rgba(179,71,0,.4), inset 0 1px 9px 1px rgba(230,92,0,.3), inset 0 -3px 4px 0 rgba(0,0,0,.7), 0 0 2px 1px #000; background: linear-gradient(180deg, rgba(255,96,0,.01), rgba(230,88,0,.01), rgba(77,29,0,.01)), var(--glow_bottom_hover), linear-gradient(180deg, #520, #000)}
+#sidebar button.download:active {padding: 7px 11px 5px 13px; color: rgba(255,96,0,.5); text-shadow: 0 -1px 1px rgba(0,0,0,.7); box-shadow: var(--btn_shadow_active), 0 0 2px 1px #000; background: linear-gradient(180deg, #310, #520)}
+#sidebar button.cancel {min-width: 151px}
+#updateAvailable {margin: 0; padding: 4px 0 0; width: calc(100% - 20px); display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
+#updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #252; content: ""}
+#updateAvailable + br + button + br + #updateAvailable {margin-top: -10px}
+
 /* client config buttons aka project "X" */
 button.accept.control {background: var(--start) var(--center) / 14px, var(--btn)}
 button.accept.control:hover, button.accept.control:focus {background: #000 var(--start_hover) var(--center) / 14px}
@@ -412,14 +407,6 @@ button.download.control:hover, button.download.control:focus {background: #000 v
 button.download.control:active {background: var(--hover) var(--download_active) var(--center) / 14px}
 button.control:active {background-size: 12px; transition: ease background .05s}
 button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0}
-
-.sidebarlogo {text-align: center}
-#sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
-#sidebar button.download {margin-bottom: 3px; width: calc(100% - 10px)}
-#sidebar button.cancel {min-width: 151px}
-#updateAvailable {margin: 0; padding: 4px 0 0; width: calc(100% - 20px); display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
-#updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #252; content: ""}
-#updateAvailable + br + button + br + #updateAvailable {margin-top: -10px}
 
 .joblog hr {margin: 10px 0}
 .wideload > a[href^="tunnels"] ~ hr, .wideload > a[href^="/susidns/"] ~ hr {margin: 10px 0}
@@ -538,7 +525,7 @@ h3[id*="jobs"] {clear: both; margin-top: 25px}
 #jobstats + hr {display: none}
 #totaljobstats {margin-bottom: -2px; margin-top: 10px}
 #jobs ol {column-gap: 4px}
-#jobs li, #jobs li:first-child {margin: 0 4px; padding: 8px 6px; width: calc(100% - 8px); list-style: none; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000; background: linear-gradient(180deg,#000b00, #000600)}
+#jobs li, #jobs li:first-child {margin: 0 4px; padding: 8px 6px; width: calc(100% - 8px); list-style: none; box-shadow: var(--bevel), inset 0 0 0 3px #000; background: linear-gradient(180deg,#000b00, #000600)}
 #finishedjobs ol + #scheduledjobs + ol {margin-bottom: -1px}
 
 /* stats */
@@ -774,7 +761,7 @@ h3[id="udpcon"] {width: auto}
 #viewprofile td {padding: 0}
 #viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 48px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 7px solid #242; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
 #viewprofile span {margin: -26px -1px -1px 0; padding: 5px; float: right; border: var(--border); background: #000}
-#profiles_overview {margin-bottom: 9px; background-image: url(../images/profile.svg)}
+#profiles_overview {margin-bottom: 9px; background: url(../images/profile.svg) no-repeat 15px center / 28px, var(--msg)}
 #peerprofiles + h3 {margin-top: 10px}
 #profiles .version {margin: 0 2px}
 #profiles .ok, #ntcpconnections td.queue:empty::before {width: 12px; height: 12px; display: inline-block; vertical-align: middle; font-size: 0; background-size: 9px}
@@ -1282,7 +1269,7 @@ th code {user-select: all}
 #bannedpeers {margin-top: 15px}
 #banlist {margin: -1px 0 13px; padding: 8px 5px; columns: 328px auto; column-gap: 8px; column-rule: var(--dotted); border: var(--border); background: none}
 #profiles #banlist {margin: 3px -8px -1px; padding: 5px 0; border: none}
-#banlist li, #banlist li:first-child {margin: 4px 8px; padding: 6px 8px 6px 10px; width: calc(100% - 16px); min-height: 48px; display: inline-block; position: relative; list-style: none; text-shadow: var(--textshadow); border: 1px solid #121; box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000; background: linear-gradient(180deg,#000b00, #000600); box-sizing: border-box; -webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
+#banlist li, #banlist li:first-child {margin: 4px 8px; padding: 6px 8px 6px 10px; width: calc(100% - 16px); min-height: 48px; display: inline-block; position: relative; list-style: none; text-shadow: var(--textshadow); border: 1px solid #121; box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--bevel), inset 0 0 0 3px #000; background: linear-gradient(180deg,#000b00, #000600); box-sizing: border-box; -webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 #banlist li::first-line {color: #bb8}
 #banlist .routerid, #banlist .routerid .flag {padding: 0; vertical-align: middle; border: none}
 #banlist .routerid {margin: -1px 1px 1px 0}
@@ -1373,7 +1360,7 @@ th code {user-select: all}
 /* home search */
 #searchbar {margin: -24px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center; animation: fade .1s .5s reverse both, slide .05s linear 1s both}
 #searchbar span {margin: 5px 5px 0; padding: 1px; display: inline-block; position: relative; overflow: hidden; border: 1px solid #151; border-radius: 2px; background: none}
-#searchbar span:focus-within {box-shadow: inset -38px 0 1px 2px rgba(0,0,0,.6), inset 0 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.8), 0 0 0 3px rgba(144,48,0,.7); background: var(--input_txt); transition: linear box-shadow .15s}
+#searchbar span:focus-within {box-shadow: inset -38px 0 1px 2px rgba(0,0,0,.6), inset 0 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #000, 0 0 2px 1px #f60, 0 0 3px 1px rgba(255,96,0,.9); background: var(--input_txt); transition: linear box-shadow .15s}
 #searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 2px 2px; border-collapse: separate; border: 1px solid #151; background: var(--panel); box-shadow: var(--bevel)}
 #searchbar td {padding: 0; border: none; box-shadow: none; background: none}
 #searchbar input[type=text] {margin: 1px 0 -2px 198px; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px); border-radius: 0; box-shadow: none; background: #000; border: none; filter: none}
@@ -1485,7 +1472,7 @@ td.infohelp.joinfamily {padding: 20px 24px 20px 58px}
 td.optionsave {padding: 5px; text-align: right; border-top: var(--border); background: #000}
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-top: 0; line-height: 0}
 th.th_title {padding: 8px 10px; position: static; text-align: left; background: var(--h1); background-size: 2px, 100% 4px, 100%, 128px}
-#bannedpeercount {background: #000 var(--ban) no-repeat 15px center / 28px}
+#bannedpeercount {background: var(--ban) no-repeat 15px center / 28px, var(--msg)}
 #clientsconfig {margin-top: -2px}
 #clientsconfig, #webappconfigactions, #pluginconfigactions {margin-bottom: -4px; padding: 5px; border: var(--border); background: #000}
 
@@ -1495,7 +1482,6 @@ th.th_title {padding: 8px 10px; position: static; text-align: left; background: 
 #floodfillconfig form, #plugininstall form, #updateplugins form, .configtable form {margin-bottom: 0}
 #i2pclientconfig, #pconfig, #pluginfromurl, #pluginfromfile, #webappconfiguration {margin-bottom: -14px}
 .infowarn#clientconf {margin: 0 0 -2px}
-#javaclienthelp {padding: 10px 10px 10px 50px; border: var(--border); background: var(--infohelp) no-repeat 15px center}
 #loggingoptions, #addkeyring {margin-bottom: -3px; margin-top: 0}
 #manualreseed table tr, #newfamily tr:last-child table tr {box-shadow: none}
 #netconfig th, #externali2cp th, #plugininstall th, #plugininstall2 th, .configtable th, th.th_title {padding: 7px 10px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; text-align: left; font-size: 10pt}
@@ -1533,7 +1519,7 @@ th.th_title {padding: 8px 10px; position: static; text-align: left; background: 
 #config_service a[href$="#alternative_browser"] img {display: none}
 #config_service a[href$="#alternative_browser"]::after, #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after {background: var(--helplink) var(--center)}
 #config_service a[href$="#alternative_browser"]:hover::after, #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center)}
-#config_service a[href$="#alternative_browser"]::after {margin: -3px 0 -4px -3px; padding: 4px 0 2px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background-size: 18px; content: ""}
+#config_service a[href$="#alternative_browser"]::after {margin: -4px 0 -4px -3px; padding: 4px 0 2px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background-size: 18px; content: ""}
 #iptransport a, #advancedconfig a, #reseedsetup a {font-size: 0}
 #iptransport a, th#upnpconfig a, #bwlimiter a, #config_stats h3 a, #config_logging h3 a, #graphdisplay a, #logs h3 a, #advancedconfig a, .h3navlinks, #reseedsetup a {float: right}
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center) / 18px}
@@ -1681,7 +1667,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover, #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {border: var(--border); box-shadow: var(--option_highlight); transition: ease box-shadow .5s}
 #manualreseed {margin: -1px 0 -4px; background: none}
 #manualreseed td {padding: 5px; border-bottom: var(--border)}
-#manualreseed td.infohelp {padding: 20px 24px 20px 58px; box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: #000 var(--infohelp) no-repeat 15px center / 28px}
+#manualreseed td.infohelp {padding: 20px 24px 20px 58px; box-shadow: var(--bevel); background: url(../images/reseed.svg) no-repeat 15px center / 28px, var(--msg)}
 #manualreseed tr:nth-last-child(2) td.infohelp {padding: 20px 24px 20px 58px; background: #000 var(--package) no-repeat 15px center / 28px}
 #manualreseed .optionsingle {padding: 5px 5px 0 45px}
 #manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type=file] {width: 50%; min-width: 0; max-width: 50%}
@@ -1695,7 +1681,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #reseedcreatefile p {margin: 0 10px; padding-top: 0; padding-bottom: 0; display: inline-block; line-height: 1.3}
 #reseedurl input[type=text], #reseedzip input[type=file], #reseedcreatefile p, #manualreseed input[type=text] {width: calc(100% - 5px)}
 
-#shutdown, #restart, #systray, #runonstart, #dumpthreads, #browserstart {margin-top: -12px; margin-bottom: 5px; padding: 5px; border: var(--border); background: #000}
+#shutdown, #restart, #systray, #runonstart, #dumpthreads, #browserstart {margin-top: -11px; margin-bottom: 5px; padding: 5px; border: var(--border); background: #000}
 #netconfig .suboption, #externali2cp .suboption {padding-top: 3px; padding-bottom: 3px}
 #externali2cp td {padding: 5px}
 
@@ -1915,6 +1901,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #i2pupdates .optbox {margin-left: 10px}
 #i2pupdates input[name*="URL"], #i2pupdates textarea {width: calc(100% - 17px)}
 #i2pupdates textarea, #i2pupdates input[type=text] {margin: 5px 5px 5px 10px; width: calc(100% - 216px); min-width: 0}
+#i2pupdates input[type=text]:read-only {pointer-events: none}
 #i2pupdates textarea {height: 76px; min-height: 32px}
 #i2pupdates textarea {margin: 6px 0 6px 10px; padding: 3px 5px; height: 76px; min-height: 76px}
 #i2pupdates .optiontextarea .nowrap::after {content: none}
@@ -2046,8 +2033,8 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #joinfamily tr:nth-child(3) td table td {background-color: #010}
 #joinfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939; background: #010 var(--key) no-repeat 10px center; background-size: 28px, 100%, 100%}
 #joinfamily .optionsingle:hover, #joinfamily .optionsingle:hover tr, #joinfamily .optionsingle:hover td, #newfamily .optionsingle:hover, #newfamily .optionsingle:hover tr, #newfamily .optionsingle:hover td {background-color: #020; transition: ease background .1s}
-#joinfamily .infohelp {box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: var(--joinfamily) no-repeat 15px center / 28px, var(--msg)}
-#newfamily .infohelp {box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: var(--newfamily) no-repeat 15px center / 28px, var(--msg)}
+#joinfamily .infohelp {box-shadow: var(--bevel); background: var(--joinfamily) no-repeat 15px center / 28px, var(--msg)}
+#newfamily .infohelp {box-shadow: var(--bevel); background: var(--newfamily) no-repeat 15px center / 28px, var(--msg)}
 #config_service .infohelp {text-align: left}
 #pluginconfig th:first-child {text-align: center}
 #pluginconfig td:first-child label {margin-left: 6px; padding: 3px 5px 3px 24px; min-width: 100px; display: inline-block; text-align: left; font-weight: 700; border-radius: 2px 15px 15px 2px; box-shadow: 0 0 0 1px #010, 0 0 0 2px rgba(0,0,0,.7); background: var(--plugin) no-repeat 5px center / 14px, linear-gradient(180deg,#020, #000); background-blend-mode: luminosity}
@@ -2388,6 +2375,23 @@ iframe {height: 0}
 .iframed h1 {margin: 0 5px 0 5px}
 .iframed div.sorry {margin: -1px 5px 10px 5px}
 
+/* console error pages */
+h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20px 20px 70px; min-width: 595px; word-wrap: break-word; text-align: justify; font-size: 10pt; border: var(--border); border-radius: 0 0 4px 4px; box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000; background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px); background-size: 44px, 100%, 100% 4px}
+#error500 #warning.sorry {border-radius: 0}
+.sorry p {line-height: 1.3}
+#warning2 {margin: -17px 2px 18px 226px; padding: 10px 20px 5px; min-width: 610px; background: #010}
+#error500 #sidebar a {line-height: 2}
+#error500 #warning2 {border: var(--border_hard); background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left; background-size: 100% 4px}
+#error500 #stacktrace {margin-top: 20px; margin-bottom: 20px}
+#error500 #warning2 p:first-child {text-decoration: none}
+#warning2 h3 {margin: -11px -20px 0; padding: 10px; text-align: left; border-width: 1px; border-radius: 0; border-left: none; border-right: none; box-shadow: inset 0 0 0 1px #700}
+#warning2 p {font-size: 9pt; text-align: left}
+#stacktrace p:first-of-type {margin-top: 20px}
+#stacktrace p {margin-bottom: 40px}
+#warning2 p + h3 {margin-top: -5px}
+#warning2 b {margin-right: 5px; min-width: 140px; display: inline-block; line-height: 1.5; text-align: right}
+.sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
+
 /* animations */
 @keyframes bar {from {width: calc(300%)}}
 @keyframes downloadbar {from {background: var(--download_bar)} to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}}
@@ -2659,7 +2663,6 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .sb_info .percentBarText {margin-top: -1px}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px}
 .sb_update {padding-bottom: 3px}
-.sb_update b {margin-bottom: 2px}
 #sb_localtunnels td:first-child {background-size: 18px}
 #sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {padding-top: 10px; padding-bottom: 10px}
 .search td {padding: 6px 6px 6px 5px}
@@ -2752,6 +2755,7 @@ span#newtab {margin-top: 4px}
 #warning2.sorry {margin: -17px 5px 18px 272px}
 #sb_status {margin: -9px 0 -7px}
 }
+
 @media screen and (min-width: 1634px) {.leasesets_container {margin-bottom: 8px} th code {font-size: 9pt}}
 @media screen and (min-width: 1800px) {#help .confignav {margin-left: -11px; margin-right: -11px; display: flex; justify-content: center; border-left: none; border-right: none} #help .tab, #help .tab2 {margin-left: 0; margin-right: 0; flex-grow: 1} .linkcontainer .applink:last-of-type {margin-bottom: 9px}}
 @media screen and (min-width: 1840px) {div[id^="config_"] .confignav {padding: 4px 4px 5px 3px; display: flex; flex-direction: row; flex-wrap: wrap; align-content: space-evenly; justify-content: center} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin: 0 -1px -1px 0; min-width: 70px; white-space: nowrap; flex: auto; flex-basis: content; flex-grow: .06} div[id^="config_"] .tab2:first-child {border-left: none} div[id^="config_"] .confignav {padding: 0} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin-top: -1px} div[id^="config_"] .tab:first-child {margin-left: -1px}} 

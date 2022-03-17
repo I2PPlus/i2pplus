@@ -32,7 +32,7 @@ class ClientWriterRunner implements Runnable {
 
     private static final int MAX_QUEUE_SIZE = 32;
     private static final long MAX_SEND_WAIT = 10*1000;
-    
+
     /**
      *  As of 0.9.11 does not start the thread, caller must call startWriting()
      */

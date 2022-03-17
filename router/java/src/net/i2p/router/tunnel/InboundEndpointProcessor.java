@@ -55,7 +55,7 @@ class InboundEndpointProcessor {
         Hash last = _config.getPeer(_config.getLength()-2);
         if (!last.equals(prev)) {
             // shouldn't happen now that we have good dup ID detection in BuildHandler
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Attempted Inbound Endpoint injection from " + prev
                                + ", expected " + last);
             return false;
@@ -66,7 +66,7 @@ class InboundEndpointProcessor {
 
         boolean ok = _validator.receiveIV(orig, offset, orig, offset + HopProcessor.IV_LENGTH);
         if (!ok) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Invalid IV, dropping at Inbound Endpoint... " + _config);
             return false;
         }
@@ -76,7 +76,7 @@ class InboundEndpointProcessor {
 
         if (_config.getLength() > 0) {
             int rtt = 0; // dunno... may not be related to an rtt
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Received " + length + " byte message through: " + _config);
             ProfileManager pm = _context.profileManager();
             // null for unit tests
@@ -103,7 +103,7 @@ class InboundEndpointProcessor {
         // dont include the endpoint, since that is the creator
         for (int i = cfg.getLength() - 2; i >= 0; i--) {
             OutboundGatewayProcessor.decrypt(ctx, orig, offset, length, cfg.getConfig(i));
-            //if (_log.shouldLog(Log.DEBUG)) {
+            //if (_log.shouldDebug()) {
                 //_log.debug("IV at hop " + i + ": " + Base64.encode(orig, offset, HopProcessor.IV_LENGTH));
                 //_log.debug("hop " + i + ": " + Base64.encode(orig, offset + HopProcessor.IV_LENGTH, length - HopProcessor.IV_LENGTH));
             //}

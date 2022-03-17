@@ -38,7 +38,7 @@ class OutboundTunnelEndpoint {
             // invalid IV
             // If we pass it on to the handler, it will fail
             // If we don't, the data buf won't get released from the cache... that's ok
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Invalid IV, dropping at Outbound Endpoint... " + _config);
             return;
         }
@@ -47,7 +47,7 @@ class OutboundTunnelEndpoint {
             // blame previous hop
             Hash h = _config.getReceiveFrom();
             if (h != null) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn(toString() + ": Blaming [" + h.toBase64().substring(0,6) + "] -> 50%");
                 _context.profileManager().tunnelFailed(h, 50);
             }
@@ -60,11 +60,11 @@ class OutboundTunnelEndpoint {
                 // Delivery type LOCAL is not supported at the OBEP
                 // We don't have any use for it yet.
                 // Don't send to OutboundMessageDistributor.distribute() which will NPE or fail
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Dropping messsage at Outbound Endpoint - unsupported delivery instruction type (LOCAL)");
                 return;
             }
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Outbound tunnel " + _config + " received a full message: " + msg +
                            " to be forwarded on to [" + toRouter.toBase64().substring(0,6) + "]" +
                            (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));

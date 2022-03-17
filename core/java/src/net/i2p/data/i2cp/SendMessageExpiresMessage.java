@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -84,7 +84,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      * Read the body into the data structures
      *
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     public void readMessage(InputStream in, int length, int type) throws I2CPMessageException, IOException {
@@ -98,10 +98,10 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * Write out the full message to the stream, including the 4 byte size and 1 
+     * Write out the full message to the stream, including the 4 byte size and 1
      * byte type header.  Override the parent so we can be more mem efficient
      *
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     public void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
@@ -114,7 +114,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
         if (_nonce < 0)
             throw new I2CPMessageException("No nonce");
         int len = 2 + _destination.size() + _payload.getSize() + 4 + 4 + DataHelper.DATE_LENGTH;
-        
+
         try {
             DataHelper.writeLong(out, 4, len);
             out.write((byte) MESSAGE_TYPE);
@@ -127,7 +127,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
             throw new I2CPMessageException("Error writing the msg", dfe);
         }
     }
-    
+
     @Override
     public int getType() {
         return MESSAGE_TYPE;

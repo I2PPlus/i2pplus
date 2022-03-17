@@ -27,13 +27,13 @@
 %>
 <jsp:setProperty name="newshelper" property="page" value="<%=fpath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
-<!DOCTYPE HTML>
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null)
         lang = ctx.getProperty("routerconsole.lang");
 %>
+<!DOCTYPE HTML>
 <html lang="<%=lang%>">
 <head><meta charset="utf-8"></head>
 <body id="sb">

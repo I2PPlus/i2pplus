@@ -156,7 +156,7 @@ class BuildExecutor implements Runnable {
                     allowed = throttle;
                     if (SystemVersion.getMaxMemory() >= 1024*1024*1024 && avg < 200)
                         allowed = throttle * 2;
-                    if (allowed < MAX_CONCURRENT_BUILDS && _log.shouldLog(Log.INFO))
+                    if (allowed < MAX_CONCURRENT_BUILDS && _log.shouldInfo())
                         _log.info("Throttling max tunnel builds to " + allowed +
                                   " due to average build time of " + ((int) avg) + "ms");
                 }
@@ -170,7 +170,7 @@ class BuildExecutor implements Runnable {
             allowed *= 2;
         if (allowed > MAX_CONCURRENT_BUILDS) {
             allowed = MAX_CONCURRENT_BUILDS;
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("No throttling of concurrent tunnel builds currently active (max is " + allowed + ")");
         }
         allowed = _context.getProperty("router.tunnelConcurrentBuilds", allowed);
@@ -207,7 +207,7 @@ class BuildExecutor implements Runnable {
         if (expired != null) {
             for (int i = 0; i < expired.size(); i++) {
                 PooledTunnelCreatorConfig cfg = expired.get(i);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Timeout (" + BuildRequestor.REQUEST_TIMEOUT / 1000 + "s) waiting for tunnel build reply -> " + cfg);
 
                 // Iterate through peers in the tunnel, get their bandwidth tiers,
@@ -255,7 +255,7 @@ class BuildExecutor implements Runnable {
 
         long lag = _context.jobQueue().getMaxLag();
         if ( (lag > 2000) && (_context.router().getUptime() > 5*60*1000) ) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Job queue too lagged (" + lag + "ms) - slowing down new tunnel builds...");
             _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
 //            return 0; // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
@@ -269,7 +269,7 @@ class BuildExecutor implements Runnable {
         if (allowed < 3) {
              allowed += 3; allowed *= 4;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Current maximum tunnel concurrent build rate: " + allowed);
         return allowed;
     }
@@ -298,7 +298,7 @@ class BuildExecutor implements Runnable {
         // Detect any fresh overload which could set back tunnel building
         if (Math.max(used1s,used15s) > overBuildLimit) {
 
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Overloaded, trouble building tunnels (maxKBps=" + maxKBps +
                            ", 1s=" + used1s + ", 15s=" + used15s + ", 1m=" + used1m + ")");
 
@@ -307,12 +307,12 @@ class BuildExecutor implements Runnable {
                 ((used1s > maxBps) && (used15s > overBuildLimit)) ||
                 ((used1s > overBuildLimit) && (used15s > overBuildLimit))) {
 
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Serious overload, allow building 0.");
 
                // If so configured, drop biggest participating tunnel
                if (Boolean.valueOf(_context.getProperty("router.dropTunnelsOnOverload","false")).booleanValue() == true) {
-                   if (_log.shouldLog(Log.WARN))
+                   if (_log.shouldWarn())
                        _log.warn("Requesting drop of biggest participating tunnel.");
                    _context.tunnelDispatcher().dropBiggestParticipating();
                }
@@ -321,12 +321,12 @@ class BuildExecutor implements Runnable {
                 // Mild overload, check if we already build tunnels
                 if (concurrent == 0) {
                     // We aren't building, allow 1
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Mild overload, allow building 1.");
                     return(1);
                 } else {
                     // Already building, allow 0
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Mild overload but already building " + concurrent + ", so allow 0.");
                     return(0);
                 }
@@ -339,7 +339,7 @@ class BuildExecutor implements Runnable {
 
     /** Set 1.5 * LOOP_TIME < BuildRequestor.REQUEST_TIMEOUT/4 - margin */
 //    private static final int LOOP_TIME = SystemVersion.isSlow() ? 1000 : 800;
-    private static final int LOOP_TIME = (SystemVersion.isSlow() && SystemVersion.getCores() < 6) ? 1000 : 400;
+    private static final int LOOP_TIME = (SystemVersion.isSlow() && SystemVersion.getCores() < 6) ? 1000 : 500;
 
     public void run() {
         _isRunning = true;
@@ -384,14 +384,14 @@ class BuildExecutor implements Runnable {
                 // allowed() also expires timed out requests (for new style requests)
                 int allowed = allowed();
 
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("Allowed: " + allowed + " wanted: " + wanted);
 
                 // zero hop ones can run inline
                 allowed = buildZeroHopTunnels(wanted, allowed);
                 //afterBuildZeroHop = System.currentTimeMillis();
 
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("Zero hops built, Allowed: " + allowed + " wanted: " + wanted);
 
                 //int realBuilt = 0;
@@ -408,7 +408,7 @@ class BuildExecutor implements Runnable {
                     }
                     synchronized (_currentlyBuilding) {
                         if (!_repoll) {
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("No tunnel to build with (allowed=" + allowed + ", wanted=" + wanted.size() + "), wait for a while");
                             try {
                                 _currentlyBuilding.wait(1*1000+_context.random().nextInt(1*1000));
@@ -444,7 +444,7 @@ class BuildExecutor implements Runnable {
                             if (cfg != null) {
                                 // 0hops are taken care of above, these are nonstandard 0hops
                                 if (cfg.getLength() <= 1 && !pool.needFallback()) {
-                                    if (_log.shouldLog(Log.DEBUG))
+                                    if (_log.shouldDebug())
                                         _log.debug("We don't need more fallbacks for " + pool);
                                     i--; //0hop, we can keep going, as there's no worry about throttling
                                     pool.buildComplete(cfg, Result.OTHER_FAILURE);
@@ -452,7 +452,7 @@ class BuildExecutor implements Runnable {
                                 }
                                 long pTime = System.currentTimeMillis() - bef;
                                 _context.statManager().addRateData("tunnel.buildConfigTime", pTime, 0);
-                                if (_log.shouldLog(Log.DEBUG))
+                                if (_log.shouldDebug())
                                     _log.debug("Configuring new tunnel [" + i + "] for " + pool + cfg);
                                 buildTunnel(cfg);
                                 //realBuilt++;
@@ -465,10 +465,11 @@ class BuildExecutor implements Runnable {
                         try {
                             synchronized (_currentlyBuilding) {
                                 if (!_repoll) {
-                                    //if (_log.shouldLog(Log.DEBUG))
+                                    //if (_log.shouldDebug())
                                     //    _log.debug("Nothin' doin (allowed=" + allowed + ", wanted=" + wanted.size() + ", pending=" + pendingRemaining + "), wait for a while");
                                     //if (allowed <= 0)
-                                    int delay = (SystemVersion.getCores() < 8 || SystemVersion.isSlow()) ? LOOP_TIME / 2 + _context.random().nextInt(LOOP_TIME) : LOOP_TIME / 2;
+                                    //int delay = (SystemVersion.getCores() < 8 || SystemVersion.isSlow()) ? LOOP_TIME / 2 + _context.random().nextInt(LOOP_TIME) : LOOP_TIME / 2;
+                                    int delay = (SystemVersion.getCores() < 8 || SystemVersion.isSlow()) ? LOOP_TIME : LOOP_TIME / 2;
                                     _currentlyBuilding.wait(delay);
                                     //else // wanted <= 0
                                     //    _currentlyBuilding.wait(_context.random().nextInt(30*1000));
@@ -480,7 +481,7 @@ class BuildExecutor implements Runnable {
                 }
 
 
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("build loop complete, tot=" + (afterHandleInbound-loopBegin) +
                 //              " inReply=" + (afterHandleInboundReplies-beforeHandleInboundReplies) +
                 //              " zeroHop=" + (afterBuildZeroHop-afterHandleInboundReplies) +
@@ -497,7 +498,7 @@ class BuildExecutor implements Runnable {
             pools.clear();
         }
 
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Done building");
     }
 
@@ -545,7 +546,7 @@ class BuildExecutor implements Runnable {
             if (pool.getSettings().getLength() == 0) {
                 PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
                 if (cfg != null) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Configuring short tunnel for " + pool + ": " + cfg);
                     buildTunnel(cfg);
                     if (cfg.getLength() > 1) {
@@ -553,7 +554,7 @@ class BuildExecutor implements Runnable {
                     }
                     iter.remove();
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Configured a null tunnel");
                 }
             }
@@ -601,7 +602,7 @@ class BuildExecutor implements Runnable {
      *  @since 0.9.53 added result parameter
      */
     public void buildComplete(PooledTunnelCreatorConfig cfg, Result result) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Build complete (" + result + ") for " + cfg);
         cfg.getTunnelPool().buildComplete(cfg, result);
         if (cfg.getLength() > 1)
@@ -617,13 +618,13 @@ class BuildExecutor implements Runnable {
                 _currentlyBuilding.notifyAll();
             }
         } else {
-            if (cfg.getLength() > 1 && _log.shouldLog(Log.INFO))
+            if (cfg.getLength() > 1 && _log.shouldInfo())
                 _log.info("Build completed really fast (" + buildTime + "ms)" + cfg);
         }
 
         long expireBefore = now + 10*60*1000 - BuildRequestor.REQUEST_TIMEOUT;
         if (cfg.getExpiration() <= expireBefore) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Build completed for expired tunnel " + cfg);
         }
         if (result == Result.SUCCESS) {
@@ -647,7 +648,7 @@ class BuildExecutor implements Runnable {
     }
 
     private void didNotReply(long tunnel, Hash peer) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("No reply from [" + peer.toBase64().substring(0,6) + "] to join [Tunnel " + tunnel + "]");
     }
 
@@ -683,7 +684,7 @@ class BuildExecutor implements Runnable {
             long requestedOn = rv.getExpiration() - 10*60*1000;
             long rtt = _context.clock().now() - requestedOn;
             _context.statManager().addRateData("tunnel.buildReplySlow", rtt, 0);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Received late reply (RTT: " + rtt + "ms) for: " + rv);
         }
         return rv;

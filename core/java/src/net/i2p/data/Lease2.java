@@ -16,7 +16,7 @@ import java.util.Date;
 public class Lease2 extends Lease {
 
     public static final int LENGTH = 40;
-    
+
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _gateway = Hash.create(in);
@@ -24,7 +24,7 @@ public class Lease2 extends Lease {
         _tunnelId.readBytes(in);
         _end = DataHelper.readLong(in, 4) * 1000;
     }
-    
+
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_gateway == null) || (_tunnelId == null))
@@ -33,7 +33,7 @@ public class Lease2 extends Lease {
         _tunnelId.writeBytes(out);
         DataHelper.writeLong(out, 4, _end / 1000);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -43,7 +43,7 @@ public class Lease2 extends Lease {
                && DataHelper.eq(_tunnelId, lse.getTunnelId())
                && DataHelper.eq(_gateway, lse.getGateway());
     }
-    
+
     @Override
     public int hashCode() {
         return (int) _end ^ DataHelper.hashCode(_gateway)

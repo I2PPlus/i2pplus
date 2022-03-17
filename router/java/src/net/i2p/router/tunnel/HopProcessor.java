@@ -76,7 +76,7 @@ class HopProcessor {
                 _config.setReceiveFrom(prev);
             } else if (!_config.getReceiveFrom().equals(prev)) {
                 // shouldn't happen now that we have good dup ID detection in BuildHandler
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Attempted mid-tunnel injection from " + prev
                                + ", expected " + _config.getReceiveFrom());
                 return false;
@@ -85,12 +85,12 @@ class HopProcessor {
 
         boolean okIV = _validator.receiveIV(orig, offset, orig, offset + IV_LENGTH);
         if (!okIV) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Invalid IV, dropping at hop... " + _config);
             return false;
         }
 
-        //if (_log.shouldLog(Log.DEBUG)) {
+        //if (_log.shouldDebug()) {
         //    _log.debug("IV received before decrypt: " + Base64.encode(orig, offset, IV_LENGTH));
         //    _log.debug("Data before processing:\n" + Base64.encode(orig, IV_LENGTH, orig.length - IV_LENGTH));
         //}
@@ -103,7 +103,7 @@ class HopProcessor {
                     orig, offset, length - IV_LENGTH);
         aes.encryptBlock(orig, offset, ivkey, orig, offset);
 
-        //if (_log.shouldLog(Log.DEBUG)) {
+        //if (_log.shouldDebug()) {
         //    _log.debug("IV sent: " + Base64.encode(orig, offset, IV_LENGTH));
         //    _log.debug("Data after processing:\n" + Base64.encode(orig, IV_LENGTH, orig.length - IV_LENGTH));
         //}

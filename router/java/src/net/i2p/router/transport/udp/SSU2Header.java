@@ -13,14 +13,14 @@ import static net.i2p.router.transport.udp.SSU2Util.*;
  *  @since 0.9.54
  */
 final class SSU2Header {
-    
+
     /** 8 bytes of zeros */
     public static final byte[] HEADER_PROT_DATA = new byte[HEADER_PROT_DATA_LEN];
     /** 12 bytes of zeros */
     public static final byte[] CHACHA_IV_0 = new byte[CHACHA_IV_LEN];
 
     private SSU2Header() {}
-    
+
     /**
      *  Session Request and Session Created only. 64 bytes.
      *  Packet is unmodified.

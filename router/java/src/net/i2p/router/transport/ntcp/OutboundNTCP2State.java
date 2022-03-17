@@ -144,7 +144,7 @@ class OutboundNTCP2State implements EstablishState {
     public synchronized void receive(ByteBuffer src) {
         if (_state == State.VERIFIED || _state == State.CORRUPT)
             throw new IllegalStateException(this + "received unexpected data on " + _con);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug(this + "Receiving: " + src.remaining() + " Received: " + _received);
         if (!src.hasRemaining())
             return; // nothing to receive
@@ -188,7 +188,7 @@ class OutboundNTCP2State implements EstablishState {
         if (!(_state == State.OB_INIT)) {
             throw new IllegalStateException(this + "unexpected prepareOutbound()");
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug(this + "send X");
         // write options directly to tmp, offset 32, will encrypt in-place
         // network ID cross-check, proposal 147

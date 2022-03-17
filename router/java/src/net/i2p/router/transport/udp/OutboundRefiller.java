@@ -39,24 +39,24 @@ class OutboundRefiller implements Runnable {
 
     public void run() {
         while (_alive) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Check the fragments to see if we can add more...");
             boolean wantMore = _fragments.waitForMoreAllowed();
             if (wantMore) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Want more fragments...");
                 OutNetMessage msg = _messages.getNext(-1);
                 if (msg != null) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("New message found to fragments: " + msg);
                     _context.statManager().addRateData("udp.timeToActive", msg.getLifetime(), msg.getLifetime());
                     _fragments.add(msg);
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("No message found to fragment");
                 }
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("No more fragments allowed, looping");
             }
         }

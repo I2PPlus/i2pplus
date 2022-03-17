@@ -75,7 +75,7 @@ public class ClientAppConfig {
     private final static long DEFAULT_STARTUP_DELAY = 2*60*1000;
     /** speed up i2ptunnel without rewriting clients.config */
     private final static long I2PTUNNEL_STARTUP_DELAY = -1000;
-    
+
     private static final String PROP_CLIENT_CONFIG_FILENAME = "router.clientConfigFile";
     private static final String DEFAULT_CLIENT_CONFIG_FILENAME = "clients.config";
     private static final String CLIENT_CONFIG_DIR = "clients.config.d";
@@ -278,7 +278,7 @@ public class ClientAppConfig {
      */
     private static ClientAppConfig getClientApp(Properties clientApps, String prefix) {
             String className = clientApps.getProperty(prefix + ".main");
-            if (className == null) 
+            if (className == null)
                 return null;
             String clientName = clientApps.getProperty(prefix + ".name");
             String args = clientApps.getProperty(prefix + ".args");

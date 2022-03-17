@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -57,20 +57,20 @@ class PeerMonitorTask implements Runnable
     int interesting = 0;
     int choking = 0;
     int choked = 0;
-    
+
     synchronized(coordinator.peers)
       {
         Iterator it = coordinator.peers.iterator();
         while (it.hasNext())
           {
             Peer peer = (Peer)it.next();
-            
+
             // Don't list dying peers
             if (!peer.isConnected())
               continue;
-            
+
             peers++;
-            
+
             if (!peer.isChoking())
               uploaders++;
             if (!peer.isChoked() && peer.isInteresting())
@@ -91,12 +91,12 @@ class PeerMonitorTask implements Runnable
     String totalDown = DataHelper.formatSize(downloaded) + "B";
     long uploaded = coordinator.getUploaded();
     String totalUp = DataHelper.formatSize(uploaded) + "B";
-    
+
     int needP = coordinator.storage.needed();
     long needMB = needP * coordinator.metainfo.getPieceLength(0) / (1024 * 1024);
     int totalP = coordinator.metainfo.getPieces();
     long totalMB = coordinator.metainfo.getTotalLength() / (1024 * 1024);
-    
+
     System.out.println();
     System.out.println("Down: "
                        + (downloaded - lastDownloaded) / KILOPERSECOND

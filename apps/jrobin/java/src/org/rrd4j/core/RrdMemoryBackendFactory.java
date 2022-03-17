@@ -42,7 +42,7 @@ public class RrdMemoryBackendFactory extends RrdBackendFactory {
      * {@inheritDoc}
      *
      * Method to determine if a memory storage with the given ID already exists.
-     * 
+     *
      */
     protected boolean exists(String id) {
         return backends.containsKey(id);

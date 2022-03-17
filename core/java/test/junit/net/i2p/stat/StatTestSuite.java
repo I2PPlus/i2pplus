@@ -1,9 +1,9 @@
 package net.i2p.stat;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -15,13 +15,13 @@ import junit.framework.TestSuite;
  * @author Comwiz
  */
 public class StatTestSuite {
-    
+
     public static Test suite() {
         TestSuite suite = new TestSuite("net.i2p.stat.StatTestSuite");
-        
+
         suite.addTestSuite(RateStatTest.class);
         suite.addTestSuite(RateTest.class);
-        
+
         return suite;
     }
 }

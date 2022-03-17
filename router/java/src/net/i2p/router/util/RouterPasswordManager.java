@@ -32,7 +32,7 @@ public class RouterPasswordManager extends PasswordManager {
     private static final String[] MIGRATE_FROM = {
         // This has a separate router.reseedProxy.username prop,
         // so let's not mess with it
-        "router.reseedProxy.password", 
+        "router.reseedProxy.password",
         // Don't migrate these until we have a console form for them,
         // which we aren't likely to ever bother with
         "routerconsole.keyPassword",
@@ -41,7 +41,7 @@ public class RouterPasswordManager extends PasswordManager {
         "i2cp.keystorePassword"
     };
     private static final String[] MIGRATE_TO = {
-        "router.reseedProxy.auth", 
+        "router.reseedProxy.auth",
         "routerconsole.ssl.key.auth",
         "routerconsole.ssl.keystore.auth",
         "i2cp.ssl.key.auth",
@@ -54,7 +54,7 @@ public class RouterPasswordManager extends PasswordManager {
         _context = ctx;
         migrate();
     }
-    
+
     /**
      *  Migrate from plaintext to salt/hash
      *
@@ -99,7 +99,7 @@ public class RouterPasswordManager extends PasswordManager {
     public boolean save(String realm, String user, String pw) {
         return saveHash(realm, user, pw);
     }
-    
+
     /**
      *  This will fail if pw contains a '#'
      *  or if user contains '#' or '=' or starts with '!'
@@ -121,8 +121,8 @@ public class RouterPasswordManager extends PasswordManager {
         toDel.add(pfx + PROP_SHASH);
         return _context.router().saveConfig(toAdd, toDel);
     }
-    
-    
+
+
     /**
      *  This will fail if
      *  if user contains '#' or '=' or starts with '!'
@@ -145,7 +145,7 @@ public class RouterPasswordManager extends PasswordManager {
         toDel.add(pfx + PROP_SHASH);
         return _context.router().saveConfig(toAdd, toDel);
     }
-    
+
     /**
      *  This will fail if
      *  user contains '#' or '=' or starts with '!'

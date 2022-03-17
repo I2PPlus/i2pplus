@@ -33,7 +33,7 @@ tr {contain: layout}
 .iframed #navbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed #configSection, .iframed .configPanel {border-left: none; border-right: none; border-radius: 0}
 
 /* topnav */
-#navbar {margin: 0 0 -6px; padding: 9px 0; min-width: 888px; position: sticky; top: -2px; z-index: 999; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: var(--topnav); background-size: var(--topnav_size); will-change: transform}
+#navbar {margin: 0 0 -6px; padding: 9px 0; min-width: 888px; position: sticky; top: -2px; z-index: 999; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: var(--topnav); will-change: transform}
 .iframed #navbar {margin-top: -2px; padding: 8px 0 7px; position: static}
 #navbar a:not(:hover):not(:focus):not(:active) {color: #32ff32}
 .nav_main {border-radius: 1px 0 0 1px; padding-left: 24px; background: #000 var(--snark) no-repeat 7px center}
@@ -244,9 +244,7 @@ input.trackerhome, input.trackerannounce {width: 210px}
 td.graphicStatus {padding-left: 2px}
 .peerCount {padding-left: 0; padding-right: 0; width: 1%; min-width: 50px; white-space: nowrap}
 th.peerCount a img {margin-left: -5px}
-td.peerCount {text-align: left; font-weight: 700}
-.nopeers.zero td.peerCount, .stopped.zero td.peerCount {text-align: center}
-td.peerCount:empty {text-align: center}
+.zero .peerCount b {display: none}
 .peerCount .left, .peerCount .right {min-width: 12px; display: inline-block}
 .peerCount .left {padding-left: 2px; text-align: left}
 .peerCount .right {padding-right: 2px; text-align: right}
@@ -260,8 +258,8 @@ tr:not(:hover) .torrentName a, tr:not(:hover) .snarkFileName a {-webkit-text-str
 .rowOdd, .rowEven {background: var(--tr)}
 .rowOdd td, .rowEven td {border-bottom: 1px solid #000}
 .rowOdd td, .rowEven td {color: #bb7}
-.torrentName {padding: 0 0 0 2px; line-height: .9}
-.torrentName a, .dirInfo td.snarkFileName a {padding: 4px 0; width: 100%; display: inline-block; font-weight: 700}
+.torrentName {padding-left: 2px; line-height: .9}
+.torrentName a, .dirInfo td.snarkFileName a {padding: 4px 0; width: 100%; display: inline-block; vertical-align: middle; font-weight: 700}
 .torrentName a:hover, .snarkFileName a:hover {border-radius: 0 15px 15px 0; box-shadow: none; background: linear-gradient(90deg, rgba(0,0,0,.2), rgba(0,0,0,.3) 40%)}
 .torrentName a:active, .snarkFileName a:active {box-shadow: inset 3px 3px 3px 3px rgba(0,0,0,.3)}
 .torrentETA, .torrentDownloaded, .torrentUploaded {width: 1%; white-space: nowrap; text-align: center}
@@ -406,37 +404,39 @@ hr.debug {margin: 1px 0 -5px; width: 100%; background: linear-gradient(90deg,#00
 .priorityHigh, .priorityNormal, .prioritySkip {display: inline-block; width: 52px; color: transparent; font-size: 0; overflow: hidden; text-align: left; vertical-align: middle}
 
 /* comments */
-#newRating, #mediaContainer td, #commentDeleteAction td {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset 0 0 2px 1px #040, inset 0 -1px 2px 1px #040, inset 0 0 0 3px #000800, inset 0 -1px 0 3px #000800; background: repeating-linear-gradient(90deg,#0080001a 2px,#0010004d 4px), repeating-linear-gradient(180deg,#000c00 2px,#00100080 4px), linear-gradient(180deg,#00100066,#000800), url(/themes/console/dark/images/camotile2.png) top left repeat; background-size: 4px 100%, 100% 4px, 100%, 175px}
+#commentInfo #newRating {background: var(--th)}
+#commentInfo #newRating td {border-left: var(--border); box-shadow: var(--bevel)}
+#commentInfo #addCommentText {padding: 0}
 #commentInfo, #userComments, #mediaContainer {margin: 10px 0 0; border: var(--border); border-left: none; border-right: none; background: #010 url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom; filter: drop-shadow(0px 0 1px rgba(16, 8, 16, .7))}
 #userComments {margin-top: -1px; border-top: 1px solid #151}
 #userComments th {text-align: left}
 #commentInfo th, #userComments th {padding: 8px 5px; white-space: normal}
 #commentInfo th {padding: 2px 5px 2px 30px; text-align: left; background: var(--comment) no-repeat 8px center / 14px, var(--th)}
-#commentInfo tr:nth-child(even), #userComments tr:nth-child(odd) {background: #001800}
-#commentInfo tr:nth-child(odd), #userComments tr:nth-child(even) {border-top: 1px solid #000; background: #001400}
+#commentInfo tr:nth-child(even), #userComments tr:nth-child(odd) {background: rgba(0,16,0,.9)}
+#commentInfo tr:nth-child(odd), #userComments tr:nth-child(even) {border-top: 1px solid #000; background: rgba(0,32,0,.9)}
 #commentInfo td, #userComments td {padding: 8px 5px}
 #commentInfo td:first-child {white-space: nowrap; font-weight: 700}
 #commentInfo td:first-child::after, #userComments td:first-child::after {min-height: 22px; vertical-align: middle; display: inline-block; content: ""}
+#commentInfo td.commentAction {padding: 10px 6px 10px 10px; border-left: var(--border)}
 #commentInfo input.accept {margin-right: 5px; float: right}
 #commentInfo th input[type=submit] {float: none; display: inline-block; vertical-align: middle}
 #commentInfo th input[type=checkbox] {margin-left: 4px; margin-right: 4px}
-#commentInfo textarea {width: 100%; height: 64px; min-height: 64px; resize: vertical; opacity: .8}
+#commentInfo textarea {margin: 1px auto -2px; width: calc(100% - 2px); height: 64px; min-height: 64px; resize: vertical; opacity: .8}
 #commentInfo textarea:focus {box-shadow: var(--highlight), inset 0 0 2px 1px #f60}
 .commentRating, .commentAuthor {width: 1%}
 td.commentRating {padding-left: 2px; padding-right: 0; width: 80px; white-space: nowrap}
 .commentRating img {margin: 0; padding: 0; width: 16px; height: 16px}
 .commentDate {padding-left: 20px; width: 105px; background: url(images/clock.png) no-repeat left center}
-#commentInfo td:first-child, #userComments td:first-child {padding-right: 2px; width: 160px; min-width: 160px}
+#commentInfo td:first-child, #userComments td:first-child {width: 160px; min-width: 160px}
 .commentAuthor {padding-right: 0; text-align: left}
 .commentAuthorName {padding: 0 0 0 22px; vertical-align: middle; font-weight: 700; border-radius: 2px; background: var(--user) no-repeat 4px center / 14px}
 td .commentAuthorName {margin: 0 0 0 4px; padding: 0 4px 0 22px; min-width: 120px; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; text-align: left; font-size: 90%; border: 1px solid #002800; box-shadow: var(--outline); background: var(--user) no-repeat 4px center, linear-gradient(180deg,rgba(0,48,0,.5), rgba(0,16,0,.5)); background-size: 14px, 100%}
 .commentText {width: 90%; text-align: left; white-space: normal}
 .commentText:empty + .commentDelete {background: none}
-.commentWrapper {border: 1px solid rgba(0,48,0,.2); margin: 2px 0; padding: 10px 10px 10px 29px; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000800; background: #010 var(--comment) no-repeat 9px center / 14px; background-blend-mode: luminosity}
 #commentsConfig .optbox {vertical-align: middle}
 #userComments select {margin-right: 0}
-#commentDeleteAction {border-top: var(--border); background: var(--th)}
-#commentDeleteAction td {padding: 10px 6px; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000800}
+#userComments #commentDeleteAction {border-top: var(--border); box-shadow: var(--bevel); background: var(--th)}
+#userComments #commentDeleteAction td {padding: 10px 9px 8px}
 .commentAction, .commentDelete {padding-left: 0; width: 1%; white-space: nowrap}
 .addCommentText, .commentText {padding-right: 0}
 #commentSection .commentDelete {padding: 8px 6px 8px 24px; text-align: left; background: var(--nuke) no-repeat 2px center; background-size: 16px}
@@ -451,8 +451,8 @@ td .commentAuthorName {margin: 0 0 0 4px; padding: 0 4px 0 22px; min-width: 120p
 #nameRequired, .commentAuthorName {display: inline-block; vertical-align: middle; line-height: 28px}
 #nameRequired {margin-right: 5px; float: right}
 #metacomment {padding: 0; line-height: 1.4; text-align: justify}
-#metacomment div {padding: 4px 4px 4px 0; overflow-y: auto}
-#metacomment .commentWrapper {margin: 5px 4px; padding: 12px 15px 14px; box-shadow: var(--bevel); background: #010}
+.commentWrapper {border: var(--border_soft); margin: 2px 0; padding: 10px 10px 10px 29px; box-shadow: var(--bevel); background: #010 var(--comment) no-repeat 9px center / 14px; background-blend-mode: luminosity}
+#metacomment .commentWrapper {margin: 5px 4px}
 #showRatings td[colspan] {text-align: left}
 
 /* files */
@@ -771,6 +771,8 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 .trackerLink {padding: 0; width: 0; min-width: 0; font-size: 0}
 .trackerLink img {display: none}
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {top: -16px}
+.peerCount {padding-right: 5px}
+.peerCount b {padding: 2px 4px; min-width: 48px; display: inline-block; vertical-align: middle; text-align: center; background: var(--badge)}
 }
 
 @media screen and (max-width: 1199px) {

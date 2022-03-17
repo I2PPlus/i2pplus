@@ -175,14 +175,14 @@ public class GarlicMessageBuilder {
         }
         if (key.getType() != EncType.ELGAMAL_2048)
             throw new IllegalArgumentException();
-        
-        if (log.shouldLog(Log.INFO))
+
+        if (log.shouldInfo())
             log.info("Encrypted with public key to expire on " + new Date(config.getExpiration()));
 
         SessionKey curKey = skm.getCurrentOrNewKey(key);
         SessionTag curTag = skm.consumeNextAvailableTag(key, curKey);
 
-            if (log.shouldLog(Log.DEBUG)) {
+            if (log.shouldDebug()) {
                 int availTags = skm.getAvailableTags(key, curKey);
                 log.debug("Available tags for encryption: " + availTags + "; Low threshold: " + lowTagsThreshold);
             }
@@ -190,7 +190,7 @@ public class GarlicMessageBuilder {
             if (numTagsToDeliver > 0 && skm.shouldSendTags(key, curKey, lowTagsThreshold)) {
                 for (int i = 0; i < numTagsToDeliver; i++)
                     wrappedTags.add(new SessionTag(true));
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Too few tags available so we're including " + numTagsToDeliver);
             }
 
@@ -239,7 +239,7 @@ public class GarlicMessageBuilder {
 
         long timeFromNow = config.getExpiration() - ctx.clock().now();
         if (timeFromNow < 1*1000) {
-            if (log.shouldLog(Log.DEBUG))
+            if (log.shouldDebug())
                 log.debug("Building a message expiring in " + timeFromNow + "ms: " + config, new Exception("created by"));
             return null;
         }
@@ -247,7 +247,7 @@ public class GarlicMessageBuilder {
             log.debug("Built ElGamal CloveSet (" + config.getCloveCount() + " cloves " + cloveSet.length + " bytes) in " + msg);
         return msg;
     }
-    
+
     /**
      *  Ratchet only.
      *  Used by TestJob,
@@ -273,7 +273,7 @@ public class GarlicMessageBuilder {
             log.debug("Built ECIES CloveSet (" + config.getCloveCount() + " cloves) in " + msg);
         return msg;
     }
-    
+
     /**
      * ECIES_X25519 only.
      * Called by OCMJH only.
@@ -335,7 +335,7 @@ public class GarlicMessageBuilder {
             log.debug("Built ECIES CloveSet (" + config.getCloveCount() + " cloves) in " + msg);
         return msg;
     }
-    
+
     /**
      * Encrypt from an anonymous source.
      * ECIES_X25519 only.
@@ -371,7 +371,7 @@ public class GarlicMessageBuilder {
             log.debug("Built ECIES CloveSet (" + config.getCloveCount() + " cloves) in " + msg);
         return msg;
     }
-    
+
 /****
     private static void noteWrap(RouterContext ctx, GarlicMessage wrapper, GarlicConfig contained) {
         for (int i = 0; i < contained.getCloveCount(); i++) {
@@ -471,7 +471,7 @@ public class GarlicMessageBuilder {
         clove.setInstructions(config.getDeliveryInstructions());
         return clove.toByteArray();
     }
-    
+
     /**
      * Build the unencrypted CloveSet specified by the config.
      * Unlike for Elgamal, the cloves do not contain a unique
@@ -503,7 +503,7 @@ public class GarlicMessageBuilder {
         CloveSet rv = new CloveSet(arr, Certificate.NULL_CERT, config.getId(), config.getExpiration());
         return rv;
     }
-    
+
     /**
      * Build a single clove
      *

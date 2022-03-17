@@ -22,7 +22,7 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
     private RouterContext _context;
     private Log _log;
     private FIFOBandwidthLimiter.Request _currentRequest;
-    
+
     public BandwidthLimitedOutputStream(RouterContext context, OutputStream source, RouterIdentity peer) {
         super(source);
         _context = context;
@@ -34,19 +34,19 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
         _log = context.logManager().getLog(BandwidthLimitedOutputStream.class);
         _currentRequest = null;
     }
-    
+
     public FIFOBandwidthLimiter.Request getCurrentRequest() { return _currentRequest; }
-    
+
     @Override
     public void write(int val) throws IOException {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Writing a single byte!", new Exception("Single byte from..."));
         long before = _context.clock().now();
         FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestOutbound(1, 0, _peerTarget);
         // only a single byte, no need to loop
         req.waitForNextAllocation();
         long waited = _context.clock().now() - before;
-        if ( (waited > 1000) && (_log.shouldLog(Log.WARN)) )
+        if ( (waited > 1000) && (_log.shouldWarn()) )
             _log.warn("Waiting to write a byte took too long [" + waited + "ms");
         out.write(val);
     }
@@ -56,15 +56,15 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
     }
     @Override
     public void write(byte src[], int off, int len) throws IOException {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Writing " + len + " bytes");
         if (src == null) return;
         if (len <= 0) return;
         if (len + off > src.length)
-            throw new IllegalArgumentException("what are you thinking?  len=" + len 
+            throw new IllegalArgumentException("what are you thinking?  len=" + len
                                                + ", off=" + off + ", data=" + src.length);
         _currentRequest = _context.bandwidthLimiter().requestOutbound(len, 0, _peerTarget);
-        
+
         int written = 0;
         while (written < len) {
             int allocated = len - _currentRequest.getPendingRequested();
@@ -85,7 +85,7 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
             _currentRequest = null;
         }
     }
-    
+
     @Override
     public void close() throws IOException {
         synchronized (this) {

@@ -5,17 +5,17 @@ package freenet.support.CPUInformation;
  *  @since 0.8.7
  */
 class VIAInfoImpl extends CPUIDCPUInfo implements VIACPUInfo {
-    
+
     private static boolean isC3Compatible;
     private static boolean isNanoCompatible;
 
     // If modelString != null, the cpu is considered correctly identified.
     private static final String smodel = identifyCPU();
-    
+
     public boolean IsC3Compatible(){ return isC3Compatible; }
 
     public boolean IsNanoCompatible(){ return isNanoCompatible; }
-    
+
     public String getCPUModelString()
     {
         if (smodel != null)
@@ -29,7 +29,7 @@ class VIAInfoImpl extends CPUIDCPUInfo implements VIACPUInfo {
     {
         return false;
     }
-    
+
 
     private static String identifyCPU()
     {

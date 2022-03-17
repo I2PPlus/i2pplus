@@ -252,7 +252,7 @@ class ConnectionManager {
         int retryAfter = 0;
 
             if (locked_tooManyStreams()) {
-                if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldLog(Log.WARN))
+                if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldWarn())
                     _log.logAlways(Log.WARN, "Refusing connection: maximum of "
                               + _defaultOptions.getMaxConns() + " simultaneous connections exceeded");
                 reject = true;
@@ -261,7 +261,7 @@ class ConnectionManager {
                 // this may not be right if more than one is enabled
                 Reason why = shouldRejectConnection(synPacket);
                 if (why != null) {
-                    if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldLog(Log.WARN))
+                    if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldWarn())
                         _log.logAlways(Log.WARN, "Refusing connection: " + why +
                            (synPacket.getOptionalFrom() == null ? "" : "\n* Client: " + synPacket.getOptionalFrom().toBase32()));
                     reject = true;
@@ -293,7 +293,7 @@ class ConnectionManager {
                 // once a limit is significantly exceeded for a particular peer, don't even send it.
                 // This is a tradeoff, because it will keep retransmitting the SYN for a while,
                 // thus more inbound, but let's not spend several KB on the outbound.
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Dropping limit response to " + from.toBase32());
                 return null;
             }
@@ -410,7 +410,7 @@ class ConnectionManager {
             // Use the same throttling as for connections
             Reason why = shouldRejectConnection(ping);
             if (why != null) {
-                if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldLog(Log.WARN))
+                if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldWarn())
                     _log.logAlways(Log.WARN, "Dropping ping: " + why + "\n* From: " + dest.toBase32());
                 return false;
             }
@@ -569,7 +569,7 @@ class ConnectionManager {
         // ok we're in...
         con.eventOccurred();
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Connect() conDelay = " + opts.getConnectDelay());
         if (opts.getConnectDelay() <= 0) {
             con.waitForConnect();
@@ -612,7 +612,7 @@ class ConnectionManager {
             }
         }
 
-        //if ( (_connectionByInboundId.size() > 100) && (_log.shouldLog(Log.INFO)) )
+        //if ( (_connectionByInboundId.size() > 100) && (_log.shouldInfo()) )
         //    _log.info("More than 100 connections!  " + active
         //              + " total: " + _connectionByInboundId.size());
 
@@ -765,7 +765,7 @@ class ConnectionManager {
      * CAN continue to use the manager.
      */
     public void disconnectAllHard() {
-        //if (_log.shouldLog(Log.INFO))
+        //if (_log.shouldInfo())
         //    _log.info("ConnMan hard disconnect", new Exception("I did it"));
         for (Iterator<Connection> iter = _connectionByInboundId.values().iterator(); iter.hasNext(); ) {
             Connection con = iter.next();
@@ -793,7 +793,7 @@ class ConnectionManager {
      * @since 0.9.7
      */
     public void shutdown() {
-        //if (_log.shouldLog(Log.INFO))
+        //if (_log.shouldInfo())
         //    _log.info("ConnMan shutdown", new Exception("I did it"));
         disconnectAllHard();
         _tcbShare.stop();
@@ -816,10 +816,10 @@ class ConnectionManager {
 
             Object o = _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
             boolean removed = (o == con);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Connection removed? " + removed + " Remaining: "
                            + _connectionByInboundId.size() + "\n " + con);
-            if (!removed && _log.shouldLog(Log.DEBUG))
+            if (!removed && _log.shouldDebug())
                 _log.debug("Failed to remove " + con + "\n" + _connectionByInboundId.values());
 
         if (removed) {
@@ -898,7 +898,7 @@ class ConnectionManager {
         packet.setRemotePort(toPort);
         if (timeoutMs > MAX_PING_TIMEOUT)
             timeoutMs = MAX_PING_TIMEOUT;
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             _log.info(String.format("About to ping %s port %d from port %d timeout=%d blocking=%b",
                       peer.calculateHash().toString(), toPort, fromPort, timeoutMs, blocking));
         }
@@ -945,7 +945,7 @@ class ConnectionManager {
         packet.setPayload(new ByteArray(payload));
         if (timeoutMs > MAX_PING_TIMEOUT)
             timeoutMs = MAX_PING_TIMEOUT;
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             _log.info(String.format("About to ping %s port %d from port %d timeout=%d payload=%d",
                       peer.calculateHash().toString(), toPort, fromPort, timeoutMs, payload.length));
         }
@@ -996,7 +996,7 @@ class ConnectionManager {
             if (pr != null) {
                 if (_notifier != null)
                     _notifier.pingComplete(false);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Ping failed");
             }
         }

@@ -94,7 +94,7 @@ class UPnPManager {
         _delayedCallback = (_scannerCallback != null) ? new DelayedCallback() : null;
         _rescanner = new Rescanner();
     }
-    
+
     /**
      *  Blocking, may take a while.
      *  May be called even if already running.
@@ -102,7 +102,7 @@ class UPnPManager {
     public synchronized void start() {
         _shouldBeRunning = true;
         if (!_isRunning && Addresses.isConnected()) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("UPnP Start");
             long b = _context.clock().now();
             try {
@@ -154,7 +154,7 @@ class UPnPManager {
      *  Blocking, may take a while, up to 20 seconds
      */
     public synchronized void stop() {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("UPnP Stop");
         _shouldBeRunning = false;
         _rescanner.cancel();
@@ -162,7 +162,7 @@ class UPnPManager {
             _upnp.terminate();
         _isRunning = false;
         _detectedAddress = null;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("UPnP Stop Done");
     }
 
@@ -189,7 +189,7 @@ class UPnPManager {
         if (_isRunning) {
             if (_scannerCallback != null)
                 _scannerCallback.beforeScan();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("UPnP Rescan", new Exception());
             // TODO default search MX (jitter) is 3 seconds... reduce?
             // See also:
@@ -250,7 +250,7 @@ class UPnPManager {
             reschedule((_upnp.getSearchMx() * 1000) + 500, false);
         }
     }
-    
+
     /**
      * Call when the ports might have changed
      * The transports can call this pretty quickly at startup,
@@ -258,7 +258,7 @@ class UPnPManager {
      * that should be ok.
      */
     public void update(Set<TransportManager.Port> ports) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("UPnP Update with " + ports.size() + " ports", new Exception("I did it"));
 
         //synchronized(this) {
@@ -286,7 +286,7 @@ class UPnPManager {
             } else {
                 continue;
             }
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Adding: " + style + " " + port);
             ForwardPort fp;
             if (entry.isIPv6)
@@ -304,10 +304,10 @@ class UPnPManager {
      *  It calls the TransportManager callbacks.
      */
     private class UPnPCallback implements ForwardPortCallback {
-	
+
         /** Called to indicate status on one or more forwarded ports. */
         public void portForwardStatus(Map<ForwardPort,ForwardPortStatus> statuses) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                  _log.debug("UPnP Callback: with " + statuses.size() + " statuses");
             // Let's not have two of these running at once.
             // Deadlock reported in ticket #1699
@@ -327,7 +327,7 @@ class UPnPManager {
                     // store the first public one and tell the transport manager if it changed
                     // Note that getAddress() will actually return a max of one address.
                     if (TransportUtil.isPubliclyRoutable(ip.publicAddress.getAddress(), false)) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("External address: " + ip.publicAddress + " type: " + ip.natType);
                         if (!ip.publicAddress.equals(_detectedAddress)) {
                             _detectedAddress = ip.publicAddress;
@@ -342,7 +342,7 @@ class UPnPManager {
                     }
                 }
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("No external address returned");
             }
 

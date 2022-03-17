@@ -4,8 +4,8 @@ import java.io.IOException;
 
 /**
  * A general purpose RRD4J exception.
- * 
- * @since 3.4 
+ *
+ * @since 3.4
  */
 public class RrdException extends IOException {
 

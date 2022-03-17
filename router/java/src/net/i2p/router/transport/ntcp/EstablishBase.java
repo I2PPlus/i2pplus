@@ -169,7 +169,7 @@ abstract class EstablishBase implements EstablishState {
             if (STATES_DONE.contains(_state))
                 throw new IllegalStateException(prefix() + "received unexpected data on " + _con);
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug(prefix() + "Receiving: " + src.remaining() + " Received: " + _received);
     }
 
@@ -225,7 +225,7 @@ abstract class EstablishBase implements EstablishState {
                 return;
             changeState(State.CORRUPT);
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
 //            _log.warn(prefix() + "Failed to establish: " + reason, e);
             _log.warn(prefix() + "\n* Failed to establish: " + reason);
         if (!bySkew)

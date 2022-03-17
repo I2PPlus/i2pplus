@@ -473,7 +473,7 @@ public class LeaseSet extends DatabaseEntry {
      *  Must be called after all the leases are in place, but before sign().
      */
     public void encrypt(SessionKey key) {
-        //if (_log.shouldLog(Log.WARN))
+        //if (_log.shouldWarn())
         //    _log.warn("encrypting lease: " + _destination.calculateHash());
         try {
             encryp(key);
@@ -541,7 +541,7 @@ public class LeaseSet extends DatabaseEntry {
      *  encrypted leaseset can be sent on to others (via writeBytes())
      */
     private void decrypt(SessionKey key) throws DataFormatException, IOException {
-        //if (_log.shouldLog(Log.WARN))
+        //if (_log.shouldWarn())
         //    _log.warn("decrypting lease: " + _destination.calculateHash());
         int size = _leases.size();
         if (size < 2)

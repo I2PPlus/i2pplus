@@ -36,7 +36,7 @@ public interface I2PSocketManager {
      *  @return the session, non-null
      */
     public I2PSession getSession();
-    
+
     /**
      *  For a server, you must call connect() on the returned object.
      *  Connecting the primary session does NOT connect any subsessions.
@@ -49,12 +49,12 @@ public interface I2PSocketManager {
      *  @since 0.9.21
      */
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException;
-    
+
     /**
      *  @since 0.9.21
      */
     public void removeSubsession(I2PSession session);
-    
+
     /**
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
@@ -63,7 +63,7 @@ public interface I2PSocketManager {
 
     /**
      * How long should we wait for the client to .accept() a socket before
-     * sending back a NACK/Close?  
+     * sending back a NACK/Close?
      *
      * @param ms milliseconds to wait, maximum
      */
@@ -92,7 +92,7 @@ public interface I2PSocketManager {
      *  @return non-null
      */
     public I2PServerSocket getServerSocket();
-    
+
     /**
      *  Create a copy of the current options, to be used in a setDefaultOptions() call.
      */
@@ -119,8 +119,8 @@ public interface I2PSocketManager {
      * @throws InterruptedIOException if the connection timeouts
      * @throws I2PException if there is some other I2P-related problem
      */
-    public I2PSocket connect(Destination peer, I2PSocketOptions options) 
-                             throws I2PException, ConnectException, 
+    public I2PSocket connect(Destination peer, I2PSocketOptions options)
+                             throws I2PException, ConnectException,
                              NoRouteToHostException, InterruptedIOException;
 
     /**
@@ -134,9 +134,9 @@ public interface I2PSocketManager {
      * @throws InterruptedIOException if the connection timeouts
      * @throws I2PException if there is some other I2P-related problem
      */
-    public I2PSocket connect(Destination peer) throws I2PException, ConnectException, 
+    public I2PSocket connect(Destination peer) throws I2PException, ConnectException,
                                                NoRouteToHostException, InterruptedIOException;
-    
+
     /**
      * Destroy the socket manager, freeing all the associated resources.  This
      * method will block untill all the managed sockets are closed.
@@ -144,7 +144,7 @@ public interface I2PSocketManager {
      * The socket manager CANNOT be reused after this.
      */
     public void destroySocketManager();
-    
+
     /**
      * Has the socket manager been destroyed?
      *
@@ -160,7 +160,7 @@ public interface I2PSocketManager {
     public Set<I2PSocket> listSockets();
 
     /**
-     * Ping the specified peer, returning true if they replied to the ping within 
+     * Ping the specified peer, returning true if they replied to the ping within
      * the timeout specified, false otherwise.  This call blocks.
      *
      * Uses the ports from the default options.
@@ -173,7 +173,7 @@ public interface I2PSocketManager {
     public boolean ping(Destination peer, long timeoutMs);
 
     /**
-     * Ping the specified peer, returning true if they replied to the ping within 
+     * Ping the specified peer, returning true if they replied to the ping within
      * the timeout specified, false otherwise.  This call blocks.
      *
      * Uses the ports specified.
@@ -189,7 +189,7 @@ public interface I2PSocketManager {
     public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs);
 
     /**
-     * Ping the specified peer, returning true if they replied to the ping within 
+     * Ping the specified peer, returning true if they replied to the ping within
      * the timeout specified, false otherwise.  This call blocks.
      *
      * Uses the ports specified.
@@ -220,10 +220,10 @@ public interface I2PSocketManager {
      * @throws UnsupportedOperationException always
      */
     public void init(I2PAppContext context, I2PSession session, Properties opts, String name);
-    
+
     public void addDisconnectListener(DisconnectListener lsnr);
     public void removeDisconnectListener(DisconnectListener lsnr);
-    
+
     public static interface DisconnectListener {
         public void sessionDisconnected();
     }

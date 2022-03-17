@@ -78,7 +78,7 @@ public class SDSCache<V extends SimpleDataStructure> {
             throw new RuntimeException("SDSCache init error", e);
         }
         _statName = "SDSCache." + rvClass.getSimpleName();
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("New SDSCache for " + rvClass + " data size: " + len +
         //               " max: " + size + " max mem: " + (len * size));
         I2PAppContext.getGlobalContext().statManager().createRateStat(_statName, "Hit rate", "Router [SDSCache]", new long[] { 10*60*1000 });

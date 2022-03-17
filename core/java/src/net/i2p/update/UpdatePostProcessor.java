@@ -10,7 +10,7 @@ import java.io.File;
  *  @since 0.9.51
  */
 public interface UpdatePostProcessor {
-    
+
     /**
      *  Notify the post-processor that an update has been downloaded and verified.
      *  The version will be higher than the currently-installed version.

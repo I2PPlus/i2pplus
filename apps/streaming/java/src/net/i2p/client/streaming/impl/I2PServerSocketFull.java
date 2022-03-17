@@ -15,17 +15,17 @@ import net.i2p.client.streaming.I2PSocketManager;
  */
 class I2PServerSocketFull implements I2PServerSocket {
     private final I2PSocketManagerFull _socketManager;
-    
+
     public I2PServerSocketFull(I2PSocketManagerFull mgr) {
         _socketManager = mgr;
     }
-    
+
     /**
-     * Waits for the next socket connecting.  If a remote user tried to make a 
+     * Waits for the next socket connecting.  If a remote user tried to make a
      * connection and the local application wasn't .accept()ing new connections,
      * they should get refused (if .accept() doesnt occur in some small period).
      * Warning - unlike regular ServerSocket, may return null (through 0.9.16 only).
-     * 
+     *
      * @return a connected I2PSocket OR NULL through 0.9.16; never null as of 0.9.17
      *
      * @throws I2PException if there is a problem with reading a new socket
@@ -50,11 +50,11 @@ class I2PServerSocketFull implements I2PServerSocket {
     public synchronized AcceptingChannel getChannel() {
         return null;
     }
-    
+
     public long getSoTimeout() {
         return _socketManager.getConnectionManager().getSoTimeout();
     }
-    
+
     public void setSoTimeout(long x) {
         _socketManager.getConnectionManager().setSoTimeout(x);
     }
@@ -66,7 +66,7 @@ class I2PServerSocketFull implements I2PServerSocket {
     }
 
     /**
-     * 
+     *
      * @return _socketManager
      */
     public I2PSocketManager getManager() {

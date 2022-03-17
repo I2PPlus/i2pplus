@@ -77,7 +77,7 @@ class RefreshRoutersJob extends JobImpl {
                 all.removeAll(_routers);
                 int non = all.size();
                 _routers.addAll(all);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("To check: " + ff + " Floodfills and " + non + " non-Floodfills");
             }
             if (_routers.isEmpty()) {
@@ -106,7 +106,7 @@ class RefreshRoutersJob extends JobImpl {
                 iter.remove();
                 if (h.equals(getContext().routerHash()))
                     continue;
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Checking RouterInfo [" + h.toBase64().substring(0,6) + "]");
                 RouterInfo ri = _facade.lookupRouterInfoLocally(h);
                 if (ri == null)
@@ -119,7 +119,7 @@ class RefreshRoutersJob extends JobImpl {
                 int routerAge = 15*60*1000;
                 long uptime = getContext().router().getUptime();
                 String v = ri.getVersion();
-                String MIN_VERSION = "0.9.52";
+                String MIN_VERSION = "0.9.53";
                 boolean isHidden = getContext().router().isHidden();
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
@@ -141,7 +141,7 @@ class RefreshRoutersJob extends JobImpl {
                 }
 //                if (ri.getPublished() < older) {
                 if (older > routerAge) {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         if (refreshTimeout == null)
                             _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "]" +
                                       "\n* Published: " + new Date(ri.getPublished()));
@@ -161,7 +161,7 @@ class RefreshRoutersJob extends JobImpl {
                         _facade.search(h, null, null, Integer.valueOf(refreshTimeout)*1000, false);
                     break;
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         if ((routerAge / 60 / 60 / 1000) <= 1 && freshness == null && !uninteresting && !refreshUninteresting) {
                             _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than an hour old" +
                                        "\n* Published: " + new Date(ri.getPublished()));
@@ -191,7 +191,7 @@ class RefreshRoutersJob extends JobImpl {
         String refresh = getContext().getProperty("router.refreshRouterDelay");
         if (netDbCount > 6000) {
             randomDelay = 15*60*1000;
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Over 6000 known peers, queuing next RouterInfo check to run in 15 minutes...");
         } else if (refresh == null) {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
@@ -205,11 +205,11 @@ class RefreshRoutersJob extends JobImpl {
             else
                 randomDelay = randomDelay - ((rand.nextInt(750) / (rand.nextInt(3) + 1)) * rand.nextInt(6) + 1);
             requeue(randomDelay);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Next RouterInfo check in " + randomDelay + "ms");
         } else {
             requeue(Integer.valueOf(refresh));
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Next RouterInfo check in " + refresh + "ms");
         }
     }

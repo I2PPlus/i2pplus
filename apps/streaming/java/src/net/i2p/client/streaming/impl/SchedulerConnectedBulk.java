@@ -4,7 +4,7 @@ import net.i2p.I2PAppContext;
 
 /**
  * <p>Scheduler used for after our SYN has been sent and ACKed but one
- * (or more) sides haven't closed the stream yet.  In addition, the 
+ * (or more) sides haven't closed the stream yet.  In addition, the
  * stream must be using the BULK profile, rather than the INTERACTIVE
  * profile.</p>
  *
@@ -36,27 +36,27 @@ class SchedulerConnectedBulk extends SchedulerImpl {
     public SchedulerConnectedBulk(I2PAppContext ctx) {
         super(ctx);
     }
-    
+
     public boolean accept(Connection con) {
-        boolean ok = (con != null) && 
+        boolean ok = (con != null) &&
                      (con.getHighestAckedThrough() >= 0) &&
                      (con.getOptions().getProfile() == ConnectionOptions.PROFILE_BULK) &&
                      (!con.getResetReceived()) &&
                      ( (con.getCloseSentOn() <= 0) || (con.getCloseReceivedOn() <= 0) );
         if (!ok) {
-            //if (_log.shouldLog(Log.DEBUG))
-            //    _log.debug("con: " + con + " closeSentOn: " + con.getCloseSentOn() 
+            //if (_log.shouldDebug())
+            //    _log.debug("con: " + con + " closeSentOn: " + con.getCloseSentOn()
             //               + " closeReceivedOn: " + con.getCloseReceivedOn());
         }
         return ok;
     }
-    
+
     public void eventOccurred(Connection con) {
-        if (con.getNextSendTime() <= 0) 
+        if (con.getNextSendTime() <= 0)
             return;
-        
+
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
-        
+
         if (timeTillSend <= 0) {
             con.setNextSendTime(-1);
             con.sendAvailable();

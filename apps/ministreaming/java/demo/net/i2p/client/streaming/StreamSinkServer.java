@@ -59,7 +59,7 @@ public class StreamSinkServer {
         else
             mgr = I2PSocketManagerFactory.createManager();
         Destination dest = mgr.getSession().getMyDestination();
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Listening for connections on: " + dest.calculateHash().toBase64());
         FileOutputStream fos = null;
         try {
@@ -123,7 +123,7 @@ public class StreamSinkServer {
                     sink.mkdirs();
                 File cur = File.createTempFile("clientSink", ".dat", sink);
                 fos = new FileOutputStream(cur);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Writing to " + cur.getAbsolutePath());
             } catch (IOException ioe) {
                 _log.error("Error creating sink", ioe);
@@ -139,7 +139,7 @@ public class StreamSinkServer {
                 while ( (read = in.read(buf)) != -1) {
                     //_fos.write(buf, 0, read);
                     written += read;
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Read and wrote " + read + " (" + written + ")");
                 }
                 fos.write((DataHelper.getUTF8("written: [" + written + "]\n")));

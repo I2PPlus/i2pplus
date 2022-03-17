@@ -99,11 +99,11 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		for (BSkipSpan ss : spanHash.values()) {
 			total += ss.nKeys;
 		}
-		if (bf.log.shouldLog(Log.DEBUG))
+		if (bf.log.shouldDebug())
 			bf.log.debug("Loaded " + this + " cached " + levelHash.size() + " levels and " + spanHash.size() + " spans with " + total + " entries");
 		if (bf.file.canWrite() &&
 		    (levelCount != levelHash.size() || spans != spanHash.size() || size != total)) {
-			if (bf.log.shouldLog(Log.WARN))
+			if (bf.log.shouldWarn())
 				bf.log.warn("On-disk counts were " + levelCount + " levels / " + spans +
 				            " spans / " +  size + " entries, correcting to " + total + " entries");
 			size = total;

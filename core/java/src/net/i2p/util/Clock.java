@@ -101,7 +101,7 @@ public class Clock implements Timestamper.UpdateListener {
         if (!force) {
             if (!_isSystemClockBad && (offsetMs > MAX_OFFSET || offsetMs < 0 - MAX_OFFSET)) {
                 Log log = getLog();
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("Maximum offset shift exceeded [" + offsetMs + "], NOT HONORING IT");
                 return;
             }
@@ -110,7 +110,7 @@ public class Clock implements Timestamper.UpdateListener {
             if (_alreadyChanged && (System.currentTimeMillis() - _startedOn > 10 * 60 * 1000)) {
                 if ( (delta > MAX_LIVE_OFFSET) || (delta < 0 - MAX_LIVE_OFFSET) ) {
                     Log log = getLog();
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("The clock has already been updated, but you want to change it by "
                                            + delta + " to " + offsetMs + "?  Did something break?");
                     return;
@@ -119,7 +119,7 @@ public class Clock implements Timestamper.UpdateListener {
 
             if ((delta < MIN_OFFSET_CHANGE) && (delta > 0 - MIN_OFFSET_CHANGE)) {
                 Log log = getLog();
-                if (log.shouldLog(Log.DEBUG))
+                if (log.shouldDebug())
                     log.debug("Not changing offset since it is only " + delta + "ms");
                 _alreadyChanged = true;
                 return;
@@ -128,7 +128,7 @@ public class Clock implements Timestamper.UpdateListener {
         if (_alreadyChanged) {
             if (delta > 15*1000)
                 getLog().log(Log.CRIT, "Updating clock offset to " + offsetMs + "ms from " + _offset + "ms");
-            else if (getLog().shouldLog(Log.INFO))
+            else if (getLog().shouldInfo())
                 getLog().info("Updating clock offset to " + offsetMs + "ms from " + _offset + "ms");
 
             if (!_statCreated) {
@@ -139,7 +139,7 @@ public class Clock implements Timestamper.UpdateListener {
             _context.statManager().addRateData("clock.skew", delta, 0);
         } else {
             Log log = getLog();
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Initializing clock offset to " + offsetMs + "ms from " + _offset + "ms");
         }
         _alreadyChanged = true;

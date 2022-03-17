@@ -1,7 +1,7 @@
 /*
  * Created on Jan 29, 2010
  * Created by Paul Gardner
- * 
+ *
  * Copyright 2010 Vuze, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -59,7 +59,7 @@ public class MLabRunner {
     private final Log _log;
     private final AtomicBoolean _running = new AtomicBoolean();
     private static MLabRunner _instance;
-    
+
     public static MLabRunner getInstance(I2PAppContext ctx) {
         synchronized(MLabRunner.class) {
             if (_instance == null)
@@ -76,7 +76,7 @@ public class MLabRunner {
     public boolean isRunning() {
        return _running.get();
     }
-    
+
     /**
      * Non-blocking, spawns a thread and returns immediately.
      *
@@ -88,7 +88,7 @@ public class MLabRunner {
         boolean useSSL = _context.getProperty(PROP_SSL, DEFAULT_USE_SSL);
         return runNDT(listener, useSSL, null);
     }
-    
+
     /**
      * Non-blocking, spawns a thread and returns immediately.
      *
@@ -107,7 +107,7 @@ public class MLabRunner {
             return null;
         }
         final ToolRun run = new ToolRunImpl();
-        
+
         runTool(
             new Runnable()
             {
@@ -115,24 +115,24 @@ public class MLabRunner {
                     boolean completed = false;
                     try{
                         _log.warn("Starting NDT Test");
-                        
+
                         // String host = "ndt.iupui.donar.measurement-lab.org";
                         // String host = "jlab4.jlab.org";
 
                         // on 2014/01/14 (or maybe before) things stopped working with the above. Found server below
                         // still running 3.6.4. Unfortunately when I tested the latest client code against servers
                         // allegedly running compatible server code it didn't work... ;(
-                        
+
                         // reply on mailing list to above issue:
-                        
+
                         // The first is to switch to our new name server, ns.measurementlab.net. For example: http://ns.measurementlab.net/ndt will return a JSON string with the closest NDT server. Example integration can be found on www.measurementlab.net/p/ndt.html
                         // The other option, discouraged, is to continue using donar which should still be resolving. It just uses ns.measurementlab.net on the backend now. However, this is currently down according to my tests, so we'll work on getting this back as soon as possible.
-                        
+
                         String server_host = serverHost;
                         String server_city = null;
                         String server_country = null;
                         boolean useSSL = use_SSL;
-                        
+
                         if (server_host == null) {
                             try {
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
@@ -176,7 +176,7 @@ public class MLabRunner {
                                     _log.warn("Failed to get server", e);
                             }
                         }
-                        
+
                         if (server_host == null) {
                             // fallback to old, discouraged approach
                             server_host = "ndt.iupui.donar.measurement-lab.org";
@@ -184,7 +184,7 @@ public class MLabRunner {
                             if (_log.shouldWarn())
                                 _log.warn("Failed to select server, falling back to donar method");
                         }
-                        
+
                         String[] args = useSSL ? new String[] { "-s", server_host } : new String[] { server_host };
                         long start = System.currentTimeMillis();
                         final Tcpbw100 test;
@@ -200,7 +200,7 @@ public class MLabRunner {
                             return;
                         }
                         final AtomicBoolean cancelled = new AtomicBoolean();
-                        
+
                         run.addListener(
                             new ToolRunListener()
                             {
@@ -215,9 +215,9 @@ public class MLabRunner {
                                     return test.getStatus();
                                 }
                             });
-                        
+
                         test.runIt();
-                        
+
                         try { Thread.sleep(2000); } catch (InterruptedException ie) { return; }
                         for (int i = 0; i < 180; i++) {
                             if (cancelled.get() || !test.isTestInProgress())
@@ -230,24 +230,24 @@ public class MLabRunner {
                         try {
                             up_bps = (long)(Double.parseDouble(test.get_c2sspd())*1000000)/8;
                         } catch(Throwable e) {}
-                        
+
                         // in integer bytes per second
                         long down_bps = 0;
                         try {
                             down_bps = (long)(Double.parseDouble(test.get_s2cspd())*1000000)/8;
                         } catch(Throwable e) {}
-                        
+
                         String result_str;
                         if (cancelled.get()) {
                             result_str = "Test cancelled";
                         } else if (up_bps == 0 || down_bps == 0) {
                             result_str = "No results were received. Either the test server is unavailable or network problems are preventing the test from running correctly. Please try again.";
                         } else {
-                            result_str =     
+                            result_str =
                                 "Completed: up=" + DataHelper.formatSize2Decimal(up_bps, false) +
                                 "Bps, down=" + DataHelper.formatSize2Decimal(down_bps, false) + "Bps";
                         }
-                        
+
                         _log.warn(result_str);
                         completed = true;
                         if (listener != null){
@@ -275,10 +275,10 @@ public class MLabRunner {
                     }
                 }
             });
-        
+
         return run;
     }
-    
+
     /**
      * Non-blocking, spawns a thread and returns immediately.
      */
@@ -294,7 +294,7 @@ public class MLabRunner {
             }
         }.start();
     }
-    
+
     /**
      * Returned from runNDT
      */
@@ -303,14 +303,14 @@ public class MLabRunner {
         public void addListener(ToolRunListener    l);
         public String getStatus();
     }
-    
+
     /**
      * Returned from runNDT
      */
     private class ToolRunImpl implements ToolRun {
         private List<ToolRunListener> listeners = new ArrayList<ToolRunListener>();
         private boolean cancelled;
-        
+
         public void cancel() {
             List<ToolRunListener> copy;
             synchronized( this ){
@@ -325,7 +325,7 @@ public class MLabRunner {
                 }
             }
         }
-        
+
         public void addListener(ToolRunListener l) {
             boolean inform = false;
             synchronized(this){
@@ -347,13 +347,13 @@ public class MLabRunner {
             }
         }
     }
-    
+
     /** The listener for ToolRun */
     public interface ToolRunListener {
         public void cancelled();
         public String getStatus();
     }
-    
+
     /** The parameter for runNDT() */
     public interface ToolListener {
         public void reportSummary(String str);

@@ -25,7 +25,7 @@ class ClientWriterRunner implements Runnable {
     //private static long __id = 0;
 
     private static final int QUEUE_SIZE = 256;
-    
+
     public ClientWriterRunner(RouterContext context, ClientConnectionRunner runner) {
         //_log = context.logManager().getLog(ClientWriterRunner.class);
         _messagesToWrite = new LinkedBlockingQueue<I2CPMessage>(QUEUE_SIZE);
@@ -42,7 +42,7 @@ class ClientWriterRunner implements Runnable {
         boolean success = _messagesToWrite.offer(msg);
         if (!success)
             throw new I2CPMessageException("I2CP write to queue failed");
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("["+_id+"] addMessage completed for " + msg.getClass().getName());
     }
 

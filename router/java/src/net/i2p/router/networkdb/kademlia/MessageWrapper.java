@@ -71,14 +71,14 @@ public class MessageWrapper {
             return null;
         SessionKey sentKey = new SessionKey();
         Set<SessionTag> sentTags = new HashSet<SessionTag>(NETDB_TAGS_TO_DELIVER);
-        GarlicMessage msg = GarlicMessageBuilder.buildMessage(ctx, payload, sentKey, sentTags, 
+        GarlicMessage msg = GarlicMessageBuilder.buildMessage(ctx, payload, sentKey, sentTags,
                                                               NETDB_TAGS_TO_DELIVER, NETDB_LOW_THRESHOLD, skm);
         if (msg == null)
             return null;
         TagSetHandle tsh = null;
         if (!sentTags.isEmpty())
             tsh = skm.tagsDelivered(sentTo, sentKey, sentTags);
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Sent to: " + to.getIdentity().getHash() + " with key: " + sentKey + " and tags: " + sentTags.size());
         return new WrappedMessage(msg, skm, sentTo, sentKey, tsh);
     }
@@ -92,7 +92,7 @@ public class MessageWrapper {
         private SessionKeyManager skm;
         private PublicKey sentTo;
         private SessionKey sessionKey;
-        private TagSetHandle tsh;        
+        private TagSetHandle tsh;
 
         WrappedMessage(GarlicMessage msg, SessionKeyManager skm, PublicKey sentTo, SessionKey sentKey, TagSetHandle tsh) {
             this.msg = msg;
@@ -110,7 +110,7 @@ public class MessageWrapper {
         void acked() {
             if (this.tsh != null) {
                 this.skm.tagsAcked(this.sentTo, this.sessionKey, this.tsh);
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("Tags acked for key: " + this.sessionKey);
             }
         }
@@ -119,11 +119,11 @@ public class MessageWrapper {
         void fail() {
             if (this.tsh != null) {
                 this.skm.failTags(this.sentTo, this.sessionKey, this.tsh);
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("Tags NOT acked for key: " + this.sessionKey);
             }
         }
-    }    
+    }
 
     /**
      *  Garlic wrap a message from nobody, destined for a router,
@@ -286,7 +286,7 @@ public class MessageWrapper {
                                                               ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                               m.getMessageExpiration(),
                                                               DeliveryInstructions.LOCAL, m);
-        GarlicMessage msg = GarlicMessageBuilder.buildMessage(ctx, payload, null, 
+        GarlicMessage msg = GarlicMessageBuilder.buildMessage(ctx, payload, null,
                                                               null, encryptKey, encryptTag);
         return msg;
     }
@@ -312,4 +312,4 @@ public class MessageWrapper {
         GarlicMessage msg = GarlicMessageBuilder.buildMessage(ctx, payload, encryptKey, encryptTag);
         return msg;
     }
-}    
+}

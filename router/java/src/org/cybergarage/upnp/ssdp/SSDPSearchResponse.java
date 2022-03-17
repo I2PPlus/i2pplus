@@ -10,7 +10,7 @@
 *
 *	01/14/03
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -24,7 +24,7 @@ public class SSDPSearchResponse extends SSDPResponse
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public SSDPSearchResponse()
 	{
 		setStatusCode(HTTPStatus.OK);

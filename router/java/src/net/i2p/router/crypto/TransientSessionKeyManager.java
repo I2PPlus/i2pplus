@@ -231,7 +231,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
 /****** leftover from when we had the persistent SKM
     protected void setData(Set<TagSet> inboundTagSets, Set<OutboundSession> outboundSessions) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Loading " + inboundTagSets.size() + " inbound tag sets, and "
                       + outboundSessions.size() + " outbound sessions");
         Map<SessionTag, TagSet> tagSets = new HashMap(inboundTagSets.size());
@@ -270,7 +270,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         if (sess == null) return null;
         long now = _context.clock().now();
         if (sess.getLastUsedDate() < now - SESSION_LIFETIME_MAX_MS) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Expiring old session key established on "
                           + new Date(sess.getEstablishedDate())
                           + " but not used for "
@@ -332,7 +332,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         EncType type = target.getType();
         if (type != EncType.ELGAMAL_2048)
             throw new IllegalArgumentException("Bad public key type " + type);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("New Outbound session: Session key [" + key.toBase64().substring(0,6) + "] Target: ["
                       + toString(target).substring(0,6) + "]");
         OutboundSession sess = new OutboundSession(_context, _log, target, key);
@@ -351,18 +351,18 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     public SessionTag consumeNextAvailableTag(PublicKey target, SessionKey key) {
         OutboundSession sess = getSession(target);
         if (sess == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No session for " + toString(target));
             return null;
         }
         if (sess.getCurrentKey().equals(key)) {
             SessionTag nxt = sess.consumeNext();
             // logged in OutboundSession
-            //if (nxt != null && _log.shouldLog(Log.DEBUG))
+            //if (nxt != null && _log.shouldDebug())
             //    _log.debug("OB Tag consumed: " + nxt + " with: " + key);
             return nxt;
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Key does not match existing key, no tag");
         return null;
     }
@@ -442,7 +442,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         // if this is ever null, this is racy and needs synch
         OutboundSession sess = getSession(target);
         if (sess == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No session for delivered TagSet to target: " + toString(target));
             sess = createAndReturnSession(target, key);
         } else {
@@ -450,7 +450,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
         TagSet set = new TagSet(sessionTags, key, _context.clock().now(), _sentTagSetID.incrementAndGet());
         sess.addTags(set);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Tags delivered: " + set +
                        "\n* Target: " + toString(target) /** + ": " + sessionTags */ );
         return set;
@@ -477,16 +477,16 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) {
         OutboundSession sess = getSession(target);
         if (sess == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No session for failed TagSet: " + ts);
             return;
         }
         if(!key.equals(sess.getCurrentKey())) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Wrong session key (wanted " + sess.getCurrentKey() + ") for failed TagSet: " + ts);
             return;
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Failed " + ts);
         sess.failTags((TagSet)ts);
     }
@@ -499,16 +499,16 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) {
         OutboundSession sess = getSession(target);
         if (sess == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No session for ACKed TagSet: " + ts);
             return;
         }
         if(!key.equals(sess.getCurrentKey())) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Wrong session key (wanted " + sess.getCurrentKey() + ") for ACKed TagSet: " + ts);
             return;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("ACKed: " + ts);
         sess.ackTags((TagSet)ts);
     }
@@ -534,7 +534,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags, long expire) {
         TagSet tagSet = new TagSet(sessionTags, key, _context.clock().now() + expire,
                                    _rcvTagSetID.incrementAndGet());
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             _log.debug("Received " + tagSet);
             //_log.debug("Tags: " + DataHelper.toString(sessionTags));
         }
@@ -566,7 +566,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 }
             }
 
-            if (_log.shouldLog(Log.WARN)) {
+            if (_log.shouldWarn()) {
                 _log.warn("Multiple tags matching! TagSet: " + tagSet + " and old TagSet: " + old + " Tag: " + dupTag + "/" + dupTag);
                 _log.warn("Earlier tag set creation: " + old + ": key=" + old.getAssociatedKey());
                 _log.warn("Current tag set creation: " + tagSet + ": key=" + tagSet.getAssociatedKey());
@@ -643,7 +643,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         synchronized (_inboundTagSets) {
             tagSet = _inboundTagSets.remove(tag);
             if (tagSet == null) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Cannot process unknown Inbound Tag [" + tag.toString().substring(0,6) + "]");
                 return null;
             }
@@ -651,7 +651,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
 
         SessionKey key = tagSet.getAssociatedKey();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Inbound Tag [" + tag.toString().substring(0,6) + "] processed from " + tagSet);
         return key;
     }
@@ -674,7 +674,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         synchronized (_outboundSessions) {
             session = _outboundSessions.remove(target);
         }
-        if ( (session != null) && (_log.shouldLog(Log.WARN)) )
+        if ( (session != null) && (_log.shouldWarn()) )
             _log.warn("Removing session tags with " + session.availableTags() + " available for "
                        + (session.getLastExpirationDate()-_context.clock().now())
                        + "ms more", new Exception("Removed by"));
@@ -957,10 +957,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 } else if (!_tagSets.contains(set)) {
                     // add back (sucess after fail)
                     _tagSets.add(set);
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("ACK of unknown (previously failed?) TagSet\n* " + set);
                 } else if (set.getAcked()) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Duplicate ACK of TagSet\n* " + set);
                 }
                 _acked = true;
@@ -990,7 +990,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                                 acked++;
                             }
                         }
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn(_consecutiveFailures + " consecutive failed TagSet deliveries to [" + _currentKey.toBase64().substring(0,6) + "]"
                                       + "\n* Reverting to full ElG and un-ACKing " + unacked + " UnACKed tag sets, with "
                                       + acked + " remaining ACKed TagSets");
@@ -1012,7 +1012,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             if (_currentKey != null) {
                 if (!_currentKey.equals(key)) {
                     synchronized (_tagSets) {
-                        if (_log.shouldLog(Log.WARN)) {
+                        if (_log.shouldWarn()) {
                             int dropped = 0;
                             for (TagSet set : _tagSets) {
                                 dropped += set.getTags().size();
@@ -1074,14 +1074,14 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                     if (set.getDate() + SESSION_TAG_DURATION_MS > now) {
                         SessionTag tag = set.consumeNext();
                         if (tag != null) {
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Outbound Tag [" + tag.toString().substring(0,6) + "] processed " + " from " + set);
                             return tag;
-                        } else if (_log.shouldLog(Log.INFO)) {
+                        } else if (_log.shouldInfo()) {
                             _log.info("Removing empty " + set);
                         }
                     } else {
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Session Tag expired " + set);
                     }
                     _tagSets.remove(0);

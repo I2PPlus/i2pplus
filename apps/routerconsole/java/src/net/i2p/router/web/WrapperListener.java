@@ -90,7 +90,7 @@ class WrapperListener {
                 return;
             }
             WrapperControlEvent wce = (WrapperControlEvent) event;
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Received signal: " + wce.getControlEventName());
             int sig = wce.getControlEvent();
             switch (sig) {

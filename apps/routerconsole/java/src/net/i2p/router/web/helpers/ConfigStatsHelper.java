@@ -136,7 +136,7 @@ public class ConfigStatsHelper extends HelperBase {
                 _currentGroup = fs.getGroupName();
                 _currentCanBeGraphed = false;
             } else {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Stat does not exist?! [" + _currentStatName + "]");
                 return false;
             }

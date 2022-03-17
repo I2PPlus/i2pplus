@@ -116,7 +116,7 @@ class UDPReceiver {
             // (not if it isn't final jr)
             int v = _context.random().nextInt(100);
             if (v <= ARTIFICIAL_DROP_PROBABILITY) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Drop with v=" + v + " p=" + ARTIFICIAL_DROP_PROBABILITY + " packet size: " + packet.getPacket().getLength() + ": " + packet);
                 _context.statManager().addRateData("udp.droppedInboundProbabalistically", 1, 0);
                 return -1;
@@ -127,7 +127,7 @@ class UDPReceiver {
 
         if ( (ARTIFICIAL_DELAY > 0) || (ARTIFICIAL_DELAY_BASE > 0) ) {
             long delay = ARTIFICIAL_DELAY_BASE + _context.random().nextInt(ARTIFICIAL_DELAY);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Delay packet " + packet + " for " + delay);
             SimpleTimer2.getInstance().addEvent(new ArtificiallyDelayedReceive(packet), delay);
             return -1;
@@ -146,12 +146,12 @@ class UDPReceiver {
         if (!_keepRunning)
             return 0;
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Received UDP packet" + packet);
 
         RemoteHostId from = packet.getRemoteHost();
         if (_transport.isInDropList(from)) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Ignoring UDP packet from the drop-listed peer: " + from);
             _context.statManager().addRateData("udp.ignorePacketFromDroplist", packet.getLifetime());
             packet.release();
@@ -160,7 +160,7 @@ class UDPReceiver {
 
         // drop anything apparently from our IP (any port)
         if (Arrays.equals(from.getIP(), _transport.getExternalIP()) && !_transport.allowLocal()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Dropping (spoofed?) UDP packet from ourselves");
             packet.release();
             return 0;
@@ -195,7 +195,7 @@ class UDPReceiver {
         // rejected
         packet.release();
         _context.statManager().addRateData("udp.droppedInbound", queueSize, headPeriod);
-        if (_log.shouldLog(Log.WARN)) {
+        if (_log.shouldWarn()) {
             queueSize = _inboundQueue.size();
             StringBuilder msg = new StringBuilder();
             msg.append("Dropping inbound packet with ");
@@ -237,19 +237,19 @@ class UDPReceiver {
                     dpacket.setLength(UDPPacket.MAX_PACKET_SIZE);
 
                 // block before we read...
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("Before throttling receive");
                 while (!_context.throttle().acceptNetworkMessage())
                     try { Thread.sleep(10); } catch (InterruptedException ie) {}
 
                 try {
-                    //if (_log.shouldLog(Log.INFO))
+                    //if (_log.shouldInfo())
                     //    _log.info("Before blocking socket.receive on " + System.identityHashCode(packet));
                     //synchronized (Runner.this) {
                         _socket.receive(dpacket);
                     //}
                     int size = dpacket.getLength();
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("After blocking socket.receive, packet is " + size + " bytes on " + System.identityHashCode(packet));
                     packet.resetBegin();
 
@@ -283,17 +283,17 @@ class UDPReceiver {
                     } else {
                         _context.statManager().addRateData("udp.receiveHolePunch", 1);
                         // nat hole punch packets are 0 bytes
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Received a 0 byte udp packet from [" + dpacket.getAddress() + ":" + dpacket.getPort()+ "]");
                         _transport.getEstablisher().receiveHolePunch(dpacket.getAddress(), dpacket.getPort());
                         packet.release();
                     }
                 } catch (IOException ioe) {
                     //if (_socketChanged) {
-                    //    if (_log.shouldLog(Log.INFO))
+                    //    if (_log.shouldInfo())
                     //        _log.info("Changing ports...");
                     //} else {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Error receiving", ioe);
                     //}
                     packet.release();
@@ -308,7 +308,7 @@ class UDPReceiver {
                     }
                 }
             }
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Stopped receiving on: " + _endpoint);
         }
 

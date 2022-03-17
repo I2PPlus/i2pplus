@@ -10,7 +10,7 @@
 *
 *	01/30/03
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.control;
@@ -25,7 +25,7 @@ public class QueryResponse extends ControlResponse
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public QueryResponse()
 	{
 	}
@@ -53,7 +53,7 @@ public class QueryResponse extends ControlResponse
 			return null;
 		return queryResNode.getNode(0);
 	}
-	
+
 	public String getReturnValue()
 	{
 		Node node = getReturnNode();
@@ -71,11 +71,11 @@ public class QueryResponse extends ControlResponse
 		String var = stateVar.getValue();
 
 		setStatusCode(HTTPStatus.OK);
-		
+
 		Node bodyNode = getBodyNode();
 		Node resNode = createResponseNode(var);
 		bodyNode.addNode(resNode);
-		
+
 		Node envNodee = getEnvelopeNode();
 		setContent(envNodee);
 
@@ -86,12 +86,12 @@ public class QueryResponse extends ControlResponse
 		Node queryResNode = new Node();
 		queryResNode.setName(Control.NS, Control.QUERY_STATE_VARIABLE_RESPONSE);
 		queryResNode.setNameSpace(Control.NS, Control.XMLNS);
-		
+
 		Node returnNode = new Node();
 		returnNode.setName(Control.RETURN);
 		returnNode.setValue(var);
 		queryResNode.addNode(returnNode);
-		
+
 		return queryResNode;
 	}
 }

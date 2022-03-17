@@ -24,7 +24,7 @@ public final class DnssecConstants {
 
     /**
      * DNSSEC Signature Algorithms.
-     * 
+     *
      * @see <a href=
      *      "http://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml">
      *      IANA DNSSEC Algorithm Numbers</a>
@@ -68,7 +68,7 @@ public final class DnssecConstants {
 
     /**
      * DNSSEC Digest Algorithms.
-     * 
+     *
      * @see <a href=
      *      "https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml">
      *      IANA Delegation Signer (DS) Resource Record (RR)</a>

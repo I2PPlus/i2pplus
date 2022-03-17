@@ -30,7 +30,7 @@ class SOCKSServerFactory {
         "<html><body><H1>I2P SOCKS PROXY ERROR: REQUEST DENIED</H1>" +
         "Your browser is misconfigured. This is a SOCKS proxy, not a HTTP proxy" +
         "</body></html>";
-    
+
     /**
      * Create a new SOCKS server, using the provided socket (that must
      * be connected to a client) to select the proper SOCKS protocol

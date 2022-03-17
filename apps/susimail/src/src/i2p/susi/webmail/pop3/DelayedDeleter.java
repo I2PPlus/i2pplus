@@ -96,11 +96,11 @@ class DelayedDeleter {
 				mailbox.deletePending(false);
 				int delSize = origSize - toDelete.size();
 				if (_log.shouldDebug()) _log.debug("Deleted " + delSize + " of " + origSize + " mails");
-			} finally {		
+			} finally {
 				isDeleting = false;
 				if (!isDead)
 					timer.schedule(CHECK_TIME);
-			}		
+			}
 		}
 	}
 }

@@ -47,7 +47,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
 //        String testFreq = PROP_UDP_TEST_FREQ;
 //        if (testFreq != null) {
 //            TEST_FREQUENCY = Integer.parseInt(testFreq) * 1000;
-//            if (_log.shouldLog(Log.INFO))
+//            if (_log.shouldInfo())
 //                _log.info("UDP Reachability Test frequency manually configured to: " + TEST_FREQUENCY + "sec");
 //        }
         if (shouldTest()) {
@@ -68,7 +68,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             } else if (!preferV4 && !configV4fw && sinceRunV4 >= TEST_FREQUENCY && _transport.getIPv6Config() != IPV6_ONLY) {
                 locked_runTest(false);
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("PeerTestEvent timeReached(), no test run" +
                               "\n* Last v4 test: " + new java.util.Date(_lastTested.get()) +
                               "\n* Last v6 test: " + new java.util.Date(_lastTestedV6.get()));
@@ -92,12 +92,12 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
         _lastTestIPv6 = isIPv6;
         PeerState bob = _transport.pickTestPeer(BOB, isIPv6, null);
         if (bob != null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Running periodic test with Bob: " + bob);
             _testManager.runTest(bob.getRemoteIPAddress(), bob.getRemotePort(), bob.getCurrentCipherKey(), bob.getCurrentMACKey());
             setLastTested(isIPv6);
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to run Peer Test, no peers available - v6? " + isIPv6);
         }
         // We switch to NO_FORCE even if no peers,
@@ -118,7 +118,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
      *  @since 0.9.39
      */
     public synchronized void forceRunSoon(boolean isIPv6, long delay) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("PTE.forceRunSoon() - v6? " + isIPv6, new Exception());
         if (!isIPv6 && _transport.isIPv4Firewalled())
             return;
@@ -140,7 +140,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
     }
 
     public synchronized void setIsAlive(boolean isAlive) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("PTE.setIsAlive(), isAlive? " + isAlive, new Exception());
         _alive = isAlive;
         if (isAlive) {
@@ -164,7 +164,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             _lastTestedV6.set(now);
         else
             _lastTested.set(now);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("PeerTestEvent setLastTested() - v6? " + isIPv6, new Exception());
     }
 

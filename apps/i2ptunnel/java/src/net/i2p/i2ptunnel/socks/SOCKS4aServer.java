@@ -172,7 +172,7 @@ class SOCKS4aServer extends SOCKSServer {
 
         byte[] reply = reps.toByteArray();
 
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             _log.debug("Sending request reply:\n" + HexDump.dump(reply));
         }
 

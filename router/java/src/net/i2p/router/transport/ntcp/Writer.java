@@ -66,7 +66,7 @@ class Writer {
                 _pendingConnections.notify();
             }
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("wantsWrite: " + con + " already live? " + already + " added to pending? " + pending + ": " + source);
     }
 
@@ -93,7 +93,7 @@ class Writer {
         public void stop() { _stop = true; }
 
         public void run() {
-            if (_log.shouldLog(Log.INFO)) _log.info("Starting writer");
+            if (_log.shouldInfo()) _log.info("Starting writer");
             NTCPConnection con = null;
             while (!_stop) {
                 try {
@@ -101,13 +101,13 @@ class Writer {
                         boolean keepWriting = (con != null) && _writeAfterLive.remove(con);
                         if (keepWriting) {
                             // keep on writing the same one
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Keep writing on the same connection: " + con);
                         } else {
                             _liveWrites.remove(con);
                             con = null;
                             if (_pendingConnections.isEmpty()) {
-                                if (_log.shouldLog(Log.DEBUG))
+                                if (_log.shouldDebug())
                                     _log.debug("Done writing, but nothing pending; waiting...");
                                 _pendingConnections.wait();
                             } else {
@@ -115,7 +115,7 @@ class Writer {
                                 con = iter.next();
                                 iter.remove();
                                 _liveWrites.add(con);
-                                if (_log.shouldLog(Log.DEBUG))
+                                if (_log.shouldDebug())
                                     _log.debug("Switch to writing on: " + con);
                             }
                         }
@@ -123,7 +123,7 @@ class Writer {
                 } catch (InterruptedException ie) {}
                 if (!_stop && (con != null)) {
                     try {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Prepare next write on: " + con);
                         _prepBuffer.init();
                         con.prepareNextWrite(_prepBuffer);
@@ -132,7 +132,7 @@ class Writer {
                     }
                 }
             }
-            if (_log.shouldLog(Log.INFO)) _log.info("Stopping writer");
+            if (_log.shouldInfo()) _log.info("Stopping writer");
         }
     }
 }

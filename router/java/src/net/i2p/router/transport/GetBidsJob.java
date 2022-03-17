@@ -48,7 +48,7 @@ class GetBidsJob extends JobImpl {
         msg.timestamp("Bid");
 
         if (context.banlist().isBanlisted(to)) {
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Attempted to send message to banlisted peer [" + to.toBase64().substring(0,6) + "]");
             //context.messageRegistry().peerFailed(to);
             context.statManager().addRateData("transport.bidFailBanlisted", msg.getLifetime());
@@ -58,7 +58,7 @@ class GetBidsJob extends JobImpl {
 
         Hash us = context.routerHash();
         if (to.equals(us)) {
-            if (log.shouldLog(Log.ERROR))
+            if (log.shouldError())
                 log.error("Send a message to ourselves? nuh uh. msg = " + msg);
             context.statManager().addRateData("transport.bidFailSelf", msg.getLifetime());
             fail(context, msg);
@@ -79,7 +79,7 @@ class GetBidsJob extends JobImpl {
             }
             fail(context, msg);
         } else {
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Attempting to send on transport [" + bid.getTransport().getStyle() + "]: " + bid);
             bid.getTransport().send(msg);
         }

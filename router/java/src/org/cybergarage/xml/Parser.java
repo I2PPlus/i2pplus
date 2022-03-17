@@ -35,7 +35,7 @@ import org.cybergarage.http.HTTPRequest;
 import org.cybergarage.http.HTTPResponse;
 import org.cybergarage.util.Debug;
 
-public abstract class Parser 
+public abstract class Parser
 {
 	// I2P
 	private static final String USER_AGENT = "Debian/buster/sid, UPnP/1.1, MiniUPnPc/2.1";
@@ -81,15 +81,15 @@ public abstract class Parser
 			throw new ParserException("Bad host " + host);
 
 		int port = locationURL.getPort();
-		// Thanks for Hao Hu 
+		// Thanks for Hao Hu
 		if (port == -1)
 			port = 80;
 		String uri = locationURL.getPath();
 		// I2P note: Roku port 9080 now ignored in ControlPoint.addDevice()
-		// I2P fix - Roku 
+		// I2P fix - Roku
 		if (uri.length() <= 0)
 			uri = "/";
-		
+
 		if (!HURLC_PROXY_ENABLED) {
 			HttpURLConnection urlCon = null;
 			InputStream urlIn = null;
@@ -177,7 +177,7 @@ public abstract class Parser
 			Node root = parse(fileIn);
 			fileIn.close();
 			return root;
-			
+
 		} catch (Exception e) {
 			throw new ParserException(e);
 		}
@@ -186,7 +186,7 @@ public abstract class Parser
 	////////////////////////////////////////////////
 	//	parse (Memory)
 	////////////////////////////////////////////////
-	
+
 	public Node parse(String descr) throws ParserException
 	{
 		try {

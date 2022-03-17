@@ -1,7 +1,7 @@
 /*
  * Created on May 20, 2010
  * Created by Paul Gardner
- * 
+ *
  * Copyright 2010 Vuze, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify

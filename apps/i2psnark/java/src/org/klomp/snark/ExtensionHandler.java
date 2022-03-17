@@ -78,7 +78,7 @@ abstract class ExtensionHandler {
 
     public static void handleMessage(Peer peer, PeerListener listener, int id, byte[] bs) {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(ExtensionHandler.class);
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Received extension message " + id + " (" + bs.length + " bytes) from [" + peer + "]");
         if (id == ID_HANDSHAKE)
             handleHandshake(peer, listener, bs, log);
@@ -90,12 +90,12 @@ abstract class ExtensionHandler {
             handleDHT(peer, listener, bs, log);
         else if (id == ID_COMMENT)
             handleComment(peer, listener, bs, log);
-        else if (log.shouldLog(Log.INFO))
+        else if (log.shouldInfo())
             log.info("Unknown extension message " + id + " from [" + peer + "]");
     }
 
     private static void handleHandshake(Peer peer, PeerListener listener, byte[] bs, Log log) {
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug("Received handshake message from [" + peer + "]");
         try {
             // this throws NPE on missing keys
@@ -106,17 +106,17 @@ abstract class ExtensionHandler {
             peer.setHandshakeMap(map);
             Map<String, BEValue> msgmap = map.get("m").getMap();
 
-            if (log.shouldLog(Log.DEBUG))
+            if (log.shouldDebug())
                 log.debug("Peer [" + peer + "] supports extensions: " + msgmap.keySet());
 
             //if (msgmap.get(TYPE_PEX) != null) {
-            //    if (log.shouldLog(Log.DEBUG))
+            //    if (log.shouldDebug())
             //        log.debug("Peer supports PEX extension: " + peer);
             //    // peer state calls peer listener calls sendPEX()
             //}
 
             //if (msgmap.get(TYPE_DHT) != null) {
-            //    if (log.shouldLog(Log.DEBUG))
+            //    if (log.shouldDebug())
             //        log.debug("Peer supports DHT extension: " + peer);
             //    // peer state calls peer listener calls sendDHT()
             //}
@@ -124,12 +124,12 @@ abstract class ExtensionHandler {
             MagnetState state = peer.getMagnetState();
 
             if (msgmap.get(TYPE_METADATA) == null) {
-                if (log.shouldLog(Log.DEBUG))
+                if (log.shouldDebug())
                     log.debug("[" + peer + "] does not support metadata extension");
                 // drop if we need metainfo and we haven't found anybody yet
                 synchronized(state) {
                     if (!state.isInitialized()) {
-                        if (log.shouldLog(Log.DEBUG))
+                        if (log.shouldDebug())
                             log.debug("Dropping [" + peer + "] - we need metadata!");
                         peer.disconnect();
                     }
@@ -139,12 +139,12 @@ abstract class ExtensionHandler {
 
             BEValue msize = map.get("metadata_size");
             if (msize == null) {
-                if (log.shouldLog(Log.DEBUG))
+                if (log.shouldDebug())
                     log.debug("[" + peer + "] does not have the metainfo size yet");
                 // drop if we need metainfo and we haven't found anybody yet
                 synchronized(state) {
                     if (!state.isInitialized()) {
-                        if (log.shouldLog(Log.DEBUG))
+                        if (log.shouldDebug())
                             log.debug("Dropping [" + peer + "] - we need metadata!");
                         peer.disconnect();
                     }
@@ -152,7 +152,7 @@ abstract class ExtensionHandler {
                 return;
             }
             int metaSize = msize.getInt();
-            if (log.shouldLog(Log.DEBUG))
+            if (log.shouldDebug())
                 log.debug("Received the metainfo size: " + metaSize);
 
             int remaining;
@@ -162,7 +162,7 @@ abstract class ExtensionHandler {
 
                 if (state.isInitialized()) {
                     if (state.getSize() != metaSize) {
-                        if (log.shouldLog(Log.DEBUG))
+                        if (log.shouldDebug())
                             log.debug("Wrong metainfo size " + metaSize + " from [" + peer + "]");
                         peer.disconnect();
                         return;
@@ -170,12 +170,12 @@ abstract class ExtensionHandler {
                 } else {
                     // initialize it
                     if (metaSize > MAX_METADATA_SIZE) {
-                        if (log.shouldLog(Log.DEBUG))
+                        if (log.shouldDebug())
                             log.debug("Huge metainfo size " + metaSize + " from [" + peer + "]");
                         peer.disconnect(false);
                         return;
                     }
-                    if (log.shouldLog(Log.INFO))
+                    if (log.shouldInfo())
                         log.info("Initialized state, metadata size = " + metaSize + " from [" + peer + "]");
                     state.initialize(metaSize);
                 }
@@ -189,12 +189,12 @@ abstract class ExtensionHandler {
                 synchronized(state) {
                     chk = state.getNextRequest();
                 }
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Requesting chunk " + chk + " from [" + peer + "]");
                 sendRequest(peer, chk);
             }
         } catch (Exception e) {
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldWarn())
                 log.warn("Handshake exception from [" + peer + "]", e);
         }
     }
@@ -208,7 +208,7 @@ abstract class ExtensionHandler {
      * @since 0.8.4
      */
     private static void handleMetadata(Peer peer, PeerListener listener, byte[] bs, Log log) {
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug("Received metadata message from [" + peer + "]");
         try {
             InputStream is = new ByteArrayInputStream(bs);
@@ -220,7 +220,7 @@ abstract class ExtensionHandler {
 
             MagnetState state = peer.getMagnetState();
             if (type == TYPE_REQUEST) {
-                if (log.shouldLog(Log.DEBUG))
+                if (log.shouldDebug())
                     log.debug("Received request for " + piece + " from [" + peer + "]");
                 byte[] pc;
                 int totalSize;
@@ -237,7 +237,7 @@ abstract class ExtensionHandler {
                 // Prior to 0.9.21, we sent the piece size, so we can't count on it.
                 // just ignore it. The actual length will be verified in saveChunk()
                 //int size = map.get("total_size").getInt();
-                //if (log.shouldLog(Log.DEBUG))
+                //if (log.shouldDebug())
                 //    log.debug("Received data for " + piece + " length " + size + " from: " + peer);
                 boolean done;
                 int chk = -1;
@@ -249,7 +249,7 @@ abstract class ExtensionHandler {
                     listener.downloaded(peer, len);
                     // this checks the size
                     done = state.saveChunk(piece, bs, bs.length - len, len);
-                    if (log.shouldLog(Log.INFO))
+                    if (log.shouldInfo())
                         log.info("Received chunk " + piece + " from [" + peer + "]");
                     if (!done)
                         chk = state.getNextRequest();
@@ -259,25 +259,25 @@ abstract class ExtensionHandler {
                     // Done!
                     // PeerState will call the listener (peer coord), who will
                     // check to see if the MagnetState has it
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("Received last chunk from [" + peer + "]");
                 } else {
                     // get the next chunk
-                    if (log.shouldLog(Log.INFO))
+                    if (log.shouldInfo())
                         log.info("Requesting chunk [" + chk + "] from [" + peer + "]");
                     sendRequest(peer, chk);
                 }
             } else if (type == TYPE_REJECT) {
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("Received reject message from [" + peer + "]");
                 peer.disconnect(false);
             } else {
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("Received unknown metadata message from [" + peer + "]");
                 peer.disconnect(false);
             }
         } catch (Exception e) {
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Received metadata ext. message exception from [" + peer + "]", e);
             // fatal ?
             peer.disconnect(false);
@@ -305,7 +305,7 @@ abstract class ExtensionHandler {
             peer.sendExtension(hisMsgCode, payload);
         } catch (Exception e) {
             // NPE, no metadata capability
-            //if (log.shouldLog(Log.INFO))
+            //if (log.shouldInfo())
             //    log.info("Metadata send req msg exception to " + peer, e);
         }
     }
@@ -328,7 +328,7 @@ abstract class ExtensionHandler {
             peer.sendExtension(hisMsgCode, payload);
         } catch (Exception e) {
             // NPE, no metadata caps
-            //if (log.shouldLog(Log.INFO))
+            //if (log.shouldInfo())
             //    log.info("Metadata send piece msg exception to " + peer, e);
         }
     }
@@ -344,7 +344,7 @@ abstract class ExtensionHandler {
      * @since 0.8.4
      */
     private static void handlePEX(Peer peer, PeerListener listener, byte[] bs, Log log) {
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug("Received PEX msg from [" + peer + "]");
         try {
             InputStream is = new ByteArrayInputStream(bs);
@@ -370,7 +370,7 @@ abstract class ExtensionHandler {
             // could include ourselves, listener must remove
             listener.gotPeers(peer, peers);
         } catch (Exception e) {
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("PEX messsage exception from [" + peer + "]", e);
             //peer.disconnect(false);
         }
@@ -381,7 +381,7 @@ abstract class ExtensionHandler {
      * @since DHT
      */
     private static void handleDHT(Peer peer, PeerListener listener, byte[] bs, Log log) {
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug("Received DHT messsage from [" + peer + "]");
         try {
             InputStream is = new ByteArrayInputStream(bs);
@@ -392,7 +392,7 @@ abstract class ExtensionHandler {
             int rport = map.get("rport").getInt();
             listener.gotPort(peer, qport, rport);
         } catch (Exception e) {
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("DHT messsage exception from [" + peer + "]", e);
             //peer.disconnect(false);
         }
@@ -420,7 +420,7 @@ abstract class ExtensionHandler {
             peer.sendExtension(hisMsgCode, payload);
         } catch (Exception e) {
             // NPE, no PEX caps
-            //if (log.shouldLog(Log.INFO))
+            //if (log.shouldInfo())
             //    log.info("PEX msg exception to " + peer, e);
         }
     }
@@ -439,7 +439,7 @@ abstract class ExtensionHandler {
             peer.sendExtension(hisMsgCode, payload);
         } catch (Exception e) {
             // NPE, no DHT caps
-            //if (log.shouldLog(Log.INFO))
+            //if (log.shouldInfo())
             //    log.info("DHT msg exception to " + peer, e);
         }
     }
@@ -452,7 +452,7 @@ abstract class ExtensionHandler {
      * @since 0.9.31
      */
     private static void handleComment(Peer peer, PeerListener listener, byte[] bs, Log log) {
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug("Received comment messsage from [" + peer + "]");
         try {
             InputStream is = new ByteArrayInputStream(bs);
@@ -486,11 +486,11 @@ abstract class ExtensionHandler {
                 }
                 listener.gotComments(peer, comments);
             } else {
-                if (log.shouldLog(Log.INFO))
+                if (log.shouldInfo())
                     log.info("Unknown comment messsage type " + type + " from [" + peer + "]");
             }
         } catch (Exception e) {
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Comment messsage exception from [" + peer + "]", e);
             //peer.disconnect(false);
         }

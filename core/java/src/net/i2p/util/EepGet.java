@@ -719,7 +719,7 @@ public class EepGet {
         _fetchInactivityTimeout = (int) Math.min(inactivityTimeout, Integer.MAX_VALUE);
         _keepFetching = true;
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Fetching (proxied? " + _shouldProxy + ") url=" + _actualURL);
         while (_keepFetching) {
             SocketTimeout timeout = null;
@@ -731,7 +731,7 @@ public class EepGet {
                 final Thread thread = Thread.currentThread();
                 timeout.setTimeoutCommand(new Runnable() {
                     public void run() {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Timeout reached on " + _url + ": " + stimeout);
                         _aborted = true;
                         thread.interrupt();
@@ -754,7 +754,7 @@ public class EepGet {
                 for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
                 int truncate = _url.indexOf("&");
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                      if (_url.contains("&") && _url.contains("info_hash"))
                         _log.warn("Transfer failed [" + _url.substring(0, truncate).replace("http://", "") + "...] (" + ioe.getMessage() + ")");
                      else
@@ -795,7 +795,7 @@ public class EepGet {
         for (int i = 0; i < _listeners.size(); i++)
             _listeners.get(i).transferFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt);
         int truncate = _url.indexOf("&");
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             if (_url.contains("&") && _url.contains("info_hash")) {
                 if (_url.startsWith("https"))
                     _log.warn("Eepget error: All attempts failed for [" + _url.substring(0, truncate) + "...]");
@@ -970,13 +970,13 @@ public class EepGet {
                     throw new IOException("Proxy requires authentication");
                 if (as.authSent)
                     throw new IOException("Proxy authentication failed");  // ignore stale
-                if (_log.shouldLog(Log.INFO)) _log.info("Adding auth");
+                if (_log.shouldInfo()) _log.info("Adding auth");
                 // actually happens in getRequest()
             } else {
                 _redirects++;
                 if (_redirects > 5)
                     throw new IOException("Too many redirects: to " + _redirectLocation);
-                if (_log.shouldLog(Log.INFO)) _log.info("Redirecting to " + _redirectLocation);
+                if (_log.shouldInfo()) _log.info("Redirecting to " + _redirectLocation);
                 if (as != null)
                     as.authSent = false;
             }
@@ -995,7 +995,7 @@ public class EepGet {
             return;
         }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Headers read completely");
 
         boolean strictSize = (_bytesRemaining >= 0);
@@ -1095,7 +1095,7 @@ public class EepGet {
         if (timeout != null)
             timeout.cancel();
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Done transferring " + _bytesTransferred + " (ok? " + !_transferFailed + ")");
 
 
@@ -1138,7 +1138,7 @@ public class EepGet {
         _responseCode = handleStatus(buf.toString());
         boolean redirect = false;
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug(_actualURL + " -> Status: " + _status);
         boolean rcOk = false;
         // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
@@ -1386,7 +1386,7 @@ public class EepGet {
         String len = buf.toString().trim();
         try {
             long bytes = Long.parseLong(len, 16);
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Chunked length: " + bytes);
             return bytes;
         } catch (NumberFormatException nfe) {
@@ -1405,11 +1405,11 @@ public class EepGet {
      */
     private int handleStatus(String line) {
         line = line.trim();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Status line: [" + line + "]");
         String[] toks = DataHelper.split(line, " ", 3);
         if (toks.length < 2) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error: status " + line);
             return -1;
         }
@@ -1421,7 +1421,7 @@ public class EepGet {
                 _responseText = null;
             return Integer.parseInt(rc);
         } catch (NumberFormatException nfe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error: status is invalid: " + line, nfe);
             return -1;
         }
@@ -1433,7 +1433,7 @@ public class EepGet {
         for (int i = 0; i < _listeners.size(); i++)
             _listeners.get(i).headerReceived(_url, _currentAttempt, key, val);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Header line: [" + key + "] = [" + val + "]");
         key = key.toLowerCase(Locale.US);
         if (key.equals("content-length")) {
@@ -1574,7 +1574,7 @@ public class EepGet {
         _proxyOut.write(DataHelper.getUTF8(req));
         _proxyOut.flush();
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Request flushed");
     }
 
@@ -1597,7 +1597,7 @@ public class EepGet {
         int port = url.getPort();
         String path = url.getRawPath();
         String query = url.getRawQuery();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Requesting " + _actualURL);
         // RFC 2616 sec 5.1.2 - full URL if proxied, absolute path only if not proxied
         String urlToSend;
@@ -1731,7 +1731,7 @@ public class EepGet {
         buf.append("Connection: close\r\n\r\n");
         if (post)
             buf.append(_postData);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Request:\n" + buf.toString().trim());
         return buf.toString();
     }
@@ -2192,7 +2192,7 @@ public class EepGet {
             //String algorithm = args.get("algorithm");
             //String stale = args.get("stale");
             if (realm == null || nonce == null) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Bad digest request: " + DataHelper.toString(args));
                 throw new IOException("Bad auth response");
             }
@@ -2277,7 +2277,7 @@ public class EepGet {
                 DataHelper.copy(in, _out);
             } catch (IOException ioe) {
                 _decompressException = ioe;
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error decompressing: " + written + ", " + in.getTotalRead() + "/" + in.getTotalExpanded(), ioe);
             } catch (OutOfMemoryError oom) {
                 _decompressException = new IOException("OOM in HTTP Decompressor");

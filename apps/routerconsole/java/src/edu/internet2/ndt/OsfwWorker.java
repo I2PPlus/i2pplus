@@ -8,13 +8,13 @@ import java.net.Socket;
  * OsfwWorker creates a thread that listens for a message from the server. It
  * functions to check if the server has sent a message that is valid and
  * sufficient to determine if the server-&gt;client direction has a fire-wall.
- * 
+ *
  * <p>
  * As part of the simple firewall test, the Server must try to connect to the
  * Client's ephemeral port and send a TEST_MSG message containing a pre-defined
  * string "Simple firewall test" of 20 chars using this newly created
  * connection. This class implements this functionality.
- * 
+ *
  * The result of the test is set back into the Tcpbw100._iS2cSFWResult variable
  * (using setter methods) for the test results to be interpreted later
  * */
@@ -29,10 +29,10 @@ public class OsfwWorker implements Runnable {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param srvSocketParam
 	 *            Socket used to transmit protocol messages
-	 * 
+	 *
 	 * @param iParamTestTime
 	 *            Test time duration to wait for message from server
 	 */
@@ -44,7 +44,7 @@ public class OsfwWorker implements Runnable {
 
 	/**
 	 * Constructor accepting Tcpbw100 parameter
-	 * 
+	 *
 	 * @param srvSocketParam
 	 *            Socket on which to accept connections
 	 * @param iParamTestTime
@@ -61,7 +61,7 @@ public class OsfwWorker implements Runnable {
 
 	/**
 	 * Make current thread sleep for 1000 ms
-	 * 
+	 *
 	 * */
 	public void finalize() {
 		// If test is not already complete/terminated, then sleep
@@ -134,11 +134,11 @@ public class OsfwWorker implements Runnable {
 				return;
 			}
 
-			
+
 			// The server is expected to send a 20 char message that
 			// says "Simple firewall test" . Every other message string
 			// indicates an unknown firewall status
-			
+
 			if (!new String(msg.getBody())
 					.equals(NDTConstants.SFW_PREDEFINED_TEST_MESSAGE)) {
 				System.out.println("Simple firewall test: Improper message");

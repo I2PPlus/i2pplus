@@ -1,9 +1,9 @@
 package net.i2p.util;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -36,7 +36,7 @@ public class LogSettingsTest extends TestCase {
 
     private String origMinimumOnScreenLevel;
     private String origLogSettings;
-    
+
 
     /**
      * Sets up the test fixture.
@@ -62,24 +62,24 @@ public class LogSettingsTest extends TestCase {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", origMinimumOnScreenLevel);
         p.setProperty("logger.minimumOnScreenLevel", origLogSettings);
         DataHelper.storeProps(p, f);
-        
+
         System.gc();
     }
 
     public void testDebug() throws IOException {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.DEBUG));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-        
+
         DataHelper.storeProps(p, f);
-        
+
         _context.logManager().rereadConfig();
-        
+
         PipedInputStream pin = new PipedInputStream();
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-        
+
         PrintStream systemOut = System.out;
         PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-        
+
         System.setOut(pout);
 
         try {
@@ -101,37 +101,37 @@ public class LogSettingsTest extends TestCase {
             String l3 = in.readLine();
             String l4 = in.readLine();
             String l5 = in.readLine();
-        
+
             assertTrue(
                 l1.matches(".*DEBUG: debug") &&
                 l2.matches(".*DEBUG: info") &&
                 l3.matches(".*DEBUG: warn") &&
                 l4.matches(".*DEBUG: error") &&
                 l5.matches(".*DEBUG: crit")
-            );    
+            );
         } finally {
             System.setOut(systemOut);
             pout.close();
         }
 
-        
+
     }
 
     public void testInfo() throws IOException {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.INFO));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-        
+
     	DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
-        
+
         PipedInputStream pin = new PipedInputStream();
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-        
+
         PrintStream systemOut = System.out;
         PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-        
+
         System.setOut(pout);
-        
+
         try {
             log.debug("INFO" + ": debug");
             log.info("INFO" + ": info");
@@ -150,7 +150,7 @@ public class LogSettingsTest extends TestCase {
             String l2 = in.readLine();
             String l3 = in.readLine();
             String l4 = in.readLine();
-        
+
             assertTrue(
                 l1.matches(".*INFO: info") &&
                 l2.matches(".*INFO: warn") &&
@@ -168,18 +168,18 @@ public class LogSettingsTest extends TestCase {
     public void testWarn() throws IOException {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.WARN));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-        
+
     	DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
-        
+
         PipedInputStream pin = new PipedInputStream();
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-        
+
         PrintStream systemOut = System.out;
         PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-        
+
         System.setOut(pout);
-        
+
         try {
             log.debug("WARN" + ": debug");
             log.info("WARN" + ": info");
@@ -197,7 +197,7 @@ public class LogSettingsTest extends TestCase {
             String l1 = in.readLine();
             String l2 = in.readLine();
             String l3 = in.readLine();
-        
+
             assertTrue(
                 l1.matches(".*WARN: warn") &&
                 l2.matches(".*WARN: error") &&
@@ -213,18 +213,18 @@ public class LogSettingsTest extends TestCase {
     public void testError() throws IOException{
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.ERROR));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-        
+
     	DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
-        
+
         PipedInputStream pin = new PipedInputStream();
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-        
+
         PrintStream systemOut = System.out;
         PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-        
+
         System.setOut(pout);
-        
+
         try {
             log.debug("ERROR" + ": debug");
             log.info("ERROR" + ": info");
@@ -241,7 +241,7 @@ public class LogSettingsTest extends TestCase {
             pout.flush();
             String l1 = in.readLine();
             String l2 = in.readLine();
-        
+
             assertTrue(
                 l1.matches(".*ERROR: error") &&
                 l2.matches(".*ERROR: crit")
@@ -256,18 +256,18 @@ public class LogSettingsTest extends TestCase {
     public void testCrit() throws IOException {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.CRIT));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-        
+
     	DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
-        
+
         PipedInputStream pin = new PipedInputStream();
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-        
+
         PrintStream systemOut = System.out;
         PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-        
+
         System.setOut(pout);
-        
+
         try {
             log.debug("CRIT" + ": debug");
             log.info("CRIT" + ": info");
@@ -282,7 +282,7 @@ public class LogSettingsTest extends TestCase {
             pout.println("");
             pout.flush();
             String l1 = in.readLine();
-        
+
             assertTrue(
                 l1.matches(".*CRIT: crit")
             );
@@ -293,5 +293,5 @@ public class LogSettingsTest extends TestCase {
 
     }
 
-    
+
 }

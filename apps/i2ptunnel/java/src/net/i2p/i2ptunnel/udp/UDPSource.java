@@ -37,18 +37,18 @@ public class UDPSource implements Source, Runnable {
     /** use socket from UDPSink */
     public UDPSource(DatagramSocket sock) {
         this.sock = sock;
-        port = sock.getLocalPort();    
+        port = sock.getLocalPort();
         this.thread = new I2PAppThread(this);
     }
-    
+
     public void setSink(Sink sink) {
         this.sink = sink;
     }
-    
+
     public void start() {
         this.thread.start();
     }
-    
+
     public void run() {
         // create packet
         byte[] buf = new byte[MAX_SIZE];
@@ -57,13 +57,13 @@ public class UDPSource implements Source, Runnable {
             try {
                 // receive...
                 this.sock.receive(pack);
-                
+
                 // create new data array
                 byte[] nbuf = new byte[pack.getLength()];
-                
+
                 // copy over
                 System.arraycopy(pack.getData(), 0, nbuf, 0, nbuf.length);
-                
+
                 // transfer to sink
                 this.sink.send(null, port, 0, nbuf);
                 //System.out.print("i");
@@ -75,16 +75,16 @@ public class UDPSource implements Source, Runnable {
             }
         }
     }
-    
+
     /**
      *  @return the local port of the DatagramSocket we are receiving on
      *  @since 0.9.53
      */
-    public int getPort() {    
-        return port;    
-    }    
+    public int getPort() {
+        return port;
+    }
 
-    public void stop() {    
-        this.sock.close();    
-    }    
+    public void stop() {
+        this.sock.close();
+    }
 }

@@ -442,7 +442,7 @@ public abstract class TransportImpl implements Transport {
                           (sendSuccessful ? (" and succeeding on " + getStyle()) : ""));
             if ( (allTime > 60*1000) && (sendSuccessful) ) {
                 // VERY slow
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Severe latency? More than a minute slow? \n* " + msg.getMessageType() +
                               " of [MsgID " + msg.getMessageId() + "] \n* Send began: " +
                               new Date(msg.getSendBegin()) + "\n* Message created: " +
@@ -483,23 +483,23 @@ public abstract class TransportImpl implements Transport {
      */
     public void send(OutNetMessage msg) {
         if (msg.getTarget() == null) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error - Bad message enqueued (target is null): " + msg, new Exception("Added by"));
             return;
         }
         try {
             _sendPool.put(msg);
         } catch (InterruptedException ie) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Interrupted during send " + msg);
             return;
         }
 
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Message added to send pool");
         //msg.timestamp("send on " + getStyle());
         outboundMessageReady();
-        //if (_log.shouldLog(Log.INFO))
+        //if (_log.shouldInfo())
         //    _log.debug("OutboundMessageReady called");
     }
     /**
@@ -556,7 +556,7 @@ public abstract class TransportImpl implements Transport {
         if (_listener != null) {
             _listener.messageReceived(inMsg, remoteIdent, remoteIdentHash);
         } else {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Null listener! this = " + toString(), new Exception("Null listener"));
         }
     }
@@ -622,7 +622,7 @@ public abstract class TransportImpl implements Transport {
      *  @param address null to remove all
      */
     protected void replaceAddress(RouterAddress address) {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
 //             _log.warn("Replacing address with " + address, new Exception());
              _log.warn("Replacing existing address\n* " + address);
         if (address == null) {
@@ -636,7 +636,7 @@ public abstract class TransportImpl implements Transport {
             }
             _currentAddresses.add(address);
         }
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
              _log.warn("[" + getStyle() + "] now has " + _currentAddresses.size() + " addresses");
         if (_listener != null)
             _listener.transportAddressChanged();

@@ -308,7 +308,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     protected void blockingHandle(I2PSocket socket) {
         Hash peerHash = socket.getPeerDestination().calculateHash();
         String peerB32 = socket.getPeerDestination().toBase32();
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[HTTPServer] Incoming connection to " + toString() + " (port " + socket.getLocalPort() +
                       ")\n* From: " + peerB32 + " on port " + socket.getPort());
         //local is fast, so synchronously. Does not need that many
@@ -352,7 +352,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } finally {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
 //                    _log.warn("[HTTPServer] Error in the HTTP request (timeout) \n* From: " + peerB32, ste);
                     _log.warn("[HTTPServer] Error in the HTTP request (timeout) \n* Client: " + peerB32);
                 return;
@@ -363,7 +363,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } finally {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
 //                    _log.warn("[HTTPServer] Error in the HTTP request (bad request) \n* From: " + peerB32, eofe);
                     _log.warn("[HTTPServer] Error in the HTTP request (EOF exception) \n* Client: " + peerB32);
                 return;
@@ -374,7 +374,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } finally {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
 //                    _log.warn("[HTTPServer] Error in the HTTP request (headers too large) \n* From: " + peerB32, ltle);
                     _log.warn("[HTTPServer] Error in the HTTP request (headers too large) \n* Client: " + peerB32);
                 return;
@@ -385,7 +385,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } finally {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
 //                    _log.warn("[HTTPServer] Error in the HTTP request (URI too long) \n* From: " + peerB32, rtle);
                     _log.warn("[HTTPServer] Error in the HTTP request (URI too long) \n* Client: " + peerB32);
                 return;
@@ -396,7 +396,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } finally {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("[HTTPServer] Error in the HTTP request (bad request) \n* Client: " + peerB32, bre);
                 return;
             }
@@ -408,7 +408,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  headers.containsKey("X-Forwarded-Server") ||
                  headers.containsKey("Forwarded") ||  // RFC 7239
                  headers.containsKey("X-Forwarded-Host"))) {
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     StringBuilder buf = new StringBuilder();
                     buf.append("[HTTPServer] Refusing inproxy access: ").append(peerB32);
                     List<String> h = headers.get("X-Forwarded-For");
@@ -445,7 +445,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         // "Referer: "
                         referer = referer.substring(9);
                         if (referer.startsWith("http://") || referer.startsWith("https://")) {
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("[HTTPServer] Refusing access (bad referer) \n* Client: " + peerB32 +
                                           "\n* Referer: " + referer);
                             try {
@@ -472,7 +472,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                 if (ag.equals("none"))
                                     continue;
                                 if (ag.length() > 0 && ua.contains(ag)) {
-                                    if (_log.shouldLog(Log.WARN))
+                                    if (_log.shouldWarn())
                                         _log.warn("[HTTPServer] Refusing access (bad user agent) \n* Client: " + peerB32 +
                                                   "\n* User-Agent: " + ua);
                                     try {
@@ -494,7 +494,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         for (int i = 0; i < agents.length; i++) {
                             String ag = agents[i].trim();
                             if (ag.equals("none")) {
-                                if (_log.shouldLog(Log.WARN))
+                                if (_log.shouldWarn())
                                     _log.warn("[HTTPServer] Refusing access (blank user agent) \n* Client: " + peerB32);
                                 try {
                                     socket.getOutputStream().write(ERR_INPROXY.getBytes("UTF-8"));
@@ -514,7 +514,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 (command.substring(0, 5).toUpperCase(Locale.US).equals("POST ") ||
                  command.substring(0, 4).toUpperCase(Locale.US).equals("PUT "))) {
                 if (_postThrottler.shouldThrottle(peerHash)) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("[HTTPServer] Refusing POST/PUT since peer is throttled \n* Client: " + peerB32);
                     try {
                         // Send a 429, so the user doesn't get an HTTP Proxy error message
@@ -574,7 +574,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             String val = opts.getProperty(TunnelController.PROP_TUN_GZIP);
             if ( (val != null) && (!Boolean.parseBoolean(val)) )
                 allowGZIP = false;
-            if (_log.shouldLog(Log.DEBUG) && (enc != null || altEnc != null))
+            if (_log.shouldDebug() && (enc != null || altEnc != null))
                 _log.debug("[HTTPServer] Encoding header: " + enc + "/" + altEnc);
             boolean alt = (altEnc != null) && (altEnc.indexOf("x-i2p-gzip") >= 0);
             boolean useGZIP = alt || ( (enc != null) && (enc.indexOf("x-i2p-gzip") >= 0) );
@@ -583,7 +583,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 headers.remove("X-Accept-Encoding");
 
             String modifiedHeader = formatHeaders(headers, command);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[HTTPServer] Modified header\n\t" + modifiedHeader);
 
             // Set a relatively short timeout for GET/HEAD,
@@ -603,8 +603,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             long afterHandle = getTunnel().getContext().clock().now();
             long timeToHandle = afterHandle - afterAccept;
             getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
-//            if ( (timeToHandle > 1000) && (_log.shouldLog(Log.WARN)) )
-            if ( (timeToHandle > 1500) && (_log.shouldLog(Log.INFO)) )
+//            if ( (timeToHandle > 1000) && (_log.shouldWarn()) )
+            if ( (timeToHandle > 1500) && (_log.shouldInfo()) )
                 _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
                           "\n* Client: " + peerB32 +
                           "\n* Tasks: Read headers: " + (afterHeaders-afterAccept) +
@@ -628,7 +628,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             try {
                 socket.close();
             } catch (IOException ioe) {}
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
 //                _log.warn("[HTTPServer] Error in the HTTP request \n* From: " + peerB32, ex);
                 _log.warn("[HTTPServer] Error in the HTTP request \n* Client: " + peerB32 + "\n* " + ex.getMessage());
         } catch (OutOfMemoryError oom) {
@@ -642,7 +642,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             try {
                 socket.close();
             } catch (IOException ioe) {}
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("[HTTPServer] Out of Memory error", oom);
         }
     }
@@ -681,7 +681,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             try {
                 serverout = _webserver.getOutputStream();
 
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[HTTPServer] Received Request headers \n Request: " + _headers);
                 serverout.write(DataHelper.getUTF8(_headers));
                 browserin = _browser.getInputStream();
@@ -740,7 +740,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     browserout.write(ERR_UNAVAILABLE.getBytes("UTF-8"));
                 } catch (IOException ioe) {}
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
 //                    _log.warn("[HTTPServer] Error compressing", ioe);
                     _log.warn("[HTTPServer] Error compressing: " + ioe.getMessage());
                  ioex = ioe;
@@ -808,15 +808,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         public void run() {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[HTTPServer] " + _name + ": Begin sending");
             try {
                 DataHelper.copy(_in, _out);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("[HTTPServer] " + _name + ": Done sending");
                 //_out.flush();
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
 //                    _log.debug("[HTTPServer] " + _name + ": Error sending", ioe);
                     _log.warn("[HTTPServer] " + _name + ": Error sending -> " + ioe.getMessage());
                 synchronized(this) {
@@ -901,7 +901,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         @Override
         protected void beginProcessing() throws IOException {
-            //if (_log.shouldLog(Log.INFO))
+            //if (_log.shouldInfo())
             //    _log.info("Beginning compression processing");
             //out.flush();
             if (shouldCompress()) {
@@ -1042,7 +1042,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  throw new EOFException("EOF reached before the end of the headers");
         }
 
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Read the http command [" + command.toString() + "]");
 
         int totalSize = command.length();
@@ -1115,7 +1115,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 addEntry(headers, name, value);
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("Client [" + peerB32.substring(0,6) + "] Reading header: " + name + " -> " + new Date(ctx.clock().now()));
                 //    _log.debug("Read the header [" + name + "] = [" + value + "]");
             }

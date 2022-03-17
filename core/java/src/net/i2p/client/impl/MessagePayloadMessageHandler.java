@@ -33,7 +33,7 @@ class MessagePayloadMessageHandler extends HandlerImpl {
     }
 
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Handle " + message + "\n* Session: " + session);
         try {
             MessagePayloadMessage msg = (MessagePayloadMessage) message;
@@ -76,7 +76,7 @@ class MessagePayloadMessageHandler extends HandlerImpl {
 
         //byte[] data = _context.elGamalAESEngine().decrypt(payload.getEncryptedData(), session.getDecryptionKey());
         //if (data == null) {
-        //    if (_log.shouldLog(Log.WARN))
+        //    if (_log.shouldWarn())
         //        _log.warn("Error decrypting the payload");
         //    throw new DataFormatException("Unable to decrypt the payload");
         //}

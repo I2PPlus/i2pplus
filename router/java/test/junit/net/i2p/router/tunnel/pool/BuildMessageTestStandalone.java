@@ -158,14 +158,14 @@ public class BuildMessageTestStandalone extends TestCase {
             msg.setRecord(ourSlot, reply);
 
             if (testType == 1 || testType == 4) {
-                log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64() 
+                log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
                           + " receives on " + ourId + " sending to " + nextId
                           + " replyKey " + Base64.encode(req.readReplyKey().getData())
                           + " replyIV " + Base64.encode(req.readReplyIV())
                           + " on " + nextPeer.toBase64()
                           + " inGW? " + isInGW + " outEnd? " + isOutEnd + " time difference " + (now-time));
             } else if (testType == 2 || testType == 5) {
-                log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64() 
+                log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
                           + " receives on " + ourId + " sending to " + nextId
                           + " replyKey " + Base64.encode(req.readReplyKey().getData())
                           + " replyIV " + Base64.encode(req.readReplyIV())
@@ -174,7 +174,7 @@ public class BuildMessageTestStandalone extends TestCase {
                           + " on " + nextPeer.toBase64()
                           + " inGW? " + isInGW + " outEnd? " + isOutEnd + " time difference " + (now-time));
             } else {
-                log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64() 
+                log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
                           + " receives on " + ourId + " sending to " + nextId
                           + " chachaKey " + Base64.encode(req.getChaChaReplyKey().getData())
                           + " chachaAD " + Base64.encode(req.getChaChaReplyAD())
@@ -226,7 +226,7 @@ public class BuildMessageTestStandalone extends TestCase {
         }
 
         log.debug("\n================================================================" +
-                  "\nTest " + testType + " complete, all peers agree? " + allAgree + 
+                  "\nTest " + testType + " complete, all peers agree? " + allAgree +
                   "\n================================================================");
         assertTrue("All peers agree", allAgree);
     }

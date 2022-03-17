@@ -47,11 +47,11 @@ public class IrcInboundFilter implements Runnable {
             in = new BufferedReader(new InputStreamReader(remote.getInputStream(), "ISO-8859-1"));
             output=local.getOutputStream();
         } catch (IOException e) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("[IRC Client] Inbound Filter: No streams",e);
             return;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("[IRC Client] Inbound Filter: Running");
         try {
             while(true)
@@ -63,18 +63,18 @@ public class IrcInboundFilter implements Runnable {
                     if(inmsg.endsWith("\r"))
                         inmsg=inmsg.substring(0,inmsg.length()-1);
                     // dupe of info level log
-                    //if (_log.shouldLog(Log.DEBUG))
+                    //if (_log.shouldDebug())
                     //    _log.debug("[IRC Client] In: [" + inmsg + "]");
                     String outmsg = IRCFilter.inboundFilter(inmsg, expectedPong, _dccHelper);
                     if(outmsg != null)
                     {
                         if(!inmsg.equals(outmsg)) {
-                            if (_log.shouldLog(Log.WARN)) {
+                            if (_log.shouldWarn()) {
                                 _log.warn("[IRC Client] Inbound message FILTERED [" + outmsg + "]");
                                 _log.warn("[IRC Client] Inbound message [" + inmsg + "]");
                             }
                         } else {
-                            if (_log.shouldLog(Log.INFO))
+                            if (_log.shouldInfo())
                                 _log.info("[IRC Client] Inbound message [" + outmsg + "]");
                         }
                         outmsg = outmsg + "\r\n";   // rfc1459 sec. 2.3
@@ -83,11 +83,11 @@ public class IrcInboundFilter implements Runnable {
                         if (!in.ready())
                             output.flush();
                     } else {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("[IRC Client] Inbound message BLOCKED [" + inmsg + "]");
                     }
                 } catch (IOException e1) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("[IRC Client] Inbound Filter: Disconnected", e1);
                     break;
                 }
@@ -98,7 +98,7 @@ public class IrcInboundFilter implements Runnable {
             try { in.close(); } catch (IOException e) {}
             try { local.close(); } catch(IOException e) {}
         }
-        if(_log.shouldLog(Log.DEBUG))
+        if(_log.shouldDebug())
             _log.debug("[IRC Client] Inbound Filter: Stopped");
     }
 }

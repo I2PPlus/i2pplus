@@ -115,11 +115,11 @@ class BackgroundChecker {
 						mailbox.foundNewMail(true);
 					}
 				}
-			} finally {		
+			} finally {
 				isChecking = false;
 				if (!isDead)
 					timer.schedule(getCheckTime());
-			}		
+			}
 		}
 	}
 }

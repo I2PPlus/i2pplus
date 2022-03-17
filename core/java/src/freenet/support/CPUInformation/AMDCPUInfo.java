@@ -2,9 +2,9 @@
  * Created on Jul 17, 2004
  *
  * free (adj.): unencumbered; not under the control of others
- * Written by Iakin in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by Iakin in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might. Use at your own risk.
  */
 package freenet.support.CPUInformation;
@@ -39,7 +39,7 @@ public interface AMDCPUInfo extends CPUInfo {
      * @return true if the CPU present in the machine is at least an 'k8' CPU (Atlhon 64, Opteron etc. and better)
      */
     public boolean IsAthlon64Compatible();
-    /** 
+    /**
      * @return true if the CPU present in the machine is at least an 'k10' CPU
      * @since 0.9.26
      */

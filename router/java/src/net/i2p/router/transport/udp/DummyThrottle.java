@@ -17,7 +17,7 @@ class DummyThrottle implements OutboundMessageFragments.ActiveThrottle {
 
     public DummyThrottle() {
     }
-    
+
     public void choke(Hash peer) {
     }
 
@@ -28,4 +28,4 @@ class DummyThrottle implements OutboundMessageFragments.ActiveThrottle {
         return false;
     }
 }
-    
+

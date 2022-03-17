@@ -33,7 +33,7 @@ public class NewsMetadata {
             // Sort latest version first.
             return VersionComparator.comp(other.i2pVersion, i2pVersion);
         }
-    
+
         /**
          *  For findbugs.
          *  Warning, not a complete comparison.
@@ -49,7 +49,7 @@ public class NewsMetadata {
             Release r = (Release) o;
             return DataHelper.eq(i2pVersion, r.i2pVersion);
         }
-        
+
         /**
          *  For findbugs.
          *  @since 0.9.21
@@ -91,7 +91,7 @@ public class NewsMetadata {
             else
                 return 3;
         }
-    
+
         /**
          *  For findbugs.
          *  Warning, not a complete comparison.
@@ -107,7 +107,7 @@ public class NewsMetadata {
             Update u = (Update) o;
             return getTypeOrder() == u.getTypeOrder();
         }
-        
+
         /**
          *  For findbugs.
          *  @since 0.9.21

@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -53,17 +53,17 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     public void setData(byte[] data) {
         _data = data;
     }
-    
-    /** 
-     * Count how many of the bytes in the array are 'valid'.  
-     * this property does not necessarily have meaning for all byte 
+
+    /**
+     * Count how many of the bytes in the array are 'valid'.
+     * this property does not necessarily have meaning for all byte
      * arrays.
      */
     public int getValid() { return _valid; }
     public void setValid(int valid) { _valid = valid; }
     public int getOffset() { return _offset; }
     public void setOffset(int offset) { _offset = offset; }
-    
+
     @Override
     public final boolean equals(Object o) {
         if (o == this) return true;
@@ -84,21 +84,21 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     private static final boolean compare(byte[] lhs, int loff, int llen, byte[] rhs, int roff, int rlen) {
         return (llen == rlen) && DataHelper.eq(lhs, loff, rhs, roff, llen);
     }
-    
+
     public final int compareTo(ByteArray ba) {
         return DataHelper.compareTo(_data, ba.getData());
     }
-    
+
     @Override
     public final int hashCode() {
         return DataHelper.hashCode(getData());
     }
-    
+
     @Override
     public String toString() {
         return super.toString() + "/" + DataHelper.toString(getData(), 32) + "." + _valid;
     }
-    
+
     public final String toBase64() {
         return Base64.encode(_data, _offset, _valid);
     }

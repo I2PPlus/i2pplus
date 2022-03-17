@@ -27,7 +27,7 @@ public final class TimerUtil
 
 	public final static void waitRandom(int time)
 	{
-		int waitTime = (int)(Math.random() * (double)time);		
+		int waitTime = (int)(Math.random() * (double)time);
 		try {
 			Thread.sleep(waitTime);
 		}

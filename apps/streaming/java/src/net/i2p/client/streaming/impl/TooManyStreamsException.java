@@ -14,7 +14,7 @@ public class TooManyStreamsException extends I2PException {
     public TooManyStreamsException(String message) {
         super(message);
     }
-    
+
     public TooManyStreamsException() {
         super();
     }

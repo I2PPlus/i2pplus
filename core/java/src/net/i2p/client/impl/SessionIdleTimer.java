@@ -92,11 +92,11 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
             return;
         long now = _context.clock().now();
         long lastActivity = _session.lastActivity();
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
             _log.info("Firing idle timer -> last activity detected " + DataHelper.formatDuration(now - lastActivity) + " ago ");
         long nextDelay = 0;
         if (_shutdownEnabled && now - lastActivity >= _shutdownTime) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Closing tunnels on idle -> " + _session);
             _session.destroySession();
             return;
@@ -105,7 +105,7 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
                 _log.debug("Still idle, sleeping again -> " + _session);
             nextDelay = _reduceTime;
         } else if (_reduceEnabled && now - lastActivity >= _reduceTime) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Reducing tunnel quantity on idle -> " + _session + ' ');
             try {
                 _session.getProducer().updateTunnels(_session, _reduceQuantity);

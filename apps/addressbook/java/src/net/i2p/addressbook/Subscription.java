@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2004 Ragnarok
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,9 +23,9 @@ package net.i2p.addressbook;
 
 /**
  * A subscription to a remote address book.
- * 
+ *
  * @author Ragnarok
- *  
+ *
  */
 class Subscription {
 
@@ -37,7 +37,7 @@ class Subscription {
     /**
      * Construct a Subscription pointing to the address book at location, that
      * was last read at the time represented by etag and lastModified.
-     * 
+     *
      * @param location
      *            A String representing a url to a remote address book. Non-null.
      * @param etag
@@ -62,7 +62,7 @@ class Subscription {
 
     /**
      * Return the location this Subscription points at.
-     * 
+     *
      * @return A String representing a url to a remote address book.
      */
     public String getLocation() {
@@ -72,7 +72,7 @@ class Subscription {
     /**
      * Return the etag header that we received the last time we read this
      * subscription.
-     * 
+     *
      * @return A String containing the etag header.
      */
     public String getEtag() {
@@ -81,7 +81,7 @@ class Subscription {
 
     /**
      * Set the etag header.
-     * 
+     *
      * @param etag
      *            A String containing the etag header.
      */
@@ -92,7 +92,7 @@ class Subscription {
     /**
      * Return the last-modified header that we received the last time we read
      * this subscription.
-     * 
+     *
      * @return A String containing the last-modified header.
      */
     public String getLastModified() {
@@ -101,7 +101,7 @@ class Subscription {
 
     /**
      * Set the last-modified header.
-     * 
+     *
      * @param lastModified
      *            A String containing the last-modified header.
      */

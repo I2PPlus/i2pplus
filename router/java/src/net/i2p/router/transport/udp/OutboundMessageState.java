@@ -111,7 +111,7 @@ class OutboundMessageState implements CDPQEntry {
         _fragmentAcks = _numFragments < 64 ? mask(_numFragments) - 1L : -1L;
         _fragmentSends = (numFragments > 1) ? new byte[numFragments] : null;
     }
-    
+
     /**
      * @since 0.9.54
      */
@@ -475,7 +475,7 @@ class OutboundMessageState implements CDPQEntry {
             System.arraycopy(_messageBuf, start, out, outOffset, toSend);
             return toSend;
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error: " + start + '/' + end + '/' + outOffset + '/' + out.length);
         }
         return -1;

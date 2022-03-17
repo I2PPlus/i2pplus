@@ -15,7 +15,7 @@
 *	10/26/04
 *		- Oliver Newell <newell@media-rush.com>
 *		- Added support the intinite time and fixed a bug in isExpired().
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.event;
@@ -27,7 +27,7 @@ public class Subscriber
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public Subscriber()
 	{
 		renew();
@@ -52,17 +52,17 @@ public class Subscriber
 	////////////////////////////////////////////////
 
 	private String ifAddr = "";
-	
+
 	public void setInterfaceAddress(String addr)
 	{
 		ifAddr = addr;
 	}
-	
+
 	public String getInterfaceAddress()
 	{
 		return ifAddr;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	deliveryURL
 	////////////////////////////////////////////////
@@ -100,13 +100,13 @@ public class Subscriber
 		return deliveryPort;
 	}
 
-	
+
 	////////////////////////////////////////////////
 	//	Timeout
 	////////////////////////////////////////////////
 
 	private long timeOut = 0;
-	
+
 	public long getTimeOut() {
 		return timeOut;
 	}
@@ -118,25 +118,25 @@ public class Subscriber
 	public boolean isExpired()
 	{
 		long currTime = System.currentTimeMillis();
-		
+
 		// Thanks for Oliver Newell (10/26/04)
-		if(timeOut == Subscription.INFINITE_VALUE ) 
-			return false; 
-			
+		if(timeOut == Subscription.INFINITE_VALUE )
+			return false;
+
 		// Thanks for Oliver Newell (10/26/04)
 		long expiredTime = getSubscriptionTime() + getTimeOut()*1000;
 		if (expiredTime < currTime)
 			return true;
-			
+
 		return false;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	SubscriptionTIme
 	////////////////////////////////////////////////
 
 	private long subscriptionTime = 0;
-	
+
 	public long getSubscriptionTime() {
 		return subscriptionTime;
 	}
@@ -166,11 +166,11 @@ public class Subscriber
 		}
 		notifyCount++;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	renew
 	////////////////////////////////////////////////
-	
+
 	public void renew()
 	{
 		setSubscriptionTime(System.currentTimeMillis());

@@ -56,7 +56,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 
 	/**
 	 * Resets the message authenticator with a new key.
-	 * 
+	 *
 	 * @param key The buffer containing the 32 byte key.
 	 * @param offset The offset into the buffer of the first key byte.
 	 */
@@ -65,7 +65,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 		System.arraycopy(key, offset + 16, nonce, 0, 16);
 		Arrays.fill(h, 0);
 		posn = 0;
-		
+
 		// Convert the first 16 bytes of the key into a 130-bit
 		// "r" value while masking off the bits that we don't need.
 		r[0] = ((key[offset] & 0xFF)) |
@@ -91,7 +91,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 
 	/**
 	 * Updates the message authenticator with more input data.
-	 * 
+	 *
 	 * @param data The buffer containing the input data.
 	 * @param offset The offset of the first byte of input.
 	 * @param length The number of bytes of input.
@@ -135,7 +135,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 
 	/**
 	 * Finishes the message authenticator and returns the 16-byte token.
-	 * 
+	 *
 	 * @param token The buffer to receive the token.
 	 * @param offset The offset of the token in the buffer.
 	 */
@@ -147,7 +147,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 			Arrays.fill(block, posn + 1, 16, (byte)0);
 			processChunk(block, 0, true);
 		}
-		
+
 	    // At this point, processChunk() has left h as a partially reduced
 	    // result that is less than (2^130 - 5) * 6.  Perform one more
 	    // reduction and a trial subtraction to produce the final result.
@@ -185,7 +185,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 		h[2] = (h[2] & nmask) | (c[2] & mask);
 		h[3] = (h[3] & nmask) | (c[3] & mask);
 		h[4] = (h[4] & nmask) | (c[4] & mask);
-		
+
 		// Convert h into little-endian in the block buffer.
 		block[0] = (byte)(h[0]);
 		block[1] = (byte)(h[0] >> 8);
@@ -203,7 +203,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 		block[13] = (byte)(h[4]);
 		block[14] = (byte)(h[4] >> 8);
 		block[15] = (byte)(h[4] >> 16);
-		
+
 		// Add the nonce and write the final result to the token.
 		carry = (nonce[0] & 0xFF) + (block[0] & 0xFF);
 		token[offset] = (byte)carry;
@@ -215,7 +215,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 
 	/**
 	 * Processes the next chunk of input data.
-	 * 
+	 *
 	 * @param chunk Buffer containing the input data chunk.
 	 * @param offset Offset of the first byte of the 16-byte chunk.
 	 * @param finalChunk Set to true if this is the final chunk.
@@ -223,7 +223,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 	private void processChunk(byte[] chunk, int offset, boolean finalChunk)
 	{
 		int x;
-		
+
 		// Unpack the 128-bit chunk into a 130-bit value in "c".
 		c[0] = ((chunk[offset] & 0xFF)) |
 			   ((chunk[offset + 1] & 0xFF) << 8) |
@@ -246,9 +246,9 @@ public final class Poly1305 implements Destroyable, Cloneable {
 			   ((chunk[offset + 15] & 0xFF) << 16);
 		if (!finalChunk)
 			c[4] |= (1 << 24);
-		
+
 		// Compute h = ((h + c) * r) mod (2^130 - 5)
-		
+
 		// Start with h += c.  We assume that h is less than (2^130 - 5) * 6
 		// and that c is less than 2^129, so the result will be less than 2^133.
 		h[0] += c[0];
@@ -277,7 +277,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 			t[x + 3] += hv * r[3];
 			t[x + 4]  = hv * r[4];
 		}
-		
+
 		// Propagate carries to convert the t limbs from 52-bit back to 26-bit.
 		// The low bits are placed into h and the high bits are placed into c.
 		h[0] = ((int)t[0]) & 0x03FFFFFF;
@@ -299,7 +299,7 @@ public final class Poly1305 implements Destroyable, Cloneable {
 		c[3] = ((int)hv) & 0x03FFFFFF;
 		hv = t[9] + (hv >> 26);
 		c[4] = ((int)hv);
-		
+
 		// Reduce h * r modulo (2^130 - 5) by multiplying the high 130 bits by 5
 		// and adding them to the low 130 bits.  This will leave the result at
 		// most 5 subtractions away from the answer we want.

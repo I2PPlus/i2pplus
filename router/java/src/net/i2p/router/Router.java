@@ -457,7 +457,7 @@ public class Router implements RouterClock.ClockShiftListener {
         CryptoChecker.warnUnavailableCrypto(_context);
 
         _routerInfo = null;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("New router created with config file " + _configFilename);
         _oomListener = new OOMListener(_context);
 
@@ -588,7 +588,7 @@ public class Router implements RouterClock.ClockShiftListener {
         } finally {
             _routerInfoLock.writeLock().unlock();
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
 //            _log.info("setRouterInfo() : " + info, new Exception("I did it"));
             _log.info("setRouterInfo() : " + info);
         if (info != null)
@@ -729,7 +729,7 @@ public class Router implements RouterClock.ClockShiftListener {
         long before = System.currentTimeMillis();
         _context.clock().getTimestamper().waitForInitialization();
         long waited = System.currentTimeMillis() - before;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Waited " + waited + "ms to initialize");
 
         changeState(State.STARTING_3);
@@ -765,7 +765,7 @@ public class Router implements RouterClock.ClockShiftListener {
         Log log = null;
         if (ctx != null) {
             log = ctx.logManager().getLog(Router.class);
-            if (log.shouldLog(Log.DEBUG))
+            if (log.shouldDebug())
                 log.debug("Config file: " + filename, new Exception("location"));
         }
         Properties props = new Properties();
@@ -857,7 +857,7 @@ public class Router implements RouterClock.ClockShiftListener {
             oldState = _state;
             _state = state;
         }
-        if (_log != null && oldState != state && state != State.STOPPED && _log.shouldLog(Log.WARN)) {
+        if (_log != null && oldState != state && state != State.STOPPED && _log.shouldWarn()) {
             _log.warn("Router state change from " + oldState + " to " + state /* , new Exception() */ );
             //for debugging
             _context.logManager().flush();
@@ -1000,7 +1000,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @param blockingRebuild ignored, always nonblocking
      */
     public void rebuildRouterInfo(boolean blockingRebuild) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Building us a new RouterInfo, publish inline? " + blockingRebuild);
         _routerInfoLock.writeLock().lock();
         try {
@@ -1306,7 +1306,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
         killKeys();
         for (Runnable task : _context.getShutdownTasks()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Running shutdown task " + task.getClass());
             try {
                 task.run();
@@ -1471,7 +1471,7 @@ public class Router implements RouterClock.ClockShiftListener {
         LinkedList<Thread> tasks = new LinkedList<Thread>();
         for (Runnable task : _context.getShutdownTasks()) {
             //System.err.println("Running shutdown task " + task.getClass());
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Running shutdown task " + task.getClass());
             try {
                 //task.run();
@@ -2047,7 +2047,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 else
                     return d;
             } catch (NumberFormatException nfe) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Unable to get the share percentage");
             }
         }

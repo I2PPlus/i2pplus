@@ -27,23 +27,23 @@ public abstract class EventReceiver implements EventDispatcher {
     public EventDispatcher getEventDispatcher() {
         return this;
     }
-    
+
     /**
      *  @throws UnsupportedOperationException always
      */
     public void attachEventDispatcher(EventDispatcher ev) {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      *  @throws UnsupportedOperationException always
      */
     public void detachEventDispatcher(EventDispatcher ev) {
         throw new UnsupportedOperationException();
     }
-    
+
     public abstract void notifyEvent(String eventName, Object args);
-    
+
     /**
      *  @throws UnsupportedOperationException always
      */
@@ -57,16 +57,16 @@ public abstract class EventReceiver implements EventDispatcher {
     public Set<String> getEvents() {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      *  @throws UnsupportedOperationException always
      */
     public void ignoreEvents() {
         throw new UnsupportedOperationException();
     }
-    
+
     public void unIgnoreEvents() {}
-    
+
     /**
      *  @throws UnsupportedOperationException always
      */

@@ -138,7 +138,7 @@ class InboundMessageState implements CDQEntry {
     public boolean receiveFragment(UDPPacketReader.DataReader data, int dataFragment) throws DataFormatException {
         int fragmentNum = data.readMessageFragmentNum(dataFragment);
         if ( (fragmentNum < 0) || (fragmentNum >= _fragments.length)) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Invalid fragment " + fragmentNum + '/' + _fragments.length);
             return false;
         }
@@ -156,7 +156,7 @@ class InboundMessageState implements CDQEntry {
                     // We might as well ack it, keep going, and pass it along to I2NP where it
                     // will get dropped as corrupted.
                     // If we don't ack the fragment he will just send a zero-length fragment again.
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Zero-length fragment " + fragmentNum + " for [MsgID " + _messageId + "] from " + _from);
                 }
                 message.setValid(size);
@@ -165,7 +165,7 @@ class InboundMessageState implements CDQEntry {
                 if (isLast) {
                     // don't allow _lastFragment to be set twice
                     if (_lastFragment >= 0) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Multiple last fragments for [MsgID " + _messageId + "] from " + _from);
                         return false;
                     }
@@ -173,22 +173,22 @@ class InboundMessageState implements CDQEntry {
                     _lastFragment = fragmentNum;
                 } else if (_lastFragment >= 0 && fragmentNum >= _lastFragment) {
                     // don't allow non-last after last
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Non-last fragment " + fragmentNum + " when last is " + _lastFragment + " for [MsgID " + _messageId + "] from " + _from);
                     return false;
                 }
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("New fragment " + fragmentNum + " for [MsgID " + _messageId
                                + "] - Size: " + size
                                + " bytes, isLast?=" + isLast
                           /*   + ", data=" + Base64.encode(message.getData(), 0, size)   */  );
             } catch (ArrayIndexOutOfBoundsException aioobe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Corrupt SSU fragment " + fragmentNum, aioobe);
                 return false;
             }
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Received fragment " + fragmentNum + " for [MsgID " + _messageId
                            + "] again - old size is: " + _fragments[fragmentNum].getValid()
                            + " and new size is: " + data.readMessageFragmentSize(dataFragment));
@@ -208,7 +208,7 @@ class InboundMessageState implements CDQEntry {
      */
     public boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) throws DataFormatException {
         if (fragmentNum >= _fragments.length) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Invalid fragment " + fragmentNum + '/' + _fragments.length);
             return false;
         }
@@ -233,13 +233,13 @@ class InboundMessageState implements CDQEntry {
                     _log.warn("Non-last fragment " + fragmentNum + " when last is " + _lastFragment + " for message " + _messageId + " from " + _from);
                 return false;
             }
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("New fragment " + fragmentNum + " for message " + _messageId
                            + ", size=" + len
                            + ", isLast=" + isLast
                       /*   + ", data=" + Base64.encode(message.getData(), 0, size)   */  );
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Received fragment " + fragmentNum + " for message " + _messageId
                            + " again, old size=" + _fragments[fragmentNum].getValid()
                            + " and new size=" + len);

@@ -25,7 +25,7 @@ class SessionsDB {
 	static class ExistingDestException extends Exception {
 		private static final long serialVersionUID = 0x1;
 	}
-	
+
 	private final HashMap<String, SessionRecord> map;
 
 	public SessionsDB() {

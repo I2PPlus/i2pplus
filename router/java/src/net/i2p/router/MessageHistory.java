@@ -359,7 +359,7 @@ public class MessageHistory {
             buf.append("unknown");
         buf.append(": ").append(info);
         addEntry(buf.toString());
-        //if (_log.shouldLog(Log.ERROR))
+        //if (_log.shouldError())
         //    _log.error(buf.toString(), new Exception("source"));
     }
 

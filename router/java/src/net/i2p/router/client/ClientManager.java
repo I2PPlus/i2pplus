@@ -277,7 +277,7 @@ class ClientManager {
 
         List<SessionId> ids = runner.getSessionIds();
         List<Destination> dests = runner.getDestinations();
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             if (ids != null && !ids.isEmpty()) {
                 _log.warn("Dropping client connection with IDs: " + ids);
             } else {
@@ -311,7 +311,7 @@ class ClientManager {
      *  @since 0.9.21
      */
     public void unregisterSession(SessionId id, Destination dest) {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Unregistering client session: "  + id);
         synchronized (_runners) {
             _runnerSessionIds.remove(id);
@@ -327,7 +327,7 @@ class ClientManager {
      *  @since 0.9.39
      */
     public void unregisterEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Unregistering encrypted LS "  + hash.toBase32());
         synchronized (_runners) {
             _runnersByHash.remove(hash);
@@ -342,7 +342,7 @@ class ClientManager {
      *  @return SessionStatusMessage return code, 1 for success, != 1 for failure
      */
     public int destinationEstablished(ClientConnectionRunner runner, Destination dest) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("DestinationEstablished called for destination: " + dest.toBase32());
 
         synchronized (_pendingRunners) {
@@ -385,7 +385,7 @@ class ClientManager {
      *  @since 0.9.39
      */
     public boolean registerEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("New encrypted LS " + hash.toBase32());
 
         boolean rv;
@@ -466,7 +466,7 @@ class ClientManager {
             runner = getRunner(toDest);
         }
         if (runner != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[Message " + msgId + "] is targeting a local destination; distribute it as such");
             ClientConnectionRunner sender = getRunner(fromDest);
             if (sender == null) {
@@ -488,7 +488,7 @@ class ClientManager {
             sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, rc);
         } else {
             // remote.  w00t
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[Message " + msgId + "] is targeting a REMOTE destination! Added to the client message pool");
             runner = getRunner(fromDest);
             if (runner == null) {
@@ -561,7 +561,7 @@ class ClientManager {
     public void requestLeaseSet(Destination dest, LeaseSet set, long timeout, Job onCreateJob, Job onFailedJob) {
         ClientConnectionRunner runner = getRunner(dest);
         if (runner == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Cannot request the LeaseSet, as we can't find a client runner for "
                           + dest.toBase32() + "; disconnected?");
             _ctx.jobQueue().addJob(onFailedJob);
@@ -585,7 +585,7 @@ class ClientManager {
             // no need to fire off any jobs...
             runner.requestLeaseSet(dest, ls, REQUEST_LEASESET_TIMEOUT, null, null);
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Cannot request LeaseSet, as we can't find a client runner for ["
                           + dest.toBase32().substring(0,6) + "] - disconnected?");
         }
@@ -680,12 +680,12 @@ class ClientManager {
     public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long messageNonce, int status) {
         ClientConnectionRunner runner = getRunner(fromDest);
         if (runner != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Delivering status " + status + " to ["
                            + fromDest.toBase32().substring(0,6) + "] for message " + id);
             runner.updateMessageDeliveryStatus(fromDest, id, messageNonce, status);
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Cannot deliver status " + status + " to ["
                           + fromDest.toBase32().substring(0,6) + "] for message " + id);
         }
@@ -802,7 +802,7 @@ class ClientManager {
             } else {
                 // no client connection...
                 // we should pool these somewhere...
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Message received but we don't have a connection to ["
                               + dest + "/" + _msg.getDestinationHash().toBase32().substring(0,6)
                               + "] currently.  DROPPED", new Exception());

@@ -346,7 +346,7 @@ public class Snark
     activity = "Network setup";
 
     id = generateID();
-    if (_log.shouldLog(Log.INFO))
+    if (_log.shouldInfo())
         _log.info("Our PeerID for this session is: " + PeerID.idencode(id));
 
 /*
@@ -433,7 +433,7 @@ public class Snark
       }
 
     infoHash = x_infoHash;  // final
-    if (_log.shouldLog(Log.INFO))
+    if (_log.shouldInfo())
         _log.info(meta.toString());
 
     // When the metainfo torrent was created from an existing file/dir
@@ -602,11 +602,11 @@ public class Snark
             fatalRouter("Unable to listen for I2P connections", null);
         else {
             Destination d = serversocket.getManager().getSession().getMyDestination();
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
 //                _log.info("Listening on I2P destination " + d.toBase64() + " / " + d.calculateHash().toBase64());
                 _log.info("Listening on I2P destination [" + d.toBase64().substring(0,6) + "]");
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Starting PeerCoordinator, ConnectionAcceptor, and TrackerClient");
         activity = "Collecting pieces";
         coordinator = new PeerCoordinator(_util, id, infoHash, meta, storage, this, this);
@@ -647,7 +647,7 @@ public class Snark
         }
         trackerclient.start();
     } else {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("NOT starting TrackerClient???");
     }
   }
@@ -1385,7 +1385,7 @@ public class Snark
         checking = true;
       }
     if (!checking) {
-//        if (_log.shouldLog(Log.INFO))
+//        if (_log.shouldInfo())
 //            _log.info("Received " + (checked ? "" : "BAD ") + "piece [" + num + "]");
         if (completeListener != null)
             completeListener.gotPiece(this);
@@ -1409,7 +1409,7 @@ public class Snark
 
   public void storageCompleted(Storage storage)
   {
-    if (_log.shouldLog(Log.INFO))
+    if (_log.shouldInfo())
         _log.info("Completely downloaded " + torrent);
     //storage.close();
     //System.out.println("Completely received: " + torrent);
@@ -1464,7 +1464,7 @@ public class Snark
         totalUploaders += c.getInterestedUploaders();
     }
     int limit = _util.getMaxUploaders();
-    if (_log.shouldLog(Log.DEBUG))
+    if (_log.shouldDebug())
         if (totalUploaders > 1)
             _log.debug("Currently uploading to: " + totalUploaders + " peers (Limit: " + limit + ")");
         else
@@ -1484,7 +1484,7 @@ public class Snark
         total += c.getCurrentUploadRate();
     }
     long limit = 1024l * _util.getMaxUpBW();
-    if (_log.shouldLog(Log.DEBUG))
+    if (_log.shouldDebug())
         _log.debug("Current total bandwidth up: " + total/1024 + "KB/s (Limit: " + limit/1024 + "KB/s)");
     return total > limit;
   }

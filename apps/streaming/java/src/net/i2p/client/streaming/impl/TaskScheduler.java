@@ -12,11 +12,11 @@ public interface TaskScheduler {
      *
      */
     public void eventOccurred(Connection con);
-    
-    /** 
-     * Determine whether this scheduler is fit to operate against the 
+
+    /**
+     * Determine whether this scheduler is fit to operate against the
      * given connection
      *
-     */ 
+     */
     public boolean accept(Connection con);
 }

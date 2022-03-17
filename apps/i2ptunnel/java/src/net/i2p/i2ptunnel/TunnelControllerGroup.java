@@ -174,7 +174,7 @@ public class TunnelControllerGroup implements ClientApp {
                 _instance = this;
             } else {
                 _log.logAlways(Log.WARN, "New TunnelControllerGroup, now you have two");
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("I did it", new Exception());
             }
         }
@@ -402,7 +402,7 @@ public class TunnelControllerGroup implements ClientApp {
                     _log.logAlways(Log.WARN, "Not migrating tunnel configurations");
                 }
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Unable to load the controllers from " + cfgFile.getAbsolutePath());
                 throw new IllegalArgumentException("Unable to load the controllers from " + cfgFile, ioe);
             }
@@ -424,15 +424,15 @@ public class TunnelControllerGroup implements ClientApp {
                                 TunnelController controller = new TunnelController(cfg, "");
                                 _controllers.add(controller);
                             }
-                            if (_log.shouldLog(Log.INFO)) {
+                            if (_log.shouldInfo()) {
                                 _log.info("Loaded application config from " + f.toString());
                             }
                         } else {
-                            if (_log.shouldLog(Log.ERROR))
+                            if (_log.shouldError())
                                 _log.error("Error loading the client app properties from " + f);
                         }
                     } catch (IOException ioe) {
-                        if (_log.shouldLog(Log.ERROR))
+                        if (_log.shouldError())
                             _log.error("Error loading the client app properties from " + f + ' '+ ioe);
                     }
                 }
@@ -453,7 +453,7 @@ public class TunnelControllerGroup implements ClientApp {
         _controllersLoaded = true;
         int i = _controllers.size();
         if (i > 0) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(i + " controllers loaded from " + cfgFile);
         } else {
             _log.logAlways(Log.WARN, "No i2ptunnel configurations found in " + cfgFile + " or " + dir);
@@ -485,7 +485,7 @@ public class TunnelControllerGroup implements ClientApp {
             try {
                 DataHelper.storeProps(props, f);
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Error migrating the i2ptunnel configuration to " + f, ioe);
                 ok = false;
             }
@@ -564,7 +564,7 @@ public class TunnelControllerGroup implements ClientApp {
         }
 
         _controllersLoaded = false;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("All controllers stopped and unloaded");
     }
 
@@ -617,7 +617,7 @@ public class TunnelControllerGroup implements ClientApp {
                 controller.stopTunnel();
                 msgs.addAll(controller.clearMessages());
             }
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(_controllers.size() + " controllers stopped");
         } finally {
             _controllersLock.readLock().unlock();
@@ -635,7 +635,7 @@ public class TunnelControllerGroup implements ClientApp {
         for (TunnelController controller : _controllers) {
             controller.destroyTunnel();
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info(_controllers.size() + " controllers stopped");
     }
 
@@ -654,7 +654,7 @@ public class TunnelControllerGroup implements ClientApp {
                 msgs.addAll(controller.clearMessages());
             }
 
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(_controllers.size() + " controllers started");
         } finally {
             _controllersLock.readLock().unlock();
@@ -676,7 +676,7 @@ public class TunnelControllerGroup implements ClientApp {
                 controller.restartTunnel();
                 msgs.addAll(controller.clearMessages());
             }
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(_controllers.size() + " controllers restarted");
         } finally {
             _controllersLock.readLock().unlock();
@@ -793,7 +793,7 @@ public class TunnelControllerGroup implements ClientApp {
         File cfgFile = assureConfigFile(tc);
         if (!FileUtil.rename(cfgFile, new File(cfgFile.getAbsolutePath() + ".bak")))
             if (! cfgFile.delete())
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("could not delete config file" + cfgFile.toString());
         if (!shouldMigrate())
             saveConfig();
@@ -864,14 +864,14 @@ public class TunnelControllerGroup implements ClientApp {
         File folder = new File(_configDirectory);
         if (!folder.isAbsolute())
             folder = new File(_context.getConfigDir(), _configDirectory);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Seeking controller configs in " + folder.toString());
         File[] listOfFiles = folder.listFiles(new FileSuffixFilter(".config"));
         List<File> files = new ArrayList<File>();
         if (listOfFiles != null && listOfFiles.length > 0){
             for (File afile : listOfFiles) {
                 files.add(afile);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Found controller config " + afile.toString());
             }
             Collections.sort(files);
@@ -1000,7 +1000,7 @@ public class TunnelControllerGroup implements ClientApp {
             }
             owners.add(controller);
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Acquiring session " + session + "\n* For: " + controller);
 
     }
@@ -1017,17 +1017,17 @@ public class TunnelControllerGroup implements ClientApp {
             if (owners != null) {
                 owners.remove(controller);
                 if (owners.isEmpty()) {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("After releasing session " + session + " by " + controller + ", no more owners remain");
                     shouldClose = true;
                     _sessions.remove(session);
                 } else {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("After releasing session " + session + " by " + controller + ", " + owners.size() + " owners remain");
                     shouldClose = false;
                 }
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("After releasing session " + session + " by " + controller + ", no owners were even known?!");
                 shouldClose = true;
             }
@@ -1035,10 +1035,10 @@ public class TunnelControllerGroup implements ClientApp {
         if (shouldClose) {
             try {
                 session.destroySession();
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Session destroyed: " + session);
             } catch (I2PSessionException ise) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Error closing the client session", ise);
             }
         }

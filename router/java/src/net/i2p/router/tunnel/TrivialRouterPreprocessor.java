@@ -4,14 +4,14 @@ import java.util.List;
 
 import net.i2p.router.RouterContext;
 
-/** 
+/**
  * Minor extension to track fragmentation
  *
  * @deprecated unused
  */
 @Deprecated
 class TrivialRouterPreprocessor extends TrivialPreprocessor {
-    
+
     public TrivialRouterPreprocessor(RouterContext ctx) {
         super(ctx);
     }

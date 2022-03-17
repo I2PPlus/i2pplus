@@ -32,7 +32,7 @@ public class UDPSink implements Sink {
         this.remoteHost = host;
         this.remotePort = port;
     }
-        
+
 
     /**
      *  @param socket existing socket
@@ -45,7 +45,7 @@ public class UDPSink implements Sink {
         this.remoteHost = host;
         this.remotePort = port;
     }
-    
+
     /**
      *  @param src ignored
      *  @param fromPort ignored
@@ -58,7 +58,7 @@ public class UDPSink implements Sink {
 
         // create packet
         DatagramPacket packet = new DatagramPacket(data, data.length, this.remoteHost, this.remotePort);
-        
+
         // send packet
         try {
             this.sock.send(packet);
@@ -66,20 +66,20 @@ public class UDPSink implements Sink {
             throw new RuntimeException("failed to send data", ioe);
         }
     }
-    
+
     /**
      *  @return the local port of the DatagramSocket we are sending from
      */
-    public int getPort() {    
-        return this.sock.getLocalPort();    
-    }    
-    
+    public int getPort() {
+        return this.sock.getLocalPort();
+    }
+
     /** to pass to UDPSource constructor */
-    public DatagramSocket getSocket() {    
-        return this.sock;    
-    }    
-    
-    public void stop() {    
-        this.sock.close();    
-    }    
+    public DatagramSocket getSocket() {
+        return this.sock;
+    }
+
+    public void stop() {
+        this.sock.close();
+    }
 }

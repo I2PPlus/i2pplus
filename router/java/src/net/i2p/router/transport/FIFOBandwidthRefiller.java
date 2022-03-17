@@ -142,7 +142,7 @@ public class FIFOBandwidthRefiller implements Runnable {
 
     private boolean updateQueues(List<FIFOBandwidthLimiter.Request> buffer, long now) {
         long numMs = (now - _lastRefillTime);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Updating bandwidth after " + numMs + "ms"
                        + "\n* Status: " + _limiter.getStatus().toString()
                        + " Rate in: " + _inboundKBytesPerSecond + "KB/s;"
@@ -176,13 +176,13 @@ public class FIFOBandwidthRefiller implements Runnable {
             long maxBurstOut = ((_outboundBurstKBytesPerSecond-_outboundKBytesPerSecond)*1024*numMs)/1000;
             _limiter.refillBandwidthQueues(buffer, inboundToAdd, outboundToAdd, maxBurstIn, maxBurstOut);
 
-            //if (_log.shouldLog(Log.DEBUG)) {
+            //if (_log.shouldDebug()) {
             //    _log.debug("Adding " + inboundToAdd + " bytes to inboundAvailable");
             //    _log.debug("Adding " + outboundToAdd + " bytes to outboundAvailable");
             //}
             return true;
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Refresh delay too fast (" + numMs + "ms)");
             return false;
         }
@@ -225,7 +225,7 @@ public class FIFOBandwidthRefiller implements Runnable {
                     _inboundKBytesPerSecond = in;
                 else
                     _inboundKBytesPerSecond = MIN_INBOUND_BANDWIDTH;
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Updating Inbound rate to " + _inboundKBytesPerSecond + " KB/s");
         }
 
@@ -243,7 +243,7 @@ public class FIFOBandwidthRefiller implements Runnable {
                     _outboundKBytesPerSecond = out;
                 else
                     _outboundKBytesPerSecond = MIN_OUTBOUND_BANDWIDTH;
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Updating Outbound rate to " + _outboundKBytesPerSecond + " KB/s");
         }
 
@@ -259,7 +259,7 @@ public class FIFOBandwidthRefiller implements Runnable {
                     _inboundBurstKBytesPerSecond = in;
                 else
                     _inboundBurstKBytesPerSecond = _inboundKBytesPerSecond;
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Updating Inbound burst rate to " + _inboundBurstKBytesPerSecond + " KB/s");
         }
 
@@ -278,7 +278,7 @@ public class FIFOBandwidthRefiller implements Runnable {
                     _outboundBurstKBytesPerSecond = out;
                 else
                     _outboundBurstKBytesPerSecond = _outboundKBytesPerSecond;
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Updating Outbound burst rate to " + _outboundBurstKBytesPerSecond + " KB/s");
         }
 

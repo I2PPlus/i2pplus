@@ -102,7 +102,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
 			bf.log.error("Already killed!! " + this, new Exception());
 			return;
 		}
-		if (bf.log.shouldLog(Log.DEBUG))
+		if (bf.log.shouldDebug())
 			bf.log.debug("Killing " + this);
 		isKilled = true;
 		try {
@@ -225,7 +225,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
 					this.overflowPage = 0;
 				try {
 					int freed = freeContinuationPages(curNextPage[0]);
-					if (bf.log.shouldLog(Log.DEBUG))
+					if (bf.log.shouldDebug())
 						bf.log.debug("Freed " + freed + " continuation pages");
 				} catch (IOException ioe) {
 					bf.log.error("Error freeing " + this, ioe);

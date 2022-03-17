@@ -148,7 +148,7 @@ class InboundEstablishState {
         _keyBuilder = null;
         _queuedMessages = new LinkedBlockingQueue<OutNetMessage>();
     }
-    
+
     /**
      * @since 0.9.54
      */
@@ -176,7 +176,7 @@ class InboundEstablishState {
         // chance of a duplicate here in a race, that's ok
         if (!_queuedMessages.contains(msg))
             _queuedMessages.offer(msg);
-        else if (_log.shouldLog(Log.WARN))
+        else if (_log.shouldWarn())
              _log.warn("attempt to add duplicate msg to queue: " + msg);
     }
 
@@ -202,7 +202,7 @@ class InboundEstablishState {
             if (_log.shouldInfo())
                 _log.info("Received SessionRequest with extended options; need intro? " + _introductionRequested + ' ' + this);
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Received SessionRequest, BobIP = " + Addresses.toString(_bobIP));
         if (_currentState == InboundState.IB_STATE_UNKNOWN)
             _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
@@ -233,7 +233,7 @@ class InboundEstablishState {
         ByteArray extra = _keyBuilder.getExtraBytes();
         _macKey = new SessionKey(new byte[SessionKey.KEYSIZE_BYTES]);
         System.arraycopy(extra.getData(), 0, _macKey.getData(), 0, SessionKey.KEYSIZE_BYTES);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Established inbound keys. Cipher: " + Base64.encode(_sessionKey.getData())
                        + " mac: " + Base64.encode(_macKey.getData()));
     }
@@ -300,7 +300,7 @@ class InboundEstablishState {
 
         _sentSignature = _context.dsa().sign(signed, _context.keyManager().getSigningPrivateKey());
 
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             StringBuilder buf = new StringBuilder(128);
             buf.append("Signing sessionCreated:");
             //buf.append(" ReceivedX: ").append(Base64.encode(_receivedX));
@@ -378,7 +378,7 @@ class InboundEstablishState {
                         _receivedSignature = new byte[sigLen];
                     conf.readFinalSignature(_receivedSignature, 0, sigLen);
                 } else {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Unsupported sig type from: " + toString());
                     // _x() in UDPTransport
                     _context.banlist().banlistRouterForever(_receivedUnconfirmedIdentity.calculateHash(),
@@ -386,7 +386,7 @@ class InboundEstablishState {
                     fail();
                 }
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Bad ident from: " + toString());
                 fail();
             }
@@ -472,10 +472,10 @@ class InboundEstablishState {
             peer.readBytes(in);
             _receivedUnconfirmedIdentity = peer;
         } catch (DataFormatException dfe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Improperly formatted yet fully received ident", dfe);
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Improperly formatted yet fully received ident", ioe);
         }
     }
@@ -528,7 +528,7 @@ class InboundEstablishState {
                 // lookup in netdb locally, if not equal, fail?
                 _receivedConfirmedIdentity = _receivedUnconfirmedIdentity;
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Signature failed from " + _receivedUnconfirmedIdentity);
             }
     }

@@ -23,19 +23,19 @@ public class I2NPMessageHandler {
     private final Log _log;
     private final I2PAppContext _context;
     private I2NPMessage _lastRead;
-    
+
     public I2NPMessageHandler(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(I2NPMessageHandler.class);
     }
-    
+
     /** clear the last message read from a byte array with an offset */
-    public I2NPMessage lastRead() { 
+    public I2NPMessage lastRead() {
         I2NPMessage rv = _lastRead;
         _lastRead = null;
         return rv;
     }
-    
+
     /**
      * Read an I2NPMessage from the byte array and return the fully populated object.
      *
@@ -76,9 +76,9 @@ public class I2NPMessageHandler {
         } catch (I2NPMessageException ime) {
             throw ime;
         } catch (RuntimeException e) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error reading the stream", e);
-            throw new I2NPMessageException("Unknown error reading the " + msg.getClass().getSimpleName(), e); 
+            throw new I2NPMessageException("Unknown error reading the " + msg.getClass().getSimpleName(), e);
         }
         _lastRead = msg;
         return cur - offset;

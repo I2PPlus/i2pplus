@@ -24,26 +24,26 @@ import org.cybergarage.net.*;
 
 import org.cybergarage.upnp.*;
 
-public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocket> 
+public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocket>
 {
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	private InetAddress[] binds = null;
-	
+
 	public SSDPSearchResponseSocketList() {
 	}
 	/**
-	 * 
+	 *
 	 * @param binds The host to bind.Use <code>null</code> for the default behavior
 	 */
 	public SSDPSearchResponseSocketList(InetAddress[] binds) {
 		this.binds = binds;
 	}
 
-	
-	
+
+
 	////////////////////////////////////////////////
 	//	ControlPoint
 
@@ -63,33 +63,33 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
 	////////////////////////////////////////////////
 	//	get
 	////////////////////////////////////////////////
-	
+
 	public SSDPSearchResponseSocket getSSDPSearchResponseSocket(int n)
 	{
 		return get(n);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public boolean open(int port){
 		InetAddress[] binds=this.binds ;
 		String[] bindAddresses;
-		if(binds!=null){			
+		if(binds!=null){
 			bindAddresses = new String[binds.length];
 			for (int i = 0; i < binds.length; i++) {
 				bindAddresses[i] = binds[i].getHostAddress();
 			}
 		}else{
 			int nHostAddrs = HostInterface.getNHostAddresses();
-			bindAddresses = new String[nHostAddrs]; 
+			bindAddresses = new String[nHostAddrs];
 			for (int n=0; n<nHostAddrs; n++) {
 				bindAddresses[n] = HostInterface.getHostAddress(n);
 			}
-		}		
+		}
 		try {
-			for (int j = 0; j < bindAddresses.length; j++) {				
+			for (int j = 0; j < bindAddresses.length; j++) {
 				SSDPSearchResponseSocket socket = new SSDPSearchResponseSocket(bindAddresses[j], port);
 				add(socket);
 			}
@@ -102,11 +102,11 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
 		return true;
 	}
 
-	public boolean open() 
+	public boolean open()
 	{
 		return open(SSDP.PORT);
 	}
-		
+
 	public void close()
 	{
 		int nSockets = size();
@@ -120,7 +120,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
 	////////////////////////////////////////////////
 	//	Methods
 	////////////////////////////////////////////////
-	
+
 	public void start()
 	{
 		int nSockets = size();
@@ -161,6 +161,6 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
 		}
 		return ret;
 	}
-	
+
 }
 

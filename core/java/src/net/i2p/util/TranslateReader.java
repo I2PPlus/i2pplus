@@ -100,7 +100,7 @@ public class TranslateReader extends FilterReader {
             if (c >= 0)
                 pushit((char) c);
             //System.err.println("State: " + _state + " char: '" + ((char)c) + "'");
-        
+
             switch (c) {
                 case -1:
                 case '\r':

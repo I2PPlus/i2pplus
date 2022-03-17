@@ -2,9 +2,9 @@ package net.i2p.util;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -53,7 +53,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         _fortuna.nextBytes(seed);
         _haveNextGaussian = false;
     }
-    
+
     /**
      *  Note - methods may hang or NPE or throw IllegalStateExceptions after this
      *  @since 0.8.8
@@ -75,7 +75,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      * According to the java docs (http://java.sun.com/j2se/1.4.1/docs/api/java/util/Random.html#nextInt(int))
      * nextInt(n) should return a number between 0 and n (including 0 and excluding n).  However, their pseudocode,
      * as well as sun's, kaffe's, and classpath's implementation INCLUDES NEGATIVE VALUES.
-     * Ok, so we're going to have it return between 0 and n (including 0, excluding n), since 
+     * Ok, so we're going to have it return between 0 and n (including 0, excluding n), since
      * thats what it has been used for.
      *
      */
@@ -83,7 +83,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     public int nextInt(int n) {
         if (n == 0) return 0;
         int rv = signedNextInt(n);
-        if (rv < 0) 
+        if (rv < 0)
             rv = 0 - rv;
         rv %= n;
         return rv;
@@ -139,12 +139,12 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     public long nextLong(long n) {
         if (n == 0) return 0;
         long rv = nextLong();
-        if (rv < 0) 
+        if (rv < 0)
             rv = 0 - rv;
         rv %= n;
         return rv;
     }
-    
+
     /**
      *  @return all possible long values, positive and negative
      */
@@ -156,7 +156,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     @Override
-    public boolean nextBoolean() { 
+    public boolean nextBoolean() {
         byte val;
         synchronized(_fortuna) {
             val = _fortuna.nextByte();
@@ -165,7 +165,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     @Override
-    public void nextBytes(byte buf[]) { 
+    public void nextBytes(byte buf[]) {
         synchronized(_fortuna) {
             _fortuna.nextBytes(buf);
         }
@@ -188,17 +188,17 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      *
      * @since 0.9.24
      */
-    public byte nextByte() { 
+    public byte nextByte() {
         synchronized(_fortuna) {
             return _fortuna.nextByte();
         }
     }
 
     /**
-     * Implementation from sun's java.util.Random javadocs 
+     * Implementation from sun's java.util.Random javadocs
      */
     @Override
-    public double nextDouble() { 
+    public double nextDouble() {
         long d;
         synchronized(_fortuna) {
             d = ((long)nextBits(26) << 27) + nextBits(27);
@@ -207,10 +207,10 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     * Implementation from sun's java.util.Random javadocs 
+     * Implementation from sun's java.util.Random javadocs
      */
     @Override
-    public float nextFloat() { 
+    public float nextFloat() {
         int d;
         synchronized(_fortuna) {
             d = nextBits(24);
@@ -219,17 +219,17 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     * Implementation from sun's java.util.Random javadocs 
+     * Implementation from sun's java.util.Random javadocs
      */
     @Override
-    public double nextGaussian() { 
+    public double nextGaussian() {
         synchronized (this) {
             if (_haveNextGaussian) {
                 _haveNextGaussian = false;
                 return _nextGaussian;
             }
             double v1, v2, s;
-            do { 
+            do {
                 v1 = 2 * nextDouble() - 1;   // between -1.0 and 1.0
                 v2 = 2 * nextDouble() - 1;   // between -1.0 and 1.0
                 s = v1 * v1 + v2 * v2;
@@ -259,10 +259,10 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         rv >>>= off;
         return (int)rv;
     }
-    
+
     @Override
     public EntropyHarvester harvester() { return this; }
- 
+
     /** reseed the fortuna */
     @Override
     public void feedEntropy(String source, long data, int bitoffset, int bits) {
@@ -270,7 +270,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
             _fortuna.addRandomByte((byte)(data & 0xFF));
         }
     }
- 
+
     /** reseed the fortuna */
     @Override
     public void feedEntropy(String source, byte[] data, int offset, int len) {
@@ -284,7 +284,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
             log.warn("feedEntropy()", e);
         }
     }
-    
+
     /**
      *  Outputs to stdout for dieharder:
      *  <code>

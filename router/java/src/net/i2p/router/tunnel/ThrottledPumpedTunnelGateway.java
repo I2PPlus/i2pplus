@@ -14,13 +14,13 @@ import net.i2p.router.RouterContext;
 class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
     /** saved so we can note messages that get dropped */
     private final HopConfig _config;
-    
+
     public ThrottledPumpedTunnelGateway(RouterContext context, QueuePreprocessor preprocessor, Sender sender,
                                         Receiver receiver, TunnelGatewayPumper pumper, HopConfig config) {
         super(context, preprocessor, sender, receiver, pumper);
         _config = config;
     }
-    
+
     /**
      * Possibly drop a message due to bandwidth before adding it to the preprocessor queue.
      * We do this here instead of in the InboundGatewayReceiver because it is much smarter to drop

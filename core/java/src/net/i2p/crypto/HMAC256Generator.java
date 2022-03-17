@@ -37,7 +37,7 @@ public final class HMAC256Generator extends HMACGenerator {
         super();
         _macs = new LinkedBlockingQueue<Mac>(CACHE_SIZE);
     }
-    
+
     /**
      *  Calculate the HMAC of the data with the given key.
      *  Outputs 32 bytes to target starting at targetOffset.
@@ -50,7 +50,7 @@ public final class HMAC256Generator extends HMACGenerator {
     public void calculate(SessionKey key, byte data[], int offset, int length, byte target[], int targetOffset) {
         calculate(key.getData(), data, offset, length, target, targetOffset);
     }
-    
+
     /**
      *  Calculate the HMAC of the data with the given key.
      *  Outputs 32 bytes to target starting at targetOffset.
@@ -72,7 +72,7 @@ public final class HMAC256Generator extends HMACGenerator {
             throw new IllegalArgumentException("HmacSHA256", e);
         }
     }
-    
+
     /**
      *  Verify the MAC inline, reducing some unnecessary memory churn.
      *
@@ -94,7 +94,7 @@ public final class HMAC256Generator extends HMACGenerator {
         releaseTmp(calc);
         return eq;
     }
-    
+
     /**
      *  Package private for HKDF.
      *
@@ -112,7 +112,7 @@ public final class HMAC256Generator extends HMACGenerator {
         }
         return rv;
     }
-    
+
     /**
      *  Mac will be reset and initialized with a zero key.
      *  Package private for HKDF.
@@ -129,7 +129,7 @@ public final class HMAC256Generator extends HMACGenerator {
             _macs.offer(mac);
         }
     }
-    
+
     /**
      *  Like SecretKeySpec but doesn't copy the key in the construtor, for speed.
      *  It still returns a copy in getEncoded(), because Mac relies
@@ -158,9 +158,9 @@ public final class HMAC256Generator extends HMACGenerator {
             reset();
             return rv.length;
         }
-        
+
     }
-    
+
     public static void main(String args[]) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         byte data[] = new byte[64];

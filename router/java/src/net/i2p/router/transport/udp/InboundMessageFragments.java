@@ -75,10 +75,10 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         try {
             rcvData(from, data);
         } catch (DataFormatException dfe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Bad packet from: " + from, dfe);
         } catch (IndexOutOfBoundsException ioobe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Bad packet from: " + from, ioobe);
         }
     }
@@ -125,7 +125,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 if (data.readMessageFragmentNum(i) == 0) {
                     _context.statManager().addRateData("udp.ignoreRecentDuplicate", 1);
                     from.messageFullyReceived(messageId, -1);
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Message received is a duplicate: " + mid + " dups: "
                                   + _recentlyCompletedMessages.getCurrentDuplicateCount() + " out of "
                                   + _recentlyCompletedMessages.getInsertedCount());
@@ -172,7 +172,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 _recentlyCompletedMessages.add(mid);
                 from.messageFullyReceived(messageId, state.getCompleteSize());
 
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Complete message received\n* " + state);
 
                 _context.statManager().addRateData("udp.receivedCompleteTime", state.getLifetime(), state.getLifetime());
@@ -182,14 +182,14 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 // this calls state.releaseResources(), all state access must be before this
                 _messageReceiver.receiveMessage(state);
             } else if (messageExpired) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Message expired while only being partially read\n* " + state);
                 _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(), "expired while partially read: " + state.toString());
                 // all state access must be before this
                 state.releaseResources();
             } else if (partialACK) {
                 // not expired but not yet complete... lets queue up a partial ACK
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Queueing up a partial ACK for peer: " + from + " for " + state);
                 from.messagePartiallyReceived();
             }
@@ -219,10 +219,10 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 for (int i = 0; i < ackCount; i++) {
                     long id = data.readACK(i);
                     if (from.acked(id, highestSeqNumAcked)) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("First full ACK of [MsgID " + id + "] received from [" + from.getRemotePeer().toBase64().substring(0,6) + "]");
                         newAck = true;
-                    //} else if (_log.shouldLog(Log.DEBUG)) {
+                    //} else if (_log.shouldDebug()) {
                     //    _log.debug("Dup full ACK of message " + id + " received from " + from.getRemotePeer());
                     }
                 }
@@ -238,7 +238,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
 
                 for (int i = 0; i < bitfields.length; i++) {
                     if (from.acked(bitfields[i], highestSeqNumAcked)) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Partial ACK received: " + bitfields[i] + " from [" + from.getRemotePeer().toBase64().substring(0,6) + "]");
                         newAck = true;
                     }

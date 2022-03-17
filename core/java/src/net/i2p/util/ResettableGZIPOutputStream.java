@@ -7,12 +7,12 @@ import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 /**
- * GZIP implementation per 
- * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing 
+ * GZIP implementation per
+ * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing
  * java's standard CRC32 and Deflater implementations.  The main difference
- * is that this implementation allows its state to be reset to initial 
+ * is that this implementation allows its state to be reset to initial
  * values, and hence reused, while the standard GZIPOutputStream writes the
- * GZIP header to the stream on instantiation, rather than on first write. 
+ * GZIP header to the stream on instantiation, rather than on first write.
  *
  */
 public class ResettableGZIPOutputStream extends DeflaterOutputStream {
@@ -23,7 +23,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     private long _writtenSize;
     private final CRC32 _crc32;
     private static final boolean DEBUG = false;
-    
+
     public ResettableGZIPOutputStream(OutputStream o) {
         super(o, new Deflater(9, true));
         _crc32 = new CRC32();
@@ -33,7 +33,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
      * Reinitialze everything so we can write a brand new gzip output stream
      * again.
      */
-    public void reset() { 
+    public void reset() {
         if (DEBUG)
             System.out.println("Resetting (writtenSize=" + _writtenSize + ")");
         def.reset();
@@ -42,16 +42,16 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         _headerWritten = false;
         _footerWritten = false;
     }
-    
+
     private static final byte[] HEADER = new byte[] {
-        (byte)0x1F, (byte)0x8b, // magic bytes 
+        (byte)0x1F, (byte)0x8b, // magic bytes
         0x08,                   // compression format == DEFLATE
         0x00,                   // flags (NOT using CRC16, filename, etc)
         0x00, 0x00, 0x00, 0x00, // no modification time available (don't leak this!)
         0x02,                   // maximum compression
         (byte)0xFF              // unknown creator OS (!!!)
     };
-    
+
     /**
      * obviously not threadsafe, but its a stream, thats standard
      */
@@ -61,7 +61,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         out.write(HEADER);
         _headerWritten = true;
     }
-    
+
     private void writeFooter() throws IOException {
         if (_footerWritten) return;
         // damn RFC writing their bytes backwards...
@@ -70,7 +70,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         out.write((int)((crcVal >>> 8) & 0xFF));
         out.write((int)((crcVal >>> 16) & 0xFF));
         out.write((int)((crcVal >>> 24) & 0xFF));
-        
+
         long sizeVal = _writtenSize; // % (1 << 31) // *redundant*
         out.write((int)(sizeVal & 0xFF));
         out.write((int)((sizeVal >>> 8) & 0xFF));
@@ -97,7 +97,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         def.end();
         super.close();
     }
-    
+
     @Override
     public void close() throws IOException {
         finish();
@@ -110,7 +110,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         super.finish();
         writeFooter();
     }
-    
+
     @Override
     public void write(int b) throws IOException {
         ensureHeaderIsWritten();
@@ -131,7 +131,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         _writtenSize += len;
         super.write(buf, off, len);
     }
-    
+
 /******
     public static void main(String args[]) {
         for (int i = 0; i < 2; i++)
@@ -139,14 +139,14 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     }
     private static void test() {
         byte b[] = "hi, how are you today?".getBytes();
-        try { 
+        try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
             ResettableGZIPOutputStream o = new ResettableGZIPOutputStream(baos);
             o.write(b);
             o.finish();
             o.flush();
             byte compressed[] = baos.toByteArray();
-            
+
             ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
             SnoopGZIPOutputStream gzo = new SnoopGZIPOutputStream(baos2);
             gzo.write(b);
@@ -154,9 +154,9 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
             gzo.flush();
             long value = gzo.getCRC().getValue();
             byte compressed2[] = baos2.toByteArray();
-            System.out.println("CRC32 values: Resettable = " + o._crc32.getValue() 
+            System.out.println("CRC32 values: Resettable = " + o._crc32.getValue()
                                + " GZIP = " + value);
-            
+
             System.out.print("Resettable compressed data: ");
             for (int i = 0; i < compressed.length; i++)
                 System.out.print(Integer.toHexString(compressed[i] & 0xFF) + " ");
@@ -165,7 +165,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
             for (int i = 0; i < compressed2.length; i++)
                 System.out.print(Integer.toHexString(compressed2[i] & 0xFF) + " ");
             System.out.println();
-            
+
             GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(compressed));
             byte rv[] = new byte[128];
             int read = in.read(rv);
@@ -175,7 +175,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
                 System.out.println("match, w00t");
         } catch (Exception e) { e.printStackTrace(); }
     }
-    
+
     // just for testing/verification, expose the CRC32 values
     private static final class SnoopGZIPOutputStream extends GZIPOutputStream {
         public SnoopGZIPOutputStream(OutputStream o) throws IOException {

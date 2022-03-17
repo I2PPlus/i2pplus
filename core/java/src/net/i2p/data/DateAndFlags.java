@@ -2,8 +2,8 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  *
  */
 
@@ -92,12 +92,12 @@ public class DateAndFlags extends DataStructureImpl {
         _flags = (int) DataHelper.readLong(in, 2);
         _date = DataHelper.readLong(in, 6);
     }
-    
+
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         DataHelper.writeLong(out, 2, _flags);
         DataHelper.writeLong(out, 6, _date);
     }
-    
+
     /**
      * Overridden for efficiency.
      */
@@ -130,12 +130,12 @@ public class DateAndFlags extends DataStructureImpl {
         return _date == daf._date && _flags == daf._flags;
 
     }
-    
+
     @Override
     public int hashCode() {
         return _flags + (int) _date;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);

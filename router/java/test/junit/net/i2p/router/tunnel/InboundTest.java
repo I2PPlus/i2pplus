@@ -18,43 +18,43 @@ import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
 
 /**
- * Quick unit test for base functionality of inbound tunnel 
+ * Quick unit test for base functionality of inbound tunnel
  * operation
  *
  */
 public class InboundTest extends TestCase {
     private RouterContext _context;
-    
+
     public void setUp() {
         _context = new RouterContext(null);
     }
-    
+
     @Test
     @SuppressWarnings("deprecation")
     public void testInbound() {
     	int numHops = 8;
         TunnelCreatorConfig config = prepareConfig(numHops);
-    	
+    
         byte orig[] = new byte[128];
         byte message[] = new byte[128];
         _context.random().nextBytes(orig); // might as well fill the IV
         System.arraycopy(orig, 0, message, 0, message.length);
-        
+
         InboundGatewayProcessor p = new InboundGatewayProcessor(_context, config.getConfig(0));
         p.process(message, 0, message.length, null);
-        
+
         for (int i = 1; i < numHops-1; i++) {
             HopProcessor hop = new HopProcessor(_context, config.getConfig(i));
             Hash prev = config.getConfig(i).getReceiveFrom();
             assertTrue(hop.process(message, 0, message.length, prev));
         }
-        
+
         InboundEndpointProcessor end = new InboundEndpointProcessor(_context, config);
         assertTrue(end.retrievePreprocessedData(message, 0, message.length, config.getPeer(numHops-2)));
-        
+
         assertTrue(DataHelper.eq(orig, 16, message, 16, orig.length - 16));
     }
-    
+
     private TunnelCreatorConfig prepareConfig(int numHops) {
         Hash peers[] = new Hash[numHops];
         long tunnelIds[] = new long[numHops];
@@ -64,7 +64,7 @@ public class InboundTest extends TestCase {
             _context.random().nextBytes(peers[i].getData());
             tunnelIds[i] = 1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE);
         }
-        
+
         TunnelCreatorConfig config = new TCConfig(_context, numHops, false);
         for (int i = 0; i < numHops; i++) {
             config.setPeer(i, peers[i]);

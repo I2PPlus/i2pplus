@@ -440,7 +440,7 @@ public class PeerState {
         _currentACKsResend = null;
         _ackedMessages = null;
     }
-    
+
     /**
      * @since 0.9.54
      */
@@ -547,7 +547,7 @@ public class PeerState {
             try {
                 _remoteIPAddress = InetAddress.getByAddress(_remoteIP);
             } catch (UnknownHostException uhe) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Invalid IP? ", uhe);
             }
         }
@@ -1189,7 +1189,7 @@ public class PeerState {
         }
 
         if (!anyPending) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] -> Nothing pending, cancelling timer...");
             _retransmitTimer = 0;
             exitFastRetransmit();
@@ -1198,7 +1198,7 @@ public class PeerState {
             long now = _context.clock().now();
             long oldTimer = _retransmitTimer - now;
             _retransmitTimer = now + getRTO();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACK, timer: " + oldTimer + " -> " + (_retransmitTimer - now));
         }
         if (anyPending || anyQueued)
@@ -1237,7 +1237,7 @@ public class PeerState {
         }
         // K = 4
         _rto = Math.min(MAX_RTO, Math.max(MIN_RTO, _rtt + (_rttDeviation<<2)));
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Recalculating timeouts w/ lifetime=" + lifetime + ": rtt=" + _rtt
         //               + " rttDev=" + _rttDeviation + " rto=" + _rto);
     }
@@ -1437,12 +1437,12 @@ public class PeerState {
             return;
         }
         if (state.getPeer() != this) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Not for me!", new Exception("I did it"));
             _transport.failed(state, false);
             return;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Adding [MsgID " + state.getMessageId() + "] to [" + _remotePeer.toBase64().substring(0,6) + "]");
         int rv = 0;
         // will never fail for CDPQ
@@ -1453,7 +1453,7 @@ public class PeerState {
             state.setSeqNum(_nextSequenceNumber++);
         }
         if (fail) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Dropping message, Outbound queue full for " + toString());
             _transport.failed(state, false);
         }
@@ -1569,7 +1569,7 @@ public class PeerState {
                 } else {
                     // it can not have an OutNetMessage if the source is the
                     // final after establishment message
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Unable to send direct message " + state + "\n* Target: " + this);
                 }
             }
@@ -1586,7 +1586,7 @@ public class PeerState {
                 // no need to nudge(), this is called from OMF loop before allocateSend()
             }
             if (rv <= 0) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] -> Nothing pending, cancelling timer...");
                 synchronized(this) {
                     _retransmitTimer = 0;
@@ -1619,7 +1619,7 @@ public class PeerState {
                 long old = _retransmitTimer;
                 if (_retransmitTimer == 0) {
                     _retransmitTimer = now + getRTO();
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                     _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] allocated " + rv.size() + " pushing retransmitter from " + old + " to " + _retransmitTimer);
                 } else if (_fastRetransmit.get()) {
                     // right?
@@ -1660,10 +1660,10 @@ public class PeerState {
                         // If fast retx flag set, just add those
                         if (state.getNACKs() < FAST_RTX_ACKS)
                             continue;
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Allocate sending (FAST) to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state);
                     } else {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Allocate sending (OLD) to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state.getMessageId());
                     }
                     if (rv == null) {
@@ -1684,14 +1684,14 @@ public class PeerState {
                         continue;
                     boolean should = locked_shouldSend(state, now);
                     if (should) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Allocate sending more fragments to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state.getMessageId());
                         if (rv == null)
                             rv = new ArrayList<OutboundMessageState>(_concurrentMessagesAllowed);
                         rv.add(state);
                     } else {
                         // no more bandwidth available
-                        if (_log.shouldLog(Log.DEBUG)) {
+                        if (_log.shouldDebug()) {
                             if (rv == null)
                                 _log.debug("Nothing to send (BW) to [" + _remotePeer.toBase64().substring(0,6) + "], with " + _outboundMessages.size() +
                                        " / " + _outboundQueue.size() + " remaining");
@@ -1723,7 +1723,7 @@ public class PeerState {
                         //    // ignore result, always send?
                         //    locked_shouldSend(dequeuedState);
                         //}
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Allocating send of NEW message [" + dequeuedState.getMessageId() + "] to [" + _remotePeer.toBase64().substring(0,6) + "]");
                         if (rv == null)
                             rv = new ArrayList<OutboundMessageState>(_concurrentMessagesAllowed);
@@ -1735,7 +1735,7 @@ public class PeerState {
             }
         }
       /****
-        if ( rv == null && _log.shouldLog(Log.DEBUG))
+        if ( rv == null && _log.shouldDebug())
             _log.debug("Nothing to send to [" + _remotePeer.toBase64().substring(0,6) + "] with " + _outboundMessages.size() +
                        " bytes / " + _outboundQueue.size() + " bytes remaining in queue" +
                        "\n* Retransmit in: " + (_retransmitTimer - now) + "ms");
@@ -1808,7 +1808,7 @@ public class PeerState {
     private boolean locked_shouldSend(OutboundMessageState state, long now) {
         synchronized(this) {
             if (allocateSendingBytes(state, now)) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] allowed with "
                               + getSendWindowBytesRemaining()
                               + "/" + getSendWindowBytes()
@@ -1819,7 +1819,7 @@ public class PeerState {
                 return true;
             } else {
                 _context.statManager().addRateData("udp.sendRejected", state.getPushCount());
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected with: wsize=" + getSendWindowBytes()
                               + " available=" + getSendWindowBytesRemaining()
                               + " for [MsgID" + state.getMessageId() + "]" + state);
@@ -1898,7 +1898,7 @@ public class PeerState {
                 if (sn > highestSeqNumAcked.value)
                     highestSeqNumAcked.value = sn;
             }
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Received an ACK for a message not pending: " + messageId);
         }
         return state != null;
@@ -2011,7 +2011,7 @@ public class PeerState {
                 if (sn > highestSeqNumAcked.value)
                     highestSeqNumAcked.value = sn;
             }
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Received an ACK for a message not pending " + bitfield);
             return false;
         }

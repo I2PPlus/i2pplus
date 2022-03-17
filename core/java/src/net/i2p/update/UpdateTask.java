@@ -8,7 +8,7 @@ import java.net.URI;
  *  @since 0.9.4
  */
 public interface UpdateTask {
-    
+
     /**
      *  Tasks must not start themselves in the constructor. Do it here.
      */

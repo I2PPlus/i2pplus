@@ -97,28 +97,28 @@ class ConnectionHandler {
     public void receiveNewSyn(Packet packet) {
         if (!_active) {
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Dropping new SYN request because we're not listening");
                 sendReset(packet);
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Dropping non-SYN packet - not listening");
             }
             return;
         }
         if (_manager.wasRecentlyClosed(packet.getSendStreamId())) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Dropping packet for recently closed stream: " + packet);
             return;
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Received new SYN packet: " + packet + "; Timeout in " + (_acceptTimeout / 1000) + "s");
         // also check if expiration of the head is long past for overload detection with peek() ?
         boolean success = _synQueue.offer(packet); // fail immediately if full
         if (success) {
             _timer.addEvent(new TimeoutSyn(packet), _acceptTimeout);
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Dropping new SYN request because queue is full");
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
                 sendReset(packet);
@@ -141,7 +141,7 @@ class ConnectionHandler {
      *                  if a timeout was previously set with setSoTimeout and the timeout has been reached.
      */
     public Connection accept(long timeoutMs) throws RouterRestartException, ConnectException, SocketTimeoutException {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Accept("+ timeoutMs+") called");
 
         long expiration = timeoutMs + _context.clock().now();
@@ -163,7 +163,7 @@ class ConnectionHandler {
 
             Packet syn = null;
             while ( _active && syn == null) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Accept("+ timeoutMs+"): active=" + _active + " queue: "
                                + _synQueue.size());
                 if (timeoutMs <= 0) {
@@ -209,7 +209,7 @@ class ConnectionHandler {
                     // a good place to check for dup SYNs and drop them
                     Destination from = syn.getOptionalFrom();
                     if (from == null) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Dropping SYN packet with no FROM: " + syn);
                         // drop it
                         continue;
@@ -219,7 +219,7 @@ class ConnectionHandler {
                         // His ID not guaranteed to be unique to us, but probably is...
                         // only drop it on a destination match too
                         if (from.equals(oldcon.getRemotePeer())) {
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Dropping duplicate SYN packet: " + syn);
                             continue;
                         }
@@ -244,7 +244,7 @@ class ConnectionHandler {
         Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
         if (con != null) {
             // Send it through the packet handler again
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Connection found for queued non-SYN packet: " + packet);
             // false -> don't requeue, fixes a race where a SYN gets dropped
             // between here and PacketHandler, causing the packet to loop forever....
@@ -256,7 +256,7 @@ class ConnectionHandler {
                 packet.logTCPDump(null);
 
             // goodbye
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Connection not found for queued non-SYN packet, dropping: " + packet);
             packet.releasePayload();
         }
@@ -285,7 +285,7 @@ class ConnectionHandler {
         // As of 0.9.20 we do not require FROM
         // Removed in 0.9.39
         //reply.setOptionalFrom();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending RESET: " + reply + " because of " + packet);
         // this just sends the packet - no retries or whatnot
         _manager.getPacketQueue().enqueue(reply);
@@ -303,7 +303,7 @@ class ConnectionHandler {
 
             if (removed) {
                 if (_synPacket.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Expired on the SYN queue: " + _synPacket);
                     // timeout - send RST
                     sendReset(_synPacket);

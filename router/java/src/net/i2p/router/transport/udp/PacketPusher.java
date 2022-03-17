@@ -80,7 +80,7 @@ class PacketPusher implements Runnable {
             }
         }
         // not handled
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("No endpoint (socket) available to send out packet " + packet);
         packet.release();
     }

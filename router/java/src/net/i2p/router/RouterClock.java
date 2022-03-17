@@ -113,7 +113,7 @@ public class RouterClock extends Clock {
         if (!force) {
             if (!_isSystemClockBad && (offsetMs > MAX_OFFSET || offsetMs < 0 - MAX_OFFSET)) {
                 Log log = getLog();
-                if (log.shouldLog(Log.WARN))
+                if (log.shouldWarn())
                     log.warn("Maximum offset shift exceeded [" + offsetMs + "], NOT HONORING IT");
                 return;
             }
@@ -122,7 +122,7 @@ public class RouterClock extends Clock {
             if (_alreadyChanged && (System.currentTimeMillis() - _startedOn > 10 * 60 * 1000)) {
                 if ( (delta > MAX_LIVE_OFFSET) || (delta < 0 - MAX_LIVE_OFFSET) ) {
                     Log log = getLog();
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn("The clock has already been updated, ignoring request to change it by "
                                            + delta + " to " + offsetMs, new Exception());
                     return;
@@ -140,7 +140,7 @@ public class RouterClock extends Clock {
             if (_alreadyChanged && stratum > _lastStratum &&
                 System.currentTimeMillis() - _lastChanged < MIN_DELAY_FOR_WORSE_STRATUM) {
                 Log log = getLog();
-                if (log.shouldLog(Log.DEBUG))
+                if (log.shouldDebug())
                     log.debug("Ignoring update from a stratum " + stratum +
                               " clock, we recently had an update from a stratum " + _lastStratum + " clock");
                 return;
@@ -186,7 +186,7 @@ public class RouterClock extends Clock {
             // Update the target offset, slewing will take care of the rest
             if (delta > 15*1000)
                 getLog().logAlways(Log.WARN, "Warning - Updating target clock offset to " + offsetMs + "ms from " + _offset + "ms (Stratum: " + stratum + ")");
-            else if (getLog().shouldLog(Log.INFO))
+            else if (getLog().shouldInfo())
                 getLog().info("Updating target clock offset to " + offsetMs + "ms from " + _offset + "ms (Stratum: " + stratum + ")");
 
             if (!_statCreated) {
@@ -202,7 +202,7 @@ public class RouterClock extends Clock {
             }
         } else {
             Log log = getLog();
-            if (log.shouldLog(Log.INFO))
+            if (log.shouldInfo())
                 log.info("Initializing clock offset to " + offsetMs + "ms (Stratum: " + stratum + ")");
             _alreadyChanged = true;
             if (_context.getBooleanProperty(PROP_DISABLE_ADJUSTMENT)) {

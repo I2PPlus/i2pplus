@@ -28,7 +28,7 @@ class SchedulerChooser {
         for (int i = 0; i < _schedulers.size(); i++) {
             TaskScheduler scheduler = _schedulers.get(i);
             if (scheduler.accept(con)) {
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("Scheduling for " + con + " with " + scheduler.getClass().getSimpleName());
                 return scheduler;
             }
@@ -52,7 +52,7 @@ class SchedulerChooser {
     private class NullScheduler implements TaskScheduler {
 
         public void eventOccurred(Connection con) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Yell at jrandom: Event occurred on " + con, new Exception("source"));
         }
         public boolean accept(Connection con) { return true; }

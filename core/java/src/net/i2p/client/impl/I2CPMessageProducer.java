@@ -99,7 +99,7 @@ class I2CPMessageProducer {
                     _maxBytesPerSecond = 0;
             } catch (NumberFormatException nfe) {}
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Setting " + _maxBytesPerSecond + "Bps max");
     }
 
@@ -122,7 +122,7 @@ class I2CPMessageProducer {
             String key = (String) e.getKey();
             String val = (String) e.getValue();
             if (key.length() > 255 || val.length() > 255) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Not passing on property ["
                               + key
                               + "] in the session config, key or value is too long (max = 255) \n* Value: "
@@ -302,7 +302,7 @@ class I2CPMessageProducer {
                 if (waitCount > 0 && expires > 0 && expires < now) {
                     // just say no to bufferbloat... drop the message right here
                     _context.statManager().addRateData("client.sendDropped", len, 0);
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Dropping " + len + " byte message - expired in queue");
                     return false;
                 }
@@ -312,7 +312,7 @@ class I2CPMessageProducer {
                     // start new period, always let it through no matter how big
                     _sendPeriodBytes = len;
                     _sendPeriodBeginTime = now;
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("New period after idle -> " + len + " bytes");
                     return true;
                 }
@@ -326,7 +326,7 @@ class I2CPMessageProducer {
                     else
                         _sendPeriodBytes = len;
                     _sendPeriodBeginTime += 1000;
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("New period -> " + len + " bytes");
                     return true;
                 }
@@ -334,7 +334,7 @@ class I2CPMessageProducer {
                 if (_sendPeriodBytes + len <= _maxBytesPerSecond) {
                     // still bytes available in this period
                     _sendPeriodBytes += len;
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Sending " + len + " bytes (elapsed: " + period + "ms) -> Total: " + _sendPeriodBytes + " bytes");
                     return true;
                 }
@@ -342,14 +342,14 @@ class I2CPMessageProducer {
                 if (waitCount >= 2) {
                     // just say no to bufferbloat... drop the message right here
                     _context.statManager().addRateData("client.sendDropped", len, 0);
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Dropping " + len + " byte message after waiting " + waitCount + " times");
                     return false;
                 }
 
                 // wait until next period
                 _context.statManager().addRateData("client.sendThrottled", ++waitCount, 0);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Throttled " + len + " bytes, wait #" + waitCount + ' ' + (1000 - period) + "ms" /*, new Exception()*/);
                 try {
                     //this.wait(1000 - period);

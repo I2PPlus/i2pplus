@@ -69,7 +69,7 @@ public class NSEC3 extends Data {
      * The cryptographic hash algorithm used. If MiniDNS
      * isn't aware of the hash algorithm, then this field will be
      * <code>null</code>.
-     * 
+     *
      * @see #hashAlgorithmByte
      */
     public final HashAlgorithm hashAlgorithm;

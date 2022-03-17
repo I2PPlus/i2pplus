@@ -35,7 +35,7 @@ public abstract class DelegatingDnssecRR extends Data {
      * The cryptographic algorithm used to create the signature. If MiniDNS
      * isn't aware of the signature algorithm, then this field will be
      * <code>null</code>.
-     * 
+     *
      * @see #algorithmByte
      */
     public final SignatureAlgorithm algorithm;
@@ -49,7 +49,7 @@ public abstract class DelegatingDnssecRR extends Data {
      * The algorithm used to construct the digest. If MiniDNS
      * isn't aware of the digest algorithm, then this field will be
      * <code>null</code>.
-     * 
+     *
      * @see #digestTypeByte
      */
     public final DigestAlgorithm digestType;

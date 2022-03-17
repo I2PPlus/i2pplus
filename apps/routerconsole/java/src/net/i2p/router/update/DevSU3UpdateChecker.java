@@ -28,7 +28,7 @@ import net.i2p.util.VersionComparator;
 class DevSU3UpdateChecker extends UpdateRunner {
 
     public DevSU3UpdateChecker(RouterContext ctx, ConsoleUpdateManager mgr,
-                               List<URI> uris) { 
+                               List<URI> uris) {
         super(ctx, mgr, UpdateType.ROUTER_DEV_SU3, uris, RouterVersion.FULL_VERSION);
         if (!uris.isEmpty())
             _currentURI = uris.get(0);
@@ -63,7 +63,7 @@ class DevSU3UpdateChecker extends UpdateRunner {
             _log.error("Error fetching the update", t);
         }
     }
-        
+
     @Override
     public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred,
                                  long bytesRemaining, String url) {
@@ -99,4 +99,4 @@ class DevSU3UpdateChecker extends UpdateRunner {
         _mgr.notifyCheckComplete(this, false, false);
     }
 }
-    
+

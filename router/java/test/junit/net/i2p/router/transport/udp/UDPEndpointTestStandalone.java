@@ -133,7 +133,7 @@ public class UDPEndpointTestStandalone {
                 if (curPacket % batch == 0 || _sentNotReceived.size() > 100) {
                     try { Thread.sleep(3); } catch (InterruptedException ie) {}
                 }
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("Sent to " + _endpoints[curPeer].getListenPort() + " from " + _endpoint.getListenPort());
             }
             _log.debug("Done sending packets");

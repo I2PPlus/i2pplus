@@ -3,9 +3,9 @@
  * Updated on Jan 8, 2011
  *
  * free (adj.): unencumbered; not under the control of others
- * Written by Iakin in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by Iakin in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might. Use at your own risk.
  */
 package freenet.support.CPUInformation;
@@ -26,7 +26,7 @@ public interface CPUInfo
     /**
      * @return A string detailing what type of CPU that is present in the machine. I.e. 'Pentium IV' etc.
      * @throws UnknownCPUException If for any reason the retrieval of the requested information
-     * failed. The message encapsulated in the execption indicates the 
+     * failed. The message encapsulated in the execption indicates the
      * cause of the failure.
      */
     public String getCPUModelString() throws UnknownCPUException;
@@ -50,7 +50,7 @@ public interface CPUInfo
      * @return true iff the CPU supports the SSE3 instruction set.
      */
     public boolean hasSSE3();
-    
+
     /**
      * @return true iff the CPU supports the SSE4.1 instruction set.
      */
@@ -68,19 +68,19 @@ public interface CPUInfo
      * @return true iff the CPU supports the SSE4A instruction set.
      */
     public boolean hasSSE4A();
-    
+
     /**
      * @return true iff the CPU supports the AVX instruction set.
      * @since 0.9.26
      */
     public boolean hasAVX();
-    
+
     /**
      * @return true iff the CPU supports the AVX2 instruction set.
      * @since 0.9.26
      */
     public boolean hasAVX2();
-    
+
     /**
      * Does the CPU supports the AVX-512 Foundation instruction set?
      *
@@ -96,7 +96,7 @@ public interface CPUInfo
      * @since 0.9.26
      */
     public boolean hasAVX512();
-    
+
     /**
      *
      * Intel Multi-Precision Add-Carry Instruction Extensions
@@ -107,7 +107,7 @@ public interface CPUInfo
      * @since 0.9.26
      */
     public boolean hasADX();
-    
+
     /**
      * Trailing Bit Manipulation (AMD feature)
      * @return true iff the CPU supports TBM.
@@ -120,25 +120,25 @@ public interface CPUInfo
      * @since 0.9.14
      */
     public boolean hasAES();
-    
+
     /**
      * @return true iff the CPU supports the 64-bit support
      * @since 0.9.26
      */
     public boolean hasX64();
-    
+
     /**
      * @return true iff the CPU supports the BMI1 instruction set.
      * @since 0.9.26
      */
     public boolean hasBMI1();
-    
+
     /**
      * @return true iff the CPU supports the BMI2 instruction set.
      * @since 0.9.26
      */
     public boolean hasBMI2();
-    
+
     /**
      * @return true iff the CPU supports the FMA3 instruction set.
      * @since 0.9.26

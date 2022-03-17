@@ -17,12 +17,12 @@ package org.cybergarage.upnp.event;
 
 import org.cybergarage.upnp.*;
 
-public class Subscription 
+public class Subscription
 {
 	public final static String XMLNS = "urn:schemas-upnp-org:event-1-0";
 	public final static String TIMEOUT_HEADER = "Second-";
-	public final static String INFINITE_STRING = "infinite";	
-	public final static int INFINITE_VALUE = -1;	
+	public final static String INFINITE_STRING = "infinite";
+	public final static int INFINITE_VALUE = -1;
 	public final static String UUID = "uuid:";
 	public final static String SUBSCRIBE_METHOD = "SUBSCRIBE";
 	public final static String UNSUBSCRIBE_METHOD = "UNSUBSCRIBE";
@@ -30,14 +30,14 @@ public class Subscription
 	////////////////////////////////////////////////
 	//	Timeout
 	////////////////////////////////////////////////
-	
+
 	public final static String toTimeoutHeaderString(long time)
 	{
 		if (time == Subscription.INFINITE_VALUE)
 			return Subscription.INFINITE_STRING;
 		return Subscription.TIMEOUT_HEADER + Long.toString(time);
 	}
-	
+
 	public final static long getTimeout(String headerValue)
 	{
 		int minusIdx = headerValue.indexOf('-');
@@ -72,6 +72,6 @@ public class Subscription
 			return headerValue;
 		return headerValue.substring(Subscription.UUID.length(), headerValue.length());
 	}
-	
+
 }
 

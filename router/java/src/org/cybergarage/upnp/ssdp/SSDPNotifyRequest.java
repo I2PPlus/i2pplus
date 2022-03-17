@@ -10,7 +10,7 @@
 *
 *	01/14/03
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -22,7 +22,7 @@ public class SSDPNotifyRequest extends SSDPRequest
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public SSDPNotifyRequest()
 	{
 		setMethod(HTTP.NOTIFY);

@@ -43,7 +43,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      *  @throws UnsupportedOperationException always
      */
@@ -51,7 +51,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);

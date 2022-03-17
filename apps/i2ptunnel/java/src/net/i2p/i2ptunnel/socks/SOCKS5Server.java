@@ -162,7 +162,7 @@ class SOCKS5Server extends SOCKSServer {
             sendAuthReply(AUTH_FAILURE, out);
             throw new SOCKSException("SOCKS authorization failure");
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("SOCKS authorization success, user: " + u);
         sendAuthReply(AUTH_SUCCESS, out);
     }
@@ -278,7 +278,7 @@ class SOCKS5Server extends SOCKSServer {
         byte[] reply = new byte[2];
         reply[0] = SOCKS_VERSION_5;
         reply[1] = (byte) replyCode;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending init reply:\n" + HexDump.dump(reply));
         out.write(reply);
     }
@@ -291,7 +291,7 @@ class SOCKS5Server extends SOCKSServer {
         byte[] reply = new byte[2];
         reply[0] = AUTH_VERSION;
         reply[1] = (byte) replyCode;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending auth reply:\n" + HexDump.dump(reply));
         out.write(reply);
     }
@@ -331,7 +331,7 @@ class SOCKS5Server extends SOCKSServer {
 
         byte[] reply = reps.toByteArray();
 
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             _log.debug("Sending request reply:\n" + HexDump.dump(reply));
         }
 
@@ -433,7 +433,7 @@ class SOCKS5Server extends SOCKSServer {
                     }
                     int p = _context.random().nextInt(proxies.size());
                     String proxy = proxies.get(p);
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Connecting to proxy " + proxy + " for " + connHostName + " port " + connPort);
                     try {
                         destSock = outproxyConnect(t, proxy);
@@ -448,21 +448,21 @@ class SOCKS5Server extends SOCKSServer {
             confirmConnection();
             _log.debug("Connection confirmed - exchanging data...");
         } catch (DataFormatException e) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("SOCKS error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
             } catch (IOException ioe) {}
             throw new SOCKSException("Error in destination format");
         } catch (IOException e) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("socks error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
             } catch (IOException ioe) {}
             throw new SOCKSException("Connection error", e);
         } catch (I2PException e) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("socks error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);

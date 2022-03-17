@@ -11,15 +11,15 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Notification;
  */
 public interface NotificationHandler {
 
-	
+
 	/**
 	 * Gets the names of the handled JSON-RPC 2.0 notification methods.
 	 *
 	 * @return The names of the handled JSON-RPC 2.0 notification methods.
 	 */
 	public String[] handledNotifications();
-	
-	
+
+
 	/**
 	 * Processes a JSON-RPC 2.0 notification.
 	 *

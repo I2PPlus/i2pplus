@@ -62,14 +62,14 @@ class SubSession extends I2PSessionMuxedImpl {
     public I2PSession addSubsession(InputStream destKeyStream, Properties opts) throws I2PSessionException {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      *  Unsupported in a subsession.
      *  Does nothing.
      */
     @Override
     public void removeSubsession(I2PSession session) {}
-    
+
     /**
      *  Unsupported in a subsession.
      *  @return empty list always
@@ -93,7 +93,7 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     * Connect to the router and establish a session.  This call blocks until 
+     * Connect to the router and establish a session.  This call blocks until
      * a session is granted.
      *
      * Should be threadsafe, other threads will block until complete.

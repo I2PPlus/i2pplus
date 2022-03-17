@@ -31,7 +31,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         super(ctx);
         migrateConsole();
     }
-    
+
     /**
      *  The username is the salt
      *
@@ -51,7 +51,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         return cr.equals(UnixCrypt.crypt(pw, cr));
     }
 ****/
-    
+
     /**
      *  Straight MD5. Compatible with Jetty.
      *
@@ -69,7 +69,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             return false;
         return hex.equals(md5Hex(subrealm, user, pw));
     }
-    
+
     /**
      *  Get all MD5 usernames and passwords. Compatible with Jetty.
      *  Any "null" user is NOT included..
@@ -145,7 +145,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         return _context.router().saveConfig(toAdd, toDel);
     }
 ****/
-    
+
     /**
      *  Straight MD5, no salt
      *  Compatible with Jetty and RFC 2617.
@@ -171,7 +171,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         toDel.add(pfx + PROP_SHASH);
         return _context.router().saveConfig(toAdd, toDel);
     }
-    
+
 /****
     public static void main(String args[]) {
         RouterContext ctx = (new Router()).getContext();

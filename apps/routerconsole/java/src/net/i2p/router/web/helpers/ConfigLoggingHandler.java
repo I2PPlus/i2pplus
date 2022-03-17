@@ -23,7 +23,7 @@ public class ConfigLoggingHandler extends FormHandler {
     private String _fileSize;
     private String _newLogClass;
     private String _newLogLevel = "WARN";
-    
+
     @Override
     protected void processForm() {
         if (_shouldSave) {
@@ -34,7 +34,7 @@ public class ConfigLoggingHandler extends FormHandler {
     }
 
     public void setShouldsave(String moo) { _shouldSave = true; }
-    
+
     public void setLevels(String levels) {
         _levels = (levels != null ? levels.trim() : null);
     }
@@ -59,13 +59,13 @@ public class ConfigLoggingHandler extends FormHandler {
         if (s != null && s.length() > 0)
             _newLogClass = s;
     }
-    
+
     /** @since 0.8.1 */
     public void setNewloglevel(String s) {
         if (s != null)
             _newLogLevel = s;
     }
-    
+
     /**
      * The user made changes to the config and wants to save them, so
      * lets go ahead and do so.
@@ -73,7 +73,7 @@ public class ConfigLoggingHandler extends FormHandler {
      */
     private void saveChanges() {
         boolean shouldSave = false;
-        
+
         if ((_levels != null && _levels.length() > 0) || _newLogClass != null) {
             try {
                 Properties props = new Properties();
@@ -94,7 +94,7 @@ public class ConfigLoggingHandler extends FormHandler {
             shouldSave = true;
             addFormNotice("Log limits cleared");
         }
-          
+
         if (_defaultLevel != null) {
             String oldDefault = _context.logManager().getDefaultLimit();
             if (_defaultLevel.equals(oldDefault)) {
@@ -105,7 +105,7 @@ public class ConfigLoggingHandler extends FormHandler {
                 addFormNotice("Default log level updated from " + oldDefault + " to " + _defaultLevel);
             }
         }
-        
+
         if (_dateFormat != null && !_dateFormat.equals(_context.logManager().getDateFormatPattern())) {
             boolean valid = _context.logManager().setDateFormat(_dateFormat);
             if (valid) {
@@ -115,7 +115,7 @@ public class ConfigLoggingHandler extends FormHandler {
                 addFormError("Specified date format is not valid (" + _dateFormat + ") - not updated");
             }
         }
-        
+
         if (_fileSize != null) {
             int newBytes = LogManager.getFileSize(_fileSize);
             int oldBytes = _context.logManager().getFileSize();
@@ -124,12 +124,12 @@ public class ConfigLoggingHandler extends FormHandler {
                     _context.logManager().setFileSize(newBytes);
                     shouldSave = true;
                     addFormNotice("File size updated");
-                } 
+                }
             } else {
                 addFormError("Specified file size limit is not valid (" + _fileSize + ") - not updated");
             }
         }
-        
+
      /*** disable
         if ( (_filename != null) && (_filename.trim().length() > 0) ) {
             _filename = _filename.trim();
@@ -139,12 +139,12 @@ public class ConfigLoggingHandler extends FormHandler {
             } else {
                 shouldSave = true;
                 _context.logManager().setBaseLogfilename(_filename);
-                addFormNotice("Log file name pattern updated to " + _filename 
+                addFormNotice("Log file name pattern updated to " + _filename
                               + " (note: will not take effect until next rotation)");
             }
         }
       ***/
-        
+
         if ( (_recordFormat != null) && (_recordFormat.trim().length() > 0) ) {
             _recordFormat = _recordFormat.trim();
             String old = new String(_context.logManager().getFormat());
@@ -152,18 +152,18 @@ public class ConfigLoggingHandler extends FormHandler {
                 // noop - no change
             } else {
                 char fmt[] = new char[_recordFormat.length()];
-                for (int i = 0; i < fmt.length; i++) 
+                for (int i = 0; i < fmt.length; i++)
                     fmt[i] = _recordFormat.charAt(i);
                 _context.logManager().setFormat(fmt);
                 shouldSave = true;
                 addFormNotice("Log record format updated");
             }
         }
-        
+
         if (shouldSave) {
             boolean saved = _context.logManager().saveConfig();
 
-            if (saved) 
+            if (saved)
                 addFormNotice(_t("Log configuration saved"));
             else
                 addFormError("Error saving the configuration (applied but not saved) - please see the error logs");

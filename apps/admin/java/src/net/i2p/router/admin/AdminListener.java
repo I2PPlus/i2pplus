@@ -29,16 +29,16 @@ public class AdminListener implements Runnable {
     private int _port;
     private boolean _running;
     private long _nextFailDelay = 1000;
-    
+
     public AdminListener(RouterContext context, int port) {
         _context = context;
         _log = context.logManager().getLog(AdminListener.class);
         _port = port;
         _running = false;
     }
-    
+
     public void restart() {
-        // this works by taking advantage of the auto-retry mechanism in the 
+        // this works by taking advantage of the auto-retry mechanism in the
         // startup() loop (which we reset to wait 1s).  by failing the socket
         // (through close()) and nulling it, we will have to try to build a new
         // serverSocket (using the *new* _port)
@@ -49,13 +49,13 @@ public class AdminListener implements Runnable {
             s.close();
         } catch (IOException ioe) {}
     }
-    
+
     public void setPort(int port) { _port = port; }
     public int getPort() { return _port; }
-    
+
     /** max time to bind */
     private final static int MAX_FAIL_DELAY = 5*60*1000;
-    
+
     /**
      * Start up the socket listener, listens for connections, and
      * fires those connections off via {@link #runConnection runConnection}.
@@ -86,22 +86,22 @@ public class AdminListener implements Runnable {
             } catch (IOException ioe) {
                 _log.error("Error listening on port " + _port, ioe);
             }
-            
+
             if (_socket != null) {
                 try { _socket.close(); } catch (IOException ioe) {}
                 _socket = null;
             }
-            
+
             _log.error("Error listening, waiting " + _nextFailDelay + "ms before we try again");
             try { Thread.sleep(_nextFailDelay); } catch (InterruptedException ie) {}
             curDelay += _nextFailDelay;
             _nextFailDelay *= 5;
         }
-        
+
         _log.error("CANCELING ADMIN LISTENER.  delay = " + curDelay, new Exception("ADMIN LISTENER cancelled!!!"));
         _running = false;
     }
-    
+
     /**
      * Handle the connection by passing it off to an AdminRunner
      *
@@ -114,7 +114,7 @@ public class AdminListener implements Runnable {
         t.setDaemon(true);
         t.start();
     }
-    
+
     public void shutdown() {
         _running = false;
         if (_socket != null) try {

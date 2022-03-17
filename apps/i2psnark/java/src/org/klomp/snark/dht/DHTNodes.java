@@ -169,7 +169,7 @@ class DHTNodes {
             else
                 _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("DHT storage cleaner done - now with " +
                          peerCount + " / " + MAX_PEERS + " peers, " +
                          DataHelper.formatDuration(_expireTime) + " expiration");

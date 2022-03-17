@@ -158,7 +158,7 @@ public class ProfileOrganizer {
     private boolean getWriteLock() {
         try {
             boolean rv = _reorganizeLock.writeLock().tryLock(3000, TimeUnit.MILLISECONDS);
-            if ((!rv) && _log.shouldLog(Log.WARN))
+            if ((!rv) && _log.shouldWarn())
                 _log.warn("No lock, size is: " + _reorganizeLock.getQueueLength(), new Exception("rats"));
             return rv;
         } catch (InterruptedException ie) {}
@@ -182,7 +182,7 @@ public class ProfileOrganizer {
      */
     public PeerProfile getProfile(Hash peer) {
         if (peer.equals(_us)) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
         }
@@ -199,7 +199,7 @@ public class ProfileOrganizer {
      */
     public PeerProfile getProfileNonblocking(Hash peer) {
         if (peer.equals(_us)) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
         }
@@ -236,14 +236,14 @@ public class ProfileOrganizer {
         PeerProfile prof = getProfile(peer);
         boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
         if (peerInfo != null && (cap != null && !reachable) || cap == null || (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
             return null;
         }
 
-        if (VersionComparator.comp(version, "0.9.52") < 0) {
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> older than 0.9.52");
+        if (VersionComparator.comp(version, "0.9.53") < 0) {
+            if (_log.shouldInfo())
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> older than 0.9.53");
            return null;
         }
 
@@ -304,18 +304,18 @@ public class ProfileOrganizer {
         boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
 
         if (peer.equals(_us)) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Added our own profile to Profile Manager");
             return null;
         }
 
         if (peerInfo != null && (cap != null && !reachable) || cap == null || (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
             return null;
         }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("New profile created for [" + peer.toBase64().substring(0,6) + "]");
 
         PeerProfile old = getProfile(peer);
@@ -338,7 +338,7 @@ public class ProfileOrganizer {
             if (peerInfo != null && (cap != null && !reachable) || cap == null || (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
                 prof.setCapacityBonus(-30);
                 _highCapacityPeers.remove(peer, profile);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> K, L, M or Unreachable");
             }
             if (_thresholdCapacityValue <= profile.getCapacityValue() && isSelectable(peer) &&
@@ -529,14 +529,14 @@ public class ProfileOrganizer {
             locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet);
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 if (howMany != 1)
                 _log.debug("Need " + howMany + " Fast peers for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity tier");
                 else
                 _log.debug("Need " + howMany + " Fast peer for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity tier");
             selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 if (howMany != 1)
                    _log.debug(howMany + " Fast peers selected for tunnel build");
                 else
@@ -607,11 +607,11 @@ public class ProfileOrganizer {
                 locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet);
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Need " + howMany + " Fast peers for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity peers");
             selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(howMany + " Fast peers selected for tunnel build");
         }
         return;
@@ -646,7 +646,7 @@ public class ProfileOrganizer {
             locked_selectPeers(_highCapacityPeers, howMany, exclude, matches, mask, ipSet);
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
 //                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
 //            selectActiveNotFailingPeers2(howMany, exclude, matches, mask);
                 _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from well integrated peers");
@@ -683,11 +683,11 @@ public class ProfileOrganizer {
             locked_selectPeers(_wellIntegratedPeers, howMany, exclude, matches, mask, ipSet);
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Need " + howMany + " Integrated peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(howMany + " Integrated peers selected for tunnel build");
         }
         return;
@@ -795,7 +795,7 @@ public class ProfileOrganizer {
             } finally { releaseReadLock(); }
         }
         if (matches.size() < howMany) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Need " + howMany + " Not Failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable Failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
@@ -834,9 +834,9 @@ public class ProfileOrganizer {
                         for (Hash h : exclude) {
                             buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
                         }
-//                        if (_log.shouldLog(Log.DEBUG))
+//                        if (_log.shouldDebug())
 //                            _log.debug(buf.toString());
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Current [" + cur.toBase64().substring(0,6) + "] Matched? " + matches.contains(cur) +
                                       " - Excluded: " + exclude.size() + " peers");
 //                            _log.debug("Current [" + cur.toBase64().substring(0,6) + "]; Matched? " + matches.contains(cur)
@@ -848,7 +848,7 @@ public class ProfileOrganizer {
                     } else {
                         if (isSelectable(cur))
                             selected.add(cur);
-                        else if (_log.shouldLog(Log.DEBUG))
+                        else if (_log.shouldDebug())
                             _log.debug("Not selectable for tunnel build: [" + cur.toBase64().substring(0,6) + "]");
                     }
                 }
@@ -860,7 +860,7 @@ public class ProfileOrganizer {
                 buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
             }
             buf.append("\n* All: " + _notFailingPeersList.size() + "; Strict: " + _strictCapacityOrder.size());
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(buf.toString());
 //                _log.info("Selecting all Not Failing peers - Strict? " + onlyNotFailing +
 //                          "\n* Found " + selected.size() + " new peers: " + selected + " All: " + _notFailingPeersList.size() +
@@ -868,11 +868,11 @@ public class ProfileOrganizer {
             matches.addAll(selected);
         }
         if (matches.size() < howMany) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Need " + howMany + " Not Failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable Failing peers");
             selectFailingPeers(howMany, exclude, matches);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(howMany + " Not Failing peers selected for tunnel build");
         }
         return;
@@ -937,9 +937,9 @@ public class ProfileOrganizer {
                 buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
             }
         }
-//        if (_log.shouldLog(Log.DEBUG) && l.size() > 0)
+//        if (_log.shouldDebug() && l.size() > 0)
 //            _log.debug(buf.toString());
-        if (_log.shouldLog(Log.DEBUG) && l.size() > 0)
+        if (_log.shouldDebug() && l.size() > 0)
             _log.debug("Unreachable: " + l.size() + " peers");
 //            _log.debug("Unreachable: " + l);
         return l;
@@ -1091,11 +1091,11 @@ public class ProfileOrganizer {
         } finally { releaseWriteLock(); }
 
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Profiles reorganized: " + expiredCount + " expired \n* Averages: [Integration: " + _thresholdIntegrationValue +
                       "] [Capacity: " + _thresholdCapacityValue + "] [Speed: " + _thresholdSpeedValue + "]");
             /*****
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldDebug()) {
                 StringBuilder buf = new StringBuilder(512);
                 for (Iterator iter = _strictCapacityOrder.iterator(); iter.hasNext(); ) {
                     PeerProfile prof = (PeerProfile)iter.next();
@@ -1126,23 +1126,23 @@ public class ProfileOrganizer {
         int minFastPeers = getMinimumFastPeers();
         int numToPromote = minFastPeers - _fastPeers.size();
         if (numToPromote > 0) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Need to explicitly promote " + numToPromote + " peers to Fast group");
             for (PeerProfile cur : _strictCapacityOrder) {
                 if ( (!_fastPeers.containsKey(cur.getPeer())) && (!cur.getIsFailing()) ) {
                     if (!isSelectable(cur.getPeer())) {
                         // skip peers we don't have in the netDb
-                        // if (_log.shouldLog(Log.INFO))
+                        // if (_log.shouldInfo())
                         //     _log.info("skip unknown peer from fast promotion: " + cur.getPeer().toBase64());
                         continue;
                     }
                     if (!cur.getIsActive()) {
                         // skip inactive
-                        // if (_log.shouldLog(Log.INFO))
+                        // if (_log.shouldInfo())
                         //     _log.info("skip inactive peer from fast promotion: " + cur.getPeer().toBase64());
                         continue;
                     }
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Promoting [" + cur.getPeer().toBase64().substring(0,6) + "] to Fast group");
                     _fastPeers.put(cur.getPeer(), cur);
                     // no need to remove it from any of the other groups, since if it is
@@ -1166,7 +1166,7 @@ public class ProfileOrganizer {
         int maxFastPeers = getMaximumFastPeers();
         int numToDemote = _fastPeers.size() - maxFastPeers;
         if (numToDemote > 0) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Need to explicitly demote " + numToDemote + " peers from Fast group");
             // sort by speed, slowest-first
             Set<PeerProfile> sorted = new TreeSet<PeerProfile>(new SpeedComparator());
@@ -1202,7 +1202,7 @@ public class ProfileOrganizer {
                     i++;
                 }
             }
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Demoted " + numToDemote + " peers from High Capacity group; new size is " + _highCapacityPeers.size() + " peers");
         }
     }
@@ -1233,7 +1233,7 @@ public class ProfileOrganizer {
             int unfailed = 0;
             for (PeerProfile best : _strictCapacityOrder) {
                 if ( (best.getIsActive()) && (best.getIsFailing()) ) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("All peers are marked as failing; overriding the Failing flag for [" +
                                   best.getPeer().toBase64().substring(0,6) + "]");
                     best.setIsFailing(false);
@@ -1268,7 +1268,7 @@ public class ProfileOrganizer {
 
             // exclude unreachable peers
             if (profile.wasUnreachable()) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Excluding [" + profile.getPeer().toBase64().substring(0,6) + "] from fast/highcap groups -> unreachable");
                 continue;
             }
@@ -1282,7 +1282,7 @@ public class ProfileOrganizer {
                 bw = peerInfo.getBandwidthTier();
             }
             if (peerInfo != null && (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Excluding [" + profile.getPeer().toBase64().substring(0,6) + "] from fast/highcap groups -> K, L or M tier");
                 continue;
             }
@@ -1344,13 +1344,13 @@ public class ProfileOrganizer {
 
         if (numExceedingMean >= minHighCapacityPeers) {
             // our average is doing well (growing, not recovering from failures)
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Our average capacity (" + meanCapacity + ") is good and includes " +
                           numExceedingMean + " peer profiles");
             _thresholdCapacityValue = meanCapacity;
         } else if (meanCapacity > thresholdAtMedian && reordered.size() / 2 > minHighCapacityPeers) {
             // avg > median, get the min High Cap peers
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Our average capacity (" + meanCapacity + ") is greater than the median,"
                           + " so we've satisified the threshold (" + thresholdAtMinHighCap + ") to get the min High Capacity peers");
             _thresholdCapacityValue = thresholdAtMinHighCap;
@@ -1358,13 +1358,13 @@ public class ProfileOrganizer {
             // ok mean is skewed low, but we still have enough to use the median
             // We really don't want to be here, since the default is 5.0 and the median
             // is inevitably 5.01 or so.
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Our average capacity (" + meanCapacity + ") is skewed under the median,"
                           + " so we're using the median threshold " + thresholdAtMedian);
             _thresholdCapacityValue = thresholdAtMedian;
         } else {
             // our average is doing well, but not enough peers
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Our average capacity (" + meanCapacity + ") is good" +
                           " but we don't have enough peers (" + numExceedingMean + " required)");
             _thresholdCapacityValue = Math.max(thresholdAtMinHighCap, thresholdAtLowest);
@@ -1411,7 +1411,7 @@ public class ProfileOrganizer {
                 break;
             }
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Threshold value for speed: " + _thresholdSpeedValue + " out of speeds: " + speeds);
 *****/
     }
@@ -1440,7 +1440,7 @@ public class ProfileOrganizer {
         if (count > 0)
 //            _thresholdSpeedValue = total / count;
             _thresholdSpeedValue = ((total / count) / 7) * 5;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Threshold value for speed: " + _thresholdSpeedValue + " (calculated from " + count + " profiles)");
     }
 
@@ -1590,7 +1590,7 @@ public class ProfileOrganizer {
         if (netDb == null) return true;
         if (_context.router() == null) return true;
         if ( (_context.banlist() != null) && (_context.banlist().isBanlisted(peer)) ) {
-             if (_log.shouldLog(Log.DEBUG))
+             if (_log.shouldDebug())
                  _log.debug("[" + peer.toBase64().substring(0,6) + "] is banlisted; not using it to build tunnels");
             return false; // never select a banlisted peer
         }
@@ -1600,13 +1600,13 @@ public class ProfileOrganizer {
         if (null != info) {
             String tier = DataHelper.stripHTML(info.getBandwidthTier());
             if (info.isHidden()) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("[" + peer.toBase64().substring(0,6) + "] is marked as hidden; not using it to build tunnels");
                 return false;
 
 /**
             } else if (tier.equals("L") || tier.equals("M")) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("[" + peer.toBase64().substring(0,6) + "] is in tier L or M; not using it to build tunnels");
                 return false;
 **/
@@ -1614,17 +1614,17 @@ public class ProfileOrganizer {
             } else {
                 boolean exclude = TunnelPeerSelector.shouldExclude(_context, info);
                 if (exclude) {
-                    // if (_log.shouldLog(Log.WARN))
+                    // if (_log.shouldWarn())
                     //     _log.warn("Peer " + peer.toBase64() + " has capabilities or other stats suggesting we avoid it");
                     return false;
                 } else {
-                    // if (_log.shouldLog(Log.INFO))
+                    // if (_log.shouldInfo())
                     //     _log.info("Peer " + peer.toBase64() + " is locally known, allowing its use");
                     return true;
                 }
             }
         } else {
-            // if (_log.shouldLog(Log.WARN))
+            // if (_log.shouldWarn())
             //    _log.warn("Peer " + peer.toBase64() + " is NOT locally known, disallowing its use");
             return false;
         }
@@ -1661,15 +1661,15 @@ public class ProfileOrganizer {
                 // null for tests
                 (_context.commSystem() == null || !_context.commSystem().isInStrictCountry(peer))) {
                 _highCapacityPeers.put(peer, profile);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to High Capacity group");
                 if (_thresholdSpeedValue <= profile.getSpeedValue()) {
                     if (!profile.getIsActive()) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Not promoting  [" + peer.toBase64().substring(0,6) + "] to Fast group (inactive)");
                     } else {
                         _fastPeers.put(peer, profile);
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to Fast group");
                     }
                 }
@@ -1685,7 +1685,7 @@ public class ProfileOrganizer {
             // This could be used later to see if a floodfill peer is for real.
             if (_thresholdIntegrationValue <= profile.getIntegrationValue()) {
                 _wellIntegratedPeers.put(peer, profile);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to Integrated group");
             }
         }

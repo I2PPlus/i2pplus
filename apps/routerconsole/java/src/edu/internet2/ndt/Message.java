@@ -5,15 +5,15 @@ package edu.internet2.ndt;
  * TEST_PREPARE. Messages are defined to have a "length" field too. Currently, 2
  * bytes of the message "body" byte array are often used to store length (For
  * example, second/third array positions)
- * 
+ *
  * <p>
  * TODO for a later release: It may be worthwhile exploring whether MessageTypes
  * could be merged here instead of being located in NDTConstants. Message/Type
  * could also be made into an enumeration and checks for the current MessageType
  * being assigned could be incorporated.
- * 
+ *
  * @see MessageType for more Message Types.
- * 
+ *
  */
 public class Message {
 
@@ -24,7 +24,7 @@ public class Message {
 
 	/**
 	 * Get Message Type
-	 * 
+	 *
 	 * @return byte indicating Message Type
 	 * */
 	public byte getType() {
@@ -33,7 +33,7 @@ public class Message {
 
 	/**
 	 * Set Message Type
-	 * 
+	 *
 	 * @param bParamType
 	 *            byte indicating Message Type
 	 * */
@@ -43,7 +43,7 @@ public class Message {
 
 	/**
 	 * Get Message body as array
-	 * 
+	 *
 	 * @return byte array message body
 	 * */
 	public byte[] getBody() {
@@ -52,10 +52,10 @@ public class Message {
 
 	/**
 	 * Set Message body, given a byte array input
-	 * 
+	 *
 	 * @param baParamBody
 	 *            message body byte array
-	 * 
+	 *
 	 * */
 	public void setBody(byte[] baParamBody) {
 		int iParamSize = 0;
@@ -70,12 +70,12 @@ public class Message {
 	 * Set Message body, given a byte array and a size parameter. This may be
 	 * useful if user wants to initialize the message, and then continue to
 	 * populate it later. This method is unused currently.
-	 * 
+	 *
 	 * @param iParamSize
 	 *            byte array size
 	 * @param baParamBody
 	 *            message body byte array
-	 * 
+	 *
 	 * */
 	public void setBody(byte[] baParamBody, int iParamSize) {
 		_yaBody = new byte[iParamSize];
@@ -84,10 +84,10 @@ public class Message {
 
 	/**
 	 * Utility method to initialize Message body
-	 * 
+	 *
 	 * @param iParamSize
 	 *            byte array size
-	 * 
+	 *
 	 * */
 	public void initBodySize(int iParamSize) {
 		this._yaBody = new byte[iParamSize];

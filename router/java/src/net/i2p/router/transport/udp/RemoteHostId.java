@@ -15,7 +15,7 @@ final class RemoteHostId {
     private final int _port;
     private final Hash _peerHash;
     private final int _hashCode;
-    
+
     /** direct */
     public RemoteHostId(byte ip[], int port) {
         this(ip, port, null);
@@ -25,7 +25,7 @@ final class RemoteHostId {
     public RemoteHostId(Hash peerHash) {
         this(null, 0, peerHash);
     }
-    
+
     private RemoteHostId(byte ip[], int port, Hash peerHash) {
         _ip = ip;
         _port = port;
@@ -41,22 +41,22 @@ final class RemoteHostId {
 
     /** @return null if direct */
     public Hash getPeerHash() { return _peerHash; }
-    
+
     @Override
     public int hashCode() {
         return _hashCode;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) 
+        if (obj == null)
             return false;
-        if (!(obj instanceof RemoteHostId)) 
+        if (!(obj instanceof RemoteHostId))
             return false;
         RemoteHostId id = (RemoteHostId)obj;
         return (_port == id._port) && DataHelper.eq(_ip, id._ip) && DataHelper.eq(_peerHash, id._peerHash);
     }
-    
+
     @Override
     public String toString() {
         if (_ip != null) {

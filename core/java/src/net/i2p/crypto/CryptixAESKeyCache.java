@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Cache the objects used in CryptixRijndael_Algorithm.makeKey to reduce
- * memory churn.  The KeyCacheEntry should be held onto as long as the 
+ * memory churn.  The KeyCacheEntry should be held onto as long as the
  * data referenced in it is needed (which often is only one or two lines
  * of code)
  *
@@ -16,15 +16,15 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public final class CryptixAESKeyCache {
     private final LinkedBlockingQueue<KeyCacheEntry> _availableKeys;
-    
+
     private static final int KEYSIZE = 32; // 256bit AES
     private static final int BLOCKSIZE = 16;
     private static final int ROUNDS = CryptixRijndael_Algorithm.getRounds(KEYSIZE, BLOCKSIZE);
     private static final int BC = BLOCKSIZE / 4;
-    private static final int KC = KEYSIZE / 4; 
-    
+    private static final int KC = KEYSIZE / 4;
+
     private static final int MAX_KEYS = 64;
-    
+
     /*
      * @deprecated unused, keys are now cached in the SessionKey objects
      */
@@ -32,7 +32,7 @@ public final class CryptixAESKeyCache {
     public CryptixAESKeyCache() {
         _availableKeys = new LinkedBlockingQueue<KeyCacheEntry>(MAX_KEYS);
     }
-    
+
     /**
      * Get the next available structure, either from the cache or a brand new one
      *
@@ -45,7 +45,7 @@ public final class CryptixAESKeyCache {
             return rv;
         return createNew();
     }
-    
+
     /**
      * Put this structure back onto the available cache for reuse
      *
@@ -55,12 +55,12 @@ public final class CryptixAESKeyCache {
     public final void releaseKey(KeyCacheEntry key) {
         _availableKeys.offer(key);
     }
-    
+
     public static final KeyCacheEntry createNew() {
         KeyCacheEntry e = new KeyCacheEntry();
         return e;
     }
-    
+
     /**
      * all the data alloc'ed in a makeKey call
      */

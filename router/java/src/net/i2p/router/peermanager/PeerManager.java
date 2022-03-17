@@ -226,7 +226,7 @@ class PeerManager {
         Set<PeerProfile> profiles = _persistenceHelper.readProfiles();
         for (PeerProfile prof : profiles) {
                 _organizer.addProfile(prof);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Profile for [" + prof.getPeer().toBase64().substring(0,6) + "] loaded");
         }
     }
@@ -276,13 +276,13 @@ class PeerManager {
                 throw new UnsupportedOperationException();
         }
         if (peers.isEmpty()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("We ran out of peers when looking for reachable ones"
                           + "\n* Found: 0 with "
                           + _organizer.countHighCapacityPeers() + " High Capacity peers and "
                           + _organizer.countFastPeers() + " Fast peers");
         }
-//        if (_log.shouldLog(Log.INFO))
+//        if (_log.shouldInfo())
 //            _log.info("Peers selected for testing: " + peers);
         return new ArrayList<Hash>(peers);
     }
@@ -291,7 +291,7 @@ class PeerManager {
      *  @param caps non-null, case is ignored
      */
     public void setCapabilities(Hash peer, String caps) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Capabilities for [" + peer.toBase64().substring(0,6) + "] set to " + caps.replace("XO", "X").replace("PO", "P"));
         caps = caps.toLowerCase(Locale.US);
 
@@ -327,7 +327,7 @@ class PeerManager {
     }
 
     public void removeCapabilities(Hash peer) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Removing capabilities from [" + peer.toBase64().substring(0,6) + "]");
 
             String oldCaps = _capabilitiesByPeer.remove(peer);

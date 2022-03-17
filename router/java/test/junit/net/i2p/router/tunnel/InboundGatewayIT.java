@@ -12,28 +12,28 @@ package net.i2p.router.tunnel;
 import static junit.framework.TestCase.*;
 
 /**
- * Quick unit test for base functionality of inbound tunnel 
+ * Quick unit test for base functionality of inbound tunnel
  * operation
  */
 public class InboundGatewayIT extends GatewayITBase {
-    
-    
+
+
     @Override
     protected void setupSenderAndReceiver() {
         _sender = new InboundSender(_context, _config.getConfig(0));
         _receiver = new InboundTestReceiver(_config);
     }
-    
+
     @Override
     protected int getLastHop() {
         return 2;
     }
-    
+
     private class InboundTestReceiver extends TestReceiver {
         public InboundTestReceiver(TunnelCreatorConfig config) {
             super(config);
         }
-        
+
         @Override
         @SuppressWarnings("deprecation")
         protected void handleAtEndpoint(byte []encrypted) {

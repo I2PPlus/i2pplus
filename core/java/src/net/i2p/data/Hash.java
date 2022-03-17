@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -25,7 +25,7 @@ public class Hash extends SimpleDataStructure {
     public final static int HASH_LENGTH = 32;
     public final static Hash FAKE_HASH = new Hash(new byte[HASH_LENGTH]);
     private static final int CACHE_SIZE = 2048;
-    
+
     private static final SDSCache<Hash> _cache = new SDSCache<Hash>(Hash.class, HASH_LENGTH, CACHE_SIZE);
 
     /**
@@ -90,7 +90,7 @@ public class Hash extends SimpleDataStructure {
         _base64ed = null;
         _cachedHashCode = super.hashCode();
     }
-    
+
     /** a Hash is a hash, so just use the first 4 bytes for speed */
     @Override
     public int hashCode() {

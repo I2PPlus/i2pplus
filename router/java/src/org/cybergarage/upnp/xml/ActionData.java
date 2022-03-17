@@ -43,12 +43,12 @@ public class ActionData extends NodeData
 
 	private ControlResponse ctrlRes = null;
 
-	public ControlResponse getControlResponse() 
+	public ControlResponse getControlResponse()
 	{
 		return ctrlRes;
 	}
 
-	public void setControlResponse(ControlResponse res) 
+	public void setControlResponse(ControlResponse res)
 	{
 		ctrlRes = res;
 	}

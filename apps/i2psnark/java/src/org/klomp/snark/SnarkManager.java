@@ -483,7 +483,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void addMessageNoEscape(String message) {
         _messages.addMessageNoEscape(getTime() + "&nbsp; " + message.replace("%20", " "));
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info(message);
     }
 
@@ -753,7 +753,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return dir;
         }
         oldFile.delete();
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Config migrated from " + oldFile + " to " + dir);
         return dir;
     }
@@ -819,7 +819,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             try {
                 return new CommentSet(com);
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Comment load error", ioe);
             }
         }
@@ -838,7 +838,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         try {
             comments.save(com);
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Comment save error", ioe);
         }
     }
@@ -1047,7 +1047,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         _util.setI2CPConfig(i2cpHost, i2cpPort, i2cpOpts);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Configuring with I2CP options " + i2cpOpts);
         //I2PSnarkUtil.instance().setI2CPConfig("66.111.51.110", 7654, new Properties());
         //String eepHost = _config.getProperty(PROP_EEP_HOST);
@@ -1325,7 +1325,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         }
                     }
                 }
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("i2cp host [" + i2cpHost + "] i2cp port " + port + " opts [" + opts
                                + "] oldOpts [" + oldOpts + "]");
                 if (snarksActive) {
@@ -1809,7 +1809,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     // This may take a LONG time
                     if (baseFile == null)
                         baseFile = getSavedBaseFile(info.getInfoHash());
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("New Snark loaded\n* Torrent: " + filename + "\n* Base: " + baseFile);
                     torrent = new Snark(_util, filename, null, -1, null, null, this,
                                         _peerCoordinatorSet, _connectionAcceptor,
@@ -2694,7 +2694,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean doMagnets = true;
             while (_running) {
                 File dir = getDataDir();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("DirectoryMonitor scanning I2PSnark data dir: " + dir.getAbsolutePath());
                 if (routerOK &&
                     (_context.isRouterContext() || _util.connected() || _util.isConnecting())) {
@@ -3005,7 +3005,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
 
         Set<String> existingNames = listTorrentFiles();
-//        if (_log.shouldLog(Log.DEBUG))
+//        if (_log.shouldDebug())
 //            _log.debug("DirectoryMonitor found the following torrents in " + dir + ":\n* " + DataHelper.toString(foundNames) + " existing: " + DataHelper.toString(existingNames));
 //            _log.debug("DirectoryMonitor found " + files.length + " torrents in " + dir + ":\n* " + DataHelper.toString(foundNames));
         // lets find new ones first...
@@ -3281,7 +3281,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void stopAllTorrents(boolean finalShutdown) {
         _stopping = true;
-        if (finalShutdown && _log.shouldLog(Log.WARN))
+        if (finalShutdown && _log.shouldWarn())
             _log.warn("SnarkManager final shutdown");
         int count = 0;
         for (Snark snark : _snarks.values()) {

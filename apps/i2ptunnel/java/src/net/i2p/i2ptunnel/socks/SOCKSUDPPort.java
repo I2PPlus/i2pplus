@@ -40,7 +40,7 @@ public class SOCKSUDPPort implements Source, Sink {
         this.wrapper = new SOCKSUDPWrapper(cache);
         this.udpsink = new UDPSink(host, port);
         this.wrapper.setSink(this.udpsink);
-        
+
         // rcv from the same port and send to I2P
         DatagramSocket sock = this.udpsink.getSocket();
         this.udpsource = new UDPSource(sock);

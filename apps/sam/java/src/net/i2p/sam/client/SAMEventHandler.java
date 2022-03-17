@@ -29,7 +29,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
         //_context = ctx;
         _log = ctx.logManager().getLog(getClass());
     }
-    
+
     @Override
     public void helloReplyReceived(boolean ok, String version) {
         synchronized (_helloLock) {
@@ -49,7 +49,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
             Boolean ok;
             if (SAMReader.SAMClientEventListener.SESSION_STATUS_OK.equals(result))
                 ok = Boolean.TRUE;
-            else 
+            else
                 ok = Boolean.FALSE;
             if (_sessionCreateOk == null)
                 _sessionCreateOk = ok;
@@ -62,7 +62,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     @Override
     public void namingReplyReceived(String name, String result, String value, String msg) {
         synchronized (_namingReplyLock) {
-            if (SAMReader.SAMClientEventListener.NAMING_REPLY_OK.equals(result)) 
+            if (SAMReader.SAMClientEventListener.NAMING_REPLY_OK.equals(result))
                 _namingReplies.put(name, value);
             else
                 _namingReplies.put(name, result);
@@ -75,7 +75,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
         synchronized (_streamStatusLock) {
             if (SAMReader.SAMClientEventListener.SESSION_STATUS_OK.equals(result))
                 _streamStatusOk = Boolean.TRUE;
-            else 
+            else
                 _streamStatusOk = Boolean.FALSE;
             _streamStatusLock.notifyAll();
         }
@@ -86,13 +86,13 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
         _log.error("Unhandled message: [" + major + "] [" + minor + "] [" + params + "]");
     }
 
-    
+
     //
     // blocking lookup calls below
     //
 
     /**
-     * Wait for the connection to be established, returning the server version if everything 
+     * Wait for the connection to be established, returning the server version if everything
      * went ok
      * @return SAM server version if everything ok, or null on failure
      */
@@ -102,7 +102,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
                 synchronized (_helloLock) {
                     if (_helloOk == null)
                         _helloLock.wait();
-                    else 
+                    else
                         return _helloOk.booleanValue() ? _version : null;
                 }
             } catch (InterruptedException ie) { return null; }
@@ -163,7 +163,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
             } catch (InterruptedException ie) { return false; }
         }
     }
-    
+
     /**
      * Return the destination found matching the name, or null if the key was
      * not able to be retrieved.

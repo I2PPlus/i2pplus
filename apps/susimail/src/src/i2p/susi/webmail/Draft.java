@@ -14,12 +14,12 @@ import i2p.susi.webmail.encoding.EncodingFactory;
 
 /**
  * Holds a draft message and reference to attachments, if any
- * 
+ *
  * Differences from Mail:
  * - Never multipart, body is always text/plain UTF-8
  * - Attachments are just headers containing name, type, encoding, and path to file
  * - Bcc is a header
- * 
+ *
  * @since 0.9.35
  */
 class Draft extends Mail {
@@ -28,7 +28,7 @@ class Draft extends Mail {
 	private String[] bcc;        // addresses only, enclosed by <>
 	private static final String HDR_ATTACH = "X-I2P-Attachment: ";
 	public static final String HDR_BCC = "Bcc: ";
-	
+
 	public Draft(String uidl) {
 		super(uidl);
 		attachments = new ArrayList<Attachment>(4);
@@ -52,7 +52,7 @@ class Draft extends Mail {
 						// don't set
 					} else if (bcc == null) {
 						bcc = list.toArray(new String[list.size()]);
-					} else {	
+					} else {
 						// add to the array, shouldn't happen
 						for (int j = 0; j < bcc.length; j++) {
 							list.add(j, bcc[i]);

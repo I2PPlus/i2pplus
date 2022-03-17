@@ -1,9 +1,9 @@
 package net.i2p.router;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -26,7 +26,7 @@ import net.i2p.router.networkdb.reseed.ReseedChecker;
 /**
  * Defines the mechanism for interacting with I2P's network database
  *
- */ 
+ */
 public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Return the RouterInfo structures for the routers closest to the given key.
@@ -37,13 +37,13 @@ public abstract class NetworkDatabaseFacade implements Service {
      * @param peersToIgnore Hash of routers not to include
      */
     public abstract Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore);
-    
+
     /**
      *  @return RouterInfo, LeaseSet, or null
      *  @since 0.8.3
      */
     public abstract DatabaseEntry lookupLocally(Hash key);
-    
+
     /**
      *  Not for use without validation
      *  @return RouterInfo, LeaseSet, or null, NOT validated
@@ -52,7 +52,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract DatabaseEntry lookupLocallyWithoutValidation(Hash key);
 
     public abstract void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs);
-    
+
     /**
      *  Lookup using the client's tunnels
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
@@ -63,7 +63,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract LeaseSet lookupLeaseSetLocally(Hash key);
     public abstract void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs);
     public abstract RouterInfo lookupRouterInfoLocally(Hash key);
-    
+
     /**
      *  Unconditionally lookup using the client's tunnels.
      *  No success or failed jobs, no local lookup, no checks.
@@ -102,22 +102,22 @@ public abstract class NetworkDatabaseFacade implements Service {
      */
     public abstract Destination lookupDestinationLocally(Hash key);
 
-    /** 
-     * @return the leaseSet if another leaseSet already existed at that key 
+    /**
+     * @return the leaseSet if another leaseSet already existed at that key
      *
      * @throws IllegalArgumentException if the data is not valid
      */
     public abstract LeaseSet store(Hash key, LeaseSet leaseSet) throws IllegalArgumentException;
 
-    /** 
-     * @return the routerInfo if another router already existed at that key 
+    /**
+     * @return the routerInfo if another router already existed at that key
      *
      * @throws IllegalArgumentException if the data is not valid
      */
     public abstract RouterInfo store(Hash key, RouterInfo routerInfo) throws IllegalArgumentException;
 
-    /** 
-     *  @return the old entry if it already existed at that key 
+    /**
+     *  @return the old entry if it already existed at that key
      *  @throws IllegalArgumentException if the data is not valid
      *  @since 0.9.16
      */
@@ -142,7 +142,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  @since 0.9.9
      */
     public long getLastRouterInfoPublishTime() { return 0; }
-    
+
     public abstract Set<Hash> getAllRouters();
     public int getKnownRouters() { return 0; }
     public int getKnownLeaseSets() { return 0; }
@@ -175,7 +175,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  @since 0.9.16
      */
     public boolean isNegativeCachedForever(Hash key) { return false; }
-    
+
     /**
      *  @param spk unblinded key
      *  @return BlindData or null
@@ -184,7 +184,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     public BlindData getBlindData(SigningPublicKey spk) {
         return null;
     }
-    
+
     /**
      *  @param bd new BlindData to put in the cache
      *  @since 0.9.40

@@ -10,7 +10,7 @@
 *
 *	12/26/02
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.device;
@@ -23,7 +23,7 @@ public class InvalidDescriptionException extends Exception
 	{
 		super();
 	}
-	
+
 	public InvalidDescriptionException(String s)
 	{
 		super(s);

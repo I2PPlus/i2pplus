@@ -20,7 +20,7 @@ import static net.i2p.update.UpdateMethod.*;
  * @since 0.9.4 moved from NewsFetcher
  */
 class NewsHandler extends UpdateHandler implements Checker {
-    
+
     /**
      *  NOTE: If you change, also change in Android:
      *  app/src/main/java/net/i2p/android/apps/NewsFetcher.java

@@ -15,12 +15,12 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     private int _maxBufferSize;
     private int _localPort;
     private int _remotePort;
-    
+
     public static final int DEFAULT_BUFFER_SIZE = 1024*64;
     public static final int DEFAULT_READ_TIMEOUT = -1;
     public static final int DEFAULT_WRITE_TIMEOUT = -1;
     public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
-    
+
     /**
      *  Sets max buffer size, connect timeout, read timeout, and write timeout
      *  from System properties. Does not set local port or remote port.
@@ -28,7 +28,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     public I2PSocketOptionsImpl() {
         this(System.getProperties());
     }
-    
+
     /**
      *  Initializes from System properties then copies over all options.
      *  @param opts may be null
@@ -56,7 +56,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     public I2PSocketOptionsImpl(Properties opts) {
         init(opts);
     }
-    
+
     /**
      *  Sets max buffer size, connect timeout, read timeout, and write timeout
      *  from properties. Does not set local port or remote port.
@@ -76,7 +76,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
         if (opts.getProperty(PROP_WRITE_TIMEOUT) != null)
             _writeTimeout = getInt(opts, PROP_WRITE_TIMEOUT, DEFAULT_WRITE_TIMEOUT);
     }
-    
+
     /**
      *  Sets max buffer size, connect timeout, read timeout, and write timeout
      *  from properties. Does not set local port or remote port.
@@ -87,7 +87,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
         _readTimeout = getInt(opts, PROP_READ_TIMEOUT, -1);
         _writeTimeout = getInt(opts, PROP_WRITE_TIMEOUT, DEFAULT_WRITE_TIMEOUT);
     }
-    
+
     protected static int getInt(Properties opts, String name, int defaultVal) {
         if (opts == null) return defaultVal;
         String val = opts.getProperty(name);
@@ -101,7 +101,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
             }
         }
     }
-    
+
     /**
      *  Not part of the API, not for external use.
      */
@@ -118,7 +118,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
             }
         }
     }
-    
+
     /**
      * How long we will wait for the ACK from a SYN, in milliseconds.
      *
@@ -141,10 +141,10 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     public void setConnectTimeout(long ms) {
         _connectTimeout = ms;
     }
-    
+
     /**
      * What is the longest we'll block on the input stream while waiting
-     * for more data.  If this value is exceeded, the read() throws 
+     * for more data.  If this value is exceeded, the read() throws
      * SocketTimeoutException as of 0.9.36.
      * Prior to that, the read() returned -1 or 0.
      *
@@ -158,7 +158,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
 
     /**
      * What is the longest we'll block on the input stream while waiting
-     * for more data.  If this value is exceeded, the read() throws 
+     * for more data.  If this value is exceeded, the read() throws
      * SocketTimeoutException as of 0.9.36.
      * Prior to that, the read() returned -1 or 0.
      *
@@ -169,11 +169,11 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     public void setReadTimeout(long ms) {
         _readTimeout = ms;
     }
-    
+
     /**
-     * How much data will we accept that hasn't been written out yet.  After 
+     * How much data will we accept that hasn't been written out yet.  After
      * this amount has been exceeded, subsequent .write calls will block until
-     * either some data is removed or the connection is closed.  If this is 
+     * either some data is removed or the connection is closed.  If this is
      * less than or equal to zero, there is no limit (warning: can eat ram)
      *
      * Default 64 KB
@@ -181,26 +181,26 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * @return buffer size limit, in bytes
      */
     public int getMaxBufferSize() {
-        return _maxBufferSize; 
+        return _maxBufferSize;
     }
-    
+
     /**
-     * How much data will we accept that hasn't been written out yet.  After 
+     * How much data will we accept that hasn't been written out yet.  After
      * this amount has been exceeded, subsequent .write calls will block until
-     * either some data is removed or the connection is closed.  If this is 
+     * either some data is removed or the connection is closed.  If this is
      * less than or equal to zero, there is no limit (warning: can eat ram)
      *
      * Default 64 KB
      *
      */
     public void setMaxBufferSize(int numBytes) {
-        _maxBufferSize = numBytes; 
+        _maxBufferSize = numBytes;
     }
-    
+
     /**
      * What is the longest we'll block on the output stream while waiting
-     * for the data to flush.  If this value is exceeded, the write() throws 
-     * InterruptedIOException.  If this is less than or equal to zero, there 
+     * for the data to flush.  If this value is exceeded, the write() throws
+     * InterruptedIOException.  If this is less than or equal to zero, there
      * is no timeout.
      *
      * Default -1 (unlimited)
@@ -211,8 +211,8 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
 
     /**
      * What is the longest we'll block on the output stream while waiting
-     * for the data to flush.  If this value is exceeded, the write() throws 
-     * InterruptedIOException.  If this is less than or equal to zero, there 
+     * for the data to flush.  If this value is exceeded, the write() throws
+     * InterruptedIOException.  If this is less than or equal to zero, there
      * is no timeout.
      *
      * Default -1 (unlimited)

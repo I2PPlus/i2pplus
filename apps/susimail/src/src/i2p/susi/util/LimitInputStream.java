@@ -12,7 +12,7 @@ import java.io.InputStream;
 public class LimitInputStream extends CountingInputStream {
 
     private final long maxx;
-    
+
     /**
      *  @param max max number of bytes to read
      */
@@ -22,17 +22,17 @@ public class LimitInputStream extends CountingInputStream {
             throw new IllegalArgumentException("negative limit: " + max);
         maxx = max;
     }
-    
+
     @Override
     public int available() throws IOException {
         return (int) Math.min(maxx - count, super.available());
     }
-    
+
     @Override
     public long skip(long n) throws IOException {
         return super.skip(Math.min(maxx - count, n));
     }
-    
+
     @Override
     public int read() throws IOException {
         if (count >= maxx)
@@ -46,7 +46,7 @@ public class LimitInputStream extends CountingInputStream {
             return -1;
         return super.read(buf, off, (int) Math.min(maxx - count, len));
     }
-    
+
 /****
     public static void main(String[] args) {
         try {

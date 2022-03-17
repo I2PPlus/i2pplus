@@ -1,9 +1,9 @@
 package net.i2p.router.networkdb.kademlia;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -27,9 +27,9 @@ import net.i2p.router.networkdb.HandleDatabaseLookupMessageJob;
  */
 public class HandleFloodfillDatabaseLookupMessageJob extends HandleDatabaseLookupMessageJob {
     public HandleFloodfillDatabaseLookupMessageJob(RouterContext ctx, DatabaseLookupMessage receivedMessage, RouterIdentity from, Hash fromHash) {
-        super(ctx, receivedMessage, from, fromHash);    
+        super(ctx, receivedMessage, from, fromHash);
     }
-    
+
     /**
      * @return are we floodfill
      * We don't really answer all queries if this is true,

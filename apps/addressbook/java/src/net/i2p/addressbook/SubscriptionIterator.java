@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2004 Ragnarok
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,7 +33,7 @@ import net.i2p.util.PortMapper;
  * An iterator over the subscriptions in a SubscriptionList.  Note that this iterator
  * returns AddressBook objects, and not Subscription objects.
  * Yes, the EepGet fetch() is done in here in next().
- * 
+ *
  * @author Ragnarok
  */
 class SubscriptionIterator implements Iterator<AddressBook> {
@@ -45,7 +45,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
 
     /**
      * Construct a SubscriptionIterator using the Subscriprions in List subscriptions.
-     * 
+     *
      * @param subscriptions
      *            List of Subscription objects that represent address books.
      * @param delay the minimum delay since last fetched for the iterator to actually fetch
@@ -59,7 +59,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
         this.proxyPort = proxyPort;
     }
 
-    
+
     /* (non-Javadoc)
      * @see java.util.Iterator#hasNext()
      */
@@ -85,7 +85,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
             //System.err.println("Fetching addressbook from " + sub.getLocation());
             return new AddressBook(sub, this.proxyHost, this.proxyPort);
         } else {
-            //System.err.println("Addressbook " + sub.getLocation() + " was last fetched " + 
+            //System.err.println("Addressbook " + sub.getLocation() + " was last fetched " +
             //                   DataHelper.formatDuration(I2PAppContext.getGlobalContext().clock().now() - sub.getLastFetched()) +
             //                   " ago but the minimum delay is " +
             //                   DataHelper.formatDuration(this.delay));

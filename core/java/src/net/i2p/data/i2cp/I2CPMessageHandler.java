@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -30,7 +30,7 @@ public class I2CPMessageHandler {
 
     /**
      * Read an I2CPMessage from the stream and return the fully populated object.
-     * 
+     *
      * @param in I2CP input stream
      * @return Fully populated I2CPMessage
      * @throws IOException if there is an IO problem reading from the stream
@@ -58,7 +58,7 @@ public class I2CPMessageHandler {
     }
 
     /**
-     * Yes, this is fairly ugly, but its the only place it ever happens.  
+     * Yes, this is fairly ugly, but its the only place it ever happens.
      *
      */
     private static I2CPMessage createMessage(int type) throws

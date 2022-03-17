@@ -44,7 +44,7 @@ public class DecodingOutputStream extends OutputStream {
         }
         _bb = ByteBuffer.allocate(1024);
         _cb = CharBuffer.allocate(1024);
-    }						
+    }
 
     @Override
     public void write(int b) throws IOException {

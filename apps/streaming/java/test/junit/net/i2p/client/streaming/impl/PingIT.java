@@ -27,7 +27,7 @@ public class PingIT extends TestCase {
             assertTrue(ponged);
         }
     }
-    
+
     private I2PSession createSession() throws Exception {
         I2PClient client = I2PClientFactory.createClient();
         ByteArrayOutputStream baos = new ByteArrayOutputStream(512);

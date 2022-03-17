@@ -15,12 +15,12 @@ import net.i2p.I2PException;
 public interface I2PServerSocket {
     /**
      * Closes the socket.
-     * @throws I2PException 
+     * @throws I2PException
      */
     public void close() throws I2PException;
 
     /**
-     * Waits for the next socket connecting.  If a remote user tried to make a 
+     * Waits for the next socket connecting.  If a remote user tried to make a
      * connection and the local application wasn't .accept()ing new connections,
      * they should get refused (if .accept() doesnt occur in some small period).
      * Warning - unlike regular ServerSocket, may return null (through 0.9.16 only).

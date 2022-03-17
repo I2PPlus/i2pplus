@@ -65,10 +65,10 @@ public class Main implements RouterApp, NotificationService {
         log = _appContext.logManager().getLog(Main.class);
         _state = INITIALIZED;
     }
-    
+
     /**
      * Start the tray icon code (loads tray icon in the tray area).
-     * @throws AWTException on startup error, including systray not supported 
+     * @throws AWTException on startup error, including systray not supported
      */
     private synchronized void startUp() throws Exception {
         final TrayManager trayManager;
@@ -83,7 +83,7 @@ public class Main implements RouterApp, NotificationService {
         changeState(RUNNING);
         if (_mgr != null)
             _mgr.register(this);
-        
+
         if (_context != null) {
             _context.addPropertyCallback(new I2PPropertyCallback() {
                 @Override
@@ -95,7 +95,7 @@ public class Main implements RouterApp, NotificationService {
             });
         }
     }
-    
+
     public static void main(String[] args) {
         // early check so we can bail out when started via CLI
         if (!SystemTray.isSupported()) {
@@ -124,7 +124,7 @@ public class Main implements RouterApp, NotificationService {
             setMacTrayIcon();
 
         // TODO process args with getopt if needed
-        
+
         if (_context == null)
             launchForeverLoop();
         //We'll be doing GUI work, so let's stay in the event dispatcher thread.
@@ -138,13 +138,13 @@ public class Main implements RouterApp, NotificationService {
                     log.error("Failed while running desktopgui!", e);
                     changeState(START_FAILED, "Failed while running desktopgui!", e);
                 }
-                
+
             }
-            
+
         });
 
     }
-    
+
     /**
      *  Unless we do this, when we start DesktopGUI we get a Java coffee cup
      *  in the tray.
@@ -183,7 +183,7 @@ public class Main implements RouterApp, NotificationService {
                 log.warn("Can't set OSX Dock icon", e);
         }
     }
-    
+
     /**
      * Avoids the app terminating because no Window is opened anymore.
      * More info: http://java.sun.com/javase/6/docs/api/java/awt/doc-files/AWTThreadIssues.html#Autoshutdown

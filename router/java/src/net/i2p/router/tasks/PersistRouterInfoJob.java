@@ -34,7 +34,7 @@ public class PersistRouterInfoJob extends JobImpl {
 
     public void runJob() {
         Log _log = getContext().logManager().getLog(PersistRouterInfoJob.class);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Saving our updated RouterInfo file to disk");
 
         File infoFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.INFO_FILENAME);

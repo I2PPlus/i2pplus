@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -207,7 +207,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
         if (bytes == null) throw new DataFormatException("Not enough data to sign");
         if (key == null)
             throw new DataFormatException("No signing key");
-        // now sign with the key 
+        // now sign with the key
         _signature = DSAEngine.getInstance().sign(bytes, key);
         if (_signature == null)
             throw new DataFormatException("Signature failed with " + key.getType() + " key");

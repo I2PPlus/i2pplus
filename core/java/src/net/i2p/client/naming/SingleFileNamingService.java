@@ -1,8 +1,8 @@
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by mihi in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by mihi in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  */
 package net.i2p.client.naming;
@@ -76,7 +76,7 @@ public class SingleFileNamingService extends NamingService {
         return _file.getAbsolutePath();
     }
 
-    /** 
+    /**
      *  Will strip a "www." prefix and retry if lookup fails
      *
      *  @param hostname case-sensitive; caller should convert to lower case
@@ -94,13 +94,13 @@ public class SingleFileNamingService extends NamingService {
         } catch (IOException ioe) {
             if (_file.exists())
                 _log.error("Error loading hosts file " + _file, ioe);
-            else if (_log.shouldLog(Log.WARN))
+            else if (_log.shouldWarn())
                 _log.warn("Error loading hosts file " + _file, ioe);
         }
         return null;
     }
-    
-    /** 
+
+    /**
      *  @param options ignored
      */
     @Override
@@ -126,7 +126,7 @@ public class SingleFileNamingService extends NamingService {
         } catch (IOException ioe) {
             if (_file.exists())
                 _log.error("Error loading hosts file " + _file, ioe);
-            else if (_log.shouldLog(Log.WARN))
+            else if (_log.shouldWarn())
                 _log.warn("Error loading hosts file " + _file, ioe);
             return null;
         } finally {
@@ -163,7 +163,7 @@ public class SingleFileNamingService extends NamingService {
         return null;
     }
 
-    /** 
+    /**
      *  @param hostname case-sensitive; caller should convert to lower case
      *  @param options if non-null, any prefixed with '=' will be appended
      *                 in subscription format
@@ -204,7 +204,7 @@ public class SingleFileNamingService extends NamingService {
             out.close();
             boolean success = FileUtil.rename(tmp, _file);
             if (success) {
-                for (NamingServiceListener nsl : _listeners) { 
+                for (NamingServiceListener nsl : _listeners) {
                     nsl.entryChanged(this, hostname, d, options);
                 }
             }
@@ -219,7 +219,7 @@ public class SingleFileNamingService extends NamingService {
         }
     }
 
-    /** 
+    /**
      *  @param hostname case-sensitive; caller should convert to lower case
      *  @param options if non-null, any prefixed with '=' will be appended
      *                 in subscription format
@@ -252,7 +252,7 @@ public class SingleFileNamingService extends NamingService {
             if (options != null)
                 writeOptions(options, out);
             out.write('\n');
-            for (NamingServiceListener nsl : _listeners) { 
+            for (NamingServiceListener nsl : _listeners) {
                 nsl.entryAdded(this, hostname, d, options);
             }
             return true;
@@ -265,7 +265,7 @@ public class SingleFileNamingService extends NamingService {
         }
     }
 
-    /** 
+    /**
      *  Write the subscription options part of the line (including the #!).
      *  Only options starting with '=' (if any) are written (with the '=' stripped).
      *  Does not write a newline.
@@ -293,7 +293,7 @@ public class SingleFileNamingService extends NamingService {
         }
     }
 
-    /** 
+    /**
      *  @param hostname case-sensitive; caller should convert to lower case
      *  @param options ignored
      */
@@ -330,7 +330,7 @@ public class SingleFileNamingService extends NamingService {
             }
             success = FileUtil.rename(tmp, _file);
             if (success) {
-                for (NamingServiceListener nsl : _listeners) { 
+                for (NamingServiceListener nsl : _listeners) {
                     nsl.entryRemoved(this, hostname);
                 }
             }
@@ -361,7 +361,7 @@ public class SingleFileNamingService extends NamingService {
             searchOpt = options.getProperty("search");
             startsWith = options.getProperty("startsWith");
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Searching " + " starting with " + startsWith + " search string " + searchOpt);
         BufferedReader in = null;
         getReadLock();
@@ -541,7 +541,7 @@ public class SingleFileNamingService extends NamingService {
         }
     }
 
-    /** 
+    /**
      *  @param options ignored
      */
     @Override
@@ -595,7 +595,7 @@ public class SingleFileNamingService extends NamingService {
     private boolean getWriteLock() {
         try {
             boolean rv = _fileLock.writeLock().tryLock(10000, TimeUnit.MILLISECONDS);
-            if ((!rv) && _log.shouldLog(Log.WARN))
+            if ((!rv) && _log.shouldWarn())
                 _log.warn("no lock, size is: " + _fileLock.getQueueLength(), new Exception("rats"));
             return rv;
         } catch (InterruptedException ie) {}

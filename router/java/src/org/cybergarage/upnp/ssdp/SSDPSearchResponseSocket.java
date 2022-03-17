@@ -14,7 +14,7 @@
 *		- Added post() to send a SSDPSearchRequest.
 *	01/31/08
 *		- Changed start() not to abort when the interface infomation is null on Android m3-rc37a.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -34,7 +34,7 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable
 	{
 		setControlPoint(null);
 	}
-	
+
 	public SSDPSearchResponseSocket(String bindAddr, int port)
 	{
 		super(bindAddr, port);
@@ -42,11 +42,11 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable
 	}
 
 	////////////////////////////////////////////////
-	//	ControlPoint	
+	//	ControlPoint
 	////////////////////////////////////////////////
 
 	private ControlPoint controlPoint = null;
-	
+
 	public void setControlPoint(ControlPoint ctrlp)
 	{
 		this.controlPoint = ctrlp;
@@ -58,15 +58,15 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable
 	}
 
 	////////////////////////////////////////////////
-	//	run	
+	//	run
 	////////////////////////////////////////////////
 
 	private Thread deviceSearchResponseThread = null;
-		
+
 	public void run()
 	{
 		Thread thisThread = Thread.currentThread();
-		
+
 		ControlPoint ctrlPoint = getControlPoint();
 
 		while (deviceSearchResponseThread == thisThread) {
@@ -75,10 +75,10 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable
 			if (packet == null)
 				break;
 			if (ctrlPoint != null)
-				ctrlPoint.searchResponseReceived(packet); 
+				ctrlPoint.searchResponseReceived(packet);
 		}
 	}
-	
+
 	public void start()	{
 
 		StringBuffer name = new StringBuffer("Cyber.SSDPSearchResponseSocket/");
@@ -91,9 +91,9 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable
 		//	name.append(s.getLocalPort());
 		//}
 		deviceSearchResponseThread = new Thread(this,name.toString());
-		deviceSearchResponseThread.start();		
+		deviceSearchResponseThread.start();
 	}
-	
+
 	public void stop()
 	{
 		deviceSearchResponseThread = null;

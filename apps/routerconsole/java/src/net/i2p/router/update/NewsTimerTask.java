@@ -36,7 +36,7 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
         boolean isNew = (ctx.clock().now() - installed) < 30*60*1000L;
         long delay = isNew ? NEW_INSTALL_DELAY : INITIAL_DELAY;
         delay += _context.random().nextLong(INITIAL_DELAY);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Scheduling first news check in " + DataHelper.formatDuration(delay));
         ctx.simpleTimer2().addPeriodicEvent(this, delay, RUN_DELAY);
         // UpdateManager calls NewsFetcher to check the existing news at startup
@@ -62,7 +62,7 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
         }
         _firstRun = false;
     }
-    
+
     private boolean shouldFetchNews() {
         if (_context.router().gracefulShutdownInProgress())
             return false;
@@ -75,16 +75,16 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
             long ms = Long.parseLong(freq);
             if (ms <= 0)
                 return false;
-            
+
             if (lastFetch + ms < _context.clock().now()) {
                 return true;
             } else {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Last fetched " + DataHelper.formatDuration(_context.clock().now() - lastFetch) + " ago");
                 return false;
             }
         } catch (NumberFormatException nfe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Invalid refresh frequency: " + freq);
             return false;
         }
@@ -94,14 +94,14 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
     private void fetchNews() {
         _mgr.checkAvailable(NEWS, 60*1000);
     }
-    
+
     private boolean shouldFetchUnsigned() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         return url != null && url.length() > 0 &&
                _context.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) &&
                !NewsHelper.dontInstall(_context);
     }
-    
+
     /** @since 0.9.20 */
     private boolean shouldFetchDevSU3() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL);

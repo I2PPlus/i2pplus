@@ -12,7 +12,7 @@
 *		- first revision.
 *	04/12/06
 *		- Added setUserData() and getUserData() to set a user original data object.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -24,7 +24,7 @@ public class Icon
 	////////////////////////////////////////////////
 	//	Constants
 	////////////////////////////////////////////////
-	
+
 	public final static String ELEM_NAME = "icon";
 
 	////////////////////////////////////////////////
@@ -37,7 +37,7 @@ public class Icon
 	{
 		return iconNode;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
@@ -50,7 +50,7 @@ public class Icon
 	public Icon() {
 		this(new Node(ELEM_NAME));
 	}
-	
+
 	////////////////////////////////////////////////
 	//	isIconNode
 	////////////////////////////////////////////////
@@ -65,7 +65,7 @@ public class Icon
 	////////////////////////////////////////////////
 
 	private final static String MIME_TYPE = "mimeType";
-	
+
 	public void setMimeType(String value)
 	{
 		getIconNode().setNode(MIME_TYPE, value);
@@ -83,13 +83,13 @@ public class Icon
 			return false;
 		return (0 < iconMimeType.length()) ? true : false;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	width
 	////////////////////////////////////////////////
 
 	private final static String WIDTH = "width";
-	
+
 	public void setWidth(String value)
 	{
 		getIconNode().setNode(WIDTH, value);
@@ -102,7 +102,7 @@ public class Icon
 		}
 		catch (Exception e) {};
 	}
-	
+
 	public int getWidth()
 	{
 		try {
@@ -117,7 +117,7 @@ public class Icon
 	////////////////////////////////////////////////
 
 	private final static String HEIGHT = "height";
-	
+
 	public void setHeight(String value)
 	{
 		getIconNode().setNode(HEIGHT, value);
@@ -130,7 +130,7 @@ public class Icon
 		}
 		catch (Exception e) {};
 	}
-	
+
 	public int getHeight()
 	{
 		try {
@@ -145,7 +145,7 @@ public class Icon
 	////////////////////////////////////////////////
 
 	private final static String DEPTH = "depth";
-	
+
 	public void setDepth(String value)
 	{
 		getIconNode().setNode(DEPTH, value);
@@ -158,7 +158,7 @@ public class Icon
 		}
 		catch (Exception e) {};
 	}
-	
+
 	public int getDepth()
 	{
 		try {
@@ -173,7 +173,7 @@ public class Icon
 	////////////////////////////////////////////////
 
 	private final static String URL = "url";
-	
+
 	public void setURL(String value)
 	{
 		getIconNode().setNode(URL, value);
@@ -191,7 +191,7 @@ public class Icon
 			return false;
 		return (0 < iconURL.length()) ? true : false;
 	}
-	
+
 	public boolean isURL(String url)
 	{
 		if (url == null)
@@ -201,19 +201,19 @@ public class Icon
 			return false;
 		return iconURL.equals(url);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	userData
 	////////////////////////////////////////////////
 
-	private Object userData = null; 
-	
-	public void setUserData(Object data) 
+	private Object userData = null;
+
+	public void setUserData(Object data)
 	{
 		userData = data;
 	}
 
-	public Object getUserData() 
+	public Object getUserData()
 	{
 		return userData;
 	}
@@ -222,19 +222,19 @@ public class Icon
 	//	Bytes
 	////////////////////////////////////////////////
 
-	private byte bytes[] = null; 
-	
-	public void setBytes(byte data[]) 
+	private byte bytes[] = null;
+
+	public void setBytes(byte data[])
 	{
 		bytes = data;
 	}
 
-	public boolean hasBytes() 
+	public boolean hasBytes()
 	{
 		return (bytes != null) ? true : false;
 	}
-	
-	public byte[]getBytes() 
+
+	public byte[]getBytes()
 	{
 		return bytes;
 	}

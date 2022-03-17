@@ -51,15 +51,15 @@ public class SubscriptionRequest extends HTTPRequest
 		this();
 		set(httpReq);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	setRequest
 	////////////////////////////////////////////////
-	
+
 	private void setService(Service service)
 	{
 		String eventSubURL = service.getEventSubURL();
-		
+
 		// Thanks for Giordano Sassaroli <sassarol@cefriel.it> (05/21/03)
 		setURI(eventSubURL, true);
 
@@ -67,34 +67,34 @@ public class SubscriptionRequest extends HTTPRequest
 		Device dev = service.getDevice();
 		if (dev != null)
 			urlBaseStr = dev.getURLBase();
-		
+
 		if (urlBaseStr == null || urlBaseStr.length() <= 0) {
 			Device rootDev = service.getRootDevice();
 			if (rootDev != null)
 				urlBaseStr = rootDev.getURLBase();
 		}
-		
+
 		// Thansk for Markus Thurner <markus.thurner@fh-hagenberg.at> (06/11/2004)
 		if (urlBaseStr == null || urlBaseStr.length() <= 0) {
 			Device rootDev = service.getRootDevice();
 			if (rootDev != null)
 				urlBaseStr = rootDev.getLocation();
 		}
-		
+
 		// Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/02/03)
 		if (urlBaseStr == null || urlBaseStr.length() <= 0) {
 			if (HTTP.isAbsoluteURL(eventSubURL))
 				urlBaseStr = eventSubURL;
 		}
-		
+
 		String reqHost = HTTP.getHost(urlBaseStr);
 		int reqPort = HTTP.getPort(urlBaseStr);
-		
+
 		setHost(reqHost, reqPort);
 		setRequestHost(reqHost);
 		setRequestPort(reqPort);
 	}
-	
+
 	public void setSubscribeRequest(Service service, String callback, long timeout)
 	{
 		setMethod(Subscription.SUBSCRIBE_METHOD);
@@ -132,30 +132,30 @@ public class SubscriptionRequest extends HTTPRequest
 	{
 		return getHeaderValue(HTTP.NT);
 	}
-	
+
 	public boolean hasNT()
 	{
 		String nt = getNT();
 		return (nt != null && 0 < nt.length()) ? true : false;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	CALLBACK
 	////////////////////////////////////////////////
 
 	private final static String CALLBACK_START_WITH  = "<";
 	private final static String CALLBACK_END_WITH  = ">";
-	
+
 	public void setCallback(String value)
 	{
 		setStringHeader(HTTP.CALLBACK, value, CALLBACK_START_WITH, CALLBACK_END_WITH);
 	}
-	
+
 	public String getCallback()
 	{
 		return getStringHeaderValue(HTTP.CALLBACK, CALLBACK_START_WITH, CALLBACK_END_WITH);
 	}
-	
+
 	public boolean hasCallback()
 	{
 		String callback = getCallback();
@@ -179,7 +179,7 @@ public class SubscriptionRequest extends HTTPRequest
 			return "";
 		return sid;
 	}
-	
+
 	public boolean hasSID()
 	{
 		String sid = getSID();

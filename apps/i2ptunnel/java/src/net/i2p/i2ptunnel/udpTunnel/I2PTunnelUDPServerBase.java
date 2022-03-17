@@ -104,7 +104,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
         // Setup the sink. Always send raw datagrams.
         _i2pSink = new I2PSinkAnywhere(_session, true);
     }
-    
+
     /**
      * Classes should override to start UDP side as well.
      *
@@ -134,7 +134,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     public void setReadTimeout(long ms) {
         readTimeout = ms;
     }
-    
+
     /**
      * Get the read idle timeout for newly-created connections (in
      * milliseconds).

@@ -105,7 +105,7 @@ class StartExplorersJob extends JobImpl {
                     num = Integer.valueOf(exploreBuckets);
                 }
                 Set<Hash> toExplore = selectKeysToExplore(num);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Exploring up to " + num + " buckets during this run");
                 _facade.removeFromExploreKeys(toExplore);
                 long delay = 0;
@@ -130,7 +130,7 @@ class StartExplorersJob extends JobImpl {
                     j.getTiming().setStartAfter(getContext().clock().now() + delay);
                     getContext().jobQueue().addJob(j);
 
-                    if (_log.shouldLog(Log.INFO) && realexpl)
+                    if (_log.shouldInfo() && realexpl)
                         _log.info("Exploring for new peers in " + delay + "ms");
                     else
                         _log.info("Exploring for new floodfills in " + delay + "ms");
@@ -140,20 +140,20 @@ class StartExplorersJob extends JobImpl {
             long delay = getNextRunDelay();
             long laggedDelay = 3*60*1000;
             if (exploreDelay != null) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Next Peer Exploration run in " + Integer.valueOf(exploreDelay) + "s");
                 requeue(Integer.valueOf(exploreDelay) * 1000);
             } else if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s");
                 requeue(laggedDelay);
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Next Peer Exploration run in " + (delay / 1000) + "s");
                 requeue(delay);
             }
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Not initiating Peer Exploration -> our router is a floodfill (router.exploreWhenFloodfill=true to override)");
         }
     }
@@ -167,7 +167,7 @@ class StartExplorersJob extends JobImpl {
         // since we switched to a TreeSet,
         // so just let runJob() above do the scheduling.
         //long delay = getNextRunDelay();
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Updating exploration schedule with a delay of " + delay);
         //requeue(delay);
     }
@@ -230,7 +230,7 @@ class StartExplorersJob extends JobImpl {
             Hash key = new Hash(hash);
             rv.add(key);
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Keys waiting for exploration: " + queued.size());
         return rv;
     }

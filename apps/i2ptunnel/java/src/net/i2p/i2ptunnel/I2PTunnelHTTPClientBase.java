@@ -448,13 +448,13 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         if (authRequired.equals("false"))
             return AuthResult.AUTH_GOOD;
         if (s instanceof InternalSocket) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(getPrefix(requestId) + "Access via internal socket: no authorization required!");
             return AuthResult.AUTH_GOOD;
         }
         if (authorization == null)
             return AuthResult.AUTH_BAD;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info(getPrefix(requestId) + "Auth: " + authorization);
         String authLC = authorization.toLowerCase(Locale.US);
         if (authRequired.equals("true") || authRequired.equals(BASIC_AUTH)) {
@@ -481,7 +481,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     }
                     if (configPW != null) {
                         if (pw.equals(configPW)) {
-                            if (_log.shouldLog(Log.INFO))
+                            if (_log.shouldInfo())
                                 _log.info(getPrefix(requestId) + "Good auth - user: " + user + " pw: " + pw);
                             return AuthResult.AUTH_GOOD;
                         }
@@ -491,13 +491,13 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     _log.error(getPrefix(requestId) + "[HTTPClient] No UTF-8 support? B64: " + authorization, uee);
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
                     // no ':' in response
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64: " + authorization, aioobe);
                     return AuthResult.AUTH_BAD_REQ;
                 }
                 return AuthResult.AUTH_BAD;
             } else {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64: " + authorization);
                 return AuthResult.AUTH_BAD_REQ;
             }
@@ -530,14 +530,14 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String response = args.get("response");
         if (user == null || realm == null || nonce == null || qop == null ||
             uri == null || cnonce == null || nc == null || response == null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[HTTPClient] Bad digest request: " + DataHelper.toString(args));
             return AuthResult.AUTH_BAD_REQ;
         }
         // nonce check
         AuthResult check = verifyNonce(nonce, nc);
         if (check != AuthResult.AUTH_GOOD) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[HTTPClient] Bad digest nonce: " + check + ' ' + DataHelper.toString(args));
             return check;
         }
@@ -556,11 +556,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String hkd = PasswordManager.md5Hex(kd);
         if (!response.equals(hkd)) {
             _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed, user: " + user);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("[HTTPClient] Bad digest auth: " + DataHelper.toString(args));
             return AuthResult.AUTH_BAD;
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("[HTTPClient] Good digest auth - user: " + user);
         return AuthResult.AUTH_GOOD;
     }

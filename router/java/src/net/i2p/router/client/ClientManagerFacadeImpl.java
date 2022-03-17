@@ -96,7 +96,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
                 continue; // still building
             long howLongAgo = _context.clock().now() - ls.getEarliestLeaseDate();
             if (howLongAgo > MAX_TIME_TO_REBUILD) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Client [" + dest.toBase32().substring(0,6) +
                                "] has LeaseSet that expired " + DataHelper.formatDuration(howLongAgo) + " ago");
                 lively = false;

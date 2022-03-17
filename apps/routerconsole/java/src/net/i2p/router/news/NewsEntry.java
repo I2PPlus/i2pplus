@@ -25,7 +25,7 @@ public class NewsEntry implements Comparable<NewsEntry> {
             return 1;
         return 0;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if(o == null) {
@@ -35,10 +35,10 @@ public class NewsEntry implements Comparable<NewsEntry> {
         	return false;
         }
     	NewsEntry e = (NewsEntry) o;
-    	
+    
     	return this.compareTo(e) == 0;
     }
-    
+
     @Override
     public int hashCode() {
     	return (int) updated;

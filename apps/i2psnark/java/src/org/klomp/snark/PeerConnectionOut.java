@@ -128,7 +128,7 @@ class PeerConnectionOut implements Runnable
                               //SimpleTimer.getInstance().removeEvent(nm.expireEvent);
                               if (peer.supportsFast()) {
                                   Message r = new Message(Message.REJECT, nm.piece, nm.begin, nm.length);
-                                  if (_log.shouldLog(Log.DEBUG))
+                                  if (_log.shouldDebug())
                                       _log.debug("Sending [" + peer + "]: " + r);
                                    r.sendMessage(dout);
                               }
@@ -157,7 +157,7 @@ class PeerConnectionOut implements Runnable
               }
             if (m != null)
               {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Sending [" + peer + "]: " + m);
 
                 // This can block for quite a while.
@@ -196,7 +196,7 @@ class PeerConnectionOut implements Runnable
     catch (IOException ioe)
       {
         // Ignore, probably other side closed connection.
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
 //            _log.info("IOError sending to [" + peer + "]", ioe);
             _log.info("Error sending to [" + peer + "] \n* " + ioe.getMessage());
       }
@@ -293,7 +293,7 @@ class PeerConnectionOut implements Runnable
                 removed = true;
                 if (type == Message.PIECE && peer.supportsFast()) {
                     Message r = new Message(Message.REJECT, m.piece, m.begin, m.length);
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Sending [" + peer + "]: " + r);
                     try {
                         r.sendMessage(dout);
@@ -390,7 +390,7 @@ class PeerConnectionOut implements Runnable
       {
         Request req = it.next();
         if(now > req.sendTime + REQ_TIMEOUT) {
-          if (_log.shouldLog(Log.DEBUG))
+          if (_log.shouldDebug())
               _log.debug("Retransmitting request " + req + " to [" + peer + "]");
           sendRequest(req);
         }
@@ -420,7 +420,7 @@ class PeerConnectionOut implements Runnable
             if (m.type == Message.REQUEST && m.piece == req.getPiece() &&
                 m.begin == req.off && m.length == req.len)
               {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                   _log.debug("Discarding duplicate request " + req + " to [" + peer + "]");
                 return;
               }

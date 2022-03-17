@@ -21,12 +21,12 @@ import net.i2p.util.Log;
 
 
 class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDatagramReceiver {
-	
+
 	private final SAMv3Handler handler;
 	private final SAMv3DatagramServer server;
 	private final String nick;
 	private final SocketAddress clientAddress;
-	
+
 	public String getNick() { return nick; }
 
 	/**
@@ -40,7 +40,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
 	 * @throws DataFormatException
 	 * @throws I2PSessionException
 	 */
-	public SAMv3DatagramSession(String nick, SAMv3DatagramServer dgServer) 
+	public SAMv3DatagramSession(String nick, SAMv3DatagramServer dgServer)
 			throws IOException, DataFormatException, I2PSessionException, SAMException {
 		super(SAMv3Handler.sSessionsHash.get(nick).getDest(),
 				SAMv3Handler.sSessionsHash.get(nick).getProps(),
@@ -55,7 +55,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
 			throw new SAMException("Record disappeared for nickname : \""+nick+"\"");
 
 		this.handler = rec.getHandler();
-		
+
 		Properties props = rec.getProps();
 		clientAddress = SAMv3RawSession.getSocketAddress(props, handler);
 	}
@@ -63,7 +63,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
 	/**
 	 *   Build a Datagram Session on an existing i2p session
 	 *   registered with the given nickname
-	 *   
+	 *
 	 * Caller MUST call start().
 	 *
 	 * @param nick nickname of the session
@@ -73,7 +73,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
 	 * @since 0.9.25
 	 */
 	public SAMv3DatagramSession(String nick, Properties props, SAMv3Handler handler, I2PSession isess,
-	                            int listenPort, SAMv3DatagramServer dgServer) 
+	                            int listenPort, SAMv3DatagramServer dgServer)
 			throws IOException, DataFormatException, I2PSessionException {
 		super(isess, props, listenPort, null);  // to be replaced by this
 		this.nick = nick ;

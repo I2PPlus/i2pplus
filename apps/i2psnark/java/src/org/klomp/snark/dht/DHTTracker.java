@@ -62,7 +62,7 @@ class DHTTracker {
     }
 
     void announce(InfoHash ih, Hash hash, boolean isSeed) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Announce " + hash + " for " + ih);
         Peers peers = _torrents.get(ih);
         if (peers == null) {
@@ -196,7 +196,7 @@ class DHTTracker {
             else
                 _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("DHT tracker cleaner done, now with " +
                          torrentCount + " torrents, " +
                          peerCount + " peers, " +

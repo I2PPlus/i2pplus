@@ -30,7 +30,7 @@ public final class Debug
                     return;
 		_log = ctx.logManager().getLog(Debug.class);
 		// org.cybergarage.util.Debug=DEBUG at startup
-		enabled = _log.shouldLog(Log.DEBUG);
+		enabled = _log.shouldDebug();
 	}
 
 	public static boolean enabled = false;

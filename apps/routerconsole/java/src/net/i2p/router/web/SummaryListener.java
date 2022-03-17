@@ -94,7 +94,7 @@ public class SummaryListener implements RateSummaryListener {
             } catch (RrdException re) {
                 // this can happen after the time slews backwards, so don't make it an error
                 // org.jrobin.core.RrdException: Bad sample timestamp 1264343107. Last update time was 1264343172, at least one second step is required
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error adding", re);
             } catch (IOException ioe) {
                 _log.error("Error adding", ioe);
@@ -138,7 +138,7 @@ public class SummaryListener implements RateSummaryListener {
                     if (arch == null)
                         throw new IOException("No average CF in " + rrdDefName);
                     _rows = arch.getRows();
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Existing RRD " + baseName + " (" + rrdDefName + ") with " + _rows + " rows consuming " + _db.getRrdBackend().getLength() + " bytes");
                 } else {
                     rrdDir.mkdir();
@@ -163,7 +163,7 @@ public class SummaryListener implements RateSummaryListener {
                 _db = RrdDb.getBuilder().setRrdDef(def).setBackendFactory(factory).build();
                 if (_isPersistent)
                     SecureFileOutputStream.setPerms(new File(rrdDefName));
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("New RRD " + baseName + " (" + rrdDefName + ") with " + _rows + " rows consuming " + _db.getRrdBackend().getLength() + " bytes");
             }
             _sample = _db.createSample();
@@ -259,7 +259,7 @@ public class SummaryListener implements RateSummaryListener {
     RrdDb getData() { return _db; }
 
     long now() { return _context.clock().now(); }
-    
+
     /** @since 0.9.46 */
     RrdBackendFactory getBackendFactory() {
         return getBackendFactory(_isPersistent);

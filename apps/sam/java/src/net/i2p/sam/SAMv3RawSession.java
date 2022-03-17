@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.i2p.sam;
 
@@ -22,7 +22,7 @@ import net.i2p.util.Log;
  *
  */
 class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
-	
+
 	private final String nick;
 	private final SAMv3Handler handler;
 	private final SAMv3DatagramServer server;
@@ -34,7 +34,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
 	/**
 	 *   Build a Raw Datagram Session according to information
 	 *   registered with the given nickname
-	 *   
+	 *
 	 * Caller MUST call start().
 	 *
 	 * @param nick nickname of the session
@@ -42,7 +42,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
 	 * @throws DataFormatException
 	 * @throws I2PSessionException
 	 */
-	public SAMv3RawSession(String nick, SAMv3DatagramServer dgServer) 
+	public SAMv3RawSession(String nick, SAMv3DatagramServer dgServer)
 			throws IOException, DataFormatException, I2PSessionException {
 		super(SAMv3Handler.sSessionsHash.get(nick).getDest(),
 		      SAMv3Handler.sSessionsHash.get(nick).getProps(),
@@ -64,7 +64,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
 	/**
 	 *   Build a Raw Session on an existing i2p session
 	 *   registered with the given nickname
-	 *   
+	 *
 	 * Caller MUST call start().
 	 *
 	 * @param nick nickname of the session
@@ -74,7 +74,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
 	 * @since 0.9.25
 	 */
 	public SAMv3RawSession(String nick, Properties props, SAMv3Handler handler, I2PSession isess,
-	                       int listenProtocol, int listenPort, SAMv3DatagramServer dgServer) 
+	                       int listenProtocol, int listenPort, SAMv3DatagramServer dgServer)
 			throws IOException, DataFormatException, I2PSessionException {
 		super(isess, props, listenProtocol, listenPort, null);  // to be replaced by this
 		this.nick = nick ;
@@ -85,7 +85,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
 		_sendHeader = ((handler.verMajor == 3 && handler.verMinor >= 2) || handler.verMajor > 3) &&
 		              Boolean.parseBoolean(props.getProperty("HEADER"));
 	}
-	
+
 	/**
 	 *  @return null if PORT not set
 	 *  @since 0.9.25 moved from constructor

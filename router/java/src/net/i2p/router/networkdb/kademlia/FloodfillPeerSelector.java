@@ -109,7 +109,7 @@ class FloodfillPeerSelector extends PeerSelector {
         for (Hash h : rv) {
             buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug(buf.toString());
 
 //            _log.debug("Searching for " + maxNumRouters + " peers close to [" + key.toBase64().substring(0,6) + "]"
@@ -272,19 +272,19 @@ class FloodfillPeerSelector extends PeerSelector {
             }
             if (sameIP) {
                 badff.add(entry);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Floodfill Sort: Same /16, family, or port [" + entry.toBase64().substring(0,6) + "]");
             } else if (info != null && now - info.getPublished() > 3*60*60*1000) {
                 badff.add(entry);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Floodfill Sort: Old [" + entry.toBase64().substring(0,6) + "]");
             } else if (info != null && _context.commSystem().isInStrictCountry(info)) {
                 badff.add(entry);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Floodfill Sort: Bad country [" + entry.toBase64().substring(0,6) + "]");
             } else if (info != null && info.getBandwidthTier().equals("L")) {
                 badff.add(entry);
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Floodfill Sort: Slow [" + entry.toBase64().substring(0,6) + "]");
             } else {
                 PeerProfile prof = _context.profileOrganizer().getProfile(entry);
@@ -297,7 +297,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 }
                 if (prof != null) {
                     if (enforceHeard && prof.getFirstHeardAbout() > now - HEARD_AGE) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Floodfill Sort: Bad (too new) [" + entry.toBase64().substring(0,6) + "]");
                         badff.add(entry);
                     } else if (prof.getDBHistory() != null) {
@@ -306,7 +306,7 @@ class FloodfillPeerSelector extends PeerSelector {
                             && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_GOOD
                             && prof.getDBHistory().getFailedLookupRate().getRate(60*60*1000).getAverageValue() < maxFailRate) {
                             // good
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Floodfill Sort: Good [" + entry.toBase64().substring(0,6) + "]");
                             rv.add(entry);
                             found++;
@@ -314,23 +314,23 @@ class FloodfillPeerSelector extends PeerSelector {
                                    || prof.getDBHistory().getLastLookupFailed() <= prof.getDBHistory().getLastLookupSuccessful()
                                    || (prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_OK
                                        && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_OK)) {
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Floodfill Sort: OK [" + entry.toBase64().substring(0,6) + "]");
                             okff.add(entry);
                         } else {
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Floodfill Sort: Bad (DB) [" + entry.toBase64().substring(0,6) + "]");
                             badff.add(entry);
                         }
                     } else {
                         // no DBHistory
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Floodfill Sort: Bad (no DB history) [" + entry.toBase64().substring(0,6) + "]");
                         badff.add(entry);
                     }
                 } else {
                     // no profile
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Floodfill Sort: Bad (no profile) [" + entry.toBase64().substring(0,6) + "]");
                     badff.add(entry);
                 }
@@ -356,7 +356,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
             }
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
 //            _log.info("Floodfill Sort\n* Good: " + rv + "\n* OK: " + okff + "\n* Bad: " + badff);
             _log.info(buf.toString());
 
@@ -458,17 +458,17 @@ class FloodfillPeerSelector extends PeerSelector {
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(entry);
                 if (info != null && now - info.getPublished() > 3*60*60*1000) {
                     badff.add(entry);
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Floodfill Sort: Skipping [" + entry.toBase64().substring(0,6) + "] - Published over 3 hours ago");
                 } else {
                     PeerProfile prof = _context.profileOrganizer().getProfile(entry);
                     if (prof != null && now - prof.getLastSendFailed() < 30*60*1000) {
                         badff.add(entry);
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Floodfill Sort: Skipping [" + entry.toBase64().substring(0,6) + "] - Recent failed send");
                     } else if (preferConnected && !_context.commSystem().isEstablished(entry)) {
                         unconnectedff.add(entry);
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Floodfill Sort: Skipping [" + entry.toBase64().substring(0,6) + "] - Not connected");
                     } else {
                         rv.add(entry);

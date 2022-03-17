@@ -58,7 +58,7 @@ class SchedulerClosing extends SchedulerImpl {
         } else {
             remaining = nextSend - now;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Event occurred with " + remaining + "ms remaining\n* " + con); // ms?
         if (remaining <= 0) {
             if (con.getCloseSentOn() <= 0) {

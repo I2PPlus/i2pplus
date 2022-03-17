@@ -1,7 +1,7 @@
 /*
  * Created on May 20, 2010
  * Created by Paul Gardner
- * 
+ *
  * Copyright 2010 Vuze, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,49 +23,49 @@
 
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
-public class 
+public class
 JProgressBar
 	extends Component
 {
 	private boolean indeterminate;
-	
+
 	public void
 	setString(
 		String	str )
 	{
 	}
-	
+
 	public void
 	setValue(
 		int	i )
 	{
 	}
-	
+
 	public void
 	setMinimum(
 		int	i )
 	{
 	}
-	
+
 	public void
 	setMaximum(
 		int	i )
 	{
 	}
-	
+
 	public void
 	setStringPainted(
 		boolean	b )
 	{
 	}
-	
+
 	public void
 	setIndeterminate(
 		boolean	b )
 	{
 		indeterminate = b;
 	}
-	
+
 	public boolean
 	isIndeterminate()
 	{

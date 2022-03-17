@@ -23,26 +23,26 @@ class AdminRunner implements Runnable {
     private RouterContext _context;
     private Socket _socket;
     private StatsGenerator _generator;
-    
+
     public AdminRunner(RouterContext context, Socket socket) {
         _context = context;
         _log = context.logManager().getLog(AdminRunner.class);
         _socket = socket;
         _generator = new StatsGenerator(context);
     }
-    
+
     public void run() {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
             OutputStream out = _socket.getOutputStream();
-            
+
             String command = in.readLine();
             runCommand(command, out);
         } catch (IOException ioe) {
             _log.error("Error running admin command", ioe);
         }
     }
-    
+
     private void runCommand(String command, OutputStream out) throws IOException {
         _log.debug("Command [" + command + "]");
         if (command.indexOf("favicon") >= 0) {
@@ -53,7 +53,7 @@ class AdminRunner implements Runnable {
                 _generator.generateStatsPage(new OutputStreamWriter(out), true);
                 out.close();
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error writing out the admin reply");
                 throw ioe;
             }
@@ -68,13 +68,13 @@ class AdminRunner implements Runnable {
                 _context.routerAppManager().renderStatusHTML(new OutputStreamWriter(out));
                 out.close();
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error writing out the admin reply");
                 throw ioe;
             }
         }
     }
-    
+
     private void reply(OutputStream out, String content) throws IOException {
         StringBuilder reply = new StringBuilder(10240);
         reply.append("HTTP/1.1 200 OK\n");
@@ -86,12 +86,12 @@ class AdminRunner implements Runnable {
             out.write(DataHelper.getASCII(reply.toString()));
             out.close();
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error writing out the admin reply:\n" + content);
             throw ioe;
         }
     }
-    
+
     private void replyText(OutputStream out, String content) throws IOException {
         StringBuilder reply = new StringBuilder(10240);
         reply.append("HTTP/1.1 200 OK\n");
@@ -103,12 +103,12 @@ class AdminRunner implements Runnable {
             out.write(DataHelper.getASCII(reply.toString()));
             out.close();
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error writing out the admin reply:\n" + content);
             throw ioe;
         }
     }
-    
+
     private String getProfile(String cmd) {
         Set peers = _context.profileOrganizer().selectAllPeers();
         for (Iterator iter = peers.iterator(); iter.hasNext(); ) {
@@ -124,21 +124,21 @@ class AdminRunner implements Runnable {
                 }
             }
         }
-        
+
         return "No such peer is being profiled\n";
     }
-    
+
     private static final String SHUTDOWN_PASSWORD_PROP = "router.shutdownPassword";
     private String shutdown(String cmd) {
         String password = _context.router().getConfigSetting(SHUTDOWN_PASSWORD_PROP);
         if (password == null)
             password = _context.getProperty(SHUTDOWN_PASSWORD_PROP);
-        if (password == null) 
+        if (password == null)
             return "No shutdown password specified in the config or context - <b>REFUSING SHUTDOWN</b>." +
                    "<a href=\"/routerConsole.html\">back</a>";
         if (cmd.indexOf(password) > 0) {
             I2PThread t = new I2PThread(new Runnable() {
-                public void run() { 
+                public void run() {
                     try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}
                     _context.router().shutdown(Router.EXIT_HARD);
                 }

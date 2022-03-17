@@ -38,7 +38,7 @@ final class ECUtil {
         for (int i = length-1; i >= 0; i--) {
             // i should start at length-1 not -2 because the MSB of binarry may not be 1
             r = doublePoint(r, curve);
-            if (binarray[i] == 1) 
+            if (binarray[i] == 1)
                 r = addPoint(r, p, curve);
         }
         return r;
@@ -65,7 +65,7 @@ final class ECUtil {
     }
 
     private static ECPoint doublePoint(ECPoint r, EllipticCurve curve) {
-        if (r.equals(ECPoint.POINT_INFINITY)) 
+        if (r.equals(ECPoint.POINT_INFINITY))
             return r;
         BigInteger slope = (r.getAffineX().pow(2)).multiply(THREE);
         slope = slope.add(curve.getA());
@@ -94,10 +94,10 @@ final class ECUtil {
         ECPoint S = new ECPoint(xs,ys);
         ECPoint T = new ECPoint(xt,yt);
 
-        // Verifying addition 
+        // Verifying addition
         ECPoint Rst = addPoint(S, T, P192);
         BigInteger xst = new BigInteger("48e1e4096b9b8e5ca9d0f1f077b8abf58e843894de4d0290", 16);   // Specified value of x of point R for addition  in NIST Routine example
-        System.out.println("x-coordinate of point Rst is : " + Rst.getAffineX()); 
+        System.out.println("x-coordinate of point Rst is : " + Rst.getAffineX());
         System.out.println("y-coordinate of point Rst is : " + Rst.getAffineY());
         if (Rst.getAffineX().equals(xst))
             System.out.println("Adding is correct");
@@ -108,9 +108,9 @@ final class ECUtil {
         BigInteger xr = new BigInteger("30c5bc6b8c7da25354b373dc14dd8a0eba42d25a3f6e6962", 16);  // Specified value of x of point R for doubling  in NIST Routine example
         BigInteger yr = new BigInteger("0dde14bc4249a721c407aedbf011e2ddbbcb2968c9d889cf", 16);
         ECPoint R2s = new ECPoint(xr, yr);  // Specified value of y of point R for doubling  in NIST Routine example
-        System.out.println("x-coordinate of point R2s is : " + R2s.getAffineX()); 
+        System.out.println("x-coordinate of point R2s is : " + R2s.getAffineX());
         System.out.println("y-coordinate of point R2s is : " + R2s.getAffineY());
-        System.out.println("x-coordinate of calculated point is : " + doublePoint(S, P192).getAffineX()); 
+        System.out.println("x-coordinate of calculated point is : " + doublePoint(S, P192).getAffineX());
         System.out.println("y-coordinate of calculated point is : " +    doublePoint(S, P192).getAffineY());
         if (R2s.getAffineX().equals(doublePoint(S, P192).getAffineX()) &&
             R2s.getAffineY().equals(doublePoint(S, P192).getAffineY()))
@@ -128,7 +128,7 @@ final class ECUtil {
         System.out.println("x-coordinate of point Rds is : " + Rds.getAffineX());
         System.out.println("y-coordinate of point Rds is : " + Rds.getAffineY());
         System.out.println("x-coordinate of calculated point is : " + Rs.getAffineX());
-        System.out.println("y-coordinate of calculated point is : " + Rs.getAffineY()); 
+        System.out.println("y-coordinate of calculated point is : " + Rs.getAffineY());
 
 
         if (Rds.getAffineX().equals(Rs.getAffineX()) &&

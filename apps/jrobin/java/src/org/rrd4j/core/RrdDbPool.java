@@ -360,7 +360,7 @@ public class RrdDbPool {
      * {@link #getCapacity()}, the method blocks until some RRD are closed.
      * </ul>
      * <p>
-     * If the default backend factory for the pool can handle this URI, it will be used, 
+     * If the default backend factory for the pool can handle this URI, it will be used,
      * or else {@link RrdBackendFactory#findFactory(URI)} will be used to find the backend factory used.
      *
      * @param uri {@link URI} to existing RRD file
@@ -374,7 +374,7 @@ public class RrdDbPool {
     /**
      * Wait for a empty reference with no usage
      * @param uri
-     * @return an reference with no usage 
+     * @return an reference with no usage
      * @throws IOException
      * @throws InterruptedException
      */
@@ -399,7 +399,7 @@ public class RrdDbPool {
      * Got an empty reference, use it only if slots are available
      * But don't hold any lock waiting for it
      * @param uri
-     * @return an reference with no usage 
+     * @return an reference with no usage
      * @throws InterruptedException
      * @throws IOException
      */
@@ -488,7 +488,7 @@ public class RrdDbPool {
      * {@link #getCapacity()}, the method blocks until some RrdDb references are closed.
      * </ul>
      * <p>
-     * If the factory defined when creating the pool can handle the URI, it will be used, 
+     * If the factory defined when creating the pool can handle the URI, it will be used,
      * or else {@link RrdBackendFactory#findFactory(URI)} will be used.
      *
      * @param rrdDef Definition of the RRD file to be created.
@@ -536,7 +536,7 @@ public class RrdDbPool {
      * If the RRD is not already open and the number of already open RRD is equal to
      * {@link #getCapacity()}, the method blocks until some RrdDb references are closed.
      * </ul>
-     * If the factory defined when creating the pool can handle the URI, it will be used, 
+     * If the factory defined when creating the pool can handle the URI, it will be used,
      * or else {@link RrdBackendFactory#findFactory(URI)} will be used to choose the factory.
      *
      * @param uri        URI to the RRD that should be created
@@ -672,7 +672,7 @@ public class RrdDbPool {
 
     /**
      * Wait until the pool is empty and return a lock that prevent any additions of new RrdDb references until it's released.
-     * 
+     *
      * @since 3.7
      *
      * @param timeout the time to wait for the write lock

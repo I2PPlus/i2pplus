@@ -28,7 +28,7 @@ class MessageStatusMessageHandler extends HandlerImpl {
     }
 
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Handle " + message);
         MessageStatusMessage msg = (MessageStatusMessage) message;
         int status = msg.getStatus();
@@ -52,10 +52,10 @@ class MessageStatusMessageHandler extends HandlerImpl {
 
             default:
                 if (msg.isSuccessful()) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Message delivery succeeded for [MsgID " + id + "]");
                 } else {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Message delivery FAILED (" + status + ") for [MsgID " + id + "]");
                 }
                 //if (!skipStatus)

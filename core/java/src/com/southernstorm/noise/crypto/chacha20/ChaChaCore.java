@@ -33,10 +33,10 @@ public final class ChaChaCore {
 	private static final int INIT3 = char4('t', 'e', ' ', 'k');
 
 	private ChaChaCore() {}
-	
+
 	/**
 	 * Hashes an input block with ChaCha20.
-	 * 
+	 *
 	 * @param output The output block, which must contain at least 16
 	 * elements and must not overlap with the input.
 	 * @param input The input block, which must contain at least 16
@@ -45,10 +45,10 @@ public final class ChaChaCore {
 	public static void hash(int[] output, int[] input)
 	{
 		int index;
-		
+
 		// Copy the input to the output to start with.
 		System.arraycopy(input, 0, output, 0, 16);
-		
+
 		// Perform the 20 ChaCha rounds in groups of two.
 		for (index = 0; index < 20; index += 2) {
 	        // Column round.
@@ -81,7 +81,7 @@ public final class ChaChaCore {
 
 	/**
 	 * Initializes a ChaCha20 block with a 256-bit key.
-	 * 
+	 *
 	 * @param output The output block, which must consist of at
 	 * least 16 words.
 	 * @param key The buffer containing the key.
@@ -109,12 +109,12 @@ public final class ChaChaCore {
 
 	/**
 	 * Initializes the 64-bit initialization vector in a ChaCha20 block.
-	 * 
+	 *
 	 * @param output The output block, which must consist of at
 	 * least 16 words and must have been initialized by initKey256()
 	 * or initKey128().
 	 * @param iv The 64-bit initialization vector value.
-	 * 
+	 *
 	 * The counter portion of the output block is set to zero.
 	 */
 	public static void initIV(int[] output, long iv)
@@ -124,10 +124,10 @@ public final class ChaChaCore {
 		output[14] = (int)iv;
 		output[15] = (int)(iv >> 32);
 	}
-	
+
 	/**
 	 * Initializes the 64-bit initialization vector and counter in a ChaCha20 block.
-	 * 
+	 *
 	 * @param output The output block, which must consist of at
 	 * least 16 words and must have been initialized by initKey256()
 	 * or initKey128().
@@ -141,7 +141,7 @@ public final class ChaChaCore {
 		output[14] = (int)iv;
 		output[15] = (int)(iv >> 32);
 	}
-	
+
 	private static int leftRotate16(int v)
 	{
 		return v << 16 | (v >>> 16);
@@ -176,7 +176,7 @@ public final class ChaChaCore {
 
 	/**
 	 * XOR's the output of ChaCha20 with a byte buffer.
-	 * 
+	 *
 	 * @param input The input byte buffer.
 	 * @param inputOffset The offset of the first input byte.
 	 * @param output The output byte buffer (can be the same as the input).

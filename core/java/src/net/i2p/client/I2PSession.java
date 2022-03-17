@@ -2,9 +2,9 @@ package net.i2p.client;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -25,17 +25,17 @@ import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
 
 /**
- * <p>Define the standard means of sending and receiving messages on the 
- * I2P network by using the I2CP (the client protocol).  This is done over a 
+ * <p>Define the standard means of sending and receiving messages on the
+ * I2P network by using the I2CP (the client protocol).  This is done over a
  * bidirectional TCP socket.
  *
  * End to end encryption in I2PSession was disabled in release 0.6.
  *
  * Periodically the router will ask the client to authorize a new set of
  * tunnels to be allocated to the client, which the client can accept by sending a
- * {@link net.i2p.data.LeaseSet} signed by the {@link net.i2p.data.Destination}.  
- * In addition, the router may on occasion provide the client with an updated 
- * clock offset so that the client can stay in sync with the network (even if 
+ * {@link net.i2p.data.LeaseSet} signed by the {@link net.i2p.data.Destination}.
+ * In addition, the router may on occasion provide the client with an updated
+ * clock offset so that the client can stay in sync with the network (even if
  * the host computer's clock is off).</p>
  *
  */
@@ -74,17 +74,17 @@ public interface I2PSession {
 
     /**
      * End-to-End Crypto is disabled, tags and keys are ignored!
-     * 
-     * Like sendMessage above, except the key used and the tags sent are exposed to the 
-     * application.  <p> 
-     * 
+     *
+     * Like sendMessage above, except the key used and the tags sent are exposed to the
+     * application.  <p>
+     *
      * If some application layer message delivery confirmation is used,
-     * rather than i2p's (slow) built in confirmation via guaranteed delivery mode, the 
+     * rather than i2p's (slow) built in confirmation via guaranteed delivery mode, the
      * application can update the SessionKeyManager, ala:
      * <pre>
      *   SessionKeyManager.getInstance().tagsDelivered(dest.getPublicKey(), keyUsed, tagsSent);
      * </pre>
-     * If an application is using guaranteed delivery mode, this is not useful, but for 
+     * If an application is using guaranteed delivery mode, this is not useful, but for
      * applications using best effort delivery mode, if they can know with certainty that a message
      * was delivered and can update the SessionKeyManager appropriately, a significant performance
      * boost will occur (subsequent message encryption and decryption will be done via AES and a SessionTag,
@@ -98,7 +98,7 @@ public interface I2PSession {
      *                same one as the key encrypted with, but not always.  If this is null then the key data will not be
      *                exposed.
      * @param tagsSent UNUSED, IGNORED. Set of tags delivered to the peer and associated with the keyUsed.  This is also an output parameter -
-     *                 the contents of the set is ignored during the call, but afterwards it contains a set of SessionTag 
+     *                 the contents of the set is ignored during the call, but afterwards it contains a set of SessionTag
      *                 objects that were sent along side the given keyUsed.
      * @return success
      */
@@ -253,7 +253,7 @@ public interface I2PSession {
      *
      */
     public void destroySession() throws I2PSessionException;
-    
+
     /**
      *  @return a new subsession, non-null
      *  @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
@@ -262,12 +262,12 @@ public interface I2PSession {
      *  @since 0.9.21
      */
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException;
-    
+
     /**
      *  @since 0.9.21
      */
     public void removeSubsession(I2PSession session);
-    
+
     /**
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
@@ -282,13 +282,13 @@ public interface I2PSession {
      */
     public void connect() throws I2PSessionException;
 
-    /** 
-     * Have we closed the session? 
+    /**
+     * Have we closed the session?
      *
      * @return true if the session is closed, OR connect() has not been called yet
      */
     public boolean isClosed();
-    
+
     /**
      * Retrieve the Destination this session serves as the endpoint for.
      * Returns null if no destination is available.

@@ -10,7 +10,7 @@
 *
 *	03/27/04
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -22,7 +22,7 @@ public class AllowedValue
 	////////////////////////////////////////////////
 	//	Constants
 	////////////////////////////////////////////////
-	
+
 	public final static String ELEM_NAME = "allowedValue";
 
 	////////////////////////////////////////////////
@@ -35,7 +35,7 @@ public class AllowedValue
 	{
 		return allowedValueNode;
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
@@ -48,7 +48,7 @@ public class AllowedValue
 	/**
 	 * Create an AllowedValue by the value String,
 	 * and will create the Node structure by itself
-	 * 
+	 *
 	 * @param value The value that will be associate to thi object
 	 */
 	public AllowedValue(String value) {

@@ -56,7 +56,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                 return j;
             //}
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Dropping " + dlm.getSearchType() + " lookup request for [" +
                           dlm.getSearchKey().toBase64().substring(0,6) + "] (throttled)\n* Reply was to: [" +
                           dlm.getFrom().toBase64().substring(0,6) + "] - [Tunnel " + dlm.getReplyTunnel() + "]");

@@ -10,7 +10,7 @@ public class ContextHelper {
     /** @throws IllegalStateException if no context available */
     public static RouterContext getContext(String contextId) {
         List<RouterContext> contexts = RouterContext.listContexts();
-        if ( (contexts == null) || (contexts.isEmpty()) ) 
+        if ( (contexts == null) || (contexts.isEmpty()) )
             throw new IllegalStateException("No contexts. This is usually because the router is either starting up or shutting down.");
         if ( (contextId == null) || (contextId.trim().length() <= 0) )
             return contexts.get(0);

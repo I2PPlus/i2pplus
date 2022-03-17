@@ -25,7 +25,7 @@ import net.i2p.util.SimpleTimer2;
 public class LoadClientAppsJob extends JobImpl {
     private final Log _log;
     private static boolean _loaded = false;
-    
+
     public LoadClientAppsJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(LoadClientAppsJob.class);
@@ -90,7 +90,7 @@ public class LoadClientAppsJob extends JobImpl {
                                 String clientName, String args[]) {
             this(pool, enclosingContext, className, clientName, args, null, null);
         }
-        
+
         /** caller MUST call schedule() */
         public DelayedRunClient(SimpleTimer2 pool, RouterContext enclosingContext, String className, String clientName,
                                 String args[], ThreadGroup threadGroup, ClassLoader cl) {
@@ -123,7 +123,7 @@ public class LoadClientAppsJob extends JobImpl {
             super.timeReached();
         }
     }
-    
+
     /**
      *  Parse arg string into an array of args.
      *  Spaces or tabs separate args.
@@ -222,7 +222,7 @@ public class LoadClientAppsJob extends JobImpl {
      */
     public static void runClientInline(String className, String clientName, String args[],
                                        Log log, ClassLoader cl) throws Exception {
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Loading up the client application " + clientName + ": " + className + " " + Arrays.toString(args));
         if (args == null)
             args = new String[0];
@@ -240,7 +240,7 @@ public class LoadClientAppsJob extends JobImpl {
     public static void runClient(String className, String clientName, String args[], RouterContext ctx, Log log) {
         runClient(className, clientName, args, ctx, log, null, null);
     }
-    
+
     /**
      *  Run client in a new thread.
      *
@@ -252,14 +252,14 @@ public class LoadClientAppsJob extends JobImpl {
      */
     public static void runClient(String className, String clientName, String args[], RouterContext ctx, Log log,
                                  ThreadGroup threadGroup, ClassLoader cl) {
-        if (log.shouldLog(Log.INFO))
+        if (log.shouldInfo())
             log.info("Loading up the client application " + clientName + ": " + className + " " + Arrays.toString(args));
         I2PThread t;
         if (threadGroup != null)
             t = new I2PThread(threadGroup, new RunApp(className, clientName, args, ctx, log, cl));
         else
             t = new I2PThread(new RunApp(className, clientName, args, ctx, log, cl));
-        if (clientName == null) 
+        if (clientName == null)
             clientName = className + " client";
         t.setName(clientName);
         t.setDaemon(true);
@@ -276,8 +276,8 @@ public class LoadClientAppsJob extends JobImpl {
         private final Log _log;
         private final ClassLoader _cl;
 
-        public RunApp(String className, String appName, String args[], RouterContext ctx, Log log, ClassLoader cl) { 
-            _className = className; 
+        public RunApp(String className, String appName, String args[], RouterContext ctx, Log log, ClassLoader cl) {
+            _className = className;
             _appName = appName;
             if (args == null)
                 _args = new String[0];

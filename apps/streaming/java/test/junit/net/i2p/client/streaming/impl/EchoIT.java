@@ -93,7 +93,7 @@ public class EchoIT extends StreamingITBase {
                             out.flush();
                         }
                     }
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Closing the received server socket");
                     socket.close();
                 }
@@ -140,7 +140,7 @@ public class EchoIT extends StreamingITBase {
                         _log.debug("* client read: " + new String(buf));
                     }
                 }
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Closing the client socket");
                 socket.close();
                 _log.debug("Socket closed");

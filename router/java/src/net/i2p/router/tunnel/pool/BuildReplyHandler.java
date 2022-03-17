@@ -58,7 +58,7 @@ class BuildReplyHandler {
             int hop = recordOrder.get(i).intValue();
             if (BuildMessageGenerator.isBlank(cfg, hop)) {
                 // self or unused...
-                if (log.shouldLog(Log.DEBUG))
+                if (log.shouldDebug())
                     log.debug(reply.getUniqueId() + ": skipping record " + i + "/" + hop + " for: " + cfg);
                 if (cfg.isInbound() && hop + 1 == cfg.getLength()) { // IBEP
                     byte[] h1 = new byte[Hash.HASH_LENGTH];
@@ -80,11 +80,11 @@ class BuildReplyHandler {
             } else {
                 int ok = decryptRecord(reply, cfg, i, hop);
                 if (ok == -1) {
-                    if (log.shouldLog(Log.WARN))
+                    if (log.shouldWarn())
                         log.warn(reply.getUniqueId() + ": decrypt record " + i + "/" + hop + " fail: " + cfg);
                     return null;
                 } else {
-                    if (log.shouldLog(Log.DEBUG))
+                    if (log.shouldDebug())
                         log.debug(reply.getUniqueId() + ": decrypt record " + i + "/" + hop + " success: " + ok + " for " + cfg);
                 }
                 rv[i] = ok;
@@ -188,7 +188,7 @@ class BuildReplyHandler {
             SimpleByteCache.release(h);
             rv = data[TunnelBuildReplyMessage.RECORD_SIZE - 1] & 0xff;
         }
-        if (log.shouldLog(Log.DEBUG))
+        if (log.shouldDebug())
             log.debug(reply.getUniqueId() + ": Verified: " + rv + " for record " + recordNum + "/" + hop);
         return rv;
     }

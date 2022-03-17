@@ -26,35 +26,35 @@ import java.util.StringTokenizer;
 /* ------------------------------------------------------------ */
 /** Byte range inclusive of end points.
  * <PRE>
- * 
+ *
  *   parses the following types of byte ranges:
- * 
+ *
  *       bytes=100-499
  *       bytes=-300
  *       bytes=100-
  *       bytes=1-2,2-3,6-,-2
  *
  *   given an entity length, converts range to string
- * 
+ *
  *       bytes 100-499/500
- * 
+ *
  * </PRE>
- * 
+ *
  * Based on RFC2616 3.12, 14.16, 14.35.1, 14.35.2
  * @version $version$
- * 
+ *
  */
-public class InclusiveByteRange 
+public class InclusiveByteRange
 {
     long first = 0;
-    long last  = 0;    
+    long last  = 0;
 
     public InclusiveByteRange(long first, long last)
     {
         this.first = first;
         this.last = last;
     }
-    
+
     public long getFirst()
     {
         return first;
@@ -63,12 +63,12 @@ public class InclusiveByteRange
     public long getLast()
     {
         return last;
-    }    
+    }
 
 
-    
+
     /* ------------------------------------------------------------ */
-    /** 
+    /**
      * @param headers Enumeration of Range header fields.
      * @param size Size of the resource.
      * @return List of satisfiable ranges
@@ -76,7 +76,7 @@ public class InclusiveByteRange
     public static List<InclusiveByteRange> satisfiableRanges(Enumeration<?> headers, long size)
     {
         List<InclusiveByteRange> satRanges = null;
-        
+
         // walk through all Range headers
     headers:
         while (headers.hasMoreElements())
@@ -86,7 +86,7 @@ public class InclusiveByteRange
             String t=null;
             try
             {
-                // read all byte ranges for this header 
+                // read all byte ranges for this header
                 while (tok.hasMoreTokens())
                 {
                     try
@@ -141,7 +141,7 @@ public class InclusiveByteRange
             }
             catch(Exception e)
             {
-            }    
+            }
         }
         return satRanges;
     }
@@ -158,18 +158,18 @@ public class InclusiveByteRange
         }
         return first;
     }
-    
+
     /* ------------------------------------------------------------ */
     public long getLast(long size)
     {
         if (first<0)
             return size-1;
-        
+
         if (last<0 ||last>=size)
             return size-1;
         return last;
     }
-    
+
     /* ------------------------------------------------------------ */
     public long getSize(long size)
     {

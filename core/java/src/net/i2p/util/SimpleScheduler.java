@@ -158,7 +158,7 @@ public class SimpleScheduler {
         protected long _scheduled;
 
         public RunnableEvent(SimpleTimer.TimedEvent t, long timeoutMs) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Creating with delay of " + timeoutMs + " : " + t);
             _timedEvent = t;
             _scheduled = timeoutMs + System.currentTimeMillis();
@@ -167,12 +167,12 @@ public class SimpleScheduler {
             _executor.schedule(this, _scheduled - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         }
         public void run() {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Running: " + _timedEvent);
             long before = System.currentTimeMillis();
-            if (_log.shouldLog(Log.WARN) && before < _scheduled - 100)
+            if (_log.shouldWarn() && before < _scheduled - 100)
                 _log.warn(_name + " early execution " + (_scheduled - before) + ": " + _timedEvent);
-            else if (_log.shouldLog(Log.WARN) && before > _scheduled + 1000)
+            else if (_log.shouldWarn() && before > _scheduled + 1000)
                 _log.warn("Late execution (" + (before - _scheduled) + "ms): " + _timedEvent + debug());
             try {
                 _timedEvent.timeReached();
@@ -180,9 +180,9 @@ public class SimpleScheduler {
                 _log.log(Log.CRIT, _name + ": Scheduled task " + _timedEvent + " exited unexpectedly, please report", t);
             }
             long time = System.currentTimeMillis() - before;
-            if (time > 1000 && _log.shouldLog(Log.WARN))
+            if (time > 1000 && _log.shouldWarn())
                 _log.warn(_name + " event execution took " + time + "ms: " + _timedEvent);
-            if (_log.shouldLog(Log.INFO)) {
+            if (_log.shouldInfo()) {
                  // this call is slow - iterates through a HashMap -
                  // would be better to have a local AtomicLong if we care
                  long completed = _executor.getCompletedTaskCount();

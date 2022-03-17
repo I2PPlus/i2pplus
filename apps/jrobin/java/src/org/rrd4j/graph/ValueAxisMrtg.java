@@ -5,7 +5,7 @@ import org.rrd4j.core.Util;
 import java.awt.*;
 
 class ValueAxisMrtg extends Axis {
-    
+
     private final ImageParameters im;
     private final ImageWorker worker;
     private final RrdGraphDef gdef;

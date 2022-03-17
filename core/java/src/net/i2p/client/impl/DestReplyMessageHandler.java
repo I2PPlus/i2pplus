@@ -1,8 +1,8 @@
 package net.i2p.client.impl;
 
 /*
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 
 import net.i2p.I2PAppContext;
@@ -20,9 +20,9 @@ class DestReplyMessageHandler extends HandlerImpl {
     public DestReplyMessageHandler(I2PAppContext ctx) {
         super(ctx, DestReplyMessage.MESSAGE_TYPE);
     }
-    
+
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Handle " + message);
         DestReplyMessage msg = (DestReplyMessage) message;
         Destination d = msg.getDestination();

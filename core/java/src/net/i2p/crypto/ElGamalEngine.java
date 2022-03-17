@@ -188,7 +188,7 @@ public final class ElGamalEngine {
 
         long diff = end - start;
         if (diff > 1000) {
-            if (_log.shouldLog(Log.WARN)) _log.warn("Took too long to encrypt ElGamal block (" + diff + "ms)");
+            if (_log.shouldWarn()) _log.warn("Took too long to encrypt ElGamal block (" + diff + "ms)");
         }
 
         _context.statManager().addRateData("crypto.elGamal.encrypt", diff);
@@ -231,7 +231,7 @@ public final class ElGamalEngine {
 
         int payloadLen = val.length - i - 1 - Hash.HASH_LENGTH;
         if (payloadLen < 0) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Decrypted data is too small (" + (val.length - i)+ ")");
             return null;
         }
@@ -254,7 +254,7 @@ public final class ElGamalEngine {
         long diff = end - start;
 //        if (diff > 1000) {
         if (diff > 1500) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Took too long (" + diff + "ms) to decrypt and verify ElGamal block");
         }
 
@@ -264,7 +264,7 @@ public final class ElGamalEngine {
             //_log.debug("Hash matches: " + DataHelper.toString(hash.getData(), hash.getData().length));
             return rv;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Doesn't match hash data = "
                        + Base64.encode(rv), new Exception("Doesn't match"));
         return null;

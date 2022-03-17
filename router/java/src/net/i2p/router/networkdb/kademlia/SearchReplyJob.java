@@ -60,7 +60,7 @@ class SearchReplyJob extends JobImpl {
 
         // either they didn't tell us anything new or we have verified
         // (or failed to verify) all of them.  we're done
-        getContext().profileManager().dbLookupReply(_peer, _newPeers, _seenPeers, 
+        getContext().profileManager().dbLookupReply(_peer, _newPeers, _seenPeers,
                                                     0, _duplicatePeers, _duration);
         if (_newPeers > 0)
             _searchJob.newPeersFound(_newPeers);
@@ -84,7 +84,7 @@ class SearchReplyJob extends JobImpl {
                     //       the floodfill's behavior
                     // This keeps us from continually chasing blocklisted floodfills
                     if (getContext().banlist().isBanlisted(peer)) {
-                    //    if (_log.shouldLog(Log.INFO))
+                    //    if (_log.shouldInfo())
                     //        _log.info("Not looking for a banlisted peer...");
                     //    getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1, 0);
                     } else {
@@ -93,7 +93,7 @@ class SearchReplyJob extends JobImpl {
                         shouldAdd = true;
                     }
                 } else {
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("Peer [" + _peer.toBase64().substring(0,6) + "] sends us bad replies, so not verifying");
                     getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1);
                 }
@@ -102,7 +102,7 @@ class SearchReplyJob extends JobImpl {
             if (_searchJob.wasAttempted(peer)) {
                 _duplicatePeers++;
             }
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("[Job " + getJobId() + "] DbSearchReply received on search, referencing Router [" + peer.toBase64().substring(0,6) +
                            "] - Already known? " + (info != null));
             if (shouldAdd) {

@@ -2,9 +2,9 @@ package net.i2p.crypto;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -43,7 +43,7 @@ public class SessionKeyManager {
      *  @since public since 0.9.14; protected before that
      */
     public SessionKeyManager(I2PAppContext context) {}
-    
+
     /**
      * Retrieve the session key currently associated with encryption to the target,
      * or null if a new session key should be generated.
@@ -76,7 +76,7 @@ public class SessionKeyManager {
     }
 
     /**
-     * Generate a new session key and associate it with the specified target.  
+     * Generate a new session key and associate it with the specified target.
      *
      * Racy if called after getCurrentKey() to check for a current session;
      * use getCurrentOrNewKey() in that case.
@@ -133,7 +133,7 @@ public class SessionKeyManager {
     }
 
     /**
-     * Determine how long the available tags will be available for before expiring, in 
+     * Determine how long the available tags will be available for before expiring, in
      * milliseconds
      */
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
@@ -186,8 +186,8 @@ public class SessionKeyManager {
         return null;
     }
 
-    /** 
-     * Called when the system is closing down, instructing the session key manager to take 
+    /**
+     * Called when the system is closing down, instructing the session key manager to take
      * whatever precautions are necessary (saving state, etc)
      *
      */

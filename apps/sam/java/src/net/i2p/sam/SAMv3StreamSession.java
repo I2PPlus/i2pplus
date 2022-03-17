@@ -187,7 +187,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	            }
 	        }
 
-	        if (_log.shouldLog(Log.DEBUG))
+	        if (_log.shouldDebug())
 	            _log.debug("Connecting new I2PSocket...");
 
 	        // blocking connection (SAMv3)
@@ -292,7 +292,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
 	    	String portStr = props.getProperty("PORT") ;
 	    	if ( portStr==null ) {
-	                if (_log.shouldLog(Log.DEBUG))
+	                if (_log.shouldDebug())
 	    			_log.debug("Receiver port not specified");
 	    		throw new SAMException("receiver port not specified");
 	    	}
@@ -301,7 +301,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    	String host = props.getProperty("HOST");
 	    	if ( host==null ) {
 	    		host = rec.getHandler().getClientIP();
-	                if (_log.shouldLog(Log.DEBUG))
+	                if (_log.shouldDebug())
 		    		_log.debug("No host specified. Taken from the client socket : " + host +':'+port);
 	    	}
 		boolean isSSL = Boolean.parseBoolean(props.getProperty("SSL"));
@@ -358,13 +358,13 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 					continue;
 				} catch (ConnectException ce) {
 					Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3StreamSession.class);
-					if (log.shouldLog(Log.WARN))
+					if (log.shouldWarn())
 						log.warn("Error accepting", ce);
 					try { Thread.sleep(50); } catch (InterruptedException ie) {}
 					continue;
 				} catch (I2PException ipe) {
 					Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3StreamSession.class);
-					if (log.shouldLog(Log.WARN))
+					if (log.shouldWarn())
 						log.warn("Error accepting", ipe);
 					break;
 				}
@@ -399,7 +399,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 		    			}
 	    			} catch (IOException ioe) {
 					Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3StreamSession.class);
-					if (log.shouldLog(Log.WARN))
+					if (log.shouldWarn())
 						log.warn("Error forwarding", ioe);
 					try {
 						i2ps.reset();
@@ -522,13 +522,13 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    	synchronized( this.socketServerLock )
 	    	{
 	    		if (this.socketServer==null) {
-		                if (_log.shouldLog(Log.DEBUG))
+		                if (_log.shouldDebug())
 		    			_log.debug("No socket server is defined for this destination");
 	    			throw new SAMException("no socket server is defined for this destination");
     			}
 	    		server = this.socketServer ;
 	    		this.socketServer = null ;
-	                if (_log.shouldLog(Log.DEBUG))
+	                if (_log.shouldDebug())
 		    		_log.debug("Nulling socketServer in stopForwardingIncoming. Object " + this );
 	    	}
 	    	try {

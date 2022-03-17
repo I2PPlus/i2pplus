@@ -39,7 +39,7 @@ public class MessageOutputStreamTest extends TestCase {
         }
         assertTrue(
                 "read does not match (first off = " + firstOff + "): \n"
-                        + Base64.encode(buf) + "\n" 
+                        + Base64.encode(buf) + "\n"
                         + Base64.encode(read)
                         ,
                         firstOff < 0);
@@ -58,7 +58,7 @@ public class MessageOutputStreamTest extends TestCase {
         public byte[] getData() { return _data.toByteArray(); }
     }
 
-    private static class DummyWriteStatus implements MessageOutputStream.WriteStatus {        
+    private static class DummyWriteStatus implements MessageOutputStream.WriteStatus {
         public void waitForAccept(int maxWaitMs) {}
         public void waitForCompletion(int maxWaitMs) {}
         public boolean writeAccepted() { return true; }

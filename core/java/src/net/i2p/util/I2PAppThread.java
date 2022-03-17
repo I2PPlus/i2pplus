@@ -2,9 +2,9 @@ package net.i2p.util;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -52,7 +52,7 @@ public class I2PAppThread extends I2PThread {
     public I2PAppThread(ThreadGroup group, Runnable r, String name) {
         super(group, r, name);
     }
-    
+
     @Override
     protected void fireOOM(OutOfMemoryError oom) {
         for (OOMEventListener listener : _threadListeners)
@@ -64,7 +64,7 @@ public class I2PAppThread extends I2PThread {
         _threadListeners.add(lsnr);
     }
 
-    /** unregister a component that wants notification of OOM events */    
+    /** unregister a component that wants notification of OOM events */
     public void removeOOMEventThreadListener(OOMEventListener lsnr) {
         _threadListeners.remove(lsnr);
     }

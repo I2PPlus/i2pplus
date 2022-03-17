@@ -27,10 +27,10 @@ import java.util.function.Function;
  * <li><code>org.rrd4j.font.plain.url</code></li>
  * <li><code>org.rrd4j.font.bold.url</code></li>
  * </ol>
- * 
+ *
  * If either <code>org.rrd4j.fonts.properties</code> or <code>org.rrd4j.fonts.properties.url</code> is used, the file provided contains any other property of lower priority .
  * The last four properties defines directly the plain or bold font. All properties URL related (<code>org.rrd4j.fonts.url</code>, <code>org.rrd4j.font.plain.url</code> and
- * <code>org.rrd4j.font.bold.url</code>) download data from an URL. They are useful when those data are provided by the file system, defined by the OS. 
+ * <code>org.rrd4j.font.bold.url</code>) download data from an URL. They are useful when those data are provided by the file system, defined by the OS.
  * The others search for the data in the classpath. So it's easy to provided font-pack as a jar that's put before RRD44J's jar.
  * <p>
  * The default settings uses <code>org.rrd4j.fonts.properties</code> looking for the file <code>/rrd4jfonts.properties</code> in the classpath.
@@ -326,7 +326,7 @@ public interface RrdGraphConstants {
             refreshConf();
         }
         private FontConstructor() {}
-        
+
         /**
          * Used for tests
          */

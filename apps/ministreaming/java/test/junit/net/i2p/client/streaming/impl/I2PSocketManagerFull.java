@@ -35,7 +35,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * This is what I2PSocketManagerFactory.createManager() returns.
      * Direct instantiation by others is deprecated.
-     * 
+     *
      * @param context non-null
      * @param session non-null
      * @param opts may be null

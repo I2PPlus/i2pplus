@@ -52,7 +52,7 @@ class SchedulerConnecting extends SchedulerImpl {
             con.setConnectionError("Timeout waiting for ack (waited " + waited + "ms)");
             con.disconnect(false);
             reschedule(0, con);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Waited too long: " + waited);
             return;
         } else {
@@ -63,13 +63,13 @@ class SchedulerConnecting extends SchedulerImpl {
         /*
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
         if ( (timeTillSend <= 0) && (con.getNextSendTime() > 0) ) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("send next on " + con);
             con.sendAvailable();
             con.setNextSendTime(-1);
         } else {
             if (con.getNextSendTime() > 0) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("time till send: " + timeTillSend + " on " + con);
                 reschedule(timeTillSend, con);
             }

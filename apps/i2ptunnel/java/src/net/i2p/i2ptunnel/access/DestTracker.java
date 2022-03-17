@@ -8,7 +8,7 @@ import net.i2p.data.Hash;
  * @since 0.9.40
  */
 class DestTracker {
-    
+
     private final Hash hash;
     private final Threshold threshold;
     private final AccessCounter counter;

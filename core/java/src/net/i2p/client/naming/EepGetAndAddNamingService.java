@@ -1,6 +1,6 @@
 /*
- * public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 package net.i2p.client.naming;
 
@@ -44,7 +44,7 @@ public class EepGetAndAddNamingService extends EepGetNamingService {
     public EepGetAndAddNamingService(I2PAppContext context) {
         super(context);
     }
-    
+
     @Override
     public Destination lookup(String hostname) {
         Destination rv = super.lookup(hostname);

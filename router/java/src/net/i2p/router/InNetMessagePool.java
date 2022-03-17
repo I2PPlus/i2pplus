@@ -208,7 +208,7 @@ public class InNetMessagePool implements Service {
             if ( (type > 0) && (type < _handlerJobBuilders.length) ) {
                 HandlerJobBuilder builder = _handlerJobBuilders[type];
 
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Adding " + messageBody.getClass().getSimpleName() + " to the pool \n* Builder: " + builder);
 
                 if (builder != null) {
@@ -243,7 +243,7 @@ public class InNetMessagePool implements Service {
                         long arr = ((DeliveryStatusMessage)messageBody).getArrival();
                         if (arr > 10) {
                             long timeSinceSent = _context.clock().now() - arr;
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Dropping unhandled DeliveryStatusMessage " + messageBody);
                             _context.statManager().addRateData("inNetPool.droppedDeliveryStatusDelay", timeSinceSent);
                         }
@@ -259,12 +259,12 @@ public class InNetMessagePool implements Service {
                         break;
 
                       case DatabaseLookupMessage.MESSAGE_TYPE:
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Dropping NetDb lookup due to throttling");
                         break;
 
                       default:
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Message expiring on " + messageBody.getMessageExpiration() +
                                       " was not handled by a HandlerJobBuilder - DROPPING: " + messageBody);
 //                                      new Exception("f00!"));
@@ -297,7 +297,7 @@ public class InNetMessagePool implements Service {
         int sz = origMessages.size();
         if (sz <= 0)
             return 0;
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             _log.debug("Original messages for inbound message: " + sz);
             if (sz > 1)
                 _log.debug("Orig: " + origMessages + " \nthe above are replies for: " + messageBody);
@@ -306,7 +306,7 @@ public class InNetMessagePool implements Service {
         for (int i = 0; i < sz; i++) {
             OutNetMessage omsg = origMessages.get(i);
             ReplyJob job = omsg.getOnReplyJob();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Original message [" + i + "] " + omsg.getReplySelector() + " : " + omsg + ": reply job: " + job);
 
             if (job != null) {
@@ -335,7 +335,7 @@ public class InNetMessagePool implements Service {
     }
 
     private void doShortCircuitTunnelGateway(I2NPMessage messageBody) {
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Shortcut dispatch TunnelGatewayMessage " + messageBody);
         _context.tunnelDispatcher().dispatch((TunnelGatewayMessage)messageBody);
     }
@@ -355,7 +355,7 @@ public class InNetMessagePool implements Service {
         }
     }
     private void doShortCircuitTunnelData(I2NPMessage messageBody, Hash from) {
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Shortcut dispatch of TunnelDataMessage " + messageBody);
         _context.tunnelDispatcher().dispatch((TunnelDataMessage)messageBody, from);
     }

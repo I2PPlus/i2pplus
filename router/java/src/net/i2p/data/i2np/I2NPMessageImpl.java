@@ -158,7 +158,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
             throw new I2NPMessageException("Bad checksum on " + size + " byte I2NP " + getClass().getSimpleName());
 
         //long start = _context.clock().now();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Reading bytes: [Type " + type + "] [ID " + _uniqueId + "]\n* Expires: " + new Date(_expiration));
         readMessage(data, cur, sz, type);
         cur += sz;

@@ -24,7 +24,7 @@
 * 		- Changed run() to catch IOException of HTTPMUSocket::receive().
 *	01/31/08
 *		- Changed start() not to abort when the interface infomation is null on Android m3-rc37a.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -38,9 +38,9 @@ import org.cybergarage.upnp.*;
 import org.cybergarage.util.Debug;
 
 /**
- * 
+ *
  * This class identifies a SSDP socket only for <b>notifing packet</b>.<br>
- * 
+ *
  * @author Satoshi "skonno" Konno
  * @author Stefano "Kismet" Lenzi
  * @version 1.8
@@ -49,11 +49,11 @@ import org.cybergarage.util.Debug;
 public class SSDPNotifySocket extends HTTPMUSocket implements Runnable
 {
 	private boolean useIPv6Address;
-	
+
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public SSDPNotifySocket(String bindAddr)
 	{
 		String addr = SSDP.ADDRESS;
@@ -68,11 +68,11 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable
 	}
 
 	////////////////////////////////////////////////
-	//	ControlPoint	
+	//	ControlPoint
 	////////////////////////////////////////////////
 
 	private ControlPoint controlPoint = null;
-	
+
 	public void setControlPoint(ControlPoint ctrlp)
 	{
 		this.controlPoint = ctrlp;
@@ -85,7 +85,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable
 
 	/**
 	 * This method send a {@link SSDPNotifyRequest} over {@link SSDPNotifySocket}
-	 * 
+	 *
 	 * @param req the {@link SSDPNotifyRequest} to send
 	 * @return true if and only if the trasmission succeced<br>
 	 * 	Because it rely on UDP doesn't mean that it's also recieved
@@ -100,17 +100,17 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable
 	}
 
 	////////////////////////////////////////////////
-	//	run	
+	//	run
 	////////////////////////////////////////////////
 
 	private Thread deviceNotifyThread = null;
-		
+
 	public void run()
 	{
 		Thread thisThread = Thread.currentThread();
-		
+
 		ControlPoint ctrlPoint = getControlPoint();
-		
+
 		while (deviceNotifyThread == thisThread) {
 			Thread.yield();
 
@@ -119,14 +119,14 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable
 			try {
 				packet = receive();
 			}
-			catch (IOException e) { 
+			catch (IOException e) {
 				break;
 			}
-			
+
 			// Thanks for Mikael Hakman (04/20/05)
 			if (packet == null)
 				continue;
-			
+
 			// Thanks for Inma (02/20/04)
 			InetAddress maddr = getMulticastInetAddress();
 			InetAddress pmaddr = packet.getHostInetAddress();
@@ -137,10 +137,10 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable
 			}
 			//TODO Must be performed on a different Thread in order to prevent UDP packet losses.
 			if (ctrlPoint != null)
-				ctrlPoint.notifyReceived(packet); 
+				ctrlPoint.notifyReceived(packet);
 		}
 	}
-	
+
 	public void start(){
 		StringBuffer name = new StringBuffer("Cyber.SSDPNotifySocket/");
 		String localAddr = this.getLocalAddress();
@@ -155,12 +155,12 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable
 		deviceNotifyThread = new Thread(this,name.toString());
 		deviceNotifyThread.start();
 	}
-	
+
 	public void stop()
 	{
 		// Thanks for Mikael Hakman (04/20/05)
 		close();
-		
+
 		deviceNotifyThread = null;
 	}
 }

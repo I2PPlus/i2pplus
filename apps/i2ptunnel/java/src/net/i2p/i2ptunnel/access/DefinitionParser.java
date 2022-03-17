@@ -9,7 +9,7 @@ import net.i2p.data.DataHelper;
 
 /**
  * Utility class for parsing filter definitions
- * 
+ *
  * @since 0.9.40
  */
 class DefinitionParser {
@@ -22,7 +22,7 @@ class DefinitionParser {
      * the filter.
      * </p>
      * <p>
-     * The definition of a filter is a list of Strings.  Each line can represent one of 
+     * The definition of a filter is a list of Strings.  Each line can represent one of
      * these items:
      * </p>
      * <ul>
@@ -52,19 +52,19 @@ class DefinitionParser {
      * The threshold format can be one of the following:
      * </p>
      * <ul>
-     * <li>Numeric definition of number of connections over number seconds - "15/5", 
-     *   "30/60", and so on.  Note that if the number of connections is 1 (as for 
+     * <li>Numeric definition of number of connections over number seconds - "15/5",
+     *   "30/60", and so on.  Note that if the number of connections is 1 (as for
      *   example in "1/1") the first connection attempt will result in a breach.</li>
-     * <li>The word "allow".  This threshold is never breached, i.e. infinite number of 
+     * <li>The word "allow".  This threshold is never breached, i.e. infinite number of
      *   connection attempts is permitted.</li>
      * <li>The word "deny".  This threshold is always breached, i.e. no connection attempts
      *   will be allowed.</li>
      * </ul>
      *
      * The default threshold applies to any remote destinations that are not explicitly
-     * listed in the definition or in any of the referenced files.  To set a default 
+     * listed in the definition or in any of the referenced files.  To set a default
      * threshold use the keyword "default".  The following are examples of default thresholds:
-     * 
+     *
      * <pre>
      * 15/5 default
      * allow default
@@ -73,7 +73,7 @@ class DefinitionParser {
      *
      * Explicit thresholds are applied to a remote destination listed in the definition itself.
      * Examples:
-     * 
+     *
      * <pre>
      * 15/5 explicit asdfasdfasdf.b32.i2p
      * allow explicit fdsafdsafdsa.b32.i2p
@@ -100,7 +100,7 @@ class DefinitionParser {
      * It is possible to use a recorder to record aggressive destinations to a given file,
      * and then use that same file to throttle them.  For example, the following snippet will
      * define a filter that initially allows all connection attempts, but if any single
-     * destination exceeds 30 attempts per 5 seconds it gets throttled down to 15 attempts per 
+     * destination exceeds 30 attempts per 5 seconds it gets throttled down to 15 attempts per
      * 5 seconds:
      * </p>
      * <pre>
@@ -112,7 +112,7 @@ class DefinitionParser {
      * 15/5 file /path/throttled.txt
      * </pre>
      * <p>
-     * It is possible to use a recorder in one tunnel that writes to a file that throttles 
+     * It is possible to use a recorder in one tunnel that writes to a file that throttles
      * another tunnel.  It is possible to reuse the same file with destinations in multiple
      * tunnels.  And of course, it is possible to edit these files by hand.
      * </p>
@@ -133,13 +133,13 @@ class DefinitionParser {
      * @throws InvalidDefinitionException if the definition is malformed
      */
     static FilterDefinition parse(String []definition) throws InvalidDefinitionException {
-        
+
         DefinitionBuilder builder = new DefinitionBuilder();
 
         for (String line : definition) {
             String [] split = DataHelper.split(line,"[ \t]");
             split[0] = split[0].toLowerCase();
-            
+
             Threshold threshold = parseThreshold(split[0]);
             Rule rule = parseRule(split[1]);
 
@@ -155,7 +155,7 @@ class DefinitionParser {
                 file = parseFileName(line, split);
                 builder.addElement(new FileFilterDefinitionElement(file, threshold));
                 break;
-            case RECORDER: 
+            case RECORDER:
                 file = parseFileName(line, split);
                 builder.addRecorder(new Recorder(file, threshold));
             }

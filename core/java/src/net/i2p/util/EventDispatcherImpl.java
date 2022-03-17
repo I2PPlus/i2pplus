@@ -37,21 +37,21 @@ public class EventDispatcherImpl implements EventDispatcher {
     private boolean _ignore = false;
     private final Map<String, Object> _events = new ConcurrentHashMap<String, Object>(4);
     private final List<EventDispatcher> _attached = new CopyOnWriteArrayList<EventDispatcher>();
-    
+
     public EventDispatcher getEventDispatcher() {
         return this;
     }
-    
+
     public void attachEventDispatcher(EventDispatcher ev) {
         if (ev == null) return;
         _attached.add(ev);
     }
-    
+
     public void detachEventDispatcher(EventDispatcher ev) {
         if (ev == null) return;
         _attached.remove(ev);
     }
-    
+
     public void notifyEvent(String eventName, Object args) {
         if (_ignore) return;
         if (args == null) {
@@ -65,7 +65,7 @@ public class EventDispatcherImpl implements EventDispatcher {
             e.notifyEvent(eventName, args);
         }
     }
-    
+
     public Object getEventValue(String name) {
         if (_ignore) return null;
         return _events.get(name);
@@ -75,16 +75,16 @@ public class EventDispatcherImpl implements EventDispatcher {
         if (_ignore) return Collections.emptySet();
         return new HashSet<String>(_events.keySet());
     }
-    
+
     public void ignoreEvents() {
         _ignore = true;
         _events.clear();
     }
-    
+
     public void unIgnoreEvents() {
         _ignore = false;
     }
-    
+
     public Object waitEventValue(String name) {
         if (_ignore) return null;
         do {

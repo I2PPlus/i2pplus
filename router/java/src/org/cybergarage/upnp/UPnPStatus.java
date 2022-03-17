@@ -12,7 +12,7 @@
 *		- first revision.
 *	01/03/04
 *		- Changed the class name from UPnPError to UPnPStatus.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -23,7 +23,7 @@ public class UPnPStatus
 	////////////////////////////////////////////////
 	//	Code
 	////////////////////////////////////////////////
-	
+
 	public static final int INVALID_ACTION = 401;
 	public static final int INVALID_ARGS = 402;
 	public static final int OUT_OF_SYNC = 403;
@@ -43,26 +43,26 @@ public class UPnPStatus
 	        default: return HTTPStatus.code2String(code);
 		}
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Member
 	////////////////////////////////////////////////
-	
+
 	private int code;
 	private String description;
-	
+
 	public UPnPStatus()
 	{
 		setCode(0);
-		setDescription("");	
+		setDescription("");
 	}
-	
+
 	public UPnPStatus(int code, String desc)
 	{
 		setCode(code);
-		setDescription(desc);	
+		setDescription(desc);
 	}
-	
+
 	public int getCode() {
 		return code;
 	}

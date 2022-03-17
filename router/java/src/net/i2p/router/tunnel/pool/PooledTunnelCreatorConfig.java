@@ -24,14 +24,14 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public PooledTunnelCreatorConfig(RouterContext ctx, int length, boolean isInbound,
                                      Hash destination, TunnelPool pool) {
         super(ctx, length, isInbound, destination);
-        _pool = pool; 
+        _pool = pool;
     }
-    
+
     /** called from TestJob */
     public void testJobSuccessful(int ms) {
         testSuccessful(ms);
     }
-    
+
     /**
      * The tunnel failed a test, so (maybe) stop using it
      */
@@ -39,7 +39,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public boolean tunnelFailed() {
         boolean rv = super.tunnelFailed();
         if (!rv) {
-            // remove us from the pool (but not the dispatcher) so that we aren't 
+            // remove us from the pool (but not the dispatcher) so that we aren't
             // selected again.  _expireJob is left to do its thing, in case there
             // are any straggling messages coming down the tunnel
             //
@@ -49,7 +49,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
         }
         return rv;
     }
-    
+
     /**
      * We failed to contact the first hop for an outbound tunnel,
      * so immediately stop using it.
@@ -63,7 +63,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
         tunnelFailedCompletely();
         _pool.tunnelFailed(this, getPeer(1));
     }
-    
+
     /**
      *  @return non-null
      */
@@ -71,7 +71,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public Properties getOptions() {
         return _pool.getSettings().getUnknownOptions();
     }
-    
+
     /**
      *  @return non-null
      */

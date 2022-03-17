@@ -73,4 +73,4 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         }
     }
 }
-    
+

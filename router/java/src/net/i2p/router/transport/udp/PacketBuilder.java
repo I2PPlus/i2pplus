@@ -189,7 +189,7 @@ class PacketBuilder {
      */
     static final int PRIORITY_HIGH = 550;
     private static final int PRIORITY_LOW = OutNetMessage.PRIORITY_LOWEST;
-    
+
     /**
      *  No state, all methods are thread-safe.
      *
@@ -246,7 +246,7 @@ class PacketBuilder {
         // OVERHEAD above includes 1 * FRAGMENT+HEADER_SIZE;
         // this adds for the others, plus the new one.
         available -= numFragments * FRAGMENT_HEADER_SIZE;
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("now: " + numFragments + " / " + curDataSize + " avail: " + available);
         return available;
     }
@@ -317,7 +317,7 @@ class PacketBuilder {
                                  Collection<Long> ackIdsRemaining, int newAckCount,
                                  List<ACKBitfield> partialACKsRemaining) {
         StringBuilder msg = null;
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             msg = new StringBuilder(256);
             msg.append("Data packet sent to [").append(peer.getRemotePeer().toBase64().substring(0,6) + "]");
         }
@@ -515,7 +515,7 @@ class PacketBuilder {
         if (sizeWritten != dataSize) {
             if (sizeWritten < 0) {
                 // probably already freed from OutboundMessageState
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Write failed for " + DataHelper.toString(fragments));
             } else {
                 _log.error("Size written: " + sizeWritten + " but size: " + dataSize +
@@ -523,7 +523,7 @@ class PacketBuilder {
             }
             packet.release();
             return null;
-        //} else if (_log.shouldLog(Log.DEBUG)) {
+        //} else if (_log.shouldDebug()) {
         //    _log.debug("Size written: " + sizeWritten + " for fragment " + fragment
         //               + " of " + state.getMessageId());
         }
@@ -611,7 +611,7 @@ class PacketBuilder {
         int off = HEADER_SIZE;
 
         StringBuilder msg = null;
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             msg = new StringBuilder(128);
             msg.append("Building ACK packet to [").append(peer.getRemotePeer().toBase64().substring(0,6) + "]\n* ");
         }
@@ -713,7 +713,7 @@ class PacketBuilder {
         try {
             to = InetAddress.getByAddress(state.getSentIP());
         } catch (UnknownHostException uhe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("How did we think this was a valid IP address?  " + state.getRemoteHostId().toString());
             packet.release();
             return null;
@@ -723,7 +723,7 @@ class PacketBuilder {
 
         byte sentIP[] = state.getSentIP();
         if ( (sentIP == null) || (sentIP.length <= 0) || (!_transport.isValid(sentIP))) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("How did our sent IP address become invalid? " + state);
             state.fail();
             packet.release();
@@ -758,7 +758,7 @@ class PacketBuilder {
             padding = 0;
         }
 
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             StringBuilder buf = new StringBuilder(128);
             buf.append("Sending SessionCreated:");
             buf.append(" Alice: ").append(Addresses.toString(sentIP, state.getSentPort()));
@@ -826,12 +826,12 @@ class PacketBuilder {
         try {
             to = InetAddress.getByAddress(toIP);
         } catch (UnknownHostException uhe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("How did we think this was a valid IP address? " + state.getRemoteHostId().toString());
             packet.release();
             return null;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending SessionRequest to " + Addresses.toString(toIP));
 
         // now for the body
@@ -900,7 +900,7 @@ class PacketBuilder {
         try {
             to = InetAddress.getByAddress(state.getSentIP());
         } catch (UnknownHostException uhe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("How did we think this was a valid IP address? " + state.getRemoteHostId().toString());
             packet.release();
             return null;
@@ -972,7 +972,7 @@ class PacketBuilder {
      *  @since 0.8.1
      */
     public UDPPacket buildSessionDestroyPacket(PeerState peer) {
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             _log.debug("Building SessionDestroy packet to " + peer.getRemotePeer());
         }
         return buildSessionDestroyPacket(peer.getCurrentCipherKey(), peer.getCurrentMACKey(),
@@ -992,7 +992,7 @@ class PacketBuilder {
         byte[] ip = peer.getSentIP();
         int port = peer.getSentPort();
         if (cipherKey == null || macKey == null || ip == null || port <= 0) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Cannot send SessionDestroy packet to " + peer + " - incomplete info");
             return null;
         }
@@ -1002,7 +1002,7 @@ class PacketBuilder {
         } catch (UnknownHostException uhe) {
             return null;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Building SessionDestroy packet to " + peer);
         return buildSessionDestroyPacket(cipherKey, macKey, addr, port);
     }
@@ -1021,7 +1021,7 @@ class PacketBuilder {
         byte[] ip = peer.getSentIP();
         int port = peer.getSentPort();
         if (cipherKey == null || macKey == null || ip == null || port <= 0) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Cannot send SessionDestroy packet to " + peer + " - incomplete info");
             return null;
         }
@@ -1031,7 +1031,7 @@ class PacketBuilder {
         } catch (UnknownHostException uhe) {
             return null;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Building SessionDestroy packet to " + peer);
         return buildSessionDestroyPacket(cipherKey, macKey, addr, port);
     }
@@ -1082,7 +1082,7 @@ class PacketBuilder {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending Peer Test " + nonce + " to Bob");
 
         // now for the body
@@ -1131,7 +1131,7 @@ class PacketBuilder {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending Peer Test " + nonce + " to Alice");
 
         // now for the body
@@ -1169,7 +1169,7 @@ class PacketBuilder {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending Peer Test " + nonce + " to Charlie");
 
         // now for the body
@@ -1207,7 +1207,7 @@ class PacketBuilder {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending Peer Test " + nonce + " to Bob");
 
         // now for the body
@@ -1304,10 +1304,10 @@ class PacketBuilder {
                 // no session, use intro key (was only way before 0.9.12)
                 cipherKey = new SessionKey(ikey);
                 macKey = cipherKey;
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Sending relay request (with intro key) to " + Addresses.toString(iaddr.getAddress(), iport));
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Sending relay request (in-session) to " + Addresses.toString(iaddr.getAddress(), iport));
             }
 
@@ -1378,7 +1378,7 @@ class PacketBuilder {
         System.arraycopy(ourIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Wrote Alice intro key: " + Base64.encode(data, off-SessionKey.KEYSIZE_BYTES, SessionKey.KEYSIZE_BYTES)
                       + " with nonce " + introNonce + " size=" + (off+4 + (16 - (off+4)%16))
                       + " and data: " + Base64.encode(data, 0, off));
@@ -1402,7 +1402,7 @@ class PacketBuilder {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Sending intro to " + charlie + " for " + alice);
 
         // now for the body
@@ -1445,7 +1445,7 @@ class PacketBuilder {
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Sending RelayResponse to " + alice + " for " + charlie + " with key " + cipherKey);
 
         // now for the body
@@ -1484,7 +1484,7 @@ class PacketBuilder {
      */
     public UDPPacket buildHolePunch(InetAddress to, int port) {
         UDPPacket packet = UDPPacket.acquire(_context, false);
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Sending relay hole punch to " + to + ":" + port);
 
         // the packet is empty and does not need to be authenticated, since
@@ -1693,7 +1693,7 @@ class PacketBuilder {
         byte[] ba = SimpleByteCache.acquire(Hash.HASH_LENGTH);
         _transport.getHMAC().calculate(macKey, data, hmacOff, hmacLen, ba, 0);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Authenticating UDP packet (" + pkt.getLength() + " bytes)" +
                        "\n* IV: " + Base64.encode(iv) +
                        "\n* Raw MAC: " + Base64.encode(ba) +

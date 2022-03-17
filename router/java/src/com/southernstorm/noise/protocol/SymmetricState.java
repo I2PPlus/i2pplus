@@ -35,7 +35,7 @@ import javax.crypto.ShortBufferException;
  * Symmetric state for helping manage a Noise handshake.
  */
 class SymmetricState implements Destroyable, Cloneable {
-	
+
 	// precalculated hash of the Noise name if over 32 bytes, else simply null-padded name
 	private static final byte[] INIT_CK_XK;
 	private static final byte[] INIT_CK_IK;
@@ -118,7 +118,7 @@ class SymmetricState implements Destroyable, Cloneable {
 		ck = new byte [hashLength];
 		h = new byte [hashLength];
 		prev_h = new byte [hashLength];
-		
+
 		byte[] initHash, initCK;
 		if (patternId.equals(HandshakeState.PATTERN_ID_XK)) {
 			initCK = INIT_CK_XK;
@@ -153,7 +153,7 @@ class SymmetricState implements Destroyable, Cloneable {
 	}
 
 	/**
-	 * Gets the name of the Noise protocol. 
+	 * Gets the name of the Noise protocol.
 	 *
 	 * @return The protocol name.
 	 */

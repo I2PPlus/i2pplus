@@ -19,7 +19,7 @@ class AccessCounter {
 
     /**
      * records that a connection attempt was made
-     * 
+     *
      * @param now the current time
      */
     void recordAccess(long now) {
@@ -36,7 +36,7 @@ class AccessCounter {
             return !accesses.isEmpty();
         if (accesses.size() < threshold.getConnections())
             return false;
-        
+
         long ignoreOlder = now - threshold.getSeconds() * 1000;
         for (int i = 0; i <= accesses.size() - threshold.getConnections(); i++) {
             long start = accesses.get(i);

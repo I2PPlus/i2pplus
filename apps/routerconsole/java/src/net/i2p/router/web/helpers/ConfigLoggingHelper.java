@@ -12,7 +12,7 @@ import net.i2p.util.Log;
 import net.i2p.util.Translate;
 
 public class ConfigLoggingHelper extends HelperBase {
-    
+
     public String getLogFilePattern() {
         return _context.logManager().getBaseLogfilename();
     }
@@ -38,7 +38,7 @@ public class ConfigLoggingHelper extends HelperBase {
         for (String prefix : limits.stringPropertyNames()) {
             sortedLogs.add(prefix);
         }
-        
+
         buf.append("<textarea name=\"levels\" rows=\"4\" cols=\"60\" wrap=\"off\" spellcheck=\"false\">");
         for (String prefix : sortedLogs) {
             String level = limits.getProperty(prefix);
@@ -78,15 +78,15 @@ public class ConfigLoggingHelper extends HelperBase {
 
     private void getLogLevelBox(StringBuilder buf, String name, String cur, boolean showRemove) {
         buf.append("<select name=\"").append(name).append("\">\n");
-        
+
         for (int i = 0; i < levels.length; i++) {
             String l = levels[i];
             buf.append("<option value=\"").append(l).append('\"');
             if (l.equals(cur))
                 buf.append(SELECTED);
             buf.append('>').append(_c(l)).append("</option>\n");
-        }        
-        
+        }
+
         //if (showRemove)
         //    buf.append("<option value=\"remove\">").append(_t("Remove")).append("</option>");
         buf.append("</select>\n");
@@ -146,10 +146,10 @@ public class ConfigLoggingHelper extends HelperBase {
             }
             buf.append("<option value=\"").append(l).append("\">")
                .append(d).append("</option>\n");
-        }        
+        }
         if (groups > 0)
             buf.append("</optgroup>\n");
-        
+
         buf.append("</select>\n");
         getLogLevelBox(buf, "newloglevel", "WARN", false);
         return buf.toString();

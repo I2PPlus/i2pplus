@@ -310,7 +310,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 break;
         }
 
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Flooded the entry for [" + key.toBase64().substring(0,6) + "] to " + flooded + " of " + peers.size() + " peers");
     }
 
@@ -477,11 +477,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
 
         if (isNew) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Started FloodSearch for key [" + key.toBase64().substring(0,6) + "]");
             _context.jobQueue().addJob(searchJob);
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Deferred FloodSearch for [" + key.toBase64().substring(0,6) + "] with " + _activeFloodQueries.size() + " in progress");
             searchJob.addDeferred(onFindJob, onFailedLookupJob, timeoutMs, isLease);
             // not necessarily LS
@@ -516,7 +516,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         SearchJob job = super.search(key, find, fail, timeoutMs, isLease);
         if (job != null) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Floodfill search timed out for " + key.toBase64() + ", falling back on normal search (#"
                           + job.getJobId() + ") with " + timeoutMs + " remaining");
             long expiration = timeoutMs + _context.clock().now();
@@ -608,10 +608,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
              _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) ||
              _context.commSystem().getStatus() == Status.DISCONNECTED) {
             if (_context.router().getUptime() < DONT_FAIL_PERIOD) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed; not dropping (startup grace period)");
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed; not dropping (router has issues)");
             }
             return;
@@ -629,16 +629,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // (KBucketSetSize() includes leasesets but avoids locking)
 //            super.lookupBeforeDropping(peer, info); // we don't want the routerinfo deleted, so this is commented out
             if (_floodfillEnabled && !forceExplore) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - Floodfill mode active");
             } else if (_context.banlist().isBanlistedForever(peer)) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - banlisted");
 //            } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
-//                if (_log.shouldLog(Log.INFO))
+//                if (_log.shouldInfo())
 //                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - kbucket is full");
             } else
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - router overload");
             return;
         }
@@ -661,7 +661,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         public String getName() { return "Timeout NetDb Lookup for Failing Peer"; }
         public void runJob() {
-//            if (_log.shouldLog(Log.INFO))
+//            if (_log.shouldInfo())
 //                _log.info("Dropped RouterInfo [" + _peer.toBase64().substring(0,6) + "]");
             dropAfterLookupFailed(_peer);
         }
@@ -682,7 +682,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             if ( (updated != null) && (updated.getPublished() > _info.getPublished()) ) {
                 // great, a legitimate update
             } else {
-//                if (_log.shouldLog(Log.INFO))
+//                if (_log.shouldInfo())
 //                    _log.info("Dropped RouterInfo [" + _peer.toBase64().substring(0,6) + "]");
                 // they just sent us what we already had.  kill 'em both
                 dropAfterLookupFailed(_peer);

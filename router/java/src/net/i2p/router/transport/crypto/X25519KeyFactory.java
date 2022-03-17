@@ -58,14 +58,14 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         _maxSize = ctx.getProperty(PROP_DH_PRECALC_MAX, defaultMax);
         _calcDelay = ctx.getProperty(PROP_DH_PRECALC_DELAY, DEFAULT_DH_PRECALC_DELAY);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("XDH Precalc (minimum: " + _minSize + " max: " + _maxSize + ", delay: "
                        + _calcDelay + ")");
         _keys = new LinkedBlockingQueue<KeyPair>(_maxSize);
         if (!SystemVersion.isWindows())
             setPriority(Thread.NORM_PRIORITY - 1);
     }
-        
+
     /**
      *  Note that this stops the singleton precalc thread.
      *  You don't want to do this if there are multiple routers in the JVM.
@@ -144,7 +144,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         long end = System.currentTimeMillis();
         long diff = end - start;
         _context.statManager().addRateData("crypto.XDHGenerateTime", diff);
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Took " + diff + "ms to generate local DH value");
         return rv;
     }

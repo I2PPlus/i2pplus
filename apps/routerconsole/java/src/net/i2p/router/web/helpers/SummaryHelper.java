@@ -460,7 +460,7 @@ public class SummaryHelper extends HelperBase {
         // long free = Runtime.getRuntime().freeMemory()/1024/1024;
         // return integerFormatter.format(used) + "MB (" + usedPc + "%)";
         // return integerFormatter.format(used) + "MB / " + free + " MB";
-        return "<div class=\"percentBarOuter\" id=\"sb_memoryBar\"><div class=\"percentBarText\">RAM: " +
+        return "<div class=\"percentBarOuter volatile\" id=\"sb_memoryBar\"><div class=\"percentBarText\">RAM: " +
                integerFormatter.format(used) + " / " + total + " M" +
                "</div><div class=\"percentBarInner\" style=\"width: " + integerFormatter.format(usedPc) +
                "%;\"></div></div>";
@@ -709,7 +709,7 @@ public class SummaryHelper extends HelperBase {
         buf.append("</h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
             Collections.sort(clients, new AlphaComparator());
-            buf.append("<table id=\"sb_localtunnels\">");
+            buf.append("<table id=\"sb_localtunnels\" class=\"volatile\">");
 
             for (Destination client : clients) {
                 String name = getName(client);
@@ -765,12 +765,14 @@ public class SummaryHelper extends HelperBase {
                 } else {
                     // yellow light
                     buf.append("<td class=\"tunnelBuilding\"><img src=\"/themes/console/images/local_inprogress.png\" alt=\"")
-                       .append(_t("Building")).append("&hellip;\" title=\"").append(_t("Building tunnels")).append("&hellip;\" width=\"16\" height=\"16\"></td></tr>\n");
+                       .append(_t("Building")).append("&hellip;\" title=\"").append(_t("Building tunnels"))
+                       .append("&hellip;\" width=\"16\" height=\"16\"></td></tr>\n");
                 }
             }
             buf.append("</table>");
         } else {
-            buf.append("<table id=\"sb_localtunnels\">\n<tr><td colspan=\"3\"><center><i>").append(_t("none")).append("</i></center></td></tr>\n</table>\n");
+            buf.append("<table id=\"sb_localtunnels\" class=\"volatile\">\n<tr><td colspan=\"3\"><center><i>")
+               .append(_t("none")).append("</i></center></td></tr>\n</table>\n");
         }
         return buf.toString();
     }
@@ -1020,7 +1022,7 @@ public class SummaryHelper extends HelperBase {
         String source = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         boolean needSpace = false;
         if (status.length() > 0) {
-            buf.append("<h4 class=\"sb_info sb_update\">").append(status).append("</h4>\n");
+            buf.append("<h4 class=\"sb_info sb_update volatile\">").append(status).append("</h4>\n");
             needSpace = true;
         }
         String dver = NewsHelper.updateVersionDownloaded();
@@ -1029,23 +1031,27 @@ public class SummaryHelper extends HelperBase {
             if (dver == null)
                 dver = NewsHelper.unsignedVersionDownloaded();
         }
-        if (dver != null && !NewsHelper.isUpdateInProgress() &&
-            !_context.router().gracefulShutdownInProgress()) {
+        if (dver != null && !NewsHelper.isUpdateInProgress()) {
             if (needSpace)
                 buf.append("<hr>");
             else
                 needSpace = true;
-            buf.append("<h4 id=\"restartRequired\" class=\"sb_info sb_update\" title=\"");
-            if (_context.hasWrapper() || NewsHelper.isExternalRestartPending())
-                buf.append(_t("Click Restart to install").replace("Click ", ""));
-            else
-                buf.append(_t("Click Shutdown and restart to install").replace("Click ", ""));
-            buf.append("\"><b>");
-            if (source != null && source.contains("skank"))
-                buf.append("I2P+ ");
-            buf.append(_t("Update downloaded")).append("<br>");
-            buf.append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]");
-            buf.append("</b></h4>");
+            if (!_context.router().gracefulShutdownInProgress()) {
+                buf.append("<h4 id=\"restartRequired\" class=\"sb_info sb_update volatile\" title=\"");
+                if (_context.hasWrapper() || NewsHelper.isExternalRestartPending())
+                    buf.append(_t("Click Restart to install").replace("Click ", ""));
+                else
+                    buf.append(_t("Click Shutdown and restart to install").replace("Click ", ""));
+                buf.append("\"><b>");
+                if (source != null && source.contains("skank"))
+                    buf.append("I2P+ ");
+                buf.append(_t("Update downloaded")).append("<br>")
+                   .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
+                   .append("</b></h4>");
+            } else {
+                buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update\" class=\"volatile\"><b>")
+                   .append(_t("Updating after restart")).append("&hellip;</b></h4>");
+            }
         }
         boolean avail = updateAvailable();
         boolean unsignedAvail = unsignedUpdateAvailable();
@@ -1172,16 +1178,16 @@ public class SummaryHelper extends HelperBase {
         String status = checker.getStatus();
         if (status.length() > 0) {
             // Show status message even if not running, timer in ReseedChecker should remove after 20 minutes
-            buf.append("<div class=\"sb_notice\" id=\"sb_notice\"><i>").append(status).append("</i></div>");
+            buf.append("<div class=\"sb_notice volatile\" id=\"sb_notice\"><i>").append(status).append("</i></div>");
         } else {
             // Hide status message but retain div so ajax refresh picks it up
-            buf.append("<div class=\"sb_notice hide\" id=\"sb_notice\" hidden></div>");
+            buf.append("<div class=\"sb_notice volatile hide\" id=\"sb_notice\" hidden></div>");
         }
         if (!checker.inProgress()) {
             // If a new reseed isn't running, and the last reseed had errors, show error message
             String reseedErrorMessage = checker.getError();
             if (reseedErrorMessage.length() > 0) {
-                buf.append("<div class=\"sb_notice\" id=\"sb_notice\"><i>").append(reseedErrorMessage).append("</i></div>");
+                buf.append("<div class=\"sb_notice volatile\" id=\"sb_notice\"><i>").append(reseedErrorMessage).append("</i></div>");
             }
             // If showing the reseed link is allowed
             if (allowReseed()) {
@@ -1191,7 +1197,7 @@ public class SummaryHelper extends HelperBase {
                 if (prev != null) System.setProperty("net.i2p.router.web.ReseedHandler.noncePrev", prev);
                 System.setProperty("net.i2p.router.web.ReseedHandler.nonce", nonce+"");
                 String uri = getRequestURI();
-                buf.append("<p><form action=\"").append(uri).append("\" method=\"POST\">\n");
+                buf.append("<p class=\"volatile\"><form action=\"").append(uri).append("\" method=\"POST\">\n");
                 buf.append("<input type=\"hidden\" name=\"reseedNonce\" value=\"").append(nonce).append("\" >\n");
                 buf.append("<button type=\"submit\" title=\"").append(_t("Attempt to download router reference files (if automatic reseed has failed)"));
                 buf.append("\" id=\"sb_manualReseed\" class=\"reload\" value=\"Reseed\" >").append(_t("Reseed")).append("</button></form></p>\n");

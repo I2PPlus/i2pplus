@@ -31,7 +31,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     private final PeerTestJob _testJob;
 
     private static final boolean ENABLE_PEER_TEST = true;
-    
+
     public PeerManagerFacadeImpl(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(PeerManagerFacadeImpl.class);

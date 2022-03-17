@@ -275,7 +275,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires)
                    throws I2PSessionException {
-        if (_log.shouldLog(Log.DEBUG)) _log.debug("Sending message");
+        if (_log.shouldDebug()) _log.debug("Sending message");
         verifyOpen();
         updateActivity();
 
@@ -296,7 +296,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         //else throw new IllegalStateException("we need to update sendGuaranteed to support partial send");
 
         int compressed = payload.length;
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             String d = dest.calculateHash().toBase64().substring(0,6);
             _log.info("Sending message to: [" + d + "] compress? " + sc + " sizeIn=" + size + " sizeOut=" + compressed);
         }
@@ -376,14 +376,14 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         boolean found = !actuallyWait || state.wasAccepted();
 
         if (found) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(getPrefix() + "Message sent after " + state.getElapsed() + "ms with "
                           + payload.length + " bytes");
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(getPrefix() + "Message send failed after " + state.getElapsed() + "ms with "
                           + payload.length + " bytes");
-            //if (_log.shouldLog(Log.ERROR))
+            //if (_log.shouldError())
             //    _log.error(getPrefix() + "Never received *accepted* from the router!  dropping and reconnecting");
             //disconnect();
             return false;
@@ -422,19 +422,19 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      */
     @Override
     public void receiveStatus(int msgId, long nonce, int status) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug(getPrefix() + "Received status " + status + " for [MsgID " + msgId + " / " + nonce + "]");
 
         MessageState state = null;
         if ((state = _sendingStates.get(Long.valueOf(nonce))) != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(getPrefix() + "Found a matching state");
         } else if (!_sendingStates.isEmpty()) {
             // O(n**2)
             // shouldn't happen, router sends good nonce for all statuses as of 0.9.14
             for (MessageState s : _sendingStates.values()) {
                 if (s.getMessageId() != null && s.getMessageId().getMessageId() == msgId) {
-                    if (_log.shouldLog(Log.DEBUG)) _log.debug(getPrefix() + "Found a matching state by msgID");
+                    if (_log.shouldDebug()) _log.debug(getPrefix() + "Found a matching state by msgID");
                     state = s;
                     break;
                 }
@@ -472,7 +472,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
             }
 
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info(getPrefix() + "No matching state for [MsgID " + msgId + " / " + nonce
                           + "] with status = " + status);
         }
@@ -497,7 +497,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         for (MessageState state : _sendingStates.values()) {
             state.cancel();
         }
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info(getPrefix() + "Disconnecting " + _sendingStates.size() + " states");
         _sendingStates.clear();
     }

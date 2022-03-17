@@ -35,13 +35,13 @@ import net.i2p.util.PortMapper;
  *  @since 0.9.24 moved from SAMv3Handler
  */
 class SAMv3DatagramServer implements Handler {
-	
+
 	private final DatagramChannel _server;
 	private final Thread _listener;
 	private final SAMBridge _parent;
 	private final String _host;
 	private final int _port;
-	
+
 	/**
 	 *  Does not start listener.
 	 *  Caller must call start().
@@ -52,13 +52,13 @@ class SAMv3DatagramServer implements Handler {
 	public SAMv3DatagramServer(SAMBridge parent, String host, int port, Properties props) throws IOException {
 		_parent = parent;
 		_server = DatagramChannel.open();
-		
+
 		_server.socket().bind(new InetSocketAddress(host, port));
 		_listener = new I2PAppThread(new Listener(_server), "SAM DatagramListener " + port);
 		_host = host;
 		_port = port;
 	}
-	
+
 	/**
 	 *  Only call once.
 	 *  @since 0.9.22
@@ -68,7 +68,7 @@ class SAMv3DatagramServer implements Handler {
 		if (_parent != null)
 			_parent.register(this);
 	}
-	
+
 	/**
 	 *  Cannot be restarted.
 	 *  @since 0.9.22
@@ -81,7 +81,7 @@ class SAMv3DatagramServer implements Handler {
 		if (_parent != null)
 			_parent.unregister(this);
 	}
-	
+
 	public void send(SocketAddress addr, ByteBuffer msg) throws IOException {
 		_server.send(msg, addr);
 	}
@@ -93,9 +93,9 @@ class SAMv3DatagramServer implements Handler {
 	public int getPort() { return _port; }
 
 	private class Listener implements Runnable {
-		
+
 		private final DatagramChannel server;
-		
+
 		public Listener(DatagramChannel server)
 		{
 			this.server = server ;
@@ -112,7 +112,7 @@ class SAMv3DatagramServer implements Handler {
 
 		private void run2() {
 			ByteBuffer inBuf = ByteBuffer.allocateDirect(SAMRawSession.RAW_SIZE_MAX+1024);
-			
+
 			while (!Thread.interrupted())
 			{
 				// not ByteBuffer to avoid Java 8/9 issues
@@ -140,11 +140,11 @@ class SAMv3DatagramServer implements Handler {
 	private static class MessageDispatcher implements Runnable {
 		private final ByteArrayInputStream is;
 		private static final int MAX_LINE_LENGTH = 2*1024;
-	
+
 		public MessageDispatcher(byte[] buf) {
 			this.is = new ByteArrayInputStream(buf) ;
 		}
-	
+
 		public void run() {
 			try {
 				// not UTF-8
@@ -275,7 +275,7 @@ class SAMv3DatagramServer implements Handler {
 		/** @since 0.9.22 */
 		private static void warn(String s, Throwable t) {
 			Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3DatagramServer.class);
-			if (log.shouldLog(Log.WARN))
+			if (log.shouldWarn())
 				log.warn(s, t);
 		}
 	}

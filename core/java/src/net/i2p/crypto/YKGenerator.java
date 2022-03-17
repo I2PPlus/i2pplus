@@ -70,7 +70,7 @@ final class YKGenerator {
         CALC_DELAY = ctx.getProperty(PROP_YK_PRECALC_DELAY, DEFAULT_YK_PRECALC_DELAY);
         _values = new LinkedBlockingQueue<BigInteger[]>(MAX_NUM_BUILDERS);
 
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("ElGamal YK Precalc (minimum: " + MIN_NUM_BUILDERS + " max: " + MAX_NUM_BUILDERS + ", delay: "
         //               + CALC_DELAY + ")");
 
@@ -160,7 +160,7 @@ final class YKGenerator {
 
         //long diff = t2 - t0;
         //if (diff > 1000) {
-        //    if (_log.shouldLog(Log.WARN)) _log.warn("Took too long to generate YK value for ElGamal (" + diff + "ms)");
+        //    if (_log.shouldWarn()) _log.warn("Took too long to generate YK value for ElGamal (" + diff + "ms)");
         //}
 
         return yk;
@@ -214,7 +214,7 @@ final class YKGenerator {
                         if (!addValues(generateYK()))
                             break;
                         //long end = Clock.getInstance().now();
-                        //if (_log.shouldLog(Log.DEBUG)) _log.debug("Precalculated YK value in " + (end - begin) + "ms");
+                        //if (_log.shouldDebug()) _log.debug("Precalculated YK value in " + (end - begin) + "ms");
                         // for some relief...
                         try {
                             Thread.sleep(CALC_DELAY);
@@ -225,7 +225,7 @@ final class YKGenerator {
                 //long end = Clock.getInstance().now();
                 //int numCalc = curSize - startSize;
                 //if (numCalc > 0) {
-                //    if (_log.shouldLog(Log.DEBUG))
+                //    if (_log.shouldDebug())
                 //        _log.debug("Precalced " + numCalc + " to " + curSize + " in "
                 //                   + (end - start - CALC_DELAY * numCalc) + "ms (not counting "
                 //                   + (CALC_DELAY * numCalc) + "ms relief).  now sleeping");

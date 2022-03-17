@@ -1,9 +1,9 @@
 package net.i2p.router;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -47,20 +47,20 @@ public class KeyManager {
     private SigningPrivateKey _signingPrivateKey;
     private SigningPublicKey _signingPublicKey;
     private final Map<Hash, LeaseSetKeys> _leaseSetKeys; // Destination --> LeaseSetKeys
-    
+
     public final static String PROP_KEYDIR = "router.keyBackupDir";
     public final static String DEFAULT_KEYDIR = "keyBackup";
     public final static String KEYFILE_PRIVATE_ENC = "privateEncryption.key";
     public final static String KEYFILE_PUBLIC_ENC = "publicEncryption.key";
     public final static String KEYFILE_PRIVATE_SIGNING = "privateSigning.key";
     public final static String KEYFILE_PUBLIC_SIGNING = "publicSigning.key";
-    
+
     public KeyManager(RouterContext context) {
         _context = context;
-        _log = _context.logManager().getLog(KeyManager.class);	
+        _log = _context.logManager().getLog(KeyManager.class);
         _leaseSetKeys = new ConcurrentHashMap<Hash, LeaseSetKeys>();
     }
-    
+
     /**
      *  Read keys in from disk, blocking
      *
@@ -71,17 +71,17 @@ public class KeyManager {
         // run inline so keys are loaded immediately
         (new SynchronizeKeysJob()).runJob();
     }
-    
+
     /**
      *  Configure the router's keys.
      *  @since 0.9.4 replace individual setters
      */
-    public void setKeys(PublicKey key1, PrivateKey key2, SigningPublicKey key3, SigningPrivateKey key4) { 
+    public void setKeys(PublicKey key1, PrivateKey key2, SigningPublicKey key3, SigningPrivateKey key4) {
         synchronized(this) {
-            _publicKey = key1; 
-            _privateKey = key2; 
-            _signingPublicKey = key3; 
-            _signingPrivateKey = key4; 
+            _publicKey = key1;
+            _privateKey = key2;
+            _signingPublicKey = key3;
+            _signingPrivateKey = key4;
         }
         queueWrite();
     }
@@ -109,7 +109,7 @@ public class KeyManager {
      * @return will be null on error or before startup() or setKeys() is called
      */
     public synchronized SigningPublicKey getSigningPublicKey() { return _signingPublicKey; }
-    
+
     /**
      *  Client with a single key
      *
@@ -121,7 +121,7 @@ public class KeyManager {
         LeaseSetKeys keys = new LeaseSetKeys(dest, leaseRevocationPrivateKey, endpointDecryptionKey);
         _leaseSetKeys.put(dest.calculateHash(), keys);
     }
-    
+
     /**
      *  Client with multiple keys
      *
@@ -134,7 +134,7 @@ public class KeyManager {
         LeaseSetKeys keys = new LeaseSetKeys(dest, leaseRevocationPrivateKey, endpointDecryptionKeys);
         _leaseSetKeys.put(dest.calculateHash(), keys);
     }
-   
+
     /**
      *  Read/Write the router keys from/to disk
      */
@@ -148,7 +148,7 @@ public class KeyManager {
             _log.info("Unregistering keys for destination " + dest.calculateHash().toBase64());
         return _leaseSetKeys.remove(dest.calculateHash());
     }
-    
+
     /** client */
     public LeaseSetKeys getKeys(Destination dest) {
         return getKeys(dest.calculateHash());
@@ -158,7 +158,7 @@ public class KeyManager {
     public LeaseSetKeys getKeys(Hash dest) {
             return _leaseSetKeys.get(dest);
     }
-    
+
     /**
      *  Read/Write the 4 files in keyBackup/
      *  As of 0.9.4 this is run on-demand only, there's no need to
@@ -185,7 +185,7 @@ public class KeyManager {
                 _log.log(Log.CRIT, "Unable to synchronize keys in " + keyDir + " - permissions problem?");
             }
         }
-        
+
         private void syncKeys(File keyDir) {
             syncPrivateKey(keyDir);
             syncPublicKey(keyDir);

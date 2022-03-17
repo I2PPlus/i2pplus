@@ -53,7 +53,7 @@ public class SAMStreamSend {
     /** Connection id (Integer) to peer (Flooder) */
     private final Map<String, Sender> _remotePeers;
     private static I2PSSLSocketFactory _sslSocketFactory;
-    
+
     private static final int STREAM=0, DG=1, V1DG=2, RAW=3, V1RAW=4;
     private static final int MASTER=8;
     private static final String USAGE = "Usage: SAMStreamSend [-s] [-x] [-m mode] [-v version] [-b samHost] [-p samPort]\n" +
@@ -150,7 +150,7 @@ public class SAMStreamSend {
                                                       args[startArgs], args[startArgs + 1]);
         sender.startup(version, isSSL, mode, user, password, opts);
     }
-    
+
     public SAMStreamSend(I2PAppContext ctx, String samHost, String samPort, String destFile, String dataFile) {
         _context = ctx;
         _log = ctx.logManager().getLog(SAMStreamSend.class);
@@ -162,16 +162,16 @@ public class SAMStreamSend {
         _conOptions = "";
         _remotePeers = new HashMap<String, Sender>();
     }
-    
+
     public void startup(String version, boolean isSSL, int mode, String user, String password, String sessionOpts) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Starting up");
         try {
             Socket sock = connect(isSSL);
             SAMEventHandler eventHandler = new SendEventHandler(_context);
             _reader = new SAMReader(_context, sock.getInputStream(), eventHandler);
             _reader.startReading();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Reader created");
             OutputStream out = sock.getOutputStream();
             String ourDest = handshake(out, version, true, eventHandler, mode, user, password, sessionOpts);
@@ -179,20 +179,20 @@ public class SAMStreamSend {
                 mode -= MASTER;
             if (ourDest == null)
                 throw new IOException("handshake failed");
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Handshake complete.  we are " + ourDest);
             if (_isV3 && mode == STREAM) {
                 Socket sock2 = connect(isSSL);
                 eventHandler = new SendEventHandler(_context);
                 _reader2 = new SAMReader(_context, sock2.getInputStream(), eventHandler);
                 _reader2.startReading();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Reader2 created");
                 out = sock2.getOutputStream();
                 String ok = handshake(out, version, false, eventHandler, mode, user, password, "");
                 if (ok == null)
                     throw new IOException("2nd handshake failed");
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Handshake2 complete.");
             }
             if (mode == DG || mode == RAW)
@@ -206,7 +206,7 @@ public class SAMStreamSend {
                 _reader2.stopReading();
         }
     }
-    
+
     private class SendEventHandler extends SAMEventHandler {
         public SendEventHandler(I2PAppContext ctx) { super(ctx); }
 
@@ -218,14 +218,14 @@ public class SAMStreamSend {
             }
             if (sender != null) {
                 sender.closed();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Connection " + sender.getConnectionId() + " closed to " + sender.getDestination());
             } else {
                 _log.error("not connected to " + id + " but we were just closed?");
             }
         }
     }
-    
+
     private Socket connect(boolean isSSL) throws IOException {
         int port = Integer.parseInt(_samPort);
         if (!isSSL)
@@ -244,7 +244,7 @@ public class SAMStreamSend {
         I2PSSLSocketFactory.verifyHostname(_context, sock, _samHost);
         return sock;
     }
-    
+
     /**
      * @param isMaster is this the control socket
      * @return our b64 dest or null
@@ -260,12 +260,12 @@ public class SAMStreamSend {
                 else
                     samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + '\n').getBytes("UTF-8"));
                 samOut.flush();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Hello sent");
                 String hisVersion = eventHandler.waitForHelloReply();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Hello reply found: " + hisVersion);
-                if (hisVersion == null) 
+                if (hisVersion == null)
                     throw new IOException("Hello failed");
                 if (!isMaster)
                     return "OK";
@@ -303,12 +303,12 @@ public class SAMStreamSend {
                     String req = "SESSION CREATE DESTINATION=TRANSIENT STYLE=MASTER ID=masterSend " + opts + '\n';
                     samOut.write(req.getBytes("UTF-8"));
                     samOut.flush();
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("SESSION CREATE STYLE=MASTER sent");
                     boolean ok = eventHandler.waitForSessionCreateReply();
-                    if (!ok) 
+                    if (!ok)
                         throw new IOException("SESSION CREATE STYLE=MASTER failed");
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("SESSION CREATE STYLE=MASTER reply found: " + ok);
                     // PORT required even if we aren't listening for this test
                     if (mode != STREAM)
@@ -317,16 +317,16 @@ public class SAMStreamSend {
                 String req = "SESSION " + command + " STYLE=" + style + ' ' + _conOptions + ' ' + opts + '\n';
                 samOut.write(req.getBytes("UTF-8"));
                 samOut.flush();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("SESSION " + command + " sent");
                 boolean ok;
                 if (masterMode)
                     ok = eventHandler.waitForSessionAddReply();
                 else
                     ok = eventHandler.waitForSessionCreateReply();
-                if (!ok) 
+                if (!ok)
                     throw new IOException("SESSION " + command + " failed");
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("SESSION " + command + " reply found: " + ok);
 
                 if (masterMode) {
@@ -342,10 +342,10 @@ public class SAMStreamSend {
                 req = "NAMING LOOKUP NAME=ME\n";
                 samOut.write(req.getBytes("UTF-8"));
                 samOut.flush();
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Naming lookup sent");
                 String destination = eventHandler.waitForNamingReply("ME");
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Naming lookup reply found: " + destination);
                 if (destination == null) {
                     _log.error("No naming lookup reply found!");
@@ -360,7 +360,7 @@ public class SAMStreamSend {
             }
         }
     }
-    
+
     private void send(OutputStream samOut, SAMEventHandler eventHandler, int mode) throws IOException {
         Sender sender = new Sender(samOut, eventHandler, mode);
         boolean ok = sender.openConnection();
@@ -371,9 +371,9 @@ public class SAMStreamSend {
             throw new IOException("Sender failed to connect");
         }
     }
-    
+
     private class Sender implements Runnable {
-        private final String _connectionId; 
+        private final String _connectionId;
         private String _remoteDestination;
         private InputStream _in;
         private volatile boolean _closed;
@@ -384,7 +384,7 @@ public class SAMStreamSend {
         private final int _mode;
         private final DatagramSocket _dgSock;
         private final InetSocketAddress _dgSAM;
-        
+
         public Sender(OutputStream samOut, SAMEventHandler eventHandler, int mode) throws IOException {
             _samOut = samOut;
             _eventHandler = eventHandler;
@@ -405,7 +405,7 @@ public class SAMStreamSend {
                 _remotePeers.put(_connectionId, Sender.this);
             }
         }
-        
+
         public boolean openConnection() {
             FileInputStream fin = null;
             try {
@@ -418,7 +418,7 @@ public class SAMStreamSend {
                 _context.statManager().createRateStat("send." + _connectionId + ".totalSent", "Data size sent", "swarm", new long[] { 30*1000, 60*1000, 5*60*1000 });
                 _context.statManager().createRateStat("send." + _connectionId + ".started", "When we start", "swarm", new long[] { 5*60*1000 });
                 _context.statManager().createRateStat("send." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { 5*60*1000 });
-                
+
                 if (_mode == STREAM) {
                     StringBuilder buf = new StringBuilder(1024);
                     buf.append("STREAM CONNECT ID=").append(_connectionId).append(" DESTINATION=").append(_remoteDestination);
@@ -450,10 +450,10 @@ public class SAMStreamSend {
                 }
             }
         }
-        
+
         public String getConnectionId() { return _connectionId; }
         public String getDestination() { return _remoteDestination; }
-        
+
         public void closed() {
             if (_closed) return;
             _closed = true;
@@ -461,7 +461,7 @@ public class SAMStreamSend {
             _context.statManager().addRateData("send." + _connectionId + ".lifetime", lifetime, lifetime);
             try { _in.close(); } catch (IOException ioe) {}
         }
-        
+
         public void run() {
             _started = _context.clock().now();
             _context.statManager().addRateData("send." + _connectionId + ".started", 1, 0);
@@ -473,14 +473,14 @@ public class SAMStreamSend {
                     int read = _in.read(data);
                     long now = _context.clock().now();
                     if (read == -1) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("EOF from the data for " + _connectionId + " after " + (now-lastSend));
                         break;
                     } else if (read > 0) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Sending " + read + " on " + _connectionId + " after " + (now-lastSend));
                         lastSend = now;
-                        
+
                         if (_samOut != null) {
                             synchronized (_samOut) {
                                 if (!_isV3 || _mode == V1DG || _mode == V1RAW) {
@@ -522,7 +522,7 @@ public class SAMStreamSend {
                             _dgSock.send(p);
                             try { Thread.sleep(25); } catch (InterruptedException ie) {}
                         }
-                        
+
                         _totalSent += read;
                         _context.statManager().addRateData("send." + _connectionId + ".totalSent", _totalSent, 0);
                     }
@@ -531,7 +531,7 @@ public class SAMStreamSend {
                     break;
                 }
             }
-            
+
             if (_samOut != null) {
                 if (_isV3) {
                     try {
@@ -552,10 +552,10 @@ public class SAMStreamSend {
                         _log.info("Error closing", ioe);
                     }
                 }
-            } else if (_dgSock != null) { 
+            } else if (_dgSock != null) {
                 _dgSock.close();
             }
-            
+
             closed();
             // stop the reader, since we're only doing this once for testing
             // you wouldn't do this in a real application
@@ -563,7 +563,7 @@ public class SAMStreamSend {
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException ie) {}
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Runner exiting");
             if (toSend != _totalSent)
                 _log.error("Only sent " + _totalSent + " of " + toSend + " bytes");

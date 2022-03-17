@@ -2,9 +2,9 @@ package net.i2p.util;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -71,7 +71,7 @@ class FileLogWriter extends LogWriter {
                 System.err.println("Error writing log, disk full? " + t);
             //t.printStackTrace();
         }
-        if (_numBytesInCurrentFile >= _manager.getFileSize()) {
+        if (_numBytesInCurrentFile >= _manager.getFileSize() - 1024) {
             rotateFile();
         }
     }
@@ -152,13 +152,13 @@ class FileLogWriter extends LogWriter {
             else
                 return f;
         }
-        
+
         int max = _manager.getRotationLimit();
         if (_rotationNum == -1) {
             return getFirstFile(base, pattern, max);
         }
-             
-        // we're in rotation, just go to the next  
+
+        // we're in rotation, just go to the next
         _rotationNum++;
         if (_rotationNum > max) _rotationNum = 0;
 

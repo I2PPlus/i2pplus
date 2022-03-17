@@ -473,7 +473,7 @@ class RatchetPayload {
             return off + 2;
         }
     }
-    
+
     /**
      * Big endian.
      * Same as DataHelper.toLong(target, offset, 4, value) but allows negative value

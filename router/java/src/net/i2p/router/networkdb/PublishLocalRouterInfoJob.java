@@ -84,7 +84,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
             return;
         }
         RouterInfo oldRI = getContext().router().getRouterInfo();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Old RouterInfo contains " + oldRI.getAddresses().size()
                        + " addresses and " + oldRI.getOptionsMap().size() + " options");
         try {
@@ -110,13 +110,13 @@ public class PublishLocalRouterInfoJob extends JobImpl {
                         }
                     }
                     if (!different) {
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Not republishing early because costs, caps and addresses are the same");
                         requeue(getDelay());
                         return;
                     }
                 }
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Republishing early because addresses or costs or caps have changed -" +
                               " Old Caps: " + oldRI.getCapabilities() + "; New Caps: " + newcaps +
                               "\nOLD:\n" +
@@ -135,7 +135,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
             }
             ri.sign(key);
             getContext().router().setRouterInfo(ri);
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Newly updated RouterInfo is published with " + stats.size() +
                           "/" + ri.getOptionsMap().size() + " options" +
                           "\n* Published: " + new Date(ri.getPublished()));

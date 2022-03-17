@@ -10,10 +10,10 @@
 *
 *	09/12/04
 *		- Oliver Newell <newell@media-rush.com>
-*		- Added this class to allow ControlPoint applications to 
+*		- Added this class to allow ControlPoint applications to
 *         be notified when the ControlPoint base class adds/removes
 *         a UPnP device
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.device;

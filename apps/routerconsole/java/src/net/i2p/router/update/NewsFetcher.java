@@ -230,7 +230,7 @@ class NewsFetcher extends UpdateRunner {
                     Map<String, String> args = parseArgs(buf.substring(index+VERSION_PREFIX.length()));
                     String ver = args.get(VERSION_KEY);
                     if (ver != null) {
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Router is running version: " + ver);
                         if (TrustedUpdate.needsUpdate(RouterVersion.VERSION, ver)) {
                             if (NewsHelper.isUpdateDisabled(_context)) {
@@ -278,7 +278,7 @@ class NewsFetcher extends UpdateRunner {
                                     return;
                                 }
                             }
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Router is out of date (" + ver + ") -> update advised!");
                             // TODO if minversion > our version, continue
                             // and look for a second entry with clearnet URLs
@@ -303,29 +303,29 @@ class NewsFetcher extends UpdateRunner {
                             //_mgr.notifyVersionAvailable(this, _currentURI, ROUTER_SIGNED,
                             //                            "", sourceMap, ver, "");
                         } else {
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Router is up to date (" + ver + ")");
                         }
                         return;
                     } else {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("No version in " + buf.toString());
                     }
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("No match in " + buf.toString());
                 }
                 buf.setLength(0);
             }
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error checking the news for an update", ioe);
             return;
         } finally {
             if (in != null) try { in.close(); } catch (IOException ioe) {}
         }
 
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("No version found in news.xml file");
     }
 
@@ -443,7 +443,7 @@ class NewsFetcher extends UpdateRunner {
      */
     @Override
     public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("News fetched from " + url + " with " + (alreadyTransferred+bytesTransferred));
 
         if (_tempFile.exists() && _tempFile.length() > 0) {
@@ -471,11 +471,11 @@ class NewsFetcher extends UpdateRunner {
                 _isNewer = true;
                 checkForUpdates();
             } else {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error("Failed to copy the news file!");
             }
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Transfer complete, but no file? - probably 304 Not Modified");
         }
         _success = true;

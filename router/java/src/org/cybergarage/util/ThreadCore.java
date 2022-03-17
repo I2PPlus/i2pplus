@@ -13,7 +13,7 @@
 *	08/23/07
 *		- Thanks for Kazuyuki Shudo
 *		- Changed stop() to stop more safety using Thread::interrupt().
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.util;
@@ -27,13 +27,13 @@ public class ThreadCore implements Runnable
 	public ThreadCore()
 	{
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Thread
 	////////////////////////////////////////////////
-	
+
 	private java.lang.Thread mThreadObject = null;
-	
+
 	public void setThreadObject(java.lang.Thread obj) {
 		mThreadObject = obj;
 	}
@@ -42,7 +42,7 @@ public class ThreadCore implements Runnable
 		return mThreadObject;
 	}
 
-	public void start() 
+	public void start()
 	{
 		java.lang.Thread threadObject = getThreadObject();
 		if (threadObject == null) {
@@ -51,7 +51,7 @@ public class ThreadCore implements Runnable
 			threadObject.start();
 		}
 	}
-	
+
 	public void run()
 	{
 	}
@@ -60,23 +60,23 @@ public class ThreadCore implements Runnable
 	{
 		return (Thread.currentThread() == getThreadObject()) ? true : false;
 	}
-	
-	public void stop() 
+
+	public void stop()
 	{
 		java.lang.Thread threadObject = getThreadObject();
-		if (threadObject != null) { 
+		if (threadObject != null) {
 			//threadObject.destroy();
 			//threadObject.stop();
-			
+
 			// Thanks for Kazuyuki Shudo (08/23/07)
 			threadObject.interrupt();
-			
+
 			setThreadObject(null);
 			// I2P break Disposer out of sleep()
 			threadObject.interrupt();
 		}
 	}
-	
+
 	public void restart()
 	{
 		stop();

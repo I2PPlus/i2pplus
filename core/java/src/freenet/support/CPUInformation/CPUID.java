@@ -570,7 +570,7 @@ public class CPUID {
             System.load(outFile.getAbsolutePath());//System.load requires an absolute path to the lib
         } catch (UnsatisfiedLinkError ule) {
             if (_doLog) {
-                System.err.println("WARNING: The resource " + resourceName 
+                System.err.println("WARNING: The resource " + resourceName
                                    + " was not a valid library for this platform " + ule);
                 //ule.printStackTrace();
             }

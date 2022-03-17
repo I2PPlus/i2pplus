@@ -367,7 +367,7 @@ public class Blocklist {
     private int readBlocklistFile(BLFile blf, long[] blocklist, int count) {
         File blFile = blf.file;
         if (blFile == null || (!blFile.exists()) || blFile.length() <= 0) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Blocklist file not found: " + blFile);
             return count;
         }
@@ -412,7 +412,7 @@ public class Blocklist {
                 }
             }
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldError())
                 _log.error("Error reading the blocklist file", ioe);
             return count;
         } catch (OutOfMemoryError oom) {
@@ -434,7 +434,7 @@ public class Blocklist {
         // save to tell the update manager
         if (read > 0)
             blf.version = blFile.lastModified();
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             _log.info("Stats for " + blFile);
             _log.info("Removed " + badcount + " bad entries and comment lines");
             _log.info("Read " + read + " valid entries from the blocklist " + blFile);
@@ -469,7 +469,7 @@ public class Blocklist {
             return 0;
         }
         int blocklistSize = count - removed;
-        if (_log.shouldLog(Log.INFO)) {
+        if (_log.shouldInfo()) {
             _log.info("Merged Stats:\n* " +
                       "Read " + count + " total entries from the blocklists\n* " +
                       "Merged " + removed + " overlapping entries\n* " +
@@ -620,7 +620,7 @@ public class Blocklist {
                     lines++;
             }
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Error reading the blocklist file", ioe);
             return 0;
         } finally {
@@ -1098,7 +1098,7 @@ public class Blocklist {
 
         if ((!blFile.exists()) || blFile.length() <= 0) {
             // just ban it and be done
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Banlisting " + peer);
             _context.banlist().banlistRouterForever(peer, " <b>➜</b> " + "Banned");
             return;
@@ -1131,14 +1131,14 @@ public class Blocklist {
                         //        reason = reason + '.';
                         //}
                         //reason = reason + " banned by " + BLOCKLIST_FILE_DEFAULT + " entry \"" + buf + "\"";
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Banlisting " + peer + " (Source: blocklist.txt)");
                         _context.banlist().banlistRouterForever(peer, reason, buf.toString());
                         return;
                     }
                 }
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error reading the blocklist file", ioe);
             } finally {
                 if (br != null) try { br.close(); } catch (IOException ioe) {}

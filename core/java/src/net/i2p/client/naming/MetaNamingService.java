@@ -23,13 +23,13 @@ import net.i2p.data.Destination;
  * Supports caching.
  */
 public class MetaNamingService extends DummyNamingService {
-    
+
     private final static String PROP_NAME_SERVICES = "i2p.nameservicelist";
-    private final static String DEFAULT_NAME_SERVICES = 
+    private final static String DEFAULT_NAME_SERVICES =
         "net.i2p.client.naming.HostsTxtNamingService";
 
     protected final List<NamingService> _services;
-    
+
     /**
      *  Adds the services from the i2p.nameservicelist property, in order, as chained services.
      */
@@ -47,7 +47,7 @@ public class MetaNamingService extends DummyNamingService {
             }
         }
     }
-    
+
     /**
      *  @param services if non-null, services to be added. If null, this will only handle b32 and b64,
      *                  until addNamingService() is called later.
@@ -62,7 +62,7 @@ public class MetaNamingService extends DummyNamingService {
             }
         }
     }
-    
+
     @Override
     public boolean addNamingService(NamingService ns, boolean head) {
         if (head)
@@ -84,14 +84,14 @@ public class MetaNamingService extends DummyNamingService {
 
     @Override
     public void registerListener(NamingServiceListener nsl) {
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
             ns.registerListener(nsl);
         }
     }
 
     @Override
     public void unregisterListener(NamingServiceListener nsl) {
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
             ns.unregisterListener(nsl);
         }
     }
@@ -106,7 +106,7 @@ public class MetaNamingService extends DummyNamingService {
         if (hostname.length() >= BASE32_HASH_LENGTH + 8 && hostname.toLowerCase(Locale.US).endsWith(".b32.i2p"))
             return null;
 
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
             d = ns.lookup(hostname, lookupOptions, storedOptions);
             if (d != null) {
                 putCache(hostname, d);
@@ -115,10 +115,10 @@ public class MetaNamingService extends DummyNamingService {
         }
         return null;
     }
-    
+
     @Override
     public String reverseLookup(Destination dest, Properties options) {
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
             String host = ns.reverseLookup(dest, options);
             if (host != null) {
                 return host;
@@ -160,7 +160,7 @@ public class MetaNamingService extends DummyNamingService {
     @Override
     public boolean remove(String hostname, Properties options) {
         boolean rv = false;
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
             if (ns.remove(hostname, options))
                 rv = true;
         }
@@ -175,7 +175,7 @@ public class MetaNamingService extends DummyNamingService {
     @Override
     public Map<String, Destination> getEntries(Properties options) {
         Map<String, Destination> rv = new HashMap<String, Destination>();
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
              rv.putAll(ns.getEntries(options));
         }
         return rv;
@@ -188,7 +188,7 @@ public class MetaNamingService extends DummyNamingService {
     @Override
     public Map<String, String> getBase64Entries(Properties options) {
         Map<String, String> rv = new HashMap<String, String>();
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
              rv.putAll(ns.getBase64Entries(options));
         }
         return rv;
@@ -200,7 +200,7 @@ public class MetaNamingService extends DummyNamingService {
     @Override
     public Set<String> getNames(Properties options) {
         Set<String> rv = new HashSet<String>();
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
              rv.addAll(ns.getNames(options));
         }
         return rv;
@@ -212,7 +212,7 @@ public class MetaNamingService extends DummyNamingService {
      *  @since 0.9.20
      */
     public void export(Writer out, Properties options) throws IOException {
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
              ns.export(out, options);
         }
     }
@@ -223,7 +223,7 @@ public class MetaNamingService extends DummyNamingService {
     @Override
     public int size(Properties options) {
         int rv = 0;
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
              int s = ns.size(options);
              if (s > 0)
                  rv += s;
@@ -232,7 +232,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     public void shutdown() {
-        for (NamingService ns : _services) { 
+        for (NamingService ns : _services) {
             ns.shutdown();
         }
     }

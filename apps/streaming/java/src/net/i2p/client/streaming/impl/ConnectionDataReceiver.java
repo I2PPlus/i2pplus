@@ -86,7 +86,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         if (con.getUnackedPacketsReceived() > 0)
             doSend = true;
 
-        if (_log.shouldLog(Log.INFO) && !doSend)
+        if (_log.shouldInfo() && !doSend)
             _log.info("writeData called: size="+size + " doSend=" + doSend
                        + " unackedReceived: " + con.getUnackedPacketsReceived()
                        + " con: " + con  /* , new Exception("write called by") */ );
@@ -139,9 +139,9 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         _connection.sendPacket(packet);
         //long sent = System.currentTimeMillis();
 
-        //if ( (built-before > 5*1000) && (_log.shouldLog(Log.WARN)) )
+        //if ( (built-before > 5*1000) && (_log.shouldWarn()) )
         //    _log.warn(took " + (built-before) + "ms to build a packet: " + packet);
-        //if ( (sent-built> 5*1000) && (_log.shouldLog(Log.WARN)) )
+        //if ( (sent-built> 5*1000) && (_log.shouldWarn()) )
         //    _log.warn(took " + (sent-built) + "ms to send a packet: " + packet);
         return packet;
     }
@@ -225,7 +225,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
             packet.setFlag(Packet.FLAG_CLOSE);
             _connection.notifyCloseSent();
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("New Outbound packet (ACKs not yet filled in): " + packet + " on " + _connection);
         return packet;
     }

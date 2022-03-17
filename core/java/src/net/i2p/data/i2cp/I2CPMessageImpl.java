@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -32,7 +32,7 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
     /**
      * Validate the type and size of the message, and then read the message into the data structures.  <p>
      *
-     * @throws IOException 
+     * @throws IOException
      */
     public void readMessage(InputStream in) throws I2CPMessageException, IOException {
         int length = 0;
@@ -95,10 +95,10 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
     protected abstract byte[] doWriteMessage() throws I2CPMessageException, IOException;
 
     /**
-     * Write out the full message to the stream, including the 4 byte size and 1 
+     * Write out the full message to the stream, including the 4 byte size and 1
      * byte type header.
      *
-     * @throws IOException 
+     * @throws IOException
      */
     public void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
         byte[] data = doWriteMessage();

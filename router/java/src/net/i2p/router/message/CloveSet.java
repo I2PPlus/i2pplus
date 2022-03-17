@@ -46,7 +46,7 @@ public class CloveSet {
     public long getExpiration() { return _expiration; }
 
     @Override
-    public String toString() { 
+    public String toString() {
 	StringBuilder buf = new StringBuilder(128);
 	buf.append("CloveSet: ID ").append(_msgId)
            .append(' ').append(_cert)

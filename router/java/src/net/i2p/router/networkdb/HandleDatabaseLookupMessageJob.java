@@ -79,7 +79,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
 
         // If we are hidden we should not get queries, log and return
         if (getContext().router().isHidden()) {
-            if (_log.shouldLog(Log.WARN)) {
+            if (_log.shouldWarn()) {
                 _log.warn("Uninvited dbLookup received with replies going to " + fromKey.toBase64().substring(0,6) +
                           "] -> [Tunnel " + toTunnel + "]");
             }
@@ -94,7 +94,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             return;
         }
 
-        if (_log.shouldLog(Log.DEBUG)) {
+        if (_log.shouldDebug()) {
             if (toTunnel != null)
                 _log.debug("DbLookup received with replies going to [" + fromKey.toBase64().substring(0,6) +
                            "] -> [Tunnel " + toTunnel + "]");
@@ -133,7 +133,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 // This is probably because we are floodfill, but also perhaps we used to be floodfill,
                 // so we don't check the answerAllQueries() flag.
                 // Local leasesets are not handled here
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("We have the published LeaseSet [" + searchKey.toBase64().substring(0,6) + "] - answering query");
                 getContext().statManager().addRateData("netDb.lookupsMatchedReceivedPublished", 1);
                 sendData(searchKey, ls, fromKey, toTunnel);
@@ -146,13 +146,13 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                                                                             CLOSENESS_THRESHOLD, null);
                 if (weAreClosest(closestHashes)) {
                     // It's in our keyspace, so give it to them
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("We have local LeaseSet [" + searchKey.toBase64().substring(0,6) + "] - answering query, in our keyspace");
                     getContext().statManager().addRateData("netDb.lookupsMatchedLocalClosest", 1);
                     sendData(searchKey, ls, fromKey, toTunnel);
                 } else {
                     // Lie, pretend we don't have it
-                    if (_log.shouldLog(Log.INFO))
+                    if (_log.shouldInfo())
                         _log.info("We have local LeaseSet [" + searchKey.toBase64().substring(0,6) + "] - NOT answering query, out of our keyspace");
                     getContext().statManager().addRateData("netDb.lookupsMatchedLocalNotClosest", 1);
                     Set<Hash> routerHashSet = getNearestRouters(lookupType);
@@ -163,7 +163,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 // or it's local and we aren't floodfill,
                 // or it's local and we don't publish it.
                 // Lie, pretend we don't have it
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("We have LeaseSet [" + searchKey.toBase64().substring(0,6) +
                                "] - NOT answering query - local? " + isLocal + " shouldPublish? " + shouldPublishLocal +
                                " RAP? " + ls.getReceivedAsPublished() + " RAR? " + ls.getReceivedAsReply());
@@ -176,13 +176,13 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             RouterInfo info = (RouterInfo) dbe;
             if (info.isCurrent(EXPIRE_DELAY)) {
                 if ( (info.isHidden()) || (isUnreachable(info) && !publishUnreachable()) ) {
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("Not answering a query for a netDb peer who isn't reachable");
                     Set<Hash> us = Collections.singleton(getContext().routerHash());
                     sendClosest(searchKey, us, fromKey, toTunnel);
                 } else {
                     // send that routerInfo to the _message.getFromHash peer
-                    if (_log.shouldLog(Log.DEBUG))
+                    if (_log.shouldDebug())
                         _log.debug("We do have key [" + searchKey.toBase64().substring(0,6) +
                                    "] locally as a router info; sending to [" + fromKey.toBase64().substring(0,6) + "]");
                     sendData(searchKey, info, fromKey, toTunnel);
@@ -200,7 +200,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 //     }
                 // }
 
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Expired [" + searchKey.toBase64().substring(0,6) +
                                "] locally; sending back " + routerHashSet.size() + " peers to [" + fromKey.toBase64().substring(0,6) + "]");
                 sendClosest(searchKey, routerHashSet, fromKey, toTunnel);
@@ -208,7 +208,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         } else {
             // not found locally - return closest peer hashes
             Set<Hash> routerHashSet = getNearestRouters(lookupType);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("We don't have key [" + searchKey.toBase64().substring(0,6) +
                            "] locally; sending back " + routerHashSet.size() + " peers to [" + fromKey.toBase64().substring(0,6) + "]");
             sendClosest(searchKey, routerHashSet, fromKey, toTunnel);
@@ -268,7 +268,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             _log.error("Hash mismatch HDLMJ");
             return;
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending data matching key " + key + " to peer " + toPeer
                        + " tunnel " + replyTunnel);
         DatabaseStoreMessage msg = new DatabaseStoreMessage(getContext());
@@ -282,7 +282,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
     }
 
     protected void sendClosest(Hash key, Set<Hash> routerHashes, Hash toPeer, TunnelId replyTunnel) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending " +  routerHashes.size() + " of our closest routers to [" + key.toBase64().substring(0,6) + "]"
                        + " -> [Tunnel " + replyTunnel + "]");
         DatabaseSearchReplyMessage msg = new DatabaseSearchReplyMessage(getContext());
@@ -302,7 +302,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         if (replyTunnel != null) {
             sendThroughTunnel(message, toPeer, replyTunnel);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Sending reply directly to [" + toPeer.toBase64().substring(0,6) + "]");
             Job send = new SendMessageDirectJob(getContext(), message, toPeer, REPLY_TIMEOUT, MESSAGE_PRIORITY);
             send.runJob();
@@ -327,12 +327,12 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                     // encrypt the reply
                     SessionTag tag = _message.getReplyTag();
                     if (tag != null) {
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Sending AES reply to [" + toPeer.toBase64().substring(0,6) + "] \n* Key: " + replyKey + " \n* Session Tag: " + tag);
                         message = MessageWrapper.wrap(getContext(), message, replyKey, tag);
                     } else {
                         RatchetSessionTag rtag = _message.getRatchetReplyTag();
-                        if (_log.shouldLog(Log.INFO))
+                        if (_log.shouldInfo())
                             _log.info("Sending AEAD reply to [" + toPeer.toBase64().substring(0,6) + "] \n* Key: " + replyKey + " \n* Session Tag (ratchet): " + rtag);
                         message = MessageWrapper.wrap(getContext(), message, replyKey, rtag);
                     }

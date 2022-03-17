@@ -1,8 +1,8 @@
 /*
  * Created on Sep 02, 2005
- * 
+ *
  *  This file is part of susidns project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2005 <susi23@mail.i2p>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  * $Revision: 1.2 $
  */
 
@@ -33,10 +33,10 @@ public class AddressByNameSorter implements Comparator<AddressBean>, Serializabl
 	{
 		if( a == null )
 			return 1;
-		
+
 		if( b == null )
 			return -1;
-		
+
 		return a.getDisplayName().compareToIgnoreCase(b.getDisplayName());
-	}	
+	}
 }

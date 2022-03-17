@@ -15,10 +15,10 @@
 
 package org.cybergarage.upnp.device;
 
-public class MAN 
+public class MAN
 {
 	public final static String DISCOVER = "ssdp:discover";
-	
+
 	public final static boolean isDiscover(String value)
 	{
 		if (value == null)

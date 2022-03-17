@@ -30,7 +30,7 @@ class SchedulerClosed extends SchedulerImpl {
     public SchedulerClosed(I2PAppContext ctx) {
         super(ctx);
     }
-    
+
     public boolean accept(Connection con) {
         if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getCloseSentOn();
@@ -40,12 +40,12 @@ class SchedulerClosed extends SchedulerImpl {
                      (con.getUnackedPacketsSent() <= 0) &&
                      (!con.getResetReceived()) &&
                      (timeSinceClose < Connection.DISCONNECT_TIMEOUT);
-        boolean conTimeout = (con.getOptions().getConnectTimeout() < con.getLifetime()) && 
+        boolean conTimeout = (con.getOptions().getConnectTimeout() < con.getLifetime()) &&
                              con.getSendStreamId() <= 0 &&
                              con.getLifetime() < Connection.DISCONNECT_TIMEOUT;
         return (ok || conTimeout);
     }
-    
+
     public void eventOccurred(Connection con) {
         // noop.  we do the timeout through the simpleTimer anyway
         //long timeLeft = con.getCloseSentOn() + Connection.DISCONNECT_TIMEOUT - _context.clock().now();

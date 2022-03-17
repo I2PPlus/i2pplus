@@ -1,9 +1,9 @@
 package net.i2p.util;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -39,11 +39,11 @@ import net.i2p.data.DataHelper;
 
 /**
  * <p>BigInteger that takes advantage of the jbigi library for the modPow operation,
- * which accounts for a massive segment of the processing cost of asymmetric 
+ * which accounts for a massive segment of the processing cost of asymmetric
  * crypto.
- * 
- * The jbigi library itself is basically just a JNI wrapper around the 
- * GMP library - a collection of insanely efficient routines for dealing with 
+ *
+ * The jbigi library itself is basically just a JNI wrapper around the
+ * GMP library - a collection of insanely efficient routines for dealing with
  * big numbers.</p>
  *
  * There are three environmental properties for configuring this component: <ul>
@@ -53,37 +53,37 @@ import net.i2p.data.DataHelper;
  *                       name to override jbigi.impl (defaults to "jbigi.cfg")</li>
  * </ul>
  *
- * <p>If jbigi.enable is set to false, this class won't even attempt to use the 
- * native library, but if it is set to true (or is not specified), it will first 
- * check the platform specific library path for the "jbigi" library, as defined by 
+ * <p>If jbigi.enable is set to false, this class won't even attempt to use the
+ * native library, but if it is set to true (or is not specified), it will first
+ * check the platform specific library path for the "jbigi" library, as defined by
  * {@link Runtime#loadLibrary} - e.g. C:\windows\jbigi.dll or /lib/libjbigi.so, as
- * well as the CLASSPATH for a resource named 'jbigi'.  If that fails, it reviews 
- * the jbigi.impl environment property - if that is set, it checks all of the 
- * components in the CLASSPATH for the file specified and attempts to load it as 
- * the native library.  If jbigi.impl is not set, it uses the jcpuid library 
- * described below.  If there is still no matching resource, or if that resource 
- * is not a valid OS/architecture specific library, the NativeBigInteger will 
+ * well as the CLASSPATH for a resource named 'jbigi'.  If that fails, it reviews
+ * the jbigi.impl environment property - if that is set, it checks all of the
+ * components in the CLASSPATH for the file specified and attempts to load it as
+ * the native library.  If jbigi.impl is not set, it uses the jcpuid library
+ * described below.  If there is still no matching resource, or if that resource
+ * is not a valid OS/architecture specific library, the NativeBigInteger will
  * revert to using the pure java implementation.</p>
- * 
+ *
  * <p>When attempting to load the native implementation as a resource from the CLASSPATH,
- * the NativeBigInteger will make use of the jcpuid component which runs some assembly 
+ * the NativeBigInteger will make use of the jcpuid component which runs some assembly
  * code to determine the current CPU implementation, such as "pentium4" or "k623".
- * We then use that, combined with the OS, to build an optimized resource name - e.g. 
+ * We then use that, combined with the OS, to build an optimized resource name - e.g.
  * "net/i2p/util/libjbigi-freebsd-pentium4.so" or "net/i2p/util/jbigi-windows-k623.dll".
- * If that resource exists, we use it.  If it doesn't (or the jcpuid component fails), 
- * we try a generic native implementation using "none" for the CPU (ala 
+ * If that resource exists, we use it.  If it doesn't (or the jcpuid component fails),
+ * we try a generic native implementation using "none" for the CPU (ala
  * "net/i2p/util/jbigi-windows-none.dll").</p>
  *
  * <p>Running this class by itself does a basic unit test and benchmarks the
  * NativeBigInteger.modPow vs. the BigInteger.modPow by running a 2Kbit op 100
- * times.  At the end of each test, if the native implementation is loaded this will output 
+ * times.  At the end of each test, if the native implementation is loaded this will output
  * something like:</p>
  * <pre>
  *  native run time:        6090ms (60ms each)
  *  java run time:          68067ms (673ms each)
  *  native = 8.947066860593239% of pure java time
  * </pre>
- * 
+ *
  * <p>If the native implementation is not loaded, it will start by saying:</p>
  * <pre>
  *  WARN: Native BigInteger library jbigi not loaded - using pure java
@@ -108,8 +108,8 @@ public class NativeBigInteger extends BigInteger {
     private static String _cpuModel = "uninitialized";
     private static String _extractedResource;
 
-    /** 
-     * do we want to dump some basic success/failure info to stderr during 
+    /**
+     * do we want to dump some basic success/failure info to stderr during
      * initialization?  this would otherwise use the Log component, but this makes
      * it easier for other systems to reuse this class
      *
@@ -122,7 +122,7 @@ public class NativeBigInteger extends BigInteger {
     private static boolean _doLog = System.getProperty("jbigi.dontLog") == null &&
                                     I2PAppContext.getCurrentContext() != null &&
                                     I2PAppContext.getCurrentContext().isRouterContext();
-    
+
     /**
      *  The following libraries are be available in jbigi.jar in all I2P versions
      *  originally installed as release 0.6.1.10 or later (released 2006-01-16),
@@ -184,7 +184,7 @@ public class NativeBigInteger extends BigInteger {
      * @since 0.8.7
      */
     private final static String JBIGI_OPTIMIZATION_PPC        = "ppc";
-    
+
     /**
      * ARM
      * @since 0.9.26
@@ -198,21 +198,21 @@ public class NativeBigInteger extends BigInteger {
     private final static String JBIGI_OPTIMIZATION_ARM_CORTEX_A8       = "armcortexa8";
     private final static String JBIGI_OPTIMIZATION_ARM_CORTEX_A9       = "armcortexa9";
     private final static String JBIGI_OPTIMIZATION_ARM_CORTEX_A15      = "armcortexa15";
-    
+
     /**
      * None, no optimizations. The default fallback for x86.
      * @since 0.9.26
      */
     private final static String JBIGI_OPTIMIZATION_X86       = "none";
-    
+
     /**
      * CPU architecture compatibility lists, in order of preference.
-     * 
+     *
      * The list is organized by the chronological evolution of architectures.
      * Totally unrelated architectures have separate lists. Sequences of
      * architectures that aren't backwards compatible (performance wise) for
      * some reasons have also been separated out.
-     * 
+     *
      * Really this could be represented by a DAG, but the benefits don't
      * outweigh the implementation time.
      */
@@ -344,12 +344,12 @@ public class NativeBigInteger extends BigInteger {
     private static final String _libSuffix = (_isWin || _isOS2 ? ".dll" : _isMac ? ".jnilib" : ".so");
 
     private final static String sCPUType; //The CPU Type to optimize for (one of the above strings)
-    
+
     static {
         sCPUType = resolveCPUType();
         loadNative();
     }
-    
+
     /**
       * Tries to resolve the best type of CPU that we have an optimized jbigi-dll/so for.
       * This is for x86 only.
@@ -444,7 +444,7 @@ public class NativeBigInteger extends BigInteger {
             Map<String, String> cpuinfo = getCPUInfo();
             String implementer = cpuinfo.get("cpu implementer");
             String part = cpuinfo.get("cpu part");
-            
+
             // If CPU implementer is ARM
             if (implementer != null && part != null && implementer.contains("0x41")) {
                 if (part.contains("0xc0f")) {
@@ -503,10 +503,10 @@ public class NativeBigInteger extends BigInteger {
                 if (model.contains("ARMv5"))
                     return JBIGI_OPTIMIZATION_ARM_ARMV5;
             }
-                
+
             if (_is64)
                 return JBIGI_OPTIMIZATION_ARM_ARMV8;
-                
+
             // If we didn't find a match, return null
             return null;
         } else if (_isPPC && !_isMac) {
@@ -518,7 +518,7 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * calculate (base ^ exponent) % modulus.
-     * 
+     *
      * @param base
      *            big endian twos complement representation of the base (but it must be positive)
      * @param exponent
@@ -533,7 +533,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      * calculate (base ^ exponent) % modulus.
      * Constant Time.
-     * 
+     *
      * @param base
      *            big endian twos complement representation of the base (but it must be positive)
      * @param exponent
@@ -551,7 +551,7 @@ public class NativeBigInteger extends BigInteger {
      *  @throws ArithmeticException
      */
     private native static byte[] nativeModInverse(byte base[], byte d[]);
- 
+
     /**
      *  Only for testing jbigi's negative conversion functions!
      *  @since 0.9.26
@@ -564,19 +564,19 @@ public class NativeBigInteger extends BigInteger {
      *  @since 0.9.26
      */
     private native static int nativeJbigiVersion();
- 
+
     /**
      *  Get the libmp version, only available since jbigi version 3
      *  @since 0.9.26
      */
     private native static int nativeGMPMajorVersion();
- 
+
     /**
      *  Get the libmp version, only available since jbigi version 3
      *  @since 0.9.26
      */
     private native static int nativeGMPMinorVersion();
- 
+
     /**
      *  Get the libmp version, only available since jbigi version 3
      *  @since 0.9.26
@@ -727,22 +727,22 @@ public class NativeBigInteger extends BigInteger {
             cachedBa = super.toByteArray();
         return cachedBa;
     }
-    
+
     /**
-     * 
+     *
      * @return True iff native methods will be used by this class
      */
     public static boolean isNative(){
         return _nativeOk;
     }
- 
+
     /**
      * @return A string suitable for display to the user
      */
     public static String loadStatus() {
         return _loadStatus;
     }
- 
+
     /**
      *  The name of the library loaded, if known.
      *  Null if unknown or not loaded.
@@ -753,22 +753,22 @@ public class NativeBigInteger extends BigInteger {
     public static String getLoadedResourceName() {
         return _extractedResource;
     }
- 
+
     public static String cpuType() {
         if (sCPUType != null)
             return sCPUType;
         return "unrecognized";
     }
- 
+
     public static String cpuModel() {
         return _cpuModel;
     }
- 
+
     /**
-     * <p>Compare the BigInteger.modPow vs the NativeBigInteger.modPow of some 
-     * really big (2Kbit) numbers 100 different times and benchmark the 
+     * <p>Compare the BigInteger.modPow vs the NativeBigInteger.modPow of some
+     * really big (2Kbit) numbers 100 different times and benchmark the
      * performance.</p>
-     * 
+     *
      * @param args -n Disable native test
      *
      */
@@ -964,7 +964,7 @@ public class NativeBigInteger extends BigInteger {
             System.out.println("However, we couldn't load the native library, so this doesn't test much");
         }
     }
-    
+
     /**
      * <p>Do whatever we can to load up the native library backing this BigInteger's native methods.
      * If it can find a custom built jbigi.dll / libjbigi.so, it'll use that.  Otherwise
@@ -1030,13 +1030,13 @@ public class NativeBigInteger extends BigInteger {
             warn("Native BigInteger library jbigi not loaded, using pure java", e);
         }
     }
-    
+
     /** @since 0.8.7 */
     private static void debug(String s) {
         I2PAppContext.getGlobalContext().logManager().getLog(NativeBigInteger.class).debug(s);
     }
 
-    
+
     private static void info(String s) {
         if(_doLog)
             System.err.println("INFO: " + s);
@@ -1061,12 +1061,12 @@ public class NativeBigInteger extends BigInteger {
         else
             _loadStatus = s;
     }
-    
+
     /** @since 0.9.26 */
     private static void error(String s) {
         error(s, null);
     }
-    
+
     /** @since 0.9.26 */
     private static void error(String s, Throwable t) {
         if(_doLog) {
@@ -1080,9 +1080,9 @@ public class NativeBigInteger extends BigInteger {
         else
             _loadStatus = s;
     }
-    
-    /** 
-     * <p>Try loading it from an explictly build jbigi.dll / libjbigi.so first, before 
+
+    /**
+     * <p>Try loading it from an explictly build jbigi.dll / libjbigi.so first, before
      * looking into a jbigi.jar for any other libraries.</p>
      *
      * @return true if it was loaded successfully, else false
@@ -1110,18 +1110,18 @@ public class NativeBigInteger extends BigInteger {
             return false;
         }
     }
-    
+
     /**
-     * <p>Check all of the jars in the classpath for the file specified by the 
-     * environmental property "jbigi.impl" and load it as the native library 
+     * <p>Check all of the jars in the classpath for the file specified by the
+     * environmental property "jbigi.impl" and load it as the native library
      * implementation.  For instance, a windows user on a p4 would define
-     * -Djbigi.impl=win-686 if there is a jbigi.jar in the classpath containing the 
-     * files "win-686", "win-athlon", "freebsd-p4", "linux-p3", where each 
+     * -Djbigi.impl=win-686 if there is a jbigi.jar in the classpath containing the
+     * files "win-686", "win-athlon", "freebsd-p4", "linux-p3", where each
      * of those files contain the correct binary file for a native library (e.g.
      * windows DLL, or a *nix .so).  </p>
-     * 
+     *
      * <p>This is a pretty ugly hack, using the general technique illustrated by the
-     * onion FEC libraries.  It works by pulling the resource, writing out the 
+     * onion FEC libraries.  It works by pulling the resource, writing out the
      * byte stream to a temporary file, loading the native library from that file.
      * We then attempt to copy the file from the temporary dir to the base install dir,
      * so we don't have to do this next time - but we don't complain if it fails,
@@ -1182,7 +1182,7 @@ public class NativeBigInteger extends BigInteger {
         FileUtil.copy(outFile, newFile, false, true);
         return true;
     }
-    
+
     /**
      *  Generate a list of resources to search for, in-order.
      *  See loadNative() comments for more info.
@@ -1200,7 +1200,7 @@ public class NativeBigInteger extends BigInteger {
         if (primary != null && compatList == null) {
             error("A bug relating to how jbigi is loaded for \"" + primary + "\" has been spotted");
         }
-        
+
         if (primary != null &&
             compatList != null) {
             // Add all architectural parents of this arch to the resource list
@@ -1218,13 +1218,13 @@ public class NativeBigInteger extends BigInteger {
                 }
                 rv.add(_libPrefix + middle + compatList[i] + _libSuffix);
             }
-            
+
             if (rv.isEmpty()) {
                 error("Couldn't find the arch \"" + primary + "\" in its compatibility map \"" +
                       primary + ": " + Arrays.toString(compatList) + "\"");
             }
         }
-        
+
         //System.out.println("Primary: " + primary);
         //System.out.println("ResourceList: " + rv.toString());
         return rv;
@@ -1272,7 +1272,7 @@ public class NativeBigInteger extends BigInteger {
         return _libPrefix + middle + _libSuffix;
     }
 ****/
-    
+
     /**
      *  @return may be null if optimized is true; returns jbigi-xxx-none if optimize is false
      */

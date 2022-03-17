@@ -31,7 +31,7 @@ public class Messages {
     public static String getString(String s, Object o, Object o2) {
         return Translate.getString(s, o, o2, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
     }
-    
+
     public static String getString(int n, String s, String p) {
         return Translate.getString(n, s, p, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
     }

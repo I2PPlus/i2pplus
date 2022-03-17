@@ -25,13 +25,13 @@ class UpdateHandler implements Updater {
     private final I2PAppContext _context;
     private final UpdateManager _umgr;
     private final SnarkManager _smgr;
-    
+
     public UpdateHandler(I2PAppContext ctx, UpdateManager umgr, SnarkManager smgr) {
         _context = ctx;
         _umgr = umgr;
         _smgr = smgr;
     }
-    
+
     /**
      *  Start a download and return a handle to the download task.
      *  Should not block.

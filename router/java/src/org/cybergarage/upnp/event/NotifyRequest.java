@@ -33,7 +33,7 @@
 *		- Error :  the other xml nodes of the message are ignored
 *		- Fix : add two methods to the NotifyRequest for extracting the property array
 *                and modify the httpRequestRecieved method in ControlPoint
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.event;
@@ -49,11 +49,11 @@ public class NotifyRequest extends SOAPRequest
 	private final static String XMLNS = "e";
 	private final static String PROPERTY = "property";
 	private final static String PROPERTYSET = "propertyset";
-	 
+
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public NotifyRequest()
 	{
 	}
@@ -121,7 +121,7 @@ public class NotifyRequest extends SOAPRequest
 		String host = sub.getDeliveryHost();
 		String path = sub.getDeliveryPath();
 		int port = sub.getDeliveryPort();
-		
+
 		setMethod(HTTP.NOTIFY);
 		setURI(path);
 		setHost(host, port);
@@ -132,29 +132,29 @@ public class NotifyRequest extends SOAPRequest
 
 		setContentType(XML.DEFAULT_CONTENT_TYPE);
 		Node propSetNode = createPropertySetNode(varName, value);
-		setContent(propSetNode);		
+		setContent(propSetNode);
 
-		return true;			
+		return true;
 	}
-	
+
 	private Node createPropertySetNode(String varName, String value)
 	{
 		Node propSetNode = new Node(/*XMLNS + SOAP.DELIM + */PROPERTYSET);
-		
+
 		propSetNode.setNameSpace(XMLNS, Subscription.XMLNS);
 
 		Node propNode = new Node(/*XMLNS + SOAP.DELIM + */PROPERTY);
 		propSetNode.addNode(propNode);
-		
+
 		// Thanks for Giordano Sassaroli <sassarol@cefriel.it> (05/22/03)
 		//Node varNameNode = new Node(XMLNS + SOAP.DELIM + varName);
 		Node varNameNode = new Node(varName);
 		varNameNode.setValue(value);
 		propNode.addNode(varNameNode);
-		
+
 		return propSetNode;
 	}
-	
+
 	private Node getVariableNode()
 	{
 		Node rootNode = getEnvelopeNode();
@@ -169,7 +169,7 @@ public class NotifyRequest extends SOAPRequest
 	}
 
 	// Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/08/03)
-	private Property getProperty(Node varNode) 
+	private Property getProperty(Node varNode)
 	{
 		Property prop = new Property();
 		if (varNode == null)
@@ -201,5 +201,5 @@ public class NotifyRequest extends SOAPRequest
 		}
 		return properties;
 	}
-	
-}	
+
+}

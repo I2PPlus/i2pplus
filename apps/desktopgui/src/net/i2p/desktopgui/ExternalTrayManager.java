@@ -21,7 +21,7 @@ import net.i2p.desktopgui.router.RouterManager;
  *  Not fully supported.
  */
 class ExternalTrayManager extends TrayManager {
-	
+
     public ExternalTrayManager(I2PAppContext ctx, boolean useSwing) {
         super(ctx, useSwing);
     }
@@ -38,7 +38,7 @@ class ExternalTrayManager extends TrayManager {
                         RouterManager.start();
                         return null;
                     }
-                    
+
                     @Override
                     protected void done() {
                         trayIcon.displayMessage(_t("Starting"), _t("I2P is starting!"), TrayIcon.MessageType.INFO);
@@ -66,7 +66,7 @@ class ExternalTrayManager extends TrayManager {
                         RouterManager.start();
                         return null;
                     }
-                    
+
                     @Override
                     protected void done() {
                         trayIcon.displayMessage(_t("Starting"), _t("I2P is starting!"), TrayIcon.MessageType.INFO);

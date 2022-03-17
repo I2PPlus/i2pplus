@@ -22,7 +22,7 @@ package com.maxmind.geoip;
 
 /**
  * Represents a country.
- * 
+ *
  * @author Matt Tucker
  */
 public class Country {
@@ -32,7 +32,7 @@ public class Country {
 
 	/**
 	 * Creates a new Country.
-	 * 
+	 *
 	 * @param code
 	 *            the country code.
 	 * @param name
@@ -45,7 +45,7 @@ public class Country {
 
 	/**
 	 * Returns the ISO two-letter country code of this country.
-	 * 
+	 *
 	 * @return the country code.
 	 */
 	public String getCode() {
@@ -54,7 +54,7 @@ public class Country {
 
 	/**
 	 * Returns the name of this country.
-	 * 
+	 *
 	 * @return the country name.
 	 */
 	public String getName() {

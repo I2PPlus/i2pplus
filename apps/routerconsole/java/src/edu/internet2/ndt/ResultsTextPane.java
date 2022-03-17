@@ -4,12 +4,12 @@ import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
 
 /*
  * Class that extends TextPane. This Text-pane is used as the chief
- * Results window that summarizes the results of all tests 
+ * Results window that summarizes the results of all tests
  * that have been run.
- * 
+ *
  * This class is declared separately so that it can be easily extended
  * by users to customize based on individual needs
- * 
+ *
  */
 public class ResultsTextPane extends JTextPane {
 
@@ -20,7 +20,7 @@ public class ResultsTextPane extends JTextPane {
 
 	/**
 	 * Method to append String into the current document
-	 * 
+	 *
 	 * @param paramTextStr
 	 *            String to be inserted into the document
 	 **/
@@ -36,7 +36,7 @@ public class ResultsTextPane extends JTextPane {
 	 * JTextPane method to insert a component into the document as a replacement
 	 * for currently selected content. If no selection is made, the the
 	 * component is inserted at the current position of the caret.
-	 * 
+	 *
 	 * @param paramCompObj
 	 *            the component to insert
 	 * */

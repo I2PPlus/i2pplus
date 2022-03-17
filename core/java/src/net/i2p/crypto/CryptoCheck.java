@@ -4,7 +4,7 @@ import java.security.GeneralSecurityException;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-/** 
+/**
  * Moved from CryptixAESEngine and net.i2p.router.tasks.CryptoChecker.
  * This class does not do any logging. See CryptoChecker for the logging.
  *

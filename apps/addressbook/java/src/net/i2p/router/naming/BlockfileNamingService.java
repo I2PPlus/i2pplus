@@ -1,8 +1,8 @@
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by mihi in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by mihi in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  */
 package net.i2p.router.naming;
@@ -143,7 +143,7 @@ public class BlockfileNamingService extends DummyNamingService {
     private static final String PROP_SOURCE = "s";
     // See susidns
     //private static final String PROP_VALIDATED = "v";
-    
+
     private static final String DUMMY = "";
     private static final int NEGATIVE_CACHE_SIZE = 32;
     private static final int MAX_VALUE_LENGTH = 4096;
@@ -292,7 +292,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 total += count;
                 _log.logAlways(Log.INFO, "Migrating " + count + " hosts from " + file + " to new hosts database");
             }
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("DB init took " + DataHelper.formatDuration(_context.clock().now() - start));
             if (total <= 0)
                 _log.logAlways(Log.WARN, "No hosts.txt files found, Initialized hosts database with zero entries");
@@ -343,12 +343,12 @@ public class BlockfileNamingService extends DummyNamingService {
             }
             _needsUpgrade = needsUpgrade(bf);
             if (_needsUpgrade) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Upgrading database from version " + _version + " to " + VERSION +
                               ", created " + (new Date(createdOn)).toString() +
                               " containing lists: " + list);
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Found database version " + _version +
                               " created " + (new Date(createdOn)).toString() +
                               " containing lists: " + list);
@@ -359,7 +359,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 skiplists.add(FALLBACK_LIST);
             _lists.addAll(skiplists);
 
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("DB init took " + DataHelper.formatDuration(_context.clock().now() - start));
             return bf;
         } catch (RuntimeException e) {
@@ -402,7 +402,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 SkipList<Integer, Properties> rev = _bf.getIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
                 if (rev == null) {
                     rev = _bf.makeIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Created reverse index");
                 }
                 setVersion("2");
@@ -418,7 +418,7 @@ public class BlockfileNamingService extends DummyNamingService {
                      i++;
                 }
                 // i may be greater than skiplist keys if there are dups
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Updated reverse index with " + i + " entries");
                 setVersion("3");
             }
@@ -438,7 +438,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 Properties info = hdr.get(PROP_INFO);
                 if (info == null)
                     throw new IOException("No header info");
-                for (String list : _lists) { 
+                for (String list : _lists) {
                     try {
                         // so that we can handle an aborted upgrade,
                         // we keep track of the version of each list
@@ -491,7 +491,7 @@ public class BlockfileNamingService extends DummyNamingService {
         info.setProperty(PROP_VERSION, version);
         info.setProperty(PROP_UPGRADED, Long.toString(_context.clock().now()));
         hdr.put(PROP_INFO, info);
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Upgraded database from version " + _version + " to version " + version);
         _version = version;
     }
@@ -600,7 +600,7 @@ public class BlockfileNamingService extends DummyNamingService {
             rv.add(tok.nextToken());
         return rv;
     }
-    
+
     /**
      *  Caller must synchronize
      *  @return removed object or null
@@ -738,14 +738,14 @@ public class BlockfileNamingService extends DummyNamingService {
      *  @since 0.8.9
      */
     private static Integer getReverseKey(Destination dest) {
-        return getReverseKey(dest.calculateHash());        
+        return getReverseKey(dest.calculateHash());
     }
 
     /**
      *  @since 0.8.9
      */
     private static Integer getReverseKey(Hash hash) {
-        byte[] hashBytes = hash.getData();        
+        byte[] hashBytes = hash.getData();
         int i = (int) DataHelper.fromLong(hashBytes, 0, 4);
         return Integer.valueOf(i);
     }
@@ -805,7 +805,7 @@ public class BlockfileNamingService extends DummyNamingService {
         synchronized(_bf) {
             if (_isClosed)
                 return null;
-            for (String list : _lists) { 
+            for (String list : _lists) {
                 if (listname != null && !list.equals(listname))
                     continue;
                 try {
@@ -867,7 +867,7 @@ public class BlockfileNamingService extends DummyNamingService {
         synchronized(_bf) {
             if (_isClosed)
                 return null;
-            for (String list : _lists) { 
+            for (String list : _lists) {
                 if (listname != null && !list.equals(listname))
                     continue;
                 try {
@@ -966,7 +966,7 @@ public class BlockfileNamingService extends DummyNamingService {
                     // removeReverseEntry(key, oldDest) ???
                 }
                 addReverseEntry(key, d);
-                for (NamingServiceListener nsl : _listeners) { 
+                for (NamingServiceListener nsl : _listeners) {
                     if (changed)
                         nsl.entryChanged(this, hostname, d, options);
                     else
@@ -1041,7 +1041,7 @@ public class BlockfileNamingService extends DummyNamingService {
                     Destination d = dests.get(i);
                     Properties options = propsList.get(i);
                     addReverseEntry(key, d);
-                    for (NamingServiceListener nsl : _listeners) { 
+                    for (NamingServiceListener nsl : _listeners) {
                         if (changed)
                             nsl.entryChanged(this, hostname, d, options);
                         else
@@ -1093,7 +1093,7 @@ public class BlockfileNamingService extends DummyNamingService {
                     } catch (ClassCastException cce) {
                         _log.error("DB reverse remove error", cce);
                     }
-                    for (NamingServiceListener nsl : _listeners) { 
+                    for (NamingServiceListener nsl : _listeners) {
                         nsl.entryRemoved(this, key);
                     }
                 }
@@ -1150,7 +1150,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 skip = Integer.parseInt(sk);
             } catch (NumberFormatException nfe) {}
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Searching " + listname + " beginning with " + beginWith +
                        " starting with " + startsWith + " search string " + search +
                        " limit=" + limit + " skip=" + skip);
@@ -1160,7 +1160,7 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 SkipList<String, DestEntry> sl = _bf.getIndex(listname, _stringSerializer, _destSerializer);
                 if (sl == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No skiplist found for lookup in " + listname);
                     return Collections.emptyMap();
                 }
@@ -1254,7 +1254,7 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 SkipList<String, DestEntry> sl = _bf.getIndex(listname, _stringSerializer, _destSerializer);
                 if (sl == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No skiplist found for lookup in " + listname);
                     return Collections.emptyMap();
                 }
@@ -1346,7 +1346,7 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 SkipList<String, DestEntry> sl = _bf.getIndex(listname, _stringSerializer, _destSerializer);
                 if (sl == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No skiplist found for lookup in " + listname);
                     return;
                 }
@@ -1479,7 +1479,7 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 SkipList<String, DestEntry> sl = _bf.getIndex(listname, _stringSerializer, _destSerializer);
                 if (sl == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No skiplist found for lookup in " + listname);
                     return Collections.emptySet();
                 }
@@ -1796,7 +1796,7 @@ public class BlockfileNamingService extends DummyNamingService {
         synchronized(_bf) {
             if (_isClosed)
                 _log.error("Database is closed");
-            for (String list : _lists) { 
+            for (String list : _lists) {
                 try {
                     SkipList sl = _bf.getIndex(list, _stringSerializer, _destSerializer);
                     if (sl == null) {
@@ -1828,10 +1828,10 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 _bf.close();
             } catch (IOException ioe) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error closing", ioe);
             } catch (RuntimeException e) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Error closing", e);
             }
             try {
@@ -2055,7 +2055,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *                             (not including the two length bytes) is greater than 65535 bytes.
      * @since 0.9.26
      */
-    private static void writeProperties(ByteArrayOutputStream rawStream, Properties p) 
+    private static void writeProperties(ByteArrayOutputStream rawStream, Properties p)
             throws DataFormatException, IOException {
         if (p != null && !p.isEmpty()) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(p.size() * 32);
@@ -2088,7 +2088,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * @return a Properties
      * @since 0.9.26
      */
-    public static Properties readProperties(ByteArrayInputStream in) 
+    public static Properties readProperties(ByteArrayInputStream in)
         throws DataFormatException, IOException {
         Properties props = new Properties();
         int size = (int) DataHelper.readLong(in, 2);
@@ -2121,7 +2121,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * @throws DataFormatException if the string is not valid
      * @throws IOException if there is an IO error writing the string
      */
-    private static void writeLongStringUTF8(ByteArrayOutputStream out, String string) 
+    private static void writeLongStringUTF8(ByteArrayOutputStream out, String string)
         throws DataFormatException, IOException {
         if (string == null) {
             out.write(0);

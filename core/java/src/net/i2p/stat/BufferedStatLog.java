@@ -66,7 +66,7 @@ public class BufferedStatLog implements StatLog {
             if (_eventNext == _lastWrite)
                 _lastWrite = (_lastWrite + 1) % _events.length; // drop an event
 
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("AddData next=" + _eventNext + " lastWrite=" + _lastWrite);
 
             if (_eventNext > _lastWrite) {
@@ -143,7 +143,7 @@ public class BufferedStatLog implements StatLog {
                     }
                     if (writeStart != writeEnd) {
                         try {
-                            if (_log.shouldLog(Log.DEBUG))
+                            if (_log.shouldDebug())
                                 _log.debug("Writing " + writeStart +"->"+ writeEnd);
                             writeEvents(writeStart, writeEnd);
                         } catch (RuntimeException e) {

@@ -13,12 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.I2PAppContext;
 
-/** 
+/**
  * Coordinate the management of various frequencies and rates within I2P components,
- * both allowing central update and retrieval, as well as distributed creation and 
+ * both allowing central update and retrieval, as well as distributed creation and
  * use.  This does not provide any persistence, but the data structures exposed can be
  * read and updated to manage the complete state.
- * 
+ *
  */
 public class StatManager {
     private final I2PAppContext _context;
@@ -45,10 +45,10 @@ public class StatManager {
     public static final String DEFAULT_STAT_FILE = "stats.log";
     /** default false */
     public static final String PROP_STAT_FULL = "stat.full";
-    
+
     /**
-     * The stat manager should only be constructed and accessed through the 
-     * application context.  This constructor should only be used by the 
+     * The stat manager should only be constructed and accessed through the
+     * application context.  This constructor should only be used by the
      * appropriate application context itself.
      *
      */
@@ -60,7 +60,7 @@ public class StatManager {
         if (filter != null && filter.length() > 0)
             _statLog = new BufferedStatLog(context);
     }
-    
+
     /** @since 0.8.8 */
     public synchronized void shutdown() {
         _frequencyStats.clear();
@@ -80,8 +80,8 @@ public class StatManager {
      *  @deprecated unused
      */
     @Deprecated
-    public synchronized void setStatLog(StatLog log) { 
-        _statLog = log; 
+    public synchronized void setStatLog(StatLog log) {
+        _statLog = log;
         for (RateStat rs : _rateStats.values()) {
             rs.setStatLog(log);
         }
@@ -261,7 +261,7 @@ public class StatManager {
     public boolean ignoreStat(String statName) {
         return _context.isRouterContext() && !_context.getBooleanProperty(PROP_STAT_FULL);
     }
-    
+
     /**
      * Serializes all Frequencies and Rates to the provided OutputStream
      * @param out to write to

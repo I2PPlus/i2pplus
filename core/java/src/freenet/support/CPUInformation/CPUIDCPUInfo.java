@@ -45,7 +45,7 @@ class CPUIDCPUInfo implements CPUInfo
     {
         return (CPUID.getExtendedECXCPUFlags() & (1 << 6)) != 0; //Extended ECX Bit 6
     }
-    
+
     /**
      * @return true iff the CPU supports the AVX instruction set.
      * @since 0.9.26
@@ -64,7 +64,7 @@ class CPUIDCPUInfo implements CPUInfo
     public boolean hasAVX2() {
         return (CPUID.getExtendedEBXFeatureFlags() & (1 << 5)) != 0; //Extended EBX Feature Bit 5
     }
-    
+
     /**
      * Does the CPU supports the AVX-512 Foundation instruction set?
      *
@@ -83,7 +83,7 @@ class CPUIDCPUInfo implements CPUInfo
     {
         return (CPUID.getExtendedEBXFeatureFlags() & (1 << 16)) != 0; //Extended EBX Bit 16
     }
-    
+
     /**
      *
      * Intel Multi-Precision Add-Carry Instruction Extensions
@@ -97,7 +97,7 @@ class CPUIDCPUInfo implements CPUInfo
     {
         return (CPUID.getExtendedEBXFeatureFlags() & (1 << 19)) != 0; //Extended EBX Bit 19
     }
-    
+
     /**
      * Trailing Bit Manipulation (AMD feature)
      * @return true iff the CPU supports TBM.
@@ -107,7 +107,7 @@ class CPUIDCPUInfo implements CPUInfo
     {
         return (CPUID.getExtendedECXCPUFlags() & (1 << 21)) != 0; //Extended ECX Bit 21
     }
-    
+
     /**
      * @return true iff the CPU supports the AES-NI instruction set.
      * @since 0.9.14
@@ -115,7 +115,7 @@ class CPUIDCPUInfo implements CPUInfo
     public boolean hasAES() {
         return (CPUID.getECXCPUFlags() & (1 << 25)) != 0; //ECX Bit 25
     }
-    
+
     /**
      * @return true iff the CPU supports the 64-bit support
      * @since 0.9.26
@@ -123,7 +123,7 @@ class CPUIDCPUInfo implements CPUInfo
     public boolean hasX64() {
         return (CPUID.getExtendedEDXCPUFlags() & (1 << 29)) != 0; //Extended EDX Bit 29
     }
-    
+
     /**
      * @return true iff the CPU supports the BMI1 instruction set.
      * @since 0.9.26
@@ -131,7 +131,7 @@ class CPUIDCPUInfo implements CPUInfo
     public boolean hasBMI1() {
         return (CPUID.getExtendedEBXFeatureFlags() & (1 << 3)) != 0; // Extended EBX Feature Bit 3
     }
-    
+
     /**
      * @return true iff the CPU supports the BMI2 instruction set.
      * @since 0.9.26
@@ -167,6 +167,6 @@ class CPUIDCPUInfo implements CPUInfo
 
     @Override
     public String getCPUModelString() throws UnknownCPUException {
-        throw new UnknownCPUException("Class CPUIDCPUInfo cannot indentify CPUs"); 
+        throw new UnknownCPUException("Class CPUIDCPUInfo cannot indentify CPUs");
     }
 }

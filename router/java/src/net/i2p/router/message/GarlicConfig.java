@@ -1,9 +1,9 @@
 package net.i2p.router.message;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -40,7 +40,7 @@ class GarlicConfig {
     //private Certificate _replyBlockCertificate;
     //private long _replyBlockMessageId;
     //private long _replyBlockExpiration;
-    
+
     public GarlicConfig(Certificate cert, long id, long expiration, DeliveryInstructions di) {
 	this(new ArrayList<GarlicConfig>(4), cert, id, expiration, di);
     }
@@ -55,7 +55,7 @@ class GarlicConfig {
 	//_replyBlockMessageId = -1;
 	//_replyBlockExpiration = -1;
     }
-    
+
     /**
      * Router to receive and process this clove - the router that will open the
      * delivery instructions and decide what to do process it locally as an I2NPMessage,
@@ -67,7 +67,7 @@ class GarlicConfig {
      */
     public void setRecipient(RouterInfo info) { _recipient = info; }
     public RouterInfo getRecipient() { return _recipient; }
-    
+
     /**
      * Public key of the router to receive and process this clove.  This is useful
      * for garlic routed messages encrypted to the router at the end of a tunnel,
@@ -77,43 +77,43 @@ class GarlicConfig {
      */
     public void setRecipientPublicKey(PublicKey recipientPublicKey) { _recipientPublicKey = recipientPublicKey; }
     public PublicKey getRecipientPublicKey() { return _recipientPublicKey; }
-    
+
     /**
      * Certificate for the getRecipient() to pay for their processing
      *
      */
     public Certificate getCertificate() { return _cert; }
-    
+
     /**
      * Unique ID of the clove
      *
      */
     public long getId() { return _id; }
-    
+
     /**
      * Expiration of the clove, after which it should be dropped
      *
      */
     public long getExpiration() { return _expiration; }
- 
+
     /**
      * Specify how the I2NPMessage in the clove should be handled.
      *
      */
     public DeliveryInstructions getDeliveryInstructions() { return _instructions; }
-    
+
     /**
      * If true, the recipient of this clove is requested to send a DeliveryStatusMessage
      * back via the replyThroughRouter using the getId() value for the status' message Id.
      * Since those reply blocks are good for one use only, this flag should only be set if
      * no reply is expected.
-     * 
+     *
      */
   /****
     public void setRequestAck(boolean request) { _requestAck = request; }
     public boolean getRequestAck() { return _requestAck; }
   ****/
-    
+
     /**
      * Specify the router through which a reply to this clove can be sent.  The
      * getReplyInstructions() are passed to this router during the reply process
@@ -124,7 +124,7 @@ class GarlicConfig {
     public void setReplyThroughRouter(RouterInfo replyThroughRouter) { _replyThroughRouter = replyThroughRouter; }
     public RouterInfo getReplyThroughRouter() { return _replyThroughRouter; }
   ****/
-    
+
     /**
      * Specify how any reply will be routed so that it reaches this router after being
      * delivered to the getReplyThroughRouter.  These instructions are not exposed to the
@@ -136,21 +136,21 @@ class GarlicConfig {
     public void setReplyInstructions(DeliveryInstructions instructions) { _replyInstructions = instructions; }
     public DeliveryInstructions getReplyInstructions() { return _replyInstructions; }
   ****/
-    
+
   /****
     public long getReplyBlockMessageId() { return _replyBlockMessageId; }
     public void setReplyBlockMessageId(long id) { _replyBlockMessageId = id; }
-    
+
     public Certificate getReplyBlockCertificate() { return _replyBlockCertificate; }
     public void setReplyBlockCertificate(Certificate cert) { _replyBlockCertificate = cert; }
-    
+
     public long getReplyBlockExpiration() { return _replyBlockExpiration; }
     public void setReplyBlockExpiration(long expiration) { _replyBlockExpiration = expiration; }
    ****/
-    
+
     /**
      * Add a clove to the current message - if any cloves are added, an I2NP message
-     * cannot be specified via setPayload.  This means that the resulting GarlicClove 
+     * cannot be specified via setPayload.  This means that the resulting GarlicClove
      * represented by this GarlicConfig must be a GarlicMessage itself
      *
      */
@@ -165,7 +165,7 @@ class GarlicConfig {
     public GarlicConfig getClove(int index) { return _cloveConfigs.get(index); }
 
     public void clearCloves() { _cloveConfigs.clear(); }
-    
+
     protected String getSubData() { return ""; }
 
     private final static String NL = System.getProperty("line.separator");

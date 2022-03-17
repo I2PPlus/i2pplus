@@ -174,7 +174,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         int cur = offset;
         int flags = data[cur] & 0xff;
         cur++;
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Read flags: " + flags + " mode: " +  flagMode(flags));
 
      /****
@@ -272,7 +272,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
         if (getDelayRequested())
             val |= FLAG_DELAY;
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("getFlags() = " + val);
         return val;
     }
@@ -287,7 +287,7 @@ public class DeliveryInstructions extends DataStructureImpl {
       ****/
         switch (getDeliveryMode()) {
             case FLAG_MODE_LOCAL:
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("mode = local");
                 break;
             case FLAG_MODE_DESTINATION:
@@ -333,31 +333,31 @@ public class DeliveryInstructions extends DataStructureImpl {
             if (_encryptionKey == null) throw new IllegalStateException("Encryption key is not set");
             System.arraycopy(_encryptionKey.getData(), 0, rv, offset, SessionKey.KEYSIZE_BYTES);
             offset += SessionKey.KEYSIZE_BYTES;
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("IsEncrypted");
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Is NOT Encrypted");
         }
       ****/
 
         switch (getDeliveryMode()) {
             case FLAG_MODE_LOCAL:
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("mode = local");
                 break;
             case FLAG_MODE_DESTINATION:
                 if (_destinationHash == null) throw new IllegalStateException("Destination hash is not set");
                 System.arraycopy(_destinationHash.getData(), 0, rv, offset, Hash.HASH_LENGTH);
                 offset += Hash.HASH_LENGTH;
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("mode = destination, hash = " + _destinationHash);
                 break;
             case FLAG_MODE_ROUTER:
                 if (_routerHash == null) throw new IllegalStateException("Router hash is not set");
                 System.arraycopy(_routerHash.getData(), 0, rv, offset, Hash.HASH_LENGTH);
                 offset += Hash.HASH_LENGTH;
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("mode = router, routerHash = " + _routerHash);
                 break;
             case FLAG_MODE_TUNNEL:
@@ -366,18 +366,18 @@ public class DeliveryInstructions extends DataStructureImpl {
                 offset += Hash.HASH_LENGTH;
                 DataHelper.toLong(rv, offset, 4, _tunnelId.getTunnelId());
                 offset += 4;
-                //if (_log.shouldLog(Log.DEBUG))
+                //if (_log.shouldDebug())
                 //    _log.debug("mode = tunnel, tunnelId = " + _tunnelId.getTunnelId()
                 //               + ", routerHash = " + _routerHash);
                 break;
         }
         if (getDelayRequested()) {
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("delay requested: " + getDelaySeconds());
             DataHelper.toLong(rv, offset, 4, getDelaySeconds());
             offset += 4;
         } else {
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("delay NOT requested");
         }
         return offset - origOffset;
@@ -398,7 +398,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     public int writeBytes(byte target[], int offset) {
         if ( (_deliveryMode < 0) || (_deliveryMode > FLAG_MODE_TUNNEL) ) throw new IllegalStateException("Invalid data: mode = " + _deliveryMode);
         int flags = getFlags();
-        //if (_log.shouldLog(Log.DEBUG))
+        //if (_log.shouldDebug())
         //    _log.debug("Write flags: " + flags + " mode: " + getDeliveryMode()
         //               + " =?= " + flagMode(flags));
         int origOffset = offset;

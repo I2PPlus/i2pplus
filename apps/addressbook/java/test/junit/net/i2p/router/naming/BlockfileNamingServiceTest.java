@@ -27,7 +27,7 @@ public class BlockfileNamingServiceTest extends TestCase {
 	public void setUp() throws Exception {
         I2PAppContext ctx = new I2PAppContext();
         routerDir = ctx.getRouterDir();
-        
+
         // first load the list of hosts that will be queried
         InputStream is = getClass().getResourceAsStream("/hosts.txt");
         Properties props = new Properties();
@@ -36,7 +36,7 @@ public class BlockfileNamingServiceTest extends TestCase {
         _names = new ArrayList<String>((Set<String>) (Set) props.keySet());  // TODO-Java6: s/keySet()/stringPropertyNames()/
         Collections.shuffle(_names);
         is.close();
-        
+
         // then copy the hosts.txt file so that the naming service can load them
         hostsTxt = new File(routerDir, "hosts.txt");
         OutputStream os = new BufferedOutputStream(new FileOutputStream(hostsTxt));

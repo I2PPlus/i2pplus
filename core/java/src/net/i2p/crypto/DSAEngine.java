@@ -108,11 +108,11 @@ public final class DSAEngine {
         if (type != SigType.DSA_SHA1) {
             try {
                 rv = altVerifySig(signature, signedData, offset, size, verifyingKey);
-                if ((!rv) && _log.shouldLog(Log.WARN))
+                if ((!rv) && _log.shouldWarn())
                     _log.warn(type + " Signature verification failure");
                 return rv;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn(type + " Signature verification failure", gse);
                 return false;
             }
@@ -120,17 +120,17 @@ public final class DSAEngine {
         if (_useJavaLibs) {
             try {
                 rv = altVerifySigSHA1(signature, signedData, offset, size, verifyingKey);
-                if ((!rv) && _log.shouldLog(Log.WARN))
+                if ((!rv) && _log.shouldWarn())
                     _log.warn("Lib DSA Signature verification failure");
                 return rv;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Lib DSA Signature verification failure");
                 // now try TheCrypto
             }
         }
         rv = verifySignature(signature, calculateHash(signedData, offset, size), verifyingKey);
-        if ((!rv) && _log.shouldLog(Log.WARN))
+        if ((!rv) && _log.shouldWarn())
             _log.warn("TheCrypto DSA Signature verification failure");
         return rv;
     }
@@ -179,7 +179,7 @@ public final class DSAEngine {
         try {
             return altVerifySigRaw(signature, hash, verifyingKey);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Failed to verify signature [" + type + "]", gse);
             return false;
         }
@@ -200,7 +200,7 @@ public final class DSAEngine {
         try {
             return altVerifySigRaw(signature, hash, pubKey);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Failed to verify signature [" + signature.getType() + "]", gse);
             return false;
         }
@@ -254,7 +254,7 @@ public final class DSAEngine {
 
             long diff = _context.clock().now() - start;
             if (diff > 1000) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Took too long to verify the signature (" + diff + "ms)");
             }
             return ok;
@@ -286,7 +286,7 @@ public final class DSAEngine {
             try {
                 return altSign(data, offset, length, signingKey);
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldError())
                     _log.error(type + " Sign Fail", gse);
                 return null;
             }
@@ -295,7 +295,7 @@ public final class DSAEngine {
             try {
                 return altSignSHA1(data, offset, length, signingKey);
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Lib Sign Fail, privkey = " + signingKey, gse);
                 // now try TheCrypto
             }
@@ -356,7 +356,7 @@ public final class DSAEngine {
         try {
             return altSignRaw(hash, signingKey);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn(type + " Sign Fail", gse);
             return null;
         }
@@ -383,7 +383,7 @@ public final class DSAEngine {
         try {
             return altSignRaw(algo, hash, privKey, type);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn(type + " Sign Fail", gse);
             return null;
         }
@@ -439,7 +439,7 @@ public final class DSAEngine {
             _log.error("Bad R length " + rbytes.length);
             return null;
         } else {
-            //if (_log.shouldLog(Log.DEBUG)) _log.debug("Using short rbytes.length [" + rbytes.length + "]");
+            //if (_log.shouldDebug()) _log.debug("Using short rbytes.length [" + rbytes.length + "]");
             //System.arraycopy(rbytes, 0, out, 20 - rbytes.length, rbytes.length);
             for (int i = 0; i < rbytes.length; i++)
                 out[i + 20 - rbytes.length] = rbytes[i];
@@ -458,7 +458,7 @@ public final class DSAEngine {
             _log.error("Bad S length " + sbytes.length);
             return null;
         } else {
-            //if (_log.shouldLog(Log.DEBUG)) _log.debug("Using short sbytes.length [" + sbytes.length + "]");
+            //if (_log.shouldDebug()) _log.debug("Using short sbytes.length [" + sbytes.length + "]");
             //System.arraycopy(sbytes, 0, out, 40 - sbytes.length, sbytes.length);
             for (int i = 0; i < sbytes.length; i++)
                 out[i + 20 + 20 - sbytes.length] = sbytes[i];
@@ -466,7 +466,7 @@ public final class DSAEngine {
 
         long diff = _context.clock().now() - start;
         if (diff > 1000) {
-            if (_log.shouldLog(Log.WARN)) _log.warn("Took too long to sign (" + diff + "ms)");
+            if (_log.shouldWarn()) _log.warn("Took too long to sign (" + diff + "ms)");
         }
 
         return new Signature(out);
@@ -488,7 +488,7 @@ public final class DSAEngine {
                 digest.update(buf, 0, read);
             }
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to hash the stream", ioe);
             return null;
         }

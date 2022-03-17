@@ -22,7 +22,7 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
                            File privkey, String privkeyname, Logging l,
                            EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(privkey, privkeyname, l, notifyThis, tunnel);
-        
+
         // The broadcaster
         this.multi = new MultiSource();
         this.multi.setSink(this);
@@ -35,21 +35,21 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
         this.server = new UDPSource(port);
         this.server.setSink(this.multi);
     }
-    
+
     @Override
     public final void startRunning() {
         super.startRunning();
         this.server.start();
         l.log("Streamr server ready");
     }
-    
+
     @Override
     public boolean close(boolean forced) {
         this.server.stop();
         this.multi.stop();
         return super.close(forced);
     }
-    
+
     private final MultiSource multi;
     private final UDPSource server;
     private final Sink subscriber;

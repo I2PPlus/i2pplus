@@ -226,7 +226,7 @@ class EstablishmentManager {
      */
     InboundEstablishState getInboundState(RemoteHostId from) {
             InboundEstablishState state = _inboundStates.get(from);
-            // if ( (state == null) && (_log.shouldLog(Log.DEBUG)) )
+            // if ( (state == null) && (_log.shouldDebug()) )
             //     _log.debug("No inbound states for " + from + ", with remaining: " + _inboundStates);
             return state;
     }
@@ -239,10 +239,10 @@ class EstablishmentManager {
             OutboundEstablishState state = _outboundStates.get(from);
             if (state == null) {
                 state = _outboundByClaimedAddress.get(from);
-                if (state != null && _log.shouldLog(Log.INFO))
+                if (state != null && _log.shouldInfo())
                     _log.info("Found by claimed address: " + state);
             }
-            // if ( (state == null) && (_log.shouldLog(Log.DEBUG)) )
+            // if ( (state == null) && (_log.shouldDebug()) )
             //     _log.debug("No outbound states for " + from + ", with remaining: " + _outboundStates);
             return state;
     }
@@ -321,7 +321,7 @@ class EstablishmentManager {
                       case IB_STATE_CONFIRMED_COMPLETELY:
                         // queue it
                         inState.addMessage(msg);
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.debug("Outbound message queued to inbound establish state");
                         break;
 
@@ -356,7 +356,7 @@ class EstablishmentManager {
             state = _outboundStates.get(to);
             if (state == null) {
                 state = _outboundByHash.get(toHash);
-                if (state != null && _log.shouldLog(Log.INFO))
+                if (state != null && _log.shouldInfo())
                     _log.info("Found by hash: " + state);
             }
             if (state == null) {
@@ -368,7 +368,7 @@ class EstablishmentManager {
                         List<OutNetMessage> queued = _queuedOutbound.putIfAbsent(to, newQueued);
                         if (queued == null) {
                             queued = newQueued;
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Queueing outbound establish to " + to + ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                         }
                         // this used to be inside a synchronized (_outboundStates) block,
@@ -412,6 +412,7 @@ class EstablishmentManager {
                         _transport.failed(msg, "Peer has bad key, cannot establish connection -> marking unreachable");
                         return;
                     }
+                    if (version == 1) {
                     boolean allowExtendedOptions = VersionComparator.comp(toRouterInfo.getVersion(),
                                                                           VERSION_ALLOW_EXTENDED_OPTIONS) >= 0
                                                    && !_context.getBooleanProperty(PROP_DISABLE_EXT_OPTS);
@@ -419,12 +420,13 @@ class EstablishmentManager {
                     // don't ask if they are indirect
                     boolean requestIntroduction = allowExtendedOptions && !isIndirect &&
                                                   _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
-                    if (version == 1) {
                     state = new OutboundEstablishState(_context, maybeTo, to,
                                                        toIdentity, allowExtendedOptions,
                                                        requestIntroduction,
                                                        sessionKey, addr, _transport.getDHFactory());
                     } else if (version == 2) {
+                        boolean requestIntroduction = SSU2Util.ENABLE_RELAY && !isIndirect &&
+                                                      _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
                         state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
                                                             toIdentity, requestIntroduction, sessionKey, ra, addr);
                     } else {
@@ -437,7 +439,7 @@ class EstablishmentManager {
                     if (isNew) {
                         if (isIndirect && maybeTo != null)
                             _outboundByClaimedAddress.put(maybeTo, state);
-                        if (_log.shouldLog(Log.DEBUG))
+                        if (_log.shouldDebug())
                             _log.debug("Adding new Outbound connection to: " + state);
                     } else {
                         // whoops, somebody beat us to it, throw out the state we just created
@@ -459,7 +461,7 @@ class EstablishmentManager {
             }
 
         if (rejected) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Too many pending, rejecting outbound establish to " + to);
             _transport.failed(msg, "Too many pending outbound connections");
             _context.statManager().addRateData("udp.establishRejected", deferred);
@@ -503,7 +505,7 @@ class EstablishmentManager {
      */
     void receiveSessionRequest(RemoteHostId from, InboundEstablishState state, UDPPacketReader reader) {
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(from.getIP())) {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Received invalid SessionRequest from: " + from);
             return;
         }
@@ -516,7 +518,7 @@ class EstablishmentManager {
                 // TODO this is insufficient to prevent DoSing, especially if
                 // IP spoofing is used. For further study.
                 if (!shouldAllowInboundEstablishment()) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Dropping inbound establish, increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                     _context.statManager().addRateData("udp.establishDropped", 1);
                     return; // drop the packet
@@ -537,7 +539,7 @@ class EstablishmentManager {
                                                   reader.getSessionRequestReader());
 
                 if (_replayFilter.add(state.getReceivedX(), 0, 8)) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Duplicate X in SessionRequest from: " + from);
                     _context.statManager().addRateData("udp.dupDHX", 1);
                     return; // drop the packet
@@ -564,10 +566,10 @@ class EstablishmentManager {
             } else {
                 // we got an IB even though we were firewalled, hidden, not high cap, etc.
             }
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Received NEW SessionRequest: " + state);
+            if (_log.shouldDebug())
+                _log.debug("Received NEW SessionRequest: " + state);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Received duplicate SessionRequest from: " + state);
         }
 
@@ -617,7 +619,7 @@ class EstablishmentManager {
 
           /**** TODO
             if (_replayFilter.add(state.getReceivedX(), 0, 8)) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("Duplicate X in session request from: " + from);
                 _context.statManager().addRateData("udp.dupDHX", 1);
                 return; // drop the packet
@@ -642,11 +644,10 @@ class EstablishmentManager {
             }
         }
 
-        if (isNew) {
-            if (_log.shouldInfo())
-                _log.info("Received NEW session/token request " + state);
-        } else {
-            if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
+            if (isNew)
+                _log.debug("Received NEW session/token request " + state);
+            else
                 _log.debug("Receive DUP session/token request from: " + state);
         }
         // call for both Session and Token request, why not
@@ -660,8 +661,8 @@ class EstablishmentManager {
         }
         notifyActivity();
     }
-    
-    /** 
+
+    /**
      * got a SessionConfirmed (should only happen as part of an inbound
      * establishment)
      *
@@ -675,7 +676,7 @@ class EstablishmentManager {
         if (state != null) {
             state.receiveSessionConfirmed(reader.getSessionConfirmedReader());
             notifyActivity();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Received SessionConfirmed from: " + state);
         } else {
             if (_log.shouldInfo())
@@ -684,8 +685,8 @@ class EstablishmentManager {
     }
 
     /**
-     * got a SessionConfirmed (should only happen as part of an inbound 
-     * establishment) 
+     * got a SessionConfirmed (should only happen as part of an inbound
+     * establishment)
      *
      * SSU 2 only.
      * @param state non-null
@@ -704,10 +705,10 @@ class EstablishmentManager {
         // we are done, go right to ps2
         handleCompletelyEstablished(state);
         notifyActivity();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Receive session confirmed from: " + state);
     }
-    
+
     /**
      * Got a SessionCreated (in response to our outbound SessionRequest)
      *
@@ -721,10 +722,10 @@ class EstablishmentManager {
         if (state != null) {
             state.receiveSessionCreated(reader.getSessionCreatedReader());
             notifyActivity();
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Received SessionCreated from: " + state);
         } else {
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("Received possible duplicate SessionCreated from: " + from);
         }
     }
@@ -748,10 +749,10 @@ class EstablishmentManager {
             return;
         }
         notifyActivity();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Receive session created from: " + state);
     }
-    
+
     /**
      * Got a Retry (in response to our outbound SessionRequest or TokenRequest)
      *
@@ -768,7 +769,7 @@ class EstablishmentManager {
             return;
         }
         notifyActivity();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Received retry with token " + state.getToken() + " from: " + state);
     }
 
@@ -780,7 +781,7 @@ class EstablishmentManager {
      * @since 0.8.1
      */
     void receiveSessionDestroy(RemoteHostId from, PeerState state) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Received SessionDestroy on established connection from: " + from);
         _transport.dropPeer(state, false, "Received destroy message");
     }
@@ -793,7 +794,7 @@ class EstablishmentManager {
      * @since 0.8.1
      */
     void receiveSessionDestroy(RemoteHostId from, OutboundEstablishState state) {
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Received Outbound SessionDestroy from: " + from);
         _outboundStates.remove(from);
         Hash peer = state.getRemoteIdentity().calculateHash();
@@ -811,7 +812,7 @@ class EstablishmentManager {
      * @since 0.8.1
      */
     void receiveSessionDestroy(RemoteHostId from) {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Received unauthenticated SessionDestroy from: " + from);
         //InboundEstablishState state = _inboundStates.remove(from);
         //if (state != null) {
@@ -957,7 +958,7 @@ class EstablishmentManager {
         // 0 is the default
         //peer.setTheyRelayToUsAs(0);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Inbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "]\n* " + state);
 
         //if (true) // for now, only support direct
@@ -1014,7 +1015,7 @@ class EstablishmentManager {
             Hash hash = peer.getRemotePeer();
             if ((hash != null) && (!_context.banlist().isBanlisted(hash)) && (!_transport.isUnreachable(hash))) {
                 // ok, we are fine with them, send them our latest info
-                //if (_log.shouldLog(Log.INFO))
+                //if (_log.shouldInfo())
                 //    _log.info("Publishing to the peer after confirm plus delay (without banlist): " + peer);
                 // bundle the two messages together for efficiency
                 DatabaseStoreMessage dbsm = getOurInfo();
@@ -1025,7 +1026,7 @@ class EstablishmentManager {
             } else {
                 _transport.send(dsm, peer);
                 // nuh uh.
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldWarn())
                     _log.warn("NOT publishing to the peer after confirm plus delay (WITH banlist): " + (hash != null ? hash.toString() : "unknown"));
             }
     }
@@ -1069,7 +1070,7 @@ class EstablishmentManager {
         // 0 is the default
         //peer.setWeRelayToThemAs(0);
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Outbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "]\n* " + state);
 
         _transport.addRemotePeerState(peer);
@@ -1082,7 +1083,7 @@ class EstablishmentManager {
                 dbsm = getOurInfo();
             }
         }
-        
+
         List<OutNetMessage> msgs = new ArrayList<OutNetMessage>(8);
         OutNetMessage msg;
         while ((msg = state.getNextQueuedMessage()) != null) {
@@ -1100,7 +1101,7 @@ class EstablishmentManager {
 
 /****
     private void sendOurInfo(PeerState peer, boolean isInbound) {
-        if (_log.shouldLog(Log.INFO))
+        if (_log.shouldInfo())
             _log.info("Publishing to the peer after confirm: " +
                       (isInbound ? " inbound con from " + peer : "outbound con to " + peer));
         DatabaseStoreMessage m = getOurInfo();
@@ -1141,7 +1142,7 @@ class EstablishmentManager {
         try {
             state.generateSessionKey();
         } catch (DHSessionKeyBuilder.InvalidPublicParameterException ippe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Peer " + state + " sent us an invalid DH parameter", ippe);
             _inboundStates.remove(state.getRemoteHostId());
             state.fail();
@@ -1154,8 +1155,8 @@ class EstablishmentManager {
             InboundEstablishState2 state2 = (InboundEstablishState2) state;
             InboundEstablishState.InboundState istate = state2.getState();
             if (istate == IB_STATE_CREATED_SENT) {
-                if (_log.shouldDebug())
-                    _log.debug("Send created to: " + state);
+                if (_log.shouldInfo())
+                    _log.info("RetransmitSessionCreated packet sent to: " + state);
                 // if already sent, get from the state to retx
                 pkt = state2.getRetransmitSessionCreatedPacket();
             } else if (istate == IB_STATE_REQUEST_RECEIVED) {
@@ -1174,7 +1175,7 @@ class EstablishmentManager {
             }
         }
         if (pkt == null) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Peer " + state + " sent us an invalid IP?");
             _inboundStates.remove(state.getRemoteHostId());
             state.fail();
@@ -1206,8 +1207,8 @@ class EstablishmentManager {
             OutboundEstablishState.OutboundState ostate = state2.getState();
             if (ostate == OB_STATE_REQUEST_SENT ||
                 ostate == OB_STATE_REQUEST_SENT_NEW_TOKEN) {
-                if (_log.shouldDebug())
-                    _log.debug("Send Session Request to: " + state);
+                if (_log.shouldInfo())
+                    _log.info("Resending SessionRequest packet to: " + state);
                 // if already sent, get from the state to retx
                 packet = state2.getRetransmitSessionRequestPacket();
             } else if (ostate == OB_STATE_NEEDS_TOKEN ||
@@ -1229,7 +1230,7 @@ class EstablishmentManager {
         if (packet != null) {
             _transport.send(packet);
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Unable to build a SessionRequest packet for: " + state);
         }
         if (version == 1)
@@ -1255,7 +1256,7 @@ class EstablishmentManager {
         _context.statManager().addRateData("udp.sendIntroRelayRequest", 1);
         List<UDPPacket> requests = _builder.buildRelayRequest(_transport, this, state, _transport.getIntroKey());
         if (requests.isEmpty()) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("No valid introducers for: " + state);
             processExpired(state);
             return;
@@ -1263,7 +1264,7 @@ class EstablishmentManager {
         for (UDPPacket req : requests) {
             _transport.send(req);
         }
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending RelayRequest for: " + state + "\n* Introduction key: " + _transport.getIntroKey());
         state.introSent();
     }
@@ -1275,8 +1276,8 @@ class EstablishmentManager {
         long nonce = reader.getRelayResponseReader().readNonce();
         OutboundEstablishState state = _liveIntroductions.remove(Long.valueOf(nonce));
         if (state == null) {
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Duplicate or unknown RelayResponse: [Nonce " + nonce + "]");
+            if (_log.shouldDebug())
+                _log.debug("Duplicate or unknown RelayResponse: [Nonce " + nonce + "]");
             return; // already established
         }
 
@@ -1286,7 +1287,7 @@ class EstablishmentManager {
         reader.getRelayResponseReader().readCharlieIP(ip, 0);
         int port = reader.getRelayResponseReader().readCharliePort();
         if ((!isValid(ip, port)) || (!isValid(bob.getIP(), bob.getPort()))) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Bad RelayResponse from " + bob + " for " + Addresses.toString(ip, port));
             _context.statManager().addRateData("udp.relayBadIP", 1);
             return;
@@ -1295,14 +1296,14 @@ class EstablishmentManager {
         try {
             addr = InetAddress.getByAddress(ip);
         } catch (UnknownHostException uhe) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Introducer for " + state + " (" + bob + ") sent us an invalid address for our target: " + Addresses.toString(ip, port), uhe);
             // TODO either put the nonce back in liveintroductions, or fail
             return;
         }
         _context.statManager().addRateData("udp.receiveIntroRelayResponse", state.getLifetime());
-        if (_log.shouldLog(Log.INFO))
-            _log.info("Received RelayResponse for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) + "]\n* Address: "
+        if (_log.shouldDebug())
+            _log.debug("Received RelayResponse for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) + "]\n* Address: "
                       + addr.toString().replace("/", "") + ":" + port + " (according to " + bob + ") [Nonce " + nonce + "]");
         synchronized (state) {
             RemoteHostId oldId = state.getRemoteHostId();
@@ -1317,7 +1318,7 @@ class EstablishmentManager {
             if (!oldId.equals(newId)) {
                 _outboundStates.remove(oldId);
                 _outboundStates.put(newId, state);
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("RelayResponse replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
             }
             //
@@ -1339,16 +1340,16 @@ class EstablishmentManager {
         if (state != null) {
             boolean sendNow = state.receiveHolePunch();
             if (sendNow) {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Received hole punch" + state + ", sending SessionRequest now");
                 notifyActivity();
             } else {
-                if (_log.shouldLog(Log.INFO))
+                if (_log.shouldInfo())
                     _log.info("Received hole punch" + state + ", already sent SessionRequest");
             }
         } else {
             // HolePunch received before RelayResponse, and we didn't know the IP/port, or it changed
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldInfo())
                 _log.info("No state found for hole punch from " + from + ":" + fromPort);
         }
     }
@@ -1379,7 +1380,7 @@ class EstablishmentManager {
         if (!valid) {
             // validate clears fields on failure
             // sendDestroy(state) won't work as we haven't sent the confirmed...
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("SessionCreated failed validation " + state);
             return;
         }
@@ -1411,7 +1412,7 @@ class EstablishmentManager {
             return;
         }
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Sending SessionConfirmed to: " + state);
 
         for (int i = 0; i < packets.length; i++) {
@@ -1446,7 +1447,7 @@ class EstablishmentManager {
             return;
         UDPPacket packet = _builder.buildSessionDestroyPacket(state);
         if (packet != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Sending SessionDestroy to: " + state);
             _transport.send(packet);
         }
@@ -1468,7 +1469,7 @@ class EstablishmentManager {
             return;
         UDPPacket packet = _builder.buildSessionDestroyPacket(state);
         if (packet != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug("Sent SessionDestroy to: " + state);
             _transport.send(packet);
         }
@@ -1491,7 +1492,7 @@ class EstablishmentManager {
                     // completely received (though the signature may be invalid)
                     iter.remove();
                     inboundState = cur;
-                    //if (_log.shouldLog(Log.DEBUG))
+                    //if (_log.shouldDebug())
                     //    _log.debug("Removing completely confirmed inbound state");
                     break;
                 } else if (cur.getLifetime() > MAX_IB_ESTABLISH_TIME) {
@@ -1499,7 +1500,7 @@ class EstablishmentManager {
                     iter.remove();
                     inboundState = cur;
                     //_context.statManager().addRateData("udp.inboundEstablishFailedState", cur.getState(), cur.getLifetime());
-                    //if (_log.shouldLog(Log.DEBUG))
+                    //if (_log.shouldDebug())
                     //    _log.debug("Removing expired inbound state");
                     expired = true;
                     break;
@@ -1512,7 +1513,7 @@ class EstablishmentManager {
                     if (next <= now) {
                         // our turn...
                         inboundState = cur;
-                        // if (_log.shouldLog(Log.DEBUG))
+                        // if (_log.shouldDebug())
                         //     _log.debug("Processing inbound that wanted activity");
                         break;
                     } else {
@@ -1526,7 +1527,7 @@ class EstablishmentManager {
             }
 
         if (inboundState != null) {
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Processing for inbound: " + inboundState);
             synchronized (inboundState) {
                 InboundEstablishState.InboundState istate = inboundState.getState();
@@ -1561,7 +1562,7 @@ class EstablishmentManager {
                     RouterIdentity remote = inboundState.getConfirmedIdentity();
                     if (remote != null) {
                         if (_context.banlist().isBanlistedForever(remote.calculateHash())) {
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Dropping Inbound connection from permanently banlisted peer: " + remote.calculateHash());
                             // So next time we will not accept the con, rather than doing the whole handshake
                             _context.blocklist().add(inboundState.getSentIP());
@@ -1571,7 +1572,7 @@ class EstablishmentManager {
                             handleCompletelyEstablished(inboundState);
                         }
                     } else {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("confirmed with invalid? " + inboundState);
                         inboundState.fail();
                         processExpired(inboundState);
@@ -1584,7 +1585,7 @@ class EstablishmentManager {
 
                   case IB_STATE_UNKNOWN:
                     // Can't happen, always call receiveSessionRequest() before putting in map
-                    if (_log.shouldLog(Log.ERROR))
+                    if (_log.shouldError())
                         _log.error("hrm, state is unknown for " + inboundState);
                     break;
 
@@ -1629,7 +1630,7 @@ class EstablishmentManager {
                     iter.remove();
                     outboundState = cur;
                     //_context.statManager().addRateData("udp.outboundEstablishFailedState", cur.getState(), cur.getLifetime());
-                    //if (_log.shouldLog(Log.DEBUG))
+                    //if (_log.shouldDebug())
                     //    _log.debug("Removing expired outbound: " + cur);
                     break;
                 } else {
@@ -1638,7 +1639,7 @@ class EstablishmentManager {
                     if (next <= now) {
                         // our turn...
                         outboundState = cur;
-                        // if (_log.shouldLog(Log.DEBUG))
+                        // if (_log.shouldDebug())
                         //     _log.debug("Outbound wants activity: " + cur);
                         break;
                     } else {
@@ -1647,7 +1648,7 @@ class EstablishmentManager {
                         // established
                         if (next < nextSendTime)
                             nextSendTime = next;
-                        // if (_log.shouldLog(Log.DEBUG))
+                        // if (_log.shouldDebug())
                         //     _log.debug("Outbound doesn't want activity: " + cur + " (next=" + (when-now) + ")");
                     }
                 }
@@ -1660,7 +1661,7 @@ class EstablishmentManager {
         //    _log.log(Log.CRIT, "Admitted " + admitted + " in push with " + remaining + " remaining queued and " + active + " active");
 
         if (outboundState != null) {
-            //if (_log.shouldLog(Log.DEBUG))
+            //if (_log.shouldDebug())
             //    _log.debug("Processing for outbound: " + outboundState);
             synchronized (outboundState) {
                 boolean expired = outboundState.getLifetime() >= MAX_OB_ESTABLISH_TIME;
@@ -1745,7 +1746,7 @@ class EstablishmentManager {
             // remove only if value == state
             boolean removed = _liveIntroductions.remove(Long.valueOf(nonce), outboundState);
             if (removed) {
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldDebug())
                     _log.debug("Relay request for " + outboundState + " timed out");
                 _context.statManager().addRateData("udp.sendIntroRelayTimeout", 1);
             }
@@ -1759,8 +1760,8 @@ class EstablishmentManager {
         // remove only if value == state
         _outboundStates.remove(outboundState.getRemoteHostId(), outboundState);
         if (outboundState.getState() != OB_STATE_CONFIRMED_COMPLETELY) {
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Session with " + outboundState + " has expired; Lifetime: " + outboundState.getLifetime() + "ms ");
+            if (_log.shouldDebug())
+                _log.debug("Session with " + outboundState + " has expired; Lifetime: " + outboundState.getLifetime() + "ms ");
             OutNetMessage msg;
             while ((msg = outboundState.getNextQueuedMessage()) != null) {
                 _transport.failed(msg, "Expired during failed establishment attempt");
@@ -1905,7 +1906,7 @@ class EstablishmentManager {
 
         private void doPass() {
             long now = _context.clock().now();
-            if (_log.shouldLog(Log.DEBUG) && _lastPrinted + PRINT_INTERVAL < now) {
+            if (_log.shouldDebug() && _lastPrinted + PRINT_INTERVAL < now) {
                 _lastPrinted = now;
                 int iactive = _inboundStates.size();
                 int oactive = _outboundStates.size();
@@ -1938,7 +1939,7 @@ class EstablishmentManager {
                     }
                 } catch (InterruptedException ie) {
                 }
-                // if (_log.shouldLog(Log.DEBUG))
+                // if (_log.shouldDebug())
                 //     _log.debug("After waiting w/ nextSend=" + nextSendTime
                 //                + " and delay=" + delay + " and interrupted=" + interrupted);
             }
@@ -1950,7 +1951,7 @@ class EstablishmentManager {
                 OutboundEstablishState state = iter.next();
                 if (state.getLifetime() > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Failsafe removal of LiveIntroduction: " + state);
                 }
             }
@@ -1958,7 +1959,7 @@ class EstablishmentManager {
                 OutboundEstablishState state = iter.next();
                 if (state.getLifetime() > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Failsafe removal of OutboundByClaimedAddress: " + state);
                 }
             }
@@ -1966,7 +1967,7 @@ class EstablishmentManager {
                 OutboundEstablishState state = iter.next();
                 if (state.getLifetime() > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Failsafe removal of OutboundByHash: " + state);
                 }
             }

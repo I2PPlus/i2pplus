@@ -28,7 +28,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         public QueuedI2CPMessageReaderRunner() {
             super();
         }
-        
+
         /**
          * Shuts the pumper down.
          */
@@ -37,7 +37,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
             super.cancelRunner();
             _readerThread.interrupt();
         }
-        
+
         /**
          * Pumps messages from the incoming message queue to the listener.
          */

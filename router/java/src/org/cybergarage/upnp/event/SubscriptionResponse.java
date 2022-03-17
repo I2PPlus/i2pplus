@@ -10,7 +10,7 @@
 *
 *	01/29/03
 *		- first revision.
-*	
+*
 ******************************************************************/
 
 package org.cybergarage.upnp.event;
@@ -23,7 +23,7 @@ public class SubscriptionResponse extends HTTPResponse
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
-	
+
 	public SubscriptionResponse()
 	{
 		setServer(UPnP.getServerName());
@@ -43,7 +43,7 @@ public class SubscriptionResponse extends HTTPResponse
 		setStatusCode(code);
 		setContentLength(0);
 	}
-	
+
 	////////////////////////////////////////////////
 	//	Error
 	////////////////////////////////////////////////
@@ -53,7 +53,7 @@ public class SubscriptionResponse extends HTTPResponse
 		setStatusCode(code);
 		setContentLength(0);
 	}
-		
+
 	////////////////////////////////////////////////
 	//	SID
 	////////////////////////////////////////////////

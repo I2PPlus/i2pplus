@@ -248,7 +248,7 @@ public class EepHead extends EepGet {
             else
                 timeout.setInactivityTimeout(INACTIVITY_TIMEOUT);
         }
-        
+
         // Should we even follow redirects for HEAD?
         if (_redirectLocation != null) {
             try {
@@ -284,13 +284,13 @@ public class EepHead extends EepGet {
                     throw new IOException("Proxy requires authentication");
                 if (as.authSent)
                     throw new IOException("Proxy authentication failed");  // ignore stale
-                if (_log.shouldLog(Log.INFO)) _log.info("Adding auth");
+                if (_log.shouldInfo()) _log.info("Adding auth");
                 // actually happens in getRequest()
             } else {
                 _redirects++;
                 if (_redirects > 5)
                     throw new IOException("Too many redirects: to " + _redirectLocation);
-                if (_log.shouldLog(Log.INFO)) _log.info("Redirecting to " + _redirectLocation);
+                if (_log.shouldInfo()) _log.info("Redirecting to " + _redirectLocation);
                 if (as != null)
                     as.authSent = false;
             }
@@ -310,7 +310,7 @@ public class EepHead extends EepGet {
         if (timeout != null)
             timeout.cancel();
 
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Headers read completely");
 
         if (_out != null)
@@ -356,7 +356,7 @@ public class EepHead extends EepGet {
         int port = url.getPort();
         String path = url.getRawPath();
         String query = url.getRawQuery();
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Requesting headers for:" + _actualURL);
         // RFC 2616 sec 5.1.2 - full URL if proxied, absolute path only if not proxied
         String urlToSend;
@@ -387,7 +387,7 @@ public class EepHead extends EepGet {
             buf.append("\r\n");
         }
         buf.append("Connection: close\r\n\r\n");
-        if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldDebug())
             _log.debug("Request: [" + buf.toString() + "]");
         return buf.toString();
     }

@@ -108,7 +108,7 @@ public abstract class RrdBackend {
 
     /**
      * Return the URI associated to this backend, using the factory to generate it from the path.
-     * 
+     *
      * @return URI to this backend's rrd.
      */
     public URI getUri() {
@@ -260,7 +260,7 @@ public abstract class RrdBackend {
         value = value.trim();
         // Over-sized string are appended at the end of the RRD
         // The real position is encoded in the "short" ds name, using the private use area from Unicode
-        // This area span the range E000-F8FF, that' a 6400 char area, 
+        // This area span the range E000-F8FF, that' a 6400 char area,
         if (value.length() > RrdPrimitive.STRING_LENGTH) {
             String bigString = value;
             int byteStringLength = Math.min(MAXUNSIGNEDSHORT, bigString.length());
@@ -338,7 +338,7 @@ public abstract class RrdBackend {
 
     /**
      * Extract a CharBuffer from the backend, used by readString
-     * 
+     *
      * @param offset the offset in the rrd
      * @param size the size of the buffer, in character
      * @return a new CharBuffer
