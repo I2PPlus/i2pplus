@@ -417,7 +417,7 @@ hr.debug {margin: 1px 0 -5px; width: 100%; background: linear-gradient(90deg,#00
 #commentInfo td, #userComments td {padding: 8px 5px}
 #commentInfo td:first-child {white-space: nowrap; font-weight: 700}
 #commentInfo td:first-child::after, #userComments td:first-child::after {min-height: 22px; vertical-align: middle; display: inline-block; content: ""}
-#commentInfo td.commentAction {padding: 10px 6px 10px 10px; border-left: var(--border); box-shadow: var(--bevel); background: var(--th)}
+#commentInfo td.commentAction {padding: 10px 6px 10px 10px; border-left: var(--border)}
 #commentInfo input.accept {margin-right: 5px; float: right}
 #commentInfo th input[type=submit] {float: none; display: inline-block; vertical-align: middle}
 #commentInfo th input[type=checkbox] {margin-left: 4px; margin-right: 4px}
