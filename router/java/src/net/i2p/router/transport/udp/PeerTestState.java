@@ -175,7 +175,7 @@ class PeerTestState {
         if (_aliceIPFromCharlie != null)
             buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
         if (_bob != null)
-            buf.append(" [Bob: ").append(_bob.toString().append("]");
+            buf.append(" [Bob: ").append(_bob.toString()).append("]");
         if (_charlieIP != null)
             buf.append(" [Charlie: ").append(_charlieIP).append(':').append(_charliePort).append("]");
         if (_lastSendTime > 0)
