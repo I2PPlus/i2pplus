@@ -51,6 +51,7 @@ class BuildExecutor implements Runnable {
     private static final int MAX_CONCURRENT_BUILDS = SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ? 10 : Math.max(SystemVersion.getCores() * 3, 16);
     /** accept replies up to a minute after we gave up on them */
     private static final long GRACE_PERIOD = 60*1000;
+    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
 
     public boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
@@ -69,30 +70,30 @@ class BuildExecutor implements Runnable {
         _currentlyBuilding = new Object();
         _currentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(MAX_CONCURRENT_BUILDS);
         _recentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(4 * MAX_CONCURRENT_BUILDS);
-        _context.statManager().createRequiredRateStat("tunnel.concurrentBuilds", "How many builds are going at once", "Tunnels", new long[] { 60*1000, 5*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("tunnel.concurrentBuildsLagged", "Concurrent build count before rejecting (job lag)", "Tunnels", new long[] { 60*1000, 5*60*1000, 60*60*1000 }); // (period is lag)
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryExpire", "No response to our build request", "Tunnels [Exploratory]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRequiredRateStat("tunnel.concurrentBuilds", "How many builds are going at once", "Tunnels", RATES);
+        _context.statManager().createRateStat("tunnel.concurrentBuildsLagged", "Concurrent build count before rejecting (job lag)", "Tunnels", RATES); // (period is lag)
+        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryExpire", "No response to our build request", "Tunnels [Exploratory]", RATES);
         if (fullStats()) {
-            _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to our build request", "Tunnels", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-            _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for rejection (ms)", "Tunnels", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-            _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for success (ms)", "Tunnels", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+            _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to our build request", "Tunnels", RATES);
+            _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for rejection (ms)", "Tunnels", RATES);
+            _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for success (ms)", "Tunnels", RATES);
         } else {
-            _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to our build request", "Tunnels", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-            _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for rejection (ms)", "Tunnels", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-            _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for success (ms)", "Tunnels", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+            _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to our build request", "Tunnels", RATES);
+            _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for rejection (ms)", "Tunnels", RATES);
+            _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for success (ms)", "Tunnels", RATES);
         }
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for success (ms)", "Tunnels [Exploratory]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for rejection (ms)", "Tunnels [Exploratory]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.buildRequestTime", "Time to build a tunnel request (ms)", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.buildConfigTime", "Time to build a tunnel config (ms)", "Tunnels", new long[] { 60*1000, 10*60*1000 });
-        //_context.statManager().createRateStat("tunnel.buildRequestZeroHopTime", "Time to build a zero hop tunnel", "Tunnels", new long[] { 60*1000, 10*60*1000 });
-        //_context.statManager().createRateStat("tunnel.pendingRemaining", "How many inbound requests are pending after a pass (period is how long the pass takes)?", "Tunnels", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRateStat("tunnel.buildFailFirstHop", "OB tunnel build failure frequency (can't contact 1st hop)", "Tunnels", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels", new long[] { 10*60*1000 });
-        //ctx.statManager().createRateStat("tunnel.buildClientExpireIB", "", "Tunnels", new long[] { 60*1000, 60*60*1000 });
-        //ctx.statManager().createRateStat("tunnel.buildClientExpireOB", "", "Tunnels", new long[] { 60*1000, 60*60*1000 });
-        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireIB", "", "Tunnels [Exploratory]", new long[] { 60*1000, 60*60*1000 });
-        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireOB", "", "Tunnels [Exploratory]", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for success (ms)", "Tunnels [Exploratory]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for rejection (ms)", "Tunnels [Exploratory]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildRequestTime", "Time to build a tunnel request (ms)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildConfigTime", "Time to build a tunnel config (ms)", "Tunnels", RATES);
+        //_context.statManager().createRateStat("tunnel.buildRequestZeroHopTime", "Time to build a zero hop tunnel", "Tunnels", RATES);
+        //_context.statManager().createRateStat("tunnel.pendingRemaining", "How many inbound requests are pending after a pass (period is how long the pass takes)?", "Tunnels", RATES);
+        _context.statManager().createRateStat("tunnel.buildFailFirstHop", "OB tunnel build failure frequency (can't contact 1st hop)", "Tunnels", RATES);
+        _context.statManager().createRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels", RATES);
+        //ctx.statManager().createRateStat("tunnel.buildClientExpireIB", "", "Tunnels", RATES);
+        //ctx.statManager().createRateStat("tunnel.buildClientExpireOB", "", "Tunnels", RATES);
+        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireIB", "", "Tunnels [Exploratory]", RATES);
+        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireOB", "", "Tunnels [Exploratory]", RATES);
 
         // Get stat manager, get recognized bandwidth tiers
         StatManager statMgr = _context.statManager();
@@ -100,14 +101,14 @@ class BuildExecutor implements Runnable {
         // For each bandwidth tier, create tunnel build agree/reject/expire stats
         for (int i = 0; i < bwTiers.length(); i++) {
             String bwTier = String.valueOf(bwTiers.charAt(i));
-            statMgr.createRateStat("tunnel.tierAgree" + bwTier, "Agreed joins from bandwidth tier " + bwTier, "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-            statMgr.createRateStat("tunnel.tierReject" + bwTier, "Rejected joins from bandwidth tier " + bwTier, "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-            statMgr.createRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels", new long[] { 60*1000, 10*60*1000 });
+            statMgr.createRateStat("tunnel.tierAgree" + bwTier, "Agreed joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
+            statMgr.createRateStat("tunnel.tierReject" + bwTier, "Rejected joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
+            statMgr.createRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels", RATES);
         }
         // For caution, also create stats for unknown
-        statMgr.createRateStat("tunnel.tierAgreeUnknown", "Agreed joins from unknown bandwidth tier", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        statMgr.createRateStat("tunnel.tierRejectUnknown", "Rejected joins from unknown bandwidth tier", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        statMgr.createRateStat("tunnel.tierExpireUnknown", "Expired joins from unknown bandwidth tier", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
+        statMgr.createRateStat("tunnel.tierAgreeUnknown", "Agreed joins from unknown bandwidth tier", "Tunnels [Participating]", RATES);
+        statMgr.createRateStat("tunnel.tierRejectUnknown", "Rejected joins from unknown bandwidth tier", "Tunnels [Participating]", RATES);
+        statMgr.createRateStat("tunnel.tierExpireUnknown", "Expired joins from unknown bandwidth tier", "Tunnels [Participating]", RATES);
     }
 
     /**
