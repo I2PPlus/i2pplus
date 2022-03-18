@@ -604,11 +604,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             OutboundMessageState state = f.state;
             if (acked(f)) {
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] New ACK of fragment " + f.num + " of " + state);
+                    _log.debug("[SSU2] New ACK of fragment " + f.num + state);
             } else {
                 // will happen with retransmission as a different packet number
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] Dup ACK of fragment " + f.num + " of " + state);
+                    _log.warn("[SSU2] Dup ACK of fragment " + f.num + state);
             }
             long sn = state.getSeqNum();
             if (sn > highest)
@@ -658,7 +658,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             super(_context.simpleTimer2());
             long delta = Math.min(_rtt/2, ACK_FREQUENCY);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Sending delayed ack in " + delta + ": " + PeerState2.this);
+                _log.debug("[SSU2] Sending delayed ACK in " + delta + ": " + PeerState2.this);
             schedule(delta);
         }
 
@@ -671,14 +671,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             synchronized(PeerState2.this) {
                 if (_wantACKSendSince <= 0) {
                     if (_log.shouldDebug())
-                        _log.debug("[SSU2] Already acked:" + PeerState2.this);
+                        _log.debug("[SSU2] Already ACKed:" + PeerState2.this);
                     return;
                 }
                 _wantACKSendSince = 0;
             }
             UDPPacket ack = _transport.getBuilder2().buildACK(PeerState2.this);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] ACKTimer sending acks to " + PeerState2.this);
+                _log.debug("[SSU2] ACKTimer sending ACKs to: " + PeerState2.this);
             _transport.send(ack);
         }
     }
