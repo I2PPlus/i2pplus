@@ -441,7 +441,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) throws DataFormatException {
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received FRAGMENT block: " + messageId + " fragment " + frag + " isLast? " + isLast);
+            _log.debug("[SSU2] Received FRAGMENT block [#" + frag + "] for [MsgID " + messageId + "]; isLast? " + isLast);
         InboundMessageState state;
         boolean messageComplete = false;
         boolean messageExpired = false;
