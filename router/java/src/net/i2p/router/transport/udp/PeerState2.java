@@ -658,7 +658,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             super(_context.simpleTimer2());
             long delta = Math.min(_rtt/2, ACK_FREQUENCY);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Sending delayed ACK in " + delta + ": " + PeerState2.this);
+                _log.debug("[SSU2] Sending delayed ACK in " + delta + "ms to " + PeerState2.this);
             schedule(delta);
         }
 
