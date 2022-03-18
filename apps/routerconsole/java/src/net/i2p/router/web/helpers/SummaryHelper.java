@@ -708,7 +708,7 @@ public class SummaryHelper extends HelperBase {
         }
         buf.append("</h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
-            Collections.sort(clients, new AlphaComparator());
+            DataHelper.sort(clients, new AlphaComparator());
             buf.append("<table id=\"sb_localtunnels\" class=\"volatile\">");
 
             for (Destination client : clients) {
