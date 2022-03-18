@@ -86,7 +86,7 @@ function refreshSidebar(timestamp) {
           setTimeout(function() {
             var redirect = document.createElement("meta");
             redirect.httpEquiv = "refresh";
-            redirect.content = "60";
+            redirect.content = "90";
             document.head.appendChild(redirect);
           }, 60000);
         }

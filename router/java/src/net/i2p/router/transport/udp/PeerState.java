@@ -111,7 +111,7 @@ public class PeerState {
     private final Queue<ResendACK> _currentACKsResend;
 
     /** when did we last send ACKs to the peer? */
-    private volatile long _lastACKSend;
+    protected volatile long _lastACKSend;
     /** when did we decide we need to ACK to this peer? */
     protected volatile long _wantACKSendSince;
     /** have we received a packet with the ECN bit set in the current second? */
@@ -367,8 +367,6 @@ public class PeerState {
             _sendWindowBytes = 4 * _mtu;
         _sendWindowBytesRemaining = _sendWindowBytes;
 
-        _lastACKSend = -1;
-
         _rto = INIT_RTO;
         _rtt = INIT_RTT;
         if (rtt > 0)
@@ -418,8 +416,6 @@ public class PeerState {
         // RFC 5681 sec. 3.1
             _sendWindowBytes = 3 * _mtu;
         _sendWindowBytesRemaining = _sendWindowBytes;
-
-        _lastACKSend = -1;
 
         _rto = INIT_RTO;
         _rtt = INIT_RTT;
@@ -2063,7 +2059,7 @@ public class PeerState {
                 if (!found) {
                     // shouldn't happen except on race
                     if (_log.shouldWarn())
-                        _log.warn("Acked but not found in outbound messages: " + state);
+                        _log.warn("ACKed but not found in outbound messages: " + state);
                     return false;
                 }
             }
@@ -2081,17 +2077,17 @@ public class PeerState {
             _transport.succeeded(state);
             if (_log.shouldDebug()) {
                 if (state.getFragmentCount() > 1) {
-                    _log.debug("Received partial ack of " + state.getMessageId() + " by " + _remotePeer
+                    _log.debug("Received partial ACK of " + state.getMessageId() + " by " + _remotePeer
                                + " newly-acked: " + ackedSize
                                + ", now complete for: " + state);
                 } else {
-                    _log.debug("Received ack of " + state.getMessageId() + " by " + _remotePeer
+                    _log.debug("Received ACK of " + state.getMessageId() + " by " + _remotePeer
                                + " after " + lifetime + " and " + numSends + " sends");
                 }
             }
         } else {
             if (_log.shouldDebug())
-                _log.debug("Received partial ack of " + state.getMessageId() + " by " + _remotePeer
+                _log.debug("Received partial ACK of " + state.getMessageId() + " by " + _remotePeer
                       + " after " + lifetime + " and " + numSends + " sends"
                       + " complete? false"
                       + " newly-acked: " + ackedSize

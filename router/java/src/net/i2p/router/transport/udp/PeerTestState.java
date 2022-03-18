@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 
 /**
@@ -16,8 +17,7 @@ class PeerTestState {
     private final boolean _isIPv6;
     private InetAddress _aliceIP;
     private int _alicePort;
-    private InetAddress _bobIP;
-    private int _bobPort;
+    private final PeerState _bob;
     private InetAddress _charlieIP;
     private int _charliePort;
     private InetAddress _aliceIPFromCharlie;
@@ -26,8 +26,10 @@ class PeerTestState {
     private SessionKey _aliceCipherKey;
     private SessionKey _aliceMACKey;
     private SessionKey _charlieIntroKey;
-    private SessionKey _bobCipherKey;
-    private SessionKey _bobMACKey;
+    // SSU2 only
+    private Hash _aliceHash;
+    // SSU2 only
+    private Hash _charlieHash;
     private final long _beginTime;
     private long _lastSendTime;
     private long _receiveAliceTime;
@@ -37,8 +39,12 @@ class PeerTestState {
 
     public enum Role {ALICE, BOB, CHARLIE};
 
-    public PeerTestState(Role role, boolean isIPv6, long nonce, long now) {
+    /**
+     * @param bob null if role is BOB
+     */
+    public PeerTestState(Role role, PeerState bob, boolean isIPv6, long nonce, long now) {
         _ourRole = role;
+        _bob = bob;
         _isIPv6 = isIPv6;
         _testNonce = nonce;
         _beginTime = now;
@@ -48,6 +54,12 @@ class PeerTestState {
 
     /** Are we Alice, bob, or Charlie. */
     public Role getOurRole() { return _ourRole; }
+
+    /**
+     * @return null if we are bob
+     * @since 0.9.54
+     */
+    public PeerState getBob() { return _bob; }
 
     /**
      * Is this an IPv6 test?
@@ -62,11 +74,26 @@ class PeerTestState {
      *
      */
     public InetAddress getAliceIP() { return _aliceIP; }
-    public void setAliceIP(InetAddress ip) { _aliceIP = ip; }
-    public InetAddress getBobIP() { return _bobIP; }
-    public void setBobIP(InetAddress ip) { _bobIP = ip; }
+    /**
+     * @param hash SSU2 only, null for SSU1
+     * @since 0.9.54
+     */
+    public void setAlice(InetAddress ip, int port, Hash hash) {
+        _aliceIP = ip;
+        _alicePort = port;
+        _aliceHash = hash;
+    }
+    public InetAddress getBobIP() { return _bob.getRemoteIPAddress(); }
     public InetAddress getCharlieIP() { return _charlieIP; }
-    public void setCharlieIP(InetAddress ip) { _charlieIP = ip; }
+    /**
+     * @param hash SSU2 only, null for SSU1
+     * @since 0.9.54
+     */
+    public void setCharlie(InetAddress ip, int port, Hash hash) {
+        _charlieIP = ip;
+        _charliePort = port;
+        _charlieHash = hash;
+    }
     public InetAddress getAliceIPFromCharlie() { return _aliceIPFromCharlie; }
     public void setAliceIPFromCharlie(InetAddress ip) { _aliceIPFromCharlie = ip; }
     /**
@@ -76,9 +103,7 @@ class PeerTestState {
      *
      */
     public int getAlicePort() { return _alicePort; }
-    public void setAlicePort(int alicePort) { _alicePort = alicePort; }
-    public int getBobPort() { return _bobPort; }
-    public void setBobPort(int bobPort) { _bobPort = bobPort; }
+    public int getBobPort() { return _bob.getRemotePort(); }
     public int getCharliePort() { return _charliePort; }
     public void setCharliePort(int charliePort) { _charliePort = charliePort; }
 
@@ -111,18 +136,8 @@ class PeerTestState {
     public SessionKey getCharlieIntroKey() { return _charlieIntroKey; }
     public void setCharlieIntroKey(SessionKey key) { _charlieIntroKey = key; }
 
-    public SessionKey getBobCipherKey() { return _bobCipherKey; }
-    public SessionKey getBobMACKey() { return _bobMACKey; }
-
-    /**
-     *  @param ck cipher key
-     *  @param mk MAC key
-     *  @since 0.9.52
-     */
-    public void setBobKeys(SessionKey ck, SessionKey mk) {
-        _bobCipherKey = ck;
-        _bobMACKey = mk;
-    }
+    public SessionKey getBobCipherKey() { return _bob.getCurrentCipherKey(); }
+    public SessionKey getBobMACKey() { return _bob.getCurrentMACKey(); }
 
     /** when did this test begin? */
     public long getBeginTime() { return _beginTime; }
@@ -159,8 +174,8 @@ class PeerTestState {
             buf.append(" [Alice: ").append(_aliceIP).append(':').append(_alicePort).append("]");
         if (_aliceIPFromCharlie != null)
             buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
-        if (_bobIP != null)
-            buf.append(" [Bob: ").append(_bobIP).append(':').append(_bobPort).append("]");
+        if (_bob != null)
+            buf.append(" [Bob: ").append(_bob.toString()).append("]");
         if (_charlieIP != null)
             buf.append(" [Charlie: ").append(_charlieIP).append(':').append(_charliePort).append("]");
         if (_lastSendTime > 0)

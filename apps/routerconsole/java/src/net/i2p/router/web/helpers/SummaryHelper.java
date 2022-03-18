@@ -699,8 +699,8 @@ public class SummaryHelper extends HelperBase {
         buf.append("<h3>");
         if (link) {
             buf.append("<a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
-           .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
-           .append("\">");
+              .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
+              .append("\">");
         }
         buf.append(_t("Service Tunnels"));
         if (link) {
@@ -1031,12 +1031,12 @@ public class SummaryHelper extends HelperBase {
             if (dver == null)
                 dver = NewsHelper.unsignedVersionDownloaded();
         }
-        if (dver != null && !NewsHelper.isUpdateInProgress()) {
+        if (dver != null && !NewsHelper.isUpdateInProgress() && !_context.router().gracefulShutdownInProgress()) {
             if (needSpace)
                 buf.append("<hr>");
             else
                 needSpace = true;
-            if (!_context.router().gracefulShutdownInProgress()) {
+            if (!_context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress()) {
                 buf.append("<h4 id=\"restartRequired\" class=\"sb_info sb_update volatile\" title=\"");
                 if (_context.hasWrapper() || NewsHelper.isExternalRestartPending())
                     buf.append(_t("Click Restart to install").replace("Click ", ""));
@@ -1048,10 +1048,10 @@ public class SummaryHelper extends HelperBase {
                 buf.append(_t("Update downloaded")).append("<br>")
                    .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
                    .append("</b></h4>");
-            } else {
-                buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update\" class=\"volatile\"><b>")
-                   .append(_t("Updating after restart")).append("&hellip;</b></h4>");
             }
+        } else if (dver != null && _context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress()) {
+            buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update\" class=\"volatile\"><b>")
+               .append(_t("Updating after restart")).append("&hellip;</b></h4>");
         }
         boolean avail = updateAvailable();
         boolean unsignedAvail = unsignedUpdateAvailable();
@@ -1078,9 +1078,9 @@ public class SummaryHelper extends HelperBase {
                 buf.append("<hr>");
             else
                 needSpace = true;
-            buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update available")).append(":<br>");
-            buf.append(_t("Version {0}", getUnsignedUpdateVersion())).append("<br>");
-            buf.append(unsignedConstraint).append("</b></h4>");
+            buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update available")).append(":<br>")
+               .append(_t("Version {0}", getUnsignedUpdateVersion())).append("<br>")
+               .append(unsignedConstraint).append("</b></h4>");
             unsignedAvail = false;
         }
         if (devSU3Avail && devSU3Constraint != null && !NewsHelper.isUpdateInProgress() && !_context.router().gracefulShutdownInProgress()) {
@@ -1088,9 +1088,9 @@ public class SummaryHelper extends HelperBase {
                 buf.append("<hr>");
             else
                 needSpace = true;
-            buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update available")).append(":<br>");
-            buf.append(_t("Version {0}", getDevSU3UpdateVersion())).append("<br>");
-            buf.append(devSU3Constraint).append("</b></h4>");
+            buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update available")).append(":<br>")
+               .append(_t("Version {0}", getDevSU3UpdateVersion())).append("<br>")
+               .append(devSU3Constraint).append("</b></h4>");
             devSU3Avail = false;
         }
         if ((avail || unsignedAvail || devSU3Avail) &&
@@ -1107,12 +1107,12 @@ public class SummaryHelper extends HelperBase {
                     System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
                 System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce+"");
                 String uri = getRequestURI();
-                buf.append("<form action=\"").append(uri).append("\" method=\"POST\">\n");
-                buf.append("<input type=\"hidden\" name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
+                buf.append("<form action=\"").append(uri).append("\" method=\"POST\">\n")
+                   .append("<input type=\"hidden\" name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
                 if (avail) {
                     buf.append("<span id=\"updateAvailable\">").append(_t("Release update available")).append("<br><i>")
-                       .append(_t("Version")).append(": ").append(getUpdateVersion());
-                    buf.append("</i></span><br><button type=\"submit\" id=\"sb_downloadReleaseUpdate\" class=\"download\" name=\"updateAction\" value=\"signed\" >")
+                       .append(_t("Version")).append(": ").append(getUpdateVersion())
+                       .append("</i></span><br><button type=\"submit\" id=\"sb_downloadReleaseUpdate\" class=\"download\" name=\"updateAction\" value=\"signed\" >")
                        // Note to translators: parameter is a version, e.g. "0.8.4"
 //                       .append(_t("Download {0} Update", getUpdateVersion()))
                        .append(_t("Download I2P Update"))
@@ -1120,8 +1120,8 @@ public class SummaryHelper extends HelperBase {
                 }
                 if (devSU3Avail) {
                     buf.append("<span id=\"updateAvailable\">").append(_t("Signed development update available")).append("<br><i>")
-                       .append(_t("Version")).append(": ").append(getDevSU3UpdateVersion());
-                    buf.append("</i></span><br><button type=\"submit\" id=\"sb_downloadSignedDevUpdate\" class=\"download\" name=\"updateAction\" value=\"DevSU3\" >")
+                       .append(_t("Version")).append(": ").append(getDevSU3UpdateVersion())
+                       .append("</i></span><br><button type=\"submit\" id=\"sb_downloadSignedDevUpdate\" class=\"download\" name=\"updateAction\" value=\"DevSU3\" >")
                        // Note to translators: parameter is a router version, e.g. "0.9.19-16"
                        // <br> is optional, to help the browser make the lines even in the button
                        // If the translation is shorter than the English, you should probably not include <br>
@@ -1135,8 +1135,8 @@ public class SummaryHelper extends HelperBase {
                         buf.append(_t("Unsigned update available").replace("update", "I2P+ update"));
                     else
                         buf.append(_t("Unsigned update available").replace("update", "I2P update"));
-                    buf.append("<br><i>").append(getUnsignedUpdateVersion());
-                    buf.append("</i></span><br><button type=\"submit\" id=\"sb_downloadUnsignedDevUpdate\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >");
+                    buf.append("<br><i>").append(getUnsignedUpdateVersion())
+                       .append("</i></span><br><button type=\"submit\" id=\"sb_downloadUnsignedDevUpdate\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >");
                        // Note to translators: parameter is a date and time, e.g. "02-Mar 20:34 UTC"
                        // <br> is optional, to help the browser make the lines even in the button
                        // If the translation is shorter than the English, you should probably not include <br>

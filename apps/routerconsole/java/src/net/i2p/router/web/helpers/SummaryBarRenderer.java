@@ -809,7 +809,7 @@ class SummaryBarRenderer {
             buf.append("<div id=\"sb_updatesection\" class=\"hide volatile\"></div>\n");
         } else {
             buf.append("<div id=\"sb_updatesection\" class=\"volatile\">\n")
-               .append("<h3 id=\"sb_updatestatus\"><a href=\"/configupdate\" target=\"_top\" title=\"")
+               .append("<h3><a href=\"/configupdate\" target=\"_top\" title=\"")
                .append(_t("Configure I2P Updates"))
                .append("\">")
                .append(_t("Update Status"))

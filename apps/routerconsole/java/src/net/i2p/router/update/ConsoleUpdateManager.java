@@ -1034,11 +1034,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     public void notifyProgress(UpdateTask task, String status, long downloaded, long totalSize) {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("<div class=\"sb_updatestatus\">");
+        buf.append("<div class=\"sb_updatestatus volatile\">");
         buf.append(status).append("</div>");
         double pct = ((double)downloaded) / ((double)totalSize);
         synchronized (_pct) {
-            buf.append("<div class=\"percentBarOuter\"><div class=\"percentBarText\">");
+            buf.append("<div class=\"percentBarOuter volatile\"><div class=\"percentBarText\">");
             buf.append(DataHelper.formatSize2(downloaded));
             buf.append("B / ");
             buf.append(DataHelper.formatSize2(totalSize));
