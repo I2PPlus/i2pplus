@@ -671,14 +671,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             synchronized(PeerState2.this) {
                 if (_wantACKSendSince <= 0) {
                     if (_log.shouldDebug())
-                        _log.debug("[SSU2] Already ACKed:" + PeerState2.this);
+                        _log.debug("[SSU2] Already ACKed " + PeerState2.this);
                     return;
                 }
                 _wantACKSendSince = 0;
             }
             UDPPacket ack = _transport.getBuilder2().buildACK(PeerState2.this);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] ACKTimer sending ACKs to: " + PeerState2.this);
+                _log.debug("[SSU2] ACKTimer sending ACKs to " + PeerState2.this);
             _transport.send(ack);
         }
     }
