@@ -1050,7 +1050,7 @@ public class SummaryHelper extends HelperBase {
                    .append("</b></h4>");
             }
         } else if (dver != null && _context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress()) {
-            buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update\" class=\"volatile\"><b>")
+            buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update volatile\"><b>")
                .append(_t("Updating after restart")).append("&hellip;</b></h4>");
         }
         boolean avail = updateAvailable();
@@ -1066,7 +1066,7 @@ public class SummaryHelper extends HelperBase {
                 buf.append("<hr>");
             else
                 needSpace = true;
-            buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update available")).append(":<br>");
+            buf.append("<h4 class=\"sb_info sb_update volatile\"><b>").append(_t("Update available")).append(":<br>");
             buf.append(_t("Version {0}", getUpdateVersion())).append("<br>");
             buf.append(constraint).append("</b></h4>");
             avail = false;
@@ -1078,7 +1078,7 @@ public class SummaryHelper extends HelperBase {
                 buf.append("<hr>");
             else
                 needSpace = true;
-            buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update available")).append(":<br>")
+            buf.append("<h4 class=\"sb_info sb_update volatile\"><b>").append(_t("Update available")).append(":<br>")
                .append(_t("Version {0}", getUnsignedUpdateVersion())).append("<br>")
                .append(unsignedConstraint).append("</b></h4>");
             unsignedAvail = false;
@@ -1088,7 +1088,7 @@ public class SummaryHelper extends HelperBase {
                 buf.append("<hr>");
             else
                 needSpace = true;
-            buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update available")).append(":<br>")
+            buf.append("<h4 class=\"sb_info sb_update volatile\"><b>").append(_t("Update available")).append(":<br>")
                .append(_t("Version {0}", getDevSU3UpdateVersion())).append("<br>")
                .append(devSU3Constraint).append("</b></h4>");
             devSU3Avail = false;
@@ -1107,7 +1107,7 @@ public class SummaryHelper extends HelperBase {
                     System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
                 System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce+"");
                 String uri = getRequestURI();
-                buf.append("<form action=\"").append(uri).append("\" method=\"POST\">\n")
+                buf.append("<form action=\"").append(uri).append("\" method=\"POST\" class=\"volatile\">\n")
                    .append("<input type=\"hidden\" name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
                 if (avail) {
                     buf.append("<span id=\"updateAvailable\">").append(_t("Release update available")).append("<br><i>")
@@ -1119,7 +1119,7 @@ public class SummaryHelper extends HelperBase {
                        .append("</button><br>\n");
                 }
                 if (devSU3Avail) {
-                    buf.append("<span id=\"updateAvailable\">").append(_t("Signed development update available")).append("<br><i>")
+                    buf.append("<span id=\"updateAvailable\" class=\"volatile\">").append(_t("Signed development update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getDevSU3UpdateVersion())
                        .append("</i></span><br><button type=\"submit\" id=\"sb_downloadSignedDevUpdate\" class=\"download\" name=\"updateAction\" value=\"DevSU3\" >")
                        // Note to translators: parameter is a router version, e.g. "0.9.19-16"
@@ -1130,7 +1130,7 @@ public class SummaryHelper extends HelperBase {
                        .append("</button><br>\n");
                 }
                 if (unsignedAvail) {
-                    buf.append("<span id=\"updateAvailable\">");
+                    buf.append("<span id=\"updateAvailable\" class=\"volatile\">");
                     if (source.contains("skank"))
                         buf.append(_t("Unsigned update available").replace("update", "I2P+ update"));
                     else
@@ -1167,11 +1167,14 @@ public class SummaryHelper extends HelperBase {
     public String getFirewallAndReseedStatus() {
         StringBuilder buf = new StringBuilder(256);
         if (showFirewallWarning()) {
-            buf.append("<h4 id=\"sb_warning\"><span><a href=\"/help#configurationhelp\" target=\"_top\" title=\"")
+            buf.append("<h4 id=\"sb_warning\" class=\"volatile\"><span><a href=\"/help#configurationhelp\" target=\"_top\" title=\"")
                .append(_t("Help with firewall configuration"))
                .append("\">")
                .append(_t("Check network connection and NAT/firewall!"))
                .append("</a></span></h4>");
+        } else {
+            // Hide warn but retain h4 so ajax refresh picks it up
+            buf.append("<h4 id=\"sb_warning\" class=\"volatile\" hidden></h4>");
         }
 
         ReseedChecker checker = _context.netDb().reseedChecker();
