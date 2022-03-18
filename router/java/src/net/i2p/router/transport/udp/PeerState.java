@@ -2059,7 +2059,7 @@ public class PeerState {
                 if (!found) {
                     // shouldn't happen except on race
                     if (_log.shouldWarn())
-                        _log.warn("Acked but not found in outbound messages: " + state);
+                        _log.warn("ACKed but not found in outbound messages: " + state);
                     return false;
                 }
             }
@@ -2077,17 +2077,17 @@ public class PeerState {
             _transport.succeeded(state);
             if (_log.shouldDebug()) {
                 if (state.getFragmentCount() > 1) {
-                    _log.debug("Received partial ack of " + state.getMessageId() + " by " + _remotePeer
+                    _log.debug("Received partial ACK of " + state.getMessageId() + " by " + _remotePeer
                                + " newly-acked: " + ackedSize
                                + ", now complete for: " + state);
                 } else {
-                    _log.debug("Received ack of " + state.getMessageId() + " by " + _remotePeer
+                    _log.debug("Received ACK of " + state.getMessageId() + " by " + _remotePeer
                                + " after " + lifetime + " and " + numSends + " sends");
                 }
             }
         } else {
             if (_log.shouldDebug())
-                _log.debug("Received partial ack of " + state.getMessageId() + " by " + _remotePeer
+                _log.debug("Received partial ACK of " + state.getMessageId() + " by " + _remotePeer
                       + " after " + lifetime + " and " + numSends + " sends"
                       + " complete? false"
                       + " newly-acked: " + ackedSize
