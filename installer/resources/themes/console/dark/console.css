@@ -2377,9 +2377,11 @@ iframe {height: 0}
 
 /* console error pages */
 h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20px 20px 70px; min-width: 595px; word-wrap: break-word; text-align: justify; font-size: 10pt; border: var(--border); border-radius: 0 0 4px 4px; box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000; background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px); background-size: 44px, 100%, 100% 4px}
+#error500 h1.err {margin-top: -10px}
 #error500 #warning.sorry {border-radius: 0}
 .sorry p {line-height: 1.3}
 #warning2 {margin: -17px 2px 18px 226px; padding: 10px 20px 5px; min-width: 610px; background: #010}
+#error500 #sidebar {position: absolute}
 #error500 #sidebar a {line-height: 2}
 #error500 #warning2 {border: var(--border_hard); background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left; background-size: 100% 4px}
 #error500 #stacktrace {margin-top: 20px; margin-bottom: 20px}
