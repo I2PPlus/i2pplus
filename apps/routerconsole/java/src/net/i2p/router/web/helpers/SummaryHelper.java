@@ -1031,7 +1031,7 @@ public class SummaryHelper extends HelperBase {
             if (dver == null)
                 dver = NewsHelper.unsignedVersionDownloaded();
         }
-        if (dver != null && !NewsHelper.isUpdateInProgress()) {
+        if (dver != null && !NewsHelper.isUpdateInProgress() && !_context.router().gracefulShutdownInProgress()) {
             if (needSpace)
                 buf.append("<hr>");
             else
@@ -1048,10 +1048,10 @@ public class SummaryHelper extends HelperBase {
                 buf.append(_t("Update downloaded")).append("<br>")
                    .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
                    .append("</b></h4>");
-            } else if (!NewsHelper.isUpdateInProgress()) {
-                buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update\" class=\"volatile\"><b>")
-                   .append(_t("Updating after restart")).append("&hellip;</b></h4>");
             }
+        } else if (dver != null && _context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress()) {
+            buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update\" class=\"volatile\"><b>")
+               .append(_t("Updating after restart")).append("&hellip;</b></h4>");
         }
         boolean avail = updateAvailable();
         boolean unsignedAvail = unsignedUpdateAvailable();
