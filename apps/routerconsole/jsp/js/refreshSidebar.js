@@ -20,13 +20,13 @@ function refreshSidebar(timestamp) {
   xhr.responseType = "document";
   xhr.overrideMimeType("text/html");
   xhr.setRequestHeader("Accept", "text/html");
-  xhr.setRequestHeader("Cache-Control", "no-store");
+  xhr.setRequestHeader("Cache-Control", "no-store, max-age=60");
   xhr.setRequestHeader("Content-Security-Policy", "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'");
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
+      var sbResponse = xhr.responseXML.getElementById("sb");
       if (xhr.status == 200) {
         if (down) {
-          var sbResponse = xhr.responseXML.getElementById("sb");
           xhrContainer.innerHTML = sbResponse.innerHTML;
         }
 
@@ -61,7 +61,8 @@ function refreshSidebar(timestamp) {
 
           function refreshAll(timestamp) {
             var sbResponse = xhr.responseXML.sb;
-            if (typeof sbResponse !== "undefined" && !Object.is(sb.innerHTML, sbResponse.innerHTML)) sb.innerHTML = sbResponse.innerHTML;
+            if (typeof sbResponse !== "undefined" && !Object.is(sb.innerHTML, sbResponse.innerHTML))
+              sb.outerHTML = sbResponse.outerHTML;
           }
 
           function refreshGraph(timestamp) {
