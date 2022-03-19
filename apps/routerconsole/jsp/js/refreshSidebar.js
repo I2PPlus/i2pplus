@@ -61,6 +61,11 @@ function refreshSidebar(timestamp) {
                 }
               }
             }
+            var links = document.querySelectorAll("h3, a");
+            var a;
+            for (a = 1; a < links.length -1; a++) {
+              links[a].removeAttribute("style", "");
+            }
           }
 
           function refreshAll(timestamp) {
@@ -97,7 +102,7 @@ function refreshSidebar(timestamp) {
         }
       } else {
         function isDown() {
-          var links = document.querySelectorAll("a");
+          var links = document.querySelectorAll("h3, a");
           var a;
           for (a = 1; a < links.length -1; a++) {
             links[a].setAttribute("style", "pointer-events: none");
@@ -113,39 +118,45 @@ function refreshSidebar(timestamp) {
           clock.innerHTML = "--:--:--";
           netstatus.innerHTML = '<span id="down">Router is down</span>';
 
-          var sectionTitle = document.querySelectorAll("#sidebar h3");
-          var s;
-          for (s = 0; s < sectionTitle.length; s++) {
-            sectionTitle[s].setAttribute("style", "opacity: .4; pointer-events: none");
-          }
-
           if (services) {
             services.setAttribute("hidden", "");
-            services.nextElementSibling.setAttribute("hidden", "");
+            if (services.nextElementSibling != null) {
+              services.nextElementSibling.setAttribute("hidden", "");
+            }
           }
           if (advanced) {
             advanced.setAttribute("hidden", "");
-            advanced.nextElementSibling.setAttribute("hidden", "");
+            if (advanced.nextElementSibling != null) {
+              advanced.nextElementSibling.setAttribute("hidden", "");
+            }
           }
           if (internals) {
             internals.setAttribute("hidden", "");
-            internals.nextElementSibling.setAttribute("hidden", "");
+            if (internals.nextElementSibling != null) {
+              internals.nextElementSibling.setAttribute("hidden", "");
+            }
           }
           if (graph) {
             graph.setAttribute("hidden", "");
             graph.setAttribute("style", "display: none");
-            graph.nextElementSibling.setAttribute("hidden", "");
+            if (graph.nextElementSibling != null) {
+              graph.nextElementSibling.setAttribute("hidden", "");
+            }
           }
           if (tunnelstatus) {
             tunnelstatus.setAttribute("hidden", "");
-            tunnelstatus.nextElementSibling.setAttribute("hidden", "");
+            if (tunnelstatus.nextElementSibling != null) {
+              tunnelstatus.nextElementSibling.setAttribute("hidden", "");
+            }
           }
           if (shutdownstatus) {
             shutdownstatus.setAttribute("hidden", "");
           }
           if (control) {
             control.setAttribute("hidden", "");
-            control.nextElementSibling.setAttribute("hidden", "");
+            if (control.nextElementSibling != null) {
+              control.nextElementSibling.setAttribute("hidden", "");
+            }
           }
           if (updatesection) {
             updatesection.setAttribute("hidden", "");
