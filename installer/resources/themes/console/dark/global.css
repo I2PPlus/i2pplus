@@ -526,7 +526,7 @@ select::-moz-focus-inner {
   position: relative;
   z-index: 100;
   border: var(--border);
-  box-shadow: 0 0 0 2px #000, var(--highlight), inset 3px 3px 3px rgba(0,0,0,.5);
+  box-shadow: var(--outline), var(--highlight), inset 3px 3px 3px rgba(0,0,0,.5);
   background: linear-gradient(180deg,#010,#020);
   outline: none;
   transition: ease-in left .15s;
@@ -534,8 +534,8 @@ select::-moz-focus-inner {
 }
 
 .optbox.slider:not(:checked), .optbox.slider:not(:checked)[disabled] {
-  background: linear-gradient(180deg,#400,#600);
   border: 1px solid #500;
+  background: linear-gradient(180deg,#400,#600);
 }
 
 .optbox.slider:not(:checked):active {
