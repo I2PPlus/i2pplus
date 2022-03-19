@@ -84,14 +84,17 @@ class UnsignedUpdateHandler implements Checker, Updater {
     @Override
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
                              String id, String newVersion, long maxTime) {
-        if (type != ROUTER_UNSIGNED || method != HTTP || updateSources.isEmpty())
+        if (type != ROUTER_UNSIGNED || method != HTTP || updateSources.isEmpty() || NewsHelper.isUpdateInProgress())
             return null;
         UpdateRunner update = new UnsignedUpdateRunner(_context, _mgr, updateSources);
         // set status before thread to ensure UI feedback
-        if (updateSources.toString().contains("skank") && type == ROUTER_UNSIGNED)
-            _mgr.notifyProgress(update, "<span id=\"contactserver\" class=\"volatile\"><b>" + _mgr._t("Updating I2P").replace("Updating I2P", "Contacting I2P+ update server") + "&hellip;</b></span>");
-        else
-            _mgr.notifyProgress(update, "<span id=\"contactserver\" class=\"volatile\"><b>" + _mgr._t("Updating I2P").replace("Updating I2P", "Contacting I2P update server") + "&hellip;</b></span>");
+        if (updateSources.toString().contains("skank") && type == ROUTER_UNSIGNED) {
+            _mgr.notifyProgress(update, "<span id=\"contactserver\" class=\"volatile\"><b>" +
+            _mgr._t("Updating I2P").replace("Updating I2P", "Contacting I2P+ update server") + "&hellip;</b></span>");
+        } else {
+            _mgr.notifyProgress(update, "<span id=\"contactserver\" class=\"volatile\"><b>" +
+            _mgr._t("Updating I2P").replace("Updating I2P", "Contacting I2P update server") + "&hellip;</b></span>");
+        }
         return update;
     }
 }

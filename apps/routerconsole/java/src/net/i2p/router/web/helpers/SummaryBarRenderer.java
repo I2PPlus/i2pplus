@@ -799,7 +799,7 @@ class SummaryBarRenderer {
 //        if ("".equals(updateStatus)) return "";
         StringBuilder buf = new StringBuilder(512);
         if (_helper == null || "".equals(updateStatus)) {
-            buf.append("<div id=\"sb_updatesection\" class=\"hide volatile\"></div>\n");
+            buf.append("<div id=\"sb_updatesection\" class=\"hide volatile\" hidden></div>\n");
         } else {
             buf.append("<div id=\"sb_updatesection\" class=\"volatile\">\n")
                .append("<h3><a href=\"/configupdate\" target=\"_top\" title=\"")
@@ -840,10 +840,9 @@ class SummaryBarRenderer {
         int active = _helper.getActivePeers();
         buf.append(active);
         if (isAdvanced()) {
-            buf.append(SummaryHelper.THINSP)
-           .append(Math.max(active, _helper.getActiveProfiles()));
-       }
-       buf.append("</span></td></tr>\n" +
+            buf.append(SummaryHelper.THINSP).append(Math.max(active, _helper.getActiveProfiles()));
+        }
+        buf.append("</span></td></tr>\n" +
                    "<tr title=\"")
            .append(_t("The number of peers available for building client tunnels"))
            .append("\">" +

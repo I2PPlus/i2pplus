@@ -15,6 +15,7 @@ function refreshSidebar(timestamp) {
   var shutdownstatus = document.getElementById("sb_shutdownStatus");
   var updatesection = document.getElementById("sb_updatesection");
   var graph = document.getElementById("sb_graphcontainer");
+  var control = document.getElementById("sb_routerControl");
 
   xhr.open("GET", "/xhr1.jsp?requestURI=" + uri + "&t=" + new Date().getTime(), true);
   xhr.responseType = "document";
@@ -24,8 +25,8 @@ function refreshSidebar(timestamp) {
   xhr.setRequestHeader("Content-Security-Policy", "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'");
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
-      var sbResponse = xhr.responseXML.getElementById("sb");
       if (xhr.status == 200) {
+        var sbResponse = xhr.responseXML.getElementById("sb");
         if (down) {
           xhrContainer.innerHTML = sbResponse.innerHTML;
         }
@@ -43,8 +44,8 @@ function refreshSidebar(timestamp) {
           }
 
           function updateVolatile(timestamp) {
-            var updating = document.getElementsByClassName("volatile");
-            var updatingResponse = xhr.responseXML.getElementsByClassName("volatile");
+            var updating = document.querySelectorAll(".volatile:not(.hide");
+            var updatingResponse = xhr.responseXML.querySelectorAll(".volatile:not(.hide)");
             var i;
             for (i = 0; i < updating.length; i++) {
               if (typeof updating[i] !== "undefined" && typeof updatingResponse[i] !== "undefined") {
@@ -60,9 +61,9 @@ function refreshSidebar(timestamp) {
           }
 
           function refreshAll(timestamp) {
-            var sbResponse = xhr.responseXML.sb;
+            var sbResponse = xhr.responseXML.getElementById("sb");
             if (typeof sbResponse !== "undefined" && !Object.is(sb.innerHTML, sbResponse.innerHTML))
-              sb.outerHTML = sbResponse.outerHTML;
+              xhrContainer.innerHTML = sbResponse.innerHTML;
           }
 
           function refreshGraph(timestamp) {
@@ -87,14 +88,14 @@ function refreshSidebar(timestamp) {
           setTimeout(function() {
             var redirect = document.createElement("meta");
             redirect.httpEquiv = "refresh";
-            redirect.content = "90";
+            redirect.content = "75";
             document.head.appendChild(redirect);
-          }, 60000);
+          }, 90000);
         }
       } else {
         function isDown() {
-          var sbdown = document.getElementById("sidebar");
-          var digits = sbdown.getElementsByClassName("digits");
+          var sbdown = document.getElementById("sb");
+          var digits = document.getElementsByClassName("digits");
           var i;
           for (i = 0; i < digits.length; i++) {
             digits[i].innerHTML = "---&nbsp;";
@@ -103,31 +104,38 @@ function refreshSidebar(timestamp) {
           netstatus.innerHTML = '<span id="down">Router is down</span>';
 
           if (services) {
-            if (services.nextElementSibling !== "undefined" && services.nextElementSibling != null) services.nextElementSibling.remove();
-            services.remove();
+            services.setAttribute("hidden", "");
+            services.nextElementSibling.setAttribute("hidden", "");
           }
           if (advanced) {
-            if (advanced.nextElementSibling !== "undefined" && advanced.nextElementSibling != null) advanced.nextElementSibling.remove();
-            advanced.remove();
+            advanced.setAttribute("hidden", "");
+            advanced.nextElementSibling.setAttribute("hidden", "");
           }
           if (internals) {
-            if (internals.nextElementSibling !== "undefined" && internals.nextElementSibling != null) internals.nextElementSibling.remove();
-            internals.remove();
+            internals.setAttribute("hidden", "");
+            internals.nextElementSibling.setAttribute("hidden", "");
           }
           if (graph) {
-            if (typeof graph.nextElementSibling !== "undefined" || graph.nextElementSibling != null) graph.nextElementSibling.remove();
-            graph.remove();
+            graph.setAttribute("hidden", "");
+            graph.nextElementSibling.setAttribute("hidden", "");
           }
           if (tunnelstatus) {
-            if (typeof tunnelstatus.nextElementSibling !== "undefined" || tunnelstatus.nextElementSibling !== null) tunnelstatus.nextElementSibling.remove();
-            tunnelstatus.remove();
+            tunnelstatus.setAttribute("hidden", "");
+            tunnelstatus.nextElementSibling.setAttribute("hidden", "");
           }
           if (shutdownstatus) {
-            if (typeof shutdownstatus.nextElementSibling !== "undefined" || shutdownstatus.nextElementSibling != null) shutdownstatus.nextElementSibling.remove();
-            shutdownstatus.remove();
+            shutdownstatus.setAttribute("hidden", "");
           }
-          if (localtunnels) localtunnels.innerHTML = '<tr><td colspan="3">&nbsp;</td></tr>';
-          if (updatesection) updatesection.remove();
+          if (control) {
+            control.setAttribute("hidden", "");
+            control.nextElementSibling.setAttribute("hidden", "");
+          }
+          if (updatesection) {
+            updatesection.setAttribute("hidden", "");
+          }
+          if (localtunnels) {
+            localtunnels.innerHTML = '<tr><td colspan="3"></td></tr>';
+          }
         }
 
         setTimeout(isDown, 10000);
