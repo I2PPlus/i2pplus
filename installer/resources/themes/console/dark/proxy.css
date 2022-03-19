@@ -426,11 +426,11 @@ hr:last-child {
   margin: 5px 20px;
 }
 
-.option .formaction {
+#warning .option .formaction {
   margin: 20px -20px 0;
-  padding: 12px 10px;
-  border-top: 1px solid #252;
-  background: #010;
+  padding: 11px 12px 10px;
+  border-top: var(--border_soft);
+  background: none;
 }
 
 @keyframes fade {
