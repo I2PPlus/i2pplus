@@ -121,9 +121,7 @@ ul {margin: 0; padding: 0}
 #sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {padding: 4px 5px 6px; text-align: center}
 #sb_localtunnels td {padding: 2px 0; line-height: 1.4}
 #sb_localtunnels td:first-child {padding: 2px 0 2px 9px; width: 20px; text-align: left; background: var(--client) var(--center) / 16px}
-#sb_localtunnels td[colspan="3"] {width: 100%; background-size: 400%}
 #sb_localtunnels tr:last-child td:first-child {background-position: center center}
-#sb_localtunnels td[colspan="3"] {line-height: 12px; font-size: 0}
 #sb_localtunnels td.ping {background-image: var(--ping)}
 #sb_localtunnels td.tunnelServer {background-image: var(--server)}
 #sb_localtunnels td:last-child {padding: 2px 6px 2px 0; width: 1%; min-width: 18px; text-align: right; background: var(--local_inprogress) no-repeat right 6px center / 16px}
@@ -216,7 +214,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--bevel)}
 #sidebar .error, .tunnelBuildStatus.rejecting, #sb_warning {color: #900; box-shadow: var(--highlight), inset 0 0 2px 1px #700; background: rgba(96,0,0,.3)}
 .sb_netstatus.running, #sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730; background: rgba(126,48,0,.3)}
-#sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(56,56,0,.5) 10px, rgba(48,48,0,.5) 20px); background-size: 400%}
+#sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(56,56,0,.5) 10px, rgba(48,48,0,.5) 20px) repeat center center / 400%}
 #sidebar .hidden, #sidebar .vmcomm, .tunnelBuildStatus.hidden {color: #999; box-shadow: var(--highlight), inset 0 0 2px 1px #777}
 .vmcomm {box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7); background: rgba(92,92,92,.3)}
 #sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--highlight), inset 0 0 2px 1px rgba(0,192,0,.7); background: repeating-linear-gradient(180deg, rgba(0,0,0,.8) 2px, rgba(0,64,0,.3) 4px) center center / 100% 4px, var(--glow_top), linear-gradient(to right, rgba(16,40,15,.5), rgba(0,0,0,.9), rgba(16,40,15,.5))}
@@ -234,6 +232,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: -3px 0; height: 24px; width: 40px; background-size: 20px}
 .sb_netstatus.testing, .sb_netstatus.running, .sb_netstatus.hidden, .sb_netstatus.firewalled {font-size: 0}
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
+#sidebar #sb_localtunnels td[colspan="3"], #sidebar #sb_localtunnels tr:hover td[colspan="3"] {width: 100%; line-height: 12px; font-size: 0; background-size: 400% !important}
 
 /* tunnel build status */
 .tunnelBuildStatus {color: #ee9}
@@ -2472,7 +2471,6 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #sidebar #sb_services td, #sidebar #sb_internals td, #sidebar #sb_advanced td {padding: 4px}
 #sb_localtunnels td {line-height: 1}
 #sb_localtunnels td:first-child {width: 18px}
-#sidebar #sb_localtunnels td[colspan="3"] {width: 100%; background-size: 400%}
 #sb_localtunnels td:last-child {background-size: 14px}
 #sb_tunnelstatus .tunnelBuildStatus::before {background-size: 12px}
 #sidebar button.cancel {margin-top: 10px}
