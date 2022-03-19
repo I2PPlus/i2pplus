@@ -44,7 +44,7 @@ public class ConfigUIHelper extends HelperBase {
         }
         boolean universalTheming = _context.getBooleanProperty(CSSHelper.PROP_UNIVERSAL_THEMING);
         buf.append("</div><div id=\"themeoptions\">" +
-                   "<label><input type=\"checkbox\" class=\"optbox\" name=\"universalTheming\" ");
+                   "<label><input type=\"checkbox\" class=\"optbox slider\" name=\"universalTheming\" ");
         if (universalTheming)
             buf.append(CHECKED);
         buf.append("value=\"1\">")
@@ -56,7 +56,7 @@ public class ConfigUIHelper extends HelperBase {
     public String getForceMobileConsole() {
         StringBuilder buf = new StringBuilder(256);
         boolean forceMobileConsole = _context.getBooleanProperty(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
-        buf.append("<label><input type=\"checkbox\" class=\"optbox\" name=\"forceMobileConsole\" ");
+        buf.append("<label><input type=\"checkbox\" class=\"optbox slider\" name=\"forceMobileConsole\" ");
         if (forceMobileConsole)
             buf.append(CHECKED);
         buf.append("value=\"1\">")
@@ -65,7 +65,7 @@ public class ConfigUIHelper extends HelperBase {
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         buf.append("<label title=\"")
            .append(_t("Enabling the Universal Theming option is recommended when embedding these applications"))
-           .append("\"><input type=\"checkbox\" class=\"optbox\" name=\"embedApps\" ");
+           .append("\"><input type=\"checkbox\" class=\"optbox slider\" name=\"embedApps\" ");
         if (embedApps)
             buf.append(CHECKED);
         buf.append("value=\"1\">")
