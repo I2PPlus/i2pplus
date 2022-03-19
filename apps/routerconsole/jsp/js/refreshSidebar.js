@@ -1,3 +1,6 @@
+/* RefreshSidebar by dr|z3d */
+/* License: AGPLv3 or later */
+
 function refreshSidebar(timestamp) {
   var pageVisibility = document.visibilityState;
   var xhr = new XMLHttpRequest();
@@ -94,14 +97,27 @@ function refreshSidebar(timestamp) {
         }
       } else {
         function isDown() {
-          var sbdown = document.getElementById("sb");
-          var digits = document.getElementsByClassName("digits");
+          var links = document.querySelectorAll("a");
+          var a;
+          for (a = 1; a < links.length -1; a++) {
+            links[a].setAttribute("style", "pointer-events: none");
+          }
+
+          var digits = document.querySelectorAll(".digits");
           var i;
           for (i = 0; i < digits.length; i++) {
             digits[i].innerHTML = "---&nbsp;";
           }
 
+          var clock = document.querySelector("#clock");
+          clock.innerHTML = "--:--:--";
           netstatus.innerHTML = '<span id="down">Router is down</span>';
+
+          var sectionTitle = document.querySelectorAll("#sidebar h3");
+          var s;
+          for (s = 0; s < sectionTitle.length; s++) {
+            sectionTitle[s].setAttribute("style", "opacity: .4; pointer-events: none");
+          }
 
           if (services) {
             services.setAttribute("hidden", "");
@@ -117,6 +133,7 @@ function refreshSidebar(timestamp) {
           }
           if (graph) {
             graph.setAttribute("hidden", "");
+            graph.setAttribute("style", "display: none");
             graph.nextElementSibling.setAttribute("hidden", "");
           }
           if (tunnelstatus) {
