@@ -364,11 +364,11 @@ textarea[disabled] {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: var(--ink);
   border: 1px solid #373;
-  box-shadow: var(--btn_shadow_active);
+  box-shadow: var(--btn_shadow_active), 0 0 2px 1px var(--hover);
   background: var(--input_txt);
   outline: none;
   filter: drop-shadow(0 0 1px var(--hover));
-  transition: filter ease .3s;
+  transition: filter ease .3s, filter box-shadow .3s;
 }
 
 input[readonly]:focus {
