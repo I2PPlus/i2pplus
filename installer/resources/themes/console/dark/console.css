@@ -1584,8 +1584,9 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 #themeselect {margin: -1px 0; padding: 8px 7px 0; clear: both; border: var(--border)}
 #themeoptions {margin: 0 -7px 5px; padding: 8px 10px 8px 5px; position: relative; top: 8px; clear: both; border-top: var(--border); border-bottom: var(--border); background: #000800}
 #themeoptions br {display: none}
-#themeoptions label {margin: 4px 0 4px 6px; padding: 10px; min-width: calc(50% - 28px); display: inline-block; white-space: nowrap; border-radius: 4px; background: var(--badge)}
-#themeoptions input {margin: 1px 10px 1px 2px}
+#themeoptions label, #enablefull label {margin: 4px 0 4px 6px; padding: 10px; min-width: calc(50% - 28px); display: inline-block; white-space: nowrap; border-radius: 4px; box-shadow: var(--bevel); background: var(--badge)}
+#themeoptions input, #enablefull input {margin: 1px 10px 1px 2px}
+#enablefull label {min-width: calc(100% - 180px)}
 #themesettings {clear: both; border: var(--border); padding: 8px 7px 0; margin: -1px 0; background: #000}
 #themesettings hr {display: none}
 #home #chooselang::after, #home #configbandwidth::after {content: none}
@@ -1851,8 +1852,10 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #configstats input.optbox {display: none}
 #config_stats #graphchoice {margin-bottom: -2px}
 #enablefullstats {margin-top: 5px; padding: 20px 24px 20px 58px; border: var(--border); background: var(--stats) no-repeat 15px center / 28px, var(--msg)}
-#enablefull label {margin-top: 7px; display: inline-block}
-#enablefull input[type=submit] {float: right}
+#enablefull td {background: var(--th)}
+#enablefull td:last-child {width: 1%; white-space: nowrap}
+#enablefull td:first-child {width: 99%; white-space: normal}
+#enablefull label {margin: 8px 0 8px 2px; width: calc(100% - 20px); display: inline-block}
 #configstats .graphableStat td {padding: 4px 6px; white-space: normal}
 #configstats label {position: relative; font-size: 90%}
 #configstats label::after {padding: 4px 8px; position: absolute; top: -26px; left: -20px; z-index: 10; display: none; white-space: nowrap; font-size: 110%; color: #eeb; border: 1px solid #030; border-radius: 1px; box-shadow: 0 0 1px 1px #000; background: #000; content: attr(data-tooltip)}
