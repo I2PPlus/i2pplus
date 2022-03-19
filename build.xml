@@ -1697,15 +1697,17 @@
 
     <!-- readme and proxy error page files -->
     <target name="prepConsoleDocUpdates">
-        <copy todir="pkg-temp/docs/" >
+        <copy todir="pkg-temp/docs/readme/" >
           <fileset dir="installer/resources/readme/" includes="readme*.html" />
+        </copy>
+        <copy todir="pkg-temp/docs/proxy/" >
           <fileset dir="installer/resources/proxy/" includes="*.ht" />
         </copy>
     </target>
 
     <!-- readme and proxy error page files -->
     <target name="prepProxyDocs">
-        <copy todir="pkg-temp/docs/" >
+        <copy todir="pkg-temp/docs/proxy" >
           <fileset dir="installer/resources/proxy/" includes="*.ht" />
         </copy>
     </target>
@@ -3222,12 +3224,12 @@
             <!-- config.txt is in installer/resources/portable -->
         <mkdir dir="pkg-temp/docs" />
             <copy file="installer/resources/initialNews/initialNews.xml" tofile="pkg-temp/docs/news.xml" overwrite="true" />
-            <copy file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme.html" />
+            <copy file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme/readme.html" />
             <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
             <copy file="installer/resources/start.ico" todir="pkg-temp/docs/" />
             <copy file="installer/resources/console.ico" todir="pkg-temp/docs/" />
             <!-- HTTP Header files, english only, if you need a different lang do it in a seperate target -->
-            <copy todir="pkg-temp/docs/" >
+            <copy todir="pkg-temp/docs/proxy/" >
                 <fileset dir="installer/resources/proxy/"  includes="**-header.ht" />
             </copy>
             <!-- Theme light only -->

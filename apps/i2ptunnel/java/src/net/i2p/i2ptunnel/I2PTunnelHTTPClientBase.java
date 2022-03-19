@@ -69,6 +69,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     public static final String PROP_USE_OUTPROXY_PLUGIN = "i2ptunnel.useLocalOutproxy";
     /** @since 0.9.11, moved to Base in 0.9.39 */
     public static final String PROP_SSL_OUTPROXIES = "i2ptunnel.httpclient.SSLOutproxies";
+    private static final String SLASH = System.getProperty("file.separator");
 
     /**
      *  This is a standard soTimeout, not a total timeout.
@@ -694,7 +695,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  @since 0.9.4 moved from I2PTunnelHTTPClient
      */
     protected static String getErrorPage(I2PAppContext ctx, String base, String backup) {
-        File errorDir = new File(ctx.getBaseDir(), "docs");
+        File errorDir = new File(ctx.getBaseDir(), "docs" + SLASH + "proxy");
         File file = new File(errorDir, base + "-header.ht");
         try {
             return readFile(ctx, file);
@@ -1096,7 +1097,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         //   .append(new Date().toString())
         //   .append("</i></div>\n</body>\n</html>\n");
         //return buf.toString();
-        return "<style type=\"text/css\">body{opacity:1}</style>\n</body>\n</html>\n";
+        return "<style type=\"text/css\">body{opacity:1!important}</style>\n</body>\n</html>\n";
     }
 
     /**
