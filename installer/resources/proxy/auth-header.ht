@@ -15,7 +15,7 @@ Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' ht
 <title>_("Proxy Authorization Required")</title>
 <!-- we cannot have links to CSS or images here, but we could put in some simple inline style -->
 </head>
-<body id="proxy_error">
+<body id="proxy_error" style="opacity:0">
 <div class="warning" id="warning">
 <h3>_("I2P HTTP Proxy Authorization Required")</h3>
 <p>

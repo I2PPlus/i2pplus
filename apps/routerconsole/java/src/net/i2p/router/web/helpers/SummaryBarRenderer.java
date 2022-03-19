@@ -790,13 +790,6 @@ class SummaryBarRenderer {
                .append(_t("Warning: ECDSA is not available. Update your Java or OS"))
                .append("</a></span></h4>\n");
         }
-        if (!SystemVersion.isJava7()) {
-            buf.append("<hr><h4><span class=\"warn\">")
-               .append(_t("Warning: Java version {0} is no longer supported by I2P.", System.getProperty("java.version")))
-               .append(' ')
-               .append(_t("Update Java to version {0} or higher to receive I2P updates.", "7"))
-               .append("</span></h4>\n");
-        }
         return buf.toString();
     }
 
@@ -833,9 +826,7 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Peers"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
-
                    "<table id=\"sb_peers\" class=\"volatile\">\n" +
-
                    "<tr title=\"");
         if (isAdvanced())
             buf.append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"));
@@ -853,7 +844,6 @@ class SummaryBarRenderer {
            .append(Math.max(active, _helper.getActiveProfiles()));
        }
        buf.append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The number of peers available for building client tunnels"))
            .append("\">" +
@@ -862,7 +852,6 @@ class SummaryBarRenderer {
            .append("</b></a></td><td class=\"digits\"><span>")
            .append(_helper.getFastPeers())
            .append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The number of peers available for building exploratory tunnels"))
            .append("\">" +
@@ -871,7 +860,6 @@ class SummaryBarRenderer {
            .append("</b></a></td><td class=\"digits\"><span>")
            .append(_helper.getHighCapacityPeers())
            .append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The number of peers available for network database inquiries"))
            .append("\">" +
@@ -880,7 +868,6 @@ class SummaryBarRenderer {
            .append("</b></a></td><td class=\"digits\"><span>")
            .append(_helper.getWellIntegratedPeers())
            .append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The number of peers without a published public IP address"))
            .append("\">" +
@@ -908,7 +895,6 @@ class SummaryBarRenderer {
            .append("</b></a></td><td class=\"digits\"><span>")
            .append(_helper.getAllPeers())
            .append("</span></td></tr>\n" +
-
                    "</table>\n");
         return buf.toString();
     }
@@ -922,9 +908,7 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Peers"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
-
                    "<table id=\"sb_peersadvanced\" class=\"volatile\">\n" +
-
                    "<tr title=\"")
            .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"))
            .append("\">" +
@@ -936,7 +920,6 @@ class SummaryBarRenderer {
            .append(SummaryHelper.THINSP)
            .append(Math.max(active, _helper.getActiveProfiles()))
            .append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The number of peers available for building client tunnels"))
            .append("\">" +
@@ -945,7 +928,6 @@ class SummaryBarRenderer {
            .append("</b></td><td class=\"digits\"><span>")
            .append(_helper.getFastPeers())
            .append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The number of peers available for building exploratory tunnels"))
            .append("\">" +
@@ -954,7 +936,6 @@ class SummaryBarRenderer {
            .append("</b></td><td class=\"digits\"><span>")
            .append(_helper.getHighCapacityPeers())
            .append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The number of peers available for network database inquiries"))
            .append("\">" +
@@ -963,7 +944,6 @@ class SummaryBarRenderer {
            .append("</b></td><td class=\"digits\"><span>")
            .append(_helper.getWellIntegratedPeers())
            .append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The number of peers without a published public ip address in our network database"))
            .append("\">" +
@@ -972,7 +952,6 @@ class SummaryBarRenderer {
            .append("</b></td><td class=\"digits\"><span>")
            .append(_helper.getUnreachablePeers())
            .append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The total number of peers in our network database"))
            .append("\">" +
@@ -981,9 +960,7 @@ class SummaryBarRenderer {
            .append("</b></a></td><td class=\"digits\"><span>")
            .append(_helper.getAllPeers())
            .append("</span></td></tr>\n" +
-
                    "<tr class=\"separator\"><td colspan=\"2\"><hr></td></tr>" +
-
                    "<tr title=\"")
            .append(_t("The number of peers failing network tests"))
            .append("\">" +
@@ -992,7 +969,6 @@ class SummaryBarRenderer {
            .append("</b></a></td><td class=\"digits\"><span>")
            .append(_helper.getFailingPeers())
            .append("</span></td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("The number of banned peers"))
            .append("\">" +
@@ -1001,7 +977,6 @@ class SummaryBarRenderer {
            .append("</b></a></td><td class=\"digits\"><span>")
            .append(_helper.getBanlistedPeers())
            .append("</span></td></tr>\n" +
-
                    "</table>\n");
         return buf.toString();
     }
@@ -1020,7 +995,6 @@ class SummaryBarRenderer {
            .append(_t("Bandwidth in/out"))
            .append("</a></h3>\n<hr class=\"b\">" +
                    "<table id=\"sb_bandwidth\" class=\"volatile\">\n" +
-
                    "<tr><td><b>")
            .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", _t("Current")))  // lie and say 3 sec since 1 sec would appear as 1000 ms
            .append("</b></td><td class=\"digits\"><span>")
@@ -1054,7 +1028,6 @@ class SummaryBarRenderer {
                                                     .replace("TiB", "T").replace("PiB", "P").replace("EiB", "E")
                                                     .replace("ZiB", "Z").replace("YiB", "Y"))
            .append("</span></td></tr>\n" +
-
                    "</table>\n");
         return buf.toString();
     }
@@ -1075,16 +1048,16 @@ class SummaryBarRenderer {
            .append("\">\n<span id=\"sb_graphstats\">")
            .append(_helper.getSecondKBps())
            .append("Bps</span>\n")
-           .append("<a href=\"/graphs\">\n");
-        buf.append("<canvas id=\"minigraph\" width=\"245\" height=\"50\">\n")
+           .append("<a href=\"/graphs\">\n")
+           .append("<canvas id=\"minigraph\" width=\"245\" height=\"50\">\n")
            .append("<div id=\"minigraphcontainer\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div>")
            .append("</canvas>\n")
            .append("<noscript><div id=\"minigraphcontainer\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
-           .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div></noscript>");
-        buf.append("</a>\n</div>\n");
+           .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div></noscript>")
+           .append("</a>\n</div>\n");
         return buf.toString();
     }
 
@@ -1146,7 +1119,6 @@ class SummaryBarRenderer {
                       _helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels() +
                       partTunnels)
               .append("</span></td></tr>\n");
-
            buf.append("<tr title=\"")
               .append(_t("Concurrent tunnel builds (averaged over a minute) / single tunnel build time"))
               .append("\">" +
@@ -1181,7 +1153,6 @@ class SummaryBarRenderer {
            .append(_t("Congestion"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_queue\" class=\"volatile\">\n" +
-
                    "<tr title=\"")
            .append(_t("Indicates router performance"))
            .append("\">" +
@@ -1194,7 +1165,6 @@ class SummaryBarRenderer {
             buf.append("<span>").append(_helper.getJobLag()).append("</span>");
         }
         buf.append("</td></tr>\n" +
-
                    "<tr title=\"")
            .append(_t("Indicates how quickly outbound messages to other I2P routers are sent"))
            .append("\">" +

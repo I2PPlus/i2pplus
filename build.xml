@@ -69,7 +69,8 @@
         <echo message=" updater                                      Build updater for existing installs &#10140; ./i2pupdate.zip" />
         <echo message=" signed-updater                               Signed Updater &#10140; ./i2pupdate.su3 (Java14+ compatible)" />
         <echo message=" updaterCompact                               Updater without SAM, BOB, DesktopGUI, systray, country/continent lists" />
-        <echo message=" updaterCompactWithGeoIP                      Updater + GeoIP without SAM, BOB, DesktopGUI, systray, country/continent lists" />
+        <echo message=" updaterCompactWithDocs                       Compact updater with readme and proxy docs" />
+        <echo message=" updaterCompactWithGeoIP                      Compact updater with GeoIP database" />
         <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only" />
         <echo message=" updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)" />
         <echo message=" updaterWithGeoIP                             Updater + GeoIP files" />
@@ -1697,15 +1698,17 @@
 
     <!-- readme and proxy error page files -->
     <target name="prepConsoleDocUpdates">
-        <copy todir="pkg-temp/docs/" >
+        <copy todir="pkg-temp/docs/readme/" >
           <fileset dir="installer/resources/readme/" includes="readme*.html" />
+        </copy>
+        <copy todir="pkg-temp/docs/proxy/" >
           <fileset dir="installer/resources/proxy/" includes="*.ht" />
         </copy>
     </target>
 
     <!-- readme and proxy error page files -->
     <target name="prepProxyDocs">
-        <copy todir="pkg-temp/docs/" >
+        <copy todir="pkg-temp/docs/proxy" >
           <fileset dir="installer/resources/proxy/" includes="*.ht" />
         </copy>
     </target>
@@ -1734,6 +1737,7 @@
     <target name="updater200WithJbigi" depends="prepupdate, prepjbigiupdate, pack200, zipit200" />
     <target name="updater" depends="prepupdate, zipit" />
     <target name="updaterCompact" depends="prepupdatecompact, zipit" />
+    <target name="updaterCompactWithDocs" depends="prepupdatecompact, prepConsoleDocUpdates, zipit" />
     <target name="updaterCompactWithGeoIP" depends="prepupdatecompact, prepgeoupdate, zipit" />
     <target name="updaterCompactWithJettyAndGeoIP" depends="prepupdatecompact, prepgeoupdate, prepjupdate, zipit" />
     <target name="updaterWithMinifyCSS" depends="prepupdate, minifycss, zipit" />
@@ -3222,12 +3226,12 @@
             <!-- config.txt is in installer/resources/portable -->
         <mkdir dir="pkg-temp/docs" />
             <copy file="installer/resources/initialNews/initialNews.xml" tofile="pkg-temp/docs/news.xml" overwrite="true" />
-            <copy file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme.html" />
+            <copy file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme/readme.html" />
             <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
             <copy file="installer/resources/start.ico" todir="pkg-temp/docs/" />
             <copy file="installer/resources/console.ico" todir="pkg-temp/docs/" />
             <!-- HTTP Header files, english only, if you need a different lang do it in a seperate target -->
-            <copy todir="pkg-temp/docs/" >
+            <copy todir="pkg-temp/docs/proxy/" >
                 <fileset dir="installer/resources/proxy/"  includes="**-header.ht" />
             </copy>
             <!-- Theme light only -->

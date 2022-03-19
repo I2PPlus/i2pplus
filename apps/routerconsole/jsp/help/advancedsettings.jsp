@@ -99,8 +99,29 @@
 <tr><th>router.updateUnsignedURL={url}</th></tr>
 <tr><td><%=intl._t("This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!")%></td></tr>
 
+<tr><th>i2p.streaming.answerPings={true|false}</th></tr>
+<tr><td><%=intl._t("This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager.")%></td></tr>
+
 <tr><th>i2p.vmCommSystem={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
+
+<tr><th>i2p.streaming.enablePongDelay={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]")%></td></tr>
+
+<tr><th>i2p.streaming.maxPongDelay={n} <span class="plus">I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used.")%></td></tr>
+
+<tr><th>router.codelInterval={n} <span class="plus">I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]")%></td></tr>
+
+<tr><th>router.router.codelMaxQueue={n} <span class="plus">I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]")%></td></tr>
+
+<tr><th>router.router.codelBacklog={n} <span class="plus">I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]")%></td></tr>
+
+<tr><th>router.codelTarget={n} <span class="plus">I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]")%></td></tr>
 
 <tr><th>router.expireRouterInfo={n} <span class="plus">I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]")%></td></tr>
@@ -137,18 +158,6 @@
 
 <tr><th>router.publishPeerRankings={true|false}</th></tr>
 <tr><td><%=intl._t("This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]")%></td></tr>
-
-<tr><th>router.codelInterval={n} <span class="plus">I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]")%></td></tr>
-
-<tr><th>router.router.codelMaxQueue={n} <span class="plus">I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]")%></td></tr>
-
-<tr><th>router.router.codelBacklog={n} <span class="plus">I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]")%></td></tr>
-
-<tr><th>router.codelTarget={n} <span class="plus">I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]")%></td></tr>
 
 <tr><th>router.pumpInitialOutboundQueue={n} <span class="plus">I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting configures the initial size of the outbound message queue. [Default is 64]")%></td></tr>

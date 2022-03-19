@@ -153,7 +153,7 @@ th.torrentUploaded a img {display: inline-block}
 #totals span, #ourDest {white-space: nowrap}
 #torrents th:empty, #torrents td:empty {width: 0; min-width: 0; padding-left: 0; padding-right: 0}
 #torrents thead th:nth-child(3) {max-width: 40px; overflow: visible; white-space: nowrap}
-.noneLoaded, .noneLoaded:hover td {font-size: 8.5pt; font-weight: 700; border-radius: 0 0 2px 2px; background: linear-gradient(180deg,#313, #101)}
+.noneLoaded, .noneLoaded:hover td {font-weight: 700; border-radius: 0 0 2px 2px; background: linear-gradient(180deg,#313, #101)}
 .noneLoaded td {text-align: center; color: #ddd}
 .noneLoaded i {padding: 10px; display: inline-block}
 .choked {color: #f00000}

@@ -421,8 +421,8 @@ hr.debug {margin: 1px 0 -5px; width: 100%; background: linear-gradient(90deg,#00
 #commentInfo input.accept {margin-right: 5px; float: right}
 #commentInfo th input[type=submit] {float: none; display: inline-block; vertical-align: middle}
 #commentInfo th input[type=checkbox] {margin-left: 4px; margin-right: 4px}
-#commentInfo textarea {margin: 1px auto -2px; width: calc(100% - 2px); height: 64px; min-height: 64px; resize: vertical; opacity: .8}
-#commentInfo textarea:focus {box-shadow: var(--highlight), inset 0 0 2px 1px #f60}
+#commentInfo textarea {margin: 1px auto -2px; width: calc(100% - 2px); height: 64px; min-height: 64px; resize: vertical}
+#commentInfo textarea:focus {filter: none}
 .commentRating, .commentAuthor {width: 1%}
 td.commentRating {padding-left: 2px; padding-right: 0; width: 80px; white-space: nowrap}
 .commentRating img {margin: 0; padding: 0; width: 16px; height: 16px}
