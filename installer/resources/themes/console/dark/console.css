@@ -1908,7 +1908,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #i2pupdates textarea {height: 76px; min-height: 32px}
 #i2pupdates textarea {margin: 6px 0 6px 10px; padding: 3px 5px; height: 76px; min-height: 76px}
 #i2pupdates .optiontextarea .nowrap::after {content: none}
-#i2pupdates .optiontextarea .nowrap b {margin-top: -48px; margin-bottom: -28px; height: 76px; vertical-align: middle}
+#i2pupdates .optiontextarea .nowrap b {margin-top: -18px; margin-bottom: -28px; height: 76px; vertical-align: middle}
 #config_update .suboption label[for="newsThroughProxy"] {margin-right: 20px}
 #config_update b.suboption {padding: 3px 8px 4px 10px}
 #config_update .suboption .optbox {margin: -2px 3px 0 -5px}

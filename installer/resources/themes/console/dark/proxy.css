@@ -8,6 +8,7 @@
     --link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg stroke-width='8'%3E%3Cpath fill='%236f7c91' d='M58.4 24.9L41.5 41.6a14 14 0 01-19.8-19.8L38.6 5.1a14 14 0 0119.7 19.8zm-30.5 3a5.4 5.4 0 007.6 7.6l16.8-16.7a5.4 5.4 0 00-7.6-7.6z'/%3E%3Cpath fill='%23939dac' d='M26.4 44.6l-7.6 7.7a5.4 5.4 0 01-7.6-7.6l16.7-16.8a5.4 5.4 0 017.6 7.6l9.2-9.1a14 14 0 00-22.8-4.6L5 38.6a14 14 0 0019.8 19.7l16.7-16.7a14 14 0 01-15.2 3z'/%3E%3C/g%3E%3C/svg%3E");
   --h3: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --h3_fade: linear-gradient(180deg,#005000, #000 75%);
+  --fatshadow: 0 0 0 1px #000, 0 0 0 5px #141, 0 0 0 6px #000;
 }
 
 html, body {
@@ -15,8 +16,7 @@ html, body {
 }
 
 html {
-  background: var(--bg_dots);
-  background-size: 4px 100%, 100% 4px;
+  background: var(--bg_dots) #010;
 }
 
 body {
@@ -341,7 +341,7 @@ hr:last-child {
 
 #warning h4 {
   text-align: left;
-  font-size: 10pt;
+  font-size: 11pt;
   box-shadow: none;
 }
 
@@ -359,9 +359,10 @@ hr:last-child {
 }
 
 #proxyNewHost {
-  margin: 20px auto -6px 100px;
-  width: calc(100% - 95px);
+  margin: 20px auto 0 100px;
+  width: calc(100% - 100px);
   border-collapse: collapse;
+  box-shadow: var(--fatshadow);
 }
 
 #proxyNewHost + hr {
@@ -406,7 +407,7 @@ hr:last-child {
 .option {
   padding: 10px 20px 0;
   border: 1px solid #252;
-  box-shadow: 0 0 0 1px #000, 0 0 0 5px #141, 0 0 0 6px #000;
+  box-shadow: var(--fatshadow);
   background: linear-gradient(180deg,rgba(0,32,0,.5), rgba(0,16,0,.5));
 }
 
@@ -415,7 +416,7 @@ hr:last-child {
 }
 
 #warning .option h4 {
-  margin: 15px 15px 24px;
+  margin: 10px 15px 13px;
 }
 
 #warning .option h4::after {
