@@ -1009,7 +1009,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     } else {
                         out.write("<br>");
                     }
-                    String jhostname = jumphost.replace(".i2p", "");
+                    String jhostname = jumphost.replace(".i2p", "").replace("scanner.linuxfarm", "linuxfarm").replace(".", "_");
                     out.write("<a id=\"" + jhostname + "\" href=\"");
                     out.write(jurl);
                     out.write(uri);

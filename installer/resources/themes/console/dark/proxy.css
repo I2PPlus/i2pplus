@@ -326,12 +326,9 @@ hr:last-child {
   margin-left: 19px;
 }
 
-#jumplinks a#stats {
-  background: url(../images/stats.svg) no-repeat 10px center / 20px, var(--badge);
-}
 
-#jumplinks a#stats {
-  background: url(../images/stats.svg) no-repeat 10px center / 20px, var(--badge);
+#jumplinks a#linuxfarm {
+  background: url(../images/linuxfarm.svg) no-repeat 10px center / 20px, var(--badge) !important;
 }
 
 #jumplinks a#notbob {
@@ -340,6 +337,10 @@ hr:last-child {
 
 #jumplinks a#reg {
   background: url(../images/reg.svg) no-repeat 10px center / 20px, var(--badge);
+}
+
+#jumplinks a#stats {
+  background: url(../images/stats.svg) no-repeat 10px center / 20px, var(--badge);
 }
 
 #jumplinks a:hover, #jumplinks a:focus, #jumplinks a[id]:hover, #jumplinks a[id]:focus {

@@ -1635,8 +1635,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     public static final String DEFAULT_JUMP_SERVERS =
             "http://notbob.i2p/cgi-bin/jump.cgi?q=," +
-            "http://stats.i2p/cgi-bin/jump.cgi?a=," +
-            "http://reg.i2p/jump/";
+            "http://reg.i2p/jump/," +
+            "http://scanner.linuxfarm.i2p/cgi-bin/jump.cgi?q=," +
+            "http://stats.i2p/cgi-bin/jump.cgi?a=";
 
     /** @param host ignored */
     private static boolean isSupportedAddress(String host, String protocol) {
