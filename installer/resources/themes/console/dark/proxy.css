@@ -315,7 +315,7 @@ hr:last-child {
 
 #jumplinks a {
   margin: 3px 0 3px 5px;
-  padding: 8px 12px 8px 34px;
+  padding: 9px 12px 9px 34px;
   display: inline-block;
   float: left;
   box-shadow: var(--outline), var(--bevel);
@@ -348,7 +348,7 @@ hr:last-child {
 }
 
 #proxy_error #jumplinks a:active {
-  box-shadow: var(--outline), var(--btn_shadow_hover), var(--btn_shadow_active);
+  box-shadow: var(--badge_shadow_hover), var(--btn_shadow_active);
   background: url(../images/arrow_right.svg) no-repeat 10px center / 20px, var(--badge_active) !important;
   background-blend-mode: luminosity;
 }
@@ -470,8 +470,8 @@ hr:last-child {
 }
 
 @media screen and (max-width: 1200px) {
-  #proxy_error #warning {
-    padding-bottom: 0;
+  #proxy_error #jumplinks {
+    margin-bottom: 0;
   }
   #jumplinks br {
     display: block;
