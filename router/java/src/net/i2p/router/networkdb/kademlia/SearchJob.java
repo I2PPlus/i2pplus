@@ -57,7 +57,7 @@ class SearchJob extends JobImpl {
     private boolean _floodfillPeersExhausted;
     private int _floodfillSearchesOutstanding;
 
-    private static final int SEARCH_BREDTH = 3;
+//    private static final int SEARCH_BREDTH = 3;
     private static int SEARCH_BREDTH = 4;
     /** Only send the 10 closest "don't tell me about" refs */
 //    static final int MAX_CLOSEST = 10;
@@ -276,7 +276,7 @@ class SearchJob extends JobImpl {
             return;
         }
         if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
-            SEARCH_BREDTH = SEARCH_BREDTH - 3;
+            SEARCH_BREDTH -= 3;
             if (_log.shouldDebug())
                 _log.debug("[Job " + getJobId() + "] Reducing number of parallel peer searches - router under load");
         }
