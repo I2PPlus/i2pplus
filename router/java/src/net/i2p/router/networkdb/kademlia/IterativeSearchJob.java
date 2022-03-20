@@ -188,7 +188,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (isLease)
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", SystemVersion.isSlow() ? MAX_CONCURRENT * 2 : MAX_CONCURRENT * 3);
         else if (ctx.netDb().getKnownRouters() < 2000 || ctx.router().getUptime() < 30*60*1000)
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT += 1);
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT * 2);
         else
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
         _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
