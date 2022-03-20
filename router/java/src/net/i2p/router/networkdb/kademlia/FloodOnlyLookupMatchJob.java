@@ -24,14 +24,13 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
     public void runJob() {
         if (_success) {
             if (_log.shouldInfo())
-                _log.info("[Job " + _search.getJobId() + "] Search for [" + _search.getKey().toBase64().substring(0,6) +
-                          "] found locally");
+                _log.info("[Job " + _search.getJobId() + "] Search for [" + _search.getKey().toBase64().substring(0,6) + "] found locally");
             _search.success();
         } else {
             // In practice, we always have zero remaining when this is called,
             // because the selector only returns true when there is zero remaining
             if (_log.shouldLog(Log.INFO))
-                _log.info("[Job " + _search.getJobId() + "] Search failed for [" + _search.getKey().toBase64().substring(0,6 + "]"));
+                _log.info("[Job " + _search.getJobId() + "] Search failed for [" + _search.getKey().toBase64().substring(0,6) + "]");
             _search.failed();
         }
     }
