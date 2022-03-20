@@ -205,7 +205,7 @@ public class FamilyKeyCrypto {
         }
     }
 
-    /** 
+    /**
      *  Verify the family signature in a RouterInfo.
      *  This requires a family key in the RI,
      *  or a certificate file for the family
@@ -363,11 +363,11 @@ public class FamilyKeyCrypto {
             rv = isKnownKey ? Result.STORED_KEY : Result.RI_KEY;
             _verified.put(h, new Verified(name, ssig, rv));
         } else {
+            rv = Result.BAD_SIG;
+            _negativeCache.put(h, rv);
             if (_log.shouldInfo())
                 _log.info("Family: " + name + " belonging to [" + h.toBase64().substring(0,6) + "] -> Verified? " + rv +
                           "\n* Signature: " + ssig);
-            rv = Result.BAD_SIG;
-            _negativeCache.put(h, rv);
         }
         return rv;
     }
@@ -512,7 +512,7 @@ public class FamilyKeyCrypto {
             _log.info("Loaded " + _knownKeys.size() + " keys");
     }
 
-    /** 
+    /**
      * Load a public key from a cert.
      *
      * @return null on all errors

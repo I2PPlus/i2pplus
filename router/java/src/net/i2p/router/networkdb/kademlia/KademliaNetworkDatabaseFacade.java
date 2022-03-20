@@ -1218,15 +1218,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 case BAD_KEY:
                 case INVALID_SIG:
                 case NO_SIG:
-                    return "Bad family " + r + ' ' + routerInfo.getHash();
+//                    return "Bad family " + r + ' ' + routerInfo.getHash();
+                    return "Bad Family [" + r + "] signature detected for [" + routerInfo.getHash().toBase64().substring(0,6) + "]";
 
                 case BAD_SIG:
                     // To be investigated
                     break;
-            }
-//            if (!validFamily) {
-//                if (_log.shouldInfo())
-//                    _log.info("Bad Family [" + r + "] signature detected for [" + routerInfo.getHash().toBase64().substring(0,6) + "]");
             }
             // todo store in RI
         }
