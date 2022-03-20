@@ -1109,8 +1109,11 @@ class NetDbRenderer {
             FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
             buf.append("<span class=\"netdb_family\"><b>").append(_t("Family"))
                .append(":</b> <span class=\"familyname\">").append(DataHelper.stripHTML(family));
-            if (fkc != null)
-               buf.append(" <span class=\"verified\">[").append(_t("Verified")).append("]</span>");
+            if (fkc != null) {
+               buf.append(" <span class=\"verified\" title=\"")
+                  .append(_t("Verified family (signing certificate is installed and valid)"))
+                  .append("\">[").append(_t("Verified")).append("]</span>");
+            }
             buf.append("</span></span>");
         }
         buf.append("</td>\n<td>");
