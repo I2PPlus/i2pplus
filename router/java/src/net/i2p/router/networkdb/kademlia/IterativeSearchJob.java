@@ -277,8 +277,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             _log.info("[Job " + getJobId() + "] New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
                       " [" + _key.toBase64().substring(0,6) + "]" +
                       "\n* Querying: "  + DataHelper.toString(_toTry).substring(0,6) + "]" +
-                      " Routing key: [" + _rkey.toBase64().substring(0,6) + "]" +
-                      " Timeout: " + DataHelper.formatDuration(_timeoutMs));
+                      "; Routing key: [" + _rkey.toBase64().substring(0,6) + "]" +
+                      "; Timeout: " + DataHelper.formatDuration(_timeoutMs));
         retry();
     }
 
@@ -490,7 +490,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 _log.debug("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
                           " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
                           "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
-                          " Direct? " + isDirect + " Reply via client tunnel? " + isClientReplyTunnel);
+                          "; Direct? " + isDirect + "; Reply via client tunnel? " + isClientReplyTunnel);
             }
             _sentTime.put(peer, Long.valueOf(now));
 
