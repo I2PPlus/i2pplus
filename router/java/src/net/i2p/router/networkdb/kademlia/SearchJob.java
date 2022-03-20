@@ -57,8 +57,8 @@ class SearchJob extends JobImpl {
     private boolean _floodfillPeersExhausted;
     private int _floodfillSearchesOutstanding;
 
-//    private static final int SEARCH_BREDTH = 3;
-    private static int SEARCH_BREDTH = 10;
+    private static final int SEARCH_BREDTH = 3;
+    private static int SEARCH_BREDTH = 4;
     /** Only send the 10 closest "don't tell me about" refs */
 //    static final int MAX_CLOSEST = 10;
     static final int MAX_CLOSEST = 12;
@@ -68,7 +68,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final int PER_PEER_TIMEOUT = 5*1000;
-    private static final int PER_PEER_TIMEOUT = 6*1000;
+    private static final int PER_PEER_TIMEOUT = 3*1000;
 
     /**
      * give ourselves 30 seconds to send out the value found to the closest
@@ -77,7 +77,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final long RESEND_TIMEOUT = 30*1000;
-    private static final long RESEND_TIMEOUT = 20*1000;
+    private static final long RESEND_TIMEOUT = 10*1000;
 
     /**
      * When we're just waiting for something to change, requeue the search status test
@@ -164,9 +164,9 @@ class SearchJob extends JobImpl {
 
     /** timeout */
 //    static final int PER_FLOODFILL_PEER_TIMEOUT = 10*1000;
-    static final int PER_FLOODFILL_PEER_TIMEOUT = 8*1000;
+    static final int PER_FLOODFILL_PEER_TIMEOUT = 4*1000;
 //    static final long MIN_TIMEOUT = 2500;
-    static final long MIN_TIMEOUT = 3000;
+    static final long MIN_TIMEOUT = 2*1000;
 
     protected int getPerPeerTimeoutMs(Hash peer) {
         int timeout = 0;
@@ -664,7 +664,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final int MAX_LEASE_RESEND = 10;
-    private static final int MAX_LEASE_RESEND = 12;
+    private static final int MAX_LEASE_RESEND = 6;
 
     /**
      * Should we republish a routerInfo received?  Probably not worthwhile, since
