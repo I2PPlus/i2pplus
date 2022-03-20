@@ -11,7 +11,7 @@ function refreshSidebar(timestamp) {
   var down = document.getElementById("down");
   var localtunnels = document.getElementById("sb_localtunnels");
   var netstatus = document.getElementById("sb_status");
-  var sb = document.getElementById("sb");
+  var sb = document.querySelector("#sidebar");
   var services = document.getElementById("sb_services");
   var shutdownstatus = document.getElementById("sb_shutdownStatus");
 
@@ -76,10 +76,13 @@ function refreshSidebar(timestamp) {
         }
 
         function removeStyles(timestamp) {
-          var links = document.querySelectorAll("h3, a");
+          var links = document.querySelectorAll("#sidebar h3, #sidebar a");
           var a;
           for (a = 1; a < links.length - 1; a += 1) {
-            links[a].removeAttribute("style", "");
+            var style = links[a].getAttribute("style");
+            if (links[a].style) {
+              links[a].removeAttribute("style", "");
+            }
           }
         }
 
@@ -115,7 +118,7 @@ function refreshSidebar(timestamp) {
 
         function isDown() {
           function hideSections() {
-            var collapse = document.querySelectorAll(".collapse");
+            var collapse = document.querySelectorAll("#sidebar .collapse");
             var h;
              for (h = 0; h < collapse.length; h += 1) {
                 collapse[h].setAttribute("hidden", "");
@@ -132,7 +135,7 @@ function refreshSidebar(timestamp) {
           }
 
           function modElements() {
-            var links = document.querySelectorAll("h3, a");
+            var links = document.querySelectorAll("#sidebar h3, #sidebar a");
             var a;
             for (a = 1; a < links.length - 1; a += 1) {
               links[a].setAttribute("style", "pointer-events: none");
