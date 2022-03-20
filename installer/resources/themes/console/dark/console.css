@@ -104,7 +104,7 @@ ul {margin: 0; padding: 0}
 #clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
-.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: repeating-linear-gradient(90deg, #f60 2px, rgba(0,0,0,0) 4px), linear-gradient(90deg, #930, #f60); content: ""; animation: bar .15s ease-in-out .1s reverse; backface-visibility: hidden; will-change: transform}
+.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 100%; transform: scaleX(0); height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(to right, rgba(255,96,0,.3),#f50,rgba(255,96,0,.3)); content: ""; animation: bar .05s steps(3) reverse; backface-visibility: hidden; will-change: transform}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services, #sb_newsheadings table {margin: -7px auto -9px -1px}
 #sb_localtunnels {margin-bottom: -8px}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -7px}
@@ -2397,7 +2397,7 @@ h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20p
 .sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
 
 /* animations */
-@keyframes bar {from {width: calc(300%)}}
+@keyframes bar {from {transform: scaleX(101%)}}
 @keyframes downloadbar {from {background: var(--download_bar)} to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}}
 @keyframes fade {from {filter: opacity(1)} to {filter: opacity(0)}}
 @keyframes hide-up {0% {margin-top: 0; filter: opacity(1)} 30% {filter: opacity(0)} 100% {margin-top: -300px}}
