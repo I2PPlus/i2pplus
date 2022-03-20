@@ -983,9 +983,6 @@ table[cellspacing="30"] > tbody > tr > td > table > tbody > tr > th:first-child 
 table[cellspacing="30"] > tbody > tr > td:first-child > table > tbody > tr > th:first-child {text-align: center}
 .version a:hover, .version a:focus, a:hover .version, a:focus .version, a:hover .tier, a:focus .tier {color: var(--hover)}
 #netdb .version {margin: 0 2px; padding: 0 8px; vertical-align: middle}
-/*#netdb .netdbentry th .version {vertical-align: inherit}*/
-
-/* netdb */
 .netdb_header img[src^="/flags"] {width: auto; height: 20px; vertical-align: middle; border: 1px solid #030; box-shadow: var(--outline)}
 th > img[src^="/imagegen"], .identicon {margin: 0 0 0 3px; height: 26px; width: 26px; border: var(--border)}
 .netdbentry tr:nth-child(2) td:last-child b, .netdbentry .familyname, .netdbStats li, .netdbStats b, #netdb .netdbentry th b, #netdb .netdbentry td:first-child b, #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code, .netdb_addresses li, .netdb_ouraddresses, .netdb_ouraddresses .netdb_transport {display: inline-block}
@@ -1070,6 +1067,7 @@ p.family b {margin-right: -3px; min-width: 118px; display: inline-block; vertica
 p.family a {padding-left: 4px; width: calc(100% - 141px); max-width: 400px; display: inline-block; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; border-radius: 0 10px 10px 0}
 p.family a:hover {background: #020}
 p.family + p.family, .sybil_info + .sybil_info {margin-top: -4px}
+.familyname .verified {margin-top: -2px; height: 12px; width: 12px; display: inline-block; vertical-align: middle; font-size: 0; background: var(--verified) no-repeat center center / 11px;}
 
 /* netdb lookup */
 #netdb .tabletitle {margin-bottom: -2px}
