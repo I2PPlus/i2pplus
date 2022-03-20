@@ -194,7 +194,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
         if (fromLocalDest != null && !isLease && _log.shouldWarn())
-            _log.warn("Search for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
+            _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
         // all createRateStat in FNDF
     }
 
@@ -555,7 +555,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     // a response may have come in.
                     if (_dead) {
                         if (_log.shouldDebug())
-                            _log.debug("[Job " + getJobId() + "] Aborting send - finished while wrapping msg to [" + peer.toBase64().substring(0,6) + "]");
+                            _log.debug("[Job " + getJobId() + "] Aborting send - finished while wrapping message to [" + peer.toBase64().substring(0,6) + "]");
                         return;
                     }
                     if (_log.shouldDebug())
@@ -607,10 +607,10 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (timedOut) {
                 getContext().profileManager().dbLookupFailed(peer);
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Search for Router [" + peer.toBase64().substring(0,6) + "] timed out");
+                    _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");
             } else {
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Search for Router [" + peer.toBase64().substring(0,6) + "] failed");
+                    _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] failed");
             }
         }
         retry();
