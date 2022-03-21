@@ -12,7 +12,6 @@ function refreshSidebar(timestamp) {
   var localtunnels = document.getElementById("sb_localtunnels");
   var netstatus = document.getElementById("sb_status");
   var sb = document.querySelector("#sidebar");
-  var services = document.getElementById("sb_services");
   var shutdownstatus = document.getElementById("sb_shutdownStatus");
 
   xhr.open("GET", "/xhr1.jsp?requestURI=" + uri + "&t=" + new Date().getTime(), true);
@@ -28,9 +27,10 @@ function refreshSidebar(timestamp) {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
         var sbResponse = xhr.responseXML.getElementById("sb");
+
         if (down) {
-          window.requestAnimationFrame(removeStyles);
-          window.requestAnimationFrame(refreshAll);
+            window.requestAnimationFrame(removeStyles);
+            window.requestAnimationFrame(refreshAll);
         }
 
         function updateVolatile(timestamp) {
@@ -54,8 +54,6 @@ function refreshSidebar(timestamp) {
         function refreshAll(timestamp) {
           if (typeof sbResponse !== "undefined" && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
             xhrContainer.innerHTML = sbResponse.innerHTML;
-          } else {
-            location.reload(true);
           }
         }
 
@@ -78,17 +76,29 @@ function refreshSidebar(timestamp) {
         }
 
         function removeStyles(timestamp) {
-          var links = document.querySelectorAll("#sidebar h3, #sidebar a");
+          var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
           var a;
-          for (a = 1; a < links.length - 1; a += 1) {
-            var style = links[a].getAttribute("style");
-            if (links[a].style) {
-              links[a].removeAttribute("style");
+          for (a = 1; a < sectionTitle.length - 1; a += 1) {
+            var styleInline = sectionTitle[a].getAttribute("style");
+            if (styleInline) {
+              sectionTitle[a].removeAttribute("style");
             }
           }
           var sep = document.querySelector("#sb_tunnelstatus + hr");
           if (sep != null && sep.hasAttribute("hidden")) {
             sep.removeAttribute("hidden");
+          }
+
+          var collapse = document.querySelectorAll("#sidebar .collapse");
+          var c;
+          for (c = 0; c < collapse.length; c += 1) {
+            var styleHidden = collapse[c].getAttribute("hidden");
+            if (styleHidden) {
+              collapse[c].removeAttribute("hidden");
+              if (collapse[c].nextElementSibling != null && collapse[c].nextElementSibling.nodeName == "HR") {
+                collapse[c].nextElementSibling.removeAttribute("hidden");
+              }
+            }
           }
         }
 
@@ -112,7 +122,7 @@ function refreshSidebar(timestamp) {
 
         } else {
 
-          setTimeout(function () {
+          setTimeout(function() {
             var metarefresh = document.createElement("meta");
             metarefresh.httpEquiv = "refresh";
             metarefresh.content = "75";
@@ -141,10 +151,10 @@ function refreshSidebar(timestamp) {
           }
 
           function modElements(timestamp) {
-            var links = document.querySelectorAll("#sidebar h3, #sidebar a");
+            var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
             var a;
-            for (a = 1; a < links.length - 1; a += 1) {
-              links[a].setAttribute("style", "pointer-events: none");
+            for (a = 1; a < sectionTitle.length - 1; a += 1) {
+              sectionTitle[a].setAttribute("style", "pointer-events: none");
             }
             var digits = document.querySelectorAll(".digits");
             var i;
@@ -160,7 +170,7 @@ function refreshSidebar(timestamp) {
           window.requestAnimationFrame(hideSections);
           window.requestAnimationFrame(modElements);
         }
-        setTimeout(isDown, 10000);
+        setTimeout(isDown, 3000);
       }
     }
   };
