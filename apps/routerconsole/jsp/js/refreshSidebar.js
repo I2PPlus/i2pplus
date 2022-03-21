@@ -20,8 +20,7 @@ function refreshSidebar(timestamp) {
   xhr.overrideMimeType("text/html");
   xhr.setRequestHeader("Accept", "text/html");
   xhr.setRequestHeader("Cache-Control", "no-store, max-age=60");
-  xhr.setRequestHeader(
-    "Content-Security-Policy",
+  xhr.setRequestHeader("Content-Security-Policy",
     "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'"
   );
 
@@ -30,7 +29,8 @@ function refreshSidebar(timestamp) {
       if (xhr.status == 200) {
         var sbResponse = xhr.responseXML.getElementById("sb");
         if (down) {
-          xhrContainer.innerHTML = sbResponse.innerHTML;
+          window.requestAnimationFrame(removeStyles);
+          window.requestAnimationFrame(refreshAll);
         }
 
         function updateVolatile(timestamp) {
@@ -54,6 +54,8 @@ function refreshSidebar(timestamp) {
         function refreshAll(timestamp) {
           if (typeof sbResponse !== "undefined" && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
             xhrContainer.innerHTML = sbResponse.innerHTML;
+          } else {
+            location.reload(true);
           }
         }
 
@@ -64,7 +66,7 @@ function refreshSidebar(timestamp) {
             const image = new Image(245, 50);
             image.onload = renderGraph;
             image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
-            ctx.globalCompositeOperation = "copy";
+            ctx.globalCompositeOperation = "source-out";
             ctx.globalAlpha = 1;
 
             function renderGraph() {
@@ -81,8 +83,12 @@ function refreshSidebar(timestamp) {
           for (a = 1; a < links.length - 1; a += 1) {
             var style = links[a].getAttribute("style");
             if (links[a].style) {
-              links[a].removeAttribute("style", "");
+              links[a].removeAttribute("style");
             }
+          }
+          var sep = document.querySelector("#sb_tunnelstatus + hr");
+          if (sep != null && sep.hasAttribute("hidden")) {
+            sep.removeAttribute("hidden");
           }
         }
 
@@ -117,12 +123,12 @@ function refreshSidebar(timestamp) {
       } else {
 
         function isDown() {
-          function hideSections() {
+          function hideSections(timestamp) {
             var collapse = document.querySelectorAll("#sidebar .collapse");
             var h;
              for (h = 0; h < collapse.length; h += 1) {
                 collapse[h].setAttribute("hidden", "");
-                if (collapse[h].nextElementSibling != null) {
+                if (collapse[h].nextElementSibling != null && collapse[h].nextElementSibling.nodeName == "HR") {
                   collapse[h].nextElementSibling.setAttribute("hidden", "");
                 }
             }
@@ -130,11 +136,11 @@ function refreshSidebar(timestamp) {
               shutdownstatus.setAttribute("hidden", "");
             }
             if (localtunnels) {
-              localtunnels.innerHTML = '<tr><td colspan="3"></td></tr>';
+              localtunnels.innerHTML = '<tr id="routerdown"><td colspan="3"></td></tr>';
             }
           }
 
-          function modElements() {
+          function modElements(timestamp) {
             var links = document.querySelectorAll("#sidebar h3, #sidebar a");
             var a;
             for (a = 1; a < links.length - 1; a += 1) {
@@ -151,9 +157,8 @@ function refreshSidebar(timestamp) {
             }
             netstatus.innerHTML = '<span id="down">Router is down</span>';
           }
-
-          hideSections(timestamp);
-          modElements(timestamp);
+          window.requestAnimationFrame(hideSections);
+          window.requestAnimationFrame(modElements);
         }
         setTimeout(isDown, 10000);
       }
