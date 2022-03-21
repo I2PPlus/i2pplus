@@ -539,12 +539,12 @@ public class IterativeSearchJob extends FloodSearchJob {
                         if (sess.tag != null) {
                             if (_log.shouldDebug())
                                 _log.debug("[Job " + getJobId() + "] Requesting AES reply from [" + peer.toBase64().substring(0,6) + "]"
-                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.tag.toString().substring(0,6) + "]");
+                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.tag.toString() + "]");
                             dlm.setReplySession(sess.key, sess.tag);
                         } else {
                             if (_log.shouldDebug())
                                 _log.debug("[Job " + getJobId() + "] Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]"
-                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.rtag.toString().substring(0,6) + "]");
+                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.rtag.toString() + "]");
                             dlm.setReplySession(sess.key, sess.rtag);
                         }
                     } else {
