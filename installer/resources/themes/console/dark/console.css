@@ -2472,10 +2472,11 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #sb_localtunnels td:last-child {background-size: 14px}
 #sb_tunnelstatus .tunnelBuildStatus::before {background-size: 12px}
 #sidebar button.cancel {margin-top: 10px}
-#searchbar span {margin: 3px 3px 0}
+.sb_update b {margin: 3px 0 0}
 #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus, #sidebar .reload[value="restartImmediate"] {background-size: 12px, 100%}
 #sidebar .reload:hover, #sidebar .reload:focus {background-size: 12px, 12px, 100%}
 #sidebar .reload[value="restartImmediate"], #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus {margin-bottom: -6px; background-size: 10px, 100%; background-position: 9px center}
+#searchbar span {margin: 3px 3px 0}
 #sitelinks a::after {margin-top: -1px}
 #sitemap .applink img {padding-left: 62px; padding-right: 62px}
 #sitemapcontainer {padding: 0}
