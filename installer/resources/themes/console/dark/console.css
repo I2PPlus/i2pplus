@@ -989,12 +989,13 @@ th > img[src^="/imagegen"], .identicon {margin: 0 0 0 3px; height: 26px; width: 
 .netdbentry tr:nth-child(2) td:last-child {text-align: right; white-space: nowrap; min-width: 140px}
 .netdbentry .familyname {max-width: 140px; overflow: hidden; vertical-align: text-bottom; text-overflow: ellipsis; white-space: nowrap}
 .netdb_family {vertical-align: middle}
-.longstat.fam {margin: 4px 0 -4px; padding: 1px 0; width: 231px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2}
 .netdbStats hr, .sybil_routerinfo hr {margin: 2px 0; display: block; color: transparent; opacity: .5; border-bottom: 1px solid #030; background: none}
 .netdbstats .hide + hr {display: none}
 .netdbstats hr#expl, .netdbstats hr#hrd {display: block}
-.netdbStats li {margin: 0; padding: 1px 10px 1px 0; white-space: normal; line-height: 1.4; list-style: none}
+.netdbStats li {padding: 1px 0; margin: 0 5px 0 0; display: inline-block; vertical-align: middle; white-space: normal; list-style: none}
 .netdbStats li .bullet:last-of-type {opacity: 0}
+.longstat.fam {max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap}
+.longstat.fam.hide {display: none}
 .netdbentry th code {margin-left: 0}
 .leaseset th:first-child code {margin-left: 4px}
 .leaseset th:last-child code {margin: 0 0 0 4px; width: auto}
