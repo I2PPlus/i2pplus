@@ -1,134 +1,160 @@
+/* RefreshSidebar by dr|z3d */
+/* License: AGPLv3 or later */
+
 function refreshSidebar(timestamp) {
+  'use strict';
   var pageVisibility = document.visibilityState;
   var xhr = new XMLHttpRequest();
   var uri = location.pathname.substring(1);
   var xhrContainer = document.getElementById("xhr");
 
   var down = document.getElementById("down");
-  var sb = document.getElementById("sb");
-  var services = document.getElementById("sb_services");
-  var advanced = document.getElementById("sb_advanced");
-  var internals = document.getElementById("sb_internals");
   var localtunnels = document.getElementById("sb_localtunnels");
   var netstatus = document.getElementById("sb_status");
-  var tunnelstatus = document.getElementById("sb_tunnelstatus");
+  var sb = document.querySelector("#sidebar");
+  var services = document.getElementById("sb_services");
   var shutdownstatus = document.getElementById("sb_shutdownStatus");
-  var updatesection = document.getElementById("sb_updatesection");
-  var graph = document.getElementById("sb_graphcontainer");
 
   xhr.open("GET", "/xhr1.jsp?requestURI=" + uri + "&t=" + new Date().getTime(), true);
   xhr.responseType = "document";
   xhr.overrideMimeType("text/html");
   xhr.setRequestHeader("Accept", "text/html");
-  xhr.setRequestHeader("Cache-Control", "no-store");
-  xhr.setRequestHeader("Content-Security-Policy", "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'");
+  xhr.setRequestHeader("Cache-Control", "no-store, max-age=60");
+  xhr.setRequestHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'"
+  );
+
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
+        var sbResponse = xhr.responseXML.getElementById("sb");
         if (down) {
-          var sbResponse = xhr.responseXML.getElementById("sb");
           xhrContainer.innerHTML = sbResponse.innerHTML;
         }
 
-        if (pageVisibility == "visible") {
-          if (document.querySelector("[http-equiv='meta']") != null) {
-            document.querySelector("[http-equiv='meta']").remove;
+        function updateVolatile(timestamp) {
+          removeStyles();
+          var updating = document.querySelectorAll(".volatile:not(.hide");
+          var updatingResponse = xhr.responseXML.querySelectorAll(".volatile:not(.hide)");
+          var i;
+          for (i = 0; i < updating.length; i += 1) {
+            if (typeof updating[i] !== "undefined" && typeof updatingResponse[i] !== "undefined") {
+              if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
+                if (updating.length === updatingResponse.length) {
+                  updating[i].outerHTML = updatingResponse[i].outerHTML;
+                } else {
+                  window.requestAnimationFrame(refreshAll);
+                }
+              }
+            }
           }
+        }
+
+        function refreshAll(timestamp) {
+          if (typeof sbResponse !== "undefined" && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
+            xhrContainer.innerHTML = sbResponse.innerHTML;
+          }
+        }
+
+        function refreshGraph(timestamp) {
+          var minigraph = document.getElementById("minigraph");
+          if (minigraph) {
+            const ctx = minigraph.getContext("2d");
+            const image = new Image(245, 50);
+            image.onload = renderGraph;
+            image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
+            ctx.globalCompositeOperation = "copy";
+            ctx.globalAlpha = 1;
+
+            function renderGraph() {
+              minigraph.width = 245;
+              minigraph.height = 50;
+              ctx.drawImage(this, 0, 0, 245, 50);
+            }
+          }
+        }
+
+        function removeStyles(timestamp) {
+          var links = document.querySelectorAll("#sidebar h3, #sidebar a");
+          var a;
+          for (a = 1; a < links.length - 1; a += 1) {
+            var style = links[a].getAttribute("style");
+            if (links[a].style) {
+              links[a].removeAttribute("style", "");
+            }
+          }
+        }
+
+        function removeMeta() {
+          var meta = document.querySelector("[http-equiv='meta']");
+          if (meta != null) {
+            meta.remove;
+          }
+        }
+
+        if (pageVisibility == "visible") {
+          removeMeta();
           window.requestAnimationFrame(updateVolatile);
 
+          var minigraph = document.getElementById("minigraph");
           if (minigraph) {
             window.requestAnimationFrame(refreshGraph);
             var minigraphResponse = xhr.responseXML.getElementById("minigraph");
             minigraph = minigraphResponse;
           }
 
-          function updateVolatile(timestamp) {
-            var updating = document.getElementsByClassName("volatile");
-            var updatingResponse = xhr.responseXML.getElementsByClassName("volatile");
-            var i;
-            for (i = 0; i < updating.length; i++) {
-              if (typeof updating[i] !== "undefined" && typeof updatingResponse[i] !== "undefined") {
-                if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
-                  if (updating.length === updatingResponse.length) {
-                    updating[i].outerHTML = updatingResponse[i].outerHTML;
-                  } else {
-                    window.requestAnimationFrame(refreshAll);
-                  }
-                }
-              }
-            }
-          }
-
-          function refreshAll(timestamp) {
-            var sbResponse = xhr.responseXML.sb;
-            if (typeof sbResponse !== "undefined" && !Object.is(sb.innerHTML, sbResponse.innerHTML)) sb.innerHTML = sbResponse.innerHTML;
-          }
-
-          function refreshGraph(timestamp) {
-            var minigraph = document.getElementById("minigraph");
-            var routerdown = document.getElementById("down");
-            if (minigraph) {
-              const ctx = minigraph.getContext("2d");
-              const image = new Image(245, 50);
-              image.onload = renderGraph;
-              image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
-              ctx.globalCompositeOperation = "copy";
-              ctx.globalAlpha = 1;
-
-              function renderGraph() {
-                minigraph.width = 245;
-                minigraph.height = 50;
-                ctx.drawImage(this, 0, 0, 245, 50);
-              }
-            }
-          }
         } else {
-          setTimeout(function() {
-            var redirect = document.createElement("meta");
-            redirect.httpEquiv = "refresh";
-            redirect.content = "90";
-            document.head.appendChild(redirect);
-          }, 60000);
+
+          setTimeout(function () {
+            var metarefresh = document.createElement("meta");
+            metarefresh.httpEquiv = "refresh";
+            metarefresh.content = "75";
+            document.head.appendChild(metarefresh);
+          }, 90000);
         }
+
       } else {
+
         function isDown() {
-          var sbdown = document.getElementById("sidebar");
-          var digits = sbdown.getElementsByClassName("digits");
-          var i;
-          for (i = 0; i < digits.length; i++) {
-            digits[i].innerHTML = "---&nbsp;";
+          function hideSections() {
+            var collapse = document.querySelectorAll("#sidebar .collapse");
+            var h;
+             for (h = 0; h < collapse.length; h += 1) {
+                collapse[h].setAttribute("hidden", "");
+                if (collapse[h].nextElementSibling != null) {
+                  collapse[h].nextElementSibling.setAttribute("hidden", "");
+                }
+            }
+            if (shutdownstatus) {
+              shutdownstatus.setAttribute("hidden", "");
+            }
+            if (localtunnels) {
+              localtunnels.innerHTML = '<tr><td colspan="3"></td></tr>';
+            }
           }
 
-          netstatus.innerHTML = '<span id="down">Router is down</span>';
+          function modElements() {
+            var links = document.querySelectorAll("#sidebar h3, #sidebar a");
+            var a;
+            for (a = 1; a < links.length - 1; a += 1) {
+              links[a].setAttribute("style", "pointer-events: none");
+            }
+            var digits = document.querySelectorAll(".digits");
+            var i;
+            for (i = 0; i < digits.length; i += 1) {
+              digits[i].innerHTML = "---&nbsp;";
+            }
+            var clock = document.querySelector("#clock");
+            if (clock != null) {
+              clock.innerHTML = "--:--:--";
+            }
+            netstatus.innerHTML = '<span id="down">Router is down</span>';
+          }
 
-          if (services) {
-            if (services.nextElementSibling !== "undefined" && services.nextElementSibling != null) services.nextElementSibling.remove();
-            services.remove();
-          }
-          if (advanced) {
-            if (advanced.nextElementSibling !== "undefined" && advanced.nextElementSibling != null) advanced.nextElementSibling.remove();
-            advanced.remove();
-          }
-          if (internals) {
-            if (internals.nextElementSibling !== "undefined" && internals.nextElementSibling != null) internals.nextElementSibling.remove();
-            internals.remove();
-          }
-          if (graph) {
-            if (typeof graph.nextElementSibling !== "undefined" || graph.nextElementSibling != null) graph.nextElementSibling.remove();
-            graph.remove();
-          }
-          if (tunnelstatus) {
-            if (typeof tunnelstatus.nextElementSibling !== "undefined" || tunnelstatus.nextElementSibling !== null) tunnelstatus.nextElementSibling.remove();
-            tunnelstatus.remove();
-          }
-          if (shutdownstatus) {
-            if (typeof shutdownstatus.nextElementSibling !== "undefined" || shutdownstatus.nextElementSibling != null) shutdownstatus.nextElementSibling.remove();
-            shutdownstatus.remove();
-          }
-          if (localtunnels) localtunnels.innerHTML = '<tr><td colspan="3">&nbsp;</td></tr>';
-          if (updatesection) updatesection.remove();
+          hideSections(timestamp);
+          modElements(timestamp);
         }
-
         setTimeout(isDown, 10000);
       }
     }
@@ -136,4 +162,4 @@ function refreshSidebar(timestamp) {
   xhr.send();
 }
 
-export { refreshSidebar };
+export {refreshSidebar};

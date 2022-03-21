@@ -104,7 +104,7 @@ ul {margin: 0; padding: 0}
 #clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
-.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: repeating-linear-gradient(90deg, #f60 2px, rgba(0,0,0,0) 4px), linear-gradient(90deg, #930, #f60); content: ""; animation: bar .15s ease-in-out .1s reverse; backface-visibility: hidden; will-change: transform}
+.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 100%; transform: scaleX(0); height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(to right, rgba(255,96,0,.3),#f50,rgba(255,96,0,.3)); content: ""; animation: bar .05s steps(3) reverse; backface-visibility: hidden; will-change: transform}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services, #sb_newsheadings table {margin: -7px auto -9px -1px}
 #sb_localtunnels {margin-bottom: -8px}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -7px}
@@ -121,9 +121,7 @@ ul {margin: 0; padding: 0}
 #sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {padding: 4px 5px 6px; text-align: center}
 #sb_localtunnels td {padding: 2px 0; line-height: 1.4}
 #sb_localtunnels td:first-child {padding: 2px 0 2px 9px; width: 20px; text-align: left; background: var(--client) var(--center) / 16px}
-#sb_localtunnels td[colspan="3"] {width: 100%; background-size: 400%}
 #sb_localtunnels tr:last-child td:first-child {background-position: center center}
-#sb_localtunnels td[colspan="3"] {line-height: 12px; font-size: 0}
 #sb_localtunnels td.ping {background-image: var(--ping)}
 #sb_localtunnels td.tunnelServer {background-image: var(--server)}
 #sb_localtunnels td:last-child {padding: 2px 6px 2px 0; width: 1%; min-width: 18px; text-align: right; background: var(--local_inprogress) no-repeat right 6px center / 16px}
@@ -216,7 +214,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--bevel)}
 #sidebar .error, .tunnelBuildStatus.rejecting, #sb_warning {color: #900; box-shadow: var(--highlight), inset 0 0 2px 1px #700; background: rgba(96,0,0,.3)}
 .sb_netstatus.running, #sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730; background: rgba(126,48,0,.3)}
-#sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(56,56,0,.5) 10px, rgba(48,48,0,.5) 20px); background-size: 400%}
+#sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(56,56,0,.5) 10px, rgba(48,48,0,.5) 20px) repeat center center / 400%}
 #sidebar .hidden, #sidebar .vmcomm, .tunnelBuildStatus.hidden {color: #999; box-shadow: var(--highlight), inset 0 0 2px 1px #777}
 .vmcomm {box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7); background: rgba(92,92,92,.3)}
 #sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--highlight), inset 0 0 2px 1px rgba(0,192,0,.7); background: repeating-linear-gradient(180deg, rgba(0,0,0,.8) 2px, rgba(0,64,0,.3) 4px) center center / 100% 4px, var(--glow_top), linear-gradient(to right, rgba(16,40,15,.5), rgba(0,0,0,.9), rgba(16,40,15,.5))}
@@ -234,6 +232,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: -3px 0; height: 24px; width: 40px; background-size: 20px}
 .sb_netstatus.testing, .sb_netstatus.running, .sb_netstatus.hidden, .sb_netstatus.firewalled {font-size: 0}
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
+#sidebar #sb_localtunnels td[colspan="3"], #sidebar #sb_localtunnels tr:hover td[colspan="3"] {width: 100%; line-height: 12px; font-size: 0; background-size: 400% !important}
 
 /* tunnel build status */
 .tunnelBuildStatus {color: #ee9}
@@ -984,21 +983,19 @@ table[cellspacing="30"] > tbody > tr > td > table > tbody > tr > th:first-child 
 table[cellspacing="30"] > tbody > tr > td:first-child > table > tbody > tr > th:first-child {text-align: center}
 .version a:hover, .version a:focus, a:hover .version, a:focus .version, a:hover .tier, a:focus .tier {color: var(--hover)}
 #netdb .version {margin: 0 2px; padding: 0 8px; vertical-align: middle}
-/*#netdb .netdbentry th .version {vertical-align: inherit}*/
-
-/* netdb */
 .netdb_header img[src^="/flags"] {width: auto; height: 20px; vertical-align: middle; border: 1px solid #030; box-shadow: var(--outline)}
 th > img[src^="/imagegen"], .identicon {margin: 0 0 0 3px; height: 26px; width: 26px; border: var(--border)}
 .netdbentry tr:nth-child(2) td:last-child b, .netdbentry .familyname, .netdbStats li, .netdbStats b, #netdb .netdbentry th b, #netdb .netdbentry td:first-child b, #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code, .netdb_addresses li, .netdb_ouraddresses, .netdb_ouraddresses .netdb_transport {display: inline-block}
 .netdbentry tr:nth-child(2) td:last-child {text-align: right; white-space: nowrap; min-width: 140px}
 .netdbentry .familyname {max-width: 140px; overflow: hidden; vertical-align: text-bottom; text-overflow: ellipsis; white-space: nowrap}
 .netdb_family {vertical-align: middle}
-.longstat.fam {margin: 4px 0 -4px; padding: 1px 0; width: 231px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2}
 .netdbStats hr, .sybil_routerinfo hr {margin: 2px 0; display: block; color: transparent; opacity: .5; border-bottom: 1px solid #030; background: none}
 .netdbstats .hide + hr {display: none}
 .netdbstats hr#expl, .netdbstats hr#hrd {display: block}
-.netdbStats li {margin: 0; padding: 1px 10px 1px 0; white-space: normal; line-height: 1.4; list-style: none}
+.netdbStats li {padding: 1px 0; margin: 0 5px 0 0; display: inline-block; vertical-align: middle; white-space: normal; list-style: none}
 .netdbStats li .bullet:last-of-type {opacity: 0}
+.longstat.fam {max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap}
+.longstat.fam.hide {display: none}
 .netdbentry th code {margin-left: 0}
 .leaseset th:first-child code {margin-left: 4px}
 .leaseset th:last-child code {margin: 0 0 0 4px; width: auto}
@@ -1071,6 +1068,7 @@ p.family b {margin-right: -3px; min-width: 118px; display: inline-block; vertica
 p.family a {padding-left: 4px; width: calc(100% - 141px); max-width: 400px; display: inline-block; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; border-radius: 0 10px 10px 0}
 p.family a:hover {background: #020}
 p.family + p.family, .sybil_info + .sybil_info {margin-top: -4px}
+.familyname .verified {margin-top: -2px; height: 12px; width: 12px; display: inline-block; vertical-align: middle; font-size: 0; background: var(--verified) no-repeat center center / 11px;}
 
 /* netdb lookup */
 #netdb .tabletitle {margin-bottom: -2px}
@@ -2398,7 +2396,7 @@ h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20p
 .sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
 
 /* animations */
-@keyframes bar {from {width: calc(300%)}}
+@keyframes bar {from {transform: scaleX(101%)}}
 @keyframes downloadbar {from {background: var(--download_bar)} to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}}
 @keyframes fade {from {filter: opacity(1)} to {filter: opacity(0)}}
 @keyframes hide-up {0% {margin-top: 0; filter: opacity(1)} 30% {filter: opacity(0)} 100% {margin-top: -300px}}
@@ -2472,7 +2470,6 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #sidebar #sb_services td, #sidebar #sb_internals td, #sidebar #sb_advanced td {padding: 4px}
 #sb_localtunnels td {line-height: 1}
 #sb_localtunnels td:first-child {width: 18px}
-#sidebar #sb_localtunnels td[colspan="3"] {width: 100%; background-size: 400%}
 #sb_localtunnels td:last-child {background-size: 14px}
 #sb_tunnelstatus .tunnelBuildStatus::before {background-size: 12px}
 #sidebar button.cancel {margin-top: 10px}

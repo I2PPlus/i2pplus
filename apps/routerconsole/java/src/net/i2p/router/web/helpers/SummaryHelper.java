@@ -1110,7 +1110,7 @@ public class SummaryHelper extends HelperBase {
                 buf.append("<form action=\"").append(uri).append("\" method=\"POST\" class=\"volatile\">\n")
                    .append("<input type=\"hidden\" name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
                 if (avail) {
-                    buf.append("<span id=\"updateAvailable\">").append(_t("Release update available")).append("<br><i>")
+                    buf.append("<span id=\"updateAvailable\" class=\"volatile\">").append(_t("Release update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getUpdateVersion())
                        .append("</i></span><br><button type=\"submit\" id=\"sb_downloadReleaseUpdate\" class=\"download\" name=\"updateAction\" value=\"signed\" >")
                        // Note to translators: parameter is a version, e.g. "0.8.4"
@@ -1174,7 +1174,7 @@ public class SummaryHelper extends HelperBase {
                .append("</a></span></h4>");
         } else {
             // Hide warn but retain h4 so ajax refresh picks it up
-            buf.append("<h4 id=\"sb_warning\" class=\"volatile\" hidden></h4>");
+            buf.append("<h4 id=\"sb_warning\" class=\"volatile hide\" hidden></h4>");
         }
 
         ReseedChecker checker = _context.netDb().reseedChecker();

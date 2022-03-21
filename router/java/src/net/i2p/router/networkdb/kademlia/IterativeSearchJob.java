@@ -89,16 +89,17 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int MAX_NON_FF = 2;
     /** Max number of peers to query */
 //    private static final int TOTAL_SEARCH_LIMIT = 5;
-    private static final int TOTAL_SEARCH_LIMIT = 4;
+    private static final int TOTAL_SEARCH_LIMIT = 10;
     /** Max number of peers to query if we are ff */
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 3;
+//    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 3;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 2;
     /** Extra peers to get from peer selector, as we may discard some before querying */
 //    private static final int EXTRA_PEERS = 1;
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
     /** TOTAL_SEARCH_LIMIT * SINGLE_SEARCH_TIME, plus some extra */
 //    private static final int MAX_SEARCH_TIME = 30*1000;
-    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 25*1000 : 15*1000;
+    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 12*1000 : 8*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
@@ -108,7 +109,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default single search time
      */
-    private static final long SINGLE_SEARCH_TIME = 3*1000;
+//    private static final long SINGLE_SEARCH_TIME = 3*1000;
+    private static final long SINGLE_SEARCH_TIME = 2*1000;
     /** the actual expire time for a search message */
     private static final long SINGLE_SEARCH_MSG_TIME = 10*1000;
     /**
@@ -185,6 +187,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
         if (isLease)
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", SystemVersion.isSlow() ? MAX_CONCURRENT * 2 : MAX_CONCURRENT * 3);
+        else if (ctx.netDb().getKnownRouters() < 2000 || ctx.router().getUptime() < 30*60*1000)
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT * 2);
         else
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
         _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
@@ -193,7 +197,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
         if (fromLocalDest != null && !isLease && _log.shouldWarn())
-            _log.warn("Search for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
+            _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
         // all createRateStat in FNDF
     }
 
@@ -260,7 +264,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         if (empty) {
             if (_log.shouldWarn())
-                _log.warn("[Job " + getJobId() + "] IterativeSearch for [" + _key.toBase64().substring(0,6) + "] failed - no Floodfills in NetDb");
+                _log.warn("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
+                          " [" + _key.toBase64().substring(0,6) + "] failed - no Floodfills in NetDb");
             // no floodfill peers, fail
             failed();
             return;
@@ -272,11 +277,11 @@ public class IterativeSearchJob extends FloodSearchJob {
         Job onTimeout = new FloodOnlyLookupTimeoutJob(getContext(), this);
         _out = getContext().messageRegistry().registerPending(replySelector, onReply, onTimeout);
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] New IterativeSearch for " +
-                      (_isLease ? "LeaseSet [" : "Router [") + _key.toBase64().substring(0,6) + "]" +
+            _log.info("[Job " + getJobId() + "] New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+                      " [" + _key.toBase64().substring(0,6) + "]" +
                       "\n* Querying: "  + DataHelper.toString(_toTry).substring(0,6) + "]" +
-                      " Routing key: [" + _rkey.toBase64().substring(0,6) + "]" +
-                      " Timeout: " + DataHelper.formatDuration(_timeoutMs));
+                      "; Routing key: [" + _rkey.toBase64().substring(0,6) + "]" +
+                      "; Timeout: " + DataHelper.formatDuration(_timeoutMs));
         retry();
     }
 
@@ -486,9 +491,9 @@ public class IterativeSearchJob extends FloodSearchJob {
                     tries = _unheardFrom.size() + _failedPeers.size();
                 }
                 _log.debug("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
-                          "[" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
+                          " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
                           "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
-                          " Direct? " + isDirect + " Reply via client tunnel? " + isClientReplyTunnel);
+                          "; Direct? " + isDirect + "; Reply via client tunnel? " + isClientReplyTunnel);
             }
             _sentTime.put(peer, Long.valueOf(now));
 
@@ -553,7 +558,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     // a response may have come in.
                     if (_dead) {
                         if (_log.shouldDebug())
-                            _log.debug("[Job " + getJobId() + "] Aborting send - finished while wrapping msg to [" + peer.toBase64().substring(0,6) + "]");
+                            _log.debug("[Job " + getJobId() + "] Aborting send - finished while wrapping message to [" + peer.toBase64().substring(0,6) + "]");
                         return;
                     }
                     if (_log.shouldDebug())
@@ -605,10 +610,10 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (timedOut) {
                 getContext().profileManager().dbLookupFailed(peer);
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Search for Router [" + peer.toBase64().substring(0,6) + "] timed out");
+                    _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");
             } else {
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Search for Router [" + peer.toBase64().substring(0,6) + "] failed");
+                    _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] failed");
             }
         }
         retry();
@@ -710,8 +715,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo()) {
             long timeRemaining = _expiration - getContext().clock().now();
-            _log.info("[Job " + getJobId() + "] IterativeSearch for [" + _key.toBase64().substring(0,6) + "] failed" +
-                      "\n* Peers queried: " + tries + " Time taken: " + (time / 1000) + "s (" + (timeRemaining / 1000) + "s remaining)");
+            _log.info("[Job " + getJobId() + "] IterativeSearch for "  + (_isLease ? "LeaseSet " : "Router") + " [" + _key.toBase64().substring(0,6) + "] failed" +
+                      "\n* Peers queried: " + tries + "; Time taken: " + (time / 1000) + "s (" + (timeRemaining / 1000) + "s remaining)");
         }
         if (tries > 0) {
             // don't bias the stats with immediate fails
@@ -749,8 +754,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] IterativeSearch for [" + _key.toBase64().substring(0,6) + "] succeeded" +
-                      "\n* Peers queried: " + tries + " Time taken: " + (time / 1000) + "s");
+            _log.info("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") + " [" + _key.toBase64().substring(0,6) + "] succeeded" +
+                      "\n* Peers queried: " + tries + "; Time taken: " + (time / 1000) + "s");
         getContext().statManager().addRateData("netDb.successTime", time);
         getContext().statManager().addRateData("netDb.successRetries", tries - 1);
         for (Job j : _onFind) {

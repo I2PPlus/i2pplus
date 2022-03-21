@@ -60,7 +60,7 @@ final class MuxedEngine {
                 return rv;
             } else {
                 if (debug)
-                    _log.debug("AES tag not found after ratchet? " + preferRatchet);
+                    _log.debug("AES tag not found after Ratchet? " + preferRatchet);
             }
         }
         if (!preferRatchet) {
@@ -80,7 +80,7 @@ final class MuxedEngine {
             if (ok)
                 return rv;
             if (debug)
-                _log.debug("Ratchet NS decrypt failed before ElG");
+                _log.debug("Ratchet NextSession decrypt failed before ElGamal");
         }
         // ElG DH
         if (data.length >= 514 && (data.length & 0x0f) == 2) {
@@ -93,14 +93,14 @@ final class MuxedEngine {
                     if (ok)
                         return rv;
                     if (_log.shouldInfo())
-                        _log.info("ElG cloveset error after ratchet? " + preferRatchet);
+                        _log.info("ElGamal cloveset error after Ratchet? " + preferRatchet);
                 } catch (DataFormatException dfe) {
                     if (_log.shouldInfo())
-                        _log.info("ElG cloveset error afterRatchet? " + preferRatchet, dfe);
+                        _log.info("ElGamal cloveset error after Ratchet? " + preferRatchet, dfe);
                 }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("ElG decrypt failed after Ratchet? " + preferRatchet);
+                    _log.info("ElGamal decrypt failed after Ratchet? " + preferRatchet);
             }
             keyManager.reportDecryptResult(false, false);
         }
@@ -110,7 +110,7 @@ final class MuxedEngine {
             boolean ok = rv != null;
             keyManager.reportDecryptResult(true, ok);
             if (!ok && debug)
-                _log.debug("Ratchet NS decrypt failed after ElG");
+                _log.debug("Ratchet NextSession decrypt failed after ElGamal");
         }
         return rv;
     }

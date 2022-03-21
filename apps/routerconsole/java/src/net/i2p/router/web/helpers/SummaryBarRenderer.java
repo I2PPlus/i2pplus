@@ -361,7 +361,7 @@ class SummaryBarRenderer {
                .append(_t("Configure startup of clients and webapps (services); manually start dormant services"))
                .append("\">")
                .append(_t("Services"))
-               .append("</a></h3>\n<hr class=\"b\">\n<table id=\"sb_services\" class=\"volatile\">\n<tr>\n<td>");
+               .append("</a></h3>\n<hr class=\"b\">\n<table id=\"sb_services\" class=\"volatile collapse\">\n<tr>\n<td>");
             for (String row : svcs.values()) {
                 buf.append(row);
             }
@@ -422,7 +422,7 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Internals"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_internals\" class=\"volatile\">\n<tr>\n<td>\n");
+                   "<table id=\"sb_internals\" class=\"volatile collapse\">\n<tr>\n<td>\n");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
@@ -545,7 +545,7 @@ class SummaryBarRenderer {
            .append(_t("Advanced"))
            .append("</a></h3>\n")
 
-           .append("<hr class=\"b\">\n<table id=\"sb_advanced\">\n<tr><td>");
+           .append("<hr class=\"b\">\n<table id=\"sb_advanced\" class=\"collapse\">\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
@@ -799,9 +799,9 @@ class SummaryBarRenderer {
 //        if ("".equals(updateStatus)) return "";
         StringBuilder buf = new StringBuilder(512);
         if (_helper == null || "".equals(updateStatus)) {
-            buf.append("<div id=\"sb_updatesection\" class=\"hide volatile\"></div>\n");
+            buf.append("<div id=\"sb_updatesection\" class=\"hide volatile\" hidden></div>\n");
         } else {
-            buf.append("<div id=\"sb_updatesection\" class=\"volatile\">\n")
+            buf.append("<div id=\"sb_updatesection\" class=\"volatile collapse\">\n")
                .append("<h3><a href=\"/configupdate\" target=\"_top\" title=\"")
                .append(_t("Configure I2P Updates"))
                .append("\">")
@@ -840,10 +840,9 @@ class SummaryBarRenderer {
         int active = _helper.getActivePeers();
         buf.append(active);
         if (isAdvanced()) {
-            buf.append(SummaryHelper.THINSP)
-           .append(Math.max(active, _helper.getActiveProfiles()));
-       }
-       buf.append("</span></td></tr>\n" +
+            buf.append(SummaryHelper.THINSP).append(Math.max(active, _helper.getActiveProfiles()));
+        }
+        buf.append("</span></td></tr>\n" +
                    "<tr title=\"")
            .append(_t("The number of peers available for building client tunnels"))
            .append("\">" +
@@ -1043,7 +1042,7 @@ class SummaryBarRenderer {
           refreshPeriod = Integer.parseInt(r);
         } catch (NumberFormatException nfe) {}
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<div id=\"sb_graphcontainer\" title=\"")
+        buf.append("<div id=\"sb_graphcontainer\" class=\"collapse\" title=\"")
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
            .append("\">\n<span id=\"sb_graphstats\">")
            .append(_helper.getSecondKBps())
@@ -1222,7 +1221,7 @@ class SummaryBarRenderer {
     public String renderTunnelStatusHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(50);
-        buf.append("<h4 id=\"sb_tunnelstatus\" class=\"volatile\"><span class=\"tunnelBuildStatus");
+        buf.append("<h4 id=\"sb_tunnelstatus\" class=\"volatile collapse\"><span class=\"tunnelBuildStatus");
         if (_t(_helper.getTunnelStatus()).contains(("Starting up")))
             buf.append(" starting\" title=\"").append(_t("No participating tunnels requests are accepted for the first 10 minutes while router stabilizes"));
         if (_t(_helper.getTunnelStatus()).contains(("Shutting down")))

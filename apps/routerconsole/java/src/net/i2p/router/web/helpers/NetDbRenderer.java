@@ -42,6 +42,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.util.HashDistance;   // debug
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import static net.i2p.router.sybil.Util.biLog2;
@@ -1007,8 +1008,6 @@ class NetDbRenderer {
      *  Be careful to use stripHTML for any displayed routerInfo data
      *  to prevent vulnerabilities
      */
-
-
     private void renderRouterInfo(StringBuilder buf, RouterInfo info, boolean isUs, boolean full) {
         String hash = info.getIdentity().getHash().toBase64();
         String family = info.getOption("family");
@@ -1057,8 +1056,12 @@ class NetDbRenderer {
         if (!isUs) {
             buf.append("<span class=\"netdb_header\">");
             if (family != null) {
-                buf.append("<a class=\"familysearch\" href=\"/netdb?fam=").append(family)
-                   .append("\" title=\"").append(_t("Show all members of the {0} family in NetDb", family))
+                FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
+                buf.append("<a class=\"familysearch");
+                if (fkc != null)
+                    buf.append(" verified");
+                buf.append("\" href=\"/netdb?fam=").append(DataHelper.stripHTML(family))
+                   .append("\" title=\"").append(_t("Show all members of the {0} family in NetDb", DataHelper.stripHTML(family)))
                    .append("\">").append(_t("Family")).append("</a>");
             }
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
@@ -1103,8 +1106,15 @@ class NetDbRenderer {
                .append(DataHelper.formatDuration2(0-age)).append("<span class=\"netdb_info\">???</span>&nbsp;&nbsp;");
         }
         if (family != null) {
+            FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
             buf.append("<span class=\"netdb_family\"><b>").append(_t("Family"))
-               .append(":</b> <span class=\"familyname\">").append(family).append("</span></span>");
+               .append(":</b> <span class=\"familyname\">").append(DataHelper.stripHTML(family));
+            if (fkc != null) {
+               buf.append(" <span class=\"verified\" title=\"")
+                  .append(_t("Verified family (signing certificate is installed and valid)"))
+                  .append("\">[").append(_t("Verified")).append("]</span>");
+            }
+            buf.append("</span></span>");
         }
         buf.append("</td>\n<td>");
         buf.append("<span class=\"signingkey\" title=\"")
@@ -1206,7 +1216,7 @@ class NetDbRenderer {
         if (full && !isUs) {
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
             if (prof != null) {
-                buf.append("<tr>\n<td><b>" + _t("Stats") + ":</b><td colspan=\"2\">\n<ul class=\"netdbStats\">");
+                buf.append("<tr>\n<td><b>").append(_t("Stats")).append(":</b><td colspan=\"2\">\n<ul class=\"netdbStats\">");
                 Map<Object, Object> p = info.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String key = (String) e.getKey();

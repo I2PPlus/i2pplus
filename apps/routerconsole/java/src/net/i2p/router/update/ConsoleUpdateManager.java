@@ -932,7 +932,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 break;
 
             case PLUGIN:
-                msg = "<b>" + _t("New plugin version {0} is available", newVersion) + "</b>";
+                msg = "<b class=\"volatile\">" + _t("New plugin version {0} is available", newVersion) + "</b>";
                 break;
 
             default:
@@ -1016,7 +1016,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     _log.logAlways(Log.WARN, msg);
                     msg = "<b>" + msg + "</b>";
                 } else if (!newer) {
-                    msg = "<b>" + _t("No new version is available for plugin {0}", task.getID()) + "</b>";
+                    msg = "<b class=\"volatile\">" + _t("No new version is available for plugin {0}", task.getID()) + "</b>";
                 }
                 /// else success.... message for that?
 
@@ -1100,7 +1100,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         // any other types that shouldn't display?
         if (task.getURI() != null && task.getType() != TYPE_DUMMY) {
             StringBuilder buf = new StringBuilder(256);
-            buf.append("<b id=\"updatefailed\">");
+            buf.append("<b id=\"updatefailed\" class=\"volatile\">");
             String uri = task.getURI().toString();
             if (uri.startsWith("file:") || task.getMethod() == FILE) {
                 uri = DataHelper.stripHTML(task.getURI().getPath());
@@ -1362,7 +1362,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private boolean handleRouterFile(URI uri, String actualVersion, File f, UpdateType updateType) {
         boolean isSU3 = updateType == ROUTER_SIGNED_SU3 || updateType == ROUTER_DEV_SU3;
         String url = uri.toString();
-        updateStatus("<b>" + _t("Update downloaded") + "</b>");
+        updateStatus("<b class=\"volatile\">" + _t("Update downloaded") + "</b>");
         File to = new File(_context.getRouterDir(), Router.UPDATE_FILE);
         String err = null;
         // Process the file
@@ -1422,7 +1422,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
             if ("install".equals(policy)) {
                 _log.log(Log.CRIT, "Update was downloaded and verified, restarting to install it...");
-                updateStatus("<b>" + _t("Update verified") + "</b><br>" + _t("Restarting"));
+                updateStatus("<b class=\"volatile\">" + _t("Update verified") + "</b><br>" + _t("Restarting"));
                 restart();
             } else {
                 _log.logAlways(Log.CRIT, "I2P Update was downloaded and verified, will be installed at next restart");
@@ -1431,7 +1431,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             }
         } else {
             _log.log(Log.CRIT, err + " from " + url);
-            updateStatus("<b>" + err + ' ' + _t("from {0}", linkify(url)) + " </b>");
+            updateStatus("<b class=\"volatile\">" + err + ' ' + _t("from {0}", linkify(url)) + " </b>");
         }
         return err == null;
     }
@@ -1446,15 +1446,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         String url = uri.toString();
         if (FileUtil.verifyZip(updFile)) {
             if (url.contains("skank"))
-                updateStatus("<b>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b>");
+                updateStatus("<b class=\"volatile\">" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b>");
             else
-                updateStatus("<b>" + _t("Update downloaded") + "</b>");
+                updateStatus("<b class=\"volatile\">" + _t("Update downloaded") + "</b>");
         } else {
             updFile.delete();
             if (url.contains("skank"))
-                updateStatus("<b>" + _t("Unsigned update file from {0} is corrupt", url).replace("Unsigned update file", "I2P+ Update") + "</b>");
+                updateStatus("<b class=\"volatile\">" + _t("Unsigned update file from {0} is corrupt", url).replace("Unsigned update file", "I2P+ Update") + "</b>");
             else
-                updateStatus("<b>" + _t("Unsigned update file from {0} is corrupt", url) + "</b>");
+                updateStatus("<b class=\"volatile\">" + _t("Unsigned update file from {0} is corrupt", url) + "</b>");
             _log.log(Log.CRIT, "Corrupt unsigned update from: " + url);
             return false;
         }
@@ -1478,7 +1478,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     updateStatus("<b>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b><br>" + _t("Restarting") + "&hellip;");
                 } else {
                     _log.log(Log.CRIT, "Update was downloaded, restarting to install it...");
-                    updateStatus("<b>" + _t("Update downloaded") + "</b><br>" + _t("Restarting") + "&hellip;");
+                    updateStatus("<b class=\"volatile\">" + _t("Update downloaded") + "</b><br>" + _t("Restarting") + "&hellip;");
                 }
                 restart();
             } else {
@@ -1491,7 +1491,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             }
         } else {
             _log.log(Log.CRIT, "Failed copy to " + to);
-            updateStatus("<b>" + _t("Failed copy to {0}", to.getAbsolutePath()) + "</b>");
+            updateStatus("<b class=\"volatile\">" + _t("Failed copy to {0}", to.getAbsolutePath()) + "</b>");
         }
         return copied;
     }
