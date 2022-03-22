@@ -1164,8 +1164,8 @@ th code {user-select: all}
 .sybil_distance:last-child {margin-bottom: 8px}
 .sybil_container p:first-child {margin-top: 0}
 .sybil_container p:last-child {margin-bottom: 0}
-.sybil_container p {text-align: left}
-.sybil_container, .sybilinfo_container, .threatpoints + ul {padding: 0 5px; display: flex}
+.sybil_container p {text-align: left; white-space: nowrap}
+.sybil_container, .sybilinfo_container, .threatpoints + ul {padding: 0 5px; display: flex; flex-wrap: wrap}
 .sybil_routerinfo b.netdb_transport {margin-right: 0}
 .sybil_routerinfo td[colspan="3"] {white-space: normal}
 .sybil_routerinfo .viewprofile img, .sybil_routerinfo .viewfullentry img, .sybil_routerinfo .familysearch img, .sybil_routerinfo .configpeer img {margin-bottom: 1px; margin-right: 6px}
