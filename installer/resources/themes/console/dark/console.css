@@ -515,8 +515,11 @@ h3[id*="jobs"] {clear: both; margin-top: 25px}
 #schedjobs li {width: calc(100% - 12px); margin: 0 4px}
 #schedjobs tr:hover td {background: #000800}
 #jobstats {margin-bottom: 10px}
+#jobstats tr:nth-last-child(n+2) {border-top: var(--border_softer)}
 #jobstats th, #jobstats td {text-align: right; padding-right: 12px}
-#jobstats td {padding-top: 6px; padding-bottom: 6px; border-top: none; border-bottom: none}
+#jobstats td {padding-top: 6px; padding-bottom: 6px; border-bottom: none}
+#jobstats tr:last-child td {border-top: var(--border); background: var(--th)}
+#jobstats tr:nth-last-child(n+2) td:nth-last-child(n+2) {border-right: var(--border_softer)}
 #jobstats tr:nth-last-child(n+2) td:nth-child(odd) {background: rgba(255,255,255,.01)}
 #jobstats tr:last-child {font-weight: 700}
 #schedjobs th:first-child, #jobstats th:first-child, #jobstats td:first-child {padding-left: 10px; text-align: left; font-weight: 700}
