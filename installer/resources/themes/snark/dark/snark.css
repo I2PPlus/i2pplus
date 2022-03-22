@@ -82,7 +82,7 @@ tr {contain: layout}
 
 th, #showRatings {padding: 3px 2px; white-space: nowrap; vertical-align: middle; font-size: 9pt; border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 #addSection td:first-child, #createSection td:first-child, #commentInfo td:first-child, #userComments td:first-child {text-align: right}
-th#torrentSort {text-align: right}
+#torrents th#torrentSort {text-align: right}
 #pagenav, th.torrentETA, th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp, th.SnarkTorrentAction {text-align: center}
 #torrents {margin: -1px 0 0; border: 1px solid #101}
 #torrents thead {box-shadow: none}
@@ -219,7 +219,7 @@ input.trackerhome, input.trackerannounce {width: 210px}
 #snarkhead th {background: none}
 #snarkhead tr {background: var(--title); background-size: 4px 100%, 100%}
 #torrents th {text-align: center}
-#torrents th:first-child {padding-left: 2px; text-align: left}
+#torrents th.graphicStatus {padding-left: 2px; text-align: left}
 #torrents td {line-height: 1.2; text-align: left; font-size: 8pt}
 #torrents td[colspan="10"] {padding: 2px; color: #cc7}
 #torrents td:empty, #torrents th:empty, #torrents tfoot tr:first-child th:empty {padding-right: 0; padding-left: 0; width: 0; min-width: 0}
@@ -239,9 +239,9 @@ input.trackerhome, input.trackerannounce {width: 210px}
 #torrents tr:hover td, .dirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover, .trackerconfig tr:nth-child(n+2):hover, .peerinfo:hover td, .peerinfo:hover + .debuginfo,
 #torrents tbody td, .debuginfo.rowOdd td, .debuginfo.rowEven td {border-top: 1px solid #001b00; border-bottom: 1px solid #001b00}
 #torrents tr:hover td, .dirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover, .trackerconfig tr:nth-child(n+2):hover {background: #030}
-.graphicStatus {width: 1%; white-space: nowrap}
-.graphicStatus {padding-left: 4px; padding-right: 5px; text-align: center}
-td.graphicStatus {padding-left: 2px}
+#torrents .graphicStatus {padding-left: 5px; padding-right: 5px; width: 1%; text-align: center}
+#torrents td.graphicStatus {padding-left: 2px}
+td.graphicStatus img {margin-top: -3px; margin-bottom: -3px; width: auto; height: 21px; display: inline-block; vertical-align: middle}
 .peerCount {padding-left: 0; padding-right: 0; width: 1%; min-width: 50px; white-space: nowrap}
 th.peerCount a img {margin-left: -5px}
 .zero .peerCount b {display: none}
@@ -265,7 +265,6 @@ tr:not(:hover) .torrentName a, tr:not(:hover) .snarkFileName a {-webkit-text-str
 .torrentETA, .torrentDownloaded, .torrentUploaded {width: 1%; white-space: nowrap; text-align: center}
 .torrentETA:not(:empty), .torrentUploaded:not(:empty), .RateDown:not(:empty), .RateUp:not(:empty) {width: 5%; min-width: 40px; white-space: nowrap; font-weight: 700}
 .torrentETA:not(:empty) {padding-right: 6px}
-.graphicStatus {text-align: center}
 .RateUp:not(:empty), .RateDown:not(:empty), .torrentDownloaded:not(:empty), .torrentUploaded:not(:empty) {padding: 0 3px; width: 1%; white-space: nowrap; line-height: .9; color: #bb7}
 .RateUp, .RateDown, .torrentUploaded {text-align: center}
 .torrentUploaded .left {min-width: 12px}
@@ -291,7 +290,6 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 .downloading.active:hover td#torrents .torrentAction {background: linear-gradient(to left,#3c3,#3c3 2px,#030 2px)}
 .seeding.active td#torrents .torrentAction {background: linear-gradient(to left,#f64384,#f64384 2px,transparent 2px)}
 .seeding.active:hover td#torrents .torrentAction {background: linear-gradient(to left,#f64384,#f64384 2px,#030 2px)}
-td.graphicStatus img {margin-top: -3px; margin-bottom: -3px; width: auto; height: 21px; display: inline-block; vertical-align: middle}
 .tooltipped {display: inline-block; position: relative; z-index: 99; content: ""}
 .tooltipped:hover::before, .tooltipped:active::before {margin-left: -10px; top: calc(50% - 6px); left: 30px; border-width: 6px; border-style: solid; border-color: transparent #000 transparent transparent; content: ""; animation: fade-in .1s ease 3s reverse both}
 .tooltipped:hover::after, .tooltipped:active::after {padding: 3px 6px; top: -3px; left: 32px; border: 1px solid #000; border-radius: 3px; box-shadow: var(--highlight); background: #000; content: attr(data-tooltip); animation: fade-in .1s ease 3s reverse both}
@@ -955,6 +953,7 @@ body, #torrents td, .snarkAddInfo, th, td,code, textarea, input, input[type=subm
 .routerdown {margin-bottom: 10px}
 .snarkNav, .snarkNav:hover, .snarkNav:focus, .snarkNav:active {background-size: 17px, 100%}
 .snarkNav {margin-top: 0; font-size: 11pt}
+#torrents th.graphicStatus img {margin-left: 3px}
 td.graphicStatus img {margin-top: -3px; margin-bottom: -3px; height: 24px}
 th.peerCount a img {margin-left: -20px}
 .torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {min-width: 76px}
