@@ -85,12 +85,12 @@ function refreshSidebar(timestamp) {
             }
           }
 
-          var collapse = document.querySelectorAll("#sidebar .collapse, #sidebar .collapse + hr");
+          var collapsed = document.querySelectorAll("#sidebar .collapse, #sidebar .collapse + hr");
           var c;
-          for (c = 0; c < collapse.length; c += 1) {
-            var styleHidden = collapse[c].getAttribute("hidden");
+          for (c = 0; c < collapsed.length; c += 1) {
+            var styleHidden = collapsed[c].getAttribute("hidden");
             if (styleHidden) {
-              collapse[c].removeAttribute("hidden");
+              collapsed[c].removeAttribute("hidden");
             }
           }
         }
@@ -165,7 +165,7 @@ function refreshSidebar(timestamp) {
           modElements();
 
         }
-        setTimeout(isDown, 500);
+        setTimeout(isDown, 2000);
       }
     }
   };
