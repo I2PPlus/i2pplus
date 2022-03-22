@@ -58,7 +58,7 @@ class SearchJob extends JobImpl {
     private int _floodfillSearchesOutstanding;
 
 //    private static final int SEARCH_BREDTH = 3;
-    private static int SEARCH_BREDTH = 4;
+    private static int SEARCH_BREDTH = 8;
     /** Only send the 10 closest "don't tell me about" refs */
 //    static final int MAX_CLOSEST = 10;
     static final int MAX_CLOSEST = 12;
@@ -68,7 +68,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final int PER_PEER_TIMEOUT = 5*1000;
-    private static final int PER_PEER_TIMEOUT = 3*1000;
+    private static final int PER_PEER_TIMEOUT = 4*1000;
 
     /**
      * give ourselves 30 seconds to send out the value found to the closest
@@ -85,7 +85,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final long REQUEUE_DELAY = 1000;
-    private static final long REQUEUE_DELAY = 3*1000;
+    private static final long REQUEUE_DELAY = 2*1000;
 
     // TODO pass to the tunnel dispatcher
     //private final static int LOOKUP_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_LOOKUP;
