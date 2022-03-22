@@ -1171,7 +1171,7 @@ th code {user-select: all}
 .sybil_routerinfo .viewprofile img, .sybil_routerinfo .viewfullentry img, .sybil_routerinfo .familysearch img, .sybil_routerinfo .configpeer img {margin-bottom: 1px; margin-right: 6px}
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {padding-right: 10px; text-align: right}
 .sybil_routerinfo th img[src^="/flags"] {margin-right: 5px; width: 30px; height: 22px}
-.sybil_routerinfo .identicon {vertical-align: middle}
+.sybil_routerinfo .identicon {margin: 0 1.5px 0 -2px; vertical-align: middle; border: none; border-radius: 3px; filter: invert(1) saturate(1.1); mix-blend-mode: screen}
 #netdb .sybil_addresses, #netdb .sybil_addresses td {border-top: none}
 #netdb .sybil_addresses {padding-right: 0}
 #netdb .sybil_addresses table td {box-shadow: var(--bevel); background: #000}
