@@ -392,6 +392,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(HEADER_A + _themePath + HEADER_C + "\n");
         }
         out.write("</head>\n" + "<body id=\"snarkxhr\" class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
+        out.write("<iframe name=\"processForm\" hidden></iframe>\n");
         List<Tracker> sortedTrackers = null;
 /*
         long now = System.currentTimeMillis();
@@ -590,9 +591,9 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showStatusFilter = _manager.util().showStatusFilter();
         if (isForm) {
             if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected())
-              out.write("<form id=\"torrentlist\" class=\"filterbarActive\" action=\"_post\" method=\"POST\">\n");
+              out.write("<form id=\"torrentlist\" class=\"filterbarActive\" action=\"_post\" method=\"POST\" target=\"processForm\">\n");
             else
-              out.write("<form id=\"torrentlist\" action=\"_post\" method=\"POST\">\n");
+              out.write("<form id=\"torrentlist\" action=\"_post\" method=\"POST\" target=\"processForm\">\n");
             if (showStatusFilter) {
                 // selective display of torrents based on status
                 // this should probably be done via a query string, but for now prototyping in js
