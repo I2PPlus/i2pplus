@@ -810,7 +810,7 @@ public class I2PSnarkServlet extends BasicServlet {
                             out.write("<span class=\"descending\"></span>");
                     } else if ("-8".equals(currentSort)) {
                         sort = "8";
-                        out.write("<span class=\"asscending\"></span>");
+                        out.write("<span class=\"ascending\"></span>");
                     } else {
                         sort = "-8";
                     }
