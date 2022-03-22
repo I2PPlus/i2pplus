@@ -1219,15 +1219,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             switch (r) {
                 case BAD_KEY:
                 case INVALID_SIG:
+                    Hash h = routerInfo.getHash();
+                    // never fail our own router, that would cause a restart and rekey
+                    if (h.equals(_context.routerHash()))
+                        break;
+                    return "Bad family " + r + ' ' + h;
+
                 case NO_SIG:
-//                    return "Bad family " + r + ' ' + routerInfo.getHash();
-                    return "Bad Family [" + r + "] signature detected for [" + routerInfo.getHash().toBase64().substring(0,6) + "]";
+                    // Routers older than 0.9.54 that added a family and haven't restarted
+                    break;
 
                 case BAD_SIG:
                     // To be investigated
                     break;
             }
-            // todo store in RI
         }
         return validate(routerInfo);
     }
