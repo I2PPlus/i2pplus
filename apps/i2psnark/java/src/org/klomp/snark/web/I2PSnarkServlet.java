@@ -2756,7 +2756,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<div id=\"add\" class=\"snarkNewTorrent\">\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form action=\"_post\" method=\"POST\">\n");
+        out.write("<form action=\"_post\" method=\"POST\" target=\"processForm\">\n");
         out.write("<div class=\"sectionPanel\" id=\"addSection\">\n");
         writeHiddenInputs(out, req, "Add");
         out.write("<input hidden class=\"toggle_input\" id=\"toggle_addtorrent\" type=\"checkbox\"");
@@ -2793,7 +2793,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
         out.write("<div class=\"sectionPanel\" id=\"createSection\">\n<div>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form action=\"_post\" method=\"POST\">\n");
+        out.write("<form action=\"_post\" method=\"POST\" target=\"processForm\">\n");
         writeHiddenInputs(out, req, "Create");
         out.write("<input hidden class=\"toggle_input\" id=\"toggle_createtorrent\" type=\"checkbox\">" +
                   "<label id=\"tab_newtorrent\" class=\"toggleview\" for=\"toggle_createtorrent\"><span class=\"tab_label\">");
@@ -2898,7 +2898,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
 // configuration
 
-        out.write("<form action=\"" + _contextPath + "/configure#top\" method=\"POST\">\n" +
+        out.write("<form action=\"" + _contextPath + "/configure#navbar\" method=\"POST\">\n" +
                   "<div class=\"configPanel lang_" + lang + "\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(out, req, "Save");
         out.write("<span class=\"configTitle\">");
@@ -3285,7 +3285,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /** @since 0.9 */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<form action=\"" + _contextPath + "/configure#top\" method=\"POST\">\n" +
+        buf.append("<form action=\"" + _contextPath + "/configure#navbar\" method=\"POST\">\n" +
                    "<div class=\"configPanel\" id=\"trackers\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(buf, req, "Save2");
         buf.append("<span class=\"configTitle\">");
