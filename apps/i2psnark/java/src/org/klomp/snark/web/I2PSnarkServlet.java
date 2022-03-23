@@ -548,7 +548,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String s = _t("Shrink");
             out.write(toThemeSVG("shrink", s, s));
             out.write("</a>\n");
-            out.write("<ul>\n");
+            out.write("<ul class=\"volatile\">\n");
             out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             // FIXME only show once
             if (!_manager.util().connected()) {
