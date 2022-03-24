@@ -17,10 +17,11 @@
   bottom: 0;
   z-index: 100;
   background: var(--notify);
+  user-select: none;
   animation: wipe 1s ease .5s both, hideAlert 1s ease-out 4s both;
 }
 
-#createNotify:not([hidden]){
+#createNotify:not([hidden]) {
   animation: wipe 1s ease .5s both, hideAlert .7s ease-out 4s both;
 }
 
@@ -45,8 +46,8 @@
 }
 
 @keyframes wait {
-  0% {background: var(--loading) no-repeat center center / 28px; transform: rotate(-480deg)}
-  99% {background: var(--loading) no-repeat center center / 28px}
+  0% {background: var(--loading) no-repeat center center / 34px; transform: rotate(-480deg)}
+  99% {background: var(--loading) no-repeat center center / 34px}
   100% {background: var(--snark) no-repeat center center / 28px; transform: rotate(0)}
 }
 

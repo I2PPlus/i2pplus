@@ -785,6 +785,15 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 #torrentEdit .info_tracker {padding-left: 16px; min-width: 80px; text-align: left}
 #torrentEdit .info_tracker, #torrentEdit .info_tracker a {line-height: 1.3; font-size: 95%; font-weight: bold; background-position: 4px center; pointer-events: none}
 
+/* inline notifications */
+#addSection #addNotify td, #createSection #createNotify td {box-shadow: var(--highlight), inset 0 0 4px 0 #e9e5e2 !important; background: linear-gradient(to bottom, rgba(0,0,0,0), #c8bdb7)}
+
+@keyframes wait {
+  0% {background: var(--loading) no-repeat center center / 36px; transform: rotate(-480deg)}
+  99% {background: var(--loading) no-repeat center center / 36px}
+  100% {background: var(--snark) no-repeat center center / 28px; transform: rotate(0)}
+}
+
 /* Resource Errors */
 .resourceError {border: var(--border_hard)}
 .resourceError th {padding: 10px 10px 10px 40px; background: var(--err) no-repeat left 10px center / 24px, var(--th)}
