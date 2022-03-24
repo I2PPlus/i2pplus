@@ -17,6 +17,7 @@
 --nav_hover: #f50;
 --navbar: linear-gradient(180deg,var(--bg),var(--bg2));
 --nav: linear-gradient(180deg,var(--bg) 50%,var(--bg2) 50%);
+--notify: var(--th);
 --page: repeating-linear-gradient(90deg,#cfd9ff 2px,var(--bg) 4px);
 --row_filtered: var(--bg3);
 --section: linear-gradient(180deg,var(--bg2), var(--bg3));

@@ -2,18 +2,20 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/midnight/global.css);
+
 :root {
+--border_filtered: var(--border);
 --btnAction_active: linear-gradient(180deg,#3c1751,#652787);
 --btnAction_hover: var(--btn_hover_radial), var(--nav_hover);
 --btnAction: linear-gradient(180deg,#181d4f 50%,#001 50%);
---nav: linear-gradient(180deg,#112,#080818 50%,#000);
---nav_hover: linear-gradient(180deg,#652787,#3c1650 50%,#3c1751 50%,#1d0b28);
 --nav_active: linear-gradient(180deg,#2c113c,#652787);
+--nav_hover: linear-gradient(180deg,#652787,#3c1650 50%,#3c1751 50%,#1d0b28);
+--nav: linear-gradient(180deg,#112,#080818 50%,#000);
+--notify: linear-gradient(180deg, #113,#001);
+--row_filtered: var(--row);
 --tab_active: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a);
 --tab_hover: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(180deg,#1d1a2d 50%, #000 50%);
 --tab: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)), var(--nav);
---row_filtered: var(--row);
---border_filtered: var(--border);
 }
 
 /* globals */

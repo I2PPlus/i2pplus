@@ -9,6 +9,7 @@
   --active: #f30;
   --badge_hover: linear-gradient(180deg, var(--bg3), #fff);
   --badge: linear-gradient(180deg, #fff, var(--bg3));
+  --bevel: inset 0 0 0 1px #fff, inset 0 0 3px 0 var(--bg4);
   --bg2: #f4f4ff;
   --bg3: #eef;
   --bg3: #f0f0ff;

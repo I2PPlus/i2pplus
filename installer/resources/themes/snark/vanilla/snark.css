@@ -4,25 +4,27 @@
 @import url(/themes/fonts/DroidSans.css);
 
 :root {
---monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
 --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
---tab: linear-gradient(to top, #ffeadf, #cfb6a8);
---highlight: inset 0 0 0 1px #ffefe6;
---nav: linear-gradient(180deg,#fff7ef 47%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px);
---nav_hover: linear-gradient(180deg,#ffeadf 47%, #cfb6a8 50%);
---nav_active: linear-gradient(180deg,#af9178, #dfb899);
---th: linear-gradient(180deg,#efefef, #cfc7c2);
---panel: linear-gradient(180deg,#dfd7d1, #cfc7c2);
---btnAction: linear-gradient(180deg,#f4f2f1, #e9e4e2 50%, #d2cbc6 50%, #bcb1a9);
---btnAction_hover: linear-gradient(180deg,#ffeee6, #ffeadf 50%, #ffdecc 50%, #ae836b);
---btnAction_active: linear-gradient(180deg,#e1d8d1, #fff2e6);
 --border: 1px solid #463e39;
---border_hard: 1px solid #6f533e;
 --border_filtered: var(--border_hard);
+--border_hard: 1px solid #6f533e;
+--btnAction_active: linear-gradient(180deg,#e1d8d1, #fff2e6);
+--btnAction_hover: linear-gradient(180deg,#ffeee6, #ffeadf 50%, #ffdecc 50%, #ae836b);
+--btnAction: linear-gradient(180deg,#f4f2f1, #e9e4e2 50%, #d2cbc6 50%, #bcb1a9);
+--highlight: inset 0 0 0 1px #ffefe6;
 --ink: #331700;
+--monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+--nav_active: linear-gradient(180deg,#af9178, #dfb899);
+--nav_hover: linear-gradient(180deg,#ffeadf 47%, #cfb6a8 50%);
+--nav: linear-gradient(180deg,#fff7ef 47%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px);
+--notify: var(--panel);
+--panel: linear-gradient(180deg,#dfd7d1, #cfc7c2);
 --row_even: linear-gradient(90deg, #998e88 3px, #e8dfda 3px);
+--row_filtered: var(--row_even);
 --row_odd: linear-gradient(90deg, #72665f 3px, #e0d9d5 3px);
---row_filtered: var(--row_even);}
+--tab: linear-gradient(to top, #ffeadf, #cfb6a8);
+--th: linear-gradient(180deg,#efefef, #cfc7c2);
+}
 
 html {min-height: 100%; border-right: var(--border); background: repeating-linear-gradient(180deg,#6f5b4c 1px, #a9927e 1px, #bfa388 4px), #cab39b; background-size: 100% 4px; scrollbar-color: #a38a75 #cab39b}
 body {font: 9pt var(--bodyfont); color: var(--ink)}

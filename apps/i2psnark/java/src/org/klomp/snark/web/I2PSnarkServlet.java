@@ -392,7 +392,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(HEADER_A + _themePath + HEADER_C + "\n");
         }
         out.write("</head>\n" + "<body id=\"snarkxhr\" class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
-        out.write("<iframe name=\"processForm\" hidden></iframe>\n");
+        out.write("<iframe name=\"processForm\" id=\"processForm\" hidden></iframe>\n");
         List<Tracker> sortedTrackers = null;
 /*
         long now = System.currentTimeMillis();
@@ -522,7 +522,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
-            out.write("<div id=\"screenlog\"");
+            out.write("<div id=\"screenlog\" class=\"");
             if (isConfigure)
                 out.write(" configpage");
             if (!_manager.util().connected())
@@ -549,7 +549,6 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(toThemeSVG("shrink", s, s));
             out.write("</a>\n");
             out.write("<ul class=\"volatile\">\n");
-            out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             // FIXME only show once
             if (!_manager.util().connected()) {
                 out.write("<noscript>\n<li class=\"noscriptWarning\">" +
@@ -565,9 +564,10 @@ public class I2PSnarkServlet extends BasicServlet {
                              .replaceFirst(" \\(", "</span> (");
                 if (msg.contains(_t("Warning - No I2P")))
                     msg = msg.replace("</span>", "");
-                out.write("<li>" + msg + "</li>\n");
+                out.write("<li class=\"msg\">" + msg + "</li>\n");
             }
             out.write("</ul>\n</div>\n");
+            out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             int delay = 0;
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0 && _context.isRouterContext())
@@ -2756,7 +2756,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<div id=\"add\" class=\"snarkNewTorrent\">\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form action=\"_post\" method=\"POST\" target=\"processForm\">\n");
+        out.write("<form id=\"addForm\" action=\"_post\" method=\"POST\" target=\"processForm\">\n");
         out.write("<div class=\"sectionPanel\" id=\"addSection\">\n");
         writeHiddenInputs(out, req, "Add");
         out.write("<input hidden class=\"toggle_input\" id=\"toggle_addtorrent\" type=\"checkbox\"");
@@ -2786,14 +2786,14 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(" title=\"");
         out.write(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()));
         out.write("\"></td></tr>\n");
-        out.write("</table>\n");
+        out.write("</table>\n<span id=\"addNotify\" hidden></span>\n");
         out.write("</div>\n</form>\n</div>\n");
     }
 
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
         out.write("<div class=\"sectionPanel\" id=\"createSection\">\n<div>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form action=\"_post\" method=\"POST\" target=\"processForm\">\n");
+        out.write("<form id=\"createForm\" action=\"_post\" method=\"POST\" target=\"processForm\">\n");
         writeHiddenInputs(out, req, "Create");
         out.write("<input hidden class=\"toggle_input\" id=\"toggle_createtorrent\" type=\"checkbox\">" +
                   "<label id=\"tab_newtorrent\" class=\"toggleview\" for=\"toggle_createtorrent\"><span class=\"tab_label\">");
@@ -2872,7 +2872,9 @@ public class I2PSnarkServlet extends BasicServlet {
         //out.write("\" > " +
         out.write("</td>\n</tr>\n" +
                   "</table>\n" +
-                  "</form>\n</div>\n</div>\n");
+                  "</form>\n</div>\n<span id=\"createNotify\" hidden></span>\n</div>\n");
+        out.write("<script src=\".resources/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+        //out.write("<script src=\"/themes/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debug
     }
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
