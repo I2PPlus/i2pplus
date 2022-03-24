@@ -1830,7 +1830,7 @@ class EstablishmentManager {
     }
 
     /**
-     *  Remove our outbound tokens for this length
+     *  Remove our tokens for this length
      *
      *  @since 0.9.54
      */
@@ -1847,10 +1847,17 @@ class EstablishmentManager {
                     iter.remove();
             }
         }
+        synchronized(_inboundTokens) {
+            for (Iterator<Map.Entry<RemoteHostId, Token>> iter = _inboundTokens.entrySet().iterator(); iter.hasNext(); ) {
+                Map.Entry<RemoteHostId, Token> e = iter.next();
+                if (e.getKey().getIP().length == len || e.getValue().expires < now)
+                    iter.remove();
+            }
+        }
     }
 
     /**
-     *  Remove all outbound tokens
+     *  Remove all tokens
      *
      *  @since 0.9.54
      */
@@ -1859,6 +1866,9 @@ class EstablishmentManager {
             return;
         synchronized(_outboundTokens) {
             _outboundTokens.clear();
+        }
+        synchronized(_inboundTokens) {
+            _inboundTokens.clear();
         }
     }
 
