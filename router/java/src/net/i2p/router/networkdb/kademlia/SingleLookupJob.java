@@ -29,7 +29,7 @@ class SingleLookupJob extends JobImpl {
      *  so just to prevent trouble, we don't want to queue 255 jobs at once
      */
 //    public static final int MAX_TO_FOLLOW = 8;
-    public static final int MAX_TO_FOLLOW = SystemVersion.isSlow() ? 2 : 4;
+    public static final int MAX_TO_FOLLOW = SystemVersion.isSlow() ? 3 : 6;
 
     public SingleLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm) {
         super(ctx);

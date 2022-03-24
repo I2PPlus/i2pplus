@@ -86,20 +86,19 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final Set<Hash> _skippedPeers;
 
 //    private static final int MAX_NON_FF = 3;
-    private static final int MAX_NON_FF = 2;
+    private static final int MAX_NON_FF = 5;
     /** Max number of peers to query */
 //    private static final int TOTAL_SEARCH_LIMIT = 5;
-    private static final int TOTAL_SEARCH_LIMIT = 10;
+    private static final int TOTAL_SEARCH_LIMIT = 16;
     /** Max number of peers to query if we are ff */
-//    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 3;
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 2;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 5;
     /** Extra peers to get from peer selector, as we may discard some before querying */
 //    private static final int EXTRA_PEERS = 1;
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
     /** TOTAL_SEARCH_LIMIT * SINGLE_SEARCH_TIME, plus some extra */
 //    private static final int MAX_SEARCH_TIME = 30*1000;
-    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 12*1000 : 8*1000;
+    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 20*1000 : 18*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
@@ -110,7 +109,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default single search time
      */
 //    private static final long SINGLE_SEARCH_TIME = 3*1000;
-    private static final long SINGLE_SEARCH_TIME = 2*1000;
+    private static final long SINGLE_SEARCH_TIME = 2500;
     /** the actual expire time for a search message */
     private static final long SINGLE_SEARCH_MSG_TIME = 10*1000;
     /**
@@ -159,7 +158,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         // these override the settings in super
         if (isLease) {
             _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME * 3 / 2);
-            totalSearchLimit *= 2;
+            totalSearchLimit *= 3 / 2;
         } else if (ri != null) {
 
             String MIN_VERSION = "0.9.53";
@@ -171,7 +170,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                                     ctx.netDb().getKnownRouters() > 3000 &&
                                     ctx.router().getUptime() > 15*60*1000 && !isHidden;
             if (uninteresting) {
-                _timeoutMs = Math.min(timeoutMs / 2, MAX_SEARCH_TIME / 3 * 2);
+                _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME / 3 * 2);
                 totalSearchLimit -= 2;
             } else if (known < 2000) {
                 totalSearchLimit += 2;
@@ -186,7 +185,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
         if (isLease)
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", SystemVersion.isSlow() ? MAX_CONCURRENT * 2 : MAX_CONCURRENT * 3);
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT * 2);
         else if (ctx.netDb().getKnownRouters() < 2000 || ctx.router().getUptime() < 30*60*1000)
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT * 2);
         else
@@ -294,7 +293,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             failed();
             return;
         }
-        if (_expiration - 500 < now)  {
+//        if (_expiration - 500 < now)  {
+        if (_expiration - 1000 < now)  {
             // not enough time left to bother
             return;
         }
@@ -539,12 +539,12 @@ public class IterativeSearchJob extends FloodSearchJob {
                         if (sess.tag != null) {
                             if (_log.shouldDebug())
                                 _log.debug("[Job " + getJobId() + "] Requesting AES reply from [" + peer.toBase64().substring(0,6) + "]"
-                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.tag.toString().substring(0,6) + "]");
+                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.tag.toString() + "]");
                             dlm.setReplySession(sess.key, sess.tag);
                         } else {
                             if (_log.shouldDebug())
                                 _log.debug("[Job " + getJobId() + "] Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]"
-                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.rtag.toString().substring(0,6) + "]");
+                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.rtag.toString() + "]");
                             dlm.setReplySession(sess.key, sess.rtag);
                         }
                     } else {

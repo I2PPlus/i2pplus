@@ -91,7 +91,7 @@
               if (!nographs)
                 graphs.innerHTML = "<span id=\'nographs\'><b>No connection to Router<\/b><\/span>";
             }
-            setTimeout(isDown, 5000);
+            setTimeout(isDown, 60000);
           }
       }
     }

@@ -154,7 +154,7 @@ public class ConfigUpdateHandler extends FormHandler {
                 return;
             }
             if (mgr.isUpdateInProgress() || mgr.isCheckInProgress()) {
-                addFormError(_t("Update or check already in progress"));
+                addFormError(_t("Update or check already in progress") + "&hellip;");
                 return;
             }
 
@@ -177,12 +177,12 @@ public class ConfigUpdateHandler extends FormHandler {
                 a3 = mgr.checkAvailable(ROUTER_UNSIGNED, 40*1000) != null;
             if (a1 || a2 || a3) {
                 if ( (_updatePolicy == null) || (!_updatePolicy.equals("notify")) )
-                    addFormNotice(_t("Update available, attempting to download now"));
+                    addFormNotice(_t("Update available, attempting to download now") + "&hellip;");
                 else
                     addFormNotice(_t("Update available, click button on left to download"));
                 // So that update() will post a status to the summary bar before we reload
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(4000);
                 } catch (InterruptedException ie) {}
             } else
                 addFormNotice(_t("No update available"));

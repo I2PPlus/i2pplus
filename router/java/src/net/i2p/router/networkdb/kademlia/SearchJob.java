@@ -58,7 +58,7 @@ class SearchJob extends JobImpl {
     private int _floodfillSearchesOutstanding;
 
 //    private static final int SEARCH_BREDTH = 3;
-    private static int SEARCH_BREDTH = 4;
+    private static int SEARCH_BREDTH = 8;
     /** Only send the 10 closest "don't tell me about" refs */
 //    static final int MAX_CLOSEST = 10;
     static final int MAX_CLOSEST = 12;
@@ -68,7 +68,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final int PER_PEER_TIMEOUT = 5*1000;
-    private static final int PER_PEER_TIMEOUT = 3*1000;
+    private static final int PER_PEER_TIMEOUT = 4*1000;
 
     /**
      * give ourselves 30 seconds to send out the value found to the closest
@@ -85,7 +85,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final long REQUEUE_DELAY = 1000;
-    private static final long REQUEUE_DELAY = 3*1000;
+    private static final long REQUEUE_DELAY = 2*1000;
 
     // TODO pass to the tunnel dispatcher
     //private final static int LOOKUP_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_LOOKUP;
@@ -261,7 +261,12 @@ class SearchJob extends JobImpl {
     }
 
     /** max # of concurrent searches */
-    protected int getBredth() { return SEARCH_BREDTH; }
+    protected int getBredth() {
+        if (_isLease)
+            return SEARCH_BREDTH * 3 / 2;
+        else
+            return SEARCH_BREDTH;
+    }
 
     /**
      * Send a series of searches to the next available peers as selected by
@@ -278,13 +283,13 @@ class SearchJob extends JobImpl {
         if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
             SEARCH_BREDTH -= 3;
             if (_log.shouldDebug())
-                _log.debug("[Job " + getJobId() + "] Reducing number of parallel peer searches - router under load");
+                _log.debug("[Job " + getJobId() + "] Reducing number of parallel peer searches to " + getBredth() + " - router under load");
         }
         int toCheck = getBredth() - _state.getPending().size();
         if (toCheck <= 0) {
             // too many already pending
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Throttling search (pending: " +
+                _log.info("[Job " + getJobId() + "] Too many searches pending -> throttling (pending: " +
                           _state.getPending().size() + ", max: " + getBredth() + ")");
             requeuePending();
             return;
@@ -296,7 +301,7 @@ class SearchJob extends JobImpl {
             boolean onlyFloodfill = true;
             if (_floodfillPeersExhausted && onlyFloodfill && _state.getPending().isEmpty()) {
                 if (_log.shouldWarn())
-                    _log.warn("[Job " + getJobId() + "] No non-Floodfill peers left, and no more pending. Searched: " +
+                    _log.warn("[Job " + getJobId() + "] No non-Floodfill peers left, and no more search queries pending. Searched: " +
                               _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
                 fail();
                 return;
@@ -306,13 +311,13 @@ class SearchJob extends JobImpl {
                 if (_state.getPending().isEmpty()) {
                     // we tried to find some peers, but there weren't any and no one else is going to answer
                     if (_log.shouldInfo())
-                        _log.info("[Job " + getJobId() + "] No peers left, and none pending! Already searched: " +
+                        _log.info("[Job " + getJobId() + "] No peers left, and no search queries pending! Already searched: " +
                                   _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
                     fail();
                 } else {
                     // no more to try, but we might get data or close peers from some outstanding requests
                     if (_log.shouldInfo())
-                        _log.info("[Job " + getJobId() + "] No peers left, but some are pending!\n* Pending: " +
+                        _log.info("[Job " + getJobId() + "] No peers left, but search queries still pending!\n* Pending: " +
                                   _state.getPending().size() + "\n* Queried: " + _state.getAttempted().size() +
                                   "\n* Failed: " + _state.getFailed().size());
                     requeuePending();

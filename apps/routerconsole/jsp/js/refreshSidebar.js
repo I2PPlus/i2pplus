@@ -12,7 +12,6 @@ function refreshSidebar(timestamp) {
   var localtunnels = document.getElementById("sb_localtunnels");
   var netstatus = document.getElementById("sb_status");
   var sb = document.querySelector("#sidebar");
-  var services = document.getElementById("sb_services");
   var shutdownstatus = document.getElementById("sb_shutdownStatus");
 
   xhr.open("GET", "/xhr1.jsp?requestURI=" + uri + "&t=" + new Date().getTime(), true);
@@ -20,8 +19,7 @@ function refreshSidebar(timestamp) {
   xhr.overrideMimeType("text/html");
   xhr.setRequestHeader("Accept", "text/html");
   xhr.setRequestHeader("Cache-Control", "no-store, max-age=60");
-  xhr.setRequestHeader(
-    "Content-Security-Policy",
+  xhr.setRequestHeader("Content-Security-Policy",
     "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'"
   );
 
@@ -29,12 +27,14 @@ function refreshSidebar(timestamp) {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
         var sbResponse = xhr.responseXML.getElementById("sb");
+
         if (down) {
-          xhrContainer.innerHTML = sbResponse.innerHTML;
+          uncollapse();
+          refreshAll();
         }
 
-        function updateVolatile(timestamp) {
-          removeStyles();
+        function updateVolatile() {
+          uncollapse();
           var updating = document.querySelectorAll(".volatile:not(.hide");
           var updatingResponse = xhr.responseXML.querySelectorAll(".volatile:not(.hide)");
           var i;
@@ -64,7 +64,7 @@ function refreshSidebar(timestamp) {
             const image = new Image(245, 50);
             image.onload = renderGraph;
             image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
-            ctx.globalCompositeOperation = "copy";
+            ctx.globalCompositeOperation = "source-out";
             ctx.globalAlpha = 1;
 
             function renderGraph() {
@@ -75,13 +75,22 @@ function refreshSidebar(timestamp) {
           }
         }
 
-        function removeStyles(timestamp) {
-          var links = document.querySelectorAll("#sidebar h3, #sidebar a");
+        function uncollapse() {
+          var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
           var a;
-          for (a = 1; a < links.length - 1; a += 1) {
-            var style = links[a].getAttribute("style");
-            if (links[a].style) {
-              links[a].removeAttribute("style", "");
+          for (a = 1; a < sectionTitle.length - 1; a += 1) {
+            var styleInline = sectionTitle[a].getAttribute("style");
+            if (styleInline) {
+              sectionTitle[a].removeAttribute("style");
+            }
+          }
+
+          var collapsed = document.querySelectorAll("#sidebar .collapse, #sidebar .collapse + hr");
+          var c;
+          for (c = 0; c < collapsed.length; c += 1) {
+            var styleHidden = collapsed[c].getAttribute("hidden");
+            if (styleHidden) {
+              collapsed[c].removeAttribute("hidden");
             }
           }
         }
@@ -89,7 +98,7 @@ function refreshSidebar(timestamp) {
         function removeMeta() {
           var meta = document.querySelector("[http-equiv='meta']");
           if (meta != null) {
-            meta.remove;
+            meta.remove();
           }
         }
 
@@ -106,7 +115,7 @@ function refreshSidebar(timestamp) {
 
         } else {
 
-          setTimeout(function () {
+          setTimeout(function() {
             var metarefresh = document.createElement("meta");
             metarefresh.httpEquiv = "refresh";
             metarefresh.content = "75";
@@ -122,7 +131,7 @@ function refreshSidebar(timestamp) {
             var h;
              for (h = 0; h < collapse.length; h += 1) {
                 collapse[h].setAttribute("hidden", "");
-                if (collapse[h].nextElementSibling != null) {
+                if (collapse[h].nextElementSibling != null && collapse[h].nextElementSibling.nodeName == "HR") {
                   collapse[h].nextElementSibling.setAttribute("hidden", "");
                 }
             }
@@ -130,15 +139,15 @@ function refreshSidebar(timestamp) {
               shutdownstatus.setAttribute("hidden", "");
             }
             if (localtunnels) {
-              localtunnels.innerHTML = '<tr><td colspan="3"></td></tr>';
+              localtunnels.innerHTML = '<tr id="routerdown"><td colspan="3"></td></tr>';
             }
           }
 
           function modElements() {
-            var links = document.querySelectorAll("#sidebar h3, #sidebar a");
+            var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
             var a;
-            for (a = 1; a < links.length - 1; a += 1) {
-              links[a].setAttribute("style", "pointer-events: none");
+            for (a = 1; a < sectionTitle.length - 1; a += 1) {
+              sectionTitle[a].setAttribute("style", "pointer-events: none");
             }
             var digits = document.querySelectorAll(".digits");
             var i;
@@ -152,10 +161,11 @@ function refreshSidebar(timestamp) {
             netstatus.innerHTML = '<span id="down">Router is down</span>';
           }
 
-          hideSections(timestamp);
-          modElements(timestamp);
+          hideSections();
+          modElements();
+
         }
-        setTimeout(isDown, 10000);
+        setTimeout(isDown, 2000);
       }
     }
   };

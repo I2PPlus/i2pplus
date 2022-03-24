@@ -6,6 +6,7 @@
 
 :root {
 --badge: linear-gradient(180deg,#414,#313);
+--bevel: var(--highlight), inset 0 0 2px 1px rgba(16,0,16,.5), 0 0 0 1px #202;
 --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, sans-serif;
 --border_hard: 1px solid #101;
 --border_inner: 1px solid #313;
@@ -21,6 +22,7 @@
 --nav_active: radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0,0,0,0) 70%), linear-gradient(180deg,#f50, #f70);
 --nav_hover: radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0,0,0,0) 90%), linear-gradient(180deg,#a15b73, #7e4062 50%, #591c3e 51%, #46133e);
 --nav: radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0,0,0,0)), linear-gradient(180deg,#a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
+--notify: var(--panel);
 --panel: linear-gradient(180deg,#545,#434);
 --row: linear-gradient(180deg,#260d26, #1f001f);
 --row_filtered: var(--row);
@@ -435,7 +437,7 @@ img:hover {border: none}
 .iframed #addSection table {animation: fade-in .05s linear, slide-in .05s ease-out; animation: none}
 .iframed #createSection table:not(#trackerselect) {animation: fade-in .05s linear; animation: none}
 .mainsection table:not(#torrents) {animation: fade-in .05s ease-out}
-#createSection, #addSection, #configSection, .configPanel, .section, .mainsection {margin: 0 0 10px 0; padding: 0 10px; word-wrap: break-word; color: #ddd; border: var(--border_hard); border-radius: 4px; box-shadow: inset 0 0 2px 1px rgba(16,0,16,.5), 0 0 0 1px #202; background: var(--panel)}
+#createSection, #addSection, #configSection, .configPanel, .section, .mainsection {margin: 0 0 10px 0; padding: 0 10px; word-wrap: break-word; color: #ddd; border: var(--border_hard); border-radius: 4px; box-shadow: var(--bevel); background: var(--panel)}
 #createSection:hover, #addSection:hover, #configSection:hover, .iframed #createSection:hover, .iframed #addSection:hover, .iframed #configSection:hover {background-blend-mode: normal}
 .iframed #editSection, .iframed #commentSection {margin: -1px 0 0}
 #editSection hr {margin-bottom: 0}
