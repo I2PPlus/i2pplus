@@ -30,12 +30,12 @@
 
 #addSection #addNotify td, #createSection #createNotify td {
   text-align: center;
-  font-size: 110%;
+  font-size: 115%;
   box-shadow: var(--bevel);
 }
 
 #addSection #addNotify td::before, #createSection #createNotify td::before {
-  margin-top: -28px auto 8px;
+  margin: -20px auto 4px;
   content: "";
   display: block;
   width: 100%;

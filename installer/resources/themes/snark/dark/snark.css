@@ -730,6 +730,9 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 .routerdown span {display: none}
 .routerdown::after {width: 40px; height: 40px; display: inline-block; background: var(--offline) no-repeat center center / 40px; content: ""; animation: linear spin 5s reverse infinite}
 
+/* inline notifications */
+#addSection #addNotify td, #createSection #createNotify td {box-shadow: var(--bevel), inset 0 0 3px 3px #131, inset 0 0 1px 5px rgba(16,48,16,.1) !important; background: var(--row), var(--bg_dots)}
+
 /* Resource Errors */
 .resourceError {margin-bottom: 0; border: none}
 .resourceError th {padding: 10px 10px 10px 40px; font-size: 10pt; border: none; border-bottom: var(--border); background: var(--err) no-repeat left 10px center / 24px, var(--th)}

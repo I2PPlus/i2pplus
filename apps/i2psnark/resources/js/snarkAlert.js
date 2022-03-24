@@ -1,3 +1,7 @@
+/* I2PSnark inline notifications */
+/* Author: dr|z3d */
+/* License: AGPL3 or later */
+
 "use strict";
 
 const addNotify = document.getElementById("addNotify");
