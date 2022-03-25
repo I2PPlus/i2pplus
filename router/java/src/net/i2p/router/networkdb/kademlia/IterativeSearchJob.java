@@ -108,8 +108,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default single search time
      */
-//    private static final long SINGLE_SEARCH_TIME = 3*1000;
-    private static final long SINGLE_SEARCH_TIME = 2500;
+    private static final long SINGLE_SEARCH_TIME = 3*1000;
     /** the actual expire time for a search message */
     private static final long SINGLE_SEARCH_MSG_TIME = 10*1000;
     /**
