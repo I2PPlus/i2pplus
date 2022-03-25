@@ -4,10 +4,11 @@
 @import url(/themes/console/dark/global.css);
 
 :root {
---tabIcon: linear-gradient(180deg,#000 50%,#040 50%);
---row_filtered: var(--tr);
+--bevel_notify: var(--bevel), inset 0 0 3px 3px #131, inset 0 0 1px 5px rgba(16,48,16,.1);
 --border_filtered: var(--border);
 --notify: #000 var(--tr);
+--row_filtered: var(--tr);
+--tabIcon: linear-gradient(180deg,#000 50%,#040 50%);
 }
 
 html {background: none}
@@ -731,7 +732,7 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 .routerdown::after {width: 40px; height: 40px; display: inline-block; background: var(--offline) no-repeat center center / 40px; content: ""; animation: linear spin 5s reverse infinite}
 
 /* inline notifications */
-#addSection #addNotify td, #createSection #createNotify td {box-shadow: var(--bevel), inset 0 0 3px 3px #131, inset 0 0 1px 5px rgba(16,48,16,.1) !important; background: var(--row), var(--bg_dots)}
+.notify {margin-bottom: -2px; background: var(--row), var(--bg_dots)}
 
 /* Resource Errors */
 .resourceError {margin-bottom: 0; border: none}

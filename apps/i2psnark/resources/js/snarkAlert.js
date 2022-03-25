@@ -2,15 +2,17 @@
 /* Author: dr|z3d */
 /* License: AGPL3 or later */
 
-"use strict";
+'use strict';
 
 const addNotify = document.getElementById("addNotify");
 const addTorrent = document.getElementById("addForm");
 const alertCss = document.querySelector("#snarkAlert");
 const createNotify = document.getElementById("createNotify");
 const createTorrent = document.getElementById("createForm");
-const processForm = document.querySelector("iframe");
+const inputAddFile = document.querySelector("input[name='nofilter_newURL']");
+const inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
 const messages = document.getElementById("screenlog");
+const processForm = document.querySelector("iframe");
 const xhrLog = new XMLHttpRequest();
 
 function updateLog() {
@@ -26,8 +28,8 @@ function updateLog() {
   function reload() {
     xhrLog.onreadystatechange = function () {
       if (xhrLog.readyState == 4 && xhrLog.status == 200) {
+        var newLogEntry = xhrLog.responseXML.querySelectorAll("#screenlog li.msg")[0].innerHTML.substring(21);
         if (messages) {
-          var newLogEntry = xhrLog.responseXML.querySelectorAll("#screenlog li.msg")[0].innerHTML.substring(21);
           console.log(newLogEntry);
         }
         if (!addNotify.hidden)
@@ -42,21 +44,17 @@ function updateLog() {
 }
 
 function addTorrentNotify() {
-  processForm.onload = function () {
-    addNotify.removeAttribute("hidden");
-    updateLog();
-  };
+  addNotify.removeAttribute("hidden");
+  processForm.onload = function () {updateLog()};
   hideAlert();
-  setTimeout(function () {document.querySelector("input[name='nofilter_newURL']").value="";}, 3000);
+  setTimeout(function () {inputAddFile.value=""; inputAddFile.focus();}, 3000);
 }
 
 function createTorrentNotify() {
-  processForm.onload = function () {
-    createNotify.removeAttribute("hidden");
-    updateLog();
-  };
+  createNotify.removeAttribute("hidden");
+  processForm.onload = function () {updateLog()};
   hideAlert();
-  setTimeout(function () {document.querySelector("input[name='nofilter_baseFile']").value="";}, 3000);
+  setTimeout(function () {inputNewFile.value=""; inputNewFile.focus();}, 3000);
 }
 
 function injectCss() {
@@ -73,7 +71,7 @@ function hideAlert() {
     if (createNotify) {
       createNotify.setAttribute("hidden", "");
     }
-  }, 8000);
+  }, 7000);
 }
 
 addTorrent.addEventListener("submit", addTorrentNotify);

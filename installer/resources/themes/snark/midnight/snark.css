@@ -4,6 +4,7 @@
 @import url(/themes/console/midnight/global.css);
 
 :root {
+--bevel_notify: var(--highlight), inset 0 0 3px 2px #652787;
 --border_filtered: var(--border);
 --btnAction_active: linear-gradient(180deg,#3c1751,#652787);
 --btnAction_hover: var(--btn_hover_radial), var(--nav_hover);

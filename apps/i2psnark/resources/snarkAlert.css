@@ -4,9 +4,12 @@
    --loading: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m28.05 2v4.75c-12.35 1.68-21.8 12.35-21.65 25.12-.16 13.85 10.94 25.2 24.8 25.37l.06.06-.02.1c.04 0 .08 0 .13.01l4.6 4.6v-4.76c12.34-1.7 21.8-12.34 21.65-25.13.16-13.85-10.94-25.2-24.78-25.37l-.06-.06.02-.1c-.04 0-.08 0-.13-.01zm0 15.97v7.2l7.12-7.12c6.64 1.27 11.64 7.1 11.64 14.08 0 6.72-4.63 12.36-10.9 13.9v-7.2l-7.12 7.12a14.35 14.35 0 0 1 -11.63-14.08c0-6.72 4.62-12.36 10.9-13.9z' fill='%23500' stroke='%23000' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath d='m31.2 6.5c.53 0 1.04.05 1.56.08l-1.56 7.1v3.86c-7.8.17-14.04 6.54-14.04 14.34s6.24 14.17 14.04 14.32l1.57-.1-1.57 11.12c-13.85-.12-24.98-11.49-24.8-25.35-.16-13.87 10.94-25.22 24.8-25.37z' fill='%23070'/%3E%3Cpath d='m36.03 38.83-11.6 11.57 11.6 11.6' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cg fill='%2380ff80' transform='matrix(-1.65 0 0 -1.65 40.11 67.62)'%3E%3Cpath d='m4.43 6.13c.32 0 .63.03.94.05l-.94 4.29v2.33c-4.72.1-8.49 3.95-8.49 8.67s3.77 8.57 8.49 8.67l.95-.06-.95 6.72c-8.38-.09-15.1-6.96-15-15.34-.09-8.38 6.62-15.25 15-15.34z'/%3E%3Cpath d='m2.53 3.4v14l7-7z'/%3E%3C/g%3E%3Cpath d='m27.95 25.15 11.6-11.58-11.6-11.57' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cpath d='m28.05 2v23.16l11.6-11.58z' fill='%23070'/%3E%3C/svg%3E");
 }
 
-#addSection, #createSection {position: relative; contain: paint}
+#addSection, #createSection {
+  position: relative;
+  contain: paint;
+}
 
-#addNotify:not([hidden]), #createNotify:not([hidden]) {
+.notify:not([hidden]) {
   width: 100%;
   height: 100%;
   display: inline-block;
@@ -16,39 +19,43 @@
   right: 0;
   bottom: 0;
   z-index: 100;
+  box-shadow: var(--bevel_notify);
   background: var(--notify);
   user-select: none;
-  animation: wipe 1s ease .5s both, hideAlert 1s ease-out 4s both;
+  animation: wipe 1s ease .5s both, hideAlert 1s ease-out 5s both;
 }
 
 #createNotify:not([hidden]) {
-  animation: wipe 1s ease .5s both, hideAlert .7s ease-out 4s both;
+  animation: wipe 1s ease .5s both, hideAlert .7s ease-out 5s both;
 }
 
-#addNotify table, #createNotify table {
+.notify table {
   height: 100%;
 }
 
 #addSection #addNotify td, #createSection #createNotify td {
   text-align: center;
-  font-size: 115%;
-  box-shadow: var(--bevel);
+  font-size: 110%;
 }
 
-#addSection #addNotify td::before, #createSection #createNotify td::before {
+.notify td::before {
   margin: -20px auto 4px;
   content: "";
   display: block;
   width: 100%;
   height: 48px;
-  background: var(--loading) no-repeat center center / 28px;
-  animation: wait 2s linear 1s both;
+  background: var(--loading) no-repeat center center / 32px;
+  animation: wait 2s linear .5s both;
+}
+
+#addNotify td::before {
+  margin-top: -12px;
 }
 
 @keyframes wait {
-  0% {background: var(--loading) no-repeat center center / 34px; transform: rotate(-480deg)}
-  99% {background: var(--loading) no-repeat center center / 34px}
-  100% {background: var(--snark) no-repeat center center / 28px; transform: rotate(0)}
+  0% {background: var(--loading) no-repeat center center / 32px; mix-blend-mode: luminosity;transform: rotate(-420deg)}
+  99% {background: var(--loading) no-repeat center center / 32px; mix-blend-mode: luminosity}
+  100% {background: var(--snark) no-repeat center center / 28px; mix-blend-mode: normal; transform: rotate(0)}
 }
 
 @keyframes wipe {

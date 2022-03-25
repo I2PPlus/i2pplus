@@ -4,6 +4,7 @@
 @import url(/themes/console/classic/global.css);
 
 :root {
+--bevel_notify: 0 0 0 1px #bfc3d9, var(--highlight);
 --bg2: #f4f4ff;
 --bg3: #eef;
 --bg4: #ddf;
