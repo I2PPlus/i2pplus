@@ -2786,7 +2786,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(" title=\"");
         out.write(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()));
         out.write("\"></td></tr>\n");
-        out.write("</table>\n<span id=\"addNotify\" hidden></span>\n");
+        out.write("</table>\n<span id=\"addNotify\" class=\"notify\" hidden></span>\n");
         out.write("</div>\n</form>\n</div>\n");
     }
 
@@ -2872,7 +2872,7 @@ public class I2PSnarkServlet extends BasicServlet {
         //out.write("\" > " +
         out.write("</td>\n</tr>\n" +
                   "</table>\n" +
-                  "</form>\n</div>\n<span id=\"createNotify\" hidden></span>\n</div>\n");
+                  "</form>\n</div>\n<span id=\"createNotify\" class=\"notify\" hidden></span>\n</div>\n");
         out.write("<script src=\".resources/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
         //out.write("<script src=\"/themes/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debug
     }

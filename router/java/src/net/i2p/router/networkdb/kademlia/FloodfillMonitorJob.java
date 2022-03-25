@@ -279,7 +279,7 @@ class FloodfillMonitorJob extends JobImpl {
             if (ra == null)
                 happy = false;
             else {
-                if (ra.getOption("ihost0") != null)
+                if (ra.getOption("itag0") != null)
                    happy = false;
             }
         }

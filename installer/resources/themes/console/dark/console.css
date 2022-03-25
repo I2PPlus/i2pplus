@@ -1584,9 +1584,10 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 #themeselect {margin: -1px 0; padding: 8px 7px 0; clear: both; border: var(--border)}
 #themeoptions {margin: 0 -7px 5px; padding: 8px 10px 8px 5px; position: relative; top: 8px; clear: both; border-top: var(--border); border-bottom: var(--border); background: #000800}
 #themeoptions br {display: none}
-#themeoptions label, #enablefull label {margin: 4px 0 4px 6px; padding: 10px; min-width: calc(50% - 28px); display: inline-block; white-space: nowrap; border-radius: 4px; box-shadow: var(--bevel); background: var(--badge)}
+#themeoptions label, #enablefull label {margin: 4px 0 4px 6px; padding: 10px; min-width: calc(50% - 28px); display: inline-block; white-space: nowrap; border-radius: 4px; box-shadow: var(--bevel); background: var(--tr)}
 #themeoptions input, #enablefull input {margin: 1px 10px 1px 2px}
 #enablefull label {min-width: calc(100% - 180px)}
+#themeoptions label:hover, #enablefull label:hover {box-shadow: var(--outline), var(--highlight), 0 0 2px 1px #f60}
 #themesettings {clear: both; border: var(--border); padding: 8px 7px 0; margin: -1px 0; background: #000}
 #themesettings hr {display: none}
 #home #chooselang::after, #home #configbandwidth::after {content: none}

@@ -5,6 +5,7 @@
 @import url(/themes/console/light/global.css);
 
 :root {
+--bevel_notify: var(--bevel);
 --border_soft: 1px solid #afafcf;
 --btnAction_hover: linear-gradient(180deg,#fff 50%,#ddf 50%);
 --btnAction: linear-gradient(180deg,#fff 50%,#eef 50%);
@@ -729,8 +730,14 @@ td.torrentAction input[type=submit] {margin-top: 1px}
 @keyframes spin {from {transform: rotate(360deg)}}
 @keyframes uploading {from {background-position: left center} to {background-position: 20% center}}
 
+/* inline notifications */
+
+.notify:not([hidden]) {height: calc(100% - 2px) !important; top: 6px !important}
+
 /* browser specific */
-@supports (animation: ease all .1s) {.ascending, .descending {filter: opacity(0); animation: ease fade-in .2s .6s forwards}}
+@supports (animation: ease all .1s) {
+.ascending, .descending {filter: opacity(0); animation: ease fade-in .2s .6s forwards}
+}
 @supports not (-moz-appearance: none) {
 .snarkNav {padding-top: 3px; padding-bottom: 3px; image-rendering: -webkit-optimize-contrast}
 .percentBarText {line-height: 16px} .iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {transition: none}
