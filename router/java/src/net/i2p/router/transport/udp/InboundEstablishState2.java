@@ -117,8 +117,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         } else if (type == SESSION_REQUEST_FLAG_BYTE &&
                    (token == 0 ||
                     (ENFORCE_TOKEN && !_transport.getEstablisher().isInboundTokenValid(_remoteHostId, token)))) {
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Invalid token [" + token + "] in SessionRequest from: " + _aliceSocketAddress);
+            if (_log.shouldInfo())
+                _log.info("[SSU2] Invalid token [" + token + "] in SessionRequest from: " + _aliceSocketAddress);
             _currentState = InboundState.IB_STATE_REQUEST_BAD_TOKEN_RECEIVED;
             _sendHeaderEncryptKey2 = introKey;
             // Generate token for the retry.
@@ -136,11 +136,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // probably don't need again
             _token = token;
             _handshakeState.start();
-            if (_log.shouldDebug())
-                _log.debug("[SSU2] State after start: " + _handshakeState);
+            //if (_log.shouldDebug())
+            //    _log.debug("[SSU2] State after start: " + _handshakeState);
             _handshakeState.mixHash(data, off, LONG_HEADER_SIZE);
-            if (_log.shouldDebug())
-                _log.debug("[SSU2] State after mixHash 1: " + _handshakeState);
+            //if (_log.shouldDebug())
+            //    _log.debug("[SSU2] State after mixHash 1: " + _handshakeState);
 
             // decrypt in-place
             try {
@@ -150,8 +150,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     _log.debug("[SSU2] Session request error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
                 throw gse;
             }
-            if (_log.shouldDebug())
-                _log.debug("[SSU2] State after SessionRequest: " + _handshakeState);
+            //if (_log.shouldDebug())
+            //    _log.debug("[SSU2] State after SessionRequest: " + _handshakeState);
             processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
             _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
             _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
@@ -407,14 +407,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId);
     }
 
-    public void gotUnknown(int type, int len) {
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] Received UNKNOWN block, type: " + type + " len: " + len);
-    }
-
-    public void gotPadding(int paddingLength, int frameLength) {
-    }
-
     /////////////////////////////////////////////////////////
     // end payload callbacks
     /////////////////////////////////////////////////////////
@@ -495,8 +487,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new GeneralSecurityException("Token mismatch: 1: " + _token + " 2: " + token);
         _handshakeState.start();
         _handshakeState.mixHash(data, off, 32);
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] State after mixHash 1: " + _handshakeState);
+        //if (_log.shouldDebug())
+        //    _log.debug("[SSU2] State after mixHash 1: " + _handshakeState);
 
         // decrypt in-place
         try {
@@ -506,8 +498,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _log.debug("[SSU2] SessionRequest error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
             throw gse;
         }
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] State after SessionRequest: " + _handshakeState);
+        //if (_log.shouldDebug())
+        //    _log.debug("[SSU2] State after SessionRequest: " + _handshakeState);
         _timeReceived = 0;
         processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
         packetReceived();
@@ -545,8 +537,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (rid != _rcvConnID)
             throw new GeneralSecurityException("Connection ID mismatch: req: " + _rcvConnID + " conf: " + rid);
         _handshakeState.mixHash(data, off, 16);
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] State after mixHash 3: " + _handshakeState);
+        //if (_log.shouldDebug())
+        //    _log.debug("[SSU2] State after mixHash 3: " + _handshakeState);
 
         // decrypt in-place
         try {
@@ -556,8 +548,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _log.debug("[SSU2] SessionConfirmed error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
             throw gse;
         }
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] State after SessionConfirmed: " + _handshakeState);
+        //if (_log.shouldDebug())
+        //    _log.debug("[SSU2] State after SessionConfirmed: " + _handshakeState);
         processPayload(data, off + SHORT_HEADER_SIZE, len - (SHORT_HEADER_SIZE + KEY_LEN + MAC_LEN + MAC_LEN), false);
         packetReceived();
         if (_currentState == InboundState.IB_STATE_FAILED) {
