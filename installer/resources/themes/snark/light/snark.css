@@ -65,7 +65,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {outline: none; border: none}
 .nav_search:active {background: var(--hover) var(--search_active) no-repeat 8px center}
 
 /* screenlog */
-#screenlog, #screenlog.collapsed {margin: -2px 0 0; padding: 3px 5px 3px 5px; min-width: 810px; height: 56px; width: auto; font-size: 8.5pt; text-align: left; overflow: hidden; color: #6e6eb7; border-top: var(--border_soft); border-bottom: var(--border_soft); border-spacing: 0; box-shadow: var(--highlight)}
+#screenlog, #screenlog.collapsed {margin: -2px 0 0; padding: 3px 5px 3px 5px; min-width: 810px; height: 56px; width: auto; font-size: 8.5pt; text-align: left; overflow: hidden; color: #6e6eb7; border-top: var(--border_soft); border-bottom: var(--border_soft); border-spacing: 0; box-shadow: var(--highlight); contain: paint}
 #screenlog, #screenlog.expanded, #screenlog.collapsed {background: url(images/kitty.png) no-repeat right center, repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px, rgba(220,220,255,.5) 4px), url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat, var(--th); background-size: 60px auto, 100%, calc(100% - 80px) calc(100% - 4px), 100%; background-position: right bottom, center center, left bottom, center center; background-blend-mode: multiply, overlay, luminosity, normal}
 #screenlog .infohash {font-weight: 700}
 .iframed #screenlog {margin-top: -12px}
@@ -584,7 +584,7 @@ td.trackerLink img {height: 16px}
 
 /* torrent filter bar */
 #torrentDisplay {margin: -1px 0 -2px; position: sticky; top: 42px; z-index: 2002; border-top: var(--border_soft); border-bottom: var(--border_soft); background: var(--th)}
-.iframed #torrentDisplay {margin-bottom: 0; position: static}
+.iframed #torrentDisplay {margin: 10px 0 0; position: static}
 #torrentDisplay label {margin: 0; padding: 2px 8px; display: inline-block; min-width: 80px; background: linear-gradient(180deg,#fff 50%,#eef 50%); border-left: var(--border_soft); box-shadow: var(--highlight); font-weight: 700; color: #559}
 #torrentDisplay label:last-child {border-right: var(--border_soft)}
 #torrentDisplay label:hover {color: var(--hover); background: #fff linear-gradient(180deg,#fff 50%, rgba(255, 232, 191, .6) 50%, rgba(239, 217, 179, .4) 100%)}
