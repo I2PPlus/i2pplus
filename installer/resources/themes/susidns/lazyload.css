@@ -1,0 +1,4 @@
+.lazy.lazyhide, .lazy.lazyhide td {opacity: 0; contain: strict}
+.lazyhide {contain: paint; visibility: hidden; transition: ease opacity .01s}
+.lazyshow {visibility: visible; transition: ease opacity .01s}
+.lazy.lazyshow, .lazy.lazyshow td {opacity: 1}
