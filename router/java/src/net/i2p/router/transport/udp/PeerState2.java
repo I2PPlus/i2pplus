@@ -507,8 +507,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotTermination(int reason, long count) {
-        if (_log.shouldWarn())
-            _log.warn("[SSU2] Received TERMINATION block, reason: " + reason + " count: " + count);
+        if (_log.shouldInfo())
+            _log.info("[SSU2] Received TERMINATION block, reason: " + reason + " count: " + count);
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
     }
 
@@ -561,11 +561,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         List<PacketBuilder.Fragment> old = _sentMessages.putIfAbsent(Long.valueOf(pktNum), fragments);
         if (old != null) {
             // shouldn't happen
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Duplicate data packet [#" + pktNum + "] sent on " + this);
+            if (_log.shouldInfo())
+                _log.info("[SSU2] Duplicate data packet [#" + pktNum + "] sent on " + this);
         } else {
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] New data packet [#" + pktNum + "] sent with " + fragments.size() + " fragments on " + this);
+            if (_log.shouldInfo())
+                _log.info("[SSU2] New data packet [#" + pktNum + "] sent with " + fragments.size() + " fragments on " + this);
         }
     }
 
@@ -586,8 +586,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         List<PacketBuilder.Fragment> fragments = _sentMessages.remove(Long.valueOf(pktNum));
         if (fragments == null) {
             // shouldn't happen
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] New ACK of packet " + pktNum + " not found on " + this);
+            if (_log.shouldInfo())
+                _log.info("[SSU2] New ACK of packet " + pktNum + " not found on " + this);
             return;
         }
         if (_log.shouldDebug())
