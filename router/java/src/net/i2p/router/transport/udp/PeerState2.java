@@ -440,7 +440,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (_transport.getInboundFragments().messageReceived(messageId)) {
             _context.statManager().addRateData("udp.ignoreRecentDuplicate", 1);
             if (_log.shouldInfo())
-                _log.info("[SSU2] Received duplicate message ["MsgID " + messageId + "] on " + this);
+                _log.info("[SSU2] Received duplicate message [MsgID " + messageId + "] on " + this);
             return;
         }
         // complete message, skip IMF and MessageReceiver
@@ -495,8 +495,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             if (_log.shouldInfo()) {
                 if (state != null)
-                    _log.info("[SSU2] Duplicate fragment [" + frag + "] received for " + state);                
-                else 
+                    _log.info("[SSU2] Duplicate fragment [" + frag + "] received for " + state);
+                else
                     _log.info("[SSU2] Duplicate fragment [" + frag + "] received on " + this);
             return;
             }
