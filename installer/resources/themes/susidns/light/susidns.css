@@ -5,6 +5,7 @@
 @import url(/themes/console/light/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(../lazyload.css);
 
 :root {
 --nav: linear-gradient(180deg,#fff 50%, #eef 50%, #ebebff);

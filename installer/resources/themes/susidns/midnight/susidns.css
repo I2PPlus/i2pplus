@@ -4,6 +4,7 @@
 @import url(/themes/console/midnight/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(../lazyload.css);
 
 :root {
 --nav: linear-gradient(180deg,#181828 50%, #000 50%);

@@ -4,6 +4,7 @@
 @import url(/themes/console/dark/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(../lazyload.css);
 
 html {background: none}
 body, input, input[type=submit], input[type=reset], .fakebutton, #hostNotes td:last-child, #hostNotes textarea {font-family: var(--bodyfont)}

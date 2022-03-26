@@ -128,7 +128,7 @@
 </div>
 <div id="search">
 <form method="GET" action="addressbook?book=${book.book}">
-<input type="hidden" name="book" value="${book.book}">
+<input id="bookname" type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="begin" value="0">
 <input type="hidden" name="end" value="99">
 <input type="hidden" name="filter" value="${book.filter}">
@@ -403,7 +403,7 @@
 </tr>
 <!-- limit iterator, or "Form too large" may result on submit, and is a huge web page if we don't -->
 <c:forEach items="${book.entries}" var="addr" begin="${book.resultBegin}" end="${book.resultEnd}">
-<tr>
+<tr class="lazy">
 <td class="info">
 <%
         boolean haveImagegen = book.haveImagegen();
@@ -499,5 +499,9 @@
 <span data-iframe-height></span>
 <style type="text/css">body{opacity:1 !important}</style>
 </div>
+<!--
+<script src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+-->
+<script src="/js/lazyload.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 </body>
 </html>

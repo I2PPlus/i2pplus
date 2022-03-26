@@ -4,6 +4,7 @@
 @import url(/themes/console/classic/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(../lazyload.css);
 
 html, body {background: var(--bg)}
 body {min-width: 700px; line-height: 1.3; background: #eef url(/themes/console/classic/images/bg0.png) center center / 120px}
