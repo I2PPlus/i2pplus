@@ -1584,44 +1584,6 @@
         </copy>
     </target>
 
-    <target name="minifycss">
-        <!--
-        <mkdir dir="pkg-temp/docs/themes_uncompressed/" />
-        <copy todir="pkg-temp/docs/themes_uncompressed" >
-            <fileset dir="installer/resources/themes/">
-            <include name="**/*.css" />
-            </fileset>
-        </copy>
-        -->
-        <copy todir="pkg-temp/docs/themes/minified/" >
-            <fileset dir="installer/resources/themes/">
-            <include name="**/*.*" />
-            </fileset>
-        </copy>
-        <delete><fileset dir="pkg-temp/docs/themes/minified/" includes="**/*.css"/></delete>
-        <echo message="Minifying console and webapp themes... this may take some time"/>
-        <apply executable="java" parallel="false" dest="pkg-temp/docs/themes/minified/">
-            <fileset dir="pkg-temp/docs/themes/" includes="**/*.css" />
-              <arg line="-jar"/>
-              <arg path="yuicompressor-2.4.8.jar" />
-              <arg line="-v --line-break=0 --charset=utf-8"/>
-              <srcfile/>
-              <arg line="-o"/>
-              <mapper type="glob" from="*.css" to="*.css"/>
-              <targetfile/>
-        </apply>
-        <echo message="Tidying minified CSS files..."/>
-        <move todir="pkg-temp/docs/themes/">
-            <fileset dir="pkg-temp/docs/themes/minified/">
-                <include name="**/*.css"/>
-        </fileset>
-        </move>
-        <delete dir="pkg-temp/docs/themes/minified/"/>
-        <replaceregexp match="\}.\}" replace="\}\}" flags="gs" encoding="utf-8">
-            <fileset dir="pkg-temp/docs/themes/" includes="**/*.css"/>
-        </replaceregexp>
-    </target>
-
     <!-- SSL Certs -->
     <target name="prepCertificates" depends="buildCore">
         <copy todir="pkg-temp/certificates/" >
@@ -1724,7 +1686,6 @@
     </target>
 
     <target name="updater200" depends="prepupdate, pack200, zipit200" />
-    <target name="updater200WithMinifyCSS" depends="prepupdate, minifycss, pack200, zipit200" />
     <target name="updater200WithLicences" depends="prepupdate, preplicenses, pack200, zipit200" />
     <target name="updater200WithGeoIP" depends="prepupdate, prepgeoupdate, pack200, zipit200" />
     <target name="updater200WithJetty" depends="prepjupdate, pack200, zipit200" />
@@ -1740,7 +1701,6 @@
     <target name="updaterCompactWithDocs" depends="prepupdatecompact, prepConsoleDocUpdates, zipit" />
     <target name="updaterCompactWithGeoIP" depends="prepupdatecompact, prepgeoupdate, zipit" />
     <target name="updaterCompactWithJettyAndGeoIP" depends="prepupdatecompact, prepgeoupdate, prepjupdate, zipit" />
-    <target name="updaterWithMinifyCSS" depends="prepupdate, minifycss, zipit" />
     <target name="updaterWithLicenses" depends="prepupdate, preplicenses, zipit" />
     <target name="updaterRepack" depends="prepupdate, repack200, zipit" />
     <target name="updaterWithJavadoc" depends="prepupdate, copyJavadoc, zipit" />
