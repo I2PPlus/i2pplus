@@ -125,10 +125,12 @@ public class IterativeSearchJob extends FloodSearchJob {
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
     /** only on fast boxes, for now */
-    public static final boolean DEFAULT_ENCRYPT_RI =
-            SystemVersion.isX86() && /* SystemVersion.is64Bit() && */
+    public static final boolean DEFAULT_ENCRYPT_RI = NativeBigInteger.isNative();
+
+/*            SystemVersion.isX86() && SystemVersion.is64Bit() &&
             !SystemVersion.isApache() && !SystemVersion.isGNU() &&
             NativeBigInteger.isNative();
+*/
 
     /**
      *  Lookup using exploratory tunnels
@@ -159,13 +161,12 @@ public class IterativeSearchJob extends FloodSearchJob {
             _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME * 3 / 2);
             totalSearchLimit *= 3 / 2;
         } else if (ri != null) {
-
             String MIN_VERSION = "0.9.53";
             String v = ri.getVersion();
-            boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                    VersionComparator.comp(v, MIN_VERSION) < 0 &&
+                                    VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                     ctx.netDb().getKnownRouters() > 3000 &&
                                     ctx.router().getUptime() > 15*60*1000 && !isHidden;
             if (uninteresting) {
@@ -207,6 +208,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             failed();
             return;
         }
+
         // pick some floodfill peers and send out the searches
         List<Hash> floodfillPeers;
         KBucketSet<Hash> ks = _facade.getKBuckets();
@@ -341,6 +343,23 @@ public class IterativeSearchJob extends FloodSearchJob {
                         _skippedPeers.add(h);
                         // go around again
                     }
+
+                    RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
+                    String MIN_VERSION = "0.9.53";
+                    String v = ri.getVersion();
+                    boolean isHidden = getContext().router().isHidden();
+                    boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                            ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                            ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                            VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                            getContext().netDb().getKnownRouters() > 3000 &&
+                                            getContext().router().getUptime() > 15*60*1000 && !isHidden;
+                    if (uninteresting) {
+                        if (_log.shouldInfo())
+                            _log.info("[Job " + getJobId() + "] Skipping query: Router [" + _key.toBase64().substring(0,6) + "] is uninteresting");
+                        return;
+                    }
+
                     if (peer == null)
                         return;
                 }
