@@ -392,7 +392,7 @@ class UPnPManager {
      */
     public String renderStatusHTML() {
         if (!_isRunning)
-            return "<h3><a name=\"upnp\"></a>" + _t("UPnP is not enabled") + "</h3>\n";
+            return "<h3 id=\"upnp\">" + _t("UPnP is not enabled") + "</h3>\n";
         return _upnp.renderStatusHTML();
     }
 

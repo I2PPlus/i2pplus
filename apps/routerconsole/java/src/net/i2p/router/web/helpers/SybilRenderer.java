@@ -540,13 +540,14 @@ public class SybilRenderer {
             Collections.sort(warns, new PointsComparator(points));
             ReasonComparator rcomp = new ReasonComparator();
             buf.append("<h3 id=\"threats\" class=\"sybils\">").append(_t("Routers with Most Threat Points"))
-               .append("<span style=\"float: right; display: inline-block;\">")
+               .append("<span style=\"float: right\">")
                .append(DataHelper.formatTime(date).replace("-", " ")).append("</span></h3>\n");
             for (Hash h : warns) {
                 Points pp = points.get(h);
                 double p = pp.getPoints();
                 if (p < minDisplay)
                     break;  // sorted
+                buf.append("<span class=\"sybil_wrap\">\n");
                 if (p >= 100)
                     buf.append("<p class=\"threatpoints hot\"><b>");
                 else
@@ -567,11 +568,12 @@ public class SybilRenderer {
                     renderRouterInfo(buf, ri, null, false, false);
                 } else {
                     String hash = h.toBase64();
-                    buf.append("<a name=\"").append(hash, 0, 6).append("\"></a>\n<table class=\"sybil_routerinfo\">\n<tr>" +
+                    buf.append("<table class=\"sybil_routerinfo\" id=\"hash_").append(hash,0,6).append("\">\n<tr>" +
                                "<th><b>" + _t("Router") + ":</b> <code>").append(hash).append("</code></th>" +
-                               "<th colspan=\"2\"><b style=\"float: right;\">" + _t("Router info not available") +
+                               "<th colspan=\"2\"><b style=\"float:right\">" + _t("Router info not available") +
                                "</b></th></tr>\n</table>\n");
                 }
+                buf.append("</span>");
             }
         }
         writeBuf(out, buf);
@@ -855,10 +857,11 @@ public class SybilRenderer {
      */
     private double renderRouterInfo(StringBuilder buf, RouterInfo info, Hash us, boolean isUs, boolean full) {
         String hash = info.getIdentity().getHash().toBase64();
-        buf.append("<a name=\"").append(hash, 0, 6).append("\"></a>\n<table class=\"sybil_routerinfo\">\n");
+
+        buf.append("<table class=\"sybil_routerinfo\" id=\"hash_").append(hash,0,6).append("\">\n");
         double distance = 0;
         if (isUs) {
-            buf.append("<tr id=\"sybil_ourinfo\"><th><a name=\"our-info\" ></a><b>" + _t("Our info") + ":</b> <code>").append(hash)
+            buf.append("<tr id=\"sybil_ourinfo\"><th id=\"our-info\"><b>" + _t("Our info") + ":</b> <code>").append(hash)
                .append("</code>");
         } else {
             buf.append("<tr><th><b>" + _t("Router") + ":</b> <a href=\"netdb?r=").append(hash, 0, 6).append("\"><code>").append(hash).append("</code></a>");
