@@ -519,8 +519,8 @@ class EstablishmentManager {
                 // TODO this is insufficient to prevent DoSing, especially if
                 // IP spoofing is used. For further study.
                 if (!shouldAllowInboundEstablishment()) {
-                    if (_log.shouldWarn())
-                        _log.warn("Dropping inbound establish, increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Dropping InboundEstablish -> increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                         if (_log.shouldDebug()) {
                             StringBuilder buf = new StringBuilder(4096);
                             buf.append("Active: ").append(_inboundStates.size()).append('\n');
