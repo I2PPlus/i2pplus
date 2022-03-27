@@ -261,8 +261,8 @@ input.reload {padding: 5px 7px 5px 22px; background: var(--refresh) no-repeat 6p
 input.reload:hover, input.reload:focus {background: var(--refresh_hover) no-repeat 6px center, linear-gradient(180deg,#eee, #fff); background-size: 14px, 100%}
 input.search[type=submit] {margin-left: 4px; padding: 6px 5px; width: 44px; vertical-align: middle; color: transparent; text-shadow: none; background: var(--search) no-repeat center center / 14px, linear-gradient(180deg,#fff, #efefff); background-blend-mode: luminosity}
 input.search[type=submit]:hover, input.search[type=submit]:focus {background: var(--search) no-repeat center center / 14px, linear-gradient(180deg,#eee, #fff); background-blend-mode: normal}
-input.search[type=text] {margin: 1px 0 0; padding: 5px 5px 5px 26px; vertical-align: middle; background: #fbfbff var(--search) no-repeat 6px center / 14px; background-blend-mode: luminosity}
-input.search[type=text]:focus {background: #fff var(--search) no-repeat 6px center / 14px; background-blend-mode: normal}
+input.search[type=text] {margin: 1px -10px 0 0; padding: 5px 8px; vertical-align: middle; border-radius: 2px 0 0 2px}
+input.search[type=text]:focus, input.search[type=text]:focus-within ~ input.search[type=submit] {border: 1px solid var(--hover); filter: none}
 #visualid .fakebutton {padding: 6px 8px 6px 22px; background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#fff, #efefff)}
 #visualid .fakebutton:hover, #visualid .fakebutton:focus {background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#eee, #fff)}
 form[action="addressbook"] table {width: 100%; font-weight: 700}
@@ -335,4 +335,5 @@ td.destinations textarea {height: 32px}
 #host_list .b32link, #host_list .helper {padding: 0 20px; width: 6%}
 .headline h4 {background: var(--files) no-repeat 10px 8px / 16px}
 #host_list td.b32link a::after, #host_list td.helper a::after {width: 18px; height: 18px}
+input.search[type=text] {margin: 0 -8px 0 0; padding: 6px 8px}
 }
