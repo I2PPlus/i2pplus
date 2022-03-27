@@ -115,8 +115,6 @@ p.messages {color: #fff; text-align: center; font-weight: 700}
 .iframed .page {margin: 1px; padding: 10px 10px 0; min-width: 520px; overflow: hidden; background-color: transparent}
 #bk.iframed .page {padding-bottom: 18px}
 #bk.iframed #published.page {padding-bottom: 3px}
-input[type=text], input[type=password], textarea {padding: 5px; font-family: var(--bodyfont); color: #4f4f63; border: var(--border_input); border-radius: 2px; box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2); background: #fbfbff; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-input[type=text]:focus, input[type=password]:focus, textarea:focus {color: var(--ink_darker); border: 1px solid #676c7f; box-shadow: 0 0 1px #89f; background: #fff}
 textarea, #subsLog pre {padding: 1px 3px; width: 100%; font-family: var(--monospaced); font-size: 9pt; color: #4f4f63; border-radius: 2px; border: var(--border_input); resize: none; scrollbar-color: #a7a7be rgba(255,255,255,.4); will-change: transform}
 #content textarea, #host_details textarea{margin: 0 0 0 -15px; width: 100%; border: none; box-shadow: none; resize: none; filter: none}
 .iframed #content textarea {margin: 0; border: 1px solid #8d8daa}
@@ -129,7 +127,7 @@ textarea[name="destination"] {width: calc(100% + 10px)}
 #filter, #search {margin-bottom: -1px; padding: 5px 15px; text-align: center; border: 1px solid #8d8daa; background: #fafaff}
 #search {margin: 1px 0 -2px; padding-top: 4px; position: sticky; top: 40px; z-index: 999}
 #booksearch {padding: 2px 5px 0; vertical-align: middle}
-#filter {margin: -1px 0 11px; padding: 6px 15px; font-weight: 700; text-align: center}
+#filter {margin: -1px 0 11px; padding: 6px; font-weight: 700; text-align: center}
 #filter a, #filter a:visited, #activefilter {margin: 2px 1px; padding: 4px 8px; min-width: 10px; display: inline-block; text-align: center; text-transform: capitalize; color: #3b6bbf; border: 1px solid #8d8daa; border-radius: 2px; background: #fff; filter: drop-shadow(0 0 1px rgba(220,220,255,.7));}
 #filter a:hover {color: #f60}
 #filter a:active {text-decoration: none; color: #fff; box-shadow: var(--highlight), inset 3px 3px 3px #4f4f63; background: #f60}
@@ -219,35 +217,33 @@ table + p.buttons {padding: 5px}
 #dtls form + #buttons {margin-top: -2px; border: 1px solid #8d8daa}
 form[action="export"] {margin: -1px 0}
 input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner, button::-moz-focus-inner{outline: none; border: none}
-input[type=submit], input[type=reset], .fakebutton {margin: 5px 5px 5px 0; padding: 4px 3px; font: 9pt var(--bodyfont); text-decoration: none; color: #4f4f63; border: var(--border_input); border-radius: 2px; box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1); background: linear-gradient(180deg,#fff, #efefff); filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); cursor: pointer}
+input[type=submit], input[type=reset], .fakebutton {margin: 5px 5px 5px 0; padding: 4px 3px; font: 9pt var(--bodyfont); text-decoration: none; color: #4f4f63; border: var(--border_input); border-radius: 2px; box-shadow: var(--btn_shadow); background: var(--btn); filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); cursor: pointer}
 a.fakebutton {font-weight: 400; color: #4f4f63}
 a.fakebutton:hover, a.fakebutton:focus {color: #111}
 a.fakebutton:active {color: #666}
-input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus, .fakebutton:hover, .fakebutton:focus {color: #111; border: 1px solid #f60; box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); background: linear-gradient(180deg,#eee, #fff); filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
-input[type=submit]:active, input[type=reset]:active, .fakebutton:active {color: #666; box-shadow: var(--highlight), inset 3px 3px 2px #555; background-blend-mode: luminosity}
-input[type=file]::file-selector-button {margin: 3px; padding: 4px 10px; line-height: 140%; font-size: 9pt; color: #5b5b71; text-decoration: none; text-shadow: 0 1px 1px #fff; border: var(--border_input); border-radius: 2px; box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1); background: linear-gradient(180deg,#fff, #efefff); background-size: 14px auto, 100%; opacity: 1; filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); cursor: pointer}
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {color: var(--ink_darker); border: 1px solid #f60; box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); background: linear-gradient(180deg,#eee, #fff); filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
-input.accept {padding: 5px 7px 5px 22px; background: var(--yes) no-repeat 6px center / 13px, linear-gradient(180deg,#fff, #efefff)}
-input.accept:hover, input.accept:focus {background: var(--yes) no-repeat 6px center / 13px, linear-gradient(180deg,#eee, #fff)}
-input.add {padding: 5px 7px 5px 20px; background: var(--add) no-repeat 6px center / 11px, linear-gradient(180deg,#fff, #efefff)}
-input.add:hover, input.add:focus {background: var(--add) no-repeat 6px center / 11px, linear-gradient(180deg,#eee, #fff)}
-input.cancel {padding: 5px 7px 5px 19px; background: var(--no) no-repeat 6px center / 10px, linear-gradient(180deg,#fff, #efefff)}
-input.cancel:hover, input.cancel:focus {background: var(--no) no-repeat 6px center / 10px, linear-gradient(180deg,#eee, #fff)}
-input.delete {padding: 5px 7px 5px 23px; background: var(--nuke) no-repeat 6px center, linear-gradient(180deg,#fff, #efefff); background-size: 13px, 100%}
-input.delete:hover, input.delete:focus {background: var(--nuke) no-repeat 6px center, linear-gradient(180deg,#eee, #fff); background-size: 13px, 100%}
-input.export {margin-top: 5px; padding: 5px 7px 5px 22px; background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#fff, #efefff)}
-input.export:hover, input.export:focus {background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#eee, #fff)}
-input.download, input.update {margin-top: 5px; padding: 5px 7px 5px 21px; background: var(--download) no-repeat 6px center / 13px, linear-gradient(180deg,#fff, #efefff)}
+input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus, .fakebutton:hover, .fakebutton:focus {color: #111; border: 1px solid #f60; box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); background: var(--btn_hover); filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
+input[type=submit]:active, input[type=reset]:active, .fakebutton:active, input[type=file]:active::file-selector-button {color: #666; box-shadow: var(--highlight), inset 3px 3px 2px #555; background-blend-mode: luminosity}
+input.accept {padding: 5px 7px 5px 22px; background: var(--yes) no-repeat 6px center / 13px, var(--btn)}
+input.accept:hover, input.accept:focus {background: var(--yes) no-repeat 6px center / 13px, var(--btn_hover)}
+input.add {padding: 5px 7px 5px 20px; background: var(--add) no-repeat 6px center / 11px, var(--btn)}
+input.add:hover, input.add:focus {background: var(--add) no-repeat 6px center / 11px, var(--btn_hover)}
+input.cancel {padding: 5px 7px 5px 19px; background: var(--no) no-repeat 6px center / 10px, var(--btn)}
+input.cancel:hover, input.cancel:focus {background: var(--no) no-repeat 6px center / 10px, var(--btn_hover)}
+input.delete {padding: 5px 7px 5px 23px; background: var(--nuke) no-repeat 6px center, var(--btn); background-size: 13px, 100%}
+input.delete:hover, input.delete:focus {background: var(--nuke) no-repeat 6px center, var(--btn_hover); background-size: 13px, 100%}
+input.export {margin-top: 5px; padding: 5px 7px 5px 22px; background: var(--go) no-repeat 6px center / 14px, var(--btn)}
+input.export:hover, input.export:focus {background: var(--go) no-repeat 6px center / 14px, var(--btn_hover)}
+input.download, input.update {margin-top: 5px; padding: 5px 7px 5px 21px; background: var(--download) no-repeat 6px center / 13px, var(--btn)}
 input.update {margin-left: 5px}
-input.download:hover, input.download:focus, input.update:hover, input.update:focus {background: var(--download) no-repeat 6px center / 13px, linear-gradient(180deg,#eee, #fff)}
-input.reload {padding: 5px 7px 5px 22px; background: var(--refresh) no-repeat 6px center / 14px, linear-gradient(180deg,#fff, #efefff)}
-input.reload:hover, input.reload:focus {background: var(--refresh_hover) no-repeat 6px center, linear-gradient(180deg,#eee, #fff); background-size: 14px, 100%}
-input.search[type=submit] {margin-left: 4px; padding: 6px 5px; width: 44px; vertical-align: middle; color: transparent; text-shadow: none; background: var(--search) no-repeat center center / 14px, linear-gradient(180deg,#fff, #efefff); background-blend-mode: luminosity}
-input.search[type=submit]:hover, input.search[type=submit]:focus {background: var(--search) no-repeat center center / 14px, linear-gradient(180deg,#eee, #fff); background-blend-mode: normal}
-input.search[type=text] {margin: 1px -10px 0 0; padding: 5px 8px; vertical-align: middle; border-radius: 2px 0 0 2px}
-input.search[type=text]:focus, input.search[type=text]:focus-within ~ input.search[type=submit] {border: 1px solid var(--hover); filter: none}
-#visualid .fakebutton {padding: 6px 8px 6px 22px; background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#fff, #efefff)}
-#visualid .fakebutton:hover, #visualid .fakebutton:focus {background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#eee, #fff)}
+input.download:hover, input.download:focus, input.update:hover, input.update:focus {background: var(--download) no-repeat 6px center / 13px, var(--btn_hover)}
+input.reload {padding: 5px 7px 5px 22px; background: var(--refresh) no-repeat 6px center / 14px, var(--btn)}
+input.reload:hover, input.reload:focus {background: var(--refresh_hover) no-repeat 6px center, var(--btn_hover); background-size: 14px, 100%}
+input.search[type=submit] {margin-left: 3px; padding: 6px 5px; width: 44px; vertical-align: middle; color: transparent; text-shadow: none; border-radius: 0 0 2px 2px; background: var(--search) no-repeat center center / 14px, var(--btn); background-blend-mode: luminosity}
+input.search[type=submit]:hover, input.search[type=submit]:focus {background: var(--search) no-repeat center center / 14px, var(--btn_hover); background-blend-mode: normal}
+input.search[type=text] {margin: 1px -10px 0 0; padding: 5px 8px; vertical-align: middle; border-radius: 2px 0 0 2px; transition: none}
+input.search[type=text]:focus, input.search[type=text]:focus-within ~ input.search[type=submit] {border: 1px solid var(--hover); filter: none; transition: none}
+#visualid .fakebutton {padding: 6px 8px 6px 22px; background: var(--go) no-repeat 6px center / 14px, var(--btn)}
+#visualid .fakebutton:hover, #visualid .fakebutton:focus {background: var(--go) no-repeat 6px center / 14px, var(--btn_hover)}
 form[action="addressbook"] table {width: 100%; font-weight: 700}
 #filter {margin-top: -2px}
 
@@ -290,6 +286,7 @@ svg {opacity: .9}
 #current {font-size: 10pt}
 .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {margin-bottom: -4px; padding-top: 10px}
 input.search[type=submit] {padding: 6px 5px}
+input.search[type="text"] {padding: 4px 8px}
 }
 
 @media screen and (max-width: 1200px) {
@@ -325,5 +322,5 @@ td.destinations textarea {height: 32px}
 #host_list .b32link, #host_list .helper {padding: 0 20px; width: 6%}
 .headline h4 {background: var(--files) no-repeat 10px 8px / 16px}
 #host_list td.b32link a::after, #host_list td.helper a::after {width: 18px; height: 18px}
-input.search[type=text] {margin: 0 -8px 0 0; padding: 6px 8px}
+input.search[type=text] {margin: 0 -8px 0 0}
 }
