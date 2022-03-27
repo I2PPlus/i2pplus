@@ -352,7 +352,7 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {padding-top: 1px}
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {text-align: right; white-space: nowrap}
 #routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: 1px inset #e0e0eb}
 #upnpscan {margin: -16px 0 5px; padding: 5px 10px; border: 1px solid var(--border_inner); background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px)}
-#upnpstatus.infohelp {margin-bottom: 6px}
+#upnpstatus.infohelp {margin: 9px 0 6px}
 #bugreports {padding: 0 0 0 10px; border-collapse: separate; border-radius: 2px; background: var(--p); filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 #bugreports td.infohelp {padding: 10px 15px 10px 40px; text-align: justify; border: none; background: var(--bug) no-repeat left center / 28px}
 #bugreports tr {background: transparent}

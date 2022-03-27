@@ -78,7 +78,7 @@
 
 html, body {
   min-height: 100%;
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 html {
