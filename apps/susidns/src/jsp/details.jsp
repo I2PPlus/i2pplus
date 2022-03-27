@@ -20,7 +20,7 @@
  *
  */
 %>
-<%@include file="headers.jsi" %>
+<%@include file="headers.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>

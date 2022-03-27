@@ -23,7 +23,7 @@
  * $Revision: 1.2 $
  */
 %>
-<%@include file="headers.jsi" %>
+<%@include file="headers.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ page contentType="text/html"%>
