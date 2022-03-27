@@ -2310,7 +2310,8 @@ public class PeerState {
     private class ACKTimer extends SimpleTimer2.TimedEvent {
         public ACKTimer() {
             super(_context.simpleTimer2());
-            long delta = Math.min(_rtt/2, ACK_FREQUENCY);
+//            long delta = Math.min(_rtt/2, ACK_FREQUENCY);
+            long delta = Math.max(10, Math.min(_rtt/6, ACK_FREQUENCY));
             if (_log.shouldDebug())
                 _log.debug("Sending delayed ACK in " + delta + "ms: " + PeerState.this);
             schedule(delta);

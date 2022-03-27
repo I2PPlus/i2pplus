@@ -22,21 +22,10 @@
  *
  * $Revision: 1.1 $
  */
-
-    // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
-    if (request.getCharacterEncoding() == null)
-        request.setCharacterEncoding("UTF-8");
-    response.setHeader("X-Frame-Options", "SAMEORIGIN");
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
-    response.setHeader("X-XSS-Protection", "1; mode=block");
-    response.setHeader("X-Content-Type-Options", "nosniff");
-    response.setHeader("Referrer-Policy", "no-referrer");
-    response.setHeader("Accept-Ranges", "none");
-
 %>
-<% //@include file="headers.jsi" %>
+<%@include file="headers.jsi"%>
 <%@page pageEncoding="UTF-8"%>
-<%@ page contentType="text/html" %>
+<%@page contentType="text/html" %>
 <%@page trimDirectiveWhitespaces="true"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <jsp:useBean id="cfg" class="i2p.susi.dns.ConfigBean" scope="session"/>
@@ -104,10 +93,6 @@
 <li><b>log</b> - <%=intl._t("File to log activity to (change to /dev/null if you like)")%></li>
 <li><b>theme</b> - <%=intl._t("Name of override theme to use (defaults to console-selected theme)")%></li>
 </ul>
-</div>
-<div id="footer">
-<hr>
-<p class="footer">susidns v${version.version} &copy; <a href="${version.url}" target="_top">susi</a> 2005 </p>
 </div>
 </div>
 <span data-iframe-height></span>

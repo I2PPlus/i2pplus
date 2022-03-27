@@ -20,9 +20,9 @@
  *
  */
 %>
-<%@include file="headers.jsi" %>
+<%@include file="headers.jsi"%>
 <%@page pageEncoding="UTF-8"%>
-<%@ page contentType="text/html"%>
+<%@page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
@@ -199,9 +199,6 @@
     }  // detail == null
 %>
 </div><%-- book --%>
-<div id="footer">
-<p class="footer">susidns v${version.version} &copy; <a href="${version.url}" target="_top">susi</a> 2005</p>
-</div>
 </div><%-- page --%>
 <span data-iframe-height></span>
 <style type="text/css">body{opacity: 1 !important;}</style>

@@ -4,6 +4,7 @@
 @import url(/themes/console/midnight/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(../lazyload.css);
 
 :root {
 --nav: linear-gradient(180deg,#181828 50%, #000 50%);
@@ -49,7 +50,6 @@ td {padding: 5px}
 p {color:var(--ink); margin: 0 0 4px; font-size: 9.5pt; text-align: justify}
 p.buttons, .buttons {margin: 5px 0 -5px; padding: 0 3px; text-align: right}
 p.buttons {padding: 8px 5px; border: var(--border)}
-p.footer {padding: 5px 0 2px; text-align: center; font-size: 8pt; border: 1px solid #113}
 p#filtered {margin: -26px 0 10px}
 .checkbox input {margin: 0}
 .headline h3:first-child + h4 {margin-top: -25px; margin-bottom: 25px}
@@ -111,7 +111,6 @@ td.names a {font-size: 9pt}
 #filter span a, #filter span a:hover {display: inline-block; word-spacing: normal; letter-spacing: normal; border: none; background: none; transform: none}
 #filter span b {margin: -3px 5px 0; line-height: .8; text-transform: uppercase; font-size: 11pt; color: #fff}
 
-#footer, .iframed #footer {display: none}
 form[action="subscriptions"] {margin: 0}
 #helpsubs {margin: -16px 0 -11px; padding: 20px 15px 15px 48px; background: #001 var(--infohelp) no-repeat 12px center / 24px}
 #host_list tr {background: var(--row)}

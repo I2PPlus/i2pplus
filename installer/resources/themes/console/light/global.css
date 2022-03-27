@@ -162,8 +162,7 @@ select, select[disabled]:hover, select[disabled]:focus {
   color: var(--ink_light);
   border: var(--border_input);
   border-radius: 2px;
-  box-shadow: var(--highlight);
-  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  box-shadow: var(--btn_shadow);
   background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
   appearance: none;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
@@ -216,14 +215,16 @@ input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {
 
 input[type=text], input[type=password] {
   padding: 6px 8px;
+  color: var(--ink);
   box-shadow: var(--input_shadow);
-  background: #fbfbff;
+  border: var(--border_input);
+  background: var(--txtinput);
   transition: ease all .1s;
 }
 
 input[type=text]:focus, input[type=password]:focus,
 .freetext:focus, .displayText:focus {
-  color: #19191f;
+  color: var(--ink_darker);
   box-shadow: var(--highlight), var(--btn_shadow_active);
   border: 1px solid #676c7f;
   background: #fff;
@@ -268,7 +269,7 @@ input[type=file]::file-selector-button {
   text-shadow: 0 1px 1px #fff;
   border: var(--border_input);
   border-radius: 2px;
-  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  box-shadow: var(--btn_shadow);
   background: var(--btn);
   background-size: 14px auto, 100%;
   opacity: 1;

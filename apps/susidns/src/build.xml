@@ -1,96 +1,94 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="susidns" default="all" basedir=".">
-	<property name="jetty" value="../../jetty/" />
-	<property name="project" value="susidns" />
-	<property name="src" value="java/src" />
-	<property name="bin" value="./WEB-INF/classes" />
-	<property name="lib" value="${jetty}/jettylib" />
-	<property name="tmp" value="./tmp" />
-	<property name="jsp" value="./jsp" />
-	<path id="cp">
-		<pathelement path="${classpath}" />
-		<pathelement location="${bin}" />
-                <!-- commons-el MUST be first to ensure we get the right (2.2) version
+  <property name="jetty" value="../../jetty/" />
+  <property name="project" value="susidns" />
+  <property name="src" value="java/src" />
+  <property name="bin" value="./WEB-INF/classes" />
+  <property name="lib" value="${jetty}/jettylib" />
+  <property name="tmp" value="./tmp" />
+  <property name="jsp" value="./jsp" />
+  <path id="cp">
+    <pathelement path="${classpath}" />
+    <pathelement location="${bin}" />
+    <!-- commons-el MUST be first to ensure we get the right (2.2) version
                   -  otherwise:
                   -  Exception in thread "main" java.lang.NoSuchMethodError: javax.el.ExpressionFactory.newInstance()Ljavax/el/ExpressionFactory;
                   -->
-		<pathelement location="${lib}/commons-el.jar" />
-		<pathelement location="${lib}/javax.servlet.jar"/>
+    <pathelement location="${lib}/commons-el.jar" />
+    <pathelement location="${lib}/javax.servlet.jar" />
 
-                <!-- following jars only present for debian builds -->
-                <pathelement location="${lib}/commons-logging.jar" />
-                <pathelement location="${lib}/jsp-api.jar" />
-                <pathelement location="${lib}/tomcat-api.jar" />
-                <pathelement location="${lib}/tomcat-util.jar" />
-                <pathelement location="${lib}/tomcat-util-scan.jar" />
-		<pathelement location="${lib}/jasper-el.jar" />
-		<pathelement location="lib/jstlel.jar" />
+    <!-- following jars only present for debian builds -->
+    <pathelement location="${lib}/commons-logging.jar" />
+    <pathelement location="${lib}/jsp-api.jar" />
+    <pathelement location="${lib}/tomcat-api.jar" />
+    <pathelement location="${lib}/tomcat-util.jar" />
+    <pathelement location="${lib}/tomcat-util-scan.jar" />
+    <pathelement location="${lib}/jasper-el.jar" />
+    <pathelement location="lib/jstlel.jar" />
 
-		<pathelement location="lib/jstl.jar" />
-		<pathelement location="lib/standard.jar" />
-		<pathelement location="${lib}/jasper-runtime.jar" />
-		<pathelement location="${lib}/jetty-util.jar" />
-		<pathelement location="${lib}/jetty-i2p.jar" />
-		<pathelement location="${ant.home}/lib/ant.jar" />
-		<pathelement location="../../../core/java/build/i2p.jar" />
-		<pathelement location="../../addressbook/dist/addressbook.jar" />
- 	</path>
+    <pathelement location="lib/jstl.jar" />
+    <pathelement location="lib/standard.jar" />
+    <pathelement location="${lib}/jasper-runtime.jar" />
+    <pathelement location="${lib}/jetty-util.jar" />
+    <pathelement location="${lib}/jetty-i2p.jar" />
+    <pathelement location="${ant.home}/lib/ant.jar" />
+    <pathelement location="../../../core/java/build/i2p.jar" />
+    <pathelement location="../../addressbook/dist/addressbook.jar" />
+  </path>
 
-	<property name="javac.compilerargs" value="" />
-	<property name="javac.version" value="1.8" />
-	<property name="javac.release" value="8" />
-	<property name="require.gettext" value="true" />
+  <property name="javac.compilerargs" value="" />
+  <property name="javac.version" value="1.8" />
+  <property name="javac.release" value="8" />
+  <property name="require.gettext" value="true" />
 
-    <condition property="no.bundle">
-        <isfalse value="${require.gettext}" />
-    </condition>
+  <condition property="no.bundle">
+    <isfalse value="${require.gettext}" />
+  </condition>
 
- 	<target name="compile">
-		<mkdir dir="${bin}" />
-		<javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
-			release="${javac.release}"
-			includeAntRuntime="false"
-			encoding="UTF-8"
- 			classpathref="cp" destdir="${bin}" srcdir="${src}" includes="**/*.java" >
-			<compilerarg line="${javac.compilerargs}" />
-		</javac>
-	</target>
+  <target name="compile">
+    <mkdir dir="${bin}" />
+    <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" release="${javac.release}" includeAntRuntime="false" encoding="UTF-8" classpathref="cp" destdir="${bin}" srcdir="${src}" includes="**/*.java">
+      <compilerarg line="${javac.compilerargs}" />
+    </javac>
+  </target>
 
-    <target name="verifylibtaglibs" if="${with-libtaglibs-standard}" >
-        <!-- lib/jstlel.jar should be a symlink to the package jar.
+  <target name="verifylibtaglibs" if="${with-libtaglibs-standard}">
+    <!-- lib/jstlel.jar should be a symlink to the package jar.
            - If the package jar is not there, we will still compile fine but it won't run,
            - so catch it here.
           -->
-        <fail message="libtaglibs-standard-jstlel-java package must be installed for debian builds">
-            <condition>
-                <not><available file="lib/jstlel.jar" type="file"/></not>
-            </condition>
-        </fail>
-    </target>
+    <fail message="libtaglibs-standard-jstlel-java package must be installed for debian builds">
+      <condition>
+        <not>
+          <available file="lib/jstlel.jar" type="file" />
+        </not>
+      </condition>
+    </fail>
+  </target>
 
-    <target name="precompilejsp" depends="verifylibtaglibs" unless="precompilejsp.uptodate">
-        <delete file="WEB-INF/web-fragment.xml" />
-        <delete file="WEB-INF/web-out.xml" />
-    	<mkdir dir="${tmp}" />
-        <echo message="Ignore any warning about /WEB-INF/web.xml not found" />
-        <!-- See apps/routerconsole/java/build.xml for important JspC build documentation -->
-        <java classname="net.i2p.servlet.util.JspC" fork="true" classpathref="cp" failonerror="true">
-            <!-- these are to detect tomcat version and reproducible build setting -->
-            <jvmarg value="-Dbuild.reproducible=${build.reproducible}" />
-            <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}" />
-            <jvmarg value="-Dwith-libtomcat9-java=${with-libtomcat9-java}" />
-            <jvmarg value="-Djasper.jar=${lib}/jasper-runtime.jar" />
-            <arg value="-d" />
-            <arg value="${tmp}" />
-            <arg value="-v" />
-            <arg value="-p" />
-            <arg value="i2p.susi.dns.jsp" />
-            <arg value="-webinc" />
-            <arg value="WEB-INF/web-fragment.xml" />
-            <arg value="-webapp" />
-            <arg value="./jsp" />
-        </java>
-        <!--
+  <target name="precompilejsp" depends="verifylibtaglibs" unless="precompilejsp.uptodate">
+    <delete file="WEB-INF/web-fragment.xml" />
+    <delete file="WEB-INF/web-out.xml" />
+    <mkdir dir="${tmp}" />
+    <echo message="Ignore any warning about /WEB-INF/web.xml not found" />
+    <!-- See apps/routerconsole/java/build.xml for important JspC build documentation -->
+    <java classname="net.i2p.servlet.util.JspC" fork="true" classpathref="cp" failonerror="true">
+      <!-- these are to detect tomcat version and reproducible build setting -->
+      <jvmarg value="-Dbuild.reproducible=${build.reproducible}" />
+      <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}" />
+      <jvmarg value="-Dwith-libtomcat9-java=${with-libtomcat9-java}" />
+      <jvmarg value="-Djasper.jar=${lib}/jasper-runtime.jar" />
+      <arg value="-d" />
+      <arg value="${tmp}" />
+      <arg value="-v" />
+      <arg value="-p" />
+      <arg value="i2p.susi.dns.jsp" />
+      <arg value="-webinc" />
+      <arg value="WEB-INF/web-fragment.xml" />
+      <arg value="-webapp" />
+      <arg value="./jsp" />
+    </java>
+    <!--
           -  Reproducible build.
           -  Strip full file path
           -  Put two entries in a standard order
@@ -103,167 +101,152 @@
           -   _jspx_dependants.put("file:lib/standard.jar", Long.valueOf(1200000000000L));
           -  We first strip the full path in case the latter steps don't work due to changing JspC implementation.
           -->
-        <replace file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java">
-            <replacefilter token="${user.dir}/apps/susidns/src/" value="" />
-        </replace>
-        <replaceregexp file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java"
-                       match="_jspx_dependants.put\(.*\);"
-                       replace="//_jspx_dependants.put(@@@);"
-                       flags="g" />
-        <replaceregexp file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java"
-                       match="//_jspx_dependants.put\(@@@\);"
-                       replace="_jspx_dependants.put(&quot;jar:file:lib/standard.jar!/META-INF/c.tld&quot;, Long.valueOf(1200000000000L));" />
-        <replaceregexp file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java"
-                       match="//_jspx_dependants.put\(@@@\);"
-                       replace="_jspx_dependants.put(&quot;file:lib/standard.jar&quot;, Long.valueOf(1200000000000L));" />
-        <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
-               release="${javac.release}"
-               includeAntRuntime="false"
-               encoding="UTF-8"
-               destdir="${bin}" srcdir="${tmp}" includes="**/*.java" classpathref="cp">
-		<compilerarg line="${javac.compilerargs}" />
-         </javac>
-        <copy file="WEB-INF/web-template.xml" tofile="WEB-INF/web-out.xml" />
-        <loadfile property="jspc.web.fragment" srcfile="WEB-INF/web-fragment.xml" />
-        <replace file="WEB-INF/web-out.xml">
-            <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}" />
-        </replace>
-        <!-- Add multipart config to servlets that need them -->
-        <property name="__match1" value="&lt;servlet-class&gt;i2p.susi.dns.jsp." />
-        <property name="__match2" value="_jsp&lt;/servlet-class&gt;" />
-        <property name="__class1" value="${__match1}addressbook${__match2}" />
-        <property name="__multipart" value="&#10;
+    <replace file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java">
+      <replacefilter token="${user.dir}/apps/susidns/src/" value="" />
+    </replace>
+    <replaceregexp file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java" match="_jspx_dependants.put\(.*\);" replace="//_jspx_dependants.put(@@@);" flags="g" />
+    <replaceregexp file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java" match="//_jspx_dependants.put\(@@@\);" replace="_jspx_dependants.put(&quot;jar:file:lib/standard.jar!/META-INF/c.tld&quot;, Long.valueOf(1200000000000L));" />
+    <replaceregexp file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java" match="//_jspx_dependants.put\(@@@\);" replace="_jspx_dependants.put(&quot;file:lib/standard.jar&quot;, Long.valueOf(1200000000000L));" />
+    <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" release="${javac.release}" includeAntRuntime="false" encoding="UTF-8" destdir="${bin}" srcdir="${tmp}" includes="**/*.java" classpathref="cp">
+      <compilerarg line="${javac.compilerargs}" />
+    </javac>
+    <copy file="WEB-INF/web-template.xml" tofile="WEB-INF/web-out.xml" />
+    <loadfile property="jspc.web.fragment" srcfile="WEB-INF/web-fragment.xml" />
+    <replace file="WEB-INF/web-out.xml">
+      <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}" />
+    </replace>
+    <!-- Add multipart config to servlets that need them -->
+    <property name="__match1" value="&lt;servlet-class&gt;i2p.susi.dns.jsp." />
+    <property name="__match2" value="_jsp&lt;/servlet-class&gt;" />
+    <property name="__class1" value="${__match1}addressbook${__match2}" />
+    <property name="__multipart" value="&#10;
        &lt;multipart-config&gt;&#10;
            &lt;max-file-size&gt;67108864&lt;/max-file-size&gt;&#10;
            &lt;max-request-size&gt;67108864&lt;/max-request-size&gt;&#10;
            &lt;file-size-threshold&gt;262144&lt;/file-size-threshold&gt;&#10;
        &lt;/multipart-config&gt;" />
-        <replace file="WEB-INF/web-out.xml">
-            <replacefilter token="${__class1}" value="${__class1}${__multipart}" />
-        </replace>
-    </target>
+    <replace file="WEB-INF/web-out.xml">
+      <replacefilter token="${__class1}" value="${__class1}${__multipart}" />
+    </replace>
+  </target>
 
-    <uptodate property="precompilejsp.uptodate" targetfile="WEB-INF/web-out.xml">
-        <srcfiles dir= "." includes="jsp/*.jsp, WEB-INF/web-template.xml"/>
+  <uptodate property="precompilejsp.uptodate" targetfile="WEB-INF/web-out.xml">
+    <srcfiles dir="." includes="jsp/*.jsp, WEB-INF/web-template.xml" />
+  </uptodate>
+
+  <target name="all" depends="war" />
+
+  <target name="listChangedFiles" depends="warUpToDate" if="shouldListChanges">
+    <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false">
+      <arg value="list" />
+      <arg value="changed" />
+      <arg value="." />
+    </exec>
+    <!-- \n in an attribute value generates an invalid manifest -->
+    <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false">
+      <arg value="-s" />
+      <arg value="[:space:]" />
+      <arg value="," />
+    </exec>
+  </target>
+
+  <target name="war" depends="compile, precompilejsp, bundle, warUpToDate" unless="war.uptodate">
+    <!-- set if unset -->
+    <property name="workspace.changes.tr" value="" />
+    <war destfile="${project}.war" webxml="WEB-INF/web-out.xml">
+      <fileset dir=".">
+        <include name="WEB-INF/**/*.class" />
+        <include name="svg/*" />
+      </fileset>
+      <manifest>
+        <attribute name="Implementation-Version" value="${full.version}" />
+        <attribute name="Built-By" value="${build.built-by}" />
+        <attribute name="Build-Date" value="${build.timestamp}" />
+        <attribute name="Base-Revision" value="${workspace.version}" />
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+      </manifest>
+    </war>
+  </target>
+
+  <target name="warUpToDate">
+    <uptodate property="war.uptodate" targetfile="${project}.war">
+      <srcfiles dir="." includes="WEB-INF/web-out.xml WEB-INF/**/*.class svg/*" />
     </uptodate>
+    <condition property="shouldListChanges">
+      <and>
+        <not>
+          <isset property="war.uptodate" />
+        </not>
+        <isset property="mtn.available" />
+      </and>
+    </condition>
+  </target>
 
-    <target name="all" depends="war"/> 
-
-    <target name="listChangedFiles" depends="warUpToDate" if="shouldListChanges" >
-        <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false" >
-            <arg value="list" />
-            <arg value="changed" />
-            <arg value="." />
-        </exec>
-        <!-- \n in an attribute value generates an invalid manifest -->
-        <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false" >
-            <arg value="-s" />
-            <arg value="[:space:]" />
-            <arg value="," />
-        </exec>
-    </target>
-
-    <target name="war" depends="compile, precompilejsp, bundle, warUpToDate" unless="war.uptodate" > 
-        <!-- set if unset -->
-        <property name="workspace.changes.tr" value="" />
-        <war destfile="${project}.war" webxml="WEB-INF/web-out.xml">
-        	<fileset dir=".">
-        		<include name="WEB-INF/**/*.class"/>
-        		<include name="svg/*"/>
-        	</fileset>
-            <manifest>
-                <attribute name="Implementation-Version" value="${full.version}" />
-                <attribute name="Built-By" value="${build.built-by}" />
-                <attribute name="Build-Date" value="${build.timestamp}" />
-                <attribute name="Base-Revision" value="${workspace.version}" />
-                <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-                <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-                <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
-            </manifest>
-        </war>
-    </target>
-
-    <target name="warUpToDate">
-        <uptodate property="war.uptodate" targetfile="${project}.war">
-            <srcfiles dir= "." includes="WEB-INF/web-out.xml WEB-INF/**/*.class svg/*" />
-        </uptodate>
-        <condition property="shouldListChanges" >
-            <and>
-                <not>
-                    <isset property="war.uptodate" />
-                </not>
-                <isset property="mtn.available" />
-            </and>
-        </condition>
-    </target>
-
-    <target name="bundle" depends="compile, precompilejsp" unless="no.bundle">
-        <mkdir dir="build/messages-src" />
-        <!-- Update the messages_*.po files.
+  <target name="bundle" depends="compile, precompilejsp" unless="no.bundle">
+    <mkdir dir="build/messages-src" />
+    <!-- Update the messages_*.po files.
              We need to supply the bat file for windows, and then change the fail property to true -->
-        <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}" >
-            <env key="JAVA_HOME" value="${java.home}" />
-            <arg value="./bundle-messages.sh" />
-        </exec>
-        <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}" >
-            <arg value="./bundle-messages.sh" />
-        </exec>
-		<!-- multi-lang is optional -->
-        <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
-            <arg value="./bundle-messages.sh" />
-        </exec>
-        <javac source="${javac.version}" target="${javac.version}" 
-               release="${javac.release}"
-               includeAntRuntime="false"
-               encoding="UTF-8"
-               srcdir="build/messages-src" destdir="${bin}">
-            <compilerarg line="${javac.compilerargs}" />
-        </javac>
-    </target>
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
+      <env key="JAVA_HOME" value="${java.home}" />
+      <arg value="./bundle-messages.sh" />
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
+      <arg value="./bundle-messages.sh" />
+    </exec>
+    <!-- multi-lang is optional -->
+    <exec executable="sh" osfamily="windows" failifexecutionfails="false">
+      <arg value="./bundle-messages.sh" />
+    </exec>
+    <javac source="${javac.version}" target="${javac.version}" release="${javac.release}" includeAntRuntime="false" encoding="UTF-8" srcdir="build/messages-src" destdir="${bin}">
+      <compilerarg line="${javac.compilerargs}" />
+    </javac>
+  </target>
 
-    <target name="extractSVGTags">
-        <mkdir dir="build/" />
-        <java classname="net.i2p.util.TranslateReader" fork="true" failonerror="true">
-            <classpath>
-                <pathelement location="../../../build/i2p.jar" />
-            </classpath>
-            <arg value="tag" />
-            <arg value="svg/" />
-            <arg value="build/HowSVG.java" />
-        </java>
-    </target>
+  <target name="extractSVGTags">
+    <mkdir dir="build/" />
+    <java classname="net.i2p.util.TranslateReader" fork="true" failonerror="true">
+      <classpath>
+        <pathelement location="../../../build/i2p.jar" />
+      </classpath>
+      <arg value="tag" />
+      <arg value="svg/" />
+      <arg value="build/HowSVG.java" />
+    </java>
+  </target>
 
-    <target name="poupdate" depends="compile, precompilejsp, extractSVGTags">
-        <!-- Update the messages_*.po files.  -->
-        <!-- set if unset -->
-        <property name="lg2" value="" />
-        <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages.sh" />
-            <arg value="-p" />
-        </exec>
-        <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages.sh" />
-            <arg value="-p" />
-        </exec>
-        <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages.sh" />
-            <arg value="-p" />
-        </exec>
-    </target>
+  <target name="poupdate" depends="compile, precompilejsp, extractSVGTags">
+    <!-- Update the messages_*.po files.  -->
+    <!-- set if unset -->
+    <property name="lg2" value="" />
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages.sh" />
+      <arg value="-p" />
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages.sh" />
+      <arg value="-p" />
+    </exec>
+    <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages.sh" />
+      <arg value="-p" />
+    </exec>
+  </target>
 
-    <target name="clean">
-      <delete file="susidns.war" />
-      <delete>
-        <fileset dir="." includes="**/*.class" />
-        <fileset dir="." includes="tmp, build" />
-        <fileset dir="WEB-INF" includes="web-fragment.xml, web-out.xml" />
-      </delete>
-      <delete dir="${bin}" />
-      <delete dir="${tmp}" />
-      <delete dir="build" />
-    </target>
-    <target name="distclean" depends="clean" />
+  <target name="clean">
+    <delete file="susidns.war" />
+    <delete>
+      <fileset dir="." includes="**/*.class" />
+      <fileset dir="." includes="tmp, build" />
+      <fileset dir="WEB-INF" includes="web-fragment.xml, web-out.xml" />
+    </delete>
+    <delete dir="${bin}" />
+    <delete dir="${tmp}" />
+    <delete dir="build" />
+  </target>
+  <target name="distclean" depends="clean" />
 </project>

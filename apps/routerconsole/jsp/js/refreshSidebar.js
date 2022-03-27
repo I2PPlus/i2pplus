@@ -113,14 +113,14 @@ function refreshSidebar(timestamp) {
             minigraph = minigraphResponse;
           }
 
-        } else {
+        } else if (xhr.readyState == 4 && xhr.status == 200) {
 
           setTimeout(function() {
             var metarefresh = document.createElement("meta");
             metarefresh.httpEquiv = "refresh";
-            metarefresh.content = "75";
+            metarefresh.content = "120";
             document.head.appendChild(metarefresh);
-          }, 90000);
+          }, 120000);
         }
 
       } else {

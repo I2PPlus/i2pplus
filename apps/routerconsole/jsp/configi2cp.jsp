@@ -28,7 +28,6 @@
  <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
 <div class="configure">
-<!--<h3 id="advancedclientconfig"><a name="i2cp"></a><%=intl._t("Advanced Client Interface Configuration")%></h3>-->
 <p class="infowarn">
 <b><%=intl._t("The default settings will work for most people.")%></b>&nbsp;
 <%=intl._t("Any changes made here must also be configured in the external client.")%>&nbsp;

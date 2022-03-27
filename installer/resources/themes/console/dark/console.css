@@ -1472,7 +1472,7 @@ td.infohelp.joinfamily {padding: 20px 24px 20px 58px}
 td.optionsave {padding: 5px; text-align: right; border-top: var(--border); background: #000}
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-top: 0; line-height: 0}
 th.th_title {padding: 8px 10px; position: static; text-align: left; background: var(--h1); background-size: 2px, 100% 4px, 100%, 128px}
-#bannedpeercount {background: var(--ban) no-repeat 15px center / 28px, var(--msg)}
+#bannedpeercount {margin: 18px 8px; background: var(--ban) no-repeat 15px center / 28px, var(--msg)}
 #clientsconfig {margin-top: -2px}
 #clientsconfig, #webappconfigactions, #pluginconfigactions {margin-bottom: -4px; padding: 5px; border: var(--border); background: #000}
 
@@ -1488,7 +1488,7 @@ th.th_title {padding: 8px 10px; position: static; text-align: left; background: 
 #pluginconfig, #i2pupdates, .homelinkedit, #peerdefs {margin-top: -1px}
 #pluginconfig th {font-size: 8.5pt}
 #plugininstall tr, #plugininstall2 tr, #plugininstall td, #plugininstall2 td, #reseedconfig td, #manualreseed td, #i2pupdates td:not(.infohelp), #netconfig td, #externali2cp td, #joinfamily tr:last-child td, #newfamily tr:last-child td, #newfamily tr:last-child table tr {background: none}
-#profiles #bannedpeercount {margin-bottom: 0}
+#profiles #bannedpeercount {margin-bottom: -2px}
 #reseedconfig tr:last-child, #i2pupdates tr:nth-child(2), #netconfig tr:last-child, #externali2cp tr:last-child {background: #000}
 #config_advanced textarea#advancedsettings {margin: 0 0 -3px; padding: 8px 10px; width: 100%; overflow-x: hidden; word-break: break-all; white-space: pre-wrap; border: none; border-radius: 0; resize: none; background: rgba(0,0,0,.3)}
 #config_advanced textarea#advancedsettings:focus {background: #000}
@@ -2462,7 +2462,7 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #pluginconfigtext input {margin: -5px -6px 0 0}
 #profilelist th {white-space: normal}
 #profiles #banlist {padding: 5px 9px}
-#profiles #bannedpeercount {margin: 15px 8px 0}
+#profiles #bannedpeercount {margin: 12px 9px 2px}
 #routerinformation .h3navlinks {margin: 1px -2px -1px -2px}
 #routerinformation .h3navlinks a::before {margin-left: 0}
 #routerinformation h3 span a {padding: 12px 3px 12px 12px}
