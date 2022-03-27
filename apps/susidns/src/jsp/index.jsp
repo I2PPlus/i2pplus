@@ -22,21 +22,8 @@
  *
  * $Revision: 1.2 $
  */
-
-    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-
-    // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
-    if (request.getCharacterEncoding() == null)
-        request.setCharacterEncoding("UTF-8");
-
-    response.setHeader("X-Frame-Options", "SAMEORIGIN");
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'");
-    response.setHeader("X-XSS-Protection", "1; mode=block");
-    response.setHeader("X-Content-Type-Options", "nosniff");
-    response.setHeader("Referrer-Policy", "no-referrer");
-    response.setHeader("Accept-Ranges", "none");
-
 %>
+<%@include file="headers.jsi" %>
 <%@page pageEncoding="UTF-8"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ page contentType="text/html"%>
@@ -106,10 +93,6 @@ document.getElementById("svg").appendChild(xhr.responseXML.documentElement);
 </object>
 </noscript>
 </div>
-</div>
-<div id="footer">
-<hr>
-<p class="footer">susidns v${version.version} &copy; <a href="${version.url}" target="_blank" rel="noreferrer">susi</a> 2005</p>
 </div>
 </div>
 <span data-iframe-height></span>

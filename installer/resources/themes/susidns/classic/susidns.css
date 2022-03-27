@@ -20,7 +20,6 @@ h4 {margin: -11px -11px 10px; padding: 3px 10px; border: var(--border); backgrou
 li {margin-left: 15px; margin-right: 15px; font-size: 9pt}
 p {margin-left: 10px; margin-right: 10px; line-height: 1.4; text-align: justify; font-size: 9pt}
 p.book, #messages + p {padding: 10px 10px 10px 38px; background: var(--addressbook) no-repeat center left / 32px}
-p.footer {position: absolute; top: 0; left: -24px; border: none; background: none; opacity: .3; font-size: 8pt; display: none}
 th, td {padding: 5px 10px; line-height: 1.2; font-size: 9pt}
 th {border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
@@ -233,7 +232,6 @@ p.messages {color: #fff; text-align: center; font-weight: 700}
 .iframed #content h3 {border: none; margin: 0; border-bottom: 1px dotted var(--border_color)}
 .iframed #content h3:first-child {margin-top: 10px}
 .iframed .fakebutton {margin-bottom: -2px}
-.iframed #footer {display: none}
 .iframed #helpconfig, .iframed #helpsubs {margin: -1px -12px -5px;}
 .iframed #helpsubs {margin-top: 10px; border-left: none; border-right: none}
 .iframed #helpconfig h3 {margin: -1px 0}

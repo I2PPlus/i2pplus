@@ -22,20 +22,8 @@
  *
  * $Revision: 1.2 $
  */
-
-    // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
-    if (request.getCharacterEncoding() == null)
-        request.setCharacterEncoding("UTF-8");
-
-    response.setHeader("X-Frame-Options", "SAMEORIGIN");
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
-    response.setHeader("X-XSS-Protection", "1; mode=block");
-    response.setHeader("X-Content-Type-Options", "nosniff");
-    response.setHeader("Referrer-Policy", "no-referrer");
-    response.setHeader("Accept-Ranges", "none");
-
 %>
-<% //@include file="headers.jsi" %>
+<%@include file="headers.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@ page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>
@@ -89,10 +77,6 @@
 <%=intl._t("Those URLs refer to published hosts.txt files.")%>&nbsp;<wbr>
 <a href="/help#addressbooksubs" target="_top"><%=intl._t("See the FAQ for a list of subscription URLs.")%></a>
 </p>
-</div>
-<div id="footer">
-<hr>
-<p class="footer">susidns v${version.version} &copy; <a href="${version.url}" target="_top">susi</a> 2005</p>
 </div>
 </div>
 <span data-iframe-height></span>

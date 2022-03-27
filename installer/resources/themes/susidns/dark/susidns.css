@@ -20,7 +20,6 @@ a:active {color: #f90}
 .page {margin: 10px 0; padding: 0 5px; position: relative; color: var(--ink); font-size: 9pt}
 p.book {padding-left: 35px}
 p.buttons, #buttons {margin: 5px 0 -5px; padding: 0 3px; text-align: right}
-p.footer {display: none; font-size: 7pt; text-align: center}
 hr {margin: 5px 0; width: 100%; height: 1px; display: none; text-align: center; border: none; background: #242}
 p {color:var(--ink); margin: 0 0 4px; font-size: 9pt; text-align: justify}
 ol, ul {margin: 0 20px 0 10px; display: table-row}
@@ -274,7 +273,6 @@ svg #arrow stop:last-child {stop-color: #010}
 #messages + p, p.book {padding: 20px 20px 20px 50px; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: #000 var(--addressbook) no-repeat 10px center / 20px}
 
 /* iframe */
-.iframed #footer {display: none}
 .iframed #helpconfig, .iframed #helpsubs {margin: 13px 0 -1px}
 .iframed .page {margin: 0; padding: 0 12px; background: transparent}
 .iframed .page::after {content: ""; display: inline-block; width: 100%; height: 14px; vertical-align: bottom}
