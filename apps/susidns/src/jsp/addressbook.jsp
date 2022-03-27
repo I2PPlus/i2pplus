@@ -409,7 +409,7 @@
         boolean haveImagegen = book.haveImagegen();
         if (haveImagegen) {
 %>
-<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img src="/imagegen/id?s=24&amp;c=${addr.b32}"></a>
+<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading="lazy"></a>
 <%
         }  else { // haveImagegen
 %>
