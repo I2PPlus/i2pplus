@@ -13,13 +13,27 @@
 
 body {margin: 0 5px; background: var(--bodybg) url(/themes/console/light/images/tile2.png) center center}
 body.iframed {background: transparent; margin: 0; overflow: hidden}
-#navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
-.optbox {margin: 3px 5px}
+a:active {color: #f30}
+a, button, input[type=submit], input[type=reset], select, h3 {text-shadow: 0 1px 1px #fff}
+a:hover, a:focus, a:active, select:hover, select:focus, select:active, input:hover, input:focus, input:active, button:hover, button:focus, button:active {text-shadow: none}
+a:hover, a:focus {text-decoration: none; color: #f60}
+a {outline: none; text-decoration:none; font-weight: 700; color: #3b6bbf; color: #4d5f80}
+a:visited {color: #4d5f80}
 b, td.search {color: #5b5b71}
-#navi + hr {display: none}
-hr {display: none}
 code, tt, .destaddress {font-size: 8.5pt}
+form {margin: 0; padding: 0}
+h3, h4, th, #filter span, #paginate #current {color: #5b5b71}
+h3 {margin-bottom: 0; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; font-weight: 700; box-shadow: var(--highlight)}
+hr {display: none}
+li {font-size: 9pt; list-style: square; line-height: 140%}
+ol, ul {margin-left: -30px}
+th {padding: 5px 10px; font-size: 70%; background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
+td {padding: 5px 10px; font-size: 9pt; vertical-align: middle}
+.optbox {margin: 3px 5px}
+table {background: #fafaff}
 #host_list .destaddress {user-select: all}
+#navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
+#navi + hr {display: none}
 
 /* navigation */
 #navi {margin: -1px 0 0; padding: 5px 3px; position: sticky; z-index: 100; top: -1px; vertical-align: middle; text-align: center; font-weight: 700; font-size: 9pt; border: 1px solid #8d8daa; border-radius: 2px 2px 0 0; box-shadow: var(--highlight); background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
@@ -40,22 +54,20 @@ code, tt, .destaddress {font-size: 8.5pt}
 #navi #overview:hover, #navi #overview:focus {background: var(--overview_hover) no-repeat 6px center / 14px, var(--nav)}
 #navi #overview:active {background: var(--overview_active) no-repeat 6px center / 14px, var(--nav)}
 
-
 .headline {margin: -1px 0 -2px; padding: 8px 5px; border: 1px solid #8d8daa; background: linear-gradient(135deg, #fafaff, #f2f2ff)}
 .iframed .headline {margin-top: 6px}
-h3, h4, th, #filter span, #paginate #current {color: #5b5b71}
-h3 {font-size: 11pt; box-shadow: var(--highlight)}
 .headline h3 {font-size: 11.5pt; background: #fcfcff var(--addressbook) no-repeat 7px calc(50% + 2px) / 20px}
-.headline#subscriptions h3 {background: #fcfcff var(--subscription) no-repeat 6px center / 18px}
-#subscriptions a {margin: 2px 2px 0 0; float: right; font-size: 80%}
-.headline#configure h3 {background: #fcfcff var(--config) no-repeat 7px calc(50% + 1px) / 18px}
-.headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {margin: -8px -5px -6px; padding: 9px 5px 8px 30px}
-#dtls .headline h3 {margin-bottom: 3px}
 span.location {word-spacing: normal; letter-spacing: normal; text-transform: none; font-size: 9pt; font-weight: 400}
 .headline h4 {margin: 5px -6px 0; padding: 8px 10px 0 33px; border-top: 1px solid #8d8daa; background: var(--files) no-repeat 9px 7px / 16px}
 .storage {user-select: all; color: #050}
 .storage::selection {background: #373}
 .storage::-moz-selection {background: #373}
+#subscriptions h3 {background: #fcfcff var(--subscription) no-repeat 6px center / 18px}
+#subscriptions a {margin: 2px 2px 0 0; float: right; font-size: 80%}
+#configure h3 {background: #fcfcff var(--config) no-repeat 7px calc(50% + 1px) / 18px}
+#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {margin: -8px -5px -6px; padding: 9px 5px 8px 30px}
+#dtls .headline h3 {margin-bottom: 3px}
+
 #content {margin: -1px 0 0; padding: 0 15px; border: 1px solid #8d8daa; background: #fafaff}
 .iframed #content {padding: 0; overflow: hidden; border: none; background: none}
 form[action="subscriptions"] #content {margin-top: 1px}
@@ -86,17 +98,6 @@ p, #helpconfig {text-align: justify; font-size: 9pt}
 #helpconfig ul {columns: 2 400px; column-gap: 50px}
 #helpconfig ul li {-webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 span.addrhlpr {font-size: 9pt}
-a, button, input[type=submit], input[type=reset], select, h3 {text-shadow: 0 1px 1px #fff}
-a:hover, a:focus, a:active, select:hover, select:focus, select:active, input:hover, input:focus, input:active, button:hover, button:focus, button:active {text-shadow: none}
-h3 {margin-bottom: 0; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; font-weight: 700}
-a {outline: none; text-decoration:none; font-weight: 700; color: #3b6bbf; color: #4d5f80}
-a:visited {color: #4d5f80}
-a:hover, a:focus {text-decoration: none; color: #f60}
-a:active {color: #f30}
-th {padding: 5px 10px; font-size: 8.5pt}
-td {padding: 5px 10px; font-size: 9pt; vertical-align: middle}
-ol, ul {margin-left: -30px}
-li {font-size: 9pt; list-style: square; line-height: 140%}
 #host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {background: linear-gradient(180deg,#fff, #eef)}
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: linear-gradient(180deg,#fff, #eef)}
 #host_list td, #host_details td {box-shadow: var(--highlight)}
@@ -108,12 +109,7 @@ div#messages:hover {background: var(--no) right 8px top 5px no-repeat #113}
 div#messages:empty {display: none}
 #messages p {letter-spacing: 2px; font-size: 9pt; color: #ff9; text-shadow: 0 1px 1px #000}
 p.messages {color: #fff; text-align: center; font-weight: 700}
-.iframed #footer {display: none}
-.illustrate {margin: 20px auto 20px; padding: 2px 10px; width: 70%; height: auto; min-width: 550px; max-width: 700px; text-align: center; border-radius: 4px; border: 1px solid #575775; box-shadow: inset 0 0 0 1px #ccc; background: #fff; opacity: .85; filter: drop-shadow(0 0 1px rgba(220,220,255,.7));}
-.illustrate img {padding: 10px; width: calc(100% - 20px); height: auto; mix-blend-mode: multiply}
-.iframed .illustrate {margin-bottom: 30px; background: linear-gradient(180deg,#fafaff 70%, rgba(220,220,255,.1)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .6) 3px, #fff 4px) #fff}
-.iframed .illustrate:hover {background: #fff}
-svg {opacity: .9}
+
 .page {margin: -4px 0; padding: 10px 0; min-width: 700px; font-size: 9pt; border: none; border-radius: 2px}
 #ovrvw .page {margin: 0}
 .iframed .page {margin: 1px; padding: 10px 10px 0; min-width: 520px; overflow: hidden; background-color: transparent}
@@ -139,9 +135,6 @@ textarea[name="destination"] {width: calc(100% + 10px)}
 #filter a:active {text-decoration: none; color: #fff; box-shadow: var(--highlight), inset 3px 3px 3px #4f4f63; background: #f60}
 p#filtered {margin-bottom: 16px; padding: 15px 200px 18px 32px; box-shadow: var(--highlight), inset 0 0 2px 1px #ddf; background: var(--filter) no-repeat 8px center / 28px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .5) 2px, #fff 4px), #fff}
 #messages + p, .headline + p {margin: 1px 0 -1px; padding: 10px; border: 1px solid #8d8daa}
-form {margin: 0; padding: 0}
-th {font-size: 70%; background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
-table {background: #fafaff}
 table.book {width: 100%}
 #host_list th.checkbox{width: 16px; background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
 .book th {padding-left: 3px; text-align: left; font-size: 90%}
@@ -281,6 +274,13 @@ input#exporthosts {margin-bottom: -2px; padding: 0; width: 28px; height: 28px; m
 #prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {border-color: transparent #f60 transparent transparent}
 #next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {border-color: transparent transparent transparent #f60}
 #filtered, #results {font-size: 10pt}
+
+/* help page */
+.illustrate {margin: 20px auto 20px; padding: 2px 10px; width: 70%; height: auto; min-width: 550px; max-width: 700px; text-align: center; border-radius: 4px; border: 1px solid #575775; box-shadow: inset 0 0 0 1px #ccc; background: #fff; opacity: .85; filter: drop-shadow(0 0 1px rgba(220,220,255,.7));}
+.illustrate img {padding: 10px; width: calc(100% - 20px); height: auto; mix-blend-mode: multiply}
+.iframed .illustrate {margin-bottom: 30px; background: linear-gradient(180deg,#fafaff 70%, rgba(220,220,255,.1)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .6) 3px, #fff 4px) #fff}
+.iframed .illustrate:hover {background: #fff}
+svg {opacity: .9}
 
 @keyframes hide-up {from {margin-top: 0} to {margin-top: -300px}}
 
