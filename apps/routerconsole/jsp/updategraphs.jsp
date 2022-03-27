@@ -20,7 +20,7 @@
     graphHelper.storeWriter(out);
     graphHelper.storeMethod(request.getMethod());
 %>
-<script src="/js/ajax.js" type="text/javascript"></script>
+<script charset="utf-8" src="/js/ajax.js" type="text/javascript"></script>
 <meta http-equiv="Refresh" content= "0;URL=/graphs">
 </head>
 <body id="updategraphs">

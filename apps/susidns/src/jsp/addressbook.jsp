@@ -60,10 +60,10 @@
 <link rel="preload" href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset="utf-8" src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <%
     String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
     String query = request.getQueryString();
@@ -500,8 +500,8 @@
 <style type="text/css">body{opacity:1 !important}</style>
 </div>
 <!--
-<script src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 -->
-<script src="/js/lazyload.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="/js/lazyload.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 </body>
 </html>

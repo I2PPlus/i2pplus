@@ -2340,18 +2340,18 @@ public class WebMail extends HttpServlet
                     out.println("<link rel=\"stylesheet\" href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" type=\"text/css\" media=\"print\" />\n");
                 if (state == State.NEW || state == State.CONFIG) {
                     // TODO cancel if to and body are empty
-                    out.println("<script src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+                    out.println("<script charset=\"utf-8\" src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
                 } else if (state == State.LIST) {
-                    out.println("<script src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
-                    out.println("<script src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+                    out.println("<script charset=\"utf-8\" src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+                    out.println("<script charset=\"utf-8\" src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
                 } else if (state == State.LOADING) {
                     // TODO JS?
                     out.println("<noscript><meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\"></noscript>\n");
                 }
                 // setup noscript style so we can hide js buttons when js is disabled
                 out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>\n");
-                out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>\n");
-//                out.println("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+                out.println("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>\n");
+//                out.println("<script charset=\"utf-8\" src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
                 out.println("</head>\n");
                 if (state == State.LIST)
                     out.print("<body id=\"main\">\n");
@@ -2453,8 +2453,8 @@ public class WebMail extends HttpServlet
 
                 else if (state == State.SHOW) {
                     showMessage(out, sessionObject, mc, showUIDL, buttonPressed(request, DELETE));
-                    out.println("<script src=\"/susimail/js/toggleHeaders.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
-                    //out.println("<script src=\"/themes/toggleHeaders.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>"); // debug
+                    out.println("<script charset=\"utf-8\" src=\"/susimail/js/toggleHeaders.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+                    //out.println("<script charset=\"utf-8\" src=\"/themes/toggleHeaders.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>"); // debug
 
                 } else if (state == State.NEW)
                     showCompose(out, sessionObject, request);
@@ -2465,7 +2465,7 @@ public class WebMail extends HttpServlet
                 if (state == State.AUTH) {
                 out.println("\n<div class=\"footer\">\n" +
                     //"<p class=\"footer\">susimail &copy; 2004-2005 susi</p>" +
-                    "<script src=\"/js/togglePassword.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>" +
+                    "<script charset=\"utf-8\" src=\"/js/togglePassword.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>" +
                     "<p class=\"footer\">" +
                     _t("{0} is an I2P-exclusive service provided by {1}.", "<b>I2PMail</b>",
                         "<a href=\"http://hq.postman.i2p/\" target=\"_blank\">Postman</a>") + ' ' +

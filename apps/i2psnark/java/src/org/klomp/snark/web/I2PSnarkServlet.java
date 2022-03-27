@@ -348,7 +348,7 @@ public class I2PSnarkServlet extends BasicServlet {
                       "var deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?") + "\";\n" +
                       "var deleteMessage2 = \"" + _t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?") + "\";\n" +
                       "</script>\n" +
-                      "<script src=\".resources/js/delete.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+                      "<script charset=\"utf-8\" src=\".resources/js/delete.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             if (delay > 0) {
                 out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
                           "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
@@ -367,7 +367,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         // custom dialog boxes for javascript alerts
-        //out.write("<script src=\"" + jsPfx + "/js/custom-alert.js\" type=\"text/javascript\"></script>\n");
+        //out.write("<script charset=\"utf-8\" src=\"" + jsPfx + "/js/custom-alert.js\" type=\"text/javascript\"></script>\n");
         //out.write("<link type=\"text/css\" rel=\"stylesheet\" href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
 
         // selected theme inserted here
@@ -455,7 +455,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<div class=\"logshim\"></div>\n</div>\n");
             writeConfigForm(out, req);
             writeTrackerForm(out, req);
-//            out.write("<script src=\".resources/js/previewTheme.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+//            out.write("<script charset=\"utf-8\" src=\".resources/js/previewTheme.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
         } else {
             boolean canWrite;
             synchronized(this) {
@@ -567,12 +567,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<li class=\"msg\">" + msg + "</li>\n");
             }
             out.write("</ul>\n</div>\n");
-            out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+            out.write("<script charset=\"utf-8\" src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             int delay = 0;
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0 && _context.isRouterContext())
-                out.write("<script type=\"text/javascript\" src=\"" + _contextPath + WARBASE + "js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
-                //out.write("<script type=\"text/javascript\" src=\"/themes/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
+                out.write("<script charset=\"utf-8\" type=\"text/javascript\" src=\"" + _contextPath + WARBASE + "js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
+                //out.write("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/themes/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
         }
     }
 
@@ -1107,9 +1107,9 @@ public class I2PSnarkServlet extends BasicServlet {
 
             // load torrentDisplay script here to ensure table has loaded into dom
             if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
-                out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION +
+                out.write("<script charset=\"utf-8\" src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION +
                           "\" type=\"text/javascript\" async></script>\n");
-                //out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debugging
+                //out.write("<script charset=\"utf-8\" src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debugging
             }
             return start == 0;
     }
@@ -2873,8 +2873,8 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("</td>\n</tr>\n" +
                   "</table>\n" +
                   "</form>\n</div>\n<span id=\"createNotify\" class=\"notify\" hidden></span>\n</div>\n");
-        out.write("<script src=\".resources/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
-        //out.write("<script src=\"/themes/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debug
+        out.write("<script charset=\"utf-8\" src=\".resources/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+        //out.write("<script charset=\"utf-8\" src=\"/themes/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debug
     }
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
@@ -3538,7 +3538,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\">";
     private static final String TABLE_HEADER = "<table border=\"0\" id=\"torrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
-                                         "<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
+                                         "<script charset=\"utf-8\" type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
                                          "<style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
     private static final String FTR_STD = "</div>\n</center><style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
@@ -3685,8 +3685,8 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<noscript><style type=\"text/css\">.script{display:none}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         //if (showPriority) // TODO fixup with ajax refresh
-            //buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
-            //buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
+            //buf.append("<script charset=\"utf-8\" src=\"").append(_contextPath).append(WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
+            //buf.append("<script charset=\"utf-8\" src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
         buf.append("</head>\n<body class=\"lang_" + lang + "\">\n" +
                    "<center>\n<div id=\"navbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
                    " class=\"snarkNav nav_main\">");
@@ -4168,7 +4168,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("</audio>");
                     } else {
                         buf.append("</video>")
-                           .append("<script src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
+                           .append("<script charset=\"utf-8\" src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
                                    "\" type=\"text/javascript\"></script>\n");
                     }
                     buf.append("</td></tr>\n</table>\n</div>\n");
@@ -4448,8 +4448,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 else if (isVideo)
                     buf.append("</video>");
                 if (videoCount == 1) {
-                    buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
-                    //buf.append("<script src=\"/themes/getMetadata.js?" + CoreVersion.VERSION + // debugging
+                    buf.append("<script charset=\"utf-8\" src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
+                    //buf.append("<script charset=\"utf-8\" src=\"/themes/getMetadata.js?" + CoreVersion.VERSION + // debugging
                                "\" type=\"text/javascript\"></script>\n");
                 }
             } else {
@@ -4564,7 +4564,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableLightbox = _manager.util().enableLightbox();
         if (!showRemainingSort && enableLightbox) {
             buf.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"").append(_contextPath).append(WARBASE + "lightbox.css\">\n");
-            buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n")
+            buf.append("<script charset=\"utf-8\" src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n")
                .append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\nvar lightbox = new Lightbox();lightbox.load();\n</script>\n");
         }
         int delay = _manager.getRefreshDelaySeconds();

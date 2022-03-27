@@ -30,17 +30,17 @@ if (tun != null) {
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=(__isClient ? intl._t("Edit Client Tunnel") : intl._t("Edit Server Tunnel"))%></title>
 <meta charset="utf-8">
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<script src="/js/selectAll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="/js/selectAll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">var deleteMessage = "<%=intl._t("Are you sure you want to delete?")%>";</script>
-<script src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 </head>
 <body id="tunnelEditPage">
 <style type="text/css">body{opacity:0}input.default{width:1px;height:1px;visibility:hidden}</style>

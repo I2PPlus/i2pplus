@@ -546,8 +546,8 @@ ElGamal-2048
 <%
   }  // !isInitialized()
 %>
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
+<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset="utf-8" src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
 <style type="text/css">body{opacity:1}</style>
