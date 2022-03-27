@@ -920,7 +920,7 @@ public class SybilRenderer {
         }
         buf.append("</span>");
         if (_context.portMapper().isRegistered("imagegen"))
-            buf.append("<img class=\"identicon\" src=\"/imagegen/id?s=32&amp;c=" + hash.replace("=", "%3d") + "\" height=\"28\" width=\"28\">");
+            buf.append("<img class=\"identicon\" src=\"/imagegen/id?s=32&amp;c=" + hash.replace("=", "%3d") + "\" height=\"28\" width=\"28\" loading=\"lazy\">");
         buf.append("</th></tr>\n");
         buf.append("<tr><td class=\"sybilinfo_params\" colspan=\"3\">\n<div class=\"sybilinfo_container\">\n");
         if (us != null) {
