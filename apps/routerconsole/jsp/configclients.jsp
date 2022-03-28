@@ -15,7 +15,7 @@
 <script nonce="<%=cspNonce%>" type="text/javascript">
   var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";
 </script>
-<script src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>

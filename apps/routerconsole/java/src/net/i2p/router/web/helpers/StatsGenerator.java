@@ -95,7 +95,7 @@ public class StatsGenerator {
         buf.append("</form>");
 **/
 
-//        buf.append("<script type=\"text/javascript\" src=\"/js/clearSelected.js\"></script>");
+//        buf.append("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/js/clearSelected.js\"></script>");
 
         out.write(buf.toString());
         buf.setLength(0);

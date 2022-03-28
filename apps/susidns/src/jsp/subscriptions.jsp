@@ -38,7 +38,7 @@
 <title><%=intl._t("subscriptions")%> - susidns</title>
 <link rel="stylesheet" type="text/css" href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=subs.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id="sbs">
 <style type="text/css">body{opacity: 0;}</style>
@@ -57,7 +57,7 @@
 <h3><%=intl._t("Subscriptions")%>&nbsp;&nbsp;<span><a href="log.jsp">View Log</a></span></h3>
 <h4><%=intl._t("File location")%>: <span class="storage">${subs.fileName}</span></h4>
 </div>
-<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <div id="messages">${subs.messages}</div>
 <form method="POST" action="subscriptions#navi">
 <div id="content">

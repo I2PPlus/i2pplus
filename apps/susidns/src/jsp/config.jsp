@@ -39,7 +39,7 @@
 <title><%=intl._t("configuration")%> - susidns</title>
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id="cfg">
 <style type="text/css">body{opacity: 0;}</style>
@@ -58,7 +58,7 @@
 <h3><%=intl._t("Configuration")%></h3>
 <h4><%=intl._t("File location")%>: <span class="storage">${cfg.fileName}</span></h4>
 </div>
-<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset="utf-8" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <div id="messages">${cfg.messages}</div>
 <form method="POST" action="config#navi">
 <div id="config">

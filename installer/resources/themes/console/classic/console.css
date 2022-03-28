@@ -976,8 +976,7 @@ p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {display: none}
 #pluginconfig td:first-child {width: 80px; white-space: nowrap}
 
 /* graphs */
-
-.graphContainer {margin: 4px 3px; padding: 2px 1px 0; max-width: calc(100% - 18px); min-height: 60px; position: relative; display: inline-block; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border); box-shadow: 0 0 1px 1px #e8e8f8; background: var(--bg); animation: ease zoom .1s forwards}
+.graphContainer {margin: 4px 3px; padding: 2px 1px 0; max-width: calc(100% - 36px); min-height: 60px; position: relative; display: inline-block; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border); box-shadow: 0 0 1px 1px #e8e8f8; background: var(--bg); animation: ease zoom .1s forwards}
 .graphContainer img {vertical-align: middle}
 .graphContainer#hidpi {padding-right: 8px; padding-left: 4px; box-sizing: border-box}
 .graphContainer:hover {border: 1px solid var(--hover)}
@@ -985,7 +984,7 @@ p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {display: none}
 .graphContainer:active img {transform: scale(.97)}
 .graphspanel {margin: -16px -16px -11px -16px; padding: 15px 5px 1px; overflow: hidden; text-align: center}
 .graphspanel h3 {margin: 10px 20px 10px 20px; text-align: left}
-.graphspanel img {margin: 5px 4px; padding: 1px; max-width: 95%; max-width: calc(100% - 50px); border: 1px solid var(--border_soft); background: var(--bg)}
+.graphspanel img {margin: 5px 4px; padding: 1px; max-width: 100%; border: 1px solid var(--border_soft); background: var(--bg)}
 .graphspanel a img {vertical-align: top; border: 1px solid var(--border_soft); background: var(--bg); opacity: .9}
 .graphspanel a img:hover {text-align: center; border: 1px solid var(--hover); opacity: 1; cursor: zoom-in}
 .singlegraph img:hover {cursor: zoom-out}
@@ -1000,7 +999,7 @@ p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {display: none}
 #graphs form[action="graphs"] hr {margin: 5px -11px 3px; height: 1px}
 #graphs form[action="graphs"] input[type=text] {min-width: 80px}
 #graph_single .graphContainer {padding-top: 4px}
-#graphs .statimage, #graphs .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {margin: 0; padding: 0; max-width: calc(100% + 2px); border: none; box-shadow: none}
+#graphs .statimage, #graphs .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {border: none; box-shadow: none}
 #graphs .statimage {min-width: 180px; min-height: 40px}
 #updategraphs .messages {margin-bottom: -11px}
 #nographs {font-size: 0}
@@ -1023,7 +1022,6 @@ p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {display: none}
 #graph_single {padding-left: 0; padding-right: 0}
 #graph_single > .infohelp {margin: 3px 20px 10px}
 #graph_single .graphspanel {margin: 0 -1px -13px; padding: 3px 0 0}
-#graph_single .graphspanel img {margin: 10px 0}
 #graphopts {margin: 25px -1px -11px; padding: 10px 10px 9px; text-align: center; color: transparent; text-transform: capitalize; border: var(--border); background: rgba(255,255,255,.8)}
 #graphinfo {margin: 0 15px 9px; text-transform: capitalize}
 #graphopts + p {margin: -1px -5px 0; padding: 10px; display: none; text-align: right; border: var(--border); background: var(--bg)}
@@ -1453,7 +1451,7 @@ font[color="#006600"] span {color: var(--bg); background: #444}
 #logs li {padding: 0 2px 4px 22px; width: 100%; width: calc(100% - 24px); border-top: 1px solid var(--border_softer); border-bottom: 1px solid var(--border_softer); background: transparent; opacity: .85; animation: ease logupdate 1s}
 #logs li:first-child, #logs li:first-child:hover {border-top: none}
 #logs li:nth-child(n+2) {margin-top: -1px}
-#logs li:hover {position: relative; z-index: 10; border-top: var(--border_soft); border-bottom: var(--border_soft); background: var(--row_hover); opacity: 1; transition: ease all .15s}
+#logs li:hover {position: relative; z-index: 10; border-top: 1px solid var(--border_soft); border-bottom: 1px solid var(--border_soft); background: var(--row_hover); opacity: 1; transition: ease all .15s}
 #logs li:last-child {border-bottom: none}
 #logs li span {margin: 0 -2px; min-width: 50px; display: inline-block; line-height: 1.1; text-align: center; vertical-align: middle; border-radius: 2px; opacity: .7}
 #criticallogs tr:first-child {display: none}

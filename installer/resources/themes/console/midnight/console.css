@@ -1065,7 +1065,6 @@ h3.h3table, h3.tabletitle, #i2pclientconfig, #advancedclientconfig, #webappconfi
 h3.ptitle {margin-bottom: -6px}
 h3.tabletitle a {letter-spacing: normal; text-transform: lowercase}
 #transports {margin-bottom: -1px}
-#upnp {border: var(--border_inner)}
 #upnpstatus {margin-bottom: 10px}
 #webappconfiguration {margin-bottom: -13px}
 h4.embeddedtitle#updateplugins {margin-top: -13px; padding: 5px 10px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 10pt; border: var(--border_inner); background: linear-gradient(180deg,#121225 50%, #00000d 50%)}

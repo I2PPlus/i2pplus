@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -60,6 +61,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     // Session Confirmed retransmit
     private byte[] _sessConfForReTX;
+    private List<SSU2Payload.RIBlock> _riFragsForReTX;
     private long _sessConfSentTime;
     private int _sessConfSentCount;
 
@@ -292,20 +294,20 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         //if (_log.shouldDebug())
         //    _log.debug("[SSU2] Packet before header decryption:\n" + HexDump.dump(data, off, len));
         try {
-            if (len < MIN_DATA_LEN) {
+            SSU2Header.Header header = SSU2Header.trialDecryptShortHeader(packet, _rcvHeaderEncryptKey1, _rcvHeaderEncryptKey2);
+            if (header == null) {
                 if (_log.shouldWarn())
                     _log.warn("[SSU2] Inbound packet too short [" + len + " bytes] on " + this);
                 return;
             }
-            SSU2Header.Header header = SSU2Header.trialDecryptShortHeader(packet, _rcvHeaderEncryptKey1, _rcvHeaderEncryptKey2);
-            if (header == null) {
+            if (header.getDestConnID() != _rcvConnID) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] BAD data header on " + this);
+                    _log.warn("[SSU2] BAD DestinationConnectionID ["  + header.getDestConnID() + "] -> Size: " + len + " bytes on " + this);
                 return;
             }
             if (header.getType() != DATA_FLAG_BYTE) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] BAD data packet [Type " + (header.getType() & 0xff) + "] received on " + this);
+                    _log.warn("[SSU2] BAD " + len + " byte data packet [Type " + (header.getType() & 0xff) + "] received on " + this);
                 // TODO if it's early:
                 // If inbound, could be a retransmitted Session Confirmed,
                 // ack it again.
@@ -314,11 +316,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 // retransmit Session Confirmed.
                 // Alternatively, could be a new Session Request or Token Request,
                 // we didn't know the session has disconnected yet.
-                return;
-            }
-            if (header.getDestConnID() != _rcvConnID) {
-                if (_log.shouldWarn())
-                    _log.warn("[SSU2] BAD DestinationConnection ID [" + header.getDestConnID() + "] on " + this);
                 return;
             }
             long n = header.getPacketNumber();
@@ -498,7 +495,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                     _log.info("[SSU2] Duplicate fragment [" + frag + "] received for " + state);
                 else
                     _log.info("[SSU2] Duplicate fragment [" + frag + "] received on " + this);
-            return;
+                return;
             }
         }
 
@@ -642,12 +639,23 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * note that we just sent the SessionConfirmed packets
-     * and save them for retransmission
+     * note that we just sent the SessionConfirmed packet
+     * and save it for retransmission.
+     *
+     * @param riFrags if non-null, the RI was fragmented, and these are the
+     *                remaining fragments to be sent and saved for retransmission.
      */
-    public synchronized void confirmedPacketsSent(byte[] data) {
+    public synchronized void confirmedPacketSent(byte[] data, List<SSU2Payload.RIBlock> riFrags) {
         if (_sessConfForReTX == null)
             _sessConfForReTX = data;
+        if (riFrags != null) {
+            if (_riFragsForReTX == null)
+                _riFragsForReTX = riFrags;
+            for (SSU2Payload.RIBlock block : riFrags) {
+                UDPPacket pkt = _transport.getBuilder2().buildPacket(Collections.emptyList(), Collections.singletonList(block), this);
+                _transport.send(pkt);
+            }
+        }
         _sessConfSentTime = _context.clock().now();
         _sessConfSentCount++;
     }
@@ -659,7 +667,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (_sessConfForReTX == null)
             return null;
         UDPPacket packet = UDPPacket.acquire(_context, false);
-        UDPPacket[] rv = new UDPPacket[1];
+        int count = 1;
+        if (_riFragsForReTX != null)
+            count += _riFragsForReTX.size();
+        UDPPacket[] rv = new UDPPacket[count];
         rv[0] = packet;
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
@@ -670,6 +681,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         pkt.setPort(_remotePort);
         packet.setMessageType(PacketBuilder2.TYPE_CONF);
         packet.setPriority(PacketBuilder2.PRIORITY_HIGH);
+        if (_riFragsForReTX != null) {
+            int i = 1;
+            for (SSU2Payload.RIBlock block : _riFragsForReTX) {
+                rv[i++] = _transport.getBuilder2().buildPacket(Collections.emptyList(), Collections.singletonList(block), this);
+            }
+        }
         return rv;
     }
 

@@ -80,8 +80,8 @@
                 appname = "imagegen";
 %>
 <div class="main" id="<%=appname%>">
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script type="text/javascript" src="/js/iframedClassInjectTheme.js"></script>
+<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset="utf-8" type="text/javascript" src="/js/iframedClassInjectTheme.js"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">
 function setupFrame() {
       f = document.getElementById("<%=appname%>_frame");
@@ -112,8 +112,8 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
             else appname = "iframedapp";
 %>
 <div class="main embedded" id="<%=appname%>">
-<script type="text/javascript" src="/js/iframedClassInjectTheme.js"></script>
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset="utf-8" type="text/javascript" src="/js/iframedClassInjectTheme.js"></script>
+<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   function setupFrame() {
       f = document.getElementById("<%=appname%>_frame");

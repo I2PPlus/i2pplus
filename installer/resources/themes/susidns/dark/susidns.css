@@ -26,8 +26,7 @@ ol, ul {margin: 0 20px 0 10px; display: table-row}
 li {margin: 0; line-height: 1.5; list-style: square; font-size: 9pt; color: var(--ink)}
 th {padding: 5px 10px; text-align: left; color: var(--ink); font-size: 8.5pt}
 td {padding: 5px; vertical-align: middle; color: var(--ink); font-size: 9pt}
-#navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
-
+#navi, #filter, h3, .buttons, #buttons, #host_list th, #host_list img, #host_list td a::after, .b32link, .helper, #add, #import {user-select: none}
 textarea, #subslog pre {padding: 3px 5px; width: 100%; height: 120px; line-height: 1.4; font-weight: 700; border: var(--border); box-shadow: var(--highlight)}
 textarea[name="config"] {height: 250px; overflow-y: scroll; resize: none}
 textarea[cols="70"] {width: 100%; height: 40px}
@@ -42,7 +41,7 @@ input {margin: 2px 4px 2px 0; padding: 5px; min-width: 64px; text-align: left; f
 input[type=file]::file-selector-button {margin: 5px 10px 2px 2px; padding: 6px 12px; min-width: 92px}
 input[type=submit], input[type=reset], .fakebutton {margin: 5px 2px}
 input[type=submit]:last-of-type, input[type=reset]:last-of-type {margin-right: 5px}
-input[type=text] {padding: 7px}
+input[type=text] {padding: 7px; user-select: text}
 input.update {margin-left: 5px}
 .fakebutton {margin-right: 3px}
 .fakebutton, .fakebutton:visited {color: #494}
@@ -126,8 +125,8 @@ td.checkbox {padding: 3px 10px; width: 1%}
 #book table {width: 100%; border: var(--border); border-collapse: separate}
 #book table th {padding: 10px 0; border-bottom: var(--border)}
 #book th:last-child {background: var(--nuke) no-repeat center center / 15px}
-#book tr.head {background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#002000, #000 75%); background-size: 100%, 4px 100%, 100%}
-#host_list tr, #host_details tr {background: var(--row)}
+#book tr.head {background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#002000,#000 75%); background-size: 100%, 4px 100%, 100%}
+#host_list tr, #host_details tr {background: #010 var(--row)}
 #host_list th {padding: 6px 9px}
 #host_list td {padding: 4px 8px; border-right: 1px solid #131; border-bottom: 1px solid #131; box-shadow: var(--highlight), inset 0 0 2px 0 #040}
 #host_list tr:hover td {border-right: 1px solid transparent; box-shadow: none}
@@ -151,8 +150,12 @@ td.destinations {max-width: 50px; padding: 1px 8px}
 
 /* search/filter */
 #search {margin: -25px 0 0; padding: 0 10px; border: var(--border); box-shadow: var(--bevel)}
-#booksearch input[name=search]:focus {background: var(--search) no-repeat 9px center / 14px, var(--txt_focus); outline: none}
-#booksearch input[name=search] {padding: 7px 8px 7px 32px; min-width: 280px; background: #000 var(--search) no-repeat 9px center / 14px; background-size: 14px}
+#booksearch input[type=text], #booksearch input[type=submit] {animation: fade-in .5s ease 1s both}
+#booksearch input[type=text] {padding: 7px 8px; min-width: 280px; border-radius: 1px 0 0 1px; box-shadow: none}
+#booksearch input[type=text]:focus {border: 1px solid var(--hover); filter: none;}
+#booksearch input[type=submit] {margin-left: -16px; width: 40px; min-width: 0; position: relative; z-index: 10; overflow: hidden; color: transparent; text-shadow: none; -webkit-text-stroke: 0; border: none; border-radius: 0 1px 1px 0; background: #000 var(--search) no-repeat center center / 14px}
+#booksearch input[type=submit]:hover, #booksearch input[type=submit]:focus, #booksearch input[type=text]:focus ~ input[type=submit] {border: none; box-shadow: inset 0 0 0 1px var(--hover), inset 0 0 0 2px #000, inset 0 0 3px 1px rgba(255,96,0,.8), inset 0 0 5px 0 rgba(255,96,0,.8), inset 0 0 0 4px #000}
+#booksearch input[type=submit]:active {box-shadow: inset 0 0 0 1px var(--hover), inset 0 0 0 2px #000, var(--btn_shadow_active); background: var(--hover) var(--search) no-repeat center center / 14px; background-blend-mode: luminosity}
 #booksearch {padding: 6px; text-align: center}
 #booksearch input {vertical-align: middle; line-height: 1.3}
 #filter {margin-top: -1px; padding: 15px 5px; border: var(--border); text-align: center; background: #001000}
@@ -278,6 +281,8 @@ svg #arrow stop:last-child {stop-color: #010}
 .iframed .page::after {content: ""; display: inline-block; width: 100%; height: 14px; vertical-align: bottom}
 .iframed #visualid {margin-top: 16px; margin-bottom: 16px}
 
+@keyframes fade-in {from {filter: opacity(0)} to {filter: opacity(1)}}
+
 @media screen and (max-width: 1200px) {
 #current {padding: 2px 10px; display: inline-block; font-size: 10pt}
 #filter a {margin: 3px 1px; padding: 0 4px}
@@ -321,7 +326,7 @@ body, input[type=submit], input[type=reset], input[type=file]::file-selector-but
 th, pre {font-size: 9pt}
 input[type=submit], input[type=reset], .fakebutton {padding: 8px 12px 8px}
 input[type=text] {padding: 8px}
-#booksearch input[name=search], #booksearch input[name=search]:focus {padding: 7px 8px 7px 32px; min-width: 320px}
+#booksearch input[name=search], #booksearch input[name=search]:focus {padding: 7px 8px; min-width: 320px}
 #host_list td.helper a::after, #host_list td.b32link a::after {width: 18px; height: 18px; background-size: 18px}
 }
 

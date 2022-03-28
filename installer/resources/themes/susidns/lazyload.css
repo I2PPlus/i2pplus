@@ -1,1 +1,10 @@
-.lazyhide td > * {visibility: collapse; display: none}
+@supports (-moz-appearance: none) {
+.lazyhide {will-change: transform}
+.lazyhide, .lazyhide td, .lazyhide td > * {content-visibility: hidden; contain: strict style; user-select: none}
+.lazyhide td > * {display: none; visibility: collapse}
+.lazyhide td.info::before {height: 28px; display: inline-block; vertical-align: middle; content: ""}
+}
+
+@supports not (-moz-appearance: none) {
+.lazyhide {visibility: hidden}
+}

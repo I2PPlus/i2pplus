@@ -770,6 +770,8 @@ class OutboundEstablishState {
     /** @since 0.8.9 */
     @Override
     public String toString() {
-        return _remoteHostId.toString() + " -> State: " + _currentState;
+        return "OutboundEstablishState " + _remoteHostId +
+               " -> Lifetime: " + DataHelper.formatDuration(getLifetime()) +
+               ' ' + _currentState;
     }
 }
