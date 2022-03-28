@@ -26,8 +26,7 @@ ol, ul {margin: 0 20px 0 10px; display: table-row}
 li {margin: 0; line-height: 1.5; list-style: square; font-size: 9pt; color: var(--ink)}
 th {padding: 5px 10px; text-align: left; color: var(--ink); font-size: 8.5pt}
 td {padding: 5px; vertical-align: middle; color: var(--ink); font-size: 9pt}
-#navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
-
+#navi, #filter, h3, .buttons, #buttons, #host_list th, #host_list img, #host_list td a::after, .b32link, .helper, #add, #import {user-select: none}
 textarea, #subslog pre {padding: 3px 5px; width: 100%; height: 120px; line-height: 1.4; font-weight: 700; border: var(--border); box-shadow: var(--highlight)}
 textarea[name="config"] {height: 250px; overflow-y: scroll; resize: none}
 textarea[cols="70"] {width: 100%; height: 40px}
@@ -42,7 +41,7 @@ input {margin: 2px 4px 2px 0; padding: 5px; min-width: 64px; text-align: left; f
 input[type=file]::file-selector-button {margin: 5px 10px 2px 2px; padding: 6px 12px; min-width: 92px}
 input[type=submit], input[type=reset], .fakebutton {margin: 5px 2px}
 input[type=submit]:last-of-type, input[type=reset]:last-of-type {margin-right: 5px}
-input[type=text] {padding: 7px}
+input[type=text] {padding: 7px; user-select: text}
 input.update {margin-left: 5px}
 .fakebutton {margin-right: 3px}
 .fakebutton, .fakebutton:visited {color: #494}
