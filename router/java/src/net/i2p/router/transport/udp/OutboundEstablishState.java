@@ -333,7 +333,7 @@ class OutboundEstablishState {
         }
         if (_receivedY != null) {
             if (_log.shouldDebug())
-                _log.debug("SessionCreated already received, ignoring");
+                _log.debug("SessionCreated already received, ignoring...");
             return; // already received
         }
         _receivedY = new byte[UDPPacketReader.SessionCreatedReader.Y_LENGTH];
@@ -703,7 +703,7 @@ class OutboundEstablishState {
             _remoteHostId = new RemoteHostId(bobIP, bobPort);
         }
         if (_log.shouldInfo())
-            _log.info("Introduced to " + _remoteHostId + ", now let's get on with establishing");
+            _log.info("Introduced to " + _remoteHostId + ", now let's get on with establishing...");
     }
 
     /**

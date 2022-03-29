@@ -302,7 +302,7 @@ class InboundEstablishState {
 
         if (_log.shouldDebug()) {
             StringBuilder buf = new StringBuilder(128);
-            buf.append("Signing sessionCreated:");
+            buf.append("Signing SessionCreated:");
             //buf.append(" ReceivedX: ").append(Base64.encode(_receivedX));
             //buf.append(" SentY: ").append(Base64.encode(_sentY));
             buf.append(" Alice: ").append(Addresses.toString(_aliceIP, _alicePort));
@@ -550,7 +550,7 @@ class InboundEstablishState {
         //if (_sentY != null)
         //    buf.append(" SentY: ").append(Base64.encode(_sentY, 0, 4));
         //buf.append(" Bob: ").append(Addresses.toString(_bobIP, _bobPort));
-        buf.append("; Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
+        buf.append(" -> Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
         buf.append("; RelayTag: ").append(_sentRelayTag);
         //buf.append(" SignedOn: ").append(_sentSignedOnTime);
         buf.append(' ').append(_currentState);
