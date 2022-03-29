@@ -316,7 +316,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #graphs .messages {top: -16px; z-index: 999}
 
 /* welcome */
-.welcome h2::after {margin-left: 1px; content: "+"; font-size: 120%}
+.main#console {padding-bottom: 20px}
 .twocol {display: block; columns: 2 400px; column-gap: 0}
 .twocol li {-webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 p + .twocol {margin: 10px 25px}
@@ -324,9 +324,9 @@ p + .twocol {margin: 10px 25px}
 .links {margin-top: 10px; text-align: justify}
 .links li {margin-left: 25px; list-style-image: var(--star); text-align: justify; line-height: 1.6}
 .links b {color: #bb0; letter-spacing: .08em; line-height: 1.65}
-#home .welcome h2 {margin: 12px -5px}
-#console .welcome h2 {background: url(images/favicon.svg) no-repeat right 6px center / 24px, var(--h3), linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade); background-size: 24px, 4px 100%, 100%, 100%; background-blend-mode: luminosity, normal, normal}
 #home .welcome {display: none}
+.welcome h2 {padding: 10px 14px; background: url(images/favicon.svg) no-repeat right 10px center / 24px, var(--h2)}
+.welcome h2::after {margin-left: 1px; content: "+"; font-size: 120%}
 div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {margin: 10px -5px 5px; padding: 10px; border: 1px solid #000; border-radius: 4px; background: rgba(0,32,0,.3)}
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li {list-style: none}
 div[lang="sv"] li::first-letter {text-transform: uppercase}
