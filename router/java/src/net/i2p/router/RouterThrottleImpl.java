@@ -38,9 +38,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long DEFAULT_REJECT_STARTUP_TIME = 10*60*1000;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
-    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 :
-//                                                            SystemVersion.isARM() ? 500 : 1000;
-                                                            SystemVersion.isARM() ? 800 : 4000;
+    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 : SystemVersion.isARM() ? 800 : 4000;
+    private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
 
     /**
      *  TO BE FIXED - SEE COMMENTS BELOW
@@ -511,7 +510,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /** don't ever probabalistically throttle tunnels if we have less than this many */
     private int getMinThrottleTunnels() {
-        return _context.getProperty("router.minThrottleTunnels", DEFAULT_MIN_THROTTLE_TUNNELS);
+        return _context.getProperty(PROP_MIN_THROTTLE_TUNNELS, DEFAULT_MIN_THROTTLE_TUNNELS);
     }
 
     private double getTunnelGrowthFactor() {
