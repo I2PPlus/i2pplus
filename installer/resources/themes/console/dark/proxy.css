@@ -93,8 +93,7 @@ hr:last-child {
   font-size: 10pt;
   border: 1px solid #131;
   box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
-  background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #000;
-  background-size: 100% 4px, 1024px;
+  background: var(--mainbg);
   opacity: 0;
 }
 
@@ -318,6 +317,7 @@ hr:last-child {
   padding: 9px 12px 9px 34px;
   display: inline-block;
   float: left;
+  text-shadow: var(--txt_shadow);
   box-shadow: var(--outline), var(--bevel);
   background: url(../images/arrow_right.svg) no-repeat 10px center / 20px, var(--badge);
 }
@@ -348,8 +348,10 @@ hr:last-child {
 }
 
 #proxy_error #jumplinks a:active {
+  padding: 10px 11px 8px 35px;
+  text-shadow: 0 1px 1px rgba(0,0,0,.8);
   box-shadow: var(--badge_shadow_hover), var(--btn_shadow_active);
-  background: url(../images/arrow_right.svg) no-repeat 10px center / 20px, var(--badge_active) !important;
+  background: url(../images/arrow_right.svg) no-repeat 12px calc(50% + 1px) / 19px, var(--badge_active) !important;
   background-blend-mode: luminosity;
 }
 
@@ -520,11 +522,10 @@ hr:last-child {
     position: absolute;
     top: 16px;
     z-index: 999;
+    background: var(--h2), var(--nav);
   }
   .logo a {
     margin-top: 10px;
-    padding: 2px 5px;
-    width: auto;
   }
   .logo a img {
     margin-bottom: -4px;
@@ -532,6 +533,8 @@ hr:last-child {
     padding: 0;
   }
   .logo a:nth-child(n+2) {
+    padding: 2px 5px;
+    width: auto;
     border: none;
   }
   #jumplinks {
