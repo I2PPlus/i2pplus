@@ -106,8 +106,8 @@ class EstablishmentManager {
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
 //    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 20 : 40;
 //    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = 150;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 50 : 100;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = 300;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 50 : 200;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 200 : 400;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
 
     /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
@@ -135,7 +135,7 @@ class EstablishmentManager {
      */
     private static final int MAX_IB_ESTABLISH_TIME = 15*1000;
 
-    /** max before receiving a response to a single message during outbound establishment */
+    /** max wait before receiving a response to a single message during outbound establishment */
     public static final int OB_MESSAGE_TIMEOUT = 15*1000;
 
     /** for the DSM and or netdb store */
@@ -1364,16 +1364,16 @@ class EstablishmentManager {
             boolean sendNow = state.receiveHolePunch();
             if (sendNow) {
                 if (_log.shouldInfo())
-                    _log.info("Received hole punch" + state + ", sending SessionRequest now");
+                    _log.info("Received HolePunch " + state + ", sending SessionRequest now");
                 notifyActivity();
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Received hole punch" + state + ", already sent SessionRequest");
+                    _log.info("Received HolePunch " + state + ", already sent SessionRequest");
             }
         } else {
             // HolePunch received before RelayResponse, and we didn't know the IP/port, or it changed
             if (_log.shouldInfo())
-                _log.info("No state found for hole punch from " + from + ":" + fromPort);
+                _log.info("No state found for HolePunch from " + from + ":" + fromPort);
         }
     }
 
@@ -1597,7 +1597,7 @@ class EstablishmentManager {
                         }
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("confirmed with invalid? " + inboundState);
+                            _log.warn("Confirmed with invalid? " + inboundState);
                         inboundState.fail();
                         processExpired(inboundState);
                     }
@@ -1790,7 +1790,7 @@ class EstablishmentManager {
             while ((msg = outboundState.getNextQueuedMessage()) != null) {
                 _transport.failed(msg, "Expired during failed establishment attempt");
             }
-            String err = "Took too long to establish OB connection, state = " + outboundState.getState();
+            String err = "Took too long to establish Outbound connection, state is " + outboundState.getState();
             Hash peer = outboundState.getRemoteIdentity().calculateHash();
             //_context.banlist().banlistRouter(peer, err, UDPTransport.STYLE);
             _transport.markUnreachable(peer);

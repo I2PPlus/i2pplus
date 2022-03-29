@@ -155,7 +155,7 @@ public class NTCPConnection implements Closeable {
      */
     static final int BUFFER_SIZE = 16*1024;
 //    private static final int MAX_DATA_READ_BUFS = 16;
-    private static final int MAX_DATA_READ_BUFS = 256;
+    private static final int MAX_DATA_READ_BUFS = 512;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
@@ -175,7 +175,7 @@ public class NTCPConnection implements Closeable {
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
 //    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
-    private static final long NTCP2_FAIL_TIMEOUT = 15*1000;
+    private static final long NTCP2_FAIL_TIMEOUT = 8*1000;
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
@@ -270,11 +270,11 @@ public class NTCPConnection implements Closeable {
         _writeBufs = new ConcurrentLinkedQueue<ByteBuffer>();
 //        _bwInRequests = new ConcurrentHashSet<Request>(2);
 //        _bwOutRequests = new ConcurrentHashSet<Request>(8);
-        _bwInRequests = new ConcurrentHashSet<Request>(8);
-        _bwOutRequests = new ConcurrentHashSet<Request>(16);
+        _bwInRequests = new ConcurrentHashSet<Request>(512);
+        _bwOutRequests = new ConcurrentHashSet<Request>(512);
         //_outbound = new CoDelPriorityBlockingQueue(ctx, "NTCP-Connection", 32);
 //        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
-        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 128);
+        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 512);
         _currentOutbound = new ArrayList<OutNetMessage>(1);
         _isInbound = isIn;
         _inboundListener = new InboundListener();

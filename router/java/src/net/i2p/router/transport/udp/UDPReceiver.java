@@ -282,7 +282,7 @@ class UDPReceiver {
                         //_context.statManager().addRateData("udp.receivePacketSize", size);
                     } else {
                         _context.statManager().addRateData("udp.receiveHolePunch", 1);
-                        // nat hole punch packets are 0 bytes
+                        // natholepunchpackets are 0 bytes
                         if (_log.shouldInfo())
                             _log.info("Received a 0 byte udp packet from [" + dpacket.getAddress() + ":" + dpacket.getPort()+ "]");
                         _transport.getEstablisher().receiveHolePunch(dpacket.getAddress(), dpacket.getPort());

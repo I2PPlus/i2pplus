@@ -478,7 +478,7 @@ class IntroductionManager {
         } catch (UnknownHostException uhe) {
             // banlist Bob?
             if (_log.shouldWarn())
-                _log.warn("IP address for Alice to hole punch to is invalid", uhe);
+                _log.warn("IP address for Alice toholepunchto is invalid", uhe);
             _context.statManager().addRateData("udp.relayBadIP", 1);
             return;
         }

@@ -38,7 +38,7 @@ class TunnelGatewayPumper implements Runnable {
      *  See additional comments in PTG.
      */
 //    private static final long REQUEUE_TIME = 50;
-    private static final long REQUEUE_TIME = 40;
+    private static final long REQUEUE_TIME = 30;
 
     /** Creates a new instance of TunnelGatewayPumper */
     public TunnelGatewayPumper(RouterContext ctx) {
@@ -70,7 +70,7 @@ class TunnelGatewayPumper implements Runnable {
         for (int i = 1; i <= 5 && !_wantsPumping.isEmpty(); i++) {
             try {
 //                Thread.sleep(i * 50);
-                Thread.sleep(i * 40);
+                Thread.sleep(i * 30);
             } catch (InterruptedException ie) {}
         }
         for (Thread t : _threads) {

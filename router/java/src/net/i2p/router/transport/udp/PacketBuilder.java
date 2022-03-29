@@ -1485,7 +1485,7 @@ class PacketBuilder {
     public UDPPacket buildHolePunch(InetAddress to, int port) {
         UDPPacket packet = UDPPacket.acquire(_context, false);
         if (_log.shouldInfo())
-            _log.info("Sending relay hole punch to " + to + ":" + port);
+            _log.info("Sending relayholepunchto " + to + ":" + port);
 
         // the packet is empty and does not need to be authenticated, since
         // its just for hole punching

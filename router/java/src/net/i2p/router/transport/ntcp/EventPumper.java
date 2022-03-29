@@ -47,7 +47,7 @@ class EventPumper implements Runnable {
     private volatile boolean _alive;
     private Selector _selector;
 //    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(32);
-    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(128);
+    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(512);
     /**
      *  The following 3 are unbounded and lockless for performance in runDelayedEvents()
      */
