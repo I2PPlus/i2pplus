@@ -242,7 +242,7 @@ public class HTTPUSocket
 /*
 	boolean joinGroup(String mcastAddr, int mcastPort, String bindAddr)
 	{
-		try {	
+		try {
 			InetSocketAddress mcastGroup = new InetSocketAddress(InetAddress.getByName(mcastAddr), mcastPort);
 			NetworkInterface mcastIf = NetworkInterface.getByInetAddress(InetAddress.getByName(bindAddr));
 			ssdpUniSock.joinGroup(mcastGroup, mcastIf);
@@ -256,7 +256,7 @@ public class HTTPUSocket
 
 	boolean leaveGroup(String mcastAddr, int mcastPort, String bindAddr)
 	 {
-		try {	
+		try {
 			InetSocketAddress mcastGroup = new InetSocketAddress(InetAddress.getByName(mcastAddr), mcastPort);
 			NetworkInterface mcastIf = NetworkInterface.getByInetAddress(InetAddress.getByName(bindAddr));
 			ssdpUniSock.leaveGroup(mcastGroup, mcastIf);

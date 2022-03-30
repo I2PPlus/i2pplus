@@ -117,7 +117,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable
 	////////////////////////////////////////////////
 
 	private ListenerList deviceSearchListenerList = new ListenerList();
-	
+
 	public void addSearchListener(SearchListener listener)
 	{
 		deviceSearchListenerList.add(listener);
