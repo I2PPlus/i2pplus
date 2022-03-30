@@ -58,7 +58,7 @@ class SearchJob extends JobImpl {
     private int _floodfillSearchesOutstanding;
 
 //    private static final int SEARCH_BREDTH = 3;
-    private static int SEARCH_BREDTH = 8;
+    private static int SEARCH_BREDTH = 6;
     /** Only send the 10 closest "don't tell me about" refs */
 //    static final int MAX_CLOSEST = 10;
     static final int MAX_CLOSEST = 12;
