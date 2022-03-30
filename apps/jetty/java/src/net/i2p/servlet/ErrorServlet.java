@@ -56,7 +56,6 @@ public class ErrorServlet extends HttpServlet {
     private static final String PROXY_CSS = "proxy.css";
     /** to be added to head */
     private final String _icoPath = BASE_THEME_PATH + DEFAULT_ICO;
-    private final String _proxyCSSPath = BASE_THEME_PATH + PROP_THEME_NAME + "/" + PROXY_CSS;
     private String _cssPath;
     /** for webapp translation */
     private String _webappName;
@@ -128,6 +127,7 @@ public class ErrorServlet extends HttpServlet {
         }
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
+        String themePath = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/";
         out.print("<!DOCTYPE HTML>\n");
         out.print("<html>\n<head>\n<title>");
         if (errorCode == 404)
@@ -137,15 +137,14 @@ public class ErrorServlet extends HttpServlet {
         out.print("</title>\n");
         out.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
         out.print("<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">\n");
-        out.print("<link href=\"" + _proxyCSSPath + "\" rel=\"stylesheet\" type=\"text/css\">\n");
+        out.print("<link href=\"" + themePath + PROXY_CSS + "\" rel=\"stylesheet\" type=\"text/css\">\n");
         if (_icoPath != null)
             out.print("<link rel=\"icon\" href=\"" + _icoPath + "\">\n");
         out.print("<script type=\"text/javascript\">if (window.location !== window.top.location) {window.top.location = window.location;}</script>\n"); // breakout of iframe
         out.print("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n"); // or ensure embedded correctly elsewise
         out.print("</head>\n<body id=\"servletError\">\n");
         out.print("<div class=\"logo\">");
-        out.print("<a href=\"/\" title=\"" + _t("Router Console") + "\"><img src=\"" +
-                  BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) +
+        out.print("<a href=\"/\" title=\"" + _t("Router Console") + "\"><img src=\"" + themePath +
                   "/images/i2plogo.png\" alt=\"" + _t("I2P Router Console").replace("I2P", "I2P+") +
                   "\" border=\"0\"></a>\n<hr>\n");
         out.print("<a href=\"/config\">" + _t("Configuration") + "</a> <a href=\"/help\">" + _t("Help") + "</a>");
