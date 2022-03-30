@@ -465,17 +465,17 @@ h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20p
 #error500 h1.err {margin-top: -10px}
 #error500 #warning.sorry {border-radius: 0}
 .sorry p {line-height: 1.3}
-#warning2 {margin: -17px 2px 18px 226px; padding: 10px 20px 5px; min-width: 610px; border: var(--border); background: #010}
+#warning2 {margin: -5px 15px 18px 243px; padding: 10px 20px 5px; min-width: 610px; border: var(--border); background: #010}
 #error500 #sidebar {position: absolute}
 #error500 #sidebar a {line-height: 2}
 #error500 #warning2 {border: var(--border_hard); background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left; background-size: 100% 4px}
 #error500 #stacktrace {margin-top: 20px; margin-bottom: 20px}
 #error500 #warning2 p:first-child {text-decoration: none}
-#warning2 h3 {margin: -11px -20px 0; padding: 10px; text-align: left; border-width: 1px; border-radius: 0; border-left: none; border-right: none; box-shadow: inset 0 0 0 1px #700}
+#warning2 h3 {margin: -6px -20px 0; padding: 10px; text-align: left; border-width: 1px; border-radius: 0; border-left: none; border-right: none; box-shadow: inset 0 0 0 1px #700}
 #warning2 p {text-align: left}
 #stacktrace {font-size: 110%}
 #stacktrace p:first-of-type {margin-top: 20px}
-#stacktrace p {margin-bottom: 40px}
+#stacktrace p {margin-bottom: 40px; word-break: break-all}
 #warning2 p + h3 {margin-top: -5px}
 #warning2 b {margin-right: 5px; min-width: 140px; display: inline-block; line-height: 1.5; text-align: right}
 .sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
@@ -508,12 +508,16 @@ h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20p
 }
 
 @media screen and (max-width: 800px) {
-  #warning {
-    margin-left: 20px;
+  #warning, #warning2 {
     margin-top: 140px;
+    margin-left: 20px;
     padding: 5px 20px 15px;
     background: repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,32,0,.8) 4px), url(images/camotile2.png);
     background-size: 100% 4px, auto;
+  }
+  #warning2 {
+    margin-top: -2px;
+    margin-left: 16px;
   }
   #proxyNewAddressHelper #warning {
     margin-top: 30px;
@@ -562,35 +566,7 @@ h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20p
   }
 }
 
-@media screen and (min-height: 700px) {
-  .proxyfooter {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding: 0 20px 0 0;
-    text-align: right;
-    background: #030;
-    width: 100%;
-    opacity: .7;
-    border-top: 1px solid #000;
-    display: none; /* hide until we resolve position */
-  }
-  .proxyfooter p {
-    margin: 5px 0;
-    line-height: 130%;
-    text-align: right;
-  }
-  #warning {
-    margin-bottom: 30px;
-  }
-}
-
-@media screen and (max-height: 700px) {
-  .proxyfooter {
-    display: none;
-  }
-}
-
 @media screen and (min-width: 1500px) {
-  #warning2.sorry {margin: 0 15px 18px 244px}
+  #warning2.sorry {margin: -12px 15px 18px 244px}
+  #warning2 h3 {margin-top: -11px}
 }
