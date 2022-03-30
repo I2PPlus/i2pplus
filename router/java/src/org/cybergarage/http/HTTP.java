@@ -178,7 +178,7 @@ public class HTTP
 	{
 		return toRelativeURL(urlStr, true);
 	}
-	 
+	
 	public static final String getAbsoluteURL(String baseURLStr, String relURlStr)
 	{
 		try {

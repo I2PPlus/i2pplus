@@ -34,7 +34,7 @@ public class InboundTest extends TestCase {
     public void testInbound() {
     	int numHops = 8;
         TunnelCreatorConfig config = prepareConfig(numHops);
-    
+
         byte orig[] = new byte[128];
         byte message[] = new byte[128];
         _context.random().nextBytes(orig); // might as well fill the IV

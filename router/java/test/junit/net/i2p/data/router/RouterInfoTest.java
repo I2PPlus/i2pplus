@@ -44,22 +44,22 @@ public class RouterInfoTest extends StructureTest {
     	SigningPublicKey signingPubKey = null;
     	PrivateKey privKey = null;
     	SigningPrivateKey signingPrivKey = null;
-    
+
     	Object obj[] = KeyGenerator.getInstance().generatePKIKeypair();
     	pubKey = (PublicKey)obj[0];
     	privKey = (PrivateKey)obj[1];
     	obj = KeyGenerator.getInstance().generateSigningKeypair();
     	signingPubKey = (SigningPublicKey)obj[0];
     	signingPrivKey = (SigningPrivateKey)obj[1];
-    
+
     	_log.debug("SigningPublicKey: " + signingPubKey);
     	_log.debug("SigningPrivateKey: " + signingPrivKey);
-    
+
     	RouterIdentity ident = new RouterIdentity();
     	ident.setCertificate(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null));
     	ident.setPublicKey(pubKey);
     	ident.setSigningPublicKey(signingPubKey);
-    
+
         info.setIdentity(ident);
 
         Properties options = new Properties();

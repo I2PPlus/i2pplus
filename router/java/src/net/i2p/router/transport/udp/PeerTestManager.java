@@ -1197,7 +1197,7 @@ class PeerTestManager {
             return null;
         return new SessionKey(ik);
     }
-    
+
     // Below here are methods for when we are Bob or Charlie
 
     /**
@@ -1205,7 +1205,7 @@ class PeerTestManager {
      * so we must be Charlie receiving a PeerTest from Bob.
      *
      * SSU 1 only.
-     *  
+     *
      * @param bob non-null if received in-session, otherwise null
      * @param inSession true if authenticated in-session
      * @param state null if new

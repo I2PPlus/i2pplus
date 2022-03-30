@@ -109,7 +109,7 @@ public class BandwidthLimiterIT {
     public void testOutbound() {
     	double error;
     	double predict;
-    
+
         prepareLimiter(-1, -1, -1, -1);
         long ms = testOutboundThrottle(NUM_KB*1024, 1*1024);
 
@@ -145,7 +145,7 @@ public class BandwidthLimiterIT {
     public void testInbound() {
         double predict;
         double error;
-    
+
         prepareLimiter(-1, -1, -1, -1);
         long ms = testInboundThrottle(NUM_KB*1024, 1*1024);
 
@@ -180,7 +180,7 @@ public class BandwidthLimiterIT {
     	long ms;
     	long end;
     	long start;
-    
+
         prepareLimiter(-1, -1, -1, -1);
         start = System.currentTimeMillis();
         //long runningTimes[] = testOutboundContention(10, NUM_KB*1024);
