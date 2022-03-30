@@ -68,7 +68,7 @@ class EventPumper implements Runnable {
 
 //    private static final int BUF_SIZE = 8*1024;
 //    private static final int MAX_CACHE_SIZE = 64; // unused
-    private static final int BUF_SIZE = 32*1024;
+    private static final int BUF_SIZE = 64*1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
@@ -90,8 +90,10 @@ class EventPumper implements Runnable {
      */
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
     private static final int FAILSAFE_ITERATION_FREQ = 60*1000;
-    private static final int FAILSAFE_LOOP_COUNT = 512;
-    private static final long SELECTOR_LOOP_DELAY = 200;
+//    private static final int FAILSAFE_LOOP_COUNT = 512;
+    private static final int FAILSAFE_LOOP_COUNT = 1024;
+//    private static final long SELECTOR_LOOP_DELAY = 200;
+    private static final long SELECTOR_LOOP_DELAY = 50;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
@@ -120,7 +122,7 @@ class EventPumper implements Runnable {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
 //        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
-        MIN_BUFS = (int) Math.max(MIN_MINB, Math.max(MAX_MINB, 1 + (maxMemory / (8*1024*1024))));
+        MIN_BUFS = (int) Math.max(MIN_MINB, Math.max(MAX_MINB, 1 + (maxMemory / (4*1024*1024))));
     }
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
