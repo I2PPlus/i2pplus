@@ -86,7 +86,7 @@ class StartExplorersJob extends JobImpl {
                 int num = MAX_PER_RUN;
 //                int count = _facade.getDataStore().size();
                 int count = getContext().netDb().getKnownRouters();
-                String exploreBuckets = getContext().getProperty("router.exploreBuckets");
+                String exploreBuckets = getContext().getProperty(PROP_EXPLORE_BUCKETS);
                 if (exploreBuckets == null) {
                     if (count < MIN_ROUTERS)
                         num *= 8;  // at less than 3x MIN_RESEED, explore extremely aggressively
@@ -107,7 +107,7 @@ class StartExplorersJob extends JobImpl {
                 }
                 Set<Hash> toExplore = selectKeysToExplore(num);
                 if (_log.shouldInfo())
-                    _log.info("Exploring up to " + num + " buckets during this run");
+                    _log.info("Exploring " + num + " buckets during this run");
                 _facade.removeFromExploreKeys(toExplore);
                 long delay = 0;
 
@@ -137,7 +137,7 @@ class StartExplorersJob extends JobImpl {
                         _log.info("Exploring for new floodfills in " + delay + "ms");
                 }
             }
-            String exploreDelay = getContext().getProperty("router.explorePeersDelay");
+            String exploreDelay = getContext().getProperty(PROP_EXPLORE_DELAY);
             long delay = getNextRunDelay();
             long laggedDelay = 3*60*1000;
             if (exploreDelay != null) {
@@ -146,7 +146,7 @@ class StartExplorersJob extends JobImpl {
                 requeue(Integer.valueOf(exploreDelay) * 1000);
             } else if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
                 if (_log.shouldInfo())
-                    _log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s");
+                    _log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s (router is under load)");
                 requeue(laggedDelay);
             } else {
                 if (_log.shouldInfo())
@@ -203,8 +203,8 @@ class StartExplorersJob extends JobImpl {
             // Use DataStore.size() which includes leasesets because it's faster
             else if ((uptime < STARTUP_TIME && netDbSize < MIN_ROUTERS) || isHidden || isK)
                 return MIN_RERUN_DELAY_MS;
-            else if (netDbSize > MAX_ROUTERS * 2)
-                return MAX_RERUN_DELAY_MS * 4; // 40mins if over 10,000 known peers
+            else if (netDbSize > MAX_ROUTERS)
+                return MAX_RERUN_DELAY_MS * 4; // 40mins if over 5,000 known peers
             else
                 return delay;
         } else {
