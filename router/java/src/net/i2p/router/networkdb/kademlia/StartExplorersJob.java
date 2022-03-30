@@ -38,10 +38,11 @@ class StartExplorersJob extends JobImpl {
 //    private static final int MAX_PER_RUN = 1;
     private static final int MAX_PER_RUN = 2;
     /** don't explore the network more often than this */
-    private static final int MIN_RERUN_DELAY_MS = 55*1000;
+//    private static final int MIN_RERUN_DELAY_MS = 55*1000;
+    private static final int MIN_RERUN_DELAY_MS = 180*1000;
     /** explore the network at least this often */
 //    private static final int MAX_RERUN_DELAY_MS = 15*60*1000;
-    private static final int MAX_RERUN_DELAY_MS = 10*60*1000;
+    private static final int MAX_RERUN_DELAY_MS = 20*60*1000;
     /** aggressively explore during this time - same as KNDF expiration grace period */
 //    private static final int STARTUP_TIME = 60*60*1000;
     private static final int STARTUP_TIME = 2*60*60*1000; // let's give it 2 hours
@@ -126,8 +127,8 @@ class StartExplorersJob extends JobImpl {
                     // spread them out
                     Random random = getContext().random();
                     delay += 100 + (random.nextInt(250));
-//                    if (delay > 0)
-                    j.getTiming().setStartAfter(getContext().clock().now() + delay);
+                    if (delay > 0)
+                        j.getTiming().setStartAfter(getContext().clock().now() + delay);
                     getContext().jobQueue().addJob(j);
 
                     if (_log.shouldInfo() && realexpl)
