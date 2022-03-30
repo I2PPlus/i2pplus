@@ -39,11 +39,12 @@ class ExploreJob extends SearchJob {
     /** how long each exploration should run for
      *  The exploration won't "succeed" so we make it long so we query several peers */
 //    private static final long MAX_EXPLORE_TIME = 30*1000;
-    private static final long MAX_EXPLORE_TIME = SystemVersion.isSlow() ? 25*1000 : 45*1000;
+    private static final long MAX_EXPLORE_TIME = SystemVersion.isSlow() ? 20*1000 : 15*1000;
 
     /** how many peers to explore through concurrently */
     static final String PROP_EXPLORE_BREDTH = "router.exploreBredth";
-    private static final int EXPLORE_BREDTH = 1;
+//    private static final int EXPLORE_BREDTH = 1;
+    private static final int EXPLORE_BREDTH = 2;
 
     /** Only send the closest "don't tell me about" refs...
      *  Override to make this bigger because we want to include both the
@@ -65,8 +66,7 @@ class ExploreJob extends SearchJob {
         // note that we're treating the last param (isLease) as *false* since we're just exploring.
         // if this collides with an actual leaseSet's key, neat, but that wouldn't imply we're actually
         // attempting to send that lease a message!
-        super(context, facade, key, null, null, context.netDb().getKnownRouters() > 5000 && !SystemVersion.isSlow() ?
-                                                MAX_EXPLORE_TIME + 15*1000 : MAX_EXPLORE_TIME , false, false);
+        super(context, facade, key, null, null, MAX_EXPLORE_TIME , false, false);
         _peerSelector = (FloodfillPeerSelector) (_facade.getPeerSelector());
         _isRealExplore = isRealExplore;
     }
@@ -201,17 +201,21 @@ class ExploreJob extends SearchJob {
     @Override
     protected int getBredth() {
         String exploreBredth = getContext().getProperty(PROP_EXPLORE_BREDTH);
-        if (exploreBredth == null && getContext().netDb().getKnownRouters() > 4000) {
+        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 2000) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search...");
-            return EXPLORE_BREDTH;
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 2000 known peers)");
+            return EXPLORE_BREDTH * 3;
+        } else if (exploreBredth == null && getContext().netDb().getKnownRouters() > 4000) {
+            if (_log.shouldInfo())
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (over 4000 known peers)");
+            return 1;
         } else if (exploreBredth == null) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search - max " + EXPLORE_BREDTH * 2 + " concurrent (less than 4000 known peers)");
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 4000 known peers)");
             return EXPLORE_BREDTH * 2;
         } else {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search - max " + exploreBredth + " concurrent");
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + exploreBredth + " concurrent (custom configuration)");
             return Integer.valueOf(exploreBredth);
         }
     }
