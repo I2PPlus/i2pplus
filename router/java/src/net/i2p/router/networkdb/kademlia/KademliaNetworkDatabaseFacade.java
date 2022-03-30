@@ -1064,7 +1064,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             rv = (LeaseSet)_ds.get(key);
             if (rv != null && rv.getEarliestLeaseDate() >= leaseSet.getEarliestLeaseDate()) {
                 if (_log.shouldDebug())
-                    _log.debug("Not storing LeaseSet [" + key.toBase64().substring(0.6) + "] -> older than our current version");
+                    _log.debug("Not storing LeaseSet [" + key.toBase64().substring(0,6) + "] -> older than our current version");
                 // if it hasn't changed, no need to do anything
                 // except copy over the flags
                 Hash to = leaseSet.getReceivedBy();
