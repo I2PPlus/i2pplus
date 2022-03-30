@@ -1408,7 +1408,7 @@ th code {user-select: all}
 #certs h4:nth-of-type(n+2) {margin-top: 0}
 #certs h3 + p {margin: 15px 0 10px}
 #certs .infohelp {margin-top: 8px}
-#certs .infohelp:first-of-type {background-image: url(/themes/console/images/certs.svg)}
+#certs .infohelp:first-of-type {background: url(/themes/console/images/certs.svg) no-repeat 15px center / 28px, var(--msg)}
 #certs p:not(.infohelp) {margin-top: -1px; padding: 10px; border: var(--border); background: #000}
 #certs h4 {letter-spacing: 0; word-spacing: 0}
 #certs p + h4 {margin-top: -13px}
@@ -1744,7 +1744,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #loggingoptions textarea {margin-bottom: 8px; width: calc(100% - 6px); height: 120px; resize: none}
 #loggingoptions textarea:empty {height: 80px; min-height: 80px}
 #loggingoptions select[name="newlogclass"] {width: calc(100% - 254px)}
-#config_logging h3 {position: relative}
+#config_logging h3 {margin-bottom: -1px; position: relative}
 
 /* configsidebar */
 #refreshsidebar td {padding-left: 45px; background: #000 var(--timer) no-repeat 15px center / 32px}
@@ -2378,25 +2378,6 @@ iframe {height: 0}
 .iframed h1 {margin: 0 5px 0 5px}
 .iframed div.sorry {margin: -1px 5px 10px 5px}
 
-/* console error pages */
-h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20px 20px 70px; min-width: 595px; word-wrap: break-word; text-align: justify; font-size: 10pt; border: var(--border); border-radius: 0 0 4px 4px; box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000; background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px); background-size: 44px, 100%, 100% 4px}
-#error500 h1.err {margin-top: -10px}
-#error500 #warning.sorry {border-radius: 0}
-.sorry p {line-height: 1.3}
-#warning2 {margin: -17px 2px 18px 226px; padding: 10px 20px 5px; min-width: 610px; background: #010}
-#error500 #sidebar {position: absolute}
-#error500 #sidebar a {line-height: 2}
-#error500 #warning2 {border: var(--border_hard); background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left; background-size: 100% 4px}
-#error500 #stacktrace {margin-top: 20px; margin-bottom: 20px}
-#error500 #warning2 p:first-child {text-decoration: none}
-#warning2 h3 {margin: -11px -20px 0; padding: 10px; text-align: left; border-width: 1px; border-radius: 0; border-left: none; border-right: none; box-shadow: inset 0 0 0 1px #700}
-#warning2 p {font-size: 9pt; text-align: left}
-#stacktrace p:first-of-type {margin-top: 20px}
-#stacktrace p {margin-bottom: 40px}
-#warning2 p + h3 {margin-top: -5px}
-#warning2 b {margin-right: 5px; min-width: 140px; display: inline-block; line-height: 1.5; text-align: right}
-.sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
-
 /* animations */
 @keyframes bar {from {transform: scaleX(101%)}}
 @keyframes downloadbar {from {background: var(--download_bar)} to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}}
@@ -2757,7 +2738,6 @@ span#newtab {margin-top: 4px}
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {margin: -3px -1px 0; width: auto; height: 14px; display: inline-block; vertical-align: middle}
 #tunnels .tab, #tunnels .tab2 {line-height: 1.3}
 #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {padding-right: 8px; width: 55px}
-#warning2.sorry {margin: -17px 5px 18px 272px}
 #sb_status {margin: -9px 0 -7px}
 }
 
