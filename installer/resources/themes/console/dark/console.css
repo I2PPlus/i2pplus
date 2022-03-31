@@ -1449,7 +1449,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 .configtable {margin-top: -1px; margin-bottom: -2px}
 .configtable tr:last-child {border-top: var(--border)}
 .configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, #debugmode, .sybilinfo {padding: 20px 24px 20px 58px; line-height: 1.4; white-space: normal; font-weight: 400; text-align: justify; border-bottom: var(--border); border-top: var(--border); background: var(--infohelp) no-repeat 15px center / 28px, var(--msg)}
-.configtable td {padding: 6px 10px; line-height: 1.8; background: #000}
+.configtable td {padding: 6px 10px; line-height: 1.8; background: rgba(0,16,0,.3)}
 .configtable td.tabletextarea {padding: 0; background: none}
 .h3navlinks a {display: inline-block; vertical-align: middle}
 .h3navlinks a:first-child {padding-right: 9px}
@@ -1697,7 +1697,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #netconfig input[name*="ost"] {width: 250px}
 #netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus), #netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {width: 140px; min-width: 140px; transition: ease width .1s}
 #netconfig tr, #i2pupdates tr, #config_reseed tr {background: #000}
-#config_reseed td {border-top: var(--border)}
+#config_update td, #config_reseed td, #config_plugins td {border-top: var(--border)}
 #netconfig tr:nth-last-child(3) .optionlist {margin-bottom: -1px}
 #reseedconfig th.options, #i2pupdates th.options {padding-left: 3px}
 #netconfig label, #externali2cp .optionlist label, #externali2cp .nowrap, #reseedconfig .nowrap, #updatehelper .nowrap, #updateProxyHostPort .nowrap, #i2pupdates .nowrap, #manualreseed .nowrap, #graphs .nowrap {min-width: 480px; width: calc(100% - 11px); display: inline-block; margin: 1px 0; padding: 2px 5px 0; background: #010; line-height: 1}
