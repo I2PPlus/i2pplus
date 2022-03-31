@@ -101,15 +101,14 @@ h4.sb_info + hr + form {margin-bottom: -1px; padding-top: 5px}
 #sb_internals a, #sb_advanced a, #sb_help a {padding: 2px; display: inline-block; vertical-align: middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 #sb_internals a:hover, #sb_advanced a:hover, #sb_help a:hover {background: #ffd; border-radius: 3px}
 #sb_internals td {padding: 0}
-#sb_localtunnels a {width: 100%; max-width: 158px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3}
+#sb_peers td:first-child, #sb_peersadvanced td:first-child, #sb_tunnels td:first-child, #sb_queue td:first-child, #sb_bandwidth td:first-child, #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child {text-transform: capitalize}
+#sb_localtunnels tr:nth-child(odd) {background: #eef}
 #sb_localtunnels td {vertical-align: middle; line-height: 1.05}
 #sb_localtunnels td:first-child {padding: 1px 2px; width: 16px; text-align: left; border-radius: 2px 0 0 2px}
 #sb_localtunnels td:first-child, #sb_localtunnels tr:hover td:first-child {background-image: var(--client); background-position: center center; background-repeat: no-repeat; background-size: 16px}
-#sb_peers td:first-child, #sb_peersadvanced td:first-child, #sb_tunnels td:first-child, #sb_queue td:first-child, #sb_bandwidth td:first-child, #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child {text-transform: capitalize}
 #sb_localtunnels td img {opacity: 0}
 #sb_localtunnels td:first-child img {margin: 0 0 2px}
-#sb_localtunnels td:last-child {background-image: var(--local_inprogress); background-position: right center; background-repeat: no-repeat; background-size: 16px}
-#sb_localtunnels td:last-child {padding: 2px 0 2px 2px; width: 16px; text-align: right; border-radius: 0 2px 2px 0}
+#sb_localtunnels td:last-child {padding: 2px 0 2px 2px; width: 16px; text-align: right; border-radius: 0 2px 2px 0; background-image: var(--local_inprogress); background-position: right center; background-repeat: no-repeat; background-size: 16px}
 #sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {background-image: var(--ping)}
 #sb_localtunnels td.tunnelReady {background-image: var(--local_up)}
 #sb_localtunnels td.tunnelRebuilding {background-image: var(--local_down)}
@@ -117,6 +116,7 @@ h4.sb_info + hr + form {margin-bottom: -1px; padding-top: 5px}
 #sb_localtunnels td img::after {content: ""; display: inline-block; height: 16px}
 #sb_localtunnels tr:hover {background: #ffd}
 #sb_localtunnels td[colspan="3"], #sb_localtunnels tr:hover td[colspan="3"] {line-height: 20px; font-size: 0; background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px)}
+#sb_localtunnels a {width: 100%; max-width: 158px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3}
 #sb_peersadvanced a:hover b, #sb_peersadvanced a:visited:hover b {color: var(--hover)}
 #sb_peersadvanced a:active b, #sb_peersadvanced a:visited:active b {color: #f90}
 #sb_peersadvanced .separator td {padding: 0}
@@ -2511,6 +2511,7 @@ h3#pconfig, h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #sb_internals a, #sb_advanced a, #sb_help a {max-width: 232px}
 #sb_internals, #sb_advanced, #sb_help {width: 240px}
 #sb_localtunnels a {max-width: 188px}
+#sb_localtunnels td:first-child, #sb_localtunnels tr:hover td:first-child {background-size: 18px}
 #sb_logo img {margin-top: -4px; margin-left: -2px; width: 240px}
 #sb_memoryBar .percentBarText {padding: 0 0 2px}
 #sb_services {width: 242px}
