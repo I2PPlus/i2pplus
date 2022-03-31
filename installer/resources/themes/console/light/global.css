@@ -11,6 +11,9 @@
   --activity: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
   --badgeborder: 1px solid #bbc;
   --badge: linear-gradient(180deg,#fff,#ddf);
+  --badge_hover: linear-gradient(180deg,#fff,#dba);
+  --badge_active: linear-gradient(180deg,#dba,#fdb);
+  --badge_shadow_hover: 0 0 0 1px #f60, var(--highlight);
   --bevel: inset 0 0 0 1px #d0d0da;
   --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
   --bodybg: #a4a4cb;
@@ -41,7 +44,7 @@
   --input_shadow: inset 2px 2px 2px rgba(0,0,0,.15);
   --membarinner_mobile: linear-gradient(180deg,rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --outline: 0 0 0 1px #000;
+  --outline: 0 0 0 1px #779;
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);
   --readonly: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fafaff 4px), #fafaff;
   --refresh: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);

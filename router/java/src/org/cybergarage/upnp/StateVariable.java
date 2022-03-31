@@ -273,7 +273,7 @@ public class StateVariable extends NodeData
 	 * @param avl The new AllowedValueList
 	 */
 	public void setAllowedValueList(AllowedValueList avl) {
-		//TODO Some test done not stable 
+		//TODO Some test done not stable
 		getStateVariableNode().removeNode(AllowedValueList.ELEM_NAME);
 		getStateVariableNode().removeNode(AllowedValueRange.ELEM_NAME);
 		Node n = new Node(AllowedValueList.ELEM_NAME);

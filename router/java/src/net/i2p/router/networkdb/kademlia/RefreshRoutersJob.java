@@ -189,10 +189,10 @@ class RefreshRoutersJob extends JobImpl {
 
         int randomDelay = (1500 * (rand.nextInt(3) + 1)) + rand.nextInt(1000) + rand.nextInt(1000) + (rand.nextInt(1000) * (rand.nextInt(3) + 1)); // max 9.5 seconds
         String refresh = getContext().getProperty("router.refreshRouterDelay");
-        if (netDbCount > 6000) {
-            randomDelay = 15*60*1000;
+        if (netDbCount > 5000) {
+            randomDelay *= 10 ;
             if (_log.shouldDebug())
-                _log.debug("Over 6000 known peers, queuing next RouterInfo check to run in 15 minutes...");
+                _log.debug("Over 5000 known peers, queuing next RouterInfo check to run in " + randomDelay / 1000 + "s...");
         } else if (refresh == null) {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
                 randomDelay = randomDelay * (rand.nextInt(3) + 1);

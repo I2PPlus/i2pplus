@@ -76,8 +76,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         int type = entry.getType();
         if (DatabaseEntry.isLeaseSet(type)) {
             getContext().statManager().addRateData("netDb.storeLeaseSetHandled", 1);
-            if (_log.shouldInfo())
-                _log.info("Handling DbStore of LeaseSet" + _message);
+            if (_log.shouldDebug())
+                _log.debug("Handling DbStore of LeaseSet" + _message);
                 //_log.info("Handling DbStore of leasset " + key + " with expiration of "
                 //          + new Date(_message.getLeaseSet().getEarliestLeaseDate()));
 

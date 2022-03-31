@@ -76,9 +76,9 @@ ul {margin: 0; padding: 0}
 #sb_logo {width: 100%; margin: -8px 0 -9px -10px; padding: 9px 10px 10px; display: inline-block; border-radius: 3px 3px 0 0; box-shadow: var(--bevel); background: linear-gradient(180deg,rgba(0,64,0,.3), rgba(0,24,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px}
 #sb_logo:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6); background: linear-gradient(180deg,rgba(0,64,0,.6), rgba(0,24,0,.6)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px; transition: ease background .15s}
 #sb_logo:active {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,144,0,.5), inset 6px 6px 6px rgba(0,0,0,.7); background: linear-gradient(180deg,rgba(0,32,0,.3), rgba(0,48,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px)}
-#sidebar img[src$="i2plogo.png"] {margin: -3px 0 -8px -6px; width: 206px; height: auto; filter: saturate(.5); transition: ease filter .05s; will-change: transform}
-#sidebar img[src$="i2plogo.png"]:hover {filter: saturate(1); transition: ease filter .1s}
-#sidebar img[src$="i2plogo.png"]:active {filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3)); transform: scale(.97); transition: none}
+#sb_logo img {margin: -3px 0 -8px -6px; width: 206px; height: auto; filter: saturate(.5); transition: ease filter .05s; will-change: transform}
+#sb_logo:hover img {filter: saturate(1); transition: ease filter .1s}
+#sb_logo:active img, #sb_logo img:active {filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3)); transform: scale(.97); transition: none}
 #sidebar input[type=text] {text-align: right; box-shadow: inset 1px 1px 1px 0 #000}
 #sidebar td {padding: 1px 8px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0}
 #sidebar td:first-child {max-width: 90px; overflow: hidden; text-transform: capitalize}
@@ -316,7 +316,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #graphs .messages {top: -16px; z-index: 999}
 
 /* welcome */
-.welcome h2::after {margin-left: 1px; content: "+"; font-size: 120%}
+.main#console {padding-bottom: 20px}
 .twocol {display: block; columns: 2 400px; column-gap: 0}
 .twocol li {-webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 p + .twocol {margin: 10px 25px}
@@ -324,9 +324,9 @@ p + .twocol {margin: 10px 25px}
 .links {margin-top: 10px; text-align: justify}
 .links li {margin-left: 25px; list-style-image: var(--star); text-align: justify; line-height: 1.6}
 .links b {color: #bb0; letter-spacing: .08em; line-height: 1.65}
-#home .welcome h2 {margin: 12px -5px}
-#console .welcome h2 {background: url(images/favicon.svg) no-repeat right 6px center / 24px, var(--h3), linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade); background-size: 24px, 4px 100%, 100%, 100%; background-blend-mode: luminosity, normal, normal}
 #home .welcome {display: none}
+.welcome h2 {padding: 10px 14px; background: url(images/favicon.svg) no-repeat right 10px center / 24px, var(--h2)}
+.welcome h2::after {margin-left: 1px; content: "+"; font-size: 120%}
 div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {margin: 10px -5px 5px; padding: 10px; border: 1px solid #000; border-radius: 4px; background: rgba(0,32,0,.3)}
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li {list-style: none}
 div[lang="sv"] li::first-letter {text-transform: uppercase}
@@ -1408,7 +1408,7 @@ th code {user-select: all}
 #certs h4:nth-of-type(n+2) {margin-top: 0}
 #certs h3 + p {margin: 15px 0 10px}
 #certs .infohelp {margin-top: 8px}
-#certs .infohelp:first-of-type {background-image: url(/themes/console/images/certs.svg)}
+#certs .infohelp:first-of-type {background: url(/themes/console/images/certs.svg) no-repeat 15px center / 28px, var(--msg)}
 #certs p:not(.infohelp) {margin-top: -1px; padding: 10px; border: var(--border); background: #000}
 #certs h4 {letter-spacing: 0; word-spacing: 0}
 #certs p + h4 {margin-top: -13px}
@@ -1744,7 +1744,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #loggingoptions textarea {margin-bottom: 8px; width: calc(100% - 6px); height: 120px; resize: none}
 #loggingoptions textarea:empty {height: 80px; min-height: 80px}
 #loggingoptions select[name="newlogclass"] {width: calc(100% - 254px)}
-#config_logging h3 {position: relative}
+#config_logging h3 {margin-bottom: -1px; position: relative}
 
 /* configsidebar */
 #refreshsidebar td {padding-left: 45px; background: #000 var(--timer) no-repeat 15px center / 32px}
@@ -2378,25 +2378,6 @@ iframe {height: 0}
 .iframed h1 {margin: 0 5px 0 5px}
 .iframed div.sorry {margin: -1px 5px 10px 5px}
 
-/* console error pages */
-h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20px 20px 70px; min-width: 595px; word-wrap: break-word; text-align: justify; font-size: 10pt; border: var(--border); border-radius: 0 0 4px 4px; box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000; background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px); background-size: 44px, 100%, 100% 4px}
-#error500 h1.err {margin-top: -10px}
-#error500 #warning.sorry {border-radius: 0}
-.sorry p {line-height: 1.3}
-#warning2 {margin: -17px 2px 18px 226px; padding: 10px 20px 5px; min-width: 610px; background: #010}
-#error500 #sidebar {position: absolute}
-#error500 #sidebar a {line-height: 2}
-#error500 #warning2 {border: var(--border_hard); background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left; background-size: 100% 4px}
-#error500 #stacktrace {margin-top: 20px; margin-bottom: 20px}
-#error500 #warning2 p:first-child {text-decoration: none}
-#warning2 h3 {margin: -11px -20px 0; padding: 10px; text-align: left; border-width: 1px; border-radius: 0; border-left: none; border-right: none; box-shadow: inset 0 0 0 1px #700}
-#warning2 p {font-size: 9pt; text-align: left}
-#stacktrace p:first-of-type {margin-top: 20px}
-#stacktrace p {margin-bottom: 40px}
-#warning2 p + h3 {margin-top: -5px}
-#warning2 b {margin-right: 5px; min-width: 140px; display: inline-block; line-height: 1.5; text-align: right}
-.sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
-
 /* animations */
 @keyframes bar {from {transform: scaleX(101%)}}
 @keyframes downloadbar {from {background: var(--download_bar)} to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}}
@@ -2704,7 +2685,7 @@ input[type=submit], input[type=reset], button {padding: 8px 12px}
 #consolepass input[name="nofilter_pw"], #consolepass input[name="name"], #externali2cp input[name="nofilter_pw"], #consolepass input[name="nofilter_pw"]:focus, #consolepass input[name="name"]:focus, #externali2cp input[name="nofilter_pw"]:focus {padding: 7px 9px 7px 25px; background-position: 6px center}
 #debug .confignav, #netdb .confignav {padding: 0}
 #debug .tab, #debug .tab2, #netdb .tab, #netdb .tab2 {margin-top: -1px}
-#error500 #sidebar img[src$="i2plogo.png"] {margin-bottom: -5px}
+#error500 #sb_logo img {margin-bottom: -5px}
 #error500 #warning2.sorry {margin-top: -1px}
 #floodfills th:first-child, #floodfills td:first-child {padding-right: 3px; width: 58px}
 #fullhistory {margin-top: -13px; text-align: right}
@@ -2742,8 +2723,8 @@ h4#updateplugins {margin-top: -15px}
 #schedjobs ul {columns: 270px auto}
 select {padding: 8px 24px 8px 8px}
 #sidebar {width: 240px}
-#sidebar #sb_logo {height: 44px !important}
-#sidebar #sb_logo img[src$="i2plogo.png"] {margin: -3px 0 -8px -4px; width: 248px; transform: none}
+#sb_logo {height: 44px !important}
+#sb_logo img {margin: -3px 0 -8px -4px; width: 248px}
 #sidebar button.download {margin-bottom: 5px; line-height: 1.4}
 #sidebar button.reload, #sidebar button.stop {margin: 4px 2px 3px; width: calc(50% - 8px)}
 #sidebar .reload[value="restartImmediate"] {width: auto; min-width: 157px}
@@ -2757,7 +2738,6 @@ span#newtab {margin-top: 4px}
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {margin: -3px -1px 0; width: auto; height: 14px; display: inline-block; vertical-align: middle}
 #tunnels .tab, #tunnels .tab2 {line-height: 1.3}
 #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {padding-right: 8px; width: 55px}
-#warning2.sorry {margin: -17px 5px 18px 272px}
 #sb_status {margin: -9px 0 -7px}
 }
 

@@ -1015,7 +1015,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     out.write(uri);
                     out.write("\">");
                     // Translators: parameter is a host name
-                    out.write(_t("{0} jump service", jumphost.replace(".i2p", "")));
+//                    out.write(_t("{0} jump service", jumphost.replace(".i2p", "")));
+                    out.write(jumphost.replace(".i2p", ""));
                     out.write("</a>\n");
                 }
                 if (!first) { // We wrote out the opening <div>

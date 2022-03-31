@@ -459,38 +459,38 @@ public class KeyCertificate extends Certificate {
         public void setPayload(byte[] payload) {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** @throws RuntimeException always */
         @Override
         public void readBytes(InputStream in) throws DataFormatException, IOException {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public void writeBytes(OutputStream out) throws IOException {
             out.write(ED_DATA);
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int writeBytes(byte target[], int offset) {
             System.arraycopy(ED_DATA, 0, target, offset, ED_LENGTH);
             return ED_LENGTH;
         }
-    
+
         /** @throws RuntimeException always */
         @Override
         public int readBytes(byte source[], int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int size() {
             return ED_LENGTH;
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int hashCode() {

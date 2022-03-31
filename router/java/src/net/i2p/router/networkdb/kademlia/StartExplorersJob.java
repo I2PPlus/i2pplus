@@ -38,10 +38,11 @@ class StartExplorersJob extends JobImpl {
 //    private static final int MAX_PER_RUN = 1;
     private static final int MAX_PER_RUN = 2;
     /** don't explore the network more often than this */
-    private static final int MIN_RERUN_DELAY_MS = 55*1000;
+//    private static final int MIN_RERUN_DELAY_MS = 55*1000;
+    private static final int MIN_RERUN_DELAY_MS = 180*1000;
     /** explore the network at least this often */
 //    private static final int MAX_RERUN_DELAY_MS = 15*60*1000;
-    private static final int MAX_RERUN_DELAY_MS = 10*60*1000;
+    private static final int MAX_RERUN_DELAY_MS = 20*60*1000;
     /** aggressively explore during this time - same as KNDF expiration grace period */
 //    private static final int STARTUP_TIME = 60*60*1000;
     private static final int STARTUP_TIME = 2*60*60*1000; // let's give it 2 hours
@@ -85,7 +86,7 @@ class StartExplorersJob extends JobImpl {
                 int num = MAX_PER_RUN;
 //                int count = _facade.getDataStore().size();
                 int count = getContext().netDb().getKnownRouters();
-                String exploreBuckets = getContext().getProperty("router.exploreBuckets");
+                String exploreBuckets = getContext().getProperty(PROP_EXPLORE_BUCKETS);
                 if (exploreBuckets == null) {
                     if (count < MIN_ROUTERS)
                         num *= 8;  // at less than 3x MIN_RESEED, explore extremely aggressively
@@ -106,7 +107,7 @@ class StartExplorersJob extends JobImpl {
                 }
                 Set<Hash> toExplore = selectKeysToExplore(num);
                 if (_log.shouldInfo())
-                    _log.info("Exploring up to " + num + " buckets during this run");
+                    _log.info("Exploring " + num + " buckets during this run");
                 _facade.removeFromExploreKeys(toExplore);
                 long delay = 0;
 
@@ -126,8 +127,8 @@ class StartExplorersJob extends JobImpl {
                     // spread them out
                     Random random = getContext().random();
                     delay += 100 + (random.nextInt(250));
-//                    if (delay > 0)
-                    j.getTiming().setStartAfter(getContext().clock().now() + delay);
+                    if (delay > 0)
+                        j.getTiming().setStartAfter(getContext().clock().now() + delay);
                     getContext().jobQueue().addJob(j);
 
                     if (_log.shouldInfo() && realexpl)
@@ -136,7 +137,7 @@ class StartExplorersJob extends JobImpl {
                         _log.info("Exploring for new floodfills in " + delay + "ms");
                 }
             }
-            String exploreDelay = getContext().getProperty("router.explorePeersDelay");
+            String exploreDelay = getContext().getProperty(PROP_EXPLORE_DELAY);
             long delay = getNextRunDelay();
             long laggedDelay = 3*60*1000;
             if (exploreDelay != null) {
@@ -145,7 +146,7 @@ class StartExplorersJob extends JobImpl {
                 requeue(Integer.valueOf(exploreDelay) * 1000);
             } else if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
                 if (_log.shouldInfo())
-                    _log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s");
+                    _log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s (router is under load)");
                 requeue(laggedDelay);
             } else {
                 if (_log.shouldInfo())
@@ -202,8 +203,8 @@ class StartExplorersJob extends JobImpl {
             // Use DataStore.size() which includes leasesets because it's faster
             else if ((uptime < STARTUP_TIME && netDbSize < MIN_ROUTERS) || isHidden || isK)
                 return MIN_RERUN_DELAY_MS;
-            else if (netDbSize > MAX_ROUTERS * 2)
-                return MAX_RERUN_DELAY_MS * 4; // 40mins if over 10,000 known peers
+            else if (netDbSize > MAX_ROUTERS)
+                return MAX_RERUN_DELAY_MS * 4; // 40mins if over 5,000 known peers
             else
                 return delay;
         } else {

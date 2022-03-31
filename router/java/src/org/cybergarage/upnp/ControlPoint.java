@@ -480,7 +480,7 @@ public class ControlPoint implements HTTPRequestListener
 	////////////////////////////////////////////////
 
 	private ListenerList deviceNotifyListenerList = new ListenerList();
-	 
+
 	public void addNotifyListener(NotifyListener listener)
 	{
 		deviceNotifyListenerList.add(listener);
@@ -509,7 +509,7 @@ public class ControlPoint implements HTTPRequestListener
 	////////////////////////////////////////////////
 
 	private ListenerList deviceSearchResponseListenerList = new ListenerList();
-	 
+
 	public void addSearchResponseListener(SearchResponseListener listener)
 	{
 		deviceSearchResponseListenerList.add(listener);
@@ -671,7 +671,7 @@ public class ControlPoint implements HTTPRequestListener
 	////////////////////////////////////////////////
 
 	private ListenerList eventListenerList = new ListenerList();
-	 
+
 	public void addEventListener(EventListener listener)
 	{
 		eventListenerList.add(listener);

@@ -253,7 +253,7 @@ public class HTTPMUSocket
 			throw new IOException("Multicast socket has already been closed.");
 
 		recvPacket.setTimeStamp(System.currentTimeMillis());
- 
+
 		return recvPacket;
 	}
 }

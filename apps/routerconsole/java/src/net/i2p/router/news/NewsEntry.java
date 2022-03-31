@@ -35,7 +35,7 @@ public class NewsEntry implements Comparable<NewsEntry> {
         	return false;
         }
     	NewsEntry e = (NewsEntry) o;
-    
+
     	return this.compareTo(e) == 0;
     }
 
