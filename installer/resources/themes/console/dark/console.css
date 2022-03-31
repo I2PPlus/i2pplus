@@ -76,9 +76,9 @@ ul {margin: 0; padding: 0}
 #sb_logo {width: 100%; margin: -8px 0 -9px -10px; padding: 9px 10px 10px; display: inline-block; border-radius: 3px 3px 0 0; box-shadow: var(--bevel); background: linear-gradient(180deg,rgba(0,64,0,.3), rgba(0,24,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px}
 #sb_logo:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6); background: linear-gradient(180deg,rgba(0,64,0,.6), rgba(0,24,0,.6)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px; transition: ease background .15s}
 #sb_logo:active {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,144,0,.5), inset 6px 6px 6px rgba(0,0,0,.7); background: linear-gradient(180deg,rgba(0,32,0,.3), rgba(0,48,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px)}
-#sidebar img[src$="i2plogo.png"] {margin: -3px 0 -8px -6px; width: 206px; height: auto; filter: saturate(.5); transition: ease filter .05s; will-change: transform}
-#sidebar img[src$="i2plogo.png"]:hover {filter: saturate(1); transition: ease filter .1s}
-#sidebar img[src$="i2plogo.png"]:active {filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3)); transform: scale(.97); transition: none}
+#sb_logo img {margin: -3px 0 -8px -6px; width: 206px; height: auto; filter: saturate(.5); transition: ease filter .05s; will-change: transform}
+#sb_logo:hover img {filter: saturate(1); transition: ease filter .1s}
+#sb_logo:active img, #sb_logo img:active {filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3)); transform: scale(.97); transition: none}
 #sidebar input[type=text] {text-align: right; box-shadow: inset 1px 1px 1px 0 #000}
 #sidebar td {padding: 1px 8px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0}
 #sidebar td:first-child {max-width: 90px; overflow: hidden; text-transform: capitalize}
@@ -2685,7 +2685,7 @@ input[type=submit], input[type=reset], button {padding: 8px 12px}
 #consolepass input[name="nofilter_pw"], #consolepass input[name="name"], #externali2cp input[name="nofilter_pw"], #consolepass input[name="nofilter_pw"]:focus, #consolepass input[name="name"]:focus, #externali2cp input[name="nofilter_pw"]:focus {padding: 7px 9px 7px 25px; background-position: 6px center}
 #debug .confignav, #netdb .confignav {padding: 0}
 #debug .tab, #debug .tab2, #netdb .tab, #netdb .tab2 {margin-top: -1px}
-#error500 #sidebar img[src$="i2plogo.png"] {margin-bottom: -5px}
+#error500 #sb_logo img {margin-bottom: -5px}
 #error500 #warning2.sorry {margin-top: -1px}
 #floodfills th:first-child, #floodfills td:first-child {padding-right: 3px; width: 58px}
 #fullhistory {margin-top: -13px; text-align: right}
@@ -2723,8 +2723,8 @@ h4#updateplugins {margin-top: -15px}
 #schedjobs ul {columns: 270px auto}
 select {padding: 8px 24px 8px 8px}
 #sidebar {width: 240px}
-#sidebar #sb_logo {height: 44px !important}
-#sidebar #sb_logo img[src$="i2plogo.png"] {margin: -3px 0 -8px -4px; width: 248px; transform: none}
+#sb_logo {height: 44px !important}
+#sb_logo img {margin: -3px 0 -8px -4px; width: 248px}
 #sidebar button.download {margin-bottom: 5px; line-height: 1.4}
 #sidebar button.reload, #sidebar button.stop {margin: 4px 2px 3px; width: calc(50% - 8px)}
 #sidebar .reload[value="restartImmediate"] {width: auto; min-width: 157px}
