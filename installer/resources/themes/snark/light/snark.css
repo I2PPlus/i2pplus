@@ -95,10 +95,13 @@ th:first-child {padding-left: 2px; text-align: left}
 tfoot td:first-child {padding-left: 0; text-align: left}
 tfoot th {padding-bottom: 4px}
 .headerstatus, .headerpriority {text-align: center}
-.ParentDir {padding: 4px 0; font-size: 8pt; text-align: left; border: none; background: #f8f8ff}
-.ParentDir a {display: inline-block; width: 100%}
+.ParentDir {padding: 4px 0; text-align: left; white-space: nowrap; border: none; background: #f8f8ff}
+#snarkFiles .ParentDir a {display: inline-block; font-size: 90%}
+.ParentDir:first-child a {width: 100%}
+.ParentDir:nth-child(2) {padding-right: 8px; text-align: right}
 .ParentDir a img {margin-left: 0; border: 1px solid transparent}
 .ParentDir a img, .fileIcon img {width: 18px; height: 18px}
+.ParentDir:nth-child(2) a img {margin-right: 0}
 .priority {vertical-align: middle; width: 1%; white-space: nowrap}
 
 /* torrents */
@@ -209,7 +212,7 @@ tr:hover .percentBarComplete {color: var(--ink_light); border: 1px solid #bbc; b
 
 .thumb, .thumb:hover {margin: 2px 2px 2px 4px; padding: 0; width: auto; height: auto; border: 1px solid transparent; box-shadow: 0 0 0 1px #fff; background: #fff}
 .thumb:hover {box-shadow: 0 0 0 1px var(--hover), 0 0 0 2px #779; opacity: 1}
-audio, video {margin: 0 1px; padding: 2px; width: 240px; border: var(--border_soft); box-shadow: inset 0 0 0 2px #fff; background: #000}
+audio, video {margin: 0 1px; padding: 2px; width: 240px; vertical-align: middle; border: var(--border_soft); box-shadow: inset 0 0 0 2px #fff; background: #000}
 audio:hover, audio:focus, video:hover, video:focus {border: 1px solid var(--hover)}
 video:fullscreen, video:fullscreen:hover, video:fullscreen:focus {padding: 0; border: none; box-shadow: none}
 video::-webkit-media-controls-timeline {padding: 0 16px 16px}
@@ -316,7 +319,7 @@ img[src$="details.png"] {opacity: .7}
 .iframed #mainsection > #screenlog + #torrentlist, .iframed #mainsection > #screenlog + script + #torrentlist {margin-top: 0}
 .page > .mainsection {margin-top: 10px}
 #snarkInfo ~ .mainsection {border-bottom: var(--border_soft)}
-.iframed #snarkInfo ~ .mainsection {margin-top: 10px; border-top: var(--border_soft)}
+.iframed #snarkInfo ~ .mainsection {border-top: var(--border_soft)}
 .iframed #editSection {margin-top: -3px}
 #snarkFiles, #commentSection, #editSection {background: var(--section)}
 #commentSection {padding-bottom: 1px}
@@ -888,6 +891,7 @@ td.peerCount b:hover a[href*="?p="]:hover::after, td.peerCount b:hover a[href*="
 @media screen and (min-width: 1500px) {
 .iframed #navbar {padding-top: 7px; padding-bottom: 8px}
 body, .snarkAddInfo, #commentInfo textarea, input[type=text], input[type=submit], .control {font-size: 10pt}
+#snarkFiles .ParentDir a {font-size: 90%}
 code, tt {font-size: 9pt}
 #screenlog li::before {width: 15px; height: 11px; background-size: 10px 10px}
 #screenlog li, #screenlog li a {font-size: 9.5pt}
