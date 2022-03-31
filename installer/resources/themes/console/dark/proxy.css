@@ -87,7 +87,7 @@ hr:last-child {margin-top: 20px; margin-bottom: 20px}
 #warning p {margin: 0 15px 10px 15px; font-size: 110%}
 #warning .option .formaction {margin: 20px -20px 0; padding: 11px 12px 10px; border-top: var(--border_soft); background: none}
 #warning p + .formaction {margin: 0 0 20px}
-#warning #proxyrequest {margin-bottom: 12px; padding: 9px 10px 9px 42px; display: inline-block; font-size: 115%; background: var(--link) no-repeat 20px center / 16px}
+#warning #proxyrequest {margin-bottom: 12px; padding: 9px 10px 9px 42px; display: inline-block; word-break: break-all; font-size: 115%; background: var(--link) no-repeat 20px center / 16px}
 
 /* console error pages */
 h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20px 20px 70px; min-width: 595px; word-wrap: break-word; text-align: justify; font-size: 10pt; border: var(--border); border-radius: 0 0 4px 4px; box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000; background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px); background-size: 44px, 100%, 100% 4px}
