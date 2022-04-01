@@ -26,8 +26,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: read
-      contents: read
+      contents: write
       security-events: write
+      pull-requests: write
 
     strategy:
       fail-fast: false
