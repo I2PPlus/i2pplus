@@ -354,7 +354,7 @@ textarea {
   text-align: left;
   font: 8.5pt var(--monospaced);
   color: #bb7;
-  border: var(--border);
+  border: var(--border_hard);
   border-radius: 1px;
   box-shadow: var(--highlight);
   background: linear-gradient(180deg,#000, #010);
@@ -444,7 +444,7 @@ select::-moz-focus-inner {
   vertical-align: middle;
   box-sizing: border-box;
   outline: none;
-  border: var(--border);
+  border: var(--border_hard);
   box-shadow: 0 0 0 1px #000, var(--highlight), inset 3px 3px 3px 1px #000;
   background: linear-gradient(180deg,#020,#001800);
   -webkit-appearance: inherit;

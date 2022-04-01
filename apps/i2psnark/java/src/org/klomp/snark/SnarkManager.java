@@ -1047,8 +1047,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         _util.setI2CPConfig(i2cpHost, i2cpPort, i2cpOpts);
-        if (_log.shouldDebug())
-            _log.debug("Configuring with I2CP options " + i2cpOpts);
+        String msg = _t("Configuring I2PSnark with I2CP options") + ": " + i2cpOpts;
+        if (_log.shouldInfo())
+            _log.info(msg);
+
         //I2PSnarkUtil.instance().setI2CPConfig("66.111.51.110", 7654, new Properties());
         //String eepHost = _config.getProperty(PROP_EEP_HOST);
         //int eepPort = getInt(PROP_EEP_PORT, 4444);
@@ -1078,14 +1080,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (dd.isDirectory()) {
             if (!dd.canWrite()) {
-                String msg = _t("No write permissions for data directory") + ": " + dd;
+                msg = _t("No write permissions for data directory") + ": " + dd;
                 addMessage(msg);
                 if (!_context.isRouterContext())
                     System.out.println(" • " + msg);
             }
         } else {
             if (!dd.mkdirs()) {
-                String msg = _t("Data directory cannot be created") + ": " + dd;
+                msg = _t("Data directory cannot be created") + ": " + dd;
                 addMessage(msg);
                 if (!_context.isRouterContext())
                     System.out.println(" • " + msg);
@@ -1173,92 +1175,137 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _util.setMaxUpBW(limit);
                     changed = true;
                     _config.setProperty(PROP_UPBW_MAX, Integer.toString(limit));
-                    addMessage(_t("Up BW limit changed to {0}KBps", limit));
+                    String msg = _t("Up BW limit changed to {0}KBps", limit);
+                    addMessage(msg);
+                    if (!_context.isRouterContext())
+                        System.out.println(" • " + msg);
                 } else {
-                    addMessage(_t("Minimum up bandwidth limit is {0}KBps", MIN_UP_BW));
+                    String msg = _t("Minimum up bandwidth limit is {0}KBps", MIN_UP_BW);
+                    addMessage(msg);
+                    if (!_context.isRouterContext())
+                        System.out.println(" • " + msg);
                 }
             }
         }
 
-   if (startDelay != null && _context.isRouterContext()) {
-      int minutes = _util.getStartupDelay();
-                try { minutes = Integer.parseInt(startDelay.trim()); } catch (NumberFormatException nfe) {}
-           if ( minutes != _util.getStartupDelay()) {
-                      _util.setStartupDelay(minutes);
-                       changed = true;
-                     _config.setProperty(PROP_STARTUP_DELAY, Integer.toString(minutes));
-                      addMessageNoEscape(_t("Startup delay changed to {0}", DataHelper.formatDuration2(minutes * (60L * 1000))));
-                }
-   }
-
-   if (refreshDelay != null) {
-       try {
-                int secs = Integer.parseInt(refreshDelay.trim());
-           if (secs != getRefreshDelaySeconds()) {
+       if (startDelay != null && _context.isRouterContext()) {
+           int minutes = _util.getStartupDelay();
+           try { minutes = Integer.parseInt(startDelay.trim()); } catch (NumberFormatException nfe) {}
+           if (minutes != _util.getStartupDelay()) {
+               _util.setStartupDelay(minutes);
                changed = true;
-               _config.setProperty(PROP_REFRESH_DELAY, Integer.toString(secs));
-                    if (secs >= 0)
-                   addMessageNoEscape(_t("Refresh time changed to {0}", DataHelper.formatDuration2(secs * 1000)));
-               else
-                   addMessage(_t("Refresh disabled"));
+               _config.setProperty(PROP_STARTUP_DELAY, Integer.toString(minutes));
+               String msg = _t("Startup delay changed to {0}", DataHelper.formatDuration2(minutes * (60L * 1000)));
+               addMessageNoEscape(msg);
+               if (!_context.isRouterContext())
+                   System.out.println(" • " + msg);
            }
-       } catch (NumberFormatException nfe) {}
-   }
+       }
 
-        if (pageSize != null) {
-            try {
-                int size = Integer.parseInt(pageSize.trim());
-                if (size <= 0)
-                    size = 999999;
-                else if (size < 5)
-                    size = 5;
-                if (size != getPageSize()) {
-                    changed = true;
-                    pageSize = Integer.toString(size);
-                    _config.setProperty(PROP_PAGE_SIZE, pageSize);
-                    addMessage(_t("Page size changed to {0}", pageSize));
-                }
-            } catch (NumberFormatException nfe) {}
+       if (refreshDelay != null) {
+           try {
+               int secs = Integer.parseInt(refreshDelay.trim());
+               if (secs != getRefreshDelaySeconds()) {
+                   changed = true;
+                   _config.setProperty(PROP_REFRESH_DELAY, Integer.toString(secs));
+                   if (secs >= 0) {
+                       String msg = _t("Refresh time changed to {0}", DataHelper.formatDuration2(secs * 1000));
+                       addMessageNoEscape(msg);
+                       if (!_context.isRouterContext())
+                           System.out.println(" • " + msg.replace("&nbsp;", " "));
+                   } else {
+                       String msg = _t("Refresh disabled");
+                       addMessage(msg);
+                       if (!_context.isRouterContext())
+                           System.out.println(" • " + msg);
+                   }
+               }
+           } catch (NumberFormatException nfe) {}
+       }
+
+       if (pageSize != null) {
+           try {
+               int size = Integer.parseInt(pageSize.trim());
+               if (size <= 0)
+                   size = 999999;
+               else if (size < 5)
+                   size = 5;
+               if (size != getPageSize()) {
+                   changed = true;
+                   pageSize = Integer.toString(size);
+                   _config.setProperty(PROP_PAGE_SIZE, pageSize);
+                   addMessage(_t("Page size changed to {0}", pageSize));
+               }
+           } catch (NumberFormatException nfe) {}
+       }
+
+       // set this before we check the data dir
+       if (areFilesPublic() != filesPublic) {
+           _config.setProperty(PROP_FILES_PUBLIC, Boolean.toString(filesPublic));
+           _util.setFilesPublic(filesPublic);
+           if (filesPublic) {
+               String msg = _t("New files will be publicly readable");
+               addMessage(msg);
+               if (!_context.isRouterContext())
+                   System.out.println(" • " + msg);
+           } else {
+               String msg = _t("New files will not be publicly readable");
+               addMessage(msg);
+               if (!_context.isRouterContext())
+                   System.out.println(" • " + msg);
+           }
+           changed = true;
+       }
+
+       if (dataDir != null && !dataDir.equals(getDataDir().getAbsolutePath())) {
+           dataDir = DataHelper.stripHTML(dataDir.trim());
+           File dd = areFilesPublic() ? new File(dataDir) : new SecureDirectory(dataDir);
+           if (!dd.isAbsolute()) {
+               String msg = _t("Data directory must be an absolute path") + ": " + dataDir;
+               addMessage(msg);
+               if (!_context.isRouterContext())
+                   System.out.println(" • " + msg);
+           } else if (!dd.exists() && !dd.mkdirs()) {
+               // save this tag for now, may need it again
+               if (false) {
+                   String msg = _t("Data directory does not exist") + ": " + dataDir;
+                   addMessage(msg);
+                   if (!_context.isRouterContext())
+                       System.out.println(" • " + msg);
+               }
+               String msg = _t("Data directory cannot be created") + ": " + dataDir;
+               addMessage(msg);
+               if (!_context.isRouterContext())
+                   System.out.println(" • " + msg);
+           } else if (!dd.isDirectory()) {
+               String msg = _t("Not a directory") + ": " + dataDir;
+               addMessage(msg);
+               if (!_context.isRouterContext())
+                   System.out.println(" • " + msg);
+           } else if (!dd.canRead()) {
+               String msg = _t("Unreadable") + ": " + dataDir;
+               addMessage(msg);
+               if (!_context.isRouterContext())
+                   System.out.println(" • " + msg);
+           } else {
+               if (!dd.canWrite()) {
+                   String msg = _t("No write permissions for data directory") + ": " + dataDir;
+                   addMessage(msg);
+                   if (!_context.isRouterContext())
+                       System.out.println(" • " + msg);
+               }
+               changed = true;
+               interruptMonitor = true;
+               _config.setProperty(PROP_DIR, dataDir);
+               String msg = _t("Data directory changed to {0}", dataDir);
+               addMessage(msg);
+               if (!_context.isRouterContext())
+                   System.out.println(" • " + msg);
+           }
         }
 
-        // set this before we check the data dir
-        if (areFilesPublic() != filesPublic) {
-            _config.setProperty(PROP_FILES_PUBLIC, Boolean.toString(filesPublic));
-            _util.setFilesPublic(filesPublic);
-            if (filesPublic)
-                addMessage(_t("New files will be publicly readable"));
-            else
-                addMessage(_t("New files will not be publicly readable"));
-            changed = true;
-        }
-
-        if (dataDir != null && !dataDir.equals(getDataDir().getAbsolutePath())) {
-            dataDir = DataHelper.stripHTML(dataDir.trim());
-            File dd = areFilesPublic() ? new File(dataDir) : new SecureDirectory(dataDir);
-            if (!dd.isAbsolute()) {
-                addMessage(_t("Data directory must be an absolute path") + ": " + dataDir);
-            } else if (!dd.exists() && !dd.mkdirs()) {
-                // save this tag for now, may need it again
-                if (false)
-                    addMessage(_t("Data directory does not exist") + ": " + dataDir);
-                addMessage(_t("Data directory cannot be created") + ": " + dataDir);
-            } else if (!dd.isDirectory()) {
-                addMessage(_t("Not a directory") + ": " + dataDir);
-            } else if (!dd.canRead()) {
-                addMessage(_t("Unreadable") + ": " + dataDir);
-            } else {
-                if (!dd.canWrite())
-                    addMessage(_t("No write permissions for data directory") + ": " + dataDir);
-                changed = true;
-                interruptMonitor = true;
-                _config.setProperty(PROP_DIR, dataDir);
-                addMessage(_t("Data directory changed to {0}", dataDir));
-            }
-
-        }
-
-   // Standalone (app context) language.
-   // lang will generally be null since it is hidden from the form if in router context.
+        // Standalone (app context) language.
+        // lang will generally be null since it is hidden from the form if in router context.
 
         if (lang != null && !_context.isRouterContext() &&
             lang.length() >= 2 && lang.length() <= 6) {
@@ -1282,96 +1329,110 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
 
 
+        // Start of I2CP stuff.
+        // i2cpHost will generally be null since it is hidden from the form if in router context.
 
-   // Start of I2CP stuff.
-   // i2cpHost will generally be null since it is hidden from the form if in router context.
+        int oldI2CPPort = _util.getI2CPPort();
+        String oldI2CPHost = _util.getI2CPHost();
+        int port = oldI2CPPort;
+        if (i2cpPort != null) {
+            try { port = Integer.parseInt(i2cpPort); } catch (NumberFormatException nfe) {}
+        }
 
-            int oldI2CPPort = _util.getI2CPPort();
-            String oldI2CPHost = _util.getI2CPHost();
-            int port = oldI2CPPort;
-            if (i2cpPort != null) {
-                try { port = Integer.parseInt(i2cpPort); } catch (NumberFormatException nfe) {}
+        Map<String, String> opts = new HashMap<String, String>();
+        i2cpOpts = DataHelper.stripHTML(i2cpOpts);
+        StringTokenizer tok = new StringTokenizer(i2cpOpts, " \t\n");
+        while (tok.hasMoreTokens()) {
+            String pair = tok.nextToken();
+            int split = pair.indexOf('=');
+            if (split > 0)
+                opts.put(pair.substring(0, split), pair.substring(split+1));
+        }
+        Map<String, String> oldOpts = new HashMap<String, String>();
+        String oldI2CPOpts = _config.getProperty(PROP_I2CP_OPTS);
+        if (oldI2CPOpts == null) oldI2CPOpts = "";
+        tok = new StringTokenizer(oldI2CPOpts, " \t\n");
+        while (tok.hasMoreTokens()) {
+            String pair = tok.nextToken();
+            int split = pair.indexOf('=');
+            if (split > 0)
+                oldOpts.put(pair.substring(0, split), pair.substring(split+1));
+        }
+
+        boolean reconnect = i2cpHost != null && i2cpHost.trim().length() > 0 && port > 0 &&
+                            (port != _util.getI2CPPort() || !oldI2CPHost.equals(i2cpHost));
+        if (reconnect || !oldOpts.equals(opts)) {
+            boolean snarksActive = false;
+            if (reconnect) {
+                for (Snark snark : _snarks.values()) {
+                    if (!snark.isStopped()) {
+                        snarksActive = true;
+                        break;
+                    }
+                }
             }
-
-            Map<String, String> opts = new HashMap<String, String>();
-            i2cpOpts = DataHelper.stripHTML(i2cpOpts);
-            StringTokenizer tok = new StringTokenizer(i2cpOpts, " \t\n");
-            while (tok.hasMoreTokens()) {
-                String pair = tok.nextToken();
-                int split = pair.indexOf('=');
-                if (split > 0)
-                    opts.put(pair.substring(0, split), pair.substring(split+1));
-            }
-            Map<String, String> oldOpts = new HashMap<String, String>();
-            String oldI2CPOpts = _config.getProperty(PROP_I2CP_OPTS);
-            if (oldI2CPOpts == null) oldI2CPOpts = "";
-            tok = new StringTokenizer(oldI2CPOpts, " \t\n");
-            while (tok.hasMoreTokens()) {
-                String pair = tok.nextToken();
-                int split = pair.indexOf('=');
-                if (split > 0)
-                    oldOpts.put(pair.substring(0, split), pair.substring(split+1));
-            }
-
-            boolean reconnect = i2cpHost != null && i2cpHost.trim().length() > 0 && port > 0 &&
-                                (port != _util.getI2CPPort() || !oldI2CPHost.equals(i2cpHost));
-            if (reconnect || !oldOpts.equals(opts)) {
-                boolean snarksActive = false;
-                if (reconnect) {
+            if (_log.shouldDebug())
+                _log.debug("i2cp host [" + i2cpHost + "] i2cp port " + port + " opts [" + opts + "] oldOpts [" + oldOpts + "]");
+            if (snarksActive) {
+                Properties p = new Properties();
+                p.putAll(opts);
+                _util.setI2CPConfig(i2cpHost, port, p);
+                _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
+                String msg = _t("I2CP and tunnel changes will take effect after stopping all torrents");
+                addMessage(msg);
+                if (!_context.isRouterContext())
+                    System.out.println(" • " + msg);
+            } else if (!reconnect) {
+                // The usual case, the other two are if not in router context
+                _config.setProperty(PROP_I2CP_OPTS, i2cpOpts.trim());
+                String msg = _t("I2CP options changed to {0}", i2cpOpts);
+                addMessage(msg);
+                if (!_context.isRouterContext())
+                    System.out.println(" • " + msg);
+                _util.setI2CPConfig(oldI2CPHost, oldI2CPPort, opts);
+            } else {
+                // Won't happen, I2CP host/port, are hidden in the GUI if in router context
+                if (_util.connected()) {
+                    _util.disconnect();
+                    addMessage(_t("Disconnecting old I2CP destination"));
+                }
+                String msg = _t("I2CP settings changed to {0}", i2cpHost + ':' + port + ' ' + i2cpOpts);
+                addMessage(msg);
+                if (!_context.isRouterContext())
+                    System.out.println(" • " + msg);
+                _util.setI2CPConfig(i2cpHost, port, opts);
+                _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
+                boolean ok = _util.connect();
+                if (!ok) {
+                    msg = _t("Unable to connect with the new settings, reverting to the old I2CP settings");
+                    addMessage(msg);
+                    if (!_context.isRouterContext())
+                        System.out.println(" • " + msg);
+                    _util.setI2CPConfig(oldI2CPHost, oldI2CPPort, oldOpts);
+                    ok = _util.connect();
+                    if (!ok) {
+                        msg = _t("Unable to reconnect with the old settings!");
+                        addMessage(msg);
+                        if (!_context.isRouterContext())
+                            System.out.println(" • " + msg);
+                    }
+                } else {
+                    addMessage(_t("Reconnected on the new I2CP destination"));
+                    _config.setProperty(PROP_I2CP_HOST, i2cpHost.trim());
+                    _config.setProperty(PROP_I2CP_PORT, "" + port);
+                    _config.setProperty(PROP_I2CP_OPTS, i2cpOpts.trim());
+                    // no PeerAcceptors/I2PServerSockets to deal with, since all snarks are inactive
                     for (Snark snark : _snarks.values()) {
-                        if (!snark.isStopped()) {
-                            snarksActive = true;
+                        if (snark.restartAcceptor()) {
+                            addMessage(_t("I2CP listener restarted for \"{0}\"", snark.getBaseName()));
+                            // this is the common ConnectionAcceptor, so we only need to do it once
                             break;
                         }
                     }
                 }
-                if (_log.shouldDebug())
-                    _log.debug("i2cp host [" + i2cpHost + "] i2cp port " + port + " opts [" + opts
-                               + "] oldOpts [" + oldOpts + "]");
-                if (snarksActive) {
-                    Properties p = new Properties();
-                    p.putAll(opts);
-                    _util.setI2CPConfig(i2cpHost, port, p);
-                    _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
-                    addMessage(_t("I2CP and tunnel changes will take effect after stopping all torrents"));
-                } else if (!reconnect) {
-                    // The usual case, the other two are if not in router context
-                    _config.setProperty(PROP_I2CP_OPTS, i2cpOpts.trim());
-                    addMessage(_t("I2CP options changed to {0}", i2cpOpts));
-                    _util.setI2CPConfig(oldI2CPHost, oldI2CPPort, opts);
-                } else {
-                    // Won't happen, I2CP host/port, are hidden in the GUI if in router context
-                    if (_util.connected()) {
-                        _util.disconnect();
-                        addMessage(_t("Disconnecting old I2CP destination"));
-                    }
-                    addMessage(_t("I2CP settings changed to {0}", i2cpHost + ':' + port + ' ' + i2cpOpts));
-                    _util.setI2CPConfig(i2cpHost, port, opts);
-                    _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
-                    boolean ok = _util.connect();
-                    if (!ok) {
-                        addMessage(_t("Unable to connect with the new settings, reverting to the old I2CP settings"));
-                        _util.setI2CPConfig(oldI2CPHost, oldI2CPPort, oldOpts);
-                        ok = _util.connect();
-                        if (!ok)
-                            addMessage(_t("Unable to reconnect with the old settings!"));
-                    } else {
-                        addMessage(_t("Reconnected on the new I2CP destination"));
-                        _config.setProperty(PROP_I2CP_HOST, i2cpHost.trim());
-                        _config.setProperty(PROP_I2CP_PORT, "" + port);
-                        _config.setProperty(PROP_I2CP_OPTS, i2cpOpts.trim());
-                        // no PeerAcceptors/I2PServerSockets to deal with, since all snarks are inactive
-                        for (Snark snark : _snarks.values()) {
-                            if (snark.restartAcceptor()) {
-                                addMessage(_t("I2CP listener restarted for \"{0}\"", snark.getBaseName()));
-                                // this is the common ConnectionAcceptor, so we only need to do it once
-                                break;
-                            }
-                        }
-                    }
-                }
-                changed = true;
-            }  // reconnect || changed options
+            }
+            changed = true;
+        }  // reconnect || changed options
 
         if (shouldAutoStart() != autoStart) {
             _config.setProperty(PROP_AUTO_START, Boolean.toString(autoStart));
@@ -2705,7 +2766,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     boolean oldOK = routerOK;
                     // standalone, first time only
                     if (doMagnets && !_context.isRouterContext())
-                        System.out.println(" • " + _t("Connecting to I2P") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
+                        System.out.println(" • " + _t("Connecting to I2P") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
                     routerOK = getBWLimit();
                     if (routerOK) {
                         autostart = shouldAutoStart();
@@ -2719,7 +2780,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         String msg = _t("Connecting to I2P") + "...";
                                         addMessage(msg);
                                         if (!_context.isRouterContext())
-                                            System.out.println(msg + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
+                                            System.out.println(" • " + msg + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
                                         // getBWLimit() was successful so this should work
                                         boolean ok = _util.connect();
                                         if (!ok) {
@@ -2785,7 +2846,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         _log.error("Error in the DirectoryMonitor", e);
                     }
                     if (!_context.isRouterContext()) {
-                        addMessage(_t("I2P+ I2PSnark standalone version {0} started", CoreVersion.VERSION));
+                        String msg = _t("I2P+ I2PSnark standalone version {0} started", CoreVersion.VERSION);
+                        addMessage(msg);
+                        if (!_context.isRouterContext())
+                            System.out.println(" • " + msg);
                     }
                     if (routerOK && !_snarks.isEmpty())
                         addMessage(_t("Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers.", _util.getMaxUpBW(), _util.getMaxUploaders()));

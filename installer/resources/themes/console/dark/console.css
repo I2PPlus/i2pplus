@@ -1449,7 +1449,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 .configtable {margin-top: -1px; margin-bottom: -2px}
 .configtable tr:last-child {border-top: var(--border)}
 .configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, #debugmode, .sybilinfo {padding: 20px 24px 20px 58px; line-height: 1.4; white-space: normal; font-weight: 400; text-align: justify; border-bottom: var(--border); border-top: var(--border); background: var(--infohelp) no-repeat 15px center / 28px, var(--msg)}
-.configtable td {padding: 6px 10px; line-height: 1.8; background: #000}
+.configtable td {padding: 6px 10px; line-height: 1.8; background: rgba(0,16,0,.3)}
 .configtable td.tabletextarea {padding: 0; background: none}
 .h3navlinks a {display: inline-block; vertical-align: middle}
 .h3navlinks a:first-child {padding-right: 9px}
@@ -1527,7 +1527,7 @@ th.th_title {padding: 8px 10px; position: static; text-align: left; background: 
 
 /* keyring */
 #config_keyring h3 {margin-bottom: -1px; border-width: 1px}
-.encDests th, .encDests td {line-height: 1.2; font-size: 8.5pt}
+#config_keyring .encDests th, #config_keyring .encDests td {line-height: 1.2; font-size: 8.5pt}
 .encDests th {text-align: left}
 .encDests th:first-child, .encDests td:first-child, .encDests th:nth-child(3), .encDests td:nth-child(3) {width: 10%}
 .encDests th:nth-child(2), .encDests td:nth-child(2), .encDests th:nth-child(3), .encDests td:nth-child(3), .encDests th:nth-child(4), .encDests td:nth-child(4), .encDests th:nth-child(5), .encDests td:nth-child(5), .encDests td[colspan="8"] {text-align: center}
@@ -1697,6 +1697,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #netconfig input[name*="ost"] {width: 250px}
 #netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus), #netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {width: 140px; min-width: 140px; transition: ease width .1s}
 #netconfig tr, #i2pupdates tr, #config_reseed tr {background: #000}
+#config_update td, #config_reseed td, #config_plugins td {border-top: var(--border)}
 #netconfig tr:nth-last-child(3) .optionlist {margin-bottom: -1px}
 #reseedconfig th.options, #i2pupdates th.options {padding-left: 3px}
 #netconfig label, #externali2cp .optionlist label, #externali2cp .nowrap, #reseedconfig .nowrap, #updatehelper .nowrap, #updateProxyHostPort .nowrap, #i2pupdates .nowrap, #manualreseed .nowrap, #graphs .nowrap {min-width: 480px; width: calc(100% - 11px); display: inline-block; margin: 1px 0; padding: 2px 5px 0; background: #010; line-height: 1}
@@ -2190,7 +2191,7 @@ a[href^="/netdb"]:hover span {color: var(--hover)}
 #config_ui .formaction {background: #000}
 #config_peers .optionsave, #refreshsidebar .optionsave {box-shadow: none}
 #refreshsidebar tr:first-child {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030}
-#pluginconfig tr {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #020, inset 0 -1px 1px 1px #020, inset -1px 0 1px 1px #020; background: none; /*background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), var(--camotile)*/}
+#pluginconfig tr {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #020, inset 0 -1px 1px 1px #020, inset -1px 0 1px 1px #020; background: none; background: var(--row)}
 #plugininstall, #plugininstall2, #reseedconfig tr, #manualreseed tr, #i2pupdates tr, #netconfig tr, #externali2cp tr, #joinfamily tr:last-child, #newfamily tr:last-child {box-shadow: var(--highlight), inset 0 0 1px 1px #040; background: none; /*background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), var(--camotile)*/}
 #netconfig td.infohelp, #reseedconfig td.infohelp {box-shadow: var(--highlight), inset 0 0 1px 1px #040; background: #000 var(--infohelp) no-repeat 15px center / 32px}
 #netconfig td.infowarn {background: #000 var(--infowarn) no-repeat 15px center / 32px}
@@ -2365,7 +2366,7 @@ iframe {height: 0}
 #webmail, #torrents {margin-top: -1px; padding: 0; background: #000}
 #tunnelmgr {min-width: 665px}
 #main#embedded {padding: 0}
-#rawtext_frame {margin: 0}
+#rawtext_frame {margin: 0; height: calc(100vh - 80px) !important; overflow: auto !important}
 #webmail::before, #dns::before {top: -1px}
 #susimailframe, #i2psnarkframe {margin: 0; box-shadow: var(--bevel); background: #000800}
 #susidnsframe {margin: 0 0 -3px}

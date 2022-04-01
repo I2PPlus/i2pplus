@@ -1,0 +1,17 @@
+name: Google Java Format
+
+on:
+  push:
+    branches:
+      - googleformat
+
+jobs:
+
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 # v2 minimum required
+      - uses: axel-op/googlejavaformat-action@v3.6.0
+        with:
+          args: "--skip-sorting-imports --replace"
+          files-excluded: "Strings.java|CoreVersion.java|Version.java"
