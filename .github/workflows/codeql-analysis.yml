@@ -64,7 +64,7 @@ jobs:
 
     - name: Install dependencies
       run: sudo apt-get install -yqq libc6-i386 ant gettext zip
-      
+
     - name: Build pkg with ant
       run: ant pkg
 
@@ -74,3 +74,7 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
+
+    - name: GitHub Security Report Action
+      uses: peter-murray/github-security-report-action@v2
+      token: ${{ secrets.MY_TOKEN || github.token }}

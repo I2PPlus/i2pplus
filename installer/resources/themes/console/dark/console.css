@@ -1324,11 +1324,11 @@ th code {user-select: all}
 .applink:hover a:link, .applink:hover a:visited {color: var(--hover)}
 .applink:hover .applabel, .sitemapLink:hover .sitemapLabel, .themechoice:hover .themelabel, .langselect:hover .ui_lang {background: var(--glow_bottom_hover) #000}
 .applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover)}
-.applink:hover img, .sitemapLink:hover img, a:focus .applink img, a:focus .sitemapLink img {opacity: 1; filter: none}
+.applink:hover img, .sitemapLink:hover img, a:focus .applink img, a:focus .sitemapLink img {opacity: 1; filter: none; transform: scale(1.1)}
 .applink a:link, .applink a:hover, .applink a:active {text-decoration: none; outline: none}
 .applink:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink); box-shadow: var(--depress); background: var(--hover)}
 .applink:active .applabel a {color: var(--ink)}
-.applink:active img {transform: scale(0.9)}
+.applink:active img, .sitemapLink:active img {transform: scale(0.9) !important}
 .appicon .extlink::after, .sitemapLink.extlink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
 .appicon .extlink::after {top: -3px}
 .applink:hover .extlink::after, .sitemapLink.extlink:hover::after {border: 1px solid #f50; background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px; opacity: 1; transform: scale(1); pointer-events: none}
@@ -2226,7 +2226,7 @@ h1[class], h1 {margin: 0 5px 0 226px; position: relative; z-index: 999; white-sp
 .newscontent a[href="/configadvanced"] + tt {margin-left: .35em}
 
 #configstats tr.tablefooter td.optionsave, #sidebarconf tr:last-child td, #i2pupdates tr.tablefooter td {background: transparent }
-#config_bandwidth td.optionsave, #config_advanced td.optionsave, #config_clients .formaction, #config_homepage .formaction, #config_i2cp td.optionsave, #config_keyring tr:last-child, #config_logging td.optionsave, #config_network td.optionsave, #config_peers .configtable tr:nth-child(4) td, #config_peers .configtable tr:last-child td, #pluginconfigactions.formaction, #reseedconfig td.optionsave, #config_service .formaction, #configstats tr.tablefooter, #config_summarybar .formaction,#sidebarconf tr:last-child, #tunnelconfigsave.formaction, #config_ui .formaction, #graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #sybilTask .optionsave {background: var(--h3), var(--footer); background-size: 2px, 100%}
+#config_bandwidth td.optionsave, #config_advanced td.optionsave, #config_clients .formaction, #config_homepage .formaction, #config_i2cp td.optionsave, #config_keyring .optionsave, #config_logging td.optionsave, #config_network td.optionsave, #config_peers .configtable tr:nth-child(4) td, #config_peers .configtable tr:last-child td, #pluginconfigactions.formaction, #reseedconfig td.optionsave, #config_service .formaction, #configstats tr.tablefooter, #config_summarybar .formaction,#sidebarconf tr:last-child, #tunnelconfigsave.formaction, #config_ui .formaction, #graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #sybilTask .optionsave {background: var(--h3), var(--footer); background-size: 2px, 100%}
 
 #profiles th::after {display: none}
 #banneduntilrestart th, #banneduntilrestart td {border-right: var(--border)}
