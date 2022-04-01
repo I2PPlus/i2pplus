@@ -344,24 +344,28 @@ public class IterativeSearchJob extends FloodSearchJob {
                         // go around again
                     }
 
-                    RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
                     String MIN_VERSION = "0.9.53";
-                    String v = ri.getVersion();
                     boolean isHidden = getContext().router().isHidden();
-                    boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                            ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                            ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                            VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                            getContext().netDb().getKnownRouters() > 3000 &&
-                                            getContext().router().getUptime() > 15*60*1000 && !isHidden;
-                    if (uninteresting) {
-                        if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Skipping query: Router [" + _key.toBase64().substring(0,6) + "] is uninteresting");
+                    RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
+                    if (ri != null) {
+                        String v = ri.getVersion();
+                        boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                                VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                                getContext().netDb().getKnownRouters() > 3000 &&
+                                                getContext().router().getUptime() > 15*60*1000 && !isHidden;
+                        if (uninteresting) {
+                            if (_log.shouldInfo())
+                                _log.info("[Job " + getJobId() + "] Skipping query: Router [" + _key.toBase64().substring(0,6) + "] is uninteresting");
+                            return;
+                        }
+
+                        if (peer == null)
+                            return;
+                    } else {
                         return;
                     }
-
-                    if (peer == null)
-                        return;
                 }
                 _unheardFrom.add(peer);
             }
