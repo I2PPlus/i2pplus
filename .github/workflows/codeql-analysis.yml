@@ -78,5 +78,10 @@ jobs:
 
     - name: GitHub Security Report Action
       uses: peter-murray/github-security-report-action@v2
+      permissions:
+        actions: read
+        contents: write
+        security-events: write
+        pull-requests: write
       with:
         token: ${{ secrets.MY_TOKEN || github.token }}
