@@ -58,6 +58,7 @@
   --th: linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
   --txtinput: linear-gradient(180deg, #f2f2ff, #fff);
   --txtinput_shadow_focus: 0 0 0 1px rgba(255,255,255,.8), 0 0 2px 2px rgba(255,96,0,.8), var(--highlight), var(--btn_shadow_active);
+  --txtinput_shadow_search: var(--highlight), var(--btn_shadow_active);
 }
 
 html, body {
