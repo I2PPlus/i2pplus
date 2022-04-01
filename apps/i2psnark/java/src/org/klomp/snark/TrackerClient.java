@@ -81,7 +81,7 @@ public class TrackerClient implements Runnable {
   private final static int SLEEP = 5; // 5 minutes.
   private final static int DELAY_MIN = 2000; // 2 secs.
   private final static int DELAY_RAND = 6*1000;
-  private final static int MAX_REGISTER_FAILS = 10; // * INITIAL_SLEEP = 15m to register
+  private final static int MAX_REGISTER_FAILS = 15; // * INITIAL_SLEEP = 15m to register
   private final static int INITIAL_SLEEP = 90*1000;
 //  private final static int MAX_CONSEC_FAILS = 5;    // slow down after this
   private final static int MAX_CONSEC_FAILS = 10;    // slow down after this
@@ -301,7 +301,8 @@ public class TrackerClient implements Runnable {
                 _log.warn("Skipping invalid or non-i2p announce: " + primary + "\n* + Torrent: " + snark.getBaseName());
         }
     } else {
-        _log.warn("No primary announce for: " + snark.getBaseName());
+        if (_log.shouldWarn())
+            _log.warn("No primary announce for: " + snark.getBaseName());
     }
 
     // announce list
@@ -600,6 +601,8 @@ public class TrackerClient implements Runnable {
                                   .replace("afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p", "lyoko.i2p")
                                   .replace("s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p", "tracker.thebland.i2p")
                                   .replace("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p", "torrfreedom.i2p")
+                                  .replace("by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p", "opentracker.skank.i2p")
+                                  .replace("punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p", "opentracker.r4sas.i2p")
                                   .replace("http://", "") + "]");
 //                                  "]\n* " + ioe.getMessage());
                     tr.trackerProblems = ioe.getMessage();
