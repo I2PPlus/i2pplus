@@ -76,7 +76,7 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
 
-    - name: GitHub Security Report Action
-      uses: peter-murray/github-security-report-action@v2
-      with:
-        token: ${{ secrets.MY_TOKEN || github.token }}
+#    - name: GitHub Security Report Action
+#      uses: peter-murray/github-security-report-action@v2
+#      with:
+#        token: ${{ secrets.MY_TOKEN || github.token }}
