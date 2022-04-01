@@ -77,4 +77,5 @@ jobs:
 
     - name: GitHub Security Report Action
       uses: peter-murray/github-security-report-action@v2
-      token: ${{ secrets.MY_TOKEN || github.token }}
+      with:
+        token: ${{ secrets.MY_TOKEN || github.token }}
