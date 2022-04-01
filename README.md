@@ -1,5 +1,6 @@
 [![CodeQL](https://github.com/vituperative/i2pplus/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/vituperative/i2pplus/actions/workflows/codeql-analysis.yml)
 [![Java CI](https://github.com/vituperative/i2pplus/actions/workflows/ant.yml/badge.svg)](https://github.com/vituperative/i2pplus/actions/workflows/ant.yml)
+[![Google Java Format](https://github.com/vituperative/i2pplus/actions/workflows/googleformat.yml/badge.svg)](https://github.com/vituperative/i2pplus/actions/workflows/googleformat.yml)
 [![I2P+ Update zip](https://i2pplus.github.io/download.svg)](https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2pupdate.zip?job=Java8)
 [![I2P+ I2PSnark standalone](https://i2pplus.github.io/i2psnarkdownload.svg)](https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2psnark-standalone.zip?job=Java8)
 [![I2P+ Javadocs](https://i2pplus.github.io/javadocsdownload.svg)](https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/javadoc.zip?job=Java14)
