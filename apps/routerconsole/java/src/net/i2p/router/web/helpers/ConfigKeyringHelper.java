@@ -102,7 +102,7 @@ public class ConfigKeyringHelper extends HelperBase {
             if (!local)
                 buf.append(_t("Encrypted")).append(" (AES)");
             SessionKey sk = e.getValue();
-            buf.append("</td><td><code>");
+            buf.append("</td><td class=\"encKey\"><code>");
             buf.append(sk.toBase64());
             buf.append("</code></td><td>");
             if (!local)
@@ -148,7 +148,7 @@ public class ConfigKeyringHelper extends HelperBase {
                         s = _t("Blinded");
                 }
                 buf.append(s);
-                buf.append("</td><td class=\"encKey\">");
+                buf.append("</td><td class=\"encKey\"><code>");
                 if (pk != null) {
                     // display pubkey for DH for sharing with server
                     if (type == BlindData.AUTH_DH)
@@ -156,7 +156,7 @@ public class ConfigKeyringHelper extends HelperBase {
                     else
                         buf.append(pk.toBase64());
                 }
-                buf.append("</td><td class=\"password\">");
+                buf.append("</code></td><td class=\"password\">");
                 if (secret != null)
                     buf.append(secret);
                 buf.append("</td><td class=\"created\">");
