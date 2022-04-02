@@ -81,7 +81,8 @@ public abstract class SystemVersion {
                            (_isGentoo && GENTOO_USER.equals(System.getProperty("user.name"))));
         _isService = _isLinuxService || _isWindowsService;
         // we assume the Apple M1 is not slow, however isSlow() below will still return true until we have a jbigi
-        _isSlow = _isAndroid || _isApache || (isARM() && !_isMac) || _isGNU || _isZero || getMaxMemory() < 128*1024*1024L;
+//        _isSlow = _isAndroid || _isApache || (isARM() && !_isMac) || _isGNU || _isZero || getMaxMemory() < 128*1024*1024L;
+        _isSlow = _isAndroid || _isApache || (isARM() && !_isMac) || _isGNU || _isZero || getMaxMemory() < 256*1024*1024L;
 
         int sdk = 0;
         if (_isAndroid) {
@@ -240,7 +241,7 @@ public abstract class SystemVersion {
     public static boolean isSlow() {
         // we don't put the NBI call in the static field,
         // to prevent a circular initialization with NBI.
-        return _isSlow || !NativeBigInteger.isNative();
+        return _isSlow || !NativeBigInteger.isNative() || getCores() < 4;
     }
 
     /**
