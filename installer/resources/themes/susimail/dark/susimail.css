@@ -34,12 +34,12 @@ div.footer {margin: 0 -1px -1px; border-top: none; border: var(--border); box-sh
 hr {margin: 5px; width: 100%; height: 1px; border: none; background: #252; opacity: .5}
 .footer hr {display: none}
 p.mailbody {margin-top: 0; padding: 0 0 15px; word-break: break-all; line-height: 1.3; text-align: left; color: #b5b774}
-a:hover, a:focus, tr:hover td[onclick] a {text-decoration: none; color: var(--hover)}
-a:visited {color: #252}
-a:active, tr:hover td[onclick]:active a {color: var(--active)}
 .linkspam {color: #300}
 .linknew {color: #5a5}
 .linkold {color: #494}
+a:visited {color: #252}
+a:hover, a:focus, tr:hover td[onclick] a {text-decoration: none; color: var(--hover); will-change: transform}
+a:active, tr:hover td[onclick]:active a {color: var(--active)}
 .noborder {margin-left: 0; margin-top: 0; margin-right: 0}
 pre {margin-left: 10px; margin-right: 10px; font-size: 9pt}
 .page {margin: 0; padding: 10px; min-width: 600px; line-height: 1.6; text-align: center; color: var(--ink); box-shadow: var(--highlight); border: var(--border); border-radius: 1px}
@@ -467,8 +467,9 @@ p.mailbody + p.info {margin-top: -53px}
 td {padding: 3px 5px}
 #dologin tr:last-child a {font-size: 90%}
 #info {margin: 4px 150px 0 4px}
-#mailbox th {font-size: 70%}
+#mailbox th {font-size: 80%}
 #messagenav {top: 9px}
 #viewmail .folders {top: -1px}
 .iframed #prefsave {margin-bottom: -11px}
+img.sort {width: 14px; height: 12px}
 }
