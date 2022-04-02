@@ -36,8 +36,10 @@ class UDPSender {
     // Queue needs to be big enough that we can compete with NTCP for
     // bandwidth requests, and so CoDel can work well.
     // When full, packets back up into the PacketPusher thread, pre-CoDel.
-    private static final int MIN_QUEUE_SIZE = 128;
-    private static final int MAX_QUEUE_SIZE = 768;
+//    private static final int MIN_QUEUE_SIZE = 128;
+//    private static final int MAX_QUEUE_SIZE = 768;
+    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 384;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 768 : 2048;
     private static final int CODEL_TARGET = 100;
     private static final int CODEL_INTERVAL = 500;
 
