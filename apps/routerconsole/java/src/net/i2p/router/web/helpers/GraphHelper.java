@@ -472,13 +472,13 @@ public class GraphHelper extends FormHandler {
                        (_showEvents ? HelperBase.CHECKED : "") + ">" + _t("Events") +
                        "</label></span><br>\n<span class=\"nowrap\">\n<b>");
             _out.write(_t("Hide legend") + ":</b> ");
-            _out.write("<label><input type=\"checkbox\" class=\"optbox\" value=\"true\" name=\"hideLegend\"");
+            _out.write("<label><input type=\"checkbox\" class=\"optbox slider\" value=\"true\" name=\"hideLegend\"");
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
             if (hideLegend)
                 _out.write(HelperBase.CHECKED);
             _out.write(">" + _t("Do not show legend on graphs") + "</label></span><br><span class=\"nowrap\">\n<b>");
             _out.write(_t("Persistence") +
-                       ":</b> <label><input type=\"checkbox\" class=\"optbox\" value=\"true\" name=\"persistent\"");
+                       ":</b> <label><input type=\"checkbox\" class=\"optbox slider\" value=\"true\" name=\"persistent\"");
             boolean persistent = _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT);
             if (persistent)
                 _out.write(HelperBase.CHECKED);

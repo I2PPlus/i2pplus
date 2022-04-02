@@ -84,7 +84,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 //    private static final int EEPGET_CONNECT_TIMEOUT = 45*1000;
     private static final int EEPGET_CONNECT_TIMEOUT = 60*1000;
 //    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 5*1000;
-    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 20*1000;
+    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 10*1000;
     public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
@@ -92,7 +92,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     public static final boolean DEFAULT_ENABLE_ADDCREATE = false;
     public static final boolean DEFAULT_USE_OPENTRACKERS = true;
 //    public static final int MAX_CONNECTIONS = 24; // per torrent
-    public static final int MAX_CONNECTIONS = 200; // per torrent
+    public static final int MAX_CONNECTIONS = 300; // per torrent
     public static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
     public static final boolean DEFAULT_USE_DHT = true;
     public static final String EEPGET_USER_AGENT = "I2PSnark";

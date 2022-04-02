@@ -146,16 +146,14 @@ class OutboundMessageDistributor {
             int stat;
             if (info != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Outbound distributor to " + _target
-                           + "." + (_tunnel != null ? _tunnel.getTunnelId() + "" : "")
-                           + ": found on search");
+                    _log.debug("Found Outbound distributor to [" + _target.toBase64().substring(0,6) + "] -> " +
+                               (_tunnel != null ? "[TunnelID " + _tunnel.getTunnelId() + "]" : "") + " via Lookup");
                 distribute(_message, info, _tunnel);
                 stat = 1;
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Outbound distributor to " + _target
-                           + "." + (_tunnel != null ? _tunnel.getTunnelId() + "" : "")
-                           + ": NOT found on search");
+                    _log.warn("Unable to find Outbound distributor to [" + _target.toBase64().substring(0,6) + "] -> " +
+                              (_tunnel != null ? "[TunnelID " + _tunnel.getTunnelId() + "]" : "") + " via Lookup");
                 stat = 0;
             }
             _context.statManager().addRateData("tunnel.distributeLookupSuccess", stat);
