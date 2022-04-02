@@ -1355,6 +1355,8 @@ h3[id="udpcon"] {width: auto}
 .applabel {margin: -4px 0 0; padding: 3px 2px 4px; width: 150px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; white-space: nowrap; line-height: .95; color: #4e47bf; text-align: center; text-transform: lowercase; border: none; border-top: var(--border_inner); border-radius: 0 0 2px 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,#141221, #001)}
 .applabel:hover {color: var(--hover); border-top: 1px solid var(--hover); background: #000}
 .applabel a, .applabel a:hover {padding: 2px 0; display: inline-block; max-width: 144px; overflow: hidden; text-overflow: ellipsis; text-decoration: none; outline: none}
+.applink a, .sitemapcontainer a {text-transform: capitalize}
+.applink a[href*=".i2p"] {text-transform: lowercase}
 .applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover); background: var(--label_hover)}
 .applink:hover a:link, .applink:hover a:visited, .applink a:focus {color: var(--hover)}
 .applink:hover {color: var(--hover); border: 1px solid var(--hover); box-shadow: none; background: var(--radial_glow_top) #000; opacity: 1}
