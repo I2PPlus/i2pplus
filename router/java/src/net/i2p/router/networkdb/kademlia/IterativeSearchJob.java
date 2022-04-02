@@ -160,19 +160,20 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (isLease) {
             _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME * 3 / 2);
             totalSearchLimit *= 3 / 2;
-        } else if (ri != null) {
+        } else {
             String MIN_VERSION = "0.9.53";
-            String v = ri.getVersion();
-            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                    VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                    ctx.netDb().getKnownRouters() > 3000 &&
-                                    ctx.router().getUptime() > 15*60*1000 && !isHidden;
-            if (uninteresting) {
-                _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME / 3 * 2);
-                totalSearchLimit -= 2;
-            } else if (known < 2000) {
+            if (ri != null) {
+                String v = ri.getVersion();
+                boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                        VersionComparator.comp(v, MIN_VERSION) < 0) && known > 2000;
+                                        // && ctx.router().getUptime() > 15*60*1000 && !isHidden;
+                if (uninteresting) {
+                    _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME / 2);
+                    totalSearchLimit -= 2;
+                }
+            } else if (known < 2000 || isHidden) {
                 totalSearchLimit += 2;
             } else {
                 _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
@@ -186,7 +187,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
         if (isLease)
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT * 2);
-        else if (ctx.netDb().getKnownRouters() < 2000 || ctx.router().getUptime() < 30*60*1000)
+        else if (ctx.netDb().getKnownRouters() < 2000 || ctx.router().getUptime() < 30*60*1000 || isHidden)
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT * 2);
         else
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
@@ -352,20 +353,18 @@ public class IterativeSearchJob extends FloodSearchJob {
                         boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                                VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                                getContext().netDb().getKnownRouters() > 3000 &&
-                                                getContext().router().getUptime() > 15*60*1000 && !isHidden;
+                                                VersionComparator.comp(v, MIN_VERSION) < 0) && !isHidden &&
+                                                getContext().netDb().getKnownRouters() > 2000;
+                                                //&& getContext().router().getUptime() > 15*60*1000 && !isHidden;
                         if (uninteresting) {
                             if (_log.shouldInfo())
                                 _log.info("[Job " + getJobId() + "] Skipping query: Router [" + _key.toBase64().substring(0,6) + "] is uninteresting");
                             return;
                         }
-
-                        if (peer == null)
-                            return;
-                    } else {
-                        return;
                     }
+                    else if (peer == null) {
+                       return;
+                   }
                 }
                 _unheardFrom.add(peer);
             }

@@ -1190,7 +1190,7 @@ th code {user-select: all}
 .sybil_routerinfo:first-of-type {margin-top: -11px}
 .sybil_routerinfo tr:last-child {border-top: none}
 .sybil_routerinfo th {padding: 1px 1px 1px 6px}
-.sybil_routerinfo th b[style="float: right;"] {margin-right: 6px; font-size: 85%; font-weight: 400; font-style: italic}
+.sybil_routerinfo th[colspan="2"] b[style="float:right"] {margin-right: 6px; font-size: 85%; font-weight: 400; font-style: italic}
 .sybil_routerinfo th:first-child {white-space: nowrap; text-align: left}
 .sybil_routerinfo th:last-child {width: 1%; white-space: nowrap}
 .sybil_routerinfo td:first-child {width: 50px}
