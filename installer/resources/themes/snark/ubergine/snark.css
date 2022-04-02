@@ -7,7 +7,7 @@
 :root {
 --badge: linear-gradient(180deg,#414,#313);
 --bevel: inset 0 0 2px 1px rgba(16,0,16,.5), 0 0 0 1px #202;
---bevel_notify: var(--bevel), inset 0 0 2px 0 #414, inset 0 0 4px 0 #905;
+--bevel_notify: inset 0 0 0 1px #101, inset 0 0 2px 0 #414, inset 0 0 4px 0 #905;
 --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, sans-serif;
 --border_hard: 1px solid #101;
 --border_inner: 1px solid #313;
@@ -949,11 +949,11 @@ td.torrentAction input[type=submit] {margin-top: 1px}
 #torrents #actionStartAll:active {background: var(--startall_hover) no-repeat center center / auto 12px, var(--btnAction_active)}
 #torrents #actionStopAll:active {background: var(--stopall_hover) no-repeat center center / auto 12px, var(--btnAction_active)}
 .torrentAction input[type=submit] {margin: 0 2px; padding: 12px; min-width: 0; min-height: 0; float: none; vertical-align: middle; font-size: 0; border: 1px solid #000; border-radius: 2px; box-shadow: inset 0 0 0 1px #414, inset 0 0 2px 0 #717; background-position: center center; opacity: .85; cursor: pointer; transition: ease box-shadow .03s; will-change: transform}
-.torrentAction input:hover, .torrentAction input:focus {/*border: 1px solid #f60; */box-shadow: inset 0 0 0 1px rgba(255,102,0, .6); opacity: 1; transition: ease box-shadow .03s; background-blend-mode: normal}
+.torrentAction input:hover, .torrentAction input:focus {box-shadow: inset 0 0 0 1px rgba(255,102,0, .6); opacity: 1; transition: ease box-shadow .03s; background-blend-mode: normal}
 .torrentAction input:active {box-shadow: 0 0 0 1px #414, inset 0 0 0 1px rgba(255,102,0, .6), inset 0 0 0 2px rgba(0,0,0,.9), inset 4px 4px 4px rgba(0,0,0,.9); background-size: auto 12px, 100%; transition: ease box-shadow .05s; filter: none}
 
 /* inline notifications */
-.notify table {background: linear-gradient(to bottom, rgba(96,0,96,.4), rgba(32,0,32,.4))}
+.notify td {background: linear-gradient(to bottom, rgba(72,0,72,.2), rgba(24,0,24,.3))}
 
 /* Resource Errors */
 .resourceError, .resourceError#NotFound {margin-bottom: 9px; border: var(--border_hard)}
