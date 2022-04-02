@@ -241,7 +241,7 @@ public abstract class SystemVersion {
     public static boolean isSlow() {
         // we don't put the NBI call in the static field,
         // to prevent a circular initialization with NBI.
-        return _isSlow || !NativeBigInteger.isNative() || getCores() < 4;
+        return _isSlow || !NativeBigInteger.isNative() || (getCores() < 4 && !is64Bit()) || getCores() == 1;
     }
 
     /**
@@ -397,7 +397,7 @@ public abstract class SystemVersion {
         if (maxMemory >= Long.MAX_VALUE / 2)
 //            maxMemory = 96*1024*1024l;
             /** speed: use sane default */
-            maxMemory = 2048*1024*1024l;
+            maxMemory = 8192*1024*1024l;
         return maxMemory;
     }
 
