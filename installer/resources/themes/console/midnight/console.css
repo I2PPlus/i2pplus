@@ -1591,11 +1591,12 @@ b.netdb_transport {display: inline-block; margin-right: 5px}
 .netdb_ouraddresses .netdb_transport {margin: -1px 5px 0 -6px; padding: 2px; display: inline-block}
 .netdb_ouraddresses:empty {display: none}
 .netdb_addresses {line-height: 1.5}
-.netdb_addresses .netdb_info, .netdb_name, .netdbentry code, #netdb .nowrap, .netdb_transport {max-width: 200px; display: inline-block; vertical-align: middle; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
-.netdb_addresses .netdb_transport {margin: -1px 4px -4px -6px; padding: 3px 5px 4px; min-width: 48px; line-height: 1.6; text-align: center; border: var(--border_badge); border-radius: 2px 0 0 2px; box-shadow: var(--highlight); background: #002}
-.netdb_addresses li, .netdb_ouraddresses {margin: 3px; padding: 0 5px 3px; vertical-align: middle; list-style: none; border: var(--border_badge); background: #000}
+.netdb_addresses .netdb_info, .netdb_name, .netdbentry code, #netdb .nowrap, .netdb_transport {display: inline-block; vertical-align: middle; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.netdb_addresses .netdb_transport {margin: -2px 4px -2px -6px; padding: 3px 5px 4px; min-width: 48px; line-height: 1.6; text-align: center; border: var(--border_badge); border-radius: 2px 0 0 2px; box-shadow: var(--highlight); background: #002}
+#netdb .netdb_addresses {padding: 2px 4px}
+.netdb_addresses li, .netdb_ouraddresses {margin: 2px 0; padding: 1px 5px; display: inline-block; vertical-align: middle; list-style: none; border: var(--border_badge); background: #000}
 .netdb_addresses .nowrap {margin: 0 2px 0 0; vertical-align: middle}
-.netdb_addresses span.netdb_info {margin-left: 3px; max-width: 180px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.netdb_addresses span.netdb_info {margin-left: 3px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .netdb_addresses ul {margin: 0; padding: 0; width: 100%; display: inline-block; columns: auto; column-gap: 0}
 .netdbentry .familyname {max-width: 140px; overflow: hidden; vertical-align: text-bottom; text-overflow: ellipsis; white-space: nowrap}
 .netdbentry th code {margin-left: 0}
