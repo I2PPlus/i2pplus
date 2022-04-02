@@ -262,7 +262,7 @@ h3#config {margin: 0 0 20px; padding: 10px; text-align: center; text-transform: 
 #infoUser {margin-right: 6px; padding: 3px 8px 4px 20px; display: inline-block; text-align: center; font-weight: 700; color: var(--ink); border-right: 1px solid #131; background: var(--user) no-repeat 2px center / 15px}
 .topbuttons {margin: -1px -1px 0; padding: 5px 5px 4px; width: calc(100% - 10px); min-width: 800px; display: inline-block; vertical-align: middle; white-space: nowrap; text-align: center; font-weight: 700; border: var(--border); box-shadow: var(--bevel); background: var(--th)}
 .topbuttons#readmail {padding: 5px 5px 8px}
-body:not(.iframed) .topbuttons {position: sticky; top: -1px; z-index: 1000; background: var(--topnav)
+body:not(.iframed) .topbuttons {position: sticky; top: -1px; z-index: 1000; background: var(--topnav)}
 .iframed .topbuttons {border-left: none; border-right: none}
 .topbuttons > * {vertical-align: middle}
 
@@ -411,7 +411,7 @@ tr.pagenavcontrols:hover .pagenavcontrols td, .topbuttons td, .topbuttons:hover 
 @keyframes fade-in {0%,80% {filter: opacity(0)} 100% {filter: opacity(1)}}
 @keyframes hide-up {from {margin-top: 0} to {margin-top: -300px}}
 @keyframes loading {0% {background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px)} 100% {background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg, #000 1px, #000 20px, #020 20px, #020 40px)}}
-@keyframes scaleY {from {transform: scaleY(0)} to {transform: scaleY(1)}
+@keyframes scaleY {from {transform: scaleY(0)} to {transform: scaleY(1)}}
 
 @supports (position: sticky) {#pagenavbottom {display: none}}
 
