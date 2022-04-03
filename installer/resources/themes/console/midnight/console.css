@@ -765,12 +765,13 @@ th.options, #externali2cp th {padding: 7px 10px}
 #externali2cp td {padding: 5px}
 
 /* keyring */
-.encDests td, .encDests th {font-size: 90%; border: var(--border_inner)}
+.encDests td, .encDests th {font-size: 90%}
 .encDests th {text-align: left}
-.encDests td {line-height: 1.2}
+.encDests td {line-height: 1.2; border: var(--border_inner)}
 .encDests th:nth-child(n+2), .encDests td:nth-child(n+2) {text-align: center}
 .encDests .b32 {margin: 0; padding: 0; display: table-cell; float: none; box-shadow: none; border: var(--border_inner); background: none}
 .encDests code {max-width: 100px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 85%; color: var(--ink); user-select: all}
+.encDests td[colspan="8"] {text-align: center}
 #addkeyring td:first-child {width: 15%; white-space: nowrap; font-weight: 700; padding-right: 0}
 #addkeyring tr:last-child {border-top: var(--border_inner); background: linear-gradient(180deg,#010014, #010010 50%)}
 #addkeyring tr:last-child td {padding-right: 6px}
@@ -1081,7 +1082,7 @@ h4.embeddedtitle#updateplugins {margin-top: -13px; padding: 5px 10px; word-spaci
 #netconfig th, #externali2cp th, #plugininstall th, .configtable th, th.th_title {text-align: left; padding: 10px 12px; text-transform: uppercase; font-size: 10pt; letter-spacing: .08em; word-spacing: .1em}
 #netconfig tr:first-child td.infohelp {background-image: url(/themes/console/images/networkconfig.svg)}
 .logtable, #enviro {margin-top: -1px}
-p.infowarn, td.infowarn, p.infohelp, td.infohelp {line-height: 1.6; background-size: 28px}
+p.infowarn, td.infowarn, p.infohelp, td.infohelp {line-height: 1.4; background-size: 28px}
 p.infowarn, td.infowarn, #sybilanalysis {padding: 20px 25px 20px 55px; border: var(--border_inner); background: var(--infowarn) no-repeat 15px center, linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,#200 2px, #000 4px); background-size: 28px, 100%, 100% 4px}
 p.infohelp, p#debugmode, p.sybilinfo, #sybilanalysis {border: var(--border_inner)}
 p.notfound {margin-top: -1px}
@@ -2085,22 +2086,22 @@ form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; 
 #events tr:hover td {background: rgba(255,255,255,.1)}
 
 /* h1 icons */
-h1 {background: var(--h1_network) no-repeat 10px center, var(--th)}
-h1.home {background: var(--h1_home) no-repeat 10px center, var(--th)}
-h1.perf {background: var(--h1_perf) no-repeat 10px center, var(--th)}
-h1.nfo, h1.newspage {background: var(--h1_info) no-repeat 10px center, var(--th)}
-h1.hlp {background: var(--h1_help) no-repeat 10px center, var(--th)}
-h1.addbook {background: var(--h1_addbook) no-repeat 10px center, var(--th)}
-h1.snark {background: var(--h1_snark) no-repeat 10px center, var(--th)}
-h1.mail {background: var(--h1_mail) no-repeat 10px center, var(--th)}
-h1.conf {background: var(--h1_config) no-repeat 10px center, var(--th)}
-h1.adv {background: var(--h1_info) no-repeat 10px center, var(--th)}
-h1.err {background: var(--h1_error) no-repeat 10px center, var(--th)}
-h1.sched {background: var(--h1_tasks) no-repeat 10px center, var(--th)}
-h1.log {background: var(--h1_logs) no-repeat 10px center, var(--th)}
-h1.webapp {background: var(--h1_webapp) no-repeat 10px center, var(--th)}
-h1.debug {background: var(--h1_debug) no-repeat 10px center, var(--th)}
-h1.newspage {background: var(--h1_news) no-repeat 10px center, var(--th)}
+h1 {background: var(--h1_network) no-repeat 10px center, var(--h1)}
+h1.home {background: var(--h1_home) no-repeat 10px center, var(--h1)}
+h1.perf {background: var(--h1_perf) no-repeat 10px center, var(--h1)}
+h1.nfo, h1.newspage {background: var(--h1_info) no-repeat 10px center, var(--h1)}
+h1.hlp {background: var(--h1_help) no-repeat 10px center, var(--h1)}
+h1.addbook {background: var(--h1_addbook) no-repeat 10px center, var(--h1)}
+h1.snark {background: var(--h1_snark) no-repeat 10px center, var(--h1)}
+h1.mail {background: var(--h1_mail) no-repeat 10px center, var(--h1)}
+h1.conf {background: var(--h1_config) no-repeat 10px center, var(--h1)}
+h1.adv {background: var(--h1_info) no-repeat 10px center, var(--h1)}
+h1.err {background: var(--h1_error) no-repeat 10px center, var(--h1)}
+h1.sched {background: var(--h1_tasks) no-repeat 10px center, var(--h1)}
+h1.log {background: var(--h1_logs) no-repeat 10px center, var(--h1)}
+h1.webapp {background: var(--h1_webapp) no-repeat 10px center, var(--h1)}
+h1.debug {background: var(--h1_debug) no-repeat 10px center, var(--h1)}
+h1.newspage {background: var(--h1_news) no-repeat 10px center, var(--h1)}
 h1[class], h1 {padding-left: 62px; background-size: 38px auto, 100% 4px, 4px 100%}
 h1::first-letter {font-size: 107%}
 
