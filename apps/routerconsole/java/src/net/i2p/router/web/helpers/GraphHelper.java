@@ -438,17 +438,17 @@ public class GraphHelper extends FormHandler {
         // So just use the "shared/console nonce".
         String nonce = CSSHelper.getNonce();
         try {
-            _out.write("<br><h3 id=\"graphdisplay\">" + _t("Configure Graph Display") + " <a href=\"configstats\">" + _t("Select Stats") + "</a></h3>");
+            _out.write("<br><h3 id=\"graphdisplay\" tabindex=\"0\">" + _t("Configure Graph Display") + " <a href=\"configstats\">" + _t("Select Stats") + "</a></h3>");
             _out.write("<form action=\"/updategraphs\" method=\"POST\">\n" +
                        "<table>\n<tr><td><div class=\"optionlist\">\n<input type=\"hidden\" name=\"action\" value=\"save\">\n" +
                        "<input type=\"hidden\" name=\"nonce\" value=\"" + nonce + "\" >\n");
             _out.write("<span class=\"nowrap\" title=\"" +
                        _t("Note: Dimensions are for graph only (excludes title, labels and legend).") +"\"><b>");
-            _out.write(_t("Graph size") + ":</b>&nbsp; <input size=\"4\" style=\"text-align: right;\" type=\"text\" name=\"width\" value=\"" + _width
-                       + "\">" + _t("pixels wide") + "&nbsp;&nbsp;&nbsp;<input size=\"4\" style=\"text-align: right;\" type=\"text\" name=\"height\" value=\"" + _height
-                       + "\">" + _t("pixels high") + "</span><br>\n<span class=\"nowrap\">\n<b>");
-            _out.write(_t("Display period") + ":</b> <input size=\"5\" style=\"text-align: right;\" type=\"text\" name=\"periodCount\" value=\""
-                       + _periodCount + "\">" + _t("minutes") + "</span><br>\n<span class=\"nowrap\">\n<b>");
+            _out.write(_t("Graph size") + ":</b>&nbsp; <input size=\"4\" style=\"text-align: right;\" type=\"text\" name=\"width\" value=\"" + _width + "\">" +
+                       _t("pixels wide") + "&nbsp;&nbsp;&nbsp;<input size=\"4\" style=\"text-align: right;\" type=\"text\" name=\"height\" value=\"" + _height + "\">" +
+                       _t("pixels high") + "</span><br>\n<span class=\"nowrap\">\n<b>");
+            _out.write(_t("Display period") + ":</b> <input size=\"5\" style=\"text-align: right;\" type=\"text\" name=\"periodCount\" value=\"" + _periodCount + "\">" +
+                       _t("minutes") + "</span><br>\n<span class=\"nowrap\">\n<b>");
             _out.write(_t("Refresh delay") + ":</b> <select name=\"refreshDelay\">");
             for (int i = 0; i < times.length; i++) {
                 _out.write("<option value=\"");

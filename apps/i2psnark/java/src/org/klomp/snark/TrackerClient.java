@@ -302,7 +302,7 @@ public class TrackerClient implements Runnable {
         }
     } else {
         if (_log.shouldWarn())
-            _log.warn("No primary announce for: " + snark.getBaseName());
+            _log.warn("No primary announce for " + snark.getBaseName());
     }
 
     // announce list
