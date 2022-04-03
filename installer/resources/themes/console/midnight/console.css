@@ -1824,6 +1824,7 @@ html, body {height: 100%}
 #embedded {height: calc(100% - 68px)}
 #embedded iframe {margin: 1px -10px -4px; width: calc(100% + 20px); height: calc(100% + 2px); background: linear-gradient(180deg,#001, #000)}
 .embedlink {float: right}
+#rawtext_frame {margin: 0; height: calc(100vh - 80px) !important; overflow: auto !important}
 #rawtext {padding: 0}
 
 /* sidebar ajax router down */
