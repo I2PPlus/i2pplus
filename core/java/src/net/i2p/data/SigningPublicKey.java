@@ -221,9 +221,8 @@ public class SigningPublicKey extends SimpleDataStructure {
         } else if (length <= 32) {
             buf.append(toBase64().substring(0,6));
         } else {
-            buf.append("Size: ").append(length);
+            buf.append("Size: ").append(length).append(" bytes");;
         }
-        buf.append(" bytes");
         return buf.toString();
     }
 

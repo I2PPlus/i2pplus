@@ -208,17 +208,14 @@ public class PublicKey extends SimpleDataStructure {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[PublicKey: ").append((_type != null) ? _type.toString() : "unknown type: " + _unknownTypeCode).append(' ');
-        if (_data == null) {
-            buf.append("null");
-        } else {
+        buf.append((_type != null) ? "[" + _type.toString() + "]" : "[Unknown type: " + _unknownTypeCode).append("] -> ");
+        if (_data != null) {
             int length = length();
             if (length <= 32)
-                buf.append(toBase64());
+                buf.append("[").append(toBase64()).append("]");
             else
                 buf.append("Size: ").append(length).append(" bytes");
         }
-        buf.append("]");
         return buf.toString();
     }
 
