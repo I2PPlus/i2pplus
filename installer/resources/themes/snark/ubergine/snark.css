@@ -452,8 +452,7 @@ img:hover {border: none}
 .iframed .mainsection#snarkFiles {margin-top: -1px}
 .iframed .mainsection#snarkFiles hr {margin-top: -1px}
 .iframed .mainsection#snarkFiles .dirInfo {margin-top: 13px}
-.iframed .mainsection .toggleview {margin-top: -10px}
-.iframed .mainsection#editSection .toggleview {margin-top: -6px}
+.iframed .mainsection .toggleview, .iframed .mainsection#editSection {margin-top: -10px}
 .iframed .mainsection#snarkFiles input:not(:checked) + .toggleview {margin-bottom: 3px}
 .iframed .mainsection#commentSection {margin-bottom: 1px}
 .iframed #editSection + #commentSection {margin-top: -1px}
