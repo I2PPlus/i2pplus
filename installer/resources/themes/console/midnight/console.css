@@ -416,7 +416,7 @@ a:active #sb_graphstats {border-color: var(--active)}
 #bandwidthTestRunning {margin: -4px 0; padding: 7px 3px; width: 100%; display: inline-block; vertical-align: middle; color: #dd8; text-shadow: 0 1px 1px #000; box-shadow: 0 0 0 1px #337, var(--highlight), inset 0 0 2px 1px #26235c; background: #001; box-sizing: border-box}
 
 /* tunnel build status */
-.tunnelBuildStatus {color: #393}
+.tunnelBuildStatus {font-size: 90%; color: #393}
 .tunnelBuildStatus::before {margin: 0 0 -1px; width: 16px; height: 16px; display: inline-block; border-radius: 50%; content: ""; transform: scale(.7)}
 .tunnelBuildStatus.accepting::before {background: var(--tunn_ready) no-repeat center center / 15px}
 .tunnelBuildStatus.active::before, .ok, #ntcpconnections td.queue:empty::before {background: var(--tunn_active) no-repeat center center / 15px}
