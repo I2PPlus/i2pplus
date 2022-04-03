@@ -81,13 +81,8 @@ public class LogsHelper extends HelperBase {
     public String getLogs() {
         String str = formatMessages(_context.logManager().getBuffer().getMostRecentMessages());
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
-        if (!embedApps) {
-            return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=\"_blank\">" + DataHelper.escapeHTML(_context.logManager().currentFile()) +
-                   "</a></p>" + str;
-        } else {
-            return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=\"_blank\">" + DataHelper.escapeHTML(_context.logManager().currentFile()) +
-                   "</a>&nbsp;<a class=\"embedlink script\" href=\"/embed?url=/router.log&amp;name=Router+Log\">" + _t("Embedded Log") + "</a></p>" + str;
-        }
+        return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=\"_blank\">" +
+                DataHelper.escapeHTML(_context.logManager().currentFile()) + "</a></p>" + str;
     }
 
     /**
