@@ -27,8 +27,10 @@ public class SearchHelper extends HelperBase {
 
     static final String ENGINES_DEFAULT =
     // TODO: add a checkbox or dropdown to UI to choose default engine
+        "ahmia.i2p"                + S +     "http:/ahmia.i2p/search/?q=%s" + SOURCE + S +
         "ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + SOURCE + S +
         "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + SOURCE + S +
+        "imperial.i2p"             + S +     "http://imperial.i2p/search/?q=%s" + SOURCE + S +
         "isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + SOURCE + S +
         "legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + SOURCE + S +
         "notbob.i2p"               + S +     "http://notbob.i2p/cgi-bin/defcon.cgi?search=%s" + SOURCE + S +
