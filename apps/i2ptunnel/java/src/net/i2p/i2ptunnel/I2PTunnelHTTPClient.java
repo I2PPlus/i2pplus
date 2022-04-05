@@ -775,7 +775,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                         Hash h2 = ConvertToHash.getHash(ahelperKey);
                                         if (h1 != null && h2 != null) {
                                             String conURL = _context.portMapper().getConsoleURL();
-                                            out.write(("\n<table class=\"conflict\"><tr><th align=\"center\">" +
+                                            out.write(("\n<table id=\"destConflict\"><tr><th align=\"center\">" +
                                                        "<a href=\"" + trustedURL + "\">").getBytes("UTF-8"));
                                             out.write(_t("Destination for {0} in addressbook", requestURI.getHost()).getBytes("UTF-8"));
                                             out.write(("</a></th>\n<th align=\"center\">" +
