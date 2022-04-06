@@ -629,7 +629,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         StringBuilder buf = new StringBuilder(128);
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
         String c = getCountry(peer);
-        String h = peer.toBase64().substring(0, 4);
+        String h = peer.toBase64();
         if (ri != null) {
             String caps = ri.getCapabilities();
             String v = ri.getVersion();
@@ -659,7 +659,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     buf.append("Floodfill &bullet;");
                 if (v != null)
                     buf.append(' ' + v);
-                buf.append("\" href=\"netdb?r=").append(h).append("\">");
+                buf.append("\" href=\"netdb?r=").append(h,0,10).append("\">");
             }
             buf.append(h);
             if (ri != null)
@@ -671,7 +671,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                        " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"))
                .append("\"></span><tt>");
            if (h != null)
-               buf.append(h);
+               buf.append(h,0,4);
            else
                buf.append("????");
            buf.append("</tt></span> ");
