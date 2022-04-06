@@ -137,7 +137,6 @@ public class HomeHelper extends HelperBase {
         //"query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "forum.svg" + S +
 
 // hosting + other services
-           "altaddress.i2p" + S + _x("Free disposable e-mail addresses") + S + "http://altaddress.i2p/" + S + I + "mail.svg" + S +
            "major.i2p" + S + _x("IRC Logs for multiple networks") + S + "http://major.i2p/" + S + I + "major.svg" + S +
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
         _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "radio.svg" + S +
