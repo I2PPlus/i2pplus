@@ -204,7 +204,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_shutdownStatus {width: calc(100% - 3px)}
 #sb_shutdownStatus span {margin: 3px 0; padding: 2px 4px; display: inline-block}
 #sidebar h4 a {width: auto; display: inline}
-#sidebar #sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
+#sidebar #sb_warning {margin-bottom: 6px; padding: 6px 5px; background: var(--msg_warn_nohat); text-align: center; line-height: 1.2}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -6px}
 #sb_status, .sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {display: inline-block; vertical-align: middle; vertical-align: -moz-middle-with-baseline; vertical-align: -webkit-baseline-middle; text-shadow: var(--textshadow); box-sizing: border-box}
 #sidebar #sb_status {margin: -6px 0 -8px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
