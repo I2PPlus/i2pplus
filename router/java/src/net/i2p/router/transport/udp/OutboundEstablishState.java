@@ -259,6 +259,9 @@ class OutboundEstablishState {
             if (m.getType() == DatabaseStoreMessage.MESSAGE_TYPE) {
                DatabaseStoreMessage dsm = (DatabaseStoreMessage) m;
                if (dsm.getKey().equals(_context.routerHash())) {
+                   // version 2 sends our RI in handshake
+                   if (getVersion() > 1)
+                       return;
                    _isFirstMessageOurDSM = true;
                }
            }
@@ -612,7 +615,7 @@ class OutboundEstablishState {
         _confirmedSentCount++;
         _nextSend = _lastSend + delay;
         if (_log.shouldDebug())
-            _log.debug("Send confirm packets, nextSend in " + delay + "ms");
+            _log.debug("Send confirm packets, nextSend in " + delay + "ms on " + this);
         if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
             _currentState == OutboundState.OB_STATE_PENDING_INTRO ||
             _currentState == OutboundState.OB_STATE_INTRODUCED ||

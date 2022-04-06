@@ -61,6 +61,7 @@
   --msg: repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px) center center / 100% 4px, var(--hat) no-repeat right 2px bottom -2px / auto 56px, linear-gradient(180deg,#010,#000400);
   --msg_nohat: repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px) center center / 100% 4px, linear-gradient(180deg,#010,#000400);
   --msg_warn: repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(96,0,0,.3) 4px) center center / 100% 4px, var(--hat) no-repeat right 2px bottom -2px / auto 56px, linear-gradient(180deg,#100,#040000);
+  --msg_warn_nohat: repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(96,0,0,.3) 4px) center center / 100% 4px, linear-gradient(180deg,#100,#040000);
   --navbar: linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
   --nav_hover: linear-gradient(180deg,#730,#620 50%,#410 50%,#000);
   --nav: linear-gradient(180deg,#002900, #000400);

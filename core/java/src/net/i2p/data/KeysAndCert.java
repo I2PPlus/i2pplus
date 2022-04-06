@@ -211,7 +211,7 @@ public class KeysAndCert extends DataStructureImpl {
         buf.append("\n* Hash: ").append(getHash().toBase64());
         // TODO: avoid duplication of info: "Certificate type: Certificate: Type..."
         buf.append("\n* Certificate type: ").append(_certificate);
-        buf.append("\n* Public Key size: ").append(_publicKey);
+        buf.append("\n* Public Key: ").append(_publicKey);
         buf.append("\n* Public Signing Key: ").append(_signingKey);
         if (_padding != null)
             buf.append("\n* Padding: ").append(_padding.length).append(" bytes");

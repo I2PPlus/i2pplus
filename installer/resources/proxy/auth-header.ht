@@ -6,6 +6,7 @@ Connection: close
 Proxy-Connection: close
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
 Referrer-Policy: no-referrer
 Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' http://proxy.i2p; form-action 'self' http://proxy.i2p; frame-ancestors 'self' http://127.0.0.1:7657/; img-src http://proxy.i2p data:; font-src http://proxy.i2p
 

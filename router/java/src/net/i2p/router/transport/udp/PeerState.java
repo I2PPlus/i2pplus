@@ -1181,8 +1181,8 @@ public class PeerState {
         }
 
         if (!anyPending) {
-            if (_log.shouldDebug())
-                _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] -> Nothing pending, cancelling timer...");
+            //if (_log.shouldDebug())
+            //    _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] -> Nothing pending, cancelling timer...");
             _retransmitTimer = 0;
             exitFastRetransmit();
         } else {
@@ -2200,7 +2200,7 @@ public class PeerState {
     /**
      * Transfer the basic activity/state from the old peer to the current peer
      *
-     *  SSU 1 only.
+     *  SSU 1 or 2.
      *
      * @param oldPeer non-null
      */
@@ -2212,45 +2212,49 @@ public class PeerState {
         _sendWindowBytes = oldPeer._sendWindowBytes;
         oldPeer._dead = true;
 
-        List<Long> tmp = new ArrayList<Long>();
-        // AIOOBE from concurrent access
-        //tmp.addAll(oldPeer._currentACKs);
-        for (Long l : oldPeer._currentACKs) {
-            tmp.add(l);
-        }
-        oldPeer._currentACKs.clear();
+        if (getVersion() == 1 && oldPeer.getVersion() == 1) {
+            List<Long> tmp = new ArrayList<Long>();
+            // AIOOBE from concurrent access
+            //tmp.addAll(oldPeer._currentACKs);
+            for (Long l : oldPeer._currentACKs) {
+                tmp.add(l);
+            }
+            oldPeer._currentACKs.clear();
 
-        if (!_dead) {
-            _currentACKs.addAll(tmp);
-        }
+            if (!_dead) {
+                _currentACKs.addAll(tmp);
+            }
 
-        List<ResendACK> tmp3 = new ArrayList<ResendACK>();
-        tmp3.addAll(oldPeer._currentACKsResend);
-        oldPeer._currentACKsResend.clear();
+            List<ResendACK> tmp3 = new ArrayList<ResendACK>();
+            tmp3.addAll(oldPeer._currentACKsResend);
+            oldPeer._currentACKsResend.clear();
 
-        if (!_dead) {
+            if (!_dead) {
             _currentACKsResend.addAll(tmp3);
+	    }
         }
 
-        Map<Long, InboundMessageState> msgs = new HashMap<Long, InboundMessageState>();
-        synchronized (oldPeer._inboundMessages) {
-            msgs.putAll(oldPeer._inboundMessages);
-            oldPeer._inboundMessages.clear();
-        }
-        if (!_dead) {
-            synchronized (_inboundMessages) { _inboundMessages.putAll(msgs); }
-        }
-        msgs.clear();
+        if (getVersion() == oldPeer.getVersion()) {
+            Map<Long, InboundMessageState> msgs = new HashMap<Long, InboundMessageState>();
+            synchronized (oldPeer._inboundMessages) {
+                msgs.putAll(oldPeer._inboundMessages);
+                oldPeer._inboundMessages.clear();
+            }
+            if (!_dead) {
+                synchronized (_inboundMessages) { _inboundMessages.putAll(msgs); }
+            }
+            msgs.clear();
 
-        List<OutboundMessageState> tmp2 = new ArrayList<OutboundMessageState>();
-        OutboundMessageState retransmitter = null;
-        synchronized (oldPeer._outboundMessages) {
-            tmp2.addAll(oldPeer._outboundMessages);
-            oldPeer._outboundMessages.clear();
-        }
-        if (!_dead) {
-            synchronized (_outboundMessages) {
-                _outboundMessages.addAll(tmp2);
+            List<OutboundMessageState> tmp2 = new ArrayList<OutboundMessageState>();
+            OutboundMessageState retransmitter = null;
+            synchronized (oldPeer._outboundMessages) {
+                tmp2.addAll(oldPeer._outboundMessages);
+                oldPeer._outboundMessages.clear();
+            }
+            if (!_dead) {
+                synchronized (_outboundMessages) {
+                    _outboundMessages.addAll(tmp2);
+                }
             }
         }
     }
@@ -2306,7 +2310,6 @@ public class PeerState {
     private class ACKTimer extends SimpleTimer2.TimedEvent {
         public ACKTimer() {
             super(_context.simpleTimer2());
-//            long delta = Math.min(_rtt/2, ACK_FREQUENCY);
             long delta = Math.max(10, Math.min(_rtt/6, ACK_FREQUENCY));
             if (_log.shouldDebug())
                 _log.debug("Sending delayed ACK in " + delta + "ms: " + PeerState.this);

@@ -234,55 +234,184 @@ class NetDbRenderer {
                     (tr != null && ri.getTargetAddress(tr) != null) ||
                     (type != null && type == ri.getIdentity().getSigType()) ||
                     (etype != null && etype == ri.getIdentity().getEncType())) {
-                    if (skipped < toSkip) {
-                        skipped++;
-                        continue;
-                    }
-                    if (written++ >= pageSize) {
-                        morePages = true;
-                        break;
-                    }
-                    renderRouterInfo(buf, ri, false, true);
-                    if (sybil != null)
-                        sybils.add(key);
-                    notFound = false;
-                } else if (family != null) {
-                    String rifam = ri.getOption("family");
-                    if (rifam != null && rifam.toLowerCase(Locale.US).contains(family)) {
                         if (skipped < toSkip) {
                             skipped++;
                             continue;
                         }
                         if (written++ >= pageSize) {
                             morePages = true;
-                            break outerloop;
+                            break;
                         }
                         renderRouterInfo(buf, ri, false, true);
                         if (sybil != null)
                             sybils.add(key);
                         notFound = false;
-                    }
-                } else if (ip != null) {
-                    for (RouterAddress ra : ri.getAddresses()) {
-                        if (ipMode == 0) {
-                            if (ip.equals(ra.getHost())) {
-                                if (skipped < toSkip) {
-                                    skipped++;
-                                    break;
-                                }
-                                if (written++ >= pageSize) {
-                                    morePages = true;
-                                    break outerloop;
-                                }
-                                renderRouterInfo(buf, ri, false, true);
-                                if (sybil != null)
-                                    sybils.add(key);
-                                notFound = false;
-                                break;
-                            }
+                    } else if (tr != null) {
+                        boolean found;
+                        if (tr.equals("NTCP_1")) {
+                            RouterAddress ra = ri.getTargetAddress("NTCP");
+                            found = ra != null && ra.getOption("v") == null;
+                        } else if (tr.equals("NTCP_2")) {
+                            RouterAddress ra = ri.getTargetAddress("NTCP");
+                            found = ra != null && ra.getOption("v") != null;
+                        } else if (tr.equals("SSU_1")) {
+                            RouterAddress ra = ri.getTargetAddress("SSU");
+                            found = ra != null && ra.getOption("v") == null;
+                        } else if (tr.equals("SSU_2")) {
+                            RouterAddress ra = ri.getTargetAddress("SSU");
+                            found = ra != null && ra.getOption("v") != null;
                         } else {
+                            RouterAddress ra = ri.getTargetAddress(tr);
+                            found = ra != null;
+                        }
+                        if (!found)
+                            continue;
+                        if (skipped < toSkip) {
+                            skipped++;
+                            continue;
+                        }
+                        if (written++ >= pageSize) {
+                            morePages = true;
+                            break;
+                        }
+                        renderRouterInfo(buf, ri, false, true);
+                        if (sybil != null)
+                            sybils.add(key);
+                        notFound = false;
+                    } else if (family != null) {
+                        String rifam = ri.getOption("family");
+                        if (rifam != null && rifam.toLowerCase(Locale.US).contains(family)) {
+                            if (skipped < toSkip) {
+                                skipped++;
+                                continue;
+                            }
+                            if (written++ >= pageSize) {
+                                morePages = true;
+                                break outerloop;
+                            }
+                            renderRouterInfo(buf, ri, false, true);
+                            if (sybil != null)
+                                sybils.add(key);
+                            notFound = false;
+                        }
+                    } else if (ip != null) {
+                        for (RouterAddress ra : ri.getAddresses()) {
+                            if (ipMode == 0) {
+                                if (ip.equals(ra.getHost())) {
+                                    if (skipped < toSkip) {
+                                        skipped++;
+                                        break;
+                                    }
+                                    if (written++ >= pageSize) {
+                                        morePages = true;
+                                        break outerloop;
+                                    }
+                                    renderRouterInfo(buf, ri, false, true);
+                                    if (sybil != null)
+                                        sybils.add(key);
+                                    notFound = false;
+                                    break;
+                                }
+                            } else {
+                                String host = ra.getHost();
+                                if (host != null && host.startsWith(ip)) {
+                                    if (skipped < toSkip) {
+                                        skipped++;
+                                        break;
+                                    }
+                                    if (written++ >= pageSize) {
+                                        morePages = true;
+                                        break outerloop;
+                                    }
+                                    renderRouterInfo(buf, ri, false, true);
+                                    if (sybil != null)
+                                        sybils.add(key);
+                                    notFound = false;
+                                    break;
+                                }
+                            }
+                        }
+                    } else if (port != 0) {
+                        for (RouterAddress ra : ri.getAddresses()) {
+                            if (port == ra.getPort()) {
+                                if (skipped < toSkip) {
+                                    skipped++;
+                                    break;
+                                }
+                                if (written++ >= pageSize) {
+                                    morePages = true;
+                                    break outerloop;
+                                }
+                                renderRouterInfo(buf, ri, false, true);
+                                if (sybil != null)
+                                    sybils.add(key);
+                                notFound = false;
+                                break;
+                            }
+                        }
+                    } else if (mtu != null) {
+                        for (RouterAddress ra : ri.getAddresses()) {
+                            if (mtu.equals(ra.getOption("mtu"))) {
+                                if (skipped < toSkip) {
+                                    skipped++;
+                                    break;
+                                }
+                                if (written++ >= pageSize) {
+                                    morePages = true;
+                                    break outerloop;
+                                }
+                                renderRouterInfo(buf, ri, false, true);
+                                if (sybil != null)
+                                    sybils.add(key);
+                                notFound = false;
+                                break;
+                            }
+                        }
+                    } else if (ipv6 != null) {
+                        for (RouterAddress ra : ri.getAddresses()) {
                             String host = ra.getHost();
-                            if (host != null && host.startsWith(ip)) {
+                            if (host != null && host.startsWith(ipv6)) {
+                                if (skipped < toSkip) {
+                                    skipped++;
+                                    break;
+                                }
+                                if (written++ >= pageSize) {
+                                    morePages = true;
+                                    break outerloop;
+                                }
+                                renderRouterInfo(buf, ri, false, true);
+                                if (sybil != null)
+                                    sybils.add(key);
+                                notFound = false;
+                                break;
+                            }
+                        }
+                    } else if (ssucaps != null) {
+                        for (RouterAddress ra : ri.getAddresses()) {
+                            if (!"SSU".equals(ra.getTransportStyle()))
+                                continue;
+                            String racaps = ra.getOption("caps");
+                            if (racaps == null)
+                                continue;
+                            if (racaps.contains(ssucaps)) {
+                                if (skipped < toSkip) {
+                                    skipped++;
+                                    break;
+                                }
+                                if (written++ >= pageSize) {
+                                    morePages = true;
+                                    break outerloop;
+                                }
+                                renderRouterInfo(buf, ri, false, true);
+                                if (sybil != null)
+                                    sybils.add(key);
+                                notFound = false;
+                                break;
+                            }
+                        }
+                    } else if (cost != 0) {
+                        for (RouterAddress ra : ri.getAddresses()) {
+                            if (cost == ra.getCost()) {
                                 if (skipped < toSkip) {
                                     skipped++;
                                     break;
@@ -299,103 +428,6 @@ class NetDbRenderer {
                             }
                         }
                     }
-                } else if (port != 0) {
-                    for (RouterAddress ra : ri.getAddresses()) {
-                        if (port == ra.getPort()) {
-                            if (skipped < toSkip) {
-                                skipped++;
-                                break;
-                            }
-                            if (written++ >= pageSize) {
-                                morePages = true;
-                                break outerloop;
-                            }
-                            renderRouterInfo(buf, ri, false, true);
-                            if (sybil != null)
-                                sybils.add(key);
-                            notFound = false;
-                            break;
-                        }
-                    }
-                } else if (mtu != null) {
-                    for (RouterAddress ra : ri.getAddresses()) {
-                        if (mtu.equals(ra.getOption("mtu"))) {
-                            if (skipped < toSkip) {
-                                skipped++;
-                                break;
-                            }
-                            if (written++ >= pageSize) {
-                                morePages = true;
-                                break outerloop;
-                            }
-                            renderRouterInfo(buf, ri, false, true);
-                            if (sybil != null)
-                                sybils.add(key);
-                            notFound = false;
-                            break;
-                        }
-                    }
-                } else if (ipv6 != null) {
-                    for (RouterAddress ra : ri.getAddresses()) {
-                        String host = ra.getHost();
-                        if (host != null && host.startsWith(ipv6)) {
-                            if (skipped < toSkip) {
-                                skipped++;
-                                break;
-                            }
-                            if (written++ >= pageSize) {
-                                morePages = true;
-                                break outerloop;
-                            }
-                            renderRouterInfo(buf, ri, false, true);
-                            if (sybil != null)
-                                sybils.add(key);
-                            notFound = false;
-                            break;
-                        }
-                    }
-                } else if (ssucaps != null) {
-                    for (RouterAddress ra : ri.getAddresses()) {
-                        if (!"SSU".equals(ra.getTransportStyle()))
-                            continue;
-                        String racaps = ra.getOption("caps");
-                        if (racaps == null)
-                            continue;
-                        if (racaps.contains(ssucaps)) {
-                            if (skipped < toSkip) {
-                                skipped++;
-                                break;
-                            }
-                            if (written++ >= pageSize) {
-                                morePages = true;
-                                break outerloop;
-                            }
-                            renderRouterInfo(buf, ri, false, true);
-                            if (sybil != null)
-                                sybils.add(key);
-                            notFound = false;
-                            break;
-                        }
-                    }
-                } else if (cost != 0) {
-                    for (RouterAddress ra : ri.getAddresses()) {
-                        if (cost == ra.getCost()) {
-                            if (skipped < toSkip) {
-                                skipped++;
-                                break;
-                            }
-                            if (written++ >= pageSize) {
-                                morePages = true;
-                                break outerloop;
-                            }
-                            renderRouterInfo(buf, ri, false, true);
-                            if (sybil != null)
-                                sybils.add(key);
-                            notFound = false;
-                            break;
-                        }
-                    }
-                }
             }
             if (notFound) {
                 buf.append("<div class=\"netdbnotfound\">");
@@ -431,7 +463,7 @@ class NetDbRenderer {
         out.write(buf.toString());
         out.flush();
         if (sybil != null)
-            SybilRenderer.renderSybilHTML(out, _context, sybils, sybil);
+        SybilRenderer.renderSybilHTML(out, _context, sybils, sybil);
     }
 
     /**
