@@ -118,7 +118,7 @@ function refreshSidebar(timestamp) {
           setTimeout(function() {
             var metarefresh = document.createElement("meta");
             metarefresh.httpEquiv = "refresh";
-            metarefresh.content = "120";
+            metarefresh.content = "1800";
             document.head.appendChild(metarefresh);
           }, 120000);
         }
@@ -165,7 +165,7 @@ function refreshSidebar(timestamp) {
           modElements();
 
         }
-        setTimeout(isDown, 2000);
+        setTimeout(isDown, 2950);
       }
     }
   };
