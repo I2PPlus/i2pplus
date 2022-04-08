@@ -1,455 +1,129 @@
 /* I2P Light theme globals */
 /* Author: (c) dr|z3d 2022 */
-
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/images/images.css);
 @import url(../images/itooplus.css);
 
 :root {
-  --a: #4d5f80;
-  --active: #f30;
-  --activity: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
-  --badgeborder: 1px solid #bbc;
-  --badge: linear-gradient(180deg,#fff,#ddf);
-  --badge_hover: linear-gradient(180deg,#fff,#dba);
-  --badge_active: linear-gradient(180deg,#dba,#fdb);
-  --badge_shadow_hover: 0 0 0 1px #f60, var(--highlight);
-  --bevel: inset 0 0 0 1px #d0d0da;
-  --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
-  --bodybg: #a4a4cb;
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  --border: #6c6c93;
-  --border_inner: #a7a7be;
-  --border_input: 1px solid #97a2ce;
-  --border_soft: 1px solid #e0e0eb;
-  --border_softer: 1px solid #dfdfec;
-  --btn_hover: linear-gradient(180deg,#eee,#fff);
-  --btn: linear-gradient(180deg,#fff,#efefff);
-  --btn_shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  --btn_shadow_active: var(--highlight), inset 2px 2px 3px 1px rgba(0,0,0,.35);
-  --div_infohelp: linear-gradient(180deg, #f8f8ff, #f0f0ff);
-  --filter_focus: drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
-  --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
-  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
-  --h3: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
-  --h4app: linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff;
-  --highlight: inset 0 0 0 1px #fff;
-  --hover: #f60;
-  --ink: #4f4f63;
-  --ink_active: #4c526f;
-  --ink_dark: #393947;
-  --ink_darker: #19191f;
-  --ink_light: #5b5b71;
-  --ink_lighter: #71718e;
-  --input_shadow: inset 2px 2px 2px rgba(0,0,0,.15);
-  --membarinner_mobile: linear-gradient(180deg,rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --outline: 0 0 0 1px #779;
-  --p: linear-gradient(135deg, #fafaff, #f8f8ff);
-  --readonly: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fafaff 4px), #fafaff;
-  --refresh: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
-  --row: linear-gradient(180deg,#fff,#eef);
-  --row_hover: #ffd;
-  --row_even: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2));
-  --row_odd: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4));
-  --selected: #27377f;
-  --suboption: linear-gradient(180deg,#fff 50%,#eef 50%);
-  --table: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
-  --th: linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
-  --txtinput: linear-gradient(180deg, #f2f2ff, #fff);
-  --txtinput_shadow_focus: 0 0 0 1px rgba(255,255,255,.8), 0 0 2px 2px rgba(255,96,0,.8), var(--highlight), var(--btn_shadow_active);
-  --txtinput_shadow_search: var(--highlight), var(--btn_shadow_active);
+--a: #4d5f80;
+--active: #f30;
+--activity: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
+--badgeborder: 1px solid #bbc;
+--badge: linear-gradient(180deg,#fff,#ddf);
+--badge_hover: linear-gradient(180deg,#fff,#dba);
+--badge_active: linear-gradient(180deg,#dba,#fdb);
+--badge_shadow_hover: 0 0 0 1px #f60, var(--highlight);
+--bevel: inset 0 0 0 1px #d0d0da;
+--bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
+--bodybg: #a4a4cb;
+--bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+--border: #6c6c93;
+--border_inner: #a7a7be;
+--border_input: 1px solid #97a2ce;
+--border_soft: 1px solid #e0e0eb;
+--border_softer: 1px solid #dfdfec;
+--btn_hover: linear-gradient(180deg,#eee,#fff);
+--btn: linear-gradient(180deg,#fff,#efefff);
+--btn_shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+--btn_shadow_active: var(--highlight), inset 2px 2px 3px 1px rgba(0,0,0,.35);
+--div_infohelp: linear-gradient(180deg, #f8f8ff, #f0f0ff);
+--filter_focus: drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
+--h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
+--h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
+--h3: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
+--h4app: linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff;
+--highlight: inset 0 0 0 1px #fff;
+--hover: #f60;
+--ink: #4f4f63;
+--ink_active: #4c526f;
+--ink_dark: #393947;
+--ink_darker: #19191f;
+--ink_light: #5b5b71;
+--ink_lighter: #71718e;
+--input_shadow: inset 2px 2px 2px rgba(0,0,0,.15);
+--membarinner_mobile: linear-gradient(180deg,rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
+--monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+--outline: 0 0 0 1px #779;
+--p: linear-gradient(135deg, #fafaff, #f8f8ff);
+--readonly: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fafaff 4px), #fafaff;
+--refresh: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
+--row: linear-gradient(180deg,#fff,#eef);
+--row_hover: #ffd;
+--row_even: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2));
+--row_odd: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4));
+--selected: #27377f;
+--suboption: linear-gradient(180deg,#fff 50%,#eef 50%);
+--table: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
+--th: linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
+--txtinput: linear-gradient(180deg, #f2f2ff, #fff);
+--txtinput_shadow_focus: 0 0 0 1px rgba(255,255,255,.8), 0 0 2px 2px rgba(255,96,0,.8), var(--highlight), var(--btn_shadow_active);
+--txtinput_shadow_search: var(--highlight), var(--btn_shadow_active);
 }
 
-html, body {
-  min-height: 100%;
-}
-
-html {
-  scrollbar-color: #779 var(--bodybg);
-}
-
-body {
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  color: var(--ink);
-}
-
-input, button, textarea, select, a {
-  outline: none;
-}
-
-::selection {
-  background: var(--selected);
-  color: #fff;
-  text-shadow: none;
-}
-
-button::-moz-focus-inner, input[type=submit]::-moz-focus-inner,
-input[type=reset]::-moz-focus-inner, .control::-moz-focus-inner,
-select::-moz-focus-inner {
-  outline: none;
-  border: none;
-}
-
-img {
-  border: none;
-  font-size: 0;
-}
-
-b {
-  color: var(--ink_light);
-}
-
-.unbold {
-  font-weight: 400;
-}
-
-.underline {
-  border-bottom: 1px solid #002; padding: 5px 0; margin: 0 0 10px;
-}
-
-tr {
-  content: layout;
-}
-
-a {
-  text-decoration: none;
-}
-
-a:link, a:visited {
-  color: var(--a);
-  text-decoration: none;
-  font-weight: 700;
-  word-wrap: break-word;
-  outline: none;
-}
-
-a:link:hover, a:hover, a:visited:hover, a:visited:focus {
-  color: #f60;
-  text-decoration: none;
-  text-shadow: none;
-}
-
-a:active, a:visited:active {
-  color: #f30;
-}
-
+html, body {min-height: 100%}
+html {scrollbar-color: #779 var(--bodybg)}
+body {font-family: var(--bodyfont); font-size: 9pt; color: var(--ink)}
+input, button, textarea, select, a {outline: none}
+::selection {background: var(--selected); color: #fff; text-shadow: none}
+button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner, .control::-moz-focus-inner, select::-moz-focus-inner {outline: none; border: none}
+img {border: none; font-size: 0}
+b {color: var(--ink_light)}
+.unbold {font-weight: 400}
+.underline {border-bottom: 1px solid #002; padding: 5px 0; margin: 0 0 10px}
+tr {content: layout}
+a {text-decoration: none}
+a:link, a:visited {color: var(--a); text-decoration: none; font-weight: 700; word-wrap: break-word; outline: none}
+a:link:hover, a:hover, a:visited:hover, a:visited:focus {color: #f60; text-decoration: none; text-shadow: none}
+a:active, a:visited:active {color: #f30}
 .left {text-align: left}
 .right {text-align: right}
 .center {text-align: center}
-
-textarea::placeholder, input::placeholder {
-  font-style: italic;
-  color: var(--ink);
-  opacity: .4;
-}
-
-textarea:focus::placeholder, input:focus::placeholder {
-  opacity: 0;
-}
-
-.control, .optbox, select, input[type=submit], input[type=reset], label, button {
-  cursor: pointer;
-}
-
-input[type=text], input[type=password], textarea, select {
-  box-sizing: border-box;
-  line-height: 1.3;
-}
-
-select, select[disabled]:hover, select[disabled]:focus {
-  margin: 5px;
-  padding: 6px 24px 6px 8px;
-  min-width: 120px;
-  text-align: left;
-  font: 9pt var(--bodyfont);
-  color: var(--ink_light);
-  border: var(--border_input);
-  border-radius: 2px;
-  box-shadow: var(--btn_shadow);
-  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
-  appearance: none;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-select:-moz-focusring {
-  outline: 1px solid transparent;
-}
-
-select option {
-  background: #fff;
-}
-
-select, input[type=text] {
-  min-width: 120px;
-}
-
-select:hover, select:focus, select:active {
-  border: 1px solid #535979;
-}
-
-select:hover, select:active {
-  color: #19191f;
-  box-shadow: var(--highlight), 0 2px 1px #ddf;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover);
-}
-
-select:focus {
-  color: #19191f;
-  box-shadow: 0 0 1px #f60;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover);
-}
-
-select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  border: var(--border_input);
-  box-shadow: var(--highlight);
-  background: var(--btn);
-  opacity: .8;
-  cursor: default;
-}
-
-input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {
-  color: #4d4d5f;
-  border: 1px solid #a8b1d6;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-  background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff;
-  filter: none;
-  cursor: default;
-}
-
-input[type=text], input[type=password] {
-  padding: 6px 8px;
-  color: var(--ink);
-  box-shadow: var(--input_shadow);
-  border: var(--border_input);
-  background: var(--txtinput);
-  transition: ease all .1s;
-}
-
-input[type=text]:focus, input[type=password]:focus,
-.freetext:focus, .displayText:focus {
-  color: var(--ink_darker);
-  box-shadow: var(--txtinput_shadow_focus);
-  border: 1px solid #676c7f;
-  background: #fff;
-  transition: ease border .15s;
-}
-
-input[type=text][disabled], label[disabled] {
-  color: var(--ink_lighter);
-}
-
-textarea {
-  margin: 5px;
-  padding: 5px 8px;
-  resize: none;
-  font-size: 9pt;
-  color: var(--ink);
-  border: var(--border_input);
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-  background: #fbfbff;
-  transition: ease all .1s;
-}
-
-textarea:focus {
-  color: #19191f;
-  border: 1px solid #676c7f;
-  box-shadow: var(--txtinput_shadow_focus);
-  background: #fff;
-  transition: ease border .15s;
-}
-
-input[type=file]::file-selector-button {
-  margin: 3px 10px 3px 3px;
-  padding: 4px 10px;
-  line-height: 1.4;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  color: var(--ink_light);
-  text-decoration: none;
-  text-shadow: 0 1px 1px #fff;
-  border: var(--border_input);
-  border-radius: 2px;
-  box-shadow: var(--btn_shadow);
-  background: var(--btn);
-  background-size: 14px auto, 100%;
-  opacity: 1;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-  cursor: pointer;
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: #19191f;
-  border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--btn_hover);
-  filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
-  transition: ease border .7s;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  width: 19px;
-  height: 19px;
-  border-radius: 1px;
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before {
-  position: absolute;
-  background: linear-gradient(135deg, #6389cf, #3c6bc3);
-  box-shadow: inset 1px 1px 1px 1px #6389cf, inset -1px -1px 1px 1px #3c6bc3;
-  content: "";
-}
-
-input[type=checkbox]:checked::before {
-  top: 3px;
-  left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: 80%;
-  border-radius: 1px;
-}
-
-input[type=radio]:checked::before {
-  left: 4px;
-  top: 4px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  box-shadow: inset 1px 1px 1px 1px #6389cf, inset -1px -1px 1px 1px #3c6bc3, 0 0 0 1px #7698d5;
-}
-
-input[type=checkbox]:not(:checked) {
-  box-shadow: inset 0 0 0 1px #f8f8ff, inset 3px 3px 3px #aad;
-}
-
-input[type=radio]:not(:checked) {
-  box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
-}
-
-.optbox {
-  margin: 2px 0;
-  position: relative;
-  vertical-align: middle;
-  border: var(--border_input);
-  background: #f8f8ff;
-  box-sizing: border-box;
-  appearance: none;
-  filter: drop-shadow(0 0 1px #e0e0eb);
-}
-
-.optbox:checked {
-  box-shadow: inset 0 0 0 1px #fff;
-  background: linear-gradient(180deg,#fff, #f0f0ff);
-}
-
-.optbox:hover, .optbox:focus, .optbox:active,
-.optbox:checked:hover, .optbox:checked:focus, .optbox:checked:active {
-  width: 19px;
-  height: 19px;
-  min-width: 19px;
-  min-height: 19px;
-  border: 1px solid #484e6a;
-  box-shadow: 0 0 2px #f60;
-}
-
-.optbox:not(:checked)::before {
-  position: absolute;
-  top: 25%;
-  left: 4px;
-  color: transparent;
-  background: transparent;
-  content: "";
-}
-
-input[type=radio]:not(:checked)::before {
-  border-radius: 50%;
-}
+textarea::placeholder, input::placeholder {font-style: italic; color: var(--ink); opacity: .4}
+textarea:focus::placeholder, input:focus::placeholder {opacity: 0}
+.control, .optbox, select, input[type=submit], input[type=reset], label, button {cursor: pointer}
+input[type=text], input[type=password], textarea, select {box-sizing: border-box; line-height: 1.3}
+select, select[disabled]:hover, select[disabled]:focus {margin: 5px; padding: 6px 24px 6px 8px; min-width: 120px; text-align: left; font: 9pt var(--bodyfont); color: var(--ink_light); border: var(--border_input); border-radius: 2px; box-shadow: var(--btn_shadow); background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn); appearance: none; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
+select:-moz-focusring {outline: 1px solid transparent}
+select option {background: #fff}
+select, input[type=text] {min-width: 120px}
+select:hover, select:focus, select:active {border: 1px solid #535979}
+select:hover, select:active {color: #19191f; box-shadow: var(--highlight), 0 2px 1px #ddf; background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover)}
+select:focus {color: #19191f; box-shadow: 0 0 1px #f60; background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover)}
+select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {border: var(--border_input); box-shadow: var(--highlight); background: var(--btn); opacity: .8; cursor: default}
+input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {color: #4d4d5f; border: 1px solid #a8b1d6; box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6); background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff; filter: none; cursor: default}
+input[type=text], input[type=password] {padding: 6px 8px; color: var(--ink); box-shadow: var(--input_shadow); border: var(--border_input); background: var(--txtinput); transition: ease all .1s}
+input[type=text]:focus, input[type=password]:focus, .freetext:focus, .displayText:focus {color: var(--ink_darker); box-shadow: var(--txtinput_shadow_focus); border: 1px solid #676c7f; background: #fff; transition: ease border .15s}
+input[type=text][disabled], label[disabled] {color: var(--ink_lighter)}
+textarea {margin: 5px; padding: 5px 8px; resize: none; font-size: 9pt; color: var(--ink); border: var(--border_input); border-radius: 2px; box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6); background: #fbfbff; transition: ease all .1s}
+textarea:focus {color: #19191f; border: 1px solid #676c7f; box-shadow: var(--txtinput_shadow_focus); background: #fff; transition: ease border .15s}
+input[type=file]::file-selector-button {margin: 3px 10px 3px 3px; padding: 4px 10px; line-height: 1.4; font-family: var(--bodyfont); font-size: 9pt; color: var(--ink_light); text-decoration: none; text-shadow: 0 1px 1px #fff; border: var(--border_input); border-radius: 2px; box-shadow: var(--btn_shadow); background: var(--btn); background-size: 14px auto, 100%; opacity: 1; filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); cursor: pointer}
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {color: #19191f; border: 1px solid #f60; box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); background: var(--btn_hover); filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {width: 19px; height: 19px; border-radius: 1px}
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {width: 19px; height: 19px; border-radius: 50%}
+input[type=checkbox]:checked::before, input[type=radio]:checked::before {position: absolute; background: linear-gradient(135deg, #6389cf, #3c6bc3); box-shadow: inset 1px 1px 1px 1px #6389cf, inset -1px -1px 1px 1px #3c6bc3; content: ""}
+input[type=checkbox]:checked::before {top: 3px; left: 3px; width: 11px; height: 11px; line-height: 80%; border-radius: 1px}
+input[type=radio]:checked::before {left: 4px; top: 4px; width: 9px; height: 9px; border-radius: 50%; box-shadow: inset 1px 1px 1px 1px #6389cf, inset -1px -1px 1px 1px #3c6bc3, 0 0 0 1px #7698d5}
+input[type=checkbox]:not(:checked) {box-shadow: inset 0 0 0 1px #f8f8ff, inset 3px 3px 3px #aad}
+input[type=radio]:not(:checked) {box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad}
+.optbox {margin: 2px 0; position: relative; vertical-align: middle; border: var(--border_input); background: #f8f8ff; box-sizing: border-box; appearance: none; filter: drop-shadow(0 0 1px #e0e0eb)}
+.optbox:checked {box-shadow: inset 0 0 0 1px #fff; background: linear-gradient(180deg,#fff, #f0f0ff)}
+.optbox:hover, .optbox:focus, .optbox:active, .optbox:checked:hover, .optbox:checked:focus, .optbox:checked:active {width: 19px; height: 19px; min-width: 19px; min-height: 19px; border: 1px solid #484e6a; box-shadow: 0 0 2px #f60}
+.optbox:not(:checked)::before {position: absolute; top: 25%; left: 4px; color: transparent; background: transparent; content: ""}
+input[type=radio]:not(:checked)::before {border-radius: 50%}
 
 /* sliders */
-.optbox.slider[type=checkbox], .optbox.slider[type=checkbox][disabled],
-.optbox.slider, .optbox.slider:hover, .optbox.slider:focus {
-  width: 40px;
-  height: 21px;
-  border-radius: 1px;
-  position: relative;
-  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2);
-  background: linear-gradient(180deg,#eef, #ddf);
-  outline: none;
-  transition: ease-in left .05s;
-  appearance: none;
-  will-change: transform;
-}
+.optbox.slider[type=checkbox], .optbox.slider[type=checkbox][disabled], .optbox.slider, .optbox.slider:hover, .optbox.slider:focus {width: 40px; height: 21px; border-radius: 1px; position: relative; box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2); background: linear-gradient(180deg,#eef, #ddf); outline: none; transition: ease-in left .05s; appearance: none; will-change: transform}
+.optbox.slider:checked {background: linear-gradient(180deg,#393, #4a4)}
+.optbox.slider:not(:checked):active {background: linear-gradient(180deg,#393, #4a4)}
+.optbox.slider:checked:active {background: linear-gradient(180deg,#cf0f00, #f00)}
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2)}
+label[disabled]:hover .optbox.slider, label[disabled]:focus .optbox.slider {border: var(--border_input); box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2)}
+.optbox.slider[type=checkbox]::before, .optbox.slider[type=checkbox][disabled]::before, .optbox.slider::before, .optbox.slider:hover::before, .optbox.slider:focus::before, .optbox.slider:active::before {width: 20px; height: 100%; position: absolute; top: 0; left: -1px; border-radius: 1px; box-shadow: inset 0 0 0 1px #99a, inset 0 0 0 2px #fff, 0 2px 5px rgba(0,0,0,.2); background: linear-gradient(#fff, #ddf); content: ""; transform: scale(.85); transition: ease-in left .05s}
+.optbox.slider:checked::before {left: 18px}
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus, .optbox.slider:not([disabled]):checked:focus, .optbox.slider:not([disabled]):checked:active {box-shadow: none}
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {border: 1px solid var(--hover); box-shadow: none}
+label:not([disabled]):hover {color: var(--ink_dark)}
+label[disabled], label[disabled]:hover {opacity: .45}
+.optbox[disabled]:hover, label[disabled]:hover .optbox {pointer-events: none}
 
-.optbox.slider:checked {
-  background: linear-gradient(180deg,#393, #4a4);
-}
-
-.optbox.slider:not(:checked):active {
-  background: linear-gradient(180deg,#393, #4a4);
-}
-
-.optbox.slider:checked:active {
-  background: linear-gradient(180deg,#cf0f00, #f00);
-}
-
-.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {
-  box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
-}
-
-label[disabled]:hover .optbox.slider, label[disabled]:focus .optbox.slider {
-  border: var(--border_input);
-  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2);
-}
-
-.optbox.slider[type=checkbox]::before,
-.optbox.slider[type=checkbox][disabled]::before,
-.optbox.slider::before,
-.optbox.slider:hover::before,
-.optbox.slider:focus::before,
-.optbox.slider:active::before {
-  width: 20px;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: -1px;
-  border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #99a, inset 0 0 0 2px #fff, 0 2px 5px rgba(0,0,0,.2);
-  background: linear-gradient(#fff, #ddf);
-  content: "";
-  transform: scale(.85);
-  transition: ease-in left .05s;
-}
-
-.optbox.slider:checked::before {
-  left: 18px;
-}
-
-.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus,
-.optbox.slider:not([disabled]):checked:focus, .optbox.slider:not([disabled]):checked:active {
-  box-shadow: none
-}
-
-.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {
-  border: 1px solid var(--hover);
-  box-shadow: none;
-}
-
-label:not([disabled]):hover {
-  color: var(--ink_dark);
-}
-
-label[disabled], label[disabled]:hover {
-  opacity: .45;
-}
-
-.optbox[disabled]:hover, label[disabled]:hover .optbox {
-  pointer-events: none;
-}
+@media (forced-colors: active) {* {forced-color-adjust: none}}

@@ -43,8 +43,10 @@ class TunnelGatewayPumper implements Runnable {
     /** Creates a new instance of TunnelGatewayPumper */
     public TunnelGatewayPumper(RouterContext ctx) {
         _context = ctx;
-        _wantsPumping = new LinkedHashSet<PumpedTunnelGateway>(16);
-        _backlogged = new HashSet<PumpedTunnelGateway>(16);
+//        _wantsPumping = new LinkedHashSet<PumpedTunnelGateway>(16);
+//        _backlogged = new HashSet<PumpedTunnelGateway>(16);
+        _wantsPumping = new LinkedHashSet<PumpedTunnelGateway>(1024);
+        _backlogged = new HashSet<PumpedTunnelGateway>(1024);
         _threads = new CopyOnWriteArrayList<Thread>();
         if (ctx.getBooleanProperty("i2p.dummyTunnelManager")) {
             _pumpers = 1;
