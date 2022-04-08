@@ -630,3 +630,5 @@ td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(
 #actionStopAll, #actionStartAll {padding: 11px 18px}
 #snarkInfo ~ #commentSection input:not(:checked) + .toggleview {margin-bottom: -8px}
 }
+
+@media (forced-colors: active) {* {forced-color-adjust: none}}

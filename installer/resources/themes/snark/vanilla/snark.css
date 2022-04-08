@@ -1029,3 +1029,5 @@ img[src$="details.png"] {max-height: 18px}
 .torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {min-width: 76px}
 .trackerhome, .trackerannounce, .knownTracker a {width: 400px; max-width: 400px}
 }
+
+@media (forced-colors: active) {* {forced-color-adjust: none}}
