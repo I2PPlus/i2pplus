@@ -116,6 +116,7 @@ function refreshSidebar(timestamp) {
         } else if (xhr.readyState == 4 && xhr.status == 200) {
 
           setTimeout(function() {
+            removeMeta();
             var metarefresh = document.createElement("meta");
             metarefresh.httpEquiv = "refresh";
             metarefresh.content = "1800";
