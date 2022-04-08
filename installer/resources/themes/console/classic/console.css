@@ -554,7 +554,7 @@ div[id^="config_"].main {padding-bottom: 20px}
 .configure tr, .configure td {padding: 5px}
 .configure h2:first-child {margin-top: 15px}
 .configtable, #permabanned, #loggingoptions, #configstats, #banlist {margin-bottom: -5px}
-.configtable td:not(.infohelp):not(.infowarn):not(.b32):not(.tabletextarea), #joinfamily td {padding: 10px; border-top: var(--border); border-bottom: var(--border)}
+.configtable td:not(.infohelp):not(.infowarn):not(.tabletextarea), #joinfamily td {padding: 10px; border-top: var(--border); border-bottom: var(--border)}
 #externali2cp td, #plugininstall td, #plugininstall2 td, #tunnelconfig td {padding: 5px}
 .configtable.homelinkedit td, .configtable.homelinkedit tr, .configtable#sidebarconf td, .configtable#sidebarconf tr {padding-top: 4px; padding-bottom: 4px; border-top: 1px inset var(--bg4); border-bottom: 1px inset var(--bg4)}
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {border-top: var(--border); background: var(--bg)}
@@ -1856,8 +1856,8 @@ li .flag + tt {margin-right: -6px}
 .obep::after {background: var(--obep) no-repeat center center / 24px}
 .ptcp::after {background: var(--ptcp) no-repeat center center / 24px}
 span.b32 {margin-right: 5px; padding: 2px 4px; float: right; line-height: 1.2; letter-spacing: .1em; font-family: var(--monospaced); font-size: 80%; color: var(--code); box-shadow: 0 0 0 1px var(--border_color), var(--highlight); background: var(--th); opacity: .8}
-.b32:hover {opacity: 1}
-.b32:active {box-shadow: 0 0 0 1px var(--border_color), var(--btn_shadow_active)}
+span.b32:hover {opacity: 1}
+span.b32:active {box-shadow: 0 0 0 1px var(--border_color), var(--btn_shadow_active)}
 .inbound, .outbound {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--in) no-repeat center center / 16px}
 .outbound {background: var(--out) no-repeat center center / 16px}
 .inbound.small, .outbound.small {background-size: 12px; background-position: center center}

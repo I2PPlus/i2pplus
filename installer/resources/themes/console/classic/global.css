@@ -5,429 +5,139 @@
 @import url(/themes/console/images/images.css);
 
 :root {
-  --a: #5c5c8a;
-  --active: #f30;
-  --badge_hover: linear-gradient(180deg, var(--bg3), #fff);
-  --badge: linear-gradient(180deg, #fff, var(--bg3));
-  --bevel: inset 0 0 0 1px #fff, inset 0 0 3px 0 var(--bg4);
-  --bg2: #f4f4ff;
-  --bg3: #eef;
-  --bg3: #f0f0ff;
-  --bg4: #e8e8ff;
-  --bg_doc: var(--bodybg) url(images/bg0.png) center center / 90px;
-  --bg: #fff;
-  --bodybg: #e2e2f3;
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --border: 1px solid #bfc3d9;
-  --border_badge: #bbc;
-  --border: 1px solid #bfc3d9;
-  --border_color: #bfc3d9;
-  --border_soft: #cfd2e2;
-  --border_softer: #dfe1ec;
-  --border_warn: #fb7;
-  --border_hard: 1px solid #9fa5c6;
-  --box_border_badge: 0 0 0 1px #bbd;
-  --btn_active: linear-gradient(180deg,#f60,#f90);
-  --btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
-  --btn_hover: linear-gradient(180deg,#ddd, #fff);
-  --btn_hover: linear-gradient(180deg,#ddd,#fff);
-  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
-  --btn_shadow_refresh: 0 0 0 1px #bbd, inset 0 0 0 1px #fff, inset 3px 3px 3px rgba(0,0,0,.3);
-  --code: #272;
-  --disabled: #757a8a;
-  --down: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
-  --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
-  --flatbar: #99c;
-  --h2: linear-gradient(180deg,#fff 50%,#fafbff 50%);
-  --h4: linear-gradient(90deg,#fff,#eff2ff);
-  --header_active: linear-gradient(180deg, #ffd, #ffe);
-  --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
-  --header: linear-gradient(180deg, var(--bg) 50%, var(--bg2) 50%);
-  --header_shiney: linear-gradient(90deg, rgba(255,255,255,.3), rgba(0,0,0,0)), linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%);
-  --heading: linear-gradient(180deg,#fff,#fafbff);
-  --highlight_active: inset 3px 3px 3px 1px #5f2400;
-  --highlight_hover: inset 0 0 0 1px #a79;
-  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
-  --hover: #f60;
-  --hr: #89f;
-  --ink: #41444d;
-  --ink_h1: #6c7293;
-  --ink_hover: #104e99;
-  --ink_light: #5e626e;
-  --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
-  --ls_target: 1px solid #5a5;
-  --note: #1f7096;
-  --membarinner_mobile: linear-gradient(90deg, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)), linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(240, 240, 250,.7) 50%, rgba(220, 220, 255, .7) 50%, rgba(140, 140, 220, .9)); box-shadow: var(--highlight);
-  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --pad_info: 20px 25px 20px 55px;
-  --reload: linear-gradient(90deg, rgba(0,0,0,0) 85%, rgba(64,255,64,.15)), linear-gradient(90deg, #bcf, #def);
-  --row_hover: #ffd;
-  --scroll: #acafb9;
-  --select: #4a90d9;
-  --selected: #559;
-  --shadow_filter_hover: drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px var(--hover));
-  --shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
-  --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
-  --subheading: linear-gradient(90deg, var(--bg), var(--bg3));
-  --th: linear-gradient(180deg,#fff,#fafbff);
-  --visited: #6b6b94;
+--a: #5c5c8a;
+--active: #f30;
+--badge_hover: linear-gradient(180deg, var(--bg3), #fff);
+--badge: linear-gradient(180deg, #fff, var(--bg3));
+--bevel: inset 0 0 0 1px #fff, inset 0 0 3px 0 var(--bg4);
+--bg2: #f4f4ff;
+--bg3: #eef;
+--bg3: #f0f0ff;
+--bg4: #e8e8ff;
+--bg_doc: var(--bodybg) url(images/bg0.png) center center / 90px;
+--bg: #fff;
+--bodybg: #e2e2f3;
+--bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+--border: 1px solid #bfc3d9;
+--border: 1px solid #bfc3d9;
+--border_badge: #bbc;
+--border_color: #bfc3d9;
+--border_hard: 1px solid #9fa5c6;
+--border_soft: #cfd2e2;
+--border_softer: #dfe1ec;
+--border_warn: #fb7;
+--box_border_badge: 0 0 0 1px #bbd;
+--btn_active: linear-gradient(180deg,#f60,#f90);
+--btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
+--btn_hover: linear-gradient(180deg,#ddd, #fff);
+--btn_hover: linear-gradient(180deg,#ddd,#fff);
+--btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
+--btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
+--btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
+--btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
+--btn_shadow_refresh: 0 0 0 1px #bbd, inset 0 0 0 1px #fff, inset 3px 3px 3px rgba(0,0,0,.3);
+--code: #272;
+--disabled: #757a8a;
+--down: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
+--down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
+--flatbar: #99c;
+--h2: linear-gradient(180deg,#fff 50%,#fafbff 50%);
+--h4: linear-gradient(90deg,#fff,#eff2ff);
+--header_active: linear-gradient(180deg, #ffd, #ffe);
+--header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
+--header: linear-gradient(180deg, var(--bg) 50%, var(--bg2) 50%);
+--header_shiney: linear-gradient(90deg, rgba(255,255,255,.3), rgba(0,0,0,0)), linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%);
+--heading: linear-gradient(180deg,#fff,#fafbff);
+--highlight_active: inset 3px 3px 3px 1px #5f2400;
+--highlight_hover: inset 0 0 0 1px #a79;
+--highlight: inset 0 0 0 1px rgba(255,255,255,.8);
+--hover: #f60;
+--hr: #89f;
+--ink: #41444d;
+--ink_h1: #6c7293;
+--ink_hover: #104e99;
+--ink_light: #5e626e;
+--label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
+--ls_target: 1px solid #5a5;
+--membarinner_mobile: linear-gradient(90deg, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)), linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(240, 240, 250,.7) 50%, rgba(220, 220, 255, .7) 50%, rgba(140, 140, 220, .9)); box-shadow: var(--highlight);
+--monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+--note: #1f7096;
+--pad_info: 20px 25px 20px 55px;
+--reload: linear-gradient(90deg, rgba(0,0,0,0) 85%, rgba(64,255,64,.15)), linear-gradient(90deg, #bcf, #def);
+--row_hover: #ffd;
+--scroll: #acafb9;
+--select: #4a90d9;
+--selected: #559;
+--shadow_filter_hover: drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px var(--hover));
+--shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
+--shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
+--subheading: linear-gradient(90deg, var(--bg), var(--bg3));
+--th: linear-gradient(180deg,#fff,#fafbff);
+--visited: #6b6b94;
 }
 
-html, body {
-  min-height: 100%;
-  box-shadow: none !important;
-}
-
-html {
-  scrollbar-color: var(--scroll) var(--bodybg);
-}
-
-body {
-  font: 9pt var(--bodyfont);
-  color: var(--ink);
-  scrollbar-color: var(--scroll) var(--bg);
-}
-
-body.iframed {
-  margin: 0;
-  overflow: hidden; /* webkit fix */
-  background: none;
-}
-
-::selection {
-  text-shadow: none;
-  color: var(--bg);
-  background: var(--select);
-}
-
-input, button, textarea, select, a {
-  outline: none;
-}
-
-img {
-  font-size: 0;
-  border: none;
-}
-
-b {
-  color: var(--ink_light);
-}
-
+html, body {min-height: 100%; box-shadow: none !important}
+html {scrollbar-color: var(--scroll) var(--bodybg)}
+body {font: 9pt var(--bodyfont); color: var(--ink); scrollbar-color: var(--scroll) var(--bg)}
+body.iframed {margin: 0; overflow: hidden; background: none}
+::selection {text-shadow: none; color: var(--bg); background: var(--select)}
+input, button, textarea, select, a {outline: none}
+img {font-size: 0; border: none}
+b {color: var(--ink_light)}
 .left {text-align: left}
 .right {text-align: right}
 .center {text-align: center}
-
-table {
-  width: 100%;
-}
-
-th {
-  font-size: 9pt;
-  font-weight: 700;
-  color: var(--ink_light);
-}
-
-a:link, a:visited {
-  word-wrap: break-word;
-  text-decoration: none;
-  font-weight: 700;
-  color: var(--a);
-  outline: none;
-}
-
-a:hover, a:focus {
-  text-decoration: none;
-  color: var(--hover);
-}
-
-a:active {
-  color: var(--active);
-}
-
-input, label {
-  vertical-align: middle;
-}
-
-input::placeholder {
-  font-style: italic;
-  color: var(--ink_light);
-  opacity: .7;
-}
-
-input:focus::placeholder {
-  opacity: 0;
-}
-
-button::-moz-focus-inner, input::-moz-focus-inner {
-  outline: none;
-  border: none;
-}
-
-input, button, select, label, textarea {
-  font-size: 9pt;
-}
-
-input, button, select, label {
-  text-decoration: none;
-  font: 9pt/130% var(--bodyfont);
-  outline: none;
-  cursor: pointer;
-}
-
-button, input, select {
-  color: var(--ink_light);
-}
-
-label:not([disabled]):hover {
-  color: var(--ink);
-}
-
-input[type=text], input[type=password], textarea {
-  box-sizing: border-box;
-}
-
-textarea {
-  width: 100%;
-  resize: none;
-  font: 9pt var(--monospaced);
-  color: var(--ink_light);
-  border: var(--border);
-  box-shadow: var(--shadow_input);
-  scrollbar-color: #acafb9 #f2f2ff;
-}
-
-textarea:focus {
-  color: var(--ink);
-  box-shadow: var(--btn_shadow_active), 0 0 0 1px rgba(255,96,0,.6);
-}
-
-select {
-  padding: 5px 20px 5px 5px;
-  vertical-align: middle;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: var(--bodyfont);
-  color: var(--ink_light);
-  border: var(--border);
-  border-radius: 3px;
-  box-shadow: var(--btn_shadow);
-  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
-  cursor: pointer;
-  appearance: none;
-}
-
-@supports not (-moz-appearance: none) {
-  select {padding: 5px 20px 5px 8px}
-}
-
-select:hover, select:active, select:focus {
-  color: var(--ink);
-  box-shadow: var(--btn_shadow_hover);
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover);
-  outline: none;
-}
-
-select:focus {
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover);
-  outline: none;
-}
-
-select option {
-  background: var(--bg);
-}
-
-select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  border: var(--border);
-  box-shadow: var(--highlight);
-  background: var(--btn);
-  color: var(--disabled);
-  cursor: default;
-  opacity: .7;
-}
-
-input[type=text], input[type=password] {
-  padding: 5px 7px;
-  min-width: 120px;
-  vertical-align: middle;
-  color: var(--ink_light);
-  border: var(--border);
-  border-radius: 2px;
-  box-shadow: var(--shadow_input);
-  background-color: var(--bg2);
-  cursor: text;
-}
-
-input[type=text]:focus, input[type=password]:focus {
-  padding: 5px 5px 5px 9px;
-  color: var(--ink);
-  border-radius: 0;
-  box-shadow: var(--btn_shadow_active), 0 0 0 1px rgba(255,96,0,.6);
-  background-color: var(--bg);
-}
-
-input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][disabled] {
-  color: var(--disabled);
-  box-shadow: var(--shadow_input);
-  background: var(--bg3);
-}
-
-input[type=file], input[type=file]::file-selector-button {
-  cursor: pointer;
-}
-
-input[type=file]::file-selector-button {
-  padding: 4px 8px;
-  text-decoration: none;
-  font: 9pt var(--bodyfont);
-  color: var(--ink_light);
-  border: var(--border);
-  border-radius: 2px;
-  box-shadow: var(--highlight), 0 0 1px #ddd;
-  background: var(--btn);
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: var(--ink);
-  background: var(--btn_hover);
-}
-
-input[type=file]:active::file-selector-button {
-  background-color: var(--bg);
-}
-
-.optbox, .optbox:checked {
-  position: relative;
-  width: 19px;
-  height: 19px;
-  vertical-align: middle;
-  box-sizing: border-box;
-  border: var(--border);
-  background: var(--bg);
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
-  will-change: transform;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 1px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  border-radius: 50%;
-}
-
-.optbox:checked::before, .optbox:not(:checked)::before {
-  position: absolute;
-  transition: linear all .05s;
-  transform: scale(1);
-}
-
-.optbox:not(:checked):not(:hover) {
-  box-shadow: var(--btn_shadow_active);
-}
-
-.optbox:checked::before {
-  line-height: .8;
-  background: #67f;
-  content: "";
-}
-
-.optbox:checked:hover::before,
-.optbox:checked:focus::before {
-  background: var(--hover);
-}
-
-input[type=checkbox]:checked::before {
-  width: 11px;
-  height: 11px;
-  top: 3px;
-  left: 3px;
-  border-radius: 1px;
-  transform: scale(1);
-}
-
-input[type=radio]:checked::before {
-  width: 9px;
-  height: 9px;
-  left: 25%;
-  top: 25%;
-  border-radius: 50%;
-}
-
-.optbox:not(:checked)::before {
-  color: transparent;
-  background: transparent;
-  transform: scale(0);
-}
-
-.optbox:not([disabled]):hover, .optbox:not([disabled]):focus {
-  border: 1px solid var(--hover);
-  background: var(--bg);
-}
-
-.optbox[disabled], .optbox:hover[disabled],
-.optbox:focus[disabled], .optbox:active[disabled], label:hover > .optbox[disabled] {
-  border: var(--border);
-  opacity: .5;
-  pointer-events: none;
-}
+table {width: 100%}
+th {font-size: 9pt; font-weight: 700; color: var(--ink_light)}
+a:link, a:visited {word-wrap: break-word; text-decoration: none; font-weight: 700; color: var(--a); outline: none}
+a:hover, a:focus {text-decoration: none; color: var(--hover)}
+a:active {color: var(--active)}
+input, label {vertical-align: middle}
+input::placeholder {font-style: italic; color: var(--ink_light); opacity: .7}
+input:focus::placeholder {opacity: 0}
+button::-moz-focus-inner, input::-moz-focus-inner {outline: none; border: none}
+input, button, select, label, textarea {font-size: 9pt}
+input, button, select, label {text-decoration: none; font: 9pt/130% var(--bodyfont); outline: none; cursor: pointer}
+button, input, select {color: var(--ink_light)}
+label:not([disabled]):hover {color: var(--ink)}
+input[type=text], input[type=password], textarea {box-sizing: border-box}
+textarea {width: 100%; resize: none; font: 9pt var(--monospaced); color: var(--ink_light); border: var(--border); box-shadow: var(--shadow_input); scrollbar-color: #acafb9 #f2f2ff}
+textarea:focus {color: var(--ink); box-shadow: var(--btn_shadow_active), 0 0 0 1px rgba(255,96,0,.6)}
+select {padding: 5px 20px 5px 5px; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; font-family: var(--bodyfont); color: var(--ink_light); border: var(--border); border-radius: 3px; box-shadow: var(--btn_shadow); background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn); cursor: pointer; appearance: none}
+select:hover, select:active, select:focus {color: var(--ink); box-shadow: var(--btn_shadow_hover); background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover); outline: none}
+select:focus {background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover); outline: none}
+select option {background: var(--bg)}
+select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {border: var(--border); box-shadow: var(--highlight); background: var(--btn); color: var(--disabled); cursor: default; opacity: .7}
+input[type=text], input[type=password] {padding: 5px 7px; min-width: 120px; vertical-align: middle; color: var(--ink_light); border: var(--border); border-radius: 2px; box-shadow: var(--shadow_input); background-color: var(--bg2); cursor: text}
+input[type=text]:focus, input[type=password]:focus {padding: 5px 5px 5px 9px; color: var(--ink); border-radius: 0; box-shadow: var(--btn_shadow_active), 0 0 0 1px rgba(255,96,0,.6); background-color: var(--bg)}
+input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][disabled] {color: var(--disabled); box-shadow: var(--shadow_input); background: var(--bg3)}
+input[type=file], input[type=file]::file-selector-button {cursor: pointer}
+input[type=file]::file-selector-button {padding: 4px 8px; text-decoration: none; font: 9pt var(--bodyfont); color: var(--ink_light); border: var(--border); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px #ddd; background: var(--btn)}
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {color: var(--ink); background: var(--btn_hover)}
+input[type=file]:active::file-selector-button {background-color: var(--bg)}
+.optbox, .optbox:checked {position: relative; width: 19px; height: 19px; vertical-align: middle; box-sizing: border-box; border: var(--border); background: var(--bg); -moz-appearance: none; -webkit-appearance: inherit; will-change: transform}
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {border-radius: 1px; box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6)}
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {border-radius: 50%}
+.optbox:checked::before, .optbox:not(:checked)::before {position: absolute; transition: linear all .05s; transform: scale(1)}
+.optbox:not(:checked):not(:hover) {box-shadow: var(--btn_shadow_active)}
+.optbox:checked::before {line-height: .8; background: #67f; content: ""}
+.optbox:checked:hover::before, .optbox:checked:focus::before {background: var(--hover)}
+input[type=checkbox]:checked::before {width: 11px; height: 11px; top: 3px; left: 3px; border-radius: 1px; transform: scale(1)}
+input[type=radio]:checked::before {width: 9px; height: 9px; left: 25%; top: 25%; border-radius: 50%}
+.optbox:not(:checked)::before {color: transparent; background: transparent; transform: scale(0)}
+.optbox:not([disabled]):hover, .optbox:not([disabled]):focus {border: 1px solid var(--hover); background: var(--bg)}
+.optbox[disabled], .optbox:hover[disabled], .optbox:focus[disabled], .optbox:active[disabled], label:hover > .optbox[disabled] {border: var(--border); opacity: .5; pointer-events: none}
 
 /* sliders */
-.optbox.slider[type=checkbox], .optbox.slider, .optbox.slider:hover, .optbox.slider:focus {
-  width: 40px;
-  height: 21px;
-  border-radius: 1px;
-  position: relative;
-  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2);
-  background: linear-gradient(180deg,#eef, #ddf);
-  outline: none;
-  transition: ease-in left .15s;
-  appearance: none;
-}
+.optbox.slider[type=checkbox], .optbox.slider, .optbox.slider:hover, .optbox.slider:focus {width: 40px; height: 21px; border-radius: 1px; position: relative; box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2); background: linear-gradient(180deg,#eef, #ddf); outline: none; transition: ease-in left .15s; appearance: none}
+.optbox.slider:checked {background: linear-gradient(180deg,#393, #4a4)}
+.optbox.slider:not(:checked):active {background: linear-gradient(180deg,#393, #4a4)}
+.optbox.slider:checked:active {background: linear-gradient(180deg,#cf0f00, #f00)}
+.optbox.slider:hover, ..optbox.slider {box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2)}
+.optbox.slider[type=checkbox]::before, .optbox.slider::before, .optbox.slider:hover::before, .optbox.slider:focus::before, .optbox.slider:active::before {width: 20px; height: 100%; position: absolute; top: 0; left: -1px; border-radius: 1px; box-shadow: inset 0 0 0 1px #99a, inset 0 0 0 2px #fff, 0 2px 5px rgba(0,0,0,.2); background: linear-gradient(#fff, #ddf); content: ""; transform: scale(.85); transition: ease-in left .15s}
+.optbox.slider:checked::before {left: 18px}
+.optbox[disabled] {opacity: .45; pointer-events: none}
 
-.optbox.slider:checked {
-  background: linear-gradient(180deg,#393, #4a4);
-}
+@supports not (-moz-appearance: none) {select {padding: 5px 20px 5px 8px}}
 
-.optbox.slider:not(:checked):active {
-  background: linear-gradient(180deg,#393, #4a4);
-}
-
-.optbox.slider:checked:active {
-  background: linear-gradient(180deg,#cf0f00, #f00);
-}
-
-.optbox.slider:hover, ..optbox.slider {
-  box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
-}
-
-.optbox.slider[type=checkbox]::before,
-.optbox.slider::before,
-.optbox.slider:hover::before,
-.optbox.slider:focus::before,
-.optbox.slider:active::before {
-  width: 20px;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: -1px;
-  border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #99a, inset 0 0 0 2px #fff, 0 2px 5px rgba(0,0,0,.2);
-  background: linear-gradient(#fff, #ddf);
-  content: "";
-  transform: scale(.85);
-  transition: ease-in left .15s;
-}
-
-.optbox.slider:checked::before {
-  left: 18px;
-}
-
-.optbox[disabled] {
-  opacity: .45;
-  pointer-events: none;
-}
+@media (forced-colors: active) {* {forced-color-adjust: none}}
