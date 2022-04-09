@@ -145,7 +145,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      */
 //    private static final int DEFAULT_INITIAL_ACK_DELAY = 500;
-    private static final int DEFAULT_INITIAL_ACK_DELAY = 200;
+    private static final int DEFAULT_INITIAL_ACK_DELAY = 150;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
     private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
