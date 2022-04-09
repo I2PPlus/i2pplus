@@ -159,7 +159,7 @@ SSL
                 break;
                 case IndexBean.RUNNING:
 %>
-<div class="statusRunning text" title="<%=intl._t("Running")%>"><%=intl._t("Running")%></div>
+<div class="statusRunning text" title="<%=intl._t("Running")%> (<%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curServer, 3)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelDepthOut(curServer, 3)%>&nbsp;<%=intl._t("out")%> / <%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curServer,2)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelQuantityOut(curServer,2)%>&nbsp;<%=intl._t("out")%>)"><%=intl._t("Running")%></div>
 </td>
 <td class="tunnelControl">
 <a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
@@ -393,7 +393,7 @@ ElGamal-2048
                    break;
                    case IndexBean.RUNNING:
 %>
-<div class="statusRunning text" title="<%=intl._t("Running")%>"><%=intl._t("Running")%></div>
+<div class="statusRunning text" title="<%=intl._t("Running")%> (<%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curClient, 3)%> / <%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curClient,2)%>)"><%=intl._t("Running")%></div>
 </td>
 <td class="tunnelControl volatile">
 <a class="control stop iconize" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
