@@ -659,7 +659,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     buf.append("Floodfill &bullet;");
                 if (v != null)
                     buf.append(' ' + v);
-                buf.append("\" href=\"netdb?r=").append(h,0,10).append("\">");
+                buf.append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">");
             }
             buf.append(h);
             if (ri != null)
@@ -671,7 +671,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                        " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"))
                .append("\"></span><tt>");
            if (h != null)
-               buf.append(h,0,4);
+               buf.append(h.substring(0,4));
            else
                buf.append("????");
            buf.append("</tt></span> ");
