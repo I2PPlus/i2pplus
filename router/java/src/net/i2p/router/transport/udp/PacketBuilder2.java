@@ -569,10 +569,10 @@ class PacketBuilder2 {
                                 hdrKey1, hdrKey2, block, state.getNextToken());
         int total = pkt.getLength();
         if (_log.shouldWarn())
-            _log.warn("Building " + count + " fragmented session confirmed packets" +
-                      " max data: " + max +
-                      " RI block size: " + blockSize +
-                      " total data size: " + total);
+            _log.warn("[SSU2] Building " + count + " fragmented SessionConfirmed packets -> " +
+                      " Max data: " + max +
+                      "; RouterInfo block size: " + blockSize +
+                      "; Total data size: " + total + " bytes");
 
         // fix up packet0 by putting the byte array back
         // and encrypting the header
@@ -601,7 +601,7 @@ class PacketBuilder2 {
             System.arraycopy(jumbo, i, data, off + SHORT_HEADER_SIZE, len);
             data[off + SHORT_HEADER_FLAGS_OFFSET] = (byte) (((++pktnum) << 4) | count);  // fragment n of numFragments
             if (len < 24)
-                _log.error("FIXME " + len);
+                _log.error("[SSU2] FIXME " + len);
             pkt.setLength(len + SHORT_HEADER_SIZE);
             SSU2Header.encryptShortHeader(packet, hdrKey1, hdrKey2);
             pkt.setSocketAddress(state.getSentAddress());
@@ -611,7 +611,7 @@ class PacketBuilder2 {
         }
         if (_log.shouldInfo()) {
             for (int i = 0; i < rv.size(); i++) {
-                _log.info("pkt " + i + " size " + rv.get(i).getPacket().getLength());
+                _log.info("[SSU2] Packet [" + i + ": " + rv.get(i).getPacket().getLength() + " bytes]");
             }
         }
         if (rv.size() != count)
