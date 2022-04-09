@@ -524,7 +524,7 @@ class PacketBuilder2 {
 
     /**
      * Build all the fragmented SessionConfirmed packets
-     * 
+     *
      */
     private UDPPacket[] buildSessionConfirmedPackets(OutboundEstablishState2 state, SSU2Payload.RIBlock block) {
         UDPPacket packet0 = buildShortPacketHeader(state.getSendConnID(), 0, SESSION_CONFIRMED_FLAG_BYTE);
@@ -791,7 +791,7 @@ class PacketBuilder2 {
      */
     private UDPPacket buildLongPacketHeader(long destID, long pktNum, byte type, long srcID, long token) {
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Building long header destID " + destID + " -> Packet [#" + pktNum + "]; Type " + type + "; srcID " + srcID + "; Token " + token);
+            _log.debug("[SSU2] Building long header with DestinationID [" + destID + "] \n* Packet [#" + pktNum + "]; Type: " + type + "; SourceID [" + srcID + "]; Token [" + token + "]");
         UDPPacket packet = buildShortPacketHeader(destID, pktNum, type);
         byte data[] = packet.getPacket().getData();
         data[13] = PROTOCOL_VERSION;
