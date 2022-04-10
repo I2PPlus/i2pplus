@@ -661,7 +661,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     buf.append(' ' + v);
                 buf.append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">");
             }
-            buf.append(h);
+            buf.append(h.substring(0,4));
             if (ri != null)
                 buf.append("</a>");
             buf.append("</tt></span>");

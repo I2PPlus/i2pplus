@@ -27,10 +27,11 @@ class TunnelGatewayPumper implements Runnable {
     private final Set<PumpedTunnelGateway> _backlogged;
     private final List<Thread> _threads;
     private volatile boolean _stop;
-    private static final int MIN_PUMPERS = 1;
+//    private static final int MIN_PUMPERS = 1;
+    private static final int MIN_PUMPERS = 2;
 //    private static final int MAX_PUMPERS = 4;
-    private static final int MAX_PUMPERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                            SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : 8;
+    private static final int MAX_PUMPERS = SystemVersion.isSlow() || (SystemVersion.getCores() <= 4 &&
+                                           SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : 8;
     private final int _pumpers;
 
     /**
@@ -51,8 +52,9 @@ class TunnelGatewayPumper implements Runnable {
         if (ctx.getBooleanProperty("i2p.dummyTunnelManager")) {
             _pumpers = 1;
         } else {
-            long maxMemory = SystemVersion.getMaxMemory();
-            _pumpers = (int) Math.max(MIN_PUMPERS, Math.min(MAX_PUMPERS, 1 + (maxMemory / (32*1024*1024))));
+//            long maxMemory = SystemVersion.getMaxMemory();
+//            _pumpers = (int) Math.max(MIN_PUMPERS, Math.min(MAX_PUMPERS, 1 + (maxMemory / (32*1024*1024))));
+            _pumpers = (int) MAX_PUMPERS;
         }
         for (int i = 0; i < _pumpers; i++) {
             Thread t = new I2PThread(this, "TunnGWPumper " + (i+1) + '/' + _pumpers, true);
@@ -72,7 +74,7 @@ class TunnelGatewayPumper implements Runnable {
         for (int i = 1; i <= 5 && !_wantsPumping.isEmpty(); i++) {
             try {
 //                Thread.sleep(i * 50);
-                Thread.sleep(i * 30);
+                Thread.sleep(i * 10);
             } catch (InterruptedException ie) {}
         }
         for (Thread t : _threads) {
