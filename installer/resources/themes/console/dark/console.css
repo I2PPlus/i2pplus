@@ -1327,6 +1327,7 @@ th code {user-select: all}
 .applink:hover .applabel, .sitemapLink:hover .sitemapLabel, .themechoice:hover .themelabel, .langselect:hover .ui_lang {background: var(--glow_bottom_hover) #000}
 .applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover)}
 .applink:hover img, .sitemapLink:hover img, a:focus .applink img, a:focus .sitemapLink img {opacity: 1; filter: none; transform: scale(1.1)}
+.applink:hover img, a:focus .applink img {margin-top: -3px}
 .applink a:link, .applink a:hover, .applink a:active {text-decoration: none; outline: none}
 .applink:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink); box-shadow: var(--depress); background: var(--hover)}
 .applink:active .applabel a {color: var(--ink)}
@@ -1397,7 +1398,7 @@ th code {user-select: all}
 .en .sitemapLink, .en .sitemapLabel {width: 136px; min-width: 136px}
 .sitemapLink {margin: 2px 2px 6px; box-shadow: var(--outline), var(--highlight), inset 0 0 1px 1px #242; background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000)}
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px var(--hover)}
-.sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px; opacity: .8}
+.sitemapLink img {padding: 13px 10px 9px; height: 32px; width: 32px; opacity: .8}
 .sitemapLink:active img, .sitemapLink img:active, .applink:active img, .applink img:active {transform: scale(0.9); filter: sepia(100%) drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px rgba(148,0,0,.5))}
 .sitemapLabel {margin: 0 0 -4px; padding: 6px 4px 8px; display: inline-block; line-height: 1.05; overflow: hidden; white-space: nowrap; box-sizing: border-box; text-overflow: ellipsis; font-size: 90%; text-shadow: var(--textshadow); border: none; border-top: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #242}
 .sitemapLink:active .sitemapLabel, .sitemapLabel:active {box-shadow: var(--depress)}
@@ -2697,6 +2698,7 @@ input[type=submit], input[type=reset], button {padding: 8px 12px}
 #i2pclientconfig .h3navlinks a {padding-top: 5px}
 #applinks, #sitelinks {padding: 9px 10px 8px 35px}
 #applinks a::after, #sitelinks a::after {margin-left: 11px}
+.applink:hover img, a:focus .applink img {margin-top: -6px}
 h4#updateplugins {margin-top: -15px}
 #help .confignav {padding: 0; position: sticky; top: -2px; z-index: 999; will-change: transform}
 #i2pclientconfig {margin-bottom: -15px}
