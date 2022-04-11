@@ -181,6 +181,8 @@ public class ErrorServlet extends HttpServlet {
      *  @param errorCause may be null
      */
     protected void outputMessage(PrintWriter out, int errorCode, String errorMsg, String errorURI, Throwable errorCause) {
+        String themePath = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/";
+        out.println("<link href=\"" + themePath + PROXY_CSS + "\" rel=\"stylesheet\" type=\"text/css\">\n");
         if (errorCode == 404) {
             // TODO: if service is available but not started, provide a link to /configclients or /configwebapps and explain the error
             out.println("<p>" + _t("Sorry! You appear to be requesting a non-existent Router Console page or resource.") + "</p>");
