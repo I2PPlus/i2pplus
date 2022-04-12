@@ -181,12 +181,15 @@ public class ErrorServlet extends HttpServlet {
      *  @param errorCause may be null
      */
     protected void outputMessage(PrintWriter out, int errorCode, String errorMsg, String errorURI, Throwable errorCause) {
+        String themePath = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/";
         if (errorCode == 404) {
+            out.println("<link href=\"" + themePath + PROXY_CSS + "\" rel=\"stylesheet\" type=\"text/css\">\n");
             // TODO: if service is available but not started, provide a link to /configclients or /configwebapps and explain the error
             out.println("<p>" + _t("Sorry! You appear to be requesting a non-existent Router Console page or resource.") + "</p>");
             out.println("<hr>");
             out.println("<p><b>" + _t("Error {0}", 404) + ": " + errorURI + "&nbsp;" + _t("not found") + "</b></p>");
         } else if (errorCode == 403 || errorCode >= 500 || errorCause != null) {
+            out.println("<link href=\"" + themePath + PROXY_CSS + "\" rel=\"stylesheet\" type=\"text/css\">\n");
             out.println("<p><b>" + _t("Sorry! There has been an internal error.") + "</b></p>");
             out.println("<hr>");
             out.println("<p>");
@@ -233,6 +236,7 @@ public class ErrorServlet extends HttpServlet {
             out.println(_t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report."));
             out.println("</p>\n");
         } else {
+            out.println("<link href=\"" + themePath + PROXY_CSS + "\" rel=\"stylesheet\" type=\"text/css\">\n");
             out.println("<p>Unsupported error " + errorCode + "</p>\n");
         }
     }

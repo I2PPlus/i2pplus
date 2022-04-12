@@ -61,34 +61,20 @@ class BuildMessageProcessor {
             // 32 KB
             // appx 500 part. tunnels or 6K req/hr
             m = 17;
-/*
         } else if (isSlow) {
             m = 20;
-        } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
-                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 2048*1024*1024L &&
-                   SystemVersion.getCores() >= 6) {
+        } else if (maxMemory >= 2048*1024*1024L && SystemVersion.getCores() >= 6) {
+            // 32 MB
+            // appx 320K part. tunnels or 3.84M req/hr
+            m = 27;
+        } else if (maxMemory >= 2048*1024*1024L) {
             // 16 MB
             // appx 160K part. tunnels or 1.92M req/hr
             m = 26;
-        } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
-                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 1024*1024*1024L &&
-                   SystemVersion.getCores() >= 4) {
+        } else if (maxMemory >= 1024*1024*1024L) {
             // 8 MB
             // appx 80K part. tunnels or 960K req/hr
             m = 25;
-        } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
-                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 512*1024*1024L && !SystemVersion.isSlow()) {
-            // 4 MB
-            // appx 40K part. tunnels or 480K req/hr
-            m = 24;
-        } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
-                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 256*1024*1024L) {
-            // 2 MB
-            // appx 20K part. tunnels or 240K req/hr
-            m = 23;
-*/
-
-
         } else if (maxMemory >= 512*1024*1024L && !SystemVersion.isSlow()) {
             // 4 MB
             // appx 40K part. tunnels or 480K req/hr
@@ -97,19 +83,12 @@ class BuildMessageProcessor {
             // 2 MB
             // appx 20K part. tunnels or 240K req/hr
             m = 23;
-        } else if (maxMemory >= 256*1024*1024L) {
-            // 1 MB
-            // appx 10K part. tunnels or 120K req/hr
-            m = 22;
-        } else if (maxMemory >= 128*1024*1024L) {
-            // 512 KB
-            // appx 5K part. tunnels or 60K req/hr
-            m = 21;
         } else {
             // 128 KB
             // appx 2K part. tunnels or 24K req/hr
             m = 19;
         }
+
         // Too early, keys not registered with key manager yet
         //boolean isEC = ctx.keyManager().getPrivateKey().getType() == EncType.ECIES_X25519;
         // ... rather than duplicating all the logic in LoadRouterInfoJob,
@@ -170,7 +149,7 @@ class BuildMessageProcessor {
                         boolean isBad = SessionKey.INVALID_KEY.equals(rv.readReplyKey());
                         if (isBad) {
                             if (log.shouldWarn())
-                                log.warn("[MsgID " + msg.getUniqueId() + "] Bad reply key " + rv);
+                                log.warn("[MsgID " + msg.getUniqueId() + "] Bad reply key (i2pd bug) " + rv);
                             ctx.statManager().addRateData("tunnel.buildRequestBadReplyKey", 1);
                             return null;
                         }

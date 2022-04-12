@@ -29,7 +29,7 @@ import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 
 /**
- * Data for a new connection being established, where we initiated the
+ * Data for a new connection being established, where we initiated the 
  * connection with a remote peer.  In other words, we are Alice and
  * they are Bob.
  *
@@ -163,7 +163,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _handshakeState.getLocalKeyPair().setKeys(_transport.getSSU2StaticPrivKey(), 0,
                                                   _transport.getSSU2StaticPubKey(), 0);
     }
-
+    
     public synchronized void restart(long token) {
         _token = token;
         HandshakeState old = _handshakeState;
@@ -212,11 +212,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             _log.debug("[SSU2] Received Address: " + Addresses.toString(ip, port));
         _aliceIP = ip;
         _alicePort = port;
-    }
-
-    public void gotIntroKey(byte[] key) {
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] Received Intro key: " + Base64.encode(key));
     }
 
     public void gotRelayTagRequest() {
@@ -274,7 +269,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     /////////////////////////////////////////////////////////
     // end payload callbacks
     /////////////////////////////////////////////////////////
-
+    
     // SSU 1 overrides
 
     @Override
@@ -470,9 +465,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             _sessConfForReTX = new byte[packets.length][];
             for (int i = 0; i < packets.length; i++) {
                 DatagramPacket pkt = packets[i].getPacket();
-            byte data[] = pkt.getData();
-            int off = pkt.getOffset();
-            int len = pkt.getLength();
+                byte data[] = pkt.getData();
+                int off = pkt.getOffset();
+                int len = pkt.getLength();
                 byte[] save = new byte[len];
                 System.arraycopy(data, off, save, 0, len);
                 _sessConfForReTX[i] = save;

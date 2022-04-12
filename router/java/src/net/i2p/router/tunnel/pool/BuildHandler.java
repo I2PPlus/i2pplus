@@ -93,11 +93,10 @@ class BuildHandler implements Runnable {
     /** limits on concurrent next-hop RI lookup */
 //    private static final int MIN_LOOKUP_LIMIT = 10;
 //    private static final int MAX_LOOKUP_LIMIT = 100;
-    private static final int MIN_LOOKUP_LIMIT = 8;
-    private static final int MAX_LOOKUP_LIMIT = 64;
+    private static final int MIN_LOOKUP_LIMIT = 12;
+    private static final int MAX_LOOKUP_LIMIT = 128;
     /** limit lookups to this % of current participating tunnels */
-//    private static final int PERCENT_LOOKUP_LIMIT = 3;
-    private static final int PERCENT_LOOKUP_LIMIT = 2;
+    private static final int PERCENT_LOOKUP_LIMIT = 3;
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
      *  participating via OnFailedSendJob.
@@ -106,7 +105,7 @@ class BuildHandler implements Runnable {
      *  10s was not enough.
      */
 //    private static final int NEXT_HOP_SEND_TIMEOUT = 25*1000;
-    private static final int NEXT_HOP_SEND_TIMEOUT = 15*1000;
+    private static final int NEXT_HOP_SEND_TIMEOUT = 20*1000;
 
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
     /** must be > 1 hour due to rounding down */
@@ -274,7 +273,8 @@ class BuildHandler implements Runnable {
             long now = _context.clock().now();
             long dropBefore = now - (BuildRequestor.REQUEST_TIMEOUT / 4);
             String PROP_MAX_TUNNELS = _context.getProperty("router.maxParticipatingTunnels");
-            int maxTunnels = 1000;
+//            int maxTunnels = 1000;
+            int maxTunnels = 4000;
             if (PROP_MAX_TUNNELS != null)
                 maxTunnels = Integer.valueOf(PROP_MAX_TUNNELS);
             if (state.recvTime <= dropBefore) {

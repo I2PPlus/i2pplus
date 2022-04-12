@@ -517,10 +517,10 @@ public class Analysis extends JobImpl implements RouterApp {
             point *= PAIR_DISTANCE_FACTOR;
             String b2 = p.r2.getHash().toBase64();
             addPoints(points, p.r1.getHash(), point, "Very close (" + fmt.format(distance) +
-                          ") to other " + other + " <a href=\"netdb?r=" + b2 + "\">" + b2 + "</a>");
+                          ") to other " + other + " <a href=\"netdb?r=" + b2 + "\">" + b2.substring(0,6) + "</a>");
             String b1 = p.r1.getHash().toBase64();
             addPoints(points, p.r2.getHash(), point, "Very close (" + fmt.format(distance) +
-                          ") to other " + other + " <a href=\"netdb?r=" + b1 + "\">" + b1 + "</a>");
+                          ") to other " + other + " <a href=\"netdb?r=" + b1 + "\">" + b1.substring(0,6) + "</a>");
         }
         return avg;
     }

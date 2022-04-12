@@ -138,7 +138,8 @@ class BuildExecutor implements Runnable {
         if (csf.isDummy() && csf.getEstablished().size() <= 0)
             return 0;
         int maxKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
-        int allowed = maxKBps / 6; // Max. 1 concurrent build per 6 KB/s outbound
+//        int allowed = maxKBps / 6; // Max. 1 concurrent build per 6 KB/s outbound
+        int allowed = maxKBps / 4;
         RateStat rs = _context.statManager().getRate("tunnel.buildRequestTime");
         if (rs != null) {
             Rate r = rs.getRate(60*1000);
@@ -148,7 +149,7 @@ class BuildExecutor implements Runnable {
             if (avg <= 0)
                 avg = rs.getLifetimeAverageValue();
 //            if (avg > 1) {
-            if (avg > 100) {
+            if (avg > 3) {
                 // If builds take more than 75 ms, start throttling
                 int throttle = (int) (200 * MAX_CONCURRENT_BUILDS / avg);
                 if (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024)
