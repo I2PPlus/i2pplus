@@ -543,7 +543,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         // allow both 0/0 (development) and 0/1 to indicate sole fragment
         int totalfrag = fragbyte & 0x0f;
         if (totalfrag > 0 && frag > totalfrag - 1)
-            throw new GeneralSecurityException("Bad sess conf fragment " + frag + " of " + totalfrag);
+            throw new GeneralSecurityException("[SSU2] Bad SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
         if (totalfrag > 1) {
             // Fragment processing. Save fragment.
             // If we have all fragments, reassemble and continue,
@@ -557,17 +557,17 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _nextSend = _lastSend + 60*1000;
             } else {
                 if (_sessConfFragments.length != totalfrag) // total frag changed
-                    throw new GeneralSecurityException("Bad sess conf fragment " + frag + " of " + totalfrag);
+                    throw new GeneralSecurityException("[SSU2] Bad SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
                 if (_sessConfFragments[frag] != null) {
                     if (_log.shouldWarn())
-                        _log.warn("Got dup sess conf frag " + frag + " on " + this);
+                        _log.warn("[SSU2] Received duplicate SessionConfirmed fragment [" + frag + "] on " + this);
                     // there is no facility to ack individual fragments
                     //packetReceived();
                     return null;
                 }
             }
             if (_log.shouldWarn())
-                _log.warn("Received " + len + " bytes SessionConfirmed fragment [" + frag + '/' + totalfrag + "]" on " + this);
+                _log.warn("[SSU2] Received " + len + " bytes SessionConfirmed fragment [" + frag + '/' + totalfrag + "] on " + this);
             byte[] fragdata;
             if (frag == 0) {
                 // preserve header
@@ -584,7 +584,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             for (int i = 0; i < totalfrag; i++) {
                 if (_sessConfFragments[i] == null) {
                     if (_log.shouldWarn())
-                        _log.warn("Still missing at least one sess conf frag on " + this);
+                        _log.warn("[SSU2] Still missing at least one SessConfirmed fragment on " + this);
                     // there is no facility to ack individual fragments
                     //packetReceived();
                     return null;
