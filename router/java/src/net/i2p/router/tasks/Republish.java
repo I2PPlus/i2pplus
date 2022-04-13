@@ -41,7 +41,7 @@ public class Republish implements SimpleTimer.TimedEvent {
                 long published = ri.getDate();
                 long diff = Math.abs(now - published);
                 if (diff > 60*1000) {
-                    log.logAlways(Log.WARN, "Large clock shift detected (" + DataHelper.formatDuration(diff) + "), rebuilding local RouterInfo..." + );
+                    log.logAlways(Log.WARN, "Large clock shift detected (" + DataHelper.formatDuration(diff) + "), rebuilding local RouterInfo...");
                     // let's just try this again and hope for better results
                     _context.router().rebuildRouterInfo();
                     return;
