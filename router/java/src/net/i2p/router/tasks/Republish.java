@@ -47,7 +47,7 @@ public class Republish implements SimpleTimer.TimedEvent {
                     return;
                 }
             }
-            log.log(Log.CRIT, "Local router info is invalid - rebuilding a new identity", iae);
+            log.log(Log.CRIT, "Local RouterInfo is invalid - rebuilding a new identity...", iae);
             _context.router().rebuildNewIdentity();
         }
     }
