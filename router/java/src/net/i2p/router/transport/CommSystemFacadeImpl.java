@@ -84,10 +84,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     public synchronized void restart() {
-        if (!_wasStarted)
+        if (!_wasStarted) {
             startup();
-        else
+        } else {
+            _wasStarted = false;
             _manager.restart();
+            _wasStarted = true;
+        }
     }
 
     /**
@@ -639,7 +642,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 String countryName = getCountryName(c);
                 if (countryName.length() > 2)
                     countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-                buf.append("<a href=\"/netdb?c=" + c + "\"><img height=\"12\" width=\"16\" loading=\"lazy\" alt=\"")
+                buf.append("<a href=\"/netdb?c=" + c + "\"><img height=\"12\" width=\"16\" loading=\"lazy\" decoding=\"async\" alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" title=\"");
                 buf.append(countryName).append(" &bullet; ");
                 if (ri != null && ip != null)

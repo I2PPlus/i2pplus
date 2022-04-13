@@ -914,7 +914,7 @@ public class SybilRenderer {
            String country = _context.commSystem().getCountry(info.getIdentity().getHash());
            if(country != null) {
                buf.append("<a href=\"/netdb?c=").append(country).append("\">")
-                  .append("<img height=\"12\" width=\"16\" loading=\"lazy\" alt=\"").append(country.toUpperCase(Locale.US)).append('\"')
+                  .append("<img height=\"12\" width=\"16\" loading=\"lazy\" decoding=\"async\" alt=\"").append(country.toUpperCase(Locale.US)).append('\"')
                   .append(" title=\"").append(getTranslatedCountry(country)).append('\"')
                   .append(" src=\"/flags.jsp?c=").append(country).append("\"> ").append("</a>");
            } else {
@@ -923,7 +923,7 @@ public class SybilRenderer {
         }
         buf.append("</span>");
         if (_context.portMapper().isRegistered("imagegen"))
-            buf.append("<img class=\"identicon\" src=\"/imagegen/id?s=32&amp;c=" + hash.replace("=", "%3d") + "\" height=\"28\" width=\"28\" loading=\"lazy\">");
+            buf.append("<img class=\"identicon\" src=\"/imagegen/id?s=32&amp;c=" + hash.replace("=", "%3d") + "\" height=\"28\" width=\"28\" loading=\"lazy\" decoding=\"async\">");
         buf.append("</th></tr>\n");
         buf.append("<tr><td class=\"sybilinfo_params\" colspan=\"3\">\n<div class=\"sybilinfo_container\">\n");
         if (us != null) {

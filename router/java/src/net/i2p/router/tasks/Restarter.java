@@ -30,18 +30,16 @@ public class Restarter implements Runnable {
         try { _context.commSystem().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the comm system", t); }
         log.logAlways(Log.WARN, "Stopping the Tunnel Manager...");
         try { _context.tunnelManager().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the tunnel manager", t); }
+        log.logAlways(Log.WARN, "Restarted the tunnel manager");
 
         //try { _context.peerManager().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the peer manager", t); }
         //try { _context.netDb().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the networkDb", t); }
         //try { _context.jobQueue().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the job queue", t); }
 
-        log.logAlways(Log.WARN, "Router teardown complete, restarting the router...");
         try { Thread.sleep(10*1000); } catch (InterruptedException ie) {}
         _context.router().setEstimatedDowntime(System.currentTimeMillis() - start);
 
-        log.logAlways(Log.WARN, "Restarting the Comm system...");
-        log.logAlways(Log.WARN, "Restarting the Tunnel Manager...");
-        log.logAlways(Log.WARN, "Restarting the Client Manager...");
+        log.logAlways(Log.WARN, "Restarting the client manager...");
         try { _context.clientMessagePool().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the CMP", t); }
         try { _context.clientManager().startup(); } catch (Throwable t) { log.log(Log.CRIT, "Error starting the client manager", t); }
 
