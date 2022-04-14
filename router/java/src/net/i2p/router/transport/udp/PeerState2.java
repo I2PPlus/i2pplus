@@ -538,7 +538,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo())
-            _log.info("[SSU2] Received TERMINATION block, reason: " + reason + " count: " + count);
+            _log.info("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count);
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
     }
 
