@@ -75,9 +75,11 @@ td p.info, td p.error {margin: -2px -3px}
 .topbuttons .pagenavcontrols {border-top: var(--border); border-bottom: var(--border)}
 .topbuttons .pagenav {margin: 7px 0 -3px; width: 100%; border-top: var(--border)}
 .topbuttons .pagenav input {margin: 5px 1px 2px}
-.topbuttons .pagenav td {white-space: nowrap; padding-bottom: 4px}
-.topbuttons .pagenav td:first-child {width: 99%}
+.topbuttons .pagenav td {padding-bottom: 4px; white-space: nowrap; text-align: center}
+.topbuttons .pagenav td:first-child, .topbuttons .pagenav td:last-child {width: 50%}
 .topbuttons .pagenav td:last-child {padding-right: 4px}
+.topbuttons .pagenav td:first-child {text-align: right}
+.topbuttons .pagenav td:last-child {text-align: left}
 .topbuttons#pagesize {padding: 6px 0 4px; border-bottom: var(--border)}
 tr.list0 {background: var(--bg3)}
 tr.list0 a:link {text-decoration: none}
@@ -102,15 +104,16 @@ tr.bottombuttons table.pagenav {margin: 0; width: 100%; border-bottom: 1px solid
 #dologin input[name="pass"] {padding: 4px 5px 4px 26px; background: var(--bg) var(--key) no-repeat 5px center / 16px}
 #dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {margin-right: 3px; width: 60%; width: calc(60% + 26px)}
 #dologin table {margin: 0 auto; width: 100%; width: calc(100% - 2px); border-collapse: collapse}
+#dologin tr:last-child td {padding: 3px 0 5px}
+#dologin tr:nth-child(n+3) td {text-align: center}
+#dologin tr:nth-child(6) hr {margin-bottom: 4px}
+#dologin tr:last-child hr {margin-top: 3px}
 #dologin td {padding: 5px 3px; font-weight: 700; color: #41444d}
 #dologin td:first-child {padding-left: 0; width: 120px; white-space: nowrap}
 #dologin td:last-child {padding-right: 0; width: auto}
 #dologin td[colspan="2"] {padding: 4px 0 7px}
-#dologin tr:last-child td {padding: 3px 0 5px}
 #dologin h1 {margin: -10px 0 10px; padding: 10px 15px; letter-spacing: .08em; text-align: left; font-size: 14pt; color: var(--ink_light); word-spacing: .1em; border-bottom: var(--border); box-shadow: var(--highlight); background: linear-gradient(90deg, #fff 30%, #eff2ff)}
 #dologin hr {display: block; box-shadow: 0 0 0 1px rgba(255,255,255,.5); background: var(--border_color)}
-#dologin tr:nth-child(6) hr {margin-bottom: 4px}
-#dologin tr:last-child hr {margin-top: 3px}
 .iframed #dologin tr:nth-child(6) hr {margin-top: 5px}
 #dologin tr:last-child a {margin: 6px -2px 6px; padding: 3px 10px; display: inline-block; font-size: 90%; border: 1px solid rgba(119, 120, 159, .3); border-radius: 25px; box-shadow: 0 0 1px rgba(255,255,255,0); background: linear-gradient(90deg, #f2f2ff, #f6f6ff, #f2f2ff); transition: ease all .1s}
 #dologin tr:last-child a:hover {border: 1px solid #77789f; border: 1px solid rgba(119, 120, 159, .5); background: #f2f2ff; background: linear-gradient(180deg,#fafaff 50%, #e8e8ff 50%) #f2f2ff; box-shadow: 0 0 1px #ccf; transition: ease all .1s}

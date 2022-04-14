@@ -54,7 +54,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static final int MIN_KBPS_TWO_HANDLERS = 64;
 //    private static final int MIN_KBPS_THREE_HANDLERS = 1024;
     private static final int MIN_KBPS_THREE_HANDLERS = 512;
-    private static final double MAX_SHARE_RATIO = 10000d;
+    private static final double MAX_SHARE_RATIO = 100000d;
 
     public TunnelPoolManager(RouterContext ctx) {
         _context = ctx;

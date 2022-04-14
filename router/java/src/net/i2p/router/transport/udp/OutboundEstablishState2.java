@@ -29,7 +29,7 @@ import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 
 /**
- * Data for a new connection being established, where we initiated the 
+ * Data for a new connection being established, where we initiated the
  * connection with a remote peer.  In other words, we are Alice and
  * they are Bob.
  *
@@ -163,7 +163,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _handshakeState.getLocalKeyPair().setKeys(_transport.getSSU2StaticPrivKey(), 0,
                                                   _transport.getSSU2StaticPubKey(), 0);
     }
-    
+
     public synchronized void restart(long token) {
         _token = token;
         HandshakeState old = _handshakeState;
@@ -260,7 +260,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldWarn())
-            _log.warn("[SSU2] Received TERMINATION block, reason: " + reason + " count: " + count);
+            _log.warn("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count);
         // this sets the state to FAILED
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
@@ -269,7 +269,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     /////////////////////////////////////////////////////////
     // end payload callbacks
     /////////////////////////////////////////////////////////
-    
+
     // SSU 1 overrides
 
     @Override

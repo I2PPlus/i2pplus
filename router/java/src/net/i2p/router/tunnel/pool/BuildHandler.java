@@ -950,7 +950,7 @@ class BuildHandler implements Runnable {
                 success = _context.tunnelDispatcher().joinParticipant(cfg);
             if (success) {
                 if (_log.shouldDebug())
-                    _log.debug("Joining participating tunnel " + req);
+                    _log.debug("Joining participating tunnel... " + req);
             } else {
                 // Dup Tunnel ID. This can definitely happen (birthday paradox).
                 // Probability in 11 minutes (per hop type):

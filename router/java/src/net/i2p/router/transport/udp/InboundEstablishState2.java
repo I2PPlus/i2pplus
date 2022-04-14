@@ -399,7 +399,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldWarn())
-            _log.warn("[SSU2] Received TERMINATION block, reason: " + reason + " count: " + count);
+            _log.warn("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count);
         // this sets the state to FAILED
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId);

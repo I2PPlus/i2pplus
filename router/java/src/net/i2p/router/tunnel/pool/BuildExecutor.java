@@ -172,8 +172,8 @@ class BuildExecutor implements Runnable {
             allowed *= 2;
         if (allowed > MAX_CONCURRENT_BUILDS) {
             allowed = MAX_CONCURRENT_BUILDS;
-            if (_log.shouldDebug())
-                _log.debug("No throttling of concurrent tunnel builds currently active (max is " + allowed + ")");
+//            if (_log.shouldDebug())
+//                _log.debug("No throttling of concurrent tunnel builds currently active (max is " + allowed + ")");
         }
         allowed = _context.getProperty("router.tunnelConcurrentBuilds", allowed);
 
@@ -271,8 +271,8 @@ class BuildExecutor implements Runnable {
         if (allowed < 3) {
              allowed += 3; allowed *= 4;
         }
-        if (_log.shouldDebug())
-            _log.debug("Current maximum tunnel concurrent build rate: " + allowed);
+//        if (_log.shouldDebug())
+//            _log.debug("Current maximum tunnel concurrent build rate: " + allowed);
         return allowed;
     }
 
