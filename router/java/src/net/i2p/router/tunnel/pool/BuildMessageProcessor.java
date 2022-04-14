@@ -64,10 +64,14 @@ class BuildMessageProcessor {
         } else if (isSlow) {
             m = 20;
         } else if (maxMemory >= 2048*1024*1024L && SystemVersion.getCores() >= 6) {
+            // 128 MB
+            // appx 1280K part. tunnels or 15.36M req/hr
+            m = 29;
+        } else if (maxMemory >= 2048*1024*1024L) {
             // 64 MB
             // appx 640K part. tunnels or 7.68M req/hr
             m = 28;
-        } else if (maxMemory >= 2048*1024*1024L) {
+        } else if (maxMemory >= 1536*1024*1024L) {
             // 32 MB
             // appx 320K part. tunnels or 3.84M req/hr
             m = 27;
