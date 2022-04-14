@@ -114,3 +114,4 @@ h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
 @media screen and (min-width: 800px) {.warning h3 {margin: -39px -34px 30px -109px}}
 @media screen and (min-width: 1400px) {#jumplinks h4 {font-size: 10.5pt}}
 @media screen and (min-height: 700px) {.warning {margin-bottom: 30px}}
+@media screen and (min-width: 1500px) {#console_404 .sorry{margin-left: 252px}}
