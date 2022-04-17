@@ -58,7 +58,7 @@ class SearchJob extends JobImpl {
     private int _floodfillSearchesOutstanding;
 
 //    private static final int SEARCH_BREDTH = 3;
-    private static int SEARCH_BREDTH = 6;
+    private static int SEARCH_BREDTH = 5;
     /** Only send the 10 closest "don't tell me about" refs */
 //    static final int MAX_CLOSEST = 10;
     static final int MAX_CLOSEST = 12;
@@ -77,7 +77,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final long RESEND_TIMEOUT = 30*1000;
-    private static final long RESEND_TIMEOUT = 10*1000;
+    private static final long RESEND_TIMEOUT = 8*1000;
 
     /**
      * When we're just waiting for something to change, requeue the search status test
@@ -85,7 +85,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final long REQUEUE_DELAY = 1000;
-    private static final long REQUEUE_DELAY = 2*1000;
+    private static final long REQUEUE_DELAY = 1500;
 
     // TODO pass to the tunnel dispatcher
     //private final static int LOOKUP_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_LOOKUP;
@@ -164,9 +164,9 @@ class SearchJob extends JobImpl {
 
     /** timeout */
 //    static final int PER_FLOODFILL_PEER_TIMEOUT = 10*1000;
-    static final int PER_FLOODFILL_PEER_TIMEOUT = 4*1000;
+    static final int PER_FLOODFILL_PEER_TIMEOUT = 5*1000;
 //    static final long MIN_TIMEOUT = 2500;
-    static final long MIN_TIMEOUT = 2*1000;
+    static final long MIN_TIMEOUT = 3*1000;
 
     protected int getPerPeerTimeoutMs(Hash peer) {
         int timeout = 0;
@@ -208,7 +208,7 @@ class SearchJob extends JobImpl {
     }
 
 //    private static int MAX_PEERS_QUERIED = 40;
-    private static int MAX_PEERS_QUERIED = 64;
+    private static int MAX_PEERS_QUERIED = 32;
 
     /**
      * Send the next search, or stop if its completed

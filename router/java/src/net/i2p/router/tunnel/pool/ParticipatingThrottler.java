@@ -5,6 +5,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SystemVersion;
 
 /**
  * Count how often we have accepted a tunnel with the peer
@@ -37,11 +38,13 @@ class ParticipatingThrottler {
     private static final int LIFETIME_PORTION = 3;
 //    private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
 //    private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
-    private static final int MIN_LIMIT = 200 / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = 800 / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = 512 / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = 2048 / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 60 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
+    private boolean isSlow = SystemVersion.isSlow();
+    private boolean isQuadCore = SystemVersion.getCores() >=4;
 
     public enum Result { ACCEPT, REJECT, DROP }
 
@@ -56,7 +59,8 @@ class ParticipatingThrottler {
     Result shouldThrottle(Hash h) {
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
 //        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
-        int limit = Math.max(MIN_LIMIT, Math.max(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
+        int limit = isSlow || !isQuadCore ? Math.max(MIN_LIMIT / 2, Math.max(MAX_LIMIT / 2, numTunnels * PERCENT_LIMIT / 100)) :
+                                            Math.max(MIN_LIMIT, Math.max(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
         int count = counter.increment(h);
         Result rv;
         if (count > limit) {

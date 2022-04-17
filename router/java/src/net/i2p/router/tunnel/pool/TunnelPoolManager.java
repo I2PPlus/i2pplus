@@ -68,8 +68,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
 //        _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(4);
 //        _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(4);
-        _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(16);
-        _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(16);
+        _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
+        _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
 
         _clientPeerSelector = new ClientPeerSelector(ctx);
 

@@ -82,8 +82,8 @@ class BuildHandler implements Runnable {
     /** TODO these may be too high, review and adjust */
 //    private static final int MIN_QUEUE = 18;
 //    private static final int MAX_QUEUE = 192;
-    private static final int MIN_QUEUE = 16;
-    private static final int MAX_QUEUE = 256;
+    private static final int MIN_QUEUE = 8;
+    private static final int MAX_QUEUE = 128;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
 
 //    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
@@ -93,10 +93,11 @@ class BuildHandler implements Runnable {
     /** limits on concurrent next-hop RI lookup */
 //    private static final int MIN_LOOKUP_LIMIT = 10;
 //    private static final int MAX_LOOKUP_LIMIT = 100;
-    private static final int MIN_LOOKUP_LIMIT = 12;
-    private static final int MAX_LOOKUP_LIMIT = 128;
+    private static final int MIN_LOOKUP_LIMIT = 16;
+    private static final int MAX_LOOKUP_LIMIT = 64;
     /** limit lookups to this % of current participating tunnels */
-    private static final int PERCENT_LOOKUP_LIMIT = 3;
+//    private static final int PERCENT_LOOKUP_LIMIT = 3;
+    private static final int PERCENT_LOOKUP_LIMIT = 2;
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
      *  participating via OnFailedSendJob.

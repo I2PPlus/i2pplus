@@ -35,7 +35,7 @@ form[action="subscriptions"], form[action="config"] {margin: 10px 0}
 input[disabled] {opacity: .6; pointer-events: none}
 input[type=file]::file-selector-button {margin: 3px 3px 3px 0; padding: 6px 10px}
 input[type=submit], input[type="reset"] {min-width: 80px}
-input[type=text], input[type=password], textarea {margin: 3px 3px 3px 0; padding: 6px 10px; min-width: 160px}
+input[type=text], input[type=password], textarea {min-width: 160px}
 input.update {margin-left: 0}
 textarea {margin: 0 auto 10px}
 textarea[name="config"], textarea[name="content"] {padding: 2px 5px; height: 200px; border: var(--border); box-shadow: none}
@@ -135,9 +135,9 @@ td.destinations {padding: 0; max-width: 50px}
 /* import/export/add */
 #add {margin-top: -12px; background: var(--bg)}
 #add input[type=text], #import input[type="file"] {width: calc(100% - 2px)}
+#add tr:first-child td {padding-bottom: 2px}
 #add td:first-child, #import td:first-child {width: 100px; white-space: nowrap; text-align: right}
 #add table {margin-top: -9px}
-#add tr:first-child td {padding-bottom: 0}
 #export {padding-left: 2px; height: 40px; position: absolute; top: 0; right: 3px; border-left: var(--border)}
 #exporthosts:disabled {pointer-events: none; opacity: .5}
 #exporthosts {margin: 6px 2px -2px 3px; padding: 0; width: 28px; height: 28px; min-width: 0; display: inline-block; font-size: 0; background: var(--download) no-repeat center center / 16px, var(--btn)}
