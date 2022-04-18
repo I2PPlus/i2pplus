@@ -125,7 +125,7 @@ public class HomeHelper extends HelperBase {
 
 // forums + social
         _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "forum.svg" + S +
-        _x("dread.i2p") + S + _x("Darknet forums") + S + "http://dread.i2p/" + S + I + "forum.svg" + S +
+        _x("dread.i2p") + S + _x("Darknet forums") + S + "http://dread.i2p/" + S + I + "dread.svg" + S +
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "forum.svg" + S +
         "discuss.i2p" + S + _x("File-sharing forum") + S + "http://discuss.i2p/" + S + I + "forum.svg" + S +
         "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
