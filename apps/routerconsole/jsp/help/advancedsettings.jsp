@@ -79,10 +79,10 @@
 <tr><td><%=intl._t("Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router.")%></td></tr>
 
 <tr><th>router.maxParticipatingTunnels={n}</th></tr>
-<tr><td><%=intl._t("Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [10,000 or 5000 if running on Arm or Android by default]")%></td></tr>
+<tr><td><%=intl._t("Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]")%></td></tr>
 
 <tr><th>router.maxTunnelPercentage={n}</th></tr>
-<tr><td><%=intl._t("Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 25%]")%></td></tr>
+<tr><td><%=intl._t("Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 15% in I2P+, 33% in I2P]")%></td></tr>
 
 <tr><th>router.networkDatabase.flat={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]")%></td></tr>

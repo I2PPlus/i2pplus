@@ -113,7 +113,8 @@ class UDPSender {
         _outboundQueue.offer(poison);
         for (int i = 1; i <= 5 && !_outboundQueue.isEmpty(); i++) {
             try {
-                Thread.sleep(i * 50);
+//                Thread.sleep(i * 50);
+                Thread.sleep(i * 10);
             } catch (InterruptedException ie) {}
         }
         _outboundQueue.clear();

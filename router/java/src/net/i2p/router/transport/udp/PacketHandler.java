@@ -158,7 +158,7 @@ class PacketHandler {
         for (int i = 1; i <= 5 && !_inboundQueue.isEmpty(); i++) {
             try {
 //                Thread.sleep(i * 50);
-                Thread.sleep(i * 30);
+                Thread.sleep(i * 10);
             } catch (InterruptedException ie) {}
         }
         _inboundQueue.clear();

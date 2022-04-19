@@ -72,11 +72,11 @@ abstract class BuildRequestor {
      *
      */
 //    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 10*1000 : 5*1000;
-    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 10*1000 : 4*1000;
+    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 8*1000 : 4*1000;
 
     /** make this shorter than REQUEST_TIMEOUT */
 //    private static final int FIRST_HOP_TIMEOUT = 10*1000;
-    private static final int FIRST_HOP_TIMEOUT = SystemVersion.isSlow() ? 10*1000 : 3*1000;
+    private static final int FIRST_HOP_TIMEOUT = SystemVersion.isSlow() ? 7*1000 : 3500;
 
     /** some randomization is added on to this */
     private static final int BUILD_MSG_TIMEOUT = 40*1000;

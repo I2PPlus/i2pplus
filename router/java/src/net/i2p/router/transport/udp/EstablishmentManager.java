@@ -1965,7 +1965,8 @@ class EstablishmentManager {
                 } catch (RuntimeException re) {
                     _log.error("Error in the establisher", re);
                     // don't loop too fast
-                    try { Thread.sleep(1000); } catch (InterruptedException ie) {}
+//                    try { Thread.sleep(1000); } catch (InterruptedException ie) {}
+                    try { Thread.sleep(300); } catch (InterruptedException ie) {}
                 }
             }
             _inboundStates.clear();

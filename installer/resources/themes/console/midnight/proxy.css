@@ -5,479 +5,118 @@
 @import url(../images/itooplus.css);
 
 :root {
-  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --button: linear-gradient(180deg,#11101c 50%, #000010 50%);
-  --button_hover: linear-gradient(180deg,#202 50%, #000 50%);
-  --button_active: linear-gradient(180deg,#401856, #501f6c);
-  --innerborder: 1px solid rgba(38, 35, 92,.7);
-  --tr: linear-gradient(180deg,#001, #000);
-  --th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(180deg,#000018, #000);
-  --panel: linear-gradient(180deg,#080818, #040410);
-  --helpsection: repeating-linear-gradient(180deg,#080820 2px, #010010 4px);
-  --highlight: inset 0 0 0 1px #000;
-  --a: #7171d1;
-  --yes: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%2371c837'/%3E%3C/svg%3E");
-  --link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg stroke-width='8'%3E%3Cpath fill='%236f7c91' d='M58.4 24.9L41.5 41.6a14 14 0 01-19.8-19.8L38.6 5.1a14 14 0 0119.7 19.8zm-30.5 3a5.4 5.4 0 007.6 7.6l16.8-16.7a5.4 5.4 0 00-7.6-7.6z'/%3E%3Cpath fill='%23939dac' d='M26.4 44.6l-7.6 7.7a5.4 5.4 0 01-7.6-7.6l16.7-16.8a5.4 5.4 0 017.6 7.6l9.2-9.1a14 14 0 00-22.8-4.6L5 38.6a14 14 0 0019.8 19.7l16.7-16.7a14 14 0 01-15.2 3z'/%3E%3C/g%3E%3C/svg%3E");
-}
-
-html {
-    margin: 0;
-}
-
-html {
-  background: repeating-linear-gradient(90deg, rgba(0,0,16,.7) 2px, rgba(0,0,0,.5) 4px),
-    repeating-linear-gradient(180deg,rgba(0,0,32,.7) 2px, rgba(0,0,0,.8) 4px),
-    var(--tile) #001;
-  background-size: 100% 4px, 4px 100%, 171px 148px;
-}
-
-body {
-  margin: 2px 0 0;
-  padding: 0;
-  line-height: 1.3;
-  text-align: center;
-  font-size: 10.5pt;
-  color: #c9ceff;
-}
-
-body::before {
-  width: 0;
-  height: 4px;
-  display: inline-block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  box-shadow: 0 2px 2px rgba(0,0,0,.8);
-  background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.3) 50%), linear-gradient(90deg, #d30, #f60);
-  content: "";
-}
-
-@keyframes loader {
-  from {width: 0}
-  99% {width: 100%}
-  100% {width: 0}
-}
-
-.logo {
-  margin: -2px 20px 0 25px;
-  padding: 16px 10px 0;
-  width: 185px;
-  float: left;
-  text-align: center;
-  color: #c9ceff;
-  border: var(--innerborder);
-  box-shadow: var(--highlight), 0 0 0 4px #225, 0 0 0 5px #000;
-  background: #000;
-  background: repeating-linear-gradient(180deg,rgba(0,0,24,.4) 2px, rgba(0,0,8,.4) 4px), linear-gradient(180deg,#0a0a1a, #040414);
-  background-size: 4px 100%, 100%;
-}
-
-.iframed .logo {
-  display: none;
-}
-
-.logo a img {
-  margin: -8px -5px -8px;
-  width: 177px;
-  opacity: .7;
-  filter: sepia(1) hue-rotate(180deg);
-}
-
-.logo a img:hover {
-  opacity: 95;
-  filter: drop-shadow(0 0 1px #652787);
-}
-
-.logo a img:active {
-  transform: scale(.95);
-  opacity: .7;
-}
-
-div.logo hr {
-  margin: 11px -11px 10px;
-  height: 4px;
-  color: #44175f;
-  border: 0 solid #225;
-  background: #225;
-}
-
-.logo a:link {
-  padding: 4px;
-  display: block;
-}
-
-.logo hr ~ a {
-  line-height: 2;
-  border: 1px solid #225;
-  background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
-    linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
-    linear-gradient(90deg, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
-    linear-gradient(180deg,#0a0a1a 50%, #040414 50%);
-}
-
-.logo hr ~ a:hover {
-  z-index: 10;
-  box-shadow: var(--highlight);
-  background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
-    linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
-    linear-gradient(180deg,#1d1a2d 50%, #000 50%);
-}
-
-.logo hr ~ a:active {
-  box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 0 0 0 3px #101, inset 5px 5px 5px 2px #000;
-  background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
-    linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
-    linear-gradient(180deg,#080820, #1d1a2d);
-}
-
-.formaction {
-  text-align: right;
-}
-
-button, select {
-  border-radius: 1px;
-  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: 8px 5px no-repeat, var(-button);
-  cursor: pointer;
-}
-
-button {
-  margin: 2px 3px;
-  font: bold 9pt var(--bodyfont);
-  color: var(--a);
-  text-decoration: none;
-  text-align: center;
-  text-shadow: 0 1px 1px #000;
-  vertical-align: middle;
-  border: 1px solid #27235c;
-  background: #000;
-  background: var(--button);
-}
-
-button:hover, button:focus,
-select:hover, select:focus {
-  color: #652787;
-  border: var(--border_input_hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  cursor: pointer;
-}
-
-button {
-  min-width: 0;
-  background-size: 12px, 100%;
-}
-
-button:hover {
-  background-blend-mode: luminosity;
-  background-size: 12px, 100%;
-}
-
-button:active {
-  color: #83529f;
-  text-shadow: 0 1px 1px #3c1751;
-  border: var(--border_input_hover);
-  box-shadow: var(--highlight), inset 3px 3px 3px #000;
-  background: #652787;
-  background-size: 12px, 100%;
-  background-blend-mode: luminosity;
-}
-
-button.go, button.accept {
-  padding: 7px 9px 7px 25px;
-  background: var(--yes) no-repeat 8px center, var(--button);
-  background-size: 12px, 100%;
-}
-
-button.go:hover, button.go:focus,
-button.accept:hover, button.accept:focus {
-  background: var(--yes) no-repeat 8px center, var(--button_hover);
-  background-size: 12px, 100%;
-}
-
-button.go:active, button.accept:active {
-  background: var(--yes) no-repeat 8px center, var(--button_active);
-  background-size: 12px, 100%;
-}
-
-.warning {
-  margin: 24px 26px 24px 260px;
-  padding: 14px 45px 40px 120px;
-  min-width: 300px;
-  min-height: 180px;
-  position: relative;
-  text-align: justify;
-  word-wrap: break-word;
-  color: #c9ceff;
-  text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #44175f;
-  border: 5px solid #26235c;
-  border-image: repeating-linear-gradient(135deg, #225, #225 19px, #000 20px, #770 20px, #770 39px, #000 40px, #225 40px) 5 repeat repeat;
-  border-image-width: 5px;
-  border-image-outset: 1px;
-  box-shadow: inset 0 0 0 1px #44175f, 0 0 0 2px #000, 0 0 0 3px #4141a4, 0 0 0 4px #000, 0 0 0 6px #225, 0 0 0 7px #000;
-  background: var(--itooplus) no-repeat, repeating-linear-gradient(180deg,#000 2px, #002 4px);
-  background-size: auto 130px, 100% 4px;
-  background-position: 30px calc(50% + 16px), center center;
-}
-
-.iframed .warning, #servletError .iframed #warning2 {
-  margin-left: 20px;
-}
-
-#proxy_error {
-  height: calc(100% - 20px);
-}
-
-#proxy_error .warning p:first-of-type {
-  padding-top: 15px;
-}
-
-#proxy_error .warning p:last-of-type {
-  padding-bottom: 5px;
-}
-
-#proxy_error p + a {
-  margin-top: -8px;
-  display: inline-block;
-}
-
-#proxy_error hr {
-  margin-bottom: 0;
-}
-
-.warning p, .warning a {
-  line-height: 130%;
-}
-
-.warning h3 {
-  margin: -13px -44px 25px -119px;
-  padding: 12px 16px;
-  letter-spacing: .1em;
-  text-align: left;
-  text-transform: uppercase;
-  font-size: 120%;
-  border: none;
-  border-bottom: 1px solid #44175f;
-  background: linear-gradient(180deg,#001 50%, #000 50%);
-}
-
-.warning h4 {
-  margin: 5px 0 10px 0;
-  padding: 0 0 10px 0;
-  text-align: left;
-  font-size: 105%;
-  border-bottom: 1px solid rgba(38, 35, 92,.7);
-  box-shadow: none;
-}
-
-#warning td {
-  border: var(--innerborder);
-}
-
-#warning_localhost {
-  margin: 20px;
-  background-position: 20px calc(50% + 16px);
-}
-
-#warning_localhost p {
-  padding: 20px 10px 15px;
-}
-
-#warning_localhost + .proxyfooter {
-  display: none;
-}
-
-#denied {
-  position: absolute;
-  top: calc(50% - 12px);
-}
-
-#jumplinks a {
-  padding: 4px 0;
-  display: inline-block;
-  line-height: 2;
-}
-
-#jumplinks a::before {
-  margin: -3px 0 0 10px;
-  padding: 4px 5px 4px 0;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 16px;
-  font-size: 200%;
-  content: "\279F\00A0";
-}
-
-hr {
-  margin: 20px 0;
-  height: 1px;
-  border: none;
-  background: rgba(38, 35, 92,.7);
-}
-
-#b64, #key {
-  white-space: pre-wrap;
-  word-break: break-all;
-  text-align: justify;
-  font-family: var(--monospaced);
-  font-size: 90%;
-  user-select: all;
-}
-
-#key {
-  margin: 20px 0 25px;
-  padding: 10px 14px;
-  border: 1px solid 1px solid rgba(38, 35, 92,.7);
-  background: #000;
-}
-
-#proxyNewHost a {
-  display: inline-block;
-  word-break: break-all;
-}
-
-.warning p + .formaction {
-  margin: 15px -5px;
-  padding: 0;
-  border: none;
-  background: none;
-}
-
-form[action="http://proxy.i2p/add"] {
-  margin-bottom: 15px;
-}
-
-.proxyfooter {
-  display: none;
-}
-
-#proxyrequest {
-  padding: 9px 10px 5px 22px;
-  background: var(--link) no-repeat left center / 16px;
-}
-
-#proxyNewAddressHelper .warning {
-  padding-bottom: 25px;
-}
-
-#proxyNewAddressHelper hr {
-  margin-left: -6px;
-  margin-right: -6px;
-}
-
-#proxyNewAddressHelper .logo hr {
-  margin: 11px -11px 0;
-}
-
-#proxyNewHost {
-  border-collapse: collapse;
-}
-
-#proxyNewHost td {
-  padding: 8px;
-}
-
-#proxyNewHost td:first-child {
-  font-weight: 700;
-}
-
-#proxyNewHost tr:last-child td:first-child {
-  vertical-align: top;
-}
-
-#proxyNewHost textarea {
-  margin: 0;
-  padding: 0;
-  height: 6em;
-  width: 100%;
-  overflow: auto;
-  white-space: pre-wrap;
-  word-break: break-all;
-  border: none;
-  box-shadow: none;
-  background: none;
-  resize: none;
-}
-
-#proxyNewHost textarea:focus {
-  filter: none;
-}
-
-#proxyNewHost + hr {
-  display: none;
-}
-
-.option {
-  padding: 10px 20px 0;
-  border: 1px solid #225;
-  box-shadow: 0 0 0 1px #000, 0 0 0 5px #225, 0 0 0 6px #000;
-  background: linear-gradient(180deg,#113, #002);
-}
-
-.warning .option h4 {
-  margin-bottom: 20px;
-}
-
-.option p {
-  margin: 5px 20px;
-}
-
-.option .formaction {
-  margin: 20px -20px 0;
-  padding: 12px 10px;
-  border-top: 1px solid #225;
-  background: #002;
-}
+--title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
+--bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+--monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+--button: linear-gradient(180deg,#11101c 50%, #000010 50%);
+--button_hover: linear-gradient(180deg,#202 50%, #000 50%);
+--button_active: linear-gradient(180deg,#401856, #501f6c);
+--innerborder: 1px solid rgba(38, 35, 92,.7);
+--tr: linear-gradient(180deg,#001, #000);
+--th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(180deg,#000018, #000);
+--panel: linear-gradient(180deg,#080818, #040410);
+--helpsection: repeating-linear-gradient(180deg,#080820 2px, #010010 4px);
+--highlight: inset 0 0 0 1px #000;
+--a: #7171d1;
+--yes: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%2371c837'/%3E%3C/svg%3E");
+--link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg stroke-width='8'%3E%3Cpath fill='%236f7c91' d='M58.4 24.9L41.5 41.6a14 14 0 01-19.8-19.8L38.6 5.1a14 14 0 0119.7 19.8zm-30.5 3a5.4 5.4 0 007.6 7.6l16.8-16.7a5.4 5.4 0 00-7.6-7.6z'/%3E%3Cpath fill='%23939dac' d='M26.4 44.6l-7.6 7.7a5.4 5.4 0 01-7.6-7.6l16.7-16.8a5.4 5.4 0 017.6 7.6l9.2-9.1a14 14 0 00-22.8-4.6L5 38.6a14 14 0 0019.8 19.7l16.7-16.7a14 14 0 01-15.2 3z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+html {margin: 0}
+html {background: repeating-linear-gradient(90deg, rgba(0,0,16,.7) 2px, rgba(0,0,0,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,32,.7) 2px, rgba(0,0,0,.8) 4px), var(--tile) #001; background-size: 100% 4px, 4px 100%, 171px 148px}
+body {margin: 2px 0 0; padding: 0; line-height: 1.3; text-align: center; font-size: 10.5pt; color: #c9ceff}
+body::before {width: 0; height: 4px; display: inline-block; position: absolute; left: 0; top: 0; box-shadow: 0 2px 2px rgba(0,0,0,.8); background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.3) 50%), linear-gradient(90deg, #d30, #f60); content: ""}
+hr {margin: 20px 0; height: 1px; border: none; background: rgba(38, 35, 92,.7)}
+.logo {margin: -2px 20px 0 25px; padding: 16px 10px 0; width: 185px; float: left; text-align: center; color: #c9ceff; border: var(--innerborder); box-shadow: var(--highlight), 0 0 0 4px #225, 0 0 0 5px #000; background: #000; background: repeating-linear-gradient(180deg,rgba(0,0,24,.4) 2px, rgba(0,0,8,.4) 4px), linear-gradient(180deg,#0a0a1a, #040414); background-size: 4px 100%, 100%}
+.iframed .logo {display: none}
+.logo a img {margin: -8px -5px -8px; width: 177px; opacity: .7; filter: sepia(1) hue-rotate(180deg)}
+.logo a img:hover {opacity: 95; filter: drop-shadow(0 0 1px #652787)}
+.logo a img:active {transform: scale(.95); opacity: .7}
+div.logo hr {margin: 11px -11px 10px; height: 4px; color: #44175f; border: 0 solid #225; background: #225}
+.logo a:link {padding: 4px; display: block}
+.logo hr ~ a {line-height: 2; border: 1px solid #225; background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%), linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(90deg, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)), linear-gradient(180deg,#0a0a1a 50%, #040414 50%)}
+.logo hr ~ a:hover {z-index: 10; box-shadow: var(--highlight); background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%), linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)), linear-gradient(180deg,#1d1a2d 50%, #000 50%)}
+.logo hr ~ a:active {box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 0 0 0 3px #101, inset 5px 5px 5px 2px #000; background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%), linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)), linear-gradient(180deg,#080820, #1d1a2d)}
+.formaction {text-align: right}
+button, select {border-radius: 1px; box-shadow: var(--highlight), inset 0 0 2px 0 #559; background: 8px 5px no-repeat, var(-button); cursor: pointer}
+button {margin: 2px 3px; font: bold 9pt var(--bodyfont); color: var(--a); text-decoration: none; text-align: center; text-shadow: 0 1px 1px #000; vertical-align: middle; border: 1px solid #27235c; background: #000; background: var(--button)}
+button:hover, button:focus, select:hover, select:focus {color: #652787; border: var(--border_input_hover); box-shadow: var(--highlight), inset 0 0 2px 1px #757; cursor: pointer}
+button {min-width: 0; background-size: 12px, 100%}
+button:hover {background-blend-mode: luminosity; background-size: 12px, 100%}
+button:active {color: #83529f; text-shadow: 0 1px 1px #3c1751; border: var(--border_input_hover); box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #652787; background-size: 12px, 100%; background-blend-mode: luminosity}
+button.go, button.accept {padding: 7px 9px 7px 25px; background: var(--yes) no-repeat 8px center, var(--button); background-size: 12px, 100%}
+button.go:hover, button.go:focus, button.accept:hover, button.accept:focus {background: var(--yes) no-repeat 8px center, var(--button_hover); background-size: 12px, 100%}
+button.go:active, button.accept:active {background: var(--yes) no-repeat 8px center, var(--button_active); background-size: 12px, 100%}
+.warning {margin: 24px 26px 24px 260px; padding: 14px 45px 40px 120px; min-width: 300px; min-height: 180px; position: relative; text-align: justify; word-wrap: break-word; color: #c9ceff; text-shadow: 0 1px 1px #000; box-shadow: inset 0 0 0 1px #44175f; border: 5px solid #26235c; border-image: repeating-linear-gradient(135deg, #225, #225 19px, #000 20px, #770 20px, #770 39px, #000 40px, #225 40px) 5 repeat repeat; border-image-width: 5px; border-image-outset: 1px; box-shadow: inset 0 0 0 1px #44175f, 0 0 0 2px #000, 0 0 0 3px #4141a4, 0 0 0 4px #000, 0 0 0 6px #225, 0 0 0 7px #000; background: var(--itooplus) no-repeat, repeating-linear-gradient(180deg,#000 2px, #002 4px); background-size: auto 130px, 100% 4px; background-position: 30px calc(50% + 16px), center center}
+.iframed .warning, #servletError .iframed #warning2 {margin-left: 20px}
+#proxy_error {height: calc(100% - 20px)}
+#proxy_error .warning p:first-of-type {padding-top: 15px}
+#proxy_error .warning p:last-of-type {padding-bottom: 5px}
+#proxy_error p + a {margin-top: -8px; display: inline-block}
+#proxy_error hr {margin-bottom: 0}
+.warning p, .warning a {line-height: 130%}
+.warning h3 {margin: -13px -44px 25px -119px; padding: 12px 16px; letter-spacing: .1em; text-align: left; text-transform: uppercase; font-size: 120%; border: none; border-bottom: 1px solid #44175f; background: linear-gradient(180deg,#001 50%, #000 50%)}
+.warning h4 {margin: 5px 0 10px 0; padding: 0 0 10px 0; text-align: left; font-size: 105%; border-bottom: 1px solid rgba(38, 35, 92,.7); box-shadow: none}
+#warning td {border: var(--innerborder)}
+#warning_localhost {margin: 20px; background-position: 20px calc(50% + 16px)}
+#warning_localhost p {padding: 20px 10px 15px}
+#warning_localhost + .proxyfooter {display: none}
+#denied {position: absolute; top: calc(50% - 12px)}
+
+/* jump links */
+#jumplinks {margin-bottom: 50px}
+#jumplinks h4 {margin: 0 15px 15px; padding: 0 0 10px}
+#jumplinks br {display: none}
+#jumplinks a {margin: 3px 0 3px 6px; padding: 9px 12px 9px 35px; float: left; text-shadow: var(--txt_shadow); -webkit-text-stroke: 0; box-shadow: var(--outline), var(--bevel); background: url(../images/arrow_right.svg) no-repeat 10px center / 20px, var(--badge); animation: fade .5s ease 3s both}
+#jumplinks a:first-of-type {margin-left: 19px}
+#jumplinks #linuxfarm {background: url(../images/linuxfarm.svg) no-repeat 10px center / 20px, var(--badge) !important}
+#jumplinks #notbob {background: url(../images/notbob.png) no-repeat 10px center / 20px, var(--badge)}
+#jumplinks #reg {background: url(../images/reg.svg) no-repeat 10px center / 20px, var(--badge)}
+#jumplinks #stats {background: url(../images/stats.svg) no-repeat 10px center / 20px, var(--badge)}
+#proxy_error #jumplinks a:hover, #proxy_error #jumplinks a:focus {box-shadow: var(--outline), inset 0 0 0 1px var(--hover); background: url(../images/arrow_right.svg) no-repeat 10px center / 20px, var(--badge_hover) !important}
+#proxy_error #jumplinks a:active {padding: 10px 12px 8px 35px; color: var(--hover); text-shadow: 0 1px 1px rgba(0,0,0,.8); box-shadow: var(--outline), inset 0 0 0 1px var(--hover), var(--btn_shadow_active); background: url(../images/arrow_right.svg) no-repeat 12px calc(50% + 1px) / 19px, var(--badge_active) !important; background-blend-mode: luminosity}
+
+#b64, #key {white-space: pre-wrap; word-break: break-all; text-align: justify; font-family: var(--monospaced); font-size: 90%; user-select: all}
+#key {margin: 20px 0 25px; padding: 10px 14px; border: 1px solid 1px solid rgba(38, 35, 92,.7); background: #000}
+#proxyNewHost a {display: inline-block; word-break: break-all}
+.warning p + .formaction {margin: 15px -5px; padding: 0; border: none; background: none}
+form[action="http://proxy.i2p/add"] {margin-bottom: 15px}
+.proxyfooter {display: none}
+#proxyrequest {padding: 9px 10px 5px 22px; background: var(--link) no-repeat left center / 16px}
+#proxyNewAddressHelper .warning {padding-bottom: 25px}
+#proxyNewAddressHelper hr {margin-left: -6px; margin-right: -6px}
+#proxyNewAddressHelper .logo hr {margin: 11px -11px 0}
+#proxyNewHost {border-collapse: collapse}
+#proxyNewHost td {padding: 8px}
+#proxyNewHost td:first-child {font-weight: 700}
+#proxyNewHost tr:last-child td:first-child {vertical-align: top}
+#proxyNewHost textarea {margin: 0; padding: 0; height: 6em; width: 100%; overflow: auto; white-space: pre-wrap; word-break: break-all; border: none; box-shadow: none; background: none; resize: none}
+#proxyNewHost textarea:focus {filter: none}
+#proxyNewHost + hr {display: none}
+.option {padding: 10px 20px 0; border: 1px solid #225; box-shadow: 0 0 0 1px #000, 0 0 0 5px #225, 0 0 0 6px #000; background: linear-gradient(180deg,#113, #002)}
+.warning .option h4 {margin-bottom: 20px}
+.option p {margin: 5px 20px}
+.option .formaction {margin: 20px -20px 0; padding: 12px 10px; border-top: 1px solid #225; background: #002}
+
+@keyframes loader {from {width: 0} 99% {width: 100%} 100% {width: 0}}
 
 @media screen and (max-width: 799px) {
-  body {
-    font-size: 10pt;
-  }
-
-  p, td, h3, h4, #b64, a {
-    font-size: 90%;
-  }
-
-  .logo {
-    display: none;
-  }
-
-  .logo hr ~ a {
-    margin: -8px -3px 12px;
-    padding: 6px 8px;
-    min-width: 110px;
-    position: relative;
-    background: #225;
-  }
-
-  .warning {
-    margin-left: 20px;
-    padding-left: 25px;
-    background: #000;
- }
-
-  .warning h3 {
-    margin: -10px -39px 10px -24px;
-    padding: 7px 14px;
-  }
+body {font-size: 10pt}
+p, td, h3, h4, #b64, a {font-size: 90%}
+.logo {display: none}
+.logo hr ~ a {margin: -8px -3px 12px; padding: 6px 8px; min-width: 110px; position: relative; background: #225}
+.warning {margin-left: 20px; padding-left: 25px; background: #000;  }
+.warning h3 {margin: -10px -39px 10px -24px; padding: 7px 14px}
 }
 
 @media screen and (max-width: 1200px) {
-  #proxyNewAddressHelper .logo {
-    display: none;
-  }
+#proxyNewAddressHelper .logo {display: none}
+#proxy_error #jumplinks {margin-bottom: 0}
+#jumplinks br {display: block}
+#jumplinks a, #jumplinks a:first-of-type {margin: 4px 3px 4px 20px; padding: 10px 10px 10px 38px; width: calc(100% - 88px); display: inline-block; float: none;background-position: 12px center}
 }
 
 @media screen and (min-width: 800px) {
-  .logo hr + a {
-    margin-top: -20px;
-  }
-
-  .logo hr ~ a {
-    margin: 0 -11px -1px;
-    padding: 10px 4px;
-    display: inline-block;
-  }
+.logo hr + a {margin-top: -20px}
+.logo hr ~ a {margin: 0 -11px -1px; padding: 10px 4px; display: inline-block}
 }

@@ -35,7 +35,8 @@ import net.i2p.util.SystemVersion;
  * As of 0.8.11, inbound request handling is done in a separate thread.
  */
 class BuildExecutor implements Runnable {
-    private final ArrayList<Long> _recentBuildIds = new ArrayList<Long>(100);
+//    private final ArrayList<Long> _recentBuildIds = new ArrayList<Long>(100);
+    private final ArrayList<Long> _recentBuildIds = new ArrayList<Long>(256);
     private final RouterContext _context;
     private final Log _log;
     private final TunnelPoolManager _manager;
@@ -341,7 +342,7 @@ class BuildExecutor implements Runnable {
 
     /** Set 1.5 * LOOP_TIME < BuildRequestor.REQUEST_TIMEOUT/4 - margin */
 //    private static final int LOOP_TIME = SystemVersion.isSlow() ? 1000 : 800;
-    private static final int LOOP_TIME = (SystemVersion.isSlow() && SystemVersion.getCores() < 6) ? 800 : 350;
+    private static final int LOOP_TIME = (SystemVersion.isSlow() && SystemVersion.getCores() < 4) ? 800 : 250;
 
     public void run() {
         _isRunning = true;

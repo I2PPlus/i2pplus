@@ -358,7 +358,8 @@ class EventPumper implements Runnable {
                                       (now - lastFailsafeIteration) + " ms");
                         _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
                         try {
-                            Thread.sleep(25);
+//                            Thread.sleep(25);
+                            Thread.sleep(10);
                         } catch (InterruptedException ie) {}
                     }
                 }

@@ -12,6 +12,8 @@
 --active: #fc1c66;
 --a_hover: #bf2295;
 --badge: linear-gradient(180deg,#080818 50%,#000 50%);
+--badge_hover: linear-gradient(180deg,#181828 50%,#000 50%);
+--badge_active: linear-gradient(180deg,#080818,#181828);
 --bevel_badge: var(--highlight), inset 0 0 2px 1px #8383c9, 0 0 0 1px #000;
 --bevel_h1: var(--highlight), inset 0 0 2px 1px rgba(70,70,160,.9);
 --bevel: var(--highlight), inset 0 0 2px 1px rgba(70,70,160,.6);
