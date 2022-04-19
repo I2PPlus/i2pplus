@@ -35,7 +35,8 @@ import net.i2p.util.SystemVersion;
  * As of 0.8.11, inbound request handling is done in a separate thread.
  */
 class BuildExecutor implements Runnable {
-    private final ArrayList<Long> _recentBuildIds = new ArrayList<Long>(100);
+//    private final ArrayList<Long> _recentBuildIds = new ArrayList<Long>(100);
+    private final ArrayList<Long> _recentBuildIds = new ArrayList<Long>(256);
     private final RouterContext _context;
     private final Log _log;
     private final TunnelPoolManager _manager;
