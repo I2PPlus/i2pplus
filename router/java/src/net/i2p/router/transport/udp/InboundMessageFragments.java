@@ -199,7 +199,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 from.messageFullyReceived(messageId, state.getCompleteSize());
 
                 if (_log.shouldDebug())
-                    _log.debug("Complete message received\n* " + state);
+                    _log.debug("Complete message received " + state);
 
                 _context.statManager().addRateData("udp.receivedCompleteTime", state.getLifetime(), state.getLifetime());
                 if (state.getFragmentCount() > 0)
@@ -214,9 +214,9 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 // all state access must be before this
                 state.releaseResources();
             } else if (partialACK) {
-                // not expired but not yet complete... lets queue up a partial ACK
+                // not expired but not yet complete... let's queue up a partial ACK
                 if (_log.shouldDebug())
-                    _log.debug("Queueing up a partial ACK for peer: " + from + " for " + state);
+                    _log.debug("Queueing up a partial ACK for peer: " + from + " for: " + state);
                 from.messagePartiallyReceived();
             }
 

@@ -605,8 +605,8 @@ class BuildExecutor implements Runnable {
      *  @since 0.9.53 added result parameter
      */
     public void buildComplete(PooledTunnelCreatorConfig cfg, Result result) {
-        if (_log.shouldDebug())
-            _log.debug("Build complete (" + result + ") for " + cfg);
+        if (_log.shouldInfo())
+            _log.info("Build complete (" + result + ") for " + cfg);
         cfg.getTunnelPool().buildComplete(cfg, result);
         if (cfg.getLength() > 1)
             removeFromBuilding(cfg.getReplyMessageId());
@@ -627,8 +627,8 @@ class BuildExecutor implements Runnable {
 
         long expireBefore = now + 10*60*1000 - BuildRequestor.REQUEST_TIMEOUT;
         if (cfg.getExpiration() <= expireBefore) {
-            if (_log.shouldInfo())
-                _log.info("Build completed for expired tunnel " + cfg);
+            if (_log.shouldDebug())
+                _log.debug("Build completed for expired tunnel " + cfg);
         }
         if (result == Result.SUCCESS) {
             _manager.buildComplete(cfg);
@@ -651,8 +651,8 @@ class BuildExecutor implements Runnable {
     }
 
     private void didNotReply(long tunnel, Hash peer) {
-        if (_log.shouldInfo())
-            _log.info("No reply from [" + peer.toBase64().substring(0,6) + "] to join [Tunnel " + tunnel + "]");
+        if (_log.shouldDebug())
+            _log.debug("No reply from [" + peer.toBase64().substring(0,6) + "] to join [Tunnel " + tunnel + "]");
     }
 
     /**

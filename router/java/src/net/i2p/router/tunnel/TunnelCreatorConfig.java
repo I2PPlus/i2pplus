@@ -383,6 +383,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public String toString() {
         // H0:1235 -> H1:2345 -> H2:2345
         StringBuilder buf = new StringBuilder(128);
+        buf.append("\n* ");
         if (_isInbound)
             buf.append("Inbound");
         else
