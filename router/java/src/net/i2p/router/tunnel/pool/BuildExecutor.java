@@ -651,8 +651,8 @@ class BuildExecutor implements Runnable {
     }
 
     private void didNotReply(long tunnel, Hash peer) {
-        if (_log.shouldInfo())
-            _log.info("No reply from [" + peer.toBase64().substring(0,6) + "] to join [Tunnel " + tunnel + "]");
+        if (_log.shouldDebug())
+            _log.debug("No reply from [" + peer.toBase64().substring(0,6) + "] to join [Tunnel " + tunnel + "]");
     }
 
     /**
