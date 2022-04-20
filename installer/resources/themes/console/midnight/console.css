@@ -311,6 +311,7 @@ p:empty + .sb_notice {margin-top: 10px}
 #sb_localid + #sb_version {margin-top: 6px; margin-bottom: 5px}
 #sidebar tr {border: 0; background-image: none; background-color: transparent}
 #sidebar tr:nth-child(even) {background: rgba(16,16,48,.5)}
+#sidebar td:nth-child(2)::before {display: inline-block; min-height: 22px; vertical-align: middle; content: ""}
 #sidebar form {margin: -4px -9px -7px}
 .sb_notice + p:empty + form {margin-top: 9px}
 #sidebar form:first-child {margin: 6px 0 -5px 0}
@@ -323,12 +324,12 @@ p:empty + .sb_notice {margin-top: 10px}
 #sb_services, #sb_internals, #sb_advanced, #sb_help {margin-top: -5px; margin-bottom: -9px}
 
 /* apps */
-#sb_services {width: 204px; margin: -7px -10px -11px; border-collapse: collapse}
+#sb_services {width: 204px; margin: -6px -10px -8px; border-collapse: collapse}
 #sb_services td {padding: 0}
 #sb_services a, #sb_services a:hover, #sb_services a:active {border-bottom: var(--border); outline: none; position: relative; z-index: 30}
-#sidebar #sb_services a:hover {color: var(--a_hover); background: #1e0b28 var(--plugin) no-repeat 5px center / 16px; background-blend-mode: normal}
 #sb_services a, #sb_services a:visited {background-blend-mode: luminosity; color: var(--a)}
-#sidebar #sb_services a {margin: 0; padding: 4px 5px 4px 27px; width: calc(100% - 33px); border: 1px solid transparent; border-radius: 0; text-align: left; text-decoration: none; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; clear: both}
+#sidebar #sb_services a:hover {color: var(--a_hover); background: #1e0b28 var(--plugin) no-repeat 5px center / 16px; background-blend-mode: normal}
+#sidebar #sb_services a {margin: 0; padding: 4px 5px 4px 27px; width: calc(100% - 33px); border-bottom: var(--border_inner); border-radius: 0; text-align: left; text-decoration: none; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; clear: both}
 #sb_services a {background: rgba(0,0,16,.3) var(--plugin) no-repeat 5px center / 16px}
 #sb_services a[href*="mail"] {background: rgba(0,0,16,.3) var(--mail) no-repeat 6px center / 14px}
 #sidebar #sb_services a[href*="mail"]:hover {background: #1e0b28 var(--mail) no-repeat 6px center / 14px}
@@ -2616,7 +2617,7 @@ h4#updateplugins {margin-top: -15px}
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-top: -7px; margin-bottom: -10px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 18px}
 #sb_graphcontainer {margin: -5px -8px -8px}
-#sidebar td:nth-child(2)::before {display: inline-block; min-height: 23px; vertical-align: middle; content: ""}
+#sidebar td:nth-child(2)::before {min-height: 23px}
 #sb_internals, #sb_advanced, #sb_help {width: 240px}
 #sb_localtunnels a {max-width: 188px}
 #sb_memoryBar.percentBarOuter {margin: -5px -8px -8px}
@@ -2625,7 +2626,7 @@ h4#updateplugins {margin-top: -15px}
 .sb_notice {margin-bottom: -8px}
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {max-width: 227px}
 #sb_services a {padding-top: 4px; padding-bottom: 4px}
-#sb_services {margin-bottom: -12px; width: 240px}
+#sb_services {margin-bottom: -10px; width: 240px}
 .sb td, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, .smallhead, pre, #newsStatus, #newsDisplay {font-size: 9pt}
 select, .main input[type=submit], .main input[type=reset], .main input[type=submit]:hover, .main input[type=reset]:hover, .main input[type=submit]:focus, .main input[type=reset]:focus, .main input[type=submit]:active, .main input[type=reset]:active, input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {padding-top: 7px; padding-bottom: 7px}
 #servletError .iframed #warning2, .iframed #warning2.sorry {margin: -16px 8px 10px}
