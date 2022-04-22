@@ -95,7 +95,7 @@ public abstract class LocalHTTPServer {
         "<link rel=\"icon\" href=\"http://proxy.i2p/themes/console/default/images/favicon.svg\">\n";
 
     private final static String logo =
-        "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" alt=\"I2P Router Console\" border=\"0\">";
+        "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" alt=\"I2P+ Router Console\" border=\"0\">";
     /**
      *  Very simple web server.
      *
