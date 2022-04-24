@@ -257,6 +257,8 @@ class PeerTestManager {
                     } else if (state.getReceiveCharlieTime() <= 0) {
                         // received from Bob, but no reply from Charlie.  send it to
                         // Bob again so he pokes Charlie
+                        // This is only useful for SSU 1; SSU 2 discards dups
+                        if (state.getBob().getVersion() == 1)
                         sendTestToBob();
                     } else {
                         // received from both Bob and Charlie, but we haven't received a
@@ -838,7 +840,7 @@ class PeerTestManager {
         byte[] testIP;
         if (iplen != 0) {
             testIP = new byte[iplen];
-        System.arraycopy(data, 11, testIP, 0, iplen);
+            System.arraycopy(data, 11, testIP, 0, iplen);
         } else {
             testIP = null;
         }
@@ -979,6 +981,8 @@ class PeerTestManager {
                 state.setLastSendTime(now);
                 _activeTests.put(lNonce, state);
                 // send alice RI to charlie
+                if (_log.shouldDebug())
+                    _log.debug("Sending Alice RI and message #2 to Charlie on " + state);
                 DatabaseStoreMessage dbsm = new DatabaseStoreMessage(_context);
                 dbsm.setEntry(aliceRI);
                 dbsm.setMessageExpiration(now + 10*1000);
@@ -1006,7 +1010,13 @@ class PeerTestManager {
                 RouterInfo aliceRI = null;
                 SessionKey aliceIntroKey = null;
                 int rcode;
-                if (_context.banlist().isBanlisted(h)) {
+                PeerState aps = _transport.getPeerState(h);
+                if (aps != null && aps.isIPv6() == isIPv6) {
+                    rcode = SSU2Util.TEST_REJECT_CHARLIE_CONNECTED;
+                } else if (_transport.getEstablisher().getInboundState(from) != null ||
+                           _transport.getEstablisher().getOutboundState(from) != null) {
+                    rcode = SSU2Util.TEST_REJECT_CHARLIE_CONNECTED;
+                } else if (_context.banlist().isBanlisted(h)) {
                     rcode = SSU2Util.TEST_REJECT_CHARLIE_BANNED;
                 } else if (!TransportUtil.isValidPort(testPort) ||
                           !_transport.isValid(testIP) ||
@@ -1060,19 +1070,19 @@ class PeerTestManager {
                 }
                 UDPPacket packet = _packetBuilder2.buildPeerTestToBob(rcode, data, fromPeer);
                 if (_log.shouldDebug())
-                    _log.debug("Send message #3 response " + rcode + " nonce " + lNonce + " to " + fromPeer);
+                    _log.debug("Sending message #3 response " + rcode + " nonce " + lNonce + " to " + fromPeer);
                 _transport.send(packet);
                 if (rcode == SSU2Util.TEST_ACCEPT) {
-                // send msg 5
+                    // send msg 5
                     if (_log.shouldDebug())
-                        _log.debug("Send msg 5 to " + Addresses.toString(testIP, testPort));
-                long rcvId = (nonce << 32) | nonce;
-                long sendId = ~rcvId;
-                // send the same data we sent to Bob
-                packet = _packetBuilder2.buildPeerTestToAlice(aliceIP, testPort,
-                                                              aliceIntroKey, true,
-                                                              sendId, rcvId, data);
-                _transport.send(packet);
+                        _log.debug("Sending message #5 to " + Addresses.toString(testIP, testPort) + " on " + state);
+                    long rcvId = (nonce << 32) | nonce;
+                    long sendId = ~rcvId;
+                    // send the same data we sent to Bob
+                    packet = _packetBuilder2.buildPeerTestToAlice(aliceIP, testPort,
+                                                                  aliceIntroKey, true,
+                                                                  sendId, rcvId, data);
+                    _transport.send(packet);
                 }
                 break;
             }
@@ -1086,6 +1096,8 @@ class PeerTestManager {
                 RouterInfo charlieRI = _context.netDb().lookupRouterInfoLocally(charlie);
                 if (charlieRI != null) {
                     // send charlie RI to alice
+                    if (_log.shouldDebug())
+                        _log.debug("Sending Charlie's RouterInfo to Alice on " + state);
                     DatabaseStoreMessage dbsm = new DatabaseStoreMessage(_context);
                     dbsm.setEntry(charlieRI);
                     dbsm.setMessageExpiration(now + 10*1000);
@@ -1097,6 +1109,8 @@ class PeerTestManager {
                 }
                 // forward to alice, don't bother to validate signed data
                 // FIXME this will probably get there before the RI
+                if (_log.shouldDebug())
+                    _log.debug("Sending message #4 to Alice on " + state);
                 UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(status, charlie, data, alice);
                 _transport.send(packet);
                 // we are done
@@ -1123,16 +1137,24 @@ class PeerTestManager {
                 boolean fail = false;
                 RouterInfo charlieRI = null;
                 SessionKey charlieIntroKey = null;
+                PeerState cps = _transport.getPeerState(h);
                 if (status != 0) {
-                    if (_log.shouldWarn())
-                        _log.warn("Msg 4 status " + status);
+                    if (_log.shouldInfo())
+                        _log.info("Msg 4 status " + status + ' ' + test);
+                } else if (cps != null && cps.isIPv6() == isIPv6) {
+                    if (_log.shouldInfo())
+                        _log.info("Charlie is connected " + test);
+                } else if (_transport.getEstablisher().getInboundState(from) != null ||
+                           _transport.getEstablisher().getOutboundState(from) != null) {
+                    if (_log.shouldInfo())
+                        _log.info("Charlie is connecting " + test);
                 } else if (_context.banlist().isBanlisted(h) ||
                     !TransportUtil.isValidPort(testPort) ||
                     !_transport.isValid(testIP) ||
                     _transport.isTooClose(testIP) ||
                     _context.blocklist().isBlocklisted(testIP)) {
-                    if (_log.shouldWarn())
-                        _log.warn("Test fail ban/ip/port");
+                    if (_log.shouldInfo())
+                        _log.info("Test fail ban/ip/port " + h + ' ' + Addresses.toString(testIP, testPort));
                 } else {
                     // bob should have sent it to us. Don't bother to lookup
                     // remotely if he didn't, or it was out-of-order or lost.
