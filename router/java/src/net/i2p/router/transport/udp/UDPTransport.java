@@ -2893,24 +2893,20 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
                 replaceCurrentExternalAddress(local, isIPv6);
             }
-            if (!isIPv6) {
-                // Make an empty "4" address
-                OrderedProperties opts = new OrderedProperties();
-                opts.setProperty(UDPAddress.PROP_CAPACITY, CAP_IPV4);
-                if (_enableSSU2)
-                    addSSU2Options(opts);
-                RouterAddress addr4 = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
-                RouterAddress current = getCurrentAddress(false);
-                boolean wantsRebuild = !addr4.deepEquals(current);
-                if (!wantsRebuild)
-                    return null;
-                replaceAddress(addr4);
-                if (allowRebuildRouterInfo)
-                    rebuildRouterInfo();
-                return addr4;
-            }
-            removeExternalAddress(isIPv6, allowRebuildRouterInfo);
-            return null;
+            // Make an empty "4" or "6" address
+            OrderedProperties opts = new OrderedProperties();
+            opts.setProperty(UDPAddress.PROP_CAPACITY, isIPv6 ? CAP_IPV6 : CAP_IPV4);
+            if (_enableSSU2)
+                addSSU2Options(opts);
+            RouterAddress addr = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
+            RouterAddress current = getCurrentAddress(isIPv6);
+            boolean wantsRebuild = !addr.deepEquals(current);
+            if (!wantsRebuild)
+                return null;
+            replaceAddress(addr);
+            if (allowRebuildRouterInfo)
+                rebuildRouterInfo();
+            return addr;
         }
     }
 
@@ -3097,23 +3093,23 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 return false;
             if (isIPv4Firewalled())
                 return true;
-        switch (status) {
-            case REJECT_UNSOLICITED:
-            case DIFFERENT:
-            case IPV4_FIREWALLED_IPV6_OK:
-            case IPV4_FIREWALLED_IPV6_UNKNOWN:
+            switch (status) {
+                case REJECT_UNSOLICITED:
+                case DIFFERENT:
+                case IPV4_FIREWALLED_IPV6_OK:
+                case IPV4_FIREWALLED_IPV6_UNKNOWN:
                 if (_log.shouldDebug())
                     _log.debug("IPv4 Introducers required because our status is [" + status + "]");
                 return true;
             }
         }
-                if (!allowDirectUDP()) {
-                    if (_log.shouldDebug())
-                        _log.debug("Introducers required because we do not allow direct UDP connections");
-                    return true;
-                }
-                return false;
+        if (!allowDirectUDP()) {
+            if (_log.shouldDebug())
+                _log.debug("Introducers required because we do not allow direct UDP connections");
+            return true;
         }
+        return false;
+    }
 
     /**
      *  MIGHT we require introducers?
@@ -3150,19 +3146,18 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 return false;
             if (isIPv4Firewalled())
                 return true;
-        switch (status) {
-            case REJECT_UNSOLICITED:
-            case DIFFERENT:
-            case IPV4_FIREWALLED_IPV6_OK:
-            case IPV4_FIREWALLED_IPV6_UNKNOWN:
-            case IPV4_UNKNOWN_IPV6_OK:
-            case IPV4_UNKNOWN_IPV6_FIREWALLED:
-            case UNKNOWN:
-                    return _introManager.introducerCount(false) < 3 * MIN_INTRODUCER_POOL;
-
+            switch (status) {
+                case REJECT_UNSOLICITED:
+                case DIFFERENT:
+                case IPV4_FIREWALLED_IPV6_OK:
+                case IPV4_FIREWALLED_IPV6_UNKNOWN:
+                case IPV4_UNKNOWN_IPV6_OK:
+                case IPV4_UNKNOWN_IPV6_FIREWALLED:
+                case UNKNOWN:
+                return _introManager.introducerCount(false) < 3 * MIN_INTRODUCER_POOL;
             }
         }
-                return !allowDirectUDP();
+        return !allowDirectUDP();
     }
 
     /**
