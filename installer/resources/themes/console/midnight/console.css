@@ -311,6 +311,7 @@ p:empty + .sb_notice {margin-top: 10px}
 #sb_localid + #sb_version {margin-top: 6px; margin-bottom: 5px}
 #sidebar tr {border: 0; background-image: none; background-color: transparent}
 #sidebar tr:nth-child(even) {background: rgba(16,16,48,.5)}
+#sidebar #sb_general tr:hover, #sidebar #sb_shortgeneral tr:hover, #sidebar #sb_advancedgeneral tr:hover, #sidebar #sb_bandwidth tr:hover, #sidebar #sb_tunnels tr:hover, #sidebar #sb_peers tr:hover, #sidebar #sb_queue tr:hover  {background: linear-gradient(90deg, rgba(16,16,32,.7), rgba(32,32,96,.5))}
 #sidebar td:nth-child(2)::before {display: inline-block; min-height: 22px; vertical-align: middle; content: ""}
 #sidebar form {margin: -4px -9px -7px}
 .sb_notice + p:empty + form {margin-top: 9px}

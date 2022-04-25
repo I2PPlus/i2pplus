@@ -59,6 +59,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private final SSU2Bitfield _ackedMessages;
     private final ConcurrentHashMap<Long, List<PacketBuilder.Fragment>> _sentMessages;
     private long _sentMessagesLastExpired;
+    private byte[] _ourIP;
+    private int _ourPort;
 
     // Session Confirmed retransmit
     private byte[][] _sessConfForReTX;
@@ -269,6 +271,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
     byte[] getRcvHeaderEncryptKey2() { return _rcvHeaderEncryptKey2; }
 
+    void setOurAddress(byte[] ip, int port) {
+        _ourIP = ip; _ourPort = port;
+    }
+    byte[] getOurIP() { return _ourIP; }
+    int getOurPort() { return _ourPort; }
+
     SSU2Bitfield getReceivedMessages() {
         // logged in PacketBuilder2
         //if (_log.shouldDebug())
@@ -379,6 +387,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotAddress(byte[] ip, int port) {
+        _ourIP = ip; _ourPort = port;
     }
 
     public void gotRelayTagRequest() {
@@ -594,8 +603,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             if (_log.shouldInfo())
                 _log.info("[SSU2] Duplicate data packet [#" + pktNum + "] sent on " + this);
         } else {
-            if (_log.shouldInfo())
-                _log.info("[SSU2] New data packet [#" + pktNum + "] sent with " + fragments.size() + " fragments on " + this);
+            if (_log.shouldDebug())
+                _log.debug("[SSU2] New data packet [#" + pktNum + "] sent with " + fragments.size() + " fragments on " + this);
         }
     }
 
@@ -660,6 +669,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (_sessConfForReTX == null)
             return null;
         UDPPacket[] rv = new UDPPacket[_sessConfForReTX.length];
+        InetAddress addr = getRemoteIPAddress();
         for (int i = 0; i < rv.length; i++) {
             UDPPacket packet = UDPPacket.acquire(_context, false);
             rv[i] = packet;
@@ -668,7 +678,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             int off = pkt.getOffset();
             System.arraycopy(_sessConfForReTX[i], 0, data, off, _sessConfForReTX[i].length);
             pkt.setLength(_sessConfForReTX.length);
-            pkt.setAddress(_remoteIPAddress);
+            pkt.setAddress(addr);
             pkt.setPort(_remotePort);
             packet.setMessageType(PacketBuilder2.TYPE_CONF);
             packet.setPriority(PacketBuilder2.PRIORITY_HIGH);

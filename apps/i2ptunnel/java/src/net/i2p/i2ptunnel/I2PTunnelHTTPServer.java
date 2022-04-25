@@ -656,7 +656,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final Log _log;
         private final boolean _shouldCompress;
 
-        private static final int BUF_SIZE = 8*1024;
+//        private static final int BUF_SIZE = 8*1024;
+        private static final int BUF_SIZE = 32*1024;
 
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers

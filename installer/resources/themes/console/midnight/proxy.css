@@ -83,6 +83,7 @@ button.go:active, button.accept:active {background: var(--yes) no-repeat 8px cen
 form[action="http://proxy.i2p/add"] {margin-bottom: 15px}
 .proxyfooter {display: none}
 #proxyrequest {padding: 9px 10px 5px 22px; background: var(--link) no-repeat left center / 16px}
+ #proxyrequest + hr {margin: 15px 0 20px}
 #proxyNewAddressHelper .warning {padding-bottom: 25px}
 #proxyNewAddressHelper hr {margin-left: -6px; margin-right: -6px}
 #proxyNewAddressHelper .logo hr {margin: 11px -11px 0}
