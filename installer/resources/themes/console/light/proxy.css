@@ -61,7 +61,6 @@ h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
 .warning h4 {margin: 20px 0 5px; padding: 0 0 10px; box-shadow: none; text-align: left; font-size: 10pt; text-transform: none; letter-spacing: 0; word-spacing: 0; background: none; border-radius: 0; border: none; border-bottom: 1px solid var(--ink_lighter)}
 #jumplinks h4 {margin-bottom: 10px; border-color: #b6b6c9; color: #5b5b71; padding-bottom: 10px}
 .warning p + .formaction {margin: 0 0 10px; padding: 0; width: 100%; text-align: right; border: none; box-shadow: none; background: none}
-.warning hr {display: none}
 #proxy_error .warning hr {margin: 25px 0 20px; display: block}
 #proxy_error hr + p {margin-top: 30px}
 #proxy_error p, #proxyrequest {margin-left: 20px; margin-right: 20px}
