@@ -825,6 +825,8 @@ public final class ECIESAEADEngine {
             if (_log.shouldWarn())
                 _log.warn("Unable to decrypt AEAD block", e);
             return false;
+        } finally {
+            chacha.destroy();
         }
         return true;
     }
@@ -1213,6 +1215,8 @@ public final class ECIESAEADEngine {
             if (_log.shouldWarn())
                 _log.warn("Unable to encrypt AEAD block", e);
             return null;
+        } finally {
+            chacha.destroy();
         }
         return enc;
     }
