@@ -147,11 +147,11 @@ public class HomeHelper extends HelperBase {
         //_x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
 
 // search engines
-        "ahmia.i2p" + S +_x("Tor-focused Search Engine") + S + "http://ahmia.i2p/" + S + I + "search.svg" + S +
+        "ahmia.i2p" + S +_x("Tor-focused Search Engine") + S + "http://ahmia.i2p/" + S + I + "onionsearch.svg" + S +
         "btdigg.i2p" + S +_x("Clearnet BitTorrent DHT search engine") + S + "http://btdigg.i2p/" + S + I + "magnet.svg" + S +
         "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
         "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
-        "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "search.svg" + S +
+        "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "onionsearch.svg" + S +
 
 // wikis & reference
         "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "books.svg" + S +
