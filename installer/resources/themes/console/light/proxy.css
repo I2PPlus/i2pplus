@@ -63,8 +63,8 @@ h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
 .warning p + .formaction {margin: 0 0 10px; padding: 0; width: 100%; text-align: right; border: none; box-shadow: none; background: none}
 #proxy_error .warning hr {margin: 25px 0 20px; display: block}
 #proxy_error hr + p {margin-top: 30px}
-#proxy_error p, #proxyrequest {margin-left: 20px; margin-right: 20px}
-#proxyrequest {margin-left: 10px; padding-left: 42px; display: inline-block; word-break: break-all; font-size: 110%; background: var(--link) no-repeat 20px center / 16px}
+#proxy_error p, #proxyrequest {margin: 15px 20px}
+#proxyrequest {margin: 5px 20px 20px 10px; padding-left: 42px; display: inline-block; word-break: break-all; font-size: 110%; background: var(--link) no-repeat 20px center / 16px}
 
 /* jump links */
 #jumplinks {margin: 15px 0}
