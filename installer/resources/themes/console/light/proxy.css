@@ -64,7 +64,8 @@ h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
 #proxy_error .warning hr {margin: 25px 0 20px; display: block}
 #proxy_error hr + p {margin-top: 30px}
 #proxy_error p, #proxyrequest {margin: 15px 20px}
-#proxyrequest {margin: 5px 20px 20px 10px; padding-left: 42px; display: inline-block; word-break: break-all; font-size: 110%; background: var(--link) no-repeat 20px center / 16px}
+#proxyrequest {margin: 5px 20px 10px 10px; padding-left: 42px; display: inline-block; word-break: break-all; font-size: 110%; background: var(--link) no-repeat 20px center / 16px}
+#extraMsg {margin-left: 20px}
 
 /* jump links */
 #jumplinks {margin: 15px 0}
