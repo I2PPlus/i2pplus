@@ -727,7 +727,7 @@ td.peerCount b a:not(:hover):not(:focus), td.peerCount b a:not(:hover):not(:focu
 .stopped.complete .peerCount b::before {border-color: transparent #28f transparent transparent}
 .nopeers.incomplete .peerCount b {text-shadow: 0 1px 1px #bbb; background: #aaa}
 .nopeers.incomplete .peerCount b::before {border-color: transparent #aaa transparent transparent}
-.stopped.incomplete .peerCount b, .inactive.neterror .peerCount b {background: #900}
+.stopped.incomplete .peerCount b, .inactive.neterror .peerCount b {text-shadow: 0 1px 1px #888; background: #900}
 .stopped.incomplete .peerCount b::before, .inactive.neterror .peerCount b::before {border-color: transparent #900 transparent transparent}
 td.peerCount b .left, td.peerCount b .right {margin: 0 1px; padding: 2px 3px 1px; min-width: 26px; display: inline-block; text-align: center; border-radius: 1px; box-shadow: 0 0 0 1px rgba(16,0,16,.5), inset 2px 2px 2px rgba(0,0,0,.3); background: linear-gradient(180deg,rgba(32,0,32,.3), rgba(16,0,16,.3)); opacity: 1}
 td.peerCount b a:hover .left, td.peerCount b a:hover .right {box-shadow: rgba(255,96,0,.5), inset 2px 2px 2px rgba(0,0,0,.3); background: linear-gradient(180deg,rgba(32,16,32,.9), rgba(64,16,64,.9))}
