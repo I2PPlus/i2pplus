@@ -1139,7 +1139,7 @@ h3#udpcon {margin-top: 7px}
 .version {margin: 0; padding: 1px 3px; min-width: 44px; display: inline-block; line-height: 1.2; vertical-align: middle; text-align: center; font-weight: 700; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: var(--row)}
 #netdb_ourinfo .version {margin-right: 4px}
 #netdboverview th, #netdblookup th {padding: 8px 5px 8px 32px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; background:var(--globe) no-repeat 8px center / 18px, var(--h2)}
-#netdbversions th, #netdbtransports th, #netdbcountrylist th, #netdbtiers th {font-size: 9pt}
+#netdboverview table th {padding: 3px 8px; font-size: 9pt}
 #netdboverview th:last-child, #netdboverview td:last-child {text-align: right}
 #netdboverview th:first-child, #netdboverview td:first-child {text-align: left}
 #netdboverview td:nth-child(2) td:last-child {width: 20%}
@@ -1148,6 +1148,8 @@ h3#udpcon {margin-top: 7px}
 #netdboverview td {padding: 0; border: 1px solid var(--border_soft)}
 #netdboverview table th, #netdboverview table td {padding: 5px 8px; line-height: 1.2; border: var(--border_soft)}
 #netdboverview table th::before, #netdboverview table td::before {min-height: 26px; display: inline-block; vertical-align: middle; content: ""}
+#netdbtiers th:first-child, #netdbtransports th:first-child, #netdbtiers td:first-child, #netdbtransports td:first-child {border-left: none}
+#netdbtiers th:last-child, #netdbtransports th:last-child, #netdbtiers td:last-child, #netdbtransports td:last-child {border-right: none}
 #netdboverview a {display: inline-block; width: 100%}
 #netdbtiers a, #netdbversions .version {margin: -2px 0; padding: 1px 3px; min-width: 44px; display: inline-block; line-height: 1.2; vertical-align: middle; text-align: center; font-weight: 700; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: var(--row)}
 #netdbtiers a {margin: -2px 8px -2px 0; width: auto; min-width: 20px}
