@@ -42,8 +42,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private final RouterIdentity _from;
     private Hash _fromHash;
     private final FloodfillNetworkDatabaseFacade _facade;
-//    private final static int REPLY_TIMEOUT = 60*1000;
-    private final static int REPLY_TIMEOUT = 45*1000;
+    private final static int REPLY_TIMEOUT = 60*1000;
     private final static int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
 
     /**
@@ -172,18 +171,21 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 wasNew = ((null == prevNetDb) || (prevNetDb.getPublished() < ri.getPublished()));
                 // Check new routerinfo address against blocklist
                 if (wasNew) {
+                    // TODO should we not flood temporarily banned routers either?
+                    boolean forever = getContext().banlist().isBanlistedForever(key);
+                    if (forever)
+                        wasNew = false; // don't flood
                     if (prevNetDb == null) {
-                        if ((!getContext().banlist().isBanlistedForever(key)) && getContext().blocklist().isBlocklisted(ri)) {
+                        if (!forever && getContext().blocklist().isBlocklisted(ri)) {
                             if (_log.shouldDebug())
                                 _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "] " + ri);
                             else if (_log.shouldWarn())
                                 _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]");
                         }
-                    } else {
+                    } else if (!forever) {
                         Collection<RouterAddress> oldAddr = prevNetDb.getAddresses();
                         Collection<RouterAddress> newAddr = ri.getAddresses();
                         if ((!newAddr.equals(oldAddr)) &&
-                            (!getContext().banlist().isBanlistedForever(key)) &&
                             getContext().blocklist().isBlocklisted(ri)) {
                             if (_log.shouldDebug())
                                 _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "] " + ri);
@@ -361,7 +363,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         }
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Reply gateway not found in LeaseSet with " + count + " leases");
+                            _log.warn("Reply gateway " + toPeer + ' ' + replyTunnel + " not found in LeaseSet with " + count + " leases");
                     }
                 }
             }
