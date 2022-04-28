@@ -1059,7 +1059,7 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 .netdbentry th:nth-child(2) {text-align: left}
 .netdbentry th:last-child {text-align: right; padding: 5px; white-space: nowrap; width: 50px}
 .netdbentry th:first-child, .netdbentry td:first-child {padding: 4px 6px; white-space: nowrap; text-align: right}
-#netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {font-family: var(--monospaced); font-weight: 700; color: #030; border-radius: 3px}
+#netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {font-family: var(--monospaced); font-weight: 700; color: #252; border-radius: 3px}
 #netdb .leaseset th:first-child code {width: 150px; display: inline-block; vertical-align: text-bottom; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--bg); border-radius: 2px; background: #89b}
 .netdbentry td:first-child {width: 80px}
 .netdbentry td:nth-child(2) {word-wrap: break-word}
@@ -1089,7 +1089,7 @@ p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
 #view_profile pre {margin: 0; padding: 20px; width: calc(100% - 40px); line-height: 20px; background: var(--pre)}
 #netdb_ram {padding: 1px 3px}
 #netdb_ram, .netdbentry .version, .netdb_transport {padding: 1px 5px; display: inline-block; box-shadow: var(--box_border_badge); background: var(--badge)}
-#netdb code, #netdb tt {color: #03183f; font-family: var(--bodyfont); font-weight: 400}
+#netdb code, #netdb tt {vertical-align: top; color: #03183f; font-family: var(--bodyfont); font-weight: 400}
 #lookupCondensed {display: none}
 
 /* leasesets */
