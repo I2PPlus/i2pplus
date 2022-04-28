@@ -38,13 +38,12 @@ button:hover a {color: var(--ink_darker)}
 button:active {color: var(--ink_active); box-shadow: var(--btn_shadow_active); background-blend-mode: luminosity; transition: none}
 button a:active {color: var(--ink_active)}
 button {padding: 5px 9px 5px 24px}
-h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
 .warning {margin: 16px 12px 30px 232px; padding: 40px 35px 24px 110px; min-width: 370px; word-wrap: break-word; text-align: justify; color: #4f4f63; border: 1px solid #7b7b9d; border-radius: 2px; box-shadow: inset 0 0 1px 0 #d00; background: var(--itooplus) no-repeat scroll 30px calc(50% + 16px) / 70px auto, linear-gradient(180deg,rgba(248,248,255,.8), rgba(240,240,255,.8)), #f8f8ff}
 .iframed #warning {margin: 28px 10px 0}
-#proxyerror .warning {background: var(--err) no-repeat 34px calc(50% + 14px) / 60px, linear-gradient(180deg,rgba(255,255,255,.8), rgba(255,255,255,.3)) #f8f8ff}
-#proxyerror p {padding-left: 15px; padding-right: 25px}
-#proxyerror p:first-of-type {padding-top: 5px}
-.warning h3 {margin: -29px -29px 25px -24px; padding: 10px 10px 8px 40px; text-align: left; font-size: 115%; border: none; border-bottom: 1px solid #7b7b9d; border-radius: 2px 2px 0 0; background: var(--err) no-repeat 10px center / 24px, var(--h3)}
+#proxy_error p {padding-left: 15px; padding-right: 25px; font-size: 110%}
+#proxy_error p:first-of-type {padding-top: 5px}
+h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
+.warning h3 {margin: -29px -29px 25px -24px; padding: 12px 10px 8px 40px; text-align: left; font-size: 130%; border: none; border-bottom: 1px solid #7b7b9d; border-radius: 2px 2px 0 0; background: var(--err) no-repeat 10px center / 26px, var(--h3)}
 #warning_localhost {margin: 20px; background-position: 20px calc(50% + 16px)}
 #warning_localhost p {padding: 20px 10px 15px; font-weight: 700}
 .proxyfooter {display: none}
@@ -61,13 +60,14 @@ h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
 .warning h4 {margin: 20px 0 5px; padding: 0 0 10px; box-shadow: none; text-align: left; font-size: 10pt; text-transform: none; letter-spacing: 0; word-spacing: 0; background: none; border-radius: 0; border: none; border-bottom: 1px solid var(--ink_lighter)}
 #jumplinks h4 {margin-bottom: 10px; border-color: #b6b6c9; color: #5b5b71; padding-bottom: 10px}
 .warning p + .formaction {margin: 0 0 10px; padding: 0; width: 100%; text-align: right; border: none; box-shadow: none; background: none}
-.warning hr {display: none}
+#proxy_error .warning hr {margin: 25px 0 20px; display: block}
 #proxy_error hr + p {margin-top: 30px}
-#proxy_error p, #proxyrequest {margin-left: 20px; margin-right: 20px}
-#proxyrequest {margin-left: 10px; padding-left: 42px; display: inline-block; word-break: break-all; font-size: 110%; background: var(--link) no-repeat 20px center / 16px}
+#proxy_error p, #proxyrequest {margin: 15px 20px}
+#proxyrequest {margin: 5px 20px 10px 10px; padding-left: 42px; display: inline-block; word-break: break-all; font-size: 110%; background: var(--link) no-repeat 20px center / 16px}
+#extraMsg {margin-left: 20px}
 
 /* jump links */
-#jumplinks {margin: 15px 0}
+#jumplinks {margin: 0 0 15px}
 #jumplinks h3 {margin: 0 0 10px}
 #jumplinks h4 {margin: 0 20px 14px; padding: 0 0 10px}
 #jumplinks br {display: none}
@@ -104,8 +104,8 @@ h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
 @media screen and (max-width: 800px) {
 .warning {margin: 120px 5px 0; padding: 35px 30px 20px; background-image: none}
 .warning {font-size: 95%; background-image: var(--itooplus); background-size: auto 90%; background-position: right 5px bottom; background-blend-mode: overlay}
-#proxyerror .warning {margin-top: 16px}
-#proxyerror p {padding-left: 65px; padding-right: 20px}
+#proxy_error .warning {margin-top: 16px}
+#proxy_error p {padding-left: 65px; padding-right: 20px}
 .warning h3 {margin: -34px -29px 20px; font-size: 10pt}
 .logo {position: absolute; top: 0; width: calc(100% - 24px); min-width: 430px; margin: 12px 5px 0}
 .logo a:link:not(img) {margin: 0 5px; width: auto; display: inline-block}

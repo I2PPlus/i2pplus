@@ -242,6 +242,7 @@ input.search[type=submit] {margin-left: 3px; padding: 6px 5px; width: 44px; vert
 input.search[type=submit]:hover, input.search[type=submit]:focus {background: var(--search) no-repeat center center / 14px, var(--btn_hover); background-blend-mode: normal}
 input.search[type=text] {margin: 1px -10px 0 0; padding: 5px 8px; vertical-align: middle; border-radius: 2px 0 0 2px; transition: none}
 input.search[type=text]:focus, input.search[type=text]:focus-within ~ input.search[type=submit] {border: 1px solid var(--hover); filter: none; transition: none}
+input.search[type=text]:focus {box-shadow: var(--btn_shadow_active)}
 #visualid .fakebutton {padding: 6px 8px 6px 22px; background: var(--go) no-repeat 6px center / 14px, var(--btn)}
 #visualid .fakebutton:hover, #visualid .fakebutton:focus {background: var(--go) no-repeat 6px center / 14px, var(--btn_hover)}
 form[action="addressbook"] table {width: 100%; font-weight: 700}

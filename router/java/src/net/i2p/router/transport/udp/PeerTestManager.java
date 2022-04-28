@@ -359,9 +359,9 @@ class PeerTestManager {
                 data[1] = 2;  // version
                 DataHelper.toLong(data, 2, 4, nonce);
                 DataHelper.toLong(data, 6, 4, _context.clock().now() / 1000);
-                data[10] = (byte) iplen;
-                System.arraycopy(aliceIP, 0, data, 11, iplen);
-                DataHelper.toLong(data, 11 + iplen, 2, alicePort);
+                data[10] = (byte) (iplen + 2);
+                DataHelper.toLong(data, 11, 2, alicePort);
+                System.arraycopy(aliceIP, 0, data, 13, iplen);
                 packet = _packetBuilder2.buildPeerTestFromAlice(test.getCharlieIP(), test.getCharliePort(),
                                                                 test.getCharlieIntroKey(),
                                                                 sendId, rcvId, data);
@@ -787,12 +787,12 @@ class PeerTestManager {
         if (type != PEER_TEST_FLAG_BYTE)
             return;
         byte[] introKey = _transport.getSSU2StaticIntroKey();
+        ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
+        chacha.initializeKey(introKey, 0);
+        long n = DataHelper.fromLong(data, off + PKT_NUM_OFFSET, 4);
+        chacha.setNonce(n);
         try {
             // decrypt in-place
-            ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
-            chacha.initializeKey(introKey, 0);
-            long n = DataHelper.fromLong(data, off + PKT_NUM_OFFSET, 4);
-            chacha.setNonce(n);
             chacha.decryptWithAd(data, off, LONG_HEADER_SIZE,
                                  data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE);
             int payloadLen = len - (LONG_HEADER_SIZE + MAC_LEN);
@@ -801,6 +801,8 @@ class PeerTestManager {
         } catch (Exception e) {
             if (_log.shouldWarn())
                 _log.warn("Bad PeerTest packet:\n" + HexDump.dump(data, off, len), e);
+        } finally {
+            chacha.destroy();
         }
     }
 
@@ -842,20 +844,24 @@ class PeerTestManager {
         long nonce = DataHelper.fromLong(data, 2, 4);
         long time = DataHelper.fromLong(data, 6, 4) * 1000;
         int iplen = data[10] & 0xff;
-        if (iplen != 0 && iplen != 4 && iplen != 16) {
+        if (iplen != 0 && iplen != 6 && iplen != 18) {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Bad IP length " + iplen);
             return;
         }
-        boolean isIPv6 = iplen == 16;
+        boolean isIPv6 = iplen == 18;
+        int testPort;
         byte[] testIP;
         if (iplen != 0) {
-            testIP = new byte[iplen];
-            System.arraycopy(data, 11, testIP, 0, iplen);
+            testPort = (int) DataHelper.fromLong(data, 11, 2);
+            testIP = new byte[iplen - 2];
+            System.arraycopy(data, 13, testIP, 0, iplen - 2);
         } else {
+            testPort = 0;
             testIP = null;
+            if (status == 0)
+                status = 999;
         }
-        int testPort = (int) DataHelper.fromLong(data, 11 + iplen, 2);
         Long lNonce = Long.valueOf(nonce);
         PeerTestState state;
         if (msg == 4 || msg == 5 || msg == 7)
@@ -1285,9 +1291,9 @@ class PeerTestManager {
                 data[1] = 2;  // version
                 DataHelper.toLong(data, 2, 4, nonce);
                 DataHelper.toLong(data, 6, 4, now / 1000);
-                data[10] = (byte) iplen;
-                System.arraycopy(aliceIP, 0, data, 11, iplen);
-                DataHelper.toLong(data, 11 + iplen, 2, alicePort);
+                data[10] = (byte) (iplen + 2);
+                DataHelper.toLong(data, 11, 2, alicePort);
+                System.arraycopy(aliceIP, 0, data, 13, iplen);
                 if (_log.shouldDebug())
                     _log.debug("Sending message #7 to Alice on " + state);
                 UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(addr, alicePort,
