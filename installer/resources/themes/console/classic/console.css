@@ -1059,7 +1059,7 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 .netdbentry th:nth-child(2) {text-align: left}
 .netdbentry th:last-child {text-align: right; padding: 5px; white-space: nowrap; width: 50px}
 .netdbentry th:first-child, .netdbentry td:first-child {padding: 4px 6px; white-space: nowrap; text-align: right}
-#netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {font-family: var(--monospaced); font-weight: 700; color: #252; border-radius: 3px}
+#netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {vertical-align: baseline; font-family: var(--monospaced); font-weight: 700; color: #252; border-radius: 3px}
 #netdb .leaseset th:first-child code {width: 150px; display: inline-block; vertical-align: text-bottom; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--bg); border-radius: 2px; background: #89b}
 .netdbentry td:first-child {width: 80px}
 .netdbentry td:nth-child(2) {word-wrap: break-word}
@@ -1185,9 +1185,10 @@ p.infowarn, #sybilanalysis {border: var(--border); padding: var(--pad_info); bac
 p.sybilinfo.experimental {background: var(--bg) var(--experimental) var(--bgpos_info)}
 p.sybilinfo {padding: var(--pad_info); background: var(--bg) var(--sybil) var(--bgpos_info)}
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, #sybil_totals {margin: 3px 0; padding: 5px 5px 5px 30px; text-align: left; font-weight: 700; border: var(--border); background: var(--eye) no-repeat 8px center / 16px, linear-gradient(90deg, var(--bg)40%, var(--bg3))}
-.sybil_addresses {padding: 0; border-bottom: var(--border)}
 .sybil_addresses table, .sybil_addresses td {border: none}
 .sybil_addresses table {width: 100%; margin: 0}
+#netdb .sybil_addresses {padding: 0; border-bottom: var(--border)}
+#netdb .sybil_addresses tr:first-child td:first-child {padding: 0 20px 0 10px}
 .sybil_container {margin: 10px 0; columns: 680px 2}
 .sybil_container p:first-child {margin-top: 0}
 .sybil_container p:last-child {margin-bottom: 0}
@@ -1694,7 +1695,7 @@ input[type="file"]:hover {cursor: pointer}
 #tunnelconfig th:not(.th_title)[colspan="4"] {padding: 10px 10px 10px 34px; text-transform: none; letter-spacing: 0; word-spacing: 0; text-shadow: var(--textshadow); background: var(--infowarn) no-repeat 10px center / 20px, var(--th)}
 #tunnelconfig th:not([colspan="4"]):first-child, #tunnelconfig th:not([colspan="4"]):last-child {width: 30%}
 #tunnelconfig th a {pointer-events: none}
-#tunnelconfig td:first-child {text-align: right; font-weight: 700; white-space: nowrap;}
+#tunnelconfig td:first-child {text-align: right; font-weight: 700; white-space: nowrap}
 #config_tunnels select {width: calc(100% - 4px); text-align: center}
 #config_tunnels select[disabled] {opacity: .7; pointer-events: none}
 
