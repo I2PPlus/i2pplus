@@ -1051,7 +1051,7 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 .encryption a.keysearch {background: var(--lock) no-repeat 2px center / 12px, var(--th)}
 .identicon {margin: -1px -1px -1px 8px; border-left: var(--border)}
 .familysearch img {margin: 1px 2px; padding: 2px; height: 14px; width: 14px; display: inline-block; vertical-align: middle; border: 1px solid #bbd; border-radius: 2px; background: var(--bg)}
-.netdb_info {display: inline-block; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; vertical-align: text-bottom}
+.netdb_info {display: inline-block; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; vertical-align: top}
 .netdb_addresses .nowrap {margin: 0 0 0 3px}
 .netdb_tunnel {margin: 1px 3px 0}
 .netdbentry {margin-top: 10px}
@@ -1068,18 +1068,20 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 .netdbentry img {margin: 1px 0 0}
 .gwhois, .banlisted {vertical-align: middle; font-size: 0}
 .banlisted {width: 18px; height: 18px; display: inline-block; background: var(--ban)}
-.gwhois a::before {margin-left: -2px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat left center / 11px; opacity: .7; content: ""}
+.gwhois a::before {margin: -2px 0 0 -2px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat left center / 11px; opacity: .7; content: ""}
 .gwhois:hover a::before, .gwhois a:focus::before {opacity: 1; transform: scale(1.2)}
 .addtobook {text-align: right}
 .addtobook a {font-size: 0}
 .addtobook a::after {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--abook_helper) no-repeat center center / 16px; content: ""}
 p.family a {display: inline-block}
 p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
+.familyname .verified {margin-top: -2px; height: 12px; width: 12px; display: inline-block; vertical-align: middle; font-size: 0; background: var(--verified) no-repeat center center / 11px}
 #netdb > .confignav {margin-bottom: 15px}
-#netdb .netdb_transport {margin: 0 0 0 6px; padding: 1px 3px; width: 40px; display: inline-block; text-align: center; font-size: 90%; background: var(--badge)}
+#netdb .netdb_transport {padding: 3px; width: 40px; display: inline-block; text-align: center; font-size: 90%; background: var(--badge)}
 #netdb hr {margin: 2px 0; display: none; width: 100%}
 #netdb ul, .netdb_addresses {margin: 0; padding: 0; columns: auto; line-height: 1.2}
 #netdb li, #netdb li:first-child {margin: 1px 0; padding: 0; display: inline-block; vertical-align: middle}
+#netdb .netdb_addresses li {margin: 2px 1px; padding: 0 6px 0 0; line-height: 1.5; border: 1px solid #bbc; background: var(--badge); contain: paint}
 #view_profile h3 {margin-bottom: -11px; position: relative}
 #view_profile .identicon {margin-top: -6px; margin-right: 5px; height: 100%; width: auto; position: absolute; right: 54px; border-right: var(--border)}
 #view_profile span {padding: 5px; float: right}
@@ -1147,6 +1149,7 @@ p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
 #netdblookup th, #netdblookup td {padding: 10px}
 #netdblookup td:nth-child(odd) {padding-right: 0; white-space: nowrap; text-align: right; font-weight: 700}
 #netdblookup td:nth-child(even) {width: 50%}
+#netdblookup td.subheading {text-align: left}
 #netdblookup tr:nth-last-child(n+3) input[type=text] {width: calc(100% - 8px)}
 #netdblookup tr:nth-last-child(2) input[type=text] {width: calc(45% + 2px)}
 #closetorouter {margin-left: 6px}
@@ -1164,7 +1167,7 @@ th code {user-select: all}
 .netdbentry th:last-child > *, .sybil_routerinfo th:nth-child(2) > * {display: inline-block; vertical-align: middle}
 .netdbentry td:first-child {text-align: right}
 #netdb td code {font-weight: 400}
-.netdb_name {vertical-align: text-bottom; text-transform: capitalize; font-weight: 700; color: var(--ink_light)}
+.netdb_name {text-transform: capitalize; font-weight: 700; color: var(--ink_light)}
 .netdb_info {margin-right: 1px}
 .netdb_expiry {margin-left: 1px}
 
