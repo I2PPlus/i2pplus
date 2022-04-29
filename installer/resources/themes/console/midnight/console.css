@@ -1621,6 +1621,7 @@ b.netdb_transport {display: inline-block; margin-right: 5px}
 .signingkey.encryption {padding-left: 18px; background: var(--lock) 4px calc(50% - 1px) no-repeat, var(--element); background-size: 12px, 100%}
 .signingkey {margin: 2px 0; padding: 2px 4px 2px 16px; display: inline-block; font-size: 90%; border: var(--border_badge); border-radius: 1px; box-shadow: var(--highlight); background: var(--crypto) no-repeat 3px center, var(--element); background-size: 12px, 100%}
 .netdbentry tr:nth-child(2) td:last-child b, .netdbentry .familyname, .netdbStats li, .netdbStats b, #netdb .netdbentry th b, #netdb .netdbentry td:first-child b, #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code, .netdb_addressesli, .netdb_ouraddresses, .netdb_ouraddresses .netdb_transport {display: inline-block}
+.familyname .verified {margin-top: -2px; height: 12px; width: 12px; display: inline-block; vertical-align: middle; font-size: 0; background: var(--verified) no-repeat center center / 11px}
 #netdb .longstat {white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 #netdb .ls_crypto span.nowrap {max-width: 400px}
 #netdb .netdbentry th {padding-top: 6px; padding-bottom: 6px}
