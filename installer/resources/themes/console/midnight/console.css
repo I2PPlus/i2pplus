@@ -350,7 +350,7 @@ p:empty + .sb_notice {margin-top: 10px}
 #sidebar #sb_services a[href*="7658"]:hover, #sb_services a[href*="7668"]:hover {background: #1e0b28 var(--webserver) no-repeat 5px center / 16px}
 #sb_services a[href*="/tracker"] {background: rgba(0,0,16,.3) var(--zzzot) no-repeat 5px center / 16px}
 #sidebar #sb_services a[href*="/tracker"]:hover {background: #1e0b28 var(--zzzot) no-repeat 5px center / 16px}
-#sidebar #sb_services a:active {color: var(--active); border: 1px solid transparent; box-shadow: var(--btn_shadow_active); background-color: #461b5e}
+#sidebar #sb_services a:active {color: var(--active); box-shadow: var(--btn_shadow_active); background-color: #461b5e}
 
 /* news */
 #sb_newsheadings {width: 192px; margin-left: 0; margin-top: -5px; margin-bottom: -8px; text-align: right}
