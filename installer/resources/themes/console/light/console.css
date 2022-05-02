@@ -1174,7 +1174,7 @@ b.netdb_transport {margin-right: 3px; display: inline-block}
 .netdb_name {text-transform: capitalize; font-weight: 700; color: var(--ink_light)}
 .netdb_info {margin-right: 1px; vertical-align: middle}
 .netdb_name, .netdb_addresses .netdb_info {display: inline-block; vertical-align: middle}
-.netdb_addresses .netdb_info:not(.host) {margin-left: 0; max-width: 160px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis}
+.netdb_addresses .netdb_info:not(.host) {margin-left: 0; max-width: 72px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis}
 .netdb_addresses {line-height: 1.5}
 .netdb_expiry {margin-left: 5px}
 .netdbentry th:last-child > *, .sybil_routerinfo th:nth-child(2) > * {vertical-align: middle}
@@ -1186,6 +1186,7 @@ b.netdb_transport {margin-right: 3px; display: inline-block}
 .netdbStats {margin: 0; columns: 250px auto; column-gap: 20px}
 .netdbStats li {margin: 0; padding: 1px 10px 1px 0; white-space: normal; line-height: 1.4; list-style: none}
 .netdb_family {vertical-align: middle}
+.familyname .verified {margin-top: -2px; height: 12px; width: 12px; display: inline-block; vertical-align: middle; font-size: 0; background: var(--verified) no-repeat center center / 11px}
 .longstat.fam {margin: 4px 0 -4px; padding: 1px 0; width: 240px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2}
 .netdbStats b {margin-right: 2px; margin-left: 0; text-align: left}
 .netdbStats hr, .sybil_routerinfo hr {margin: -2px 0; display: block; color: transparent; opacity: .5; border-bottom: 1px solid #bbe; background: none}
@@ -1697,7 +1698,7 @@ select[name="newlogclass"] {margin-left: 3px}
 .stattograph {margin: 2px 1px 2px 0; padding: 4px 8px; width: 220px; display: inline-block; box-sizing: border-box; font-size: 90%; text-align: left; border: 1px solid #99b; border-left-width: 3px; border-radius: 1px; background: var(--row); outline: none; will-change: transform}
 .stattograph b {display: inline-block; word-break: break-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; color: var(--ink_light)}
 .optbox:checked + label > .stattograph {padding-left: 18px; border-left-width: 3px; box-shadow: inset 0 0 0 1px #eef, inset 3px 3px 3px rgba(0,0,32,.2); background: var(--yes) no-repeat 8px center / 8px, linear-gradient(180deg,#eef, #fff)}
-.optbox:not(:checked) + label > .stattograph b {font-style: italic; opacity: .8;}
+.optbox:not(:checked) + label > .stattograph b {font-style: italic; opacity: .8}
 .stattograph:hover b {color: var(--hover)}
 .statdesc {display: none}
 .optbox:checked + label > .stattograph:active, .optbox:not(:checked) + label > .stattograph:active {box-shadow: inset 0 0 0 1px #930, inset 3px 3px 3px rgba(0,0,0,.4); background: var(--hover)}

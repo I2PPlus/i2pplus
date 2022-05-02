@@ -1044,7 +1044,7 @@ class SummaryBarRenderer {
         StringBuilder buf = new StringBuilder(512);
         buf.append("<div id=\"sb_graphcontainer\" class=\"collapse\" title=\"")
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
-           .append("\">\n<span id=\"sb_graphstats\">")
+           .append("\">\n<span id=\"sb_graphstats\" class=\"volatile\">")
            .append(_helper.getSecondKBps())
            .append("Bps</span>\n")
            .append("<a href=\"/graphs\">\n")

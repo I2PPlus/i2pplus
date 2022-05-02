@@ -1073,7 +1073,7 @@ p.family b {margin-right: -3px; min-width: 118px; display: inline-block; vertica
 p.family a {padding-left: 4px; width: calc(100% - 141px); max-width: 400px; display: inline-block; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; border-radius: 0 10px 10px 0}
 p.family a:hover {background: #020}
 p.family + p.family, .sybil_info + .sybil_info {margin-top: -4px}
-.familyname .verified {margin-top: -2px; height: 12px; width: 12px; display: inline-block; vertical-align: middle; font-size: 0; background: var(--verified) no-repeat center center / 11px;}
+.familyname .verified {margin-top: -2px; height: 12px; width: 12px; display: inline-block; vertical-align: middle; font-size: 0; background: var(--verified) no-repeat center center / 11px}
 
 /* netdb lookup */
 #netdb .tabletitle {margin-bottom: -2px}
@@ -1572,7 +1572,7 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .themechoice {padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .langselect {padding: 8px 4px 0; background: radial-gradient(circle at center -70px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#010,#000 80%)}
 .themechoice:hover {border: 1px solid var(--hover); background: #000}
-.themechoice .optbox, .langselect .optbox {position: absolute; opacity: 0;}
+.themechoice .optbox, .langselect .optbox {position: absolute; opacity: 0}
 .themechoice .optbox:checked + img {opacity: 1; filter: none; transform: scale(0.8)}
 .themechoice img {padding: 8px 0 3px; opacity: .6}
 .themechoice img, .langflag {animation: fade .15s ease .3s reverse both}
@@ -1731,7 +1731,7 @@ form > table {font-size: 9pt}
 #tunnelconfig th:not(.th_title)[colspan="4"] {padding: 12px 10px 12px 34px; text-transform: none; letter-spacing: 0; word-spacing: 0; text-shadow: var(--textshadow); background: var(--infowarn) no-repeat 10px center, linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,#300 2px, #100 4px); background-size: 18px, 100%, 100% 4px}
 #tunnelconfig th a {pointer-events: none}
 #tunnelconfig th:not([colspan="4"]):first-child, #tunnelconfig th:not([colspan="4"]):last-child {width: 30%}
-#tunnelconfig td:first-child {text-align: right; font-weight: 700; white-space: nowrap;}
+#tunnelconfig td:first-child {text-align: right; font-weight: 700; white-space: nowrap}
 #tunnelconfig input[type=text] {margin: 6px 16px 6px 0; width: calc(100% - 4px)}
 #config_tunnels hr {display: none}
 #tunnelconfigsave {margin-top: 0; border-top: var(--border)}
@@ -1950,7 +1950,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #debug th:first-child {text-align: left}
 #debug td:last-child {vertical-align: top}
 #debug h2, #debug h3 {border-radius: 0}
-#debug h2 {margin-top: 11px; padding: 10px 10px 8px; font-size: 11.5pt; background: var(--bug) no-repeat right 6px center, var(--h3), #010; background-size: 18px, 2px;}
+#debug h2 {margin-top: 11px; padding: 10px 10px 8px; font-size: 11.5pt; background: var(--bug) no-repeat right 6px center, var(--h3), #010; background-size: 18px, 2px}
 #debug h2#debug_portmapper {margin-top: 15px}
 #debug h2 + hr, .buckets hr {display: none}
 #debug h3 {border-width: 1px; padding: 5px 10px; font-size: 10pt}
@@ -2537,7 +2537,7 @@ td.optionsave {white-space: normal}
 #tunnels {padding: 0 5px; min-width: 640px}
 #tunnels h3 {margin-top: 6px}
 #participating a::after, #peercount a::after {width: 16px; height: 16px; background-size: 16px}
-.statusnotes:last-child {margin-bottom: 6px;}
+.statusnotes:last-child {margin-bottom: 6px}
 #portfaq td:nth-child(2) {white-space: normal}
 #faq h3 {font-size: 10pt}
 #udpconnections .cells {border: 1px inset #131}

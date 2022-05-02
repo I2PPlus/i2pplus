@@ -1051,7 +1051,7 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 .encryption a.keysearch {background: var(--lock) no-repeat 2px center / 12px, var(--th)}
 .identicon {margin: -1px -1px -1px 8px; border-left: var(--border)}
 .familysearch img {margin: 1px 2px; padding: 2px; height: 14px; width: 14px; display: inline-block; vertical-align: middle; border: 1px solid #bbd; border-radius: 2px; background: var(--bg)}
-.netdb_info {display: inline-block; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; vertical-align: text-bottom}
+.netdb_info {display: inline-block; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; vertical-align: top}
 .netdb_addresses .nowrap {margin: 0 0 0 3px}
 .netdb_tunnel {margin: 1px 3px 0}
 .netdbentry {margin-top: 10px}
@@ -1059,7 +1059,7 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 .netdbentry th:nth-child(2) {text-align: left}
 .netdbentry th:last-child {text-align: right; padding: 5px; white-space: nowrap; width: 50px}
 .netdbentry th:first-child, .netdbentry td:first-child {padding: 4px 6px; white-space: nowrap; text-align: right}
-#netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {font-family: var(--monospaced); font-weight: 700; color: #030; border-radius: 3px}
+#netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {vertical-align: baseline; font-family: var(--monospaced); font-weight: 700; color: #252; border-radius: 3px}
 #netdb .leaseset th:first-child code {width: 150px; display: inline-block; vertical-align: text-bottom; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--bg); border-radius: 2px; background: #89b}
 .netdbentry td:first-child {width: 80px}
 .netdbentry td:nth-child(2) {word-wrap: break-word}
@@ -1068,18 +1068,20 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 .netdbentry img {margin: 1px 0 0}
 .gwhois, .banlisted {vertical-align: middle; font-size: 0}
 .banlisted {width: 18px; height: 18px; display: inline-block; background: var(--ban)}
-.gwhois a::before {margin-left: -2px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat left center / 11px; opacity: .7; content: ""}
+.gwhois a::before {margin: -2px 0 0 -2px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat left center / 11px; opacity: .7; content: ""}
 .gwhois:hover a::before, .gwhois a:focus::before {opacity: 1; transform: scale(1.2)}
 .addtobook {text-align: right}
 .addtobook a {font-size: 0}
 .addtobook a::after {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--abook_helper) no-repeat center center / 16px; content: ""}
 p.family a {display: inline-block}
 p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
+.familyname .verified {margin-top: -2px; height: 12px; width: 12px; display: inline-block; vertical-align: middle; font-size: 0; background: var(--verified) no-repeat center center / 11px}
 #netdb > .confignav {margin-bottom: 15px}
-#netdb .netdb_transport {margin: 0 0 0 6px; padding: 1px 3px; width: 40px; display: inline-block; text-align: center; font-size: 90%; background: var(--badge)}
+#netdb .netdb_transport {padding: 3px; width: 40px; display: inline-block; text-align: center; font-size: 90%; background: var(--badge)}
 #netdb hr {margin: 2px 0; display: none; width: 100%}
 #netdb ul, .netdb_addresses {margin: 0; padding: 0; columns: auto; line-height: 1.2}
 #netdb li, #netdb li:first-child {margin: 1px 0; padding: 0; display: inline-block; vertical-align: middle}
+#netdb .netdb_addresses li {margin: 2px 1px; padding: 0 6px 0 0; line-height: 1.5; border: 1px solid #bbc; background: var(--badge); contain: paint}
 #view_profile h3 {margin-bottom: -11px; position: relative}
 #view_profile .identicon {margin-top: -6px; margin-right: 5px; height: 100%; width: auto; position: absolute; right: 54px; border-right: var(--border)}
 #view_profile span {padding: 5px; float: right}
@@ -1087,7 +1089,7 @@ p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
 #view_profile pre {margin: 0; padding: 20px; width: calc(100% - 40px); line-height: 20px; background: var(--pre)}
 #netdb_ram {padding: 1px 3px}
 #netdb_ram, .netdbentry .version, .netdb_transport {padding: 1px 5px; display: inline-block; box-shadow: var(--box_border_badge); background: var(--badge)}
-#netdb code, #netdb tt {color: #03183f; font-family: var(--bodyfont); font-weight: 400}
+#netdb code, #netdb tt {vertical-align: top; color: #03183f; font-family: var(--bodyfont); font-weight: 400}
 #lookupCondensed {display: none}
 
 /* leasesets */
@@ -1147,6 +1149,7 @@ p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
 #netdblookup th, #netdblookup td {padding: 10px}
 #netdblookup td:nth-child(odd) {padding-right: 0; white-space: nowrap; text-align: right; font-weight: 700}
 #netdblookup td:nth-child(even) {width: 50%}
+#netdblookup td.subheading {text-align: left}
 #netdblookup tr:nth-last-child(n+3) input[type=text] {width: calc(100% - 8px)}
 #netdblookup tr:nth-last-child(2) input[type=text] {width: calc(45% + 2px)}
 #closetorouter {margin-left: 6px}
@@ -1164,7 +1167,7 @@ th code {user-select: all}
 .netdbentry th:last-child > *, .sybil_routerinfo th:nth-child(2) > * {display: inline-block; vertical-align: middle}
 .netdbentry td:first-child {text-align: right}
 #netdb td code {font-weight: 400}
-.netdb_name {vertical-align: text-bottom; text-transform: capitalize; font-weight: 700; color: var(--ink_light)}
+.netdb_name {text-transform: capitalize; font-weight: 700; color: var(--ink_light)}
 .netdb_info {margin-right: 1px}
 .netdb_expiry {margin-left: 1px}
 
@@ -1182,9 +1185,10 @@ p.infowarn, #sybilanalysis {border: var(--border); padding: var(--pad_info); bac
 p.sybilinfo.experimental {background: var(--bg) var(--experimental) var(--bgpos_info)}
 p.sybilinfo {padding: var(--pad_info); background: var(--bg) var(--sybil) var(--bgpos_info)}
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, #sybil_totals {margin: 3px 0; padding: 5px 5px 5px 30px; text-align: left; font-weight: 700; border: var(--border); background: var(--eye) no-repeat 8px center / 16px, linear-gradient(90deg, var(--bg)40%, var(--bg3))}
-.sybil_addresses {padding: 0; border-bottom: var(--border)}
 .sybil_addresses table, .sybil_addresses td {border: none}
 .sybil_addresses table {width: 100%; margin: 0}
+#netdb .sybil_addresses {padding: 0; border-bottom: var(--border)}
+#netdb .sybil_addresses tr:first-child td:first-child {padding: 0 20px 0 10px}
 .sybil_container {margin: 10px 0; columns: 680px 2}
 .sybil_container p:first-child {margin-top: 0}
 .sybil_container p:last-child {margin-bottom: 0}
@@ -1691,7 +1695,7 @@ input[type="file"]:hover {cursor: pointer}
 #tunnelconfig th:not(.th_title)[colspan="4"] {padding: 10px 10px 10px 34px; text-transform: none; letter-spacing: 0; word-spacing: 0; text-shadow: var(--textshadow); background: var(--infowarn) no-repeat 10px center / 20px, var(--th)}
 #tunnelconfig th:not([colspan="4"]):first-child, #tunnelconfig th:not([colspan="4"]):last-child {width: 30%}
 #tunnelconfig th a {pointer-events: none}
-#tunnelconfig td:first-child {text-align: right; font-weight: 700; white-space: nowrap;}
+#tunnelconfig td:first-child {text-align: right; font-weight: 700; white-space: nowrap}
 #config_tunnels select {width: calc(100% - 4px); text-align: center}
 #config_tunnels select[disabled] {opacity: .7; pointer-events: none}
 

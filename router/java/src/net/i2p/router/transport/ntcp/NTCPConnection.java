@@ -1664,10 +1664,13 @@ public class NTCPConnection implements Closeable {
             _messagesRead.incrementAndGet();
             try {
                 Hash h = ri.getHash();
+                if (h.equals(_context.routerHash()))
+                    return;
                 RouterInfo old = _context.netDb().store(h, ri);
                 if (flood && !ri.equals(old)) {
                     FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
-                    if (fndf.floodConditional(ri)) {
+                    if ((old == null || ri.getPublished() > old.getPublished()) &&
+                        fndf.floodConditional(ri)) {
                         if (_log.shouldDebug())
                             _log.debug("Flooded the RouterInfo: " + h);
                     } else {
@@ -1676,7 +1679,8 @@ public class NTCPConnection implements Closeable {
                     }
                 }
             } catch (IllegalArgumentException iae) {
-                throw new DataFormatException("RouterInfo store fail: " + ri, iae);
+                if (_log.shouldWarn())
+                    _log.warn("RouterInfo store fail: " + ri, iae);
             }
         }
 
