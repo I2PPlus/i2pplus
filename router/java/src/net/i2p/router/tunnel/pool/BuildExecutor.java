@@ -456,7 +456,7 @@ class BuildExecutor implements Runnable {
                                 long pTime = System.currentTimeMillis() - bef;
                                 _context.statManager().addRateData("tunnel.buildConfigTime", pTime, 0);
                                 if (_log.shouldDebug())
-                                    _log.debug("Configuring new tunnel [" + i + "] for " + pool + cfg);
+                                    _log.debug("Configuring new tunnel [" + i + "] for " + pool + "\n* " + cfg);
                                 buildTunnel(cfg);
                                 //realBuilt++;
                             } else {
