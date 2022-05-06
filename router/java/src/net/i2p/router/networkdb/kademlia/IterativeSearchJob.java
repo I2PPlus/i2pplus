@@ -158,7 +158,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
         // these override the settings in super
         if (isLease) {
-            _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME * 3 / 2);
+            _timeoutMs = Math.max(timeoutMs * 3, MAX_SEARCH_TIME * 2);
             totalSearchLimit *= 3 / 2;
         } else {
             String MIN_VERSION = "0.9.53";
