@@ -15,9 +15,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Properties;
 
 import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
-import net.i2p.util.PasswordManager;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -27,7 +25,7 @@ class SAMHandlerFactory {
 
     private static final String VERSION = "3.3";
 
-    private static final int HELLO_TIMEOUT = 60*1000;
+    private static final int HELLO_TIMEOUT = 60 * 1000;
 
     /**
      * Return the right SAM handler depending on the protocol version
@@ -42,6 +40,7 @@ class SAMHandlerFactory {
                                               SAMBridge parent) throws SAMException {
         String line;
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMHandlerFactory.class);
+        SAMSecureSessionInterface secureSession = parent.secureSession();
 
         try {
             Socket sock = s.socket();
@@ -69,14 +68,14 @@ class SAMHandlerFactory {
 
         String minVer = props.getProperty("MIN");
         if (minVer == null) {
-            //throw new SAMException("Missing MIN parameter in HELLO VERSION message");
+            // throw new SAMException("Missing MIN parameter in HELLO VERSION message");
             // MIN optional as of 0.9.14
             minVer = "1";
         }
 
         String maxVer = props.getProperty("MAX");
         if (maxVer == null) {
-            //throw new SAMException("Missing MAX parameter in HELLO VERSION message");
+            // throw new SAMException("Missing MAX parameter in HELLO VERSION message");
             // MAX optional as of 0.9.14
             maxVer = "99.99";
         }
@@ -88,25 +87,10 @@ class SAMHandlerFactory {
             return null;
         }
 
-        if (Boolean.parseBoolean(i2cpProps.getProperty(SAMBridge.PROP_AUTH))) {
-            String user = props.getProperty("USER");
-            String pw = props.getProperty("PASSWORD");
-            if (user == null || pw == null) {
-                if (user == null)
-                    log.logAlways(Log.WARN, "SAM authentication failed");
-                else
-                    log.logAlways(Log.WARN, "SAM authentication failed, user: " + user);
-                throw new SAMException("USER and PASSWORD required");
-            }
-            String savedPW = i2cpProps.getProperty(SAMBridge.PROP_PW_PREFIX + user + SAMBridge.PROP_PW_SUFFIX);
-            if (savedPW == null) {
-                log.logAlways(Log.WARN, "SAM authentication failed, user: " + user);
-                throw new SAMException("Authorization failed");
-            }
-            PasswordManager pm = new PasswordManager(I2PAppContext.getGlobalContext());
-            if (!pm.checkHash(savedPW, pw)) {
-                log.logAlways(Log.WARN, "SAM authentication failed, user: " + user);
-                throw new SAMException("Authorization failed");
+        if (secureSession != null) {
+            boolean approval = secureSession.approveOrDenySecureSession(i2cpProps, props);
+            if (!approval) {
+                throw new SAMException("SAM connection cancelled by user request");
             }
         }
 
@@ -186,7 +170,7 @@ class SAMHandlerFactory {
 
     /* Get the minor protocol version from a string, or -1 */
     private static int getMinor(String ver) {
-        if ( (ver == null) || (ver.indexOf('.') < 0) )
+        if ((ver == null) || (ver.indexOf('.') < 0))
             return -1;
         try {
             String major = ver.substring(ver.indexOf('.') + 1);

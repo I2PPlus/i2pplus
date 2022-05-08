@@ -176,12 +176,20 @@ input.update {margin-left: 5px}
 input::placeholder {font-weight: 400; font-style: italic; color: var(--ink); opacity: .7}
 input:focus::placeholder {opacity: 0}
 
-#search input[type=text]:focus {background: var(--search) no-repeat 8px center / 14px, var(--text_focus); background-blend-mode: normal}
-#search input[type=text] {margin-left: 5px; padding: 6px 6px 6px 30px; vertical-align: middle; background: #000 var(--search) no-repeat 8px center / 14px; background-blend-mode: luminosity}
 #subsLog pre {margin-top: -26px; padding-left: 10px; width: calc(100% - 17px); height: auto; white-space: pre-wrap; font-weight: 400; color: var(--ink); background: #000}
 textarea[cols="70"] {width: 100%; height: 40px; white-space: pre-wrap}
 textarea:focus::placeholder {opacity: 0}
 textarea, #subsLog pre {padding: 3px 5px; width: 100%; height: 200px; resize: none; font: 700 8.5pt var(--monospaced); line-height: 1.4; color: #7670c2; border: 1px solid #26225d; background: #000}
+
+#search input[type=text], #search input[type=submit] {animation: fade-in .5s ease 1s both}
+#search input[type=text] {padding: 7px 8px; min-width: 280px; border-radius: 1px 0 0 1px; box-shadow: none}
+#search input[type=text]:focus {border: 1px solid var(--hover); filter: none;}
+#search input[type=submit] {margin-left: -16px; padding: 7px 8px; width: 40px; min-width: 0; position: relative; z-index: 10; overflow: hidden; color: transparent; text-shadow: none; -webkit-text-stroke: 0; border: var(--border_input); border-radius: 0 1px 1px 0; background: #000 var(--search) no-repeat center center / 14px}
+#search input[type=submit]:hover, #search input[type=submit]:focus, #search input[type=text]:focus ~ input[type=submit] {padding: 7px 8px; border: 1px solid var(--hover); box-shadow: inset 0 0 0 1px #000, inset 0 0 3px 1px var(--hover), inset 0 0 0 4px #000}
+#search input[type=text]:focus ~ input[type=submit] {transition: ease all .1s}
+#search input[type=submit]:active {box-shadow: inset 0 0 0 1px #000, var(--btn_shadow_active); background: var(--hover) var(--search) no-repeat center center / 14px; background-blend-mode: luminosity}
+#booksearch {padding: 6px; text-align: center}
+#search input {vertical-align: middle; line-height: 1.3}
 
 /* identicon */
 #visualid h3 {margin-top: -1px; border-left: none; border-right: none}
@@ -316,6 +324,8 @@ svg #arrow stop:last-child {stop-color: #001}
 .iframed #import {margin-top: 10px;}
 .iframed #config + #buttons, .iframed #content + #buttons {margin: 12px 10px}
 .iframed #messages {top: -4px}
+
+@keyframes fade-in {from {opacity: 0} to {opacity: 1}}
 
 /* responsive layout */
 @media screen and (max-width: 1000px) {
