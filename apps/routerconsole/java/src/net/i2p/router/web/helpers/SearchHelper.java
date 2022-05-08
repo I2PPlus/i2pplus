@@ -30,13 +30,15 @@ public class SearchHelper extends HelperBase {
         "ahmia.i2p"                + S +     "http:/ahmia.i2p/search/?q=%s" + SOURCE + S +
         "ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + SOURCE + S +
         "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + SOURCE + S +
+        "i2psearch.i2p"            + S +     "http://i2psearch.i2p/search?q=%s" + SOURCE + S +
         "imperial.i2p"             + S +     "http://imperial.i2p/search/?q=%s" + SOURCE + S +
         "isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + SOURCE + S +
         "legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + SOURCE + S +
+        "nitter.skank.i2p"         + S +     "hhttp://nitter.skank.i2p/search?f=tweets&q=%s" + SOURCE + S +
         "notbob.i2p"               + S +     "http://notbob.i2p/cgi-bin/defcon.cgi?search=%s" + SOURCE + S +
+        "raklet.i2p"               + S +     "http://ransack.i2p/search?page=1&query=%s" + SOURCE + S +
         "ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + SOURCE + S +
         "tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + SOURCE + S +
-        "trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + SOURCE + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + SOURCE + S +
         "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + SOURCE + S +
         "yacy.idk.i2p"             + S +     "http://yacy.idk.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + SOURCE + S +
@@ -48,6 +50,7 @@ public class SearchHelper extends HelperBase {
         //"simple-search.i2p"        + S +     "http://simple-search.i2p/search.sh?search=%s" + SOURCE + S +
         //"sprongle.i2p"             + S +     "http://sprongle.i2p/sprongle.php?q=%s" + SOURCE + S +
         //"torrentfinder.i2p"        + S +     "http://torrentfinder.i2p/?searchq=%s" + SOURCE + S +
+        //"trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + SOURCE + S +
         "";
 
     public void setEngine(String s) {
