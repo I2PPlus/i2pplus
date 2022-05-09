@@ -940,7 +940,7 @@ public class NTCPConnection implements Closeable {
             _sender.encryptWithAd(null, tmp, 0, enc, 2, payloadlen);
         } catch (GeneralSecurityException gse) {
             // TODO anything else?
-            _log.error("data enc", gse);
+            _log.error("Data encryption error", gse);
             return;
         }
         // siphash ^ len
