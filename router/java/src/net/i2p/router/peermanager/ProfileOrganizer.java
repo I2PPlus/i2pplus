@@ -218,7 +218,7 @@ public class ProfileOrganizer {
      * @since 0.9.47
      */
     PeerProfile getOrCreateProfileNonblocking(Hash peer) {
-        if (peer.equals(_us)) {
+        if (peer != null && peer.equals(_us)) {
             if (_log.shouldDebug())
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;

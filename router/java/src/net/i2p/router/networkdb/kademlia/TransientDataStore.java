@@ -90,7 +90,10 @@ class TransientDataStore implements DataStore {
     }
 
     public DatabaseEntry get(Hash key) {
-        return _data.get(key);
+        if (key != null)
+            return _data.get(key);
+        else
+            return null;
     }
 
     public boolean isKnown(Hash key) {
