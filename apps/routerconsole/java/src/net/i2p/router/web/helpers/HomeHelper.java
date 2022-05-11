@@ -156,6 +156,7 @@ public class HomeHelper extends HelperBase {
         "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "onionsearch.svg" + S +
 
 // wikis & reference
+        "ddosecrets.i2p" + S + _x("Enabling the free transmission of data in the public interest") + S + "http://ddosecrets.i2p/" + S + I + "wiki.svg" + S +
         "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "books.svg" + S +
         "freehaven.i2p" + S + _x("Selected Papers in Anonymity") + S + "http://freehaven.i2p/" + S + I + "books.svg" + S +
         "hiddenwiki.i2p" + S + _x("Tor .onion site links") + S + "http://hiddenwiki.i2p/" + S + I + "wiki.svg" + S +
