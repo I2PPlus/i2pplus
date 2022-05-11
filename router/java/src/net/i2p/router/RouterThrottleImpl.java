@@ -104,7 +104,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 //        if ( (lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000) ) {
         if ( (lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 3*60*1000) ) {
             if (_log.shouldWarn())
-                _log.warn("Throttling Network Reader -> job lag is " + lag + "ms");
+                _log.warn("Throttling Network Reader -> Job lag is " + lag + "ms");
             _context.statManager().addRateData("router.throttleNetworkCause", lag);
             return false;
         } else {
@@ -118,7 +118,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         long lag = _context.jobQueue().getMaxLag();
         if (lag > JOB_LAG_LIMIT_NETDB) {
             if (_log.shouldDebug())
-                _log.debug("Refusing NetDb Lookup request -> job lag is " + lag + "ms");
+                _log.debug("Refusing NetDb Lookup request -> Job lag is " + lag + "ms");
             _context.statManager().addRateData("router.throttleNetDbCause", lag);
             return false;
         } else {
