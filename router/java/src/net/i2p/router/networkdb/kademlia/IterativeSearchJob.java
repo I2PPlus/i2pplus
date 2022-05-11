@@ -516,7 +516,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                           "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
                           "; Direct? " + isDirect + "; Reply via client tunnel? " + isClientReplyTunnel);
             }
-            _sentTime.put(peer, Long.valueOf(now));
+            if (peer != null)
+                _sentTime.put(peer, Long.valueOf(now));
 
             EncType type = ri != null ? ri.getIdentity().getPublicKey().getType() : null;
             boolean encryptElG = ctx.getProperty(PROP_ENCRYPT_RI, DEFAULT_ENCRYPT_RI);

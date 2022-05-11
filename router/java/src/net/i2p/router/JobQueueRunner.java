@@ -114,7 +114,8 @@ class JobQueueRunner extends I2PThread {
     private void runCurrentJob() {
         try {
             _lastBegin = _context.clock().now();
-            _currentJob.runJob();
+            if (_currentJob != null)
+                _currentJob.runJob();
         } catch (OutOfMemoryError oom) {
             try {
                 if (SystemVersion.isAndroid())
