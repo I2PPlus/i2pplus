@@ -181,7 +181,7 @@ public class ProfileOrganizer {
      * Blocking if a reorganize is happening.
      */
     public PeerProfile getProfile(Hash peer) {
-        if (peer.equals(_us)) {
+        if (peer != null && peer.equals(_us)) {
             if (_log.shouldDebug())
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
@@ -198,7 +198,7 @@ public class ProfileOrganizer {
      * @since 0.8.12
      */
     public PeerProfile getProfileNonblocking(Hash peer) {
-        if (peer.equals(_us)) {
+        if (peer != null && peer.equals(_us)) {
             if (_log.shouldDebug())
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
@@ -303,7 +303,7 @@ public class ProfileOrganizer {
         PeerProfile prof = getProfile(peer);
         boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
 
-        if (peer.equals(_us)) {
+        if (peer != null && peer.equals(_us)) {
             if (_log.shouldDebug())
                 _log.debug("Added our own profile to Profile Manager");
             return null;

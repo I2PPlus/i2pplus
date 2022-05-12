@@ -716,7 +716,7 @@ td.peerCount {padding-left: 0; padding-right: 5px; width: 1%; white-space: nowra
 td.peerCount b {padding: 4px 3px; min-width: 80px; display: inline-block; text-align: center; position: relative; line-height: 1; font-size: 95%; text-shadow: 0 1px 1px #101; border-radius: 2px; background: #535}
 td.peerCount b::before {width: 0; height: 0; position: absolute; top: calc(50% - 5px); left: -10px; border-width: 5px; border-style: solid; border-color: transparent #535 transparent transparent; content: ""}
 td.peerCount b a:not(:hover):not(:focus), td.peerCount b a:not(:hover):not(:focus):visited {color: #d0d; text-shadow: 0 1px 1px #000}
-.inactive.downloading td.peerCount b a:not(:hover):not(:focus), .inactive.downloading td.peerCount b a:not(:hover):not(:focus):visited {color: #900; text-shadow: 0 1px 1px #990}
+.inactive.downloading .peerCount b a:not(:hover):not(:focus), .inactive.downloading td.peerCount b a:not(:hover):not(:focus):visited {color: #900; text-shadow: 0 1px 1px #990}
 .active.seeding.complete .peerCount b {background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px)}
 .active.seeding.complete .peerCount b::before {border-color: transparent #937 transparent transparent}
 .active.downloading .peerCount b {background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px)}
@@ -727,16 +727,16 @@ td.peerCount b a:not(:hover):not(:focus), td.peerCount b a:not(:hover):not(:focu
 .stopped.complete .peerCount b::before {border-color: transparent #28f transparent transparent}
 .nopeers.incomplete .peerCount b {text-shadow: 0 1px 1px #bbb; background: #aaa}
 .nopeers.incomplete .peerCount b::before {border-color: transparent #aaa transparent transparent}
-.stopped.incomplete .peerCount b, .inactive.neterror .peerCount b {text-shadow: 0 1px 1px #888; background: #900}
+.stopped.incomplete .peerCount b, .inactive.neterror .peerCount b {color: #ccc; text-shadow: 0 1px 1px #000; background: #900}
 .stopped.incomplete .peerCount b::before, .inactive.neterror .peerCount b::before {border-color: transparent #900 transparent transparent}
 td.peerCount b .left, td.peerCount b .right {margin: 0 1px; padding: 2px 3px 1px; min-width: 26px; display: inline-block; text-align: center; border-radius: 1px; box-shadow: 0 0 0 1px rgba(16,0,16,.5), inset 2px 2px 2px rgba(0,0,0,.3); background: linear-gradient(180deg,rgba(32,0,32,.3), rgba(16,0,16,.3)); opacity: 1}
 td.peerCount b a:hover .left, td.peerCount b a:hover .right {box-shadow: rgba(255,96,0,.5), inset 2px 2px 2px rgba(0,0,0,.3); background: linear-gradient(180deg,rgba(32,16,32,.9), rgba(64,16,64,.9))}
-.inactive td.peerCount b a:hover, .inactive td.peerCount b a:hover .left, td.peerCount b a:hover .right {color: #fff}
-.inactive td.peerCount b:hover a .left, .inactive td.peerCount b:hover a .right {box-shadow: inset 0 0 0 1px rgba(255,255,0,.5), inset 2px 2px 2px rgba(0,0,0,.3); background: linear-gradient(180deg,rgba(128,128,0,.9), rgba(192,192,0,.9))}
+.inactive .peerCount b a:hover, .inactive td.peerCount b a:hover .left, td.peerCount b a:hover .right {color: #fff}
+.inactive .peerCount b:hover a .left, .inactive td.peerCount b:hover a .right {box-shadow: inset 0 0 0 1px rgba(255,255,0,.5), inset 2px 2px 2px rgba(0,0,0,.3); background: linear-gradient(180deg,rgba(128,128,0,.9), rgba(192,192,0,.9))}
 td.peerCount b:not(:empty) {color: #aaa}
-.nopeers td.peerCount b {content: "‒"; color: #000}
+.nopeers .peerCount b {content: "‒"; color: #000}
 #torrents td.peerCount b a {color: #ccc}
-td.peerCount b a:hover, td.peerCount b a:focus, td.peerCount b a:active {color: #fff}
+#torrents td.peerCount b:hover a, #torrents td.peerCount b:hover a span, #torrents td.peerCount b a:focus span, #torrents td.peerCount b a:active span {color: #fff}
 
  /* action buttons */
 td.torrentAction input {margin-top: 1px}
