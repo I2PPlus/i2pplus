@@ -120,7 +120,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default _maxConcurrent
      */
-    private static final int MAX_CONCURRENT = 1;
+//    private static final int MAX_CONCURRENT = 1;
+    private static final int MAX_CONCURRENT = 2;
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
