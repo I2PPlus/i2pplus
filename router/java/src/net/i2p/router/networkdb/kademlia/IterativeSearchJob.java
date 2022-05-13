@@ -298,9 +298,10 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
 //        if (_expiration - 500 < now)  {
-        if (_expiration - 1000 < now)  {
+        if (_expiration - 3000 < now)  {
             // not enough time left to bother
-            return;
+//            return;
+            _expiration = 3000;
         }
         while (true) {
             Hash peer = null;
@@ -748,7 +749,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (_log.shouldInfo()) {
             long timeRemaining = _expiration - getContext().clock().now();
             _log.info("[Job " + getJobId() + "] IterativeSearch for "  + (_isLease ? "LeaseSet " : "Router") + " [" + _key.toBase64().substring(0,6) + "] failed" +
-                      "\n* Peers queried: " + tries + "; Time taken: " + (time / 1000) + "s (" + (timeRemaining / 1000) + "s remaining)");
+                      "\n* Peers queried: " + tries + "; Time taken: " + time + "ms (" + timeRemaining + "ms remaining)");
         }
         if (tries > 0) {
             // don't bias the stats with immediate fails
@@ -787,7 +788,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo())
             _log.info("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") + " [" + _key.toBase64().substring(0,6) + "] succeeded" +
-                      "\n* Peers queried: " + tries + "; Time taken: " + (time / 1000) + "s");
+                      "\n* Peers queried: " + tries + "; Time taken: " + time + "ms");
         getContext().statManager().addRateData("netDb.successTime", time);
         getContext().statManager().addRateData("netDb.successRetries", tries - 1);
         for (Job j : _onFind) {
