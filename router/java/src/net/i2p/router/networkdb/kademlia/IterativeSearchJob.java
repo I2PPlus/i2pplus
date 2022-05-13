@@ -632,11 +632,19 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (isNewFail) {
             if (timedOut) {
                 getContext().profileManager().dbLookupFailed(peer);
-                if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");
+                if (_log.shouldInfo()) {
+                    if (peer != null)
+                        _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");
+                    else
+                        _log.info("[Job " + getJobId() + "] IterativeSearch for unknown Router timed out");
+                }
             } else {
-                if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] failed");
+                if (_log.shouldInfo()) {
+                    if (peer != null)
+                        _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] failed");
+                    else
+                        _log.info("[Job " + getJobId() + "] IterativeSearch for unknown Router failed");
+                }
             }
         }
         retry();
