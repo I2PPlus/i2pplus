@@ -296,17 +296,17 @@ h4 {margin: 5px 0 10px; padding: 4px 6px; word-spacing: .1em; letter-spacing: .0
 
 /* news */
 #news {padding: 3px 15px 5px}
-.news#news {margin: -12px 0 5px 214px; padding: 5px 15px 10px; min-width: 546px; line-height: 1.4; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: 1px solid var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--bevel), inset 0 0 0 2px rgba(255,255,255,.2)}
+.news#news {margin: -12px 0 5px 214px; padding: 5px 15px 10px; min-width: 546px; line-height: 1.4; position: relative; z-index: 10; text-align: right; border: 1px solid var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--bevel), inset 0 0 0 2px rgba(255,255,255,.2)}
 .news hr {display: none; opacity: .6; background: #339}
 .newsentry {box-shadow: 0 0 1px #ccc}
 .news#news .newsentry:first-child {margin-top: -2px}
 #news .newsentry:last-child {margin-bottom: -5px}
-.newscontent {margin: 0 0 14px; padding: 10px 15px; border: 1px solid var(--border_inner); border-radius: 0 0 2px 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(250,250,255,.3), rgba(236,236,255,.6)), repeating-linear-gradient(135deg, rgba(255,255,255,.3) 2px, rgba(240, 240, 255, .3) 3px, rgba(236,236,255,.3) 4px)}
-.newscontent p {margin: 0; padding: 0; font-size: 9.3pt; text-align: justify; line-height: 1.2; text-shadow: 0 0 1px #fff}
+.newscontent {margin: 0 0 14px; padding: 12px 18px 15px; border: 1px solid var(--border_inner); border-radius: 0 0 2px 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(250,250,255,.3), rgba(236,236,255,.6)), repeating-linear-gradient(135deg, rgba(255,255,255,.3) 2px, rgba(240, 240, 255, .3) 3px, rgba(236,236,255,.3) 4px)}
+.newscontent p {margin: 0; padding: 0; font-size: 9.3pt; text-align: justify; line-height: 1.4; text-shadow: 0 0 1px #fff}
 .newscontent p:nth-child(n+2) {margin-top: 8px}
 .newscontent hr {margin: 10px 0 5px; height: 1px; color: #225; border: 0 dotted #225; background: #225}
 .newsentry + hr + i {margin-right: 8px}
-#newsStatus, #newsDisplay {display: inline-block; color: var(--ink_light)}
+#newsStatus, #newsDisplay {display: inline-block; font-size: 90%; color: var(--ink_light)}
 #newsStatus, .news #newsDisplay {padding-top: 6px; padding-bottom: 3px}
 #newsDisplay, #graphopts {color: transparent}
 #newsDisplay a, #graphopts a, #routerinfo a, #fullhistory a, #routerinformation tr:nth-child(n+2) a:not(#revision), .graphstat {margin-left: -3px; padding: 2px 10px; border: 1px solid var(--a); border-radius: 15px; background: #f8f8ff}
