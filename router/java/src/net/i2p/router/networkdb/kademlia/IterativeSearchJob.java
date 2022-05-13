@@ -482,13 +482,13 @@ public class IterativeSearchJob extends FloodSearchJob {
             // If we don't, the OutboundMessageDistributor ends up logging erors for
             // not being able to send to the floodfill, if we don't have an older netdb entry.
             if (outTunnel != null && outTunnel.getLength() <= 1) {
-                if (peer.equals(_key)) {
+                if (peer != null && peer.equals(_key)) {
                     failed(peer, false);
                     if (_log.shouldWarn())
                         _log.warn("[Job " + getJobId() + "] Not doing zero-hop self-lookup of [" + peer.toBase64().substring(0,6) + "]");
                     return;
                 }
-                if (_facade.lookupLocallyWithoutValidation(peer) == null) {
+                if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
                     failed(peer, false);
                     if (_log.shouldWarn())
                         _log.warn("[Job " + getJobId() + "] Not doing zero-hop lookup to unknown [" + peer.toBase64().substring(0,6) + "]");
