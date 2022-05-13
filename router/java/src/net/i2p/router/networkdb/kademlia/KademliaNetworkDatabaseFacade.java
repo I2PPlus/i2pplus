@@ -786,7 +786,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
             }
 
-        } else if (_context.banlist().isBanlistedForever(key)) {
+        } else if (key != null && _context.banlist().isBanlistedForever(key)) {
             if (_log.shouldWarn())
 //                _log.warn("Not searching for blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
                 _log.warn("Deleted blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
@@ -798,7 +798,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 //                _log.info("Not searching for negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
                 _log.info("Deleted RouterInfo [" + key.toBase64().substring(0,6) + "] -> lookup failed");
                 _context.jobQueue().addJob(onFailedLookupJob);
-        } else if (isNegativeCached(key)) {
+        } else if (key != null && isNegativeCached(key)) {
             _ds.remove(key);
             _kb.remove(key);
             if (_log.shouldInfo())
