@@ -179,7 +179,7 @@ class OutboundEstablishState {
      *
      *  @since 0.9.54
      */
-    public OutboundEstablishState(RouterContext ctx, RemoteHostId claimedAddress,
+    protected OutboundEstablishState(RouterContext ctx, RemoteHostId claimedAddress,
                                   RemoteHostId remoteHostId,
                                   RouterIdentity remotePeer,
                                   boolean needIntroduction,
