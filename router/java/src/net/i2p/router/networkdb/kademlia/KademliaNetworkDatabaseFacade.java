@@ -1278,7 +1278,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         adjustedExpiration = ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !routerInfo.isCurrent(adjustedExpiration)) {
-            long age = _context.clock().now() - routerInfo.getPublished();
+            long age = now - routerInfo.getPublished();
             int existing = _kb.size();
             if (existing >= MIN_REMAINING_ROUTERS) {
                 if (_log.shouldInfo())
@@ -1292,7 +1292,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR) {
-            long age = routerInfo.getPublished() - _context.clock().now();
+            long age = routerInfo.getPublished() - now;
             if (_log.shouldInfo())
                 _log.info("Peer [" + routerId + "] published their RouterInfo in the future\n* Publish date: "
                           + new Date(routerInfo.getPublished()), new Exception());
@@ -1323,7 +1323,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (expireRI != null && !us.equals(routerInfo.getIdentity().getHash())) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
-            long age = _context.clock().now() - routerInfo.getPublished();
+            long age = now - routerInfo.getPublished();
                 return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
         }
         } else {
