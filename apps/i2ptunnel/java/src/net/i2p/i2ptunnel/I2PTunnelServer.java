@@ -674,6 +674,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 } catch (InterruptedException ie) {}
                 // This should be the same as before, but we have to call getServerSocket()
                 // so sockMgr will call ConnectionManager.setAllowIncomingConnections(true) again
+                _log.logAlways(Log.WARN, "Reconnecting to router after restart");
                 i2pss = sockMgr.getServerSocket();
             } catch (I2PException ipe) {
                 String s = "Error accepting server socket connection - KILLING THE TUNNEL SERVER!";
