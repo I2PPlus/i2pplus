@@ -68,86 +68,88 @@ span.location {word-spacing: normal; letter-spacing: normal; text-transform: non
 #subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {margin: -8px -5px -6px; padding: 9px 5px 8px 30px}
 #dtls .headline h3 {margin-bottom: 3px}
 
-#content {margin: -1px 0 0; padding: 0 15px; border: 1px solid #8d8daa; background: #fafaff}
-.iframed #content {padding: 0; overflow: hidden; border: none; background: none}
-form[action="subscriptions"] #content {margin-top: 1px}
-#content + #buttons {margin: -1px 0 10px; border: 1px solid #8d8daa; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff}
-#content h3 {padding: 5px 8px 5px 34px; letter-spacing: 0; text-transform: none; border: 1px solid #8d8daa; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px #ccc; background: var(--question) no-repeat 8px center, linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%); background-size: 20px, 100%, 100%; background-blend-mode: luminosity, normal, normal}
-.iframed #content h3 {margin-top: 3px}
-#content p {margin-left: 15px; margin-right: 15px; line-height: 130%; font-size: 110%}
 #add, div#import {margin-top: 4px; padding: 0 15px; border: 1px solid #8d8daa; background: #fafaff}
-#add {margin-top: -11px}
-.iframed #add {margin: 12px 0 10px}
-.iframed #import {margin: 0 0 18px}
 #add h3, #import h3 {margin: 0 -15px; padding: 5px 10px; border-bottom: 1px solid #8d8daa}
+#add input[type=text], #import input[type="file"] {width: 100%}
+#add {margin-top: -11px}
 #add table, #import table {margin: 5px 0; width: 100%}
 #add table td:first-child, #import table td:first-child {width: 100px; white-space: nowrap; text-align: right}
 #add td, #import td {padding: 3px}
-#add input[type=text], #import input[type="file"] {width: 100%}
-input::placeholder {font-style: italic}
-input:focus::placeholder {opacity: 0}
+#content + #buttons {margin: -1px 0 10px; border: 1px solid #8d8daa; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff}
+#content h3 {padding: 5px 8px 5px 34px; letter-spacing: 0; text-transform: none; border: 1px solid #8d8daa; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px #ccc; background: var(--question) no-repeat 8px center, linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%); background-size: 20px, 100%, 100%; background-blend-mode: luminosity, normal, normal}
+#content {margin: -1px 0 0; padding: 0 15px; border: 1px solid #8d8daa; background: #fafaff}
+#content p {margin-left: 15px; margin-right: 15px; line-height: 130%; font-size: 110%}
 div#add p.buttons, div#import p.buttons {margin: 0 -16px -6px; border: 1px solid #8d8daa; background: linear-gradient(180deg,#fff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff}
-.iframed #add p.buttons {margin-bottom: 0; border-bottom: none}
-div.help {margin: -11px 0 0; padding: 0 15px; border: 1px solid #8d8daa; background: linear-gradient(135deg, #fafaff, #f8f8ff)}
-.iframed div.help {border-radius: 0 0 2px 2px}
-.help#helpsubs {padding: 0 15px 0 45px; font-size: 10pt; background: var(--infohelp) no-repeat 10px center / 26px, linear-gradient(135deg, #fafaff, #f8f8ff)}
 div.help h3, #add h3, #import h3 {margin: -1px -16px 0; padding: 5px 10px; border: 1px solid #8d8daa; background: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%)}
-p#help {margin: 0; padding: 0}
-p, #helpconfig {text-align: justify; font-size: 9pt}
-.iframed #helpconfig, .iframed #helpsubs {margin-top: 10px; margin-bottom: 12px; border-radius: 0; box-shadow: var(--highlight)}
+div.help {margin: -11px 0 0; padding: 0 15px; border: 1px solid #8d8daa; background: linear-gradient(135deg, #fafaff, #f8f8ff)}
+div#messages:empty {display: none}
+div#messages:hover {background: #113 var(--no) no-repeat right 8px top 8px / 12px}
+div#messages {margin: 0 3%; padding: 5px 20px; top: 0; left: 0; right: 0; position: fixed; z-index: 999; line-height: 150%; text-align: center; opacity: .9; border-radius: 0 0 4px 4px; box-shadow: 0 1px 2px rgba(100,100,200,.7); background: #113 var(--no) no-repeat right 8px top 8px / 12px; cursor: crosshair; animation: 2s hide-up 5s ease-out forwards}
+form[action="subscriptions"] #content {margin-top: 1px}
 #helpconfig ul {columns: 2 400px; column-gap: 50px}
 #helpconfig ul li {-webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
-span.addrhlpr {font-size: 9pt}
-#host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {background: linear-gradient(180deg,#fff, #eef)}
-#host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: linear-gradient(180deg,#fff, #eef)}
-#host_list td, #host_details td {box-shadow: var(--highlight)}
-#host_list tr:hover td, #host_details tr:hover td {color: #4f4f63; box-shadow: inset 0 0 0 1px #ffe}
-#host_list td:nth-last-child(n+4), #host_details td:nth-last-child(n+4), #host_details td:first-child {border-right: 1px solid #ddf}
-div#messages {margin: 0 3%; padding: 5px 20px; top: 0; left: 0; right: 0; position: fixed; z-index: 999; line-height: 150%; text-align: center; opacity: .9; border-radius: 0 0 4px 4px; box-shadow: 0 1px 2px rgba(100,100,200,.7); background: var(--no) right 8px top 5px no-repeat #113; background-size: 16px; cursor: crosshair; animation: 2s hide-up 10s ease-out forwards}
-div#messages:hover {background: var(--no) right 8px top 5px no-repeat #113}
+.help#helpsubs {padding: 0 15px 0 45px; font-size: 10pt; background: var(--infohelp) no-repeat 10px center / 26px, linear-gradient(135deg, #fafaff, #f8f8ff)}
+.iframed #add {margin: 12px 0 10px}
+.iframed #add p.buttons {margin-bottom: 0; border-bottom: none}
+.iframed #content h3 {margin-top: 3px}
+.iframed #content {padding: 0; overflow: hidden; border: none; background: none}
+.iframed div.help {border-radius: 0 0 2px 2px}
 .iframed div#messages {border: none}
-div#messages:empty {display: none}
-#messages p {letter-spacing: 2px; font-size: 9pt; color: #ff9; text-shadow: 0 1px 1px #000}
+.iframed #helpconfig, .iframed #helpsubs {margin-top: 10px; margin-bottom: 12px; border-radius: 0; box-shadow: var(--highlight)}
+.iframed #import {margin: 0 0 18px}
+input:focus::placeholder {opacity: 0}
+input::placeholder {font-style: italic}
+#messages p {font-size: 105%; color: #ff9; text-shadow: 0 1px 1px #000}
+p, #helpconfig {text-align: justify; font-size: 9pt}
+p#help {margin: 0; padding: 0}
 p.messages {color: #fff; text-align: center; font-weight: 700}
+span.addrhlpr {font-size: 9pt}
 
-.page {margin: -4px 0; padding: 10px 0; min-width: 700px; font-size: 9pt; border: none; border-radius: 2px}
-#ovrvw .page {margin: 0}
+.book td {padding: 3px; border-top: 1px solid #ddf}
+.book th {padding-left: 3px; text-align: left; font-size: 90%}
+.book tr:first-child td, .book tr.head + .list1 td {border-top: none}
+.book tr:hover td, #host_details tr:hover td {background: rgba(255,255,200,.4)}
+.iframed #content textarea {margin: 0; border: 1px solid #8d8daa}
 .iframed .page {margin: 1px; padding: 10px 10px 0; min-width: 520px; overflow: hidden; background-color: transparent}
+.page {margin: -4px 0; padding: 10px 0; min-width: 700px; font-size: 9pt; border: none; border-radius: 2px}
+table.book {width: 100%}
+textarea[name="config"]:focus, textarea[name="content"]:focus {background: #fff}
+textarea[name="config"], textarea[name="content"], #subsLog pre {margin: auto; padding: 3px 6px; width: 100%; border: 1px solid #8d8daa; border-radius: 0; box-shadow: none; background: #fafaff; filter: none}
+textarea[name="destination"] {width: calc(100% + 10px)}
+textarea, #subsLog pre {padding: 1px 3px; width: 100%; font-family: var(--monospaced); font-size: 9pt; color: #4f4f63; border-radius: 2px; border: var(--border_input); resize: none; scrollbar-color: #a7a7be rgba(255,255,255,.4); will-change: transform}
+tr:hover .destaddress {color: #333}
 #bk.iframed .page {padding-bottom: 18px}
 #bk.iframed #published.page {padding-bottom: 3px}
-textarea, #subsLog pre {padding: 1px 3px; width: 100%; font-family: var(--monospaced); font-size: 9pt; color: #4f4f63; border-radius: 2px; border: var(--border_input); resize: none; scrollbar-color: #a7a7be rgba(255,255,255,.4); will-change: transform}
-#content textarea, #host_details textarea{margin: 0 0 0 -15px; width: 100%; border: none; box-shadow: none; resize: none; filter: none}
-.iframed #content textarea {margin: 0; border: 1px solid #8d8daa}
-textarea[name="config"], textarea[name="content"], #subsLog pre {margin: auto; padding: 3px 6px; width: 100%; border: 1px solid #8d8daa; border-radius: 0; box-shadow: none; background: #fafaff; filter: none}
-#subsLog pre {margin: 0 0 -5px; padding-left: 10px; width: calc(100% - 18px); line-height: 15px; white-space: pre-wrap; box-shadow: inset 0 0 0 1px #fafaff; background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat, linear-gradient(90deg, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px); background-size: auto 160px, 100%}
-#subsLog.iframed pre {margin-bottom: 10px}
-textarea[name="config"]:focus, textarea[name="content"]:focus {background: #fff}
-textarea[name="destination"] {width: calc(100% + 10px)}
-#config + #buttons {margin: -2px 0 10px; border: 1px solid #8d8daa; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff}
-#filter, #search {margin-bottom: -1px; padding: 5px 15px; text-align: center; border: 1px solid #8d8daa; background: #fafaff}
-#search {margin: 1px 0 -2px; padding-top: 4px; position: sticky; top: 40px; z-index: 999}
+#book .head {position: sticky; top: 92px; z-index: 999}
+#bookmessages td:last-child {text-align: right}
+#bookmessages {width: 100%; border: 1px solid #8d8daa}
 #booksearch {padding: 2px 5px 0; vertical-align: middle}
-#filter {margin: -1px 0 11px; padding: 6px; font-weight: 700; text-align: center}
+#config + #buttons {margin: -2px 0 10px; border: 1px solid #8d8daa; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff}
+#content textarea, #host_details textarea{margin: 0 0 0 -15px; width: 100%; border: none; box-shadow: none; resize: none; filter: none}
+
+#filter, #search {margin-bottom: -1px; padding: 5px 15px; text-align: center; border: 1px solid #8d8daa; background: #fafaff}
+#filter {margin: -2px 0 11px; padding: 6px; font-weight: 700; text-align: center}
 #filter a, #filter a:visited, #activefilter {margin: 2px 1px; padding: 4px 8px; min-width: 10px; display: inline-block; text-align: center; text-transform: capitalize; color: #3b6bbf; border: 1px solid #8d8daa; border-radius: 2px; background: #fff; filter: drop-shadow(0 0 1px rgba(220,220,255,.7));}
 #filter a:hover {color: #f60}
 #filter a:active {text-decoration: none; color: #fff; box-shadow: var(--highlight), inset 3px 3px 3px #4f4f63; background: #f60}
-p#filtered {margin-bottom: 16px; padding: 15px 200px 18px 32px; box-shadow: var(--highlight), inset 0 0 2px 1px #ddf; background: var(--filter) no-repeat 8px center / 28px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .5) 2px, #fff 4px), #fff}
-#messages + p, .headline + p {margin: 1px 0 -1px; padding: 10px; border: 1px solid #8d8daa}
-table.book {width: 100%}
-#host_list th.checkbox{width: 16px; background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
-.book th {padding-left: 3px; text-align: left; font-size: 90%}
-.book tr:hover td, #host_details tr:hover td {background: rgba(255,255,200,.4)}
-tr:hover .destaddress {color: #333}
-.book tr:first-child td, .book tr.head + .list1 td {border-top: none}
-.book td {padding: 3px; border-top: 1px solid #ddf}
-#bookmessages {width: 100%; border: 1px solid #8d8daa}
-#bookmessages td:last-child {text-align: right}
-#book .head {position: sticky; top: 92px; z-index: 999}
 
+#messages + p, .headline + p {margin: 1px 0 -1px; padding: 10px; border: 1px solid #8d8daa}
+#ovrvw .page {margin: 0}
+p#filtered {margin-bottom: 16px; padding: 15px 200px 18px 32px; box-shadow: var(--highlight), inset 0 0 2px 1px #ddf; background: var(--filter) no-repeat 8px center / 28px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .5) 2px, #fff 4px), #fff}
+#search {margin: 1px 0 -2px; padding-top: 4px; position: sticky; top: 40px; z-index: 999}
+#subsLog pre {margin: 0 0 -5px; padding-left: 10px; width: calc(100% - 15px); line-height: 15px; white-space: pre-wrap; box-shadow: inset 0 0 0 1px #fafaff; background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat, linear-gradient(90deg, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px); background-size: auto 160px, 100%}
+#subsLog.iframed pre {margin-bottom: 10px}
+
+/* host list */
 #host_list, #host_details {border: 1px solid #8d8daa}
 #host_list .names {width: 30%; white-space: nowrap; padding-left: 5px}
 .names a, .b32link a {width: 100%; display: inline-block}
 .names a[href$=".i2p/"] {max-width: 260px; overflow: hidden; text-overflow: ellipsis}
+#host_list td, #host_details td {box-shadow: var(--highlight)}
+#host_list td:nth-last-child(n+4), #host_details td:nth-last-child(n+4), #host_details td:first-child {border-right: 1px solid #ddf}
+#host_list tr:hover td, #host_details tr:hover td {color: #4f4f63; box-shadow: inset 0 0 0 1px #ffe}
+#host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: linear-gradient(180deg,#fff, #eef)}
+#host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {background: linear-gradient(180deg,#fff, #eef)}
 #host_list .checkbox {width: 1%; white-space: nowrap; font-weight: 700}
 #host_list .b32link, #host_list .helper {padding: 0 5px; width: 8%; white-space: nowrap; text-align: center}
 #host_list td.b32link a, #host_list td.helper a {font-size: 0}
@@ -158,6 +160,7 @@ tr:hover .destaddress {color: #333}
 #host_list .destaddress {padding: 3px; overflow: auto; white-space: nowrap; font-family: var(--monospaced); font-weight: 400; color: #5a5a6f}
 #host_list .destaddress {overflow: hidden; text-overflow: ellipsis}
 #host_list .destaddress:focus {margin-bottom: -2px; padding: 1px 3px 3px; overflow: auto; text-overflow: clip; color: #4f4f63}
+#host_list th.checkbox{width: 16px; background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
 td.destinations {padding: 0; max-width: 50px; border-left: 1px solid #ddf; border-right: 1px solid #ddf}
 td.destinations textarea {height: 28px; box-shadow: none}
 #host_list td:first-child a:last-of-type, #host_list td:nth-child(3) a, td:nth-child(4) a {padding: 4px 0}
@@ -200,21 +203,22 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
 .info img:hover, .info a:focus img {box-shadow: 0 0 0 1px #f60; filter: drop-shadow(0 0 1px #f60)}
 .info a:active img, .info a:focus img {transform: rotate(45deg) scale(0.8); transition: ease all .1s 0s}
 
-.info a[href^="http"], .helper a {width: 100%; display: inline-block}
-.book th {border-bottom: 1px solid #8d8daa}
-.book textarea {padding: 0; margin: 0; resize: none; border: none; border-left: 1px solid #ccccf0; border-right: 1px solid #ccccf0; background: none}
-div#book, #emptybook {margin: -12px 0 -1px; padding: 0 0 60px; background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fff 4px) #fafaff}
-.iframed div#book, .iframed #emptybook {margin-bottom: 10px}
-#emptybook {padding: 0 8px}
-#empty {margin: -1px 0 10px; height: 10px; border: 1px solid #8d8daa; border-bottom: none; background: #fafaff; position: relative; z-index: 10; border-bottom: 1px solid #8d8daa}
-.iframed #empty {margin-bottom: 20px; height: 20px; border: none; border-top: 1px solid #8d8daa; border-bottom: 1px solid #8d8daa}
 p.book {padding: 5px 5px 5px 24px; background: var(--addressbook) no-repeat 2px center / 16px}
-#buttons {padding: 5px; text-align: right; background: #fafaff; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff}
 p.buttons {margin: 0; padding: 0; text-align: right}
 table + p.buttons {padding: 5px}
-#book + #buttons {margin: -61px 0 8px; border: 1px solid #8d8daa}
+.book textarea {padding: 0; margin: 0; resize: none; border: none; border-left: 1px solid #ccccf0; border-right: 1px solid #ccccf0; background: none}
+.book th {border-bottom: 1px solid #8d8daa}
 .iframed #book + #buttons {margin: -71px 0 -2px}
+.iframed div#book, .iframed #emptybook {margin-bottom: 10px}
+.iframed #empty {margin-bottom: 20px; height: 20px; border: none; border-top: 1px solid #8d8daa; border-bottom: 1px solid #8d8daa}
+.info a[href^="http"], .helper a {width: 100%; display: inline-block}
+#book, #emptybook {margin: -12px 0 -1px; padding: 0 0 60px; background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fff 4px) #fafaff}
+#emptybook {padding: 0 8px}
+#empty {margin: -1px 0 10px; height: 10px; border: 1px solid #8d8daa; border-bottom: none; background: #fafaff; position: relative; z-index: 10; border-bottom: 1px solid #8d8daa}
+#buttons {padding: 5px; text-align: right; background: #fafaff; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff}
+#book + #buttons {margin: -61px 0 8px; border: 1px solid #8d8daa}
 #dtls form + #buttons {margin-top: -2px; border: 1px solid #8d8daa}
+
 form[action="export"] {margin: -1px 0}
 input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner, button::-moz-focus-inner{outline: none; border: none}
 input[type=submit], input[type=reset], .fakebutton {margin: 5px 5px 5px 0; padding: 4px 3px; font: 9pt var(--bodyfont); text-decoration: none; color: #4f4f63; border: var(--border_input); border-radius: 2px; box-shadow: var(--btn_shadow); background: var(--btn); filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); cursor: pointer}
@@ -246,7 +250,6 @@ input.search[type=text]:focus {box-shadow: var(--btn_shadow_active)}
 #visualid .fakebutton {padding: 6px 8px 6px 22px; background: var(--go) no-repeat 6px center / 14px, var(--btn)}
 #visualid .fakebutton:hover, #visualid .fakebutton:focus {background: var(--go) no-repeat 6px center / 14px, var(--btn_hover)}
 form[action="addressbook"] table {width: 100%; font-weight: 700}
-#filter {margin-top: -2px}
 
 #helpconfig ul {columns: 1}
 #showing, #paginate {display: inline-block}
@@ -314,7 +317,7 @@ input.search[type="text"] {padding: 4px 8px}
 }
 
 @media screen and (min-width: 1500px) {body, p, td, textarea, input, button, li, a, h4 {font-size: 10pt}
-#content p {font-size: 112%}
+#content p {font-size: 120%}
 code, tt, .destaddress, th {font-size: 9pt}
 input[type=submit], input[type=reset], .fakebutton {font-size: 10pt}
 #navi a.abook, #navi a#configlink, #navi a#overview, #navi a#subs {padding-left: 25px; font-size: 11pt; background-size: 15px, 100%}
