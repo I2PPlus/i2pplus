@@ -57,6 +57,7 @@ class Daemon {
                                               "http://reg.i2p/export/hosts.txt" + "\n" +
                                               "http://skank.i2p/hosts.txt" + "\n" +
                                               "http://notbob.i2p/hosts.txt" + "\n" +
+                                              "http://scanner.linuxfarm.i2p/hosts.txt" + "\n" +
                                               "http://identiguy.i2p/hosts.txt";
     /** @since 0.9.12 */
     static final String OLD_DEFAULT_SUB = "http://www.i2p2.i2p/hosts.txt";
