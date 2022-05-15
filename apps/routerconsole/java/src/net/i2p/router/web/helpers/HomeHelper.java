@@ -163,9 +163,10 @@ public class HomeHelper extends HelperBase {
         "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "wiki.svg" + S +
         "imperial.i2p" + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "books.svg" + S +
         "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "books.svg" + S +
+        _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psychonaut.i2p/" + S + I + "psy.svg" + S +
+        "wikiless.i2p" + S + _x("Alternative Wikipedia front-end focused on privacy") + S + "http://wikiless.i2p/" + S + I + "wiki.svg" + S +
         //"jalibrary.i2p" + S + _x("Books &amp; courses &amp art") + S + "http://jalibrary.i2p/" + S + I + "books.svg" + S +
         //"nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
-        _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psychonaut.i2p/" + S + I + "psy.svg" + S +
         //"tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "books.svg" + S +
 
 // news + blogs

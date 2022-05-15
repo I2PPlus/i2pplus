@@ -298,8 +298,12 @@ public class Banlist {
     }
 
     public boolean isBanlistedForever(Hash peer) {
-        Entry entry = _entries.get(peer);
-        return entry != null && entry.expireOn > _context.clock().now() + 2*24*60*60*1000L;
+        if (peer != null) {
+            Entry entry = _entries.get(peer);
+            return entry != null && entry.expireOn > _context.clock().now() + 2*24*60*60*1000L;
+        } else {
+            return false;
+        }
     }
 
     /** @deprecated moved to router console */

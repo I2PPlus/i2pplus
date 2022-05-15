@@ -124,7 +124,8 @@ class JobQueueRunner extends I2PThread {
                     fireOOM(oom);
             } catch (Throwable t) {}
         } catch (Throwable t) {
-            _log.log(Log.CRIT, "Error processing job [" + _currentJob.getName() + "] on thread " + _id + "\n* " + t, t);
+//            _log.log(Log.CRIT, "Error processing job [" + _currentJob.getName() + "] on thread " + _id + "\n* " + t, t);
+            _log.log(Log.CRIT, "Error processing job [" + _currentJob.getName() + "] on thread " + _id, t);
         }
     }
 }

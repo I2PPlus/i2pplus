@@ -458,26 +458,30 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @return null always
      * @since 0.9.10
      */
-    SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease,
-                     Hash fromLocalDest) {
+    SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) {
         //if (true) return super.search(key, onFindJob, onFailedLookupJob, timeoutMs, isLease);
-        if (key == null) throw new IllegalArgumentException("Searchin' for nothing, eh?");
-        boolean isNew = false;
-        FloodSearchJob searchJob;
-        synchronized (_activeFloodQueries) {
-            searchJob = _activeFloodQueries.get(key);
-            if (searchJob == null) {
-                //if (SearchJob.onlyQueryFloodfillPeers(_context)) {
+//        if (key == null) throw new IllegalArgumentException("Searchin' for nothing, eh?");
+        if (key == null) {
+            if (_log.shouldWarn())
+                _log.warn("Not searching for a null key");
+            return null;
+        } else {
+            boolean isNew = false;
+            FloodSearchJob searchJob;
+            synchronized (_activeFloodQueries) {
+                searchJob = _activeFloodQueries.get(key);
+                if (searchJob == null) {
+                    //if (SearchJob.onlyQueryFloodfillPeers(_context)) {
                     //searchJob = new FloodOnlySearchJob(_context, this, key, onFindJob, onFailedLookupJob, (int)timeoutMs, isLease);
                     searchJob = new IterativeSearchJob(_context, this, key, onFindJob, onFailedLookupJob, (int)timeoutMs,
                                                        isLease, fromLocalDest);
-                //} else {
-                //    searchJob = new FloodSearchJob(_context, this, key, onFindJob, onFailedLookupJob, (int)timeoutMs, isLease);
-                //}
-                _activeFloodQueries.put(key, searchJob);
-                isNew = true;
+                    //} else {
+                    //    searchJob = new FloodSearchJob(_context, this, key, onFindJob, onFailedLookupJob, (int)timeoutMs, isLease);
+                    //}
+                    _activeFloodQueries.put(key, searchJob);
+                    isNew = true;
+                }
             }
-        }
 
         if (isNew) {
             if (_log.shouldDebug())
@@ -491,6 +495,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _context.statManager().addRateData("netDb.lookupDeferred", 1, searchJob.getExpiration()-_context.clock().now());
         }
         return null;
+        }
     }
 
     /**

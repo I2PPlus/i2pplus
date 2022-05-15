@@ -223,7 +223,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
 
 /* tunnel build status */
-.tunnelBuildStatus {color: #393}
+.tunnelBuildStatus {padding: 6px 3px 8px; color: #393}
 .tunnelBuildStatus::before {margin: -3px 0 -1px; width: 16px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 50%; content: ""; transform: scale(.7)}
 .tunnelBuildStatus.accepting::before {background: var(--tunn_ready) no-repeat center center / 15px}
 .tunnelBuildStatus.active::before, .ok, #ntcpconnections td.queue:empty::before {background: var(--tunn_active) no-repeat center center / 15px}
@@ -296,17 +296,17 @@ h4 {margin: 5px 0 10px; padding: 4px 6px; word-spacing: .1em; letter-spacing: .0
 
 /* news */
 #news {padding: 3px 15px 5px}
-.news#news {margin: -12px 0 5px 214px; padding: 5px 15px 10px; min-width: 546px; line-height: 1.4; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: 1px solid var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--bevel), inset 0 0 0 2px rgba(255,255,255,.2)}
+.news#news {margin: -12px 0 5px 214px; padding: 5px 15px 10px; min-width: 546px; line-height: 1.4; position: relative; z-index: 10; text-align: right; border: 1px solid var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--bevel), inset 0 0 0 2px rgba(255,255,255,.2)}
 .news hr {display: none; opacity: .6; background: #339}
 .newsentry {box-shadow: 0 0 1px #ccc}
 .news#news .newsentry:first-child {margin-top: -2px}
 #news .newsentry:last-child {margin-bottom: -5px}
-.newscontent {margin: 0 0 14px; padding: 10px 15px; border: 1px solid var(--border_inner); border-radius: 0 0 2px 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(250,250,255,.3), rgba(236,236,255,.6)), repeating-linear-gradient(135deg, rgba(255,255,255,.3) 2px, rgba(240, 240, 255, .3) 3px, rgba(236,236,255,.3) 4px)}
-.newscontent p {margin: 0; padding: 0; font-size: 9.3pt; text-align: justify; line-height: 1.2; text-shadow: 0 0 1px #fff}
+.newscontent {margin: 0 0 14px; padding: 12px 18px 15px; border: 1px solid var(--border_inner); border-radius: 0 0 2px 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(250,250,255,.3), rgba(236,236,255,.6)), repeating-linear-gradient(135deg, rgba(255,255,255,.3) 2px, rgba(240, 240, 255, .3) 3px, rgba(236,236,255,.3) 4px)}
+.newscontent p {margin: 0; padding: 0; font-size: 9.3pt; text-align: justify; line-height: 1.4; text-shadow: 0 0 1px #fff}
 .newscontent p:nth-child(n+2) {margin-top: 8px}
 .newscontent hr {margin: 10px 0 5px; height: 1px; color: #225; border: 0 dotted #225; background: #225}
 .newsentry + hr + i {margin-right: 8px}
-#newsStatus, #newsDisplay {display: inline-block; color: var(--ink_light)}
+#newsStatus, #newsDisplay {display: inline-block; font-size: 90%; color: var(--ink_light)}
 #newsStatus, .news #newsDisplay {padding-top: 6px; padding-bottom: 3px}
 #newsDisplay, #graphopts {color: transparent}
 #newsDisplay a, #graphopts a, #routerinfo a, #fullhistory a, #routerinformation tr:nth-child(n+2) a:not(#revision), .graphstat {margin-left: -3px; padding: 2px 10px; border: 1px solid var(--a); border-radius: 15px; background: #f8f8ff}
@@ -468,7 +468,7 @@ table[id$="logs"] ul li:last-child {margin-bottom: 10px}
 #routerlogs li:last-child, #criticallogs li:last-child {margin-bottom: -2px}
 #routerlogs tr:first-child td, #wrapperlogs tr:first-child td {border-bottom: 1px solid var(--border_inner)}
 #wrapperlogs, table#routerlogs {margin-bottom: 10px; width: 100%; table-layout: fixed}
-#wrapperlogs {margin-bottom: 5px}
+#wrapperlogs {margin-bottom: 5px; border-bottom-width: 2px}
 #wrapperlogs .nologs {padding: 11px 12px}
 #wrapperlogs tr:last-child td {padding: 0}
 #wrapperlogs pre {margin: 0; padding: 3px 0 0 5px; white-space: pre-wrap; word-wrap: break-word; width: calc(100% - 5px); max-height: 600px; overflow: auto; will-change: transform}
@@ -546,12 +546,14 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #profiles tr:last-
 .applink:hover a:link, .applink:hover a:visited {color: var(--hover)}
 .applink:hover .appicon .extlink::after, .sitemapLink.extlink:hover::after {position: absolute; top: -1px; right: -1px; content: ""; display: inline-block; width: 21px; height: 18px; border: 1px solid #f50; border-radius: 0 2px 0 2px; background: url(images/newtab.png) no-repeat 4.5px center / 12.5px 10px; opacity: .75}
 .applink:hover .applabel, .sitemapLink:hover .sitemapLabel {border-color: var(--hover); background: linear-gradient(180deg,#fff 50%, #ffe8bf 50%, #efd9b3); box-shadow: var(--highlight)}
-.applink:hover img.app, .app:hover img {opacity: 1; filter: drop-shadow(0 0 1px var(--hover)); transition: ease filter .2s}
 .applink:hover, .sitemapLink:hover {border: 1px solid var(--hover); background: #fff; box-shadow: none; cursor: pointer}
 .applink.js:hover::before {padding: 1px 3px 5px; display: inline-block; position: absolute; top: -1px; left: -1px; line-height: 1; border: 1px solid var(--hover); content: "*js"}
-.applink img {padding: 10px 60px 5px; width: auto; height: 32px; max-height: 32px; max-width: 32px; opacity: .9; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-.applink img, .sitemapLink img {animation: zoom .075s linear .5s both; backface-visibility: hidden; will-change: transform}
+.applink img, .sitemapLink img {animation: zoom .075s linear .5s both; backface-visibility: hidden; filter: saturate(.8); will-change: transform}
+.applink img {padding: 10px 60px 5px; width: auto; height: 32px; max-height: 32px; max-width: 32px; opacity: .9}
+.applink:hover img, .app:hover img, .sitemapLink:hover img {opacity: 1; transform: scale(1.1); filter: saturate(1)}
 .applink img:-moz-broken, .sitemapLink img:-moz-broken {background: url(/themes/console/images/plus.svg) no-repeat center center / 32px}
+.sitemapLink img {padding: 10px 10px 6px; height: 32px; width: 32px}
+.applink:active img, .sitemapLink:active img {transform: scale(.9)}
 div.search + .linkcontainer {margin: -15px 0 0}
 
 /* home search */
@@ -588,9 +590,6 @@ div.search + .linkcontainer {margin: -15px 0 0}
 .sitemapLink, .sitemapLabel {width: 180px; min-width: 180px; display: inline-block; text-align: center; font-size: 9pt; border: 1px solid var(--border_inner); border-radius: 0; box-shadow: var(--highlight), inset 0 0 2px 1px #efefff; background: #f8f8ff}
 .en .sitemapLink, .en .sitemapLabel {width: 136px; min-width: 136px}
 .sitemapLink {margin: 0 2px 7px}
-.sitemapLink img {padding: 10px 10px 6px; height: 32px; width: 32px}
-.sitemapLink:hover img {filter: drop-shadow(0 0 1px var(--hover)); transition: ease filter .3s}
-.sitemapLink:active img {transform: scale(0.8)}
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover); color: var(--hover)}
 .sitemapLabel {margin-bottom: -3px; padding: 4px 0; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border: none; border-top: 1px solid var(--border_inner)}
 
@@ -995,17 +994,17 @@ h3#udpcon {margin-top: 7px}
 
 /* peers - sort icons */
 #udpconnections th {vertical-align: top; padding-top: 3px}
-.sortup, .sortdown, .sortupactive, .sortdownactive {margin: 3px 1px 0; padding: 1px 0; width: 16px; height: 12px; display: inline-block; vertical-align: middle; text-align: center; border: var(--border_input); border-radius: 2px; background-size: 9px auto, 100%}
+.sortup, .sortdown, .sortupactive, .sortdownactive {margin: 3px 1px 0; padding: 1px; width: 16px; height: 12px; display: inline-block; vertical-align: middle; text-align: center; border: var(--border_input); border-radius: 2px; background-size: 9px auto, 100%}
 .sortup, .sortdown {box-shadow: var(--highlight), 0 0 1px #ddd; opacity: .75}
-.sortup img, .sortdown img, .sortupactive img, .sortdownactive img {margin: 0; padding: 0; opacity: 0; width: 16px; height: 14px; vertical-align: middle; text-align: center}
-.sortup {background: var(--mv_up) no-repeat center center / 16px 14px, var(--btn)}
-.sortdown {background: var(--mv_down) no-repeat center center / 16px 14px, var(--btn)}
-.sortup:hover {background: var(--mv_up_hover) no-repeat center center, var(--btn_hover); border: 1px solid var(--hover); opacity: 1}
-.sortdown:hover {background: var(--mv_down_hover) no-repeat center center, var(--btn_hover); border: 1px solid var(--hover); opacity: 1}
+.sortup img, .sortdown img, .sortupactive img, .sortdownactive img {margin: 0; padding: 0; opacity: 0; width: 14px; height: 10px; vertical-align: middle; text-align: center}
+.sortup {background: var(--mv_up) no-repeat center center / 12px 10px, var(--btn)}
+.sortdown {background: var(--mv_down) no-repeat center center / 12px 10px, var(--btn)}
+.sortup:hover {background: var(--mv_up_hover) no-repeat center center / 14px 12px, var(--btn_hover); border: 1px solid var(--hover); opacity: 1}
+.sortdown:hover {background: var(--mv_down_hover) no-repeat center center / 14px 12px, var(--btn_hover); border: 1px solid var(--hover); opacity: 1}
 .sortup a:focus, .sortdown a:focus {margin-top: -1px; display: inline-block; border-radius: 2px; box-shadow: var(--highlight); background: rgba(255,102,0,.15)}
-.sortupactive, .sortdownactive {opacity: 1; box-shadow: inset 1px 1px 1px #ccc}
-.sortupactive {background: var(--mv_up_hover) no-repeat center center, #fff}
-.sortdownactive {background: var(--mv_down_hover) no-repeat center center, #fff}
+.sortupactive, .sortdownactive {opacity: 1; box-shadow: var(--btn_shadow_active)}
+.sortupactive {background: var(--mv_up_hover) no-repeat center calc(50% + 1px) / 12px 10px, #fff}
+.sortdownactive {background: var(--mv_down_hover) no-repeat center calc(50% + 1px) / 12px 10px, #fff}
 
 #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn {font-size: 9pt}
 #tunnels th, #peers th {text-align: center; font-size: 90%}

@@ -786,7 +786,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
             }
 
-        } else if (_context.banlist().isBanlistedForever(key)) {
+        } else if (key != null && _context.banlist().isBanlistedForever(key)) {
             if (_log.shouldWarn())
 //                _log.warn("Not searching for blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
                 _log.warn("Deleted blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
@@ -798,7 +798,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 //                _log.info("Not searching for negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
                 _log.info("Deleted RouterInfo [" + key.toBase64().substring(0,6) + "] -> lookup failed");
                 _context.jobQueue().addJob(onFailedLookupJob);
-        } else if (isNegativeCached(key)) {
+        } else if (key != null && isNegativeCached(key)) {
             _ds.remove(key);
             _kb.remove(key);
             if (_log.shouldInfo())
@@ -1278,7 +1278,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         adjustedExpiration = ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !routerInfo.isCurrent(adjustedExpiration)) {
-            long age = _context.clock().now() - routerInfo.getPublished();
+            long age = now - routerInfo.getPublished();
             int existing = _kb.size();
             if (existing >= MIN_REMAINING_ROUTERS) {
                 if (_log.shouldInfo())
@@ -1292,7 +1292,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR) {
-            long age = routerInfo.getPublished() - _context.clock().now();
+            long age = routerInfo.getPublished() - now;
             if (_log.shouldInfo())
                 _log.info("Peer [" + routerId + "] published their RouterInfo in the future\n* Publish date: "
                           + new Date(routerInfo.getPublished()), new Exception());
@@ -1323,7 +1323,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (expireRI != null && !us.equals(routerInfo.getIdentity().getHash())) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
-            long age = _context.clock().now() - routerInfo.getPublished();
+            long age = now - routerInfo.getPublished();
                 return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
         }
         } else {
