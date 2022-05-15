@@ -793,7 +793,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(1).equals(peer)) {
                 if (_log.shouldWarn())
-                    _log.warn("Removing Outbound tunnel as first hop [" + peer.toBase64().substring(0,6) + "] is banlisted" + tun);
+                    _log.warn("Removing Outbound tunnel as first hop [" + peer.toBase64().substring(0,6) + "] is banlisted \n* " + tun);
                 pool.tunnelFailed(tun, peer);
             }
         }
@@ -809,7 +809,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(len - 2).equals(peer)) {
                 if (_log.shouldWarn())
-                    _log.warn("Removing Inbound tunnel as previous hop [" + peer.toBase64().substring(0,6) + "] is banlisted" + tun);
+                    _log.warn("Removing Inbound tunnel as previous hop [" + peer.toBase64().substring(0,6) + "] is banlisted \n* " + tun);
                 pool.tunnelFailed(tun, peer);
             }
         }
