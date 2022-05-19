@@ -13,16 +13,16 @@ package net.i2p.sam;
  *
  * @author human
  */
-class SAMException extends Exception {
+public class SAMException extends Exception {
 
     private static final long serialVersionUID = 1;
 
     public SAMException() {
-    	super();
+        super();
     }
 
     public SAMException(String s) {
-    	super(s);
+        super(s);
     }
 
     /** @since 0.9.14 */
