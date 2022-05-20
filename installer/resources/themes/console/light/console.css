@@ -2250,42 +2250,45 @@ th.options .optbox {vertical-align: sub}
 /* responsive layout */
 @media screen and (max-width: 1499px) {
 body {margin: 4px}
-.sitemapLink, .sitemapLabel, #sitemap .applink, #sitemap .applabel {width: 160px; min-width: 160px; font-size: 8pt}
+#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {padding-top: 8px}
 .en #sitemap .applink img {padding-left: 35px; padding-right: 35px}
 .en .sitemapLink, .en .sitemapLabel, .en #sitemap .applink, .en #sitemap .applabel, .en #sitemap .applink table {width: 120px; min-width: 120px}
-.tunnelBuildStatus {font-size: 90%}
-.tunnels_client th:first-child::after {vertical-align: middle; line-height: 0; letter-spacing: -.25em; font-family: sans-serif; font-size: 12pt; content: "\21E9\21E7"}
-.tunnels_client th:first-child {font-size: 0}
 .expiry ul {margin-left: -4px}
 .infohelp code, .infowarn code {white-space: nowrap}
 .infowarn, .infohelp, #pluginconfigtext {background-size: 24px, 100%}
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {padding: 2px 4px}
 .netdbStats li {margin: 0; min-width: 240px}
+.sitemapLink, .sitemapLabel, #sitemap .applink, #sitemap .applabel {width: 160px; min-width: 160px; font-size: 8pt}
+.statsLongName {margin-bottom: 0}
+.tunnelBuildStatus {font-size: 90%}
+.tunnels_client th:first-child::after {vertical-align: middle; line-height: 0; letter-spacing: -.25em; font-family: sans-serif; font-size: 12pt; content: "\21E9\21E7"}
+.tunnels_client th:first-child {font-size: 0}
+#applinks img, #sitelinks img, #sitemap h3 img {margin: -7px 0 -6px; padding: 8px 0 6px 9px}
 #banlist li {padding-bottom: 0}
 #banlist .routerid img {margin-right: -3px}
 #chooselang, #configbandwidth {margin-top: 1px; margin-bottom: 4px}
 #chooselang img, #configbandwidth img {margin: -9px -5px -12px 20px}
 #clock {font-size: 16pt}
+#config_clients #i2pclientconfig a, #config_bandwidth #bwlimiter .h3navlinks {margin-top: -4px}
 #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -2px}
+#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type="password"] {width: 184px}
 #enablefull label {margin-top: 4px}
-#applinks img, #sitelinks img, #sitemap h3 img {margin: -7px 0 -6px; padding: 8px 0 6px 9px}
+#graphdisplay a {margin-top: -5px}
+#graph_single #graphinfo a {margin-top: -6px}
 #help h2, #help #newuserguide h2 {padding: 9px 8px 7px 34px; font-size: 12pt; background-size: 20px, 100%, 100%, 100%}
 #home h4 a::after {margin: -2px 10px 3px -6px}
+#logs ul li {padding-left: 46px; width: calc(100% - 44px); line-height: 1.4}
+#logs li font[color]::before {display: none}
+#logs li span[class] {margin: 2px 2px 0 -44px; float: left}
 #pluginconfig {margin-top: -14px}
 p#pluginconfigtext {margin-top: 11px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px}
 #sb_internals a, #sb_advanced a #sb_help a {max-width: 200px}
 #sb_tunnelstatus .tunnelBuildStatus::before {margin: -1px 0 0; background-size: 12px}
+#searchbar select {padding: 6px 24px 7px 8px}
 #sitemap .applink img {padding-left: 62px; padding-right: 62px}
 #sitemap h3 img {margin-top: -8px; padding-right: 6px}
 #tunnels .routerid img {margin: -2px 0 0 -2px}
-#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {padding-top: 8px}
-#config_clients #i2pclientconfig a, #config_bandwidth #bwlimiter .h3navlinks {margin-top: -4px}
-#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type="password"] {width: 184px}
-.statsLongName {margin-bottom: 0}
-#graphdisplay a {margin-top: -5px}
-#graph_single #graphinfo a {margin-top: -6px}
-#searchbar select {padding: 6px 24px 7px 8px}
 }
 
 @media screen and (max-width: 1480px) {

@@ -654,6 +654,7 @@ tr:hover .cells, #profiles tr:hover td {box-shadow: none}
 #peers table {margin-bottom: 9px}
 h3[id$="con"] {margin-bottom: -2px; border-radius: 0; padding: 8px 10px; font-size: 10pt; word-spacing: .1em; letter-spacing: .08em; background: linear-gradient(90deg, #000, #001000 70%, #001300 90%); border: var(--border)}
 h3[id="udpcon"] {width: auto}
+#ntcp + #udp {margin-top: -12px}
 #peers #udpconnections .routerid {margin: 2px 0; min-width: 70px}
 #udpconnections td:nth-child(2) img, #ntcpconnections td:nth-child(2) img {padding: 0}
 #udpconnections tr:last-child td, #ntcpconnections tr:last-child td {padding-top: 6px; padding-bottom: 6px}
@@ -1443,7 +1444,7 @@ th code {user-select: all}
 #enablefullstats, #gatherstats {padding: 20px 24px 20px 58px; background: var(--stats) no-repeat 15px center / 28px, var(--msg)}
 #config_family .infohelp {padding: 20px 24px 20px 58px; background: var(--family) no-repeat 15px center / 28px, var(--msg)}
 #consolepass tr:first-child td {padding: 20px 24px 20px 58px; white-space: normal; background: var(--useradd) no-repeat 15px center / 28px, var(--msg)}
-form[action="events"] {padding: 10px 10px 10px 50px; background: var(--logs) no-repeat 15px center; background-size: 28px, var(--msg)}
+form[action="events"] {padding: 10px 10px 10px 50px; background: var(--logs) no-repeat 15px center / 28px, var(--msg)}
 
 th.options, #externali2cp th {padding: 7px 10px}
 .options input[type=checkbox], #i2pupdates .options .optbox {margin: 0 3px 0 0}
