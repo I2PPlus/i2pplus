@@ -97,6 +97,7 @@ h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
 #errmsg {padding: 3px 0 0 18px; display: inline-block; font-size: 13pt; text-transform: none; word-spacing: 0; letter-spacing: 0}
 #stacktrace p, #sysinfo p {text-align: left}
 #stacktrace {margin: 18px 0 38px; padding: 5px 10px 0; border: 1px solid #700; box-shadow: var(--highlight), 0 0 1px 1px #ddf; background: #ffe}
+#error500 #stacktrace {margin-top: 12px}
 #stacktrace p:first-child {font-weight: 700; font-size: 10pt; border-bottom: 1px solid #700; padding-bottom: 10px}
 #stacktrace p:nth-child(2) {padding-left: 15px; margin-bottom: 0; word-break: break-all}
 #error500 #sidebar hr ~ a {padding: 5px 0; display: inline-block; font-size: 9.5pt}
@@ -114,4 +115,4 @@ h3 {text-transform: uppercase; letter-spacing: .1em; background: var(--h3)}
 @media screen and (min-width: 800px) {.warning h3 {margin: -39px -34px 30px -109px}}
 @media screen and (min-width: 1400px) {#jumplinks h4 {font-size: 10.5pt}}
 @media screen and (min-height: 700px) {.warning {margin-bottom: 30px}}
-@media screen and (min-width: 1500px) {#console_404 .sorry{margin-left: 252px}}
+@media screen and (min-width: 1500px) {#console_404 .sorry{margin-left: 252px} #error500 #warning2 {margin: -11px 0 4px 252px} #error500 #stacktrace {margin-top: 0}}
