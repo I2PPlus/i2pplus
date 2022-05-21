@@ -2037,8 +2037,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #config_family .confignav {margin-bottom: 12px}
 #newfamily {margin-top: 14px; margin-bottom: -2px}
 #newfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939; background: #010 var(--tag) no-repeat 10px center; background-size: 28px, 100%, 100%}
-#joinfamily tr:nth-child(3) td {background: #000}
-#joinfamily tr:nth-child(3) td table td {background-color: #010}
+#joinfamily tr:nth-child(3), #joinfamily tr:nth-child(3) td, #joinfamily tr:nth-child(3) td table td {background: none}
 #joinfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939; background: #010 var(--key) no-repeat 10px center; background-size: 28px, 100%, 100%}
 #joinfamily .optionsingle:hover, #joinfamily .optionsingle:hover tr, #joinfamily .optionsingle:hover td, #newfamily .optionsingle:hover, #newfamily .optionsingle:hover tr, #newfamily .optionsingle:hover td {background-color: #020; transition: ease background .1s}
 #joinfamily .infohelp {box-shadow: var(--bevel); background: var(--joinfamily) no-repeat 15px center / 28px, var(--msg)}
@@ -2196,7 +2195,7 @@ a[href^="/netdb"]:hover span {color: var(--hover)}
 #config_peers .optionsave, #refreshsidebar .optionsave {box-shadow: none}
 #refreshsidebar tr:first-child {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030}
 #pluginconfig tr {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #020, inset 0 -1px 1px 1px #020, inset -1px 0 1px 1px #020; background: none; background: var(--row)}
-#plugininstall, #plugininstall2, #reseedconfig tr, #manualreseed tr, #i2pupdates tr, #netconfig tr, #externali2cp tr, #joinfamily tr:last-child, #newfamily tr:last-child {box-shadow: var(--highlight), inset 0 0 1px 1px #040; background: none; /*background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), var(--camotile)*/}
+#plugininstall, #plugininstall2, #reseedconfig tr, #manualreseed tr, #i2pupdates tr, #netconfig tr, #externali2cp tr, #joinfamily tr, #newfamily tr:last-child {box-shadow: var(--highlight), inset 0 0 1px 1px #040; background: none; /*background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), var(--camotile)*/}
 #netconfig td.infohelp, #reseedconfig td.infohelp {box-shadow: var(--highlight), inset 0 0 1px 1px #040; background: #000 var(--infohelp) no-repeat 15px center / 32px}
 #netconfig td.infowarn {background: #000 var(--infowarn) no-repeat 15px center / 32px}
 #routerinformation td:first-child {border-right: var(--border_soft)}
