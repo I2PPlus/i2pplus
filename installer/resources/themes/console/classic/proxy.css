@@ -14,8 +14,8 @@ body::before {width: 0; height: 3px; display: inline-block; position: absolute; 
 
 /* Sidepanel for proxy errors */
 .logo {margin: 0 0 0 20px; padding: 10px 5px 8px; width: 200px; float: left; position: relative; text-align: center; border: 5px solid #bbf; background: #eff1ff}
-.logo img {width: 182px; mix-blend-mode: luminosity}
-.logo img:hover {mix-blend-mode: normal}
+.logo img, #error500 #sidebar img {width: 182px; mix-blend-mode: luminosity}
+.logo img:hover, #error500 #sidebar img:hover {mix-blend-mode: normal}
 .logo hr {margin: 8px -5px 8px; height: 5px; color: #bbf; border: 0 solid #bbf; background: #bbf}
 .logo a {padding: 4px 0; width: 100%; display: inline-block}
 .logo a:nth-child(n+2):active {color: #f60; border-radius: 4px; box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999}
@@ -78,7 +78,8 @@ button[type=submit]:active {color: #555; border: 1px solid #999; box-shadow: ins
 #error500 .sorry {box-shadow: inset 0 0 0 1px #f99}
 .sorry hr {margin: 10px 0; height: 1px; background: #900; opacity: .2}
 .sorry p {padding: 0}
-#warning2 {margin-top: -1px; padding: 0 15px 5px; min-width: 540px; font-weight: 400; color: var(--ink); box-shadow: inset 0 0 0 1px #f99; background: linear-gradient(180deg,rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100%, url(images/bg0.png) repeat scroll 0 0 / 120px}
+#warning2 {margin-top: -1px; padding: 0 15px 5px; min-width: 540px; font-weight: 400; color: var(--ink); box-shadow: inset 0 0 0 1px #f99; background: linear-gradient(180deg,rgba(255, 255, 255, .8), rgba(255, 255, 255, .6)) repeat scroll 0 0 / 100%, url(images/bg0.png) repeat scroll 0 0 / 120px}
+#error500 #warning2 {margin-top: 0; padding-top: 6px}
 #warning2 h3 {margin: -1px -16px 15px; padding: 8px 10px; color: var(--ink); box-shadow: inset 0 0 0 1px #f99}
 #warning2 b {margin-right: 3px; min-width: 140px; display: inline-block; text-align: right}
 #warning2 p {margin-left: 10px; margin-right: 10px}
@@ -95,7 +96,7 @@ button[type=submit]:active {color: #555; border: 1px solid #999; box-shadow: ins
 @media screen and (min-width: 1500px) {
 body, p, td, button, input, select {font-size: 10pt}
 #warning {margin-left: 252px}
-#error500 .sb img[src$="i2plogo.png"] {margin: -2px 0 -5px -2px; width: 232px}
+#error500 #sidebar img[src$="i2plogo.png"] {margin: -2px 0 -5px -2px; width: 232px}
 #servletError.iframed .logo {display: none}
 #error500 .sorry {margin-left: 252px}
 #servletError #warning2.sorry, #servletError #warning.warning {margin-right: 20px}
