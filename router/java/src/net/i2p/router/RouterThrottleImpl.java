@@ -54,7 +54,6 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
 
-
     public RouterThrottleImpl(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(RouterThrottleImpl.class);
@@ -66,7 +65,6 @@ public class RouterThrottleImpl implements RouterThrottle {
         _context.statManager().createRateStat("router.throttleTunnelCause", "JobQueue lag when a tunnel request was throttled", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("tunnel.bytesAllocatedAtAccept", "Allocated bytes for participating tunnels when we accepted a request", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelProcessingTime1m", "Message processing time when we throttle a tunnel", "Router [Throttle]", RATES);
- //       _context.statManager().createRateStat("router.throttleTunnelProcessingTime10m", "Time to process a message when we throttle a tunnel (10 minute average)", "Router [Throttle]", new long[] { 10*60*1000, 60*60*1000, 24*60*60*1000 });
         _context.statManager().createRateStat("router.throttleTunnelMaxExceeded", "Participating tunnels when max limit reached", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelProbTooFast", "Participating tunnels beyond previous 1h average when we throttle", "Router [Throttle]", RATES);
         //_context.statManager().createRateStat("router.throttleTunnelProbTestSlow", "How slow are our tunnel tests when our average exceeds the old average and we throttle?", "Router [Throttle]", RATES);
