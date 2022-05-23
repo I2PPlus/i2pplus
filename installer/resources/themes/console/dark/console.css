@@ -1634,8 +1634,8 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 /* family */
 #netconfig th, #config_family th {padding: 10px}
 #config_family th {word-spacing: .1em; letter-spacing: .1em; text-transform: uppercase; background: var(--h1); background-size: 2px, 100%, 100%}
-#newfamily, #leavefamily {margin-bottom: 10px}
-#leavefamily {margin-top: 14px}
+#newfamily {margin-bottom: 10px}
+#leavefamily {margin: 12px 0 -2px}
 #exportfamily tr:nth-child(2) td:first-child {padding: 20px 24px 20px 58px; background: #000 var(--joinfamily) no-repeat 15px center / 28px}
 #leavefamily tr:last-child td:first-child {padding: 20px 24px 20px 58px; background: #000 var(--leavefamily) no-repeat 15px center / 28px}
 
