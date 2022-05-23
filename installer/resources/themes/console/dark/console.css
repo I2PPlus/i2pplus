@@ -370,7 +370,7 @@ input[type=file] {background: none}
 #sidebar .reload[value="restartImmediate"] {padding-left: 24px; background: var(--restart) no-repeat 8px center / 12px, var(--btn)}
 #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus {background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover_radial); color: #f00}
 #sidebar .cancel {text-transform: capitalize}
-#sidebar .stop[value="shutdownImmediate"] {background: var(--shutdown) no-repeat 8px center / 12px, var(--btn)}
+#sidebar .stop[value="shutdownImmediate"] {width: auto; background: var(--shutdown) no-repeat 8px center / 12px, var(--btn)}
 #sidebar .stop[value="shutdownImmediate"]:hover, #sidebar .stop[value="shutdownImmediate"]:focus {background: var(--shutdown_hover) no-repeat 8px center / 12px, var(--btn_hover_radial)}
 #sidebar .stop[value="shutdownImmediate"]:active {background: #f60 var(--shutdown_active) no-repeat 8px center / 12px}
 #sidebar .reload[value="restartImmediate"]:active {color: #ee9; background: #f60 var(--restart_active) no-repeat 8px center / 12px}
