@@ -659,7 +659,7 @@ tfoot .RateDown::after, tfoot .RateUp::after {width: 6px; display: inline-block;
 #commentstoggle input {margin-left: 4px; margin-right: 0; display: inline-block}
 #nameRequired, .commentAuthorName {display: inline-block; vertical-align: middle; line-height: 24px}
 #metacomment {padding: 0; line-height: 1.4; text-align: justify}
-#metacomment div {padding: 4px 8px; max-height: 80px; overflow-y: auto}
+#metacomment div {padding: 4px 8px; overflow-y: auto}
 
 /* comment indicator */
 .snarkFiletype {position: relative; vertical-align: middle}
