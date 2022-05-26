@@ -82,7 +82,8 @@ class SyntheticREDQueue implements BandwidthEstimator {
 
     // As in kernel tcp_westwood.c
     private static final int DECAY_FACTOR = 8;
-    private static final int WESTWOOD_RTT_MIN = 500;
+//    private static final int WESTWOOD_RTT_MIN = 500;
+    private static final int WESTWOOD_RTT_MIN = 50;
     // denominator of time, 1/x seconds of traffic in the queue
     private static final int DEFAULT_LOW_THRESHOLD = 13;
     // denominator of time, 1/x seconds of traffic in the queue
