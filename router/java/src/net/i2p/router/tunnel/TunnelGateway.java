@@ -192,9 +192,9 @@ abstract class TunnelGateway {
     }
 
     protected class DelayedFlush extends SimpleTimer2.TimedEvent {
-    	DelayedFlush() {
+        DelayedFlush() {
             super(_context.simpleTimer2());
-    	}
+        }
 
         public void timeReached() {
             boolean wantRequeue = false;
