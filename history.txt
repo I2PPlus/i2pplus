@@ -1,16 +1,41 @@
-2022-05-19 zzz
- * Pull translations from Transifex
+2022-05-23 I2P+ 1.8.0+ released
 
 2022-05-17 zzz
  * i2psnark: Fix remaining size calculation causing tracker errors
+
+2022-05-15 dr|z3d
+ * SusiDNS: Add scanner.linuxfarm.i2p/hosts.txt to default subscriptions
+
+2022-05-14 dr|z3d
+ * Router:
+   - Increase TunnelGatewayPumper requeue day for slower systems
+   - Increase max search limit for IterativeSearchJo
+
+2022-05-13 dr|z3d
+ * Router:
+   - Don't expire short-lived iterative searches early
+   - Reduce threshold for throttling messages to unconnected routers
+ * Wrapper: Disable shared memory, increase max ram to 512MB (new installs)
 
 2022-05-11 zzz
  * Transport: Fix thrashing of UPnP IPv6 listen sockets
  * Util: Rename modified apache classes (Gitlab ticket #353)
 
+2022-05-09 dr|z3d
+ * Router: Increase max queue size for PriorityBlockingQueue
+
+2022-05-06 dr|z3d
+ * Router: Increase IterativeSearchJob timeout for leasesets
+
 2022-05-02 zzz
  * GeoIP 2022-05-01
  * Tomcat 9.0.62
+
+2022-05-01 dr|z3d
+ * Console: Ensure sidebar minigraph stats overlay updates as per sidebar refresh
+
+2022-04-28 dr|z3d
+ * Console: Add verified status icon for routers with installed family certificates
 
 2022-04-27 zzz
  * SSU2: Peer test updates and fixes
@@ -19,11 +44,24 @@
  * SSU: Publish empty IPv6 address when missing introducers
  * SSU2: Finish peer test implementation
 
+2022-04-19 dr|z3d
+ * Router: Increase buffer for recent tunnel build ids
+
+2022-04-18 dr|z3d
+ * Console: Update advanced config help to reflect current defaults for
+   router.maxTunnelPercentage and router.maxParticipatingTunnels
+
 2022-04-17 zzz
  * More soft restart fixes
 
+2022-04-14 dr|z3d
+ * Console: Increase max share ratio readout to 100,000 (was 10K)
+
 2022-04-14 zzz
  * Startup: Don't set our RI loaded from disk if too old
+
+2022-04-13 dr|z3d
+ * Console: Async image loading for flags/identicons
 
 2022-04-13 zzz
  * Router:
@@ -39,14 +77,47 @@
 2022-04-11 zzz
  * I2CP: Fix external I2CP broken when session ID is 0
 
+2022-04-08 dr|z3d
+ * Console / Webapps: Disable OS high contrast mode if active
+
 2022-04-05 zzz
  * SSU2: Fragmented Session Confirmed
+
+2022-04-03 dr|z3d
+ * Console: Remove embedded logs link on /logs
+ * I2PSnark: Inline form processing to prevent page reloads
+
+2022-04-02 dr|z3d
+ * Router:
+   - Increase max queue length for UDPSender if !isSlow()
+   - Increase max inbound/outbound messages per pump if !isSlow()
+ * Console: Convert checkboxes to sliders on /graphs options
+ * I2PSnark: Reduce short eepget timeout; increase max peers per torrent
+
+2022-04-01 dr|z3d
+ * Router:
+   - Increase build executor loop interval
+   - Tweak min/max eventpumper buffers
+ * I2PSnark:
+   - More syslogging / terminal output for standalone
+   - Try harder before failing unresponsive trackers
+
+2022-03-31 dr|z3d
+ * Proxy: Iconize jump links
+
+2022-03-30 dr|z3d
+ * Router:
+   - Slow down exploration if > 5000 known peers
+   - Reduce netdb router ceiling before slowing down RefreshRoutersJob
 
 2022-03-27 zzz
  * Crypto: Fix CertUtil loading EdDSA certs, check sigs
  * Router: Validate family sig at startup
  * SSU: Increase min pending establish states limit
  * SSU2: Misc. fixes, prep for fragmented RI
+
+2022-03-26 dr|z3d
+ * Console: Sidebar refresh optimizations
 
 2022-03-26 zzz
  * Crypto: Add official EdDSA OIDs to provider
@@ -56,6 +127,10 @@
 2022-03-25 zzz
  * Console: Prevent creating a family that another router is using
 
+2022-03-24 dr|z3d
+ * I2PSnark: Process torrent creation / uploading in situ without
+   requiring page reload and display inline notification
+
 2022-03-23 zzz
  * I2CP: Synch fixes
  * SSU2: Refactor tokens
@@ -63,11 +138,28 @@
 2022-03-22 zzz
  * Router family fixes
 
+2022-03-22 dr|z3d
+ * I2PSnark: Process torrent control inline without page reload
+
+2022-03-21 dr|z3d
+ * Console: Streamline, refactor and optimize sidebar refresh javascript
+
 2022-03-20 zzz
  * NetDB:
    - Refactor family validation
    - Remove duplicate store in FloodOnlyLookupMatchJob
    - Don't store an entry which is older
+
+2022-03-19 dr|z3d
+ * Console/Proxy: Migrate readme and proxy error docs to own folders
+ * Console: Convert checkboxes to slider on /configstats and /configui
+
+2022-03-18 dr|z3d
+ * Console:
+   - Add entries for random pong delay and i2p.streaming.answerPings
+     to advanced help page
+   - Add sidebar notification of imminent update after restart when
+     router shutdown/restart is initiated if update is downloaded
 
 2022-03-18 zzz
  * Console: Fix rare IAE on destination sort
@@ -77,8 +169,23 @@
  * SSU: Peer Test refactor
  * SSU2: Relay and Peer Test WIP
 
+2022-03-17 dr|z3d
+ * Tunnels:
+   - Standardize BuildExecutor rate stat periods
+   - Increase next hop lookup timeout; drop tunnel if peer timeout
+
+2022-03-16 dr|z3d
+ * Logging: Replace all longhand ShouldLog references with shorthand
+ * Router: Bump min v. for tests / usage / persistent storage to 0.9.53
+
+2022-03-15 dr|z3d
+ * Tunnels: Increase loop build time; make values constant not random
+
 2022-03-15 zzz
  * SSU2: Fixes
+
+2022-03-14 dr|z3d
+ * I2PSnark: Russian translation updates courtesy of acetone
 
 2022-03-13 zzz
  * SSU2: Fixes, stubs for relay and peer test (phase 2)
@@ -93,6 +200,11 @@
 2022-03-09 zzz
  * DTG: Add new ExternalMain class for app context use
 
+2022-03-08 dr|z3d
+ * Streaming: make randomPongDelay configurable per tunnel
+   - i2p.streaming.enablePongDelay={true|false} (default false)
+   - i2p.streaming.maxPongDelay={n} (default: random value max 50ms)
+
 2022-03-08 zzz
  * I2NP: Fix TunnelGatewayMessage.calculateWrittenLength()
  * SSU2: Fixes
@@ -101,12 +213,21 @@
  * Console: Improve class selection on /configlogging
  * SSU2: Fixes
 
+2022-03-05 dr|z3d
+ * I2PSnark: Only attempt to load override.css if file exists
+
+2022-03-04 dr|z3d
+ * Reseeding: Increase min required routerinfos for manual/auto reseed
+
 2022-03-04 zzz
  * Console: Add SSU version column to /peers
  * i2psnark: Add js theme preview
  * i2psnark standalone: Add more CLI messages, increase memory
  * NTCP: Fix port selection when SSU disabled
  * Transport: Fix wasUnreachable() for transports with alt style
+
+2022-03-03 dr|z3d
+ * Router: Increase tunnel requests before throttle; log throttle events
 
 2022-03-03 zzz
  * NetDB: Load reseed RI if newer than in-memory
@@ -117,9 +238,15 @@
    Unit tested only, testnet testing to follow
    Data phase retransmissions unimplemented
 
+2022-03-02 dr|z3d
+ * I2PSnark: Add new .sh icon to filetypes
+
 2022-03-01 zzz
  * NetDB: Add new reseeds
  * Util: More efficient detection of connectivity
+
+2022-02-28 dr|z3d
+ * Console: Add spans to sidebar digital readouts to assist alignment
 
 2022-02-27 dr|z3d
  * Router: Mark i2pd routers older than 0.9.53 as unreachable to mitigate

@@ -72,8 +72,11 @@ public class RunStandalone {
             try {
                Thread.sleep(1000);
             } catch (InterruptedException ie) {}
-            UrlLauncher launch = new UrlLauncher(_context, null, new String[] { url } );
-            launch.startup();
+            String p = _context.getProperty("routerconsole.browser");
+            if (!("/bin/false".equals(p) || "NUL".equals(p))) {
+                UrlLauncher launch = new UrlLauncher(_context, null, new String[] { url } );
+                launch.startup();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

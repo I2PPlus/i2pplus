@@ -779,7 +779,7 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 }
 
 @media screen and (max-width: 1199px) {
-.clientid {line-height: 1.8}
+.clientid {padding: 2px 4px 0; line-height: 1.8}
 .configPanel .snarkConfigtitle {font-size: 11pt}
 .dirInfoComplete {display: none}
 .fileStatus img[src*="clock"] {margin-top: 4px}

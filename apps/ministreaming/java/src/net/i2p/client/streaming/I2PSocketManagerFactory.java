@@ -464,11 +464,11 @@ public class I2PSocketManagerFactory {
                     return rv;
                 if (rv != null)
                     st = rv.toString();
-                getLog().logAlways(Log.WARN, "Unsupported Signature Type " + st +
-                                             ", reverting to " + I2PClient.DEFAULT_SIGTYPE);
+                getLog().logAlways(Log.WARN, "Tunnel configuration error: Unsupported Signature Type " + st +
+                                             ", reverting to EdDSA_SHA512_Ed25519");
             }
         }
-        return I2PClient.DEFAULT_SIGTYPE;
+        return SigType.EdDSA_SHA512_Ed25519;
     }
 
     /** @since 0.9.7 */
