@@ -241,7 +241,7 @@ public abstract class SystemVersion {
     public static boolean isSlow() {
         // we don't put the NBI call in the static field,
         // to prevent a circular initialization with NBI.
-        return _isSlow || !NativeBigInteger.isNative() || (getCores() < 4 && !is64Bit()) || getCores() == 1;
+        return _isSlow || !NativeBigInteger.isNative() || (getCores() < 4 && !is64Bit()) || (getCores() == 1 && getMaxMemory() < 384*1024*1024L);
     }
 
     /**
