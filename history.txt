@@ -23,7 +23,6 @@
  * Crypto: Throw checked exception from ElGamal
    so console key import reports the correct error
 
-
 2022-05-23 I2P+ 1.8.0+ released
 
 2022-05-17 zzz
