@@ -117,10 +117,10 @@ public class InfoHelper extends HelperBase {
     }
 
     public boolean isRouterSlow() {
-        if (_context.getBooleanProperty("router.overrideIsSlow") != false && !SystemVersion.isSlow())
-            return false;
-        else
+        if (_context.getBooleanProperty("router.overrideIsSlow") == false || SystemVersion.isSlow())
             return true;
+        else
+            return false;
     }
 
     public String getCoreCount() {
