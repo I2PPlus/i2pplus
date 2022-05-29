@@ -118,9 +118,9 @@ public class InfoHelper extends HelperBase {
 
     public boolean isRouterSlow() {
         if (_context.getBooleanProperty("router.overrideIsSlow") != false && !SystemVersion.isSlow())
-            return true;
-        else
             return false;
+        else
+            return true;
     }
 
     public String getCoreCount() {
@@ -214,9 +214,9 @@ public class InfoHelper extends HelperBase {
         buf.append("<tr><td><b>" + _t("Performance") + ":</b></td><td><b>" + _t("Available CPU Cores") + ":</b> " + getCoreCount() +
                    "&ensp;<b>" + _t("Classified as slow") + ":</b>");
         if (isRouterSlow())
-            buf.append("<span class=\"yes\">" + _t("Yes") + "</span>");
+            buf.append(" <span class=\"yes\">" + _t("Yes") + "</span>");
         else
-            buf.append("<span class=\"no\">" + _t("No") + "</span>");
+            buf.append(" <span class=\"no\">" + _t("No") + "</span>");
         buf.append("</td></tr>\n");
         Boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
         if (isAdvanced) {
