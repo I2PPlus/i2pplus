@@ -5,21 +5,21 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Date;
+import java.util.SortedMap;
 
 import net.i2p.CoreVersion;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.router.RouterVersion;
-import net.i2p.router.web.HelperBase;
-
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.RouterContext;
-import net.i2p.router.transport.udp.UDPTransport;
-import net.i2p.router.web.helpers.ConfigAdvancedHelper;
 
-import java.util.SortedMap;
+import net.i2p.router.RouterContext;
+import net.i2p.router.RouterVersion;
 import net.i2p.router.transport.Transport;
+import net.i2p.router.transport.udp.UDPTransport;
+import net.i2p.router.web.HelperBase;
+import net.i2p.router.web.helpers.ConfigAdvancedHelper;
+import net.i2p.util.SystemVersion;
 
 public class InfoHelper extends HelperBase {
     private boolean _full;
@@ -116,6 +116,17 @@ public class InfoHelper extends HelperBase {
             return "true";
     }
 
+    public boolean isRouterSlow() {
+        if (_context.getBooleanProperty("router.overrideIsSlow") != false && !SystemVersion.isSlow())
+            return true;
+        else
+            return false;
+    }
+
+    public String getCoreCount() {
+        return Integer.toString(SystemVersion.getCores());
+    }
+
     public String bwIn() {
         String in = _context.getProperty("i2np.bandwidth.inboundKBytesPerSecond");
         if (in != null)
@@ -200,6 +211,13 @@ public class InfoHelper extends HelperBase {
                        _t("Shared") + ":</b> " + bwShare() + "% (" + shareBW + "KB/s) &ensp;<a href=\"/config\">" +
                        _t("Configure") + "</a></td></tr>\n");
         }
+        buf.append("<tr><td><b>" + _t("Performance") + ":</b></td><td><b>" + _t("Available CPU Cores") + ":</b> " + getCoreCount() +
+                   "&ensp;<b>" + _t("Classified as slow") + ":</b>");
+        if (isRouterSlow())
+            buf.append("<span class=\"yes\">" + _t("Yes") + "</span>");
+        else
+            buf.append("<span class=\"no\">" + _t("No") + "</span>");
+        buf.append("</td></tr>\n");
         Boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
         if (isAdvanced) {
             buf.append("<tr><td><b>CoDel:</b></td><td><b>" + _t("Target") + ":</b> " + codelTarget() + "ms &ensp;<b>" +
