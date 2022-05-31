@@ -56,6 +56,10 @@ public abstract class SystemVersion {
     private static final boolean _oneDotEleven;
     private static final int _androidSDK;
 
+    /** @since 0.9.55+ */
+    public static final String PROP_OVERRIDE_IS_SLOW = "router.overrideIsSlow";
+    public static final boolean DEFAULT_OVERRIDE_IS_SLOW = false;
+
     static {
         boolean is64 = "64".equals(System.getProperty("sun.arch.data.model")) ||
                        System.getProperty("os.arch").contains("64");
@@ -241,7 +245,8 @@ public abstract class SystemVersion {
     public static boolean isSlow() {
         // we don't put the NBI call in the static field,
         // to prevent a circular initialization with NBI.
-        return _isSlow || !NativeBigInteger.isNative() || (getCores() < 4 && !is64Bit()) || getCores() == 1;
+        return _isSlow || !NativeBigInteger.isNative() || (getCores() < 4 && !is64Bit()) || (getCores() == 1 && getMaxMemory() < 384*1024*1024L)
+                       && !I2PAppContext.getGlobalContext().getBooleanProperty(PROP_OVERRIDE_IS_SLOW);
     }
 
     /**

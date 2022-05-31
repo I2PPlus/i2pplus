@@ -2098,7 +2098,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #routerinformation .h3navlinks a::before {margin: 0 3px 0 -2px; width: 14px; height: 14px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #routerinformation .h3navlinks a:hover::before {background: var(--eye_hover) no-repeat left center / 14px}
 #routerinformation td {padding: 8px}
-#routerinformation td:first-child {width: 1%; min-width: 80px; max-width: 80px; text-align: left}
+#routerinformation td:first-child {width: 1%; min-width: 88px; max-width: 88px; text-align: left}
 #routerinformation tr:nth-child(n+2) a:not(#revision) {display: none}
 #routerinformation table:hover tr:nth-child(n+2) a:not(#revision) {display: inline}
 #routerinformation #upnpstatus {margin: 12px 0 0}
