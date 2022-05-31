@@ -87,7 +87,7 @@
 <tr><th>router.networkDatabase.flat={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]")%></td></tr>
 
-<tr><th>router.overrideIsSlow={true|false}</th></tr>
+<tr><th>router.overrideIsSlow={true|false} <span class="plus">I2P+</span></th></tr>
 <tr><td><%=intl._t("When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:
 <ul>
 <li>Host OS running Android</li>
