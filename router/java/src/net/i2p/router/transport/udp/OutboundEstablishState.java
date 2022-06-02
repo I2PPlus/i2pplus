@@ -539,7 +539,7 @@ class OutboundEstablishState {
             buf.append("Signed session created");
             buf.append("\n* Signature: ").append(Base64.encode(_receivedSignature.getData()));
             buf.append("\n* Signed on: ").append(new Date(_receivedSignedOnTime));
-            buf.append("Alice: ").append(Addresses.toString(_aliceIP, _alicePort));
+            buf.append("\n Alice: ").append(Addresses.toString(_aliceIP, _alicePort));
             buf.append("; Bob: ").append(Addresses.toString(_bobIP, _bobPort));
             buf.append("\n* RelayTag: ").append(_receivedRelayTag);
             if (valid)
