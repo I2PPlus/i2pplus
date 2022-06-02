@@ -203,30 +203,30 @@ button.download.control:active {background: var(--download) no-repeat center cen
 
 /* buttons */
 #sidebar button {margin: 2px; min-width: 87px; background-blend-mode: normal}
-#sidebar .reload, #sidebar .stop {margin-top: 3px; margin-bottom: 3px; padding: 6px 5px; min-width: 92px; text-indent: -99999px; background-size: 16px, 100%; background-position: center center}
-#sidebar .reload, #sidebar .reload[value$="restart"] {padding: 6px 5px; background: var(--restart) no-repeat center center / 14px, var(--btn_sidebar)}
+#sidebar .reload, #sidebar .stop {margin-top: 3px; margin-bottom: 3px; padding: 7px 5px; min-width: 92px; text-indent: -99999px; background-size: 16px, 100%; background-position: center center}
+#sidebar .reload, #sidebar .reload[value$="restart"] {padding: 7px 5px; background: var(--restart) no-repeat center center / 14px, var(--btn_sidebar)}
 #sidebar .reload:hover, #sidebar .reload:focus, #sidebar .reload[value$="restart"]:hover, #sidebar .reload[value$="restart"]:focus {padding: 6px 5px; background: var(--shutdown_hover) no-repeat 37% center / 14px, var(--restart_hover) no-repeat 63% center / 14px, var(--btn_hover)}
-#sidebar .reload:active, #sidebar .reload[value$="restart"]:active {padding: 6px 5px; background: var(--shutdown) no-repeat 37% center / 14px, var(--restart) no-repeat 63% center / 14px, var(--btn_active)}
-#sidebar .stop {padding: 6px 5px; background: var(--shutdown) no-repeat center center / 14px, var(--btn_sidebar)}
-#sidebar .stop:hover, #sidebar .stop:focus {padding: 6px 5px; background: var(--shutdown_hover) no-repeat center center / 14px, var(--btn_hover)}
-#sidebar .stop:active {padding: 6px 5px; background: var(--shutdown) no-repeat center center / 14px, var(--btn_active)}
-#sidebar .cancel {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn_sidebar)}
+#sidebar .reload:active, #sidebar .reload[value$="restart"]:active {padding: 7px 5px; background: var(--shutdown) no-repeat 37% center / 14px, var(--restart) no-repeat 63% center / 14px, var(--btn_active)}
+#sidebar .stop {padding: 7px 5px; background: var(--shutdown) no-repeat center center / 14px, var(--btn_sidebar)}
+#sidebar .stop:hover, #sidebar .stop:focus {padding: 7px 5px; background: var(--shutdown_hover) no-repeat center center / 14px, var(--btn_hover)}
+#sidebar .stop:active {padding: 7px 5px; background: var(--shutdown) no-repeat center center / 14px, var(--btn_active)}
+#sidebar .cancel {padding: 7px 9px 7px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn_sidebar)}
 #sidebar #sb_downloadUnsignedDevUpdate, #sidebar #sb_downloadSignedDevUpdate, #sidebar #sb_downloadReleaseUpdate {padding: 5px 16px 5px 30px; margin: 4px 0 6px; font-size: 110%; border-radius: 15px; background-position: 12px center}
 #sidebar #sb_downloadUnsignedDevUpdate:active, #sidebar #sb_downloadSignedDevUpdate:active, #sidebar #sb_downloadReleaseUpdate:active {color: #7171d1; text-shadow: none; -webkit-text-stroke: 0}
 
 /* Show text on context specific buttons (eg deferred shutdown) */
 #sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"], #sb_manualReseed, #sidebar .cancel {padding: 6px 9px 6px 25px; min-width: 0; text-indent: 0; text-align: left; text-transform: capitalize}
 #sidebar .reload[value="restartImmediate"] {background: var(--restart) no-repeat left 6px center / 12px, var(--btn_sidebar)}
-#sidebar .reload[value="restartImmediate"]:hover {padding: 6px 9px 6px 25px; background: var(--restart_hover) no-repeat left 6px center / 12px, var(--btn_hover)}
-#sidebar .reload[value="restartImmediate"]:focus, #sidebar .reload[value="restartImmediate"]:active {padding: 6px 9px 6px 25px; background: var(--hover) var(--restart_hover) no-repeat left 6px center / 12px}
+#sidebar .reload[value="restartImmediate"]:hover {padding: 7px 9px 7px 25px; background: var(--restart_hover) no-repeat left 6px center / 12px, var(--btn_hover)}
+#sidebar .reload[value="restartImmediate"]:focus, #sidebar .reload[value="restartImmediate"]:active {padding: 7px 9px 7px 25px; background: var(--hover) var(--restart_hover) no-repeat left 6px center / 12px}
 #sidebar .stop[value="shutdownImmediate"] {background: var(--shutdown) no-repeat left 6px center / 12px, var(--btn_sidebar)}
-#sidebar .stop[value="shutdownImmediate"]:hover {padding: 6px 9px 6px 25px; background: #000 var(--shutdown_hover) no-repeat left 6px center / 12px}
-#sidebar .stop[value="shutdownImmediate"]:focus, #sidebar .stop[value="shutdownImmediate"]:active {padding: 6px 9px 6px 25px; background: var(--shutdown_hover) no-repeat left 6px center / 12px}
+#sidebar .stop[value="shutdownImmediate"]:hover {padding: 7px 9px 7px 25px; background: #000 var(--shutdown_hover) no-repeat left 6px center / 12px}
+#sidebar .stop[value="shutdownImmediate"]:focus, #sidebar .stop[value="shutdownImmediate"]:active {padding: 7px 9px 7px 25px; background: var(--shutdown_hover) no-repeat left 6px center / 12px}
 #sb_manualReseed {background: var(--download) no-repeat left 6px center, var(--btn_sidebar); background-size: 14px auto, 100%, 100%, 100%}
-#sb_manualReseed:hover {padding: 6px 9px 6px 25px; background: #000 var(--download_hover) no-repeat left 6px center / 14px}
-#sb_manualReseed:focus, #sb_manualReseed:active {padding: 6px 9px 6px 25px; background: var(--hover) var(--download_hover) no-repeat left 6px center / 14px}
+#sb_manualReseed:hover {padding: 7px 9px 7px 25px; background: #000 var(--download_hover) no-repeat left 6px center / 14px}
+#sb_manualReseed:focus, #sb_manualReseed:active {padding: 7px 9px 7px 25px; background: var(--hover) var(--download_hover) no-repeat left 6px center / 14px}
 #sidebar .download, #sidebar .download:hover, #sidebar .download:focus {min-width: 0; background: var(--download) no-repeat 7px center / 15px}
-#sidebar .download, #sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {padding: 6px 9px 6px 25px; background-size: 15px, 100%; background-position: 7px center}
+#sidebar .download, #sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {padding: 7px 9px 7px 25px; background-size: 15px, 100%; background-position: 7px center}
 #sidebar .download:hover {background: var(--download_hover) no-repeat 7px center / 15px, var(--btn_hover)}
 #sidebar .download:active {background: var(--hover) var(--download) no-repeat 7px center / 15px}
 
