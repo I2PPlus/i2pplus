@@ -952,9 +952,8 @@ class EstablishmentManager {
         int version = state.getVersion();
         if (version == 1) {
             peer = new PeerState(_context, _transport,
-                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), true, state.getRTT());
-            peer.setCurrentCipherKey(state.getCipherKey());
-            peer.setCurrentMACKey(state.getMACKey());
+                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), true, state.getRTT(),
+                                 state.getCipherKey(), state.getMACKey());
             peer.setWeRelayToThemAs(state.getSentRelayTag());
         } else {
             InboundEstablishState2 state2 = (InboundEstablishState2) state;
@@ -1087,9 +1086,8 @@ class EstablishmentManager {
         PeerState peer;
         if (version == 1) {
             peer = new PeerState(_context, _transport,
-                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), false, state.getRTT());
-        peer.setCurrentCipherKey(state.getCipherKey());
-        peer.setCurrentMACKey(state.getMACKey());
+                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), false, state.getRTT(),
+                                 state.getCipherKey(), state.getMACKey());
             int mtu = state.getRemoteAddress().getMTU();
             if (mtu > 0)
                 peer.setHisMTU(mtu);
