@@ -154,7 +154,7 @@ class IntroductionManager {
             _inbound.put(Long.valueOf(id2), peer);
         }
         if (added &&_log.shouldDebug())
-            _log.debug("Adding peer [" + peer.toBase64().substring(0,6) + "]");
+            _log.debug("Adding peer [" + peer.toString().substring(0,6) + "]");
     }
 
     public void remove(PeerState peer) {
@@ -167,7 +167,7 @@ class IntroductionManager {
             _inbound.remove(Long.valueOf(id2));
         }
         if ((id > 0 || id2 > 0) &&_log.shouldDebug())
-            _log.debug("Removing peer [" + peer.toBase64().substring(0,6) + "]");
+            _log.debug("Removing peer [" + peer.toString().substring(0,6) + "]");
     }
 
     /**
@@ -803,7 +803,7 @@ class IntroductionManager {
         if (rcode == SSU2Util.RELAY_ACCEPT) {
             // Send Alice RI and forward data in a Relay Intro to Charlie
             if (_log.shouldInfo())
-                _log.info("Received relay request from " + alice 
+                _log.info("Received relay request from " + alice
                       + " for tag " + tag
                       + " nonce " + nonce
                       + " and relaying with " + charlie);
