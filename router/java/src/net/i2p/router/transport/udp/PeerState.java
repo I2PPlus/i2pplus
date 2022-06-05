@@ -64,12 +64,6 @@ public class PeerState {
      * connection, or null if we are not in the process of rekeying.
      */
     private SessionKey _nextMACKey;
-    /**
-     * The pending AES key for encrypting/decrypting packets if we are
-     * rekeying the connection, or null if we are not in the process
-     * of rekeying.
-     */
-    private SessionKey _nextCipherKey;
 
     /** when were the current cipher and MAC keys established/rekeyed? */
     protected final long _keyEstablishedTime;
@@ -495,9 +489,12 @@ public class PeerState {
      *
      * @return null always, rekeying unimplemented
      */
-    SessionKey getNextCipherKey() { return _nextCipherKey; }
+    SessionKey getNextCipherKey() { return null; }
 
-    /** when were the current cipher and MAC keys established/rekeyed? */
+    /**
+     * When were the current cipher and MAC keys established/rekeyed?
+     * This is the connection uptime.
+     */
     public long getKeyEstablishedTime() { return _keyEstablishedTime; }
 
     /**
