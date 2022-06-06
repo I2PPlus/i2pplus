@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Batching preprocessor that will briefly delay the sending of a message
@@ -65,7 +66,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     //private static final boolean DISABLE_BATCHING = false;
 
     /* not final or private so the test code can adjust */
-    static long DEFAULT_DELAY = 100;
+//    static long DEFAULT_DELAY = 100;
+    static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 50;
     /**
      *  Wait up to this long before sending (flushing) a small tunnel message
      *  Warning - overridden in BatchedRouterPreprocessor
