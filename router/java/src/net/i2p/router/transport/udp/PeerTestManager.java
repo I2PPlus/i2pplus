@@ -1334,6 +1334,7 @@ class PeerTestManager {
                                                                         state.getAliceIntroKey(), false,
                                                                         sendId, rcvId, data);
                 _transport.send(packet);
+                // for now, ignore address block, we could pass it to externalAddressReceived()
                 break;
             }
 
@@ -1352,13 +1353,17 @@ class PeerTestManager {
                 test.setReceiveCharlieTime(now);
                 // use the IP/port from the address block
                 test.setAlicePortFromCharlie(addrBlockPort);
-                try {
-                    InetAddress addr = InetAddress.getByAddress(addrBlockIP);
-                    test.setAliceIPFromCharlie(addr);
-                } catch (UnknownHostException uhe) {
-                    if (_log.shouldWarn())
-                        _log.warn("Charlie @ " + from + " said we were an invalid IP address: " + uhe.getMessage(), uhe);
-                    _context.statManager().addRateData("udp.testBadIP", 1);
+                if (addrBlockIP != null) {
+                    try {
+                        InetAddress addr = InetAddress.getByAddress(addrBlockIP);
+                        test.setAliceIPFromCharlie(addr);
+                    } catch (UnknownHostException uhe) {
+                        if (_log.shouldWarn())
+                            _log.warn("Charlie @ " + from + " said we were an invalid IP address: " + uhe.getMessage(), uhe);
+                        _context.statManager().addRateData("udp.testBadIP", 1);
+                    }
+                } else {
+                    test.setAliceIPFromCharlie(test.getAliceIP());
                 }
                 if (test.getReceiveBobTime() > 0)
                     testComplete();
