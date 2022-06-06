@@ -3171,6 +3171,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         // count as connections, we have to keep the connection to this peer up longer if
         // we are offering introductions.
         return
+            !SystemVersion.isAndroid() &&
             (!_context.router().isHidden()) &&
             (!introducersRequired(ipv6)) &&
             haveCapacity() &&
