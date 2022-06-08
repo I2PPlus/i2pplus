@@ -609,10 +609,11 @@ public class JobQueue {
                                 }
                             }
                                 if (timeToWait < 0)
-                                    timeToWait = 1000;
-                                else if (timeToWait < 10)
-//                                    timeToWait = 10;
+//                                    timeToWait = 1000;
                                     timeToWait = 100;
+                                else if (timeToWait < 10)
+                                    timeToWait = 10;
+                                    //timeToWait = 100;
                                 else if (timeToWait > 10*1000)
                                     timeToWait = 10*1000;
                                 //if (_log.shouldDebug())
