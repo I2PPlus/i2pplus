@@ -615,7 +615,7 @@ public class JobQueue {
                                 timeToWait = 10;
                                 //timeToWait = 100;
                             else if (!SystemVersion.isSlow() && SystemVersion.getCores() >= 8 && timeToWait > 3*1000)
-                                timeToWawit = 3*1000;
+                                timeToWait = 3*1000;
                             else if (!SystemVersion.isSlow() && SystemVersion.getCores() >= 4 && timeToWait > 5*1000)
                                 timeToWait = 5*1000;
                             else if (timeToWait > 10*1000)
