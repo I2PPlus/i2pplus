@@ -385,6 +385,8 @@ class PacketHandler {
                         PeerState state = null;
                         int newPort = remoteHost.getPort();
                         for (PeerState ps : peers) {
+                            if (ps.getVersion() > 1)
+                                continue;
                             boolean valid = false;
                             if (_log.shouldWarn()) {
                                 long now = _context.clock().now();
