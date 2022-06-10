@@ -505,8 +505,8 @@ class IntroductionManager {
         for (PeerState cur : _inbound.values()) {
             if (cur.getIntroducerTime() > pingCutoff &&
                 cur.getLastSendOrPingTime() < inactivityCutoff) {
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("Pinging introducer: " + cur);
+                if (_log.shouldDebug())
+                    _log.debug("Pinging introducer: " + cur);
                 cur.setLastPingTime(now);
                 UDPPacket ping;
                 if (cur.getVersion() == 2)
@@ -581,8 +581,8 @@ class IntroductionManager {
             return;
         }
 
-        if (_log.shouldInfo())
-            _log.info("Received RelayIntro from " + bob + " for: " + Addresses.toString(ip, port));
+        if (_log.shouldDebug())
+            _log.debug("Received RelayIntro from " + bob + " for: " + Addresses.toString(ip, port));
 
         InetAddress to = null;
         try {
@@ -719,14 +719,14 @@ class IntroductionManager {
 
         PeerState charlie = get(tag);
         if (charlie == null) {
-            if (_log.shouldInfo())
-                _log.info("Received RelayRequest from: " + alice +
+            if (_log.shouldDebug())
+                _log.debug("Received RelayRequest from: " + alice +
                           " with unknown tag " + tag);
             _context.statManager().addRateData("udp.receiveRelayRequestBadTag", 1);
             return;
         }
-        if (_log.shouldInfo())
-            _log.info("Received RelayRequest from: " + alice +
+        if (_log.shouldDebug())
+            _log.debug("Received RelayRequest from: " + alice +
                       " for tag " + tag +
                       " and relaying with " + charlie);
 
@@ -753,11 +753,11 @@ class IntroductionManager {
             reader.getRelayRequestReader().readAliceIntroKey(key, 0);
             cipherKey = new SessionKey(key);
             macKey = cipherKey;
-            if (_log.shouldInfo())
-                _log.info("Sending RelayResponse (with intro key) to: " + alice);
+            if (_log.shouldDebug())
+                _log.debug("Sending RelayResponse (with intro key) to: " + alice);
         } else {
-            if (_log.shouldInfo())
-                _log.info("Sending RelayResponse (in-session) to: " + alice);
+            if (_log.shouldDebug())
+                _log.debug("Sending RelayResponse (in-session) to: " + alice);
         }
         _transport.send(_builder.buildRelayResponse(alice, charlie, rrReader.readNonce(),
                                                     cipherKey, macKey));
