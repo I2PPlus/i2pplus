@@ -111,12 +111,18 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             }
         }
         _mtu = mtu;
+        _routerAddress = ra;
         if (addr.getIntroducerCount() > 0) {
-            if (_log.shouldDebug())
-                _log.debug("[SSU2] New outbound establish to " + remotePeer.calculateHash() + ", with address: " + addr);
             _currentState = OutboundState.OB_STATE_PENDING_INTRO;
+            // we will get a token in the relay response or hole punch
         } else {
+            _token = _transport.getEstablisher().getOutboundToken(_remoteHostId);
+            if (_token != 0) {
             _currentState = OutboundState.OB_STATE_UNKNOWN;
+                createNewState(ra);
+            } else {
+                _currentState = OutboundState.OB_STATE_NEEDS_TOKEN;
+            }
         }
 
         _sendConnID = ctx.random().nextLong();
@@ -127,13 +133,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         } while (_sendConnID == rcid);
         _rcvConnID = rcid;
 
-        _token = _transport.getEstablisher().getOutboundToken(_remoteHostId);
-        _routerAddress = ra;
-        if (_token != 0)
-            createNewState(ra);
-        else
-            _currentState = OutboundState.OB_STATE_NEEDS_TOKEN;
-
         byte[] ik = introKey.getData();
         _sendHeaderEncryptKey1 = ik;
         _rcvHeaderEncryptKey1 = ik;
@@ -142,6 +141,19 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _rcvRetryHeaderEncryptKey2 = ik;
         if (_log.shouldDebug())
             _log.debug("[SSU2] New " + this);
+    }
+
+    /**
+     *  After introduction
+     *
+     *  @since 0.9.55
+     */
+    public synchronized void introduced(byte[] ip, int port, long token) {
+        if (_currentState != OutboundState.OB_STATE_PENDING_INTRO)
+            return;
+        introduced(ip, port);
+        _token = token;
+        createNewState(_routerAddress);
     }
 
     private void createNewState(RouterAddress addr) {
@@ -161,18 +173,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _handshakeState.getRemotePublicKey().setPublicKey(publicKey, 0);
         _handshakeState.getLocalKeyPair().setKeys(_transport.getSSU2StaticPrivKey(), 0,
                                                   _transport.getSSU2StaticPubKey(), 0);
-    }
-
-    public synchronized void restart(long token) {
-        _token = token;
-        HandshakeState old = _handshakeState;
-        if (old != null) {
-            // TODO pass the old keys over to createNewState()
-            old.destroy();
-        }
-        createNewState(_routerAddress);
-        //_rcvHeaderEncryptKey2 will be set after the Session Request message is created
-        _rcvHeaderEncryptKey2 = null;
     }
 
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
