@@ -1,3 +1,45 @@
+2022-06-11 zzz
+ * SSU: Don't send SSU1 relay request to SSU2 peer
+
+2022-06-10 zzz
+ * SSU: Fix for HMAC NPE take 2
+ * SSU2: Continue work on relay
+
+2022-06-08 zzz
+ * NetDb: Bypass checks on lookups of our router hash
+ * SSU: Request RI from introducers if missing
+ * SSU2: Set timer to remove peer test state
+
+2022-06-07 zzz
+ * SSU: Ban IP on bad handshake signature
+ * SSU2: Peer test fixes
+ * Transport:
+   - Don't requeue message after multiple failures
+   - Don't remove from netdb after a failure
+
+2022-06-06 zzz
+ * Console: Add deadlock detector
+ * SSU: Don't allow Android introducers
+ * SSU2: Continue work on relay
+ * SSU2: Peer test fixes
+
+2022-06-03 zzz
+ * SSU: Possible fix for rare HMAC NPE
+ * Transports: Periodically send RI to connected peers
+   (Gitlab ticket #356)
+
+2022-06-02 zzz
+ * SSU2: Relay partial implementation
+
+2022-06-01 zzz
+ * SSU2: Enable peer test
+
+2022-05-30 zzz
+ * SSLEepGet: Send Host header to HTTPS proxy
+
+2022-05-29 zzz
+ * SSU2: Remove role field from peer test block
+
 2022-05-29 dr|z3d
  * Core: Add router.overrideIsSlow={true|false} config to enable
    overriding isSlow() system classification
@@ -8,6 +50,7 @@
 
 2022-05-28 zzz
  * Console: Require full restart on transport enable/disable
+ * Crypto: Handle conversion from Java JCA 15+ EdEC keys
  * I2CP: Only send one notification to each session listener
  * i2psnark: Fix DHT not restarting after router restart
  * Router: Don't fail to start up on unchecked family key errors

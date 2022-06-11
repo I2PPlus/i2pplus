@@ -27,11 +27,11 @@ class TunnelGatewayPumper implements Runnable {
     private final Set<PumpedTunnelGateway> _backlogged;
     private final List<Thread> _threads;
     private volatile boolean _stop;
-//    private static final int MIN_PUMPERS = 1;
-    private static final int MIN_PUMPERS = 2;
+    private static final int MIN_PUMPERS = 1;
 //    private static final int MAX_PUMPERS = 4;
     private static final int MAX_PUMPERS = SystemVersion.isSlow() || (SystemVersion.getCores() <= 4 &&
-                                           SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : 8;
+                                           SystemVersion.getMaxMemory() < 384*1024*1024) ? 2 :
+                                           SystemVersion.getMaxMemory() < 1024*1024*1024 ? 3 : 4;
     private final int _pumpers;
 
     /**

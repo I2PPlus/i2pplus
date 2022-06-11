@@ -471,8 +471,8 @@ class PacketBuilder2 {
         if (numFragments > 1 || info.length > 1000) {
             byte[] gzipped = DataHelper.compress(info, 0, info.length, DataHelper.MAX_COMPRESSION);
             if (gzipped.length < info.length) {
-                if (_log.shouldWarn())
-                    _log.warn("[SSU2] Gzipping RouterInfo -> Max is " + max + " bytes; Size was " + info.length + " bytes, size now is " + gzipped.length + " bytes");
+                if (_log.shouldInfo())
+                    _log.info("[SSU2] Gzipping RouterInfo -> Max is " + max + " bytes; Size was " + info.length + " bytes, size now is " + gzipped.length + " bytes");
                 gzip = true;
                 info = gzipped;
                 numFragments = info.length / max;
@@ -485,8 +485,8 @@ class PacketBuilder2 {
         if (numFragments > 1) {
             if (numFragments > 15)
                 throw new IllegalArgumentException();
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] RouterInfo size " + info.length + " bytes requires " + numFragments + " packets");
+            if (_log.shouldInfo())
+                _log.info("[SSU2] RouterInfo size " + info.length + " bytes requires " + numFragments + " packets");
             len = max;
         } else {
             len = info.length;
@@ -570,8 +570,8 @@ class PacketBuilder2 {
         encryptSessionConfirmed(packet0, state.getHandshakeState(), state.getMTU(), count, addPadding, isIPv6,
                                 hdrKey1, hdrKey2, block, state.getNextToken());
         int total = pkt.getLength();
-        if (_log.shouldWarn())
-            _log.warn("[SSU2] Building " + count + " fragmented SessionConfirmed packets -> " +
+        if (_log.shouldInfo())
+            _log.info("[SSU2] Building " + count + " fragmented SessionConfirmed packets -> " +
                       " Max data: " + max +
                       "; RouterInfo block size: " + blockSize +
                       "; Total data size: " + total + " bytes");
@@ -723,6 +723,7 @@ class PacketBuilder2 {
      *  From Alice to Bob.
      *  In-session.
      *
+     *  @param signedData flag + signed data
      *  @return null on failure
      */
     UDPPacket buildRelayRequest(byte[] signedData, PeerState2 bob) {
@@ -737,6 +738,7 @@ class PacketBuilder2 {
      *  From Bob to Charlie.
      *  In-session.
      *
+     *  @param signedData flag + alice hash + signed data
      *  @return null on failure
      */
     UDPPacket buildRelayIntro(byte[] signedData, PeerState2 charlie) {
@@ -750,6 +752,7 @@ class PacketBuilder2 {
      *  From Charlie to Bob or Bob to Alice.
      *  In-session.
      *
+     *  @param signedData flag + response code + signed data + optional token
      *  @param state Alice or Bob
      *  @return null on failure
      */
@@ -761,19 +764,22 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Creates an empty unauthenticated packet for hole punching.
-     *  Parameters must be validated previously.
+     *  Out-of-session, containing a RelayResponse block.
+     *
      */
-    public UDPPacket buildHolePunch(InetAddress to, int port) {
-        UDPPacket packet = UDPPacket.acquire(_context, false);
+    public UDPPacket buildHolePunch(InetAddress to, int port, SessionKey introKey,
+                                    long sendID, long rcvID, byte[] signedData) {
+        long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
+        long token = _context.random().nextLong();
+        UDPPacket packet = buildLongPacketHeader(sendID, n, HOLE_PUNCH_FLAG_BYTE, rcvID, token);
+        Block block = new SSU2Payload.RelayResponseBlock(signedData);
         if (_log.shouldLog(Log.INFO))
             _log.info("[SSU2] Sending relay HolePunch to " + to + ":" + port);
 
-        // the packet is empty and does not need to be authenticated, since
-        // its just for hole punching
-        packet.getPacket().setLength(0);
+        byte[] ik = introKey.getData();
+        packet.getPacket().setLength(LONG_HEADER_SIZE);
+        encryptPeerTest(packet, ik, n, ik, ik, to.getAddress(), port, block);
         setTo(packet, to, port);
-        
         packet.setMessageType(TYPE_PUNCH);
         packet.setPriority(PRIORITY_HIGH);
         return packet;

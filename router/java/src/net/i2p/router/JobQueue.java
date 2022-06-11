@@ -608,17 +608,22 @@ public class JobQueue {
                                     break;
                                 }
                             }
-                                if (timeToWait < 0)
-                                    timeToWait = 1000;
-                                else if (timeToWait < 10)
-//                                    timeToWait = 10;
-                                    timeToWait = 100;
-                                else if (timeToWait > 10*1000)
-                                    timeToWait = 10*1000;
-                                //if (_log.shouldDebug())
-                                //    _log.debug("Waiting " + timeToWait + " before rechecking the timed queue");
-                                _nextPumperRun = _context.clock().now() + timeToWait;
-                                _jobLock.wait(timeToWait);
+                            if (timeToWait < 0)
+//                                timeToWait = 1000;
+                                timeToWait = 100;
+                            else if (timeToWait < 10)
+                                timeToWait = 10;
+                                //timeToWait = 100;
+                            else if (!SystemVersion.isSlow() && SystemVersion.getCores() >= 8 && timeToWait > 3*1000)
+                                timeToWait = 3*1000;
+                            else if (!SystemVersion.isSlow() && SystemVersion.getCores() >= 4 && timeToWait > 5*1000)
+                                timeToWait = 5*1000;
+                            else if (timeToWait > 10*1000)
+                                timeToWait = 10*1000;
+                            //if (_log.shouldDebug())
+                            //    _log.debug("Waiting " + timeToWait + " before rechecking the timed queue");
+                            _nextPumperRun = _context.clock().now() + timeToWait;
+                            _jobLock.wait(timeToWait);
                         } // synchronize (_jobLock)
                     } catch (InterruptedException ie) {}
                 } // while (_alive)

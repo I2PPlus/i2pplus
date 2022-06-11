@@ -244,10 +244,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     // SSU 1 unsupported things
 
     @Override
-    void setCurrentMACKey(SessionKey key) { throw new UnsupportedOperationException(); }
-    @Override
-    void setCurrentCipherKey(SessionKey key) { throw new UnsupportedOperationException(); }
-    @Override
     List<Long> getCurrentFullACKs() { throw new UnsupportedOperationException(); }
     @Override
     List<Long> getCurrentResendACKs() { throw new UnsupportedOperationException(); }
@@ -311,7 +307,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             if (header.getDestConnID() != _rcvConnID) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] BAD Destination ConnectionID ["  + header.getDestConnID() + "] -> Size: " + len + " bytes on " + this);
+                    _log.warn("[SSU2] BAD Destination ConnectionID ["  + header + "] -> Size: " + len + " bytes on " + this);
                 return;
             }
             if (header.getType() != DATA_FLAG_BYTE) {
@@ -434,6 +430,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public void gotRelayRequest(byte[] data) {
         if (!ENABLE_RELAY)
             return;
+        _transport.getIntroManager().receiveRelayRequest(this, data);
         // Relay blocks are ACK-eliciting
         messagePartiallyReceived();
     }
@@ -441,6 +438,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public void gotRelayResponse(int status, byte[] data) {
         if (!ENABLE_RELAY)
             return;
+        _transport.getIntroManager().receiveRelayResponse(this, status, data);
         // Relay blocks are ACK-eliciting
         messagePartiallyReceived();
     }
@@ -448,6 +446,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
         if (!ENABLE_RELAY)
             return;
+        _transport.getIntroManager().receiveRelayIntro(this, aliceHash, data);
         // Relay blocks are ACK-eliciting
         messagePartiallyReceived();
     }
@@ -568,17 +567,24 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 _log.debug("Got dup ACK block: " + SSU2Bitfield.toString(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0)));
             return;
         }
-        SSU2Bitfield ackbf;
-        ackbf = SSU2Bitfield.fromACKBlock(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0));
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] Received ACK block: " + SSU2Bitfield.toString(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0)));
-        // calls bitSet() below
-        ackbf.forEachAndNot(_ackedMessages, this);
+        try {
+            SSU2Bitfield ackbf = SSU2Bitfield.fromACKBlock(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0));
+            if (_log.shouldDebug())
+                _log.debug("[SSU2] Received ACK block: " + SSU2Bitfield.toString(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0)));
+            // calls bitSet() below
+            ackbf.forEachAndNot(_ackedMessages, this);
+        } catch (Exception e) {
+            // IllegalArgumentException, buggy ack block, let the other blocks get processed
+            if (_log.shouldWarn())
+                _log.warn("[SSU2] Bad ACK block\n" + SSU2Bitfield.toString(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0)) +
+                          "\nAck through " + ackThru + " acks " + acks + (ranges != null ? "\n" + HexDump.dump(ranges) : "") +
+                          "\nfrom " + this, e);
+        }
     }
 
     public void gotTermination(int reason, long count) {
-        if (_log.shouldInfo())
-            _log.info("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count);
+        if (_log.shouldDebug())
+            _log.debug("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count + " on " + this);
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
     }
 

@@ -1,5 +1,6 @@
 package net.i2p.router.transport.udp;
 
+import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
@@ -10,12 +11,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
+
 import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.SessionKey;
+import net.i2p.data.SigningPublicKey;
+import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
@@ -27,9 +33,11 @@ import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import static net.i2p.router.transport.udp.InboundEstablishState.InboundState.*;
 import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.*;
+import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.router.util.DecayingHashSet;
 import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.util.Addresses;
+import net.i2p.util.HexDump;
 import net.i2p.util.I2PThread;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
@@ -394,6 +402,22 @@ class EstablishmentManager {
                     // must have a valid session key
                     byte[] keyBytes;
                     int version = _transport.getSSUVersion(ra);
+                    if (isIndirect && version == 2 && ra.getTransportStyle().equals("SSU")) {
+                        // revert to v1 if no unexpired v2 introducers are present
+                        boolean v2intros = false;
+                        int count = addr.getIntroducerCount();
+                        long now = _context.clock().now();
+                        for (int i = 0; i < count; i++) {
+                            Hash h = addr.getIntroducerHash(i);
+                            long exp = addr.getIntroducerExpiration(i);
+                            if (h != null && (exp > now || exp == 0)) {
+                                v2intros = true;
+                                break;
+                            }
+                            if (!v2intros)
+                                version = 1;
+                        }
+                    }
                     if (version == 1) {
                         keyBytes = addr.getIntroKey();
                     } else {
@@ -946,14 +970,13 @@ class EstablishmentManager {
         int version = state.getVersion();
         if (version == 1) {
             peer = new PeerState(_context, _transport,
-                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), true, state.getRTT());
-            peer.setCurrentCipherKey(state.getCipherKey());
-            peer.setCurrentMACKey(state.getMACKey());
-            peer.setWeRelayToThemAs(state.getSentRelayTag());
+                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), true, state.getRTT(),
+                                 state.getCipherKey(), state.getMACKey());
         } else {
             InboundEstablishState2 state2 = (InboundEstablishState2) state;
             peer = state2.getPeerState();
         }
+        peer.setWeRelayToThemAs(state.getSentRelayTag());
 
         if (version == 1) {
             // Lookup the peer's MTU from the netdb, since it isn't included in the protocol setup (yet)
@@ -1081,9 +1104,8 @@ class EstablishmentManager {
         PeerState peer;
         if (version == 1) {
             peer = new PeerState(_context, _transport,
-                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), false, state.getRTT());
-        peer.setCurrentCipherKey(state.getCipherKey());
-        peer.setCurrentMACKey(state.getMACKey());
+                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), false, state.getRTT(),
+                                 state.getCipherKey(), state.getMACKey());
             int mtu = state.getRemoteAddress().getMTU();
             if (mtu > 0)
                 peer.setHisMTU(mtu);
@@ -1139,9 +1161,9 @@ class EstablishmentManager {
     /**
      *  A database store message with our router info
      *  @return non-null
-     *  @since 0.9.24 split from sendOurInfo()
+     *  @since 0.9.24 split from sendOurInfo(), public since 0.9.55 for UDPTransport
      */
-    private DatabaseStoreMessage getOurInfo() {
+    public DatabaseStoreMessage getOurInfo() {
         DatabaseStoreMessage m = new DatabaseStoreMessage(_context);
         m.setEntry(_context.router().getRouterInfo());
         m.setMessageExpiration(_context.clock().now() + DATA_MESSAGE_TIMEOUT);
@@ -1269,6 +1291,10 @@ class EstablishmentManager {
      *  Send RelayRequests to multiple introducers.
      *  This may be called multiple times, it sets the nonce the first time only
      *  Caller should probably synch on state.
+     *
+     *  SSU 1 or 2
+     *
+     *  @param state charlie
      */
     private void handlePendingIntro(OutboundEstablishState state) {
         long nonce = state.getIntroNonce();
@@ -1280,24 +1306,166 @@ class EstablishmentManager {
             } while (old != null);
             state.setIntroNonce(nonce);
         }
-        _context.statManager().addRateData("udp.sendIntroRelayRequest", 1);
-        List<UDPPacket> requests = _builder.buildRelayRequest(_transport, this, state, _transport.getIntroKey());
-        if (requests.isEmpty()) {
-            if (_log.shouldWarn())
-                _log.warn("No valid introducers for: " + state);
+        if (state.getVersion() == 1) {
+            List<UDPPacket> requests = _builder.buildRelayRequest(_transport, this, state, _transport.getIntroKey());
+            if (requests.isEmpty()) {
+                if (_log.shouldWarn())
+                    _log.warn("No valid introducers for: " + state);
             processExpired(state);
             return;
         }
         for (UDPPacket req : requests) {
             _transport.send(req);
         }
+            _context.statManager().addRateData("udp.sendIntroRelayRequest", 1);
         if (_log.shouldDebug())
             _log.debug("Sending RelayRequest for: " + state + "\n* Introduction key: " + _transport.getIntroKey());
         state.introSent();
+        } else {
+            // establish() above ensured there is at least one valid v2 introducer
+            // Look for a connected peer, if found, use the first one only.
+            long now = _context.clock().now();
+            UDPAddress addr = state.getRemoteAddress();
+            int count = addr.getIntroducerCount();
+            for (int i = 0; i < count; i++) {
+                Hash h = addr.getIntroducerHash(i);
+                long exp = addr.getIntroducerExpiration(i);
+                if (h != null && (exp > now || exp == 0)) {
+                    PeerState bob = _transport.getPeerState(h);
+                    // TODO cross-version relaying, maybe
+                    if (bob != null && bob.getVersion() == 2) {
+                        if (_log.shouldDebug())
+                            _log.debug("Found connected introducer " + bob + " for " + state);
+                        long tag = addr.getIntroducerTag(i);
+                        sendRelayRequest(tag, (PeerState2) bob, state);
+                        state.introSent();
+                        return;
+                    }
+                }
+            }
+            // Otherwise, look for ones we already have RIs for, attempt to connect to each.
+            boolean sent = false;
+            for (int i = 0; i < count; i++) {
+                Hash h = addr.getIntroducerHash(i);
+                long exp = addr.getIntroducerExpiration(i);
+                if (h != null && (exp > now || exp == 0)) {
+                    if (_context.banlist().isBanlisted(h))
+                        continue;
+                    PeerState bobState = _transport.getPeerState(h);
+                    if (bobState != null) {
+                        // presumably SSU1 or we would have used it above
+                        if (_log.shouldDebug())
+                            _log.debug("Skipping SSU1-connected introducer " + bobState + " for " + state);
+                        continue;
+                    }
+                    RouterInfo bob = _context.netDb().lookupRouterInfoLocally(h);
+                    if (bob != null) {
+                        List<RouterAddress> addrs = _transport.getTargetAddresses(bob);
+                        for (RouterAddress ra : addrs) {
+                            byte[] ip = ra.getIP();
+                            int port = ra.getPort();
+                            if (ip == null || port <= 0)
+                                continue;
+                            RemoteHostId rhid = new RemoteHostId(ip, port);
+                            OutboundEstablishState oes = _outboundStates.get(rhid);
+                            if (oes != null) {
+                                if (_log.shouldDebug())
+                                    _log.debug("Awaiting pending connection to introducer " + oes + " for " + state);
+                                break;
+                            }
+                            int version = _transport.getSSUVersion(ra);
+                            if (version == 2) {
+                                if (_log.shouldDebug())
+                                    _log.debug("Connecting to introducer " + bob + " for " + state);
+                                // arbitrary message because we have no way to connect for no reason
+                                DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context);
+                                dlm.setSearchKey(h);
+                                dlm.setSearchType(DatabaseLookupMessage.Type.RI);
+                                dlm.setMessageExpiration(now + 10*1000);
+                                dlm.setFrom(_context.routerHash());
+                                OutNetMessage m = new OutNetMessage(_context, dlm, now + 10*1000, OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, bob);
+                                establish(m);
+                                // for now, just wait until this method is called again,
+                                // hopefully somebody has connected
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (sent) {
+                // not really
+                state.introSent();
+                return;
+            }
+            // Otherwise, look up the RIs first.
+            for (int i = 0; i < count; i++) {
+                Hash h = addr.getIntroducerHash(i);
+                long exp = addr.getIntroducerExpiration(i);
+                if (h != null && (exp > now || exp == 0)) {
+                    if (_context.banlist().isBanlisted(h))
+                        continue;
+                    if (_log.shouldDebug())
+                        _log.debug("Looking up introducer " + h + " for " + state);
+                    // TODO on success job
+                    _context.netDb().lookupRouterInfo(h, null, null, 10*1000);
+                    sent = true;
+                }
+            }
+            if (sent) {
+                // not really
+                state.introSent();
+            } else {
+                if (_log.shouldDebug())
+                    _log.debug("No valid introducers for " + state);
+                processExpired(state);
+            }
+        }
     }
 
     /**
      *  We are Alice, we sent a RelayRequest to Bob and got a response back.
+     *
+     *  SSU 2 only.
+     *
+     *  @param charlie must be SSU2
+     *  @since 0.9.55
+     */
+    private void sendRelayRequest(long tag, PeerState2 bob, OutboundEstablishState charlie) {
+        // pick our IP based on what address we're connecting to
+        UDPAddress cra = charlie.getRemoteAddress();
+        RouterAddress ourra;
+        if (cra.isIPv6()) {
+            ourra = _transport.getCurrentExternalAddress(true);
+            if (ourra == null)
+                ourra = _transport.getCurrentExternalAddress(false);
+        } else {
+            ourra = _transport.getCurrentExternalAddress(false);
+        }
+        if (ourra == null)
+            return;
+        byte[] ourIP = ourra.getIP();
+        if (ourIP == null)
+            return;
+        int ourPort = _transport.getRequestedPort();
+        byte[] data = SSU2Util.createRelayRequestData(_context, bob.getRemotePeer(), charlie.getRemoteHostId().getPeerHash(),
+                                                      charlie.getIntroNonce(), tag, ourIP, ourPort,
+                                                      _context.keyManager().getSigningPrivateKey());
+        if (data == null) {
+            if (_log.shouldWarn())
+                _log.warn("sig fail");
+             return;
+        }
+        UDPPacket packet = _builder2.buildRelayRequest(data, bob);
+        if (_log.shouldDebug())
+            _log.debug("Send relay request to " + bob + " for " + charlie);
+        _transport.send(packet);
+    }
+
+    /**
+     *  We are Alice, we sent a RelayRequest to Bob and got a response back.
+     *
+     *  SSU 1 only.
      */
     void receiveRelayResponse(RemoteHostId bob, UDPPacketReader reader) {
         long nonce = reader.getRelayResponseReader().readNonce();
@@ -1356,8 +1524,138 @@ class EstablishmentManager {
     }
 
     /**
+     *  We are Alice, we sent a RelayRequest to Bob and got a RelayResponse back.
+     *  Time and version already checked by caller.
+     *
+     *  SSU 2 only.
+     *
+     *  @param data including nonce, including token if code == 0
+     *  @since 0.9.55
+     */
+    void receiveRelayResponse(PeerState2 bob, long nonce, int code, byte[] data) {
+        // don't remove unless accepted or rejected by charlie
+        OutboundEstablishState charlie;
+        Long lnonce = Long.valueOf(nonce);
+        if (code > 0 && code < 64)
+            charlie = _liveIntroductions.get(lnonce);
+        else
+            charlie = _liveIntroductions.remove(lnonce);
+        if (charlie == null) {
+            if (_log.shouldDebug())
+                _log.debug("Dup or unknown RelayResponse: " + nonce);
+            return; // already established
+        }
+        long token;
+        if (code == 0) {
+            token = DataHelper.fromLong8(data, data.length - 8);
+            data = Arrays.copyOfRange(data, 0, data.length - 8);
+        } else {
+            token = 0;
+        }
+        Hash bobHash = bob.getRemotePeer();
+        Hash charlieHash = charlie.getRemoteHostId().getPeerHash();
+        RouterInfo bobRI = _context.netDb().lookupRouterInfoLocally(bobHash);
+        RouterInfo charlieRI = _context.netDb().lookupRouterInfoLocally(charlieHash);
+        Hash signer;
+        if (code > 0 && code < 64)
+            signer = bobHash;
+        else
+            signer = charlieHash;
+        RouterInfo signerRI = _context.netDb().lookupRouterInfoLocally(signer);
+        if (signerRI != null) {
+            // validate signed data
+            SigningPublicKey spk = signerRI.getIdentity().getSigningPublicKey();
+            if (SSU2Util.validateSig(_context, SSU2Util.RELAY_REQUEST_PROLOGUE,
+                                     bobHash, null, data, spk)) {
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("Signature failed relay response\n" + signerRI);
+            }
+        } else {
+            if (_log.shouldWarn())
+                _log.warn("Signer RI not found " + signer);
+        }
+        if (code == 0) {
+            int iplen = data[9] & 0xff;
+            if (iplen != 6 && iplen != 18) {
+                if (_log.shouldWarn())
+                    _log.warn("Bad IP length " + iplen + " from " + charlie);
+                charlie.fail();
+                return;
+            }
+            boolean isIPv6 = iplen == 18;
+            int port = (int) DataHelper.fromLong(data, 10, 2);
+            byte[] ip = new byte[iplen - 2];
+            System.arraycopy(data, 12, ip, 0, iplen - 2);
+            // validate
+            if (!TransportUtil.isValidPort(port) ||
+                !_transport.isValid(ip) ||
+                _transport.isTooClose(ip) ||
+                _context.blocklist().isBlocklisted(ip)) {
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("Bad relay resp from " + charlie + " for " + Addresses.toString(ip, port));
+                _context.statManager().addRateData("udp.relayBadIP", 1);
+                charlie.fail();
+                return;
+            }
+            InetAddress charlieIP;
+            try {
+                charlieIP = InetAddress.getByAddress(ip);
+            } catch (UnknownHostException uhe) {
+                charlie.fail();
+                return;
+            }
+            if (_log.shouldDebug())
+                _log.debug("Received RelayResponse from " + charlie + " - they are on " +
+                           Addresses.toString(ip, port));
+            if (charlieRI == null) {
+                if (_log.shouldWarn())
+                    _log.warn("Charlie RI not found " + charlie);
+                // maybe it will show up later
+                return;
+            }
+            synchronized (charlie) {
+                RemoteHostId oldId = charlie.getRemoteHostId();
+                ((OutboundEstablishState2) charlie).introduced(ip, port, token);
+                RemoteHostId newId = charlie.getRemoteHostId();
+                addOutboundToken(newId, token, _context.clock().now() + 10*1000);
+                // Swap out the RemoteHostId the state is indexed under.
+                // It was a Hash, change it to a IP/port.
+                // Remove the entry in the byClaimedAddress map as it's now in main map.
+                // Add an entry in the byHash map so additional OB pkts can find it.
+                _outboundByHash.put(charlieHash, charlie);
+                RemoteHostId claimed = charlie.getClaimedAddress();
+                if (!oldId.equals(newId)) {
+                    _outboundStates.remove(oldId);
+                    _outboundStates.put(newId, charlie);
+                    if (_log.shouldLog(Log.INFO))
+                        _log.info("RR replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
+                }
+                //
+                if (claimed != null)
+                    _outboundByClaimedAddress.remove(oldId, charlie);  // only if == state
+            }
+            notifyActivity();
+        } else if (code >= 64) {
+            // that's it
+            if (_log.shouldDebug())
+                _log.debug("Received RelayResponse rejection " + code + " from charlie " + charlie);
+            charlie.fail();
+            _liveIntroductions.remove(lnonce);
+        } else {
+            // don't give up, maybe more bobs out there
+            // TODO keep track
+            if (_log.shouldDebug())
+                _log.debug("Received RelayResponse rejection " + code + " from bob " + bob);
+            notifyActivity();
+        }
+    }
+
+    /**
      *  Called from UDPReceiver.
      *  Accelerate response to RelayResponse if we haven't sent it yet.
+     *
+     *  SSU 1 only.
      *
      *  @since 0.9.15
      */
@@ -1376,8 +1674,68 @@ class EstablishmentManager {
             }
         } else {
             // HolePunch received before RelayResponse, and we didn't know the IP/port, or it changed
-            if (_log.shouldInfo())
-                _log.info("No state found for HolePunch from " + from + ":" + fromPort);
+            if (_log.shouldDebug())
+                _log.debug("No state found for HolePunch from " + from + ":" + fromPort);
+        }
+    }
+
+    /**
+     *  Called from PacketHandler.
+     *  Accelerate response to RelayResponse if we haven't sent it yet.
+     *
+     *  SSU 2 only.
+     *
+     *  @param id non-null
+     *  @param packet header already decrypted
+     *  @since 0.9.55
+     */
+    void receiveHolePunch(RemoteHostId id, UDPPacket packet) {
+        DatagramPacket pkt = packet.getPacket();
+        int off = pkt.getOffset();
+        int len = pkt.getLength();
+        byte data[] = pkt.getData();
+        long rcvConnID = DataHelper.fromLong8(data, off);
+        long sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
+        int type = data[off + TYPE_OFFSET] & 0xff;
+        if (type != HOLE_PUNCH_FLAG_BYTE)
+            return;
+        byte[] introKey = _transport.getSSU2StaticIntroKey();
+        ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
+        chacha.initializeKey(introKey, 0);
+        long n = DataHelper.fromLong(data, off + PKT_NUM_OFFSET, 4);
+        chacha.setNonce(n);
+        try {
+            // decrypt in-place
+            chacha.decryptWithAd(data, off, LONG_HEADER_SIZE,
+                                 data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE);
+            int payloadLen = len - (LONG_HEADER_SIZE + MAC_LEN);
+            SSU2Payload.PayloadCallback cb = new HPCallback(id);
+            SSU2Payload.processPayload(_context, cb, data, off + LONG_HEADER_SIZE, payloadLen, false);
+            // TODO process cb fields
+        } catch (Exception e) {
+            if (_log.shouldWarn())
+                _log.warn("Bad HolePunch packet:\n" + HexDump.dump(data, off, len), e);
+            return;
+        } finally {
+            chacha.destroy();
+        }
+
+        // TODO now we can look up by nonce instead if we want
+        OutboundEstablishState state = _outboundStates.get(id);
+        if (state != null) {
+            boolean sendNow = state.receiveHolePunch();
+            if (sendNow) {
+                if (_log.shouldDebug())
+                    _log.debug("Hole punch from " + state + ", sending SessionRequest now");
+                notifyActivity();
+            } else {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Hole punch from " + state + ", already sent SessionRequest");
+            }
+        } else {
+            // HolePunch received before RelayResponse, and we didn't know the IP/port, or it changed
+            if (_log.shouldLog(Log.INFO))
+                _log.info("No state found for SSU2 hole punch from " + id);
         }
     }
 
@@ -1586,7 +1944,7 @@ class EstablishmentManager {
                             inboundState.fail();
                             processExpired(inboundState);
                         } else {
-                        sendCreated(inboundState);
+                            sendCreated(inboundState);
                         }
                     }
                     break;
@@ -1605,6 +1963,7 @@ class EstablishmentManager {
                             handleCompletelyEstablished(inboundState);
                         }
                     } else {
+                        // really shouldn't be this state
                         if (_log.shouldWarn())
                             _log.warn("Confirmed with invalid? " + inboundState);
                         inboundState.fail();
@@ -1950,6 +2309,89 @@ class EstablishmentManager {
             token = tok; expires = exp;
         }
     }
+
+    /**
+     *  Process SSU2 hole punch payload
+     *
+     *  @since 0.9.55
+     */
+    private class HPCallback implements SSU2Payload.PayloadCallback {
+        private final RemoteHostId _from;
+        public long _timeReceived;
+        public byte[] _aliceIP;
+        public int _alicePort;
+        public int _respCode;
+        public byte[] _respData;
+
+        public HPCallback(RemoteHostId from) {
+            _from = from;
+        }
+
+        public void gotDateTime(long time) {
+            _timeReceived = time;
+        }
+
+        public void gotOptions(byte[] options, boolean isHandshake) {}
+
+        public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotAddress(byte[] ip, int port) {
+            _aliceIP = ip;
+            _alicePort = port;
+        }
+
+        public void gotRelayTagRequest() {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotRelayTag(long tag) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotRelayRequest(byte[] data) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotRelayResponse(int status, byte[] data) {
+            _respCode = status;
+            _respData = data;
+        }
+
+        public void gotRelayIntro(Hash aliceHash, byte[] data) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotToken(long token, long expires) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotI2NP(I2NPMessage msg) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotFragment(byte[] data, int off, int len, long messageId,int frag, boolean isLast) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotACK(long ackThru, int acks, byte[] ranges) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+
+        public void gotTermination(int reason, long count) {
+            throw new IllegalStateException("Bad block in HP");
+        }
+    }
+
 
     //// End SSU 2 ////
 

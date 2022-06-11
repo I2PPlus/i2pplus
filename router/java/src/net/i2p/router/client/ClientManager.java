@@ -89,7 +89,8 @@ class ClientManager {
     /** 2 bytes, save 65535 for unknown */
     private static final int MAX_SESSION_ID = 65534;
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
-    private static final int DEFAULT_MAX_SESSIONS = 100;
+//    private static final int DEFAULT_MAX_SESSIONS = 100;
+    private static final int DEFAULT_MAX_SESSIONS = 256;
     /** 65535 */
     public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1);
 
@@ -115,9 +116,9 @@ class ClientManager {
         _port = port;
         _clientTimestamper = new ClientTimestamper();
         // following are for RequestLeaseSetJob
-        _ctx.statManager().createRateStat("client.requestLeaseSetSuccess", "How often our router successfully requests a new LeaseSet", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
-        _ctx.statManager().createRateStat("client.requestLeaseSetTimeout", "How often our router requests a new LeaseSet without a reply", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
-        _ctx.statManager().createRateStat("client.requestLeaseSetDropped", "How often our router requests a new LeaseSet dropped by the client", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
+        _ctx.statManager().createRateStat("client.requestLeaseSetSuccess", "Successful LeaseSet requests", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
+        _ctx.statManager().createRateStat("client.requestLeaseSetTimeout", "Requests for new LeaseSet without reply", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
+        _ctx.statManager().createRateStat("client.requestLeaseSetDropped", "Requests for new LeaseSet dropped by the client", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
     }
 
     /** @since 0.9.8 */

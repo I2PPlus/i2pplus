@@ -53,23 +53,17 @@ public class PeerState {
      * The AES key used to verify packets, set only after the connection is
      * established.
      */
-    private SessionKey _currentMACKey;
+    private final SessionKey _currentMACKey;
     /**
      * The AES key used to encrypt/decrypt packets, set only after the
      * connection is established.
      */
-    private SessionKey _currentCipherKey;
+    private final SessionKey _currentCipherKey;
     /**
      * The pending AES key for verifying packets if we are rekeying the
      * connection, or null if we are not in the process of rekeying.
      */
     private SessionKey _nextMACKey;
-    /**
-     * The pending AES key for encrypting/decrypting packets if we are
-     * rekeying the connection, or null if we are not in the process
-     * of rekeying.
-     */
-    private SessionKey _nextCipherKey;
 
     /** when were the current cipher and MAC keys established/rekeyed? */
     protected final long _keyEstablishedTime;
@@ -334,7 +328,8 @@ public class PeerState {
      *  @param rtt from the EstablishState, or 0 if not available
      */
     public PeerState(RouterContext ctx, UDPTransport transport,
-                     byte[] remoteIP, int remotePort, Hash remotePeer, boolean isInbound, int rtt) {
+                     byte[] remoteIP, int remotePort, Hash remotePeer, boolean isInbound, int rtt,
+                     SessionKey cipherKey, SessionKey macKey) {
         _context = ctx;
         _log = ctx.logManager().getLog(PeerState.class);
         _transport = transport;
@@ -382,6 +377,8 @@ public class PeerState {
         _isInbound = isInbound;
         _remoteHostId = new RemoteHostId(remoteIP, remotePort);
         _bwEstimator = new SimpleBandwidthEstimator(ctx, this);
+        _currentCipherKey = cipherKey;
+        _currentMACKey = macKey;
     }
 
     /**
@@ -431,6 +428,8 @@ public class PeerState {
         _currentACKs = null;
         _currentACKsResend = null;
         _ackedMessages = null;
+        _currentCipherKey = null;
+        _currentMACKey = null;
     }
 
     /**
@@ -490,9 +489,12 @@ public class PeerState {
      *
      * @return null always, rekeying unimplemented
      */
-    SessionKey getNextCipherKey() { return _nextCipherKey; }
+    SessionKey getNextCipherKey() { return null; }
 
-    /** when were the current cipher and MAC keys established/rekeyed? */
+    /**
+     * When were the current cipher and MAC keys established/rekeyed?
+     * This is the connection uptime.
+     */
     public long getKeyEstablishedTime() { return _keyEstablishedTime; }
 
     /**
@@ -573,18 +575,6 @@ public class PeerState {
      *  It is used only for the HTML status.
      */
     public int getReceiveMTU() { return _mtuReceive; }
-
-    /**
-     * The AES key used to verify packets, set only after the connection is
-     * established.
-     */
-    void setCurrentMACKey(SessionKey key) { _currentMACKey = key; }
-
-    /**
-     * The AES key used to encrypt/decrypt packets, set only after the
-     * connection is established.
-     */
-    void setCurrentCipherKey(SessionKey key) { _currentCipherKey = key; }
 
     /**
      *  Update the moving-average clock skew based on the current difference.

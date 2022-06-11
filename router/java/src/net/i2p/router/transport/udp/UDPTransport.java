@@ -3171,6 +3171,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         // count as connections, we have to keep the connection to this peer up longer if
         // we are offering introductions.
         return
+            !SystemVersion.isAndroid() &&
             (!_context.router().isHidden()) &&
             (!introducersRequired(ipv6)) &&
             haveCapacity() &&
@@ -3510,6 +3511,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         private static final long EXPIRE_INCREMENT = 15*1000;
         private static final long EXPIRE_DECREMENT = 45*1000;
         private static final long MAY_DISCON_TIMEOUT = 10*1000;
+        private static final long RI_STORE_INTERVAL = 29*60*1000;
 
         public ExpirePeerEvent() {
             super(_context.simpleTimer2());
@@ -3546,6 +3548,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             int currentListenPort = getListenPort(false);
             boolean pingOneOnly = shouldPingFirewall && getExternalPort(false) == currentListenPort;
             boolean shortLoop = shouldPingFirewall || !haveCap || _context.netDb().floodfillEnabled();
+            long loopTime = shortLoop ? SHORT_LOOP_TIME : LONG_LOOP_TIME;
             _lastLoopShort = shortLoop;
             _expireBuffer.clear();
             _runCount++;
@@ -3591,7 +3594,17 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                         // session, so ping all of them. Otherwise only one.
                         if (pingOneOnly)
                             shouldPingFirewall = false;
-		    }
+                    } else {
+                        // periodically send our RI
+                        long uptime = now - peer.getKeyEstablishedTime();
+                        if (uptime >= RI_STORE_INTERVAL) {
+                            long mod = uptime % RI_STORE_INTERVAL;
+                            if (mod < loopTime) {
+                                DatabaseStoreMessage dsm = _establisher.getOurInfo();
+                                send(dsm, peer);
+                            }
+                        }
+                    }
                 }
 
             if (!_expireBuffer.isEmpty()) {
@@ -3609,7 +3622,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             }
 
             if (_alive)
-                schedule(shortLoop ? SHORT_LOOP_TIME : LONG_LOOP_TIME);
+                schedule(loopTime);
         }
 
         public void add(PeerState peer) {
@@ -3813,7 +3826,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             PeerState peer = iter.next();
             if (peerRole == BOB) {
                 // Skip SSU2 until we have support for peer test
-                if (peer.getVersion() != 1) {
+                version = peer.getVersion();
+                if (version != 1) {
                     if (!SSU2Util.ENABLE_PEER_TEST)
                         continue;
                     // we must know our IP/port
@@ -3851,6 +3865,17 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             ip = null;
             List<RouterAddress> addrs = getTargetAddresses(peerInfo);
             for (RouterAddress addr : addrs) {
+                if (_enableSSU2) {
+                    // get the right address
+                    String style = addr.getTransportStyle();
+                    if (version == 1) {
+                        if (style.equals("SSU2"))
+                            continue;
+                    } else {
+                        if (style.equals("SSU") && !"2".equals(addr.getOption("v")))
+                            continue;
+                    }
+                }
                 byte[] rip = addr.getIP();
                 if (rip != null) {
                     if (isIPv6) {

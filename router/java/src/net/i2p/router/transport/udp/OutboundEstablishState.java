@@ -112,7 +112,7 @@ class OutboundEstablishState {
          */
         OB_STATE_RETRY_RECEIVED,
         /**
-         * SSU2: We have sent a second token request with a new token
+         * SSU2: We have sent a session request after receiving a retry
          * @since 0.9.54
          */
         OB_STATE_REQUEST_SENT_NEW_TOKEN
@@ -539,7 +539,7 @@ class OutboundEstablishState {
             buf.append("Signed session created");
             buf.append("\n* Signature: ").append(Base64.encode(_receivedSignature.getData()));
             buf.append("\n* Signed on: ").append(new Date(_receivedSignedOnTime));
-            buf.append("Alice: ").append(Addresses.toString(_aliceIP, _alicePort));
+            buf.append("\n Alice: ").append(Addresses.toString(_aliceIP, _alicePort));
             buf.append("; Bob: ").append(Addresses.toString(_bobIP, _bobPort));
             buf.append("\n* RelayTag: ").append(_receivedRelayTag);
             if (valid)
@@ -644,7 +644,7 @@ class OutboundEstablishState {
         _requestSentCount++;
         _nextSend = _lastSend + delay;
         if (_log.shouldDebug())
-            _log.debug("Sent a SessionRequest packet; next send in " + delay + "ms");
+            _log.debug("Sent a SessionRequest packet; next send in " + delay + "ms on " + this);
         if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
             _currentState == OutboundState.OB_STATE_INTRODUCED)
             _currentState = OutboundState.OB_STATE_REQUEST_SENT;
