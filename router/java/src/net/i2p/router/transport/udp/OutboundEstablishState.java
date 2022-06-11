@@ -644,7 +644,7 @@ class OutboundEstablishState {
         _requestSentCount++;
         _nextSend = _lastSend + delay;
         if (_log.shouldDebug())
-            _log.debug("Sent a SessionRequest packet; next send in " + delay + "ms");
+            _log.debug("Sent a SessionRequest packet; next send in " + delay + "ms on " + this);
         if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
             _currentState == OutboundState.OB_STATE_INTRODUCED)
             _currentState = OutboundState.OB_STATE_REQUEST_SENT;
