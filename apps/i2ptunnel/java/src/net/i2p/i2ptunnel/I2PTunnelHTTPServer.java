@@ -111,6 +111,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private final static String ERR_UNAVAILABLE =
          "HTTP/1.1 503 Service Unavailable\r\n" +
+         "Content-Type: text/html; charset=utf-8\r\n" +
+         "Cache-Control: no-cache\r\n" +
+         "Connection: close\r\n" +
+         "Proxy-Connection: close\r\n" +
+         "\r\n" +
+         "<html>\n" +
+         "<head><title>503 Service Temporarily Unavailable</title></head>\n" +
+         "<body>\n" +
+         "<center><h1>>503 Service Temporarily Unavailable</h1></center>\n" +
+         "<hr>\n" +
+         "</body>\n" +
+         "</html>";
+
+/**
+         "HTTP/1.1 503 Service Unavailable\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
@@ -121,6 +136,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "<h2>503 Service Unavailable</h2>\n" +
          "<p>This I2P website is unavailable. It may be down or undergoing maintenance.</p>\n" +
          "</body>\n</html>";
+**/
 
     // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     private final static String ERR_DENIED =
