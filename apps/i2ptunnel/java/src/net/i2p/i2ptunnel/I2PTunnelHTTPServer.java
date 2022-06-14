@@ -119,7 +119,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "<html>\n" +
          "<head><title>503 Service Temporarily Unavailable</title></head>\n" +
          "<body>\n" +
-         "<center><h1>>503 Service Temporarily Unavailable</h1></center>\n" +
+         "<center><h1>503 Service Temporarily Unavailable</h1></center>\n" +
          "<hr>\n" +
          "</body>\n" +
          "</html>";
