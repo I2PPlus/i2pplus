@@ -825,7 +825,7 @@ class IntroductionManager {
                     // TODO add timer to remove from _nonceToAlice
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Signature failed relay intro\n" + aliceRI);
+                        _log.warn("Signature failed relay request\n" + aliceRI);
                     rcode = SSU2Util.RELAY_REJECT_BOB_SIGFAIL;
                 }
             } else {
@@ -855,19 +855,15 @@ class IntroductionManager {
         } else {
             // send rejection to Alice
             SigningPrivateKey spk = _context.keyManager().getSigningPrivateKey();
-            int iplen = data[13] & 0xff;
-            int testPort = (int) DataHelper.fromLong(data, 14, 2);
-            byte[] testIP = new byte[iplen - 2];
-            System.arraycopy(data, 16, testIP, 0, iplen - 2);
             data = SSU2Util.createRelayResponseData(_context, _context.routerHash(), rcode,
-                                                    nonce, testIP, testPort, spk, 0);
+                                                    nonce, null, 0, spk, 0);
             if (data == null) {
                 if (_log.shouldWarn())
                     _log.warn("sig fail");
                  return;
             }
-            if (_log.shouldDebug())
-                _log.debug("Sending relay response rejection " + rcode + " to " + alice);
+            if (_log.shouldInfo())
+                _log.info("Send relay response rejection as bob " + rcode + " to alice " + alice);
             packet = _builder2.buildRelayResponse(data, alice);
         }
         _transport.send(packet);
@@ -954,6 +950,21 @@ class IntroductionManager {
                 rcode = SSU2Util.RELAY_REJECT_CHARLIE_UNKNOWN_ALICE;
             }
         }
+        byte[] ourIP = null;
+        RouterAddress ourra = _transport.getCurrentExternalAddress(isIPv6);
+        if (ourra != null) {
+            ourIP = ourra.getIP();
+            if (ourIP == null) {
+                if (_log.shouldWarn())
+                    _log.warn("No IP to send in relay response");
+                rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
+            }
+        } else {
+            if (_log.shouldWarn())
+                _log.warn("No address to send in relay response");
+            rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
+        }
+        int ourPort = _transport.getRequestedPort();
 
         // generate our signed data
         // we sign it even if rejecting, not required though
@@ -967,7 +978,7 @@ class IntroductionManager {
         }
         SigningPrivateKey spk = _context.keyManager().getSigningPrivateKey();
         data = SSU2Util.createRelayResponseData(_context, bob.getRemotePeer(), rcode,
-                                                nonce, testIP, testPort, spk, token);
+                                                nonce, ourIP, ourPort, spk, token);
         if (data == null) {
             if (_log.shouldWarn())
                 _log.warn("sig fail");
@@ -975,14 +986,14 @@ class IntroductionManager {
         }
         UDPPacket packet = _builder2.buildRelayResponse(data, bob);
         if (_log.shouldDebug())
-            _log.debug("Send relay response " + " nonce " + nonce + " to " + bob);
+            _log.debug("Sending RelayResponse " + rcode + " as Charlie " + " nonce " + nonce + " to Bob " + bob);
         _transport.send(packet);
         if (rcode == SSU2Util.RELAY_ACCEPT) {
             // send hole punch with the same data we sent to Bob
             if (_log.shouldDebug())
                 _log.debug("Send hole punch to " + Addresses.toString(testIP, testPort));
-            long rcvId = (nonce << 32) | nonce;
-            long sendId = ~rcvId;
+            long sendId = (nonce << 32) | nonce;
+            long rcvId = ~sendId;
             packet = _builder2.buildHolePunch(aliceIP, testPort, aliceIntroKey, sendId, rcvId, data);
             _transport.send(packet);
         }
@@ -1030,11 +1041,11 @@ class IntroductionManager {
                     else
                         signedData = data;
                     SigningPublicKey spk = charlie.getIdentity().getSigningPublicKey();
-                    if (SSU2Util.validateSig(_context, SSU2Util.RELAY_REQUEST_PROLOGUE,
-                                             _context.routerHash(), null, data, spk)) {
+                    if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
+                                             _context.routerHash(), null, signedData, spk)) {
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Signature failed relay response\n" + charlie);
+                            _log.warn("Signature failed relay response as bob from charlie:\n" + charlie);
                     }
                 } else {
                     if (_log.shouldWarn())
@@ -1047,12 +1058,12 @@ class IntroductionManager {
             System.arraycopy(data, 0, idata, 2, data.length);
             UDPPacket packet = _builder2.buildRelayResponse(idata, alice);
             if (_log.shouldDebug())
-                _log.debug("Send relay response " + " nonce " + nonce + " to " + alice);
+                _log.debug("Received relay response " + status + " as bob, forward " + " nonce " + nonce + " to " + alice);
             _transport.send(packet);
         } else {
             // We are Alice, give to EstablishmentManager to check sig and process
             if (_log.shouldDebug())
-                _log.debug("Got relay response " + " nonce " + nonce + " from " + peer);
+                _log.debug("Received relay response " + status + " as alice " + " nonce " + nonce + " from " + peer);
             _transport.getEstablisher().receiveRelayResponse(peer, nonce, status, data);
         }
     }

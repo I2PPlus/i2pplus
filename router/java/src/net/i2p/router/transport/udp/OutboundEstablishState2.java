@@ -6,7 +6,9 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import com.southernstorm.noise.protocol.CipherState;
@@ -43,6 +45,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     private final long _sendConnID;
     private final long _rcvConnID;
     private final RouterAddress _routerAddress;
+    private final Map<Hash, IntroState> _introducers;
     private long _token;
     private HandshakeState _handshakeState;
     private final byte[] _sendHeaderEncryptKey1;
@@ -60,6 +63,58 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     private static final boolean SET_TOKEN = false;
     private static final long MAX_SKEW = 2*60*1000L;
+
+    /**
+     *  Per-introducer introduction states
+     *  @since 0.9.55
+     */
+    public enum IntroState {
+        // pending states
+        // we may transition from these to another state
+        // See EstablishmentManager.handlePendingIntro() for state machine
+
+        /** nothing happened yet */
+        INTRO_STATE_INIT,
+        /** lookup for the introducer RI was sent */
+        INTRO_STATE_LOOKUP_SENT,
+        /** we have the introducer RI */
+        INTRO_STATE_HAS_RI,
+        /** we are connecting to the introducer */
+        INTRO_STATE_CONNECTING,
+        /** we are connected to this introducer */
+        INTRO_STATE_CONNECTED,
+        /** we sent the relay request to this introducer */
+        INTRO_STATE_RELAY_REQUEST_SENT,
+        /** we got a good relay response via this introducer */
+        INTRO_STATE_RELAY_CHARLIE_ACCEPTED,
+
+        // final states
+        // we do not transition from these states
+
+        /** introducer has expired */
+        INTRO_STATE_EXPIRED,
+        /** we tried to lookup the introducer RI, no luck */
+        INTRO_STATE_LOOKUP_FAILED,
+        /** we rejected this introducer for some reason */
+        INTRO_STATE_REJECTED,
+        /** we failed to connect to the introducer */
+        INTRO_STATE_CONNECT_FAILED,
+        /** he disconnected from us along the way */
+        INTRO_STATE_DISCONNECTED,
+        /** we failed to get a relay response from this introducer */
+        INTRO_STATE_RELAY_RESPONSE_TIMEOUT,
+        /** we got a rejection from this introducer */
+        INTRO_STATE_BOB_REJECT,
+        /** we got a rejection from Charlie via this introducer */
+        INTRO_STATE_CHARLIE_REJECT,
+        /** unspecified failure */
+        INTRO_STATE_FAILED,
+        /** this peer is not an introducer */
+        INTRO_STATE_INVALID,
+        /** we got an accept from Charlie via this introducer */
+        INTRO_STATE_SUCCESS
+    }
+
 
     /**
      *  Prepare to start a new handshake with the given peer.
@@ -94,7 +149,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             if (ra.getTransportStyle().equals(UDPTransport.STYLE2)) {
                 mtu = PeerState2.DEFAULT_MTU;
             } else {
-                if (_bobIP.length == 16)
+                if (_bobIP != null && _bobIP.length == 16)
                     mtu = PeerState2.DEFAULT_SSU_IPV6_MTU;
                 else
                     mtu = PeerState2.DEFAULT_SSU_IPV4_MTU;
@@ -104,7 +159,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             if (ra.getTransportStyle().equals(UDPTransport.STYLE2)) {
                 mtu = Math.min(Math.max(mtu, PeerState2.MIN_MTU), PeerState2.MAX_MTU);
             } else {
-                if (_bobIP.length == 16)
+                if (_bobIP != null && _bobIP.length == 16)
                     mtu = Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV6_MTU), PeerState2.MAX_SSU_IPV6_MTU);
                 else
                     mtu = Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV4_MTU), PeerState2.MAX_SSU_IPV4_MTU);
@@ -112,9 +167,27 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         }
         _mtu = mtu;
         _routerAddress = ra;
-        if (addr.getIntroducerCount() > 0) {
+        int intros = addr.getIntroducerCount();
+        if (intros > 0) {
             _currentState = OutboundState.OB_STATE_PENDING_INTRO;
             // we will get a token in the relay response or hole punch
+            _introducers = new HashMap<Hash, IntroState>(4);
+            // Initial setup of per-introducer state tracking.
+            // See EstablishmentManager.handlePendingIntro() for state machine
+            for (int i = 0; i < intros; i++) {
+                Hash h = addr.getIntroducerHash(i);
+                if (h != null) {
+                    IntroState istate;
+                    long exp = addr.getIntroducerExpiration(i);
+                    if (exp != 0 && exp < _establishBegin)
+                        istate = IntroState.INTRO_STATE_EXPIRED;
+                    else if (_context.banlist().isBanlisted(h))
+                        istate = IntroState.INTRO_STATE_REJECTED;
+                    else
+                        istate = IntroState.INTRO_STATE_INIT;
+                    _introducers.put(h, istate);
+                }
+            }
         } else {
             _token = _transport.getEstablisher().getOutboundToken(_remoteHostId);
             if (_token != 0) {
@@ -123,6 +196,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             } else {
                 _currentState = OutboundState.OB_STATE_NEEDS_TOKEN;
             }
+            _introducers = null;
         }
 
         _sendConnID = ctx.random().nextLong();
@@ -152,6 +226,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (_currentState != OutboundState.OB_STATE_PENDING_INTRO)
             return;
         introduced(ip, port);
+        try {
+            _bobSocketAddress = new InetSocketAddress(InetAddress.getByAddress(ip), port);
+        } catch (UnknownHostException uhe) {
+            throw new IllegalArgumentException("bad IP", uhe);
+        }
         _token = token;
         createNewState(_routerAddress);
     }
@@ -277,6 +356,25 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         boolean rv = _currentState == OutboundState.OB_STATE_CREATED_RECEIVED ||
                      _currentState == OutboundState.OB_STATE_CONFIRMED_COMPLETELY;
         return rv;
+    }
+
+    /**
+     *  Overridden because we don't have to wait for Relay Response first.
+     *
+     *  @return true if we should send the SessionRequest now
+     *  @since 0.9.55
+     */
+    @Override
+    synchronized boolean receiveHolePunch() {
+        if (_currentState == OutboundState.OB_STATE_PENDING_INTRO)
+            _currentState = OutboundState.OB_STATE_INTRODUCED;
+        else if (_currentState != OutboundState.OB_STATE_INTRODUCED)
+            return false;
+        if (_requestSentCount > 0)
+            return false;
+        long now = _context.clock().now();
+        _nextSend = now;
+        return true;
     }
 
     // SSU 2 things
@@ -557,12 +655,56 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         return _pstate;
     }
 
+    /**
+     * @return non-null current state for the SSU2 introducer specified,
+     *         or INTRO_STATE_INVALID if peer is not an SSU2 introducer
+     * @since 0.9.55
+     */
+    public IntroState getIntroState(Hash h) {
+        IntroState rv;
+        if (_introducers == null) {
+            rv = IntroState.INTRO_STATE_INVALID;
+        } else {
+            synchronized(_introducers) {
+                rv = _introducers.get(h);
+            }
+            if (rv == null)
+                rv = IntroState.INTRO_STATE_INVALID;
+        }
+        return rv;
+    }
+
+    /**
+     * Set the current state for the SSU2 introducer specified
+     * @since 0.9.55
+     */
+    public void setIntroState(Hash h, IntroState state) {
+        if (_introducers == null)
+            return;
+        IntroState old;
+        synchronized(_introducers) {
+            old = _introducers.put(h, state);
+        }
+        if (old != state && _log.shouldDebug())
+            _log.debug("Change state for introducer " + h.toBase64() + " from " + old + " to " + state + " on " + this);
+    }
+
+    /**
+     * A relay request was sent to the SSU2 introducer specified
+     * @since 0.9.55
+     */
+    public void introSent(Hash h) {
+        setIntroState(h, IntroState.INTRO_STATE_RELAY_REQUEST_SENT);
+        introSent();
+    }
+
     @Override
     public String toString() {
-        return "OutboundEstablishState2 " + _remoteHostId +
+        return "OutboundEstablishState2 " + _remotePeer.getHash().toBase64().substring(0, 6) + ' ' + _remoteHostId +
                "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) +
                " Receive ID: " + _rcvConnID +
                "; Send ID: " + _sendConnID +
-               " -> " + _currentState;
+               " -> " + _currentState +
+               (_introducers != null ? (" Introducers: " + _introducers.toString()) : "");
     }
 }
