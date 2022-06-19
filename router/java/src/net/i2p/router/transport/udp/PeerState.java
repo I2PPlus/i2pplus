@@ -449,10 +449,7 @@ public class PeerState {
     }
 
     /**
-     * The peer are we talking to.  This should be set as soon as this
-     * state is created if we are initiating a connection, but if we are
-     * receiving the connection this will be set only after the connection
-     * is established.
+     * The peer are we talking to. Non-null.
      */
     public Hash getRemotePeer() { return _remotePeer; }
     /**
@@ -2381,8 +2378,7 @@ public class PeerState {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append(_remoteHostId.toString());
-        if (_remotePeer != null)
-            buf.append(" [").append(_remotePeer.toBase64().substring(0,6)).append("]");
+        buf.append(" [").append(_remotePeer.toBase64().substring(0,6)).append("]");
 
         if (getVersion() == 2)
             buf.append(_isInbound? " Inbound v2 " : " Outbound v2 ");
