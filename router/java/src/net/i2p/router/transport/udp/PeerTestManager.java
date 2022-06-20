@@ -352,8 +352,8 @@ class PeerTestManager {
                                                                test.getNonce(), _transport.getIntroKey());
             } else {
                 long nonce = test.getNonce();
-                long sendId = (nonce << 32) | nonce;
-                long rcvId = ~sendId;
+                long rcvId = (nonce << 32) | nonce;
+                long sendId = ~rcvId;
                 InetAddress addr = test.getAliceIP();
                 int alicePort = test.getAlicePort();
                 byte[] aliceIP = addr.getAddress();
@@ -1198,8 +1198,8 @@ class PeerTestManager {
                     // send msg 5
                     if (_log.shouldDebug())
                         _log.debug("Sending message #5 to " + Addresses.toString(testIP, testPort) + " on " + state);
-                    long rcvId = (nonce << 32) | nonce;
-                    long sendId = ~rcvId;
+                    long sendId = (nonce << 32) | nonce;
+                    long rcvId = ~sendId;
                     // send the same data we sent to Bob
                     packet = _packetBuilder2.buildPeerTestToAlice(aliceIP, testPort,
                                                                   aliceIntroKey, true,
@@ -1350,7 +1350,7 @@ class PeerTestManager {
                         sendTestToCharlie();
                     }
                 } else {
-                // delay, await msg 5
+                    // delay, await msg 5
                     if (_log.shouldDebug())
                         _log.debug("Received message #4 before message #5 on " + test);
                 }
@@ -1379,9 +1379,9 @@ class PeerTestManager {
                     // send msg 6
                     if (_log.shouldDebug())
                         _log.debug("Sending message #6 to Charlie on " + test);
-                synchronized(this) {
-                    sendTestToCharlie();
-                }
+                    synchronized(this) {
+                        sendTestToCharlie();
+                    }
                 } else {
                     // we haven't gotten message 4 yet
                     if (_log.shouldDebug())
@@ -1395,8 +1395,8 @@ class PeerTestManager {
                 state.setReceiveAliceTime(now);
                 state.setLastSendTime(now);
                 // send msg 7
-                long rcvId = (nonce << 32) | nonce;
-                long sendId = ~rcvId;
+                long sendId = (nonce << 32) | nonce;
+                long rcvId = ~sendId;
                 InetAddress addr = state.getAliceIP();
                 int alicePort = state.getAlicePort();
                 byte[] aliceIP = addr.getAddress();
