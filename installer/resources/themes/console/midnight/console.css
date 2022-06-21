@@ -2320,12 +2320,12 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 #reseedhelp ol ul li:last-child {margin-bottom: -12px}
 
 /* welcome */
-.links {margin-top: 10px; margin-bottom: -10px; text-align: justify}
+.links {margin-top: 10px; margin-bottom: 15px; text-align: justify}
 .links li {line-height: 1.5; text-align: justify! important; list-style-image: var(--star)}
 .links b {color: #8f7959; letter-spacing: .08em; line-height: 165%}
 .twocol li {break-inside: avoid; page-break-inside: avoid; -webkit-column-break-inside: avoid}
 .twocol li:first-child {margin-top: 0}
-.twocol {margin: 5px 0 -5px; display: block; columns: 2 400px; column-gap: 0}
+.twocol {margin: 5px 0 15px; display: block; columns: 2 400px; column-gap: 0}
 .welcome h2 {background: url(images/favicon.svg) no-repeat right 6px center, var(--th); background-size: 24px, 4px 100%, 100%}
 div[lang="de"] .twocol, div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {margin: 10px -5px 5px; padding: 10px; border: var(--border_badge); border-radius: 2px; box-shadow: var(--highlight); background: rgba(0,0,48,.3)}
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li, div[lang="zh"] li {list-style: none; text-align: justify}
