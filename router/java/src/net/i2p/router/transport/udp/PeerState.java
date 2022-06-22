@@ -1275,7 +1275,8 @@ public class PeerState {
     synchronized void setHisMTU(int mtu) {
         if (mtu <= _minMTU || mtu >= _largeMTU)
             return;
-        _largeMTU = mtu;
+        if (mtu < _largeMTU)
+            _largeMTU = mtu;
         if (mtu < _mtu)
             _mtu = mtu;
     }
