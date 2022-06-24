@@ -874,7 +874,7 @@ class PeerTestManager {
         return true;
     }
 
-    /** 
+    /**
      * Wait for RI.
      * @since 0.9.55
      */
@@ -961,15 +961,14 @@ class PeerTestManager {
             state = _activeTests.get(lNonce);
 
         if (_log.shouldDebug())
-            _log.debug("Got peer test" +
-                       " msg: " + msg +
-                       " status: " + status +
-                       " hash: " + h +
-                       " nonce: " + nonce +
-                       " time: " + DataHelper.formatTime(time) +
-                       " ip/port: " + Addresses.toString(testIP, testPort) +
-                       " from " + fromPeer +
-                       " state: " + state);
+            _log.debug("Received PeerTest from [" + fromPeer + "] \n* " +
+                       "Time: " + DataHelper.formatTime(time) +
+                       "; Message: " + msg +
+                       "; Status: " + status +
+                       "; Hash: " + h +
+                       "; Nonce: " + nonce +
+                       "; IP/Port: " + Addresses.toString(testIP, testPort) +
+                       "; State: " + state);
 
         byte[] fromIP = from.getIP();
         int fromPort = from.getPort();
@@ -1005,20 +1004,20 @@ class PeerTestManager {
         if (msg >= 1 && msg <= 4) {
             if (fromPeer == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Bad msg " + msg + " out-of-session from " + from);
+                    _log.warn("Bad message " + msg + " out-of-session from " + from);
                 return;
             }
         } else {
             if (fromPeer != null) {
                 if (_log.shouldWarn())
-                    _log.warn("Bad msg " + msg + " in-session from " + fromPeer);
+                    _log.warn("Bad message " + msg + " in-session from " + fromPeer);
                 return;
             }
         }
         if (msg < 3) {
             if (state != null) {
                 if (_log.shouldWarn())
-                    _log.warn("Dup msg " + msg + " from " + fromPeer);
+                    _log.warn("Duplicate message " + msg + " from " + fromPeer);
                 return;
             }
             if (_activeTests.size() >= MAX_ACTIVE_TESTS) {
@@ -1037,7 +1036,7 @@ class PeerTestManager {
         } else {
             if (state == null) {
                 if (_log.shouldWarn())
-                    _log.warn("No state found for msg " + msg + " from " + fromPeer);
+                    _log.warn("No state found for message " + msg + " from " + fromPeer);
                 return;
             }
         }
@@ -1045,7 +1044,7 @@ class PeerTestManager {
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
             if (_log.shouldWarn())
-                _log.warn("Too skewed for msg " + msg + " from " + fromPeer);
+                _log.warn("Too skewed for message " + msg + " from " + fromPeer);
             return;
         }
 
@@ -1054,7 +1053,7 @@ class PeerTestManager {
             case 1: {
                 if (status != 0) {
                     if (_log.shouldWarn())
-                        _log.warn("Msg 1 status " + status);
+                        _log.warn("Message #1 status " + status);
                     return;
                 }
                 // IP/port checks
@@ -1076,7 +1075,7 @@ class PeerTestManager {
                 RouterInfo aliceRI = _context.netDb().lookupRouterInfoLocally(alice);
                 if (aliceRI == null) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("No alice RI");
+                        _log.warn("No RouterInfo for Alice");
                     // send reject
                     UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(SSU2Util.TEST_REJECT_BOB_UNSPEC,
                                                                             Hash.FAKE_HASH, data, fromPeer);
@@ -1089,7 +1088,7 @@ class PeerTestManager {
                 if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
                                           _context.routerHash(), null, data, spk)) {
                     if (_log.shouldWarn())
-                        _log.warn("Signature failed msg 1\n" + aliceRI);
+                        _log.warn("Signature failed in message #1\n" + aliceRI);
                     // send reject
                     UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(SSU2Util.TEST_REJECT_BOB_SIGFAIL,
                                                                             Hash.FAKE_HASH, data, fromPeer);
@@ -1099,7 +1098,7 @@ class PeerTestManager {
                 PeerState charlie = _transport.pickTestPeer(CHARLIE, fromPeer.getVersion(), isIPv6, from);
                 if (charlie == null) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Unable to pick a charlie (no peer), IPv6? " + isIPv6);
+                        _log.warn("Unable to pick a Charlie (no peer), IPv6? " + isIPv6);
                     // send reject
                     UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(SSU2Util.TEST_REJECT_BOB_NO_CHARLIE,
                                                                             Hash.FAKE_HASH, data, fromPeer);
@@ -1118,7 +1117,7 @@ class PeerTestManager {
                 _context.simpleTimer2().addEvent(new RemoveTest(lNonce), MAX_BOB_LIFETIME);
                 // send alice RI to charlie
                 if (_log.shouldDebug())
-                    _log.debug("Sending Alice RI and message #2 to Charlie on " + state);
+                    _log.debug("Sending Alice's RouterInfo and message #2 to Charlie on " + state);
                 DatabaseStoreMessage dbsm = new DatabaseStoreMessage(_context);
                 dbsm.setEntry(aliceRI);
                 dbsm.setMessageExpiration(now + 10*1000);
@@ -1134,7 +1133,7 @@ class PeerTestManager {
             case 2: {
                 if (status != 0) {
                     if (_log.shouldWarn())
-                        _log.warn("Msg 2 status " + status);
+                        _log.warn("Message #2 status " + status);
                     return;
                 }
                 InetAddress aliceIP;
@@ -1175,12 +1174,12 @@ class PeerTestManager {
                                 rcode = SSU2Util.TEST_REJECT_CHARLIE_ADDRESS;
                         } else {
                             if (_log.shouldWarn())
-                                _log.warn("Signature failed msg 2\n" + aliceRI);
+                                _log.warn("Signature failed on message #2\n" + aliceRI);
                             rcode = SSU2Util.TEST_REJECT_CHARLIE_SIGFAIL;
                         }
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Alice RI not found " + h + " for peer test from " + fromPeer);
+                            _log.warn("Alice's RouterInfo not found " + h + " for peer test from " + fromPeer);
                         rcode = SSU2Util.TEST_REJECT_CHARLIE_UNKNOWN_ALICE;
                     }
                 }
@@ -1200,7 +1199,7 @@ class PeerTestManager {
                                                    CHARLIE, nonce, testIP, testPort, spk);
                 if (data == null) {
                     if (_log.shouldWarn())
-                        _log.warn("sig fail");
+                        _log.warn("Signature failure");
                      if (rcode == SSU2Util.TEST_ACCEPT)
                          _activeTests.remove(lNonce);
                      return;
@@ -1246,13 +1245,13 @@ class PeerTestManager {
                         if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
                                                   _context.routerHash(), alice.getRemotePeer(), data, spk)) {
                             if (_log.shouldWarn())
-                                _log.warn("Signature failed msg 3\n" + charlieRI);
+                                _log.warn("Signature failed on message #3\n" + charlieRI);
                         }
                     }
                 } else  {
                     // oh well, maybe alice has it
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("No charlie RI");
+                        _log.warn("No RouterInfo for Charlie");
                 }
                 // forward to alice, don't bother to validate signed data
                 // FIXME this will probably get there before the RI
@@ -1283,7 +1282,7 @@ class PeerTestManager {
                 PeerState cps = _transport.getPeerState(h);
                 if (status != 0) {
                     if (_log.shouldInfo())
-                        _log.info("Msg 4 status " + status + ' ' + test);
+                        _log.info("Message #4 status " + status + ' ' + test);
                 } else if (cps != null && cps.isIPv6() == isIPv6) {
                     if (_log.shouldInfo())
                         _log.info("Charlie is connected " + test);
@@ -1307,7 +1306,7 @@ class PeerTestManager {
                             if (ra != null) {
                                 charlieIntroKey = getIntroKey(ra);
                                 if (charlieIntroKey == null && _log.shouldWarn())
-                                    _log.warn("Charlie intro key not found: " + test + '\n' + charlieRI);
+                                    _log.warn("Charlie's IntroKey not found: " + test + '\n' + charlieRI);
                                 byte[] ip = ra.getIP();
                                 if (ip != null) {
                                     if (!_transport.isValid(ip) ||
@@ -1320,30 +1319,30 @@ class PeerTestManager {
                                            charlieIP = InetAddress.getByAddress(ip);
                                         } catch (UnknownHostException uhe) {
                                            if (_log.shouldWarn())
-                                                _log.warn("Charlie IP not found: " + test + '\n' + ra, uhe);
+                                                _log.warn("Charlie's IP not found: " + test + '\n' + ra, uhe);
                                         }
                                     }
                                 } else {
                                     if (_log.shouldWarn())
-                                        _log.warn("Charlie IP not found: " + test + '\n' + ra);
+                                        _log.warn("Charlie's IP not found: " + test + '\n' + ra);
                                 }
                                 charliePort = ra.getPort();
                                 if (!TransportUtil.isValidPort(charliePort)) {
                                     if (_log.shouldWarn())
-                                        _log.warn("Charlie port bad: " + test + '\n' + ra);
+                                        _log.warn("Bad port detected for Charlie: " + test + '\n' + ra);
                                     charliePort = 0;
                                 }
                             } else {
                                 if (_log.shouldWarn())
-                                    _log.warn("Charlie address not found" + test + '\n' + charlieRI);
+                                    _log.warn("Charlie's address not found" + test + '\n' + charlieRI);
                             }
                         } else {
                             if (_log.shouldWarn())
-                                _log.warn("Signature failed msg 4 " + test + '\n' + charlieRI);
+                                _log.warn("Signature failed on message #4 " + test + '\n' + charlieRI);
                         }
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Charlie RI not found" + test + ' ' + h);
+                            _log.warn("Charlie's RouterInfo not found" + test + ' ' + h);
                     }
                 }
                 if (charlieIntroKey == null || charlieIP == null || charliePort <= 0) {
@@ -1360,7 +1359,7 @@ class PeerTestManager {
                 if (test.getReceiveCharlieTime() > 0) {
                     // send msg 6
                     if (_log.shouldDebug())
-                        _log.debug("Send msg 6 to charlie on " + test);
+                        _log.debug("Sending message #6 to charlie on " + test);
                     synchronized(this) {
                         sendTestToCharlie();
                     }
@@ -1400,7 +1399,7 @@ class PeerTestManager {
                 } else {
                     // we haven't gotten message 4 yet
                     if (_log.shouldDebug())
-                        _log.debug("Got msg 5 before msg 4 on " + test);
+                        _log.debug("Received message #5 before message #4 on " + test);
                 }
                 break;
             }
@@ -1432,7 +1431,7 @@ class PeerTestManager {
                     }
                 }
                 if (_log.shouldDebug())
-                    _log.debug("Send messsage #7 to Alice at " + Addresses.toString(fromIP, fromPort) + " on " + state);
+                    _log.debug("Sending messsage #7 to Alice at " + Addresses.toString(fromIP, fromPort) + " on " + state);
                 UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(addr, fromPort,
                                                                         state.getAliceIntroKey(), false,
                                                                         sendId, rcvId, data);
@@ -1659,7 +1658,7 @@ class PeerTestManager {
         charlieInfo = _context.netDb().lookupRouterInfoLocally(charlie.getRemotePeer());
         if (charlieInfo == null) {
             if (_log.shouldWarn())
-                _log.warn("Unable to pick a Charlie (no RI), IPv6? " + isIPv6);
+                _log.warn("Unable to pick a Charlie (no RouterInfo), IPv6? " + isIPv6);
             return;
         }
 
@@ -1674,14 +1673,14 @@ class PeerTestManager {
             RouterAddress raddr = _transport.getTargetAddress(charlieInfo);
             if (raddr == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Unable to pick a Charlie (no addr), IPv6? " + isIPv6);
+                    _log.warn("Unable to pick a Charlie (no IP address), IPv6? " + isIPv6);
                 return;
             }
             UDPAddress addr = new UDPAddress(raddr);
             byte[] ikey = addr.getIntroKey();
             if (ikey == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Unable to pick a Charlie (no ikey), IPv6? " + isIPv6);
+                    _log.warn("Unable to pick a Charlie (no IntroKey), IPv6? " + isIPv6);
                 return;
             }
             SessionKey charlieIntroKey = new SessionKey(ikey);
@@ -1728,7 +1727,7 @@ class PeerTestManager {
                                                                      charlie.getCurrentMACKey());
 
             if (_log.shouldDebug())
-                _log.debug("Receive from Alice: " + state);
+                _log.debug("Received from Alice: " + state);
 
             _transport.send(packet);
         } catch (UnknownHostException uhe) {
@@ -1776,7 +1775,7 @@ class PeerTestManager {
                                                                state.getCharlieIntroKey(), state.getNonce());
 
         if (_log.shouldDebug())
-            _log.debug("Receive from Charlie, sending Alice back the OK: " + state);
+            _log.debug("Received from Charlie, sending Alice back the OK: " + state);
 
         _transport.send(packet);
     }
@@ -1815,7 +1814,7 @@ class PeerTestManager {
             UDPPacket packet = _packetBuilder.buildPeerTestToAlice(aliceIP, from.getPort(), aliceIntroKey, _transport.getIntroKey(), nonce);
 
             if (_log.shouldDebug())
-                _log.debug("Receive from Alice: " + state);
+                _log.debug("Received from Alice: " + state);
 
             _transport.send(packet);
         } catch (UnknownHostException uhe) {
@@ -1868,7 +1867,7 @@ class PeerTestManager {
                 // ignore flood request
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldWarn())
-                    _log.warn("RI store fail: " + ri, iae);
+                    _log.warn("RouterInfo store fail: " + ri, iae);
             }
         }
 
