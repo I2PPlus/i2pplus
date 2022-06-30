@@ -1776,7 +1776,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (oldPeer != null) {
             oldPeer.dropOutbound();
             _introManager.remove(oldPeer);
-            _expireEvent.remove(oldPeer);
             RemoteHostId oldID = oldPeer.getRemoteHostId();
             if (!remoteId.equals(oldID)) {
                 // leak fix, remove old address
@@ -1787,7 +1786,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 if (oldPeer2 != oldPeer && oldPeer2 != null) {
                     oldPeer2.dropOutbound();
                      _introManager.remove(oldPeer2);
-                    _expireEvent.remove(oldPeer2);
                 }
             }
         }
@@ -1808,7 +1806,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             oldEstablishedOn = oldPeer2.getKeyEstablishedTime();
             oldPeer2.dropOutbound();
             _introManager.remove(oldPeer2);
-            _expireEvent.remove(oldPeer2);
         }
 
         if (_log.shouldWarn() && !_mismatchLogged && _peersByIdent.size() != _peersByRemoteHost.size()) {
@@ -1824,8 +1821,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
         //if (SHOULD_FLOOD_PEERS)
         //    _flooder.addPeer(peer);
-
-        _expireEvent.add(peer);
 
         _introManager.add(peer);
 
@@ -2009,7 +2004,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
         //if (SHOULD_FLOOD_PEERS)
         //    _flooder.removePeer(peer);
-        _expireEvent.remove(peer);
 
         // deal with races to make sure we drop the peers fully
         if ( (altByIdent != null) && (peer != altByIdent) ) locked_dropPeer(altByIdent, shouldBanlist, "recurse");
@@ -2239,8 +2233,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         Hash to = toAddress.getIdentity().calculateHash();
         PeerState peer = getPeerState(to);
         if (peer != null) {
-            if (_log.shouldDebug())
-                _log.debug("Bidding on a message to an established peer: " + peer);
+            //if (_log.shouldDebug())
+            //    _log.debug("Bidding on a message to an established peer: " + peer);
             if (preferUDP())
                 return _cachedBid[FAST_PREFERRED_BID];
             else
@@ -2313,8 +2307,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             if (!allowConnection())
                 return _cachedBid[TRANSIENT_FAIL_BID];
 
-            if (_log.shouldDebug())
-                _log.debug("Bidding on a message to unestablished peer [" + to.toBase64().substring(0,6) + "]");
+            //if (_log.shouldDebug())
+            //    _log.debug("Bidding on a message to unestablished peer [" + to.toBase64().substring(0,6) + "]");
 
             // Try to maintain at least 5 peers (30 for v6) so we can determine our IP address and
             // we have a selection to run peer tests with.
@@ -2465,8 +2459,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 }
             }
             msg.timestamp("Enqueueing for an already established peer");
-            if (_log.shouldDebug())
-                _log.debug("Add to fragments for " + to);
+            //if (_log.shouldDebug())
+            //    _log.debug("Add to fragments for " + to);
 
             // See comments in DummyThrottle.java
             if (USE_PRIORITY)
@@ -3452,8 +3446,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 continue; // Big RTT makes for a poor calculation
             skews.add(Long.valueOf(peer.getClockSkew() / 1000));
         }
-        if (_log.shouldDebug())
-            _log.debug("UDP transport returned " + skews.size() + " peer clock skew results");
+        //if (_log.shouldDebug())
+        //    _log.debug("UDP transport returned " + skews.size() + " peer clock skew results");
         return skews;
     }
 
@@ -3547,8 +3541,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     private class ExpirePeerEvent extends SimpleTimer2.TimedEvent {
-        // TODO why have separate Set, just use _peersByIdent.values()
-        private final Set<PeerState> _expirePeers;
         private final List<PeerState> _expireBuffer;
         private volatile boolean _alive;
         private int _runCount;
@@ -3567,7 +3559,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
         public ExpirePeerEvent() {
             super(_context.simpleTimer2());
-            _expirePeers = new ConcurrentHashSet<PeerState>(128);
             _expireBuffer = new ArrayList<PeerState>();
         }
 
@@ -3605,8 +3596,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _expireBuffer.clear();
             _runCount++;
 
-                for (Iterator<PeerState> iter = _expirePeers.iterator(); iter.hasNext(); ) {
-                    PeerState peer = iter.next();
+                for (PeerState peer : _peersByIdent.values()) {
                     long inactivityCutoff;
                     // if we offered to introduce them, or we used them as introducer in last 2 hours
                     if (peer.getWeRelayToThemAs() > 0 || peer.getIntroducerTime() > pingCutoff) {
@@ -3622,7 +3612,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     }
                     if ( (peer.getLastReceiveTime() < inactivityCutoff) && (peer.getLastSendTime() < inactivityCutoff) ) {
                         _expireBuffer.add(peer);
-                        iter.remove();
                     } else if (shouldPingFirewall &&
                                ((_runCount ^ peer.hashCode()) & (SLICES - 1)) == 0 &&
                                peer.getLastSendOrPingTime() < pingFirewallCutoff &&
@@ -3677,21 +3666,12 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 schedule(loopTime);
         }
 
-        public void add(PeerState peer) {
-                _expirePeers.add(peer);
-        }
-
-        public void remove(PeerState peer) {
-                _expirePeers.remove(peer);
-        }
-
         public void setIsAlive(boolean isAlive) {
             _alive = isAlive;
             if (isAlive) {
                 reschedule(LONG_LOOP_TIME);
             } else {
                 cancel();
-                _expirePeers.clear();
             }
         }
     }
