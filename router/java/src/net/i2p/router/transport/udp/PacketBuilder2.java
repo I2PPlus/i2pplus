@@ -286,7 +286,7 @@ class PacketBuilder2 {
                        "; Data size " + dataSize + " bytes" +
                        "; Packet size " + (off + ipHeaderSize) + " bytes" +
                        "; MTU " + currentMTU + " bytes" +
-                       "; Fragments: " + DataHelper.toString(fragments), new Exception());
+                       "; Fragments: " + DataHelper.toString(fragments) /* , new Exception() */ );
             }
         }
         
