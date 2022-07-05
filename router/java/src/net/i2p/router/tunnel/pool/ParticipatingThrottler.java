@@ -64,12 +64,12 @@ class ParticipatingThrottler {
         int count = counter.increment(h);
         Result rv;
         if (count > limit) {
-            if (count > limit * 3 / 2) {
+            if (count > limit) {
                 context.banlist().banlistRouter(h, "Excessive participating tunnels", null, null, context.clock().now() + 60*60*1000);
                 // drop after any accepted tunnels have expired
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for excessive part. tunnel requests (Limit: " + limit + " Requests: " + count + ")");
+                    _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for 1hr for excessive part. tunnel requests (Limit: " + limit + " Requests: " + count + ")");
                 rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
