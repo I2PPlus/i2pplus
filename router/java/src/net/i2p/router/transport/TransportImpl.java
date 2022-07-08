@@ -992,6 +992,7 @@ public abstract class TransportImpl implements Transport {
                 return true;
             }
         }
+/*
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
         if (ri == null)
             return false;
@@ -1003,6 +1004,8 @@ public abstract class TransportImpl implements Transport {
             RouterAddress addr = ri.getTargetAddress(getStyle());
             return addr == null;
         }
+*/
+        return false;
     }
 
     /**
