@@ -230,7 +230,7 @@ class MessageReceiver {
                 PeerState ps = _transport.getPeerState(state.getFrom());
                 if (ps != null && ps.getRemotePort() == 65520) {
                     // distinct port of buggy router
-                    _transport.sendDestroy(ps);
+                    _transport.sendDestroy(ps, SSU2Util.REASON_BANNED);
                     _transport.dropPeer(ps, true, "Corrupt DSM");
                     _context.banlist().banlistRouterForever(state.getFrom(),
                                                             " <b>➜</b> " + "Sent corrupt message");  // don't bother translating
