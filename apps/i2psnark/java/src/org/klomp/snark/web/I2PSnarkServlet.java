@@ -419,17 +419,15 @@ public class I2PSnarkServlet extends BasicServlet {
             sortedTrackers = _manager.getSortedTrackers();
 //            if (_context.isRouterContext() && _manager.hasModifiedTrackers()) {
 //            if (_context.isRouterContext()) {
-                out.write("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=\"_blank\">");
+                out.write("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=\"_blank\" title=\"");
+                out.write("\n<a href=\"http://btdigg.i2p/\" class=\"snarkNav nav_search\" target=\"_blank\" title=\"");
+                out.write(_t("Torrent &amp; filesharing forum"));
+                out.write("\">");
                 out.write(_t("Forum"));
                 out.write("</a>\n");
-/*
-                out.write("<a href=\"http://anodex.i2p/\" class=\"snarkNav nav_tracker\" target=\"_blank\">");
-                out.write("Anodex");
-                out.write("</a>\n");
-*/
-                out.write("<a href=\"http://torrents.chudo.i2p/\" class=\"snarkNav nav_tracker\" target=\"_blank\">");
-                out.write("Chudo");
-                out.write("</a>");
+//                out.write("<a href=\"http://torrents.chudo.i2p/\" class=\"snarkNav nav_tracker\" target=\"_blank\">");
+//                out.write("Chudo");
+//                out.write("</a>");
                 for (Tracker t : sortedTrackers) {
                     if (t.baseURL == null || !t.baseURL.startsWith("http"))
                         continue;
@@ -437,10 +435,11 @@ public class I2PSnarkServlet extends BasicServlet {
                         continue;
                     out.write("\n<a href=\"" + t.baseURL + "\" class=\"snarkNav nav_tracker\" target=\"_blank\">" + t.name + "</a>");
                 }
-//                out.write("\n<a href=\"http://torrentfinder.i2p/\" class=\"snarkNav nav_search\" target=\"_blank\">");
-//                out.write(_t("Finder"));
-//                out.write("</a>");
-//            }
+                out.write("\n<a href=\"http://btdigg.i2p/\" class=\"snarkNav nav_search\" target=\"_blank\" title=\"");
+                out.write(_t("I2P-based search engine for clearnet-hosted torrents"));
+                out.write("\">");
+                out.write(_t("BTDigg"));
+                out.write("</a>");
         }
         out.write("\n</div>\n");
         String newURL = req.getParameter("newURL");
