@@ -198,12 +198,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String DEFAULT_TRACKERS[] = {
        "Postman", "http://tracker2.postman.i2p/announce.php=http://tracker2.postman.i2p/"
        ,"DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/"
-       ,"Chudo", "http://tracker.chudo.i2p/a=http://tracker.chudo.i2p/"
-//       ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
-       ,"Lyoko", "http://lyoko.i2p/a=http://lyoko.i2p/tracker"
        ,"OmiTracker", "http://omitracker.i2p/announce.php=http://omitracker.i2p/"
        ,"R4SAS", "http://opentracker.r4sas.i2p/a=http://opentracker.r4sas.i2p/stats"
        ,"Skank", "http://opentracker.skank.i2p/a=http://opentracker.skank.i2p/tracker"
+//       ,"Lyoko", "http://lyoko.i2p/a=http://lyoko.i2p/tracker"
+//       ,"Chudo", "http://tracker.chudo.i2p/a=http://tracker.chudo.i2p/"
+//       ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
 //       ,"Freedom", "http://torrfreedom.i2p/announce.php=http://torrfreedom.i2p/"
 //       ,"PTT", "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce=http://ptt.i2p/index_eng.html"
 //The following is ECDSA_SHA256_P256
@@ -223,13 +223,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** URLs, comma-separated. Used for "announce to open trackers also" */
 //    private static final String DEFAULT_OPENTRACKERS = DEFAULT_BACKUP_TRACKER +
     private static final String DEFAULT_OPENTRACKERS =
-        "http://lyoko.i2p/a," +
         "http://omitracker.i2p/announce.php," +
         "http://opentracker.dg2.i2p/a," +
         "http://opentracker.r4sas.i2p/a," +
-        "http://opentracker.skank.i2p/a," +
+        "http://opentracker.skank.i2p/a,";
+//        "http://lyoko.i2p/a," +
 //        "http://tracker.lodikon.i2p/announce," +
-        "http://tracker.chudo.i2p/a";
+//        "http://tracker.chudo.i2p/a";
 //        (SigType.ECDSA_SHA256_P256.isAvailable() ? "http://tracker.thebland.i2p/a" : "");
 //        "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce," +
 //        "http://tracker.psi.i2p/a," +
@@ -243,12 +243,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /** host names for config form */
     static final Set<String> KNOWN_OPENTRACKERS = new HashSet<String>(Arrays.asList(new String[] {
-        "lyoko.i2p", "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
         "omitracker.i2p", "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p",
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
         "opentracker.r4sas.i2p", "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p",
         "opentracker.skank.i2p", "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
-        "tracker.chudo.i2p", "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p",
+//        "lyoko.i2p", "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
+//        "tracker.chudo.i2p", "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p",
 //        "tracker.lodikon.i2p", "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p",
 //        "tracker.thebland.i2p", "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
 //        "ptt.i2p", "5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p",

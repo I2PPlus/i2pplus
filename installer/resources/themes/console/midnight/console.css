@@ -65,7 +65,7 @@ hr:last-child {margin-top: 20px; margin-bottom: 20px}
 .main:not(#home):not(#sitemap) td:last-child {border-right: var(--border_inner)}
 .main:not(#home):not(#sitemap) tr:last-child td {border-bottom: var(--border_inner)}
 .main#home {padding-bottom: 3px}
-div[id^="config_"] td {padding-left: 10px; padding-right: 10px}
+div[id^="config_"] td:not(.infohelp).not(.infowarn) {padding-left: 10px; padding-right: 10px}
 .widepanel h3 {padding: 6px 10px; text-align: left; text-transform: uppercase; font-size: 10.5pt; letter-spacing: .08em; word-spacing: .1em; border: var(--border_inner); border-radius: 0}
 a[name="chelp"], a[name="help"] {pointer-events: none}
 .footnote, .topness {display: none}

@@ -221,6 +221,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         if (_sessConfSentCount >= MAX_SESS_CONF_RETX) {
                             if (_log.shouldWarn())
                                 _log.warn("[SSU2] Fail, no SessionConfirmed ACK received on " + this);
+                            UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_FRAME_TIMEOUT, this);
+                            _transport.send(pkt);
                             _transport.dropPeer(this, false, "No Sess Conf ACK rcvd");
                             _sessConfForReTX = null;
                             return null;
@@ -377,8 +379,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
-        if (_log.shouldDebug())
-            _log.debug("Got updated RI");
+        if (_log.shouldInfo())
+            _log.info("Received RouterInfo in data phase " + ri + "\non: " + this);
         try {
             Hash h = ri.getHash();
             if (h.equals(_context.routerHash()))
@@ -481,8 +483,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) throws DataFormatException {
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] Received FRAGMENT block [#" + frag + "] for [MsgID " + messageId + "]; isLast? " + isLast);
+        if (_log.shouldInfo())
+            _log.info("[SSU2] Received FRAGMENT block: " + messageId + " fragment " + frag + " len " + len +
+                      " isLast? " + isLast + " on " + _remotePeer.toBase64());
         InboundMessageState state;
         boolean messageComplete = false;
         boolean messageExpired = false;

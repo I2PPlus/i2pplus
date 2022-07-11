@@ -904,7 +904,10 @@ class IntroductionManager {
      */
     private boolean receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, int retryCount) {
         RouterInfo aliceRI = null;
-        if (retryCount < 5 && !_context.banlist().isBanlisted(alice)) {
+        if (retryCount >= 5) {
+            // last chance
+            aliceRI = _context.netDb().lookupRouterInfoLocally(alice);
+        } else if (!_context.banlist().isBanlisted(alice)) {
             aliceRI = _context.netDb().lookupRouterInfoLocally(alice);
             if (aliceRI == null) {
                 if (_log.shouldInfo())
@@ -1044,7 +1047,7 @@ class IntroductionManager {
         long token;
         if (rcode == SSU2Util.RELAY_ACCEPT) {
             RemoteHostId aliceID = new RemoteHostId(testIP, testPort);
-            EstablishmentManager.Token tok = _transport.getEstablisher().getInboundToken(aliceID);
+            EstablishmentManager.Token tok = _transport.getEstablisher().getInboundToken(aliceID, 60*1000);
             token = tok.token;
         } else {
             token = 0;
@@ -1059,7 +1062,8 @@ class IntroductionManager {
         }
         UDPPacket packet = _builder2.buildRelayResponse(data, bob);
         if (_log.shouldInfo())
-            _log.info("Sending RelayResponse " + rcode + " as Charlie " + " nonce " + nonce + " to Bob " + bob +
+            _log.info("Send RelayResponse " + rcode + " as Charlie " + " nonce " + nonce + " to Bob " + bob +
+                      " with token " + token +
                       " for Alice " + Addresses.toString(testIP, testPort) + ' ' + aliceRI);
         _transport.send(packet);
         if (rcode == SSU2Util.RELAY_ACCEPT) {

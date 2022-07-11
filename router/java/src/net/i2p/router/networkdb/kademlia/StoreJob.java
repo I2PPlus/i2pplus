@@ -65,7 +65,7 @@ abstract class StoreJob extends JobImpl {
 //    private final static int PARALLELIZATION = 4; // how many sent at a time
 //    private final static int REDUNDANCY = 4; // we want the data sent to 4 peers
     private final static int PARALLELIZATION = 5; // how many sent at a time
-    private final static int REDUNDANCY = 5; // we want the data sent to 4 peers
+    private final static int REDUNDANCY = 15; // we want the data sent to 4 peers
     private final static int STORE_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE;
 
     /**
@@ -78,7 +78,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * @param toSkip set of peer hashes of people we dont want to send the data to (e.g. we
+     * @param toSkip set of peer hashes of people we don't want to send the data to (e.g. we
      *               already know they have it).  This can be null.
      */
     public StoreJob(RouterContext context, KademliaNetworkDatabaseFacade facade, Hash key,
@@ -117,7 +117,8 @@ abstract class StoreJob extends JobImpl {
         return getContext().clock().now() >= _expiration;
     }
 
-    private static final int MAX_PEERS_SENT = 10;
+//    private static final int MAX_PEERS_SENT = 10;
+    private static final int MAX_PEERS_SENT = REDUNDANCY;
 
     /**
      * send the key to the next batch of peers
@@ -127,7 +128,7 @@ abstract class StoreJob extends JobImpl {
     private void sendNext() {
         if (_state.completed()) {
             if (_log.shouldInfo())
-                _log.info("Already completed");
+                _log.info("Already completed submission of key to floodfills");
             return;
         }
         if (isExpired()) {

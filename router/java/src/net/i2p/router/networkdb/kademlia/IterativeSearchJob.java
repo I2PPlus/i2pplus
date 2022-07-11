@@ -89,17 +89,17 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int MAX_NON_FF = 5;
     /** Max number of peers to query */
 //    private static final int TOTAL_SEARCH_LIMIT = 5;
-    private static final int TOTAL_SEARCH_LIMIT = 16;
+    private static final int TOTAL_SEARCH_LIMIT = 30;
     /** Max number of peers to query if we are ff */
 //    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 2;
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 5;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 8;
     /** Extra peers to get from peer selector, as we may discard some before querying */
 //    private static final int EXTRA_PEERS = 1;
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
     /** TOTAL_SEARCH_LIMIT * SINGLE_SEARCH_TIME, plus some extra */
 //    private static final int MAX_SEARCH_TIME = 30*1000;
-    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 15*1000 : 10*1000;
+    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 40*1000 : 30*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
@@ -122,7 +122,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default _maxConcurrent
      */
 //    private static final int MAX_CONCURRENT = 1;
-    private static final int MAX_CONCURRENT = 2;
+    private static final int MAX_CONCURRENT = SystemVersion.isSlow() ? 2 : 3;
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
@@ -172,11 +172,11 @@ public class IterativeSearchJob extends FloodSearchJob {
                                         VersionComparator.comp(v, MIN_VERSION) < 0) && known > 2000;
                                         // && ctx.router().getUptime() > 15*60*1000 && !isHidden;
                 if (uninteresting) {
-                    _timeoutMs = Math.min(timeoutMs * 2, MAX_SEARCH_TIME / 2);
+                    _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME / 3 * 2);
                     totalSearchLimit -= 2;
                 }
             } else if (known < 2000 || isHidden) {
-                totalSearchLimit += 2;
+                totalSearchLimit += 3;
             } else {
                 _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
             }
@@ -514,10 +514,12 @@ public class IterativeSearchJob extends FloodSearchJob {
                 synchronized(this) {
                     tries = _unheardFrom.size() + _failedPeers.size();
                 }
-                _log.debug("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
-                          " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
-                          "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
-                          "; Direct? " + isDirect + "; Reply via client tunnel? " + isClientReplyTunnel);
+                if (_key != null) {
+                    _log.debug("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
+                              " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
+                              "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
+                              "; Direct? " + isDirect + "; Reply via client tunnel? " + isClientReplyTunnel);
+                }
             }
             if (peer != null)
                 _sentTime.put(peer, Long.valueOf(now));

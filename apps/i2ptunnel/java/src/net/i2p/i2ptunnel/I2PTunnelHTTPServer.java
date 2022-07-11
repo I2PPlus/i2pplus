@@ -78,15 +78,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String SERVER_HEADER = "server";
     private static final String X_POWERED_BY_HEADER = "x-powered-by";
     private static final String X_RUNTIME_HEADER = "x-runtime"; // Rails
+    private static final String X_HACKER_HEADER = "x-hacker"; // Wordpress
     // https://httpoxy.org
     private static final String PROXY_HEADER = "proxy";
     /** MUST ALL BE LOWER CASE */
-    private static final String[] SERVER_SKIPHEADERS = {DATE_HEADER, SERVER_HEADER, X_POWERED_BY_HEADER, X_RUNTIME_HEADER, PROXY_HEADER};
+    private static final String[] SERVER_SKIPHEADERS = {DATE_HEADER, SERVER_HEADER, X_HACKER_HEADER, X_POWERED_BY_HEADER, X_RUNTIME_HEADER, PROXY_HEADER};
     /** timeout for first request line */
 //    private static final long HEADER_TIMEOUT = 15*1000;
     private static final long HEADER_TIMEOUT = 30*1000;
     /** total timeout for the request and all the headers */
-    private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
+//    private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
+    private static final long TOTAL_HEADER_TIMEOUT = 3 * HEADER_TIMEOUT;
     private static final long START_INTERVAL = (60 * 1000) * 3;
     private static final int MAX_LINE_LENGTH = 8*1024;
     /** ridiculously long, just to prevent OOM DOS @since 0.7.13 */

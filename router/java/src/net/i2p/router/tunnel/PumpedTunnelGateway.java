@@ -54,9 +54,9 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int MAX_IB_QUEUE = 1024;
 */
     private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : 256;
-    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 24 : 128;
+    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 24 : 96;
     private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 64 : 256;
-    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : 2048;
+    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : 4096;
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
     public static final String PROP_INITIAL_OB_QUEUE = "router.pumpInitialOutboundQueue";
