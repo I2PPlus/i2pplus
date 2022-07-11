@@ -226,7 +226,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "http://omitracker.i2p/announce.php," +
         "http://opentracker.dg2.i2p/a," +
         "http://opentracker.r4sas.i2p/a," +
-        "http://opentracker.skank.i2p/a," +
+        "http://opentracker.skank.i2p/a,";
 //        "http://lyoko.i2p/a," +
 //        "http://tracker.lodikon.i2p/announce," +
 //        "http://tracker.chudo.i2p/a";
