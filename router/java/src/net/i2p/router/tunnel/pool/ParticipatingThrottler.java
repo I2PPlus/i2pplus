@@ -38,10 +38,10 @@ class ParticipatingThrottler {
     private static final int LIFETIME_PORTION = 3;
 //    private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
 //    private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
-    private static final int MIN_LIMIT = 256 / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = 1024 / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = 64 / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = 256 / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 60 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 20 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
     private boolean isSlow = SystemVersion.isSlow();
     private boolean isQuadCore = SystemVersion.getCores() >=4;
@@ -65,11 +65,11 @@ class ParticipatingThrottler {
         Result rv;
         if (count > limit) {
             if (count > limit) {
-                context.banlist().banlistRouter(h, "Excessive participating tunnels", null, null, context.clock().now() + 60*60*1000);
+                context.banlist().banlistRouter(h, "Excessive participating tunnels", null, null, context.clock().now() + 2*60*60*1000);
                 // drop after any accepted tunnels have expired
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for 1hr for excessive part. tunnel requests (Limit: " + limit + " Requests: " + count + ")");
+                    _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for 2 hours for excessive part. tunnel requests (Limit: " + limit + " Requests: " + count + ")");
                 rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
