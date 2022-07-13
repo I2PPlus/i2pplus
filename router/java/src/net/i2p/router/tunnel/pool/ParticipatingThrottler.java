@@ -71,9 +71,9 @@ class ParticipatingThrottler {
                 context.banlist().banlistRouter(h, "Excessive participating tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
-                if (_log.shouldWarn())
-                    _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for " + period +
-                              " minutes for excessive part. tunnel requests (Limit: " + limit + ")");
+//                if (_log.shouldWarn())
+                _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for " + period +
+                          " minutes for excessive part. tunnel requests (Limit: " + limit + ")");
                 rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
