@@ -1444,7 +1444,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     private boolean handleUnsignedFile(URI uri, String lastmod, File updFile) {
         String url = uri.toString();
-        if (FileUtil.verifyZip(updFile)) {
+        if (FileUtil.verifyZip(updFile) && !isExternalRestartPending()) {
             if (url.contains("skank"))
                 updateStatus("<b class=\"volatile\">" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b>");
             else
