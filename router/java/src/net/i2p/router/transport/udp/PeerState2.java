@@ -355,7 +355,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             packetReceived(payloadLen);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
-                _log.warn([SSU2] "BAD encrypted packet on: " + this + '\n' + HexDump.dump(data, off, len), gse);
+                _log.warn("[SSU2] BAD encrypted packet on: " + this + '\n' + HexDump.dump(data, off, len), gse);
         } catch (IndexOutOfBoundsException ioobe) {
             if (_log.shouldWarn())
                 _log.warn("[SSU2] BAD encrypted packet on: " + this + '\n' + HexDump.dump(data, off, len), ioobe);
