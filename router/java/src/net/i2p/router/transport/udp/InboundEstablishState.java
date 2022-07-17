@@ -552,10 +552,11 @@ class InboundEstablishState {
         //if (_sentY != null)
         //    buf.append(" SentY: ").append(Base64.encode(_sentY, 0, 4));
         //buf.append(" Bob: ").append(Addresses.toString(_bobIP, _bobPort));
-        buf.append(" -> Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
+        buf.append("\n* Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
+        if (_sentRelayTag > 0)
         buf.append("; RelayTag: ").append(_sentRelayTag);
         //buf.append(" SignedOn: ").append(_sentSignedOnTime);
-        buf.append(' ').append(_currentState);
+        buf.append(" -> ").append(_currentState);
         return buf.toString();
     }
 }

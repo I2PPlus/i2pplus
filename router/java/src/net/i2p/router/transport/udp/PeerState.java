@@ -1567,7 +1567,7 @@ public class PeerState {
                     _transport.failed(state);
                     if (_log.shouldInfo())
                         _log.info("Message expired " + state + "\n* Target: " + this);
-                    if (!_isInbound && msg.getSeqNum() == 0)
+                    if (!_isInbound && state.getSeqNum() == 0)
                         totalFail = true; // see below
                 } else {
                     // it can not have an OutNetMessage if the source is the
