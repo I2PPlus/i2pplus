@@ -1817,26 +1817,28 @@ public class PeerState {
     }
 
     /**
-     *  Locks this.
+     *  Locks this
      */
     private boolean locked_shouldSend(OutboundMessageState state, long now) {
         synchronized(this) {
             if (allocateSendingBytes(state, now)) {
+              /***
                 if (_log.shouldDebug())
                     _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] allowed with "
                               + getSendWindowBytesRemaining()
                               + "/" + getSendWindowBytes()
                               + " remaining"
                               + " for message " + state.getMessageId() + ": " + state);
+               ***/
                 if (state.getPushCount() == 0)
                     _messagesSent++;
                 return true;
             } else {
                 _context.statManager().addRateData("udp.sendRejected", state.getPushCount());
                 if (_log.shouldDebug())
-                    _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected with: wsize=" + getSendWindowBytes()
-                              + " available=" + getSendWindowBytesRemaining()
-                              + " for [MsgID" + state.getMessageId() + "]" + state);
+                    _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected (Windown size: " + getSendWindowBytes()
+                              + " / available: " + getSendWindowBytesRemaining()
+                              + " bytes) for [MsgID" + state.getMessageId() + "]" + state);
                 return false;
             }
         }
