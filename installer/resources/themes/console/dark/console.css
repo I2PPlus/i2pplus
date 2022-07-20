@@ -1036,7 +1036,7 @@ th > img[src^="/imagegen"], .identicon {margin: 0 0 0 3px; height: 26px; width: 
 #netdb .netdbStats b {margin-right: 2px; margin-left: 0; text-align: left; color: var(--ink)}
 #netdb .netdbentry th b, #netdb .netdbentry td:first-child b {min-width: 80px; text-align: right}
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {margin: 0 5px 0 0; padding: 1px 4px 2px; font-family: var(--bodyfont); font-weight: 700; letter-spacing: .12em; color: #bb0; text-shadow: none; border-radius: 2px; box-shadow: var(--outline); background: var(--badge)}
-#netdb .sybil_routerinfo th code, #netdb .leaseset th code {margin: 4px 0 4px 3px}
+#netdb .sybil_routerinfo th code, #netdb .leaseset th code {margin: 4px 6px 4px 4px}
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, .leaseset th code {width: 150px; vertical-align: middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border: 1px solid #020}
 #netdb .netdbentry th code:hover, #netdb .netdbentry th code:active, .leaseset th code:hover, #netdb .sybil_routerinfo th code:hover, #netdb .sybil_routerinfo th code:active {width: auto}
 #netdb .netdbentry th code::selection, #netdb .sybil_routerinfo th code::selection, .leaseset th code::selection {color: #fff; background: #070}
