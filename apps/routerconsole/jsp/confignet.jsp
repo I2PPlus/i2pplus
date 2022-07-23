@@ -54,12 +54,12 @@
 <tr>
 <td>
 <div class="optionlist">
-<label id="ipv4config"><input type="checkbox" class="optbox" name="IPv4Firewalled" value="true" <jsp:getProperty name="nethelper" property="IPv4FirewalledChecked" /> >
+<label id="ipv4config"><input type="checkbox" class="optbox slider" name="IPv4Firewalled" value="true" <jsp:getProperty name="nethelper" property="IPv4FirewalledChecked" /> >
 <%=intl._t("Disable inbound IPv4 connections (firewalled)")%></label><br>
-<label><input type="checkbox" class="optbox" name="upnp" value="true" <jsp:getProperty name="nethelper" property="upnpChecked" /> >
+<label><input type="checkbox" class="optbox slider" name="upnp" value="true" <jsp:getProperty name="nethelper" property="upnpChecked" /> >
 <%=intl._t("Enable UPnP to open firewall ports")%></label><br>
-<label id="ipchange" title="<%=intl._t("This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed.")%>"><input type="checkbox" class="optbox" name="laptop" value="true" <jsp:getProperty name="nethelper" property="laptopChecked" /> >
-<%=intl._t("Laptop mode - new router identity when public IP address changes")%>
+<label id="ipchange" title="<%=intl._t("This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed.").replace("changed.", "changed when your public IP address changes.%>"><input type="checkbox" class="optbox slider" name="laptop" value="true" <jsp:getProperty name="nethelper" property="laptopChecked" /> >
+<%=intl._t("Laptop mode")%>
 <span class="config_experimental" title="<%=intl._t("This is an experimental feature")%>">(<i><%=intl._t("Experimental")%></i>)</span></label>
 </div>
 </td>
@@ -70,7 +70,7 @@
 <tr>
 <td>
 <div class="optionlist">
-<label><input type="checkbox" class="optbox" name="IPv6Firewalled" value="true" <jsp:getProperty name="nethelper" property="IPv6FirewalledChecked" /> >
+<label><input type="checkbox" class="optbox slider" name="IPv6Firewalled" value="true" <jsp:getProperty name="nethelper" property="IPv6FirewalledChecked" /> >
 <%=intl._t("Disable inbound (firewalled)")%></label><br>
 <label><input type="radio" class="optbox" name="ipv6" value="false" <%=nethelper.getIPv6Checked("false") %> >
 <%=intl._t("Disable IPv6")%></label><br>
@@ -128,7 +128,7 @@
 <div class="optionlist">
 <label><b><%=intl._t("UDP port")%>:</b>
 <input name ="udpPort" type="text" size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="configuredUdpPort" />" ></label><br>
-<label title="<%=intl._t("Select only if behind a firewall that blocks outbound UDP")%>"><input type="checkbox" class="optbox" name="disableUDP" value="disabled" <%=nethelper.getUdpDisabledChecked() %> >
+<label title="<%=intl._t("Select only if behind a firewall that blocks outbound UDP")%>"><input type="checkbox" class="optbox slider" name="disableUDP" value="disabled" <%=nethelper.getUdpDisabledChecked() %> >
 <%=intl._t("Completely disable UDP connections")%></label>
 </div>
 </td>
