@@ -285,7 +285,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             I2PSession s = socketManager.getSession();
             if (s.isClosed() && _socketManagerState != SocketManagerState.INIT) {
                 if (_log.shouldInfo())
-                    _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Building a new socket manager as old one closed [s=" + s + "]");
+                    _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Building new socket manager as old one closed [s=" + s + "]");
                 tunnel.removeSession(s);
                 // make sure the old one is closed
                 socketManager.destroySocketManager();
@@ -301,7 +301,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 */
             } else {
                 if (_log.shouldInfo())
-                    _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Not building a new socket manager as old one is open [s=" + s + "]");
+                    _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Not building new socket manager as old one is open [s=" + s + "]");
                 // If some other tunnel created the session, we need to add it
                 // as our session too.
                 // It's a Set in I2PTunnel
@@ -309,7 +309,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             }
         } else {
             if (_log.shouldInfo())
-                _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Building a new socket manager as there is no other one");
+                _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Building new socket manager as there is none exists");
             socketManager = buildSocketManager(tunnel, pkf);
 /*
    since we enabled ratchet by default, we're not compatible with ancient servers anyway.
