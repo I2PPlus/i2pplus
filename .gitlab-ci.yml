@@ -62,7 +62,7 @@ Java14:
 
 Java17:
   stage: build
-  image: nitesh231/hirsute-hippo
+  image: ubuntu@sha256:bace9fb0d5923a675c894d5c815da75ffe35e24970166a48a4460a48ae6e0d19
   # currently not well supported, needs some code fixes
   # remove this line once code is fixed
   allow_failure: true
@@ -95,3 +95,40 @@ findbugs:
     expose_as: findbugs
     paths: ['findbugs.html']
     expire_in: 1 month
+
+Java18:
+  stage: build
+  image: ubuntu@sha256:bace9fb0d5923a675c894d5c815da75ffe35e24970166a48a4460a48ae6e0d19
+  # currently not well supported, needs some code fixes
+  # remove this line once code is fixed
+  allow_failure: true
+  script:
+    - apt-get install openjdk-18-jdk -y
+#    - ./installer/resources/makegeoip.sh
+#    - ant pkg // izpack fail
+    - ant updater
+
+testing:
+  stage: test
+  image: openjdk:8
+  script:
+    - apt-get install -yqq libxml2-utils
+    - ./tests/scripts/checkcerts.sh
+    - ./tests/scripts/checkpo.sh
+    - ./tests/scripts/checkscripts.sh
+    - ./tests/scripts/checkutf8.sh
+    - ./tests/scripts/checkxml.sh
+
+findbugs:
+  stage: test
+  image: openjdk:8
+  only:
+    - schedules
+  script:
+    - apt-get install -yqq findbugs
+    - ant findbugs
+  artifacts:
+    expose_as: findbugs
+    paths: ['findbugs.html']
+    expire_in: 1 month
+
