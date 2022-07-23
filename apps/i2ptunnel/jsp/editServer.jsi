@@ -517,12 +517,14 @@
 <option title="<%=intl._t("no randomization, consistent performance")%>" value="0"<%=(tunnelVariance  ==  0 ? " selected=\"selected\"" : "") %>><%=intl._t("0 hop variance")%></option>
 <option title="<%=intl._t("medium randomization, lower performance")%>" value="1"<%=(tunnelVariance  ==  1 ? " selected=\"selected\"" : "") %>><%=intl._t("+ 0-1 hop variance")%></option>
 <option title="<%=intl._t("high randomization, very low performance")%>" value="2"<%=(tunnelVariance  ==  2 ? " selected=\"selected\"" : "") %>><%=intl._t("+ 0-2 hop variance")%></option>
+<option title="<%=intl._t("very high randomization, very low performance")%>" value="3"<%=(tunnelVariance  ==  3 ? " selected=\"selected\"" : "") %>><%=intl._t("+ 0-3 hop variance")%></option>
 <option title="<%=intl._t("standard randomization, standard performance")%>" value="-1"<%=(tunnelVariance == -1 ? " selected=\"selected\"" : "") %>><%=intl._t("+/- 0-1 hop variance")%></option>
 <option title="<%=intl._t("not recommended")%>" value="-2"<%=(tunnelVariance == -2 ? " selected=\"selected\"" : "") %>><%=intl._t("+/- 0-2 hop variance")%></option>
+<option title="<%=intl._t("definitely not recommended")%>" value="-3"<%=(tunnelVariance == -3 ? " selected=\"selected\"" : "") %>><%=intl._t("+/- 0-3 hop variance")%></option>
 <%
-        if (tunnelVariance > 2 || tunnelVariance < -2) {
+        if (tunnelVariance > 3 || tunnelVariance < -3) {
 %>
-<option value="<%=tunnelVariance%>" selected="selected"><%= (tunnelVariance > 2 ? "+ " : "+/- ") %>0-<%=tunnelVariance%> <%=intl._t("hop variance")%></option>
+<option value="<%=tunnelVariance%>" selected="selected"><%= (tunnelVariance > 3 ? "+ " : "+/- ") %>0-<%=tunnelVariance%> <%=intl._t("hop variance")%></option>
 <%      }
 %>
 </select>
@@ -553,12 +555,14 @@
 <option value="0"<%=(tunnelVarianceOut  ==  0 ? " selected=\"selected\"" : "") %>><%=intl._t("0 hop variance")%></option>
 <option value="1"<%=(tunnelVarianceOut  ==  1 ? " selected=\"selected\"" : "") %>><%=intl._t("+ 0-1 hop variance")%></option>
 <option value="2"<%=(tunnelVarianceOut  ==  2 ? " selected=\"selected\"" : "") %>><%=intl._t("+ 0-2 hop variance")%></option>
+<option value="2"<%=(tunnelVarianceOut  ==  3 ? " selected=\"selected\"" : "") %>><%=intl._t("+ 0-3 hop variance")%></option>
 <option value="-1"<%=(tunnelVarianceOut == -1 ? " selected=\"selected\"" : "") %>><%=intl._t("+/- 0-1 hop variance")%></option>
 <option value="-2"<%=(tunnelVarianceOut == -2 ? " selected=\"selected\"" : "") %>><%=intl._t("+/- 0-2 hop variance")%></option>
+<option value="-2"<%=(tunnelVarianceOut == -3 ? " selected=\"selected\"" : "") %>><%=intl._t("+/- 0-3 hop variance")%></option>
 <%
-        if (tunnelVarianceOut > 2 || tunnelVarianceOut < -2) {
+        if (tunnelVarianceOut > 3 || tunnelVarianceOut < -3) {
 %>
-<option value="<%=tunnelVarianceOut%>" selected="selected"><%= (tunnelVarianceOut > 2 ? "+ " : "+/- ") %>0-<%=tunnelVarianceOut%> <%=intl._t("hop variance")%></option>
+<option value="<%=tunnelVarianceOut%>" selected="selected"><%= (tunnelVarianceOut > 3 ? "+ " : "+/- ") %>0-<%=tunnelVarianceOut%> <%=intl._t("hop variance")%></option>
 <%
         }
 %>
