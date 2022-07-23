@@ -58,7 +58,7 @@
 <%=intl._t("Disable inbound IPv4 connections (firewalled)")%></label><br>
 <label><input type="checkbox" class="optbox slider" name="upnp" value="true" <jsp:getProperty name="nethelper" property="upnpChecked" /> >
 <%=intl._t("Enable UPnP to open firewall ports")%></label><br>
-<label id="ipchange" title="<%=intl._t("This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed.").replace("changed.", "changed when your public IP address changes.%>"><input type="checkbox" class="optbox slider" name="laptop" value="true" <jsp:getProperty name="nethelper" property="laptopChecked" /> >
+<label id="ipchange" title="<%=intl._t("This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed.").replace("changed.", "changed when your public IP address changes.")%>"><input type="checkbox" class="optbox slider" name="laptop" value="true" <jsp:getProperty name="nethelper" property="laptopChecked" /> >
 <%=intl._t("Laptop mode")%>
 <span class="config_experimental" title="<%=intl._t("This is an experimental feature")%>">(<i><%=intl._t("Experimental")%></i>)</span></label>
 </div>
