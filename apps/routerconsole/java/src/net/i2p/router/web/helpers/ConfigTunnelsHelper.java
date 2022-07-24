@@ -70,8 +70,8 @@ public class ConfigTunnelsHelper extends HelperBase {
     private static final int MAX_ADVANCED_QUANTITY = 16;
     private static final int MAX_BACKUP_QUANTITY = 3;
     private static final int MAX_ADVANCED_BACKUP_QUANTITY = 16;
-    private static final int MAX_VARIANCE = 2;
-    private static final int MIN_NEG_VARIANCE = -1;
+    private static final int MAX_VARIANCE = 3;
+    private static final int MIN_NEG_VARIANCE = -2;
 
     private void renderForm(StringBuilder buf, int index, String prefix, String name, TunnelPoolSettings in, TunnelPoolSettings out) {
 

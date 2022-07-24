@@ -172,7 +172,8 @@ public class HomeHelper extends HelperBase {
         _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "urbandictionary.svg" + S +
         "w3schools.i2p" + S + _x("Web technology reference and learning site") + S + "http://w3schools.i2p/" + S + I + "w3schools.svg" + S +
         "wikiless.i2p" + S + _x("Alternative Wikipedia front-end focused on privacy") + S + "http://wikiless.i2p/" + S + I + "wiki.svg" + S +
-        //"jalibrary.i2p" + S + _x("Books &amp; courses &amp art") + S + "http://jalibrary.i2p/" + S + I + "books.svg" + S +
+        "Wordnik" + S + _x("The biggest online English dictionary") + S + "http://wordnik.i2p/" + S + I + "wordnik.svg" + S +
+        //"jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "books.svg" + S +
         //"nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
         //"tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "books.svg" + S +
 
@@ -184,15 +185,18 @@ public class HomeHelper extends HelperBase {
         "DarkNetDaily" + S + _x("Darknet related news site") + S + "http://darknetdaily.i2p/" + S + I + "news.svg" + S +
         "DarknetLive" + S + _x("Darknet related news site") + S + "http://darknetlive.i2p/" + S + I + "news.svg" + S +
         "FrontLineDefenders" + S + _x("Human rights activism") + S + "http://frontlinedefenders.i2p/" + S + I + "news.svg" + S +
+        "Hackaday" + S + _x("Fresh hacks every day") + S + "http://hackaday.i2p/" + S + I + "hackaday.svg" + S +
         "High Times" + S + _x("Cannabis-related magazine") + S + "http://hightimes.i2p/" + S + I + "cannabis.svg" + S +
         "KrebsOnSecurity" + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "krebs.png" + S +
         "SchneierOnSecurity" + S + _x("Internationally renowned security technologist") + S + "http://schneieronsecurity.i2p/" + S + I + "schneier.png" + S +
         "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "linuxfarm.svg" + S +
         "NakedSecurity" + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
+        "MotherJones" + S + _x("Smart &amp; fearless journalism") + S + "http://motherjones.i2p/" + S + I + "news.svg" + S +
         _x("NewsNow") + S + _x("The Independent News Discovery Platform") + S + "http://newsnow.i2p/" + S + I + "newsnow.svg" + S +
         _x("Planet I2P") + S + _x("I2P News") + S + "http://planet.i2p/" + S + I + "planet.svg" + S +
         "RollingStone" + S + _x("Lifestyle magazine") + S + "http://rollingstone.i2p/" + S + I + "rollingstone.svg" + S +
         "ScienceDaily" + S + _x("Latest scientific research news") + S + "http://sciencedaily.i2p/" + S + I + "science.svg" + S +
+        "SoylentNews" + S + _x("Community-driven tech news") + S + "http://soylentnews.i2p/" + S + I + "news.svg" + S +
         "Slashdot" + S + _x("News for nerds") + S + "http://slashdot.i2p/" + S + I + "slashdot.svg" + S +
         "TechXplore" + S + _x("Technology and engineering news") + S + "http://techxplore.i2p/" + S + I + "news.svg" + S +
         "TechMeme" + S + _x("Technology news aggregator") + S + "http://techmeme.i2p/" + S + I + "news.svg" + S +

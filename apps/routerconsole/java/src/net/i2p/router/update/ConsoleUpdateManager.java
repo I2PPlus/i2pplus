@@ -1444,7 +1444,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     private boolean handleUnsignedFile(URI uri, String lastmod, File updFile) {
         String url = uri.toString();
-        if (FileUtil.verifyZip(updFile)) {
+        if (FileUtil.verifyZip(updFile) && !isExternalRestartPending()) {
             if (url.contains("skank"))
                 updateStatus("<b class=\"volatile\">" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b>");
             else
@@ -1475,10 +1475,10 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             if ("install".equals(policy)) {
                 if (url.contains("skank")) {
                     _log.log(Log.CRIT, "I2P+ update downloaded, restarting to install it...");
-                    updateStatus("<b>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b><br>" + _t("Restarting") + "&hellip;");
+//                    updateStatus("<b>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b><br>" + _t("Restarting") + "&hellip;");
                 } else {
                     _log.log(Log.CRIT, "Update was downloaded, restarting to install it...");
-                    updateStatus("<b class=\"volatile\">" + _t("Update downloaded") + "</b><br>" + _t("Restarting") + "&hellip;");
+//                    updateStatus("<b class=\"volatile\">" + _t("Update downloaded") + "</b><br>" + _t("Restarting") + "&hellip;");
                 }
                 restart();
             } else {

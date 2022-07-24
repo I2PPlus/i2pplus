@@ -58,11 +58,11 @@ public class TunnelConfig {
     private int _tunnelDepth = -1;
     private int _tunnelQuantity = -1;
     // -2 or higher is valid
-    private int _tunnelVariance = -3;
+    private int _tunnelVariance = -4;
     private int _tunnelBackupQuantity = -1;
     private int _tunnelDepthOut = -1;
     private int _tunnelQuantityOut = -1;
-    private int _tunnelVarianceOut = -3;
+    private int _tunnelVarianceOut = -4;
     private int _tunnelBackupQuantityOut = -1;
     private boolean _connectDelay;
     private String _customOptions;

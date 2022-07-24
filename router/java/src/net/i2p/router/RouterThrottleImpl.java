@@ -182,16 +182,15 @@ public class RouterThrottleImpl implements RouterThrottle {
             int maxProcessingTime = _context.getProperty(PROP_MAX_PROCESSINGTIME, DEFAULT_MAX_PROCESSINGTIME);
 
             //Set throttling if necessary
-            if ((ra.getAverage() > maxProcessingTime * 0.9
-                    || ra.getCurrent() > maxProcessingTime
-                    || ra.getLast() > maxProcessingTime) && maxTunnels > 0) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Refusing participating tunnel request: message processing congestion" +
-                              "\n* Current: " + ((int)ra.getCurrent()) + "ms" +
-                              "\n* Last: " + ((int)ra.getLast()) + "ms" +
-                              "\n* Average: " + ((int)ra.getAverage()) + "ms" +
-                              "\n* Max time to process: " + maxProcessingTime + "ms");
-                }
+            if ((ra.getAverage() > maxProcessingTime * 0.9 || ra.getCurrent() > maxProcessingTime ||
+                 ra.getLast() > maxProcessingTime) && maxTunnels > 0) {
+//                if (_log.shouldWarn()) {
+                _log.warn("Refusing participating tunnel request: message processing congestion" +
+                          "\n* Current: " + ((int)ra.getCurrent()) + "ms" +
+                          "\n* Last: " + ((int)ra.getLast()) + "ms" +
+                          "\n* Average: " + ((int)ra.getAverage()) + "ms" +
+                          "\n* Max time to process: " + maxProcessingTime + "ms");
+//                }
                 setTunnelStatus(_x("Declining tunnel requests" + ":<br>" + _x("High message delay")));
                 return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
             }
@@ -201,9 +200,9 @@ public class RouterThrottleImpl implements RouterThrottle {
         int numTunnels = _context.tunnelManager().getParticipatingCount();
         if (numTunnels >= maxTunnels) {
             if (maxTunnels > 0) {
-                if (_log.shouldWarn())
-                    _log.warn("Refusing participating tunnel request: already participating in "
-                              + numTunnels + " (max: " + maxTunnels + ")");
+//                if (_log.shouldWarn())
+                _log.warn("Refusing participating tunnel request: already participating in "
+                          + numTunnels + " (max: " + maxTunnels + ")");
                 _context.statManager().addRateData("router.throttleTunnelMaxExceeded", numTunnels);
                 setTunnelStatus(_x("Declining requests" + ": " + _x("Limit reached")));
             } else {
@@ -383,7 +382,8 @@ public class RouterThrottleImpl implements RouterThrottle {
         // dropping packets with WRED
         int availBps = Math.min((maxKBpsIn*1024*9/10) - usedIn, (maxKBpsOut*1024*9/10) - usedOut);
         if (availBps < MIN_AVAILABLE_BPS) {
-            if (_log.shouldWarn()) _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
+//            if (_log.shouldWarn())
+            _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
                                                      "Bps) is less than minimum required (" + MIN_AVAILABLE_BPS + "Bps)");
             setTunnelStatus(LIMIT_STR);
             return false;
@@ -407,7 +407,8 @@ public class RouterThrottleImpl implements RouterThrottle {
         long overage = Math.max(used1mIn - (maxKBpsIn*1024), used1mOut - (maxKBpsOut*1024));
         if ( (overage > 0) &&
              ((overage/(maxKBps*1024f)) > _context.random().nextFloat()) ) {
-            if (_log.shouldWarn()) _log.warn("Rejecting participating tunnel request \n* 1 minute rate (" + overage + " over) indicates overload.");
+//            if (_log.shouldWarn())
+            _log.warn("Rejecting participating tunnel request \n* 1 minute rate (" + overage + " over) indicates overload.");
             setTunnelStatus(LIMIT_STR);
             return false;
         }

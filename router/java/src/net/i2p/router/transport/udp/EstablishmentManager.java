@@ -145,13 +145,14 @@ class EstablishmentManager {
      * But SSU probably isn't higher priority than NTCP.
      * And it's important to not fail an establishment too soon and waste it.
      */
-    private static final int MAX_OB_ESTABLISH_TIME = 35*1000;
+    private static final int MAX_OB_ESTABLISH_TIME = 25*1000;
 
     /**
      * Kill any inbound that takes more than this
      * One round trip (Created-Confirmed)
+     * Note: could be two round trips for SSU2 with retry
      */
-    private static final int MAX_IB_ESTABLISH_TIME = 15*1000;
+    public static final int MAX_IB_ESTABLISH_TIME = 12*1000;
 
     /** max wait before receiving a response to a single message during outbound establishment */
     public static final int OB_MESSAGE_TIMEOUT = 15*1000;
@@ -170,7 +171,7 @@ class EstablishmentManager {
 
     // SSU 2
     private static final int MAX_TOKENS = 512;
-    public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
+    public static final long IB_TOKEN_EXPIRATION = 2*60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
 
@@ -1248,7 +1249,7 @@ class EstablishmentManager {
               case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
                 if (_log.shouldDebug())
                     _log.debug("Send retry to: " + state);
-                pkt = _builder2.buildRetryPacket(state2);
+                pkt = _builder2.buildRetryPacket(state2, 0);
                 break;
 
               default:
@@ -2555,10 +2556,14 @@ class EstablishmentManager {
         do {
             token = _context.random().nextLong();
         } while (token == 0);
-        // TODO shorten expiration based on _inboundTokens size
-        long expires = _context.clock().now() + expiration;
-        Token tok = new Token(token, expires);
+        long now = _context.clock().now();
+        Token tok;
         synchronized(_inboundTokens) {
+            // shorten expiration based on _inboundTokens size
+            if (expiration > 2*60*1000 && _inboundTokens.size() >  MAX_TOKENS / 2)
+                expiration /= 2;
+            long expires = now + expiration;
+            tok = new Token(token, expires);
             _inboundTokens.put(peer, tok);
         }
         return tok;
@@ -2609,13 +2614,13 @@ class EstablishmentManager {
         String ourV4Port = Integer.toString(_transport.getExternalPort(false));
         String ourV6Port = Integer.toString(_transport.getExternalPort(true));
         String ourV4Addr;
-        RouterAddress addr = _transport.getCurrentAddress(false);
+        RouterAddress addr = _transport.getCurrentExternalAddress(false);
         if (addr != null)
             ourV4Addr = addr.getHost();
         else
             ourV4Addr = null;
         String ourV6Addr;
-        addr = _transport.getCurrentAddress(true);
+        addr = _transport.getCurrentExternalAddress(true);
         if (addr != null)
             ourV6Addr = addr.getHost();
         else
@@ -2693,13 +2698,13 @@ class EstablishmentManager {
         try {
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "ISO-8859-1")));
             out.println("# SSU2 tokens, format: IPv4/IPv6/In/Out addr port token expiration");
-            RouterAddress addr = _transport.getCurrentAddress(false);
+            RouterAddress addr = _transport.getCurrentExternalAddress(false);
             if (addr != null) {
                 String us = addr.getHost();
                 if (us != null)
                     out.println("4 " + us + ' ' + _transport.getExternalPort(false));
             }
-            addr = _transport.getCurrentAddress(true);
+            addr = _transport.getCurrentExternalAddress(true);
             if (addr != null) {
                 String us = addr.getHost();
                 if (us != null)

@@ -90,7 +90,7 @@ class ClientManager {
     private static final int MAX_SESSION_ID = 65534;
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
 //    private static final int DEFAULT_MAX_SESSIONS = 100;
-    private static final int DEFAULT_MAX_SESSIONS = 256;
+    private static final int DEFAULT_MAX_SESSIONS = 512;
     /** 65535 */
     public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1);
 

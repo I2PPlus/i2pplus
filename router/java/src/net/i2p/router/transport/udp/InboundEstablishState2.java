@@ -99,8 +99,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         int type = data[off + TYPE_OFFSET] & 0xff;
         long token = DataHelper.fromLong8(data, off + TOKEN_OFFSET);
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
-            if (_log.shouldInfo())
-                _log.info("[SSU2] Received TokenRequest from: " + _aliceSocketAddress);
+            if (_log.shouldDebug())
+                _log.debug("[SSU2] Received TokenRequest from: " + _aliceSocketAddress);
             _currentState = InboundState.IB_STATE_TOKEN_REQUEST_RECEIVED;
             // decrypt in-place
             ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
@@ -166,7 +166,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new GeneralSecurityException("No DateTime block in Session/Token Request");
         _skew = _establishBegin - _timeReceived;
         if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW) {
-            // TODO send retry with termination
+            // send retry with termination
+            UDPPacket retry = _transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_SKEW);
+            _transport.send(retry);
             throw new GeneralSecurityException("Skew exceeded in Session/Token Request: " + _skew);
         }
         packetReceived();
@@ -257,6 +259,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new DataFormatException("bad SSU2 S");
         if (s.length != 32)
             throw new DataFormatException("bad SSU2 S len");
+        byte[] nb = new byte[32];
+        // compare to the _handshakeState
+        _handshakeState.getRemotePublicKey().getPublicKey(nb, 0);
+        if (!DataHelper.eqCT(s, 0, nb, 0, KEY_LEN))
+            throw new DataFormatException("s mismatch in RI: " + ri);
+
         if (!"2".equals(ra.getOption("v")))
             throw new DataFormatException("bad SSU2 v");
 
@@ -472,8 +480,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     public synchronized void receiveSessionRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
         if (_currentState != InboundState.IB_STATE_RETRY_SENT)
             throw new GeneralSecurityException("Bad state for SessionRequest after Retry: " + _currentState);
-        if (_log.shouldInfo())
-            _log.info("[SSU2] Received SessionRequest after retry from: " + _aliceSocketAddress);
+        if (_log.shouldDebug())
+            _log.debug("[SSU2] Received SessionRequest after retry from: " + _aliceSocketAddress);
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
         if (!from.equals(_aliceSocketAddress))
@@ -519,8 +527,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new GeneralSecurityException("No DateTime block in SessionRequest");
         // _nextSend is now(), from packetReceived()
         _skew = _nextSend - _timeReceived;
-        if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW)
-            throw new GeneralSecurityException("Skew exceeded in SessionRequest: " + _skew);
+        if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW) {
+            // send another retry with termination
+            UDPPacket retry = _transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_SKEW);
+            _transport.send(retry);
+            throw new GeneralSecurityException("Skew exceeded in Session Request: " + _skew);
+        }
         _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
         _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
         _rtt = (int) (_nextSend - _lastSend);
@@ -530,6 +542,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * Receive the last messages in the handshake, and create the PeerState.
      * If the message is fragmented, store the data for reassembly and return,
      * unless this was the last one.
+     *
+     * Exceptions thrown from here are fatal.
      *
      * @return the new PeerState2 if are done, may also be retrieved from getPeerState(),
      *         or null if more fragments to go
@@ -724,6 +738,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     public synchronized UDPPacket getRetransmitSessionCreatedPacket() {
         if (_sessCrForReTX == null)
             return null;
+        if (_log.shouldInfo())
+            _log.info("ReTX Sess Created on " + this);
         UDPPacket packet = UDPPacket.acquire(_context, false);
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();

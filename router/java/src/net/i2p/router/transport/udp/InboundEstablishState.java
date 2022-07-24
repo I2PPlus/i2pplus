@@ -103,13 +103,16 @@ class InboundEstablishState {
     }
 
     /** basic delay before backoff
-     *  Transmissions at 0, 3, 9 sec
-     *  Previously: 1500 (0, 1.5, 4.5, 10.5)
+     *  Transmissions at 0, 1, 3, 7 sec
+     *  This should be a little shorter than for outbound.
      */
-    protected static final long RETRANSMIT_DELAY = 3000;
+    protected static final long RETRANSMIT_DELAY = 1000;
 
-    /** max delay including backoff */
-    protected static final long MAX_DELAY = 15*1000;
+    /**
+     *  max delay including backoff
+     *  This should be a little shorter than for outbound.
+     */
+    protected static final long MAX_DELAY = EstablishmentManager.MAX_IB_ESTABLISH_TIME;
 
     /**
      *  @param localPort Must be our external port, otherwise the signature of the
@@ -552,10 +555,11 @@ class InboundEstablishState {
         //if (_sentY != null)
         //    buf.append(" SentY: ").append(Base64.encode(_sentY, 0, 4));
         //buf.append(" Bob: ").append(Addresses.toString(_bobIP, _bobPort));
-        buf.append(" -> Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
+        buf.append("\n* Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
+        if (_sentRelayTag > 0)
         buf.append("; RelayTag: ").append(_sentRelayTag);
         //buf.append(" SignedOn: ").append(_sentSignedOnTime);
-        buf.append(' ').append(_currentState);
+        buf.append(" -> ").append(_currentState);
         return buf.toString();
     }
 }
