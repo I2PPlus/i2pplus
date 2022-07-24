@@ -145,7 +145,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar form:first-child {margin: 6px 0 -5px 0}
 #sidebar p {padding: 0}
 #sidebar a:link, #sidebar a:visited {word-spacing: .05em}
-#sidebar #sb_peers a:not(:hover):not(:focus):not(:active), #sidebar #sb_peersadvanced a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels a:not(:hover):not(:focus):not(:active), #sidebar #sidebar #sb_general a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral a:not(:hover):not(:focus):not(:active) {color: var(--ink)}
+#sidebar #sb_peers a:not(:hover):not(:focus):not(:active), #sidebar #sb_peersadvanced a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels a:not(:hover):not(:focus):not(:active), #sidebar #sidebar #sb_general a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral a:not(:hover):not(:focus):not(:active), #sidebar #sb_queue a:not(:hover):not(:focus):not(:active) {color: var(--ink)}
 #sidebar #sb_general tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_peers tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels tr:hover a:not(:hover):not(:focus):not(:active) {color: #ff5}
 #sidebar .refresh {margin-top: -10px; margin-bottom: -4px; padding: 2px 0 0 0}
 #sb_warning {margin-left: -10px; margin-right: -10px; border-bottom: var(--border)}
