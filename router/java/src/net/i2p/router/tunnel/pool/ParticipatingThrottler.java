@@ -38,10 +38,10 @@ class ParticipatingThrottler {
     private static final int LIFETIME_PORTION = 3;
 //    private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
 //    private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
-    private static final int MIN_LIMIT = 64 / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = 256 / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = 256 / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = 1024 / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 20 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 40 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
     private boolean isSlow = SystemVersion.isSlow();
     private boolean isQuadCore = SystemVersion.getCores() >=4;
@@ -65,8 +65,8 @@ class ParticipatingThrottler {
         Result rv;
         if (count > limit) {
             if (count > limit) {
-                int random = (context.random().nextInt(90) * context.random().nextInt(90)) * 1000;
-                int bantime = Math.max(random, (30 + context.random().nextInt(30)) * 60 * 1000);
+                int random = (1 + context.random().nextInt(15) * context.random().nextInt(60)) * 1000;
+                int bantime = Math.max(random, (5 + context.random().nextInt(10)) * 60 * 1000);
                 int period = bantime / 60 / 1000;
                 context.banlist().banlistRouter(h, "Excessive participating tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
