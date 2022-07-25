@@ -2439,7 +2439,7 @@ public class PeerState {
            .append("; RTO: ").append(_rto)
            .append("; MTU: ").append(_mtu)
            .append("; Large MTU: ").append(_largeMTU)
-           .append("; Congestion window: ").append(_sendWindowBytes).append(" bytes")
+           .append("\n* Congestion window: ").append(_sendWindowBytes).append(" bytes")
            .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
            .append("; SST: ").append(_slowStartThreshold).append(" bytes")
            .append("; FastRetransmit? ").append(_fastRetransmit)
