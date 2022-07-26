@@ -83,7 +83,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             if (_transport.hasIPv6Address() && _transport.getIPv6Config() != IPV6_ONLY)
                 delay /= 2;
             if (_log.shouldDebug())
-                _log.debug("reschedule for " + net.i2p.data.DataHelper.formatDuration(delay));
+                _log.debug("Rescheduling test to run in " + net.i2p.data.DataHelper.formatDuration(delay) + "...");
             schedule(delay);
         }
     }
@@ -126,7 +126,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             return;
         _forceRun = isIPv6 ? FORCE_IPV6 : FORCE_IPV4;
         if (_log.shouldDebug())
-            _log.debug("reschedule for " + net.i2p.data.DataHelper.formatDuration(delay));
+            _log.debug("Rescheduling test to run in " + net.i2p.data.DataHelper.formatDuration(delay) + "...");
         reschedule(delay);
     }
 
@@ -146,7 +146,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
         if (isAlive) {
             long delay = _context.random().nextInt(2*TEST_FREQUENCY);
             if (_log.shouldDebug())
-                _log.debug("reschedule for " + net.i2p.data.DataHelper.formatDuration(delay));
+                _log.debug("Rescheduling test to run in " + net.i2p.data.DataHelper.formatDuration(delay) + "...");
             reschedule(delay);
         } else {
             cancel();
