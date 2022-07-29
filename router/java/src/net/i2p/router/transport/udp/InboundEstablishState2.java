@@ -816,7 +816,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         StringBuilder buf = new StringBuilder(128);
         buf.append("IES2 ");
         buf.append(Addresses.toString(_aliceIP, _alicePort));
-        buf.append(" Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
+        buf.append("\n* Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
         buf.append(" Rcv ID: ").append(_rcvConnID);
         buf.append(" Send ID: ").append(_sendConnID);
         if (_sentRelayTag > 0)
