@@ -187,7 +187,7 @@ public class HomeHelper extends HelperBase {
         "DarkNetDaily" + S + _x("Darknet related news site") + S + "http://darknetdaily.i2p/" + S + I + "news.svg" + S +
         "DarknetLive" + S + _x("Darknet related news site") + S + "http://darknetlive.i2p/" + S + I + "news.svg" + S +
         "FrontLineDefenders" + S + _x("Human rights activism") + S + "http://frontlinedefenders.i2p/" + S + I + "news.svg" + S +
-        "HumanRightsWatch" + S + _x("Defending Human Rights Worldwide") + S + "http://frontlinedefenders.i2p/" + S + I + "news.svg" + S +
+        "HumanRightsWatch" + S + _x("Defending Human Rights Worldwide") + S + "http://humanrightswatch.i2p/" + S + I + "news.svg" + S +
         "Hackaday" + S + _x("Fresh hacks every day") + S + "http://hackaday.i2p/" + S + I + "hackaday.svg" + S +
         "HackerNews" + S + _x("Computer related news aggregation") + S + "http://hackernews.i2p/" + S + I + "news.svg" + S +
         "High Times" + S + _x("Cannabis-related magazine") + S + "http://hightimes.i2p/" + S + I + "cannabis.svg" + S +
