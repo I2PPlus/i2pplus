@@ -167,6 +167,7 @@ public class HomeHelper extends HelperBase {
         "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "wiki.svg" + S +
         "imperial.i2p" + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "books.svg" + S +
         "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "books.svg" + S +
+        "mathworld.i2p" + S + _x("Wolfram's Online Math Reference") + S + "http://mathworld.i2p/" + S + I + "books.svg" + S +
         "mdn.i2p" + S + _x("Mozilla Developer Network") + S + "http://mdn.i2p/" + S + I + "mdn.svg" + S +
         "Philosopedia" + S + _x("Internet Encylopedia of Philosophy") + S + "http://philosopedia.i2p/" + S + I + "books.svg" + S +
         "plato.i2p" + S + _x("Standford Encylopedia of Philosophy") + S + "http://plato.i2p/" + S + I + "plato.png" + S +
@@ -184,6 +185,7 @@ public class HomeHelper extends HelperBase {
         "ArsTechnica" + S + _x("Technology News &amp; more...") + S + "http://arstechnica.i2p/" + S + I + "arstechnica.svg" + S +
         "bellingcat.i2p" + S + _x("Independent investigative journalism") + S + "http://bellingcat.i2p/" + S + I + "bellingcat.svg" + S +
         "BenthamsGaze" + S + _x("Information Security Research &amp; Education") + S + "http://benthamsgaze.i2p/" + S + I + "benthamsgaze.png" + S +
+        "CultureMagazine" + S + _x("Cannabis-related magazine") + S + "http://culturemagazine.i2p/" + S + I + "cannabis.svg" + S +
         "DarkDotNet" + S + _x("Darknet related news site") + S + "http://darkdotnet.i2p/" + S + I + "news.svg" + S +
         "DarkNetDaily" + S + _x("Darknet related news site") + S + "http://darknetdaily.i2p/" + S + I + "news.svg" + S +
         "DarknetLive" + S + _x("Darknet related news site") + S + "http://darknetlive.i2p/" + S + I + "news.svg" + S +
@@ -197,6 +199,7 @@ public class HomeHelper extends HelperBase {
         "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "linuxfarm.svg" + S +
         "NakedSecurity" + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
         "MotherJones" + S + _x("Smart &amp; fearless journalism") + S + "http://motherjones.i2p/" + S + I + "news.svg" + S +
+        _x("Newsweek") + S + _x("American &amp International News") + S + "http://newsweek.i2p/" + S + I + "newsweek.svg" + S +
         _x("NewsNow") + S + _x("The Independent News Discovery Platform") + S + "http://newsnow.i2p/" + S + I + "newsnow.svg" + S +
         _x("Planet I2P") + S + _x("I2P News") + S + "http://planet.i2p/" + S + I + "planet.svg" + S +
         "RollingStone" + S + _x("Lifestyle magazine") + S + "http://rollingstone.i2p/" + S + I + "rollingstone.svg" + S +
@@ -207,8 +210,10 @@ public class HomeHelper extends HelperBase {
         "TechMeme" + S + _x("Technology news aggregator") + S + "http://techmeme.i2p/" + S + I + "news.svg" + S +
         "TheConversation" + S + _x("Academic commentary and essays") + S + "http://theconverastion.i2p/" + S + I + "theconversation.svg" + S +
         "TheMarkup" + S + _x("Watching Big Tech...") + S + "http://themarkup.i2p/" + S + I + "news.svg" + S +
+        _x("TheMoscowTimes") + S + _x("Independent Journalism from Russia") + S + "http://themoscowtimes.i2p/" + S + I + "news.svg" + S +
         "ThreatPost" + S + _x("Security related news") + S + "http://threatpost.i2p/" + S + I + "news.svg" + S +
         "TorrentFreak" + S + _x("Filesharing &amp; copyright news") + S + "http://torrentfreak.i2p/" + S + I + "torrentfreak.svg" + S +
+        "Ukrinform" + S + _x("Ukranian National News Agency") + S + "http://ukrinform.i2p/" + S + I + "news.svg" + S +
         "Wired" + S + _x("Technology News &amp; more...") + S + "http://wired.i2p/" + S + I + "wired.svg" + S +
 
         "";
