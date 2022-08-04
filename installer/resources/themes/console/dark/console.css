@@ -124,6 +124,7 @@ ul {margin: 0; padding: 0}
 #sb_localtunnels tr:last-child td:first-child {background-position: center center}
 #sb_localtunnels td.ping {background-image: var(--ping)}
 #sb_localtunnels td.tunnelServer {background-image: var(--server)}
+#sb_localtunnels td.tunnelI2PSnark {background-image: url(/themes/console/images/snark.svg)}
 #sb_localtunnels td:last-child {padding: 2px 6px 2px 0; width: 1%; min-width: 18px; text-align: right; background: var(--local_inprogress) no-repeat right 6px center / 16px}
 #sb_localtunnels td.tunnelReady {background: var(--local_up) no-repeat right 5px center / 16px}
 #sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 5px center / 16px}

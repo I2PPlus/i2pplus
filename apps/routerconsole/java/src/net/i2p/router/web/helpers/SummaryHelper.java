@@ -716,19 +716,23 @@ public class SummaryHelper extends HelperBase {
                 Hash h = client.calculateHash();
                 Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
                 Boolean isPing = (name.startsWith("Ping") && name.contains("[")) || name.equals("I2Ping");
+                Boolean isSnark = name.equals(_t("I2PSnark"));
 
                 buf.append("<tr><td ");
-                if (server)
+                if (isSnark)
+                    buf.append("class=\"tunnelI2PSnark\" ");
+                else if (server)
                     buf.append("class=\"tunnelServer\" ");
                 else if (isPing)
                     buf.append("class=\"ping\" ");
                 buf.append("align=\"right\"><img src=\"/themes/console/images/");
-                if (server) {
+                if (isSnark) {
+                    buf.append("snark.svg\" alt=\"I2PSnark\" title=\"").append(_t("Torrents"));
+                } else if (server) {
                     buf.append("server.svg\" alt=\"Server\" title=\"").append(_t("Server"));
                     if (!isAdvanced()) {
                         buf.append(" (").append(_t("service may be available to peers")).append(")");
                      }
-                     buf.append("\" width=\"16\" height=\"16\">");
                 } else {
                     if (isPing)
                         buf.append("ping.svg\" alt=\"Client\" title=\"").append(_t("Client"));
@@ -737,8 +741,8 @@ public class SummaryHelper extends HelperBase {
                     if (!isAdvanced()) {
                         buf.append(" (").append(_t("service is only available locally")).append(")");
                     }
-                    buf.append("\" width=\"16\" height=\"16\">");
                 }
+                buf.append("\" width=\"16\" height=\"16\">");
                 buf.append("</td><td><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
                 buf.append("\" target=\"_top\" title=\"").append(_t("Show tunnels")).append("\">");
                 // Increase permitted max length of tunnel name & handle overflow with css

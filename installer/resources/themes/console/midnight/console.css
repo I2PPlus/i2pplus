@@ -277,6 +277,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 #sb_localtunnels td:first-child {background-image: var(--client); background-position: center center; background-repeat: no-repeat; background-size: 16px}
 #sidebar #sb_localtunnels td:nth-child(2)::before {display: none}
 #sb_localtunnels td.tunnelServer {background-image: var(--server)}
+#sb_localtunnels td.tunnelI2PSnark {background-image: url(/themes/console/images/snark.svg)}
 #sb_localtunnels td.ping {background-image: var(--ping)}
 #sb_localtunnels td:last-child {background-image: url(/themes/console/images/local_inprogress.png); background-position: right 1px center; background-repeat: no-repeat; background-size: 16px}
 #sb_localtunnels td.tunnelReady {background-image: url(/themes/console/images/local_up.png)}
