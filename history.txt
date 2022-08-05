@@ -1,3 +1,37 @@
+2022-08-02 zzz
+ * SSU2: More Path challenge WIP
+
+2022-07-31 zzz
+ * SSU2: Add state lookup by conn ID
+
+2022-07-29 zzz
+ * LogManager: Prevent hangs at shutdown on Mac after dock right-click-quit (Gitlab #363)
+
+2022-07-27 zzz
+ * NetDB: Publish ff stats based on current caps, not previous
+ * Router: Log warning if no family keys loaded
+ * SSU: Decrease MTU only on retransmit of large packets
+ * SSU2: Stub out path challenge
+
+2022-07-26 zzz
+ * SSU2: Send termination in response to termination
+
+2022-07-25 zzz
+ * SSU2: Fix bitfield shifts of 256 or more
+
+2022-07-21 zzz
+ * Console: Fix saving flat clients.config file
+
+2022-07-19 zzz
+ * GeoIP: Don't lookup route48 addresses
+ * SSU:
+   - Reduce max establishment time
+   - Retransmit handshake messages faster and expire faster (SSU 1/2)
+ * SSU2:
+    - Shorten token expiration based on cache size
+    - Retransmit session confirmed after receiving apparent retransmitted session created
+    - Fix storage/checking of local firewalled IP address/port in token file
+
 2022-07-17 zzz
  * SSU2:
    - More MTU fixes

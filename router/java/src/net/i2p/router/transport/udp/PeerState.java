@@ -108,8 +108,6 @@ public class PeerState {
     protected volatile long _lastACKSend;
     /** when did we decide we need to ACK to this peer? */
     protected volatile long _wantACKSendSince;
-    /** have we received a packet with the ECN bit set in the current second? */
-    private boolean _currentSecondECNReceived;
     /**
      * have all of the packets received in the current second requested that
      * the previous second's ACKs be sent?
@@ -1257,7 +1255,7 @@ public class PeerState {
                         _log.debug("Increased MTU after " + maxPktSz + " byte packet acked on " + this);
                 }
             } else {
-                if (_mtu > _minMTU) {
+                if (_mtu > _minMTU && maxPktSz > _mtu - (MTU_STEP * 4)) {
                     _mtu = Math.max(_mtu - MTU_STEP, _minMTU);
                 _mtuDecreases++;
                     _mtuIncreases = 0;
@@ -1363,7 +1361,6 @@ public class PeerState {
             congestionOccurred();
         }
         _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes);
-        _currentSecondECNReceived = true;
         _lastReceiveTime = _context.clock().now();
     }
 
@@ -1633,8 +1630,8 @@ public class PeerState {
                 long old = _retransmitTimer;
                 if (_retransmitTimer == 0) {
                     _retransmitTimer = now + getRTO();
-                    if (_log.shouldDebug())
-                    _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] allocated " + rv.size() + " pushing retransmitter from " + old + " to " + _retransmitTimer);
+                    //if (_log.shouldDebug())
+                    //    _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] allocated " + rv.size() + " pushing retransmitter from " + old + " to " + _retransmitTimer);
                 } else if (_fastRetransmit.get()) {
                     // right?
                     _retransmitTimer = now + getRTO();
@@ -2436,10 +2433,11 @@ public class PeerState {
             buf.append("\n* Last ACK sent: ").append(new Date(_lastACKSend));
         buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms")
            .append("; RTT: ").append(_rtt)
+           .append("; RTTdev: ").append(_rttDeviation)
            .append("; RTO: ").append(_rto)
            .append("; MTU: ").append(_mtu)
            .append("; Large MTU: ").append(_largeMTU)
-           .append("; Congestion window: ").append(_sendWindowBytes).append(" bytes")
+           .append("\n* Congestion window: ").append(_sendWindowBytes).append(" bytes")
            .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
            .append("; SST: ").append(_slowStartThreshold).append(" bytes")
            .append("; FastRetransmit? ").append(_fastRetransmit)

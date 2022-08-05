@@ -124,19 +124,32 @@ class SSU2Payload {
          *  @param lastReceived in theory could wrap around to negative, but very unlikely
          */
         public void gotTermination(int reason, long lastReceived);
+
+        /**
+         *  @param from null if unknown
+         *  @since 0.9.55
+         */
+        public void gotPathChallenge(RemoteHostId from, byte[] data);
+
+        /**
+         *  @param from null if unknown
+         *  @since 0.9.55
+         */
+        public void gotPathResponse(RemoteHostId from, byte[] data);
     }
 
     /**
      *  Incoming payload. Calls the callback for each received block.
      *
      *  @param isHandshake true for Token Req, Retry, Sess Req, Sess Created; false for Sess Confirmed
+     *  @param from for path challenge/response only, may be null
      *  @return number of blocks processed
      *  @throws IOException on major errors
      *  @throws DataFormatException on parsing of individual blocks
      *  @throws I2NPMessageException on parsing of I2NP block
      */
     public static int processPayload(I2PAppContext ctx, PayloadCallback cb,
-                                     byte[] payload, int off, int length, boolean isHandshake)
+                                     byte[] payload, int off, int length, boolean isHandshake, RemoteHostId from)
                                      throws IOException, DataFormatException, I2NPMessageException {
         int blocks = 0;
         boolean gotPadding = false;
@@ -350,6 +363,22 @@ class SSU2Payload {
                     int rsn = payload[i + 8] & 0xff;
                     cb.gotTermination(rsn, last);
                     gotTermination = true;
+                    break;
+
+                case BLOCK_PATHCHALLENGE:
+                    if (isHandshake)
+                        throw new IOException("Illegal block in handshake: " + type);
+                    byte[] cdata = new byte[len];
+                    System.arraycopy(payload, i, cdata, 0, len);
+                    cb.gotPathChallenge(from, cdata);
+                    break;
+
+                case BLOCK_PATHRESP:
+                    if (isHandshake)
+                        throw new IOException("Illegal block in handshake: " + type);
+                    byte[] rdata = new byte[len];
+                    System.arraycopy(payload, i, rdata, 0, len);
+                    cb.gotPathResponse(from, rdata);
                     break;
 
                 case BLOCK_PADDING:
@@ -834,6 +863,48 @@ class SSU2Payload {
             off += 4;
             DataHelper.toLong8(tgt, off, t);
             return off + 8;
+        }
+    }
+
+    /**
+     *  @since 0.9.55
+     */
+    public static class PathChallengeBlock extends Block {
+        private final byte[] d;
+
+        public PathChallengeBlock(byte[] data) {
+            super(BLOCK_PATHCHALLENGE);
+            d = data;
+        }
+
+        public int getDataLength() {
+            return d.length;
+        }
+
+        public int writeData(byte[] tgt, int off) {
+            System.arraycopy(d, 0, tgt, off, d.length);
+            return off + d.length;
+        }
+    }
+
+    /**
+     *  @since 0.9.55
+     */
+    public static class PathResponseBlock extends Block {
+        private final byte[] d;
+
+        public PathResponseBlock(byte[] data) {
+            super(BLOCK_PATHRESP);
+            d = data;
+        }
+
+        public int getDataLength() {
+            return d.length;
+        }
+
+        public int writeData(byte[] tgt, int off) {
+            System.arraycopy(d, 0, tgt, off, d.length);
+            return off + d.length;
         }
     }
 }

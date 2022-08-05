@@ -181,7 +181,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
-            int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake);
+            int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake, null);
             if (_log.shouldDebug())
                 _log.debug("[SSU2] Processed " + blocks + " blocks on " + this);
         } catch (Exception e) {
@@ -418,6 +418,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         // this sets the state to FAILED
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId);
+    }
+
+    public void gotPathChallenge(RemoteHostId from, byte[] data) {
+        throw new IllegalStateException("Bad block in handshake");
+    }
+
+    public void gotPathResponse(RemoteHostId from, byte[] data) {
+        throw new IllegalStateException("Bad block in handshake");
     }
 
     /////////////////////////////////////////////////////////
@@ -808,11 +816,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         StringBuilder buf = new StringBuilder(128);
         buf.append("IES2 ");
         buf.append(Addresses.toString(_aliceIP, _alicePort));
-        buf.append(" Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
-        buf.append(" Rcv ID: ").append(_rcvConnID);
-        buf.append(" Send ID: ").append(_sendConnID);
+        buf.append("\n* Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
+        buf.append("; Rcv ID: ").append(_rcvConnID);
+        buf.append("; Send ID: ").append(_sendConnID);
         if (_sentRelayTag > 0)
-            buf.append(" RelayTag: ").append(_sentRelayTag);
+            buf.append("; RelayTag: ").append(_sentRelayTag);
         buf.append(' ').append(_currentState);
         return buf.toString();
     }

@@ -258,7 +258,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
-            int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake);
+            int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake, null);
             if (_log.shouldDebug())
                 _log.debug("[SSU2] Processed " + blocks + " blocks on " + this);
         } catch (Exception e) {
@@ -346,6 +346,14 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         // this sets the state to FAILED
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
+    }
+
+    public void gotPathChallenge(RemoteHostId from, byte[] data) {
+        // won't be called, SSU2Payload will throw
+    }
+
+    public void gotPathResponse(RemoteHostId from, byte[] data) {
+        // won't be called, SSU2Payload will throw
     }
 
     /////////////////////////////////////////////////////////

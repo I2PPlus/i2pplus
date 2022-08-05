@@ -179,7 +179,7 @@ class PeerTestState {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("PeerTest ").append(_testNonce)
+        buf.append("\n* PeerTest ").append(_testNonce)
            .append(_isIPv6 ? " [IPv6]" : " [IPv4]")
            .append(" started ").append(DataHelper.formatTime(_beginTime))
            .append(" as ").append(_ourRole.toString()).append("\n*");

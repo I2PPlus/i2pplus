@@ -96,7 +96,7 @@ function refreshSidebar(timestamp) {
         }
 
         function removeMeta() {
-          var meta = document.querySelector("[http-equiv='meta']");
+          var meta = document.querySelector('[http-equiv="refresh"]');
           if (meta != null) {
             meta.remove();
           }

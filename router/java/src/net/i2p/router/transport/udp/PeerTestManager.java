@@ -261,7 +261,7 @@ class PeerTestManager {
                     int sent = state.incrementPacketsRelayed();
                     if (sent > MAX_RELAYED_PER_TEST_ALICE) {
                         if (_log.shouldWarn())
-                            _log.warn("Sent too many packets: " + state);
+                            _log.warn("Sent too many packets " + state);
                         if (!_currentTestComplete)
                             testComplete();
                         return;
@@ -764,7 +764,7 @@ class PeerTestManager {
                     receiveFromCharlieAsBob(from, fromPeer, inSession, state);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Received from a fourth party as Bob! Alice: " + state.getAliceIP() + ", Charlie: " + state.getCharlieIP() + ", Dave: " + from);
+                        _log.warn("Received from a fourth party as Bob! Alice " + state.getAliceIP() + ", Charlie " + state.getCharlieIP() + ", Dave: " + from);
                 }
             } else if (state.getOurRole() == CHARLIE) {
                 if ( (testIP == null) || (testPort <= 0) ) {
@@ -812,7 +812,7 @@ class PeerTestManager {
                                  data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE);
             int payloadLen = len - (LONG_HEADER_SIZE + MAC_LEN);
             SSU2Payload.PayloadCallback cb = new PTCallback(from);
-            SSU2Payload.processPayload(_context, cb, data, off + LONG_HEADER_SIZE, payloadLen, false);
+            SSU2Payload.processPayload(_context, cb, data, off + LONG_HEADER_SIZE, payloadLen, false, null);
         } catch (Exception e) {
             if (_log.shouldWarn())
                 _log.warn("Bad PeerTest packet:\n" + HexDump.dump(data, off, len), e);
@@ -968,7 +968,7 @@ class PeerTestManager {
                        "; Hash: " + h +
                        "; Nonce: " + nonce +
                        "; IP/Port: " + Addresses.toString(testIP, testPort) +
-                       "; State: " + state);
+                       "; State " + state);
 
         byte[] fromIP = from.getIP();
         int fromPort = from.getPort();
@@ -1563,7 +1563,7 @@ class PeerTestManager {
         } else {
             if (state.getReceiveBobTime() > now - (RESEND_TIMEOUT / 2)) {
                 if (_log.shouldWarn())
-                    _log.warn("Too soon, not retransmitting: " + state);
+                    _log.warn("Too soon, not retransmitting " + state);
                 return;
             }
         }
@@ -1591,12 +1591,12 @@ class PeerTestManager {
             // we send two packets below, but increment just once
             if (state.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_CHARLIE) {
                 if (_log.shouldWarn())
-                    _log.warn("Too many, not retransmitting: " + state);
+                    _log.warn("Too many, not retransmitting " + state);
                 return;
             }
 
             if (_log.shouldDebug())
-                _log.debug("Receive from Bob: " + state);
+                _log.debug("Received from Bob " + state);
 
             if (isNew) {
                 Long lnonce = Long.valueOf(nonce);
@@ -1694,7 +1694,7 @@ class PeerTestManager {
             } else {
                 if (state.getReceiveAliceTime() > now - (RESEND_TIMEOUT / 2)) {
                     if (_log.shouldWarn())
-                        _log.warn("Too soon, not retransmitting: " + state);
+                        _log.warn("Too soon, not retransmitting " + state);
                     return;
                 }
             }
@@ -1707,7 +1707,7 @@ class PeerTestManager {
 
             if (state.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_BOB) {
                 if (_log.shouldWarn())
-                    _log.warn("Too many, not retransmitting: " + state);
+                    _log.warn("Too many, not retransmitting " + state);
                 return;
             }
 
@@ -1725,7 +1725,7 @@ class PeerTestManager {
                                                                      charlie.getCurrentMACKey());
 
             if (_log.shouldDebug())
-                _log.debug("Received from Alice: " + state);
+                _log.debug("Received from Alice " + state);
 
             _transport.send(packet);
         } catch (UnknownHostException uhe) {
@@ -1755,13 +1755,13 @@ class PeerTestManager {
         long now = _context.clock().now();
         if (state.getReceiveCharlieTime() > now - (RESEND_TIMEOUT / 2)) {
             if (_log.shouldWarn())
-                _log.warn("Too soon, not retransmitting: " + state);
+                _log.warn("Too soon, not retransmitting " + state);
             return;
         }
 
         if (state.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_BOB) {
             if (_log.shouldWarn())
-                _log.warn("Too many, not retransmitting: " + state);
+                _log.warn("Too many, not retransmitting " + state);
             return;
         }
         state.setReceiveCharlieTime(now);
@@ -1773,7 +1773,7 @@ class PeerTestManager {
                                                                state.getCharlieIntroKey(), state.getNonce());
 
         if (_log.shouldDebug())
-            _log.debug("Received from Charlie, sending Alice back the OK: " + state);
+            _log.debug("Received from Charlie, sending Alice back the OK " + state);
 
         _transport.send(packet);
     }
@@ -1793,13 +1793,13 @@ class PeerTestManager {
         long now = _context.clock().now();
         if (state.getReceiveAliceTime() > now - (RESEND_TIMEOUT / 2)) {
             if (_log.shouldWarn())
-                _log.warn("Too soon, not retransmitting: " + state);
+                _log.warn("Too soon, not retransmitting " + state);
             return;
         }
 
         if (state.incrementPacketsRelayed() > MAX_RELAYED_PER_TEST_CHARLIE) {
             if (_log.shouldWarn())
-                _log.warn("Too many, not retransmitting: " + state);
+                _log.warn("Too many, not retransmitting " + state);
             return;
         }
         state.setReceiveAliceTime(now);
@@ -1812,7 +1812,7 @@ class PeerTestManager {
             UDPPacket packet = _packetBuilder.buildPeerTestToAlice(aliceIP, from.getPort(), aliceIntroKey, _transport.getIntroKey(), nonce);
 
             if (_log.shouldDebug())
-                _log.debug("Received from Alice: " + state);
+                _log.debug("Received from Alice " + state);
 
             _transport.send(packet);
         } catch (UnknownHostException uhe) {
@@ -1838,6 +1838,9 @@ class PeerTestManager {
     }
 
     /**
+     *  This is only for out-of-session messages 5-7,
+     *  where most blocks are not allowed.
+     *
      *  @since 0.9.54
      */
     private class PTCallback implements SSU2Payload.PayloadCallback {
@@ -1919,6 +1922,14 @@ class PeerTestManager {
         }
 
         public void gotTermination(int reason, long count) {
+            throw new IllegalStateException("Bad block in PT");
+        }
+
+        public void gotPathChallenge(RemoteHostId from, byte[] data) {
+            throw new IllegalStateException("Bad block in PT");
+        }
+
+        public void gotPathResponse(RemoteHostId from, byte[] data) {
             throw new IllegalStateException("Bad block in PT");
         }
     }
