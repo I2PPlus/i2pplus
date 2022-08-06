@@ -28,7 +28,8 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
     private int _forceRun;
     private boolean _lastTestIPv6 = true;
 
-    private static final int TEST_FREQUENCY = 13*60*1000;
+//    private static final int TEST_FREQUENCY = 13*60*1000;
+    private static final int TEST_FREQUENCY = 5*60*1000;
 //    private static int TEST_FREQUENCY = 13*60*1000;
 //    private static final String PROP_UDP_TEST_FREQ = "i2np.udp.testFrequency";
     private static final int MIN_TEST_FREQUENCY = 45*1000;
