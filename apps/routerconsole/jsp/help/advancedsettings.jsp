@@ -110,6 +110,11 @@
 <tr><th>router.updateUnsignedURL={url}</th></tr>
 <tr><td><%=intl._t("This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!")%></td></tr>
 
+i2np.udp.disablePeerTest
+
+<tr><th>i2np.udp.disablePeerTest={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]")%></td></tr>
+
 <tr><th>i2p.streaming.answerPings={true|false}</th></tr>
 <tr><td><%=intl._t("This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager.")%></td></tr>
 
