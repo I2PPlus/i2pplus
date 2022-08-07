@@ -556,7 +556,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                         if (ratchet1 && !ratchet2) {
                             failed(peer, false);
                             if (_log.shouldWarn())
-                                _log.warn("[Job " + getJobId() + "] Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) + "] -> does not support AEAD replies");
+                                _log.warn("[Job " + getJobId() + "] Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) +
+                                          "] -> Router does not support AEAD replies");
                             return;
                         }
                         supportsRatchet = ratchet1 && ratchet2;
