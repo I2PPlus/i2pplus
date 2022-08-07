@@ -616,7 +616,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             for (int i = 0; i < totalfrag; i++) {
                 if (_sessConfFragments[i] == null) {
                     if (_log.shouldWarn())
-                        _log.warn("[SSU2] Still missing at least one SessConfirmed fragment on " + this);
+                        _log.warn("[SSU2] Still missing at least one SessionConfirmed fragment on " + this);
                     // there is no facility to ack individual fragments
                     //packetReceived();
                     return null;
@@ -635,7 +635,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 joff += f.length;
             }
             if (_log.shouldWarn())
-                _log.warn("Have all " + totalfrag + " sess conf frags, total length " + len + " on " + this);
+                _log.warn("[SSU2] Have all " + totalfrag + " SessionConfirmed fragments (total length: " + len + " bytes) on " + this);
         }
         _handshakeState.mixHash(data, off, SHORT_HEADER_SIZE);
         //if (_log.shouldDebug())
@@ -747,7 +747,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_sessCrForReTX == null)
             return null;
         if (_log.shouldInfo())
-            _log.info("ReTX Sess Created on " + this);
+            _log.info("Retransmit Session created on " + this);
         UDPPacket packet = UDPPacket.acquire(_context, false);
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
