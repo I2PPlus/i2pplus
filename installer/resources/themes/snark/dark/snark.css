@@ -293,7 +293,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 .downloading.active:hover td#torrents .torrentAction {background:linear-gradient(to left,#3c3,#3c3 2px,#030 2px)}
 .seeding.active td#torrents .torrentAction {background:linear-gradient(to left,#f64384,#f64384 2px,transparent 2px)}
 .seeding.active:hover td#torrents .torrentAction {background:linear-gradient(to left,#f64384,#f64384 2px,#030 2px)}
-.tooltipped {display:inline-block;position:relative;z-index:99;content:""}
+.tooltipped {display:inline-block;position:relative;z-index:99;white-space:nowrap;content:""}
 .tooltipped:hover::before, .tooltipped:active::before {margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:transparent #000 transparent transparent;content:"";animation:fade-in .1s ease 3s reverse both}
 .tooltipped:hover::after, .tooltipped:active::after {padding:3px 6px;top:-3px;left:32px;border:1px solid #000;border-radius:3px;box-shadow:var(--highlight);background:#000;content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
 .tooltipped:hover::before, .tooltipped:active::before, .tooltipped:hover::after, .tooltipped:active::after {position:absolute;display:inline-block}
