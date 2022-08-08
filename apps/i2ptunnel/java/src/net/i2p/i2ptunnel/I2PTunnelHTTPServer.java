@@ -434,13 +434,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         buf.append("\n* X-Forwarded-For: ").append(h.get(0));
                     h = headers.get("X-Forwarded-Server");
                     if (h != null)
-                        buf.append("\n* X-Forwarded-Host (Via): ").append(h.get(0));
+                        buf.append("\n* X-Forwarded-Server: ").append(h.get(0));
                     h = headers.get("X-Forwarded-Host");
                     if (h != null)
-                        buf.append("\n* Forwarded for: ").append(h.get(0));
+                        buf.append("\n* X-Forwarded-Host: ").append(h.get(0));
                     h = headers.get("Forwarded");
                     if (h != null)
-                        buf.append(h.get(0));
+                        buf.append("\n* Forwarded: ").append(h.get(0));
                     _log.warn(buf.toString());
                 }
                 try {
