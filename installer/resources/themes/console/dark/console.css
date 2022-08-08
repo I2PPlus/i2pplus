@@ -2278,8 +2278,6 @@ h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
 #fullhistory a::before {width: 19px; height: 20px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left 45% / 16px; content: ""}
 #fullhistory a:hover::before {background-image: var(--eye_hover)}
 ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
-#help td.infohelp, #help td.infowarn {padding-left: 46px; background-size: 24px}
-#i2pupdates td.infohelp {padding: 15px 15px 15px 46px; background-size: 24px, 100% 4px, auto 56px, 100%}
 #i2pupdates td.infohelp code {user-select: all}
 #help #configinfo .infowarn {padding: 7px 10px 7px 36px; border: none; border-bottom: 1px solid #000; box-shadow: none; background-size: 20px}
 #help li {text-align: justify; line-height: 1.5}
