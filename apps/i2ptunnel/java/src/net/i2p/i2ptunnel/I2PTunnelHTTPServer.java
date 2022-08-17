@@ -428,19 +428,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  headers.containsKey("X-Forwarded-Host"))) {
                 if (_log.shouldWarn()) {
                     StringBuilder buf = new StringBuilder();
-                    buf.append("[HTTPServer] Refusing inproxy access: ").append(peerB32);
+                    buf.append("[HTTPServer] Refusing inproxy access \n*Client:").append(peerB32);
                     List<String> h = headers.get("X-Forwarded-For");
                     if (h != null)
-                        buf.append(" from: ").append(h.get(0));
+                        buf.append("\n* X-Forwarded-For: ").append(h.get(0));
                     h = headers.get("X-Forwarded-Server");
                     if (h != null)
-                        buf.append(" via: ").append(h.get(0));
+                        buf.append("\n* X-Forwarded-Server: ").append(h.get(0));
                     h = headers.get("X-Forwarded-Host");
                     if (h != null)
-                        buf.append(" for: ").append(h.get(0));
+                        buf.append("\n* X-Forwarded-Host: ").append(h.get(0));
                     h = headers.get("Forwarded");
                     if (h != null)
-                        buf.append(h.get(0));
+                        buf.append("\n* Forwarded: ").append(h.get(0));
                     _log.warn(buf.toString());
                 }
                 try {

@@ -40,8 +40,12 @@ class UDPSender {
 //    private static final int MAX_QUEUE_SIZE = 768;
     private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 384;
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 768 : 2048;
-    private static final int CODEL_TARGET = 100;
-    private static final int CODEL_INTERVAL = 500;
+//    private static final int CODEL_TARGET = 100;
+//    private static final int CODEL_INTERVAL = 500;
+    private static final int CODEL_TARGET = 50;
+    private static final int CODEL_INTERVAL = 1000;
+    public static final String PROP_CODEL_TARGET = "router.codelTarget";
+    public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 
     public boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
@@ -57,7 +61,9 @@ class UDPSender {
         long messageDelay = _context.throttle().getMessageDelay();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (1024*1024)));
         //_outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize, CODEL_TARGET, CODEL_INTERVAL);
-        _outboundQueue = new CoDelPriorityBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize, CODEL_TARGET, CODEL_INTERVAL);
+        _outboundQueue = new CoDelPriorityBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize,
+                         ctx.getProperty(PROP_CODEL_TARGET, CODEL_INTERVAL),
+                         ctx.getProperty(PROP_CODEL_INTERVAL, CODEL_INTERVAL));
         _socket = socket;
         _runner = new Runner();
         _name = name;
