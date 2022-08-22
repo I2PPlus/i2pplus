@@ -176,7 +176,7 @@ class LookupDestJob extends JobImpl {
                 returnDest(d);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Failed name lookup " + _name);
+                    _log.debug("Failed name lookup [Address: " + _name + "]");
                 returnFail();
             }
         } else if (_hash != null) {
@@ -226,7 +226,7 @@ class LookupDestJob extends JobImpl {
             }
             if (dest != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Successful destination lookup" + dest);
+                    _log.debug("Successful destination lookup " + dest);
                 returnDest(dest);
             } else {
                 if (_log.shouldDebug())
