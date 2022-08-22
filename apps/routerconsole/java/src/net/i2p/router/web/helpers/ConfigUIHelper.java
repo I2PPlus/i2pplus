@@ -134,7 +134,7 @@ public class ConfigUIHelper extends HelperBase {
         { "de", "de", "Deutsch", null },
         { "et", "ee", "Eesti", null },
         { "es", "es", "Español", null },
-        //{ "arg", "ar", "Español Argentino", null },
+        { "es", "ar", "Español", "Argentina" },
         { "fa", "ir", "Persian فارسی", null },
         { "fr", "fr", "Français", null },
         { "gl", "lang_gl", "Galego", null },
