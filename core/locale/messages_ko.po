@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-17 17:32+0000\n"
+"POT-Creation-Date: 2022-08-22 22:55+0000\n"
 "PO-Revision-Date: 2019-11-24 13:40+0000\n"
 "Last-Translator: HelloKS <kqwe1859@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/otf/I2P/language/ko/)\n"
@@ -27,8 +27,8 @@ msgstr ""
 #. {0,number,####} prevents 1234 from being output as 1,234 in the English locale.
 #. If you want the digit separator in your locale, translate as {0}.
 #. alternates: msec, msecs
-#: ../java/src/net/i2p/data/DataHelper.java:1383
-#: ../java/src/net/i2p/data/DataHelper.java:1436
+#: ../java/src/net/i2p/data/DataHelper.java:1421
+#: ../java/src/net/i2p/data/DataHelper.java:1474
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
@@ -36,8 +36,8 @@ msgstr[0] "{0,number,####} ms"
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
-#: ../java/src/net/i2p/data/DataHelper.java:1387
-#: ../java/src/net/i2p/data/DataHelper.java:1438
+#: ../java/src/net/i2p/data/DataHelper.java:1425
+#: ../java/src/net/i2p/data/DataHelper.java:1476
 #, java-format
 msgid "{0} sec"
 msgid_plural "{0} sec"
@@ -45,8 +45,8 @@ msgstr[0] "{0} 초"
 
 #. minutes
 #. alternates: mins, min. 'minutes' is probably too long.
-#: ../java/src/net/i2p/data/DataHelper.java:1391
-#: ../java/src/net/i2p/data/DataHelper.java:1440
+#: ../java/src/net/i2p/data/DataHelper.java:1429
+#: ../java/src/net/i2p/data/DataHelper.java:1478
 #, java-format
 msgid "{0} min"
 msgid_plural "{0} min"
@@ -54,73 +54,69 @@ msgstr[0] "{0} 분"
 
 #. hours
 #. alternates: hrs, hr., hrs.
-#: ../java/src/net/i2p/data/DataHelper.java:1395
-#: ../java/src/net/i2p/data/DataHelper.java:1442
+#: ../java/src/net/i2p/data/DataHelper.java:1433
+#: ../java/src/net/i2p/data/DataHelper.java:1480
 #, java-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} 시간"
 
 #. days
-#: ../java/src/net/i2p/data/DataHelper.java:1398
-#: ../java/src/net/i2p/data/DataHelper.java:1445
+#: ../java/src/net/i2p/data/DataHelper.java:1436
+#: ../java/src/net/i2p/data/DataHelper.java:1483
 #, java-format
 msgid "{0} day"
 msgid_plural "{0} days"
 msgstr[0] "{0} 일"
 
 #. years
-#: ../java/src/net/i2p/data/DataHelper.java:1401
-#: ../java/src/net/i2p/data/DataHelper.java:1448
+#: ../java/src/net/i2p/data/DataHelper.java:1439
+#: ../java/src/net/i2p/data/DataHelper.java:1486
 #, java-format
 msgid "{0} year"
 msgid_plural "{0} years"
 msgstr[0] "{0} 년"
 
-#: ../java/src/net/i2p/data/DataHelper.java:1403
-#: ../java/src/net/i2p/data/DataHelper.java:1450
+#: ../java/src/net/i2p/data/DataHelper.java:1441
+#: ../java/src/net/i2p/data/DataHelper.java:1488
 msgid "n/a"
 msgstr "n/a"
 
-#: ../java/src/net/i2p/data/DataHelper.java:1432
+#: ../java/src/net/i2p/data/DataHelper.java:1470
 #, java-format
 msgid "{0,number,####} ns"
 msgid_plural "{0,number,###} ns"
 msgstr[0] "{0,number,###} ns"
 
-#: ../java/src/net/i2p/data/DataHelper.java:1434
+#: ../java/src/net/i2p/data/DataHelper.java:1472
 #, java-format
 msgid "{0,number,####} μs"
 msgid_plural "{0,number,###} μs"
 msgstr[0] "{0,number,###} μs"
 
-#: ../java/src/net/i2p/util/LogWriter.java:161
+#. just for tagging
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
+msgid "CRIT"
+msgstr "위험"
+
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
+msgid "DEBUG"
+msgstr "디버그"
+
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
+msgid "ERROR"
+msgstr "오류"
+
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
+msgid "INFO"
+msgstr "정보"
+
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
+msgid "WARN"
+msgstr "경고"
+
+#: ../java/src/net/i2p/util/LogWriter.java:165
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
 msgstr[0] ""
-
-#: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:70
-#: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:153
-msgid "CRIT"
-msgstr "위험"
-
-#: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:70
-msgid "DEBUG"
-msgstr "디버그"
-
-#: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:70
-#: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:155
-msgid "ERROR"
-msgstr "오류"
-
-#: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:70
-#: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:160
-msgid "INFO"
-msgstr "정보"
-
-#: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:70
-#: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:157
-msgid "WARN"
-msgstr "경고"
-

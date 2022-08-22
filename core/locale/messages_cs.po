@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 19:39+0000\n"
+"POT-Creation-Date: 2022-08-22 22:55+0000\n"
 "PO-Revision-Date: 2019-11-28 13:22+0000\n"
 "Last-Translator: Ondrej Führer <transifex@fuhrer.cz>\n"
 "Language-Team: Czech (http://www.transifex.com/otf/I2P/language/cs/)\n"
@@ -30,8 +30,8 @@ msgstr ""
 #. {0,number,####} prevents 1234 from being output as 1,234 in the English locale.
 #. If you want the digit separator in your locale, translate as {0}.
 #. alternates: msec, msecs
-#: ../java/src/net/i2p/data/DataHelper.java:1417
-#: ../java/src/net/i2p/data/DataHelper.java:1470
+#: ../java/src/net/i2p/data/DataHelper.java:1421
+#: ../java/src/net/i2p/data/DataHelper.java:1474
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
@@ -42,8 +42,8 @@ msgstr[3] ""
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
-#: ../java/src/net/i2p/data/DataHelper.java:1421
-#: ../java/src/net/i2p/data/DataHelper.java:1472
+#: ../java/src/net/i2p/data/DataHelper.java:1425
+#: ../java/src/net/i2p/data/DataHelper.java:1476
 #, java-format
 msgid "{0} sec"
 msgid_plural "{0} sec"
@@ -54,8 +54,8 @@ msgstr[3] "{0} sek."
 
 #. minutes
 #. alternates: mins, min. 'minutes' is probably too long.
-#: ../java/src/net/i2p/data/DataHelper.java:1425
-#: ../java/src/net/i2p/data/DataHelper.java:1474
+#: ../java/src/net/i2p/data/DataHelper.java:1429
+#: ../java/src/net/i2p/data/DataHelper.java:1478
 #, java-format
 msgid "{0} min"
 msgid_plural "{0} min"
@@ -66,8 +66,8 @@ msgstr[3] "{0} minut"
 
 #. hours
 #. alternates: hrs, hr., hrs.
-#: ../java/src/net/i2p/data/DataHelper.java:1429
-#: ../java/src/net/i2p/data/DataHelper.java:1476
+#: ../java/src/net/i2p/data/DataHelper.java:1433
+#: ../java/src/net/i2p/data/DataHelper.java:1480
 #, java-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
@@ -77,8 +77,8 @@ msgstr[2] "{0} hodin"
 msgstr[3] "{0} hodin"
 
 #. days
-#: ../java/src/net/i2p/data/DataHelper.java:1432
-#: ../java/src/net/i2p/data/DataHelper.java:1479
+#: ../java/src/net/i2p/data/DataHelper.java:1436
+#: ../java/src/net/i2p/data/DataHelper.java:1483
 #, java-format
 msgid "{0} day"
 msgid_plural "{0} days"
@@ -88,8 +88,8 @@ msgstr[2] "{0} dnů"
 msgstr[3] "{0} dnů"
 
 #. years
-#: ../java/src/net/i2p/data/DataHelper.java:1435
-#: ../java/src/net/i2p/data/DataHelper.java:1482
+#: ../java/src/net/i2p/data/DataHelper.java:1439
+#: ../java/src/net/i2p/data/DataHelper.java:1486
 #, java-format
 msgid "{0} year"
 msgid_plural "{0} years"
@@ -98,12 +98,12 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: ../java/src/net/i2p/data/DataHelper.java:1437
-#: ../java/src/net/i2p/data/DataHelper.java:1484
+#: ../java/src/net/i2p/data/DataHelper.java:1441
+#: ../java/src/net/i2p/data/DataHelper.java:1488
 msgid "n/a"
 msgstr "neaplikovatelné"
 
-#: ../java/src/net/i2p/data/DataHelper.java:1466
+#: ../java/src/net/i2p/data/DataHelper.java:1470
 #, java-format
 msgid "{0,number,####} ns"
 msgid_plural "{0,number,###} ns"
@@ -112,7 +112,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: ../java/src/net/i2p/data/DataHelper.java:1468
+#: ../java/src/net/i2p/data/DataHelper.java:1472
 #, java-format
 msgid "{0,number,####} μs"
 msgid_plural "{0,number,###} μs"
@@ -142,7 +142,7 @@ msgstr ""
 msgid "WARN"
 msgstr ""
 
-#: ../java/src/net/i2p/util/LogWriter.java:163
+#: ../java/src/net/i2p/util/LogWriter.java:165
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"

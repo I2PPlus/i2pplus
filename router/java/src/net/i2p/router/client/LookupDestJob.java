@@ -176,7 +176,7 @@ class LookupDestJob extends JobImpl {
                 returnDest(d);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Failed name lookup " + _name);
+                    _log.debug("Failed name lookup [Address: " + _name + "]");
                 returnFail();
             }
         } else if (_hash != null) {
@@ -200,6 +200,18 @@ class LookupDestJob extends JobImpl {
         public String getName() { return "Lookup LeaseSet &amp; Reply to Client"; }
         public void runJob() {
             Destination dest = getContext().netDb().lookupDestinationLocally(_hash);
+
+            // http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/364
+            // Attempt a single retry if dest==null to allow
+            // for a possible race with the storing of the leaseset
+            // on new destination.
+            if (dest == null) {
+                try { Thread.sleep(1000); } catch (InterruptedException ie) {}
+                dest = getContext().netDb().lookupDestinationLocally(_hash);
+                if (_log.shouldDebug() && dest != null)
+                    _log.debug("Retry required for destination lookup" + dest);
+            }
+
             if (dest == null && _blindData != null) {
                 // TODO store and lookup original hash instead
                 LeaseSet ls = getContext().netDb().lookupLeaseSetLocally(_hash);
@@ -214,11 +226,11 @@ class LookupDestJob extends JobImpl {
             }
             if (dest != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Found hash lookup " + _hash + " to " + dest);
+                    _log.debug("Successful destination lookup " + dest);
                 returnDest(dest);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Failed hash lookup " + _hash);
+                    _log.debug("Failed destination lookup [Hash: " + _hash + "]");
                 returnFail();
             }
         }
