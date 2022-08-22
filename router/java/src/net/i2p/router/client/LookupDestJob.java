@@ -209,7 +209,7 @@ class LookupDestJob extends JobImpl {
                 try { Thread.sleep(1000); } catch (InterruptedException ie) {}
                 dest = getContext().netDb().lookupDestinationLocally(_hash);
                 if (_log.shouldDebug() && dest != null)
-                    _log.debug("Retry required for lookup of destination: " + dest);
+                    _log.debug("Retry required for destination lookup" + dest);
             }
 
             if (dest == null && _blindData != null) {
@@ -226,11 +226,11 @@ class LookupDestJob extends JobImpl {
             }
             if (dest != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Found hash lookup " + _hash + " to " + dest);
+                    _log.debug("Successful destination lookup" + dest);
                 returnDest(dest);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Failed hash lookup " + _hash);
+                    _log.debug("Failed destination lookup [Hash: " + _hash + "]");
                 returnFail();
             }
         }
