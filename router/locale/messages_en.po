@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-12 22:38+0000\n"
+"POT-Creation-Date: 2022-08-22 22:54+0000\n"
 "PO-Revision-Date: 2010-06-15 14:09+0100\n"
 "Last-Translator: duck <duck@mail.i2p>\n"
 "Language-Team: duck <duck@mail.i2p>\n"
@@ -95,62 +95,64 @@ msgstr ""
 #. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
 #. else
 #. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:89
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:149
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:590
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:86
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:146
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:588
 msgid "Starting up"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:151
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:148
 msgid "Declining all tunnel requests:<br>"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:151
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:801
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:148
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:804
 msgid "Hidden Mode"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:198
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:216
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:839
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:870
+#. }
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:194
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:212
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:842
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:873
 msgid "Declining tunnel requests:<br>"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:198
+#. }
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:194
 msgid "High message delay"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:211
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:207
 msgid "Declining requests: "
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:211
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:207
 msgid "Limit reached"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:216
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:212
 msgid "Participation disabled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:256
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:252
 msgid "High number of requests"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:256
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:252
 msgid "Rejecting most tunnel requests:<br>"
 msgstr ""
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:258
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:464
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:254
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:462
 msgid "Accepting most tunnel requests"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:466
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:606
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:256
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:464
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:604
 msgid "Accepting tunnel requests"
 msgstr ""
 
@@ -161,53 +163,53 @@ msgstr ""
 #. hard to do {0} from here
 #. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:366
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:460
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:362
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:458
 msgid "Declining requests: Bandwidth limit"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:595
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
 msgid "Declining requests"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:595
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
 msgid "Shutting down"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:608
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:606
 msgid "Declining tunnel requests"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:285
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:287
 msgid "Dropping tunnel requests: Too slow"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:294
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:296
 msgid "Dropping tunnel requests: High job lag"
 msgstr ""
 
 #. don't even bother, since we are so overloaded locally
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:494
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:496
 msgid "Dropping tunnel requests: Overloaded"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:801
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:804
 msgid "Declining requests:"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:839
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:842
 msgid "Request overload"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:870
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:873
 msgid "Connection limit reached"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1130
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1163
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1133
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1166
 msgid "Dropping tunnel requests: High load"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1246
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1249
 msgid "Dropping tunnel requests: Queue time"
 msgstr ""

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-05 14:35+0000\n"
+"POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2020-05-14 01:58+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/otf/I2P/language/"
@@ -192,7 +192,7 @@ msgstr "Lütfen bir sunucu adı ve hedef yazın"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:348
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:382
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:389
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:387
 msgid "Delete Entry"
 msgstr "Kaydı Silin"
 
@@ -251,10 +251,10 @@ msgstr "HATA: Adres defteri dosyasına yazılamadı."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
 msgid ""
-"Invalid form submission, probably because you used the \"back\" or \"reload"
-"\" button on your browser. Please resubmit."
+"Invalid form submission, probably because you used the \"back\" or "
+"\"reload\" button on your browser. Please resubmit."
 msgstr ""
 "Büyük olasılıkla web tarayıcınızdaki \"Geri\" ya da \"Yenile\" düğmesine "
 "tıkladığınızdan, gönderilen form geçersiz sayıldı. Lütfen yeniden gönderin."
@@ -262,7 +262,7 @@ msgstr ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:166
 msgid ""
 "If the problem persists, verify that you have cookies enabled in your "
 "browser."
@@ -270,9 +270,9 @@ msgstr ""
 "Sorun sürerse, tarayıcınızda çerezlerin etkinleştirilmiş olduğuna emin olun."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:228
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:223
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:231
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:225
 msgid "Save"
 msgstr "Kaydet"
 
@@ -281,9 +281,9 @@ msgid "Configuration saved."
 msgstr "Yapılandırma kaydedildi."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:226
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:221
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:229
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:223
 msgid "Reload"
 msgstr "Yeniden yükle"
 
@@ -321,7 +321,7 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0} hedefi {1} ad hizmetinden silinemedi"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:407
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:367
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:365
 msgid "Save Notes"
 msgstr "Notları Kaydet"
 
@@ -360,7 +360,7 @@ msgstr[1] "Dosyadaki {0} çift kayıt atlandı"
 msgid "Import from file failed"
 msgstr "Dosyadan içe aktarılamadı"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:140
 msgid "Subscriptions saved."
 msgstr "Abonelikler kaydedildi."
 
@@ -373,23 +373,23 @@ msgstr "Abonelikler kaydedildi."
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:219
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:151
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:221
 msgid "Update"
 msgstr ""
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:154
 #, fuzzy
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr ""
 "Abonelikler kaydedildi, adres defteri abonelik kaynaklarına göre "
 "güncelleniyor."
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr ""
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:162
 msgid "Subscriptions reloaded."
 msgstr "Abonelikler yeniden yüklendi"
 
@@ -403,72 +403,72 @@ msgid "address book"
 msgstr "adres defteri"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:247
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:198
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:200
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:191
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:191
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:201
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:198
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:192
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:195
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:193
 msgid "Router"
 msgstr "Yöneltici"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:251
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:200
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:204
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:193
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:198
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:193
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:203
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:202
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:194
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:197
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:195
 msgid "Master"
 msgstr "Ana"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:202
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:208
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:195
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:200
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:195
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:205
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:206
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:196
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:199
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:197
 msgid "Private"
 msgstr "Kişisel"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:204
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:212
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:197
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:202
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:197
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:207
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:210
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:198
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:201
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:199
 msgid "Published"
 msgstr "Yayınlanmış"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:261
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:206
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:214
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:199
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:204
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:199
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:205 build/HowSVG.java:15
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:209
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:212
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:200
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:203
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:201
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:207 build/HowSVG.java:15
 msgid "Subscriptions"
 msgstr "Abonelikler"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:263
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:208
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:212
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:216
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:201
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:206
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:201
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:211
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:215
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:214
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:202
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:205
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:203
 msgid "Configuration"
 msgstr "Yapılandırma"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:265
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:210
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:218
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:203
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:208
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:203
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:213
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:216
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:204
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:207
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:205
 msgid "Help"
 msgstr ""
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:267
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:276
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:274
 msgid "Book"
 msgstr ""
 
@@ -509,7 +509,7 @@ msgstr ""
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:721
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:937
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:270
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:268
 msgid "Hostname"
 msgstr "Sunucu Adı"
 
@@ -518,7 +518,7 @@ msgid "Link (b32)"
 msgstr "Bağlantı (b32)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:350
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:348
 msgid "Destination"
 msgstr "Hedef"
 
@@ -568,21 +568,21 @@ msgstr "hosts.txt dosyasından içe aktar"
 msgid "Select file"
 msgstr "süzgeci temizleyin"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:186
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:189
 msgid "configuration"
 msgstr "yapılandırma"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:214
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:212
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:207
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:217
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:211
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:209
 msgid "File location"
 msgstr "Dosya konumu"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:230
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:233
 msgid "Hints"
 msgstr "İpuçları"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:235
 msgid ""
 "File and directory paths here are relative to the addressbook's working "
 "directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
@@ -592,14 +592,14 @@ msgstr ""
 "ya da %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) şeklinde olan adres "
 "defteri klasörüne göre yazılmıştır."
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:234
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:237
 msgid ""
 "If you want to manually add lines to an addressbook, add them to the private "
 "or master addressbooks."
 msgstr ""
 "El ile eklenen satırlar kişisel ya da genel adres defterine eklenmelidir."
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:236
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:239
 msgid ""
 "The router addressbook and the published addressbook are updated by the "
 "addressbook application."
@@ -607,7 +607,7 @@ msgstr ""
 "Adres defteri uygulaması yöneltici ve yayınlanan adres defterlerini "
 "güncelledi."
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:238
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:241
 msgid ""
 "When you publish your addressbook, ALL destinations from the master and "
 "router addressbooks appear there."
@@ -615,26 +615,26 @@ msgstr ""
 "Adres defteri yayınlandığında, genel ve yöneltici adres defterlerindeki TÜM "
 "hedefler burada görüntülenir."
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:240
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:243
 msgid ""
 "Use the private addressbook for private destinations, these are not "
 "published."
 msgstr "Kişisel adres defterine kaydedilen hedefler yayınlanmaz."
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:242
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:245
 msgid "Options"
 msgstr "Ayarlar"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:244
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:247
 msgid "File containing the list of subscriptions URLs (no need to change)"
 msgstr ""
 "Abonelik İnternet adreslerini içeren dosya (değiştirilmesine gerek yok)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:249
 msgid "Update interval in hours"
 msgstr "Saat cinsinden güncelleme aralığı"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:248
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:251
 msgid ""
 "Your public hosts.txt file (choose a path within your webserver document "
 "root)"
@@ -642,31 +642,31 @@ msgstr ""
 "Herkese açık hosts.txt dosyası (web sunucunuzun belge kök klasörü altında "
 "bir yol seçin)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:250
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:253
 msgid "Your hosts.txt (don't change)"
 msgstr "Hosts.txt dosyanız (değiştirmeyin)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:255
 msgid "Your personal addressbook, these hosts will be published"
 msgstr "Bu sunucuların yayınlanacağı kişisel adres defteriniz"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:257
 msgid "Your private addressbook, it is never published"
 msgstr "Asla yayınlanmayacak kişisel adres defteriniz"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:259
 msgid "Port for your eepProxy (no need to change)"
 msgstr "eepProxy kapı numaranız (değiştirilmesine gerek yok)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:261
 msgid "Hostname for your eepProxy (no need to change)"
 msgstr "eepProxy sunucu adınız (değiştirilmesine gerek yok)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:263
 msgid "Whether to update the published addressbook"
 msgstr "Yayınlanmış adres defteri güncellensin"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:265
 msgid ""
 "File containing the etags header from the fetched subscription URLs (no need "
 "to change)"
@@ -674,7 +674,7 @@ msgstr ""
 "Alınan abonelik adresinde etags üst bilgisini içeren dosya (değiştirilmesine "
 "gerek yok)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:264
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:267
 msgid ""
 "File containing the modification timestamp for each fetched subscription URL "
 "(no need to change)"
@@ -682,135 +682,135 @@ msgstr ""
 "Alınan her bir abonelik adresi için değişiklik zaman damgasını içeren dosya "
 "(değiştirilmesine gerek yok)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:269
 msgid "File to log activity to (change to /dev/null if you like)"
 msgstr ""
 "İşlem günlük kayıtlarının yazılacağı dosya (/dev/null olarak "
 "değiştirebilirsiniz)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:271
 #, fuzzy
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Kullanılacak temanın adı (varsayılan 'açık')"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:182
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:180
 msgid "addressbook"
 msgstr "adres defteri"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:247
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:245
 #, fuzzy
 msgid "Details"
 msgstr "ayrıntılar"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:280
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:278
 msgid "Address Helper"
 msgstr "Adres Yardımcısı"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:286
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:284
 msgid "link"
 msgstr "bağlantı"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:292
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:290
 msgid "Encoded Name"
 msgstr "Kodlanmış Ad"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:302
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:300
 msgid "Base 32 Address"
 msgstr "Base 32 Adresi"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:308
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:306
 msgid "Base 64 Hash"
 msgstr "Base 64 Karma"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:312
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:310
 msgid "Public Key"
 msgstr "Genel Anahtar"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:314
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:312
 msgid "ElGamal 2048 bit"
 msgstr "ElGamal 2048 bit"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:316
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:314
 msgid "Signing Key"
 msgstr "İmzalama Anahtarı"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:320
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:318
 msgid "Certificate"
 msgstr "Sertifika"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:324
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:322
 msgid "Validated"
 msgstr "Doğrulandı"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:326
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:324
 msgid "no"
 msgstr "hayır"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:326
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:324
 msgid "yes"
 msgstr "evet"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:328
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:326
 msgid "Source"
 msgstr "Kaynak"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:332
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:330
 msgid "Added Date"
 msgstr "Eklendiği Tarih"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:342
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:340
 msgid "Last Modified"
 msgstr "Son Değişiklik"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:360
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:358
 msgid "Notes"
 msgstr "Notlar"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:362
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:360
 msgid "Add notes about domain"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:395
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:393
 msgid "Visual Identification for"
 msgstr "Şunun için görsel tanıtıcı"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:407
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:405
 msgid "Create your own identification images"
 msgstr "Kendi tanıtım görsellerinizi oluşturun"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:409
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:407
 msgid "Launch Image Generator"
 msgstr "Görsel Üretecini Başlat"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:179
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:180
 msgid "Introduction"
 msgstr "Giriş"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:205
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:206
 msgid "What is the addressbook?"
 msgstr "Adres defteri nedir?"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:207
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:208
 msgid "The addressbook application is part of your I2P installation."
 msgstr "Adres defteri uygulaması I2P kurulumunun bir parçasıdır."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:209
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:210
 msgid ""
 "It regularly updates your hosts.txt file from distributed sources or "
 "\"subscriptions\"."
 msgstr ""
-"hosts.txt dosyanızı düzenli olarak dağıtılmışkaynaklar ya da \"aboneliklerden"
-"\" günceller."
+"hosts.txt dosyanızı düzenli olarak dağıtılmışkaynaklar ya da "
+"\"aboneliklerden\" günceller."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:211
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:212
 msgid ""
-"Subscribing to additional sites is easy, just add them to your <a href="
-"\"subscriptions\">subscriptions</a> file."
+"Subscribing to additional sites is easy, just add them to your <a "
+"href=\"subscriptions\">subscriptions</a> file."
 msgstr ""
-"Ek sitelere kolayca abone olabilirsiniz. Yalnızca siteleri <a href="
-"\"subscriptions\">subscriptions</a> dosyasına ekleyin."
+"Ek sitelere kolayca abone olabilirsiniz. Yalnızca siteleri <a "
+"href=\"subscriptions\">subscriptions</a> dosyasına ekleyin."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:213
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:214
 msgid ""
 "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
 "naming.html\" target=\"_blank\">the overview</a>."
@@ -818,11 +818,11 @@ msgstr ""
 "I2P adlandırmaları hakkında ayrıntılı bilgi almak için <a href=\"http://i2p-"
 "projekt.i2p/naming.html\" target=\"_blank\">özet bölümüne</a> bakabilirsiniz."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:215
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:216
 msgid "How does the addressbook application work?"
 msgstr "Adres defteri uygulaması nasıl çalışır?"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:217
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:218
 msgid ""
 "The addressbook application regularly polls your subscriptions and merges "
 "their content into your \"router\" address book."
@@ -830,14 +830,14 @@ msgstr ""
 "Adres defteri uygulaması düzenli olarak aboneliklerinizi denetleyerek "
 "içeriklerini \"yöneltici\" adres defterinize aktarır."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:220
 msgid ""
 "Then it merges your \"master\" address book into the router address book as "
 "well."
 msgstr ""
 "Ardından \"ana\" adres defterinizi yönelticinin adres defterine aktarır."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:221
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:222
 msgid ""
 "If configured, the router address book is now written to the \"published\" "
 "address book, which will be publicly available if you are running an eepsite."
@@ -846,7 +846,7 @@ msgstr ""
 "adres defteri herkes tarafından görülebilecek \"yayınlanmış\" adres "
 "defterine yazılır."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:223
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:224
 msgid ""
 "The router also uses a private address book, which is not merged or "
 "published."
@@ -854,7 +854,7 @@ msgstr ""
 "Yöneltici ayrıca aktarılmayan ya da yayınlanmayan bir kişisel adres defteri "
 "kullanır."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:225
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:226
 msgid ""
 "Hosts in the private address book can be accessed by you but their addresses "
 "are never distributed to others."
@@ -862,7 +862,7 @@ msgstr ""
 "Kişisel adres defterindeki sunuculara yalnız siz erişebilirsiniz. Bu "
 "adresler asla diğer kişiler ile paylaşılmaz."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:228
 msgid ""
 "The private address book can also be used for aliases of hosts in your other "
 "address books."
@@ -870,36 +870,36 @@ msgstr ""
 "Kişisel adres defteri ayrıca diğer adres defterlerinizdeki sunucu "
 "kısaltmaları için kullanılabilir."
 
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:184
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:183
 #, fuzzy
 msgid "subscription log"
 msgstr "abonelikler"
 
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:210
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:209
 #, fuzzy
 msgid "Subscription Log"
 msgstr "Abonelikler"
 
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:179
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:181
 msgid "subscriptions"
 msgstr "abonelikler"
 
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:225
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:227
 msgid "The subscription file contains a list of i2p URLs."
 msgstr "Abonelik dosyasında I2P İnternet adreslerinin listesi bulunur."
 
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:227
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:229
 msgid ""
 "The addressbook application regularly checks this list for new eepsites."
 msgstr ""
 "Adres defteri uygulaması düzenli olarak yeni eepsiteleri için bu listeyi "
 "denetler."
 
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:229
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:231
 msgid "Those URLs refer to published hosts.txt files."
 msgstr "Bu İnternet adresleri yayınlanmış hosts.txt dosyalarını gösterir."
 
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:231
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:233
 msgid "See the FAQ for a list of subscription URLs."
 msgstr ""
 "Abonelik İnternet adreslerinin listesi için SSS bölümüne bakabilirsiniz."

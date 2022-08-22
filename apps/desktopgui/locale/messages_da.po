@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 02:50+0000\n"
+"POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2017-06-30 21:32+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Danish (http://www.transifex.com/otf/I2P/language/da/)\n"
@@ -27,82 +27,82 @@ msgstr "Start I2P"
 
 #: src/net/i2p/desktopgui/ExternalTrayManager.java:44
 #: src/net/i2p/desktopgui/ExternalTrayManager.java:72
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
+#: src/net/i2p/desktopgui/InternalTrayManager.java:57
 msgid "I2P is starting!"
 msgstr "I2P starter!"
 
 #: src/net/i2p/desktopgui/ExternalTrayManager.java:44
 #: src/net/i2p/desktopgui/ExternalTrayManager.java:72
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
+#: src/net/i2p/desktopgui/InternalTrayManager.java:57
 msgid "Starting"
 msgstr "Starter"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:65
-#: src/net/i2p/desktopgui/InternalTrayManager.java:249
+#: src/net/i2p/desktopgui/InternalTrayManager.java:67
+#: src/net/i2p/desktopgui/InternalTrayManager.java:251
 msgid "Launch I2P Browser"
 msgstr "Start I2P Browseren"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:86
-#: src/net/i2p/desktopgui/InternalTrayManager.java:270
+#: src/net/i2p/desktopgui/InternalTrayManager.java:88
+#: src/net/i2p/desktopgui/InternalTrayManager.java:272
 msgid "Configure I2P System Tray"
 msgstr ""
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:87
-#: src/net/i2p/desktopgui/InternalTrayManager.java:271
+#: src/net/i2p/desktopgui/InternalTrayManager.java:89
+#: src/net/i2p/desktopgui/InternalTrayManager.java:273
 msgid "Enable notifications"
 msgstr ""
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:101
-#: src/net/i2p/desktopgui/InternalTrayManager.java:285
+#: src/net/i2p/desktopgui/InternalTrayManager.java:103
+#: src/net/i2p/desktopgui/InternalTrayManager.java:287
 msgid "Disable notifications"
 msgstr ""
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:115
-#: src/net/i2p/desktopgui/InternalTrayManager.java:299
+#: src/net/i2p/desktopgui/InternalTrayManager.java:117
+#: src/net/i2p/desktopgui/InternalTrayManager.java:301
 msgid "Disable system tray"
 msgstr ""
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:131
-#: src/net/i2p/desktopgui/InternalTrayManager.java:315
+#: src/net/i2p/desktopgui/InternalTrayManager.java:133
+#: src/net/i2p/desktopgui/InternalTrayManager.java:317
 msgid "Restart I2P"
 msgstr "Genstart I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:148
-#: src/net/i2p/desktopgui/InternalTrayManager.java:332
+#: src/net/i2p/desktopgui/InternalTrayManager.java:150
+#: src/net/i2p/desktopgui/InternalTrayManager.java:334
 msgid "Stop I2P"
 msgstr "Stop I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:164
-#: src/net/i2p/desktopgui/InternalTrayManager.java:348
+#: src/net/i2p/desktopgui/InternalTrayManager.java:166
+#: src/net/i2p/desktopgui/InternalTrayManager.java:350
 msgid "Restart I2P Immediately"
 msgstr ""
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:181
-#: src/net/i2p/desktopgui/InternalTrayManager.java:365
+#: src/net/i2p/desktopgui/InternalTrayManager.java:183
+#: src/net/i2p/desktopgui/InternalTrayManager.java:367
 msgid "Stop I2P Immediately"
 msgstr ""
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:195
-#: src/net/i2p/desktopgui/InternalTrayManager.java:379
+#: src/net/i2p/desktopgui/InternalTrayManager.java:197
+#: src/net/i2p/desktopgui/InternalTrayManager.java:381
 msgid "Cancel I2P Shutdown"
 msgstr ""
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:437
+#: src/net/i2p/desktopgui/InternalTrayManager.java:439
 #, java-format
 msgid "Shutdown in {0}"
 msgstr "Lukker ned om {0}"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:439
+#: src/net/i2p/desktopgui/InternalTrayManager.java:441
 msgid "Shutdown imminent"
 msgstr "Lukker ned om et øjeblik"
 
 #. status translations are in the console bundle
-#: src/net/i2p/desktopgui/InternalTrayManager.java:444
+#: src/net/i2p/desktopgui/InternalTrayManager.java:446
 msgid "Network"
 msgstr "Netværk"
 
 #. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
-#: src/net/i2p/desktopgui/TrayManager.java:72
+#: src/net/i2p/desktopgui/TrayManager.java:70
 msgid "I2P: Right-click for menu"
 msgstr ""
 
