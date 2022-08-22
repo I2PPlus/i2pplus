@@ -88,7 +88,7 @@ public class TransportManager implements TransportEventListener {
      */
     public final static String PROP_ENABLE_SSU2 = "i2np.ssu2.enable";
     /** 1 in this many */
-    private static final int SSU2_ENABLE_PROBABILITY = 16;
+    private static final int SSU2_ENABLE_PROBABILITY = 4;
     /** default true */
     public final static String PROP_ENABLE_NTCP = "i2np.ntcp.enable";
     /** default true */
