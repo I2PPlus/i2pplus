@@ -110,8 +110,8 @@ class SAMUtils {
         byte[] b = Base64.decode(dest);
         if (b == null || b.length < 663)
             return false;
-    	ByteArrayInputStream destKeyStream = new ByteArrayInputStream(b);
-    	try {
+        ByteArrayInputStream destKeyStream = new ByteArrayInputStream(b);
+        try {
             Destination d = Destination.create(destKeyStream);
             new PrivateKey().readBytes(destKeyStream);
             SigType dtype = d.getSigningPublicKey().getType();
@@ -166,7 +166,7 @@ class SAMUtils {
         // NamingService caches b64 so just use it for everything
         // TODO: Add a static local cache here so SAM doesn't flush the
         // NamingService cache
-    	Destination d = lookupHost(s);
+        Destination d = lookupHost(s);
         if (d == null) {
             String msg;
             if (s.length() >= 516)
@@ -177,7 +177,7 @@ class SAMUtils {
                 msg = "Host name not found: ";
             throw new DataFormatException(msg + s);
         }
-    	return d;
+        return d;
     }
 
     public static final String COMMAND = "\"\"COMMAND\"\"";
