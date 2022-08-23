@@ -1,6 +1,7 @@
 // setup torrent display buttons so we can show/hide snarks based on status
 
 var bar = document.getElementById("torrentDisplay");
+var filtered = document.querySelectorAll(".filtered");
 
 function initFilterBar() {
 
@@ -28,10 +29,8 @@ function initFilterBar() {
   if (tfoot)
     var tfootInner = tfoot.getElementsByClassName("tr")[0];
 
-  var filtered = document.querySelectorAll(".filtered");
-
   function clean() {
-    countFiltered();
+
     var filter = document.getElementById("filter");
     if (filter) {
         filter.remove();
@@ -45,13 +44,13 @@ function initFilterBar() {
   }
 
   function countFiltered() {
-    var filtered = document.querySelectorAll(".filtered");
+    filtered = document.querySelectorAll(".filtered");
       showResults();
   }
 
   function showResults() {
     var tbody = document.getElementById("snarkTbody");
-    var filtered = document.querySelectorAll(".filtered");
+    filtered = document.querySelectorAll(".filtered");
     var results = document.querySelectorAll(".results");
     cleanResults();
     var row = tbody.insertRow(0);
@@ -108,6 +107,7 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnAll.checked = true;
+    window.localStorage.setItem("filter", btnAll.id);
   }
 
   function showActive() {
@@ -119,9 +119,11 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnActive.checked = true;
+    window.localStorage.setItem("filter", btnActive.id);
     active.forEach((element) => {
       element.classList.add("filtered");
     });
+    countFiltered();
   }
 
   function showInactive() {
@@ -133,9 +135,11 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnInactive.checked = true;
+    window.localStorage.setItem("filter", btnInactive.id);
     inactive.forEach((element) => {
       element.classList.add("filtered");
     });
+    countFiltered();
   }
 
   function showDownloading() {
@@ -147,9 +151,11 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnDownloading.checked = true;
+    window.localStorage.setItem("filter", btnDownloading.id);
     downloading.forEach((element) => {
       element.classList.add("filtered");
     });
+    countFiltered();
   }
 
   function showSeeding() {
@@ -161,9 +167,11 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnSeeding.checked = true;
+    window.localStorage.setItem("filter", btnSeeding.id);
     seeding.forEach((element) => {
       element.classList.add("filtered");
     });
+    countFiltered();
   }
 
   function showComplete() {
@@ -175,9 +183,11 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnComplete.checked = true;
+    window.localStorage.setItem("filter", btnComplete.id);
     complete.forEach((element) => {
       element.classList.add("filtered");
     });
+    countFiltered();
   }
 
   function showIncomplete() {
@@ -189,9 +199,11 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnIncomplete.checked = true;
+    window.localStorage.setItem("filter", btnIncomplete.id);
     incomplete.forEach((element) => {
       element.classList.add("filtered");
     });
+    countFiltered();
   }
 
   function showStopped() {
@@ -203,26 +215,63 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnStopped.checked = true;
+    window.localStorage.setItem("filter", btnStopped.id);
     stopped.forEach((element) => {
       element.classList.add("filtered");
     });
+    countFiltered();
   }
 
   if (bar) {
-    btnAll.addEventListener("click", showAll, false);
-    btnActive.addEventListener("click", showActive, false);
-    btnInactive.addEventListener("click", showInactive, false);
-    btnDownloading.addEventListener("click", showDownloading, false);
-    btnSeeding.addEventListener("click", showSeeding, false);
-    btnComplete.addEventListener("click", showComplete, false);
-    btnIncomplete.addEventListener("click", showIncomplete, false);
-    btnStopped.addEventListener("click", showStopped, false);
+     btnAll.addEventListener("click", showAll, false);
+     btnActive.addEventListener("click", showActive, false);
+     btnInactive.addEventListener("click", showInactive, false);
+     btnDownloading.addEventListener("click", showDownloading, false);
+     btnSeeding.addEventListener("click", showSeeding, false);
+     btnComplete.addEventListener("click", showComplete, false);
+     btnIncomplete.addEventListener("click", showIncomplete, false);
+     btnStopped.addEventListener("click", showStopped, false);
+     switch (window.localStorage.getItem("filter")) {
+       case "all":
+         btnAll.checked = true;
+         showAll();
+         break;
+       case "active":
+         btnActive.checked = true;
+         showActive();
+         break;
+       case "inactive":
+         btnInactive.checked = true;
+         showInactive();
+         break;
+       case "downloading":
+         btnDownloading.checked = true;
+         showDownloading();
+         break;
+       case "seeding":
+         btnSeeding.checked = true;
+         showSeeding();
+         break;
+       case "complete":
+         btnComplete.checked = true;
+         showComplete();
+         break;
+       case "incomplete":
+         btnIncomplete.checked = true;
+         showIncomplete();
+         break;
+       case "stopped":
+         btnStopped.checked = true;
+         showStopped();
+         break;
+       default:
+         btnAll.checked = true;
+         showAll();
+     }
   }
 
 }
 
 if (typeof bar !== "undefined" || bar) {
-  document.addEventListener("mouseover", function() {
-    initFilterBar();
-  }, false);
+  initFilterBar();
 }
