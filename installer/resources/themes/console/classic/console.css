@@ -1871,6 +1871,8 @@ span.b32:active {box-shadow: 0 0 0 1px var(--border_color), var(--btn_shadow_act
 .statusnotes {margin: -6px 0 7px; padding: 8px 0; color: var(--ink); font-style: italic; font-size: 9pt; text-align: center; border: var(--border); background: var(--bg)}
 h3 + .statusnotes {margin-top: -1px}
 .statusnotes + .statusnotes {margin-top: -8px}
+.tunneldisplay td {text-align: center}
+.tunneldisplay td:first-child {text-align: center; width: 1%; white-space: nowrap}
 #tunnels h3 {padding-right: 5px}
 #tunnels h3 a {float: right}
 #tunnels h3 a:not(.lsview), #logs h3 a {font-size: 0}
