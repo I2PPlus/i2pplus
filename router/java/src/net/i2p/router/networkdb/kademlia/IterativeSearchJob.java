@@ -514,7 +514,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 synchronized(this) {
                     tries = _unheardFrom.size() + _failedPeers.size();
                 }
-                if (_key != null) {
+                if (_key != null && peer != null) {
                     _log.debug("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
                               " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
                               "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
