@@ -176,7 +176,7 @@ class LookupDestJob extends JobImpl {
                 returnDest(d);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Failed name lookup [Address: " + _name + "]");
+                    _log.debug("Failed name lookup [Address: " + _name.replace("\n", "") + "]");
                 returnFail();
             }
         } else if (_hash != null) {
