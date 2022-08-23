@@ -107,13 +107,13 @@ public class TunnelController implements Logging {
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
     public static final String PROP_LIMITS_SET = "i2p.streaming.limitsManuallySet";
 //    public static final int DEFAULT_MAX_CONNS_MIN = 30;
-    public static final int DEFAULT_MAX_CONNS_MIN = 200;
+    public static final int DEFAULT_MAX_CONNS_MIN = 80;
 //    public static final int DEFAULT_MAX_CONNS_HOUR = 80;
-    public static final int DEFAULT_MAX_CONNS_HOUR = 1200;
+    public static final int DEFAULT_MAX_CONNS_HOUR = 600;
 //    public static final int DEFAULT_MAX_CONNS_DAY = 200;
-    public static final int DEFAULT_MAX_CONNS_DAY = 4000;
+    public static final int DEFAULT_MAX_CONNS_DAY = 1800;
 //    public static final int DEFAULT_MAX_TOTAL_CONNS_MIN = 60;
-    public static final int DEFAULT_MAX_TOTAL_CONNS_MIN = 400;
+    public static final int DEFAULT_MAX_TOTAL_CONNS_MIN = 240;
     public static final int DEFAULT_MAX_TOTAL_CONNS_HOUR = 4800;
     public static final int DEFAULT_MAX_TOTAL_CONNS_DAY = 19200;
 //    public static final int DEFAULT_MAX_STREAMS = 30;

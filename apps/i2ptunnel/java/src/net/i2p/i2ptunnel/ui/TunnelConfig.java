@@ -846,15 +846,12 @@ public class TunnelConfig {
             // but only if we know the sigtype
             // Server enctype migration here
             String dflt;
-            if (TunnelController.TYPE_STD_SERVER.equals(_type) ||
-                TunnelController.TYPE_HTTP_SERVER.equals(_type) ||
+            if (TunnelController.TYPE_HTTP_SERVER.equals(_type) ||
                 TunnelController.TYPE_IRC_SERVER.equals(_type) ||
                 TunnelController.TYPE_STREAMR_SERVER.equals(_type)) {
-//                dflt = "4,0";
-                dflt = "4";
-            } else {
-//                dflt = "0";
                 dflt = "4,0";
+            } else {
+                dflt = "0";
             }
             String senc = config.getProperty(OPT + "i2cp.leaseSetEncType", dflt);
             String slstyp = config.getProperty(OPT + "i2cp.leaseSetType", "0");
