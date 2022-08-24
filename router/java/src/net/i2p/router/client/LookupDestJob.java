@@ -172,7 +172,7 @@ class LookupDestJob extends JobImpl {
             Destination d = getContext().namingService().lookup(_name);
             if (d != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Found name lookup " + _name + " to " + d);
+                    _log.debug("Successful name lookup [Hostname: " + _name + "]" + d);
                 returnDest(d);
             } else {
                 if (_log.shouldDebug())
