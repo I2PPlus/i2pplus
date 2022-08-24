@@ -209,7 +209,7 @@ class LookupDestJob extends JobImpl {
                 try { Thread.sleep(1000); } catch (InterruptedException ie) {}
                 dest = getContext().netDb().lookupDestinationLocally(_hash);
                 if (_log.shouldDebug() && dest != null)
-                    _log.debug("Retry required for destination lookup [Hash:" + _hash + "]");
+                    _log.debug("Retry required for destination lookup [Hash: " + _hash + "]");
             }
 
             if (dest == null && _blindData != null) {
