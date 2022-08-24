@@ -1,5 +1,32 @@
+2022-08-24 dr|z3d
+ * Console: Reduce deadlock detector interval to 1hr (was 24)
+ * Router:
+   - Increase max in/outbound message per pump for non-slow routers
+   - Increase priority blocking queue/backlog for non-slow routers
+
+2022-08-23 dr|z3d
+ * Router:
+   - Relax throttle for message sent to unconnected peers
+   - Automatically enable SSU2 for routers with < 4 cores
+ * I2PSnark: Persist torrent filters via local storage (patch by HaruCode)
+ * graceful_update: Fixes and improvements from term99
+ * I2PTunnel: Relax default throttles for server tunnels
+
+2022-08-22 dr|z3d
+ * Router:
+   - Increase probability of SSU2 activation to 1 in 4
+   - Mitigate lookup failure for new leasesets (patch by Obscuratus)
+
 2022-08-10 zzz
  * SSU2: Enable for Android, ARM, and 2% of others
+
+2022-08-07 dr|z3d
+ * Router: Sync UDPSender CoDel parameters with global settings and enable
+   global config override
+
+2022-08-06 dr|z3d
+ * Router: Reduce peer test frequency for SSU IP detection to 5m (was 13)
+ * Console: Add info about i2np.udp.disablePeerTest to advanced help
 
 2022-08-06 zzz
  * GeoIP 2022-08
@@ -7,6 +34,9 @@
 
 2022-08-05 zzz
  * SSU: Try to keep a mix of v1/v2 introducers
+
+2022-08-04 dr|z3d
+ * Console: Use snark icon in sidebar service tunnels section
 
 2022-08-04 zzz
  * i2ptunnel: New outproxy (new installs only)
@@ -33,8 +63,28 @@
 2022-07-25 zzz
  * SSU2: Fix bitfield shifts of 256 or more
 
+2022-07-25 dr|z3d
+ * Router: Reduce default peer test timeout to 800ms (was 1s)
+
+2022-07-24 dr|z3d
+ * Console:
+   - Ensure meta refresh tag is removed from <head> when console
+     becomes visible
+   - Link to /profiles from Peer Test Average label in sidebar
+
+2022-07-23 dr|z3d
+ * Console: Use sliders on /confignet
+ * I2PTunnel: Add option for +/-3 tunnel hop variance for server tunnels
+   in advanced mode
+
+2022-07-21 dr|z3d
+ * ClientManager: Increase default max sessions to 512
+
 2022-07-21 zzz
  * Console: Fix saving flat clients.config file
+
+2022-07-19 dr|z3d
+ * Router: Increase max floodfills to push new leaseset to
 
 2022-07-19 zzz
  * GeoIP: Don't lookup route48 addresses
@@ -58,6 +108,10 @@
    - MTU fixes
    - Send retry with termination on clock skew
 
+2022-07-13 dr|z3d
+ * Router: Add short temporary ban for routers when throttled for
+   excessive participating tunnel requests
+
 2022-07-12 zzz
  * SSU2: Fail session if first outbound message fails
 
@@ -79,6 +133,13 @@
 2022-07-04 zzz
  * Console: Add cancel button to netdb search form
  * NetDB: Lookup handling cleanups
+
+2022-07-02 dr|z3d
+ * Router
+   - Increase timeout for iterative search job and increase concurrency
+     for non-slow routers
+ * Increase max floodfills we attempt to store keys with and increase
+   parallelization
 
 2022-07-02 zzz
  * SSU: Remove copy of peers in idle timeout checker
@@ -116,6 +177,9 @@
 2022-06-16 zzz
  * SSU2: Hole punch processing and fixes
 
+2022-06-14 dr|z3d
+ * I2PTunnel: Generic 503 (service unavailable) error page
+
 2022-06-14 zzz
  * SSU2:
    - Add per-introducer relay state machine
@@ -132,6 +196,9 @@
 2022-06-10 zzz
  * SSU: Fix for HMAC NPE take 2
  * SSU2: Continue work on relay
+
+2022-06-09 dr|z3d
+ * Router: Modifications to job queue scheduler to reduce job lag
 
 2022-06-08 zzz
  * NetDb: Bypass checks on lookups of our router hash
@@ -161,6 +228,9 @@
 
 2022-06-01 zzz
  * SSU2: Enable peer test
+
+2022-05-31 dr|z3d
+ * Console: Add router.overrideIsSlow to advanced config help page
 
 2022-05-30 zzz
  * SSLEepGet: Send Host header to HTTPS proxy
