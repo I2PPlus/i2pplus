@@ -54,22 +54,22 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 #navbar {margin: -11px 0 10px 0; padding: 12px 10px 11px; position: sticky; top: -2px; z-index: 999; width: 70%; border: var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--highlight), 0 0 0 1px rgba(111,96,90,.3); background: linear-gradient(180deg,#efefef 50%, #cfc7c2 53%); text-align: center; transition: ease width .5s .5s}
 .iframed #navbar {margin: -6px 0; padding-top: 10px; position: static; width: auto; border-radius: 0; box-shadow: var(--highlight); background: var(--th)}
 #navbar a:not(:hover):not(:focus):not(:active) {color: #3f271b}
-.snarkNav, .snarkNav:visited {margin: -3px -4px -4px 0; padding: 4px 10px 4px 28px; display: inline-block; position: relative; z-index: 30; line-height: 1.3; font: bold 10pt var(--bodyfont); color: #3f271b; text-shadow: 0 0 1px #fff5ef; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: var(--border); border-radius: 0; box-shadow: var(--highlight), inset 0 0 0 rgba(0,0,0,0), 0 0 0 1px rgba(77, 69, 62, .1); background-size: 17px, 100%, 100%, 17px, 17px; background-position: 12px center, center center, center center; background-repeat: no-repeat; animation: fade-in .25s ease .5s both}
+.snarkNav, .snarkNav:visited {margin: -3px -4px -4px 0; padding: 4px 10px 4px 28px; display: inline-block; position: relative; z-index: 30; line-height: 1.3; font: bold 10pt var(--bodyfont); color: #3f271b; text-shadow: 0 0 1px #fff5ef; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: var(--border); border-radius: 0; box-shadow: var(--highlight), inset 0 0 0 rgba(0,0,0,0), 0 0 0 1px rgba(77,69,62,.1); background-size: 17px, 100%, 100%, 17px, 17px; background-position: 12px center, center center, center center; background-repeat: no-repeat; animation: fade-in .25s ease .5s both}
 .snarkNav:hover, .snarkNav:focus {z-index: 50; color: #930; text-decoration: none; text-shadow: none; box-shadow: var(--highlight), inset 0 0 0 rgba(0,0,0,0), 0 0 0 1px rgba(77, 69, 62, .1)}
-.snarkNav:active {text-shadow: none; box-shadow: var(--highlight), inset 2px 2px 3px 1px #59513b, 0 0 0 1px rgba(77, 69, 62, .1); transition: ease box-shadow .01s}
+.snarkNav:active {text-shadow: none; box-shadow: var(--highlight), inset 2px 2px 3px 1px #59513b, 0 0 0 1px rgba(77,69,62,.1); transition: ease box-shadow .01s}
 
 .nav_main {background: var(--b_snark) no-repeat 9px center / 16px, var(--nav), var(--b_snark_hover) no-repeat 9px center / 16px, var(--b_snark_active) no-repeat 9px center / 16px}
 .nav_main:hover, .nav_main:focus {background: var(--b_snark_hover) no-repeat 9px center / 18px, var(--nav_hover); background-size: 18px, 100%}
 .nav_main:active {background: var(--b_snark_active) no-repeat 9px center, var(--nav_active); background-size: 18px, 100%}
-.nav_forum {background: var(--b_forum) no-repeat 12px center/ 17px, var(--nav), var(--b_forum_hover), var(--b_forum_active)}
-.nav_tracker {background: var(--b_tracker) no-repeat 12px center/ 17px, var(--nav), var(--b_tracker_hover), var(--b_tracker_active)}
-.nav_search {background: var(--b_search) no-repeat 12px center/ 17px, var(--nav), var(--b_search_hover), var(--b_search_active)}
-.nav_forum:hover, .nav_forum:focus {background: var(--b_forum_hover) no-repeat 12px center/ 17px, var(--nav_hover)}
-.nav_tracker:hover, .nav_tracker:focus {background: var(--b_tracker_hover) no-repeat 12px center/ 17px, var(--nav_hover)}
-.nav_search:hover, .nav_search:focus {background: var(--b_search_hover) no-repeat 12px center/ 17px, var(--nav_hover)}
-.nav_forum:active {background: var(--b_forum_active) no-repeat 12px center/ 17px, var(--nav_active)}
-.nav_tracker:active {background: var(--b_tracker_active) no-repeat 12px center/ 17px, var(--nav_active)}
-.nav_search:active {background: var(--b_search_active) no-repeat 12px center/ 17px, var(--nav_active)}
+.nav_forum {background: var(--b_forum) no-repeat 12px center / 17px, var(--nav), var(--b_forum_hover), var(--b_forum_active)}
+.nav_tracker {background: var(--b_tracker) no-repeat 12px center / 17px, var(--nav), var(--b_tracker_hover), var(--b_tracker_active)}
+.nav_search {background: var(--b_search) no-repeat 12px center / 15px, var(--nav), var(--b_search_hover), var(--b_search_active)}
+.nav_forum:hover, .nav_forum:focus {background: var(--b_forum_hover) no-repeat 12px center / 17px, var(--nav_hover)}
+.nav_tracker:hover, .nav_tracker:focus {background: var(--b_tracker_hover) no-repeat 12px center / 17px, var(--nav_hover)}
+.nav_search:hover, .nav_search:focus {background: var(--b_search_hover) no-repeat 8px center / 15px, var(--nav_hover)}
+.nav_forum:active {background: var(--b_forum_active) no-repeat 12px center / 17px, var(--nav_active)}
+.nav_tracker:active {background: var(--b_tracker_active) no-repeat 12px center / 17px, var(--nav_active)}
+.nav_search:active {background: var(--b_search_active) no-repeat 12px center / 17px, var(--nav_active)}
 
 .snarkNav:last-child {border-radius: 0 2px 2px 0}
 .snarkNav:first-child, .snarkNav:hover:first-child {padding-left: 27px; border-radius: 2px 0 0 2px; background-position: 9px center; background-size: 16px, 100%, 16px}
@@ -88,7 +88,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 #screenlog ul {margin: 0; padding: 0 0 0 16px; text-align: left; list-style: none; line-height: 1.3; font-weight: 600}
 #screenlog li {margin-left: -15px}
 #screenlog li::before {width: 13px; height: 11px; display: inline-block; background: var(--bullet) no-repeat left 2px / 9px; content: ""}
-#screenlog .infohash, #screenlog a, #screenlog a:visited {color: #f90; text-shadow: 0 0 1px #000; opacity: .9}
+#screenlog .infohash, #screenlog a, #screenlog a:visited {vertical-align: baseline; color: #f90; text-shadow: 0 0 1px #000; opacity: .9}
 #screenlog a:hover, #screenlog a:visited:hover {color: #fb0; opacity: 1}
 #screenlog a:link:active, #screenlog a:visited:active{color: #f60}
 #screenlog .infohash {color: #5b5}
@@ -942,6 +942,7 @@ tr:hover td.graphicStatus, tr:hover td.trackerLink, tr:hover td.torrentDetails, 
 .rowOdd td, .rowEven td {padding-top: 4px; padding-bottom: 4px}
 .snarkNav {padding: 4px 8px 4px 26px; background-size: 16px, 100%, 100%; background-position: 8px center, center center, center center}
 .nav_main {padding: 4px 8px 4px 27px; background-position: 8px center, center center, center center; background-size: 18px, 100%, 100%}
+.nav_search:hover, .nav_search:focus {background-size: 17px, 100%, 100%; background-position: 8px center, center center, center center}
 .percentDownloaded {pointer-events: none;}
 .graphicStatus::after {min-height: 20px; vertical-align: middle}
 #totals {word-spacing: .15em}

@@ -91,7 +91,7 @@ p:empty + .sb_notice {margin-top: 7px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px;  display: inline-block;  content: ""}
 #sb_peers td:first-child, #sb_peersadvanced td:first-child, #sb_tunnels td:first-child, #sb_queue td:first-child, #sb_bandwidth td:first-child, #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child {white-space: nowrap}
 #sb_bandwidth td:nth-child(2) {width: 60%; white-space: nowrap}
-#sb_peers a, #sb_peersadvanced a, #sb_tunnels a, #sb_general a, #sb_shortgeneral a, #sb_advancedgeneral a {padding: 0}
+#sb_peers a, #sb_peersadvanced a, #sb_tunnels a, #sb_general a, #sb_shortgeneral a, #sb_advancedgeneral a, #sb_queue a {padding: 0}
 #sb_peers a b, #sb_peersadvanced a b, #sb_tunnels a a, #sb_general a b, #sb_shortgeneral a b, #sb_advancedgeneral a b {color: var(--ink)}
 #sb_peers a:hover b, #sb_peersadvanced a:hover b {color: var(--hover)}
 #sb_peersadvanced .separator {display: none}
@@ -1871,6 +1871,8 @@ span.b32:active {box-shadow: 0 0 0 1px var(--border_color), var(--btn_shadow_act
 .statusnotes {margin: -6px 0 7px; padding: 8px 0; color: var(--ink); font-style: italic; font-size: 9pt; text-align: center; border: var(--border); background: var(--bg)}
 h3 + .statusnotes {margin-top: -1px}
 .statusnotes + .statusnotes {margin-top: -8px}
+.tunneldisplay td {text-align: center}
+.tunneldisplay td:first-child {text-align: center; width: 1%; white-space: nowrap}
 #tunnels h3 {padding-right: 5px}
 #tunnels h3 a {float: right}
 #tunnels h3 a:not(.lsview), #logs h3 a {font-size: 0}

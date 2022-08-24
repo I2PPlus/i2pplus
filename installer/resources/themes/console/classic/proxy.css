@@ -30,6 +30,7 @@ body::before {width: 0; height: 3px; display: inline-block; position: absolute; 
 .warning a:hover, .warning a:focus, .warning a:visited:focus {color: #d30}
 .warning a:active {color: #900}
 .warning hr {color: #fb7; background: #fb7; height: 1px; border: 0 solid #fb7; margin: 5px 0}
+#proxyNewAddressHelper .warning hr {display: none}
 #warning_localhost {margin: 25px 20px; background-position: 20px calc(50% + 16px)}
 #warning_localhost p {margin-bottom: 0; padding: 20px 10px 0; font-weight: 700}
 #warning_localhost + .proxyfooter {margin-top: -65px}

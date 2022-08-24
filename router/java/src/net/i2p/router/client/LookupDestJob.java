@@ -172,11 +172,11 @@ class LookupDestJob extends JobImpl {
             Destination d = getContext().namingService().lookup(_name);
             if (d != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Found name lookup " + _name + " to " + d);
+                    _log.debug("Successful name lookup [Hostname: " + _name + "]" + d);
                 returnDest(d);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Failed name lookup [Address: " + _name + "]");
+                    _log.debug("Failed name lookup [Address: " + _name.replace("\n", "") + "]");
                 returnFail();
             }
         } else if (_hash != null) {
@@ -209,7 +209,7 @@ class LookupDestJob extends JobImpl {
                 try { Thread.sleep(1000); } catch (InterruptedException ie) {}
                 dest = getContext().netDb().lookupDestinationLocally(_hash);
                 if (_log.shouldDebug() && dest != null)
-                    _log.debug("Retry required for destination lookup" + dest);
+                    _log.debug("Retry required for destination lookup [Hash: " + _hash + "]");
             }
 
             if (dest == null && _blindData != null) {

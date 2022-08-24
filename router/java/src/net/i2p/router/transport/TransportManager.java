@@ -88,7 +88,7 @@ public class TransportManager implements TransportEventListener {
      */
     public final static String PROP_ENABLE_SSU2 = "i2np.ssu2.enable";
     /** 1 in this many */
-    private static final int SSU2_ENABLE_PROBABILITY = 16;
+    private static final int SSU2_ENABLE_PROBABILITY = 4;
     /** default true */
     public final static String PROP_ENABLE_NTCP = "i2np.ntcp.enable";
     /** default true */
@@ -265,7 +265,7 @@ public class TransportManager implements TransportEventListener {
             boolean enableSSU2 = false;
             if (ssu2 == null) {
                 // Migration, to be removed when we change to default true
-                if (SystemVersion.isSlow() || _context.random().nextInt(SSU2_ENABLE_PROBABILITY) == 0) {
+                if (SystemVersion.isSlow() || SystemVersion.getCores() < 4 || _context.random().nextInt(SSU2_ENABLE_PROBABILITY) == 0) {
                     enableSSU2 = true;
                     _context.router().saveConfig(PROP_ENABLE_SSU2, "true");
                 }
