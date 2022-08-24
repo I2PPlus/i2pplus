@@ -32,8 +32,8 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     protected static final long[] RATES = {60*1000, 10*60*1000, 60*60*1000};
 //    protected static final int BACKLOG_SIZE = 256;
 //    protected static final int MAX_SIZE = 512;
-    protected static final int DEFAULT_BACKLOG_SIZE = 512;
-    protected static final int DEFAULT_MAX_SIZE = 1024;
+    protected static final int DEFAULT_BACKLOG_SIZE = SystemVersion.isSlow() ? 512 : 1024;
+    protected static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 1024 : 4096;
     public static final String PROP_MAX_SIZE = "router.codelMaxQueue";
     public static final String PROP_BACKLOG_SIZE = "router.codelBacklog";
 /*
