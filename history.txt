@@ -1,3 +1,7 @@
+2022-08-25 zzz
+ * Router: Fix deadlock via rebuildRouterAddress() and UDPTransport
+ * SSU2: Implement path challenge and connection migration
+
 2022-08-24 1.9.0+ released
 
 2022-08-24 dr|z3d
@@ -13,6 +17,9 @@
  * I2PSnark: Persist torrent filters via local storage (patch by HaruCode)
  * graceful_update: Fixes and improvements from term99
  * I2PTunnel: Relax default throttles for server tunnels
+
+2022-08-23 zzz
+ * Router: Add deadlocks to event log
 
 2022-08-22 dr|z3d
  * Router:
