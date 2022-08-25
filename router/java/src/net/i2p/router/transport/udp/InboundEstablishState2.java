@@ -187,7 +187,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (_log.shouldDebug())
                 _log.debug("[SSU2] Processed " + blocks + " blocks on " + this);
         } catch (Exception e) {
-            _log.error("[SSU2] InboundEstablishState payload error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
+            if (!e.toString().contains("RouterInfo store fail"))
+                _log.error("[SSU2] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
             throw new GeneralSecurityException("IES2 payload error", e);
         }
     }
