@@ -260,7 +260,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         // first outbound message will timeout before this
                         // and close the session in super.finishMessages()
                         if (_log.shouldWarn())
-                            _log.warn("[SSU2] Fail, no SessionConfirmed ACK received on " + this);
+                            _log.warn("[SSU2] Fail, no SessionConfirmed ACK received from " + this);
                         UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_FRAME_TIMEOUT, this);
                         _transport.send(pkt);
                         _transport.dropPeer(this, true, "No Sess Conf ACK rcvd");
@@ -275,7 +275,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
         if (packets != null) {
             if (_log.shouldInfo())
-                _log.info("[SSU2] Retransmitting SessionConfirmed on " + this);
+                _log.info("[SSU2] Retransmitting SessionConfirmed to " + this);
             for (int i = 0; i < packets.length; i++) {
                  _transport.send(packets[i]);
             }
@@ -355,12 +355,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             SSU2Header.Header header = SSU2Header.trialDecryptShortHeader(packet, _rcvHeaderEncryptKey1, _rcvHeaderEncryptKey2);
             if (header == null) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] Inbound packet too short [" + len + " bytes] on " + this);
+                    _log.warn("[SSU2] Inbound packet too short [" + len + " bytes] from " + this);
                 return;
             }
             if (header.getDestConnID() != _rcvConnID) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] BAD Destination ConnectionID ["  + header + "] -> Size: " + len + " bytes on " + this);
+                    _log.warn("[SSU2] BAD Destination ConnectionID ["  + header + "] -> Size: " + len + " bytes from " + this);
                 if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0)) {
                     // this was probably a retransmitted session created,
                     // sent with k_header_1 = bob's intro key, and we're
@@ -374,7 +374,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             if (header.getType() != DATA_FLAG_BYTE) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] BAD " + len + " byte data packet [Type " + (header.getType() & 0xff) + "] received on " + this);
+                    _log.warn("[SSU2] BAD " + len + " byte data packet [Type " + (header.getType() & 0xff) + "] received from " + this);
                 // TODO if it's early:
                 // If inbound, could be a retransmitted Session Confirmed,
                 // ack it again.
@@ -401,13 +401,13 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                     _packetsReceivedDuplicate++;
                 }
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] Duplicate packet received [#" + n + "] on " + this);
+                    _log.warn("[SSU2] Duplicate packet received [#" + n + "] from " + this);
                 return;
             }
 
             int payloadLen = len - (SHORT_HEADER_SIZE + MAC_LEN);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] New " + len + " byte packet [#" + n + "] received on " + this);
+                _log.debug("[SSU2] New " + len + " byte packet [#" + n + "] received from " + this);
             SSU2Payload.processPayload(_context, this, data, off + SHORT_HEADER_SIZE, payloadLen, false, from);
             packetReceived(payloadLen);
 
@@ -562,7 +562,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (!ENABLE_RELAY)
             return;
         if (_log.shouldInfo())
-            _log.info("Received RELAY TAG REQUEST on " + this);
+            _log.info("Received RELAY TAG REQUEST from " + this);
         long tag = getWeRelayToThemAs();
         if (tag <= 0) {
             if (_transport.canIntroduce(isIPv6())) {
@@ -697,7 +697,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 if (state != null)
                     _log.info("[SSU2] Duplicate fragment [" + frag + "] received for " + state);
                 else
-                    _log.info("[SSU2] Duplicate fragment [" + frag + "] received on " + this);
+                    _log.info("[SSU2] Duplicate fragment [" + frag + "] received from " + this);
                 return;
             }
         }
