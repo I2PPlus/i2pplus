@@ -2096,21 +2096,21 @@ public class PeerState {
             _transport.succeeded(state);
             if (_log.shouldDebug()) {
                 if (state.getFragmentCount() > 1) {
-                    _log.debug("Received partial ACK of " + state.getMessageId() + " by " + _remotePeer
-                               + " newly-acked: " + ackedSize
-                               + ", now complete for: " + state);
+                    _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
+                               + "] ->  Newly-acked: " + ackedSize
+                               + " bytes, now complete for: " + state);
                 } else {
-                    _log.debug("Received ACK of " + state.getMessageId() + " by " + _remotePeer
-                               + " after " + lifetime + " and " + numSends + " sends");
+                    _log.debug("Received ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
+                               + "] after " + lifetime + " and " + numSends + " sends");
                 }
             }
         } else {
             if (_log.shouldDebug())
-                _log.debug("Received partial ACK of " + state.getMessageId() + " by " + _remotePeer
-                      + " after " + lifetime + " and " + numSends + " sends"
-                      + " complete? false"
-                      + " newly-acked: " + ackedSize
-                      + " fragment: " + f.num
+                _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
+                      + "] after " + lifetime + " and " + numSends + " sends ->"
+                      + " Complete? false"
+                      + "; newly-acked: " + ackedSize
+                      + "; fragment: " + f.num
                       + " for: " + state);
         }
         state.clearNACKs();
