@@ -2109,8 +2109,8 @@ public class PeerState {
                 _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
                       + "] after " + lifetime + " and " + numSends + " sends ->"
                       + " Complete? false"
-                      + "; newly-acked: " + ackedSize
-                      + "; fragment: " + f.num
+                      + "; Newly-acked: " + ackedSize
+                      + " bytes; Fragment: " + f.num
                       + " for: " + state);
         }
         state.clearNACKs();
