@@ -229,7 +229,7 @@ input.trackerhome,input.trackerannounce {width:210px}
 #torrents tbody tr:last-child td {border-bottom:var(--border)}
 #torrents td.torrentDetails img:not([src$="rateme.svg"]) {margin-top:-2px;margin-bottom:-2px;padding:4px;width:19px;height:19px}
 #torrents tfoot th {font-weight:400}
-#torrents tfoot tr:first-child th {padding:7px 4px;vertical-align:middle;line-height:1.4;white-space:no-wrap;font-weight:700;background:transparent}
+#torrents tfoot tr:first-child th {padding:7px 4px;min-width:64px;vertical-align:middle;line-height:1.4;white-space:no-wrap;font-weight:700;background:transparent}
 #torrents tfoot tr:first-child th:first-child {text-align:left}
 #torrents tfoot th br {margin-left:20px;display:inline-block}
 #torrents tfoot td:first-child {padding-left:0;text-align:left}
