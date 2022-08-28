@@ -145,7 +145,7 @@ class NetDbRenderer {
                     if (routerPrefix != null) {
                         buf.append(_t("Router")).append(' ');
                         buf.append(routerPrefix);
-                        buf.append(' ').append(banned ? _t("is banned) : _t("not found in network database"));
+                        buf.append(' ').append(banned ? _t("is banned") : _t("not found in network database"));
                     } else {
                         buf.append(_t("No results"));
                     }
