@@ -75,7 +75,7 @@ public class JobQueue {
         else if (cores <= 2)
             RUNNERS = 4;
         else if (cores <= 4)
-            RUNNERS = cores;
+            RUNNERS = cores + 2;
         else if (maxMemory >= 1024*1024*1024L)
             RUNNERS = Math.min(cores - 2, 8);
         else if (maxMemory >= 512*1024*1024L)
