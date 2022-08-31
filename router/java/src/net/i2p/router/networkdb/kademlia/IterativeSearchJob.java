@@ -174,7 +174,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                                         // && ctx.router().getUptime() > 15*60*1000 && !isHidden;
                 if (uninteresting) {
                     _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME / 3 * 2);
-                    totalSearchLimit -= 2;
+                    totalSearchLimit = Math.max(totalSearchLimit - 1, 2);
                 }
             } else if (known < 2000 || isHidden) {
                 totalSearchLimit += 3;
@@ -189,9 +189,9 @@ public class IterativeSearchJob extends FloodSearchJob {
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
         if (isLease)
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT * 2);
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
         else if (ctx.netDb().getKnownRouters() < 2000 || ctx.router().getUptime() < 30*60*1000 || isHidden)
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT * 2);
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 2);
         else
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
         _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
