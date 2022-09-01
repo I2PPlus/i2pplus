@@ -164,14 +164,17 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // termination block received
             throw new GeneralSecurityException("Termination block in Session/Token Request");
         }
-        if (_timeReceived == 0)
+        if (_timeReceived == 0) {
+            _currentState = InboundState.IB_STATE_FAILED;
             throw new GeneralSecurityException("No DateTime block in Session/Token Request");
+        }
         _skew = _establishBegin - _timeReceived;
         if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW) {
+            _currentState = InboundState.IB_STATE_FAILED;
             // send retry with termination
             UDPPacket retry = _transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_SKEW);
             _transport.send(retry);
-            throw new GeneralSecurityException("Skew exceeded in Session/Token Request: " + _skew);
+            throw new GeneralSecurityException("Skew exceeded in Session/Token Request (retry sent): " + _skew);
         }
         packetReceived();
         if (_log.shouldDebug())
@@ -476,6 +479,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     /** note that we just sent a Retry packet */
     public synchronized void retryPacketSent() {
+        // retry after clock skew
+        if (_currentState == InboundState.IB_STATE_FAILED)
+            return;
         if (_currentState != InboundState.IB_STATE_REQUEST_BAD_TOKEN_RECEIVED &&
             _currentState != InboundState.IB_STATE_TOKEN_REQUEST_RECEIVED)
             throw new IllegalStateException("Bad state for Retry Sent: " + _currentState);
