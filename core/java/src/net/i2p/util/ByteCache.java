@@ -17,34 +17,35 @@ import net.i2p.data.ByteArray;
  * Heap size control - survey of usage:
  *
  *  <pre>
-	Size	Max	MaxMem	From
+	Size	Max		MaxMem		From
 
-	1K	32	32K	tunnel TrivialPreprocessor
-                *changed to 512 since we disabled resize()
-	1K	512	512K	tunnel FragmentHandler
-	1K	512	512K	I2NP TunnelDataMessage
-	1K	512	512K	tunnel FragmentedMessage
+	1K		32		32K			tunnel TrivialPreprocessor
+								*changed to 512 since we disabled resize()
+	1K		512		512K		tunnel FragmentHandler
+	1K		512		512K		I2NP TunnelDataMessage
+	1K		512		512K		tunnel FragmentedMessage
 
-	1572	64	100K	UDP InboundMessageState
+	1572	64		100K		UDP InboundMessageState
 
-	1730	128	216K	streaming MessageOutputStream
+	1730	128		216K		streaming MessageOutputStream
 
-	4K	32	128K	I2PTunnelRunner
+	4K		32		28K			I2PTunnelRunner
 
-	8K	8	64K	I2PTunnel HTTPResponseOutputStream
+	8K		8		64K			I2PTunnel HTTPResponseOutputStream
 
-	16K	16	256K	I2PSnark
+	16K		16		256K		I2PSnark
 
-	32K	4	128K	SAM StreamSession
-	32K	10	320K	SAM v2StreamSession
-	32K	64	2M	UDP OMS
-	32K	128	4M	streaming MessageInputStream
+	32K		4		128K		SAM StreamSession
+	32K		10		320K		SAM v2StreamSession
+	32K		64		2M			UDP OMS
+	32K		128		4M			streaming MessageInputStream
 
-	36K	64	2.25M	streaming PacketQueue
+	36K		64		2.25M		streaming PacketQueue
 
-	40K	8	320K	DataHelper decompress
+	40K		8		320K		DataHelper decompress
 
-	64K	64	4M	UDP MessageReceiver - disabled in 0.7.14
+	64K		64		4M			UDP MessageReceiver
+								(disabled in 0.7.14)
  *  </pre>
  *
  */
@@ -63,7 +64,7 @@ public final class ByteCache extends TryCache<ByteArray> {
     static {
         long maxMemory = SystemVersion.getMaxMemory();
 //        MAX_CACHE = (int) Math.min(4*1024*1024l, Math.max(128*1024l, maxMemory / 128));
-        MAX_CACHE = (int) Math.min(16*1024*1024l, Math.max(128*1024l, maxMemory / 128));
+        MAX_CACHE = (int) Math.min(8*1024*1024l, Math.max(128*1024l, maxMemory / 128));
     }
 
     /**
@@ -109,10 +110,11 @@ public final class ByteCache extends TryCache<ByteArray> {
     private final int _entrySize;
 
     /** how often do we cleanup the cache */
-    private static final int CLEANUP_FREQUENCY = 33*1000;
+//    private static final int CLEANUP_FREQUENCY = 33*1000;
+    private static final int CLEANUP_FREQUENCY = 45*1000;
     /** if we haven't exceeded the cache size in 2 minutes, cut our cache in half */
 //    private static final long EXPIRE_PERIOD = 2*60*1000;
-    private static final long EXPIRE_PERIOD = 5*60*1000;
+    private static final long EXPIRE_PERIOD = 90*1000;
 
     /** @since 0.9.36 */
     private static class ByteArrayFactory implements TryCache.ObjectFactory<ByteArray> {

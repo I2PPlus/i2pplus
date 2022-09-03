@@ -1,4 +1,6 @@
 // setup torrent display buttons so we can show/hide snarks based on status
+var showpeers = window.localStorage.getItem("showpeers");
+setPeersLocation();
 
 var bar = document.getElementById("torrentDisplay");
 var filtered = document.querySelectorAll(".filtered");
@@ -275,3 +277,24 @@ function initFilterBar() {
 if (typeof bar !== "undefined" || bar) {
   initFilterBar();
 }
+
+function setPeersLocation() {
+  if (showpeers == "true" && window.location.search != "?p=1") {
+     window.location = "/i2psnark?p=1";
+  } else if (showpeers != "true" && window.location.search != "") {
+     window.location = "/i2psnark";
+  }
+}
+
+
+function toggleShowPeers() {
+  if (showpeers == "true") {
+     showpeers = "false";
+  } else {
+     showpeers = "true";
+  }
+  window.localStorage.setItem("showpeers", showpeers);
+  setPeersLocation();
+}
+
+document.querySelector("th.peerCount").addEventListener("click", toggleShowPeers, false);

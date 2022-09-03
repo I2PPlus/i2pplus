@@ -125,6 +125,8 @@ function refreshTorrents(timestamp) {
             var theadResponse = xhrsnark.responseXML.getElementById("snarkHead");
             if (thead && typeof theadResponse !== "undefined" && !Object.is(thead.innerHTML, theadResponse.innerHTML))
               thead.innerHTML = theadResponse.innerHTML;
+              thead.querySelector("th.peerCount").addEventListener("click", toggleShowPeers, false);
+              initFilterBar();
           }
         }
 
@@ -133,6 +135,8 @@ function refreshTorrents(timestamp) {
             var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
             if (typeof mainsectionResponse !== "undefined" && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML))
               mainsection.innerHTML = mainsectionResponse.innerHTML;
+              mainsection.querySelector("th.peerCount").addEventListener("click", toggleShowPeers, false);
+              initFilterBar();
           } else if (files) {
             var dirlist = document.getElementById("dirlist");
             var notfound = document.getElementById("NotFound");

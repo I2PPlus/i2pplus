@@ -121,6 +121,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     (ENFORCE_TOKEN && !_transport.getEstablisher().isInboundTokenValid(_remoteHostId, token)))) {
             if (_log.shouldInfo())
                 _log.info("[SSU2] Invalid token [" + token + "] in SessionRequest from: " + _aliceSocketAddress);
+            if (token == 0)
+                throw new GeneralSecurityException("Zero token in session request from: " + _aliceSocketAddress);
             _currentState = InboundState.IB_STATE_REQUEST_BAD_TOKEN_RECEIVED;
             _sendHeaderEncryptKey2 = introKey;
             // Generate token for the retry.
@@ -162,14 +164,17 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // termination block received
             throw new GeneralSecurityException("Termination block in Session/Token Request");
         }
-        if (_timeReceived == 0)
+        if (_timeReceived == 0) {
+            _currentState = InboundState.IB_STATE_FAILED;
             throw new GeneralSecurityException("No DateTime block in Session/Token Request");
+        }
         _skew = _establishBegin - _timeReceived;
         if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW) {
+            _currentState = InboundState.IB_STATE_FAILED;
             // send retry with termination
             UDPPacket retry = _transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_SKEW);
             _transport.send(retry);
-            throw new GeneralSecurityException("Skew exceeded in Session/Token Request: " + _skew);
+            throw new GeneralSecurityException("Skew exceeded in Session/Token Request (retry sent): " + _skew);
         }
         packetReceived();
         if (_log.shouldDebug())
@@ -185,7 +190,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (_log.shouldDebug())
                 _log.debug("[SSU2] Processed " + blocks + " blocks on " + this);
         } catch (Exception e) {
-            _log.error("[SSU2] InboundEstablishState payload error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
+            if (!e.toString().contains("RouterInfo store fail"))
+                if (_log.shouldWarn())
+                    _log.warn("[SSU2] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
             throw new GeneralSecurityException("IES2 payload error", e);
         }
     }
@@ -472,6 +479,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     /** note that we just sent a Retry packet */
     public synchronized void retryPacketSent() {
+        // retry after clock skew
+        if (_currentState == InboundState.IB_STATE_FAILED)
+            return;
         if (_currentState != InboundState.IB_STATE_REQUEST_BAD_TOKEN_RECEIVED &&
             _currentState != InboundState.IB_STATE_TOKEN_REQUEST_RECEIVED)
             throw new IllegalStateException("Bad state for Retry Sent: " + _currentState);

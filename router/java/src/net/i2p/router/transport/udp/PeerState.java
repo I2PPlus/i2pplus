@@ -210,7 +210,7 @@ public class PeerState {
     protected final UDPTransport _transport;
 
     /** have we migrated away from this peer to another newer one? */
-    private volatile boolean _dead;
+    protected volatile boolean _dead;
 
     /** The minimum number of outstanding messages (NOT fragments/packets) */
 //    private static final int MIN_CONCURRENT_MSGS = 8;
@@ -2096,21 +2096,21 @@ public class PeerState {
             _transport.succeeded(state);
             if (_log.shouldDebug()) {
                 if (state.getFragmentCount() > 1) {
-                    _log.debug("Received partial ACK of " + state.getMessageId() + " by " + _remotePeer
-                               + " newly-acked: " + ackedSize
-                               + ", now complete for: " + state);
+                    _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
+                               + "] ->  Newly-acked: " + ackedSize
+                               + " bytes, now complete for: " + state);
                 } else {
-                    _log.debug("Received ACK of " + state.getMessageId() + " by " + _remotePeer
-                               + " after " + lifetime + " and " + numSends + " sends");
+                    _log.debug("Received ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
+                               + "] after " + lifetime + " and " + numSends + " sends");
                 }
             }
         } else {
             if (_log.shouldDebug())
-                _log.debug("Received partial ACK of " + state.getMessageId() + " by " + _remotePeer
-                      + " after " + lifetime + " and " + numSends + " sends"
-                      + " complete? false"
-                      + " newly-acked: " + ackedSize
-                      + " fragment: " + f.num
+                _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
+                      + "] after " + lifetime + " and " + numSends + " sends ->"
+                      + " Complete? false"
+                      + "; Newly-acked: " + ackedSize
+                      + " bytes; Fragment: " + f.num
                       + " for: " + state);
         }
         state.clearNACKs();
@@ -2220,6 +2220,17 @@ public class PeerState {
             }
             if (_log.shouldDebug())
                 _log.debug("End of FAST RTX, deflated window: " + this);
+        }
+    }
+
+    /**
+     * SSU 2 only
+     *
+     * @since 0.9.56
+     */
+    protected boolean shouldRequestImmediateAck() {
+        synchronized(_sendWindowBytesRemainingLock) {
+            return _sendWindowBytesRemaining < _sendWindowBytes / 3;
         }
     }
 

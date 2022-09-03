@@ -485,11 +485,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         if (isNew) {
             if (_log.shouldDebug())
-                _log.debug("Started FloodSearch for key [" + key.toBase64().substring(0,6) + "]");
+                _log.debug("Started new IterativeSearchJob for key [" + key.toBase64().substring(0,6) + "]");
             _context.jobQueue().addJob(searchJob);
         } else {
-            if (_log.shouldInfo())
-                _log.info("Deferred FloodSearch for [" + key.toBase64().substring(0,6) + "] with " + _activeFloodQueries.size() + " in progress");
+            if (_log.shouldDebug())
+                _log.debug("Deferred IterativeSearchJob for [" + key.toBase64().substring(0,6) + "] with " + _activeFloodQueries.size() + " in progress");
             searchJob.addDeferred(onFindJob, onFailedLookupJob, timeoutMs, isLease);
             // not necessarily LS
             _context.statManager().addRateData("netDb.lookupDeferred", 1, searchJob.getExpiration()-_context.clock().now());
@@ -602,6 +602,32 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
       */
     @Override
     protected void lookupBeforeDropping(Hash peer, RouterInfo info) {
+        if (_context.commSystem().isEstablished(peer)) {
+            // see DirectLookupJob
+            boolean isNew = false;
+            FloodSearchJob searchJob;
+            Job onFindJob = new DropLookupFoundJob(_context, peer, info);
+            Job onFailedLookupJob = new DropLookupFailedJob(_context, peer, info);
+            synchronized (_activeFloodQueries) {
+                searchJob = _activeFloodQueries.get(peer);
+                if (searchJob == null) {
+                    searchJob = new DirectLookupJob(_context, this, peer, info, onFindJob, onFailedLookupJob);
+                    _activeFloodQueries.put(peer, searchJob);
+                    isNew = true;
+                }
+            }
+            if (isNew) {
+                if (_log.shouldDebug())
+                    _log.debug("Direct RI lookup for " + peer.toBase64());
+                _context.jobQueue().addJob(searchJob);
+            } else {
+                if (_log.shouldDebug())
+                    _log.debug("Pending Direct RI lookup for " + peer.toBase64());
+                searchJob.addDeferred(onFindJob, onFailedLookupJob, 10*1000, false);
+            }
+            return;
+        }
+
         // following are some special situations, we don't want to
         // drop the peer in these cases
         // yikes don't do this - stack overflow //  getFloodfillPeers().size() == 0 ||
@@ -655,22 +681,20 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // we shouldn't drop them but instead use the new data), or if they all time out,
         // firing the dropLookupFailedJob, which actually removes out local reference
 //        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 10*1000, false);
+        if (_log.shouldDebug())
+            _log.debug("Initiating IterativeSearchJob lookup before dropping for " + peer.toBase64() + ' ' + info.getPublished());
         search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000, false);
     }
 
     private class DropLookupFailedJob extends JobImpl {
         private final Hash _peer;
-        private final RouterInfo _info;
 
         public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo info) {
             super(ctx);
             _peer = peer;
-            _info = info;
         }
         public String getName() { return "Timeout NetDb Lookup for Failing Peer"; }
         public void runJob() {
-//            if (_log.shouldInfo())
-//                _log.info("Dropped RouterInfo [" + _peer.toBase64().substring(0,6) + "]");
             dropAfterLookupFailed(_peer);
         }
     }
@@ -687,12 +711,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         public String getName() { return "Verify NetDb Lookup for Failing Peer"; }
         public void runJob() {
             RouterInfo updated = lookupRouterInfoLocally(_peer);
-            if ( (updated != null) && (updated.getPublished() > _info.getPublished()) ) {
-                // great, a legitimate update
-            } else {
-//                if (_log.shouldInfo())
-//                    _log.info("Dropped RouterInfo [" + _peer.toBase64().substring(0,6) + "]");
-                // they just sent us what we already had.  kill 'em both
+            if (updated == null || updated.getPublished() <= _info.getPublished()) {
+                // they just sent us what we already had
                 dropAfterLookupFailed(_peer);
             }
         }

@@ -275,6 +275,11 @@ class PacketBuilder2 {
         //if (_log.shouldDebug())
         //    _log.debug("Packet " + pktNum + " before encryption:\n" + HexDump.dump(data, 0, off));
 
+        // ack immediate flag
+        if (numFragments > 0) {
+            data[SHORT_HEADER_FLAGS_OFFSET] = peer.getFlags();
+        }
+
         encryptDataPacket(packet, peer.getSendCipher(), pktNum, peer.getSendHeaderEncryptKey1(), peer.getSendHeaderEncryptKey2());
         setTo(packet, peer.getRemoteIPAddress(), peer.getRemotePort());
         //if (_log.shouldDebug())
@@ -343,7 +348,7 @@ class PacketBuilder2 {
      *
      */
     public UDPPacket buildACK(PeerState2 peer) {
-        return buildPacket(Collections.emptyList(), peer);
+        return buildPacket(Collections.<Fragment>emptyList(), peer);
     }
 
     /**
@@ -351,8 +356,8 @@ class PacketBuilder2 {
      *  This will also include acks, a new token block, and padding.
      */
     public UDPPacket buildSessionDestroyPacket(int reason, PeerState2 peer) {
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Sending termination " + reason + " to " + peer);
+            if (_log.shouldDebug())
+                _log.debug("[SSU2] Sending termination " + reason + " to " + peer);
         List<Block> blocks = new ArrayList<Block>(2);
         if (peer.getKeyEstablishedTime() - _context.clock().now() > EstablishmentManager.IB_TOKEN_EXPIRATION / 2 &&
             !_context.router().gracefulShutdownInProgress()) {
@@ -363,7 +368,7 @@ class PacketBuilder2 {
         }
         Block block = new SSU2Payload.TerminationBlock(reason, peer.getReceivedMessages().getHighestSet());
         blocks.add(block);
-        UDPPacket packet = buildPacket(Collections.emptyList(), blocks, peer);
+        UDPPacket packet = buildPacket(Collections.<Fragment>emptyList(), blocks, peer);
         packet.setMessageType(TYPE_DESTROY);
         return packet;
     }
@@ -652,7 +657,7 @@ class PacketBuilder2 {
      */
     public UDPPacket buildPeerTestFromAlice(byte[] signedData, PeerState2 bob) {
         Block block = new SSU2Payload.PeerTestBlock(1, 0, null, signedData);
-        UDPPacket rv = buildPacket(Collections.emptyList(), Collections.singletonList(block), bob);
+        UDPPacket rv = buildPacket(Collections.<Fragment>emptyList(), Collections.singletonList(block), bob);
         rv.setMessageType(TYPE_TFA);
         return rv;
     }
@@ -688,7 +693,7 @@ class PacketBuilder2 {
      */
     public UDPPacket buildPeerTestToAlice(int code, Hash charlieHash, byte[] signedData, PeerState2 alice) {
         Block block = new SSU2Payload.PeerTestBlock(4, code, charlieHash, signedData);
-        UDPPacket rv = buildPacket(Collections.emptyList(), Collections.singletonList(block), alice);
+        UDPPacket rv = buildPacket(Collections.<Fragment>emptyList(), Collections.singletonList(block), alice);
         rv.setMessageType(TYPE_TTA);
         return rv;
     }
@@ -724,7 +729,7 @@ class PacketBuilder2 {
      */
     public UDPPacket buildPeerTestToCharlie(Hash aliceHash, byte[] signedData, PeerState2 charlie) {
         Block block = new SSU2Payload.PeerTestBlock(2, 0, aliceHash, signedData);
-        UDPPacket rv = buildPacket(Collections.emptyList(), Collections.singletonList(block), charlie);
+        UDPPacket rv = buildPacket(Collections.<Fragment>emptyList(), Collections.singletonList(block), charlie);
         rv.setMessageType(TYPE_TBC);
         return rv;
     }
@@ -737,7 +742,7 @@ class PacketBuilder2 {
      */
     public UDPPacket buildPeerTestToBob(int code, byte[] signedData, PeerState2 bob) {
         Block block = new SSU2Payload.PeerTestBlock(3, code, null, signedData);
-        UDPPacket rv = buildPacket(Collections.emptyList(), Collections.singletonList(block), bob);
+        UDPPacket rv = buildPacket(Collections.<Fragment>emptyList(), Collections.singletonList(block), bob);
         rv.setMessageType(TYPE_TCB);
         return rv;
     }
@@ -751,7 +756,7 @@ class PacketBuilder2 {
      */
     UDPPacket buildRelayRequest(byte[] signedData, PeerState2 bob) {
         Block block = new SSU2Payload.RelayRequestBlock(signedData);
-        UDPPacket rv = buildPacket(Collections.emptyList(), Collections.singletonList(block), bob);
+        UDPPacket rv = buildPacket(Collections.<Fragment>emptyList(), Collections.singletonList(block), bob);
         rv.setMessageType(TYPE_RREQ);
         rv.setPriority(PRIORITY_HIGH);
         return rv;
@@ -766,7 +771,7 @@ class PacketBuilder2 {
      */
     UDPPacket buildRelayIntro(byte[] signedData, PeerState2 charlie) {
         Block block = new SSU2Payload.RelayIntroBlock(signedData);
-        UDPPacket rv = buildPacket(Collections.emptyList(), Collections.singletonList(block), charlie);
+        UDPPacket rv = buildPacket(Collections.<Fragment>emptyList(), Collections.singletonList(block), charlie);
         rv.setMessageType(TYPE_INTRO);
         return rv;
     }
@@ -781,7 +786,7 @@ class PacketBuilder2 {
      */
     UDPPacket buildRelayResponse(byte[] signedData, PeerState2 state) {
         Block block = new SSU2Payload.RelayResponseBlock(signedData);
-        UDPPacket rv = buildPacket(Collections.emptyList(), Collections.singletonList(block), state);
+        UDPPacket rv = buildPacket(Collections.<Fragment>emptyList(), Collections.singletonList(block), state);
         rv.setMessageType(TYPE_RESP);
         return rv;
     }
