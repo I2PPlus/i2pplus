@@ -6203,7 +6203,7 @@ msgstr "Was ist in der Aufgabenliste des Routers?"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1156
 msgid "Indicates router performance"
-msgstr "zeigt die gegenwärtige Leisutng des Routers"
+msgstr "zeigt die gegenwärtige Leistung des Routers"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1159
 msgid "Job lag"
@@ -10543,7 +10543,7 @@ msgstr "Router Debug Inforamtionen anzeigen"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:543
 #, fuzzy
 msgid "View router performance graphs"
-msgstr "zeigt die gegenwärtige Leisutng des Routers"
+msgstr "zeigt die gegenwärtige Leistung des Routers"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:547
 #, fuzzy
