@@ -69,6 +69,10 @@
     String query = request.getQueryString();
     RequestWrapper bookRequest = new RequestWrapper(request);
     String here = bookRequest.getParameter("book");
+    // This is what does the form processing.
+    // We need to do this before any notEmpty test and before loadBookMessages() which displays the entry count.
+    // Messages will be displayed below.
+    String formMessages = book.getMessages();
 %>
 </head>
 <body id="bk">
@@ -117,6 +121,7 @@
 %>
 </h3>
 </div>
+<% /* need this whether book is empty or not to display the form messages */ %>
 <div id="messages">${book.messages}
 <%
    if (importMessages != null) {
