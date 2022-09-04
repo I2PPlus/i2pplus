@@ -468,6 +468,7 @@
 </table>
 <p class="buttons">
 <input class="cancel" type="reset" value="<%=intl._t("Cancel")%>">
+<c:if test="${book.notEmpty}">
 <input class="accept scrollToNav" type="submit" name="action" value="<%=intl._t("Replace")%>">
 <%
     if (!book.getBook().equals("published")) {
@@ -476,6 +477,7 @@
 <%
     }
 %>
+</c:if><% /* book.notEmpty */ %>
 <input class="add scrollToNav" type="submit" name="action" value="<%=intl._t("Add")%>">
 </p>
 </div>
