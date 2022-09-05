@@ -2,6 +2,7 @@ package net.i2p.router.tunnel;
 
 import java.util.List;
 import java.util.Properties;
+import net.i2p.util.SystemVersion;
 
 import net.i2p.router.RouterContext;
 
