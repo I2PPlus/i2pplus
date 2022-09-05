@@ -24,7 +24,7 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
     /** This goes in router advanced config */
     public static final String PROP_ROUTER_BATCH_FREQUENCY = "router.batchFrequency";
     /** for client OBGWs only (our data) */
-    public static final int OB_CLIENT_BATCH_FREQ = 37;
+    public static final int OB_CLIENT_BATCH_FREQ = SystemVersion.isSlow() ? 37 : 30;
     /** for exploratory OBGWs only (our tunnel tests and build messages) */
     public static final int OB_EXPL_BATCH_FREQ = 100;
     /** for IBGWs for efficiency (not our data) */
