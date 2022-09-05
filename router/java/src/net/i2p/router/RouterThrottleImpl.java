@@ -31,7 +31,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long JOB_LAG_LIMIT_NETDB = 2*1000;
     // TODO reduce
 //    private static final long JOB_LAG_LIMIT_TUNNEL = 500;
-    private static final long JOB_LAG_LIMIT_TUNNEL = 300;
+    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 400 : 300;
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
     public static final int DEFAULT_MAX_TUNNELS = (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024) ? 2*1000 : 8*1000;
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
