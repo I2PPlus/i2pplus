@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-22 22:57+0000\n"
+"POT-Creation-Date: 2022-09-05 14:21+0000\n"
 "PO-Revision-Date: 2020-02-16 18:40+0000\n"
 "Last-Translator: anvo <fragos.george@hotmail.com>\n"
 "Language-Team: Greek (http://www.transifex.com/otf/I2P/language/el/)\n"
@@ -112,14 +112,14 @@ msgstr[1] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:963
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:997
 msgid "Add"
 msgstr "Πρόσθεση"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
@@ -195,8 +195,8 @@ msgstr ""
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:713
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:891
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:719
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:897
 msgid "Delete Selected"
 msgstr "Διαγραφή Επιλεγμένων"
 
@@ -227,7 +227,7 @@ msgstr ""
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:955
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
 msgid "Add Alternate"
 msgstr ""
 
@@ -392,7 +392,7 @@ msgid "Subscriptions reloaded."
 msgstr "Συνδρομές επαναφορτώθηκαν."
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:194
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:981
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1015
 msgid "Import"
 msgstr "Εισαγωγή"
 
@@ -400,7 +400,7 @@ msgstr "Εισαγωγή"
 msgid "address book"
 msgstr "βιβλίο διευθύνσεων"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:247
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:251
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:201
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:198
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:192
@@ -409,7 +409,7 @@ msgstr "βιβλίο διευθύνσεων"
 msgid "Router"
 msgstr "Router"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:251
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:203
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:202
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:194
@@ -418,7 +418,7 @@ msgstr "Router"
 msgid "Master"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:205
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:206
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:196
@@ -427,7 +427,7 @@ msgstr ""
 msgid "Private"
 msgstr "Ιδιωτικό"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:263
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:207
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:210
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:198
@@ -436,7 +436,7 @@ msgstr "Ιδιωτικό"
 msgid "Published"
 msgstr "Δημοσιεύτηκε"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:261
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:265
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:209
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:212
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:200
@@ -446,7 +446,7 @@ msgstr "Δημοσιεύτηκε"
 msgid "Subscriptions"
 msgstr "Συνδρομές"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:263
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:267
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:211
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:215
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:214
@@ -456,7 +456,7 @@ msgstr "Συνδρομές"
 msgid "Configuration"
 msgstr "Ρυθμίσεις"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:265
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:269
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:213
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:216
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:204
@@ -465,99 +465,99 @@ msgstr "Ρυθμίσεις"
 msgid "Help"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:267
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:271
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:274
 msgid "Book"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:284
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:288
 msgid "No entries"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:328
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:338
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:332
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:342
 msgid "Export in hosts.txt format"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:330
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:334
 msgid "Export results in hosts.txt format"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:340
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:344
 msgid "Export book in hosts.txt format"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:385
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:391
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:663
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:669
 msgid "other"
 msgstr "άλλο"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:675
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:681
 msgid "clear filter"
 msgstr "εκκαθάριση φίλτρου"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:719
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
 msgid "Info"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:721
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:937
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:727
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:943
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:268
 msgid "Hostname"
 msgstr "Όνομα κεντρικού υπολογιστή"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:723
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:729
 msgid "Link (b32)"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:731
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:348
 msgid "Destination"
 msgstr "Προορισμός"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:739
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:745
 msgid "Select hosts for deletion from addressbook"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:784
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:796
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:790
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:802
 msgid "More information on this entry"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:808
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
 msgid "Base 32 address"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:820
 msgid "Helper link to share host address with option to add to addressbook"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:834
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:840
 msgid "Mark for deletion"
 msgstr "Επιλογή προς διαγραφή"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:889
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:945
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:895
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:951
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1013
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:935
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:941
 msgid "Add new destination"
 msgstr "Προσθήκη νέου προορισμού"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:941
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
 msgid "B64 or B32"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1009
 msgid "Import from hosts.txt file"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:977
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1011
 #, fuzzy
 msgid "Select file"
 msgstr "εκκαθάριση φίλτρου"
