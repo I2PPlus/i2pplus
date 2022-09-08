@@ -1,6 +1,4 @@
 // setup torrent display buttons so we can show/hide snarks based on status
-var showpeers = window.localStorage.getItem("showpeers");
-setPeersLocation();
 
 var bar = document.getElementById("torrentDisplay");
 var filtered = document.querySelectorAll(".filtered");
@@ -274,27 +272,31 @@ function initFilterBar() {
 
 }
 
+function setQuery() {
+  if (query) {
+    window.localStorage.setItem("queryString", url);
+    window.history.replaceState("", "", url);
+  }
+}
+
+function clearFilter() {
+  window.localStorage.removeItem("filter");
+}
+
+function clearQuery() {
+  window.localStorage.removeItem("queryString");
+}
+
+function clearLocalStorage() {
+  window.localStorage.clear();
+}
+
 if (typeof bar !== "undefined" || bar) {
   initFilterBar();
 }
 
-function setPeersLocation() {
-  if (showpeers == "true" && window.location.search != "?p=1") {
-     window.location = "/i2psnark?p=1";
-  } else if (showpeers != "true" && window.location.search != "") {
-     window.location = "/i2psnark";
-  }
-}
-
-
-function toggleShowPeers() {
-  if (showpeers == "true") {
-     showpeers = "false";
-  } else {
-     showpeers = "true";
-  }
-  window.localStorage.setItem("showpeers", showpeers);
-  setPeersLocation();
-}
-
-document.querySelector("th.peerCount").addEventListener("click", toggleShowPeers, false);
+document.querySelectorAll(".sortIcon").forEach(item => {
+  item.addEventListener('click', event => {
+    setQuery, false;
+  })
+})

@@ -337,7 +337,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // we want it to go to the base URI so we don't refresh with some funky action= value
         int delay = 0;
         String jsPfx = _context.isRouterContext() ? "" : ".resources";
-        if (!isConfigure) {
+//        if (!isConfigure) {
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
@@ -352,6 +352,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (delay > 0) {
                 out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
                           "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+//                          "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" + // debug
                           "var ajaxDelay = " + (delay * 1000) + ";\n" +
                           "var visibility = document.visibilityState;\n" +
                           "var cycle;\n" +
@@ -365,7 +366,7 @@ public class I2PSnarkServlet extends BasicServlet {
                           "}\n" +
                           "</script>\n");
             }
-        }
+//        }
         // custom dialog boxes for javascript alerts
         //out.write("<script charset=\"utf-8\" src=\"" + jsPfx + "/js/custom-alert.js\" type=\"text/javascript\"></script>\n");
         //out.write("<link type=\"text/css\" rel=\"stylesheet\" href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
@@ -502,7 +503,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private static void setXHRHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
-        resp.setHeader("Cache-Control", "private, max-age=2628000");
+//        resp.setHeader("Cache-Control", "private, max-age=2628000");
+        resp.setHeader("Cache-Control", "no-cache, no-store, private, max-age=0");
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
@@ -1102,7 +1104,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
                 out.write("<script charset=\"utf-8\" src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION +
                           "\" type=\"text/javascript\" async></script>\n");
-                //out.write("<script charset=\"utf-8\" src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debugging
+//                out.write("<script charset=\"utf-8\" src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debugging
             }
             return start == 0;
     }
@@ -4564,6 +4566,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (delay > 0) {
             buf.append("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
                        "import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+//                       "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" + // debug
                        "var ajaxDelay = " + (delay * 1000) + ";\n" +
                        "var visibility = document.visibilityState;\n" +
                        "var cycle;\n" +
