@@ -1391,7 +1391,7 @@ class NetDbRenderer {
             String style = addr.getTransportStyle();
             if (style.equals("NTCP2") || style.equals("NTCP")) {
                 rv |= NTCP;
-            } else if (style.equals("SSU") || style-equals("SSU2")) {
+            } else if (style.equals("SSU") || style.equals("SSU2")) {
                 if (addr.getOption("itag0") != null)
                     rv |= SSUI;
                 else
