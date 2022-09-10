@@ -32,21 +32,17 @@ function refreshTorrents(timestamp) {
       window.localStorage.setItem("queryString", query);
       query == savedQuery;
       url = "/i2psnark/" + savedQuery;
-      window.history.replaceState(null, "", "/i2psnark/" + savedQuery);
+//      window.history.replaceState(null, "", "/i2psnark/" + savedQuery);
     }
   }
-
-const url = new URL(location.href);
-url.searchParams.set('PARAM_HERE', VALUE_HERE);
-history.replaceState(null, '', url);
 
   function setLinks() {
     home.href = url;
     getQuery();
-    if (torrents) {
+    if (debug) {
       debug.href = savedQuery;
-      window.history.replaceState("", "", savedQuery);
-    } else {
+//      window.history.replaceState("", "", savedQuery);
+    } else if (home) {
       home.href = "/i2psnark/" + savedQuery;
     }
   }
