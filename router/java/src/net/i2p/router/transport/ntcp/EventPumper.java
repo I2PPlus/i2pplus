@@ -68,7 +68,7 @@ class EventPumper implements Runnable {
 
 //    private static final int BUF_SIZE = 8*1024;
 //    private static final int MAX_CACHE_SIZE = 64; // unused
-    private static final int BUF_SIZE = 64*1024;
+    private static final int BUF_SIZE = SystemVersion.isSlow() ? 8*1024 : 12*1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
