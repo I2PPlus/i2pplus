@@ -647,8 +647,8 @@ public class ProfileOrganizer {
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
-                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from well integrated peers");
-            selectWellIntegratedPeers(howMany, exclude, matches, mask, ipSet);
+                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from non-failing peers");
+            selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldDebug())
                 _log.debug(howMany + " High Capacity peers selected for tunnel build");
