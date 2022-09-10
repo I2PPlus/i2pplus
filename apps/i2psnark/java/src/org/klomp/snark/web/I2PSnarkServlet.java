@@ -337,7 +337,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // we want it to go to the base URI so we don't refresh with some funky action= value
         int delay = 0;
         String jsPfx = _context.isRouterContext() ? "" : ".resources";
-//        if (!isConfigure) {
+        if (!isConfigure) {
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
@@ -352,7 +352,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (delay > 0) {
                 out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
                           "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-//                          "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" + // debug
+                          "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" + // debug - comment out when done
                           "var ajaxDelay = " + (delay * 1000) + ";\n" +
                           "var visibility = document.visibilityState;\n" +
                           "var cycle;\n" +
@@ -366,7 +366,7 @@ public class I2PSnarkServlet extends BasicServlet {
                           "}\n" +
                           "</script>\n");
             }
-//        }
+        }
         // custom dialog boxes for javascript alerts
         //out.write("<script charset=\"utf-8\" src=\"" + jsPfx + "/js/custom-alert.js\" type=\"text/javascript\"></script>\n");
         //out.write("<link type=\"text/css\" rel=\"stylesheet\" href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
@@ -1104,7 +1104,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
                 out.write("<script charset=\"utf-8\" src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION +
                           "\" type=\"text/javascript\" async></script>\n");
-//                out.write("<script charset=\"utf-8\" src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debugging
+                out.write("<script charset=\"utf-8\" src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debug - comment out when done
             }
             return start == 0;
     }
