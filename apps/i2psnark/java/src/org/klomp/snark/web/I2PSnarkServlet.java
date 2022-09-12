@@ -85,6 +85,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String WARBASE = "/.resources/";
     private static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    private boolean debug;
 
     String cspNonce = Integer.toHexString(_context.random().nextInt());
     public I2PSnarkServlet() {
@@ -350,10 +351,13 @@ public class I2PSnarkServlet extends BasicServlet {
                       "</script>\n" +
                       "<script charset=\"utf-8\" src=\".resources/js/delete.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             if (delay > 0) {
-                out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
-                          "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-                          "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" + // debug - comment out when done
-                          "var ajaxDelay = " + (delay * 1000) + ";\n" +
+                out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n");
+                if (debug) {
+                    out.write("import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debug - comment out when done
+                } else {
+                    out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
+                }
+                out.write("var ajaxDelay = " + (delay * 1000) + ";\n" +
                           "var visibility = document.visibilityState;\n" +
                           "var cycle;\n" +
                           "if (visibility = \"visible\") {\n" +
