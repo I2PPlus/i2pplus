@@ -352,6 +352,7 @@ public class I2PSnarkServlet extends BasicServlet {
                       "<script charset=\"utf-8\" src=\".resources/js/delete.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             if (delay > 0) {
                 out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n");
+                //debug = true;
                 if (debug) {
                     out.write("import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debug - comment out when done
                 } else {
