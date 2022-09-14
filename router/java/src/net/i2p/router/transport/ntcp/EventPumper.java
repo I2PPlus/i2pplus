@@ -538,7 +538,7 @@ class EventPumper implements Runnable {
             if (count > 0) {
                 count = _blockedIPs.increment(ba);
                 if (_log.shouldWarn())
-                   _log.warn("Blocking accept of IP address: " + Addresses.toString(ip) + " (count: " + count + ")");
+                   _log.warn("Blocking accept of IP address: " + Addresses.toString(ip) + " (Count: " + count + ")");
                 _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
                 try { chan.close(); } catch (IOException ioe) { }
                 return;
@@ -636,7 +636,7 @@ class EventPumper implements Runnable {
                             count = _blockedIPs.increment(ba);
                             if (_log.shouldWarn())
                                 _log.warn("EOF on Inbound connection before receiving any data " +
-                                          "\n* Blocking IP address: " + Addresses.toString(ip) + " (count: " + count + ") -> " + con);
+                                          "\n* Blocking IP address: " + Addresses.toString(ip) + " (Count: " + count + ") -> " + con);
                         } else {
                             count = 1;
                             if (_log.shouldWarn())
@@ -716,8 +716,8 @@ class EventPumper implements Runnable {
                     ByteArray ba = new ByteArray(ip);
                     count = _blockedIPs.increment(ba);
                     if (_log.shouldWarn())
-//                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + "): " + con, ioe);
-                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + ") -> " + con +
+//                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (Count: " + count + "): " + con, ioe);
+                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (Count: " + count + ") -> " + con +
                                   "\n* IO Error: " +  ioe.getMessage());
                 } else {
                     count = 1;
