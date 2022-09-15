@@ -417,7 +417,7 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {padding-top: 1px}
 #graphs .messages {margin-bottom: -5px}
 #events .messages {margin-bottom: 0}
 #messages li {color: var(--ink_light)}
-#messages .error li {color: #411}
+#messages .error li {color: #900}
 .messages #newsDisplay, .messages #newsStatus {padding: 0}
 .messages #newsDisplay {float: right; color: transparent}
 .messages #newsDisplay a:first-child {display: none}
@@ -622,7 +622,7 @@ h3#systray + p.infohelp {padding: 20px 20px 20px 53px; box-shadow: var(--highlig
 .links li {list-style: var(--star); text-align: justify; line-height: 1.4; margin-right: 10px}
 .links ul {margin-top: -5px}
 .main li {text-align: left; list-style: square; margin: 2px 20px 0 40px; padding: 1px 10px; line-height: 1.5; word-wrap: break-word}
-.infohelp, #bannedpeercount, p#clientconf.infohelp, p#webappconfigtext.infohelp {box-shadow: var(--highlight), inset 0 0 1px 1px var(--border)}
+.infohelp, #bannedpeercount, p#clientconf.infohelp, p#webappconfigtext.infohelp {box-shadow: var(--highlight)}
 .infowarn {box-shadow: var(--highlight), inset 0 0 1px 1px #900}
 p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {padding: 20px 20px 20px 53px; line-height: 1.3; border: 1px solid var(--border_inner); background: var(--infohelp) no-repeat 15px center / 28px, var(--div_infohelp)}
 p.infowarn {padding: 20px 20px 20px 53px; line-height: 1.3; border: 1px solid var(--border_inner); background: var(--infowarn) no-repeat 15px center / 28px, var(--div_infohelp)}
@@ -1824,7 +1824,7 @@ select[name="newlogclass"] {margin-left: 3px}
 .langselect img {width: 40px; height: 30px; vertical-align: middle; border-radius: 4px}
 .langselect input:hover + .langflag {box-shadow: 0 0 0 1px var(--hover); opacity: 1}
 .langselect input, .themechoice input {cursor: pointer}
-.langselect {margin: 4px; padding: 4px 4px 0; width: 115px; min-height: 64px; float: left; text-align: center; border: 1px solid var(--border_inner); box-shadow: var(--highlight); background: #f8f8ff; transition: ease transform .05s; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
+.langselect {margin: 4px; padding: 4px 4px 0; width: 128px; min-height: 64px; float: left; text-align: center; border: 1px solid var(--border_inner); box-shadow: var(--highlight); background: #f8f8ff; transition: ease transform .05s; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 .langselect .optbox {display: none}
 .langselect .optbox:checked + .langflag {transform: scale(.8); opacity: 1}
 .langselect .optbox:checked ~ .langflag::after {padding: 2px; width: 16px; height: 16px; display: inline-block; position: absolute; right: -14px; bottom: calc(50% - 10px); z-index: 20; border-radius: 50%; box-shadow: 0 0 0 2px #bbc, 0 0 0 5px #fff; background: #f2f2ff var(--yes) no-repeat center center / 10px; content: ""}
