@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
-"PO-Revision-Date: 2020-05-14 18:48+0000\n"
+"PO-Revision-Date: 2022-09-16 09:05+0000\n"
 "Last-Translator: AO <ao@localizationlab.org>\n"
 "Language-Team: French (http://www.transifex.com/otf/I2P/language/fr/)\n"
 "Language: fr\n"
@@ -27,6 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: ../java/build/Proxy.java:5 ../java/build/Proxy.java:11
 msgid "Warning: Invalid Request URI"
@@ -157,6 +158,9 @@ msgid ""
 "If you leave this page open, it will automatically retry connecting to the "
 "website every {0} seconds after a failed connection attempt."
 msgstr ""
+"Si vous laissez cette page ouverte, elle réessayera automatiquement de se "
+"connecter au site Web toutes les {0} secondes après une tentative de "
+"connexion ratée."
 
 #: ../java/build/Proxy.java:25 ../java/build/Proxy.java:58
 #: ../java/build/Proxy.java:70 ../java/build/Proxy.java:83
@@ -308,6 +312,8 @@ msgid ""
 "This address appears to be malformed. Please verify you have supplied a "
 "valid address!"
 msgstr ""
+"Cette adresse semble être malformée. Veuillez vérifier que vous avez fourni "
+"une adresse valide !"
 
 #: ../java/build/Proxy.java:92
 msgid "You attempted to connect to a non-I2P website or location."
@@ -795,7 +801,7 @@ msgstr "Redirection vers {0}"
 
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:394
 msgid "Redirection in progress"
-msgstr ""
+msgstr "Redirection en cours"
 
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:396
 #, java-format
