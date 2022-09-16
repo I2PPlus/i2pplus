@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
-"PO-Revision-Date: 2022-09-16 09:11+0000\n"
+"PO-Revision-Date: 2022-09-16 09:24+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/otf/I2P/"
 "language/uk_UA/)\n"
@@ -151,9 +151,6 @@ msgid ""
 "If you leave this page open, it will automatically retry connecting to the "
 "website every {0} seconds after a failed connection attempt."
 msgstr ""
-"Якщо ви залишите цю сторінку відкритою, то після невдалої спроби з'єднання з "
-"сайтом кожні {0} секунд буде відбуватися автоматична повторна спроба "
-"з'єднання з сайтом."
 
 #: ../java/build/Proxy.java:25 ../java/build/Proxy.java:58
 #: ../java/build/Proxy.java:70 ../java/build/Proxy.java:83
