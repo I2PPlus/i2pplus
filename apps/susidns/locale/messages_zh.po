@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-05 14:21+0000\n"
-"PO-Revision-Date: 2019-12-12 08:03+0000\n"
+"PO-Revision-Date: 2022-09-16 11:51+0000\n"
 "Last-Translator: Beta Ba <linsui555@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -27,6 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
@@ -93,7 +94,7 @@ msgstr "DSA 1024位"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=\"active\">"
 msgid_plural "Search for <span class=\"active\">"
-msgstr[0] ""
+msgstr[0] "搜索 <span class=\"active\">"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
@@ -244,7 +245,7 @@ msgstr "地址簿已保存。"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Browse away from this addressbook and return to see update."
-msgstr ""
+msgstr "浏览一下这个地址簿，回来看看更新。"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:367
 msgid "ERROR: Could not write addressbook file."
@@ -375,7 +376,7 @@ msgstr "订阅已保存。"
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:151
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:221
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:154
 #, fuzzy
@@ -384,7 +385,7 @@ msgstr "订阅已保存，正在通过订阅地址更新地址簿。"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
-msgstr ""
+msgstr "无法更新订阅。HTTP代理没有运行!"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:162
 msgid "Subscriptions reloaded."
@@ -462,16 +463,16 @@ msgstr "配置"
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:207
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:205
 msgid "Help"
-msgstr ""
+msgstr "帮助"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:271
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:274
 msgid "Book"
-msgstr ""
+msgstr "书籍"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:288
 msgid "No entries"
-msgstr ""
+msgstr "没有条目"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:332
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:342
@@ -502,7 +503,7 @@ msgstr "清除过滤器"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
 msgid "Info"
-msgstr ""
+msgstr "信息"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:727
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:943
@@ -552,7 +553,7 @@ msgstr "添加新目标"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
 msgid "B64 or B32"
-msgstr ""
+msgstr "B64或B32"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1009
 msgid "Import from hosts.txt file"
@@ -753,7 +754,7 @@ msgstr "注释"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:360
 msgid "Add notes about domain"
-msgstr ""
+msgstr "添加关于域名的注释"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:393
 msgid "Visual Identification for"
