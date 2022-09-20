@@ -1,3 +1,6 @@
+2022-09-20 zzz
+ * i2ptunnel, eepget: Add support for SHA-256 digest proxy auth (RFC 7616)
+
 2022-09-09 zzz
  * SSU2: Enable handling of ack-immediate flag by default
 
