@@ -428,7 +428,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  headers.containsKey("X-Forwarded-Host"))) {
                 if (_log.shouldWarn()) {
                     StringBuilder buf = new StringBuilder();
-                    buf.append("[HTTPServer] Refusing inproxy access \n*Client:").append(peerB32);
+                    buf.append("[HTTPServer] Refusing inproxy access \n* Client:").append(peerB32);
                     List<String> h = headers.get("X-Forwarded-For");
                     if (h != null)
                         buf.append("\n* X-Forwarded-For: ").append(h.get(0));
