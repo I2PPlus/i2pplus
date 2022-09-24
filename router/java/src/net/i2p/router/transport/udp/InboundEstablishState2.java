@@ -453,7 +453,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _handshakeState.destroy();
         super.fail();
     }
-    
+
     // SSU 1 unsupported things
 
     @Override
@@ -845,7 +845,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _queuedDataPackets.add(packet2);
         } else {
             // case 2, race, decrypt header and pass over
-            if (_log.Info())
+            if (_log.shouldInfo())
                 _log.info("[SSU2] Passing possible data " + packet + " to PeerState2: " + this);
             _pstate.receivePacket(packet);
         }
