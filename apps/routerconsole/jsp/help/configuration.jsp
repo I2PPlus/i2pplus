@@ -78,7 +78,7 @@
 <%=intl._t("You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more.")%></p>
 <p><%=intl._t("By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels (for performance reasons) and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i> in the sidebar under Service Tunnels and on the <a href=\"/tunnels\">Tunnels page</a>.")%>&nbsp;<%=intl._t("However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels.")%>&nbsp;
 <%=intl._t("This can be done by unchecking the <i>Share tunnels with other configured clients</i> option listed under <i>Shared Client</i> on the configuration page of the relevant client service, after which you will need to restart the client service from the <a href=\"/i2ptunnelmgr\">Tunnel Manager index page</a>.")%></p>
-<p><%=intl._t("Note: Most of the options in the Tunnel Manager have tooltips; be sure to check those before you change settings you don't fully understand! For example, it is <i>not</i> recommended to enable DCC for your IRC client tunnel as this will severely compromise your anonymity.")%></p>
+<p><%=intl._t("Note: Most of the options in the Tunnel Manager have tooltips; be sure to check those before you change settings you don't fully understand!")%></p>
 </div>
 </div>
 <%@include file="../summaryajax.jsi" %>
