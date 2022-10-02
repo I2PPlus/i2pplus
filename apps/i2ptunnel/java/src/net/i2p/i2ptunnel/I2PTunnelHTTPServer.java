@@ -333,10 +333,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         Hash peerHash = socket.getPeerDestination().calculateHash();
         String peerB32 = socket.getPeerDestination().toBase32();
         if (_log.shouldInfo())
-            _log.info("[HTTPServer] Incoming connection to " + toString() + " (port " + socket.getLocalPort() +
-                      ")\n* From: " + peerB32 + " on port " + socket.getPort());
-        //local is fast, so synchronously. Does not need that many
-        //threads.
+            _log.info("[HTTPServer] Incoming connection to " + toString() + " (port" + socket.getLocalPort() + ")" +
+                      "\n* From: " + peerB32 + " on port " + socket.getPort());
+        // local is fast, so synchronously. Does not need that many threads.
         try {
             if (socket.getLocalPort() == 443) {
                 if (getTunnel().getClientOptions().getProperty("targetForPort.443") == null) {
@@ -434,7 +433,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  headers.containsKey("X-Forwarded-Host"))) {
                 if (_log.shouldWarn()) {
                     StringBuilder buf = new StringBuilder();
-                    buf.append("[HTTPServer] Refusing inproxy access \n* Client:").append(peerB32);
+                    buf.append("[HTTPServer] Refusing inproxy access \n* Client: ").append(peerB32);
                     List<String> h = headers.get("X-Forwarded-For");
                     if (h != null)
                         buf.append("\n* X-Forwarded-For: ").append(h.get(0));
