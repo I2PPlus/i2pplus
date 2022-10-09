@@ -46,7 +46,7 @@ A <a href="https://en.wikipedia.org/wiki/Base32" class="sitelink external" targe
 </p>
 
 <p><b>BOB</b><br>
-BOB (Basic Open Bridge) is a simple application-to-router protocol, largely superseded by <i>SAM</i>. For more information, see the <a href="https://geti2p.net/en/docs/api/bob" class="sitelink external" target="_blank" rel="noreferrer">online documentation</a>.
+BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router protocol, superseded by <i>SAM</i>. For more information, see the <a href="https://geti2p.net/en/docs/api/bob" class="sitelink external" target="_blank" rel="noreferrer">online documentation</a>.
 </p>
 
 <p><b>Clearnet</b><br>
@@ -74,7 +74,7 @@ A tunnel used by the router for communicating with other routers to perform vari
 </p>
 
 <p><b>Floodfill</b><br>
-A router on the network tasked with providing and receiving information about other routers on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href="/configadvanced">Advanced Configuration page</a>. For more information, see the <a href="https://geti2p.net/en/docs/how/network-database#floodfill" class="sitelink external" target="_blank" rel="noreferrer">online documentation</a>.
+A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href="/configadvanced">Advanced Configuration page</a>. For more information, see the <a href="https://geti2p.net/en/docs/how/network-database#floodfill" class="sitelink external" target="_blank" rel="noreferrer">online documentation</a>.
 </p>
 
 <p><b>Garlic Routing</b><br>
@@ -98,7 +98,7 @@ A soft fork of the Java I2P software which retains full compatibility, providing
 </p>
 
 <p><b>I2PBote (plugin)</b><br>
-An I2P plugin that provides serverless, end-to-end encrypted e-mail within the I2P network. For more information, see <a href="http://bote.i2p/" class="sitelink" target="_blank" rel="noreferrer">http://bote.i2p/</a>. Source code is available on <a href="https://github.com/i2p/i2p.i2p-bote" class="sitelink external" target="_blank" rel="noreferrer">github</a>.
+An unmaintained I2P plugin that provides serverless, end-to-end encrypted e-mail within the I2P network. For more information, see <a href="http://bote.i2p/" class="sitelink" target="_blank" rel="noreferrer">http://bote.i2p/</a>. Source code is available on <a href="https://github.com/i2p/i2p.i2p-bote" class="sitelink external" target="_blank" rel="noreferrer">github</a>.
 </p>
 
 <p><b>i2pd</b><br>
@@ -130,7 +130,7 @@ A group of tunnel entry points (leases) for a <i>destination</i>. Note: A 0-hop 
 </p>
 
 <p><b>Monotone / mtn</b><br>
-The distributed version control system (DVCS) perviously used to maintain I2P's source code, now superseded by git.
+The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git.
 </p>
 
 <p><b>Multihoming</b><br>

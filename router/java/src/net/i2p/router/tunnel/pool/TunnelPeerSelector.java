@@ -84,22 +84,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             length = 0;
         else if (length > 7) // as documented in tunnel.html
             length = 7;
-        /*
-        if ( (ctx.tunnelManager().getOutboundTunnelCount() <= 0) ||
-             (ctx.tunnelManager().getFreeTunnelCount() <= 0) ) {
-            Log log = ctx.logManager().getLog(TunnelPeerSelector.class);
-            // no tunnels to build tunnels with
-            if (settings.getAllowZeroHop()) {
-                if (log.shouldInfo())
-                    log.info("no outbound tunnels or free inbound tunnels, but we do allow zeroHop: " + settings);
-                return 0;
-            } else {
-                if (log.shouldWarn())
-                    log.warn("No outbound tunnels or free inbound tunnels, and we don't allow zeroHop: " + settings);
-                return -1;
-            }
-        }
-        */
         return length;
     }
 
@@ -423,60 +407,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return false;
         if (VersionComparator.comp(v, MIN_VERSION) < 0)
             return true;
-
-        // uptime is always spoofed to 90m, so just remove all this
-      /******
-        String val = peer.getOption("stat_uptime");
-        if (val != null) {
-            long uptimeMs = 0;
-                long factor = 1;
-                if (val.endsWith("ms")) {
-                    factor = 1;
-                    val = val.substring(0, val.length()-2);
-                } else if (val.endsWith("s")) {
-                    factor = 1000l;
-                    val = val.substring(0, val.length()-1);
-                } else if (val.endsWith("m")) {
-                    factor = 60*1000l;
-                    val = val.substring(0, val.length()-1);
-                } else if (val.endsWith("h")) {
-                    factor = 60*60*1000l;
-                    val = val.substring(0, val.length()-1);
-                } else if (val.endsWith("d")) {
-                    factor = 24*60*60*1000l;
-                    val = val.substring(0, val.length()-1);
-                }
-                try { uptimeMs = Long.parseLong(val); } catch (NumberFormatException nfe) {}
-                uptimeMs *= factor;
-
-            long infoAge = ctx.clock().now() - peer.getPublished();
-            if (infoAge < 0) {
-                return false;
-            } else if (infoAge > 5*24*60*60*1000) {
-                // Only exclude long-unseen peers if we haven't just started up
-                if (ctx.router().getUptime() < DONT_EXCLUDE_PERIOD) {
-                    if (log.shouldDebug())
-                        log.debug("Not excluding a long-unseen peer, since we just started up.");
-                    return false;
-                } else {
-                    if (log.shouldDebug())
-                        log.debug("Excluding a long-unseen peer.");
-                    return true;
-                }
-            } else {
-                if ( (infoAge + uptimeMs < 90*60*1000) && (ctx.router().getUptime() > DONT_EXCLUDE_PERIOD) ) {
-                    // up for less than 90 min (which is really 1h since an uptime of 1h-2h is published as 90m),
-                    // so exclude it
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            // not publishing an uptime, so exclude it
-            return true;
-        }
-      ******/
         return false;
     }
 
@@ -539,33 +469,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_SLOW, true);
         }
     }
-
-/****
-    private static final String PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UPTIME = "router.outboundExploratoryExcludeUptime";
-    private static final String PROP_OUTBOUND_CLIENT_EXCLUDE_UPTIME = "router.outboundClientExcludeUptime";
-    private static final String PROP_INBOUND_EXPLORATORY_EXCLUDE_UPTIME = "router.inboundExploratoryExcludeUptime";
-    private static final String PROP_INBOUND_CLIENT_EXCLUDE_UPTIME = "router.inboundClientExcludeUptime";
-****/
-
-    /**
-     * do we want to skip peers who haven't been up for long?
-     * @return true unless configured otherwise
-     */
-/****
-    protected boolean filterUptime(boolean isInbound, boolean isExploratory) {
-        if (isExploratory) {
-            if (isInbound)
-                return ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_UPTIME, true);
-            else
-                return ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UPTIME, true);
-        } else {
-            if (isInbound)
-                return ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_UPTIME, true);
-            else
-                return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_UPTIME, true);
-        }
-    }
-****/
 
     /** see HashComparator */
     protected void orderPeers(List<Hash> rv, SessionKey key) {

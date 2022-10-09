@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
-"PO-Revision-Date: 2019-10-12 14:15+0000\n"
+"PO-Revision-Date: 2022-09-16 09:24+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/otf/I2P/"
 "language/uk_UA/)\n"
@@ -27,6 +27,7 @@ msgstr ""
 "11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: ../java/build/Proxy.java:5 ../java/build/Proxy.java:11
 msgid "Warning: Invalid Request URI"
@@ -122,17 +123,18 @@ msgstr ""
 #: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20
 #: ../java/build/Proxy.java:122 ../java/build/Proxy.java:128
 msgid "Connection Reset"
-msgstr ""
+msgstr "Скидання з'єднання"
 
 #: ../java/build/Proxy.java:21
 msgid "The connection to the website was reset while the page was loading."
-msgstr ""
+msgstr "Під час завантаження сторінки з'єднання з сайтом було обірвано."
 
 #: ../java/build/Proxy.java:22
 msgid ""
 "The website could be temporarily unavailable, too busy, or it has blocked "
 "your access."
 msgstr ""
+"Веб-сайт може бути тимчасово недоступний, занадто зайнятий або заблокований."
 
 #: ../java/build/Proxy.java:23 ../java/build/Proxy.java:68
 #: ../java/build/Proxy.java:120 ../java/build/Proxy.java:165
@@ -194,15 +196,15 @@ msgstr "Помилка: запит відхилено"
 
 #: ../java/build/Proxy.java:46
 msgid "Website Unknown"
-msgstr ""
+msgstr "Веб-сайт невідомий"
 
 #: ../java/build/Proxy.java:52
 msgid "Website Not Found in Addressbook"
-msgstr ""
+msgstr "Сайт не знайдено в адресній книзі"
 
 #: ../java/build/Proxy.java:53
 msgid "The website was not found in your router's addressbook."
-msgstr ""
+msgstr "Веб-сайт не знайдено в адресній книзі вашого маршрутизатора."
 
 #: ../java/build/Proxy.java:54
 msgid "Check the link or find a Base 32 or Base 64 address."
@@ -231,7 +233,7 @@ msgstr ""
 #: ../java/build/Proxy.java:178 ../java/build/Proxy.java:197
 #: ../java/build/Proxy.java:203
 msgid "Website Unreachable"
-msgstr ""
+msgstr "Сайт недоступний"
 
 #: ../java/build/Proxy.java:66
 msgid "The website was not reachable, because its lease set was not found."
@@ -256,6 +258,8 @@ msgid ""
 "It is offline, there is network congestion, or your router is not yet well-"
 "integrated with peers."
 msgstr ""
+"Він знаходиться в автономному режимі, є перевантаження мережі або ваш "
+"маршрутизатор ще не інтегрований з одноранговими пристроями."
 
 #: ../java/build/Proxy.java:80 ../java/build/Proxy.java:101
 #: ../java/build/Proxy.java:131 ../java/build/Proxy.java:144
@@ -289,7 +293,7 @@ msgstr ""
 
 #: ../java/build/Proxy.java:93 ../java/build/Proxy.java:99
 msgid "Outproxy Unreachable"
-msgstr ""
+msgstr "Outproxy Недоступний"
 
 #: ../java/build/Proxy.java:100
 msgid ""
@@ -302,7 +306,7 @@ msgstr ""
 #: ../java/build/Proxy.java:104 ../java/build/Proxy.java:155
 #: ../java/build/Proxy.java:205
 msgid "Could not connect to the following destination:"
-msgstr ""
+msgstr "Не вдалося з'єднатися з наступним пунктом призначення:"
 
 #: ../java/build/Proxy.java:105
 msgid "Proxy Authorization Required"
@@ -381,7 +385,7 @@ msgstr ""
 
 #: ../java/build/Proxy.java:163
 msgid "The website was not reachable."
-msgstr ""
+msgstr "Веб-сайт був недоступний."
 
 #: ../java/build/Proxy.java:164
 msgid ""

@@ -1389,10 +1389,10 @@ class NetDbRenderer {
         int rv = 0;
         for (RouterAddress addr : info.getAddresses()) {
             String style = addr.getTransportStyle();
-            if (style.equals("NTCP") || style.equals("NTCP2")) {
+            if (style.equals("NTCP2") || style.equals("NTCP")) {
                 rv |= NTCP;
-            } else if (style.equals("SSU")) {
-                if (addr.getOption("iport0") != null)
+            } else if (style.equals("SSU") || style.equals("SSU2")) {
+                if (addr.getOption("itag0") != null)
                     rv |= SSUI;
                 else
                     rv |= SSU;

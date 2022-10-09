@@ -1,3 +1,30 @@
+2022-09-28 zzz
+ * Installer: Fix error on Windows when username contains a space (gitlab #367)
+ * SSU2: Enable by default
+
+2022-09-23 zzz
+ * SSU2:
+   - Fail handshakes while inside sync
+   - Convert 1276 MTU to 1280 to workaround bug in 1.9.0
+   - Ensure min packet size for pings
+
+2022-09-20 zzz
+ * i2ptunnel, eepget: Add support for SHA-256 digest proxy auth (RFC 7616)
+
+2022-09-09 zzz
+ * SSU2: Enable handling of ack-immediate flag by default
+
+2022-09-07 zzz
+ * SSU: Fallback processing for MTU detection
+ * Transports: Don't rekey noise params on testnet
+
+2022-09-06 zzz
+ * NetDB: Fix reseeding when clock is skewed
+ * SSU2: Don't publish or connect if our MTU becomes too small
+
+2022-09-04 zzz
+ * SusiDNS: Fix adding to empty address book
+
 2022-09-03 zzz
  * NetDB: Query connected peers for their RI directly
  * UPnP: Fix opening IPv6 ports

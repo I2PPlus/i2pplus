@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-22 22:57+0000\n"
+"POT-Creation-Date: 2022-09-05 14:21+0000\n"
 "PO-Revision-Date: 2019-10-02 08:58+0000\n"
 "Last-Translator: Plusb Preco <plusb21@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/otf/I2P/language/ko/)\n"
@@ -109,14 +109,14 @@ msgstr[0] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:963
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:997
 msgid "Add"
 msgstr "추가"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
 msgid "Replace"
 msgstr "교체"
 
@@ -195,8 +195,8 @@ msgstr "항목 삭제"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:713
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:891
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:719
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:897
 msgid "Delete Selected"
 msgstr "선택된 것 삭제"
 
@@ -226,7 +226,7 @@ msgstr "삭제될 항목 없음."
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:955
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
 msgid "Add Alternate"
 msgstr ""
 
@@ -385,7 +385,7 @@ msgid "Subscriptions reloaded."
 msgstr "구독 다시 불러옴."
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:194
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:981
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1015
 msgid "Import"
 msgstr "내보내기"
 
@@ -393,7 +393,7 @@ msgstr "내보내기"
 msgid "address book"
 msgstr "주소록"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:247
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:251
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:201
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:198
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:192
@@ -402,7 +402,7 @@ msgstr "주소록"
 msgid "Router"
 msgstr "라우터"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:251
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:203
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:202
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:194
@@ -411,7 +411,7 @@ msgstr "라우터"
 msgid "Master"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:205
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:206
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:196
@@ -420,7 +420,7 @@ msgstr ""
 msgid "Private"
 msgstr "사설"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:263
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:207
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:210
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:198
@@ -429,7 +429,7 @@ msgstr "사설"
 msgid "Published"
 msgstr "게시됨"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:261
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:265
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:209
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:212
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:200
@@ -439,7 +439,7 @@ msgstr "게시됨"
 msgid "Subscriptions"
 msgstr "구독"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:263
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:267
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:211
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:215
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:214
@@ -449,7 +449,7 @@ msgstr "구독"
 msgid "Configuration"
 msgstr "설정"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:265
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:269
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:213
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:216
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:204
@@ -458,101 +458,101 @@ msgstr "설정"
 msgid "Help"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:267
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:271
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:274
 msgid "Book"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:284
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:288
 msgid "No entries"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:328
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:338
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:332
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:342
 msgid "Export in hosts.txt format"
 msgstr "hosts.txt 포맷으로 내보내기"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:330
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:334
 #, fuzzy
 msgid "Export results in hosts.txt format"
 msgstr "hosts.txt 포맷으로 내보내기"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:340
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:344
 #, fuzzy
 msgid "Export book in hosts.txt format"
 msgstr "hosts.txt 포맷으로 내보내기"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:385
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:391
 msgid "Search"
 msgstr "검색"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:663
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:669
 msgid "other"
 msgstr "그 외"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:675
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:681
 msgid "clear filter"
 msgstr "필터 소거"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:719
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
 msgid "Info"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:721
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:937
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:727
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:943
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:268
 msgid "Hostname"
 msgstr "호스트 이름"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:723
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:729
 msgid "Link (b32)"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:731
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:348
 msgid "Destination"
 msgstr "목적지"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:739
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:745
 msgid "Select hosts for deletion from addressbook"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:784
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:796
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:790
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:802
 msgid "More information on this entry"
 msgstr "해당 항목들 상세정보"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:808
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
 msgid "Base 32 address"
 msgstr "Base32 주소"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:820
 msgid "Helper link to share host address with option to add to addressbook"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:834
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:840
 msgid "Mark for deletion"
 msgstr "삭제표시"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:889
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:945
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:895
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:951
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1013
 msgid "Cancel"
 msgstr "취소"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:935
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:941
 msgid "Add new destination"
 msgstr "새 목적지 축"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:941
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
 msgid "B64 or B32"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1009
 msgid "Import from hosts.txt file"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:977
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1011
 #, fuzzy
 msgid "Select file"
 msgstr "필터 소거"

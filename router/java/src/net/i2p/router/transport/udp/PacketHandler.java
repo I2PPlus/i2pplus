@@ -367,11 +367,24 @@ class PacketHandler {
                     // For now, try SSU2 Session/Token Request processing here.
                     // After we've migrated the majority of the network over to SSU2,
                     // we can try SSU2 first.
-                    if (_enableSSU2 && peerType == PeerType.NEW_PEER &&
-                        packet.getPacket().getLength() >= SSU2Util.MIN_TOKEN_REQUEST_LEN) {
-                        boolean handled = receiveSSU2Packet(remoteHost, packet, (InboundEstablishState2) null);
-                        if (handled)
-                            return;
+                    if (_enableSSU2 && peerType == PeerType.NEW_PEER) {
+                        int len = packet.getPacket().getLength();
+                        if (len >= SSU2Util.MIN_TOKEN_REQUEST_LEN) {
+                            boolean handled = receiveSSU2Packet(remoteHost, packet, (InboundEstablishState2) null);
+                            if (handled)
+                                return;
+                        } else if (len >= SSU2Util.MIN_DATA_LEN) {
+                            byte[] k1 = _transport.getSSU2StaticIntroKey();
+                            long id = SSU2Header.decryptDestConnID(packet.getPacket(), k1);
+                            if (_transport.wasRecentlyClosed(id)) {
+                                // Probably termination ack.
+                                // Prevent attempted SSU1 fallback processing and adding to fail cache
+                                if (_log.shouldDebug())
+                                    _log.debug("Dropping " + len + " byte packet from " + remoteHost +
+                                               " for recently closed ID " + id);
+                                return;
+                            }
+                        }
                         if (_log.shouldDebug())
                             _log.debug("Continuing with SSU1 fallback processing, wasn't an SSU2 packet from " + remoteHost);
                     }
@@ -842,6 +855,15 @@ class PacketHandler {
                             ps2.receivePacket(from, packet);
                             return true;
                         }
+                        if (_transport.wasRecentlyClosed(id)) {
+                            // Probably termination ack.
+                            // Prevent attempted SSU1 fallback processing and adding to fail cache
+                            if (_log.shouldDebug())
+                                _log.debug("Dropping " + packet.getPacket().getLength() + " byte packet from " + from +
+                                           " for recently closed ID " + id);
+                            return true;
+                        }
+
                     }
                     return false;
                 }
@@ -895,7 +917,7 @@ class PacketHandler {
                 if (header.getPacketNumber() != 0 ||
                     header.getType() != SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
                     if (_log.shouldWarn())
-                        _log.warn("Queue possible data packet with header " + header + " on: " + state);
+                        _log.warn("Queue possible data packet with header \n* " + header + " on: " + state);
                     // TODO either attempt to decrypt as a retransmitted
                     // Session Request or Token Request,
                     // or just tell establisher so it can retransmit Session Created or Retry

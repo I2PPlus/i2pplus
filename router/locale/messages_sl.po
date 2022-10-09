@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 02:49+0000\n"
+"POT-Creation-Date: 2022-09-05 14:19+0000\n"
 "PO-Revision-Date: 2019-12-19 14:09+0000\n"
 "Last-Translator: Žan Šadl-Ferš, 2021\n"
 "Language-Team: Slovenian (https://www.transifex.com/otf/teams/12694/sl/)\n"
@@ -99,68 +99,70 @@ msgstr "Preizkušanje"
 #. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
 #. else
 #. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:89
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:149
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:590
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:86
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:146
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:588
 msgid "Starting up"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:151
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:148
 #, fuzzy
 msgid "Declining all tunnel requests:<br>"
 msgstr "Spuščanje prošenj predorov: Preobremenjeno"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:151
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:801
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:148
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:804
 msgid "Hidden Mode"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:198
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:216
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:839
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:870
+#. }
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:194
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:212
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:842
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:873
 #, fuzzy
 msgid "Declining tunnel requests:<br>"
 msgstr "Spuščanje prošenj predorov: Preobremenjeno"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:198
+#. }
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:194
 #, fuzzy
 msgid "High message delay"
 msgstr "Zavrnitev predorov: Visoka zamuda sporočil"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:211
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:207
 msgid "Declining requests: "
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:211
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:207
 msgid "Limit reached"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:216
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:212
 msgid "Participation disabled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:256
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:252
 #, fuzzy
 msgid "High number of requests"
 msgstr "Zavrnitev večine predorov: Visoko število prošenj"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:256
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:252
 #, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "Zavrnitev večine predorov: Visoko število prošenj"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:258
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:464
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:254
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:462
 #, fuzzy
 msgid "Accepting most tunnel requests"
 msgstr "Sprejemanje večine predorov"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:466
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:606
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:256
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:464
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:604
 #, fuzzy
 msgid "Accepting tunnel requests"
 msgstr "Sprejemanje predorov"
@@ -172,58 +174,58 @@ msgstr "Sprejemanje predorov"
 #. hard to do {0} from here
 #. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:366
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:460
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:362
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:458
 #, fuzzy
 msgid "Declining requests: Bandwidth limit"
 msgstr "Zavrnitev predorov: Omejitev pretočnosti"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:595
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
 msgid "Declining requests"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:595
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
 msgid "Shutting down"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:608
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:606
 #, fuzzy
 msgid "Declining tunnel requests"
 msgstr "Spuščanje prošenj predorov: Preveč počasno"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:285
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:287
 msgid "Dropping tunnel requests: Too slow"
 msgstr "Spuščanje prošenj predorov: Preveč počasno"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:294
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:296
 msgid "Dropping tunnel requests: High job lag"
 msgstr "Spuščanje prošenj predorov: Visoki odzivni čas dela"
 
 #. don't even bother, since we are so overloaded locally
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:494
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:496
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "Spuščanje prošenj predorov: Preobremenjeno"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:801
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:804
 msgid "Declining requests:"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:839
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:842
 #, fuzzy
 msgid "Request overload"
 msgstr "Zavrnitev predorov: Preobremenitev prošenj"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:870
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:873
 #, fuzzy
 msgid "Connection limit reached"
 msgstr "Zavrnitev predorov: Omejitev dosežena"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1130
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1163
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1133
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1166
 msgid "Dropping tunnel requests: High load"
 msgstr "Spuščanje prošenj predorov: Visoko breme"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1246
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1249
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Spuščanje prošenj predorov: Čas čakalnega reda"
 

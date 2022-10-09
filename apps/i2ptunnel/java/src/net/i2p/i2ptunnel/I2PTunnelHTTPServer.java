@@ -126,21 +126,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n" +
          "</html>";
 
-/**
-         "HTTP/1.1 503 Service Unavailable\r\n" +
-         "Content-Type: text/html; charset=iso-8859-1\r\n" +
-         "Cache-Control: no-cache\r\n" +
-         "Connection: close\r\n" +
-         "Proxy-Connection: close\r\n" +
-         "\r\n" +
-         "<!DOCTYPE html>\n<html>\n<head><title>503 Service Unavailable</title></head>\n" +
-         ERR_STYLE +
-         "<h2>503 Service Unavailable</h2>\n" +
-         "<p>This I2P website is unavailable. It may be down or undergoing maintenance.</p>\n" +
-         "</body>\n</html>";
-**/
-
-    // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     private final static String ERR_DENIED =
          "HTTP/1.1 429 Too Many Requests\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -149,13 +134,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
          "\r\n" +
-         "<!DOCTYPE html>\n<html>\n<head><title>429 Too Many Requests</title></head>\n" +
-         ERR_STYLE +
-         "<h2>429 Too Many Requests</h2>\n" +
-         "<p>Denied due to excessive requests. Please try again later.</p>\n" +
-         "</body>\n</html>";
+         "<html>\n" +
+         "<head><title>429 Too Many Requests</title></head>\n" +
+         "<body>\n" +
+         "<center><h1>429 Too Many Requests</h1></center>\n" +
+         "<hr>\n" +
+         "</body>\n" +
+         "</html>";
 
+    // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     private final static String ERR_INPROXY =
+
+/**
          "HTTP/1.1 403 Denied\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n"+
          "Cache-Control: no-cache\r\n"+
@@ -167,6 +157,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "<h2>403 Denied</h2>\n" +
          "<p>Inproxy access denied. You must run <a style=\"color: #ee7 !important;\" href=\"https://geti2p.net/\">I2P</a> to access this site.</p>\n" +
          "</body>\n</html>";
+**/
+         "HTTP/1.1 403 Denied\r\n" +
+         "Content-Type: text/html; charset=iso-8859-1\r\n"+
+         "Cache-Control: no-cache\r\n"+
+         "Connection: close\r\n" +
+         "Proxy-Connection: close\r\n"+
+         "\r\n" +
+         "<html>\n" +
+         "<head><title>403 Forbidden</title></head>\n" +
+         "<body>\n" +
+         "<center><h1>403 Forbidden</h1></center>\n" +
+         "<hr>\n" +
+         "</body>\n" +
+         "</html>";
 
     private final static String ERR_SSL =
          "HTTP/1.1 503 Service Unavailable\r\n" +
@@ -215,11 +219,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
          "\r\n" +
-         "<!DOCTYPE html>\n<html>\n<head><title>408 Request Timeout</title></head>\n" +
-         ERR_STYLE +
-         "<h2>408 Request timeout</h2>\n" +
-         "<p>The connection took too long to establish and has been dropped.</p>\n" +
-         "</body>\n</html>";
+         "<html>\n" +
+         "<head><title>408 Request Time-out</title><meta http-equiv=\"refresh\" content=\"15\"></head>\n" +
+         "<body>\n" +
+         "<center><h1>408 Request Time-out</h1></center>\n" +
+         "<hr>\n" +
+         "</body>\n" +
+         "</html>";
 
     private final static String ERR_BAD_REQUEST =
          "HTTP/1.1 400 Bad Request\r\n" +
@@ -327,10 +333,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         Hash peerHash = socket.getPeerDestination().calculateHash();
         String peerB32 = socket.getPeerDestination().toBase32();
         if (_log.shouldInfo())
-            _log.info("[HTTPServer] Incoming connection to " + toString() + " (port " + socket.getLocalPort() +
-                      ")\n* From: " + peerB32 + " on port " + socket.getPort());
-        //local is fast, so synchronously. Does not need that many
-        //threads.
+            _log.info("[HTTPServer] Incoming connection to " + toString() + " (port" + socket.getLocalPort() + ")" +
+                      "\n* From: " + peerB32 + " on port " + socket.getPort());
+        // local is fast, so synchronously. Does not need that many threads.
         try {
             if (socket.getLocalPort() == 443) {
                 if (getTunnel().getClientOptions().getProperty("targetForPort.443") == null) {
@@ -428,7 +433,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  headers.containsKey("X-Forwarded-Host"))) {
                 if (_log.shouldWarn()) {
                     StringBuilder buf = new StringBuilder();
-                    buf.append("[HTTPServer] Refusing inproxy access \n*Client:").append(peerB32);
+                    buf.append("[HTTPServer] Refusing inproxy access \n* Client: ").append(peerB32);
                     List<String> h = headers.get("X-Forwarded-For");
                     if (h != null)
                         buf.append("\n* X-Forwarded-For: ").append(h.get(0));

@@ -289,6 +289,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 else
                     mtu = PeerState2.DEFAULT_SSU_IPV4_MTU;
             }
+        } else if (mtu == 1276 && ra.getTransportStyle().equals("SSU")) {
+            // workaround for bug in 1.9.0
+            mtu = PeerState2.MIN_MTU;
         } else {
             // if too small, give up now
             if (mtu < PeerState2.MIN_MTU)
@@ -420,8 +423,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotTermination(int reason, long count) {
-        if (_log.shouldWarn())
-            _log.warn("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count);
+        if (_log.shouldInfo())
+            _log.info("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count);
         // this sets the state to FAILED
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId);
@@ -438,6 +441,18 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     /////////////////////////////////////////////////////////
     // end payload callbacks
     /////////////////////////////////////////////////////////
+
+    // SSU 1 overrides
+
+    /**
+     *  Overridden to destroy the handshake state
+     *  @since 0.9.56
+     */
+    @Override
+    public synchronized void fail() {
+        _handshakeState.destroy();
+        super.fail();
+    }
 
     // SSU 1 unsupported things
 
@@ -567,6 +582,21 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      *         or null if more fragments to go
      */
     public synchronized PeerState2 receiveSessionConfirmed(UDPPacket packet) throws GeneralSecurityException {
+        try {
+            return locked_receiveSessionConfirmed(packet);
+        } catch (GeneralSecurityException gse) {
+            if (_log.shouldDebug())
+                _log.debug("Session confirmed error", gse);
+            // fail inside synch rather than have Est. Mgr. do it to prevent races
+            fail();
+            throw gse;
+        }
+    }
+
+    /**
+     *  @since 0.9.56
+     */
+    private PeerState2 locked_receiveSessionConfirmed(UDPPacket packet) throws GeneralSecurityException {
         if (_currentState != InboundState.IB_STATE_CREATED_SENT &&
             _currentState != InboundState.IB_STATE_CONFIRMED_PARTIALLY)
             throw new GeneralSecurityException("Bad state for Session Confirmed: " + _currentState);
@@ -601,15 +631,15 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 if (_sessConfFragments.length != totalfrag) // total frag changed
                     throw new GeneralSecurityException("[SSU2] Bad SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
                 if (_sessConfFragments[frag] != null) {
-                    if (_log.shouldWarn())
-                        _log.warn("[SSU2] Received duplicate SessionConfirmed fragment [" + frag + "] on " + this);
+                    if (_log.shouldInfo())
+                        _log.info("[SSU2] Received duplicate SessionConfirmed fragment [" + frag + "] on " + this);
                     // there is no facility to ack individual fragments
                     //packetReceived();
                     return null;
                 }
             }
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Received " + len + " bytes SessionConfirmed fragment [" + frag + '/' + totalfrag + "] on " + this);
+            if (_log.shouldInfo())
+                _log.info("[SSU2] Received " + len + " bytes SessionConfirmed fragment [" + frag + '/' + totalfrag + "] on " + this);
             byte[] fragdata;
             if (frag == 0) {
                 // preserve header
@@ -625,8 +655,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             int totalsize = 0;
             for (int i = 0; i < totalfrag; i++) {
                 if (_sessConfFragments[i] == null) {
-                    if (_log.shouldWarn())
-                        _log.warn("[SSU2] Still missing at least one SessionConfirmed fragment on " + this);
+                    if (_log.shouldInfo())
+                        _log.info("[SSU2] Still missing at least one SessionConfirmed fragment on " + this);
                     // there is no facility to ack individual fragments
                     //packetReceived();
                     return null;
@@ -644,8 +674,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 System.arraycopy(f, 0, data, joff, f.length);
                 joff += f.length;
             }
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Have all " + totalfrag + " SessionConfirmed fragments (total length: " + len + " bytes) on " + this);
+            if (_log.shouldInfo())
+                _log.info("[SSU2] Have all " + totalfrag + " SessionConfirmed fragments (total length: " + len + " bytes) on " + this);
         }
         _handshakeState.mixHash(data, off, SHORT_HEADER_SIZE);
         //if (_log.shouldDebug())
@@ -779,8 +809,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _currentState = InboundState.IB_STATE_COMPLETE;
             if (_queuedDataPackets != null) {
                 for (UDPPacket packet : _queuedDataPackets) {
-                    if (_log.shouldWarn())
-                        _log.warn("[SSU2] Passing possible data " + packet + " to PeerState2: " + this);
+                    if (_log.shouldInfo())
+                        _log.info("[SSU2] Passing possible data " + packet + " to PeerState2: " + this);
                     _pstate.receivePacket(packet);
                     packet.release();
                 }
@@ -803,8 +833,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     _log.warn("[SSU2] Not queueing possible data " + packet + ", too many queued on " + this);
                 return;
             }
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Queueing possible data " + packet + " on " + this);
+            if (_log.shouldInfo())
+                _log.info("[SSU2] Queueing possible data " + packet + " on " + this);
             // have to copy it because PacketHandler will release
             DatagramPacket pkt = packet.getPacket();
             UDPPacket packet2 = UDPPacket.acquire(_context, true);
@@ -815,8 +845,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _queuedDataPackets.add(packet2);
         } else {
             // case 2, race, decrypt header and pass over
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Passing possible data " + packet + " to PeerState2: " + this);
+            if (_log.shouldInfo())
+                _log.info("[SSU2] Passing possible data " + packet + " to PeerState2: " + this);
             _pstate.receivePacket(packet);
         }
     }

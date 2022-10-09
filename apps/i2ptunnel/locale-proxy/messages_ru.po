@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
-"PO-Revision-Date: 2019-11-24 14:49+0000\n"
+"PO-Revision-Date: 2022-09-16 09:01+0000\n"
 "Last-Translator: ValdikSS <iam@valdikss.org.ru>\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
 "ru_RU/)\n"
@@ -33,6 +33,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: ../java/build/Proxy.java:5 ../java/build/Proxy.java:11
 msgid "Warning: Invalid Request URI"
@@ -159,6 +160,8 @@ msgid ""
 "If you leave this page open, it will automatically retry connecting to the "
 "website every {0} seconds after a failed connection attempt."
 msgstr ""
+"Если вы оставите эту страницу открытой, она будет автоматически повторять "
+"подключение к сайту каждые {0} секунд после неудачной попытки подключения."
 
 #: ../java/build/Proxy.java:25 ../java/build/Proxy.java:58
 #: ../java/build/Proxy.java:70 ../java/build/Proxy.java:83
@@ -305,6 +308,8 @@ msgid ""
 "This address appears to be malformed. Please verify you have supplied a "
 "valid address!"
 msgstr ""
+"Похоже, что этот адрес неправильно сформирован. Пожалуйста, проверьте, что "
+"вы указали правильный адрес!"
 
 #: ../java/build/Proxy.java:92
 msgid "You attempted to connect to a non-I2P website or location."
@@ -761,7 +766,7 @@ msgstr "Перенаправляем к {0}"
 
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:394
 msgid "Redirection in progress"
-msgstr ""
+msgstr "Выполняется перенаправление"
 
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:396
 #, java-format

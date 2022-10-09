@@ -305,7 +305,7 @@ public class PersistentDataStore extends TransientDataStore {
         File dbFile = null;
 
         try {
-            String MIN_VERSION = "0.9.54";
+            String MIN_VERSION = "0.9.55";
             String v = MIN_VERSION;
             boolean unreachable = false;
             if (ri != null) {
@@ -394,7 +394,7 @@ public class PersistentDataStore extends TransientDataStore {
                 requeue(READ_DELAY);
                 return;
             }
-            long now = getContext().clock().now();
+            long now = System.currentTimeMillis();
             // check directory mod time to save a lot of object churn in scanning all the file names
             long lastMod = _dbDir.lastModified();
             // if size() (= RI + LS) is too low, call anyway to check for reseed
@@ -572,7 +572,7 @@ public class PersistentDataStore extends TransientDataStore {
                     RouterInfo ri = new RouterInfo();
                     ri.readBytes(fis, true);  // true = verify sig on read
                     String v = ri.getVersion();
-                    String MIN_VERSION = "0.9.54";
+                    String MIN_VERSION = "0.9.55";
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldError())

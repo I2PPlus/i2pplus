@@ -241,9 +241,9 @@ public class ProfileOrganizer {
             return null;
         }
 
-        if (VersionComparator.comp(version, "0.9.54") < 0) {
+        if (VersionComparator.comp(version, "0.9.55") < 0) {
             if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> older than 0.9.54");
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> older than 0.9.55");
            return null;
         }
 
@@ -647,48 +647,11 @@ public class ProfileOrganizer {
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
-//                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
-//            selectActiveNotFailingPeers2(howMany, exclude, matches, mask);
-                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from well integrated peers");
-            selectWellIntegratedPeers(howMany, exclude, matches, mask, ipSet);
-        } else {
-            if (_log.shouldDebug())
-                _log.debug(howMany + " High Capacity peers selected for tunnel build");
-        }
-        return;
-    }
-
-    /**
-     * Return a set of Hashes for peers that are well integrated into the network.
-     *
-     * @deprecated unused
-     */
-    @Deprecated
-    public void selectWellIntegratedPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
-        selectWellIntegratedPeers(howMany, exclude, matches, 0, null);
-    }
-
-    /**
-     * Return a set of Hashes for peers that are well integrated into the network.
-     *
-     * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
-     *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
-     * @since 0.9.53 added ipSet param
-     * @deprecated unused
-     */
-    @Deprecated
-    public void selectWellIntegratedPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
-        getReadLock();
-        try {
-            locked_selectPeers(_wellIntegratedPeers, howMany, exclude, matches, mask, ipSet);
-        } finally { releaseReadLock(); }
-        if (matches.size() < howMany) {
-            if (_log.shouldDebug())
-                _log.debug("Need " + howMany + " Integrated peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
+                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from non-failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldDebug())
-                _log.debug(howMany + " Integrated peers selected for tunnel build");
+                _log.debug(howMany + " High Capacity peers selected for tunnel build");
         }
         return;
     }
@@ -882,7 +845,7 @@ public class ProfileOrganizer {
      * I'm not quite sure why you'd want this... (other than for failover from the better results)
      *
      */
-    public void selectFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
+    private void selectFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
         getReadLock();
         try {
             locked_selectPeers(_failingPeers, howMany, exclude, matches);

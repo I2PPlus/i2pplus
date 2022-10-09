@@ -1,143 +1,131 @@
-/* I2P Theme: I2P Classic Theme Override */
-/* Description: Larger fontsize override for console to accomodate foreign charactersets */
-/* Author: dr|z3d */
+/* I2P Theme:I2P Classic Theme Override */
+/* Description:Larger fontsize override for console to accomodate foreign charactersets */
+/* Author:dr|z3d */
 
-input, button, textarea, select, a {text-shadow: none; font-weight: 400; font-size: 10.5pt; letter-spacing: 0; word-spacing: 0; line-height: 140%}
-b {font-weight: 400}
-code, tt {font-size: 10.5pt}
-input[type=submit], input[type=reset], input[type="file"], button, button.search, input.cancel {font-size: 11pt; padding-top: 3px; padding-bottom: 3px; line-height: 140%; display: inline-block; letter-spacing: .05em}
-input[type=submit], input[type=reset], input[type="file"], button, button.search, input.cancel, .applink, .themelabel, .ui_lang, .tab a, label, a, li {letter-spacing: .05em}
-.sb button {min-width: 100px; padding-top: 3px; padding-bottom: 3px}
+a,b,#sidebar h3 a,#sidebar h4{font-weight:400}
+a:hover code{color:#f60}
+b{font-weight:400}
+b,a,input,button,submit,i,th,thead,tfoot,h1,h2,h3,h4,.messages{font-style:normal;font-weight:400;text-shadow:none}
+b.tunnel_cap,.tunnel_cap b{color:#fff;font-size:10pt;min-width:18px;text-shadow:0 1px 1px #555}
+body,.main{font:11pt Open Sans,Noto Sans,Segoe UI,Droid Sans,Lucida Grande,Verdana,Bitstream Vera Sans,Helvetica,Sans,sans-serif}
+button.control{font-size:0}
+code,tt{font-size:10.5pt}
+div.main,div.main p,div.news p{line-height:140%}
+div.news{padding-bottom:7px}
+div.news h3,.newsDate,div.news a{font-size:12pt}
+div.themechoice,div.langselect{width:140px}
+div.tunnels a{font-size:12pt}
+div.tunnels td{padding:0 2px}
+div.tunnels td:first-child,div.tunnels td:last-child{width:16px}
+div.tunnels td:last-child{text-align:left}
+div[lang="zh"]a{background:#ddf;border-radius:2px;display:inline-block;padding:0 4px}
+h1{font-size:18pt;padding:17px 20px 18px 60px}
+h1,h2,h3,h4{letter-spacing:.08em;word-spacing:.1em}
+h2{font-size:16pt}
+h3 a{display:inline-block;padding:3px 2px}
+h3,.configtable th{font-size:11pt}
+h3.ptitle,h3#i2pclientconfig{margin-bottom:-17px}
+h3.stats{margin-top:-1px}
+h4{font-size:13pt}
+h4#updateplugins{margin-top:-16px}
+hr+.formaction{margin-top:0}
+input,button,textarea,select,.main a{font-size:10.5pt;font-weight:400;letter-spacing:0;line-height:140%;text-shadow:none;word-spacing:0}
+input.search[type=text]{background-position:8px center;padding-left:30px}
+input[name="pluginURL"]{max-width:250px;width:250px}
+input[type=radio],input[type=checkbox]{margin-bottom:6px;margin-top:6px}
+input[type=submit],input[type=reset],input[type="file"],button,button.search,input.cancel{display:inline-block;font-size:11pt;letter-spacing:.05em;line-height:140%;padding-bottom:3px;padding-top:3px}
+input[type=submit],input[type=reset],input[type="file"],button,button.search,input.cancel,.applink,.themelabel,.ui_lang,.tab a,label,a,li{letter-spacing:.05em}
+input[type=text],input[type=password]{min-width:0}
+p#fullhistory{padding:8px 10px}
+p#keyringhelp,#tunnelconfig+.infohelp{margin-bottom:15px}
+p.infohelp{margin-bottom:-7px}
+p[style="margin:0px 12px"]{margin-left:5px;padding:8px 0}
+table+.formaction{margin-top:-1px}
+table code{font-size:120%}
+.applabel a,#sitemapLink{font-size:10pt}
+.formaction#webappconfigactions{margin-top:36px}
+.formaction,#consolepass+.formaction,#sidebardefaults,#webappconfigactions.formaction,#clientsconfig.formaction,#homesites,#homeapps{margin-top:-6px}
+.homelinkedit td img{height:24px;width:24px}
+.homelinkedit th:first-child,#sidebarconf th:first-child,#consolepass th:first-child{font-size:0}
+.infohelp,.infowarn,.infowarn b,#helptranslate,#consolepass td{font-size:10.5pt;letter-spacing:.1em;line-height:160%;word-spacing:.2em}
+.joblog b{color:#003;font-size:110%}
+.joblog li i{font-weight:400}
+.langselect .optbox{margin:-4px 0 8px-54px}
+.main[id^="config_"]th{font-size:11.5pt}
+.newsAuthor{background-position:left 6px;background-size:12px;padding-left:14px}
+.optbox,#netconfig .optbox:last-child,#netconfig .optbox[value="only"],#netconfig .optbox[name="disableUDP"],#netconfig .optbox[value="disabled"]{margin-bottom:10px;margin-top:10px}
+.routerid tt a:hover{opacity:1}
+.routerid tt,.routerid tt a{font-weight:700;letter-spacing:.1em;opacity:.85}
+.suboption{display:inline-block;margin-bottom:5px}
+.tab,.tab2{font-size:11pt}
+.tab,.tab2,.main[id^="config_"]td{font-size:10.5pt}
+.themelabel,.ui_lang{font-size:12pt;font-weight:400;overflow:hidden;padding-bottom:4px;text-overflow:hidden}
+.tunnel_peer{min-width:60px}
+.twocol{background:#eef;border-radius:4px;margin-bottom:-20px;margin-top:15px;padding:10px}
+.twocol li{margin:0 0 0 20px;padding:0 0 10px}
+.twocol li:first-child{margin-bottom:10px;margin-top:5px;padding-top:0}
+.ui_lang{font-size:9pt}
+.welcome h2{font-size:14pt}
+#advancedsettings,.main textarea{font-size:10pt;letter-spacing:0;word-spacing:0}
+#changelog pre{font-size:10pt}
+#console code{font-size:13pt}
+#console h2 a[name],#console h2 a[name]:hover{color:#0c153d;font-size:16pt}
+#console li{list-style-type:none;margin:10px 25px 10px 10px;text-align:justify}
+#console p,#console li{letter-spacing:.15em;line-height:160%}
+#enviro td{padding-bottom:3px;padding-top:3px}
+#faq ul{margin-bottom:0}
+#iptransport a,#advancedconfig a{font-size:0}
+#iptransport a::after,#advancedconfig a::after{margin-left:5px;vertical-align:sub}
+#jardump b{font-size:9pt}
+#leasesetdebug th a,#leasesetsummary th a,#tunnels.main h3 a,#logs h3 a,a[href^="configpeer?peer"]{font-size:0}
+#logs li font,#logs pre,#enviro td,#enviro td b{font-size:10pt;letter-spacing:normal;word-spacing:normal}
+#netdboverview th{font-size:12pt}
+#news #newsDisplay,#news #newsStatus{display:inline-block;margin-top:4px}
+#news #newsStatus{margin-top:8px}
+#pluginmanage{margin-bottom:-22px}
+#reseedconfig td:first-child,#loggingoptions td:first-child{white-space:nowrap}
+#resetreseed input.reload{margin-bottom:0;margin-top:20px}
+#stats form{margin-bottom:-1px;margin-top:0}
+#systray,#servicedebug,#browseronstart{margin-bottom:-17px}
+#themeui.formaction{margin-top:8px}
+#tunnelconfigsave{margin-top:-6px}
+#tunnels td,.tunnel_cap,.tunnel_id,#tunnels .cells,#tunnels tt a{font-size:10pt;letter-spacing:0;word-spacing:0}
+#webappconfig{margin-bottom:-37px}
+#wrapperlogs pre,pre#activetransports{font-size:10pt}
 
 /* sidepanel */
-.sb #sb_logo {margin-top: 0; margin-bottom: 18px}
-.sb h3, .sb h3 a{font-size: 11.5pt}
-.sb h4, .sb h4 a {font-size: 10.5pt; letter-spacing: 0}
-.sb td {font-size: 10.5pt}
-#sb_bandwidth td:last-child, #sb_peers td:last-child, #sb_peersadvanced td:last-child, #sb_queue td:last-child,#sb_tunnels td:last-child, #sb_general td:last-child, #sb_shortgeneral td:last-child, #sb_advancedgeneral td:last-child {font-size: 10pt}
-.sb table a:link, .sb table a:visited {font-size: 12pt; font-weight: 400; text-shadow: none}
-#sb_graphstats {font-size: 9pt}
-#sb_localtunnels td:first-child img, #sb_localtunnels td:last-child img {font-size: 0}
+#sb_graphstats{font-size:9pt}
+#sb_localtunnels,#sidebar table{width:100%}
+#sb_localtunnels td:first-child img,#sb_localtunnels td:last-child img{font-size:0}
+#sb_newsheadings td,#sb_newsheadings tr:hover td{background-position:4px center}
+#sidebar button{min-width:100px;padding-bottom:3px;padding-top:3px}
+#sidebar .digits{text-align:right}
+#sidebar h3,#sidebar h3 a{font-size:11.5pt}
+#sidebar h4,#sidebar h4 a{font-size:10.5pt; letter-spacing:0}
+#sidebar .reload[value="restartImmediate"],#sidebar .stop[value="shutdownImmediate"],#sidebar .reload[value="Reseed"],#sidebar button[name="updateAction"]{font-size:11pt}
+#sidebar #sb_logo{margin-top:0; margin-bottom:18px}
+#sidebar table a:link,#sidebar table a:visited{font-weight:400;text-shadow:none}
 
-/* global overrides */
-a, b, .sb h3 a, .sb h4 {font-weight: 400; font-size: 100%}
-b, a, input, button, submit, i, th, thead, tfoot, h1, h2, h3, h4, .messages {font-weight: 400; font-style: normal; text-shadow: none}
-body, .main {font: 11pt Open Sans, Noto Sans, Segoe UI, Droid Sans, Lucida Grande, Verdana, Bitstream Vera Sans, Helvetica, Sans, sans-serif}
-h1 {font-size: 18pt; padding: 13px 20px 12px}
-h2 {font-size: 16pt}
-h3, .configtable th {font-size: 11pt}
-h3 a {display: inline-block; padding: 3px 2px}
-h4 {font-size: 13pt}
-h1, h2, h3, h4 {letter-spacing: .08em; word-spacing: .1em}
-.infohelp, .infowarn, .infowarn b, #helptranslate {letter-spacing: .1em; word-spacing: .2em}
-.suboption {display: inline-block; margin-bottom: 5px}
-.applabel a, #sitemapLink {font-size: 9pt}
+@supports not (-moz-appearance:none){.twocol{margin-top:5px}}
 
-div.tunnels a {font-size: 12pt}
-div.tunnels td:first-child, div.tunnels td:last-child{width: 16px}
-div.tunnels td:last-child {text-align: left}
-div.tunnels td {padding: 0 2px}
-div.main, div.main p, div.news p {line-height: 140%}
-.joblog li i {font-weight: 400}
-.joblog b {color: #003; font-size: 110%}
-table code {font-size: 120%}
-.tab, .tab2 {font-size: 11pt}
-.themelabel, .ui_lang {font-size: 12pt; font-weight: 400; overflow: hidden; text-overflow: hidden; padding-bottom: 4px}
-.ui_lang {font-size: 9pt}
-#themeui.formaction {margin-top: 8px}
-div.themechoice, div.langselect {width: 140px}
-h3.ptitle, h3#i2pclientconfig {margin-bottom: -17px}
-h3#systray, h3#servicedebug, h3#browseronstart {margin-bottom: -17px}
-h3#pluginmanage {margin-bottom: -22px}
-.formaction, #consolepass + .formaction, #sidebardefaults, #webappconfigactions.formaction, #clientsconfig.formaction, #homesites, #homeapps {margin-top: -6px}
-table + .formaction {margin-top: -1px}
-hr + .formaction {margin-top: 0}
-h4#updateplugins {margin-top: -16px}
-#tunnelconfigsave {margin-top: -6px}
-#resetreseed input.reload {margin-top: 20px; margin-bottom: 0}
-p#keyringhelp, #tunnelconfig + .infohelp {margin-bottom: 15px}
-h3.stats {margin-top: -1px}
-#stats form {margin-top: 0; margin-bottom: -1px}
-input[type=text], input[type=password] {min-width: 0}
-input[type=radio], input[type=checkbox] {margin-top: 6px; margin-bottom: 6px}
-input[name="pluginURL"] {max-width: 250px; width: 250px}
-button.control {font-size: 0}
-.infohelp, .infowarn {line-height: 160%}
-p.infohelp {margin-bottom: -7px}
-#advancedsettings, .main textarea {font-size: 10pt; letter-spacing: 0; word-spacing: 0}
-#webappconfig {margin-bottom: -37px}
-.formaction#webappconfigactions {margin-top: 36px}
-p[style="margin: 0px 12px"] {margin-left: 5px; padding: 8px 0}
-#news #newsDisplay, #news #newsStatus {margin-top: 4px; display: inline-block}
-#news #newsStatus {margin-top: 8px}
-.newsAuthor {padding-left: 14px; background-position: left top 6px; background-size: 12px 12px}
-input.search[type=text] {padding-left: 30px; background-position: 8px center}
-#jardump b {font-size: 9pt}
-#wrapperlogs pre, pre#activetransports {font-size: 10pt}
-table#leasesetdebug th a, table#leasesetsummary th a, #tunnels.main h3 a, #logs h3 a, a[href^="configpeer?peer"] {font-size: 0}
-h3#iptransport a, h3#advancedconfig a {font-size: 0}
-h3#iptransport a::after, h3#advancedconfig a::after {vertical-align: sub; margin-left: 5px}
-#console p, #console li {letter-spacing: .15em; line-height: 160%}
-#console li {list-style-type: none; margin: 10px 25px 10px 10px; text-align: justify}
-.twocol {background: #eef; margin-top: 15px; margin-bottom: -20px; padding: 10px; border-radius: 4px}
-.twocol li {margin: 0 0 0 20px; padding: 0 0 10px}
-.twocol li:first-child {margin-top: 5px; margin-bottom: 10px; padding-top: 0}
-div[lang="zh"] a {background: #ddf; border-radius: 2px; display: inline-block; padding: 0 4px}
-a:hover code {color: #f60}
-#reseedconfig td:first-child, #loggingoptions td:first-child {white-space: nowrap}
-#logs li font, #logs pre, #enviro td, #enviro td b {font-size: 10pt; letter-spacing: normal; word-spacing: normal}
-#enviro td {padding-top: 3px; padding-bottom: 3px}
-
-@supports not (-moz-appearance: none) {.twocol {margin-top: 5px}}
-
-/* responsive layout */
-@media screen and (min-width: 0) {
-b.tunnel_cap, .tunnel_cap b {min-width: 18px; color: #fff; font-size: 10pt; text-shadow: 0 1px 1px #555}
-#changelog pre {font-size: 10pt}
-div.news h3, .newsDate, div.news a {font-size: 12pt}
-div.news {padding-bottom: 7px}
-#faq ul {margin-bottom: 0}
-.homelinkedit td img {width: 24px; height: 24px}
-.homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {font-size: 0}
-.langselect .optbox {margin: -4px 0 8px -54px}
-.main[id^="config_"] th {font-size: 11.5pt}
-#netdboverview th {font-size: 12pt}
-.optbox, #netconfig .optbox:last-child, #netconfig .optbox[value="only"], #netconfig .optbox[name="disableUDP"], #netconfig .optbox[value="disabled"] {margin-top: 10px; margin-bottom: 10px}
-p#fullhistory {padding: 8px 10px}
-.routerid tt, .routerid tt a {letter-spacing: .1em; font-weight: 700; opacity: .85}
-.routerid tt a:hover {opacity: 1}
-#sb_newsheadings td, #sb_newsheadings tr:hover td {background-position: 4px center}
-#sb_newsheadings td a {font-size: 9pt}
-.sb .reload[value="restartImmediate"], .sb .stop[value="shutdownImmediate"], .sb .reload[value="Reseed"], .sb button[name="updateAction"] {font-size: 11pt}
-#sidebar table, #sb_localtunnels {width: calc(100% + 1px)}
-#sidebar #sb_bandwidth td:first-child {width: 1%}
-.tab, .tab2, .main[id^="config_"] td {font-size: 10.5pt}
-.tunnel_peer {min-width: 60px}
-#tunnels td, .tunnel_cap, .tunnel_id, #tunnels .cells, #tunnels tt a {font-size: 10pt; letter-spacing: 0; word-spacing: 0}
-#console code {font-size: 13pt}
-#console h2 a[name], #console h2 a[name]:hover {font-size: 16pt; color: #0c153d}
-.welcome h2 {font-size: 14pt}
+@media (max-width:1500px){
+.applinklabel{height:22px; padding:2px}
+#sidebar, #sidebar td, #sidebar a, #sidebar b{font-size:10pt}
+#sidebar #sb_bandwidth{width:206px!important;overflow:visible}
+#sidebar #sb_bandwidth .digits{padding-right:3px;text-align:right;display:inline-block;font-size:8.5pt}
+#sidebar button.download {max-width: 200px; font-size: 8.5pt}
 }
-
-@media screen and (min-width: 1200px) {.tab, .tab2 {margin-right: -3px}
-#faq th, #portfaq th, #portfaq th[colspan="3"] {font-size: 12pt}
+@media (max-width:1200px){
+.main td,.main td b{font-size:10pt}
+.tab,.tab2{margin-right:-2px}
 }
-
-@media screen and (min-width: 1500px) {
-body, .main, .main td, .news p, #news p, .main li b, div.joblog li, .themelabel, .applabel a, .statusnotes, #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, textarea, code, tt, pre, .netdbentry th, .configtable th, ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover, div.messages, th {font-size: 12pt}
-.sb td, .sb a, .sb button, .sb h4, .sb h4 a, div.news, #banlist li {font-size: 11pt}
-.applabel a, #sitemapLink {font-size: 9.5pt}
-.sb h3 {padding-top: 2px; padding-bottom: 2px}
+@media (min-width:1200px){.tab,.tab2{margin-right:-3px}
+#faq th,#portfaq th,#portfaq th[colspan="3"]{font-size:12pt}
 }
-
-@media screen and (max-width: 1500px) {
-.applinklabel {height: 22px; padding: 2px}
-#sidebar td, #sidebar td.digits span, #sidebar a, #sidebar #sb_localtunnels a {font-size: 9.5pt}
-#sidebar #sb_bandwidth {width: calc(100% - 10px); overflow: visible}
-#sidebar #sb_bandwidth .digits {margin-left: -48px; padding-right: 3px; display: inline-block}
-}
-
-@media screen and (max-width: 1200px) {
-.main td, .main td b {font-size: 10pt}
-.tab, .tab2 {margin-right: -2px}
+@media (min-width:1500px){
+body,.main,.main td,.news p,#news p,.main li b,div.joblog li,.themelabel,.applabel a,.statusnotes,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,textarea,code,tt,pre,.netdbentry th,.configtable th,ul.statlist a[name],ul.statlist b,ul.statlist li b,ul.statlist a[name]:hover,div.messages,th,.infowarn b,#helptranslate,#consolepass td{font-size:12pt}
+#sidebar td,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,div.news,#banlist li{font-size:11pt}
+.applabel a,#sitemapLink,#sidebar a,#sidebar td{font-size:10pt}
+#sidebar h3{padding-top:2px; padding-bottom:2px}
+#sb_logo{height:34px!important}
 }

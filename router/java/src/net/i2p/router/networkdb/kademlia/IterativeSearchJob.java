@@ -99,7 +99,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int IP_CLOSE_BYTES = 3;
     /** TOTAL_SEARCH_LIMIT * SINGLE_SEARCH_TIME, plus some extra */
 //    private static final int MAX_SEARCH_TIME = 30*1000;
-    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 10*1000 : 5*1000;
+    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 8*1000 : 4*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
@@ -162,9 +162,9 @@ public class IterativeSearchJob extends FloodSearchJob {
         // these override the settings in super
         if (isLease) {
             _timeoutMs = Math.max(timeoutMs * 3, MAX_SEARCH_TIME * 2);
-            totalSearchLimit *= 3 / 2;
+            totalSearchLimit += 2;
         } else {
-            String MIN_VERSION = "0.9.54";
+            String MIN_VERSION = "0.9.55";
             if (ri != null) {
                 String v = ri.getVersion();
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
@@ -174,10 +174,10 @@ public class IterativeSearchJob extends FloodSearchJob {
                                         // && ctx.router().getUptime() > 15*60*1000 && !isHidden;
                 if (uninteresting) {
                     _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME / 3 * 2);
-                    totalSearchLimit = Math.max(totalSearchLimit - 1, 2);
+                    totalSearchLimit = Math.max(totalSearchLimit - 1, 3);
                 }
             } else if (known < 2000 || isHidden) {
-                totalSearchLimit += 3;
+                totalSearchLimit += 2;
             } else {
                 _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
             }
@@ -349,7 +349,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                         // go around again
                     }
 
-                    String MIN_VERSION = "0.9.54";
+                    String MIN_VERSION = "0.9.55";
                     boolean isHidden = getContext().router().isHidden();
                     RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
                     if (ri != null) {

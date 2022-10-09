@@ -5681,7 +5681,7 @@ msgstr "Router Informationen (kurz)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:57
 msgid "Router Information (advanced)"
-msgstr "Router Inforamtionen (Erweitert)"
+msgstr "Router Informationen (Erweitert)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:58
 msgid "Memory Usage Bar"
@@ -5938,7 +5938,7 @@ msgstr "Debug"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:568
 msgid "View router debug information"
-msgstr "Router Debug Inforamtionen anzeigen"
+msgstr "Router Debug Informationen anzeigen"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:574
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:561
@@ -6203,7 +6203,7 @@ msgstr "Was ist in der Aufgabenliste des Routers?"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1156
 msgid "Indicates router performance"
-msgstr "zeigt die gegenwärtige Leisutng des Routers"
+msgstr "zeigt die gegenwärtige Leistung des Routers"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1159
 msgid "Job lag"
@@ -10538,12 +10538,12 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:535
 #, fuzzy
 msgid "View debugging information"
-msgstr "Router Debug Inforamtionen anzeigen"
+msgstr "Router Debug Informationen anzeigen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:543
 #, fuzzy
 msgid "View router performance graphs"
-msgstr "zeigt die gegenwärtige Leisutng des Routers"
+msgstr "zeigt die gegenwärtige Leistung des Routers"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:547
 #, fuzzy
@@ -10839,7 +10839,7 @@ msgstr "NetzDB-Eintrag"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:484
 #, fuzzy
 msgid "View profile in text format"
-msgstr "Router Debug Inforamtionen anzeigen"
+msgstr "Router Debug Informationen anzeigen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:486
 #, fuzzy

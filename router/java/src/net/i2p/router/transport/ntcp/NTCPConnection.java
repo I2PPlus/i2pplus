@@ -590,7 +590,7 @@ public class NTCPConnection implements Closeable {
         // current transmission rate, and how much time is left before the new message's expiration?
         // ok, maybe later...
 //        if (getUptime() < 10*1000) // allow some slack just after establishment
-        if (getUptime() < 12*1000) // allow some slack just after establishment
+        if (getUptime() < 15*1000) // allow some slack just after establishment
             return false;
         if (_outbound.isBacklogged()) { // bloody arbitrary.  well, it's half the average message lifetime...
             int size = _outbound.size();

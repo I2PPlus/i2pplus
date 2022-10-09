@@ -397,10 +397,16 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
             buf.append("[" + _peers[i].toBase64().substring(0,6) + "]");
             buf.append(isEC(i) ? " EC:" : " ElG:");
             long id = _config[i].getReceiveTunnelId();
-            if (id != 0)
+            if (id != 0) {
+                // don't show for "me" at OBGW or IBEP
+                if (!_isInbound || i != _peers.length - 1)
+                    buf.append(isEC(i) ? " EC:" : " ElG:");
+                else
+                    buf.append(' ');
                 buf.append(id);
-            else
-                buf.append("local");
+            } else {
+                buf.append(" local");
+            }
             id = _config[i].getSendTunnelId();
             if (id != 0) {
                 buf.append('.');

@@ -132,8 +132,8 @@ public class JobQueue {
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
 //    private final static int DEFAULT_MAX_WAITING_JOBS = 25;
-    private final static int DEFAULT_MAX_WAITING_JOBS = 30;
-    private final static long MIN_LAG_TO_DROP = 250;
+    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 30 : 50;
+    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 350 : 250;
 
     /** @deprecated unimplemented */
 //    @Deprecated

@@ -69,6 +69,10 @@
     String query = request.getQueryString();
     RequestWrapper bookRequest = new RequestWrapper(request);
     String here = bookRequest.getParameter("book");
+    // This is what does the form processing.
+    // We need to do this before any notEmpty test and before loadBookMessages() which displays the entry count.
+    // Messages will be displayed below.
+    String formMessages = book.getMessages();
 %>
 </head>
 <body id="bk">
@@ -117,6 +121,7 @@
 %>
 </h3>
 </div>
+<% /* need this whether book is empty or not to display the form messages */ %>
 <div id="messages">${book.messages}
 <%
    if (importMessages != null) {
@@ -463,6 +468,7 @@
 </table>
 <p class="buttons">
 <input class="cancel" type="reset" value="<%=intl._t("Cancel")%>">
+<c:if test="${book.notEmpty}">
 <input class="accept scrollToNav" type="submit" name="action" value="<%=intl._t("Replace")%>">
 <%
     if (!book.getBook().equals("published")) {
@@ -471,6 +477,7 @@
 <%
     }
 %>
+</c:if><% /* book.notEmpty */ %>
 <input class="add scrollToNav" type="submit" name="action" value="<%=intl._t("Add")%>">
 </p>
 </div>

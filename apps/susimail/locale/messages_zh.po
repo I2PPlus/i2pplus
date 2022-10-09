@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 02:50+0000\n"
-"PO-Revision-Date: 2019-04-24 14:21+0000\n"
+"PO-Revision-Date: 2022-09-16 11:45+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -24,6 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2415
@@ -95,11 +96,11 @@ msgstr "第（{0}）部分没有显示，因为{1}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:595
 msgid "Reloading the page may fix the error."
-msgstr ""
+msgstr "重新加载页面可能会解决这个错误。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:625
 msgid "File"
-msgstr ""
+msgstr "文件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:648
 #: src/src/i2p/susi/webmail/WebMail.java:653
@@ -292,7 +293,7 @@ msgstr "配置"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2329
 msgid "I2PMail"
-msgstr ""
+msgstr "I2P网络邮件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2418
 msgid "No new messages"
@@ -310,12 +311,12 @@ msgstr "刷新页面来更新"
 #: src/src/i2p/susi/webmail/WebMail.java:2470
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
-msgstr ""
+msgstr "{0}是一个由{1}提供的I2P专属服务。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2472
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr ""
+msgstr "{0} 网络邮件客户端版权归Susi 2004-2005所有"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2652
 #: src/src/i2p/susi/webmail/WebMail.java:3300
@@ -439,7 +440,7 @@ msgstr "密码"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3141
 msgid "Toggle password visibility"
-msgstr ""
+msgstr "切换密码的可见性"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3147
 msgid "Host"
@@ -482,7 +483,7 @@ msgstr "检查邮件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3219
 msgid "Refresh Page"
-msgstr ""
+msgstr "刷新页面"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3232
 #, java-format
