@@ -1,7 +1,7 @@
 @font-face{font-display:swap;font-family:FiraCode;font-style:normal;font-weight:300,400,500,600,700;src:url(/themes/fonts/FiraCode.woff2);format("woff2")}
 @font-face{font-display:swap;font-family:Sora;font-style:normal;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora.woff2);format("woff2")}
 @font-face{font-display:swap;font-family:Sora;font-style:italic;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora-Italic.woff2);format("woff2")}
-:root{--bodyfont: Sora,Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;--monospaced: FiraCode, Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace}
-a,a:link,a:visited,b,.tab{font-weight:500}
-h2,h3,h4,h5,#logs li,.tab2{font-weight:600}
-#sidebar h3,#sidebar h3 a{font-weight:700}
+:root{--bodyfont: Sora,Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;--monospaced: FiraCode,Droid Sans Mono,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace}
+a,a:link,a:visited{font-weight:500}
+b,h2,h3,h4,h5,#logs li,#logs pre,.tab,.statvalue,select,input[type="submit"],input[type="reset"],button,.control,.fakebutton,.fakebutton:visited,#sidebar a,#sb_localtunnels a,#torrents tfoot tr:first-child th{font-weight:600}
+#sidebar h3,#sidebar h3 a,.tab2{font-weight:700}
