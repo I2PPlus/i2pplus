@@ -406,7 +406,8 @@ p + .twocol {margin: 10px 30px}
 
 /* news */
 .news {margin: -1px 0 0 211px; padding: 3px 10px 3px 10px; min-width: 586px; text-align: right; font-size: 8pt; border: var(--border); border-bottom: var(--border); border-right: var(--border); background: var(--bg)}
-.news li {margin: 15px 15px -10px -20px; padding: 3px 5px 5px 0; text-align: justify; text-transform: capitalize; font-size: 10pt; list-style: none; color: var(--border_color); border-bottom: 2px dotted var(--border_color)}
+.news ul {margin: 8px 25px; padding: 5px 15px}
+.news li {margin: 5px 0; padding: 3px 5px 5px 2px; text-align: justify; text-transform: capitalize; font-size: 10pt; list-style: disc; color: var(--border_color); border-bottom: 1px dotted var(--border_color)}
 .news p {font-size: 9pt; margin-bottom: -10px}
 .news p:last-child {margin-bottom: 10px}
 .newsentry:first-child {margin-top: -6px}

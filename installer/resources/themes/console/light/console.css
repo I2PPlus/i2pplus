@@ -326,6 +326,9 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {padding-top: 1px}
 .newscontent h4 {margin: 14px 15px 7px; font-size: 10pt}
 .newscontent h5 {font-size: 9.5pt}
 .newscontent h6 {font-size: 9pt}
+#news ul {margin: 4px 15px 0; padding: 8px 15px 4px; text-align: left}
+#news p + ul {margin-top: 0}
+#news li {margin: 4px 0; padding: 0 0 0 2px}
 
 /* info */
 #sidebarconf tr:nth-child(odd), .homelinkedit tr:nth-child(odd), #clientconfig tr:nth-child(odd), #netdb tr:nth-child(even), #webappconfig tr:nth-child(odd), #configstats tr:nth-child(odd), #pluginconfig table tr:nth-child(even), #routerinformation tr:nth-child(odd) {background: var(--row_odd)}
