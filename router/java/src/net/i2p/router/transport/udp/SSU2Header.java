@@ -189,17 +189,17 @@ final class SSU2Header {
         @Override
         public String toString() {
             if (data.length >= SESSION_HEADER_SIZE) {
-                return "Handshake header: destID: " + getDestConnID() + "; packet number: " + getPacketNumber() + "; type: " + getType() +
-                       "; version: " + getVersion() + "; netID: " + getNetID() +
-                       "; srcID: " + getSrcConnID() + "; token: " + getToken() + "; key: " + Base64.encode(getEphemeralKey());
+                return "Handshake header: DestID: " + getDestConnID() + "; Packet number: " + getPacketNumber() + "; Type: " + getType() +
+                       "; Version: " + getVersion() + "; NetID: " + getNetID() +
+                       "; SourceID: " + getSrcConnID() + "\n* Token: " + getToken() + "; Key: " + Base64.encode(getEphemeralKey());
             }
             if (data.length >= LONG_HEADER_SIZE) {
-                return "Long header: destID: " + getDestConnID() + "; packet number: " + getPacketNumber() + "; type: " + getType() +
-                       "; version: " + getVersion() + "; netID: " + getNetID() +
-                       "; srcID: " + getSrcConnID() + "; token: " + getToken();
+                return "Long header: DestID: " + getDestConnID() + "; Packet number: " + getPacketNumber() + "; Type: " + getType() +
+                       "; Version: " + getVersion() + "; NetID: " + getNetID() +
+                       "; SourceID: " + getSrcConnID() + "\n* Token: " + getToken();
             }
-            return "Short header: destID: " + getDestConnID() + "; packet number: " + getPacketNumber() + "; type: " + getType() +
-                   "; flags: " + getShortHeaderFlags();
+            return "Short header: DestID: " + getDestConnID() + "; Packet number: " + getPacketNumber() + "; Type: " + getType() +
+                   "; Flags: " + getShortHeaderFlags();
         }
     }
 
