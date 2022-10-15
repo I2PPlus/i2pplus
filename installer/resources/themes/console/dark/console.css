@@ -2281,6 +2281,7 @@ h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
 ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
 #i2pupdates td.infohelp code {user-select: all}
 #help #configinfo .infowarn {padding: 7px 10px 7px 36px; border: none; border-bottom: 1px solid #000; box-shadow: none; background-size: 20px}
+#help td ul {margin: 10px 10px 0}
 #help li {text-align: justify; line-height: 1.5}
 #help li:last-child {padding-bottom: 10px}
 #help #faq li:last-child {padding-bottom: 0}
