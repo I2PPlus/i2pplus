@@ -38,7 +38,11 @@ Java8:
 
 testing:
   stage: test
+  only:
+    - master
   image: openjdk:8
+  # allow failure so commits work when CI minutes exhausted
+  allow_failure: true
   script:
     - apt-get install -yqq libxml2-utils
     - ./tests/scripts/checkcerts.sh
@@ -51,6 +55,7 @@ findbugs:
   stage: test
   image: openjdk:8
   only:
+    - master
     - schedules
   script:
     - apt-get install -yqq findbugs
