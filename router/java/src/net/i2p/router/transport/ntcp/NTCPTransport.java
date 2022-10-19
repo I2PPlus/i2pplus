@@ -221,7 +221,7 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.writeError", "Number of NTCP write errors", "Transport [NTCP]", RATES);
         _endpoints = new HashSet<InetSocketAddress>(4);
 //        _establishing = new ConcurrentHashSet<NTCPConnection>(16);
-        _establishing = new ConcurrentHashSet<NTCPConnection>(1024);
+        _establishing = new ConcurrentHashSet<NTCPConnection>(64);
         _conLock = new Object();
 //        _conByIdent = new ConcurrentHashMap<Hash, NTCPConnection>(64);
         _conByIdent = new ConcurrentHashMap<Hash, NTCPConnection>(256);
@@ -850,9 +850,9 @@ public class NTCPTransport extends TransportImpl {
 //    private static final int MAX_CONCURRENT_READERS = 4;
 //    private static final int MAX_CONCURRENT_WRITERS = 4;
     private static final int MAX_CONCURRENT_READERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                                       SystemVersion.getMaxMemory() < 512*1024*1024) ? 3 : Math.max(SystemVersion.getCores() / 2, 4);
+                                                       SystemVersion.getMaxMemory() < 512*1024*1024) ? 3 : Math.min(SystemVersion.getCores() + 3, 6);
     private static final int MAX_CONCURRENT_WRITERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                                       SystemVersion.getMaxMemory() < 512*1024*1024) ? 3 : Math.max(SystemVersion.getCores() / 2, 4);
+                                                       SystemVersion.getMaxMemory() < 512*1024*1024) ? 3 : Math.min(SystemVersion.getCores() + 3, 6);
 
     /**
      *  Called by TransportManager.
