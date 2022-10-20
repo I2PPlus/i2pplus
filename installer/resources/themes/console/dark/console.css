@@ -422,9 +422,6 @@ select{margin:5px 10px;min-width:110px;font-size:9.5pt}
 .search select{margin-bottom:4px}
 textarea[cols="70"],textarea[name="levels"]{width:calc(100% - 20px)}
 #advancedsettings:focus{border:none}
-#consolepass input[name="name"],#externali2cp input[name="user"]{padding:6px 5px 6px 24px;background:#000800 var(--user) no-repeat 5px center / 16px}
-#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus{background:var(--user) no-repeat 5px center / 16px,var(--input_txt)}
-#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"]{padding:6px 5px 6px 24px;background:#000800 var(--key) no-repeat 3px center / 16px} #consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus{background:var(--key) no-repeat 3px center / 16px,var(--input_txt)}
 textarea#advancedsettings:focus{box-shadow:var(--highlight),inset 0 0 2px 1px var(--hover);filter:none}
 textarea[readonly]:focus{font-weight:400;box-shadow:var(--highlight)}
 input[type=submit],input[type=reset],select,button{font-size:8.5pt}
@@ -1625,11 +1622,15 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 #consolepass th{padding:5px}
 #consolepass td{padding:2px 3px}
 #consolepass td{padding:5px 10px;border-bottom:var(--border)}
+#consolepass tr:nth-child(n+2) td:not(#pw_adduser):first-child{text-align:center}
 #consolepass input{margin:5px}
-#consolepass #pw_adduser{padding:5px 10px;background:#000}
-#pw_adduser input{margin:5px 20px 5px 5px}
+#consolepass input[name="name"],#externali2cp input[name="user"]{padding:6px 5px 6px 24px;background:#000800 var(--user) no-repeat 5px center / 16px}
 #consolepass input[name="name"]{margin-right:20px}
+#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus{background:var(--user) no-repeat 5px center / 16px,var(--input_txt)}
+#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"]{padding:6px 5px 6px 24px;background:#000800 var(--key) no-repeat 3px center / 16px} #consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus{background:var(--key) no-repeat 3px center / 16px,var(--input_txt)}
 #consolepass input[type=password]{width:200px}
+#pw_adduser input{margin:5px 20px 5px 5px}
+#consolepass #pw_adduser{padding:5px 10px;background:#000}
 #submitconsolepass{margin-bottom:-1px;margin-top:-2px;padding:5px;border:var(--border);background:#000}
 #consolepass .delete{float:left}
 
