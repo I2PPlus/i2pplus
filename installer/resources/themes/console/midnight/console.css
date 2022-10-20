@@ -473,6 +473,8 @@ div[id^="config_"].main {padding-bottom: 14px}
 .news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 9px center / 14px, var(--title)}
 .news h3 {font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat 8px center / 16px, var(--title)}
 #news .newsentry h3 {border: var(--border_inner)}
+#news ul {margin: 12px 25px 8px; text-align: left}
+#news li {margin: 6px 0;padding-left: 3px}
 
 #config_ui, #netdb {padding-bottom: 3px}
 
@@ -2560,7 +2562,7 @@ h3.tabletitle a, #version.tabletitle a {padding-left: 18px}
 }
 
 @media screen and (min-width: 1500px) {
-body, .main, .main td, .news p, #news p, .statusnotes, textarea, th, .applabel a, tt, code, .messages, .messages #newsStatus {font-size: 10pt}
+body, .main, .main td, .news p, #news p, .statusnotes, textarea, th, .applabel a, tt, code, .messages, .messages #newsStatus, #news li {font-size: 10pt}
 h1 {padding: 14px 15px 15px 62px; font-size: 19pt; background-position: 14px center}
 h2 {font-size: 14pt}
 .appicon {padding-top: 4px; height: 50px}

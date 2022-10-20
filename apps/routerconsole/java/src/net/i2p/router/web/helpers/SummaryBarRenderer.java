@@ -352,7 +352,7 @@ class SummaryBarRenderer {
             }
         }
 
-        Map<String, String> apps = NavHelper.getClientAppLinks();
+        Map<String, String> apps = NavHelper.getInstance(_context).getClientAppLinks();
         if (apps != null)
             svcs.putAll(apps);
         if (!svcs.isEmpty()) {

@@ -1711,6 +1711,8 @@ class EstablishmentManager {
                 _context.statManager().addRateData("udp.relayBadIP", 1);
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
+                _context.statManager().addRateData("udp.relayBadIP", 1);
+                _context.banlist().banlistRouter(charlieHash, "Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                 charlie.fail();
                 return;
             }
@@ -1757,6 +1759,8 @@ class EstablishmentManager {
             if (_log.shouldDebug())
                 _log.debug("Received RelayResponse rejection " + code + " from charlie " + charlie);
             charlie2.setIntroState(bobHash, istate);
+            if (code == RELAY_REJECT_CHARLIE_BANNED)
+                _context.banlist().banlistRouter(charlieHash, "They banned us", null, null, _context.clock().now() + 6*60*60*1000);
             charlie.fail();
             _liveIntroductions.remove(lnonce);
         } else {
@@ -1873,7 +1877,7 @@ class EstablishmentManager {
             chacha.destroy();
         }
 
-        // TODO now we can look up by nonce instead if we want
+        // TODO now we can look up by nonce first instead if we want
         OutboundEstablishState state = _outboundStates.get(id);
         if (state != null) {
             if (_log.shouldInfo())
@@ -1954,6 +1958,8 @@ class EstablishmentManager {
             if (iplen != 6 && iplen != 18) {
                 if (_log.shouldWarn())
                     _log.warn("Bad IP length " + iplen + " from " + state);
+                _context.statManager().addRateData("udp.relayBadIP", 1);
+                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), "Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                 state.fail();
                 return;
             }
@@ -1964,16 +1970,35 @@ class EstablishmentManager {
             if (!TransportUtil.isValidPort(port) ||
                 !_transport.isValid(ip) ||
                 _transport.isTooClose(ip) ||
+                !DataHelper.eq(ip, id.getIP()) ||  // IP mismatch
                 _context.blocklist().isBlocklisted(ip)) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Bad hole punch from " + state + " for " + Addresses.toString(ip, port));
+                    _log.warn("Bad hole punch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
+                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), "Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                 state.fail();
                 return;
             }
-            if (_log.shouldDebug())
-                _log.debug("Received hole punch from " + state + " - they are on " +
-                           Addresses.toString(ip, port));
+            int fromPort = id.getPort();
+            if (port != fromPort) {
+                // if port mismatch only, use the source port as charlie doesn't know
+                // his port or is behind a symmetric NAT
+                if (_log.shouldWarn())
+                    _log.warn("Hole punch source mismatch on " + state +
+                              " resp. block: " + Addresses.toString(ip, port) +
+                              " rcvd. from: " + id);
+                if (!TransportUtil.isValidPort(fromPort)) {
+                    _context.statManager().addRateData("udp.relayBadIP", 1);
+                    _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), "Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                    state.fail();
+                    return;
+                }
+                port = fromPort;
+            } else {
+                if (_log.shouldDebug())
+                    _log.debug("Received hole punch from " + state + " - they are on " +
+                               Addresses.toString(ip, port));
+            }
             synchronized (state) {
                 RemoteHostId oldId = state.getRemoteHostId();
                 if (oldId.getIP() == null) {
@@ -2041,7 +2066,7 @@ class EstablishmentManager {
             // validate clears fields on failure
             // sendDestroy(state) won't work as we haven't sent the confirmed...
             if (_log.shouldWarn())
-                _log.warn("SessionCreated failed validation " + state);
+                _log.warn("SessionCreated failed validation -> " + state);
             return;
         }
 

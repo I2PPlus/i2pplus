@@ -760,9 +760,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     @Override
     public String toString() {
-        return "OutboundEstablishState2 " + _remotePeer.getHash().toBase64().substring(0, 6) + ' ' + _remoteHostId +
+        return "OutboundEstablishState2 [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
                "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) +
-               " Receive ID: " + _rcvConnID +
+               "; Receive ID: " + _rcvConnID +
                "; Send ID: " + _sendConnID +
                " -> " + _currentState +
                (_introducers != null ? (" Introducers: " + _introducers.toString()) : "");

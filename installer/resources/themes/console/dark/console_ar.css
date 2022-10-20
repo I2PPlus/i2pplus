@@ -1,152 +1,153 @@
-/* I2P Theme: Camo aka Dark - Arabic override */
-/* Description: Military Grade. */
-/* Comment: Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
-/* Author: dr|z3d */
-body {direction: rtl; margin: 6px 12px 6px 0}
-div.main li {margin: 5px 20px; text-align: right; line-height: 150%}
-table {direction: rtl}
-td {text-align: right}
-.main {margin: -1px 212px 5px 5px}
-div.news {margin: -1px 212px 0px 5px; direction: ltr}
-.news h3, #newspage h3 {direction: ltr}
-.news hr + i {float: left; direction: rtl}
-.sorry {margin: -1px 212px 0px 5px}
-h1[class] {margin: 0 212px 0 5px; padding-right: 56px; background-position: right 12px center; text-align: right}
-h1, h2, h3, h4 {direction: rtl; text-align: right}
-.welcome h2 {padding-right: 34px}
-#debug h2 {background-position: 8px center}
-#debug h3.debug_inboundsessions, #debug h3.debug_outboundsessions {background-position: right 5px center; padding-right: 26px}
-h3, h3.welcome {border-width: 1px 5px 1px 1px}
-#news h3 {border-width: 1px 1px 1px 5px}
-#applinks, #sitelinks {padding-right: 32px; padding-left: 8px; text-align: right; background-position: right 8px center, center center, center center}
-#applinks a, #sitelinks a {float: left}
-.applink:hover .appicon .extlink::after {left: -1px; right: auto; border-radius: 2px 0 2px 0}
-button.search {margin-right: 30px}
-input.search, input.search:focus {padding: 4px 24px 4px 3px; background-position: right 4px center}
-#sb_wrap {margin-right: 0; right: -17px; float: right;}
-#sb_logo {margin: -8px -10px -9px 0}
-#sidebar h3, #sidebar h4, #sidebar a, #sidebar b {text-align: center; font-weight: 400}
-#sidebar h3 {font-size: 11pt}
-#sidebar h4 {font-size: 10pt}
-#sidebar td {text-align: right}
-#sidebar td:last-child {text-align: left; margin-left: 3px}
-#sidebar td:first-child {text-align: right}
-#sb_services td, #sb_internals td, #sb_advanced td {text-align: center}
-#sb_localtunnels td:last-child {text-align: left}
-#sb_localtunnels a {display: inline; margin-right: 2px; font-size: 9pt}
-#sb_localtunnels td:nth-child(2) {text-align: right}
-.formaction {text-align: left}
-form {text-align: right}
-#sidebar form {text-align: center}
-.cells {text-align: center}
-div.joblog li {text-align: left; direction: ltr}
-span#newtab {text-align: left; font-size: 8pt; float: left; letter-spacing: 0}
-.tab2::before, .tab2::after {display: none}
-h3#iptransport a, th#upnpconfig a, h3#bwlimiter a, #config_stats h3 a, #config_logging h3 a, h3#graphdisplay a, #logs h3 a, h3#advancedconfig a {float: left}
-#sybilnav ul li a {padding-right: 0}
-.sybil_routerinfo th:first-child {text-align: right}
-.sybil_routerinfo th:nth-last-child(2) {padding-left: 0; text-align: left}
-.sybil_routerinfo th {padding: 1px 3px 1px 1px}
-#leasesetdebug th:first-child, #leasesetsummary th:first-child {text-align: right}
-#leasesetdebug th:last-child, #leasesetsummary th:last-child {text-align: left}
-#leasesetdebug th, #leasesetsummary th {padding: 5px}
-.leaseset th {text-align: right}
-.leaseset th:first-child b {float: right}
-.leaseset th:last-child, .leaseset td:nth-child(2) {text-align: left}
-#netdboverview th, table.netdbentry th, #leasesetdebug td:nth-child(2n) {text-align: right}
-#debug {direction: ltr}
-#jardump.main th:nth-child(1), #jardump.main th:nth-child(3), #jardump.main th:nth-child(6), #jardump.main th:nth-child(7) {text-align: right}
-#schedjobs td {text-align: center}
-table.netdbentry th:last-child, #leasesetdebug td:nth-child(2n+1) {text-align: left}
-#tunnels.main h3 a {float: left}
-#enviro td {padding: 5px 10px 5px 5px}
-#enviro td:first-child {text-align: left}
-#wrapperlogs pre, table[id$="logs"] ul, .logtable ul li {direction: ltr; text-align: left}
-#criticallogs ul {border: none}
-#eventlog th {text-align: right; padding-right: 10px}
-.homelinkedit th:nth-child(3), .homelinkedit th:last-child {text-align: right}
-table#netconfig th, table#externali2cp th, table#plugininstall th, table#plugininstall2 th, .configtable th, th.th_title {text-align: right}
-#sidebarconf th:nth-child(1), #sidebarconf th:nth-child(2) {text-align: right}
-#sidebarconf td:nth-child(4) {padding-right: 0}
-#sidebarconf td:nth-child(3) {text-align: left; padding-left: 0}
-.configtable td.infohelp, p.infohelp, td.infohelp, p#debugmode, p#sybilinfo, p.infowarn, td.infowarn, p#keyringhelp, h3#shutdownrouter + p, h3#restartrouter + p, h3#servicedebug + p, h3#browseronstart + p, h3#runonstartup + p, h3#systray + p {padding: 15px 45px 15px 15px; background: #000 var(--infohelp) no-repeat right 8px center / 28px}
-p.infowarn, td.infowarn {background: #000 var(--infowarn) no-repeat right 8px center / 28px}
-#config_update .messages {padding: 15px 55px 15px 15px; text-align: right; background: #000 var(--infohelp) no-repeat right 10px center / 28px}
-#config_update .messages a {float: left; margin: 0 5px}
-.messages {background-position: right 12px center, left bottom; padding: 20px 40px 20px 10px}
-td.optionsave {text-align: left}
-#tunnelconfig th {text-align: right}
-.h3navlinks, h3#servicedebug a, h3#graphinfo a, #config_stats.main h3 a, #config_logging.main h3 a, #configstats th a {float: left}
-#i2pupdates .optbox {margin-right: 10px}
-#reseedconfig input {margin-left: 8px; margin-right: 0}
-#configstats th {text-align: right}
-#configstats td:first-child {text-align: center}
-#configstats td.optionsave {text-align: left}
-#configstats td:nth-child(2) {padding-right: 15px}
-#clientconfig th:first-child, #clientconfig td:first-child, #loggingoptions td:first-child, #i2pupdates td:first-child, #tunnelconfig td:first-child, table#i2pupdates input[name*="URL"], table#i2pupdates textarea, #addkeyring td:first-child, #reseedconfig td:first-child {text-align: left}
-#config_logging p, #reseedconfig td.infohelp {text-align: right}
-#clientconfig td:nth-child(2) {text-align: center}
-#bannedips, #bannedips table {direction: ltr}
-table#addkeyring td.infohelp {text-align: right}
-p#helptranslate, #floodfillconfig tr:first-child .infohelp {text-align: right; padding-right: 50px; background: var(--infohelp) no-repeat right 12px center / 28px}
-#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus, #consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {margin: 5px 3px 5px 15px; padding: 4px 20px 4px 4px; background-position: right 3px center, center center}
-/*@-moz-document url-prefix() {select, select:hover, select:focus {padding: 3px 2px 3px 16px; background-position: left center}}*/
-#consolepass tr:first-child td, p#clientconf.infohelp, p#webappconfigtext.infohelp, #floodfillconfig .infohelp, #bandwidthconfig tr:first-child .infohelp, h3#shutdownrouter + p.infohelp, h3#restartrouter + p.infohelp, h3#systray + p.infohelp, h3#servicedebug + p.infohelp, h3#browseronstart + p.infohelp, table#addkeyring td:first-child, #config_peers tr:nth-child(3) td.infohelp, #config_reseed.main p.infohelp, #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall2 tr:nth-child(2) td:nth-last-child(2), #manualreseed tr:nth-last-child(2) td.infohelp, p#enablefullstats, p#gatherstats, p#pluginconfigtext, #plugininstall .infohelp, #config_family .infohelp, #joinfamily tr:nth-child(3) td:first-child, #newfamily tr:last-child td:first-child, #config_summarybar .configtable td:not(.optionsave), table#bugreports td.infohelp {background-position: right 12px center; padding: 15px 50px 15px 15px}
-div[lang="ar"] ul {margin-right: 20px}
-div[lang="ar"] ul li {list-style-image: url(images/link.png); list-style-position: outside; margin: 10px 15px 0 0; padding-left: 0; margin-top: 15px;}
-div[lang="ar"] ul ul {margin-right: -10px}
-div[lang="ar"] ul, div[lang="ar"] p {margin: 10px}
-#sidebar .error::before, #sidebar .warn::before, #sidebar .testing::before, #sidebar .hidden::before, #sidebar .running::before, #sidebar .firewalled::before, #sidebar .vmcomm::before, #sidebar .clockskew::before {padding-left: 6px; padding-right: 0}
-.themechoice {padding: 0}
-.tunnel_peer {text-align: left}
-.tunnel_local {margin-right: -4px; margin-left: 4px; text-align: center}
-.tunnel_id:empty + .tunnel_cap {display: inline-block; margin-left: 0; margin-right: 12px}
-.sybil_routerinfo th img[src^="/flags"], .netdbentry th a img {margin-left: 5px}
-.sybil_routerinfo th:last-child {padding: 1px}
-.sybil_info, .family {direction: ltr}
-.leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {border-right: none}
-a.viewfullentry::after, a[href^="viewprofile"]::after {margin-left: 3px}
-#sb_newsheadings td, #sb_newsheadings tr:hover td {background-position: right 4px center; padding-right: 22px; padding-left: 8px; text-align: right}
-#sb_newsheadings td a {font-size: 9pt; font-weight: 700}
-.percentBarOuter {margin: -3px -6px -5px 0}
-.sb_info .percentBarOuter {margin: 6px 2px -18px -2px}
-.sb_info .percentBarText {font-size: 9pt; padding-top: 1px; direction: ltr}
-#console .twocol {margin: 15px 35px 5px 0; background: rgba(0, 32, 0, .5); border-radius: 3px; padding-top: 10px; padding-bottom: 10px; line-height: 120%}
-.twocol li {list-style-position: inside; padding-right: 0; margin-right: 0}
+/* I2P Theme:Camo aka Dark - Arabic override */
+/* Description:Military Grade. */
+/* Comment:Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
+/* Author:dr|z3d */
 
-.optionsingle p {padding: 15px 55px 15px 15px}
-#manualreseed .optionsingle, #newfamily .optionsingle, #joinfamily .optionsingle, #manualreseed .optionsingle:hover , #newfamily .optionsingle:hover, #joinfamily .optionsingle:hover {padding: 5px 45px 5px 5px; background-position: right 8px center}
-.optionsingle table {margin-right: 0}
-#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {width: calc(100% - 20px)}
-#bandwidthconfig td:first-child:not(.infohelp) {padding: 0 5px 0 80px; background: url(/themes/console/images/info/arrow_left.png) no-repeat 30px center}
-#joinfamily tr:nth-child(3) td:first-child, #newfamily tr:last-child td:first-child {padding: 5px}
-#config_reseed .confignav + .infohelp + form {margin-left: -16px; margin-right: 16px}
-#reseedsetup {margin-left: 16px; margin-right: -16px}
-#reseedsetup a {float: left}
-#reseedconfig {margin-right: -16px}
-#updateHelper b, #updateProxyHostPort b, #i2pupdates b {text-align: left}
-#i2pupdates td:first-child, #reseedconfig td:first-child, #configstats tr:last-child td, textarea[name="levels"] {text-align: right}
-.suboption {padding-left: 18px}
-.sub-option label {min-width: 0; width: auto}
-.sub-option .optbox, #config_update .suboption .optbox {margin-right: 0; margin-left: 5px}
-#config_update .suboption label[for="newsThroughProxy"] {margin-right: 5px; margin-left: 15px}
-input[type="file"]:hover {border-radius: 15px 0 0 15px; background: linear-gradient(to left, rgba(0,0,0,0), #010)}
-#installPluginUrl {padding: 5px}
-#installPluginUrl td:first-child, #plugininstall tr:nth-child(n+2) table td:first-child {background-position: right 8px center; padding-right: 45px}
-#pluginconfig td:first-child label {margin-right: 6px; padding: 3px 24px 3px 5px; text-align: right; border-radius: 15px 2px 2px 15px; background: var(--plugin) no-repeat right 5px center, linear-gradient(180deg,#020, #000); background-size: 14px, 100%}
-#pluginconfigtext + form {float: left; margin-left: 8px}
-#installPluginFile td:last-child, #installPluginUrl td:last-child, #newfamily table td:last-child, #joinfamily table td:last-child {padding: 10px 15px 10px 0}
-#sidebarconf th:first-child, #sidebarconf td:first-child {width: 1%; text-align: center}
-#sidebarconf select {margin-right: 0; width: calc(100% - 5px)}
-#config_reseed #reseedurl, #config_reseed #reseedzip, #config_reseed #reseedcreatefile, #config_reseed #reseedurl:hover, #config_reseed #reseedzip:hover, #config_reseed #reseedcreatefile:hover {background-position: right 10px center; padding: 10px 45px 10px 10px}
+a.viewfullentry::after,a[href^="viewprofile"]::after{margin-left:3px}
+body{direction:rtl;margin:6px 12px 6px 0}
+button.search{margin-right:30px}
+.applink:hover .appicon .extlink::after{left:-1px;right:auto;border-radius:2px 0 2px 0}
+.cells{text-align:center}
+.configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p#sybilinfo,p.infowarn,td.infowarn,p#keyringhelp,h3#shutdownrouter + p,h3#restartrouter + p,h3#servicedebug + p,h3#browseronstart + p,h3#runonstartup + p,h3#systray + p{padding:15px 45px 15px 15px;background:#000 var(--infohelp) no-repeat right 8px center / 28px}
+div.joblog li{text-align:left;direction:ltr}
+div[lang="ar"] ul,div[lang="ar"] p{margin:10px}
+div[lang="ar"] ul li{list-style-image:url(images/link.png);list-style-position:outside;margin:10px 15px 0 0;padding-left:0;margin-top:15px;}
+div[lang="ar"] ul{margin-right:20px}
+div[lang="ar"] ul ul{margin-right:-10px}
+div.main li{margin:5px 20px;text-align:right;line-height:150%}
+div.news{margin:-1px 212px 0px 5px;direction:ltr}
+p.infowarn,td.infowarn{background:#000 var(--infowarn) no-repeat right 8px center / 28px}
+.formaction{text-align:left}
+form{text-align:right}
+h1[class]{margin:0 212px 0 5px;padding-right:56px;background-position:right 12px center;text-align:right}
+h1,h2,h3,h4{direction:rtl;text-align:right}
+h3,h3.welcome{border-width:1px 5px 1px 1px}
+h3#iptransport a,th#upnpconfig a,h3#bwlimiter a,#config_stats h3 a,#config_logging h3 a,h3#graphdisplay a,#logs h3 a,h3#advancedconfig a{float:left}
+.h3navlinks,h3#servicedebug a,h3#graphinfo a,#config_stats.main h3 a,#config_logging.main h3 a,#configstats th a{float:left}
+.homelinkedit th:nth-child(3),.homelinkedit th:last-child{text-align:right}
+input.search,input.search:focus{padding:4px 24px 4px 3px;background-position:right 4px center}
+input[type="file"]:hover{border-radius:15px 0 0 15px;background:linear-gradient(to left,rgba(0,0,0,0),#010)}
+table#addkeyring td.infohelp{text-align:right}
+table{direction:rtl}
+table#netconfig th,table#externali2cp th,table#plugininstall th,table#plugininstall2 th,.configtable th,th.th_title{text-align:right}
+table.netdbentry th:last-child,#leasesetdebug td:nth-child(2n+1){text-align:left}
+td.optionsave{text-align:left}
+td{text-align:right}
+.leaseset th:first-child b{float:right}
+.leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:none}
+.leaseset th:last-child,.leaseset td:nth-child(2){text-align:left}
+.leaseset th{text-align:right}
+.main{margin:-1px 212px 5px 5px}
+.messages{background-position:right 12px center,left bottom;padding:20px 40px 20px 10px}
+.news h3,#newspage h3{direction:ltr}
+.news hr + i{float:left;direction:rtl}
+.optionsingle p{padding:15px 55px 15px 15px}
+.optionsingle table{margin-right:0}
+.percentBarOuter{margin:-3px -6px -5px 0}
+.sb_info .percentBarOuter{margin:6px 2px -18px -2px}
+.sb_info .percentBarText{font-size:9pt;padding-top:1px;direction:ltr}
+.sorry{margin:-1px 212px 0px 5px}
+.sub-option label{min-width:0;width:auto}
+.sub-option .optbox,#config_update .suboption .optbox{margin-right:0;margin-left:5px}
+.suboption{padding-left:18px}
+.sybil_info,.family{direction:ltr}
+.sybil_routerinfo th:first-child{text-align:right}
+.sybil_routerinfo th img[src^="/flags"],.netdbentry th a img{margin-left:5px}
+.sybil_routerinfo th:last-child{padding:1px}
+.sybil_routerinfo th:nth-last-child(2){padding-left:0;text-align:left}
+.sybil_routerinfo th{padding:1px 3px 1px 1px}
+.tab2::before,.tab2::after{display:none}
+.themechoice{padding:0}
+.tunnel_id:empty + .tunnel_cap{display:inline-block;margin-left:0;margin-right:12px}
+.tunnel_local{margin-right:-4px;margin-left:4px;text-align:center}
+.tunnel_peer{text-align:left}
+.twocol li{list-style-position:inside;padding-right:0;margin-right:0}
+.welcome h2{padding-right:34px}
+#applinks a,#sitelinks a{float:left}
+#applinks,#sitelinks{padding-right:32px;padding-left:8px;text-align:right;background-position:right 8px center,center center,center center}
+#bandwidthconfig td:first-child:not(.infohelp){padding:0 5px 0 80px;background:url(/themes/console/images/info/arrow_left.png) no-repeat 30px center}
+#bannedips,#bannedips table{direction:ltr}
+#clientconfig td:nth-child(2){text-align:center}
+#clientconfig th:first-child,#clientconfig td:first-child,#loggingoptions td:first-child,#i2pupdates td:first-child,#tunnelconfig td:first-child,table#i2pupdates input[name*="URL"],table#i2pupdates textarea,#addkeyring td:first-child,#reseedconfig td:first-child{text-align:left}
+#config_logging p,#reseedconfig td.infohelp{text-align:right}
+#config_reseed .confignav + .infohelp + form{margin-left:-16px;margin-right:16px}
+#config_reseed #reseedurl,#config_reseed #reseedzip,#config_reseed #reseedcreatefile,#config_reseed #reseedurl:hover,#config_reseed #reseedzip:hover,#config_reseed #reseedcreatefile:hover{background-position:right 10px center;padding:10px 45px 10px 10px}
+#configstats td:first-child{text-align:center}
+#configstats td:nth-child(2){padding-right:15px}
+#configstats td.optionsave{text-align:left}
+#configstats th{text-align:right}
+#config_update .messages a{float:left;margin:0 5px}
+#config_update .messages{padding:15px 55px 15px 15px;text-align:right;background:#000 var(--infohelp) no-repeat right 10px center / 28px}
+#config_update .suboption label[for="newsThroughProxy"]{margin-right:5px;margin-left:15px}
+#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus,#consolepass input[name="name"],#externali2cp input[name="user"],#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus{margin:5px 3px 5px 15px;padding:6px 26px 6px 4px;background-position:right 6px center,center center}
+#consolepass tr:first-child td,p#clientconf.infohelp,p#webappconfigtext.infohelp,#floodfillconfig .infohelp,#bandwidthconfig tr:first-child .infohelp,h3#shutdownrouter + p.infohelp,h3#restartrouter + p.infohelp,h3#systray + p.infohelp,h3#servicedebug + p.infohelp,h3#browseronstart + p.infohelp,table#addkeyring td:first-child,#config_peers tr:nth-child(3) td.infohelp,#config_reseed.main p.infohelp,#plugininstall tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(5) td:nth-last-child(2),#plugininstall2 tr:nth-child(2) td:nth-last-child(2),#manualreseed tr:nth-last-child(2) td.infohelp,p#enablefullstats,p#gatherstats,p#pluginconfigtext,#plugininstall .infohelp,#config_family .infohelp,#joinfamily tr:nth-child(3) td:first-child,#newfamily tr:last-child td:first-child,#config_summarybar .configtable td:not(.optionsave),table#bugreports td.infohelp{background-position:right 12px center;padding:15px 50px 15px 15px}
+#console .twocol{margin:15px 35px 5px 0;background:rgba(0,32,0,.5);border-radius:3px;padding-top:10px;padding-bottom:10px;line-height:120%}
+#criticallogs ul{border:none}
+#debug{direction:ltr}
+#debug h2{background-position:8px center}
+#debug h3.debug_inboundsessions,#debug h3.debug_outboundsessions{background-position:right 5px center;padding-right:26px}
+#enviro td:first-child{text-align:left}
+#enviro td{padding:5px 10px 5px 5px}
+#eventlog th{text-align:right;padding-right:10px}
+#i2pupdates .optbox{margin-right:10px}
+#i2pupdates td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"]{text-align:right}
+#installPluginFile td:last-child,#installPluginUrl td:last-child,#newfamily table td:last-child,#joinfamily table td:last-child{padding:10px 15px 10px 0}
+#installPluginUrl{padding:5px}
+#installPluginUrl td:first-child,#plugininstall tr:nth-child(n+2) table td:first-child{background-position:right 8px center;padding-right:45px}
+#jardump.main th:nth-child(1),#jardump.main th:nth-child(3),#jardump.main th:nth-child(6),#jardump.main th:nth-child(7){text-align:right}
+#joinfamily tr:nth-child(3) td:first-child,#newfamily tr:last-child td:first-child{padding:5px}
+#leasesetdebug th:first-child,#leasesetsummary th:first-child{text-align:right}
+#leasesetdebug th:last-child,#leasesetsummary th:last-child{text-align:left}
+#leasesetdebug th,#leasesetsummary th{padding:5px}
+#manualreseed .optionsingle,#newfamily .optionsingle,#joinfamily .optionsingle,#manualreseed .optionsingle:hover ,#newfamily .optionsingle:hover,#joinfamily .optionsingle:hover{padding:5px 45px 5px 5px;background-position:right 8px center}
+#netdboverview th,table.netdbentry th,#leasesetdebug td:nth-child(2n){text-align:right}
+#news h3{border-width:1px 1px 1px 5px}
+#newtab{text-align:left;font-size:8pt;float:left;letter-spacing:0}
+#helptranslate,#floodfillconfig tr:first-child .infohelp{text-align:right;padding-right:50px;background:var(--infohelp) no-repeat right 12px center / 28px}
+#pluginconfig td:first-child label{margin-right:6px;padding:3px 24px 3px 5px;text-align:right;border-radius:15px 2px 2px 15px;background:var(--plugin) no-repeat right 5px center,linear-gradient(180deg,#020,#000);background-size:14px,100%}
+#pluginconfigtext + form{float:left;margin-left:8px}
+#reseedconfig input{margin-left:8px;margin-right:0}
+#reseedconfig{margin-right:-16px}
+#reseedsetup a{float:left}
+#reseedsetup{margin-left:16px;margin-right:-16px}
+#reseedurl input[type=text],#reseedzip input[type="file"],#reseedcreatefile p{width:calc(100% - 20px)}
+#sb_localtunnels a{display:inline;margin-right:2px;font-size:9pt}
+#sb_localtunnels td:last-child{text-align:left}
+#sb_localtunnels td:nth-child(2){text-align:right}
+#sb_logo{margin:-8px -10px -9px 0}
+#sb_newsheadings td a{font-size:9pt;font-weight:700}
+#sb_newsheadings td,#sb_newsheadings tr:hover td{background-position:right 4px center;padding-right:22px;padding-left:8px;text-align:right}
+#sb_services td,#sb_internals td,#sb_advanced td{text-align:center}
+#sb_wrap{float:right !important;margin-right:-7px !important}
+#schedjobs td{text-align:center}
+#sidebarconf select{margin-right:0;width:calc(100% - 5px)}
+#sidebarconf td:nth-child(3){text-align:left;padding-left:0}
+#sidebarconf td:nth-child(4){padding-right:0}
+#sidebarconf th:first-child,#sidebarconf td:first-child{width:1%;text-align:center}
+#sidebarconf th:nth-child(1),#sidebarconf th:nth-child(2){text-align:right}
+#sidebar #sb_localtunnels a{text-align:right}
+#sb_localtunnels td.tunnelReady{padding-left:2px}
+#sidebar .error::before,#sidebar .warn::before,#sidebar .testing::before,#sidebar .hidden::before,#sidebar .running::before,#sidebar .firewalled::before,#sidebar .vmcomm::before,#sidebar .clockskew::before{padding-left:6px;padding-right:0}
+#sidebar form{text-align:center}
+#sidebar h3{font-size:11pt}
+#sidebar h3,#sidebar h4,#sidebar a,#sidebar b{text-align:center;font-weight:400}
+#sidebar h4{font-size:10pt}
+#sidebar td:first-child{text-align:right}
+#sidebar td:last-child{text-align:left;margin-left:3px}
+#sidebar td{text-align:right}
+#sybilnav ul li a{padding-right:0}
+#tunnelconfig th{text-align:right}
+#tunnels.main h3 a{float:left}
+#updateHelper b,#updateProxyHostPort b,#i2pupdates b{text-align:left}
+#wrapperlogs pre,table[id$="logs"] ul,.logtable ul li{direction:ltr;text-align:left}
+#xhr {margin:0 -9px 0 auto}
 
-/* responsive layout */
-@media screen and (min-width: 1500px) {
-.main, .news, h1[class], .sorry {margin-right: 260px; margin-left: 6px}
-/*#sidebar #sb_wrap {margin-right: 0}*/
-#sidebar #sb_logo { margin: -8px -10px -9px 0}
-#sidebar img[src$="i2plogo.png"] {margin-top: -3px}
-#sidebar h4 {font-size: 11pt}
-#sidebar td, #sidebar a {font-size: 10pt}
-div[lang="ar"], div[lang="ar"] code, div[lang="ar"] b {font-size: 11pt}
+@media screen and (min-width:1500px){
+.main,.news,h1[class],.sorry{margin-right:260px;margin-left:6px}
+.tunnelBuildStatus::before{margin:0}
+#sidebar #sb_logo{ margin:-8px -10px -9px 0}
+#sidebar img[src$="i2plogo.png"]{margin-top:-3px}
+#sidebar h4{font-size:11pt}
+#sidebar td,#sidebar a{font-size:10pt}
+div[lang="ar"],div[lang="ar"] code,div[lang="ar"] b{font-size:11pt}
 }

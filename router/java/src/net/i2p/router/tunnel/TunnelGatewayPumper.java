@@ -31,7 +31,7 @@ class TunnelGatewayPumper implements Runnable {
 //    private static final int MAX_PUMPERS = 4;
     private static final int MAX_PUMPERS = SystemVersion.isSlow() || (SystemVersion.getCores() <= 4 &&
                                            SystemVersion.getMaxMemory() < 384*1024*1024) ? 2 :
-                                           SystemVersion.getMaxMemory() < 1024*1024*1024 ? 3 : 4;
+                                           SystemVersion.getMaxMemory() < 1024*1024*1024 ? 3 : 6;
     private final int _pumpers;
 
     /**

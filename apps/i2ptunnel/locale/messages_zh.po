@@ -21,12 +21,13 @@
 # YFdyh000 <yfdyh000@gmail.com>, 2014-2017
 # yue gao <gaoyue@iie.ac.cn>, 2017
 # fzh2003 <fzh2003@i2pmail.org>, 2020
+# NarratorZ <TpNYxtt11ox5TgZ@i2pmail.org>, 2022
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
-"PO-Revision-Date: 2020-02-12 17:20+0000\n"
+"PO-Revision-Date: 2022-10-19 09:50-0400\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -35,6 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:490
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:500
@@ -187,47 +189,42 @@ msgstr "无效地址"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:155
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:188
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:175
-#, fuzzy
 msgid "Tunnel Manager"
-msgstr "隧道名称"
+msgstr "隧道管理器"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:182
 msgid "Edit Client Tunnel"
 msgstr "编辑客户隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:182
-#, fuzzy
 msgid "Edit Server Tunnel"
-msgstr "服务端隧道"
+msgstr "编辑服务端隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:214
 msgid "Are you sure you want to delete?"
-msgstr ""
+msgstr "您确定要删除吗？"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:233
 msgid ""
 "Tunnel and all other shared client tunnels must be stopped to change this "
 "configuration"
-msgstr ""
+msgstr "改变该配置必须停止当前隧道和所有其他共享隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:234
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1215
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1772
-#, fuzzy
 msgid "Tunnel must be stopped to change this configuration"
-msgstr "此隧道必须使用新的目标配置。"
+msgstr "必须停止隧道以改变该配置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:250
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1186
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:815
-#, fuzzy
 msgid "Configuration"
 msgstr "配置文件"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:260
-#, fuzzy
 msgid "New Client Configuration"
-msgstr "保存隧道设置"
+msgstr "新客户端隧道设置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:312
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1266
@@ -271,7 +268,7 @@ msgstr "描述"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:331
 msgid "Shared Client"
-msgstr "共享客户端"
+msgstr "共享隧道客户端"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:336
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1297
@@ -285,13 +282,12 @@ msgid ""
 "same set of tunnels. This will make profiling the tunnels by an adversary "
 "more difficult, but will link the clients together."
 msgstr ""
-"从支持这个特性的客户端中发出的带宽会被路由到同一个通道中。这会使对方分析通道"
-"更困难，但会使客户端连接在一起"
+"从支持这个特性的客户端隧道中发出的流量会被合并到同一个目的地中。这会使客户端"
+"共用一套目的地和隧道上限，让对方分析流量更困难。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:360
-#, fuzzy
 msgid "Share tunnels with other configured clients"
-msgstr "保存隧道设置"
+msgstr "与其他配置共享的共享隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:376
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1321
@@ -365,7 +361,7 @@ msgstr "访问地址"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:440
 msgid "Local interface (ip address) the client tunnel will be reachable from"
-msgstr "<br>"
+msgstr "客户端隧道可到达的本地ip地址"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:462
 msgid ""
@@ -376,21 +372,18 @@ msgstr ""
 "问 I2P 以外的网站"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:466
-#, fuzzy
 msgid "Use plugin instead of proxies listed below if available"
-msgstr "使用插件而非上方列出的代理，如果可用"
+msgstr "使用出口代理插件而非上方列出的代理"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:472
-#, fuzzy
 msgid ""
 "Enables direct chat and file transfers, bypassing I2P. Note that this will "
 "compromise your anonymity and is not recommended."
-msgstr ""
-"启用客户端到客户端直接协议。注意，这将影响您的匿名性，<i>不推荐</i>使用。"
+msgstr "启用客户端直连，绕过I2P。请注意，这将损害您的匿名性，不推荐使用。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:476
 msgid "Enable Direct Client-to-Client protocol"
-msgstr ""
+msgstr "启用客户端直连"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:487
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:503
@@ -422,9 +415,8 @@ msgstr "隧道目标"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:526
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1323
-#, fuzzy
 msgid "Use SSL"
-msgstr "是否使用SSL？"
+msgstr "使用SSL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:539
 msgid ""
@@ -451,7 +443,7 @@ msgstr "客户端使用 SSL 连接到隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:561
 msgid "Please specify the full b64 destination."
-msgstr ""
+msgstr "请注明完整的b64目的地。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:576
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1433
@@ -504,9 +496,8 @@ msgstr "取消"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1166
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1646
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2678
-#, fuzzy
 msgid "Delete this tunnel (cannot be undone)"
-msgstr "删除这个代理（无法撤销）"
+msgstr "删除这个隧道（无法撤销）"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:627
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1169
@@ -529,12 +520,10 @@ msgid "Advanced networking options"
 msgstr "高级网络设置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:638
-#, fuzzy
 msgid ""
 "Note: When this client is configured to share tunnels, these options apply "
 "to all clients configured to share tunnels."
-msgstr ""
-"注意：当此客户端代理配置为共享隧道时，这些选项适用于所有的共享代理客户端！"
+msgstr "注意：当该客户端被配置为时，这些选项适用于所有使用的客户端隧道！"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:645
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1659
@@ -598,9 +587,8 @@ msgid "Conserve resources by only creating tunnels when required"
 msgstr "只在需要时创建隧道以节约资源"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:702
-#, fuzzy
 msgid "Don't open tunnel until activity is detected on port"
-msgstr "延迟打开客户端隧道，直到在配置的隧道端口上检测到活动"
+msgstr "在检测到端口上有活动之前不要打开隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:727
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1746
@@ -686,10 +674,10 @@ msgstr "3跳隧道（高匿名性）"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1906
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1910
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1914
-#, fuzzy, java-format
+#, java-format
 msgid "{0} hop tunnel"
 msgid_plural "{0} hop tunnel"
-msgstr[0] "{0} 入站隧道"
+msgstr[0] "{0} 跳入站节点"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:860
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1876
@@ -716,67 +704,57 @@ msgstr "隧道长度随机化等级"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:880
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1948
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2051
-#, fuzzy
 msgid "0 hop variance"
-msgstr "节点数量"
+msgstr "0 跃点变化（性能不变）"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:881
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1944
-#, fuzzy
 msgid "no randomization, consistent performance"
-msgstr "隧道长度恒定(随机性无,性能稳定)"
+msgstr "没有随机性,性能稳定"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:885
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1954
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2055
-#, fuzzy
 msgid "+ 0-1 hop variance"
-msgstr "节点数量"
+msgstr "+0-1 跃点变化"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:886
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1950
-#, fuzzy
 msgid "medium randomization, lower performance"
-msgstr "隧道长度恒定(随机性无,性能稳定)"
+msgstr "中等的随机性，较低的性能"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:890
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1960
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2059
-#, fuzzy
 msgid "+ 0-2 hop variance"
-msgstr "节点数量"
+msgstr "+0-2 跃点变化"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:891
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1956
-#, fuzzy
 msgid "high randomization, very low performance"
-msgstr "隧道长度恒定(随机性无,性能稳定)"
+msgstr "高随机性，非常低的性能"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:895
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1972
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2067
-#, fuzzy
 msgid "+/- 0-1 hop variance"
-msgstr "节点数量"
+msgstr "+/- 0-1 跃点变化"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:896
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1968
-#, fuzzy
 msgid "standard randomization, standard performance"
-msgstr "隧道长度+/- 0-1(随机性标准,正常性能)"
+msgstr "标准的随机性，标准的性能"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:900
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1978
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2071
-#, fuzzy
 msgid "+/- 0-2 hop variance"
-msgstr "节点数量"
+msgstr "+/- 0-2 跃点变化"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:901
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1974
-#, fuzzy
 msgid "not recommended"
-msgstr "请避免使用b32地址。"
+msgstr "不建议使用"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:913
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1996
@@ -800,42 +778,36 @@ msgstr "备用隧道数量"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2023
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2029
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2037
-#, fuzzy, java-format
+#, java-format
 msgid "{0} backup tunnel"
 msgid_plural "{0} backup tunnels"
-msgstr[0] "备用隧道"
+msgstr[0] "{0} 备用隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:928
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2007
-#, fuzzy
 msgid "no redundancy, no added resource usage"
-msgstr "无备用隧道(无冗余,不增加资源占用)"
+msgstr "无冗余,不增加资源占用"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:933
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2013
-#, fuzzy
 msgid "low redundancy, low resource usage"
 msgstr "每方向1个备用隧道 (低冗余,低资源占用)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:938
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2019
-#, fuzzy
 msgid "medium redundancy, medium resource usage"
 msgstr "每方向2个备用隧道 (中冗余,中资源占用)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:943
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2025
-#, fuzzy
 msgid "high redundancy, high resource usage"
 msgstr "每方向3个备用隧道 (高冗余,高资源占用)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:961
-#, fuzzy
 msgid "Reduce tunnel quantity"
 msgstr "空闲时缩减隧道数量"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:963
-#, fuzzy
 msgid ""
 "Reduce tunnel count when idle to conserve resources but keep tunnel open (to "
 "ensure immediate availability)"
@@ -858,7 +830,6 @@ msgstr "减少隧道闲置时间"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:975
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2176
-#, fuzzy
 msgid "Reduced count"
 msgstr "削减后的隧道数量"
 
@@ -920,8 +891,8 @@ msgid ""
 "static, for services offering features based on destination e.g. IRC user "
 "authentication"
 msgstr ""
-"启用此功能将确保您的隧道身份（目标）保持静态，用于提供基于目的的功能的服务，"
-"例如IRC用户身份验证"
+"启用此功能将确保您的隧道身份（目标）保持静态，用于基于目的地的服务，例如IRC用"
+"户身份验证"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1021
 msgid "Generate key to enable persistent client tunnel identity"
@@ -941,8 +912,8 @@ msgid ""
 "When enabled, the user agent of your web browser or http client will not be "
 "spoofed, potentially reducing your anonymity"
 msgstr ""
-"启用时，您的网页浏览器或 HTTP 客户端的用户代理信息将不做伪装，这可能降低您的"
-"匿名性。"
+"启用时，您的网页浏览器或 HTTP 客户端的user agent将不做伪装，这可能降低您的匿"
+"名性"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1038
 msgid "Do not spoof User-Agent header"
@@ -983,9 +954,8 @@ msgid "Local Authorization"
 msgstr "本地认证"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1065
-#, fuzzy
 msgid "Local Credentials"
-msgstr "本地目标"
+msgstr "本地证书"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1067
 msgid ""
@@ -1027,7 +997,7 @@ msgstr "出口代理认证"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1087
 msgid "Remote Credentials"
-msgstr ""
+msgstr "远程证书"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1089
 msgid "Enable if the outproxy a username and password to access"
@@ -1066,9 +1036,8 @@ msgid "Advanced tunnel, streaming, and I2CP options"
 msgstr "高级隧道，串流和I2CP选项"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1196
-#, fuzzy
 msgid "New Server Configuration"
-msgstr "保存隧道设置"
+msgstr "新服务端隧道设置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1260
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:446
@@ -1152,7 +1121,7 @@ msgstr "HTTPS配置"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1520
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:652
 msgid "SSL Wizard"
-msgstr "SSL向导"
+msgstr "SSL 向导"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1530
 msgid ""
@@ -1166,7 +1135,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1543
 msgid ""
 "Absolute path to Private Key File (will be created if it does not exist)"
-msgstr ""
+msgstr "私钥文件的绝对路径（如果不存在将被创建）"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1549
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1557
@@ -1179,7 +1148,7 @@ msgstr "备用本地目的地"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1571
 msgid "Absolute path for new key (will be created)"
-msgstr ""
+msgstr "新密钥的绝对路径（将被创建）"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1582
 msgid "Read Only: Alternate Local Destination"
@@ -1187,21 +1156,22 @@ msgstr "只读：备用本地目的地"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1593
 msgid "Specify filename or full path for new key"
-msgstr ""
+msgstr "为新密钥指定文件名或完整路径"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1662
 msgid "Configuration cannot be changed after destination is created"
-msgstr ""
+msgstr "目的地创建后不能改变配置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1689
 msgid ""
 "Configuration of signature type is only possible when the tunnel is first "
 "created. To change, you must create a new tunnel."
 msgstr ""
+"签名类型的配置只有在隧道首次创建时才能进行。要改变，你必须创建一个新的隧道。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1709
 msgid "Legacy option, with alternate key configured"
-msgstr ""
+msgstr "兼容性选项，配置备用钥匙"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1755
 msgid "Recommended for blinded and encrypted destinations"
@@ -1224,24 +1194,20 @@ msgid "Outbound"
 msgstr "传出"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1820
-#, fuzzy
 msgid "no anonymity"
-msgstr "0跳隧道（非匿名）"
+msgstr "非匿名"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1826
-#, fuzzy
 msgid "low anonymity"
-msgstr "1跳隧道（低匿名性）"
+msgstr "低匿名性"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1832
-#, fuzzy
 msgid "medium anonymity"
-msgstr "2跳隧道（中等匿名性）"
+msgstr "中等匿名性"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1838
-#, fuzzy
 msgid "high anonymity"
-msgstr "3跳隧道（高匿名性）"
+msgstr "高匿名性"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1940
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2043
@@ -1249,26 +1215,22 @@ msgid "Level of Randomization for Tunnel Depth"
 msgstr "隧道深度随机化级别"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1962
-#, fuzzy
 msgid "very high randomization, very low performance"
-msgstr "隧道长度恒定(随机性无,性能稳定)"
+msgstr "非常高的随机性，非常低的性能"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1966
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2063
-#, fuzzy
 msgid "+ 0-3 hop variance"
-msgstr "节点数量"
+msgstr "+ 0-3 跃点变化"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1980
-#, fuzzy
 msgid "definitely not recommended"
-msgstr "请避免使用b32地址。"
+msgstr "绝对不建议使用"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1984
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2075
-#, fuzzy
 msgid "+/- 0-3 hop variance"
-msgstr "节点数量"
+msgstr "+/- 0-3 跃点变化"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2103
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2109
@@ -1279,7 +1241,6 @@ msgid "backup tunnels"
 msgstr "备用隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2166
-#, fuzzy
 msgid "Reduce tunnels to conserve resources"
 msgstr "空闲时减少隧道数量以节约资源"
 
@@ -1303,7 +1264,7 @@ msgstr "服务器访问选项"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2188
 msgid "Prevent clients from accessing this service via an inproxy"
-msgstr "通过一个传入代理避免客户端访问此服务"
+msgstr "通过一个传入代理避免客户端直接访问此服务"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2192
 msgid "Block Access via Inproxies"
@@ -1345,16 +1306,15 @@ msgstr "用逗号分隔，如Mozilla,Opera（区分大小写）"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2237
 msgid "Encrypt Leaseset"
-msgstr "加密赁集"
+msgstr "加密租约集"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2250
-#, fuzzy
 msgid "Optional Lookup Password"
 msgstr "可选查找密码"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2255
 msgid "Keyring Manager"
-msgstr ""
+msgstr "密钥环管理器"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2263
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2274
@@ -1365,7 +1325,7 @@ msgstr "允许所有客户端连接到此服务"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2285
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2313
 msgid "Send key to all users."
-msgstr "向所有用户发送密钥"
+msgstr "向所有用户发送密钥."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2290
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2318
@@ -1385,7 +1345,7 @@ msgstr "已混淆"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2335
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2350
 msgid "Send password to all users."
-msgstr "向所有用户发送密码"
+msgstr "向所有用户发送密码."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2311
 msgid "Blinded with lookup password"
@@ -1393,7 +1353,7 @@ msgstr "使用查找密码混淆"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2320
 msgid "Send key and password to all users."
-msgstr "向所有用户发送密钥和密码"
+msgstr "向所有用户发送密钥和密码."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2325
 msgid "Encrypted with lookup password"
@@ -1402,7 +1362,7 @@ msgstr "使用查找密码加密"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2327
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2334
 msgid "Send individual key to each user."
-msgstr "把私钥发送给每个用户"
+msgstr "把私钥发送给每个用户."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2332
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2347
@@ -1417,25 +1377,23 @@ msgstr "用查找到的密码与每个用户的密钥加密"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2342
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2349
 msgid "Enter key from each user."
-msgstr "为每个用户输入密钥"
+msgstr "为每个用户输入密钥."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2391
 msgid "Encryption Key"
 msgstr "加密密钥"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2393
-#, fuzzy
 msgid "Generate New Key"
-msgstr "生成QR码"
+msgstr "生成新密钥"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2409
 msgid "Encryption key required to access this service"
 msgstr "此服务需要加密密钥"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2413
-#, fuzzy
 msgid "Generate new encryption key"
-msgstr "生成新SSL证书"
+msgstr "生成新密钥"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2416
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:598
@@ -1444,12 +1402,11 @@ msgstr "生成"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2418
 msgid "Tunnel must be stopped first"
-msgstr ""
+msgstr "隧道必须先停止"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2428
-#, fuzzy
 msgid "Client Manager"
-msgstr "客户名称"
+msgstr "客户端隧道管理"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2436
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2474
@@ -1473,7 +1430,7 @@ msgstr "取消"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:291
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:313
 msgid "Client"
-msgstr "客户"
+msgstr "客户端"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2488
 msgid "Add"
@@ -1485,16 +1442,15 @@ msgstr "限制访问列表"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2514
 msgid "Activate to enable editing"
-msgstr ""
+msgstr "激活以启用编辑"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2520
-#, fuzzy
 msgid "Tunnel Filter"
-msgstr "隧道类型"
+msgstr "隧道过滤"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2522
 msgid "Help with defining tunnel filters"
-msgstr ""
+msgstr "隧道过滤器帮助"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2532
 msgid "Prevent listed clients from connecting to this service"
@@ -1517,22 +1473,19 @@ msgid "Absolute path to file containing filter definition"
 msgstr "过滤器定义文件的路径"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2548
-#, fuzzy
 msgid "Absolute path to filter definition"
-msgstr "过滤器定义文件的路径"
+msgstr "过滤器定义的绝对路径"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2554
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2556
-#, fuzzy
 msgid "Specify client destinations, 1 per line"
-msgstr "指定客户端，每行一个"
+msgstr "指定客户端目的地，每行一个"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2564
 msgid "Server Throttling"
 msgstr "服务器节流"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2566
-#, fuzzy
 msgid "Inbound connection limits"
 msgstr "入站连接限制(0=无限制)"
 
@@ -1550,7 +1503,7 @@ msgstr "每天"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2574
 msgid "Concurrent"
-msgstr ""
+msgstr "并行"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2576
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2634
@@ -1561,7 +1514,7 @@ msgstr "每个客户端"
 msgid ""
 "Maximum number of web page requests per minute for a unique client before "
 "access to the server is blocked"
-msgstr ""
+msgstr "在对服务器的访问被阻止之前，一个客户端每分钟的最大网页请求数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2580
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2586
@@ -1572,21 +1525,20 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2618
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2638
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2656
-#, fuzzy
 msgid "(0 = unlimited)"
-msgstr "POST限制(0 =无限制)"
+msgstr "0 =无限制"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2584
 msgid ""
 "Maximum number of web page requests per hour for a unique client before "
 "access to the server is blocked"
-msgstr ""
+msgstr "在对服务器的访问被阻止之前，一个客户端每小时的最大网页请求数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2590
 msgid ""
 "Maximum number of web page requests per day for a unique client before "
 "access to the server is blocked"
-msgstr ""
+msgstr "在对服务器的访问被阻止之前，一个客户端每天的最大网页请求数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2596
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2652
@@ -1616,7 +1568,6 @@ msgid "Maximum number of simultaneous client connections"
 msgstr "最大客户连接数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2626
-#, fuzzy
 msgid "POST limits"
 msgstr "POST 限制时长"
 
@@ -1668,7 +1619,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1124
 #, java-format
 msgid "Initializing Tunnel Manager{0}"
-msgstr ""
+msgstr "正在初始化隧道管理器{0}。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2695
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:853
@@ -1711,9 +1662,8 @@ msgid "Restart All"
 msgstr "全部重启"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:234
-#, fuzzy
 msgid "I2P Server Tunnels"
-msgstr "服务端隧道"
+msgstr "运行的隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:238
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:559
@@ -1745,7 +1695,7 @@ msgstr "控制项"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:272
 msgid "Edit Server Tunnel Settings for"
-msgstr "编辑服务器隧道设置 - "
+msgstr "编辑服务器隧道设置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:291
 msgid "Test HTTPS server, bypassing I2P"
@@ -1791,18 +1741,17 @@ msgstr "运行中"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:370
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:676
 msgid "Hops"
-msgstr ""
+msgstr "跳数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:375
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:389
 msgid "in"
-msgstr ""
+msgstr "入口"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:380
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:394
-#, fuzzy
 msgid "out"
-msgstr "计数"
+msgstr "出口"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:414
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:417
@@ -1819,29 +1768,25 @@ msgstr "目标"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:775
-#, fuzzy
 msgid "Signature"
 msgstr "签名类型"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:483
 msgid "Alternate"
-msgstr ""
+msgstr "备用"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:513
-#, fuzzy
 msgid "Alt Destination"
-msgstr "目标"
+msgstr "备用目的地"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:525
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:815
-#, fuzzy
 msgid "Encryption"
-msgstr "加密密钥"
+msgstr "加密"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:549
-#, fuzzy
 msgid "New server tunnel"
-msgstr "服务端隧道"
+msgstr "新建服务端隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:551
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:840
@@ -1868,7 +1813,7 @@ msgstr "网络接口"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:593
 msgid "Edit Tunnel Settings for"
-msgstr "编辑隧道设置 - "
+msgstr "编辑隧道设置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:656
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:659
@@ -1995,7 +1940,7 @@ msgstr "此隧道必须使用新的主机名称配置。"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:399
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:428
 msgid "Enter old hostname below."
-msgstr "输入旧的主机名"
+msgstr "输入旧的主机名."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:406
 msgid "Authentication for adding alias"
@@ -2053,9 +1998,8 @@ msgid "Enter higher-level domain and destination below."
 msgstr "在下面输入上层域名和目标。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:569
-#, fuzzy
 msgid "Return to Tunnel Configuration"
-msgstr "保存隧道设置"
+msgstr "返回隧道配置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:576
 msgid "Specify old name and destination"
@@ -2070,12 +2014,10 @@ msgid "See above for required items."
 msgstr "请看上方的必填项目。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:587
-#, fuzzy
 msgid "Old / parent hostname "
-msgstr "旧的主机名"
+msgstr "旧的主机名 "
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:591
-#, fuzzy
 msgid "Private key file for old destination / sub-domain parent"
 msgstr "旧目标的私钥文件"
 
@@ -2108,14 +2050,12 @@ msgid "Virtual Host"
 msgstr "虚拟主机"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:720
-#, fuzzy
 msgid "Via SSL?"
-msgstr "禁用SSL"
+msgstr "启用SSL？"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:795
-#, fuzzy
 msgid "Test HTTPS server through I2P"
-msgstr "测试 HTTP 服务器，通过 I2P"
+msgstr "通过 I2P测试 HTTP 服务器"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:813
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:245
@@ -2126,9 +2066,8 @@ msgid "Server"
 msgstr "服务器"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:817
-#, fuzzy
 msgid "SSL Activation"
-msgstr "本地认证"
+msgstr "启用SSL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:870
 msgid "I2P webserver (eepsite)"
@@ -2147,7 +2086,6 @@ msgid "New Certificate Password"
 msgstr "新证书密码"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1066
-#, fuzzy
 msgid "Password (required to encrypt the certificate)"
 msgstr "设定访问此服务所需的密码"
 
@@ -2164,19 +2102,19 @@ msgstr "生成SSL证书并启用"
 msgid ""
 "Cannot configure, no Jetty server found in {0}client configurations{1} that "
 "matches this tunnel"
-msgstr ""
+msgstr "无法配置，在{0}客户端配置{1}中没有发现与此隧道匹配的Jetty服务器"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1096
 msgid "Support for non-Jetty servers will be added in a future release"
-msgstr ""
+msgstr "对非Jetty服务器的支持将在未来的版本中加入"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1103
 msgid "Return to Tunnel Manager Index"
-msgstr ""
+msgstr "返回隧道管理器主页"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1114
 msgid "Return to Tunnel Editor"
-msgstr ""
+msgstr "返回隧道编辑器"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:193
 msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
@@ -2296,7 +2234,7 @@ msgstr "使用此隧道类型，您的IRC客户端可以连接至I2P内的IRC网
 msgid ""
 "Each IRC network in I2P that you wish to connect to will require its own "
 "tunnel. (See Also, SOCKS IRC)"
-msgstr "I2P中的每个IRC网络，都需要自己独立的隧道。(参见，SOCKS IRC)"
+msgstr "I2P中的每个IRC网络都需要自己独立的隧道。(参见，SOCKS IRC)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:397
 msgid "A tunnel that implements the SOCKS protocol."
@@ -2449,7 +2387,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:699
 msgid "The wizard has now collected enough information to create your tunnel."
-msgstr "向导已收集到最够的信息来完成隧道的创建。"
+msgstr "向导已收集到足够的信息来完成隧道的创建。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:701
 msgid ""
@@ -2481,7 +2419,7 @@ msgstr "您只需在主页面中对应的新隧道上点击启动按钮。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:723
 msgid "Below is a summary of the options you chose:"
-msgstr "下面列出了您选择的选项。"
+msgstr "下面列出了您选择的选项："
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:756
 msgid "Tunnel description"

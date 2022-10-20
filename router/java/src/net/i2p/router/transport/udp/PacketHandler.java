@@ -831,7 +831,7 @@ class PacketHandler {
                 header.getVersion() != 2 ||
                 header.getNetID() != _networkID) {
                 if (header != null && _log.shouldInfo())
-                    _log.info("Does not decrypt as Session Request, attempt to decrypt as TokenRequest/PeerTest/HolePunch: " + header + " from " + from);
+                    _log.info("Does not decrypt as Session Request, attempting to decrypt as TokenRequest / PeerTest/ HolePunch \n* " + header + " from " + from);
                 // The first 32 bytes were fine, but it corrupted the next 32 bytes
                 // TODO make this more efficient, just take the first 32 bytes
                 header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
@@ -884,19 +884,19 @@ class PacketHandler {
                     header.getVersion() != 2 ||
                     header.getNetID() != _networkID) {
                     if (_log.shouldWarn())
-                        _log.warn("Failed decrypt Session Request after Retry: " + header + " on " + state);
+                        _log.warn("Failed decrypt Session Request after Retry \n* " + header + " on " + state);
                     return false;
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Bad Source Conn id " + header + " on " + state);
+                        _log.warn("Bad Source Connection ID \n* " + header + " on " + state);
                     // TODO could be a retransmitted Session Request,
                     // tell establisher?
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Bad Dest Conn id " + header + " on " + state);
+                        _log.warn("Bad Destination Connection ID \n* " + header + " on " + state);
                     return false;
                 }
                 type = SSU2Util.SESSION_REQUEST_FLAG_BYTE;
@@ -911,7 +911,7 @@ class PacketHandler {
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Bad Dest Conn id " + header + " on " + state);
+                        _log.warn("Bad Destination Connection ID \n* " + header + " on " + state);
                     return false;
                 }
                 if (header.getPacketNumber() != 0 ||
@@ -937,29 +937,29 @@ class PacketHandler {
         SSU2Header.acceptTrialDecrypt(packet, header);
         if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Got a Session Request on " + state);
+                _log.debug("Received a Session Request on " + state);
             _establisher.receiveSessionOrTokenRequest(from, state, packet);
         } else if (type == SSU2Util.TOKEN_REQUEST_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Got a Token Request on " + state);
+                _log.debug("Received a Token Request on " + state);
             _establisher.receiveSessionOrTokenRequest(from, state, packet);
         } else if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Got a Session Confirmed on " + state);
+                _log.debug("Received a Session Confirmed on " + state);
             _establisher.receiveSessionConfirmed(state, packet);
         } else if (type == SSU2Util.PEER_TEST_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Got a Peer Test");
+                _log.debug("Received a Peer Test");
             if (SSU2Util.ENABLE_PEER_TEST)
                 _testManager.receiveTest(from, packet);
         } else if (type == SSU2Util.HOLE_PUNCH_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Got a Hole Punch");
+                _log.debug("Received a Hole Punch");
             if (SSU2Util.ENABLE_RELAY)
                 _establisher.receiveHolePunch(from, packet);
         } else {
             if (_log.shouldWarn())
-                _log.warn("Got unknown SSU2 message " + header + " from " + from);
+                _log.warn("Received unknown SSU2 message \n* " + header + " from " + from);
         }
         return true;
     }
@@ -990,7 +990,7 @@ class PacketHandler {
                 // and Retry, so we can bail out now if it doesn't match
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Bad Dest Conn id " + header);
+                        _log.warn("Bad Destination Connection ID \n* " + header);
                     return false;
                 }
             }
@@ -1004,7 +1004,7 @@ class PacketHandler {
             header.getVersion() != 2 ||
             header.getNetID() != _networkID) {
             if (_log.shouldInfo())
-                _log.info("Does not decrypt as Session Created, attempt to decrypt as Retry: " + header);
+                _log.info("Does not decrypt as Session Created, attempt to decrypt as Retry \n* " + header);
             k2 = state.getRcvRetryHeaderEncryptKey2();
             header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
             if (header == null ||
@@ -1012,7 +1012,7 @@ class PacketHandler {
                 header.getVersion() != 2 ||
                 header.getNetID() != _networkID) {
                 if (_log.shouldWarn())
-                    _log.warn("Does not decrypt as Session Created or Retry: " + header + " on " + state);
+                    _log.warn("Does not decrypt as Session Created or Retry \n* " + header + " on " + state);
                 return false;
             }
             type = SSU2Util.RETRY_FLAG_BYTE;
@@ -1021,12 +1021,12 @@ class PacketHandler {
         }
         if (header.getDestConnID() != state.getRcvConnID()) {
             if (_log.shouldWarn())
-                _log.warn("Bad Dest Conn id " + header);
+                _log.warn("Bad Destination Connection ID \n* " + header);
             return false;
         }
         if (header.getSrcConnID() != state.getSendConnID()) {
             if (_log.shouldWarn())
-                _log.warn("Bad Source Conn id " + header);
+                _log.warn("Bad Source Connection ID \n* " + header);
             return false;
         }
 
@@ -1034,11 +1034,11 @@ class PacketHandler {
         SSU2Header.acceptTrialDecrypt(packet, header);
         if (type == SSU2Util.SESSION_CREATED_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Got a Session Created on " + state);
+                _log.debug("Received a Session Created on " + state);
             _establisher.receiveSessionCreated(state, packet);
         } else {
             if (_log.shouldDebug())
-                _log.debug("Got a Retry on " + state);
+                _log.debug("Received a Retry on " + state);
             _establisher.receiveRetry(state, packet);
         }
         return true;

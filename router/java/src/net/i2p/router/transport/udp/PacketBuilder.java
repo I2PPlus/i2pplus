@@ -1299,8 +1299,8 @@ class PacketBuilder {
                 if (bobState.getVersion() > 1) {
                     // TODO cross-version relaying, maybe
                     if (_log.shouldWarn())
-                        _log.warn("Cannot build SSU1 relay request for " + state.getRemoteIdentity().calculateHash()
-                                   + " through SSU2-connected introducer " + bobState);
+                        _log.warn("Cannot build SSU1 relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6)
+                                   + "] through SSU2-connected introducer " + bobState);
                     continue;
                 }
                 // established session (since 0.9.12)

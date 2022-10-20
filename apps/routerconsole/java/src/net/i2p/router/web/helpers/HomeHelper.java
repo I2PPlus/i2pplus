@@ -272,7 +272,7 @@ public class HomeHelper extends HelperBase {
     }
 
     public String getServices() {
-        List<App> plugins = NavHelper.getClientApps(_context);
+        List<App> plugins = NavHelper.getInstance(_context).getClientApps(_context);
         net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
         String version = net.i2p.CoreVersion.VERSION;
         String firstVersion = ctx.getProperty("router.firstVersion");

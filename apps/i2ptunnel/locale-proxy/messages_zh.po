@@ -14,12 +14,13 @@
 # walking <walking@i2pmail.org>, 2011
 # wwj402 <wwj402@gmail.com>, 2013
 # YFdyh000 <yfdyh000@gmail.com>, 2014-2016
+# NarratorZ <TpNYxtt11ox5TgZ@i2pmail.org>, 2022
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
-"PO-Revision-Date: 2022-09-16 08:58+0000\n"
+"PO-Revision-Date: 2022-10-18 05:08+0000\n"
 "Last-Translator: Beta Ba <linsui555@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -241,7 +242,7 @@ msgstr "网站不可达"
 
 #: ../java/build/Proxy.java:66
 msgid "The website was not reachable, because its lease set was not found."
-msgstr "该网站不可达，因为找不到其租契集。"
+msgstr "该网站不可达，因为找不到其赁集。"
 
 #: ../java/build/Proxy.java:67
 msgid ""
@@ -289,7 +290,7 @@ msgstr "警告：请求被拒绝"
 msgid ""
 "This address appears to be malformed. Please verify you have supplied a "
 "valid address!"
-msgstr "这个地址似乎是畸形的。请确认你提供了一个有效的地址!"
+msgstr "这个地址似乎是错误的。请确认你提供了一个有效的地址!"
 
 #: ../java/build/Proxy.java:92
 msgid "You attempted to connect to a non-I2P website or location."
@@ -376,7 +377,7 @@ msgstr "代理暂时不可用、太忙或者被屏蔽。"
 #: ../java/build/Proxy.java:142
 msgid ""
 "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "HTTP 出口代理不可达，因为找不到其租契。"
+msgstr "HTTP 出口代理不可达，因为找不到其租约集。"
 
 #: ../java/build/Proxy.java:143
 msgid ""
@@ -419,8 +420,8 @@ msgid ""
 "the address helper link, or delete the host entry from your address book and "
 "click the address helper link again."
 msgstr ""
-"决定您信任哪个密钥以解决冲突，然后要么忽略地址助手链接，要么在您的地址簿中删"
-"除该主机项，并再次点击该地址助手链接。"
+"决定您信任哪个密钥以解决地址冲突，然后要么忽略地址助手链接，要么在您的地址簿"
+"中删除该主机项，并再次点击该地址助手链接。"
 
 #: ../java/build/Proxy.java:185
 msgid "The Base32 address is invalid."
@@ -492,10 +493,10 @@ msgstr "目标似乎无效："
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:698
 msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2p 地址助手对您输入的目标无能为力！"
+msgstr "I2P 地址助手对您输入的目标无能为力！"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:770
-#, fuzzy, java-format
+#, java-format
 msgid ""
 "To visit the destination in your addressbook, click <a href=\"{0}\">here</"
 "a>. To visit the conflicting addresshelper destination, click <a "
@@ -505,9 +506,9 @@ msgstr ""
 "助手目标，点击<a href=\"{1}\">这里</a>。"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:780
-#, fuzzy, java-format
+#, java-format
 msgid "Destination for {0} in addressbook"
-msgstr "地址簿中的 {0} 的目标"
+msgstr "地址簿中的 {0} 的目的地"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:783
 msgid "Conflicting address helper destination"
@@ -518,9 +519,8 @@ msgid "Corrupt Base32 address"
 msgstr "损坏的 Base32 地址"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1334
-#, fuzzy
 msgid "Destination LeaseSet not found"
-msgstr "找不到目标租赁"
+msgstr "找不到目标赁集"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1471
 msgid "Host"
@@ -541,12 +541,11 @@ msgid "Continue to {0} without saving"
 msgstr "继续{0}，而不保存"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1485
-#, fuzzy
 msgid ""
 "You can browse to the site without saving it to the addressbook. The address "
 "will be remembered until you restart your I2P router."
 msgstr ""
-"您可以不将站点添加到地址簿而进行浏览。地址会被记录直到您重启您的I2P路由器。"
+"您可以不将站点添加到地址簿而进行浏览。地址会被记录直到您重启您的I2P路由。"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1486
 msgid "Continue without saving"
@@ -555,21 +554,19 @@ msgstr "继续，而不保存"
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1493
 #, java-format
 msgid "Save {0} to router address book and continue to website"
-msgstr "保存 {0} 到路由器地址簿并继续访问网站"
+msgstr "保存 {0} 到路由地址簿并继续访问网站"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1494
-#, fuzzy
 msgid ""
 "This address will be saved to your Router addressbook where your "
 "subscription-based addresses are stored."
-msgstr "本地址会被存储在您的路由器地址簿，您基于订阅的地址所存储的地方。"
+msgstr "本地址会被存储在您的路由器地址簿，您订阅的地址所存储的地方。"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1496
-#, fuzzy
 msgid ""
 "If you want to keep track of sites you have added manually, add to your "
 "Master or Private addressbook instead."
-msgstr "如果您希望追踪您手动添加的站点，请将其加入私有地址簿或主地址簿。"
+msgstr "如果您希望追踪您手动添加的站点，请将其加入私有地址簿或主要地址簿。"
 
 #. FIXME wasn't escaped
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1499
@@ -579,27 +576,25 @@ msgstr "保存并继续"
 
 #. only blockfile supports multiple books
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1505
-#, fuzzy, java-format
+#, java-format
 msgid "Save {0} to master addressbook and continue to website"
-msgstr "保存 {0} 到主地址簿并继续访问网站"
+msgstr "保存 {0} 到主要地址簿并继续访问网站"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1506
-#, fuzzy
 msgid ""
 "This address will be saved to your Master addressbook. Select this option "
 "for addresses you wish to keep separate from the main router address book, "
 "but don't mind publishing."
 msgstr ""
-"本地址会被存储到您的主要地址簿。如果您希望与主要的路由器地址簿分开存储，而不"
-"介意发布的话，请选择此选项。"
+"本地址会被存储到您的主要地址簿。如果您希望与路由地址簿分开存储，而不介意发布"
+"的话，请选择此选项。"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1510
-#, fuzzy, java-format
+#, java-format
 msgid "Save {0} to private addressbook and continue to website"
 msgstr "保存 {0} 到私有地址簿并继续访问网站"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1511
-#, fuzzy
 msgid ""
 "This address will be saved to your Private addressbook, ensuring it is never "
 "published."
@@ -668,7 +663,7 @@ msgstr "已通过地址助手添加"
 
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:269
 msgid "Missing lookup password"
-msgstr "查找密码不存在"
+msgstr "密码不存在"
 
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:283
 msgid "Missing private key"

@@ -1,0 +1,10 @@
+@font-face{font-display:swap;font-family:FiraCode;font-style:normal;font-weight:300,400,500,600,700;src:url(/themes/fonts/FiraCode.woff2);format("woff2")}
+@font-face{font-display:swap;font-family:Sora;font-style:normal;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora.woff2);format("woff2")}
+@font-face{font-display:swap;font-family:Sora;font-style:italic;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora-Italic.woff2);format("woff2")}
+:root{--bodyfont: Sora,Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;--monospaced: FiraCode,Droid Sans Mono,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace}
+textarea,#statusMessages,#statusMessages:active,#statusMessages:focus{font-weight:500}
+a,a:link,a:visited,b,h2,h3,h4,h5,#logs li,#logs pre,.tab,.statvalue,select,input[type="submit"],input[type="reset"],button,.control,.fakebutton,.fakebutton:visited,#sidebar a,#sb_localtunnels a,#torrents tfoot tr:first-child th,#screenlog li,.txBarText,.torrentDownloaded{font-weight:600}
+#sidebar h3,#sidebar h3 a,.tab2{font-weight:700}
+#torrents tfoot tr:first-child th{min-width:80px}
+#torrents tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {margin-right:2px}
+.tab a{padding: 4px 12px}

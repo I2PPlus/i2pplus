@@ -365,7 +365,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             if (header.getDestConnID() != _rcvConnID) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] BAD Destination ConnectionID ["  + header + "] -> Size: " + len + " bytes from " + this);
+                    _log.warn("[SSU2] BAD Destination ConnectionID \n* " + header + " -> Size: " + len + " bytes from " + this);
                 if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0)) {
                     // this was probably a retransmitted session created,
                     // sent with k_header_1 = bob's intro key, and we're
