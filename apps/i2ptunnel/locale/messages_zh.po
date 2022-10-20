@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
-"PO-Revision-Date: 2022-10-19 09:50-0400\n"
+"PO-Revision-Date: 2022-10-20 19:12-0400\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -47,19 +47,19 @@ msgstr "内部"
 #, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
-msgstr[0] "{0} 入站隧道"
+msgstr[0] "{0} 传入隧道"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:541
 #, java-format
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
-msgstr[0] "{0} 出站隧道"
+msgstr[0] "{0} 传出隧道"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:543
 #, java-format
 msgid "{0} inbound, {0} outbound tunnel"
 msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0}入站, {0}出站隧道"
+msgstr[0] "{0}传入, {0}传出隧道"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:547
 msgid "lower bandwidth and reliability"
@@ -523,7 +523,8 @@ msgstr "高级网络设置"
 msgid ""
 "Note: When this client is configured to share tunnels, these options apply "
 "to all clients configured to share tunnels."
-msgstr "注意：当该客户端被配置为时，这些选项适用于所有使用的客户端隧道！"
+msgstr ""
+"注意：当该客户端被配置为共享隧道时，这些选项适用于所有使用的客户端隧道！"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:645
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1659
@@ -677,7 +678,7 @@ msgstr "3跳隧道（高匿名性）"
 #, java-format
 msgid "{0} hop tunnel"
 msgid_plural "{0} hop tunnel"
-msgstr[0] "{0} 跳入站节点"
+msgstr[0] "{0} 跳传入节点"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:860
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1876
@@ -1454,7 +1455,7 @@ msgstr "隧道过滤器帮助"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2532
 msgid "Prevent listed clients from connecting to this service"
-msgstr "阻止被列入的客户连接到这个服务"
+msgstr "阻止被列入的客户端连接到这个服务"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2536
 msgid "Blacklist"
@@ -1487,7 +1488,7 @@ msgstr "服务器节流"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2566
 msgid "Inbound connection limits"
-msgstr "入站连接限制(0=无限制)"
+msgstr "传入连接限制(0=无限制)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2568
 msgid "Per Minute"
@@ -1569,7 +1570,7 @@ msgstr "最大客户连接数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2626
 msgid "POST limits"
-msgstr "POST 限制时长"
+msgstr "POST 限制"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2628
 msgid "Per Period"
@@ -1663,7 +1664,7 @@ msgstr "全部重启"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:234
 msgid "I2P Server Tunnels"
-msgstr "运行的隧道"
+msgstr "服务端隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:238
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:559
@@ -2043,7 +2044,7 @@ msgstr "备用Base32"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:716
 msgid "Incoming I2P Port Routing"
-msgstr "入站I2P路由"
+msgstr "传入I2P路由"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:718
 msgid "Virtual Host"
