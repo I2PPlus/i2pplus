@@ -31,6 +31,7 @@ td>*{vertical-align:middle}
 .percentBarOuter{margin-top:-3px;margin-bottom:-5px}
 .percentBarText{margin-top:-2px}
 .sb_notice,.sb_notice a{font-size:10pt;line-height:1.2}
+.sitemapLabel{margin-bottom:-5px}
 .smallhead,th{font-size:10pt;font-weight:400}
 .sorry{font-size:12pt}
 .tab2{padding-top:6px;padding-bottom:5px}
@@ -48,7 +49,8 @@ td>*{vertical-align:middle}
 #sb_warning{padding-top:10px;padding-bottom:10px}
 #searchbar span{margin:5px}
 #sidebar a,#sidebar b{font-size:10pt;font-weight:400}
-#sidebar button{font-size:11pt;padding:5px 8px}
+#sidebar button{font-size:10.5pt;padding:5px 8px}
+#sidebar button.download{padding:5px 10px;width:calc(100% - 10px);font-size:10pt}
 #sidebar button.reload,#sidebar button.stop{padding:3px 8px;min-width:94px}
 #sidebarconf button{min-width:32px}
 #sidebar h3 a{font-size:14pt;font-weight:400;text-transform:uppercase;letter-spacing:.15em}
@@ -61,9 +63,10 @@ td>*{vertical-align:middle}
 #themeheading,#langheading,#passwordheading,#netconfig th,#externali2cp th,#plugininstall th,#plugininstall2 th,.configtable th,th.th_title{font-size:12pt}
 #banlist{column-width:500px}
 #updateAvailable{margin-top:5px}
+#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before {margin-top:-3px;width:20px;vertical-align:middle;background-size:14px}
 
-@media screen and (max-width:1500px){.tab,.tab2{font-size:10.5pt;margin-right:-3px}h1[class]{font-size:15.5pt;padding-left: 54px}}
-@media screen and (max-width:1076px){.tab2{padding-top:5px;padding-bottom:4.5px}}
+@media screen and (max-width:1500px){.tab,.tab2{font-size:10.5pt;margin-right:-3px}h1[class]{font-size:15.5pt;padding-left:54px}}
+@media screen and (max-width:1076px){.tab2{padding-top:5px;padding-bottom:5.5px}}
 @media screen and (max-width:1000px){#console div[lang="zh"],#console p,#console li{font-size:10.5pt}}
-@media screen and (min-width:0){body{font-size:12pt;line-height:1.3}#sidebar #sb_status{margin-top: -11px}}
-@media screen and (min-width:1500px){#sidebar button.reload,#sidebar button.stop{padding-top:5px;padding-bottom:5px;min-width:119px}#sb_logo img{margin: -2px 0 -10px -4px}.h3navlinks a{padding: 9px 10px 11px 17px}}
+@media screen and (min-width:0){body{font-size:12pt;line-height:1.3}#sidebar #sb_status{margin-top:-11px}}
+@media screen and (min-width:1500px){#sidebar button.reload,#sidebar button.stop{padding-top:5px;padding-bottom:5px;min-width:119px}#sb_logo img{margin:-2px 0 -10px -4px}.h3navlinks a{padding:9px 10px 11px 17px}}
