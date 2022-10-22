@@ -396,9 +396,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         //_context.statManager().createRateStat("udp.statusUnknown", "How many times the peer test returned an unknown result", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.addressTestInsteadOfUpdate", "Number of times we fire off a peer test of ourselves instead of adjusting our own reachable address", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.addressUpdated", "How often we adjust our own reachable IP address", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.proactiveReestablish", "How long a session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.dropPeerDroplist", "Number of current peers experiencing dropped packets when new peer is added to list", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.dropPeerConsecutiveFailures", "Number of consecutive failed sends to a peer we attempted before giving up and reestablishing a new session (lifetime is inactivity period)", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.dropPeerConsecutiveFailures", "Consecutive failed sends to a peer before establishing new session (lifetime is inactivity period)", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv4Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv6 UDP Connection", "Transport [UDP]", RATES);
         // following are for PacketBuider
@@ -1646,9 +1646,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         }
         return rv;
     }
-    
-    /** 
-     * get the state for the peer with the given ident, or null 
+
+    /**
+     * get the state for the peer with the given ident, or null
      * if no state exists
      */
     PeerState getPeerState(Hash remotePeer) {
@@ -1674,7 +1674,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         }
     }
 
-    /** 
+    /**
      * For /peers UI only. Not a public API, not for external use.
      *
      * @return not a copy, do not modify
@@ -1827,7 +1827,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             PeerState2 state2 = (PeerState2) peer;
             _peersByConnID.put(Long.valueOf(state2.getRcvConnID()), state2);
         }
-        
+
         RemoteHostId remoteId = peer.getRemoteHostId();
         if (oldPeer != null) {
             sendDestroy(oldPeer, SSU2Util.REASON_REPLACED);
@@ -2059,7 +2059,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _recentlyClosedConnIDs.put(id, DUMMY);
             _peersByConnID.remove(id);
         }
-        
+
         RemoteHostId remoteId = peer.getRemoteHostId();
         PeerState altByHost = _peersByRemoteHost.remove(remoteId);
 
