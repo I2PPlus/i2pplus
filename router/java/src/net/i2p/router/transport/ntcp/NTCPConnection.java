@@ -156,7 +156,7 @@ public class NTCPConnection implements Closeable {
 //    static final int BUFFER_SIZE = 16*1024;
     static final int BUFFER_SIZE = 32*1024;
 //    private static final int MAX_DATA_READ_BUFS = 16;
-    private static final int MAX_DATA_READ_BUFS = 512;
+    private static final int MAX_DATA_READ_BUFS = 32;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
@@ -180,7 +180,8 @@ public class NTCPConnection implements Closeable {
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
-    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
+//    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
+    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = SystemVersion.isSlow() ? 10*1040 : 16*1040;
     static final int REASON_UNSPEC = 0;
     static final int REASON_TERMINATION = 1;
     static final int REASON_TIMEOUT = 2;
