@@ -271,8 +271,9 @@ div[id^="config_"].main{padding-bottom:14px}
 #newspage .newsentry{margin-bottom:14px;padding:0 15px 20px;box-shadow:0 0 0 1px #242,0 0 2px 2px #000,var(--highlight),inset 0 0 2px 0 #030;background:var(--newsbg) #000}
 #newspage .newsentry:first-child{margin-top:-4px}
 #newspage .newsentry:last-child{margin-bottom:-4px}
-#news ul{margin:10px 15px;padding:12px 15px;border-radius:4px;box-shadow:var(--bevel_hard),var(--highlight_badge);background:var(--helpbox)}
-#news li{margin:3px 0 3px 25px;padding:5px;vertical-align:middle;word-wrap:break-word;list-style:disc;text-align:justify;text-transform:capitalize;color:var(--a)}
+#news ul{margin:10px 15px 15px;padding:12px 15px;list-style:none;border-radius:4px;box-shadow:var(--bevel_hard),var(--highlight_badge);background:var(--msg)}
+#news li{margin:3px 0 3px 15px;padding:5px;vertical-align:middle;word-wrap:break-word;text-align:justify;text-transform:capitalize;color:var(--a)}
+#news li::before{width:20px;height:10px;display:inline-block;list-style:none;background:var(--tunn_active) no-repeat left center / 8px;content:"";}
 #news .newsentry h4{margin:5px 0 10px;padding:0;text-transform:capitalize;font-size:10pt;border-bottom:var(--dotted);opacity:1}
 #news p,#newscontent p{margin:0 15px;font-size:9pt}
 #news p:nth-child(n+2),#newscontent p:nth-child(n+2){margin-top:8px}
@@ -2441,6 +2442,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #i2pclientconfig a,#pluginmanage a{transform:translateY(-1px)}
 #jardump a[href^="https://gitlab.com/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
 #netdboverview th[colspan="3"]{font-size:11pt}
+#news li::before{height:8px;background-size:7px}
 #passwordheading{margin-top:12px}
 #peers .routerid .flag img,#profiles .routerid .flag img{margin:0 0 -2px}
 #pluginconfig{margin-top:-13px}
