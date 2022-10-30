@@ -128,11 +128,11 @@ public class HomeHelper extends HelperBase {
         "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/" + S + I + "dread.svg" + S +
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "forum.svg" + S +
         "discuss.i2p" + S + _x("File-sharing forum") + S + "http://discuss.i2p/" + S + I + "forum.svg" + S +
-        "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
         "Natter" + S + _x("Alternative front-end for Twitter") + S + "http://natter.i2p/" + S + I + "twitter.svg" + S +
         "novabbs.i2p" + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "forum.svg" + S +
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "ramble.svg" + S +
         "teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "teddit.svg" + S +
+        //"libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
         //"zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
         //_x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "forum.svg" + S +
         //"query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "forum.svg" + S +
@@ -173,7 +173,7 @@ public class HomeHelper extends HelperBase {
         "Philosopedia" + S + _x("Internet Encylopedia of Philosophy") + S + "http://philosopedia.i2p/" + S + I + "books.svg" + S +
         "plato.i2p" + S + _x("Standford Encylopedia of Philosophy") + S + "http://plato.i2p/" + S + I + "plato.png" + S +
         _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psychonaut.i2p/" + S + I + "psy.svg" + S +
-        _x("SimplifiedGuide") + S + _x("Computing-related tutorials") + S + "http://simplifiedguide.i2p/" + S + I + "help.svg" + S +
+        _x("SimplifiedGuide") + S + _x("Computing-related tutorials") + S + "http://simplified.i2p/" + S + I + "help.svg" + S +
         _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "urbandictionary.svg" + S +
         "vuldb.i2p" + S + _x("Vulnerability Database") + S + "http://vuldb.i2p/" + S + I + "vuldb.svg" + S +
         "w3schools.i2p" + S + _x("Web technology reference and learning site") + S + "http://w3schools.i2p/" + S + I + "w3schools.svg" + S +
@@ -214,19 +214,21 @@ public class HomeHelper extends HelperBase {
         "intpolicydigest.i2p" + S + _x("Politics &amp; Current Affairs Journal") + S + "http://intpolicydigest.i2p/" + S + I + "news.svg" + S +
         _x("JapanToday") + S + _x("English language Japanese News") + S + "http://japantoday.i2p/" + S + I + "japantoday.svg" + S +
         _x("KrebsOnSecurity") + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "krebs.png" + S +
-        _x("SchneierOnSecurity") + S + _x("Internationally renowned security technologist") + S + "http://schneieronsecurity.i2p/" + S + I + "schneier.png" + S +
         "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "linuxfarm.svg" + S +
         "LKML" + S + _x("Linux Kernel Mailing List") + S + "http://lkml.i2p/" + S + I + "news.svg" + S +
+        _x("LittleAtoms") + S + _x("A rationalist journal") + S + "http://littleatoms.i2p/" + S + I + "news.svg" + S +
         _x("MetaCritic") + S + _x("Movie + TV + Music + Game reviews") + S + "http://metacritic.i2p/" + S + I + "metacritic.svg" + S +
         _x("NakedSecurity") + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
         "MotherJones" + S + _x("Smart &amp; fearless journalism") + S + "http://motherjones.i2p/" + S + I + "news.svg" + S +
         _x("Newsweek") + S + _x("American &amp; International News") + S + "http://newsweek.i2p/" + S + I + "newsweek.svg" + S +
         _x("NewsNow") + S + _x("The Independent News Discovery Platform") + S + "http://newsnow.i2p/" + S + I + "newsnow.svg" + S +
+        _x("NewVoiceUkraine") + S + _x("Independent News from Ukraine") + S + "http://newvoiceukraine.i2p/" + S + I + "newvoice.svg" + S +
         _x("OpenDemocracy") + S + _x("Independent International Media Platform") + S + "http://opendemocracy.i2p/" + S + I + "news.svg" + S +
         _x("Planeta") + S + _x("News and blog feeds on I2P") + S + "http://planeta.i2p/" + S + I + "planet.svg" + S +
         "Phayul" + S + _x("News &amp; Views on Tibet") + S + "http://phayul.i2p/" + S + I + "news.svg" + S +
         _x("SaveTibet") + S + _x("International Campaign for Tibet") + S + "http://savetibet.i2p/" + S + I + "savetibet.svg" + S +
         "RollingStone" + S + _x("Lifestyle magazine") + S + "http://rollingstone.i2p/" + S + I + "rollingstone.svg" + S +
+        _x("SchneierOnSecurity") + S + _x("Internationally renowned security technologist") + S + "http://schneieronsecurity.i2p/" + S + I + "schneier.png" + S +
         _x("ScienceDaily") + S + _x("Latest scientific research news") + S + "http://sciencedaily.i2p/" + S + I + "science.svg" + S +
         "SoylentNews" + S + _x("Community-driven tech news") + S + "http://soylentnews.i2p/" + S + I + "news.svg" + S +
         "Slashdot" + S + _x("News for nerds") + S + "http://slashdot.i2p/" + S + I + "slashdot.svg" + S +
