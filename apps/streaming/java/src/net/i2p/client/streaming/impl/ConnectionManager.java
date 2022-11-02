@@ -79,6 +79,8 @@ class ConnectionManager {
 
     // https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     // RFC 6585
+
+/**
     private static final String LIMIT_HTTP_RESPONSE =
          "HTTP/1.1 429 Denied\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -92,7 +94,23 @@ class ConnectionManager {
          "<h2>429 Denied</h2>\n" +
          "<p>Denied due to excessive requests. Please try again later.</p>\n" +
          "</body>\n</html>";
+**/
 
+    private static final String LIMIT_HTTP_RESPONSE =
+         "HTTP/1.1 429 Too Many Requests\r\n" +
+         "Content-Type: text/html; charset=iso-8859-1\r\n" +
+         "Retry-After: 600\r\n" +
+         "Cache-Control: no-cache\r\n" +
+         "Connection: close\r\n" +
+         "Proxy-Connection: close\r\n" +
+         "\r\n" +
+         "<html>\n" +
+         "<head><title>429 Too Many Requests</title></head>\n" +
+         "<body>\n" +
+         "<center><h1>429 Too Many Requests</h1></center>\n" +
+         "<hr>\n" +
+         "</body>\n" +
+         "</html>";
     /**
      *  Manage all conns for this session
      */
