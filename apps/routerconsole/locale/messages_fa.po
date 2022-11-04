@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-04 14:45+0000\n"
+"POT-Creation-Date: 2022-11-04 16:58+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Last-Translator: Reza Ghasemi\n"
 "Language-Team: Persian (http://www.transifex.com/otf/I2P/language/fa/)\n"
@@ -1584,18 +1584,18 @@ msgstr "شرح"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:351
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:353
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:349
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:351
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:350
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:352
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:351
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:353
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:349
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:351
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:351
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:353
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:349
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:351
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:355
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:340
@@ -2081,12 +2081,12 @@ msgstr "شبکه"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:421
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:419
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:420
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:421
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:419
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:421
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:419
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:410
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:326
@@ -2191,8 +2191,11 @@ msgstr "پیشرفته "
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:597
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:455
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:477
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:455
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:455
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:647
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:717
@@ -3149,6 +3152,7 @@ msgid "Graph settings unchanged"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:28
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:481
 #, fuzzy
 msgid "Overview"
 msgstr "سرویس"
@@ -3161,8 +3165,11 @@ msgstr "سرویس"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:449
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:449
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:603
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:697
@@ -3177,7 +3184,9 @@ msgstr "پیکربندی"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:459
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:459
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:701
 msgid "FAQ"
@@ -3399,6 +3408,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:100
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:289
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:699
 msgid "Frequently Asked Questions"
 msgstr "سوالات متداول"
@@ -5325,6 +5335,7 @@ msgid "Integrated"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:290
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:497
 msgid "Thresholds"
 msgstr ""
 
@@ -5745,8 +5756,11 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:451
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:451
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:693
 #, fuzzy
@@ -5775,6 +5789,7 @@ msgid "New Users"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:211
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:475
 msgid "A gentle introduction to I2P"
 msgstr ""
 
@@ -5789,7 +5804,9 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:467
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:467
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:467
 msgid "Troubleshoot"
 msgstr ""
 
@@ -5808,6 +5825,7 @@ msgid "Webhosting"
 msgstr "راه اندازی مجدد"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:247
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:495
 msgid "An introduction to hosting websites on the I2P network"
 msgstr ""
 
@@ -7263,12 +7281,12 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:434
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:432
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:434
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:432
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:434
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:432
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:458
@@ -7332,12 +7350,12 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:438
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:436
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:437
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:438
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:436
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:438
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:436
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:440
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:427
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:462
@@ -8209,7 +8227,8 @@ msgid "Help with reseeding"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:571
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:445
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:289
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:447
 msgid "Reseeding Help"
 msgstr ""
 
@@ -8848,8 +8867,11 @@ msgstr "پیکربندی پیشرفته"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:453
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:489
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:453
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:453
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:679
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:729
@@ -8861,9 +8883,12 @@ msgstr "نام کاربری"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:457
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:485
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:457
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:445
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:289
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:459
 msgid "Tunnel Filtering"
 msgstr ""
@@ -8875,7 +8900,9 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:463
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:463
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:733
 msgid "Web Hosting"
@@ -8886,10 +8913,13 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:461
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:289
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:461
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:461
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:463
 msgid "New User Guide"
 msgstr ""
@@ -8900,7 +8930,9 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:467
 #, fuzzy
 msgid "Hostname Registration"
@@ -8913,8 +8945,11 @@ msgstr "پیکربندی صفحه اصلی I2P"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:705
 msgid "Glossary"
@@ -8925,8 +8960,11 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:709
 msgid "Legal"
 msgstr ""
@@ -8936,8 +8974,11 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:473
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:473
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:473
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:533
 msgid "Change Log"
@@ -9662,6 +9703,7 @@ msgid ""
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:457
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:457
 #, fuzzy
 msgid "unnel Filtering"
 msgstr "وضعیت تونل"
@@ -10765,15 +10807,83 @@ msgid ""
 "plugin)."
 msgstr ""
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:289
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:549
+msgid "Help Section"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:689
+msgid "Help &amp; Support"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:451
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:691
+#, fuzzy
+msgid "Advanced configuration settings"
+msgstr "پیکربندی پیشرفته"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:455
+#, fuzzy
+msgid "Recent code changes to I2P+"
+msgstr "ذخیره تغییرات"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:459
+msgid "Configuring I2P+: Network, Firefox, Tunnel Manager"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:461
+msgid "F.A.Q."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:467
+msgid "2P-specific terminology"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:707
+msgid "Licensing and copyright notices"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:479
+msgid "A guide to reseeding your I2P+ router"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:481
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:289
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:475
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:721
+msgid "Troubleshooting"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:483
+msgid "What to do in the event I2P+ isn't working"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:487
+msgid "An introduction to tunnel access lists"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:491
+msgid ""
+"Information about the sidebar, network status messages, and theme overrides"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:493
+#, fuzzy
+msgid "Webhosting on I2P"
+msgstr "راه اندازی مجدد"
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:475
 msgid "Introduction to I2P"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:475
 msgid "Reseeding Your Router"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:449
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:477
 msgid ""
 "Reseeding is the bootstrapping process used to find other routers when you "
 "first install I2P, or when your router has too few router references "
@@ -10781,55 +10891,55 @@ msgid ""
 "if HTTPS is blocked by a restrictive firewall and reseed has failed."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:451
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:479
 msgid ""
 "If reseeding has failed, you should first check your network connection."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:481
 msgid ""
 "If a firewall is blocking your connections to reseed hosts, you may have "
 "access to a proxy."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:483
 msgid ""
 "The proxy may be remotely hosted or a service running on your computer "
 "(localhost/127.0.0.1)."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:457
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:467
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:469
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:477
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:501
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:485
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:495
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:497
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:505
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:515
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:529
 #, fuzzy
 msgid "Reseed Configuration page"
 msgstr "پیکربندی"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:457
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:485
 #, java-format
 msgid ""
 "To use a proxy to reseed, configure the proxy type, hostname, and port on "
 "the {0}."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:459
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
 msgid ""
 "If you are running the Tor Browser, you may use its Tor instance by "
 "configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> "
 "<code>127.0.0.1</code> <i>Port:</i> <code>9150</code>."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:461
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:489
 msgid ""
 "If you are running a standalone Tor instance locally, you may use it by "
 "configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> "
 "<code>127.0.0.1</code> <i>Port:</i> <code>9050</code>."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:491
 msgid ""
 "If you have some peers but need more, you may try the I2P Outproxy option. "
 "This will not work for the initial reseed when you have 0 known peers. "
@@ -10837,13 +10947,13 @@ msgid ""
 "<code>127.0.0.1:4444</code>) or, if configured, the Orchid Tor plugin."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:493
 msgid ""
 "Then click the <i>Save changes</i> button to confirm the proxy configuration "
 "and then the <i>Reseed now</i> button to initiate the reseed process."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:467
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:495
 #, java-format
 msgid ""
 "If you know and trust somebody that runs I2P, ask them to send you a reseed "
@@ -10851,7 +10961,7 @@ msgid ""
 "<i>Reseed from file</i> option on the {0} using the file you received."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:497
 #, java-format
 msgid ""
 "If you know and trust somebody that publishes reseed files, ask them for the "
@@ -10859,11 +10969,11 @@ msgid ""
 "using the URL you received."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:499
 msgid "How do I reseed manually?"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:501
 msgid ""
 "An I2P router usually only needs to be seeded once, to join the network for "
 "the first time. However, if the router is running for an extended period "
@@ -10873,7 +10983,7 @@ msgid ""
 "group of clearnet HTTPS servers."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:475
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:503
 msgid ""
 "If the number of known peers drops below 50, I2P will attempt to reseed "
 "automatically. If the reseed attempt fails, a notification will appear in "
@@ -10882,7 +10992,7 @@ msgid ""
 "network connectivity issues, or if the reseed request is blocked entirely."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:477
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:505
 #, java-format
 msgid ""
 "In the event that you suspect the request is being blocked, you can "
@@ -10890,17 +11000,17 @@ msgid ""
 "proxy type, hostname, and port."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:479
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:507
 msgid ""
 "If you are stuck behind an ISP firewall or filter, you can use the following "
 "manual method (non-automated technical solution) to join the I2P network."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:481
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:509
 msgid "Joining the I2P Network using a reseed file"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:483
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:511
 msgid ""
 "Please contact a known trustworthy friend who has a running I2P router, and "
 "ask them for help with reseeding your I2P router. Request that they send you "
@@ -10911,34 +11021,34 @@ msgid ""
 "friends. Never import a reseed file if you cannot verify its source."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:485
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:513
 msgid "To import the received i2preseed.zip file into your local I2P router:"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:501
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:515
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:529
 #, java-format
 msgid "Go to the {0}"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:489
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:517
 msgid "Under <i>Select zip or su3 file</i> click <i>Browse&hellip;</i>"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:491
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:519
 msgid "Select the i2preseed.zip file"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:493
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:521
 msgid "Click the <i>Reseed from File</i> button"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:495
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:523
 #, fuzzy
 msgid "Service (Wrapper) log"
 msgstr "سرویس حذف شد"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:495
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:523
 #, java-format
 msgid ""
 "The reseed status will be indicated on the sidebar. You can also check the "
@@ -10946,26 +11056,26 @@ msgid ""
 "with 0 errors</code>"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:497
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:525
 msgid "Sharing a reseed file"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:499
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:527
 msgid ""
 "For trusted friends you can use your local I2P router to give them a jump "
 "start:"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:503
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:531
 msgid ""
 "Under <i>Create Reseed File</i> click the <i>Create reseed file</i> button"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:505
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:533
 msgid "Securely send the i2preseed.zip file to your friend"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:507
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:535
 msgid ""
 "Do not reveal this file to unknown users, as it contains sensitive data (100 "
 "RouterInfo files) from your own I2P router which potentially could be used "
@@ -10975,31 +11085,24 @@ msgid ""
 "(no more than once a week)."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:509
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:537
 msgid "General guidelines for manual reseeding of I2P"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:511
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:539
 msgid ""
 "Do not publicly publish the reseed file or share these files with a friend "
 "of a friend!"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:513
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:541
 msgid ""
 "This file should be used only for a very limited number of friends (less "
 "than 3)."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:515
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:543
 msgid "The file will only be valid for a limited time (less than 3 weeks)."
-msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:289
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:447
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:475
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:721
-msgid "Troubleshooting"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:477
@@ -11084,8 +11187,251 @@ msgid ""
 "a>."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:475
 msgid "Introduction to Tunnel Filtering"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:477
+msgid ""
+"Server tunnels, configurable in the <a href=/i2ptunnelmgr>Tunnel Manager</"
+"a>, provide a number of ways to limit access to the hosted service. "
+"Destination whitelisting, blacklisting, connection throttling, and tunnel "
+"filtering are methods provisioned to mitigate denial of service attacks, "
+"grant exclusive access to known I2P destinations, and manage traffic to the "
+"server."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:479
+msgid ""
+"A tunnel filter can provide protection against denial of service attacks, "
+"without otherwise interrupting the service for genuine users, either in "
+"conjunction with the tunnel throttler or as an alternative strategy. It can "
+"also be used to log access to a hosted service to determine if the server is "
+"under attack, or simply to log all visitors by I2P destination. "
+"Additionally, a filter can function simultaneously as a whitelist and "
+"blacklist making it more flexible than the Tunnel Manager's access list "
+"controls. Note that multiple server tunnels can share a single filter file "
+"if you wish to implement a global filter."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:483
+msgid ""
+"A filter is a text file that can contain one or more declarations. Blank "
+"lines and lines beginning with <i class=example>#</i> are ignored."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:485
+msgid ""
+"A declaration will contain a directive (keyword) with parameters to define "
+"the scope of the declaration, and can represent one of the following:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:487
+msgid ""
+"A default threshold to apply to all remote destinations not listed in the "
+"containing file or any of the referenced files"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:489
+msgid "A threshold to apply to a specific remote destination"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:491
+msgid "A threshold to apply to remote destinations listed in a file"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:493
+msgid ""
+"A threshold that if breached will cause the offending remote destination to "
+"be recorded in a specified file"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:495
+msgid ""
+"Note: The order of the declarations matters. The first threshold declaration "
+"for a given destination (whether explicit or listed in a referenced file) "
+"overrides any future thresholds for the same destination, whether explicit "
+"or listed in a file. Note: to apply a new filter file, the tunnel must be "
+"restarted after the location has been specified in the tunnel manager. Once "
+"configured, a definition file can be updated without requiring a restart of "
+"the target tunnel, although destinations that are blocked will persist until "
+"the tunnel is restarted."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:499
+msgid ""
+"A threshold is defined by the number of connection attempts a remote "
+"destination is permitted to perform over a specified number of seconds "
+"before a \"breach\" occurs."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:501
+msgid "A threshold declaration can be expressed in one of the following ways:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:503
+msgid ""
+"Numeric definition of the number of connection attempts in the period "
+"specified (in seconds) e.g. <i class=example>15/5</i>, <i "
+"class=example>60/60</i> etc."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:505
+msgid ""
+"Note that if the number of connections is 1 (e.g. <i class=example>1/60</"
+"i>), the first connection attempt will result in a breach."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:507
+msgid ""
+"The keyword <i class=example>allow</i>. This threshold is never breached, i."
+"e. an infinite number of connection attempts is permitted."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:509
+msgid ""
+"The keyword <i class=example>deny</i>. This threshold is always breached, i."
+"e. no connection attempts will be allowed."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:511
+msgid "Default Threshold"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:513
+msgid ""
+"The <i class=example>default</i> threshold applies to any remote destination "
+"not explicitly listed in the definition or in any of the referenced files. "
+"To set a default threshold use the keyword <i class=example>default</i>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:515
+msgid ""
+"The following threshold definition <i class=example>180/60</i> specifies "
+"that the same remote destination is allowed to make 179 connection attempts "
+"during a 60 second period. If it makes one more attempt within the same "
+"period, the threshold will be breached and further connection attempts will "
+"be rejected until the end of the period:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:517
+msgid "To allow all unspecified client destinations:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:519
+#, fuzzy
+msgid "Or to deny all unspecified destinations:"
+msgstr "مقصد های رمزگذاری شده محلی"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:521
+msgid ""
+"Note that there can only be a single reference to the <i "
+"class=example>default</i> keyword in a filter file. If unstated, all "
+"connections are permitted unless explicitly forbidden. Errors in the filter "
+"file will prevent a stopped tunnel from starting, so be sure to double check "
+"the syntax before deployment."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:523
+msgid "Explicit Thresholds"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:525
+msgid ""
+"Using the <i class=example>explicit</i> directive, a threshold can be "
+"applied to a remote destination listed in the definition itself, with the "
+"option to specify custom thresholds for multiple destinations. Remote "
+"destinations can also be excluded from the default threshold using the <i "
+"class=example>allow</i> keyword, or permanently blocked using the <i "
+"class=example>deny</i> keyword:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:527
+msgid "Bulk Thresholds"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:529
+msgid ""
+"For convenience you can maintain a list of destinations in a file and define "
+"a threshold for all of them in bulk:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:531
+#, fuzzy
+msgid "Recorders"
+msgstr "ذخیره ترتیب"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:533
+msgid ""
+"Recorders keep track of connection attempts made by a remote destination, "
+"and if that breaches the defined threshold, the destination gets logged in "
+"the specified file. Multiple recorders can be specified:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:535
+msgid ""
+"You can use a recorder to log the destinations of aggressive clients to a "
+"specified file, and then use that same file to throttle them. The following "
+"snippet defines a filter that initially allows all connection requests, but "
+"if any single destination exceeds 180 requests in 60 seconds, it gets "
+"throttled down to 30 requests every 60 seconds:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:537
+msgid "by default there are no limits"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:539
+#, fuzzy
+msgid "but log overly aggressive destinations"
+msgstr "باید یک مقصد را وارد کنید"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:541
+msgid "and any that end up in that file will get throttled in the future"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:543
+msgid ""
+"To log all unique remote destinations connecting to a server, and also log "
+"aggressive connection attempts:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:545
+#, fuzzy
+msgid "log all unique destinations"
+msgstr "باید یک مقصد را وارد کنید"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:547
+msgid "log visitors making 90 or more connections a minute"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:549
+msgid ""
+"You can use a recorder in one tunnel that writes to a file that another "
+"tunnel, or multiple tunnels, can use for throttling. These files can also be "
+"edited by hand."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:551
+msgid ""
+"The following filter definition applies some throttling by default, no "
+"throttling for destinations in the file <i class=example>friends.txt</i>, "
+"forbids any connections from destinations in the file <i "
+"class=example>enemies.txt</i>, and logs any aggressive behavior in a file "
+"called <i class=example>suspicious.txt</i>:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:553
+msgid ""
+"Note that the full path to the output files must be accessible before "
+"deploying the filter. If the target directory does not exist, the "
+"destinations will not be recorded and an error will appear in the router "
+"logs. The files will be created as required. The examples provided above are "
+"not recommendations; your configuration should be tuned according to the "
+"amount of content (number and size of files) your site is serving, the speed "
+"of the server, and the frequency with which the site is updated. Configuring "
+"recorders and monitoring the resulting files will help you fine tune the "
+"settings."
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:291
@@ -11601,10 +11947,6 @@ msgstr ""
 msgid "Router help section"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:549
-msgid "Help Section"
-msgstr ""
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:551
 #, fuzzy
 msgid "Router homepage"
@@ -11757,21 +12099,8 @@ msgstr ""
 msgid "Webapps"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:689
-msgid "Help &amp; Support"
-msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:691
-#, fuzzy
-msgid "Advanced configuration settings"
-msgstr "پیکربندی پیشرفته"
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:695
 msgid "Configuring I2P for optimal performance"
-msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:707
-msgid "Licensing and copyright notices"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:711
