@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-05 14:19+0000\n"
+"POT-Creation-Date: 2022-11-04 03:13+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Last-Translator: Waseihou Watashi <waseihou@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/otf/I2P/language/cs/)\n"
@@ -209,19 +209,19 @@ msgstr "neznámý"
 msgid "No transports (hidden or starting up?)"
 msgstr "Žádné transporty (skryté nebo začínající?)"
 
-#: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:928
+#: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:917
 msgid "Unsupported signature type"
 msgstr ""
 
-#: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:946
+#: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:935
 msgid "No support for our signature type"
 msgstr ""
 
-#: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:950
+#: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:939
 msgid "Unreachable on any transport"
 msgstr "Nedostupné na každém transportu"
 
-#: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:1055
+#: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:1044
 #: ../../../router/java/src/net/i2p/router/transport/UPnPManager.java:395
 msgid "UPnP is not enabled"
 msgstr "UPnP není povolen"
@@ -358,7 +358,7 @@ msgstr "{0} port {1,number,#####} nebyl úspěšně předán UPnP."
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:903
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:110
 #: ../java/src/net/i2p/router/web/StatSummarizer.java:440
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:292
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:291
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:146
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:438
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1057
@@ -929,7 +929,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:125
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:120
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:144
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:554
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:553
 msgid "Restart required to take effect"
 msgstr ""
 
@@ -1001,7 +1001,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:247
 #: ../java/src/net/i2p/router/web/ConfigUpdateHelper.java:126
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:463
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:462
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:336
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:358
 msgid "Never"
@@ -1122,7 +1122,7 @@ msgid "Plugin check complete"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/StatSummarizer.java:440
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:292
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:291
 msgid "Bandwidth usage"
 msgstr ""
 
@@ -1592,8 +1592,8 @@ msgstr "Popis"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:342
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:349
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:351
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:340
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:342
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:351
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:349
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:351
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:350
@@ -1946,7 +1946,7 @@ msgid "Cancel"
 msgstr "Zrušit"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:61
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:454
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:464
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1328
 msgid "Name"
 msgstr "Jméno"
@@ -2086,7 +2086,7 @@ msgstr "Síť"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:410
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:419
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:410
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:420
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:419
@@ -2192,6 +2192,7 @@ msgstr "Pokročilé"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:217
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:456
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:455
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:647
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:717
 msgid "Reseeding"
@@ -2839,12 +2840,12 @@ msgid "Router console password is enabled."
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:450
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:460
 msgid "Mark for deletion"
 msgstr "Označit pro smazání"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:452
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:462
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1326
 msgid "Remove"
 msgstr "Odstranit"
@@ -3007,151 +3008,151 @@ msgstr "Událost"
 msgid "Details"
 msgstr "Detaily"
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:193
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:192
 msgid "Combined bandwidth graph"
 msgstr ""
 
 #. e.g. "statname for 60m"
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:226
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:305
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:304
 #, java-format
 msgid "{0} for {1}"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:307
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:306
 #, java-format
 msgid "ending {0} ago"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:311
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:318
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:310
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:317
 msgid "Return to main graphs page"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:338
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:337
 msgid "Larger"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:344
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:343
 msgid "Smaller"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:350
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:349
 msgid "Taller"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:356
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:355
 msgid "Shorter"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:362
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:361
 msgid "Wider"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:368
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:367
 msgid "Narrower"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:375
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:374
 msgid "Larger interval"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:381
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:380
 msgid "Smaller interval"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:387
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:386
 msgid "Previous interval"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:398
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:397
 msgid "Next interval"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:405
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:404
 msgid "Plot averages"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:405
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:404
 msgid "plot events"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:441
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:440
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:355
 msgid "Configure Graph Display"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:441
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:440
 msgid "Select Stats"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:446
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:445
 msgid ""
 "Note: Dimensions are for graph only (excludes title, labels and legend)."
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:447
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:446
 msgid "Graph size"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:448
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:447
 msgid "pixels wide"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:449
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:448
 msgid "pixels high"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:450
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:449
 msgid "Display period"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:451
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:450
 msgid "minutes"
 msgstr "minut"
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:452
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:451
 msgid "Refresh delay"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:468
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:467
 msgid "Plot type"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:470
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:469
 msgid "Averages"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:472
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:471
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:439
 msgid "Events"
 msgstr "Události"
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:474
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:473
 msgid "Hide legend"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:479
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:478
 msgid "Do not show legend on graphs"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:480
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:479
 msgid "Persistence"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:485
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:484
 msgid "Store graph data on disk"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:487
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:486
 msgid "Save settings and redraw graphs"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:552
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:551
 msgid "Graph settings saved"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:556
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:555
 msgid "Graph settings unchanged"
 msgstr ""
 
@@ -3164,6 +3165,7 @@ msgstr "Služba"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:190
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:315
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:449
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:603
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:697
 msgid "Configuration"
@@ -3172,6 +3174,7 @@ msgstr "Konfigurace"
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:32
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:199
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:461
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:701
 msgid "FAQ"
 msgstr "FAQ"
@@ -3315,7 +3318,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:383
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:393
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:335
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:523
 msgid "Web Server"
@@ -3503,22 +3506,22 @@ msgid "File-sharing forum"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:131
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:135
-msgid "Alternative privacy-focused front-end for Reddit"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:132
 msgid "Alternative front-end for Twitter"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:133
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:132
 msgid "Rocksolid forums for the darknets"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:134
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:133
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr ""
 
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:134
+msgid "Alternative privacy-focused front-end for Reddit"
+msgstr ""
+
+#. "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
 #. "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
 #. _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "forum.svg" + S +
 #. "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "forum.svg" + S +
@@ -3548,21 +3551,18 @@ msgid "Alternative front-end to Youtube"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:145
-msgid "Image optimizer"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:146
 msgid "Privacy-focused not-for-profit organization"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:147
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:146
 msgid "Outproxy bandwidth test"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:147
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr ""
 
+#. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
 #. _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
 #. search engines
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
@@ -3594,420 +3594,489 @@ msgstr ""
 
 #. wikis & reference
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:163
-msgid "CSS design reference"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:164
 msgid "Enabling the free transmission of data in the public interest"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:165
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:164
 msgid "Huge collection of books &amp; magazines &amp; comics"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:166
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:165
 msgid "Selected Papers in Anonymity"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:167
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:166
 msgid "Tor .onion site links"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:168
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:167
 msgid "HTML Color Reference"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:168
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:167
 msgid "HTMLColors"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:169
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:168
 msgid "I2P-related Wiki"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:170
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:169
 msgid "Extensive repository of DRM-free ebooks"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:171
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:170
 msgid "Publicly available texts of court decisions all over the world"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:172
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:171
 msgid "Wolfram's Online Math Reference"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:173
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:172
 msgid "Mozilla Developer Network"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:174
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:173
 msgid "Internet Encylopedia of Philosophy"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:174
 msgid "Standford Encylopedia of Philosophy"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "Psychonaut"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "Wiki relating to altered states of consciousness"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "Computing-related tutorials"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "SimplifiedGuide"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
 msgid "Crowd-sourced slang dictionary"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
 msgid "UrbanDictionary"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
 msgid "Vulnerability Database"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
 msgid "Web technology reference and learning site"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:182
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
 msgid "The biggest online English dictionary"
 msgstr ""
 
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:182
+msgid "World atlas including geography facts &amp; flags"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:182
+msgid "WorldAtlas"
+msgstr ""
+
+#. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
 #. "jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "books.svg" + S +
 #. "nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
 #. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "books.svg" + S +
 #. news + blogs
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:188
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:189
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Technology News &amp; more..."
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:189
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:190
 msgid "Independent investigative journalism"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:190
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:191
 msgid "Information Security Research &amp; Education"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:191
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:192
 msgid "ChinaDigitalTimes"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:191
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:192
 msgid "Covering China from Cyberspace"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:192
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:193
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
 msgid "Cannabis-related magazine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:193
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
 msgid "Democracy for the Arab world now"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:195
 msgid "News &amp; Current Affairs from Germany and around the world"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:195
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:196
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:197
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:198
 msgid "Darknet related news site"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:198
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "DigitalJournal"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:198
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Global news &amp; media platform"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:200
 msgid "DigitalTrends"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:200
 msgid "Tech News &amp; Reviews"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:200
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:201
 msgid "International Politics Journal"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:201
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
-msgid "ForeignPolicy"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
-msgid "The Global Magazine of News &amp; Ideas"
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
+msgid "Accurate News"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
-msgid "Human rights activism"
+msgid "EpochTimes"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:204
-msgid "Defending Human Rights Worldwide"
+msgid "ForeignPolicy"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:204
+msgid "The Global Magazine of News &amp; Ideas"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:205
-msgid "Fresh hacks every day"
+msgid "Human rights activism"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
+msgid "Defending Human Rights Worldwide"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
+msgid "Fresh hacks every day"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
 msgid "Computer related news aggregation"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "HongKongFreePress"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "HongKongWatch"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "Human Rights in China"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
 msgid "Business &amp; Financial News"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
-msgid "English language Japanese News"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
-msgid "JapanToday"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
-msgid "In-depth security news &amp; investigation"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
-msgid "KrebsOnSecurity"
-msgstr ""
-
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
-msgid "Internationally renowned security technologist"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
-msgid "SchneierOnSecurity"
+msgid "Politics &amp; Current Affairs Journal"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:215
-msgid "Router performance monitoring and Linux tips"
+msgid "English language Japanese News"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:215
+msgid "JapanToday"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
+msgid "In-depth security news &amp; investigation"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
+msgid "KrebsOnSecurity"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
+msgid "Router performance monitoring and Linux tips"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "Linux Kernel Mailing List"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
-msgid "MetaCritic"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
-msgid "Movie + TV + Music + Game reviews"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "NakedSecurity"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "Security news and research blog"
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
+msgid "A rationalist journal"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
+msgid "LittleAtoms"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
+msgid "MetaCritic"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
+msgid "Movie + TV + Music + Game reviews"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+msgid "NakedSecurity"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+msgid "Security news and research blog"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Smart &amp; fearless journalism"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+msgid "NewStatesman"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+msgid "Politics &amp; Current Affairs magazine"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "American &amp; International News"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 #, fuzzy
 msgid "Newsweek"
 msgstr "Novinky"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 #, fuzzy
 msgid "NewsNow"
 msgstr "Novinky"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "The Independent News Discovery Platform"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
+msgid "Independent News from Ukraine"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
+msgid "NewVoiceUkraine"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Independent International Media Platform"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "OpenDemocracy"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:557
-msgid "I2P News"
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+msgid "News and blog feeds on I2P"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
-msgid "Planet I2P"
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+msgid "Planeta"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "News &amp; Views on Tibet"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "International Campaign for Tibet"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 #, fuzzy
 msgid "SaveTibet"
 msgstr "Uložit"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "Lifestyle magazine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
-msgid "Latest scientific research news"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
-msgid "ScienceDaily"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
-msgid "Community-driven tech news"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
-msgid "News for nerds"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
-msgid "Technology news &amp; reviews"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
-msgid "Reporting on China without fear or favor"
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
+msgid "Internationally renowned security technologist"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
-msgid "News from the Taiwan Capital"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
-msgid "TaipeiTimes"
+msgid "SchneierOnSecurity"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
-msgid "Technology and engineering news"
+msgid "Latest scientific research news"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
+msgid "ScienceDaily"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
+msgid "Community-driven tech news"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+msgid "News for nerds"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+msgid "Technology news &amp; reviews"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
+msgid "Reporting on China without fear or favor"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
+msgid "News from the Taiwan Capital"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
+msgid "TaipeiTimes"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
+msgid "Technology and engineering news"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "Technology news aggregator"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+msgid "News &amp; Reviews"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+msgid "TheAtlantic"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Academic commentary and essays"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 #, fuzzy
 msgid "TheConversation"
 msgstr "Verze"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+msgid "Global News"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+msgid "TheGuardian"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+msgid "Computer &amp; cyber security news"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+msgid "TheHackerNews"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Watching Big Tech..."
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "Independent Journalism from Russia"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheMoscowTimes"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+msgid "TheNewRepublic"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "International News from Tibet"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheTibetPost"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Security related news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "ThreatPost"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "Filesharing &amp; copyright news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "Ukranian National News Agency"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:318
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:328
 msgid "The HTTP proxy is not up"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:320
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:330
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:456
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:466
 msgid "URL"
 msgstr "URL"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:490
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:500
 msgid "Add"
 msgstr "Přidat"
 
@@ -5690,6 +5759,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:173
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:451
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:693
 #, fuzzy
 msgid "Advanced Settings"
@@ -5726,6 +5796,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:226
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:467
 msgid "Troubleshoot"
 msgstr ""
 
@@ -7178,7 +7249,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:432
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:423
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:432
@@ -7247,7 +7318,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:427
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:436
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:427
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:437
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:436
@@ -8749,6 +8820,7 @@ msgid "Advanced Configuration Help"
 msgstr "Pokročilá konfigurace"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:453
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:679
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:729
 #, fuzzy
@@ -8756,36 +8828,44 @@ msgid "User Interface"
 msgstr "Uživatelské jméno"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:457
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:445
 msgid "Tunnel Filtering"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:733
 msgid "Web Hosting"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:463
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:461
 msgid "New User Guide"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:467
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:465
 msgid "Hostname Registration"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:705
 msgid "Glossary"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:473
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:709
 msgid "Legal"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:475
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:533
 msgid "Change Log"
 msgstr ""
@@ -9005,27 +9085,36 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:535
 msgid ""
+"This setting determines which transport takes priority when communicating "
+"with peers. By default, NTCP is favored over UDP (SSU). By setting the value "
+"to true, UDP will be favored unless a pre-existing NTCP connection exists; "
+"when set to always, UDP will always be used regardless of any pre-existing "
+"NTCP connection. [Default is false]"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:537
+msgid ""
 "This tunnel-specific setting allows you to enable or disable replies to "
 "pings sent to servers hosted by the router. To disable pings, you must add "
 "the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom "
 "Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:537
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:539
 msgid ""
 "When set to true, I2P runs without network connectivity, which is helpful if "
 "you are constantly restarting the router to test code updates as this "
 "prevents network disruption."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:539
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
 msgid ""
 "This setting, when enabled, introduces a random pong delay of up to 50ms for "
 "all ping-enabled servers hosted by the router. Default is disabled. [Restart "
 "required]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
 msgid ""
 "This setting, when enabled, modifies the maximum additional random pong "
 "delay introduced for ping-enabled servers, if <code>i2p.streaming."
@@ -9033,32 +9122,32 @@ msgid ""
 "value of 50ms will be used."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
 msgid ""
 "This setting (in milliseconds) determines how long a packet may stay in the "
 "CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
 msgid ""
 "This setting determines the maximum number of messages in the outbound queue "
 "before it is marked as full. [Default is 768]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:549
 msgid ""
 "This setting determines the maximum number of messages above the maximum "
 "queue value before further messages are dropped. [Default is 128]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:549
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:551
 msgid ""
 "This setting (in milliseconds) allows you to manually configure the queue "
 "delay target value for the CoDel queue management system. Default is 50ms. "
 "[Restart required]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:551
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:553
 msgid ""
 "This setting (in hours) determines how old a RouterInfo in the NetDb is (its "
 "last known publication date) before it's classified as stale and deleted. "
@@ -9066,7 +9155,7 @@ msgid ""
 "default is 8 hours]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:553
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
 msgid ""
 "This setting determines the number of peers to explore in parallel when the "
 "Peer Exploration Job runs [default is 1 peer]. Note that increasing this "
@@ -9075,7 +9164,7 @@ msgid ""
 "with other services, so use with caution!"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
 msgid ""
 "This setting determines the number of NetDb DHT buckets the Peer Exploration "
 "Job will reference when run. By default, the number of buckets to explore "
@@ -9084,7 +9173,7 @@ msgid ""
 "known routers."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:559
 msgid ""
 "This setting (in seconds) allows you to override the delay between runs of "
 "the Peer Exploration Job which attempts to locate new peers to add to the "
@@ -9096,26 +9185,26 @@ msgid ""
 "this job does not run."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:559
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
 msgid ""
 "This setting determines the maximum number of peer hashes to queue for "
 "exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:563
 msgid ""
 "This setting determines whether a router acting as a floodfill will explore "
 "the NetDb to learn about new peers. [Default is false, restart required]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:563
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:565
 msgid ""
 "This setting, when set to true, prevents a router from directly "
 "communicating with other routers, forcing the use of introducers. [Default "
 "is false unlesss router is in hidden mode]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:565
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:567
 msgid ""
 "This setting allows you to exclude older routers from your NetDb. Routers "
 "older than the default or the value you set will be deleted from the NetDb "
@@ -9125,19 +9214,19 @@ msgid ""
 "[Restart required]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:567
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:569
 msgid ""
 "This setting determines the number of peer tests to run concurrently, used "
 "to determine peer latency. [Default is 4]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:569
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:571
 msgid ""
 "This setting determines the delay between peer test jobs, configured in "
 "milliseconds. [Default is 5000]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:571
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:573
 msgid ""
 "To determine peer latency, this setting allocates the maximum time a peer "
 "test should take before being considered a failure, configured in "
@@ -9146,37 +9235,37 @@ msgid ""
 "[Default is 1000]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:573
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:575
 msgid ""
 "This setting determines whether stats about our router are sporadically "
 "published to the NetDb. [Default is false]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:575
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:577
 msgid ""
 "This setting configures the initial size of the outbound message queue. "
 "[Default is 64]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:577
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:579
 msgid ""
 "This setting configures the maximum size of the inbound message queue. "
 "[Default is 1024]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:579
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:581
 msgid ""
 "This setting configures the maximum number of inbound messages queued per "
 "cycle (pump). [Default is 24]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:581
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:583
 msgid ""
 "This setting configures the maximum number of outbound messages queued per "
 "cycle (pump). [Default is 64]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:583
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:585
 msgid ""
 "This setting (in milliseconds) allows you to manually configure the delay "
 "between router refresh updates run by the Refresh Routers Job. By default "
@@ -9188,7 +9277,7 @@ msgid ""
 "lag, and is not recommended for sustained use."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:585
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:587
 msgid ""
 "This setting (in hours) allows you to manually configure how old a "
 "RouterInfo is in order for it to be checked by the Refresh Routers Job. By "
@@ -9198,21 +9287,21 @@ msgid ""
 "NetDb, regardless of age."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:587
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:589
 msgid ""
 "This setting (in seconds) allows you to manually configure the amount of "
 "time to wait before an attempt to refresh a router is determined to have "
 "failed. [The default is 20 seconds]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:589
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:591
 msgid ""
 "This setting determines whether routers classified as uninteresting (K or L "
 "tier, unreachable or older than 0.9.50) are checked during the refresh "
 "router process after 1 hour of uptime. [Default is false]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:591
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:593
 msgid ""
 "This setting (in minutes) allows you to manually configure how long to wait "
 "after startup before RouterInfos in the NetDb are checked for validity, "
@@ -9224,7 +9313,7 @@ msgid ""
 "as soon as a NetDb store is attempted."
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:593
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:595
 msgid ""
 "This setting, when set to true, will enable HiDPI mode for the graphs on <a "
 "href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the "
@@ -9233,7 +9322,7 @@ msgid ""
 "browser. [Experimental]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:595
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:597
 msgid ""
 "This setting, when set to true, will display a Peer Test Average readout in "
 "the Congestion section of the sidebar, calculated by adding the successful "
@@ -9242,26 +9331,26 @@ msgid ""
 "peerTestTimeout</code> value. [Default is false]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:597
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:599
 msgid ""
 "This setting, when set to true, will display the <i>Sites of Interest</i> "
 "links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:599
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:601
 msgid ""
 "This setting permits the configuration of alternative NTP servers required "
 "to ensure that your router maintains accurate clock time. [Default is 0.pool."
 "ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:601
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:603
 msgid ""
 "If set to true, this option will place an icon in the system tray / "
 "notification area, with basic service control options. [Disabled by default]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:603
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:605
 msgid ""
 "This setting allows configuration of the maximum number of files per torrent "
 "I2PSnark will permit, when downloading or creating a torrent. Note that "
@@ -9413,9 +9502,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:501
 msgid ""
 "Note: Most of the options in the Tunnel Manager have tooltips; be sure to "
-"check those before you change settings you don't fully understand! For "
-"example, it is <i>not</i> recommended to enable DCC for your IRC client "
-"tunnel as this will severely compromise your anonymity."
+"check those before you change settings you don't fully understand!"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
@@ -9423,6 +9510,83 @@ msgstr ""
 #, fuzzy
 msgid "I2P Terminology"
 msgstr "I2P Webmail"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:289
+msgid "Web Hosting - I2P+"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:475
+msgid "Registering an I2P Domain"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:477
+msgid ""
+"To obtain your own hostname, I2P domain registrars such as <a href=http://"
+"stats.i2p/i2p/addkey.html target=_blank rel=noreferrer class=sitelink>stats."
+"i2p</a> or <a href=http://reg.i2p/ target=_blank rel=noreferrer "
+"class=sitelink>reg.i2p</a> provide registration services that allow you to "
+"register and manage an .i2p hostname or sub-domain which will then be "
+"propagated across the network. Some registration sites will require the "
+"<i>B64 destination address</i> for the tunnel/service you wish to associate "
+"with a hostname, which you should copy from the <i>Local destination</i> "
+"section on the <a href='http://127.0.0.1:7657/i2ptunnel/edit?"
+"tunnel=3'>Tunnel Manager Configuration page</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:479
+msgid ""
+"If a <i>Registration Authentication</i> string is requested, you can find it "
+"on the <a href='http://127.0.0.1:7657/i2ptunnel/register?"
+"tunnel=3'>Registration Authentication page</a> linked from the <a "
+"href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>Tunnel Manager "
+"Configuration page</a>. Registration authentication ensures only the owner "
+"is able to register or otherwise manage the hostname, and is required on "
+"stats.i2p and reg.i2p."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:481
+msgid ""
+"If you are in a hurry and can't wait a few hours, you can tell people to use "
+"a \"jump\" address helper redirection service. This will usually work within "
+"a few minutes of your registering your hostname on the same site. Test it "
+"yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?"
+"a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is "
+"working, you can tell others to use it."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:483
+msgid ""
+"Alternatively, you can copy the <i>address helper link</i> for your domain, "
+"indicated either on the addressbook list page, or on the details page for "
+"your domain e.g. <a href='http://127.0.0.1:7657/susidns/details?h=skank."
+"i2p&amp;book=router' target=_blank rel=noreferrer>details for i2p-projekt."
+"i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:485
+msgid "Backup your private key!"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:487
+msgid ""
+"When a new service tunnel is created, or a service is run for the first time "
+"(e.g. the default jetty webserver, plugins), a private encryption key is "
+"created which essentially controls the ownership of address. This is usually "
+"named <code>&hellip;privKey.dat</code>, or <code>eepPriv.dat</code>, though "
+"it's a good idea to change the name to indicate the service it belongs to "
+"and then respecify it in the Tunnel Manager server settings. This .dat file "
+"should be backed up safely; lose it and you will lose ownership and control "
+"of your hostname!"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:489
+msgid ""
+"To migrate the key to a new router, or to setup multihoming (running the "
+"same service on multiple routers for redundancy and load-balancing), copy "
+"the backed up key to your .i2p directory and specify it in the new server "
+"tunnel, or replace the default key in the plugin folder (e.g. the zzzot "
+"plugin)."
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:447
 #, fuzzy
@@ -10140,6 +10304,10 @@ msgstr "Domovská stránka"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:555
 msgid "View news relating to I2P"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:557
+msgid "I2P News"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:563
