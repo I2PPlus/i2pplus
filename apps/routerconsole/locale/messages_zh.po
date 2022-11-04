@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-04 03:14+0000\n"
-"PO-Revision-Date: 2022-09-06 16:04+0000\n"
+"PO-Revision-Date: 2022-11-04 04:29+0000\n"
 "Last-Translator: xtoaster <zhazhenzhong@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -1048,21 +1048,18 @@ msgstr "仅下载、验证并重启"
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:85
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:39
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1187
-#, fuzzy
 msgid "Deadlock detected"
-msgstr "删除选中项目"
+msgstr "检测到死锁"
 
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:85
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1189
-#, fuzzy
 msgid "Please report"
-msgstr "健康报告"
+msgstr "请报告"
 
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:100
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1190
-#, fuzzy
 msgid "After reporting, please restart your router"
-msgstr "更改这些设置需要重启您的路由器。"
+msgstr "更改这些设置需要重启您的路由器"
 
 #: ../java/src/net/i2p/router/web/FormHandler.java:266
 msgid ""
@@ -1386,7 +1383,7 @@ msgstr "客户端 {0} 已删除"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:404
 msgid "WebApp configuration saved."
-msgstr "WebApp 设置已保存。"
+msgstr "WebApp 设置已保存"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:418
 msgid "Plugin configuration saved."
@@ -1735,7 +1732,7 @@ msgstr "许可证"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:387
 msgid "imagegen"
-msgstr "图像基因"
+msgstr "身份图像"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:417
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:419
@@ -2757,7 +2754,7 @@ msgstr "添加用户"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:77
 msgid "Theme change saved."
-msgstr "主题设置已保存。"
+msgstr "主题设置已保存"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:79
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:84
@@ -3425,7 +3422,7 @@ msgstr "临时服务器加密的文件共享和粘贴绑定"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:112
 msgid "Secure filesharing service"
-msgstr "Secure filesharing service"
+msgstr "安全的文件共享"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:110
 msgid "Community Git hosting"
@@ -3463,7 +3460,7 @@ msgstr "注册一个简单好记的.i2p域名"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:124
 msgid "zzz Domain Registry"
-msgstr "zzz 域名注册"
+msgstr "zzz 的域名注册"
 
 #. forums + social
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:127
@@ -3529,7 +3526,7 @@ msgstr "流媒体广播服务"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:143
 msgid "radio.r4sas.i2p"
-msgstr "R4SAS互联网广播"
+msgstr "R4SAS广播台"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:144
 msgid "Alternative front-end to Youtube"
@@ -3545,7 +3542,7 @@ msgstr "出口代理带宽测试"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:147
 msgid "Provider of privacy respecting web hosting and VPN services"
-msgstr "尊重网络托管和VPN服务的隐私提供商"
+msgstr "尊重隐私的网络托管和VPN服务提供商"
 
 #. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
 #. _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
@@ -3562,7 +3559,7 @@ msgstr "DuckDuckGo搜索引擎（无JavaScript）"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:154
 msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Clearnet BitTorrent DHT 搜索引擎"
+msgstr "表网种子搜索引擎"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:155
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:156
@@ -3644,7 +3641,7 @@ msgstr "计算相关教程"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "SimplifiedGuide"
-msgstr "SimplifiedGuide"
+msgstr "简易指南"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
 msgid "Crowd-sourced slang dictionary"
@@ -3664,7 +3661,7 @@ msgstr "网络技术参考和学习网站"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
 msgid "Alternative Wikipedia front-end focused on privacy"
-msgstr "专注于隐私的替代维基百科前端"
+msgstr "专注于隐私的维基百科替代前端"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
 msgid "The biggest online English dictionary"
@@ -3672,11 +3669,11 @@ msgstr "最大的在线英语词典"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:182
 msgid "World atlas including geography facts &amp; flags"
-msgstr ""
+msgstr "世界地图集，包括地理知识&amp; 和国旗"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:182
 msgid "WorldAtlas"
-msgstr ""
+msgstr "世界地图集"
 
 #. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
 #. "jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "books.svg" + S +
@@ -3686,7 +3683,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:189
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Technology News &amp; more..."
-msgstr "Technology News &amp; more..."
+msgstr "技术新闻&amp; 和更多..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:190
 msgid "Independent investigative journalism"
@@ -3711,11 +3708,11 @@ msgstr "大麻相关杂志"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
 msgid "Democracy for the Arab world now"
-msgstr ""
+msgstr "阿拉伯世界的民主"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:195
 msgid "News &amp; Current Affairs from Germany and around the world"
-msgstr ""
+msgstr "来自德国和世界各地的新闻和时事"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:196
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:197
@@ -3724,13 +3721,12 @@ msgid "Darknet related news site"
 msgstr "暗网相关新闻网站"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
-#, fuzzy
 msgid "DigitalJournal"
-msgstr "DigitalTrends"
+msgstr "DigitalJournal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Global news &amp; media platform"
-msgstr ""
+msgstr "全球新闻&amp;媒体平台"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:200
 msgid "DigitalTrends"
@@ -3742,28 +3738,27 @@ msgstr "技术新闻 &amp;评论"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:201
 msgid "International Politics Journal"
-msgstr ""
+msgstr "国际政治学报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "椭圆曲线密码学博客"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
-#, fuzzy
 msgid "Accurate News"
 msgstr "最新消息"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "EpochTimes"
-msgstr ""
+msgstr "大纪元时报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:204
 msgid "ForeignPolicy"
-msgstr ""
+msgstr "外交政策"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:204
 msgid "The Global Magazine of News &amp; Ideas"
-msgstr ""
+msgstr "全球新闻&amp;和思想"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:205
 msgid "Human rights activism"
@@ -3791,11 +3786,11 @@ msgstr "为香港提供独立和公正的新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "HongKongWatch"
-msgstr ""
+msgstr "香港观察"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr ""
+msgstr "监察香港的自由和权利受到的威胁"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "Human Rights in China"
@@ -3803,11 +3798,11 @@ msgstr "中国人权"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
 msgid "Business &amp; Financial News"
-msgstr ""
+msgstr "商业&amp;金融新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "Politics &amp; Current Affairs Journal"
-msgstr ""
+msgstr "政治&amp; 时事杂志"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:215
 msgid "English language Japanese News"
@@ -3831,15 +3826,15 @@ msgstr "路由器性能监控和 Linux 提示"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "Linux Kernel Mailing List"
-msgstr "Linux Kernel Mailing List"
+msgstr "Linux内核邮件列表"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "A rationalist journal"
-msgstr ""
+msgstr "一本理性主义期刊"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "LittleAtoms"
-msgstr ""
+msgstr "LittleAtoms"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "MetaCritic"
@@ -3859,21 +3854,20 @@ msgstr "安全新闻和研究博客"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Smart &amp; fearless journalism"
-msgstr "Smart &amp; fearless journalism"
+msgstr "聪明&amp;无畏的新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "NewStatesman"
-msgstr ""
+msgstr "新州人"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Politics &amp; Current Affairs magazine"
-msgstr ""
+msgstr "政治&amp; 时事杂志"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
-#, fuzzy
 msgid "American &amp; International News"
-msgstr "美国与国际新闻"
+msgstr "美国&amp; 国际新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Newsweek"
@@ -3888,35 +3882,32 @@ msgid "The Independent News Discovery Platform"
 msgstr "独立新闻发现平台"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
-#, fuzzy
 msgid "Independent News from Ukraine"
-msgstr "来自俄罗斯的独立新闻"
+msgstr "来自乌克兰的独立新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "NewVoiceUkraine"
-msgstr ""
+msgstr "乌克兰新声"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
-#, fuzzy
 msgid "Independent International Media Platform"
-msgstr "独立新闻发现平台"
+msgstr "独立新闻平台"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "OpenDemocracy"
-msgstr ""
+msgstr "OpenDemocracy"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "News and blog feeds on I2P"
-msgstr ""
+msgstr "I2P的新闻和博客订阅"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
-#, fuzzy
 msgid "Planeta"
-msgstr "Planet I2P"
+msgstr "Planeta I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "News &amp; Views on Tibet"
-msgstr "News &amp; Views on Tibet"
+msgstr "西藏新闻&amp;观察"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "International Campaign for Tibet"
@@ -3936,7 +3927,7 @@ msgstr "国际知名安防技术专家"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "SchneierOnSecurity"
-msgstr "SchneierOnSecurity"
+msgstr "施奈尔安全"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Latest scientific research news"
@@ -3956,11 +3947,11 @@ msgstr "News for nerds"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Technology news &amp; reviews"
-msgstr "Technology news &amp; reviews"
+msgstr "技术新闻&amp; 与评论"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
 msgid "Reporting on China without fear or favor"
-msgstr ""
+msgstr "无所偏袒地报道中国"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
 msgid "News from the Taiwan Capital"
@@ -3972,20 +3963,19 @@ msgstr "台北时报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Technology and engineering news"
-msgstr "Technology and engineering news"
+msgstr "技术和工程新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "Technology news aggregator"
-msgstr "Technology news aggregator"
+msgstr "科技新闻聚合站"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
-#, fuzzy
 msgid "News &amp; Reviews"
-msgstr "技术新闻 &amp;评论"
+msgstr "新闻 &amp;与评论"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TheAtlantic"
-msgstr ""
+msgstr "大西洋报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Academic commentary and essays"
@@ -3997,19 +3987,19 @@ msgstr "连接"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "Global News"
-msgstr ""
+msgstr "Global News"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheGuardian"
-msgstr ""
+msgstr "卫报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Computer &amp; cyber security news"
-msgstr ""
+msgstr "计算机&amp;网络安全新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheHackerNews"
-msgstr ""
+msgstr "TheHackerNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Watching Big Tech..."
@@ -4025,7 +4015,7 @@ msgstr "莫斯科时报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheNewRepublic"
-msgstr ""
+msgstr "TheNewRepublic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "International News from Tibet"
@@ -4082,7 +4072,7 @@ msgstr "IP地址"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:196
 msgid "UDP Port"
-msgstr "UDP端口"
+msgstr "UDP 端口"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:198
 msgid "Floodfill Role"
@@ -4290,7 +4280,7 @@ msgstr "全部路由"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1339
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:940
 msgid "LeaseSets"
-msgstr "赁集"
+msgstr "租约集"
 
 #. 6
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:50
@@ -4307,9 +4297,8 @@ msgstr ""
 "IP 地址。"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:148
-#, fuzzy
 msgid "is banned"
-msgstr "已解封"
+msgstr "已封禁"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:148
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:447
@@ -4342,15 +4331,15 @@ msgstr "下一页"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:550
 msgid "No Leasesets currently active."
-msgstr "目前没有赁集。"
+msgstr "目前没有租约集。"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:572
 msgid "LeaseSet"
-msgstr "赁集"
+msgstr "租约集"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:573
 msgid "LeaseSet Key"
-msgstr "赁集"
+msgstr "租约集"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:590
 msgid "View local tunnels for destination"
@@ -4421,7 +4410,7 @@ msgstr "路由器密钥"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:745
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:749
 msgid "Lease"
-msgstr "租赁"
+msgstr "租约"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:763
 #, java-format
@@ -4451,7 +4440,7 @@ msgstr "估算的播种节点总数"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:787
 msgid "Estimated total leasesets"
-msgstr "估计的赁集总数"
+msgstr "估计的租约集总数"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:801
 msgid "Not initialized"
@@ -5640,7 +5629,7 @@ msgstr "隧道状态"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:70
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:706
 msgid "Service Tunnels"
-msgstr "服务端隧道"
+msgstr "运行中隧道"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:71
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1291
@@ -5890,7 +5879,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:622
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:682
 msgid "Never disclose this to anyone, as it can reveal your real world IP."
-msgstr "绝对不要将它泄露给任何人，因为它能揭露您的真实世界 IP。"
+msgstr "绝对不要将它泄露给任何人，因为它能揭露您的真实 IP。"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:629
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:655
@@ -6229,7 +6218,7 @@ msgstr "显示隧道"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:762
 msgid "Leases expired"
-msgstr "租契已过期"
+msgstr "租约已过期"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:762
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:764
@@ -6407,7 +6396,7 @@ msgstr "离我们较近"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:164
 msgid "Close to us tomorrow"
-msgstr "Close to us tomorrow"
+msgstr "未来已来"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:165
 msgid "DHT neighbors"
@@ -6438,7 +6427,7 @@ msgstr "选择存储的分析"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:296
 msgid "Run analysis on Floodfills only"
-msgstr "仅对 Floodfill 运行分析"
+msgstr "仅对洪泛节点运行分析"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:304
 msgid "Run analysis on all routers in NetDb"
@@ -6505,7 +6494,7 @@ msgstr "已知的播种节点"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:387
 msgid "Average closest floodfill distance"
-msgstr "平均最近洪水填充距离"
+msgstr "平均最近洪泛节点距离"
 
 #. "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:389
@@ -6521,17 +6510,17 @@ msgstr "旋转"
 #. Distance to our router analysis
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:455
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
-msgstr "最接近路由密钥的 Floodfill（我们存储 RI 的位置）"
+msgstr "最接近路由密钥的洪泛节点（我们存储 RI 的位置）"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:469
 msgid ""
 "Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)"
-msgstr "最接近明天路由密钥的 Floodfill（我们将存储 RI 的位置）"
+msgstr "最接近明天的路由密钥的洪泛节点（我们将存储 RI 的位置）"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:479
 msgid ""
 "Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)"
-msgstr "最接近路由器哈希的 Floodfill（如果我们是 Floodfill，则为 DHT 邻居）"
+msgstr "最接近路由器哈希的洪泛节点（如果我们是 洪泛节点，则为 DHT 邻居）"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:490
 msgid "Floodfills Close to Our Destinations"
@@ -6549,7 +6538,7 @@ msgstr "空"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:513
 msgid "Closest floodfills to the Routing Key for"
-msgstr "最接近路由键的洪水填充"
+msgstr "最接近路由键的洪泛节点"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:514
 msgid "where we store our LS"
@@ -6557,7 +6546,7 @@ msgstr "我们在哪里存储我们的LS"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:519
 msgid "Closest floodfills to Tomorrow's Routing Key for"
-msgstr "最接近明天路由键的洪水填充"
+msgstr "最接近明天的路由器密钥的洪泛节点"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:520
 msgid "where we will store our LS"
@@ -6577,11 +6566,11 @@ msgstr "路由信息不可用"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:586
 msgid "Average Floodfill Distance is"
-msgstr "Average Floodfill Distance is"
+msgstr "平均洪泛节点距离为"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:587
 msgid "Closest Floodfill Pairs by Hash"
-msgstr "按哈希值排列的最接近的 Floodfill 对"
+msgstr "按散列值排列的最近洪泛节点"
 
 #. sorted;
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:595
@@ -6640,12 +6629,12 @@ msgstr "不用担心，但上面的路由器比平均最小距离更近"
 msgid ""
 "Possible Sybil Warning - above routers are closer than average minimum "
 "distance"
-msgstr "可能的 Sybil 警告 - 路由器上方的距离比平均最小距离更近"
+msgstr "可能的 Sybil 警告 - 上级路由器的距离比平均最小距离更近"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:810
 msgid ""
 "Major Sybil Warning - above router is closer than average minimum distance"
-msgstr "主要 Sybil 警告 - 路由器上方的距离比平均最小距离更近"
+msgstr "主要 Sybil 警告 - 上级路由器的距离比平均最小距离更近"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:826
 msgid "Totals for"
@@ -6693,7 +6682,7 @@ msgstr "上次保存失败"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1071
 msgid "Distance to "
-msgstr "距离"
+msgstr "距离 "
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1076
 msgid "Distance for"
@@ -6720,7 +6709,7 @@ msgstr "配置会话隧道"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:113
 msgid "View LeaseSet"
-msgstr "查看赁集"
+msgstr "查看租约集"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:153
 msgid "tunnels"
@@ -6947,7 +6936,7 @@ msgstr "i2psnark"
 
 #: ../java/strings/Strings.java:14
 msgid "i2ptunnel"
-msgstr "I2P 隧道"
+msgstr "i2p隧道管理器"
 
 #: ../java/strings/Strings.java:15
 msgid "susimail"
@@ -7355,7 +7344,7 @@ msgstr "请设置更多的带宽以便启用共享功能（参与到其他节点
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:678
 msgid ""
 "It improves your anonymity by creating cover traffic, and helps the network. "
-msgstr "它通过创造掩护流量来提高你的匿名性，并帮助网络成长。 "
+msgstr "这会创造掩护流量来提高你的匿名性，并帮助网络成长。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:619
 #, java-format
@@ -7643,7 +7632,7 @@ msgstr "密钥环管理"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:558
 msgid "The router keyring is used to decrypt encrypted LeaseSets."
-msgstr "路由器钥匙环用于加解密的赁集。"
+msgstr "路由器钥匙环用于加解密的租约集。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:560
 msgid ""
@@ -7675,7 +7664,7 @@ msgstr "输入由服务器运营商提供的密钥。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:588
 msgid "Prevents server discovery by floodfills"
-msgstr "通过洪泛预防服务器发现"
+msgstr "预防洪泛服务器发现"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:592
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:609
@@ -7769,7 +7758,7 @@ msgstr "默认日志等级"
 msgid ""
 "(DEBUG and INFO are not recommended defaults, as they will drastically slow "
 "down your router)"
-msgstr "（不建议使用 DEBUG 或 INFO 作为默认等级，它们会明显降低你的路由性能）"
+msgstr "（不建议使用 DEBUG 或 INFO 作为默认等级，它们会显著降低你的性能）"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:596
 msgid "Log level overrides"
@@ -7953,7 +7942,7 @@ msgstr "UDP 配置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:747
 msgid "UDP port"
-msgstr "UDP端口"
+msgstr "UDP 端口"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:751
 msgid "Select only if behind a firewall that blocks outbound UDP"
@@ -8195,7 +8184,7 @@ msgstr "优选 su3 格式，因为可验证它被一个可信任的源签名。"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:729
 msgid ""
 "The zip format is unsigned; use a zip file only from a source that you trust."
-msgstr "zip格式是无签名的，应该只使用你信任的来源的zip文件。"
+msgstr "zip格式没有经过签名，应该只使用你信任的来源的zip文件。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:731
 msgid "Enter zip or su3 URL"
@@ -8337,7 +8326,7 @@ msgstr "设置统计"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:448
 msgid "Stats Collection &amp; Graphing"
-msgstr "Stats Collection &amp; Graphing"
+msgstr "统计资料收集&amp;图表制作"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:560
 msgid "Configure I2P Stat Collection"
@@ -8755,7 +8744,7 @@ msgstr "隧道过滤"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:733
 msgid "Web Hosting"
-msgstr "尊重隐私的网络托管和VPN服务提供商"
+msgstr "托管网站"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:461
@@ -8766,7 +8755,7 @@ msgstr "新手指南"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:465
 msgid "Hostname Registration"
-msgstr "主机名注册"
+msgstr "域名注册"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
@@ -9072,6 +9061,10 @@ msgid ""
 "when set to always, UDP will always be used regardless of any pre-existing "
 "NTCP connection. [Default is false]"
 msgstr ""
+"这个设置决定了在与其他节点进行通信时，哪种传输方式具有优先权。默认情况下，"
+"NTCP比UDP（SSU）更受青睐。将该值设置为 \"true\"，除非存在预先存在的NTCP连接，"
+"否则UDP将被优先考虑；当设置为 \"always \"时，无论是否存在预先存在的NTCP连接，"
+"UDP将始终被使用。[默认值是false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:537
 msgid ""
@@ -9100,7 +9093,7 @@ msgid ""
 "required]"
 msgstr ""
 "启用此设置后，将为路由器托管的所有启用了 ping 的服务器引入长达 50 毫秒的随机 "
-"pong 延迟。默认值处于禁用状态。[需要重新启动]"
+"ping 延迟。默认值处于禁用状态。[需要重新启动]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
 msgid ""
@@ -9151,8 +9144,8 @@ msgid ""
 "default is 8 hours]"
 msgstr ""
 "此设置（以小时为单位）确定 NetDb 中的 RouterInfo 在分类为过时并被删除之前（其"
-"最后一次已知的发布日期）的年龄。[默认值为 28 小时，除非路由器是 Floodfill，在"
-"这种情况下，默认值为 8 小时]"
+"最后一次已知的发布日期）的年龄。[默认值为 28 小时，除非路由器是 洪泛，在这种"
+"情况下，默认值为 8 小时]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
 msgid ""
@@ -9193,8 +9186,8 @@ msgstr ""
 "加到 NetDb 的新对等体。默认情况下，作业将每 80 秒运行一次，如果路由器遇到作业"
 "或消息滞后，则每 3 分钟运行一次。如果 NetDb 的大小达到 4000 个对等节点，则暂"
 "停时间将增加到 15 分钟。如果您的 NetDb 填充良好（超过 2000 个对等体），或者如"
-"果您希望减少总体带宽使用量，则可能希望增加延迟。注意： 对于 Floodfill 路由"
-"器，此作业不会运行。"
+"果您希望减少总体带宽使用量，则可能希望增加延迟。注意： 对于 洪泛 路由器，此作"
+"业不会运行。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
 msgid ""
@@ -9575,14 +9568,12 @@ msgstr ""
 "客户端服务配置为使用其自己的隧道集。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:501
-#, fuzzy
 msgid ""
 "Note: Most of the options in the Tunnel Manager have tooltips; be sure to "
 "check those before you change settings you don't fully understand!"
 msgstr ""
-"这可以通过取消选中相关客户端服务的配置页面上的<i>“共享客户端</i>”下列出的“<i>"
-"与其他已配置的客户端共享隧道</i>”选项来完成，之后您需要从< a href=“/"
-"i2ptunnelmgr”>Tunnel Manager 索引页面重新启动客户端服务</a>。"
+"注意：隧道管理器中的大多数选项都有帮助提示；在你改变你不完全理解的设置之前，"
+"请确保已经看过了这些提示！"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:703
@@ -9590,13 +9581,12 @@ msgid "I2P Terminology"
 msgstr "I2P术语表"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:289
-#, fuzzy
 msgid "Web Hosting - I2P+"
-msgstr "尊重隐私的网络托管和VPN服务提供商"
+msgstr "托管网站 - I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:475
 msgid "Registering an I2P Domain"
-msgstr ""
+msgstr "注册一个.i2p域名"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:477
 msgid ""
@@ -9611,6 +9601,13 @@ msgid ""
 "section on the <a href='http://127.0.0.1:7657/i2ptunnel/edit?"
 "tunnel=3'>Tunnel Manager Configuration page</a>."
 msgstr ""
+"要获得您自己的域名，I2P域名注册商如<a href=http://stats.i2p/i2p/addkey.html "
+"target=_blank rel=noreferrer class=sitelink>stats.i2p</a> 或者<a href=http://"
+"reg.i2p/ target=_blank rel=noreferrer class=sitelink>reg.i2p</a>提供注册服"
+"务，允许你注册和管理一个.i2p域名和子域，方便在网络上传播。一些注册网站会要求"
+"使用将隧道/服务与主机名联系起来的<i>B64目的地地址</i>，你应该从 <a "
+"href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>隧道管理器配置页面</a>的"
+"本地目标部分复制这个地址。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:479
 msgid ""
@@ -9622,6 +9619,10 @@ msgid ""
 "is able to register or otherwise manage the hostname, and is required on "
 "stats.i2p and reg.i2p."
 msgstr ""
+"如果需要<i>注册认证</i>，你可以在<a href='http://127.0.0.1:7657/i2ptunnel/"
+"edit?tunnel=3'>隧道管理器</a>配置页面链接的<a href='http://127.0.0.1:7657/"
+"i2ptunnel/register?tunnel=3'>注册认证</a>页面上找到它。 注册认证确保只有所有"
+"者能够在stats.i2p和reg.i2p注册或以其他方式管理域名。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:481
 msgid ""
@@ -9632,6 +9633,10 @@ msgid ""
 "a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is "
 "working, you can tell others to use it."
 msgstr ""
+"如果你很着急，等不了几个小时，你可以告诉人们使用 \"跳转\"服务帮助重定向。这通"
+"常会在你在同一网站上注册你的域名后几分钟内起作用。先自己在浏览器中输入测试 "
+"<code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>你的域名.i2p</i></code>。一旦一"
+"切顺利，你就可以告诉其他人使用它。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:483
 msgid ""
@@ -9641,10 +9646,14 @@ msgid ""
 "i2p&amp;book=router' target=_blank rel=noreferrer>details for i2p-projekt."
 "i2p</a>, and paste the link where it's required to share it with others."
 msgstr ""
+"另外，您可以复制您的<i>地址助手</i>链接，位于地址簿列表页或您的域名的详细信息"
+"页，例如：<a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;"
+"book=router' target=_blank rel=noreferrer>i2p-projekt.i2p的详细信息</a>，并将"
+"该链接粘贴在需要与他人分享的地方。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:485
 msgid "Backup your private key!"
-msgstr ""
+msgstr "备份你的私钥！"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:487
 msgid ""
@@ -9657,6 +9666,11 @@ msgid ""
 "should be backed up safely; lose it and you will lose ownership and control "
 "of your hostname!"
 msgstr ""
+"当一个新的服务隧道被创建，或者一个服务首次运行时（例如默认的jetty 服务器，各"
+"种插件）会创建一个私钥，它基本上控制了地址的所有权。这通常被命名为 "
+"<code>&hellip;privKey.dat</code>或<code>eepPriv.dat</code>，不过最好是改变名"
+"称，以表明它所属的服务，然后在隧道管理器的服务器设置中重新指定它。这个.dat文"
+"件应该被安全地备份，如果丢失，你将失去对你的域名的所有权和控制权！"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:489
 msgid ""
@@ -9666,6 +9680,9 @@ msgid ""
 "tunnel, or replace the default key in the plugin folder (e.g. the zzzot "
 "plugin)."
 msgstr ""
+"要把密钥迁移到一个新的路由器上，或设置多宿主（在多个路由器上运行相同的服务，"
+"以实现冗余和负载平衡），请将备份的密钥复制到你的.i2p目录，并在新的服务器隧道"
+"中指定它，或替换插件文件夹中的默认密钥（如zzzot插件）。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:447
 msgid "Reseeding Your Router"
@@ -10159,7 +10176,7 @@ msgid ""
 "be able to accept inbound connections, which will limit your participation "
 "in the network."
 msgstr ""
-"I2P 无法与此类防火墙很好的共存。您可能无法接收入站连接，这会障碍您连入 I2P 网"
+"I2P 无法与此类防火墙很好的共存。您可能无法接收入站连接，这会阻碍您连入 I2P 网"
 "络。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:539
@@ -10386,7 +10403,7 @@ msgstr "地址"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:480
 msgid "Imagegen"
-msgstr "身份图片生成器"
+msgstr "身份图像"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:487
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:493
