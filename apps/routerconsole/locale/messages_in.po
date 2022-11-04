@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-04 04:38+0000\n"
+"POT-Creation-Date: 2022-11-04 12:02+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Last-Translator: Robert Dafis <robertdafis@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/otf/I2P/language/id/)\n"
@@ -360,6 +360,7 @@ msgstr "{0} port {1,number,#####} tidak diteruskan oleh UPnP."
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:572
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:867
 #: ../java/strings/Strings.java:69
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:601
 msgid "Router"
 msgstr "Router "
 
@@ -1249,6 +1250,7 @@ msgstr "Lokasi file"
 #. I2CP
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:42
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:32
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:525
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:623
 msgid "I2CP"
 msgstr "I2CP "
@@ -1258,6 +1260,7 @@ msgid "I2PTunnel"
 msgstr "I2PTunnel "
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:609
 msgid "SAM"
 msgstr "SAM "
 
@@ -1608,8 +1611,8 @@ msgstr "Deskripsi"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:351
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:340
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:342
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:349
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:351
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:351
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:349
@@ -1695,6 +1698,7 @@ msgstr "Torrent"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:91
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:323
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:576
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:637
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:313
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:479
@@ -1709,6 +1713,7 @@ msgstr "Tunnel lag "
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:80
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:268
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:477
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:476
 msgid "Addressbook"
 msgstr "Buku alamat"
@@ -1972,6 +1977,7 @@ msgstr "Nama"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:62
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:631
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:493
 msgid "Destination"
 msgstr "Destinasi"
 
@@ -2104,7 +2110,7 @@ msgstr "Jaringan"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:410
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:419
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:420
@@ -2211,6 +2217,8 @@ msgstr "Advanced "
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:217
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:456
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:455
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:455
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:597
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:455
@@ -3189,6 +3197,7 @@ msgstr "Servis"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:190
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:315
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:449
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
@@ -3200,6 +3209,7 @@ msgstr "Konfigurasi"
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:32
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:199
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:461
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:459
@@ -3271,6 +3281,7 @@ msgstr "Kelola plugin"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:50
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:577
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:451
 msgid "Network Database"
 msgstr "Database Jaringan"
@@ -4426,6 +4437,7 @@ msgid "No Leasesets currently active."
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:572
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:565
 msgid "LeaseSet"
 msgstr "LeaseSet "
 
@@ -4507,6 +4519,7 @@ msgstr "Signing Key "
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:745
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:749
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:561
 msgid "Lease"
 msgstr "Lease "
 
@@ -4835,6 +4848,7 @@ msgid "Hidden or starting up"
 msgstr "Tersembunyi atau sedang diaktifkan"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1381
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:617
 msgid "SSU"
 msgstr "SSU "
 
@@ -5505,6 +5519,7 @@ msgstr "cap"
 #. 1
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:429
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:15
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:513
 msgid "Floodfill"
 msgstr "Floodfill "
 
@@ -5827,6 +5842,7 @@ msgstr "I2P Router Help &amp; FAQ "
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:173
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:451
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
@@ -5868,6 +5884,7 @@ msgstr "Matikan router"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:226
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:467
@@ -6416,6 +6433,7 @@ msgstr "Tambah/hapus/edit & kontrol client dan server tunnel"
 #. hardcoded in i2psnark
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:720
 #: ../java/strings/Strings.java:53
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:545
 msgid "I2PSnark"
 msgstr "I2PSnark "
 
@@ -7392,7 +7410,7 @@ msgstr "konfigurasi UI"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:423
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:432
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:433
@@ -7461,7 +7479,7 @@ msgstr "Refresh (s) "
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:427
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:436
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:437
@@ -9077,6 +9095,7 @@ msgid "Advanced Configuration Help"
 msgstr "Konfigurasi Lanjutan"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:453
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:453
@@ -9087,6 +9106,7 @@ msgid "User Interface"
 msgstr "I2CP Interface "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:457
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:457
@@ -9097,6 +9117,7 @@ msgstr "Tunnel lag "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:463
@@ -9106,6 +9127,7 @@ msgid "Web Hosting"
 msgstr "Menguji"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:463
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:289
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:447
@@ -9116,6 +9138,7 @@ msgid "New User Guide"
 msgstr "Override baru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:467
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:465
@@ -9125,7 +9148,9 @@ msgid "Hostname Registration"
 msgstr "Konfigurasi Home Page i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:471
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:289
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
@@ -9134,6 +9159,7 @@ msgid "Glossary"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:473
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:471
@@ -9142,6 +9168,7 @@ msgid "Legal"
 msgstr "Aspek Hukum"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:475
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:473
@@ -9807,11 +9834,532 @@ msgid ""
 "check those before you change settings you don't fully understand!"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:475
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:703
 #, fuzzy
 msgid "I2P Terminology"
 msgstr "I2p Webmail"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:479
+msgid ""
+"An I2P web application that manages service destinations for the network, "
+"mapping B64 hashes to human-readable names. Destinations may be added "
+"manually, or via subscriptions to hosts.txt files. Also referred to as "
+"SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/"
+"naming class='sitelink external' target=_blank rel=noreferrer>online "
+"documentation</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:481
+msgid "Base32 (B32) / Base64 (B64)"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:483
+msgid ""
+"A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' "
+"target=_blank rel=noreferrer>Base32</a> link (which always ends with .b32."
+"i2p) is a hash of a <a href=https://en.wikipedia.org/wiki/Base64 "
+"class='sitelink external' target=_blank rel=noreferrer>Base64</a> "
+"destination. For services on the network, the Base64 hash is often mapped to "
+"an .i2p domain in the addressbook."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:485
+msgid "BOB"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:487
+msgid ""
+"BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router "
+"protocol, superseded by <i>SAM</i>. For more information, see the <a "
+"href=https://geti2p.net/en/docs/api/bob class='sitelink external' "
+"target=_blank rel=noreferrer>online documentation</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:489
+msgid "Clearnet"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:491
+msgid ""
+"Clearnet normally refers to the publicly accessible internet, the opposite "
+"of the darknet that typically describes the encrypted, anonymous services "
+"built on I2P, Tor etc. For more information, see the <a href=https://en."
+"wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' "
+"target=_blank rel=noreferrer>Wikipedia article</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:495
+msgid ""
+"The unique cryptographic identity of the inbound endpoint of a tunnel "
+"providing access to a service on the I2P network, represented as a Base32 or "
+"Base64 hash of the public key. Equivalent to an IP address and port."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:497
+msgid "Eepget"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:499
+msgid ""
+"A command-line application supplied with I2P that is used to request URL "
+"resources, similar to <a href=https://www.gnu.org/software/wget/ "
+"class='sitelink external' target=_blank rel=noreferrer>wget</a> or <a "
+"href=https://curl.haxx.se/ class='sitelink external' target=_blank "
+"rel=noreferrer>curl</a>. Eepget is also used internally by the router, for "
+"example to reseed from remote hosts. By default, eepget uses the HTTP proxy "
+"on <code>127.0.0.1:4444</code>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:501
+msgid "Eephead"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:503
+msgid ""
+"A command-line application supplied with I2P+ (Linux/MacOS) that is used to "
+"perform a <code>head</code> request on a specified http resource on the "
+"network, returning various response headers from the remote server. By "
+"default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:505
+#, fuzzy
+msgid "Eepsite"
+msgstr "eepsite "
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:507
+msgid ""
+"A website hosted on the I2P network. By default, a <a href=https://www."
+"eclipse.org/jetty/about.html class='sitelink external' target=_blank "
+"rel=noreferrer>Jetty webserver</a> is configured and running on <a "
+"href=http://127.0.0.1:7658/ target=_blank "
+"rel=noreferrer>http://127.0.0.1:7658/</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:509
+#, fuzzy
+msgid "Exploratory Tunnel"
+msgstr "Exploratory tunnel"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:511
+msgid ""
+"A tunnel used by the router for communicating with other routers to perform "
+"various \"housekeeping\" functions such as learning and publishing "
+"<i>leasesets</i>, testing client tunnels, and learning about and validating "
+"other routers in the network. These tunnels are normally low-bandwidth."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:515
+msgid ""
+"A router on the network tasked with providing and receiving information "
+"about other routers and services on the network. The current minimum share "
+"bandwidth for a router to be considered as capable of performing floodfill "
+"duties is 128 KBytes/sec, though it's possible to override this requirement "
+"and force a router to be a floodfill on the <a href=/configadvanced>Advanced "
+"Configuration page</a>. For more information, see the <a href=https://geti2p."
+"net/en/docs/how/network-database#floodfill class='sitelink external' "
+"target=_blank rel=noreferrer>online documentation</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:517
+msgid "Garlic Routing"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:519
+msgid ""
+"A variant of onion routing that encrypts multiple messages together to make "
+"it more difficult for attackers to perform traffic analysis and to increase "
+"the speed of data transfer. For more information, see the <a href=https://"
+"geti2p.net/en/docs/how/garlic-routing class='sitelink external' "
+"target=_blank rel=noreferrer>online documentation</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:521
+#, fuzzy
+msgid "Hidden Mode"
+msgstr "Tersembunyi"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:523
+msgid ""
+"A router configured to run in Hidden Mode will not publish its details to "
+"the <i>Network Database</i> and will not participate in routing traffic for "
+"other routers. Routers operating in countries designated as strict and "
+"routers manually configured run in Hidden Mode."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:527
+msgid ""
+"The I2P Client Protocol (I2CP) enables external applications (clients) to "
+"communicate with I2P over single TCP socket, by default using port 7654. For "
+"more information, see the <a href=https://geti2p.net/en/docs/protocol/i2cp "
+"class='sitelink external' target=_blank rel=noreferrer>online documentation</"
+"a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:529
+msgid "I2NP"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:531
+msgid ""
+"The I2P Network Protocol (I2NP) manages the routing and mixing of messages "
+"between routers, in addition to the transport selection (where more than one "
+"is supported) when communicating with a peer. For more information, see the "
+"<a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' "
+"target=_blank rel=noreferrer>online documentation</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:533
+msgid "I2P+"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:535
+msgid ""
+"A soft fork of the Java I2P software which retains full compatibility, "
+"providing an enhanced user interface and improvements to network "
+"performance. See <a href=http://skank.i2p/ class=sitelink target=_blank "
+"rel=noreferrer>http://skank.i2p/</a> or <a href=https://i2pplus.github.io "
+"class='sitelink external' target=_blank rel=noreferrer>https://i2pplus."
+"github.io</a>for more information."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:537
+#, fuzzy
+msgid "I2PBote (plugin)"
+msgstr "Plugin"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:539
+msgid ""
+"An unmaintained I2P plugin that provides serverless, end-to-end encrypted e-"
+"mail within the I2P network. For more information, see <a href=http://bote."
+"i2p/ class=sitelink target=_blank rel=noreferrer>http://bote.i2p/</a>. "
+"Source code is available on <a href=https://github.com/i2p/i2p.i2p-bote "
+"class='sitelink external' target=_blank rel=noreferrer>github</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:541
+msgid "i2pd"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:543
+msgid ""
+"An alternative implementation of an I2P router coded in C++. For more "
+"information, see <a href=https://i2pd.website/ class='sitelink external' "
+"target=_blank rel=noreferrer>https://i2pd.website/</a> Source code is "
+"available on <a href=https://github.com/PurpleI2P/i2pd class='sitelink "
+"external' target=_blank rel=noreferrer>github</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:547
+msgid ""
+"A fork of the <a href=http://www.klomp.org/snark/ class='sitelink external' "
+"target=_blank rel=noreferrer>Snark BitTorrent client</a> refactored for use "
+"on the I2P network. Usually supplied as part of the default suite of "
+"applications with Java I2P, and also available as a <a href=http://skank.i2p/"
+"#download class=sitelink target=_blank rel=noreferrer>standalone Java "
+"application</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:549
+#, fuzzy
+msgid "Introducer"
+msgstr "SSU Introducer "
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:551
+msgid ""
+"A router that facilitates the connection to the network of another router "
+"that is behind a firewall."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:553
+#, fuzzy
+msgid "Jump Service"
+msgstr "Servis"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:555
+msgid ""
+"A simple CGI application that takes a hostname as a parameter and returns a "
+"301 redirect to the proper URL with a <code>?i2paddresshelper=key</code> "
+"string appended. The HTTP proxy will interpret the appended string and use "
+"the key as the actual destination. In addition, the proxy will cache the key "
+"so the address helper is not necessary until restart, and offer the option "
+"to add the resolved address to the addressbook."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:557
+#, fuzzy
+msgid "Laptop Mode"
+msgstr "Mengaktifkan modus laptop"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:559
+msgid ""
+"An <a href=/confignet#ipchange>optional configuration</a> that automatically "
+"changes your <a href=/netdb?r=.>router identity</a> and <a href=/"
+"confignet#udpconfig>external port</a> when the public ip address your system "
+"is on changes. This can prevent an adversary from correlating your router "
+"identity and ip address in scenarios where your ip address may change "
+"frequently, for example when you're running I2P on a laptop from multiple "
+"locations."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:563
+msgid ""
+"The information that defines the authorization for a particular tunnel to "
+"receive messages targeting a <i>Destination</i>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:567
+msgid ""
+"A group of tunnel entry points (leases) for a <i>destination</i>. Note: A 0-"
+"hop server tunnel will only have one lease, regardless of the number of "
+"tunnels configured."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:569
+msgid "Monotone / mtn"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
+msgid ""
+"The distributed version control system (DVCS) previously used to maintain "
+"I2P's source code, now superseded by git."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:573
+msgid "Multihoming"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:575
+msgid ""
+"Services may be hosted on multiple routers simultaneously, by sharing the "
+"same private key for the destination. Multihoming can further enhance the "
+"security and stability of a server by providing redundancy; if a server is "
+"multihomed, when a server in the pool goes offline, the provided service "
+"will remain available, making it more difficult to correlate server downtime "
+"with a router going offline."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:579
+msgid ""
+"A distributed database containing router contact information (RouterInfos) "
+"and destination contact information (LeaseSets). A single router maintains "
+"its own (partial) database for communicating with other routers on the "
+"network; no single router will maintain a list of all routers. The "
+"RouterInfos are stored on disk and read into memory when the router starts, "
+"or when new RouterInfos are acquired. Also referred to as the <i>NetDb</i>. "
+"For more information, see the <a href=https://geti2p.net/en/docs/how/network-"
+"database class='sitelink external' target=_blank rel=noreferrer>online "
+"documentation</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:581
+msgid "NTCP / NTCP2"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:583
+msgid ""
+"NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use "
+"Java's NIO (New I/O) TCP implementation to deliver I2NP messages between "
+"routers on the network. NTCP2 improves the resistance of NTCP to various "
+"attacks and automated traffic identification methods. For more information, "
+"see the <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink "
+"external' target=_blank rel=noreferrer>online documentation</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:585
+#, fuzzy
+msgid "Orchid (plugin)"
+msgstr "konfigurasi plugin"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:587
+msgid ""
+"A java implementation of a Tor client, available as an I2P plugin. Can be "
+"used as the default <i>outproxy</i> if configured in the relevant SOCKS or "
+"HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a "
+"href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/"
+"plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p."
+"plugins.orchid class='sitelink external' target=_blank "
+"rel=noreferrer>github</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:589
+#, fuzzy
+msgid "Outproxy"
+msgstr "Outproxy I2P"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:591
+msgid ""
+"A service on the network that provides a proxy connection to the "
+"<i>clearnet</i>. By default, I2P has an HTTP outproxy configured for web "
+"browsing on <code>127.0.0.1:4444</code>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:593
+#, fuzzy
+msgid "Participation"
+msgstr "Participating "
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:595
+msgid ""
+"The act of contributing to the network by permitting other routers to build "
+"tunnels using your router in a tunnel chain. At least 12KB/s upstream "
+"bandwidth (network share) is required to be allocated in order to enable "
+"participation. Note that firewalled routers will be limited in how much they "
+"contribute to participation, and a router designated as Hidden will not "
+"participate at all."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:599
+msgid ""
+"The process of acquiring router identities, normally via <i>clearnet</i> "
+"servers, to ensure your router can communicate and build tunnels with other "
+"routers on the network. When a router has no router identities for other "
+"peers (usually immediately after installation), the process of reseeding is "
+"also referred to as <i>bootstrapping</i>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:603
+msgid ""
+"The core I2P software, which routes encrypted packets on the I2P network. "
+"All routers by default participate in the network except routers running in "
+"countries considered hostile (see <i>Strict Countries</i>), which both helps "
+"the network and provides cover traffic for any clients or servers connecting "
+"to the I2P network through the router."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:605
+#, fuzzy
+msgid "Router Identity"
+msgstr "Identitas router baru"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:607
+msgid ""
+"Information defining the unique identity of a router on the network which "
+"includes its IP address (or the IP addresses of intermediate introducers) "
+"and listening port, public signing and encryption keys. Router identities "
+"correlate to peers in the NetDB. Also referred to as a <i>RouterInfo</i>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:611
+msgid ""
+"SAM (Simple Anonymous Messaging) is a protocol which allows a client "
+"application written in any programming language to communicate over I2P, by "
+"using a socket-based interface to the I2P router. For more information, see "
+"the <a href=https://geti2p.net/en/docs/api/samv3 class='sitelink external' "
+"target=_blank rel=noreferrer>online documentation</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:613
+#, fuzzy
+msgid "Shared Client"
+msgstr "Shared clients"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:615
+msgid ""
+"In order to use a single set of tunnels for multiple client services, "
+"clients can be configured from the <i>Tunnel Manager</i> to operate in "
+"<i>Shared Client</i> mode. This mode conserves resources and blends the "
+"traffic from multiple clients into a single set of tunnels, making traffic "
+"analysis harder. Clients configured as Shared Clients share the same tunnel "
+"options."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:619
+msgid ""
+"SSU (Secure Semi-reliable UDP) is an I2P network transport providing "
+"encrypted, connection-oriented, point-to-point connections, in addition to "
+"IP address detection and NAT traversal services. For more information, see "
+"the <a href=https://geti2p.net/en/docs/transport/ssu class='sitelink "
+"external' target=_blank rel=noreferrer>online documentation</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:621
+msgid "Strict Countries"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:623
+msgid ""
+"A list of countries derived from the <a href=https://freedomhouse.org/report/"
+"countries-world-freedom-2019 class='sitelink external' target=_blank "
+"rel=noreferrer>World Freedom Report</a> with a poor civil liberties "
+"reputation. This list is used to place routers running in the specified "
+"countries in <i>Hidden Mode</i> to provide enhanced security for users. The "
+"following countries are designated as strict: Afghanistan, Azerbaijan, "
+"Bahrain, Belarus, Brunei, Burundi, Cameroon, Central African Republic, Chad, "
+"China, Cuba, Democratic Republic of the Congo, Egypt, Equatorial Guinea, "
+"Eritrea, Ethiopia, Iran, Kazakhstan, Laos, Libya, Myanmar, North Korea, "
+"Palestinian Territories, Rwanda, Saudi Arabia, Somalia, South Sudan, Sudan, "
+"Eswatini (Swaziland), Syria, Tajikistan, Thailand, Turkey, Turkmenistan, "
+"Venezuela, United Arab Emirates, Uzbekistan, Western Sahara, Yemen."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:625
+msgid "Tunnel"
+msgstr "Tunnel "
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:627
+msgid ""
+"A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink "
+"external' target=_blank rel=noreferrer>unidirectional</a> encrypted "
+"communication pathway between a client or server on the I2P network. Similar "
+"to a circuit in Tor, except that Tor circuits are bidirectional."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:629
+#, fuzzy
+msgid "Tunnel Endpoint"
+msgstr "Endpoint "
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:631
+msgid ""
+"The last router in a tunnel, which may be the <i>Outbound Endpoint</i>, "
+"where the client's tunnels meet the <i>Inbound Gateway</i> of the "
+"destination server's tunnels, or the <i>Inbound Endpoint</i> which is the "
+"final router in the chain that connects to the destination server."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:633
+#, fuzzy
+msgid "Tunnel Gateway"
+msgstr "Inbound Gateway "
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:635
+msgid ""
+"The first router in a tunnel. For inbound tunnels, this is the one mentioned "
+"in the <i>LeaseSet</i> published in the <i>Network Database</i>. For "
+"outbound tunnels, the gateway is the originating router."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:639
+msgid ""
+"A web application supplied with the router that permits creation and "
+"configuration of client and server tunnels. Also referred to as the "
+"<i>Hidden Services Manager</i>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:641
+#, fuzzy
+msgid "Tunnel Participant"
+msgstr "Participant "
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:643
+msgid "A router in a tunnel not designated as a gateway or endpoint."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:645
+msgid "ZzzOT (plugin)"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:647
+msgid ""
+"A Java I2P plugin implementation of a BitTorrent <a href=https://en."
+"wikipedia.org/wiki/Opentracker class='sitelink external' target=_blank "
+"rel=noreferrer>Open Tracker</a>. Available from <a href=http://stats.i2p/i2p/"
+"plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is "
+"available on <a href=https://github.com/i2p/i2p.plugins.zzzot "
+"class='sitelink external' target=_blank rel=noreferrer>github</a>."
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:289
 #, fuzzy
@@ -11419,9 +11967,6 @@ msgstr "Selesai"
 #~ msgid "Configure Floodfill Participation"
 #~ msgstr "Konfigurasikan Partisipasi Floodfill"
 
-#~ msgid "Tunnel"
-#~ msgstr "Tunnel "
-
 #~ msgid "View extended router info"
 #~ msgstr "Lihat info router yang lengkap"
 
@@ -11462,9 +12007,6 @@ msgstr "Selesai"
 
 #~ msgid "SSU Testing"
 #~ msgstr "Pengujian SSU"
-
-#~ msgid "SSU Introducer"
-#~ msgstr "SSU Introducer "
 
 #, java-format
 #~ msgid "Under {0} shared bandwidth"
@@ -11545,9 +12087,6 @@ msgstr "Selesai"
 
 #~ msgid "IRC proxy"
 #~ msgstr "Proxy IRC"
-
-#~ msgid "eepsite"
-#~ msgstr "eepsite "
 
 #~ msgid "I2P Advanced Configuration"
 #~ msgstr "I2P Advanced Configuration "
