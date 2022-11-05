@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-04 16:58+0000\n"
+"POT-Creation-Date: 2022-11-05 00:47+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/otf/I2P/"
@@ -1614,8 +1614,8 @@ msgstr "Descrição"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:353
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:355
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:340
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:342
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:344
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:318
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:320
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:375
@@ -2104,7 +2104,7 @@ msgstr "Rede"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:423
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:410
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:412
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:326
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:445
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:420
@@ -2213,6 +2213,7 @@ msgstr "Avançado"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:457
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:446
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:647
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:717
 msgid "Reseeding"
@@ -3189,6 +3190,7 @@ msgstr "Serviço"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:451
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:440
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:603
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:697
 msgid "Configuration"
@@ -3206,6 +3208,7 @@ msgstr "Configuração"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:461
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:450
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:701
 msgid "FAQ"
 msgstr "Perguntas Frequentes"
@@ -5811,6 +5814,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:453
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:442
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:693
 #, fuzzy
 msgid "Advanced Settings"
@@ -5856,6 +5860,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:467
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:458
 msgid "Troubleshoot"
 msgstr ""
 
@@ -7357,7 +7362,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:436
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:423
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:458
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jars_jsp.java:433
@@ -7426,7 +7431,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:438
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:440
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:427
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:429
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:462
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:437
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jars_jsp.java:437
@@ -8956,6 +8961,7 @@ msgstr "Configurações avançadas"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:455
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:444
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:679
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:729
 #, fuzzy
@@ -8973,6 +8979,7 @@ msgstr "Interface do I2CP"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:459
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:448
 msgid "Tunnel Filtering"
 msgstr ""
 
@@ -8987,6 +8994,8 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:280
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:454
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:733
 #, fuzzy
 msgid "Web Hosting"
@@ -9005,6 +9014,7 @@ msgstr "Testando"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:463
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:452
 #, fuzzy
 msgid "New User Guide"
 msgstr "Nova sobrescrita"
@@ -9019,6 +9029,7 @@ msgstr "Nova sobrescrita"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:467
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:456
 msgid "Hostname Registration"
 msgstr ""
 
@@ -9035,6 +9046,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:460
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:705
 msgid "Glossary"
 msgstr ""
@@ -9049,6 +9061,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:462
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:709
 msgid "Legal"
 msgstr ""
@@ -9064,6 +9077,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:464
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:533
 msgid "Change Log"
 msgstr "Log de Mudanças"
@@ -11217,74 +11231,85 @@ msgid "Be Patient!"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:481
+msgid ""
+"I2P+ may be slow to integrate into network the first time you run it as it "
+"bootstraps into the network and learns of additional peers. The longer your "
+"I2P+ router is running, the better it will perform, so try and keep your "
+"router on as long as you can, 24/7 if possible! If, after 30 minutes, your "
+"<i>Active: [connected/recent]</i> count still has less than 10 peers, or "
+"your total number of <i>Integrated</i> peers is less than 5, there are "
+"several things you can do to check for problems:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:483
 #, fuzzy
 msgid "Check your Configuration &amp; Bandwidth Allocation"
 msgstr "Configuração salva com sucesso"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:483
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:485
 msgid "Firewalls, Modems &amp; Routers"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:485
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:487
 msgid "Check Your Proxy Setttings"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:487
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:489
 #, fuzzy
 msgid "Check Your Logs"
 msgstr "Verificar se há atualizações"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:489
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
 msgid "Verify Java is Up to Date"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:493
 msgid "Problems running on Legacy Hardware"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:493
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:495
 msgid "Enable Universal Plug and Play (UPnP)"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:495
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:497
 msgid "Port Forwarding"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:497
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:499
 msgid "Getting Support Online"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:499
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:501
 msgid "Reporting Bugs"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:501
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:503
 msgid "Further assistance is available here:"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:503
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:505
 #, fuzzy
 msgid "I2P Support Forum"
 msgstr "Fórum I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:505
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:507
 #, fuzzy
 msgid "I2P Developers' Forum"
 msgstr "Fórum dos Desenvolvedores"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:507
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:509
 #, fuzzy
 msgid "I2P Wiki"
 msgstr "Wiki I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:509
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:511
 msgid ""
 "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank "
 "rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq "
 "target=_blank rel=noreferrer>geti2p.net</a>"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:511
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:513
 msgid ""
 "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</"
 "a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink> on I2P's IRC network</"
@@ -11861,6 +11886,284 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:608
 msgid ""
 "If I2P cannot connect to the internet, a reading of 0ms may be indicated."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:438
+#, fuzzy
+msgid "Web hosting on I2P"
+msgstr "Testando"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:466
+msgid "Introduction to Hosting Websites on I2P"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:468
+msgid ""
+"By default, I2P is supplied with a webserver to host your own anonymized "
+"website (traditionally referred to as an <i>eepsite</i>). Both the site and "
+"the I2P Router Console are running on a streamlined version of <a "
+"href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank "
+"rel=noreferrer class='sitelink external'>Jetty</a>, customized for I2P."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:470
+msgid ""
+"To serve your own static content, you only need to edit or replace the files "
+"in the webserver's root directory, and the site will be available on the I2P "
+"network after you've followed the instructions below. Additionally, cgi and "
+"python scripts can be run from the <code>cgi-bin</code> directory "
+"immediately above <code>docroot</code> if you have <a href=https://www.perl."
+"org/about.html target=_blank rel=noreferrer class='sitelink external'>perl</"
+"a> and <a href=https://www.python.org/ target=_blank rel=noreferrer "
+"class='sitelink external'>python</a> installed."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:472
+msgid ""
+"Directory listings (sometimes referred to as virtual directories) are "
+"enabled by default, so you can host files from a sub-directory of "
+"<code>docroot</code> without providing a page with links to the files. You "
+"can also serve content that exists outside of <code>docroot</code> by using "
+"a <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank "
+"rel=noreferrer class='sitelink external'>symbolic link</a> to the desired "
+"directory."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:474
+msgid ""
+"You can override the <a href=http://127.0.0.1:7658/help/images/>default "
+"appearance</a> of the directory listing by supplying an edited <a "
+"href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> file "
+"to set a global appearance. Note that this file will not be displayed in the "
+"webserver's directory listing. Files and directories prefixed with . and "
+"files named favicon.ico or files ending with ~ or .bak or .old will also be "
+"hidden from view (though still accessible). Note: To create hidden files "
+"with a . prefix on Windows, add a trailing . to the file or directory e.g. "
+"<code>.hidden.</code>; Windows explorer will then save the file with the "
+"correct name, removing the trailing dot in the process."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:476
+msgid ""
+"To disable directory listings, find the entry for <code>org.eclipse.jetty."
+"servlet.Default.dirAllowed</code> in the <code>base-context.xml</code> file, "
+"located in the <code>eepsite/contexts</code> folder (just above docroot "
+"folder), and change 'true' to 'false' immediately underneath. To apply the "
+"change immediately, stop and restart the <i>I2P Webserver</i> client on the "
+"<a href=/configclients>Client Configuration page</a>. You can also drop an "
+"empty <code>index.html</code> file in any exposed directory to suppress "
+"directory listings for that location."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:478
+msgid "Location of the I2P webserver root directory"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:480
+#, fuzzy
+msgid "Standard Java installation"
+msgstr "Instalação de extensão"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:482
+#, fuzzy
+msgid "Package/repository installation"
+msgstr "Instalação de extensão"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:484
+msgid ""
+"On the I2P network, remotely hosted services can be accessed using a <a "
+"href=https://en.wikipedia.org/wiki/Base32 target=_blank rel=noreferrer "
+"class='sitelink external'>Base32</a> address ending in \".b32.i2p\", a "
+"<i>destination</i> represented as a long <a href=https://en.wikipedia.org/"
+"wiki/Base64 class='sitelink external'>Base64</a> string, or more usually by "
+"using an .i2p domain. A destination is I2P's equivalent to an IP address, "
+"and is shown on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager "
+"Configuration page</a>. You can share your b32.i2p address to allow others "
+"to access to your website until you've registered your own .i2p domain."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:486
+msgid "Setting up &amp; announcing your website"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:488
+msgid ""
+"Your webserver is running by default at <a href=http://127.0.0.1:7658/"
+">http://127.0.0.1:7658</a>, but is not accessible by others until you start "
+"the <i>I2P Webserver</i> tunnel. After starting the tunnel, your site will "
+"be difficult for other people to find. You could just tell people the "
+"destination or the Base32 address, but thankfully I2P has an address book to "
+"store domain names, and various services where you can <a href=/help/"
+"hostnameregistration>register a new .i2p domain</a> for free."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:490
+msgid ""
+"Choose a name for your website (<i>hostname</i>.i2p), using lower-case. To "
+"verify that the hostname is available, check <a href=http://notbob.i2p/ "
+"target=_blank>notbob.i2p</a> or <a href=http://reg.i2p target=_blank>reg."
+"i2p</a> before you decide. Enter the new name for your website on the <a "
+"href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a> where "
+"it says <i>Website name</i>, replacing the default <i>mysite.i2p</i> "
+"placeholder. If you want your website to be available when I2P starts, "
+"enable <i>Auto Start</i> and then click <i>Save</i>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:492
+msgid ""
+"Click the <i>Start</i> button for your webserver tunnel on the <a href=/"
+"i2ptunnelmgr/>main Tunnel Manager page</a>. You should now see it listed "
+"under <i>Service Tunnels</i> on the <a href=/>Router Console</a> sidebar. A "
+"green star displayed next to the tunnel name (<i>I2P Webserver</i> by "
+"default) indicates that your website is active on the I2P network."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:494
+msgid ""
+"Highlight and copy the entire <i>Local destination</i> on the <a href='/"
+"i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:496
+msgid ""
+"Enter the name and paste the destination into your <a href='/susidns/"
+"addressbook?book=router&amp;filter=none'>address book</a>. Click <i>Add</i> "
+"to save the new entry."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:498
+msgid ""
+"In the web browser you have configured for I2P usage, browse to your website "
+"name (<i>chosenhostname</i>.i2p) and you should be returned to this page."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:500
+msgid ""
+"Before you tell the world about your new website, you should add some "
+"content. Go to the server's root directory <a href=#rootdir>listed above</a> "
+"and replace the <i>index.html</i> redirect page with your own content. If "
+"you need a template for a basic site, feel free to adapt <a "
+"href=http://127.0.0.1:7658/help/pagetemplate.html>this page</a>. If you're "
+"returned to this page after editing the content, try clearing your browser's "
+"web cache."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:502
+msgid "Content Optimization"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:504
+msgid ""
+"In order to provide the best experience for visitors to your site, there are "
+"various additional steps you may wish to consider once your site is up and "
+"running:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:506
+msgid "Optimize your images"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:508
+msgid ""
+"If you want your site to feel responsive, image compression is essential "
+"when hosting large images. Using a service like <a href=https://tinypng.com/ "
+"target=_blank class='sitelink external'>tinypng.com</a> to compress your png "
+"and jpeg images will often result in much smaller files with minimal loss of "
+"quality. In some situations the webp format can best jpegs, generating "
+"smaller files with approximately the same or better visual fidelity, and has "
+"wide browser support. Also consider using svgs instead of bitmaps for icons "
+"and illustrations - they're often smaller than the equivalent bitmap file "
+"(run them through a service like <a href=https://vecta.io/nano target=_blank "
+"class='sitelink external'>Nano SVG Optimizer</a> to remove unneeded cruft), "
+"scale without loss of quality, and can be gzipped by your webserver."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:510
+msgid "Use separate files for multi-use assets"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:512
+msgid ""
+"Wherever possible, assets that are used repeatedly on your site should be "
+"loaded from an external file and not inlined. If you're using the same CSS "
+"on several pages, create a separate css file and load that in the <code>&lt;"
+"head&gt;</code> section of your pages. This will make styling updates to "
+"your site easier to manage, and will also allow the file to be cached in the "
+"visitor's browser, resulting in less bandwidth demands on your webserver and "
+"faster page loads for your visitors."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:514
+msgid "Consider using a backend cache"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:516
+msgid ""
+"If you're running a dynamic site handling a large number of concurrent "
+"users, content caching can often improve the time taken to deliver pages. "
+"For content that rapidly changes, a <a href=https://blog.stackpath.com/"
+"glossary-micro-caching/ target=_blank class='sitelink external'>micro-"
+"caching strategy</a> may still yield some benefits. The <a href=https://www."
+"nginx.com/ target=_blank class='sitelink external'>Nginx webserver</a> "
+"provides a competent caching sub-system, or for a more heavy-weight "
+"solution, have a look at <a href=https://varnish-cache.org/ target=_blank "
+"class='sitelink external'>Varnish</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:518
+msgid "Using an alternative webserver"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:520
+msgid ""
+"To configure an alternative webserver for use on I2P, you can either use the "
+"existing webserver tunnel and <a href=/configclients>disable the default "
+"webserver</a> from running, or create a new HTTP Server tunnel in the <a "
+"href=/i2ptunnelmgr>Tunnel Manager</a>. Ensure that the webserver's "
+"<i>listening port</i> is also configured in the Tunnel Manager settings. For "
+"example, if your webserver is listening by default on address 127.0.0.1 port "
+"80, you'd also need to ensure that the <i>Target port</i> in the Tunnel "
+"Manager settings page for the service is also configured to port 80."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:522
+msgid ""
+"To preserve anonymity, make sure that the webserver is not publicly "
+"available outside of the I2P network, which is normally achieved by "
+"configuring the webserver to listen on localhost (127.0.0.1) rather than all "
+"interfaces (0.0.0.0)."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:524
+msgid ""
+"Be aware that a poorly configured webserver or web appplication can leak "
+"information such as your real IP address or server details that may reduce "
+"your anonymity or assist a hacker. If using an alternative platform, be sure "
+"to secure it before putting it online. If in doubt, consult online guides "
+"about web server and web application hardening, for example:"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:526
+msgid "Apache Web Server Security Guide"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:528
+msgid "Nginx Web Server Security Guide"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:530
+msgid "How to Harden Your WordPress Site"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:532
+msgid ""
+"<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache."
+"org/docs/2.4/mod/mod_status.html target=_blank class='sitelink "
+"external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/"
+"mod_info.html target=_blank class='sitelink external'>mod_info</a> modules "
+"are enabled by default. It is important to disable these, or otherwise "
+"protect access to the urls, to avoid compromising the anonymity and security "
+"of your server."
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:286
