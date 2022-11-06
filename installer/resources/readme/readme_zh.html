@@ -45,8 +45,8 @@ Postman 的基于 I2P 的邮件系统可以通过 <a href="/webmail">I2P 的内�
 您无需在您的 IRC 客户端配置代理；I2P 向您提供了本地 IRC 隧道（在您的 IRC 客户端中配置为 IRC 服务器或远程主机）。
 在 <code>localhost:6668</code> 上的您的本地 I2P IRC 隧道将指向由 Postman，echelon 和 zl0 托管在 I2P 上的三个 IRC 服务器中的一个，但您和他们都不知道对方在哪，并且您的通信在中转时将由 I2P 加密以阻止窃听。
 当您完成后，<code>#i2p-chat</code> 和 <code>#i2p-dev</code> 是一些您可能想要加入的可用频道。
-也有一个基于 I2P 的<a href="http://echelon.i2p/qti2pmessenger/">即时消息服务</a>用于不受监控审查的匿名聊天，以及替代的 IRC 服务器，Jabber 服务器，基于网站的聊天等等。
-您可以以任何您选择的方式通过 I2P 运行自己的服务，或者如果您是开发者，编写您自己的          <a href="http://i2p-projekt.i2p/applications.html" target="_blank">I2P 应用</a>。
+也有一个基于 I2P 的<a href="http://git.i2p/I2P.Plus/i2pchat/" target="_blank">即时消息服务</a>用于不受监控审查的匿名聊天，以及替代的 IRC 服务器，Jabber 服务器，基于网站的聊天等等。
+您可以以任何您选择的方式通过 I2P 运行自己的服务，或者如果您是开发者，编写您自己的 <a href="http://i2p-projekt.i2p/applications.html" target="_blank">I2P 应用</a>。
 UDP 和 TCP 协议都<a href="http://i2p-projekt.i2p/techintro.html#op.transport" target="_blank">支持</a>。
 我们也提供了 <a href="http://javadoc.skank.i2p/" target="_blank">Java API</a> 的完全访问。</li>
 
@@ -58,8 +58,7 @@ UDP 和 TCP 协议都<a href="http://i2p-projekt.i2p/techintro.html#op.transport
 <li>
 <a name="plugins"></a><b>I2P 插件</b><br>
 通过安装插件扩展 I2P 的可用性：博客，聊天，文件分享和其他插件已被编写和移植，等待您的<a href="http://stats.i2p/i2p/plugins/" target="_blank">安装</a>！
-<!--在 <a href="http://i2pwiki.i2p/index.php?title=Plugins" target="_blank">i2pwiki.i2p</a> 浏览插件和相关信息。-->
-如果您是<!--<a href="http://i2pwiki.i2p/index.php?title=Plugins" target="_blank">-->开发者<!--</a>-->，<a href="http://i2p-projekt.i2p/plugins.html" target="_blank">文档</a>提供了编写您自己的插件的完整框架。</li>
+<a href="http://i2p-projekt.i2p/plugins.html" target="_blank">文档</a>提供了编写您自己的插件的完整框架。</li>
 
 </ul>
 <h3>I2P 匿名加密网络托管</h3>
@@ -67,7 +66,7 @@ UDP 和 TCP 协议都<a href="http://i2p-projekt.i2p/techintro.html#op.transport
 <ul class="links">
 <li>
 <b>内置网络服务器</b><br>
-I2P 自带内置网络服务器供您在 I2P 网络上托管您自己的隐藏服务网站（“匿名网站”）：一个 <a href="https://www.eclipse.org/jetty/" target="_blank">Jetty</a> 实例监听 <a href="http://127.0.0.1:7658/" target="_blank">http://127.0.0.1:7658/</a>。
+I2P 自带内置网络服务器供您在 I2P 网络上托管您自己的隐藏服务网站（“匿名网站”）： 一个 <a href="https://www.eclipse.org/jetty/" target="_blank">Jetty</a> 实例监听 <a href="http://127.0.0.1:7658/" target="_blank">http://127.0.0.1:7658/</a>。
 为托管您自己的内容，只需将您的文件放在 <code>eepsite/docroot/</code> 文件夹中（或将任何标准 JSP/Servlet .war 文件放在 <code>eepsite/webapps</code> 下，或将标准 CGI scripts 放在 <code>eepsite/cgi-bin</code> 下）它们就会显示。
 您也可以通过 I2P 运行其他网络服务器平台并替换内置的服务器，或者在另一个隧道运行。</li>
 
@@ -90,18 +89,10 @@ I2P 自带内置网络服务器供您在 I2P 网络上托管您自己的隐藏�
 <a href="http://i2pforum.i2p/" target="_blank">i2pforum.i2p</a>：安全匿名地连接到在线社区论坛，在这里讨论 I2P 相关地问题和想法以及相关话题。</li>
 
 <li>
-<b>I2P 匿名剪贴板</b><br><a href="http://cake.i2p/pastebin" target="_blank">zerobin.i2p</a>：安全匿名的粘贴服务，可以通过 I2P 分享匿名文本及基于文本的代码。</li>
+<b>I2P 匿名剪贴板</b><br><a href="http://cake.i2p/pastebin" target="_blank">cake.i2p/pastebin</a>：安全匿名的粘贴服务，可以通过 I2P 分享匿名文本及基于文本的代码。</li>
 
 <li>
-<b>Echelon 的 I2P 资源</b><br><a href="http://echelon.i2p/" target="_blank">echelon.i2p</a>：I2P 软件存档及源代码，关于 I2P 的信息，包括一份<a href="http://echelon.i2p/I2Pguide/index.html" target="_blank">新手指南</a>和 I2P 预发布开发者构建。</li>
-
-<!--
-<li>
-<b>i2pwiki Wiki</b><br><a href="http://i2pwiki.i2p/" target="_blank">i2pwiki.i2p</a>：由大量关于 I2P 信息的任何人都可以编辑的开放式 wiki，新手帮助其他网络内链接及更多内容。</li>
--->
-
-<li>
-<b>I2P Planet</b><br><a href="http://planet.i2p/" target="_blank">planet.i2p</a>：从 I2P 获取新闻和事件并集中发布的 RSS 聚合网站。访问这个优秀的网站看看社区的工作！</li>
+<b>Planeta</b><br><a href="http://planeta.i2p/" target="_blank">planeta.i2p</a>：从 I2P 获取新闻和事件并集中发布的 RSS 聚合网站。访问这个优秀的网站看看社区的工作！</li>
 
 <li>
 <b>I2P 网络健康</b><br><a href="http://stats.i2p/cgi-bin/dashboard.cgi" target="_blank">stats.i2p</a>：使用 zzz 运行的 I2P 网络监测网站检查多方面网络性能。</li>
@@ -115,7 +106,7 @@ I2P 自带内置网络服务器供您在 I2P 网络上托管您自己的隐藏�
 </li>
 
 </ul>
-<h2 id="trouble">故障排除及更多帮助</h2>
+<h3 id="trouble">故障排除及更多帮助</h3>
 
 <ul class="links">
 <li>
@@ -173,7 +164,7 @@ I2P 默认配置为一些相当保守的数值，并不适合许多用例，所�
 
 <li>
 <b>获取在线支持</b><br>
-您可能也想要在 <a href="http://i2p-projekt.i2p/" target="_blank">I2P 网站</a>上获取信息，在 <a href="http://forums.i2p/" target="_blank">I2P 讨论论坛</a>上发布消息或在  I2P 的内部 IRC 网络 - Irc2P 上的 <a href="irc://127.0.0.1:6668/i2p">#i2p</a> 或 <a href="irc://127.0.0.1:6668/saltR">#saltR</a> 上摇摆。
+您可能也想要在 <a href="http://i2p-projekt.i2p/" target="_blank">I2P 网站</a>上获取信息，在 <a href="http://i2pforum.i2p/" target="_blank">I2P 讨论论坛</a>上发布消息或在  I2P 的内部 IRC 网络 - Irc2P 上的 <a href="irc://127.0.0.1:6668/i2p">#i2p</a> 或 <a href="irc://127.0.0.1:6668/saltR">#saltR</a> 上摇摆。
 这些频道也可以通过 <a href="irc://irc.freenode.net/i2p">Freenode IRC</a> 在 I2P 的加密匿名网络之外访问。</li>
 
 <li>
@@ -182,14 +173,6 @@ I2P 默认配置为一些相当保守的数值，并不适合许多用例，所�
 对于开发者相关的讨论，请访问 <a href="http://zzz.i2p/" target="_blank">zzz 的开发者论坛</a> 或 I2P 的 IRC 网络上的<a href="irc://127.0.0.1:6668/i2p-dev">开发者频道</a>。
 开发者可在 <a href="https://github.com/i2p/i2p.i2p" target="_blank">Github</a> 上浏览源代码。
 我们使用 <a href="http://i2p-projekt.i2p/monotone.html" target="_blank">monotone</a> 管理源代码 - 尽管您可以匿名 clone 源代码，仅在接受开发者协议后提交才会被接受。</li>
-
-<li>
-<b>参与进来！</b><br>
-I2P 通常由社区成员无经费志愿参与进行开发和维护。
-我们乐于接受<a href="http://i2p-projekt.i2p/donate.html" target="_blank">捐赠</a>，它们将用于基础托管和管理费用。
-我们对寻找参与激励的 I2P 方面的开发者有<a href="http://i2p-projekt.i2p/bounties.html" target="_blank">现金奖励</a>，我们也一直在寻找更多<a href="http://i2p-projekt.i2p/newdevelopers.html" target="_blank">Java 程序员</a>，<a href="http://i2p-projekt.i2p/newtranslators.html" target="_blank">翻译者</a>，宣传者和用户以帮助 I2P 成长。
-I2P 网络越大，每个人获益越多，所以简单地告诉您的朋友们 I2P , the more everyone benefits, so simply telling all your friends about I2P（并在需要的时候帮助安装和设置）很有帮助。
-关于您如何参与的更多信息，访问网站上的<a href="http://i2p-projekt.i2p/getinvolved.html" target="_blank">志愿者页面</a>。</li>
 
 </ul>
 <div class="topness"><a href="#top">[返回顶部]</a></div>
