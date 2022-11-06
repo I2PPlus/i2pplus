@@ -125,7 +125,7 @@ public class HomeHelper extends HelperBase {
 
 // forums + social
         _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "forum.svg" + S +
-        "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p" + S + I + "dread.svg" + S +
+        "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "dread.svg" + S +
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "forum.svg" + S +
         "discuss.i2p" + S + _x("File-sharing forum") + S + "http://discuss.i2p/" + S + I + "forum.svg" + S +
         "Natter" + S + _x("Alternative front-end for Twitter") + S + "http://natter.i2p/" + S + I + "twitter.svg" + S +
@@ -190,9 +190,9 @@ public class HomeHelper extends HelperBase {
         "bellingcat.i2p" + S + _x("Independent investigative journalism") + S + "http://bellingcat.i2p/" + S + I + "bellingcat.svg" + S +
         "BenthamsGaze" + S + _x("Information Security Research &amp; Education") + S + "http://benthamsgaze.i2p/" + S + I + "benthamsgaze.png" + S +
         _x("ChinaDigitalTimes") + S + _x("Covering China from Cyberspace") + S + "http://chinadigitaltimes.i2p/" + S + I + "chinadigitaltimes.png" + S +
-        "CultureMagazine" + S + _x("Cannabis-related magazine") + S + "http://culturemagazine.i2p/" + S + I + "cannabis.svg" + S +
+        _x("CultureMagazine") + S + _x("Cannabis-related magazine") + S + "http://culturemagazine.i2p/" + S + I + "cannabis.svg" + S +
+        _x("CurrentAffairs") + S + _x("A magazine of Politics &amp; Culture") + S + "http://currentaffairs.i2p/" + S + I + "news.svg" + S +
         "Dawn" + S + _x("Democracy for the Arab world now") + S + "http://dawn.i2p/" + S + I + "news.svg" + S +
-        "dw.i2p" + S + _x("News &amp; Current Affairs from Germany and around the world") + S + "http://dw.i2p/" + S + I + "news.svg" + S +
         "DarkDotNet" + S + _x("Darknet related news site") + S + "http://darkdotnet.i2p/" + S + I + "news.svg" + S +
         "DarkNetDaily" + S + _x("Darknet related news site") + S + "http://darknetdaily.i2p/" + S + I + "news.svg" + S +
         "DarknetLive" + S + _x("Darknet related news site") + S + "http://darknetlive.i2p/" + S + I + "news.svg" + S +
@@ -236,20 +236,22 @@ public class HomeHelper extends HelperBase {
         "SlashGear" + S + _x("Technology news &amp; reviews") + S + "http://slashgear.i2p/" + S + I + "slashgear.svg" + S +
         "supchina.i2p" + S + _x("Reporting on China without fear or favor") + S + "http://supchina.i2p/" + S + I + "news.svg" + S +
         _x("TaipeiTimes") + S + _x("News from the Taiwan Capital") + S + "http://taipeitimes.i2p/" + S + I + "news.svg" + S +
-        "TechXplore" + S + _x("Technology and engineering news") + S + "http://techxplore.i2p/" + S + I + "news.svg" + S +
-        "TechMeme" + S + _x("Technology news aggregator") + S + "http://techmeme.i2p/" + S + I + "news.svg" + S +
+        _x("TechXplore") + S + _x("Technology and engineering news") + S + "http://techxplore.i2p/" + S + I + "techxplore.svg" + S +
+        _x("TechMeme") + S + _x("Technology news aggregator") + S + "http://techmeme.i2p/" + S + I + "news.svg" + S +
         _x("TheAtlantic") + S + _x("News &amp; Reviews") + S + "http://theatlantic.i2p/" + S + I + "news.svg" + S +
         _x("TheConversation") + S + _x("Academic commentary and essays") + S + "http://theconverastion.i2p/" + S + I + "theconversation.svg" + S +
         _x("TheGuardian") + S + _x("Global News") + S + "http://theguardian.i2p/" + S + I + "theguardian.svg" + S +
         _x("TheHackerNews") + S + _x("Computer &amp; cyber security news") + S + "http://thehackernews.i2p/" + S + I + "news.svg" + S +
-        "TheMarkup" + S + _x("Watching Big Tech...") + S + "http://themarkup.i2p/" + S + I + "news.svg" + S +
+        _x("TheMarkup") + S + _x("Watching Big Tech...") + S + "http://themarkup.i2p/" + S + I + "news.svg" + S +
         _x("TheMoscowTimes") + S + _x("Independent Journalism from Russia") + S + "http://themoscowtimes.i2p/" + S + I + "news.svg" + S +
         _x("TheNewRepublic") + S + _x("Politics &amp; Current Affairs magazine") + S + "http://newrepublic.i2p/" + S + I + "newrepublic.svg" + S +
         _x("TheTibetPost") + S + _x("International News from Tibet") + S + "http://thetibetpost.i2p/" + S + I + "tibetpost.svg" + S +
+        _x("TheWeek") + S + _x("All you need to know about everything that matters") + S + "http://theweek.i2p/" + S + I + "theweek.svg" + S +
         _x("ThreatPost") + S + _x("Security related news") + S + "http://threatpost.i2p/" + S + I + "news.svg" + S +
         "TorrentFreak" + S + _x("Filesharing &amp; copyright news") + S + "http://torrentfreak.i2p/" + S + I + "torrentfreak.svg" + S +
         "Ukrinform" + S + _x("Ukranian National News Agency") + S + "http://ukrinform.i2p/" + S + I + "news.svg" + S +
         "Wired" + S + _x("Technology News &amp; more...") + S + "http://wired.i2p/" + S + I + "wired.svg" + S +
+        //"dw.i2p" + S + _x("News &amp; Current Affairs from Germany and around the world") + S + "http://dw.i2p/" + S + I + "news.svg" + S +
 
         "";
 
