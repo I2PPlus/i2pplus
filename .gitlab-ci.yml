@@ -23,18 +23,20 @@ before_script:
 
 Java8:
   stage: build
+  only:
+  - master
   image: openjdk:8
   # allow failure so commits work when CI minutes exhausted
   allow_failure: true
   script:
 #    - ./installer/resources/makegeoip.sh
     - ant pkg
-    - ant tarball
+#    - ant tarball
 #    - ant updater200WithJettyAndGeoIP
 #    - ant updaterWithJetty
     - ant updaterCompact
     - ant i2psnark
-    - ant javadoc-zip
+#    - ant javadoc-zip
 
 testing:
   stage: test
@@ -55,7 +57,7 @@ findbugs:
   stage: test
   image: openjdk:8
   only:
-    - master
+#    - master
     - schedules
   script:
     - apt-get install -yqq findbugs
@@ -65,13 +67,13 @@ findbugs:
     paths: ['findbugs.html']
     expire_in: 1 month
 
-Java18:
-  stage: build
-  image: ubuntu@sha256:bace9fb0d5923a675c894d5c815da75ffe35e24970166a48a4460a48ae6e0d19
+#Java18:
+#  stage: build
+#  image: ubuntu@sha256:bace9fb0d5923a675c894d5c815da75ffe35e24970166a48a4460a48ae6e0d19
   # currently not well supported, needs some code fixes
   # remove this line once code is fixed
-  allow_failure: true
-  script:
-    - apt-get install openjdk-18-jdk -y
-    - ant updater
-    - ant javadoc-zip
+#  allow_failure: true
+#  script:
+#    - apt-get install openjdk-18-jdk -y
+#    - ant updater
+#    - ant javadoc-zip
