@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 00:46+0000\n"
+"POT-Creation-Date: 2022-11-07 11:57+0000\n"
 "PO-Revision-Date: 2021-10-17 12:24+0000\n"
 "Last-Translator: AO <ao@localizationlab.org>\n"
 "Language-Team: French (http://www.transifex.com/otf/I2P/language/fr/)\n"
@@ -2009,7 +2009,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:61
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:464
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:466
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1328
 msgid "Name"
 msgstr "Nom"
@@ -2263,6 +2263,7 @@ msgstr "Évolué"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:597
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:477
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:454
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:455
@@ -2945,12 +2946,12 @@ msgid "Router console password is enabled."
 msgstr "Mot de passe de la console du routeur"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:460
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:462
 msgid "Mark for deletion"
 msgstr "Marquer pour suppression"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:462
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:464
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1326
 msgid "Remove"
 msgstr "Retirer"
@@ -3279,6 +3280,7 @@ msgstr "Vue d’ensemble de l’UPnP"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:457
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:448
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
@@ -3297,6 +3299,7 @@ msgstr "Configuration"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:459
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:458
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:459
@@ -3450,7 +3453,7 @@ msgstr "Serveur Web local pour héberger votre propre contenu sur I2P"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:393
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:395
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:335
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:523
 msgid "Web Server"
@@ -3849,7 +3852,7 @@ msgstr ""
 #. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "books.svg" + S +
 #. news + blogs
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:189
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "Technology News &amp; more..."
 msgstr ""
 
@@ -3874,12 +3877,21 @@ msgstr ""
 msgid "Cannabis-related magazine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
-msgid "Democracy for the Arab world now"
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:193
+msgid "CultureMagazine"
 msgstr ""
 
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
+msgid "A magazine of Politics &amp; Culture"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
+#, fuzzy
+msgid "CurrentAffairs"
+msgstr "actuellement"
+
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:195
-msgid "News &amp; Current Affairs from Germany and around the world"
+msgid "Democracy for the Arab world now"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:196
@@ -4138,7 +4150,15 @@ msgid "TaipeiTimes"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
+msgid "TechXplore"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Technology and engineering news"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
+msgid "TechMeme"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
@@ -4180,6 +4200,10 @@ msgid "TheHackerNews"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+msgid "TheMarkup"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Watching Big Tech..."
 msgstr ""
 
@@ -4205,38 +4229,46 @@ msgid "TheTibetPost"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
-msgid "Security related news"
+msgid "All you need to know about everything that matters"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+msgid "TheWeek"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+msgid "Security related news"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 #, fuzzy
 msgid "ThreatPost"
 msgstr "Points de Menace"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "Filesharing &amp; copyright news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Ukranian National News Agency"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:328
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:330
 msgid "The HTTP proxy is not up"
 msgstr "Le mandataire HTTP n’est pas en fonction"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:330
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:332
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr ""
 "Votre navigateur n’est pas configuré correctement pour utiliser le "
 "mandataire HTTP à {0}"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:466
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:468
 msgid "URL"
 msgstr "URL"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:500
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:502
 msgid "Add"
 msgstr "Ajouter"
 
@@ -5961,6 +5993,7 @@ msgstr "Aide et FAQ du routeur I2P"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:449
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:450
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
@@ -6010,6 +6043,7 @@ msgstr "Fermer le routeur"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:467
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:466
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:467
@@ -9273,6 +9307,7 @@ msgstr "Configuration avancée"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:489
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:452
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:453
@@ -9290,6 +9325,7 @@ msgstr "Interface I2CP"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:485
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:456
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:289
@@ -9307,6 +9343,7 @@ msgstr "Retard des tunnels"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:463
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:462
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:463
@@ -9325,6 +9362,7 @@ msgstr "En test"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:473
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:460
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:289
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:461
@@ -9342,6 +9380,7 @@ msgstr "Nouveaux Utilisateurs"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:464
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:465
@@ -9360,6 +9399,7 @@ msgstr "Configuration de la page d’accueil d’I2P"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:468
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
@@ -9376,6 +9416,7 @@ msgstr "Glossaire"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:470
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:471
@@ -9391,6 +9432,7 @@ msgstr "Juridique"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:453
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:472
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:473
@@ -11356,6 +11398,15 @@ msgstr ""
 #, fuzzy
 msgid "Webhosting on I2P"
 msgstr "En test"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:290
+#, fuzzy
+msgid "Licensing Information"
+msgstr "Renseignements de la barre latérale"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:446
+msgid "Legal &amp; Licensing"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:475
 #, fuzzy
@@ -14110,9 +14161,6 @@ msgstr "Terminé"
 #, java-format
 #~ msgid "You may also try {0} or {1}."
 #~ msgstr "Vous pouvez aussi essayer {0} ou {1}."
-
-#~ msgid "Sidebar Information"
-#~ msgstr "Renseignements de la barre latérale"
 
 #~ msgid ""
 #~ "Many of the stats on the sidebar may be <a "

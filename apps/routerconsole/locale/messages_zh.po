@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 00:47+0000\n"
+"POT-Creation-Date: 2022-11-07 11:57+0000\n"
 "PO-Revision-Date: 2022-11-05 07:56+0000\n"
 "Last-Translator: xtoaster <zhazhenzhong@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
@@ -1948,7 +1948,7 @@ msgid "Cancel"
 msgstr "取消"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:61
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:464
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:466
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1328
 msgid "Name"
 msgstr "名称"
@@ -2201,6 +2201,7 @@ msgstr "高级"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:597
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:477
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:454
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:455
@@ -2846,12 +2847,12 @@ msgid "Router console password is enabled."
 msgstr "路由控制台密码已启用。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:460
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:462
 msgid "Mark for deletion"
 msgstr "标记为删除"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:462
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:464
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1326
 msgid "Remove"
 msgstr "删除"
@@ -3176,6 +3177,7 @@ msgstr "UPnP 概况"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:457
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:448
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
@@ -3194,6 +3196,7 @@ msgstr "设置"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:459
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:458
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:459
@@ -3344,7 +3347,7 @@ msgstr "在 I2P 上托管您自己的内容的本地网络服务器"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:393
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:395
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:335
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:523
 msgid "Web Server"
@@ -3722,7 +3725,7 @@ msgstr "世界地图集"
 #. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "books.svg" + S +
 #. news + blogs
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:189
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "Technology News &amp; more..."
 msgstr "技术新闻和 和更多..."
 
@@ -3747,13 +3750,22 @@ msgstr "从网络空间探索中国"
 msgid "Cannabis-related magazine"
 msgstr "大麻相关杂志"
 
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:193
+msgid "CultureMagazine"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
-msgid "Democracy for the Arab world now"
-msgstr "阿拉伯世界的民主"
+msgid "A magazine of Politics &amp; Culture"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
+#, fuzzy
+msgid "CurrentAffairs"
+msgstr "目前"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:195
-msgid "News &amp; Current Affairs from Germany and around the world"
-msgstr "来自德国和世界各地的新闻和时事"
+msgid "Democracy for the Arab world now"
+msgstr "阿拉伯世界的民主"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:196
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:197
@@ -4003,8 +4015,16 @@ msgid "TaipeiTimes"
 msgstr "台北时报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
+msgid "TechXplore"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Technology and engineering news"
 msgstr "技术和工程新闻"
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
+msgid "TechMeme"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "Technology news aggregator"
@@ -4043,6 +4063,10 @@ msgid "TheHackerNews"
 msgstr "TheHackerNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+msgid "TheMarkup"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Watching Big Tech..."
 msgstr "观看大型科技..."
 
@@ -4067,35 +4091,43 @@ msgid "TheTibetPost"
 msgstr "TheTibetPost"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+msgid "All you need to know about everything that matters"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+msgid "TheWeek"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "Security related news"
 msgstr "安全新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "ThreatPost"
 msgstr "ThreatPost"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "Filesharing &amp; copyright news"
 msgstr "文件共享和 著作权新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Ukranian National News Agency"
 msgstr "乌克兰国家通讯社"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:328
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:330
 msgid "The HTTP proxy is not up"
 msgstr "HTTP 代理未启动"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:330
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:332
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "您的浏览器尚未配置使用 HTTP 代理 {0}"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:466
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:468
 msgid "URL"
 msgstr "URL"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:500
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:502
 msgid "Add"
 msgstr "添加"
 
@@ -5701,6 +5733,7 @@ msgstr "I2P 使用帮助与常见问答"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:449
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:450
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
@@ -5747,6 +5780,7 @@ msgstr "补种指南"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:467
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:466
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:467
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:467
@@ -8804,6 +8838,7 @@ msgstr "高级设置帮助"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:489
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:452
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:453
@@ -8820,6 +8855,7 @@ msgstr "用户界面"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:485
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:456
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:289
@@ -8836,6 +8872,7 @@ msgstr "隧道过滤"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:463
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:462
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:463
@@ -8853,6 +8890,7 @@ msgstr "托管网站"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:461
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:473
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:460
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:289
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:461
@@ -8869,6 +8907,7 @@ msgstr "新手指南"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:464
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:465
@@ -8886,6 +8925,7 @@ msgstr "域名注册"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:465
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:468
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
@@ -8902,6 +8942,7 @@ msgstr "词汇表"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:470
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:471
@@ -8917,6 +8958,7 @@ msgstr "法律"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:453
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:472
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:473
@@ -11274,6 +11316,15 @@ msgstr "关于侧边栏、网络状态信息和主题覆写的帮助"
 msgid "Webhosting on I2P"
 msgstr "在I2P上托管网站"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:290
+#, fuzzy
+msgid "Licensing Information"
+msgstr "路由信息"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:446
+msgid "Legal &amp; Licensing"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:475
 msgid "Introduction to I2P"
 msgstr "关于I2P的介绍"
@@ -13265,671 +13316,695 @@ msgstr "下一步"
 msgid "Finished"
 msgstr "完成"
 
-msgid "Image optimizer"
-msgstr "图片压缩"
+#~ msgid "News &amp; Current Affairs from Germany and around the world"
+#~ msgstr "来自德国和世界各地的新闻和时事"
+
+#~ msgid "Image optimizer"
+#~ msgstr "图片压缩"
 
 #, java-format
-msgid "Warning: Java version {0} is no longer supported by I2P."
-msgstr "警告：Java 版本 {0} 不再受到 I2P 支持。"
+#~ msgid "Warning: Java version {0} is no longer supported by I2P."
+#~ msgstr "警告：Java 版本 {0} 不再受到 I2P 支持。"
 
 #, java-format
-msgid "Update Java to version {0} or higher to receive I2P updates."
-msgstr "更新 Java 到 {0} 或更高版本以接收 I2P 更新。"
+#~ msgid "Update Java to version {0} or higher to receive I2P updates."
+#~ msgstr "更新 Java 到 {0} 或更高版本以接收 I2P 更新。"
 
-msgid "Laptop mode - new router identity when public IP address changes"
-msgstr "笔记本模式 - IP 变化后改变路由身份及 UDP 端口以增强匿名性"
+#~ msgid "Laptop mode - new router identity when public IP address changes"
+#~ msgstr "笔记本模式 - IP 变化后改变路由身份及 UDP 端口以增强匿名性"
 
-msgid "IP banned by blocklist.txt"
-msgstr "根据blocklist.txt封禁的IP"
+#~ msgid "IP banned by blocklist.txt"
+#~ msgstr "根据blocklist.txt封禁的IP"
 
-msgid "Date"
-msgstr "日期"
+#~ msgid "Date"
+#~ msgstr "日期"
 
-msgid "All times are UTC."
-msgstr "所有时间均为 UTC。"
+#~ msgid "All times are UTC."
+#~ msgstr "所有时间均为 UTC。"
 
-msgid ""
-"A web app may also be disabled by removing the .war file from the webapps "
-"directory; however the .war file and web app will reappear when you update "
-"your router to a newer version, so disabling the web app here is the "
-"preferred method."
-msgstr ""
-"从 web 应用文件夹中删除相应的 .wa r文件同样可以禁用 Web 应用；然而这些 .war "
-"文件和 web 应用在更新 I2P 后还会再次出现，所以推荐在这里通过设置的方法禁用不"
-"用的 web 应用。"
-
-#, java-format
-msgid "See {0} for help."
-msgstr "帮助参见 {0}。"
-
-msgid "Reseeding: fetching seed URL."
-msgstr "正在补种：从 URL 获取种子。"
-
-msgid "How many peers we are actively talking with"
-msgstr "正在通讯的活动节点数"
-
-msgid ""
-"UPnP has been disabled; Do you have more than one UPnP Internet Gateway "
-"Device on your LAN ?"
-msgstr "UPnP 已禁用；您的 LAN 中一个以上的 UPnP 互联网网关设备吗？"
+#~ msgid ""
+#~ "A web app may also be disabled by removing the .war file from the webapps "
+#~ "directory; however the .war file and web app will reappear when you "
+#~ "update your router to a newer version, so disabling the web app here is "
+#~ "the preferred method."
+#~ msgstr ""
+#~ "从 web 应用文件夹中删除相应的 .wa r文件同样可以禁用 Web 应用；然而这些 ."
+#~ "war 文件和 web 应用在更新 I2P 后还会再次出现，所以推荐在这里通过设置的方法"
+#~ "禁用不用的 web 应用。"
 
 #, java-format
-msgid "Alternatively, put entries in the file {0} (e.g. {1})."
-msgstr "或者，将条目放入文件 {0}（例如 {1}）。"
+#~ msgid "See {0} for help."
+#~ msgstr "帮助参见 {0}。"
 
-msgid "Easy anonymous file sharing"
-msgstr "易用的匿名文件分享"
+#~ msgid "Reseeding: fetching seed URL."
+#~ msgstr "正在补种：从 URL 获取种子。"
 
-msgid "MuWire"
-msgstr "MuWire"
+#~ msgid "How many peers we are actively talking with"
+#~ msgstr "正在通讯的活动节点数"
 
-msgid "Privacy guides and tutorials"
-msgstr "隐私指南和教程"
-
-msgid "The Tin Hat"
-msgstr "锡帽"
-
-msgid "I2P Technical Docs"
-msgstr "I2P 技术文档"
-
-msgid "Trac Wiki"
-msgstr "Trac Wiki"
-
-msgid "Manually Configure Floodfill Participation"
-msgstr "手动配置参与洪泛"
-
-msgid "cost"
-msgstr "开销"
-
-msgid "If UPnP is not working, it may be for one of the following reasons:"
-msgstr "如果 UPnP 未工作，可能由于以下原因："
-
-msgid ""
-"To override these limits, add the settings i2np.ntcp.maxConnections=nnn and "
-"i2np.udp.maxConnections=nnn on the advanced configuration page."
-msgstr ""
-"要自定义连接数限制，您可以在高级配置页面中添加参数 i2np.ntcp."
-"maxConnections=nnn 及 i2np.udp.maxConnections=nnn 。"
-
-msgid "The round trip time in milliseconds"
-msgstr "往返时间（毫秒）"
-
-msgid "Limit"
-msgstr "限制"
-
-msgid "as determined by the profile organizer"
-msgstr "由配置文件管理器决定"
-
-msgid "UDP"
-msgstr "UDP"
-
-msgid "Jump to section"
-msgstr "跳转"
-
-msgid "GO"
-msgstr "执行"
-
-msgid "Information regarding software and licenses used by I2P"
-msgstr "I2P 使用的软件和许可证信息"
-
-msgid "A short guide to the sidebar's network reachability notification"
-msgstr "侧栏网络可达性通知的简明指南"
-
-msgid "View full changelog"
-msgstr "查看完整的更新日志"
-
-msgid "View active leasesets (debug mode)"
-msgstr "查看活动租契集（调试模式）"
-
-msgid "Proof"
-msgstr "检验"
-
-msgid "Signed proof of ownership of this router"
-msgstr "此路由器所有权的签名证明"
-
-msgid "Disconnected - check network connection"
-msgstr "已断开 - 请检查网络连接"
+#~ msgid ""
+#~ "UPnP has been disabled; Do you have more than one UPnP Internet Gateway "
+#~ "Device on your LAN ?"
+#~ msgstr "UPnP 已禁用；您的 LAN 中一个以上的 UPnP 互联网网关设备吗？"
 
 #, java-format
-msgid "Download Signed<br>Development Update<br>{0}"
-msgstr "下载已签名的<br>开发版更新<br>{0}"
+#~ msgid "Alternatively, put entries in the file {0} (e.g. {1})."
+#~ msgstr "或者，将条目放入文件 {0}（例如 {1}）。"
 
-msgid "dead"
-msgstr "失效"
+#~ msgid "Easy anonymous file sharing"
+#~ msgstr "易用的匿名文件分享"
 
-msgid "All sidebar values are in bytes per second, not bits per second."
-msgstr "所有侧栏值单位为字节每秒，不是比特每秒。"
+#~ msgid "MuWire"
+#~ msgstr "MuWire"
 
-msgid "You may change your bandwidth limits here."
-msgstr "您可以在此更改您的带宽限制。"
+#~ msgid "Privacy guides and tutorials"
+#~ msgstr "隐私指南和教程"
 
-msgid ""
-"The more bandwidth you make available, the more you help the network and "
-"improve your own anonymity, so please take the time to review the settings."
-msgstr ""
-"您可用的带宽越多，您对网络的帮助越多，对您的匿名性提升越多，因此请花时间查看"
-"设置。"
+#~ msgid "The Tin Hat"
+#~ msgstr "锡帽"
 
-msgid ""
-"If you are unsure of your network's speed, use the <a href=\"/welcome?"
-"page=3\">Bandwidth Test</a>."
-msgstr ""
-"如果您不确定您的网络速度，使用<a href=\"/welcome?page=3\">带宽测试</a>。"
+#~ msgid "I2P Technical Docs"
+#~ msgstr "I2P 技术文档"
 
-msgid ""
-"Your upstream share amount (KBps Out) will determine your overall "
-"contribution to the network."
-msgstr "您的上行共享总量（KBps 出站）将决定您对网络的总体贡献。"
+#~ msgid "Trac Wiki"
+#~ msgstr "Trac Wiki"
 
-msgid ""
-"Most of the router configuration options listed below are not available in "
-"the user interface, because they are rarely used or provide access to "
-"advanced settings that most users will not need."
-msgstr ""
-"下方列出的大部分路由配置选项在用户界面不可用，因为它们极少用到或提供大部分用"
-"户不需要的高级设置。"
+#~ msgid "Manually Configure Floodfill Participation"
+#~ msgstr "手动配置参与洪泛"
 
-msgid ""
-"You must edit your <code>router.config</code> file to add options, or, if "
-"you have added <code>routerconsole.advanced=true</code> to the router.config "
-"file, you may edit settings within the console on this page."
-msgstr ""
-"您必须编辑您的 <code>router.config</code> 文件以添加选项，或者，如果您已经添"
-"加 <code>routerconsole.advanced=true</code> 到 router.config 文件，您可以在此"
-"页面控制台内编辑设置。"
+#~ msgid "cost"
+#~ msgstr "开销"
 
-msgid "Only set this to true if you know what you are doing!"
-msgstr "仅在您知道您在做什么时将其设置为 true！"
+#~ msgid "If UPnP is not working, it may be for one of the following reasons:"
+#~ msgstr "如果 UPnP 未工作，可能由于以下原因："
 
-msgid ""
-"When set to true, additional functionality will be enabled in the console "
-"and the user will be able to edit settings directly on this page"
-msgstr "当设置为 true，将在控制台启用高级功能，用户将可以在此页面直接编辑设置"
+#~ msgid ""
+#~ "To override these limits, add the settings i2np.ntcp.maxConnections=nnn "
+#~ "and i2np.udp.maxConnections=nnn on the advanced configuration page."
+#~ msgstr ""
+#~ "要自定义连接数限制，您可以在高级配置页面中添加参数 i2np.ntcp."
+#~ "maxConnections=nnn 及 i2np.udp.maxConnections=nnn 。"
 
-msgid ""
-"Extra display options are provided in the <a href=\"/netdb\">Network "
-"Database section</a>."
-msgstr "额外显示选项在<a href=\"/netdb\">网络数据库章节</a>提供。"
+#~ msgid "The round trip time in milliseconds"
+#~ msgstr "往返时间（毫秒）"
 
-msgid "This will also enable the installation of unsigned updates."
-msgstr "这将启用未签名安装。"
+#~ msgid "Limit"
+#~ msgstr "限制"
 
-msgid ""
-"This setting allows the manual selection of the browser which I2P will "
-"launch on startup."
-msgstr "此设置允许手动选择 I2P 启动时启动的浏览器。"
+#~ msgid "as determined by the profile organizer"
+#~ msgstr "由配置文件管理器决定"
 
-msgid ""
-"When set to true, a configurable search bar will appear on the <a href=\"/"
-"home\">console home page</a>"
-msgstr ""
-"当设置为 true，可配置的搜索栏将出现在<a href=\"/home\">控制台主页</a>上"
+#~ msgid "UDP"
+#~ msgstr "UDP"
 
-msgid ""
-"Determines the maximum number of participating tunnels the router will "
-"accept."
-msgstr "决定路由将接受的参与隧道的最大数量。"
+#~ msgid "Jump to section"
+#~ msgstr "跳转"
 
-msgid "To disable participation completely, set to 0."
-msgstr "设为 0 以完全禁用参与。"
+#~ msgid "GO"
+#~ msgstr "执行"
 
-msgid "Websites Inside I2P"
-msgstr "I2P 网站"
+#~ msgid "Information regarding software and licenses used by I2P"
+#~ msgstr "I2P 使用的软件和许可证信息"
 
-msgid "Leave blank for DH option."
-msgstr "留空 DH 选项。"
+#~ msgid "A short guide to the sidebar's network reachability notification"
+#~ msgstr "侧栏网络可达性通知的简明指南"
 
-msgid ""
-"If you are running Tor Browser, reseed through it by configuring SOCKS 5, "
-"localhost, port 9150."
-msgstr ""
-"如果您在运行 Tor 浏览器，配置 SOCKS 5，localhost，9150 端口以通过它补种。"
+#~ msgid "View full changelog"
+#~ msgstr "查看完整的更新日志"
 
-msgid ""
-"If you are running command-line Tor, reseed through it by configuring SOCKS "
-"5, localhost, port 9050."
-msgstr ""
-"如果您在运行命令行 Tor，配置 SOCKS 5，localhost，9050 端口以通过它补种。"
+#~ msgid "View active leasesets (debug mode)"
+#~ msgstr "查看活动租契集（调试模式）"
 
-msgid ""
-"If you have some peers but need more, you may try the I2P Outproxy option. "
-"Leave the host and port blank."
-msgstr ""
-"如果您有一些对等节点但需要更多，您可以尝试 I2P 出口代理选项。留空主机和端口。"
+#~ msgid "Proof"
+#~ msgstr "检验"
 
-msgid "This will not work for an initial reseed when you have no peers at all."
-msgstr "对于初始补种这不起作用因为您根本没有对等节点。"
+#~ msgid "Signed proof of ownership of this router"
+#~ msgstr "此路由器所有权的签名证明"
+
+#~ msgid "Disconnected - check network connection"
+#~ msgstr "已断开 - 请检查网络连接"
 
 #, java-format
-msgid "Then, click \"{0}\"."
-msgstr "然后，点击 \"{0}\"。"
+#~ msgid "Download Signed<br>Development Update<br>{0}"
+#~ msgstr "下载已签名的<br>开发版更新<br>{0}"
 
-msgid "Then, use this page to reseed with the file you received."
-msgstr "然后，使用此页面从您收到的文件中补种。"
+#~ msgid "dead"
+#~ msgstr "失效"
 
-msgid "First, select the file below."
-msgstr "首先，在下方选择一个文件。"
+#~ msgid "All sidebar values are in bytes per second, not bits per second."
+#~ msgstr "所有侧栏值单位为字节每秒，不是比特每秒。"
 
-msgid "Then, use this page to reseed with the URL you received."
-msgstr "然后，使用此页面从您收到的 URL 中补种。"
+#~ msgid "You may change your bandwidth limits here."
+#~ msgstr "您可以在此更改您的带宽限制。"
 
-msgid "First, enter the URL below."
-msgstr "首先，在下方输入 URL。"
+#~ msgid ""
+#~ "The more bandwidth you make available, the more you help the network and "
+#~ "improve your own anonymity, so please take the time to review the "
+#~ "settings."
+#~ msgstr ""
+#~ "您可用的带宽越多，您对网络的帮助越多，对您的匿名性提升越多，因此请花时间查"
+#~ "看设置。"
 
-#, java-format
-msgid "See {0} for instructions on reseeding manually."
-msgstr "手动补种的方法请参见 {0}"
+#~ msgid ""
+#~ "If you are unsure of your network's speed, use the <a href=\"/welcome?"
+#~ "page=3\">Bandwidth Test</a>."
+#~ msgstr ""
+#~ "如果您不确定您的网络速度，使用<a href=\"/welcome?page=3\">带宽测试</a>。"
 
-msgid "the FAQ"
-msgstr "常见问题"
+#~ msgid ""
+#~ "Your upstream share amount (KBps Out) will determine your overall "
+#~ "contribution to the network."
+#~ msgstr "您的上行共享总量（KBps 出站）将决定您对网络的总体贡献。"
 
-msgid "Not for initial reseed. Leave host and port blank."
-msgstr "不用于初始补种。主机和端口留空。"
+#~ msgid ""
+#~ "Most of the router configuration options listed below are not available "
+#~ "in the user interface, because they are rarely used or provide access to "
+#~ "advanced settings that most users will not need."
+#~ msgstr ""
+#~ "下方列出的大部分路由配置选项在用户界面不可用，因为它们极少用到或提供大部分"
+#~ "用户不需要的高级设置。"
 
-msgid ""
-"Graceful shutdown lets the router satisfy the agreements it has already made "
-"before shutting down, but may take a few minutes."
-msgstr "平滑关闭让路由在关闭前完成已达成的任务，但这可能需要花费几分钟的时间。"
+#~ msgid ""
+#~ "You must edit your <code>router.config</code> file to add options, or, if "
+#~ "you have added <code>routerconsole.advanced=true</code> to the router."
+#~ "config file, you may edit settings within the console on this page."
+#~ msgstr ""
+#~ "您必须编辑您的 <code>router.config</code> 文件以添加选项，或者，如果您已经"
+#~ "添加 <code>routerconsole.advanced=true</code> 到 router.config 文件，您可"
+#~ "以在此页面控制台内编辑设置。"
 
-msgid ""
-"If you need to kill the router immediately, that option is available as well."
-msgstr "当然你也可以选择立即关闭路由。"
+#~ msgid "Only set this to true if you know what you are doing!"
+#~ msgstr "仅在您知道您在做什么时将其设置为 true！"
 
-msgid ""
-"If you want the router to restart itself after shutting down, you can choose "
-"one of the following."
-msgstr "如果你想要路由关闭后自动重新启动，可以选择下面的选项。"
+#~ msgid ""
+#~ "When set to true, additional functionality will be enabled in the console "
+#~ "and the user will be able to edit settings directly on this page"
+#~ msgstr ""
+#~ "当设置为 true，将在控制台启用高级功能，用户将可以在此页面直接编辑设置"
 
-msgid ""
-"This is useful in some situations - for example, if you changed some "
-"settings that client applications only read at startup, such as the "
-"routerconsole password or the interface it listens on."
-msgstr ""
-"此功能在如下情况下适用 - 例如当您修改了某些只在启动时读取的设置，例如路由控制"
-"台密码，路由监听接口等。"
+#~ msgid ""
+#~ "Extra display options are provided in the <a href=\"/netdb\">Network "
+#~ "Database section</a>."
+#~ msgstr "额外显示选项在<a href=\"/netdb\">网络数据库章节</a>提供。"
 
-msgid ""
-"A graceful restart will take a few minutes (but your peers will appreciate "
-"your patience), while a hard restart does so immediately."
-msgstr ""
-"平滑重启可能会等待几分钟的时间（但你的节点一定会感激你的耐心），硬重启可以立"
-"即完成。"
+#~ msgid "This will also enable the installation of unsigned updates."
+#~ msgstr "这将启用未签名安装。"
 
-msgid ""
-"After tearing down the router, it will wait 1 minute before starting back up "
-"again."
-msgstr "路由关闭后将等待1分钟再重新启动。"
+#~ msgid ""
+#~ "This setting allows the manual selection of the browser which I2P will "
+#~ "launch on startup."
+#~ msgstr "此设置允许手动选择 I2P 启动时启动的浏览器。"
 
-msgid ""
-"You can control whether I2P is run on startup or not by selecting one of the "
-"following options - I2P will install (or remove) a service accordingly."
-msgstr ""
-"这里你可以通过下面的选项来设置开机后 I2P 是否启动 - I2P 将相应的安装或卸载 "
-"I2P 服务。"
+#~ msgid ""
+#~ "When set to true, a configurable search bar will appear on the <a href=\"/"
+#~ "home\">console home page</a>"
+#~ msgstr ""
+#~ "当设置为 true，可配置的搜索栏将出现在<a href=\"/home\">控制台主页</a>上"
 
-msgid "If you prefer the command line, you can also run the "
-msgstr "如果你偏好使用命令行，可以运行 "
+#~ msgid ""
+#~ "Determines the maximum number of participating tunnels the router will "
+#~ "accept."
+#~ msgstr "决定路由将接受的参与隧道的最大数量。"
 
-msgid ""
-"If you are running I2P as service right now, removing it will shut down your "
-"router immediately."
-msgstr "如果您目前已经以服务形式运行 I2P ，删除 I2P 服务将立刻关闭路由器。"
+#~ msgid "To disable participation completely, set to 0."
+#~ msgstr "设为 0 以完全禁用参与。"
 
-msgid ""
-"You may want to consider shutting down gracefully, as above, then running "
-"uninstall_i2p_service_winnt.bat."
-msgstr ""
-"您可以考虑先平滑关闭路由，待退出后运行 uninstall_i2p_service_winnt.bat。"
+#~ msgid "Websites Inside I2P"
+#~ msgstr "I2P 网站"
 
-msgid ""
-"At times, it may be helpful to debug I2P by getting a thread dump. To do so, "
-"please select the following option and review the thread dumped to <a "
-"href=\"logs.jsp#servicelogs\">wrapper.log</a>."
-msgstr ""
-"I2P 调试有时需要用到线程转储，利用此处的选项可以将线程转储至 <a href=\"logs."
-"jsp#servicelogs\">wrapper.log</a>。"
+#~ msgid "Leave blank for DH option."
+#~ msgstr "留空 DH 选项。"
 
-#, java-format
-msgid ""
-"I2P''s main configuration interface is this web console, so for your "
-"convenience I2P can launch a web browser on startup pointing at {0}."
-msgstr ""
-"I2P'' 主配置接口是网络控制台，所以为了您方便 I2P 可以在启动时启动网络浏览器指"
-"向 {0}。"
+#~ msgid ""
+#~ "If you are running Tor Browser, reseed through it by configuring SOCKS 5, "
+#~ "localhost, port 9150."
+#~ msgstr ""
+#~ "如果您在运行 Tor 浏览器，配置 SOCKS 5，localhost，9150 端口以通过它补种。"
 
-msgid "toggle all"
-msgstr "全部切换"
+#~ msgid ""
+#~ "If you are running command-line Tor, reseed through it by configuring "
+#~ "SOCKS 5, localhost, port 9050."
+#~ msgstr ""
+#~ "如果您在运行命令行 Tor，配置 SOCKS 5，localhost，9050 端口以通过它补种。"
 
-msgid "Stat file"
-msgstr "统计文件"
+#~ msgid ""
+#~ "If you have some peers but need more, you may try the I2P Outproxy "
+#~ "option. Leave the host and port blank."
+#~ msgstr ""
+#~ "如果您有一些对等节点但需要更多，您可以尝试 I2P 出口代理选项。留空主机和端"
+#~ "口。"
 
-msgid "Toggle section graphing options"
-msgstr "切换板块图形选项"
-
-msgid "To make permanent client tunnel changes see the"
-msgstr "要永久性更改客户通道的设置参见"
-
-msgid "Signed Build URL"
-msgstr "已签名版本 URL"
-
-msgid "Unsigned Build URL"
-msgstr "未签名软件链接"
-
-msgid "help"
-msgstr "帮助"
-
-msgid ""
-"If you would like to help improve or translate the documentation, or help "
-"with other aspects of the project, please see the documentation for <a "
-"href=\"http://i2p-projekt.i2p/en/get-involved\" target=\"_blank\">volunteers."
-"</a>"
-msgstr ""
-"如果您想要帮助改进或翻译文档，或帮助项目其他方面，请参阅文档<a href=\"http://"
-"i2p-projekt.i2p/en/get-involved\" target=\"_blank\">参与贡献</a>"
-
-msgid "FAQ on i2p-projekt.i2p"
-msgstr "i2p-projekt.i2p 上的常见问题"
+#~ msgid ""
+#~ "This will not work for an initial reseed when you have no peers at all."
+#~ msgstr "对于初始补种这不起作用因为您根本没有对等节点。"
 
 #, java-format
-msgid "You may also try {0} or {1}."
-msgstr "您也可以尝试 {0} 或 {1}。"
+#~ msgid "Then, click \"{0}\"."
+#~ msgstr "然后，点击 \"{0}\"。"
 
-msgid ""
-"Many of the stats on the sidebar may be <a href=\"configstats\">configured</"
-"a> to be <a href=\"graphs\">graphed</a> for further analysis."
-msgstr ""
-"侧栏上的许多统计数据可以<a href=\"configstats\">配置</a>为<a href=\"graphs\">"
-"图表</a>以进行进一步分析。"
+#~ msgid "Then, use this page to reseed with the file you received."
+#~ msgstr "然后，使用此页面从您收到的文件中补种。"
 
-msgid ""
-"You may also customize the sections that appear on the Sidebar and their "
-"positioning on the <a href=\"configsidebar\">Sidebar Configuration page</a>."
-msgstr ""
-"您还可以在<a href=\"configsidebar\">侧栏配置页面</a>上自定义侧栏上显示的部分"
-"及其位置。"
+#~ msgid "First, select the file below."
+#~ msgstr "首先，在下方选择一个文件。"
 
-msgid ""
-"This section indicates your average bandwidth speeds and total usage for the "
-"session."
-msgstr "此部分指示会话中您的平均带宽速度和总使用量。"
+#~ msgid "Then, use this page to reseed with the URL you received."
+#~ msgstr "然后，使用此页面从您收到的 URL 中补种。"
 
-msgid "All values are in bytes per second, not bits per second."
-msgstr "所有数值单位为字节每秒而非比特每秒。"
-
-msgid ""
-"The first number is the number of peers your router has sent or received a "
-"message from in the last few minutes."
-msgstr "第一个数字是路由在过去几分钟内发送或接收消息的对等节点数量。"
-
-msgid ""
-"This may range from 8-10 to several hundred, depending on your total "
-"bandwidth, shared bandwidth, and locally-generated traffic."
-msgstr ""
-"这可能在 8-10 到几百之间，具体取决于您的总带宽，共享带宽和本地生成的流量。"
-
-msgid "The second number is the number of peers seen in the last hour or so."
-msgstr "第二个数字是过去一小时左右看到的对等节点数量。"
-
-msgid "Do not be concerned if these numbers vary widely."
-msgstr "如果这些数字变化很大，请不要担心。"
-
-msgid "These peers are shown on the <a href=\"profiles\">profiles page</a>."
-msgstr "这些对等节点显示在<a href=\"profiles\">摘要页面</a>上。"
-
-msgid "The fast peers are included in the high capacity tier."
-msgstr "快速对等节点包含在高容量级别中。"
-
-msgid ""
-"These are usually the floodfill routers responsible for maintaining network "
-"integrity."
-msgstr "这些通常是负责维护网络完整性的洪泛路由。"
-
-msgid "This may range from under 100 to several thousand."
-msgstr "这可能从不到 100 到数千不等。"
-
-msgid ""
-"This number is not the total size of the network; it may vary widely "
-"depending on your total bandwidth, shared bandwidth, and locally-generated "
-"traffic."
-msgstr ""
-"这个数字不是网络的总大小；它可能会有很大差异，具体取决于您的总带宽，共享带宽"
-"和本地生成的流量。"
-
-msgid ""
-"I2P does not require a router to know every other router in the network."
-msgstr "I2P 不需要路由知道网络中的每个其他路由。"
+#~ msgid "First, enter the URL below."
+#~ msgstr "首先，在下方输入 URL。"
 
 #, java-format
-msgid "For the full version, please visit {0} or {1}."
-msgstr "请访问 {0} 或 {1} 获取完整版本。"
+#~ msgid "See {0} for instructions on reseeding manually."
+#~ msgstr "手动补种的方法请参见 {0}"
 
-msgid ""
-"If after a few minutes of uptime your router is indicating 0 Active Peers "
-"and 0 Known Peers, with a notification in the sidebar that you need to check "
-"your network connection, verify that you can access the internet."
-msgstr ""
-"如果在正常运行几分钟后，您的路由器显示 0 个活动对等节点和 0 个已知对等节点，"
-"并在侧栏中显示您需要检查网络连接的通知，请确认您是否可以访问互联网。"
+#~ msgid "the FAQ"
+#~ msgstr "常见问题"
 
-msgid ""
-"If your internet connection is functional, you may need to unblock Java in "
-"your firewall."
-msgstr "如果您的互联网连接正常，则可能需要在防火墙中取消阻止 Java。"
+#~ msgid "Not for initial reseed. Leave host and port blank."
+#~ msgstr "不用于初始补种。主机和端口留空。"
 
-msgid ""
-"Otherwise, you may need to reseed your I2P router. Visit the <a href=\"/"
-"configreseed#reseedconfig\">Reseed Configuration page</a> and click the "
-"\"Save Changes and Reseed Now\" button."
-msgstr ""
-"否则，您可能需要为 I2P 路由补种。 访问<a href=\"/configreseed#reseedconfig\">"
-"补种配置页面</a>并点击“保存更改并立刻补种”按钮。"
+#~ msgid ""
+#~ "Graceful shutdown lets the router satisfy the agreements it has already "
+#~ "made before shutting down, but may take a few minutes."
+#~ msgstr ""
+#~ "平滑关闭让路由在关闭前完成已达成的任务，但这可能需要花费几分钟的时间。"
 
-msgid "The router should maintain connections to a few peers at all times."
-msgstr "路由器应始终保持与几个对等节点的连接。"
+#~ msgid ""
+#~ "If you need to kill the router immediately, that option is available as "
+#~ "well."
+#~ msgstr "当然你也可以选择立即关闭路由。"
 
-msgid ""
-"The best way to stay connected to the network is to <a href=\"/"
-"config\">share more bandwidth</a>."
-msgstr "保持与网络连接的最佳方式是<a href=\"/config\">共享更多带宽</a>。"
+#~ msgid ""
+#~ "If you want the router to restart itself after shutting down, you can "
+#~ "choose one of the following."
+#~ msgstr "如果你想要路由关闭后自动重新启动，可以选择下面的选项。"
 
-#, java-format
-msgid "The default subscription is to {0} which is seldom updated."
-msgstr "默认订阅是来自 {0}，它很少更新。"
+#~ msgid ""
+#~ "This is useful in some situations - for example, if you changed some "
+#~ "settings that client applications only read at startup, such as the "
+#~ "routerconsole password or the interface it listens on."
+#~ msgstr ""
+#~ "此功能在如下情况下适用 - 例如当您修改了某些只在启动时读取的设置，例如路由"
+#~ "控制台密码，路由监听接口等。"
 
-msgid ""
-"If you don't have another subscription, you may use \"jump\" links which are "
-"slower, but ensure that your addressbook only contains the default addresses "
-"and sites that you use."
-msgstr ""
-"如果您没有其他订阅，则可以使用较慢的“跳转”链接，但请确保您的地址簿仅包含您使"
-"用的默认地址和站点。"
+#~ msgid ""
+#~ "A graceful restart will take a few minutes (but your peers will "
+#~ "appreciate your patience), while a hard restart does so immediately."
+#~ msgstr ""
+#~ "平滑重启可能会等待几分钟的时间（但你的节点一定会感激你的耐心），硬重启可以"
+#~ "立即完成。"
 
-msgid ""
-"To speed up browsing on I2P, it's a good idea to add some addressbook "
-"subscriptions."
-msgstr "为了加快浏览 I2P，添加一些地址簿订阅是个好主意。"
+#~ msgid ""
+#~ "After tearing down the router, it will wait 1 minute before starting back "
+#~ "up again."
+#~ msgstr "路由关闭后将等待1分钟再重新启动。"
 
-msgid "Here are some other public addressbook subscription links."
-msgstr "以下是一些其他公开地址簿订阅链接。"
+#~ msgid ""
+#~ "You can control whether I2P is run on startup or not by selecting one of "
+#~ "the following options - I2P will install (or remove) a service "
+#~ "accordingly."
+#~ msgstr ""
+#~ "这里你可以通过下面的选项来设置开机后 I2P 是否启动 - I2P 将相应的安装或卸"
+#~ "载 I2P 服务。"
 
-msgid ""
-"You may wish to add one or two to your <a href=\"/susidns/"
-"subscriptions\">subscription list</a>."
-msgstr ""
-"您可能希望添加一两个到您的<a href=\"/susidns/subscriptions\">订阅列表</a>。"
+#~ msgid "If you prefer the command line, you can also run the "
+#~ msgstr "如果你偏好使用命令行，可以运行 "
 
-msgid ""
-"The operators of these services may have various policies for listing hosts."
-msgstr "这些服务的运营商可能有各种列出主机的策略。"
+#~ msgid ""
+#~ "If you are running I2P as service right now, removing it will shut down "
+#~ "your router immediately."
+#~ msgstr "如果您目前已经以服务形式运行 I2P ，删除 I2P 服务将立刻关闭路由器。"
 
-msgid "Presence on this list does not imply endorsement."
-msgstr "出现在此列表中并不意味着认可。"
+#~ msgid ""
+#~ "You may want to consider shutting down gracefully, as above, then running "
+#~ "uninstall_i2p_service_winnt.bat."
+#~ msgstr ""
+#~ "您可以考虑先平滑关闭路由，待退出后运行 uninstall_i2p_service_winnt.bat。"
 
-msgid ""
-"Unless an outproxy has been set up for the service you want to connect to, "
-"this is not possible."
-msgstr "除非已为要连接的服务设置了出口代理，否则无法做到。"
-
-msgid ""
-"There are only three types of outproxies running right now: HTTP, HTTPS, and "
-"email."
-msgstr "现在只运行三种类型的出口代理：HTTP，HTTPS 和电子邮件。"
-
-msgid "Note that there is currently no public SOCKS outproxy."
-msgstr "请注意目前没有公共 SOCKS 出口代理。"
-
-msgid ""
-"You will need to configure your browser to use the HTTP proxy server on host "
-"<code>127.0.0.1</code> port <code>4444</code>)."
-msgstr ""
-"您需要将浏览器配置为在主机 <code>127.0.0.1</code> <code>4444</code> 端口上使"
-"用 HTTP 代理服务。"
+#~ msgid ""
+#~ "At times, it may be helpful to debug I2P by getting a thread dump. To do "
+#~ "so, please select the following option and review the thread dumped to <a "
+#~ "href=\"logs.jsp#servicelogs\">wrapper.log</a>."
+#~ msgstr ""
+#~ "I2P 调试有时需要用到线程转储，利用此处的选项可以将线程转储至 <a "
+#~ "href=\"logs.jsp#servicelogs\">wrapper.log</a>。"
 
 #, java-format
-msgid "See the {0} for a more detailed explanation."
-msgstr "有关更详细的说明，请参阅 {0}。"
+#~ msgid ""
+#~ "I2P''s main configuration interface is this web console, so for your "
+#~ "convenience I2P can launch a web browser on startup pointing at {0}."
+#~ msgstr ""
+#~ "I2P'' 主配置接口是网络控制台，所以为了您方便 I2P 可以在启动时启动网络浏览"
+#~ "器指向 {0}。"
 
-msgid "An eepsite is a website that is hosted anonymously on the I2P network."
-msgstr "匿名网站是匿名托管在 I2P 网络上的网站。"
+#~ msgid "toggle all"
+#~ msgstr "全部切换"
 
-msgid ""
-"You can access it by configuring your web browser to use I2P's HTTP proxy "
-"and browsing to the website."
-msgstr "您可以配置网络浏览器使用 I2P 的 HTTP 代理并浏览网站。"
+#~ msgid "Stat file"
+#~ msgstr "统计文件"
 
-msgid ""
-"If you consider every eepsite that has ever been created, yes, most of them "
-"are down."
-msgstr "若你考虑已创建过的每一个匿名网站，是的，它们大多已经关闭。"
+#~ msgid "Toggle section graphing options"
+#~ msgstr "切换板块图形选项"
 
-msgid "People and eepsites come and go."
-msgstr "人们和匿名网站来来去去。"
+#~ msgid "To make permanent client tunnel changes see the"
+#~ msgstr "要永久性更改客户通道的设置参见"
 
-msgid ""
-"A good way to get started in I2P is check out a list of eepsites that are "
-"currently up."
-msgstr "一个要在 I2P 开始的好方法，是查阅目前正运行的匿名网站的列表。"
+#~ msgid "Signed Build URL"
+#~ msgstr "已签名版本 URL"
+
+#~ msgid "Unsigned Build URL"
+#~ msgstr "未签名软件链接"
+
+#~ msgid "help"
+#~ msgstr "帮助"
+
+#~ msgid ""
+#~ "If you would like to help improve or translate the documentation, or help "
+#~ "with other aspects of the project, please see the documentation for <a "
+#~ "href=\"http://i2p-projekt.i2p/en/get-involved\" "
+#~ "target=\"_blank\">volunteers.</a>"
+#~ msgstr ""
+#~ "如果您想要帮助改进或翻译文档，或帮助项目其他方面，请参阅文档<a "
+#~ "href=\"http://i2p-projekt.i2p/en/get-involved\" target=\"_blank\">参与贡献"
+#~ "</a>"
+
+#~ msgid "FAQ on i2p-projekt.i2p"
+#~ msgstr "i2p-projekt.i2p 上的常见问题"
 
 #, java-format
-msgid "{0} tracks active eepsites."
-msgstr "{0} 跟踪正运行的匿名网站。"
+#~ msgid "You may also try {0} or {1}."
+#~ msgstr "您也可以尝试 {0} 或 {1}。"
 
-msgid ""
-"A tunnel to the main IRC server network within I2P, Irc2P, is automatically "
-"started when the I2P router starts."
-msgstr ""
-"当 I2P 路由启动时，到 I2P 内的主 IRC 服务网络的隧道 Irc2P 将自动启动 。"
+#~ msgid ""
+#~ "Many of the stats on the sidebar may be <a "
+#~ "href=\"configstats\">configured</a> to be <a href=\"graphs\">graphed</a> "
+#~ "for further analysis."
+#~ msgstr ""
+#~ "侧栏上的许多统计数据可以<a href=\"configstats\">配置</a>为<a "
+#~ "href=\"graphs\">图表</a>以进行进一步分析。"
 
-msgid ""
-"To connect to it, tell your IRC client to connect to server: "
-"<code>127.0.0.1</code> port: <code>6668</code>."
-msgstr ""
-"告诉您的 IRC 客户端连接到服务器：<code>127.0.0.1</code> 端口：<code>6668</"
-"code> 以连接到它。"
+#~ msgid ""
+#~ "You may also customize the sections that appear on the Sidebar and their "
+#~ "positioning on the <a href=\"configsidebar\">Sidebar Configuration page</"
+#~ "a>."
+#~ msgstr ""
+#~ "您还可以在<a href=\"configsidebar\">侧栏配置页面</a>上自定义侧栏上显示的部"
+#~ "分及其位置。"
 
-msgid ""
-"Different IRC clients may require a different command, consult the client "
-"documentation."
-msgstr "不同的 IRC 客户端可能需要不同的命令，请参阅客户端文档。"
+#~ msgid ""
+#~ "This section indicates your average bandwidth speeds and total usage for "
+#~ "the session."
+#~ msgstr "此部分指示会话中您的平均带宽速度和总使用量。"
 
-msgid "Internet facing ports"
-msgstr "面向网络的端口"
+#~ msgid "All values are in bytes per second, not bits per second."
+#~ msgstr "所有数值单位为字节每秒而非比特每秒。"
 
-msgid ""
-"I2P selects a random port to communicate with other routers when the program "
-"is run for the first time."
-msgstr "程序首次运行时 I2P 会选择随机端口与其他路由通信。"
+#~ msgid ""
+#~ "The first number is the number of peers your router has sent or received "
+#~ "a message from in the last few minutes."
+#~ msgstr "第一个数字是路由在过去几分钟内发送或接收消息的对等节点数量。"
 
-msgid "This page shows tunnels built by and routed through your router."
-msgstr "此页面显示由路由构建和路由的隧道。"
+#~ msgid ""
+#~ "This may range from 8-10 to several hundred, depending on your total "
+#~ "bandwidth, shared bandwidth, and locally-generated traffic."
+#~ msgstr ""
+#~ "这可能在 8-10 到几百之间，具体取决于您的总带宽，共享带宽和本地生成的流量。"
 
-msgid ""
-"Tunnels built by your router and used for communication with the floodfill "
-"peers, building new tunnels, and testing existing tunnels."
-msgstr "由路由构建的隧道，用于与洪泛对等节点通信，构建新隧道以及测试现有隧道。"
+#~ msgid ""
+#~ "The second number is the number of peers seen in the last hour or so."
+#~ msgstr "第二个数字是过去一小时左右看到的对等节点数量。"
 
-msgid "Tunnels built by your router for each client's use."
-msgstr "路由为每个客户端使用构建的隧道。"
+#~ msgid "Do not be concerned if these numbers vary widely."
+#~ msgstr "如果这些数字变化很大，请不要担心。"
 
-msgid "Tunnels built by other routers through your router."
-msgstr "其他路由构建的通过您的路由的隧道。"
+#~ msgid "These peers are shown on the <a href=\"profiles\">profiles page</a>."
+#~ msgstr "这些对等节点显示在<a href=\"profiles\">摘要页面</a>上。"
 
-msgid ""
-"The quantity may vary widely depending on network demand, your shared "
-"bandwidth, and amount of locally-generated traffic."
-msgstr "数量可能会有很大差异，具体取决于网络需求，共享带宽以及本地生成的流量。"
+#~ msgid "The fast peers are included in the high capacity tier."
+#~ msgstr "快速对等节点包含在高容量级别中。"
 
-msgid ""
-"The recommended method for limiting participating tunnels is to change your "
-"share percentage on the <a href=\"config\">Bandwidth Configuration page</a>."
-msgstr ""
-"限制参与隧道的推荐方式是在<a href=\"config\">带宽配置页面</a>上更改您的共享比"
-"率。"
+#~ msgid ""
+#~ "These are usually the floodfill routers responsible for maintaining "
+#~ "network integrity."
+#~ msgstr "这些通常是负责维护网络完整性的洪泛路由。"
 
-msgid ""
-"You may also limit the total number by setting <code>router."
-"maxParticipatingTunnels=nnn</code> on the <a "
-"href=\"configadvanced\">Advanced configuration page</a>."
-msgstr ""
-"您也可以通过在<a href=\"configadvanced\">高级配置页面</a>上设置 <code>router."
-"maxParticipatingTunnels=nnn</code> 来限制总数。"
+#~ msgid "This may range from under 100 to several thousand."
+#~ msgstr "这可能从不到 100 到数千不等。"
 
-msgid ""
-"The number of participating tunnels you route for others, divided by the "
-"total number of hops in all your exploratory and client tunnels."
-msgstr "您为其他人路由的参与隧道数除以所有探测隧道和客户端隧道中的总跃点数。"
+#~ msgid ""
+#~ "This number is not the total size of the network; it may vary widely "
+#~ "depending on your total bandwidth, shared bandwidth, and locally-"
+#~ "generated traffic."
+#~ msgstr ""
+#~ "这个数字不是网络的总大小；它可能会有很大差异，具体取决于您的总带宽，共享带"
+#~ "宽和本地生成的流量。"
 
-msgid ""
-"A number greater than 1.00 means you are contributing more tunnels to the "
-"network than you are using."
-msgstr "大于 1.00 的数字表示您为网络提供的隧道数量超过了您使用的数量。"
+#~ msgid ""
+#~ "I2P does not require a router to know every other router in the network."
+#~ msgstr "I2P 不需要路由知道网络中的每个其他路由。"
 
-msgid "Why I2P?"
-msgstr "为什么要用 I2P？"
+#, java-format
+#~ msgid "For the full version, please visit {0} or {1}."
+#~ msgstr "请访问 {0} 或 {1} 获取完整版本。"
 
-msgid ""
-"I2P is a communication tool for people who value privacy and wish to remain "
-"anonymous online."
-msgstr "I2P 重视隐私并希望在网络上保持匿名的人们使用的通信工具。"
+#~ msgid ""
+#~ "If after a few minutes of uptime your router is indicating 0 Active Peers "
+#~ "and 0 Known Peers, with a notification in the sidebar that you need to "
+#~ "check your network connection, verify that you can access the internet."
+#~ msgstr ""
+#~ "如果在正常运行几分钟后，您的路由器显示 0 个活动对等节点和 0 个已知对等节"
+#~ "点，并在侧栏中显示您需要检查网络连接的通知，请确认您是否可以访问互联网。"
 
-msgid ""
-"I2P is a peer to peer network where you can browse and create hidden "
-"services."
-msgstr "I2P 是您可以浏览并创建隐藏服务的对等网络。"
+#~ msgid ""
+#~ "If your internet connection is functional, you may need to unblock Java "
+#~ "in your firewall."
+#~ msgstr "如果您的互联网连接正常，则可能需要在防火墙中取消阻止 Java。"
 
-msgid ""
-"Bandwidth participation improves the anonymity level of all users on the "
-"network and maximizes your download speed."
-msgstr "带宽参与可提高网络上所有用户的匿名程度，并最大限度地提高您的下载速度。"
+#~ msgid ""
+#~ "Otherwise, you may need to reseed your I2P router. Visit the <a href=\"/"
+#~ "configreseed#reseedconfig\">Reseed Configuration page</a> and click the "
+#~ "\"Save Changes and Reseed Now\" button."
+#~ msgstr ""
+#~ "否则，您可能需要为 I2P 路由补种。 访问<a href=\"/"
+#~ "configreseed#reseedconfig\">补种配置页面</a>并点击“保存更改并立刻补种”按"
+#~ "钮。"
 
-msgid ""
-"We currently provide an I2P Browser which configures itself automatically"
-msgstr "我们现在提供了可自动配置的 I2P 浏览器"
+#~ msgid "The router should maintain connections to a few peers at all times."
+#~ msgstr "路由器应始终保持与几个对等节点的连接。"
 
-msgid "that you may retrieve from here."
-msgstr "您可从此处获取。"
+#~ msgid ""
+#~ "The best way to stay connected to the network is to <a href=\"/"
+#~ "config\">share more bandwidth</a>."
+#~ msgstr "保持与网络连接的最佳方式是<a href=\"/config\">共享更多带宽</a>。"
 
-msgid "Be aware that this product is currently in beta-testing."
-msgstr "请知晓此产品当前处于 beta 测试中。"
+#, java-format
+#~ msgid "The default subscription is to {0} which is seldom updated."
+#~ msgstr "默认订阅是来自 {0}，它很少更新。"
 
-msgid "Alternatively, you can configure your browser of choice to use I2P."
-msgstr "另外，您可以配置您选择的浏览器以使用 I2P。"
+#~ msgid ""
+#~ "If you don't have another subscription, you may use \"jump\" links which "
+#~ "are slower, but ensure that your addressbook only contains the default "
+#~ "addresses and sites that you use."
+#~ msgstr ""
+#~ "如果您没有其他订阅，则可以使用较慢的“跳转”链接，但请确保您的地址簿仅包含您"
+#~ "使用的默认地址和站点。"
 
-msgid "If you want to do this yourself, here are instructions."
-msgstr "如果您想要自己做，这是指导。"
+#~ msgid ""
+#~ "To speed up browsing on I2P, it's a good idea to add some addressbook "
+#~ "subscriptions."
+#~ msgstr "为了加快浏览 I2P，添加一些地址簿订阅是个好主意。"
 
-msgid ""
-"Otherwise, the recommended way to browse I2P websites is with a separate "
-"profile in the Firefox browser."
-msgstr "否则，浏览 I2P 网站的推荐方式是在 Firefox 浏览器中使用隔离的配置文件。"
+#~ msgid "Here are some other public addressbook subscription links."
+#~ msgstr "以下是一些其他公开地址簿订阅链接。"
 
-msgid ""
-"When I2P starts up, and during normal operation, I2P's tunnel build "
-"readiness indicator in the side panel may indicate that I2P is \"Rejecting "
-"Tunnels\"; this is normal behavior."
-msgstr ""
-"当 I2P 启动时，以及正常操作期间，I2P 的隧道构建侧面板准备状态指示器可能指示 "
-"I2P “拒绝共享隧道”；这是正常行为。"
+#~ msgid ""
+#~ "You may wish to add one or two to your <a href=\"/susidns/"
+#~ "subscriptions\">subscription list</a>."
+#~ msgstr ""
+#~ "您可能希望添加一两个到您的<a href=\"/susidns/subscriptions\">订阅列表</"
+#~ "a>。"
+
+#~ msgid ""
+#~ "The operators of these services may have various policies for listing "
+#~ "hosts."
+#~ msgstr "这些服务的运营商可能有各种列出主机的策略。"
+
+#~ msgid "Presence on this list does not imply endorsement."
+#~ msgstr "出现在此列表中并不意味着认可。"
+
+#~ msgid ""
+#~ "Unless an outproxy has been set up for the service you want to connect "
+#~ "to, this is not possible."
+#~ msgstr "除非已为要连接的服务设置了出口代理，否则无法做到。"
+
+#~ msgid ""
+#~ "There are only three types of outproxies running right now: HTTP, HTTPS, "
+#~ "and email."
+#~ msgstr "现在只运行三种类型的出口代理：HTTP，HTTPS 和电子邮件。"
+
+#~ msgid "Note that there is currently no public SOCKS outproxy."
+#~ msgstr "请注意目前没有公共 SOCKS 出口代理。"
+
+#~ msgid ""
+#~ "You will need to configure your browser to use the HTTP proxy server on "
+#~ "host <code>127.0.0.1</code> port <code>4444</code>)."
+#~ msgstr ""
+#~ "您需要将浏览器配置为在主机 <code>127.0.0.1</code> <code>4444</code> 端口上"
+#~ "使用 HTTP 代理服务。"
+
+#, java-format
+#~ msgid "See the {0} for a more detailed explanation."
+#~ msgstr "有关更详细的说明，请参阅 {0}。"
+
+#~ msgid ""
+#~ "An eepsite is a website that is hosted anonymously on the I2P network."
+#~ msgstr "匿名网站是匿名托管在 I2P 网络上的网站。"
+
+#~ msgid ""
+#~ "You can access it by configuring your web browser to use I2P's HTTP proxy "
+#~ "and browsing to the website."
+#~ msgstr "您可以配置网络浏览器使用 I2P 的 HTTP 代理并浏览网站。"
+
+#~ msgid ""
+#~ "If you consider every eepsite that has ever been created, yes, most of "
+#~ "them are down."
+#~ msgstr "若你考虑已创建过的每一个匿名网站，是的，它们大多已经关闭。"
+
+#~ msgid "People and eepsites come and go."
+#~ msgstr "人们和匿名网站来来去去。"
+
+#~ msgid ""
+#~ "A good way to get started in I2P is check out a list of eepsites that are "
+#~ "currently up."
+#~ msgstr "一个要在 I2P 开始的好方法，是查阅目前正运行的匿名网站的列表。"
+
+#, java-format
+#~ msgid "{0} tracks active eepsites."
+#~ msgstr "{0} 跟踪正运行的匿名网站。"
+
+#~ msgid ""
+#~ "A tunnel to the main IRC server network within I2P, Irc2P, is "
+#~ "automatically started when the I2P router starts."
+#~ msgstr ""
+#~ "当 I2P 路由启动时，到 I2P 内的主 IRC 服务网络的隧道 Irc2P 将自动启动 。"
+
+#~ msgid ""
+#~ "To connect to it, tell your IRC client to connect to server: "
+#~ "<code>127.0.0.1</code> port: <code>6668</code>."
+#~ msgstr ""
+#~ "告诉您的 IRC 客户端连接到服务器：<code>127.0.0.1</code> 端口：<code>6668</"
+#~ "code> 以连接到它。"
+
+#~ msgid ""
+#~ "Different IRC clients may require a different command, consult the client "
+#~ "documentation."
+#~ msgstr "不同的 IRC 客户端可能需要不同的命令，请参阅客户端文档。"
+
+#~ msgid "Internet facing ports"
+#~ msgstr "面向网络的端口"
+
+#~ msgid ""
+#~ "I2P selects a random port to communicate with other routers when the "
+#~ "program is run for the first time."
+#~ msgstr "程序首次运行时 I2P 会选择随机端口与其他路由通信。"
+
+#~ msgid "This page shows tunnels built by and routed through your router."
+#~ msgstr "此页面显示由路由构建和路由的隧道。"
+
+#~ msgid ""
+#~ "Tunnels built by your router and used for communication with the "
+#~ "floodfill peers, building new tunnels, and testing existing tunnels."
+#~ msgstr ""
+#~ "由路由构建的隧道，用于与洪泛对等节点通信，构建新隧道以及测试现有隧道。"
+
+#~ msgid "Tunnels built by your router for each client's use."
+#~ msgstr "路由为每个客户端使用构建的隧道。"
+
+#~ msgid "Tunnels built by other routers through your router."
+#~ msgstr "其他路由构建的通过您的路由的隧道。"
+
+#~ msgid ""
+#~ "The quantity may vary widely depending on network demand, your shared "
+#~ "bandwidth, and amount of locally-generated traffic."
+#~ msgstr ""
+#~ "数量可能会有很大差异，具体取决于网络需求，共享带宽以及本地生成的流量。"
+
+#~ msgid ""
+#~ "The recommended method for limiting participating tunnels is to change "
+#~ "your share percentage on the <a href=\"config\">Bandwidth Configuration "
+#~ "page</a>."
+#~ msgstr ""
+#~ "限制参与隧道的推荐方式是在<a href=\"config\">带宽配置页面</a>上更改您的共"
+#~ "享比率。"
+
+#~ msgid ""
+#~ "You may also limit the total number by setting <code>router."
+#~ "maxParticipatingTunnels=nnn</code> on the <a "
+#~ "href=\"configadvanced\">Advanced configuration page</a>."
+#~ msgstr ""
+#~ "您也可以通过在<a href=\"configadvanced\">高级配置页面</a>上设置 "
+#~ "<code>router.maxParticipatingTunnels=nnn</code> 来限制总数。"
+
+#~ msgid ""
+#~ "The number of participating tunnels you route for others, divided by the "
+#~ "total number of hops in all your exploratory and client tunnels."
+#~ msgstr ""
+#~ "您为其他人路由的参与隧道数除以所有探测隧道和客户端隧道中的总跃点数。"
+
+#~ msgid ""
+#~ "A number greater than 1.00 means you are contributing more tunnels to the "
+#~ "network than you are using."
+#~ msgstr "大于 1.00 的数字表示您为网络提供的隧道数量超过了您使用的数量。"
+
+#~ msgid "Why I2P?"
+#~ msgstr "为什么要用 I2P？"
+
+#~ msgid ""
+#~ "I2P is a communication tool for people who value privacy and wish to "
+#~ "remain anonymous online."
+#~ msgstr "I2P 重视隐私并希望在网络上保持匿名的人们使用的通信工具。"
+
+#~ msgid ""
+#~ "I2P is a peer to peer network where you can browse and create hidden "
+#~ "services."
+#~ msgstr "I2P 是您可以浏览并创建隐藏服务的对等网络。"
+
+#~ msgid ""
+#~ "Bandwidth participation improves the anonymity level of all users on the "
+#~ "network and maximizes your download speed."
+#~ msgstr ""
+#~ "带宽参与可提高网络上所有用户的匿名程度，并最大限度地提高您的下载速度。"
+
+#~ msgid ""
+#~ "We currently provide an I2P Browser which configures itself automatically"
+#~ msgstr "我们现在提供了可自动配置的 I2P 浏览器"
+
+#~ msgid "that you may retrieve from here."
+#~ msgstr "您可从此处获取。"
+
+#~ msgid "Be aware that this product is currently in beta-testing."
+#~ msgstr "请知晓此产品当前处于 beta 测试中。"
+
+#~ msgid "Alternatively, you can configure your browser of choice to use I2P."
+#~ msgstr "另外，您可以配置您选择的浏览器以使用 I2P。"
+
+#~ msgid "If you want to do this yourself, here are instructions."
+#~ msgstr "如果您想要自己做，这是指导。"
+
+#~ msgid ""
+#~ "Otherwise, the recommended way to browse I2P websites is with a separate "
+#~ "profile in the Firefox browser."
+#~ msgstr ""
+#~ "否则，浏览 I2P 网站的推荐方式是在 Firefox 浏览器中使用隔离的配置文件。"
+
+#~ msgid ""
+#~ "When I2P starts up, and during normal operation, I2P's tunnel build "
+#~ "readiness indicator in the side panel may indicate that I2P is "
+#~ "\"Rejecting Tunnels\"; this is normal behavior."
+#~ msgstr ""
+#~ "当 I2P 启动时，以及正常操作期间，I2P 的隧道构建侧面板准备状态指示器可能指"
+#~ "示 I2P “拒绝共享隧道”；这是正常行为。"
 
 #, fuzzy
 #~| msgid "Save Interface Configuration"
@@ -14501,11 +14576,6 @@ msgstr ""
 #~| msgid "Troubleshooting &amp; Further Assistance"
 #~ msgid "Further Assistance"
 #~ msgstr "故障排除 &amp; 更多帮助"
-
-#, fuzzy
-#~| msgid "Router Information"
-#~ msgid "Sidebar Information"
-#~ msgstr "路由信息"
 
 #, fuzzy
 #~| msgid ""
