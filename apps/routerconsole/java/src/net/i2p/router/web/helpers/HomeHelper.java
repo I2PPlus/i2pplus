@@ -442,7 +442,7 @@ public class HomeHelper extends HelperBase {
             buf.append("\n<div class=\"applink");
             // tag sites that require javascript to function
             if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("zeronet") || url.contains("speedtest") ||
-                url.contains("tinypng") || url.contains("vuldb") || url.contains("meduza") || || url.contains("mdn") ||
+                url.contains("tinypng") || url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") ||
                 url.contains("w3schools"))
                 buf.append(" js");
             buf.append("\" style=\"display: inline-block; text-align: center;\">\n" +
