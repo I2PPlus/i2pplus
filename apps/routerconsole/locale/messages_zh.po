@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-08 10:39+0000\n"
-"PO-Revision-Date: 2022-11-05 07:56+0000\n"
+"PO-Revision-Date: 2022-11-08 12:39+0000\n"
 "Last-Translator: xtoaster <zhazhenzhong@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -3759,16 +3759,15 @@ msgstr "大麻相关杂志"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:193
 msgid "CultureMagazine"
-msgstr ""
+msgstr "文化杂志"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
 msgid "A magazine of Politics &amp; Culture"
-msgstr ""
+msgstr "政治&amp; 时事杂志"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:194
-#, fuzzy
 msgid "CurrentAffairs"
-msgstr "目前"
+msgstr "时事政治"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:195
 msgid "Democracy for the Arab world now"
@@ -3918,7 +3917,7 @@ msgstr "聪明和无畏的新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "NewStatesman"
-msgstr "新州人"
+msgstr "NewStatesman"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
@@ -4023,7 +4022,7 @@ msgstr "台北时报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "TechXplore"
-msgstr ""
+msgstr "Tech Xplore"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Technology and engineering news"
@@ -4031,7 +4030,7 @@ msgstr "技术和工程新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TechMeme"
-msgstr ""
+msgstr "TechMeme"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "Technology news aggregator"
@@ -4071,7 +4070,7 @@ msgstr "TheHackerNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheMarkup"
-msgstr ""
+msgstr "TheMarkup"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Watching Big Tech..."
@@ -4099,11 +4098,11 @@ msgstr "TheTibetPost"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "All you need to know about everything that matters"
-msgstr ""
+msgstr "你需要知道的所有重要信息"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheWeek"
-msgstr ""
+msgstr "TheWeek"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "Security related news"
@@ -5360,7 +5359,7 @@ msgstr[0] "{0}已整合节点"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:331
 msgid "Integ. Value"
-msgstr "整合值"
+msgstr "整合度"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:332
 msgid "Last Heard About"
@@ -7491,7 +7490,7 @@ msgstr "洪泛配置"
 msgid ""
 "Floodfill participation helps the network, but may use more of your "
 "computer's resources."
-msgstr "参与洪泛可帮助网络上的节点发现彼此，但也耗费更多计算机资源"
+msgstr "参与洪泛可帮助网络上的节点发现彼此，但也耗费更多计算机资源。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:566
 msgid "This router is currently a floodfill participant."
@@ -8463,6 +8462,9 @@ msgid ""
 "router performance. Only stats that have an optional graph are listed here; "
 "for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
 msgstr ""
+"默认情况下出于监控路由器性能的需要启用了部分统计信息。这里只列出了具有可选图"
+"表的统计信息；要获得已启用统计信息的完整列表，请查看<a href=\"/stats\">统计页"
+"</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:569
 msgid "Enable full stats?"
@@ -10088,7 +10090,7 @@ msgid ""
 msgstr ""
 "你需要设置浏览器的 HTTP 代理（默认是127.0.0.1:4444），查看 <a href=https://"
 "geti2p.net/en/about/browser-config target=_blank rel=noreferrer "
-"class='sitelink external'>浏览器代理配置指南</a>了解更多"
+"class='sitelink external'>浏览器代理配置指南</a>了解更多。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:511
 msgid "What is an eepsite?"
@@ -11344,13 +11346,12 @@ msgid "Webhosting on I2P"
 msgstr "在I2P上托管网站"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:290
-#, fuzzy
 msgid "Licensing Information"
-msgstr "路由信息"
+msgstr "许可和版权声明"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:446
 msgid "Legal &amp; Licensing"
-msgstr ""
+msgstr "法律&amp;许可"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:475
 msgid "Introduction to I2P"
@@ -11796,7 +11797,7 @@ msgstr "适用于文件中列出的目标的阈值"
 msgid ""
 "A threshold that if breached will cause the offending remote destination to "
 "be recorded in a specified file"
-msgstr "超过指定阈值，就将违规的目标被记录在一个指定的文件中。"
+msgstr "超过指定阈值，就将违规的目标被记录在一个指定的文件中"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:495
 msgid ""
@@ -11967,7 +11968,7 @@ msgstr "记录不良的目标"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:541
 msgid "and any that end up in that file will get throttled in the future"
-msgstr "而最终任何出现在该文件中的目标都将在未来被永封。"
+msgstr "而最终任何出现在该文件中的目标都将在未来被永封"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:543
 msgid ""
@@ -12069,25 +12070,23 @@ msgstr ""
 "题子目录中都有用于覆写的模板。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:483
-#, fuzzy
 msgid "Sidebar Information"
-msgstr "路由信息"
+msgstr "侧栏信息"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:485
-#, fuzzy
 msgid ""
 "Many of the stats on the sidebar may be <a href='/configstats'>configured</"
 "a> to be <a href='/graphs'>graphed</a> for further analysis. You may also "
 "customize the sections that appear on the Sidebar and their positioning on "
 "the <a href='/configsidebar'>Sidebar Configuration page</a>."
 msgstr ""
-"您还可以在<a href=\"configsidebar\">侧栏配置页面</a>上自定义侧栏上显示的部分"
-"及其位置。"
+"侧边栏上的许多统计数据可以被<a href='/configstats'>设置</a> 为<a href='/"
+"graphs'>图表</a>，以便进行进一步分析。您还可以在<a href='/configsidebar'>侧边"
+"栏配置</a>页面上自定义出现在侧边栏上的部分以及它们的位置。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:489
-#, fuzzy
 msgid "Local Identity"
-msgstr "路由身份"
+msgstr "本地身份"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:491
 msgid ""
@@ -12098,6 +12097,10 @@ msgid ""
 "your router identity is uniquely linked to your IP address in the network "
 "database."
 msgstr ""
+"如果您将鼠标悬停在<i>路由器信息</i>标题上，则会显示部分路由器标识（ Base64路"
+"由器哈希的前四个字符（ 24bits） ）。 完整的哈希值显示在您的<a href='netdb?"
+"r=.'>网络数据库条目</a>上。 切勿向任何人透露此信息，因为您的路由器标识与网络"
+"数据库中的IP地址绑定。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:495
 msgid ""
@@ -12106,6 +12109,8 @@ msgid ""
 "your router up to date to ensure optimal performance and security. Router "
 "updates are usually made available on average every 2-3 months."
 msgstr ""
+"您所运行的I2P软件的版本。如果有新的版本，您会在侧边栏得到通知。建议保持您的路"
+"由器为最新版本，以确保最佳性能和安全。路由器的更新平均每2-3个月发布一次。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:499
 msgid ""
@@ -12117,6 +12122,10 @@ msgid ""
 "(advanced)</i> section. You may add this section to your Sidebar on the <a "
 "href='/configsidebar'>Sidebar Configuration page</a>."
 msgstr ""
+"你的电脑时钟相对于网络同步时间的偏移。I2P要求您的计算机时间准确，如果偏移超过"
+"几秒钟，请通过调整您的计算机时间来纠正这个问题。如果I2P不能连接到互联网，可能"
+"会显示0ms的读数。注意：这只显示在路由器信息（高级）部分，您可以在侧边栏配置页"
+"面上将此部分添加到您的侧边栏。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:503
 msgid ""
@@ -12130,6 +12139,11 @@ msgid ""
 "384 for I2P+. Note: if the memory bar is enabled, the memory entry in the "
 "router info section will be suppressed."
 msgstr ""
+"这表示I2P正在使用的RAM 的数量以及可用的总量。 如果RAM使用率一直较高，这可能表"
+"明您需要增加分配给JVM的RAM。 您可以通过编辑通常位于I2P安装目录中的"
+"<code>wrapper.config</code>文件的<code>wrapper.java.maxmemory</code>参数来分"
+"配更多RAM。默认设置为256 MB ，I2P +为384 MB。 注意：如果启用了内存栏，则路由"
+"器信息部分的内存条目将隐藏。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:513
 msgid ""
@@ -12140,11 +12154,13 @@ msgid ""
 "profiles'>Profiles page</a>. <a href='/configstats#router."
 "highCapacityPeers'>[Enable graphing]</a>"
 msgstr ""
+"这是你的路由器可用于建立探索隧道的对等节点数量，用于确定网络性能，它通常在"
+"8-75的范围内，且已经包含了快速节点。高容量节点数量显示在 <a href='/profiles'>"
+"概况页</a>上。<a href='/configstats#router.highCapacityPeers'>[启用图表]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:519
-#, fuzzy
 msgid "Bandwidth In/Out"
-msgstr "带宽进/出"
+msgstr "带宽 进/出"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:521
 msgid ""
@@ -12159,11 +12175,16 @@ msgid ""
 "determine your overall contribution to the network. Bandwidth is <a href='/"
 "graphs'>graphed</a> by default."
 msgstr ""
+"此部分显示本次开机以来平均带宽速度和总使用量。 所有值均以bytes/秒为单位。 您"
+"可以在<a href='/config'>带宽配置</a>页面上更改带宽限制。 您提供的带宽越多，您"
+"对网络的帮助就越多，同时加强了你自己的匿名性，因此请花一点时间查看设置。 如果"
+"您不确定网络速度，使用<a href='http://speedtest.net/'>SpeedTest</a>或类似服务"
+"作为参考。 您的上行带宽（KBps Out）将决定您对网络的总体贡献。 默认情况下，带"
+"宽是<a href='/graphs'>图表</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:523
-#, fuzzy
 msgid "Local Destinations"
-msgstr "目标址"
+msgstr "本地目标"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:525
 msgid ""
@@ -12182,40 +12203,44 @@ msgid ""
 "service in the Tunnel Manager, after which you will need to restart the "
 "client service from the <a href='/i2ptunnelmgr'>main Tunnel Manager page</a>."
 msgstr ""
+"这些是由您的路由器提供的本地服务。 他们可能是通过<a href='/i2ptunnelmgr'>隧道"
+"管理器</a>启动的客户端隧道，也可能是通过SAM、BOB或I2CP桥接的外部程序。 默认情"
+"况下，大多数客户端服务（邮件、HTTP代理、IRC ）将共享相同的隧道，并列为<i>共享"
+"隧道客户端</i>和<i>共享隧道客户端(DSA)</i> ，通过混合来自所有共享服务的流量可"
+"以增强匿名性，并减少构建和维护隧道所需的开销。 但是，如果您遇到隧道故障，您的"
+"所有服务将同时掉线，因此在某些情况下，您应该会希望将客户端服务配置为使用自己"
+"的隧道。 这可以通过取消选中“<i>隧道管理器</i>中客户端服务的配置页面上的<i>共"
+"享客户端</i>：与其他客户端共享隧道…选项来完成，然后您需要从<a href='/"
+"i2ptunnelmgr'>隧道管理器主页面</a>重新启动客户端服务。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:529
-#, fuzzy
 msgid ""
 "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
-msgstr "这些对等节点显示在<a href=\"profiles\">摘要页面</a>上。"
+msgstr "这些运行中隧道显示在<a href=\"profiles\">隧道页面</a>上。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:537
-#, fuzzy
 msgid "Share Ratio"
 msgstr "共享比率"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
 msgid "Some basic indications of router overload:"
-msgstr ""
+msgstr "一些路由器过载的迹象："
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:543
-#, fuzzy
 msgid "Job Lag"
 msgstr "作业延迟"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:545
-#, fuzzy
 msgid "Message Delay"
 msgstr "消息延迟"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:549
 msgid "Accepting/Rejecting"
-msgstr ""
+msgstr "接受/拒绝"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:551
-#, fuzzy
 msgid "<b>Note"
-msgstr "说明"
+msgstr "<b>注意"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:553
 msgid "Reachability Help"
