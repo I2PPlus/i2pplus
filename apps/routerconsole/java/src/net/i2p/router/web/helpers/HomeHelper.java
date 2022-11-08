@@ -202,10 +202,11 @@ public class HomeHelper extends HelperBase {
         "EllipticNews" + S + _x("The Elliptic Curve Cryptography Blog") + S + "http://ellipticnews.i2p/" + S + I + "news.svg" + S +
         _x("EpochTimes") + S + _x("Accurate News") + S + "http://epochtimes.i2p/" + S + I + "epochtimes.svg" + S +
         _x("ForeignPolicy") + S + _x("The Global Magazine of News &amp; Ideas") + S + "http://foreignpolicy.i2p/" + S + I + "news.svg" + S +
-        "FrontLineDefenders" + S + _x("Human rights activism") + S + "http://frontlinedefenders.i2p/" + S + I + "news.svg" + S +
-        "HumanRightsWatch" + S + _x("Defending Human Rights Worldwide") + S + "http://humanrightswatch.i2p/" + S + I + "news.svg" + S +
+        _x("FrontLineDefenders") + S + _x("Human rights activism") + S + "http://frontlinedefenders.i2p/" + S + I + "news.svg" + S +
+        "Granta" + S + _x("The home of new writing") + S + "http://granta.i2p/" + S + I + "granta.svg" + S +
+        _x("HumanRightsWatch") + S + _x("Defending Human Rights Worldwide") + S + "http://humanrightswatch.i2p/" + S + I + "news.svg" + S +
         "Hackaday" + S + _x("Fresh hacks every day") + S + "http://hackaday.i2p/" + S + I + "hackaday.svg" + S +
-        "HackerNews" + S + _x("Computer related news aggregation") + S + "http://hackernews.i2p/" + S + I + "news.svg" + S +
+        _x("HackerNews") + S + _x("Computer related news aggregation") + S + "http://hackernews.i2p/" + S + I + "news.svg" + S +
         "High Times" + S + _x("Cannabis-related magazine") + S + "http://hightimes.i2p/" + S + I + "cannabis.svg" + S +
         _x("HongKongFreePress") + S + _x("Independent &amp; impartial news for Hong Kong") + S + "http://hongkongfreepress.i2p/" + S + I + "news.svg" + S +
         _x("HongKongWatch") + S + _x("Monitors threats to freedoms and rights in Hong Kong") + S + "http://hongkongwatch.i2p/" + S + I + "news.svg" + S +
@@ -214,9 +215,11 @@ public class HomeHelper extends HelperBase {
         "intpolicydigest.i2p" + S + _x("Politics &amp; Current Affairs Journal") + S + "http://intpolicydigest.i2p/" + S + I + "news.svg" + S +
         _x("JapanToday") + S + _x("English language Japanese News") + S + "http://japantoday.i2p/" + S + I + "japantoday.svg" + S +
         _x("KrebsOnSecurity") + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "krebs.png" + S +
+        _x("KyivIndependent") + S + _x("News from Ukraine") + S + "http://kyivindependent.i2p/" + S + I + "krebs.png" + S +
         "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "linuxfarm.svg" + S +
         "LKML" + S + _x("Linux Kernel Mailing List") + S + "http://lkml.i2p/" + S + I + "news.svg" + S +
         _x("LittleAtoms") + S + _x("A rationalist journal") + S + "http://littleatoms.i2p/" + S + I + "news.svg" + S +
+        "Meduza" + S + _x("The Real Russia. Today.") + S + "http://meduza.i2p/" + S + I + "meduza.svg" + S +
         _x("MetaCritic") + S + _x("Movie + TV + Music + Game reviews") + S + "http://metacritic.i2p/" + S + I + "metacritic.svg" + S +
         _x("NakedSecurity") + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
         "MotherJones" + S + _x("Smart &amp; fearless journalism") + S + "http://motherjones.i2p/" + S + I + "news.svg" + S +
@@ -439,7 +442,8 @@ public class HomeHelper extends HelperBase {
             buf.append("\n<div class=\"applink");
             // tag sites that require javascript to function
             if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("zeronet") || url.contains("speedtest") ||
-                url.contains("tinypng") || url.contains("vuldb"))
+                url.contains("tinypng") || url.contains("vuldb") || url.contains("meduza") || || url.contains("mdn") ||
+                url.contains("w3schools"))
                 buf.append(" js");
             buf.append("\" style=\"display: inline-block; text-align: center;\">\n" +
                        "<div class=\"appicon\">" +
