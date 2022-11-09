@@ -174,7 +174,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // send retry with termination
             UDPPacket retry = _transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_SKEW);
             _transport.send(retry);
-            throw new GeneralSecurityException("Skew exceeded in Session/Token Request (retry sent): " + _skew);
+            throw new GeneralSecurityException("Skew exceeded in Session/Token Request (retry sent): " + _skew + "ms");
         }
         packetReceived();
         if (_log.shouldDebug())
