@@ -42,8 +42,8 @@ class UDPSender {
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 768 : 2048;
 //    private static final int CODEL_TARGET = 100;
 //    private static final int CODEL_INTERVAL = 500;
-    private static final int CODEL_TARGET = 50;
-    private static final int CODEL_INTERVAL = 1000;
+    private static final int CODEL_TARGET = 30;
+    private static final int CODEL_INTERVAL = 1500;
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 
