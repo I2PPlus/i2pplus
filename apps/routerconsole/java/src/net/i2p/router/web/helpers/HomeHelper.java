@@ -215,7 +215,7 @@ public class HomeHelper extends HelperBase {
         "intpolicydigest.i2p" + S + _x("Politics &amp; Current Affairs Journal") + S + "http://intpolicydigest.i2p/" + S + I + "news.svg" + S +
         _x("JapanToday") + S + _x("English language Japanese News") + S + "http://japantoday.i2p/" + S + I + "japantoday.svg" + S +
         _x("KrebsOnSecurity") + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "krebs.png" + S +
-        _x("KyivIndependent") + S + _x("News from Ukraine") + S + "http://kyivindependent.i2p/" + S + I + "krebs.png" + S +
+        _x("KyivIndependent") + S + _x("News from Ukraine") + S + "http://kyivindependent.i2p/" + S + I + "kyivindependent.svg" + S +
         "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "linuxfarm.svg" + S +
         "LKML" + S + _x("Linux Kernel Mailing List") + S + "http://lkml.i2p/" + S + I + "news.svg" + S +
         _x("LittleAtoms") + S + _x("A rationalist journal") + S + "http://littleatoms.i2p/" + S + I + "news.svg" + S +
