@@ -135,7 +135,7 @@
 <%-- needed for CSS: --%><div id="config_ui">
 <%-- needed for lang setting in css.jsi: --%><input type="hidden" name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
 <p class="infohelp" id="flags">
-Select the language to be used for the router console and web applications (<a href="/webmail" target="_blank" rel="noreferrer">webmail</a>, <a href="/torrents" target="_blank" rel="noreferrer">torrents</a>, <a href="/tunnelmgr" target="_blank" rel="noreferrer">tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href="/configui" target="_blank" rel="noreferrer">User Interface configuration page</a>.
+<%=intl._t("Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>.")%>
 </p>
 <h3 id="langheading"><%=uihelper._t("Router Console &amp; WebApps Display Language")%></h3>
 <div id="langsettings">
@@ -165,7 +165,7 @@ Select the language to be used for the router console and web applications (<a h
     } else if (ipg == 3) {
         // Bandwidth test in progress (w/ AJAX)
 %>
-<p class="infohelp" id="bandwidth">The bandwidth test is now running and will take around 60 seconds to complete, after which you should be forwarded to the results page.</p>
+<p class="infohelp" id="bandwidth"><%=intl._t("The bandwidth test is now running and will take around 60 seconds to complete, after which you should be forwarded to the results page.")%></p>
 <div id="bandwidthTestRunning"><%=intl._t("Bandwidth Test in progress")%>...</div>
 <noscript>
 <div id="xhr">
@@ -323,9 +323,9 @@ A negative rate sets the default.</i><br>
     } else if (ipg == 5) {
         // Browser setup
 %>
-<p class="infohelp" id="webbrowser">I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network.</p>
+<p class="infohelp" id="webbrowser"><%=intl._t("I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network.")%></p>
 <h3><%=intl._t("Browser Setup")%></h3>
-<p>In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href="https://geti2p.net/htproxyports" target="_blank" rel="noreferrer">the configuration guide</a>, or <a href="/help/configuration#browserconfig">the mini-tutorial for Firefox</a>.</p>
+<p><%=intl._t("In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>.")%></p>
 <%
     } else if (ipg == LAST_PAGE) {
         // Done
@@ -340,7 +340,7 @@ A negative rate sets the default.</i><br>
 <%
     } else {
 %>
-<p>Unknown Wizard page</p>
+<p><%=intl._t("Unknown Wizard page")%></p>
 <%
     }
 %>
