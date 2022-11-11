@@ -1,6 +1,6 @@
-/* I2P Theme:Classic */
-/* I2P Description:Light blue "classic" I2P theme;optimized for less capable browsers and system specifications. */
-/* Author:dr|z3d */
+/* I2P Theme: Classic */
+/* I2P Description: Light blue "classic" I2P theme;optimized for less capable browsers and system specifications. */
+/* Author: dr|z3d */
 
 @import url(global.css);
 
@@ -841,11 +841,11 @@ h4#updateplugins{margin-top:-13px}
 .linkgroup{margin:0;padding:0 8px;width:auto}
 .linkcontainer{margin:0 -15px -9px}
 .applink{margin:3px;padding:0;width:140px;position:relative;float:left;text-align:center;border:none;border:var(--border);background:var(--bg)}
-.applink:hover{border:1px solid var(--hover);cursor:pointer}
+.applink:hover, .applink:hover .applabel, .applink:focus-within, .applink:focus-within .applabel{border-color:var(--hover);cursor:pointer}
 .applink img,.sitemapLink img{filter:grayscale(.6)}
 .applink img{margin:0 0 -2px;padding:10px 46px 6px;width:auto;height:32px;max-height:32px;max-width:32px}
 .applink:hover img,.sitemapLink:hover img{filter:none}
-#home .app:hover a,#home .app:hover .applabel a{color:var(--hover)}
+#home .applink:hover a,#home .applink:hover .applabel a{color:var(--hover)}
 .applink.js:hover::before{padding:1px 3px 5px;display:inline-block;position:absolute;top:-1px;left:-1px;line-height:1;border:1px solid var(--hover);content:"*js"}
 .applink:active img{transform:scale(.9)}
 .applink:last-child{margin-bottom:10px}
@@ -861,9 +861,9 @@ h4#updateplugins{margin-top:-13px}
 .applabel{margin:0;padding:3px 2px;width:136px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;text-transform:lowercase;font-size:8pt;border-top:var(--border)}
 .applabel:hover{box-shadow:none}
 .applabel a{margin:0;padding:1px;display:inline-block;width:calc(100% - 2px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.app:hover .applabel{border-top:1px solid var(--hover);background:var(--bg)}
-#home .app:active .applabel{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--hover)}
-#home .app:active #home .applabel a,#home .app:active .applabel a:visited{color:var(--bg)}
+.applink:hover .applabel{border-top:1px solid var(--hover);background:var(--bg)}
+#home .applink:active .applabel{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--hover)}
+#home .applink:active #home .applabel a,#home .applink:active .applabel a:visited{color:var(--bg)}
 
 /* home search */
 #searchbar{margin:-24px 10px 0 10px;padding:8px 0 2px;width:auto;white-space:nowrap;text-align:center}
