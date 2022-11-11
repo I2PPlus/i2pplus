@@ -113,6 +113,12 @@ class EstablishmentManager {
      */
     private final ConcurrentHashMap<Hash, OutboundEstablishState> _outboundByHash;
 
+    /**
+     *  Temporary inbound bans after previous IB failure, to prevent excessive DH.
+     *  SSU 1 or 2. Value is expiration time.
+     */
+    private final Map<RemoteHostId, Long> _inboundBans;
+
     private volatile boolean _alive;
     private final Object _activityLock;
     private int _activity;
@@ -159,6 +165,8 @@ class EstablishmentManager {
 
     /** for the DSM and or netdb store */
     private static final int DATA_MESSAGE_TIMEOUT = 10*1000;
+    
+    private static final int IB_BAN_TIME = 15*60*1000;
 
     /**
      * Java I2P has always parsed the length of the extended options field,
@@ -190,6 +198,7 @@ class EstablishmentManager {
         _liveIntroductions = new ConcurrentHashMap<Long, OutboundEstablishState>();
         _outboundByClaimedAddress = new ConcurrentHashMap<RemoteHostId, OutboundEstablishState>();
         _outboundByHash = new ConcurrentHashMap<Hash, OutboundEstablishState>();
+        _inboundBans = new LHMCache<RemoteHostId, Long>(32);
         if (_enableSSU2) {
             _inboundTokens = new LHMCache<RemoteHostId, Token>(MAX_TOKENS);
             _outboundTokens = new LHMCache<RemoteHostId, Token>(MAX_TOKENS);
@@ -598,6 +607,19 @@ class EstablishmentManager {
                     _context.statManager().addRateData("udp.establishBadIP", 1);
                     return; // drop the packet
                 }
+                synchronized (_inboundBans) {
+                    Long exp = _inboundBans.get(from);
+                    if (exp != null) {
+                        if (exp.longValue() >= _context.clock().now()) {
+                            if (_log.shouldInfo())
+                                _log.info("SSU 1 session request from temp. blocked peer: " + from);
+                             _context.statManager().addRateData("udp.establishBadIP", 1);
+                             return; // drop the packet
+                        }
+                        // expired
+                        _inboundBans.remove(from);
+                    }
+                }
                 if (!_transport.allowConnection())
                     return; // drop the packet
                 byte[] fromIP = from.getIP();
@@ -673,6 +695,19 @@ class EstablishmentManager {
                     _log.info("Received session request from blocklisted IP: " + from);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 return; // drop the packet
+            }
+            synchronized (_inboundBans) {
+                Long exp = _inboundBans.get(from);
+                if (exp != null) {
+                    if (exp.longValue() >= _context.clock().now()) {
+                        if (_log.shouldInfo())
+                            _log.info("SSU 2 session request from temp. blocked peer: " + from);
+                         _context.statManager().addRateData("udp.establishBadIP", 1);
+                         return; // drop the packet
+                    }
+                    // expired
+                    _inboundBans.remove(from);
+                }
             }
             if (!_transport.allowConnection())
                 return; // drop the packet
@@ -2481,7 +2516,12 @@ class EstablishmentManager {
     private void processExpired(InboundEstablishState inboundState) {
         if (_log.shouldWarn())
             _log.warn("Expired: " + inboundState);
-        _inboundStates.remove(inboundState.getRemoteHostId());
+        RemoteHostId id = inboundState.getRemoteHostId();
+        _inboundStates.remove(id);
+        Long exp = Long.valueOf(_context.clock().now() + IB_BAN_TIME);
+        synchronized (_inboundBans) {
+            _inboundBans.put(id, exp);
+        }
         OutNetMessage msg;
         while ((msg = inboundState.getNextQueuedMessage()) != null) {
             _transport.failed(msg, "Expired during failed establish");

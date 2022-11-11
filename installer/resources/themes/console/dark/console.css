@@ -221,7 +221,6 @@ p:empty + .sb_notice{margin-top:9px}
 #sidebar .hidden,#sidebar .vmcomm,.tunnelBuildStatus.hidden{color:#999;box-shadow:var(--highlight),inset 0 0 2px 1px #777}
 .vmcomm{box-shadow:var(--highlight),inset 0 0 1px 1px #aaa,inset 0 0 0 2px rgba(0,0,0,.7);background:rgba(92,92,92,.3)}
 #sidebar .running,.tunnelBuildStatus.active{box-shadow:var(--highlight),inset 0 0 2px 1px rgba(0,192,0,.7);background:repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px,rgba(0,64,0,.3) 4px) center center / 100% 4px,var(--glow_top),linear-gradient(to right,rgba(16,40,15,.5),rgba(0,0,0,.9),rgba(16,40,15,.5))}
-#bandwidthTestRunning{background:repeating-linear-gradient(90deg,rgba(0,0,0,.3),rgba(0,0,0,.3) 10px,rgba(0,32,0,.3) 10px,rgba(0,32,0,.3) 20px) #010;background-size:400%;animation:progress 120s 3s linear infinite both}
 .sb_netstatus::before,.tunnelBuildStatus::before{margin:0 2px 0 -4px;height:18px;width:18px;display:inline-block;vertical-align:middle;content:""}
 .sb_netstatus::before{background-size:16px}
 .sb_netstatus.error::before{background:var(--net_error) var(--center) / 16px}
@@ -271,8 +270,9 @@ div[id^="config_"].main{padding-bottom:14px}
 #newspage .newsentry{margin-bottom:14px;padding:0 15px 20px;box-shadow:0 0 0 1px #242,0 0 2px 2px #000,var(--highlight),inset 0 0 2px 0 #030;background:var(--newsbg) #000}
 #newspage .newsentry:first-child{margin-top:-4px}
 #newspage .newsentry:last-child{margin-bottom:-4px}
-#news ul{margin:10px 15px;padding:12px 15px;border-radius:4px;box-shadow:var(--bevel_hard),var(--highlight_badge);background:var(--helpbox)}
-#news li{margin:3px 0 3px 25px;padding:5px;vertical-align:middle;word-wrap:break-word;list-style:disc;text-align:justify;text-transform:capitalize;color:var(--a)}
+#news ul{margin:10px 15px 15px;padding:12px 15px;list-style:none;border-radius:4px;box-shadow:var(--bevel_hard),var(--highlight_badge);background:var(--msg)}
+#news li{margin:3px 0 3px 15px;padding:5px;vertical-align:middle;word-wrap:break-word;text-align:justify;text-transform:capitalize;color:var(--a)}
+#news li::before{width:20px;height:10px;display:inline-block;list-style:none;background:var(--tunn_active) no-repeat left center / 8px;content:"";}
 #news .newsentry h4{margin:5px 0 10px;padding:0;text-transform:capitalize;font-size:10pt;border-bottom:var(--dotted);opacity:1}
 #news p,#newscontent p{margin:0 15px;font-size:9pt}
 #news p:nth-child(n+2),#newscontent p:nth-child(n+2){margin-top:8px}
@@ -422,9 +422,6 @@ select{margin:5px 10px;min-width:110px;font-size:9.5pt}
 .search select{margin-bottom:4px}
 textarea[cols="70"],textarea[name="levels"]{width:calc(100% - 20px)}
 #advancedsettings:focus{border:none}
-#consolepass input[name="name"],#externali2cp input[name="user"]{padding:6px 5px 6px 24px;background:#000800 var(--user) no-repeat 5px center / 16px}
-#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus{background:var(--user) no-repeat 5px center / 16px,var(--input_txt)}
-#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"]{padding:6px 5px 6px 24px;background:#000800 var(--key) no-repeat 3px center / 16px} #consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus{background:var(--key) no-repeat 3px center / 16px,var(--input_txt)}
 textarea#advancedsettings:focus{box-shadow:var(--highlight),inset 0 0 2px 1px var(--hover);filter:none}
 textarea[readonly]:focus{font-weight:400;box-shadow:var(--highlight)}
 input[type=submit],input[type=reset],select,button{font-size:8.5pt}
@@ -1613,7 +1610,7 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 .langselect .optbox:checked + .langflag{margin:0 0 3px;opacity:1;transform:scale(.9)}
 .langflag img{width:40px;height:30px;border-radius:3px}
 .langselect:active .optbox:not(:checked) + .langflag{transform:scale(.8)}
-.langflag::before{position:absolute;top:0;bottom:0;left:0;right:0;z-index:10;border-radius:3px;box-shadow:0 0 0 1px #000,inset 0 0 0 1px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.3);background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(0,0,0,0) 75%);content:"";display:inline-block}
+.langflag::before{position:absolute;top:0;bottom:0;left:0;right:0;z-index:10;border-radius:3px;box-shadow:0 0 0 1px #000,inset 0 0 0 1px rgba(0,0,0,.35),inset 0 1px 1px 0 rgba(255,255,255,.2);background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(0,0,0,0) 75%);content:"";display:inline-block}
 .langselect:hover .optbox:not(:checked) ~ .langflag::before{box-shadow:0 0 0 1px #000,inset 0 0 0 1px rgba(255,96,0,.6),inset 0 0 0 1px rgba(255,255,255,.5)}
 .langselect .optbox:checked ~ .langflag::after{padding:2px;width:16px;height:16px;display:inline-block;position:absolute;z-index:20;right:-8px;bottom:-8px;border-radius:50%;box-shadow:0 0 0 2px #000,inset 0 0 0 1px #6ec436;background:#252 var(--yes) no-repeat center center / 10px;content:""}
 #helptranslate{padding:6px 10px 10px;clear:both;text-align:right}
@@ -1625,11 +1622,15 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 #consolepass th{padding:5px}
 #consolepass td{padding:2px 3px}
 #consolepass td{padding:5px 10px;border-bottom:var(--border)}
+#consolepass tr:nth-child(n+2) td:not(#pw_adduser):first-child{text-align:center}
 #consolepass input{margin:5px}
-#consolepass #pw_adduser{padding:5px 10px;background:#000}
-#pw_adduser input{margin:5px 20px 5px 5px}
+#consolepass input[name="name"],#externali2cp input[name="user"]{padding:6px 5px 6px 24px;background:#000800 var(--user) no-repeat 5px center / 16px}
 #consolepass input[name="name"]{margin-right:20px}
+#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus{background:var(--user) no-repeat 5px center / 16px,var(--input_txt)}
+#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"]{padding:6px 5px 6px 24px;background:#000800 var(--key) no-repeat 3px center / 16px} #consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus{background:var(--key) no-repeat 3px center / 16px,var(--input_txt)}
 #consolepass input[type=password]{width:200px}
+#pw_adduser input{margin:5px 20px 5px 5px}
+#consolepass #pw_adduser{padding:5px 10px;background:#000}
 #submitconsolepass{margin-bottom:-1px;margin-top:-2px;padding:5px;border:var(--border);background:#000}
 #consolepass .delete{float:left}
 
@@ -2256,7 +2257,9 @@ h2,h2.welcome,h3,h3.welcome,#themeoptions{border-color:#242}
 #help .confignav{margin-bottom:11px}
 #help h3{padding:7px 10px;font-size:11pt}
 #volunteer,#legal,#sidebarhelp,#reachabilityhelp,#configurationhelp,#themeoverride,#browserconfig,#tunnman,#advancedsettings,#faq,#reseedhelp,#troubleshoot,#newuserguide,#filterlist,#webhosting,#glossary{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
+#newuserguide{padding-bottom:20px}
 #newuserguide div[lang]{margin:0;padding:0;box-shadow:none}
+#trouble{margin:20px 0 15px}
 #themeoverride{margin-top:-2px}
 #volunteer{background:var(--hat) right bottom no-repeat,#000;background-size:auto 40%}
 #advancedsettings{padding:0 15px 10px}
@@ -2440,6 +2443,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #i2pclientconfig a,#pluginmanage a{transform:translateY(-1px)}
 #jardump a[href^="https://gitlab.com/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
 #netdboverview th[colspan="3"]{font-size:11pt}
+#news li::before{height:8px;background-size:7px}
 #passwordheading{margin-top:12px}
 #peers .routerid .flag img,#profiles .routerid .flag img{margin:0 0 -2px}
 #pluginconfig{margin-top:-13px}

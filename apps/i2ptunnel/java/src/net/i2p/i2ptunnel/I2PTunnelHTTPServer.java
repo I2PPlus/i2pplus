@@ -128,7 +128,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private final static String ERR_DENIED =
          "HTTP/1.1 429 Too Many Requests\r\n" +
-         "Content-Type: text/html; charset=iso-8859-1\r\n" +
+         "Content-Type: text/html; charset=utf-8\r\n" +
          "Retry-After: 600\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
@@ -159,7 +159,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n</html>";
 **/
          "HTTP/1.1 403 Denied\r\n" +
-         "Content-Type: text/html; charset=iso-8859-1\r\n"+
+         "Content-Type: text/html; charset=utf-8\r\n"+
          "Cache-Control: no-cache\r\n"+
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n"+
@@ -174,7 +174,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private final static String ERR_SSL =
          "HTTP/1.1 503 Service Unavailable\r\n" +
-         "Content-Type: text/html; charset=iso-8859-1\r\n" +
+         "Content-Type: text/html; charset=utf-8\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
@@ -187,7 +187,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private final static String ERR_REQUEST_URI_TOO_LONG =
          "HTTP/1.1 414 Request URI too long\r\n" +
-         "Content-Type: text/html; charset=iso-8859-1\r\n" +
+         "Content-Type: text/html; charset=utf-8\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
@@ -200,7 +200,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private final static String ERR_HEADERS_TOO_LARGE =
          "HTTP/1.1 431 Request header fields too large\r\n" +
-         "Content-Type: text/html; charset=iso-8859-1\r\n" +
+         "Content-Type: text/html; charset=utf-8\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
@@ -214,7 +214,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** @since protected since 0.9.33 for I2PTunnelHTTPClientBase, was private */
     protected final static String ERR_REQUEST_TIMEOUT =
          "HTTP/1.1 408 Request timeout\r\n" +
-         "Content-Type: text/html; charset=iso-8859-1\r\n" +
+         "Content-Type: text/html; charset=utf-8\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
@@ -229,7 +229,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private final static String ERR_BAD_REQUEST =
          "HTTP/1.1 400 Bad Request\r\n" +
-         "Content-Type: text/html; charset=iso-8859-1\r\n" +
+         "Content-Type: text/html; charset=utf-8\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +

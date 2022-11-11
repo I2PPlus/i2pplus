@@ -10,32 +10,30 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<title>Licensing Information - I2P+</title>
 <%@include file="../css.jsi" %>
+<title><%=intl._t("Licensing Information")%> - I2P+</title>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp">Legal &amp; Licensing</h1>
+<h1 class="hlp"><%=intl._t("Legal &amp; Licensing")%></h1>
 <div class="main" id="help">
 <div class="confignav">
-<span class="tab"><a href="/help/configuration">Configuration</a></span>
-<span class="tab"><a href="/help/advancedsettings">Advanced Settings</a></span>
-<span class="tab"><a href="/help/ui">User Interface</a></span>
-<span class="tab"><a href="/help/reseed">Reseeding</a></span>
-<span class="tab"><a href="/help/tunnelfilter">Tunnel Filtering</a></span>
-<span class="tab"><a href="/help/faq">FAQ</a></span>
-<span class="tab"><a href="/help/newusers">New User Guide</a></span>
-<span class="tab"><a href="/help/webhosting">Web Hosting</a></span>
-<span class="tab"><a href="/help/hostnameregistration">Hostname Registration</a></span>
-<span class="tab"><a href="/help/troubleshoot">Troubleshoot</a></span>
-<span class="tab"><a href="/help/glossary">Glossary</a></span>
-<span class="tab2">Legal</span>
-<span class="tab"><a href="/help/changelog">Change Log</a></span>
+<span class="tab"><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
+<span class="tab"><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
+<span class="tab"><a href="/help/ui"><%=intl._t("User Interface")%></a></span>
+<span class="tab"><a href="/help/reseed"><%=intl._t("Reseeding")%></a></span>
+<span class="tab"><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
+<span class="tab"><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
+<span class="tab"><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
+<span class="tab"><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
+<span class="tab"><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
+<span class="tab"><a href="/help/troubleshoot"><%=intl._t("Troubleshoot")%></a></span>
+<span class="tab"><a href="/help/glossary"><%=intl._t("Glossary")%></a></span>
+<span class="tab2"><%=intl._t("Legal")%></span>
+<span class="tab"><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
 <div id="legal"><%@include file="../help-legal.jsi" %></div>
 </div>
 <%@include file="../summaryajax.jsi" %>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

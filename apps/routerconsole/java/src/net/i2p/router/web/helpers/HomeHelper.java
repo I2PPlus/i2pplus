@@ -125,14 +125,15 @@ public class HomeHelper extends HelperBase {
 
 // forums + social
         _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "forum.svg" + S +
-        "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/" + S + I + "dread.svg" + S +
+        "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "dread.svg" + S +
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "forum.svg" + S +
         "discuss.i2p" + S + _x("File-sharing forum") + S + "http://discuss.i2p/" + S + I + "forum.svg" + S +
-        "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
         "Natter" + S + _x("Alternative front-end for Twitter") + S + "http://natter.i2p/" + S + I + "twitter.svg" + S +
         "novabbs.i2p" + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "forum.svg" + S +
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "ramble.svg" + S +
+        "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "stackoverflow.svg" + S +
         "teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "teddit.svg" + S +
+        //"libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
         //"zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
         //_x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "forum.svg" + S +
         //"query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "forum.svg" + S +
@@ -166,19 +167,20 @@ public class HomeHelper extends HelperBase {
         "hiddenwiki.i2p" + S + _x("Tor .onion site links") + S + "http://hiddenwiki.i2p/" + S + I + "wiki.svg" + S +
         _x("HTMLColors") + S + _x("HTML Color Reference") + S + "http://htmlcolors.i2p/" + S + I + "help.svg" + S +
         "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "wiki.svg" + S +
-        "imperial.i2p" + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "books.svg" + S +
+        //"imperial.i2p" + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "books.svg" + S +
         "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "books.svg" + S +
         "mathworld.i2p" + S + _x("Wolfram's Online Math Reference") + S + "http://mathworld.i2p/" + S + I + "books.svg" + S +
         "mdn.i2p" + S + _x("Mozilla Developer Network") + S + "http://mdn.i2p/" + S + I + "mdn.svg" + S +
         "Philosopedia" + S + _x("Internet Encylopedia of Philosophy") + S + "http://philosopedia.i2p/" + S + I + "books.svg" + S +
         "plato.i2p" + S + _x("Standford Encylopedia of Philosophy") + S + "http://plato.i2p/" + S + I + "plato.png" + S +
         _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psychonaut.i2p/" + S + I + "psy.svg" + S +
-        _x("SimplifiedGuide") + S + _x("Computing-related tutorials") + S + "http://simplifiedguide.i2p/" + S + I + "help.svg" + S +
+        _x("SimplifiedGuide") + S + _x("Computing-related tutorials") + S + "http://simplified.i2p/" + S + I + "help.svg" + S +
         _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "urbandictionary.svg" + S +
         "vuldb.i2p" + S + _x("Vulnerability Database") + S + "http://vuldb.i2p/" + S + I + "vuldb.svg" + S +
         "w3schools.i2p" + S + _x("Web technology reference and learning site") + S + "http://w3schools.i2p/" + S + I + "w3schools.svg" + S +
         "wikiless.i2p" + S + _x("Alternative Wikipedia front-end focused on privacy") + S + "http://wikiless.i2p/" + S + I + "wiki.svg" + S +
         "Wordnik" + S + _x("The biggest online English dictionary") + S + "http://wordnik.i2p/" + S + I + "wordnik.svg" + S +
+        _x("WorldAtlas") + S + _x("World atlas including geography facts &amp; flags") + S + "http://worldatlas.i2p/" + S + I + "planet.svg" + S +
         //"cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
         //"jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "books.svg" + S +
         //"nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
@@ -189,59 +191,71 @@ public class HomeHelper extends HelperBase {
         "bellingcat.i2p" + S + _x("Independent investigative journalism") + S + "http://bellingcat.i2p/" + S + I + "bellingcat.svg" + S +
         "BenthamsGaze" + S + _x("Information Security Research &amp; Education") + S + "http://benthamsgaze.i2p/" + S + I + "benthamsgaze.png" + S +
         _x("ChinaDigitalTimes") + S + _x("Covering China from Cyberspace") + S + "http://chinadigitaltimes.i2p/" + S + I + "chinadigitaltimes.png" + S +
-        "CultureMagazine" + S + _x("Cannabis-related magazine") + S + "http://culturemagazine.i2p/" + S + I + "cannabis.svg" + S +
+        _x("CultureMagazine") + S + _x("Cannabis-related magazine") + S + "http://culturemagazine.i2p/" + S + I + "cannabis.svg" + S +
+        _x("CurrentAffairs") + S + _x("A magazine of Politics &amp; Culture") + S + "http://currentaffairs.i2p/" + S + I + "news.svg" + S +
         "Dawn" + S + _x("Democracy for the Arab world now") + S + "http://dawn.i2p/" + S + I + "news.svg" + S +
-        "dw.i2p" + S + _x("News &amp; Current Affairs from Germany and around the world") + S + "http://dw.i2p/" + S + I + "news.svg" + S +
         "DarkDotNet" + S + _x("Darknet related news site") + S + "http://darkdotnet.i2p/" + S + I + "news.svg" + S +
-        "DarkNetDaily" + S + _x("Darknet related news site") + S + "http://darknetdaily.i2p/" + S + I + "news.svg" + S +
         "DarknetLive" + S + _x("Darknet related news site") + S + "http://darknetlive.i2p/" + S + I + "news.svg" + S +
         _x("DigitalJournal") + S + _x("Global news &amp; media platform") + S + "http://digitaljournal.i2p/" + S + I + "news.svg" + S +
         _x("DigitalTrends") + S + _x("Tech News &amp; Reviews") + S + "http://digitaltrends.i2p/" + S + I + "digitaltrends.svg" + S +
         "E-IR" + S + _x("International Politics Journal") + S + "http://e-internationalrelations.i2p/" + S + I + "news.svg" + S +
         "EllipticNews" + S + _x("The Elliptic Curve Cryptography Blog") + S + "http://ellipticnews.i2p/" + S + I + "news.svg" + S +
+        _x("EpochTimes") + S + _x("Accurate News") + S + "http://epochtimes.i2p/" + S + I + "epochtimes.svg" + S +
         _x("ForeignPolicy") + S + _x("The Global Magazine of News &amp; Ideas") + S + "http://foreignpolicy.i2p/" + S + I + "news.svg" + S +
-        "FrontLineDefenders" + S + _x("Human rights activism") + S + "http://frontlinedefenders.i2p/" + S + I + "news.svg" + S +
-        "HumanRightsWatch" + S + _x("Defending Human Rights Worldwide") + S + "http://humanrightswatch.i2p/" + S + I + "news.svg" + S +
+        _x("FrontLineDefenders") + S + _x("Human rights activism") + S + "http://frontlinedefenders.i2p/" + S + I + "news.svg" + S +
+        "Granta" + S + _x("The home of new writing") + S + "http://granta.i2p/" + S + I + "granta.svg" + S +
+        _x("HumanRightsWatch") + S + _x("Defending Human Rights Worldwide") + S + "http://humanrightswatch.i2p/" + S + I + "news.svg" + S +
         "Hackaday" + S + _x("Fresh hacks every day") + S + "http://hackaday.i2p/" + S + I + "hackaday.svg" + S +
-        "HackerNews" + S + _x("Computer related news aggregation") + S + "http://hackernews.i2p/" + S + I + "news.svg" + S +
+        _x("HackerNews") + S + _x("Computer related news aggregation") + S + "http://hackernews.i2p/" + S + I + "news.svg" + S +
         "High Times" + S + _x("Cannabis-related magazine") + S + "http://hightimes.i2p/" + S + I + "cannabis.svg" + S +
         _x("HongKongFreePress") + S + _x("Independent &amp; impartial news for Hong Kong") + S + "http://hongkongfreepress.i2p/" + S + I + "news.svg" + S +
         _x("HongKongWatch") + S + _x("Monitors threats to freedoms and rights in Hong Kong") + S + "http://hongkongwatch.i2p/" + S + I + "news.svg" + S +
         "hrichina.i2p" + S + _x("Human Rights in China") + S + "http://hrichina.i2p/" + S + I + "news.svg" + S +
         "ibtimes.i2p" + S + _x("Business &amp; Financial News") + S + "http://ibtimes.i2p/" + S + I + "news.svg" + S +
+        "intpolicydigest.i2p" + S + _x("Politics &amp; Current Affairs Journal") + S + "http://intpolicydigest.i2p/" + S + I + "news.svg" + S +
         _x("JapanToday") + S + _x("English language Japanese News") + S + "http://japantoday.i2p/" + S + I + "japantoday.svg" + S +
         _x("KrebsOnSecurity") + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "krebs.png" + S +
-        _x("SchneierOnSecurity") + S + _x("Internationally renowned security technologist") + S + "http://schneieronsecurity.i2p/" + S + I + "schneier.png" + S +
+        _x("KyivIndependent") + S + _x("News from Ukraine") + S + "http://kyivindependent.i2p/" + S + I + "kyivindependent.svg" + S +
         "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "linuxfarm.svg" + S +
         "LKML" + S + _x("Linux Kernel Mailing List") + S + "http://lkml.i2p/" + S + I + "news.svg" + S +
+        _x("LittleAtoms") + S + _x("A rationalist journal") + S + "http://littleatoms.i2p/" + S + I + "littleatoms.svg" + S +
+        "Meduza" + S + _x("The Real Russia. Today.") + S + "http://meduza.i2p/" + S + I + "meduza.svg" + S +
         _x("MetaCritic") + S + _x("Movie + TV + Music + Game reviews") + S + "http://metacritic.i2p/" + S + I + "metacritic.svg" + S +
         _x("NakedSecurity") + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
         "MotherJones" + S + _x("Smart &amp; fearless journalism") + S + "http://motherjones.i2p/" + S + I + "news.svg" + S +
+        _x("NewStatesman") + S + _x("Politics &amp; Current Affairs magazine") + S + "http://newstatesman.i2p/" + S + I + "newstatesman.svg" + S +
         _x("Newsweek") + S + _x("American &amp; International News") + S + "http://newsweek.i2p/" + S + I + "newsweek.svg" + S +
         _x("NewsNow") + S + _x("The Independent News Discovery Platform") + S + "http://newsnow.i2p/" + S + I + "newsnow.svg" + S +
+        _x("NewVoiceUkraine") + S + _x("Independent News from Ukraine") + S + "http://newvoiceukraine.i2p/" + S + I + "newvoice.svg" + S +
         _x("OpenDemocracy") + S + _x("Independent International Media Platform") + S + "http://opendemocracy.i2p/" + S + I + "news.svg" + S +
         _x("Planeta") + S + _x("News and blog feeds on I2P") + S + "http://planeta.i2p/" + S + I + "planet.svg" + S +
         "Phayul" + S + _x("News &amp; Views on Tibet") + S + "http://phayul.i2p/" + S + I + "news.svg" + S +
         _x("SaveTibet") + S + _x("International Campaign for Tibet") + S + "http://savetibet.i2p/" + S + I + "savetibet.svg" + S +
         "RollingStone" + S + _x("Lifestyle magazine") + S + "http://rollingstone.i2p/" + S + I + "rollingstone.svg" + S +
+        _x("SchneierOnSecurity") + S + _x("Internationally renowned security technologist") + S + "http://schneieronsecurity.i2p/" + S + I + "schneier.png" + S +
         _x("ScienceDaily") + S + _x("Latest scientific research news") + S + "http://sciencedaily.i2p/" + S + I + "science.svg" + S +
         "SoylentNews" + S + _x("Community-driven tech news") + S + "http://soylentnews.i2p/" + S + I + "news.svg" + S +
         "Slashdot" + S + _x("News for nerds") + S + "http://slashdot.i2p/" + S + I + "slashdot.svg" + S +
         "SlashGear" + S + _x("Technology news &amp; reviews") + S + "http://slashgear.i2p/" + S + I + "slashgear.svg" + S +
         "supchina.i2p" + S + _x("Reporting on China without fear or favor") + S + "http://supchina.i2p/" + S + I + "news.svg" + S +
         _x("TaipeiTimes") + S + _x("News from the Taiwan Capital") + S + "http://taipeitimes.i2p/" + S + I + "news.svg" + S +
-        "TechXplore" + S + _x("Technology and engineering news") + S + "http://techxplore.i2p/" + S + I + "news.svg" + S +
-        "TechMeme" + S + _x("Technology news aggregator") + S + "http://techmeme.i2p/" + S + I + "news.svg" + S +
+        _x("TechXplore") + S + _x("Technology and engineering news") + S + "http://techxplore.i2p/" + S + I + "techxplore.svg" + S +
+        _x("TechMeme") + S + _x("Technology news aggregator") + S + "http://techmeme.i2p/" + S + I + "news.svg" + S +
         _x("TheAtlantic") + S + _x("News &amp; Reviews") + S + "http://theatlantic.i2p/" + S + I + "news.svg" + S +
-        _x("TheConversation") + S + _x("Academic commentary and essays") + S + "http://theconverastion.i2p/" + S + I + "theconversation.svg" + S +
+        _x("TheConversation") + S + _x("Academic commentary and essays") + S + "http://theconversation.i2p/" + S + I + "theconversation.svg" + S +
         _x("TheGuardian") + S + _x("Global News") + S + "http://theguardian.i2p/" + S + I + "theguardian.svg" + S +
-        "TheMarkup" + S + _x("Watching Big Tech...") + S + "http://themarkup.i2p/" + S + I + "news.svg" + S +
+        _x("TheHackerNews") + S + _x("Computer &amp; cyber security news") + S + "http://thehackernews.i2p/" + S + I + "news.svg" + S +
+        _x("TheMarkup") + S + _x("Watching Big Tech...") + S + "http://themarkup.i2p/" + S + I + "news.svg" + S +
         _x("TheMoscowTimes") + S + _x("Independent Journalism from Russia") + S + "http://themoscowtimes.i2p/" + S + I + "news.svg" + S +
+        _x("TheNewRepublic") + S + _x("Politics &amp; Current Affairs magazine") + S + "http://newrepublic.i2p/" + S + I + "newrepublic.svg" + S +
         _x("TheTibetPost") + S + _x("International News from Tibet") + S + "http://thetibetpost.i2p/" + S + I + "tibetpost.svg" + S +
+        _x("TheWeek") + S + _x("All you need to know about everything that matters") + S + "http://theweek.i2p/" + S + I + "theweek.svg" + S +
         _x("ThreatPost") + S + _x("Security related news") + S + "http://threatpost.i2p/" + S + I + "news.svg" + S +
         "TorrentFreak" + S + _x("Filesharing &amp; copyright news") + S + "http://torrentfreak.i2p/" + S + I + "torrentfreak.svg" + S +
         "Ukrinform" + S + _x("Ukranian National News Agency") + S + "http://ukrinform.i2p/" + S + I + "news.svg" + S +
         "Wired" + S + _x("Technology News &amp; more...") + S + "http://wired.i2p/" + S + I + "wired.svg" + S +
+        //"DarkNetDaily" + S + _x("Darknet related news site") + S + "http://darknetdaily.i2p/" + S + I + "news.svg" + S +
+        //"dw.i2p" + S + _x("News &amp; Current Affairs from Germany and around the world") + S + "http://dw.i2p/" + S + I + "news.svg" + S +
 
         "";
 
@@ -429,7 +443,8 @@ public class HomeHelper extends HelperBase {
             buf.append("\n<div class=\"applink");
             // tag sites that require javascript to function
             if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("zeronet") || url.contains("speedtest") ||
-                url.contains("tinypng") || url.contains("vuldb"))
+                url.contains("tinypng") || url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") ||
+                url.contains("w3schools"))
                 buf.append(" js");
             buf.append("\" style=\"display: inline-block; text-align: center;\">\n" +
                        "<div class=\"appicon\">" +

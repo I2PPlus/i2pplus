@@ -10,31 +10,31 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<title>New User Guide - I2P+</title>
 <%@include file="../css.jsi" %>
+<title><%=intl._t("New User Guide")%> - I2P+</title>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp">New User Guide</h1>
+<h1 class="hlp"><%=intl._t("New User Guide")%></h1>
 <div class="main" id="help">
 <div class="confignav">
-<span class="tab"><a href="/help/configuration">Configuration</a></span>
-<span class="tab"><a href="/help/advancedsettings">Advanced Settings</a></span>
-<span class="tab"><a href="/help/ui">User Interface</a></span>
-<span class="tab"><a href="/help/reseed">Reseeding</a></span>
-<span class="tab"><a href="/help/tunnelfilter">Tunnel Filtering</a></span>
-<span class="tab"><a href="/help/faq">FAQ</a></span>
-<span class="tab2">New User Guide</span>
-<span class="tab"><a href="/help/webhosting">Web Hosting</a></span>
-<span class="tab"><a href="/help/hostnameregistration">Hostname Registration</a></span>
-<span class="tab"><a href="/help/troubleshoot">Troubleshoot</a></span>
-<span class="tab"><a href="/help/glossary">Glossary</a></span>
-<span class="tab"><a href="/help/legal">Legal</a></span>
-<span class="tab"><a href="/help/changelog">Change Log</a></span>
+<span class="tab"><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
+<span class="tab"><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
+<span class="tab"><a href="/help/ui"><%=intl._t("User Interface")%></a></span>
+<span class="tab"><a href="/help/reseed"><%=intl._t("Reseeding")%></a></span>
+<span class="tab"><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
+<span class="tab"><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
+<span class="tab2"><%=intl._t("New User Guide")%></span>
+<span class="tab"><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
+<span class="tab"><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
+<span class="tab"><a href="/help/troubleshoot"><%=intl._t("Troubleshoot")%></a></span>
+<span class="tab"><a href="/help/glossary"><%=intl._t("Glossary")%></a></span>
+<span class="tab"><a href="/help/legal"><%=intl._t("Legal")%></a></span>
+<span class="tab"><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
 <div id="newuserguide">
-<h2>Introduction to I2P</h2>
+<h2><%=intl._t("Introduction to I2P")%></h2>
 <jsp:useBean class="net.i2p.router.web.ContentHelper" id="contenthelper" scope="request" />
  <% java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getBaseDir(), "docs/readme/readme.html"); %>
  <jsp:setProperty name="contenthelper" property="page" value="<%=fpath.getAbsolutePath()%>" />

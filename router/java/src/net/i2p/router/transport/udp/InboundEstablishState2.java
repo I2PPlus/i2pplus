@@ -174,7 +174,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // send retry with termination
             UDPPacket retry = _transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_SKEW);
             _transport.send(retry);
-            throw new GeneralSecurityException("Skew exceeded in Session/Token Request (retry sent): " + _skew);
+            throw new GeneralSecurityException("Skew exceeded in Session/Token Request (retry sent): " + _skew + "ms");
         }
         packetReceived();
         if (_log.shouldDebug())
@@ -189,6 +189,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake, null);
             if (_log.shouldDebug())
                 _log.debug("[SSU2] Processed " + blocks + " blocks on " + this);
+        } catch (DataFormatException dfe) {
+            // probably RI problems, ban for a while??
+            //_context.blocklist().add(_aliceIP);
+            if (_log.shouldWarn())
+                _log.warn("[SSU2] IES2 payload error", dfe);
+            throw new GeneralSecurityException("IES2 payload error: " + this, dfe);
         } catch (Exception e) {
             if (!e.toString().contains("RouterInfo store fail"))
                 if (_log.shouldWarn())
@@ -495,7 +501,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     /** note that we just sent a Retry packet */
     public synchronized void retryPacketSent() {
         // retry after clock skew
-        if (_currentState == InboundState.IB_STATE_FAILED)
+        if (_currentState == InboundState.IB_STATE_FAILED ||
+            _currentState == InboundState.IB_STATE_RETRY_SENT)
             return;
         if (_currentState != InboundState.IB_STATE_REQUEST_BAD_TOKEN_RECEIVED &&
             _currentState != InboundState.IB_STATE_TOKEN_REQUEST_RECEIVED)
@@ -508,9 +515,24 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *
+     *  All exceptions thrown from here will be fatal. fail() will be called before throwing.
      */
     public synchronized void receiveSessionRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
+        try {
+            locked_receiveSessionRequestAfterRetry(packet);
+        } catch (GeneralSecurityException gse) {
+            if (_log.shouldDebug())
+                _log.debug("[SSU2] Session request error after retry", gse);
+            // fail inside synch rather than have Est. Mgr. do it to prevent races
+            fail();
+            throw gse;
+        }
+    }
+
+    /**
+     * @since 0.9.56
+     */
+    private void locked_receiveSessionRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
         if (_currentState != InboundState.IB_STATE_RETRY_SENT)
             throw new GeneralSecurityException("Bad state for SessionRequest after Retry: " + _currentState);
         if (_log.shouldDebug())

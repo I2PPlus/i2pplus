@@ -64,7 +64,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      */
 //    private static final int TARGET = 10;
 //    private static final int TARGET = 25;
-    private static final int DEFAULT_CODEL_TARGET = 50;
+    private static final int DEFAULT_CODEL_TARGET = 30;
     private final long _target;
 
     /**
@@ -74,7 +74,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      */
 //    private static final int INTERVAL = 200;
 //    private static final int INTERVAL = 500;
-    private static final int DEFAULT_CODEL_INTERVAL = 1000;
+    private static final int DEFAULT_CODEL_INTERVAL = 1500;
     private final long _interval;
     //private static final int MAXPACKET = 512;
 
