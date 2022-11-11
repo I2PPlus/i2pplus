@@ -7,7 +7,7 @@
  * Do not tag this file for translation.
  */
     //
-    //  Redirect from /console to /help/newusers
+    //  Redirect from /help to /help/
     //
     response.setStatus(301);
     response.setHeader("Cache-Control","no-cache");

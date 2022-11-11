@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-07 11:53+0000\n"
+"POT-Creation-Date: 2022-11-11 03:56+0000\n"
 "PO-Revision-Date: 2022-09-16 11:51+0000\n"
 "Last-Translator: Beta Ba <linsui555@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
@@ -117,14 +117,14 @@ msgstr[0] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:991
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:997
 msgid "Add"
 msgstr "添加"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:961
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
 msgid "Replace"
 msgstr "替换"
 
@@ -202,8 +202,8 @@ msgstr "删除记录"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:713
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:891
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:719
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:897
 msgid "Delete Selected"
 msgstr "删除选中项"
 
@@ -233,7 +233,7 @@ msgstr "未选择要删除的记录。"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:969
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
 msgid "Add Alternate"
 msgstr "添加备用"
 
@@ -391,16 +391,16 @@ msgstr "无法更新订阅。HTTP代理没有运行!"
 msgid "Subscriptions reloaded."
 msgstr "订阅设置已重新载入。"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:188
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1009
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:194
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1015
 msgid "Import"
 msgstr "导入"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:200
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:206
 msgid "address book"
 msgstr "地址簿"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:245
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:251
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:201
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:198
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:192
@@ -409,7 +409,7 @@ msgstr "地址簿"
 msgid "Router"
 msgstr "路由"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:249
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:203
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:202
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:194
@@ -418,7 +418,7 @@ msgstr "路由"
 msgid "Master"
 msgstr "主要"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:253
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:205
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:206
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:196
@@ -427,7 +427,7 @@ msgstr "主要"
 msgid "Private"
 msgstr "私有"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:257
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:263
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:207
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:210
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:198
@@ -436,7 +436,7 @@ msgstr "私有"
 msgid "Published"
 msgstr "发布"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:265
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:209
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:212
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:200
@@ -446,7 +446,7 @@ msgstr "发布"
 msgid "Subscriptions"
 msgstr "订阅"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:261
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:267
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:211
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:215
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:214
@@ -456,7 +456,7 @@ msgstr "订阅"
 msgid "Configuration"
 msgstr "配置"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:263
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:269
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:213
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:216
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:204
@@ -465,101 +465,101 @@ msgstr "配置"
 msgid "Help"
 msgstr "帮助"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:265
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:271
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:274
 msgid "Book"
 msgstr "书籍"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:282
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:288
 msgid "No entries"
 msgstr "没有条目"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:326
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:336
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:332
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:342
 msgid "Export in hosts.txt format"
 msgstr "导出 hosts.txt 格式"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:328
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:334
 #, fuzzy
 msgid "Export results in hosts.txt format"
 msgstr "导出 hosts.txt 格式"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:338
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:344
 #, fuzzy
 msgid "Export book in hosts.txt format"
 msgstr "导出 hosts.txt 格式"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:385
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:391
 msgid "Search"
 msgstr "搜索"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:663
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:669
 msgid "other"
 msgstr "其他"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:675
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:681
 msgid "clear filter"
 msgstr "清除过滤器"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:719
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
 msgid "Info"
 msgstr "信息"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:721
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:937
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:727
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:943
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:268
 msgid "Hostname"
 msgstr "主机名"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:723
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:729
 msgid "Link (b32)"
 msgstr "链接 (b32)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:731
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:348
 msgid "Destination"
 msgstr "目标"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:739
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:745
 msgid "Select hosts for deletion from addressbook"
 msgstr "从地址簿中选择要删除的主机"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:784
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:796
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:790
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:802
 msgid "More information on this entry"
 msgstr "此记录的更多信息"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:808
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
 msgid "Base 32 address"
 msgstr "Base 32 地址"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:820
 msgid "Helper link to share host address with option to add to addressbook"
 msgstr "Helper链接以共享主机地址，并带有添加到地址簿的选项"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:834
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:840
 msgid "Mark for deletion"
 msgstr "标记为删除"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:889
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:945
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1007
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:895
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:951
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1013
 msgid "Cancel"
 msgstr "取消"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:935
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:941
 msgid "Add new destination"
 msgstr "添加新目标"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:941
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
 msgid "B64 or B32"
 msgstr "B64或B32"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1003
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1009
 msgid "Import from hosts.txt file"
 msgstr "从 hosts.txt 文件导入"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1005
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1011
 #, fuzzy
 msgid "Select file"
 msgstr "清除过滤器"
