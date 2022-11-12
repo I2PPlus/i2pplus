@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-11 03:56+0000\n"
-"PO-Revision-Date: 2022-11-08 12:39+0000\n"
+"PO-Revision-Date: 2022-11-11 04:35+0000\n"
 "Last-Translator: xtoaster <zhazhenzhong@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -3549,7 +3549,7 @@ msgstr "跨网络微博和论坛和维基"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:134
 msgid "Developer question &amp; answer forums"
-msgstr ""
+msgstr "开发者问题和答案"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:135
 msgid "Alternative privacy-focused front-end for Reddit"
@@ -3818,7 +3818,7 @@ msgstr "全球新闻和思考"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:205
 msgid "FrontLineDefenders"
-msgstr ""
+msgstr "前线捍卫者"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:205
 msgid "Human rights activism"
@@ -3826,16 +3826,15 @@ msgstr "人权行动主义"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "The home of new writing"
-msgstr ""
+msgstr "新写作之家"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "Defending Human Rights Worldwide"
 msgstr "捍卫全球人权"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
-#, fuzzy
 msgid "HumanRightsWatch"
-msgstr "中国人权"
+msgstr "人权观察"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
 msgid "Fresh hacks every day"
@@ -3846,9 +3845,8 @@ msgid "Computer related news aggregation"
 msgstr "计算机相关新闻聚合"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
-#, fuzzy
 msgid "HackerNews"
-msgstr "TheHackerNews"
+msgstr "黑客新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "HongKongFreePress"
@@ -3896,12 +3894,11 @@ msgstr "KrebsOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "KyivIndependent"
-msgstr ""
+msgstr "基辅独立报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-#, fuzzy
 msgid "News from Ukraine"
-msgstr "来自乌克兰的独立新闻"
+msgstr "来自乌克兰的新闻"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Router performance monitoring and Linux tips"
@@ -3921,7 +3918,7 @@ msgstr "LittleAtoms"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "The Real Russia. Today."
-msgstr ""
+msgstr "真正的俄罗斯。今天。"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "MetaCritic"
@@ -13445,7 +13442,7 @@ msgstr "M-Lab 名称服务器隐私政策"
 msgid ""
 "The bandwidth test is now running and will take around 60 seconds to "
 "complete, after which you should be forwarded to the results page."
-msgstr ""
+msgstr "带宽测试现在正在运行，将需要大约60秒完成，之后你应该被转到结果页面。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:539
 msgid "Bandwidth Test in progress"
@@ -13503,6 +13500,7 @@ msgid ""
 "I2P+ requires a web browser configured to use the resident HTTP proxy in "
 "order to browse websites on the I2P network."
 msgstr ""
+"I2P+需要一个配置为使用驻地HTTP代理的网络浏览器，才能浏览I2P网络上的网站。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:697
 msgid "Browser Setup"
@@ -13543,7 +13541,7 @@ msgstr "一旦您的本地隧道旁显示绿星，你将可以通过 I2P 做大�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:718
 msgid "Unknown Wizard page"
-msgstr ""
+msgstr "未知的魔法师页面"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:728
 msgid "Previous"
