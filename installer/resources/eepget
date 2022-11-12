@@ -15,7 +15,7 @@ fi
 
  # Send help
 send_help() {
-	java -cp "$I2P/lib/i2p.jar" net.i2p.util.EepGet
+    java -cp "$I2P/lib/i2p.jar" net.i2p.util.EepGet
     if [ "$1" ]; then exit $1; else exit 0; fi
 }
 
@@ -115,7 +115,8 @@ for a in $@; do
             shift
             ;;
         http*://*)
-            eep_url="$(echo $1 | grep -iEo '(http|https)://[a-z0-9./?=_%:-]*')"
+            #eep_url="$(echo $1 | grep -iEo '(http|https)://[a-z0-9./?=_%:-]*')"
+            eep_url="$(echo $1)"
             args="$args $eep_url "
             ;;
     esac
