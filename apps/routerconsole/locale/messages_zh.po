@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 03:56+0000\n"
-"PO-Revision-Date: 2022-11-11 04:35+0000\n"
+"POT-Creation-Date: 2022-11-12 13:03+0000\n"
+"PO-Revision-Date: 2022-11-12 12:56+0000\n"
 "Last-Translator: xtoaster <zhazhenzhong@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -1948,7 +1948,7 @@ msgid "Cancel"
 msgstr "取消"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:61
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:471
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:472
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1328
 msgid "Name"
 msgstr "名称"
@@ -2850,12 +2850,12 @@ msgid "Router console password is enabled."
 msgstr "路由控制台密码已启用。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:467
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:468
 msgid "Mark for deletion"
 msgstr "标记为删除"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:469
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:470
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1326
 msgid "Remove"
 msgstr "删除"
@@ -3351,7 +3351,7 @@ msgstr "在 I2P 上托管您自己的内容的本地网络服务器"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:399
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:400
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:335
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:523
 msgid "Web Server"
@@ -3893,272 +3893,273 @@ msgid "KrebsOnSecurity"
 msgstr "KrebsOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "KyivIndependent"
-msgstr "基辅独立报"
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "News from Ukraine"
-msgstr "来自乌克兰的新闻"
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Router performance monitoring and Linux tips"
 msgstr "路由器性能监控和 Linux 提示"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Linux Kernel Mailing List"
 msgstr "Linux内核邮件列表"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "A rationalist journal"
 msgstr "一本理性主义期刊"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "LittleAtoms"
 msgstr "LittleAtoms"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "The Real Russia. Today."
-msgstr "真正的俄罗斯。今天。"
+msgstr "了解俄罗斯的真实现状。"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "MetaCritic"
 msgstr "MetaCritic"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Movie + TV + Music + Game reviews"
 msgstr "电影 + 电视 + 音乐 + 游戏评论"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "NakedSecurity"
 msgstr "NakedSecurity"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "Security news and research blog"
 msgstr "安全新闻和研究博客"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Smart &amp; fearless journalism"
 msgstr "聪明和无畏的新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "NewStatesman"
 msgstr "NewStatesman"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
 msgstr "政治和 时事杂志"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "American &amp; International News"
 msgstr "美国和 国际新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Newsweek"
 msgstr "Newsweek"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "NewsNow"
 msgstr "NewsNow"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "The Independent News Discovery Platform"
 msgstr "独立新闻发现平台"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "Independent News from Ukraine"
 msgstr "来自乌克兰的独立新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewVoiceUkraine"
 msgstr "乌克兰新声"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
 msgstr "独立新闻平台"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
 msgstr "I2P的新闻和博客订阅"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
 msgstr "Planeta I2P"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
 msgstr "西藏新闻和观察"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "International Campaign for Tibet"
 msgstr "国际声援西藏运动"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "SaveTibet"
 msgstr "拯救西藏"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Lifestyle magazine"
 msgstr "Lifestyle magazine"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "Internationally renowned security technologist"
 msgstr "国际知名安防技术专家"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
 msgstr "施奈尔安全"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
 msgstr "最新的安全新闻和研究博客"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
 msgstr "科学日报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
 msgstr "社区驱动的技术新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
 msgid "News for nerds"
 msgstr "News for nerds"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
 msgid "Technology news &amp; reviews"
 msgstr "技术新闻和 与评论"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
 msgstr "无所偏袒地报道中国"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "News from the Taiwan Capital"
 msgstr "来自台湾首都的新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
 msgstr "台北时报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TechXplore"
 msgstr "Tech Xplore"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
 msgstr "技术和工程新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
 msgstr "TechMeme"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
 msgstr "科技新闻聚合站"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
 msgstr "新闻 和与评论"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
 msgstr "大西洋报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
 msgstr "学术评论和论文"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
 msgstr "连接"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
 msgstr "Global News"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
 msgstr "卫报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "Computer &amp; cyber security news"
 msgstr "计算机和网络安全新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHackerNews"
 msgstr "TheHackerNews"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
 msgstr "观看大型科技..."
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "Independent Journalism from Russia"
 msgstr "来自俄罗斯的独立新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
 msgstr "莫斯科时报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
 msgstr "TheNewRepublic"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "International News from Tibet"
 msgstr "International News from Tibet"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "TheTibetPost"
 msgstr "TheTibetPost"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "All you need to know about everything that matters"
 msgstr "你需要知道的所有重要信息"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "TheWeek"
 msgstr "TheWeek"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Security related news"
 msgstr "安全新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "ThreatPost"
 msgstr "ThreatPost"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "Filesharing &amp; copyright news"
 msgstr "文件共享和 著作权新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Ukranian National News Agency"
 msgstr "乌克兰国家通讯社"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:334
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+msgid "A magazine about human rights and social justice"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+#, fuzzy
+msgid "UpstreamJournal"
+msgstr "上行"
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:335
 msgid "The HTTP proxy is not up"
 msgstr "HTTP 代理未启动"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:336
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:337
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "您的浏览器尚未配置使用 HTTP 代理 {0}"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:473
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:474
 msgid "URL"
 msgstr "URL"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:507
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:508
 msgid "Add"
 msgstr "添加"
 
@@ -13381,6 +13382,11 @@ msgid ""
 "password to access the console, you may do so on the <a href=/configui "
 "target=_blank rel=noreferrer>User Interface configuration page</a>."
 msgstr ""
+"选择用于路由器控制台和网络应用（<a href=/webmail target=_blank "
+"rel=noreferrer>webmail</a>、<a href=/torrents target=_blank "
+"rel=noreferrer>torrents</a>、<a href=/i2ptunnelmgr target=_blank "
+"rel=noreferrer>隧道管理器</a> 等）的语言。如果你想在将来改变语言，改变路由器"
+"控制台的主题或者配置访问控制台的密码，都可以在用户界面配置页上进行。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:505
 msgid "Router Console &amp; WebApps Display Language"
@@ -13500,14 +13506,13 @@ msgid ""
 "I2P+ requires a web browser configured to use the resident HTTP proxy in "
 "order to browse websites on the I2P network."
 msgstr ""
-"I2P+需要一个配置为使用驻地HTTP代理的网络浏览器，才能浏览I2P网络上的网站。"
+"I2P+需要一个配置为使用本地HTTP代理的网络浏览器，才能浏览I2P网络上的网站。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:697
 msgid "Browser Setup"
 msgstr "浏览器设置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:699
-#, fuzzy
 msgid ""
 "In order to access websites hosted on the I2P network, and optionally use "
 "the default outproxy to connect to websites on clearnet, you will need to "
@@ -13541,7 +13546,7 @@ msgstr "一旦您的本地隧道旁显示绿星，你将可以通过 I2P 做大�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:718
 msgid "Unknown Wizard page"
-msgstr "未知的魔法师页面"
+msgstr "未知向导页面"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:728
 msgid "Previous"
@@ -13562,6 +13567,12 @@ msgstr "下一步"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:764
 msgid "Finished"
 msgstr "完成"
+
+#~ msgid "KyivIndependent"
+#~ msgstr "基辅独立报"
+
+#~ msgid "News from Ukraine"
+#~ msgstr "来自乌克兰的新闻"
 
 #~ msgid "welcome"
 #~ msgstr "欢迎使用 I2P"

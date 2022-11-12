@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 03:55+0000\n"
+"POT-Creation-Date: 2022-11-12 13:02+0000\n"
 "PO-Revision-Date: 2020-02-12 17:20+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Azerbaijani (http://www.transifex.com/otf/I2P/language/az/)\n"
@@ -1924,7 +1924,7 @@ msgid "Cancel"
 msgstr "Ləğv et"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:61
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:471
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:472
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1328
 msgid "Name"
 msgstr "Ad"
@@ -2826,12 +2826,12 @@ msgid "Router console password is enabled."
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:467
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:468
 msgid "Mark for deletion"
 msgstr "Silinmə üçün işarələ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:469
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:470
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1326
 msgid "Remove"
 msgstr "Sil"
@@ -3328,7 +3328,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:399
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:400
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:335
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:523
 msgid "Web Server"
@@ -3876,276 +3876,276 @@ msgid "KrebsOnSecurity"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "KyivIndependent"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "News from Ukraine"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Router performance monitoring and Linux tips"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Linux Kernel Mailing List"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "A rationalist journal"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "LittleAtoms"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "The Real Russia. Today."
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "MetaCritic"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Movie + TV + Music + Game reviews"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "NakedSecurity"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "Security news and research blog"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Smart &amp; fearless journalism"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "NewStatesman"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "American &amp; International News"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 #, fuzzy
 msgid "Newsweek"
 msgstr "Xəbərlər"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 #, fuzzy
 msgid "NewsNow"
 msgstr "Xəbərlər"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "The Independent News Discovery Platform"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "Independent News from Ukraine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewVoiceUkraine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "International Campaign for Tibet"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 #, fuzzy
 msgid "SaveTibet"
 msgstr "Yadda saxla"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Lifestyle magazine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "Internationally renowned security technologist"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
 msgid "News for nerds"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
 msgid "Technology news &amp; reviews"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "News from the Taiwan Capital"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TechXplore"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 #, fuzzy
 msgid "TheConversation"
 msgstr "Versiya"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "Computer &amp; cyber security news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHackerNews"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "Independent Journalism from Russia"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "International News from Tibet"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "TheTibetPost"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "All you need to know about everything that matters"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "TheWeek"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Security related news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "ThreatPost"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "Filesharing &amp; copyright news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Ukranian National News Agency"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:334
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+msgid "A magazine about human rights and social justice"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+msgid "UpstreamJournal"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:335
 msgid "The HTTP proxy is not up"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:336
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:337
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:473
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:474
 msgid "URL"
 msgstr "URL"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:507
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:508
 msgid "Add"
 msgstr "Əlavə et"
 
