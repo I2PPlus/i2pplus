@@ -31,7 +31,7 @@ import net.i2p.data.DataHelper;
 //import java.util.jar.Pack200;
 //
 // For Apache Harmony or if you put its pack200.jar in your library directory use this
-//import org.apache.harmony.unpack200.Archive;
+//import org.apache.commons.compress.harmony.unpack200.Archive;
 
 /**
  * General helper methods for messing with files
@@ -256,19 +256,19 @@ public class FileUtil {
                         while ( (in.read(buf)) != -1) {
                             // throw the data away
                         }
-                        //System.err.println("INFO: File [" + entry.getName() + "] extracted");
+                        System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         in.close();
                     } catch (IOException ioe) {
-                        //System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + "]");
-                        //ioe.printStackTrace();
+                        System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + "]");
+                        ioe.printStackTrace();
                         return false;
                     }
                 }
             }
             return true;
         } catch (IOException ioe) {
-            //System.err.println("ERROR: Unable to extract the zip file");
-            //ioe.printStackTrace();
+            System.err.println("ERROR: Unable to extract the zip file");
+            ioe.printStackTrace();
             return false;
         } finally {
             if (zip != null) {
@@ -287,7 +287,7 @@ public class FileUtil {
             return true;
         } catch (Exception e) {}
         try {
-            Class.forName("org.apache.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
+            Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
             return true;
         } catch (Exception e) {}
         return false;
@@ -333,7 +333,7 @@ public class FileUtil {
         //(new Archive(in, out)).unpack();
         if (!_failedApache) {
             try {
-                Class<?> p200 = Class.forName("org.apache.harmony.unpack200.Archive", true, ClassLoader.getSystemClassLoader());
+                Class<?> p200 = Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", true, ClassLoader.getSystemClassLoader());
                 Constructor<?> newUnpacker = p200.getConstructor(InputStream.class, JarOutputStream.class);
                 Object unpacker = newUnpacker.newInstance(in, out);
                 Method unpack = unpacker.getClass().getMethod("unpack");
