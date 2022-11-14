@@ -541,7 +541,7 @@
     </target>
 
     <uptodate property="precompilejsp.uptodate" targetfile="../jsp/web-out.xml">
-        <srcfiles dir= "../jsp" includes="**/*.jsp, *.jsi, **/*.html, *.css, susimail/susimail, web.xml"/>
+        <srcfiles dir= "../jsp" includes="**/*.jsp, help/*.jsp, *.jsi, **/*.html, *.css, susimail/susimail, web.xml"/>
         <!-- so the version is right on logs.jsp -->
         <srcfiles dir= "../../../router/java/src/net/i2p/router" includes="RouterVersion.java"/>
     </uptodate>
