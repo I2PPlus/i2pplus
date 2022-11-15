@@ -1712,9 +1712,9 @@
     <target name="updaterWithLicenses" depends="prepupdate, preplicenses, zipit" />
     <target name="updater200" depends="prepupdate, pack200, zipit200" />
     <target name="updater200Compact" depends="prepupdatecompact, pack200, zipit200" />
-    <target name="updaterCompactWithDocs" depends="prepupdatecompact, prepConsoleDocUpdates, pack200, zipit200" />
-    <target name="updaterCompactWithGeoIP" depends="prepupdatecompact, prepgeoupdate, pack200, zipit200" />
-    <target name="updaterCompactWithJettyAndGeoIP" depends="prepupdatecompact, prepgeoupdate, prepjupdate, pack200, zipit200" />
+    <target name="updater200CompactWithDocs" depends="prepupdatecompact, prepConsoleDocUpdates, pack200, zipit200" />
+    <target name="updater200CompactWithGeoIP" depends="prepupdatecompact, prepgeoupdate, pack200, zipit200" />
+    <target name="updater200CompactWithJettyAndGeoIP" depends="prepupdatecompact, prepgeoupdate, prepjupdate, pack200, zipit200" />
     <target name="updater200Small" depends="prepupdateSmall, pack200, zipit200" />
     <target name="updater200Router" depends="prepupdateRouter, pack200, zipit200" />
     <target name="updater200WithGeoIP" depends="prepupdate, prepgeoupdate, pack200, zipit200" />
