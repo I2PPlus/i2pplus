@@ -27,8 +27,8 @@
 <div class="configure">
 <h3 id="webappconfiguration"><%=intl._t("WebApp Configuration")%>&nbsp;
 <span class="h3navlinks">
-<a href="configclients" title="<%=intl._t("Client Configuration")%>"><%=intl._t("Clients")%>"</a>&nbsp;
-<a href="configplugins" title="<%=intl._t("Plugin Configuration")%>"><%=intl._t("Plugins")%>"</a>
+<a href="configclients" title="<%=intl._t("Client Configuration")%>"><%=intl._t("Clients")%></a>&nbsp;
+<a href="configplugins" title="<%=intl._t("Plugin Configuration")%>"><%=intl._t("Plugins")%></a>
 </span>
 </h3>
 <p class="infohelp" id="webappconfigtext">
