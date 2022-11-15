@@ -22,7 +22,7 @@
 <link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.svg">
 </head>
 <body id="tunnelListPage">
-<style type="text/css">body{opacity:0}</style>
+<style type="text/css">body{display:none;pointer-events:none}</style>
 <div id="page">
 <%
   boolean isInitialized = indexBean.isInitialized();
@@ -151,7 +151,7 @@ SSL
             switch (indexBean.getTunnelStatus(curServer)) {
                 case IndexBean.STARTING:
 %>
-<div class="statusStarting text" title="<%=intl._t("Starting...")%>"><%=intl._t("Starting...")%></div>
+<div class="statusStarting text"><span class="tooltip" hidden><b><%=intl._t("Starting...")%></b></span><%=intl._t("Starting...")%></div>
 </td>
 <td class="tunnelControl volatile">
 <a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
@@ -159,7 +159,7 @@ SSL
                 break;
                 case IndexBean.RUNNING:
 %>
-<div class="statusRunning text" title="<%=intl._t("Running")%> (<%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curServer, 3)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelDepthOut(curServer, 3)%>&nbsp;<%=intl._t("out")%> / <%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curServer,2)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelQuantityOut(curServer,2)%>&nbsp;<%=intl._t("out")%>)"><%=intl._t("Running")%></div>
+<div class="statusRunning text"><span class="tooltip" hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curServer, 3)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelDepthOut(curServer, 3)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curServer,2)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelQuantityOut(curServer,2)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curServer,0)%>&nbsp;<%=intl._t("in")%>,&nbsp;<%=editBean.getTunnelVarianceOut(curServer,0)%>&nbsp;<%=intl._t("out")%></span><%=intl._t("Running")%></div>
 </td>
 <td class="tunnelControl">
 <a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
@@ -167,7 +167,7 @@ SSL
                 break;
                 case IndexBean.NOT_RUNNING:
 %>
-<div class="statusNotRunning text" title="<%=intl._t("Stopped")%>"><%=intl._t("Stopped")%></div>
+<div class="statusNotRunning text"><span class="tooltip" hidden><b><%=intl._t("Stopped")%></b></span><%=intl._t("Stopped")%></div>
 </td>
 <td class="tunnelControl">
 <a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curServer%>"><%=intl._t("Start")%></a>
@@ -177,7 +177,7 @@ SSL
 %>
 </td>
 </tr>
-<tr class="tunnelInfo" style="display: none;">
+<tr class="tunnelInfo" style="display:none">
 <td class="tunnelDestination" colspan="2">
 <span class="tunnelDestinationLabel">
 <%
@@ -241,7 +241,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
             String altDestB32 = editBean.getAltDestHashBase32(curServer);
             if (encName != null && encName.length() > 0) {
 %>
-<tr class="tunnelInfo" style="display: none;">
+<tr class="tunnelInfo" style="display:none">
 <td class="tunnelDestinationEncrypted" colspan="2">
 <span class="tunnelDestinationLabel"><b><%=intl._t("Encrypted")%>:</b></span>
 <span class="selectAll"><%=encName%></span>
@@ -249,7 +249,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
 <%
             } else if (hasHostname) {
 %>
-<tr class="tunnelInfo" style="display: none;">
+<tr class="tunnelInfo" style="display:none">
 <td class="tunnelDestinationEncrypted" colspan="2">
 <span class="tunnelDestinationLabel"><b><%=intl._t("Destination")%>:</b></span>
 <span class="selectAll"><%=indexBean.getDestHashBase32(curServer)%></span>
@@ -257,7 +257,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
 <%
             } else if (altDest != null && !altDest.equals("")) {
 %>
-<tr class="tunnelInfo" style="display: none;">
+<tr class="tunnelInfo" style="display:none">
 <td class="tunnelDestinationEncrypted" colspan="2">
 <span class="tunnelDestinationLabel"><b><%=intl._t("Alt Destination")%>:</b></span>
 <span class="selectAll"><%=altDestB32%></span>
@@ -265,7 +265,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
 <%
             } else {
 %>
-<tr class="tunnelInfo" style="display: none;">
+<tr class="tunnelInfo" style="display:none">
 <td class="tunnelDestinationEncrypted empty" colspan="2"></td>
 <%
             }
@@ -377,7 +377,7 @@ ElGamal-2048
                switch (indexBean.getTunnelStatus(curClient)) {
                    case IndexBean.STARTING:
 %>
-<div class="statusStarting text" title="<%=intl._t("Starting...")%>"><%=intl._t("Starting...")%></div>
+<div class="statusStarting text"><span class="tooltip" hidden><b><%=intl._t("Starting...")%></b></span><%=intl._t("Starting...")%></div>
 </td>
 <td class="tunnelControl volatile">
 <a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
@@ -385,7 +385,7 @@ ElGamal-2048
                    break;
                    case IndexBean.STANDBY:
 %>
-<div class="statusStandby text" title="<%=intl._t("Standby")%>"><%=intl._t("Standby")%></div>
+<div class="statusStandby text"><span class="tooltip" hidden><b><%=intl._t("Standby")%></b></span><%=intl._t("Standby")%></div>
 </td>
 <td class="tunnelControl volatile">
 <a class="control stop iconize" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
@@ -393,7 +393,7 @@ ElGamal-2048
                    break;
                    case IndexBean.RUNNING:
 %>
-<div class="statusRunning text" title="<%=intl._t("Running")%> (<%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curClient, 3)%> / <%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curClient,2)%>)"><%=intl._t("Running")%></div>
+<div class="statusRunning text"><span class="tooltip" hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curClient, 3)%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curClient,2)%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curClient,0)%></span><%=intl._t("Running")%></div>
 </td>
 <td class="tunnelControl volatile">
 <a class="control stop iconize" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
@@ -401,7 +401,7 @@ ElGamal-2048
                    break;
                    case IndexBean.NOT_RUNNING:
 %>
-<div class="statusNotRunning text" title="<%=intl._t("Stopped")%>"><%=intl._t("Stopped")%></div>
+<div class="statusNotRunning text"><span class="tooltip" hidden><b><%=intl._t("Stopped")%></b></span><%=intl._t("Stopped")%></div>
 </td>
 <td class="tunnelControl volatile">
 <a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curClient%>"><%=intl._t("Start")%></a>
@@ -411,7 +411,7 @@ ElGamal-2048
 %>
 </td>
 </tr>
-<tr class="tunnelInfo" style="display: none;">
+<tr class="tunnelInfo" style="display:none">
 <td class="tunnelDestination" colspan="2">
 <span class="tunnelDestinationLabel">
 <%
@@ -479,7 +479,7 @@ ECDSA-P256
                String clientB32 = indexBean.getDestHashBase32(curClient);
                if ((cdest.contains(".i2p") && !cdest.contains(".b32") || cdest.length() > 70) && clientB32.length() > 0) {
 %>
-<tr class="tunnelInfo" style="display: none;">
+<tr class="tunnelInfo" style="display:none">
 <td class="tunnelDestinationEncrypted" colspan="2">
 <span class="tunnelDestinationLabel"><b>B32:</b></span>
 <span class="selectAll"><%=clientB32%></span>
@@ -487,7 +487,7 @@ ECDSA-P256
 <%
                } else {
 %>
-<tr class="tunnelInfo" style="display: none;">
+<tr class="tunnelInfo" style="display:none">
 <td class="empty" colspan="2"></td>
 <%
                }
@@ -535,7 +535,7 @@ ElGamal-2048
 </tr>
 </table>
 </div>
-<noscript><style type="text/css">.script {display: none} .tunnelInfo {display: table-row !important}</style></noscript>
+<noscript><style type="text/css">.script{display:none}.tunnelInfo{display:table-row!important}</style></noscript>
 <%
 
   }  // isInitialized()
@@ -550,6 +550,6 @@ ElGamal-2048
 <script charset="utf-8" src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
-<style type="text/css">body{opacity:1}</style>
+<style type="text/css">body{display:block;pointer-events:auto}</style>
 </body>
 </html>
