@@ -24,8 +24,8 @@
         <echo message="Useful targets:" />
         <echo message=" bench                                        Build benchmarks" />
         <echo message=" bump                                         Increment build (minor version) by 1" />
-        <echo message=" buildProperties                              Echo build properties for current build" />
         <echo message=" bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date" />
+        <echo message=" buildProperties                              Echo build properties for current build" />
         <echo message=" buildAddressbook                             Build Addressbook .jar component &#10140; ./build/addressbook.jar" />
         <echo message=" buildCore                                    Build i2p .jar component &#10140; ./build/i2p.jar" />
         <echo message=" buildDesktopGui                              Build standalone DesktopGUI &#10140; ./build/desktopgui.jar" />
@@ -36,6 +36,7 @@
         <echo message=" buildJetty                                   Build all Jetty related jar components &#10140; ./build/" />
         <echo message=" buildJrobin                                  Build the JRobin (RRD4J) .jar component &#10140; ./build/jrobin.jar" />
         <echo message=" buildMinistreaming                           Build MiniStreaming .jar component &#10140; ./build/mstreaming.jar" />
+        <echo message=" buildPack200                                 Build Pack200 .jar component &#10140; ./build/pack200.jar" />
         <echo message=" buildRouter                                  Build Router .jar component &#10140; ./build/router.jar" />
         <echo message=" buildRouterConsole                           Build required .jar components for RouterConsole &#10140; ./build/" />
         <echo message=" buildSAM                                     Build SAM .jar component &#10140; ./build/sam.jar" />
