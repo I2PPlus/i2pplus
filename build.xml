@@ -67,7 +67,7 @@
         <echo message=" tarball                                      Create tar archive for clean install &#10140; ./i2p.tar.bz2" />
         <echo message=" updater                                      Build updater for existing installs &#10140; ./i2pupdate.zip" />
         <echo message=" signed-updater                               Signed Updater &#10140; ./i2pupdate.su3 (Java14+ compatible)" />
-        <echo message=" updaterCompact                               Updater without SAM, BOB, DesktopGUI, systray, country/continent lists" />
+        <echo message=" updaterCompact                               Updater without SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme" />
         <echo message=" updaterCompactWithDocs                       Compact updater with readme and proxy docs" />
         <echo message=" updaterCompactWithGeoIP                      Compact updater with GeoIP database" />
         <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only" />
@@ -81,6 +81,9 @@
         <echo message=" updaterWithJettyFixes                        Updater + local Jetty patches" />
         <echo message=" updaterWithJetty                             Updater + Jetty" />
         <echo message=" updater200                                   Updater (pack200 - not compatible with Java 14+) &#10140; ./i2pupdate200.zip" />
+        <echo message=" updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme" />
+        <echo message=" updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs" />
+        <echo message=" updater200CompactWithGeoIP                   Compact updater (pack200)with GeoIP database" />
         <echo message=" updater200WithGeoIP                          Updater (pack200) + GeoIP files" />
         <echo message=" updater200WithJavadocAndJetty                Updater (pack200) + javadocs (with console link) + Jetty" />
         <echo message=" updater200WithJavadoc                        Updater (pack200) + javadocs (with console link)" />
@@ -322,7 +325,7 @@
 
     <target name="builddep" depends="builddepSmall, buildSAM, buildSusiMail, buildSusiDNS, buildI2PSnark, buildI2PControl" />
 
-    <target name="builddepSmall" depends="buildrouter, buildSystray, buildDesktopGui, buildRouterConsole, buildStreaming, buildI2PTunnel, buildAddressbook" />
+    <target name="builddepSmall" depends="buildrouter, buildSystray, buildDesktopGui, buildRouterConsole, buildStreaming, buildI2PTunnel, buildAddressbook, buildPack200" />
 
     <!--
          start of buildX, one for each sub-build.xml.
@@ -450,6 +453,11 @@
     <target name="buildJrobin" depends="buildProperties" >
         <ant dir="apps/jrobin/java/" target="jar" />
         <copy file="apps/jrobin/java/build/jrobin.jar" todir="build/" />
+    </target>
+
+    <target name="buildPack200" depends="buildProperties" >
+        <ant dir="apps/pack200/java/" target="jar" />
+        <copy file="apps/pack200/java/build/pack200.jar" todir="build/" />
     </target>
 
     <target name="buildProperties" depends="getGitRev, getReleaseNumber, getBuildNumber, setBuildTimestamp, disableManifestClasspath" >
@@ -1703,6 +1711,10 @@
     <target name="updaterWithJettyRepack" depends="prepjupdate, repack200, zipit" />
     <target name="updaterWithLicenses" depends="prepupdate, preplicenses, zipit" />
     <target name="updater200" depends="prepupdate, pack200, zipit200" />
+    <target name="updater200Compact" depends="prepupdatecompact, pack200, zipit200" />
+    <target name="updaterCompactWithDocs" depends="prepupdatecompact, prepConsoleDocUpdates, pack200, zipit200" />
+    <target name="updaterCompactWithGeoIP" depends="prepupdatecompact, prepgeoupdate, pack200, zipit200" />
+    <target name="updaterCompactWithJettyAndGeoIP" depends="prepupdatecompact, prepgeoupdate, prepjupdate, pack200, zipit200" />
     <target name="updater200Small" depends="prepupdateSmall, pack200, zipit200" />
     <target name="updater200Router" depends="prepupdateRouter, pack200, zipit200" />
     <target name="updater200WithGeoIP" depends="prepupdate, prepgeoupdate, pack200, zipit200" />
@@ -1762,11 +1774,11 @@
         <!-- *nix here -->
         <exec executable="sh" osfamily="unix" failonerror="true">
             <arg value="-c" />
-            <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do if [ $i = pkg-temp/lib/commons-logging.jar -o $i = pkg-temp/lib/jasper-compiler.jar -o $i = pkg-temp/lib/jbigi.jar -o $i = pkg-temp/lib/jetty-java5-threadpool.jar -o $i = pkg-temp/lib/jetty-sslengine.jar -o $i = pkg-temp/webapps/addressbook.war ]; then continue; fi; echo pack200 $i; mv $i $i.jar; pack200 -g $i.pack $i.jar; rm -f $i.jar; done" />
+            <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do if [ $i = pkg-temp/lib/commons-logging.jar -o $i = pkg-temp/lib/jasper-compiler.jar -o $i = pkg-temp/lib/jbigi.jar -o $i = pkg-temp/lib/jetty-java5-threadpool.jar -o $i = pkg-temp/lib/jetty-sslengine.jar -o $i = pkg-temp/webapps/addressbook.war -o $i = pkg-temp/lib/pack200.jar ]; then continue; fi; echo pack200 $i; mv $i $i.jar; pack200 -g $i.pack $i.jar; rm -f $i.jar; done" />
         </exec>
         <exec executable="sh" osfamily="mac" failonerror="true">
             <arg value="-c" />
-            <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do if [ $i = pkg-temp/lib/commons-logging.jar -o $i = pkg-temp/lib/jasper-compiler.jar -o $i = pkg-temp/lib/jbigi.jar -o $i = pkg-temp/lib/jetty-java5-threadpool.jar -o $i = pkg-temp/lib/jetty-sslengine.jar -o $i = pkg-temp/webapps/addressbook.war ]; then continue; fi; echo pack200 $i; mv $i $i.jar; pack200 -g $i.pack $i.jar; rm -f $i.jar; done" />
+            <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do if [ $i = pkg-temp/lib/commons-logging.jar -o $i = pkg-temp/lib/jasper-compiler.jar -o $i = pkg-temp/lib/jbigi.jar -o $i = pkg-temp/lib/jetty-java5-threadpool.jar -o $i = pkg-temp/lib/jetty-sslengine.jar -o $i = pkg-temp/webapps/addressbook.war -o $i = pkg-temp/lib/pack200.jar ]; then continue; fi; echo pack200 $i; mv $i $i.jar; pack200 -g $i.pack $i.jar; rm -f $i.jar; done" />
         </exec>
         <!-- windoz here : i admit, i hate escaped symbols in xml, indeed = =! -->
         <exec executable="cmd" osfamily="windows" failonerror="true">
@@ -1810,6 +1822,7 @@
         <copy file="build/systray.jar" todir="pkg-temp/lib/" />
         <!-- removed from updater in 0.9, added back in 0.9.26 -->
         <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
+        <copy file="build/pack200.jar" todir="pkg-temp/lib" />
         <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
         <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
         <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
@@ -1858,6 +1871,7 @@
         <!-- name without version so we can overwrite if we upgrade  -->
         <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
         <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
+        <copy file="build/pack200.jar" todir="pkg-temp/lib" />
         <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
         <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
         <copy file="build/addressbook.war" todir="pkg-temp/webapps/" />
@@ -1874,6 +1888,7 @@
         <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
         <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
         <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
+        <copy file="build/pack200.jar" todir="pkg-temp/lib" />
         <!-- Updated in 0.9.28 -->
         <!-- name without version so we can overwrite if we upgrade  -->
         <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
@@ -1893,10 +1908,11 @@
 
     <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepProxyDocs, prepCertificates, prep-script-translation, truncatehistory">
         <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
-        <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
-        <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
-        <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
         <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
+        <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
+        <copy file="build/pack200.jar" todir="pkg-temp/lib" />
+        <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
+        <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
         <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
         <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
         <copy file="installer/resources/i2ping" todir="pkg-temp/" />

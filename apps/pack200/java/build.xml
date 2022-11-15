@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all" name="pack200">
+
+    <property name="src" value="src" />
+    <property name="build" value="build" />
+    <property name="dist" location="dist" />
+    <property name="jar" value="pack200.jar" />
+    <property name="javadoc" value="javadoc" />
+    <property name="javac.compilerargs" value="" />
+    <property name="javac.version" value="1.8" />
+    <property name="javac.release" value="8" />
+    <property name="require.gettext" value="false" />
+    <property name="manifest.classpath.name" value="Class-Path" />
+
+    <target name="init">
+        <mkdir dir="${build}" />
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}" />
+    </target>
+
+    <target name="jar" depends="compile">
+        <!-- set if unset -->
+        <property name="workspace.changes.tr" value="" />
+        <jar destfile="${build}/pack200.jar" includes="**/*.class">
+        <fileset dir="build" includes="**/*.class" />
+        <fileset dir="src" includes="io/pack200/intrinsic.properties" />
+            <manifest>
+                <attribute name="Implementation-Title" value="Pack200" />
+                <attribute name="Implementation-Version" value="14" />
+                <attribute name="Implementation-Vendor" value="Oracle Inc." />
+                <attribute name="Built-By" value="${build.built-by}" />
+                <attribute name="Build-Date" value="${build.timestamp}" />
+                <attribute name="Base-Revision" value="${workspace.version}" />
+                <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
+                <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
+                <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+            release="${javac.release}"
+            includeAntRuntime="false"
+            encoding="UTF-8"
+            srcdir="${src}" destdir="${build}">
+            <compilerarg line="${javac.compilerargs}" />
+        </javac>
+    </target>
+
+    <target name="javadoc">
+        <mkdir dir="./build" />
+        <mkdir dir="./build/javadoc" />
+        <javadoc
+            sourcepath="./src"
+            classpath="./src"
+            destdir="./build/javadoc"
+            packagenames="*"
+            use="true"
+            access="package"
+            splitindex="true" />
+    </target>
+    <target name="cleandep" depends="clean" />
+    <target name="distclean" depends="clean" />
+
+</project>
