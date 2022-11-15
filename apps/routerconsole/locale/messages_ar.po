@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 03:55+0000\n"
+"POT-Creation-Date: 2022-11-14 02:55+0000\n"
 "PO-Revision-Date: 2020-02-12 17:20+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Arabic (http://www.transifex.com/otf/I2P/language/ar/)\n"
@@ -1962,7 +1962,7 @@ msgid "Cancel"
 msgstr "ألغي"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:61
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:471
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:472
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1328
 msgid "Name"
 msgstr "الاسم"
@@ -2882,12 +2882,12 @@ msgid "Router console password is enabled."
 msgstr "لغة لوحة التحكم"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:467
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:468
 msgid "Mark for deletion"
 msgstr "اختر للحذف"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:469
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:470
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1326
 msgid "Remove"
 msgstr "حذف"
@@ -3388,7 +3388,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:399
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:400
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:335
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:523
 msgid "Web Server"
@@ -3942,276 +3942,276 @@ msgid "KrebsOnSecurity"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "KyivIndependent"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "News from Ukraine"
-msgstr ""
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Router performance monitoring and Linux tips"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Linux Kernel Mailing List"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "A rationalist journal"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "LittleAtoms"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "The Real Russia. Today."
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "MetaCritic"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Movie + TV + Music + Game reviews"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "NakedSecurity"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "Security news and research blog"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Smart &amp; fearless journalism"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "NewStatesman"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "American &amp; International News"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 #, fuzzy
 msgid "Newsweek"
 msgstr "الأخبار"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 #, fuzzy
 msgid "NewsNow"
 msgstr "الأخبار"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "The Independent News Discovery Platform"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "Independent News from Ukraine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewVoiceUkraine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "International Campaign for Tibet"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 #, fuzzy
 msgid "SaveTibet"
 msgstr "حفظ"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Lifestyle magazine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "Internationally renowned security technologist"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
 msgid "News for nerds"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
 msgid "Technology news &amp; reviews"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "News from the Taiwan Capital"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TechXplore"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 #, fuzzy
 msgid "TheConversation"
 msgstr "ازدحام"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "Computer &amp; cyber security news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHackerNews"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "Independent Journalism from Russia"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "International News from Tibet"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "TheTibetPost"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "All you need to know about everything that matters"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "TheWeek"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Security related news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "ThreatPost"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "Filesharing &amp; copyright news"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Ukranian National News Agency"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:334
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+msgid "A magazine about human rights and social justice"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+msgid "UpstreamJournal"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:335
 msgid "The HTTP proxy is not up"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:336
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:337
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:473
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:474
 msgid "URL"
 msgstr "العنوان"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:507
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:508
 msgid "Add"
 msgstr "إضافة"
 
@@ -11385,67 +11385,179 @@ msgid "Check your Configuration &amp; Bandwidth Allocation"
 msgstr "حدد سرعة الموجه"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:485
-msgid "Firewalls, Modems &amp; Routers"
+msgid ""
+"I2P+ functions best when you can accurately reflect the speed of your "
+"network connection in the <a href=/config>bandwidth configuration section</"
+"a>. By default I2P+ is configured with some fairly conservative values that "
+"will not suit many use cases, so please take time to review these settings "
+"and correct where necessary. The more bandwidth you allocate, "
+"<i>specifically</i> upstream bandwidth, the more you will benefit from the "
+"network."
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:487
-msgid "Check Your Proxy Setttings"
+msgid "Firewalls, Modems &amp; Routers"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:489
+msgid ""
+"Where possible, please ensure I2P+/Java is allowed bi-directional port "
+"access from the internet by configuring your modem/router/pc firewall "
+"accordingly. If you're behind a prohibitive firewall but have unrestricted "
+"outbound access, I2P+ can still function; you can turn off inbound access "
+"and rely on <a href=http://i2p-projekt.i2p/udp.html target=_blank "
+"rel=noreferrer class=sitelink>SSU IP Address Detection</a> (<a href=https://"
+"wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer "
+"class='sitelink external'>firewall hole punching</a>) to connect you to the "
+"network, and your network status in the side panel will indicate \"Status: "
+"Firewalled\". For optimal performance, please ensure I2P's <a href=/"
+"confignet#udpconfig>external port</a> is visible from the internet (see "
+"below for more information)."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
+msgid "Check Your Proxy Setttings"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:493
+msgid ""
+"If you cannot see any websites at all (not even <a href=http://i2p-projekt."
+"i2p/ target=_blank rel=noreferrer>i2p-projekt.i2p</a>), make sure your "
+"browser's proxy is set to access http traffic (<i>not</i> https, <i>not</i> "
+"socks) via <code>127.0.0.1 port 4444</code>. If you need some help, there's "
+"<a href=https://geti2p.net/en/about/browser-config target=_blank "
+"rel=noreferrer class='sitelink external'>a guide</a> to configuring your "
+"browser for I2P use."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:495
 #, fuzzy
 msgid "Check Your Logs"
 msgstr "بحث عن الترقية"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
-msgid "Verify Java is Up to Date"
-msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:493
-msgid "Problems running on Legacy Hardware"
-msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:495
-msgid "Enable Universal Plug and Play (UPnP)"
-msgstr ""
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:497
-msgid "Port Forwarding"
+msgid ""
+"<a href=/logs>Logs</a> may help resolve a problem. You may wish to paste "
+"excerpts in a <a href=http://i2pforum.i2p/ target=_blank "
+"rel=noreferrer>forum</a> for help, or perhaps <a href=http://cake.i2p/"
+"pastebin/ target=_blank rel=noreferrer class='sitelink external'>paste</a> "
+"it instead and reference the link on IRC for help."
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:499
-msgid "Getting Support Online"
+msgid "Verify Java is Up to Date"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:501
-msgid "Reporting Bugs"
+msgid ""
+"Ensure your Java is up to date. Version 1.8 or higher is required; version "
+"11 or higher is recommended. Check your Java version at the top of <a href=/"
+"info>the router information page</a>."
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:503
+msgid "Problems running on Legacy Hardware"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:505
+msgid ""
+"[Linux/Unix/Solaris] If you can't start the router with <code>i2p/i2prouter "
+"start</code> try the <code>runplain.sh</code> script in the same directory. "
+"Root privileges are never required to run I2P+. If you need to compile the "
+"<a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi "
+"library</a> (which is necessary in rare cases), consult the documentation, "
+"visit the forums, or visit <a href=irc://127.0.0.1:6668/saltR "
+"class=chatlink>the I2P+ channel</a> or <a href=irc://127.0.0.1:6668/i2p-dev "
+"class=chatlink>IRC developer channel</a>."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:507
+msgid "Enable Universal Plug and Play (UPnP)"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:509
+msgid ""
+"Your modem or router may support <a href=https://wikipedia.org/wiki/"
+"Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; "
+"Play</a> (UPnP), which permits automatic port forwarding. Ensure UPnP "
+"support for I2P+ is enabled on the <a href=/confignet>config page</a>, then "
+"try to activate UPnP on your modem/router and possibly your computer also. "
+"Now try restarting the <a href=/>I2P+ router</a>. If successful, I2P+ should "
+"report \"Status: OK\" in the side panel once the I2P+ router completes "
+"initial connectivity tests."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:511
+msgid "Port Forwarding"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:513
+msgid ""
+"Open <a href=/confignet#udpconfig>I2P+'s port</a> on your modem, router and/"
+"or firewall(s) for better connectivity (ideally both UDP and TCP). More "
+"information on how to go about port forwarding can be found at <a "
+"href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink "
+"external'>portforward.com</a>, in addition to our forums and IRC channels "
+"listed below. Note that I2P does not support connecting to the internet via "
+"an http or socks proxy [patches welcome!], though you can connect to proxies "
+"via I2P itself once connected to the network."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:515
+msgid "Getting Support Online"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:517
+msgid ""
+"You may also want to review the information on the <a href=http://i2p-"
+"projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to "
+"the <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank "
+"rel=noreferrer>I2P discussion forum</a> or swing by <a "
+"href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a "
+"href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC "
+"network."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:519
+msgid "Reporting Bugs"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:521
+msgid ""
+"If you'd like to report a bug, please file a ticket on <a href=http://git."
+"idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer "
+"class=sitelink>trac.i2p2.i2p</a>. For developer-related discussions, please "
+"visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer "
+"class=sitelink>zzz's developer forums</a> or come and visit the <a "
+"href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on "
+"I2P's IRC network."
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:523
 #, fuzzy
 msgid "Further assistance is available here:"
 msgstr "للمزيد من المساعدة"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:505
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:525
 msgid "I2P Support Forum"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:507
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:527
 msgid "I2P Developers' Forum"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:509
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:529
 msgid "I2P Wiki"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:511
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:531
 msgid ""
 "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank "
 "rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq "
 "target=_blank rel=noreferrer>geti2p.net</a>"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:513
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:533
 msgid ""
 "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</"
 "a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink> on I2P's IRC network</"

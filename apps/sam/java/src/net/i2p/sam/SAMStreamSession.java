@@ -139,8 +139,7 @@ class SAMStreamSession implements SAMMessageSess {
             canReceive = true;
             startAcceptor = true;
         } else {
-            _log.error("BUG! Wrong direction passed to SAMStreamSession: "
-                       + dir);
+            _log.error("BUG! Wrong direction passed to SAMStreamSession: " + dir);
             throw new SAMException("BUG! Wrong direction specified!");
         }
 
@@ -164,7 +163,8 @@ class SAMStreamSession implements SAMMessageSess {
             allprops.setProperty("i2cp.dontPublishLeaseSet", "true");
         String name = allprops.getProperty("inbound.nickname");
         if (name == null || name.trim().isEmpty()) {
-            name = "SAM TCP Client";
+            //name = "SAM TCP Client";
+            name = (getClass().getSimpleName().equals("PrimarySession") || getClass().getSimpleName().equals("MasterSession")) ? "SAM Mux Client" : "SAM TCP Client";
             allprops.setProperty("inbound.nickname", name);
         }
         String name2 = allprops.getProperty("outbound.nickname");

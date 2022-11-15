@@ -16,6 +16,8 @@ import net.i2p.internal.PoisonI2CPMessage;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
+import net.i2p.util.SystemVersion;
+
 /**
  * Copied from net.i2p.router.client
  * We need a single thread that writes so we don't have issues with
@@ -30,7 +32,8 @@ class ClientWriterRunner implements Runnable {
     private static final AtomicLong __Id = new AtomicLong();
     //private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ClientWriterRunner.class);
 
-    private static final int MAX_QUEUE_SIZE = 32;
+//    private static final int MAX_QUEUE_SIZE = 32;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 32 : 256;
     private static final long MAX_SEND_WAIT = 10*1000;
 
     /**

@@ -14,7 +14,7 @@
     <target name="depend" if="depend.available">
         <depend
             cache="../../build"
-            srcdir="./src" 
+            srcdir="./src"
             destdir="./build/obj" >
         </depend>
     </target>
@@ -140,7 +140,7 @@
         <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
             <arg value="./bundle-messages.sh" />
         </exec>
-        <javac source="${javac.version}" target="${javac.version}" 
+        <javac source="${javac.version}" target="${javac.version}"
                release="${javac.release}"
                includeAntRuntime="false"
                encoding="UTF-8"

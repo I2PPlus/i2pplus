@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 03:56+0000\n"
-"PO-Revision-Date: 2022-11-11 04:35+0000\n"
+"POT-Creation-Date: 2022-11-14 14:18+0000\n"
+"PO-Revision-Date: 2022-11-14 14:07+0000\n"
 "Last-Translator: xtoaster <zhazhenzhong@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -39,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.1\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:272
 #, java-format
@@ -1948,7 +1948,7 @@ msgid "Cancel"
 msgstr "取消"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:61
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:471
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:472
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1328
 msgid "Name"
 msgstr "名称"
@@ -2850,12 +2850,12 @@ msgid "Router console password is enabled."
 msgstr "路由控制台密码已启用。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:467
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:468
 msgid "Mark for deletion"
 msgstr "标记为删除"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:243
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:469
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:470
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1326
 msgid "Remove"
 msgstr "删除"
@@ -3351,7 +3351,7 @@ msgstr "在 I2P 上托管您自己的内容的本地网络服务器"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:399
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:400
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:335
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:523
 msgid "Web Server"
@@ -3893,272 +3893,272 @@ msgid "KrebsOnSecurity"
 msgstr "KrebsOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "KyivIndependent"
-msgstr "基辅独立报"
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
-msgid "News from Ukraine"
-msgstr "来自乌克兰的新闻"
-
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Router performance monitoring and Linux tips"
 msgstr "路由器性能监控和 Linux 提示"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Linux Kernel Mailing List"
 msgstr "Linux内核邮件列表"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "A rationalist journal"
 msgstr "一本理性主义期刊"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "LittleAtoms"
 msgstr "LittleAtoms"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "The Real Russia. Today."
-msgstr "真正的俄罗斯。今天。"
+msgstr "了解俄罗斯的真实现状。"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "MetaCritic"
 msgstr "MetaCritic"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Movie + TV + Music + Game reviews"
 msgstr "电影 + 电视 + 音乐 + 游戏评论"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "NakedSecurity"
 msgstr "NakedSecurity"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "Security news and research blog"
 msgstr "安全新闻和研究博客"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Smart &amp; fearless journalism"
 msgstr "聪明和无畏的新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "NewStatesman"
 msgstr "NewStatesman"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
 msgstr "政治和 时事杂志"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "American &amp; International News"
 msgstr "美国和 国际新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Newsweek"
 msgstr "Newsweek"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "NewsNow"
 msgstr "NewsNow"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "The Independent News Discovery Platform"
 msgstr "独立新闻发现平台"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "Independent News from Ukraine"
 msgstr "来自乌克兰的独立新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewVoiceUkraine"
 msgstr "乌克兰新声"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
 msgstr "独立新闻平台"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
 msgstr "I2P的新闻和博客订阅"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
 msgstr "Planeta I2P"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
 msgstr "西藏新闻和观察"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "International Campaign for Tibet"
 msgstr "国际声援西藏运动"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "SaveTibet"
 msgstr "拯救西藏"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Lifestyle magazine"
 msgstr "Lifestyle magazine"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "Internationally renowned security technologist"
 msgstr "国际知名安防技术专家"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
 msgstr "施奈尔安全"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
 msgstr "最新的安全新闻和研究博客"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
 msgstr "科学日报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
 msgstr "社区驱动的技术新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
 msgid "News for nerds"
 msgstr "News for nerds"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
 msgid "Technology news &amp; reviews"
 msgstr "技术新闻和 与评论"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
 msgstr "无所偏袒地报道中国"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "News from the Taiwan Capital"
 msgstr "来自台湾首都的新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
 msgstr "台北时报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TechXplore"
 msgstr "Tech Xplore"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
 msgstr "技术和工程新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
 msgstr "TechMeme"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
 msgstr "科技新闻聚合站"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
 msgstr "新闻 和与评论"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
 msgstr "大西洋报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
 msgstr "学术评论和论文"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
 msgstr "连接"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
 msgstr "Global News"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
 msgstr "卫报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "Computer &amp; cyber security news"
 msgstr "计算机和网络安全新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHackerNews"
 msgstr "TheHackerNews"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
 msgstr "观看大型科技..."
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "Independent Journalism from Russia"
 msgstr "来自俄罗斯的独立新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
 msgstr "莫斯科时报"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
 msgstr "TheNewRepublic"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "International News from Tibet"
 msgstr "International News from Tibet"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "TheTibetPost"
 msgstr "TheTibetPost"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "All you need to know about everything that matters"
 msgstr "你需要知道的所有重要信息"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "TheWeek"
 msgstr "TheWeek"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Security related news"
 msgstr "安全新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "ThreatPost"
 msgstr "ThreatPost"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "Filesharing &amp; copyright news"
 msgstr "文件共享和 著作权新闻"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Ukranian National News Agency"
 msgstr "乌克兰国家通讯社"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:334
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+msgid "A magazine about human rights and social justice"
+msgstr "一本关于人权和社会正义的杂志"
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:255
+msgid "UpstreamJournal"
+msgstr "UpstreamJournal"
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:335
 msgid "The HTTP proxy is not up"
 msgstr "HTTP 代理未启动"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:336
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:337
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "您的浏览器尚未配置使用 HTTP 代理 {0}"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:473
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:474
 msgid "URL"
 msgstr "URL"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:507
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:508
 msgid "Add"
 msgstr "添加"
 
@@ -11668,58 +11668,222 @@ msgid "Check your Configuration &amp; Bandwidth Allocation"
 msgstr "设置路由的带宽配额"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:485
+msgid ""
+"I2P+ functions best when you can accurately reflect the speed of your "
+"network connection in the <a href=/config>bandwidth configuration section</"
+"a>. By default I2P+ is configured with some fairly conservative values that "
+"will not suit many use cases, so please take time to review these settings "
+"and correct where necessary. The more bandwidth you allocate, "
+"<i>specifically</i> upstream bandwidth, the more you will benefit from the "
+"network."
+msgstr ""
+"如果您能在<a href=/config>带宽配置部分</a>准确反映您的网速，I2P+才能运行在最"
+"佳状态。默认值相当保守，并不适合大部分情况，所以请花时间查看这些设置并予以纠"
+"正。您分配的带宽越多，特别是上行带宽，您从网络中受益就越多。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:487
 msgid "Firewalls, Modems &amp; Routers"
 msgstr "防火墙、调制解调器和路由器"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:487
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:489
+msgid ""
+"Where possible, please ensure I2P+/Java is allowed bi-directional port "
+"access from the internet by configuring your modem/router/pc firewall "
+"accordingly. If you're behind a prohibitive firewall but have unrestricted "
+"outbound access, I2P+ can still function; you can turn off inbound access "
+"and rely on <a href=http://i2p-projekt.i2p/udp.html target=_blank "
+"rel=noreferrer class=sitelink>SSU IP Address Detection</a> (<a href=https://"
+"wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer "
+"class='sitelink external'>firewall hole punching</a>) to connect you to the "
+"network, and your network status in the side panel will indicate \"Status: "
+"Firewalled\". For optimal performance, please ensure I2P's <a href=/"
+"confignet#udpconfig>external port</a> is visible from the internet (see "
+"below for more information)."
+msgstr ""
+"在可能的情况下，请通过配置调制解调器/路由器/电脑防火墙以确保I2P+/Java被允许从"
+"互联网进行双向端口访问。如果您在防火墙后面，但有不受限制的出站访问，I2P+仍然"
+"可以运行；您可以关闭入站访问，依靠<a href=http://i2p-projekt.i2p/udp.html "
+"target=_blank rel=noreferrer class=sitelink>SSU IP探测</a>（<a href=https://"
+"wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer "
+"class='sitelink external'>防火墙穿透</a>）将您连接到网络，您在侧板的网络状态"
+"将显示 \"状态：被防火墙限制\"。为了获得最佳性能，请确保I2P的<a href=/"
+"confignet#udpconfig>外部端口</a>在互联网上是能接受传入连接的（更多信息见下"
+"文）。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
 msgid "Check Your Proxy Setttings"
 msgstr "检查你的代理设置"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:489
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:493
+msgid ""
+"If you cannot see any websites at all (not even <a href=http://i2p-projekt."
+"i2p/ target=_blank rel=noreferrer>i2p-projekt.i2p</a>), make sure your "
+"browser's proxy is set to access http traffic (<i>not</i> https, <i>not</i> "
+"socks) via <code>127.0.0.1 port 4444</code>. If you need some help, there's "
+"<a href=https://geti2p.net/en/about/browser-config target=_blank "
+"rel=noreferrer class='sitelink external'>a guide</a> to configuring your "
+"browser for I2P use."
+msgstr ""
+"如果您根本看不到任何网站（甚至<a href=http://i2p-projekt.i2p/ target=_blank "
+"rel=noreferrer>i2p-projekt.i2p</a>也不行） ，请确保您的浏览器代理设置指向"
+"<code>127.0.0.1:4444</code>（<i>不是</i>https ，<i>更不是</i>socks）。 如果您"
+"需要帮助，请参阅为浏览I2P配置浏览器的<a href=https://geti2p.net/en/about/"
+"browser-config target=_blank rel=noreferrer class='sitelink external'>指南</"
+"a>。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:495
 msgid "Check Your Logs"
 msgstr "查看路由器日志"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:497
+msgid ""
+"<a href=/logs>Logs</a> may help resolve a problem. You may wish to paste "
+"excerpts in a <a href=http://i2pforum.i2p/ target=_blank "
+"rel=noreferrer>forum</a> for help, or perhaps <a href=http://cake.i2p/"
+"pastebin/ target=_blank rel=noreferrer class='sitelink external'>paste</a> "
+"it instead and reference the link on IRC for help."
+msgstr ""
+"<a href=/logs>日志</a>可能有助于解决问题,您可以将摘录粘贴到<a href=http://"
+"i2pforum.i2p/ target=_blank rel=noreferrer>论坛</a>寻求帮助，或者将其粘贴到"
+"<a href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer "
+"class='sitelink external'>IRC</a>寻求帮助。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:499
 msgid "Verify Java is Up to Date"
 msgstr "检查Java版本是否为最新"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:493
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:501
+msgid ""
+"Ensure your Java is up to date. Version 1.8 or higher is required; version "
+"11 or higher is recommended. Check your Java version at the top of <a href=/"
+"info>the router information page</a>."
+msgstr ""
+"确定你的Java运行时是最新的，需要JRE 1.8或更高版本但建议使用 JDK 11或更高版"
+"本。在<a href=/info>路由器信息</a>页的顶部检查你的Java版本。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:503
 msgid "Problems running on Legacy Hardware"
 msgstr "老硬件可能有兼容性问题"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:495
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:505
+msgid ""
+"[Linux/Unix/Solaris] If you can't start the router with <code>i2p/i2prouter "
+"start</code> try the <code>runplain.sh</code> script in the same directory. "
+"Root privileges are never required to run I2P+. If you need to compile the "
+"<a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi "
+"library</a> (which is necessary in rare cases), consult the documentation, "
+"visit the forums, or visit <a href=irc://127.0.0.1:6668/saltR "
+"class=chatlink>the I2P+ channel</a> or <a href=irc://127.0.0.1:6668/i2p-dev "
+"class=chatlink>IRC developer channel</a>."
+msgstr ""
+"[Linux/Unix/Solaris]如果无法使用<code>i2p/i2prouter</code>启动路由器，请尝试"
+"使用同一目录中的<code>runplain.sh</code>脚本。 运行I2P +从不需要root特权。 如"
+"果您需要编译<a href=http://i2p-projekt.i2p/jbigi.html target=_blank "
+"rel=noreferrer>jBigi库</a>（在极少数情况下是必要的） ，请参阅文档，访问论坛，"
+"或访问<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a>或<a "
+"href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p-dev</a>。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:507
 msgid "Enable Universal Plug and Play (UPnP)"
 msgstr "启用路由器的UPnP"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:497
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:509
+msgid ""
+"Your modem or router may support <a href=https://wikipedia.org/wiki/"
+"Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; "
+"Play</a> (UPnP), which permits automatic port forwarding. Ensure UPnP "
+"support for I2P+ is enabled on the <a href=/confignet>config page</a>, then "
+"try to activate UPnP on your modem/router and possibly your computer also. "
+"Now try restarting the <a href=/>I2P+ router</a>. If successful, I2P+ should "
+"report \"Status: OK\" in the side panel once the I2P+ router completes "
+"initial connectivity tests."
+msgstr ""
+"您的调制解调器或路由器可能支持<a href=https://wikipedia.org/wiki/"
+"Universal_Plug_and_Play target=_blank rel=noreferrer>通用即插即用</a>(UPnP) "
+"来实现自动端口转发。 确保<a href=/confignet>配置页面</a>上启用了对I2P +的UPnP"
+"支持，然后尝试在您的调制解调器/路由器上启用UPnP ，也可能是在您的计算机上启用"
+"UPnP。 现在尝试重新启动<a href=/>I2P +路由器</a>。 如果成功，一旦I2P +路由器"
+"完成初始连接测试， I2P +应在侧面板中报告“状态：正常”。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:511
 msgid "Port Forwarding"
 msgstr "端口转发"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:499
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:513
+msgid ""
+"Open <a href=/confignet#udpconfig>I2P+'s port</a> on your modem, router and/"
+"or firewall(s) for better connectivity (ideally both UDP and TCP). More "
+"information on how to go about port forwarding can be found at <a "
+"href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink "
+"external'>portforward.com</a>, in addition to our forums and IRC channels "
+"listed below. Note that I2P does not support connecting to the internet via "
+"an http or socks proxy [patches welcome!], though you can connect to proxies "
+"via I2P itself once connected to the network."
+msgstr ""
+"在调制解调器、路由器和/或防火墙上打开<a href=/confignet#udpconfig>I2P +的端口"
+"</a>，以获得更好的连接（最好是UDP和TCP都打开）。 有关设置端口转发的更多信息，"
+"请访问<a href=http://portforward.com/ target=_blank rel=noreferrer "
+"class='sitelink external'>portforward.com</a> ，以及我们的论坛和下面列出的IRC"
+"频道。 请注意， I2P不支持通过HTTP或SOCKS代理连接到互联网[patches welcome!]，"
+"但您可以在连接到网络后通过I2P连接到出口代理。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:515
 msgid "Getting Support Online"
 msgstr "寻找在线帮助"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:501
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:517
+msgid ""
+"You may also want to review the information on the <a href=http://i2p-"
+"projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to "
+"the <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank "
+"rel=noreferrer>I2P discussion forum</a> or swing by <a "
+"href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a "
+"href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC "
+"network."
+msgstr ""
+"您也可以查看<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P "
+"官网</a>上的信息，在<a href=http://i2pforum.i2p/viewforum.php?f=8 "
+"target=_blank rel=noreferrer>I2P 论坛</a>上发帖，或在I2P的内部IRC网络上浏览"
+"<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 和 <a "
+"href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a>。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:519
 msgid "Reporting Bugs"
 msgstr "报告Bugs"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:503
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:521
+msgid ""
+"If you'd like to report a bug, please file a ticket on <a href=http://git."
+"idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer "
+"class=sitelink>trac.i2p2.i2p</a>. For developer-related discussions, please "
+"visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer "
+"class=sitelink>zzz's developer forums</a> or come and visit the <a "
+"href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on "
+"I2P's IRC network."
+msgstr ""
+"如果您想报告一个bug，请在a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/"
+"issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>上提交。"
+"有关开发的讨论，请访问<a href=http://zzz.i2p/ target=_blank rel=noreferrer "
+"class=sitelink>zzz的开发者论坛</a>或访问I2P的IRC网络上的<a "
+"href=irc://127.0.0.1:6668/i2p-dev class=chatlink>开发者频道</a>。"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:523
 msgid "Further assistance is available here:"
 msgstr "更多帮助可在此获取："
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:505
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:525
 msgid "I2P Support Forum"
 msgstr "I2P 帮助论坛"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:507
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:527
 msgid "I2P Developers' Forum"
 msgstr "I2P 开发论坛"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:509
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:529
 msgid "I2P Wiki"
 msgstr "I2P 维基"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:511
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:531
 msgid ""
 "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank "
 "rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq "
@@ -11729,7 +11893,7 @@ msgstr ""
 "rel=noreferrer>i2p-projekt.i2p</a>或<a href=https://geti2p.net/en/faq "
 "target=_blank rel=noreferrer>geti2p.net</a>"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:513
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:533
 msgid ""
 "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</"
 "a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink> on I2P's IRC network</"
@@ -13381,6 +13545,11 @@ msgid ""
 "password to access the console, you may do so on the <a href=/configui "
 "target=_blank rel=noreferrer>User Interface configuration page</a>."
 msgstr ""
+"选择用于路由器控制台和网络应用（<a href=/webmail target=_blank "
+"rel=noreferrer>webmail</a>、<a href=/torrents target=_blank "
+"rel=noreferrer>torrents</a>、<a href=/i2ptunnelmgr target=_blank "
+"rel=noreferrer>隧道管理器</a> 等）的语言。如果你想在将来改变语言，改变路由器"
+"控制台的主题或者配置访问控制台的密码，都可以在用户界面配置页上进行。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:505
 msgid "Router Console &amp; WebApps Display Language"
@@ -13500,14 +13669,13 @@ msgid ""
 "I2P+ requires a web browser configured to use the resident HTTP proxy in "
 "order to browse websites on the I2P network."
 msgstr ""
-"I2P+需要一个配置为使用驻地HTTP代理的网络浏览器，才能浏览I2P网络上的网站。"
+"I2P+需要一个配置为使用本地HTTP代理的网络浏览器，才能浏览I2P网络上的网站。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:697
 msgid "Browser Setup"
 msgstr "浏览器设置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:699
-#, fuzzy
 msgid ""
 "In order to access websites hosted on the I2P network, and optionally use "
 "the default outproxy to connect to websites on clearnet, you will need to "
@@ -13541,7 +13709,7 @@ msgstr "一旦您的本地隧道旁显示绿星，你将可以通过 I2P 做大�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:718
 msgid "Unknown Wizard page"
-msgstr "未知的魔法师页面"
+msgstr "未知向导页面"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:728
 msgid "Previous"
@@ -13562,6 +13730,12 @@ msgstr "下一步"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:764
 msgid "Finished"
 msgstr "完成"
+
+#~ msgid "KyivIndependent"
+#~ msgstr "基辅独立报"
+
+#~ msgid "News from Ukraine"
+#~ msgstr "来自乌克兰的新闻"
 
 #~ msgid "welcome"
 #~ msgstr "欢迎使用 I2P"
