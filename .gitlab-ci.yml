@@ -59,6 +59,7 @@ findbugs:
   only:
     - master
     - schedules
+  allow_failure: true
   script:
     - apt-get install -yqq findbugs
     - ant findbugs
