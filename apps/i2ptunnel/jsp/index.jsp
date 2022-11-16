@@ -19,9 +19,9 @@
 <link href="<%=indexBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
 <link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.svg">
+<style type="text/css">body{display:none;pointer-events:none}</style>
 </head>
 <body id="tunnelListPage">
-<style type="text/css">body{display:none;pointer-events:none}</style>
 <div id="page">
 <%
   boolean isInitialized = indexBean.isInitialized();

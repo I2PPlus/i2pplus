@@ -53,9 +53,9 @@
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<style type="text/css">body{display:none;pointer-events:none}</style>
 </head>
 <body id="tunnelWizardPage">
-<style type="text/css">body{opacity:0}</style>
 <form method="post" action="<%=(curPage == 7 ? "list" : "wizard") %>">
 <div id="wizardPanel" class="panel">
 <%
@@ -698,6 +698,6 @@ No
 </div>
 </form>
 <span data-iframe-height></span>
-<style type="text/css">body {opacity: 1 !important;}</style>
+<style type="text/css">body{display:block;pointer-events:auto}</style>
 </body>
 </html>

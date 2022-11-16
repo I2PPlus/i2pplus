@@ -40,9 +40,9 @@ if (tun != null) {
 <script charset="utf-8" src="/js/selectAll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">var deleteMessage = "<%=intl._t("Are you sure you want to delete?")%>";</script>
 <script charset="utf-8" src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<style type="text/css">body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
 <body id="tunnelEditPage">
-<style type="text/css">body{opacity:0}input.default{width:1px;height:1px;visibility:hidden}</style>
 <%
 if (__invalid) {
 %>
@@ -88,6 +88,6 @@ if (__invalid) {
 }
 %>
 <span data-iframe-height></span>
-<style type="text/css">body {opacity: 1 !important;}</style>
+<style type="text/css">body{display:block;pointer-events:auto}</style>
 </body>
 </html>

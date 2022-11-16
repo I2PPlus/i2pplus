@@ -34,9 +34,9 @@
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<style type="text/css">body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
 <body id="tunnelRegistration">
-<style type="text/css">body{opacity:0}input.default{width:1px;height:1px;visibility:hidden}</style>
 <%
   if (editBean.isInitialized()) {
 %>
@@ -337,6 +337,6 @@
   }  // isInitialized()
 %>
 <span data-iframe-height></span>
-<style type="text/css">body {opacity: 1 !important;}</style>
+<style type="text/css">body{display:block;pointer-events:auto}</style>
 </body>
 </html>
