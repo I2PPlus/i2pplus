@@ -2,8 +2,7 @@
 <%@include file="headers-unsafe.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.EditBean"%>
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
 <% String pageStr = request.getParameter("page");
@@ -42,7 +41,7 @@
      }
    }
 %>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" id="tman">
+<html id="tman">
 <head>
 <title><%=intl._t("I2P Tunnel Manager - Tunnel Creation Wizard")%></title>
 <meta charset="utf-8">
