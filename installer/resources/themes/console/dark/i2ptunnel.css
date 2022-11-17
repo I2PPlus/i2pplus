@@ -11,7 +11,7 @@
 }
 
 html{background:none}
-body{margin:0 8px 12px;padding:0;text-align:center;font-size:9pt;background:repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px,rgba(0,8,0,.5) 4px),url(images/camotile2.png) top left scroll #010;background-size:100% 4px,175px}
+body{margin:24px 8px 12px;padding:0;text-align:center;font-size:9pt;background:repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px,rgba(0,8,0,.5) 4px),url(images/camotile2.png) top left scroll #010;background-size:100% 4px,175px}
 body.iframed{margin:0;padding:0;overflow:hidden;background:none}
 br{clear:left}
 ::selection{color:#000;background:#ff0}
