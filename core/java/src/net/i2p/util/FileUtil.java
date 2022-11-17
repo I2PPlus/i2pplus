@@ -253,8 +253,7 @@ public class FileUtil {
                         while ( (in.read(buf)) != -1) {
                             // throw the data away
                         }
-                        if (logLevel == Log.DEBUG)
-                            System.err.println("INFO: File [" + entry.getName() + "] extracted");
+                        //System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         in.close();
                     } catch (IOException ioe) {
                         System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + "]");
