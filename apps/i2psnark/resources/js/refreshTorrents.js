@@ -20,7 +20,6 @@ function refreshTorrents(timestamp) {
     var url = location.href;
       if (savedQuery)
         url = location.href + savedQuery;
-        window.location.hash = url;
   } else {
     var url = location.href;
   }
@@ -32,7 +31,6 @@ function refreshTorrents(timestamp) {
       window.localStorage.setItem("queryString", query);
       query == savedQuery;
       url = "/i2psnark/" + savedQuery;
-//      window.history.replaceState(null, "", "/i2psnark/" + savedQuery);
     }
   }
 
@@ -41,7 +39,6 @@ function refreshTorrents(timestamp) {
     getQuery();
     if (debug) {
       debug.href = savedQuery;
-//      window.history.replaceState("", "", savedQuery);
     } else if (home) {
       home.href = "/i2psnark/" + savedQuery;
     }

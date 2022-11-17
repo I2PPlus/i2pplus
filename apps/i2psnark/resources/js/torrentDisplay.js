@@ -269,22 +269,20 @@ function initFilterBar() {
          showAll();
      }
   }
-
 }
 
 function setQuery() {
   if (query) {
     window.localStorage.setItem("queryString", url);
-    window.history.replaceState("", "", url);
   }
-}
-
-function clearFilter() {
-  window.localStorage.removeItem("filter");
 }
 
 function clearQuery() {
   window.localStorage.removeItem("queryString");
+}
+
+function clearFilter() {
+  window.localStorage.removeItem("filter");
 }
 
 function clearLocalStorage() {
