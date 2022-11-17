@@ -397,6 +397,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (noCollapse || !collapsePanels) {
             out.write(HEADER_A + _themePath + HEADER_C + "\n");
         }
+        out.write("<style type=\"text/css\">body{display:none;pointer-events:none}</style>");
         out.write("</head>\n" + "<body id=\"snarkxhr\" class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
         out.write("<iframe name=\"processForm\" id=\"processForm\" hidden></iframe>\n");
         List<Tracker> sortedTrackers = null;
@@ -3540,8 +3541,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
                                          "<script charset=\"utf-8\" type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
-                                         "<style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
-    private static final String FTR_STD = "</div>\n</center><style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
+                                         "<style type=\"text/css\">body{display:block;pointer-events:auto}</style>\n</body>\n</html>";
+    private static final String FTR_STD = "</div>\n</center><style type=\"text/css\">body{display:block;pointer-events:auto}</style>\n</body>\n</html>";
 
     /**
      * Modded heavily from the Jetty version in Resource.java,
