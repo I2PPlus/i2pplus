@@ -166,7 +166,7 @@ public class FileUtil {
                             while ((read = in.read(buf)) != -1) {
                                    fos.write(buf, 0, read);
                             }
-                            if (logLevel <= Log.INFO)
+                            if (logLevel == Log.DEBUG)
                                 System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         }
                         files++;
@@ -234,7 +234,7 @@ public class FileUtil {
             while (entries.hasMoreElements()) {
                 ZipEntry entry = (ZipEntry)entries.nextElement();
                 if (entry.getName().indexOf("..") != -1) {
-                    //System.err.println("ERROR: Refusing to extract a zip entry with '..' in it [" + entry.getName() + "]");
+                    System.err.println("ERROR: Refusing to extract a zip entry with '..' in the name [" + entry.getName() + "]");
                     return false;
                 }
                 if (entry.isDirectory()) {
@@ -253,7 +253,8 @@ public class FileUtil {
                         while ( (in.read(buf)) != -1) {
                             // throw the data away
                         }
-                        System.err.println("INFO: File [" + entry.getName() + "] extracted");
+                        if (logLevel == Log.DEBUG)
+                            System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         in.close();
                     } catch (IOException ioe) {
                         System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + "]");
