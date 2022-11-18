@@ -38,12 +38,12 @@ class UDPSender {
     // When full, packets back up into the PacketPusher thread, pre-CoDel.
 //    private static final int MIN_QUEUE_SIZE = 128;
 //    private static final int MAX_QUEUE_SIZE = 768;
-    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 384;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 768 : 2048;
+    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 512;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 768 : 4096;
 //    private static final int CODEL_TARGET = 100;
 //    private static final int CODEL_INTERVAL = 500;
-    private static final int CODEL_TARGET = 30;
-    private static final int CODEL_INTERVAL = 1500;
+    private static final int CODEL_TARGET = 15;
+    private static final int CODEL_INTERVAL = 600;
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 
@@ -204,7 +204,8 @@ class UDPSender {
         add(packet);
     }
 
-    private static final int MAX_HEAD_LIFETIME = 3*1000;
+//    private static final int MAX_HEAD_LIFETIME = 3*1000;
+    private static final int MAX_HEAD_LIFETIME = 1500;
 
     /**
      * Put it on the queue.
