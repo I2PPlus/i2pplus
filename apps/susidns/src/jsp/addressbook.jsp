@@ -74,9 +74,9 @@
     // Messages will be displayed below.
     String formMessages = book.getMessages();
 %>
+<style type="text/css">body{display:none;pointer-events:none}</style>
 </head>
 <body id="bk">
-<style type="text/css">body{opacity:0}</style>
 <div<% if (book.getBook().equals("published")) { %> id="published"<% } %> class="page">
 <div id="navi" class="${book.getBook()}">
 <a class="abook router<%=(here.contains("router") ? " selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
@@ -463,8 +463,8 @@
 <div id="add">
 <h3><%=intl._t("Add new destination")%></h3>
 <table>
-<tr><td><b><%=intl._t("Hostname")%></b></td><td><input type="text" name="hostname" value="${book.hostname}" size="30" required placeholder="e.g. newdomain.i2p"></td></tr>
-<tr><td><b><%=intl._t("B64 or B32")%></b></td><td><input type="text" name="destination" value="${book.destination}" size="50" required placeholder="Full destination or b32 address"></td></tr>
+<tr><td><b><%=intl._t("Hostname")%></b></td><td><input type="text" name="hostname" value="${book.hostname}" size="30" required placeholder="<%=intl._t("e.g. newdomain.i2p")%>"></td></tr>
+<tr><td><b><%=intl._t("B64 or B32")%></b></td><td><input type="text" name="destination" value="${book.destination}" size="50" required placeholder="<%=intl._t("Full destination or b32 address")%>"></td></tr>
 </table>
 <p class="buttons">
 <input class="cancel" type="reset" value="<%=intl._t("Cancel")%>">
@@ -504,7 +504,7 @@
 %>
 <c:if test="${book.isEmpty}"></div></c:if>
 <span data-iframe-height></span>
-<style type="text/css">body{opacity:1 !important}</style>
+<style type="text/css">body{display:block;pointer-events:auto}</style>
 </div>
 <!--
 <script charset="utf-8" src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>

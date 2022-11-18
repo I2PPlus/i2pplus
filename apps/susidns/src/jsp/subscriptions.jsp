@@ -39,9 +39,9 @@
 <link rel="stylesheet" type="text/css" href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=subs.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
 <script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<style type="text/css">body{display:none;pointer-events:none}</style>
 </head>
 <body id="sbs">
-<style type="text/css">body{opacity: 0;}</style>
 <div class="page">
 <div id="navi">
 <a class="abook router" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
@@ -80,6 +80,6 @@
 </div>
 </div>
 <span data-iframe-height></span>
-<style type="text/css">body{opacity: 1 !important;}</style>
+<style type="text/css">body{display:block;pointer-events:auto}</style>
 </body>
 </html>
