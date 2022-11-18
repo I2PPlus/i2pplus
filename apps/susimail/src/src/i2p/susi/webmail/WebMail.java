@@ -2352,6 +2352,7 @@ public class WebMail extends HttpServlet
                 out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>\n");
                 out.println("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>\n");
 //                out.println("<script charset=\"utf-8\" src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+                out.println("<style type=\"text/css\">body{display:none;pointer-events:none}</style>\n");
                 out.println("</head>\n");
                 if (state == State.LIST)
                     out.print("<body id=\"main\">\n");
@@ -2475,6 +2476,7 @@ public class WebMail extends HttpServlet
                 out.println("</form>\n</div>\n<span data-iframe-height></span>\n");
                 if (sessionObject.isFetching)
                     out.println("<script id=\"autorefresh\" type=\"module\" src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>");
+                out.println("<style type=\"text/css\">body{display:block;pointer-events:auto}</style>\n");
                 out.println("</body>\n</html>");
                 out.flush();
         }  // synch sessionObject
