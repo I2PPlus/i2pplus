@@ -123,7 +123,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default _maxConcurrent
      */
 //    private static final int MAX_CONCURRENT = 1;
-    private static final int MAX_CONCURRENT = SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ? 2 : 3;
+    private static final int MAX_CONCURRENT = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 2 : 3;
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
@@ -192,6 +192,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
         else if (ctx.netDb().getKnownRouters() < 2000 || ctx.router().getUptime() < 30*60*1000 || isHidden)
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 2);
+        else if (ctx.netDb().getKnownRouters() > 4000 && ctx.router().getUptime() > 30*60*1000 && !isHidden)
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT - 1);
         else
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
         _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
