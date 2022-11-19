@@ -63,7 +63,7 @@ class UDPSender {
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, (maxMemory * 2) / (1024*1024)));
         //_outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize, CODEL_TARGET, CODEL_INTERVAL);
         _outboundQueue = new CoDelPriorityBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize,
-                         ctx.getProperty(PROP_CODEL_TARGET, CODEL_INTERVAL),
+                         ctx.getProperty(PROP_CODEL_TARGET, CODEL_TARGET),
                          ctx.getProperty(PROP_CODEL_INTERVAL, CODEL_INTERVAL));
         _socket = socket;
         _runner = new Runner();
@@ -242,7 +242,7 @@ class UDPSender {
 
         public void run() {
             if (_log.shouldDebug())
-                _log.debug("Running the UDP sender");
+                _log.debug("Running the UDP sender...");
             //_socketChanged = false;
             while (_keepRunning) {
                 //if (_socketChanged) {
@@ -336,7 +336,7 @@ class UDPSender {
         /** @return next packet in queue. */
         private UDPPacket getNextPacket() {
             UDPPacket packet = null;
-            while (_keepRunning) {
+            while (_keepRunning && (packet == null || packet.getLifetime() > _context.getProperty(PROP_CODEL_TARGET, CODEL_TARGET))) {
                 if (packet != null) {
                     _context.statManager().addRateData("udp.sendQueueTrimmed", 1);
                     packet.release();
