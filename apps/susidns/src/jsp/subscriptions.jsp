@@ -75,7 +75,7 @@
 <%=intl._t("The subscription file contains a list of i2p URLs.")%>&nbsp;<wbr>
 <%=intl._t("The addressbook application regularly checks this list for new eepsites.")%>&nbsp;<wbr>
 <%=intl._t("Those URLs refer to published hosts.txt files.")%>&nbsp;<wbr>
-<a href="/help#addressbooksubs" target="_top"><%=intl._t("See the FAQ for a list of subscription URLs.")%></a>
+<a href="/help/faq#addressbooksubs" target="_top"><%=intl._t("See the FAQ for a list of subscription URLs.")%></a>
 </p>
 </div>
 </div>
