@@ -253,7 +253,7 @@ class UDPSender {
                 UDPPacket packet = getNextPacket();
                 if (packet != null) {
                     if (_log.shouldDebug())
-                        _log.debug("Attempting to send UDP packet to known peer" + packet);
+                        _log.debug("Attempting to send UDP packet to known peer " + packet);
                     // ?? int size2 = packet.getPacket().getLength();
                     int size = packet.getPacket().getLength();
                     long acquireTime = _context.clock().now();
@@ -336,8 +336,10 @@ class UDPSender {
         /** @return next packet in queue. */
         private UDPPacket getNextPacket() {
             UDPPacket packet = null;
-//            while (_keepRunning && (packet == null || packet.getLifetime() > Integer.parseInt(_context.getProperty(PROP_CODEL_TARGET), CODEL_TARGET)*3)) {
-            while (_keepRunning) {
+            int codelTarget = CODEL_TARGET;
+            if (_context.getProperty(PROP_CODEL_TARGET) != null)
+                codelTarget = Integer.parseInt(_context.getProperty(PROP_CODEL_TARGET));
+            while ((_keepRunning) && (packet == null || packet.getLifetime() > codelTarget * 3)) {
                 if (packet != null) {
                     _context.statManager().addRateData("udp.sendQueueTrimmed", 1);
                     packet.release();
