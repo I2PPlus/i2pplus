@@ -233,7 +233,7 @@ class UDPSender {
         //size = _outboundQueue.size();
         //_context.statManager().addRateData("udp.sendQueueSize", size, lifetime);
         if (_log.shouldDebug()) {
-            _log.debug("Added UDP packet (" + psz + " bytes) to queue with lifetime of " + packet.getLifetime() + "ms");
+            _log.debug("UDP packet queued -> Lifetime: " + packet.getLifetime() + "ms; Size: " + psz + " bytes");
         }
     }
 
@@ -336,7 +336,8 @@ class UDPSender {
         /** @return next packet in queue. */
         private UDPPacket getNextPacket() {
             UDPPacket packet = null;
-            while (_keepRunning && (packet == null || packet.getLifetime() > _context.getProperty(PROP_CODEL_TARGET, CODEL_TARGET))) {
+//            while (_keepRunning && (packet == null || packet.getLifetime() > Integer.parseInt(_context.getProperty(PROP_CODEL_TARGET), CODEL_TARGET)*3)) {
+            while (_keepRunning) {
                 if (packet != null) {
                     _context.statManager().addRateData("udp.sendQueueTrimmed", 1);
                     packet.release();
