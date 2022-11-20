@@ -20,7 +20,7 @@ before_script:
   - apt-get update -yqq
   - apt-get install -yqq libc6-i386 ant gettext zip apt-utils swapspace zram-config git
 
-Java8:
+Java11:
   stage: build
   only:
     - master
