@@ -38,35 +38,35 @@ Java8:
     - ant i2psnark
 #    - ant javadoc-zip
 
-testing:
-  stage: test
-  only:
-    - master
-  image: openjdk:8
-  # allow failure so commits work when CI minutes exhausted
-  allow_failure: true
-  script:
-    - apt-get install -yqq libxml2-utils
-    - ./tests/scripts/checkcerts.sh
-    - ./tests/scripts/checkpo.sh
-    - ./tests/scripts/checkscripts.sh
-    - ./tests/scripts/checkutf8.sh
-    - ./tests/scripts/checkxml.sh
+#testing:
+#  stage: test
+#  only:
+#    - master
+#  image: openjdk:8
+#  # allow failure so commits work when CI minutes exhausted
+#  allow_failure: true
+#  script:
+#    - apt-get install -yqq libxml2-utils
+#    - ./tests/scripts/checkcerts.sh
+#    - ./tests/scripts/checkpo.sh
+#    - ./tests/scripts/checkscripts.sh
+#    - ./tests/scripts/checkutf8.sh
+#    - ./tests/scripts/checkxml.sh
 
-findbugs:
-  stage: test
-  image: openjdk:8
-  only:
-    - master
-    - schedules
-  allow_failure: true
-  script:
-    - apt-get install -yqq findbugs
-    - ant findbugs
-  artifacts:
-    expose_as: findbugs
-    paths: ['findbugs.html']
-    expire_in: 1 month
+#findbugs:
+#  stage: test
+#  image: openjdk:8
+#  only:
+#    - master
+#    - schedules
+#  allow_failure: true
+#  script:
+#    - apt-get install -yqq findbugs
+#    - ant findbugs
+#  artifacts:
+#    expose_as: findbugs
+#    paths: ['findbugs.html']
+#    expire_in: 1 month
 
 Java18:
   stage: build
@@ -78,6 +78,6 @@ Java18:
   # remove this line once code is fixed
   allow_failure: true
   script:
-    - apt-get install openjdk-18-jdk -y
-    - ant updater
+    - ant updaterCompactWithDocs
+    - ant i2psnark
     - ant javadoc-zip
