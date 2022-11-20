@@ -33,7 +33,7 @@ Java8:
     - ant installer
     - ant tarball
     - ant updaterCompactWithDocs
-    - ant updaterCompact200WithDocs
+    - ant updater200CompactWithDocs
     - ant i2psnark
 
 #testing:
