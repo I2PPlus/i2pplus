@@ -68,8 +68,6 @@ Java8:
 
 Java20:
   stage: build
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
   only:
     - master
     - schedules
