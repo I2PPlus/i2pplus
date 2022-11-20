@@ -68,7 +68,6 @@ Java11:
 Java20:
   stage: build
   only:
-    - master
     - schedules
   image: ubuntu:kinetic
   # currently not well supported, needs some code fixes
