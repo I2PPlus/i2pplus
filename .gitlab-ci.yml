@@ -28,7 +28,6 @@ Java8:
   # allow failure so commits work when CI minutes exhausted
   allow_failure: true
   script:
-    - apt purge openjdk* && apt-get install -yqq openjdk-8-jdk-headless
     - java -version
     - ant installer
     - ant tarball
