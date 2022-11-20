@@ -30,13 +30,11 @@ Java8:
   script:
     - apt-get install -yqq openjdk-8-jdk-headless
     - java -version
-    - ant pkg
+    - ant installer
     - ant tarball
     - ant updaterCompactWithDocs
+    - ant updaterCompact200WithDocs
     - ant i2psnark
-#    - ./installer/resources/makegeoip.sh
-#    - ant updater200WithJettyAndGeoIP
-#    - ant updaterWithJetty
 
 #testing:
 #  stage: test
@@ -79,5 +77,4 @@ Java20:
   script:
     - apt-get install -yqq openjdk-20-jdk-headless
     - java -version
-    - ant pkg
     - ant javadoc-zip
