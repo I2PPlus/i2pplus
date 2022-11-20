@@ -75,10 +75,7 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[ShortTunnelBuildMessage: " +
-                   "\n\tID: ").append(getUniqueId())
-           .append("\n\tRecords: ").append(getRecordCount())
-           .append(']');
+        buf.append("ShortTunnelBuildMessageID: ").append(getUniqueId()).append("; Records: ").append(getRecordCount());
         return buf.toString();
     }
 }
