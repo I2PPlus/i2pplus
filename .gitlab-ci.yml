@@ -15,34 +15,34 @@ stages:
   - build
   - test
 
-#before_script:
-#  # install dependencies to build EXEs and packages
-#  - apt-get update -yqq
-#  - apt-get install -yqq libc6-i386 ant gettext zip
-  - java -version
+before_script:
+  # install dependencies to build EXEs and packages
+  - apt-get update -yqq
+  - apt-get install -yqq libc6-i386 ant gettext zip
 
 Java8:
   stage: build
   only:
     - master
-  image: openjdk:8
+  image: ubuntu:kinetic
   # allow failure so commits work when CI minutes exhausted
   allow_failure: true
   script:
-#    - ./installer/resources/makegeoip.sh
+    - apt-get install -yqq openjdk-8-jdk-headless
+    - java -version
     - ant pkg
     - ant tarball
-    - ant updater200WithJettyAndGeoIP
-    - ant updaterWithJetty
-    - ant updaterCompact
+    - ant updaterCompactWithDocs
     - ant i2psnark
-#    - ant javadoc-zip
+#    - ./installer/resources/makegeoip.sh
+#    - ant updater200WithJettyAndGeoIP
+#    - ant updaterWithJetty
 
 #testing:
 #  stage: test
 #  only:
 #    - master
-#  image: openjdk:8
+#  image: ubuntu:kinetic
 #  # allow failure so commits work when CI minutes exhausted
 #  allow_failure: true
 #  script:
@@ -68,16 +68,16 @@ Java8:
 #    paths: ['findbugs.html']
 #    expire_in: 1 month
 
-Java18:
+Java20:
   stage: build
   only:
     - master
-  ##image: ubuntu@sha256:bace9fb0d5923a675c894d5c815da75ffe35e24970166a48a4460a48ae6e0d19
-  image: openjdk:18
+  image: ubuntu:kinetic
   # currently not well supported, needs some code fixes
   # remove this line once code is fixed
   allow_failure: true
   script:
-    - ant updaterCompactWithDocs
-    - ant i2psnark
+    - apt-get install -yqq openjdk-20-jdk-headless
+    - java -version
+    - ant pkg
     - ant javadoc-zip
