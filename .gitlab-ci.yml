@@ -18,7 +18,7 @@ stages:
 before_script:
   # install dependencies to build EXEs and packages
   - apt-get update -yqq
-  - apt-get install -yqq libc6-i386 ant gettext zip apt-utils swapspace zram-config
+  - apt-get install -yqq libc6-i386 ant gettext zip apt-utils swapspace zram-config git
 
 Java8:
   stage: build
@@ -28,7 +28,7 @@ Java8:
   # allow failure so commits work when CI minutes exhausted
   allow_failure: true
   script:
-    - apt-get install -yqq openjdk-8-jdk-headless
+    - apt purge openjdk* && apt-get install -yqq openjdk-8-jdk-headless
     - java -version
     - ant installer
     - ant tarball
