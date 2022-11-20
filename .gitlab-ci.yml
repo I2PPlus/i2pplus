@@ -15,10 +15,10 @@ stages:
   - build
   - test
 
-before_script:
-  # install dependencies to build EXEs and packages
-  - apt-get update -yqq
-  - apt-get install -yqq libc6-i386 ant gettext zip
+#before_script:
+#  # install dependencies to build EXEs and packages
+#  - apt-get update -yqq
+#  - apt-get install -yqq libc6-i386 ant gettext zip
   - java -version
 
 Java8:
