@@ -68,8 +68,11 @@ Java8:
 
 Java20:
   stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
   only:
     - master
+    - schedules
   image: ubuntu:kinetic
   # currently not well supported, needs some code fixes
   # remove this line once code is fixed
