@@ -8,7 +8,7 @@ default:
       - install.jar
       - i2psnark-standalone.zip
       - javadoc.zip
-#      - i2p.tar.bz2
+      - i2p.tar.bz2
     expire_in: 2 weeks
 
 stages:
@@ -30,10 +30,10 @@ Java11:
   script:
     - java -version
     - ant installer
-    - ant tarball
     - ant updaterCompactWithDocs
     - ant updater200CompactWithDocs
     - ant i2psnark
+#    - ant tarball
 
 #testing:
 #  stage: test
