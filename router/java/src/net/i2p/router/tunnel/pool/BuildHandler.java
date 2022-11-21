@@ -368,7 +368,7 @@ class BuildHandler implements Runnable {
                         if (peer != null) {
                             String reason = " <b>➜</b> No RouterInfo";
                             _context.commSystem().mayDisconnect(peer);
-                            _context.banlist().banlistRouter(peer, reason, null, null, 60*60*1000);
+                            _context.banlist().banlistRouter(peer, reason, null, null, 15*60*1000);
                         }
                     }
                     // Record that a peer of the given tier agreed or rejected
