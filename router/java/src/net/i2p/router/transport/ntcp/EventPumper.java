@@ -153,7 +153,7 @@ class EventPumper implements Runnable {
             _selector = Selector.open();
             _alive = true;
             I2PThread t = new I2PThread(this, "NTCPPumper", true);
-            t.setPriority(I2PThread.MAX_PRIORITY - 1);
+            t.setPriority(I2PThread.MAX_PRIORITY);
             t.start();
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error opening the NTCP selector", ioe);

@@ -21,7 +21,7 @@ class JobQueueRunner extends I2PThread {
         _keepRunning = true;
         _log = _context.logManager().getLog(JobQueueRunner.class);
 //        setPriority(NORM_PRIORITY + 1);
-        setPriority(MAX_PRIORITY - 1);
+        setPriority(MAX_PRIORITY);
         // all createRateStat in JobQueue
     }
 

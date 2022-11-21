@@ -43,7 +43,7 @@ class Reader {
         for (int i = 1; i <= numReaders; i++) {
             Runner r = new Runner();
             I2PThread t = new I2PThread(r, "NTCPReader " + i + '/' + numReaders, true);
-            t.setPriority(I2PThread.MAX_PRIORITY - 1);
+            t.setPriority(I2PThread.MAX_PRIORITY);
             _runners.add(r);
             t.start();
         }
