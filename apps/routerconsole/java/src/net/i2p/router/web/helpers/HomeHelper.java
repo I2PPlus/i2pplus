@@ -142,6 +142,7 @@ public class HomeHelper extends HelperBase {
 
 // hosting + other services
         _x("base64-image.i2p") + S + _x("Base64 Image Encoder") + S + "http://base64-image.i2p/" + S + I + "base64-image.svg" + S +
+        _x("imageproxy.i2p") + S + _x("An image cache and resize service") + S + "http://imageproxy.i2p/" + S + I + "imageproxy.svg" + S +
         "major.i2p" + S + _x("IRC Logs for multiple networks") + S + "http://major.i2p/" + S + I + "major.svg" + S +
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
         _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "radio.svg" + S +
@@ -170,7 +171,7 @@ public class HomeHelper extends HelperBase {
         "hiddenwiki.i2p" + S + _x("Tor .onion site links") + S + "http://hiddenwiki.i2p/" + S + I + "wiki.svg" + S +
         _x("HTMLColors") + S + _x("HTML Color Reference") + S + "http://htmlcolors.i2p/" + S + I + "help.svg" + S +
         "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "wiki.svg" + S +
-        //"imperial.i2p" + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "books.svg" + S +
+        _x("imperial.i2p") + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "books.svg" + S +
         "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "books.svg" + S +
         "mathworld.i2p" + S + _x("Wolfram's Online Math Reference") + S + "http://mathworld.i2p/" + S + I + "books.svg" + S +
         "mdn.i2p" + S + _x("Mozilla Developer Network") + S + "http://mdn.i2p/" + S + I + "mdn.svg" + S +
