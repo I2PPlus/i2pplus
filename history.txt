@@ -1,3 +1,5 @@
+2022-11-21 I2P+ 2.0.0+ released
+
 2022-11-19 dr|z3d
  * Router:
    - Reduce iterative search concurrency if known routers > 4000
