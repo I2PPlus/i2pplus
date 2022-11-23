@@ -48,6 +48,17 @@
 <td><input type="text" name="logfilesize" size="10" value="<jsp:getProperty name="logginghelper" property="maxFileSize" />" ></td>
 <td></td>
 </tr>
+<%
+   if (logginghelper.isAdvanced()) {
+%>
+<tr>
+<td align="right"><b><%=intl._t("GZIP Compression")%>:</b></td>
+<td><label><input type="checkbox" class="optbox" name="logcompress" value="true" <jsp:getProperty name="logginghelper" property="logCompress" /> > Compress logs</label></td>
+<td></td>
+</tr>
+<%
+   }
+%>
 <tr>
 <td align="right"><b><%=intl._t("Default log level")%>:</b></td>
 <td><jsp:getProperty name="logginghelper" property="defaultLogLevelBox" /></td>
