@@ -1422,7 +1422,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
             if ("install".equals(policy)) {
                 _log.log(Log.CRIT, "Update was downloaded and verified, restarting to install it...");
-                updateStatus("<b class=\"volatile\">" + _t("Update verified") + "</b><br>" + _t("Restarting"));
+                updateStatus("<b class=\"volatile\">" + _t("Update verified") + "</b><br>" + _t("Restarting") + "...");
                 restart();
             } else {
                 _log.logAlways(Log.CRIT, "I2P Update was downloaded and verified, will be installed at next restart");
@@ -1444,7 +1444,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     private boolean handleUnsignedFile(URI uri, String lastmod, File updFile) {
         String url = uri.toString();
-        if (FileUtil.verifyZip(updFile) && !isExternalRestartPending()) {
+        String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY);
+        if (FileUtil.verifyZip(updFile) && (!isExternalRestartPending() || !("install".equals(policy)))) {
             if (url.contains("skank"))
                 updateStatus("<b class=\"volatile\">" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b>");
             else
@@ -1462,7 +1463,6 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         boolean copied = FileUtil.copy(updFile, to, true, false);
         if (copied) {
             updFile.delete();
-            String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY);
             long modtime = 0;
             if (lastmod != null) {
                 try {

@@ -38,12 +38,12 @@ class UDPSender {
     // When full, packets back up into the PacketPusher thread, pre-CoDel.
 //    private static final int MIN_QUEUE_SIZE = 128;
 //    private static final int MAX_QUEUE_SIZE = 768;
-    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 384;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 768 : 2048;
+    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 512;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 768 : 4096;
 //    private static final int CODEL_TARGET = 100;
 //    private static final int CODEL_INTERVAL = 500;
-    private static final int CODEL_TARGET = 30;
-    private static final int CODEL_INTERVAL = 1500;
+    private static final int CODEL_TARGET = 40;
+    private static final int CODEL_INTERVAL = 750;
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 
@@ -59,10 +59,11 @@ class UDPSender {
         int cores = SystemVersion.getCores();
         boolean isSlow = SystemVersion.isSlow();
         long messageDelay = _context.throttle().getMessageDelay();
-        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (1024*1024)));
+//        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (1024*1024)));
+        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, (maxMemory * 2) / (1024*1024)));
         //_outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize, CODEL_TARGET, CODEL_INTERVAL);
         _outboundQueue = new CoDelPriorityBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize,
-                         ctx.getProperty(PROP_CODEL_TARGET, CODEL_INTERVAL),
+                         ctx.getProperty(PROP_CODEL_TARGET, CODEL_TARGET),
                          ctx.getProperty(PROP_CODEL_INTERVAL, CODEL_INTERVAL));
         _socket = socket;
         _runner = new Runner();
@@ -105,7 +106,7 @@ class UDPSender {
             _log.debug("Starting the runner: " + _name);
         _keepRunning = true;
         I2PThread t = new I2PThread(_runner, _name, true);
-        t.setPriority(I2PThread.MAX_PRIORITY - 1);
+        t.setPriority(I2PThread.MAX_PRIORITY);
         t.start();
     }
 
@@ -204,8 +205,6 @@ class UDPSender {
         add(packet);
     }
 
-    private static final int MAX_HEAD_LIFETIME = 3*1000;
-
     /**
      * Put it on the queue.
      * BLOCKING if queue is full (backs up PacketPusher thread)
@@ -234,7 +233,7 @@ class UDPSender {
         //size = _outboundQueue.size();
         //_context.statManager().addRateData("udp.sendQueueSize", size, lifetime);
         if (_log.shouldDebug()) {
-            _log.debug("Added UDP packet (" + psz + " bytes) to queue with lifetime of " + packet.getLifetime() + "ms");
+            _log.debug("UDP packet queued -> Lifetime: " + packet.getLifetime() + "ms; Size: " + psz + " bytes");
         }
     }
 
@@ -243,7 +242,7 @@ class UDPSender {
 
         public void run() {
             if (_log.shouldDebug())
-                _log.debug("Running the UDP sender");
+                _log.debug("Running the UDP sender...");
             //_socketChanged = false;
             while (_keepRunning) {
                 //if (_socketChanged) {
@@ -254,7 +253,7 @@ class UDPSender {
                 UDPPacket packet = getNextPacket();
                 if (packet != null) {
                     if (_log.shouldDebug())
-                        _log.debug("Attempting to send UDP packet to known peer" + packet);
+                        _log.debug("Attempting to send UDP packet to known peer " + packet);
                     // ?? int size2 = packet.getPacket().getLength();
                     int size = packet.getPacket().getLength();
                     long acquireTime = _context.clock().now();
@@ -334,10 +333,13 @@ class UDPSender {
             _outboundQueue.clear();
         }
 
-        /** @return next packet in queue. Will discard any packet older than MAX_HEAD_LIFETIME */
+        /** @return next packet in queue. */
         private UDPPacket getNextPacket() {
             UDPPacket packet = null;
-            while ( (_keepRunning) && (packet == null || packet.getLifetime() > MAX_HEAD_LIFETIME) ) {
+            int codelTarget = CODEL_TARGET;
+            if (_context.getProperty(PROP_CODEL_TARGET) != null)
+                codelTarget = Integer.parseInt(_context.getProperty(PROP_CODEL_TARGET));
+            while ((_keepRunning) && (packet == null || packet.getLifetime() > codelTarget * 3)) {
                 if (packet != null) {
                     _context.statManager().addRateData("udp.sendQueueTrimmed", 1);
                     packet.release();

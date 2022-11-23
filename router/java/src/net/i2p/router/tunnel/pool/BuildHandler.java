@@ -113,7 +113,8 @@ class BuildHandler implements Runnable {
     private static final long MAX_REQUEST_AGE = 65*60*1000;
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
 
-    private static final long JOB_LAG_LIMIT_TUNNEL = 350;
+//    private static final long JOB_LAG_LIMIT_TUNNEL = 350;
+    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 400 : 300;
 
     private static final long[] RATES = { 60*1000, 60*60*1000l };
 
@@ -360,9 +361,16 @@ class BuildHandler implements Runnable {
                     RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
                     // Default and detect bandwidth tier
                     String bwTier = "Unknown";
-                    if (ri != null) bwTier = ri.getBandwidthTier(); // Returns "Unknown" if none recognized
-                        else if (_log.shouldWarn())
-                                  _log.warn("Failed detecting bwTier; null RouterInfo for: [" + peer.toBase64().substring(0,6) + "]");
+                    if (ri != null) {
+                        bwTier = ri.getBandwidthTier(); // Returns "Unknown" if none recognized
+                    } else if (_log.shouldWarn()) {
+                        _log.warn("Temp banning [" + peer.toBase64().substring(0,6) + "] -> No RouterInfo");
+                        if (peer != null) {
+                            String reason = " <b>➜</b> No RouterInfo";
+                            _context.commSystem().mayDisconnect(peer);
+                            _context.banlist().banlistRouter(peer, reason, null, null, 15*60*1000);
+                        }
+                    }
                     // Record that a peer of the given tier agreed or rejected
                     if (howBad == 0) {
                         _context.statManager().addRateData("tunnel.tierAgree" + bwTier, 1);

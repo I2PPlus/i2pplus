@@ -44,7 +44,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     /**
      *  TO BE FIXED - SEE COMMENTS BELOW
      */
-    private static final int DEFAULT_MAX_PROCESSINGTIME = 2250;
+//    private static final int DEFAULT_MAX_PROCESSINGTIME = 2250;
+    private static final int DEFAULT_MAX_PROCESSINGTIME = 1500;
 
     /** tunnel acceptance */
     public static final int TUNNEL_ACCEPT = 0;

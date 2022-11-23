@@ -696,7 +696,7 @@ class Packet {
             cur += 2;
             SigType type = SigType.getByCode(itype);
             if (type == null || !type.isAvailable())
-                throw new IllegalArgumentException("Unsupported transient sig type: " + itype);
+                throw new IllegalArgumentException("Unsupported transient signature type: " + itype);
             _transientSigningPublicKey = new SigningPublicKey(type);
             byte[] buf = new byte[_transientSigningPublicKey.length()];
             System.arraycopy(buffer, cur, buf, 0, buf.length);
@@ -823,7 +823,7 @@ class Packet {
         if (type == null || !type.isAvailable()) {
             Log l = ctx.logManager().getLog(Packet.class);
             if (l.shouldWarn())
-                l.warn("Unknown sig type in " + spk + " cannot verify " + toString());
+                l.warn("Unknown signature type in " + spk + " cannot verify " + toString());
             return false;
         }
         int written = writePacket(buffer, 0, type.getSigLen());
@@ -880,7 +880,7 @@ class Packet {
         //    buf.append('\t');
         toFlagString(buf);
         if ( (_payload != null) && (_payload.getValid() > 0) )
-            buf.append(" Data: ").append(_payload.getValid() + "bytes;");
+            buf.append("\n* Data: ").append(_payload.getValid() + " bytes;");
         return buf;
     }
 
@@ -918,13 +918,13 @@ class Packet {
             else
                 buf.append(" (no key data)");
             if (_offlineSignature != null)
-                buf.append(" OFFSIG ").append(_offlineSignature.getType());
+                buf.append("; Offline Signature: ").append(_offlineSignature.getType());
             else
                 buf.append(" (no offline sig data)");
         }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
             if (_optionSignature != null)
-                buf.append(" SIG ").append(_optionSignature.getType());
+                buf.append("; Signature: ").append(_optionSignature.getType());
             else
                 buf.append(" (to be signed)");
         }

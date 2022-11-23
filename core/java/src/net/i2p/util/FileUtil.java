@@ -29,9 +29,6 @@ import net.i2p.data.DataHelper;
 //
 // For Sun, OpenJDK, IcedTea, etc, use this
 //import java.util.jar.Pack200;
-//
-// For Apache Harmony or if you put its pack200.jar in your library directory use this
-//import org.apache.commons.compress.harmony.unpack200.Archive;
 
 /**
  * General helper methods for messing with files
@@ -169,7 +166,7 @@ public class FileUtil {
                             while ((read = in.read(buf)) != -1) {
                                    fos.write(buf, 0, read);
                             }
-                            if (logLevel <= Log.INFO)
+                            if (logLevel == Log.DEBUG)
                                 System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         }
                         files++;
@@ -237,7 +234,7 @@ public class FileUtil {
             while (entries.hasMoreElements()) {
                 ZipEntry entry = (ZipEntry)entries.nextElement();
                 if (entry.getName().indexOf("..") != -1) {
-                    //System.err.println("ERROR: Refusing to extract a zip entry with '..' in it [" + entry.getName() + "]");
+                    System.err.println("ERROR: Refusing to extract a zip entry with '..' in the name [" + entry.getName() + "]");
                     return false;
                 }
                 if (entry.isDirectory()) {
@@ -256,7 +253,7 @@ public class FileUtil {
                         while ( (in.read(buf)) != -1) {
                             // throw the data away
                         }
-                        System.err.println("INFO: File [" + entry.getName() + "] extracted");
+                        //System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         in.close();
                     } catch (IOException ioe) {
                         System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + "]");
@@ -290,6 +287,7 @@ public class FileUtil {
             Class.forName("io.pack200.Pack200", false, ClassLoader.getSystemClassLoader());
             return true;
         } catch (Exception e) {}
+/**
         try {
             Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
             return true;
@@ -298,11 +296,12 @@ public class FileUtil {
             Class.forName("org.apache.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
             return true;
         } catch (Exception e) {}
+**/
         return false;
     }
 
     private static boolean _failedOracle;
-    private static boolean _failedApache;
+    //private static boolean _failedApache;
 
     /**
      * Unpack using either Oracle or Apache's unpack200 library,
@@ -326,13 +325,6 @@ public class FileUtil {
                     p200 = Class.forName("java.util.jar.Pack200", true, ClassLoader.getSystemClassLoader());
                 } catch (Exception e) {
                     // https://github.com/pack200/pack200
-                    // instructions:
-                    // cd pack200
-                    // cp -r src/main/java/io ../i2p.i2p/core/java/src
-                    // cp src/main/resources/io/pack200/intrinsic.properties ../i2p.i2p/core/java/src/io/pack200
-                    // cd ../i2p.i2p
-                    // patch core/java/build.xml to add to jar target at line ~109:
-                    //     <fileset dir="src" includes="io/pack200/intrinsic.properties" />
                     p200 = Class.forName("io.pack200.Pack200", true, ClassLoader.getSystemClassLoader());
                 }
                 Method newUnpacker = p200.getMethod("newUnpacker");
@@ -358,6 +350,7 @@ public class FileUtil {
         // Incompatible with pack200 from Java 6-13
         // Error is:
         // org.apache.commons.compress.harmony.pack200.Pack200Exception: Invalid segment minor version
+/**
         if (!_failedApache) {
             try {
                 Class<?> p200;
@@ -382,7 +375,7 @@ public class FileUtil {
                 e.printStackTrace();
             }
         }
-
+**/
         // ------------------
         // For gcj, gij, etc., use this
         throw new IOException("Unpack200 not supported");

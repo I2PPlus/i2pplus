@@ -1,5 +1,5 @@
 /* I2P TunnelManager theme:"Camo". Aka "dark". As in ops. */
-/* Author:dr|z3d */
+/* Author: dr|z3d */
 
 @import url(global.css);
 @import url(images/images.css);
@@ -11,7 +11,7 @@
 }
 
 html{background:none}
-body{margin:0 8px 12px;padding:0;text-align:center;font-size:9pt;background:repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px,rgba(0,8,0,.5) 4px),url(images/camotile2.png) top left scroll #010;background-size:100% 4px,175px}
+body{margin:24px 8px 12px;padding:0;text-align:center;font-size:9pt;background:repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px,rgba(0,8,0,.5) 4px),url(images/camotile2.png) top left scroll #010;background-size:100% 4px,175px}
 body.iframed{margin:0;padding:0;overflow:hidden;background:none}
 br{clear:left}
 ::selection{color:#000;background:#ff0}
@@ -204,6 +204,10 @@ td > b{margin-right:5px;display:inline-block;min-width:30px}
 .tunnelLocation,.tunnelInterface{width:20%}
 .tunnelLocation font[color="red"]{margin:0 3px;font-size:80%}
 .tunnelStatus{text-align:center;width:10%;min-width:48px}
+.tunnelStatus div{position:relative}
+.tunnelStatus div .tooltip{pointer-events:none}
+.tunnelStatus div:hover .tooltip{padding:6px 12px;min-width:140px;display:inline-block;line-height:1.5;left:0;position:absolute;bottom:calc(100% + 4px);z-index:99999;color:var(--ink);font-size:9pt;box-shadow:var(--bevel_hard);background:var(--badge)}
+.tunnelStatus div .tooltip hr{margin:2px 0 4px;height:0;display:block;border:none;border-top:1px solid #000;border-bottom:1px solid #141;opacity:.8}
 .tunnelControl{width:5%;text-align:right;white-space:nowrap}
 .buttons,.newTunnel{box-shadow:var(--highlight),inset 0 0 2px 1px #030}
 #clientTunnels tr,#serverTunnels tr,.tunnelConfig tr{background:rgba(0,4,0,.4)}

@@ -9,7 +9,7 @@ default:
       - i2psnark-standalone.zip
       - javadoc.zip
       - i2p.tar.bz2
-    expire_in: 2 weeks
+    expire_in: 1 month
 
 stages:
   - build
@@ -18,64 +18,62 @@ stages:
 before_script:
   # install dependencies to build EXEs and packages
   - apt-get update -yqq
-  - apt-get install -yqq libc6-i386 ant gettext zip
-  - java -version
+  - apt-get install -yqq libc6-i386 ant gettext zip apt-utils swapspace zram-config git
 
-Java8:
+Java11:
   stage: build
   only:
     - master
-  image: openjdk:8
+  image: ubuntu:kinetic
   # allow failure so commits work when CI minutes exhausted
   allow_failure: true
   script:
-#    - ./installer/resources/makegeoip.sh
-    - ant pkg
-    - ant tarball
-    - ant updater200WithJettyAndGeoIP
-    - ant updaterWithJetty
-    - ant updaterCompact
+    - java -version
+    - ant installer
+    - ant updaterCompactWithDocs
+    - ant updater200CompactWithDocs
     - ant i2psnark
-#    - ant javadoc-zip
+#    - ant tarball
 
-testing:
-  stage: test
-  only:
-    - master
-  image: openjdk:8
-  # allow failure so commits work when CI minutes exhausted
-  allow_failure: true
-  script:
-    - apt-get install -yqq libxml2-utils
-    - ./tests/scripts/checkcerts.sh
-    - ./tests/scripts/checkpo.sh
-    - ./tests/scripts/checkscripts.sh
-    - ./tests/scripts/checkutf8.sh
-    - ./tests/scripts/checkxml.sh
+#testing:
+#  stage: test
+#  only:
+#    - master
+#  image: ubuntu:kinetic
+#  # allow failure so commits work when CI minutes exhausted
+#  allow_failure: true
+#  script:
+#    - apt-get install -yqq libxml2-utils
+#    - ./tests/scripts/checkcerts.sh
+#    - ./tests/scripts/checkpo.sh
+#    - ./tests/scripts/checkscripts.sh
+#    - ./tests/scripts/checkutf8.sh
+#    - ./tests/scripts/checkxml.sh
 
-findbugs:
-  stage: test
-  image: openjdk:8
-  only:
-    - master
-    - schedules
-  script:
-    - apt-get install -yqq findbugs
-    - ant findbugs
-  artifacts:
-    expose_as: findbugs
-    paths: ['findbugs.html']
-    expire_in: 1 month
+#findbugs:
+#  stage: test
+#  image: openjdk:8
+#  only:
+#    - master
+#    - schedules
+#  allow_failure: true
+#  script:
+#    - apt-get install -yqq findbugs
+#    - ant findbugs
+#  artifacts:
+#    expose_as: findbugs
+#    paths: ['findbugs.html']
+#    expire_in: 1 month
 
-Java18:
+Java20:
   stage: build
   only:
-    - master
-  image: ubuntu@sha256:bace9fb0d5923a675c894d5c815da75ffe35e24970166a48a4460a48ae6e0d19
+    - schedules
+  image: ubuntu:kinetic
   # currently not well supported, needs some code fixes
   # remove this line once code is fixed
   allow_failure: true
   script:
-    - apt-get install openjdk-18-jdk -y
-    - ant updater
+    - apt-get install -yqq openjdk-20-jdk-headless
+    - java -version
     - ant javadoc-zip

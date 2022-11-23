@@ -158,7 +158,7 @@ public class InfoHelper extends HelperBase {
         if (interval != null)
             return interval;
         else
-            return "1000";
+            return "750";
     }
 
     public String codelTarget() {
@@ -166,7 +166,7 @@ public class InfoHelper extends HelperBase {
         if (target != null)
             return target;
         else
-            return "50";
+            return "40";
     }
 
     private void renderStatusHTML(Writer out) throws IOException {

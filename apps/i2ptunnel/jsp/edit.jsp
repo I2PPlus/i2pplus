@@ -20,13 +20,12 @@ if (tun != null) {
   __isClient = EditBean.isClient(type);
 }
 %>
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />
 <jsp:setProperty name="indexBean" property="*" />
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" id="tman">
+<html id="tman">
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=(__isClient ? intl._t("Edit Client Tunnel") : intl._t("Edit Server Tunnel"))%></title>
 <meta charset="utf-8">
@@ -41,9 +40,9 @@ if (tun != null) {
 <script charset="utf-8" src="/js/selectAll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">var deleteMessage = "<%=intl._t("Are you sure you want to delete?")%>";</script>
 <script charset="utf-8" src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<style type="text/css">body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
 <body id="tunnelEditPage">
-<style type="text/css">body{opacity:0}input.default{width:1px;height:1px;visibility:hidden}</style>
 <%
 if (__invalid) {
 %>
@@ -89,6 +88,6 @@ if (__invalid) {
 }
 %>
 <span data-iframe-height></span>
-<style type="text/css">body {opacity: 1 !important;}</style>
+<style type="text/css">body{display:block;pointer-events:auto}</style>
 </body>
 </html>

@@ -355,7 +355,7 @@ public class WorkingDir {
         for (int i = 0; i < files.length; i++) {
             File from = new File(olddir, files[i]);
             if (!copy(from, todir)) {
-                System.err.println("Error copying " + from.getAbsolutePath());
+                System.err.println("Error copying file: " + from.getAbsolutePath());
                 rv = false;
             }
         }
@@ -392,12 +392,12 @@ public class WorkingDir {
                 }
                 out.println(s);
             }
-            System.err.println("Copied file " + oldFile + " with modifications");
+            System.err.println("Copied file: " + oldFile + " with modifications");
             if (out.checkError())
                 throw new IOException("Failed write to " + newFile);
             return true;
         } catch (IOException ioe) {
-            System.err.println("FAILED copy " + oldFile + ": " + ioe);
+            System.err.println("FAILED copy of: " + oldFile + ": " + ioe);
             return false;
         } finally {
             if (in != null) try { in.close(); } catch (IOException ioe) {}
@@ -431,7 +431,7 @@ public class WorkingDir {
                 out.println(s);
             }
             out.println("<!-- Modified by I2P User dir migration script -->");
-            System.err.println("Copied " + oldFile + " with modifications");
+            System.err.println("Copied file: " + oldFile + " with modifications");
             return true;
         } catch (IOException ioe) {
             System.err.println("FAILED copy " + oldFile + ": " + ioe);
@@ -457,7 +457,7 @@ public class WorkingDir {
                 System.err.println("FAILED copy " + src.getPath());
                 return false;
             }
-            System.err.println("Created Directory " + targetDir.getPath());
+            System.err.println("Created directory: " + targetDir.getPath());
         }
         // SecureDirectory is a File so this works for non-directories too
         File targetFile = new SecureDirectory(targetDir, src.getName());
@@ -474,7 +474,7 @@ public class WorkingDir {
                 System.err.println("FAILED copy " + src.getPath());
                 return false;
             }
-            System.err.println("Created File " + targetFile.getPath());
+            System.err.println("Created file: " + targetFile.getPath());
         }
         boolean rv = true;
         for (int i = 0; i < children.length; i++) {
@@ -498,7 +498,7 @@ public class WorkingDir {
             in = new FileInputStream(src);
             out = new SecureFileOutputStream(dst);
             DataHelper.copy(in, out);
-            System.err.println("Copied File " + src.getPath());
+            System.err.println("Copied file: " + src.getPath());
         } catch (IOException ioe) {
             System.err.println("FAILED copy " + src.getPath() + ": " + ioe);
             rv = false;

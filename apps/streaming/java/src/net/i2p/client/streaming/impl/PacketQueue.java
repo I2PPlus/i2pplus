@@ -20,7 +20,7 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Queue out packets to be sent through the session.
- * Well, thats the theory at least... in practice we just
+ * Well, that's the theory at least... in practice we just
  * send them immediately with no blocking, since the
  * mode=bestEffort doesnt block in the SDK.
  *<p>
@@ -296,7 +296,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             // overflow in router-side I2CP queue, sent as of 0.9.29, will be retried
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:
                 if (_log.shouldWarn())
-                    _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] on " + con);
+                    _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 _messageStatusMap.remove(id);
                 break;
 
@@ -309,7 +309,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // we can't treat this one as a hard fail.
                 // Let the streaming retransmission paper over the problem.
                 if (_log.shouldWarn())
-                    _log.warn("LeaseSet lookup: Soft Failure for [MsgID " + msgId + "] on " + con);
+                    _log.warn("LeaseSet lookup: Soft Failure for [MsgID " + msgId + "] \n* " + con);
                 _messageStatusMap.remove(id);
                 break;
 
@@ -329,13 +329,13 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 if (con.getHighestAckedThrough() >= 0) {
                     // a retxed SYN succeeded before the first SYN failed
                     if (_log.shouldWarn())
-                        _log.warn("Received Hard Failure but Already Connected status [" + status + "] for [MsgID " + msgId + "] on " + con);
+                        _log.warn("Received Hard Failure but Already Connected status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 } else if (!con.getIsConnected()) {
                     if (_log.shouldWarn())
-                        _log.warn("Received Hard Failure but Already Closed status [" + status + "] for [MsgID " + msgId + "] on " + con);
+                        _log.warn("Received Hard Failure but Already Closed status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Received Hard Failure status [" + status + "] for [MsgID " + msgId + "] on " + con);
+                        _log.warn("Received Hard Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                     _messageStatusMap.remove(id);
                     IOException ioe = new I2PSocketException(status);
                     con.getOutputStream().streamErrorOccurred(ioe);
@@ -359,18 +359,18 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_GUARANTEED_SUCCESS:
             case MessageStatusMessage.STATUS_SEND_SUCCESS_LOCAL:
                 if (_log.shouldInfo())
-                    _log.info("Received Success status [" + status + "] for [MsgID " + msgId + "] on " + con);
+                    _log.info("Received Success status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 _messageStatusMap.remove(id);
                 break;
 
             case MessageStatusMessage.STATUS_SEND_ACCEPTED:
                 if (_log.shouldInfo())
-                    _log.info("Received Accept status [" + status + "] for [MsgID " + msgId + "] on " + con);
+                    _log.info("Received Accept status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 break;
 
             default:
                 if (_log.shouldWarn())
-                    _log.warn("Received unknown status [" + status + "] for [MsgID " + msgId + "] on " + con);
+                    _log.warn("Received unknown status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 _messageStatusMap.remove(id);
                 break;
         }

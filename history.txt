@@ -1,8 +1,33 @@
+2022-11-21 I2P+ 2.0.0+ released
+
+2022-11-19 dr|z3d
+ * Router:
+   - Reduce iterative search concurrency if known routers > 4000
+     and reduce threshold for skipping searches
+   - Reduce processing time threshold before throttling part tunnels
+
+2022-11-16 dr|z3d
+ * I2PTunnel: Remove xml doctype and transitional html tags from jsp files
+ * Router: Start expire participating tunnels job sooner after startup
+
+2022-11-15 dr|z3d
+ * I2PTunnel: Add variance to tunnel status tooltip; display as css tooltip
+ * Build.xml: Add support for pack200 updates for all Java versions
+
 2022-11-12 zzz
  * i2ptunnel: Fix IRC USER filtering
 
+2022-11-11 dr|z3d
+ * Console: Add redirect pages for /help and /console
+
 2022-11-09 zzz
  * SAM: Add warning at startup if not bound to localhost
+
+2022-11-05 NarratorZ
+ * Console/Webapps: Chinese translation updates
+
+2022-11-04 dr|z3d
+ * Console: Tag help pages and other console strings for translation
 
 2022-11-01 zzz
  * GeoIP 2022-11-01
@@ -27,8 +52,19 @@
 2022-10-15 zzz
  * i2psnark: Increase piece limit to 64K
 
+2022-10-11 dr|z3d
+ * Console: Alternative display fonts and global override.css file for use
+   with all themes/webapps (console/dark/override_Sora.css)
+
+2022-10-10 term99
+ * graceful_restart.sh updates
+
 2022-10-10 zzz
  * SSU2: Track recently-closed sessions (gitlab #370)
+
+2022-10-01 dr|z3d
+ * I2PTunnel: Generic 403, 408, 429 http errors; Add 15s meta refresh
+   for 408 (request timeout)
 
 2022-09-28 zzz
  * Installer: Fix error on Windows when username contains a space (gitlab #367)
@@ -42,6 +78,15 @@
 
 2022-09-20 zzz
  * i2ptunnel, eepget: Add support for SHA-256 digest proxy auth (RFC 7616)
+
+2022-09-16 dr|z3d
+ * Proxy: Translation updates (de/fr/ru/uk/zh)
+
+2022-09-10 dr|z3d
+ * I2PSnark: Cleanup refreshTorrents.js
+ * Router:
+   - Increase max IB/OB messages per pump for non-slow routers
+   - Increase priorityblockingqueue & backlog queue if >=4GB JVM
 
 2022-09-09 zzz
  * SSU2: Enable handling of ack-immediate flag by default
@@ -63,6 +108,10 @@
 
 2022-09-01 zzz
  * Router: Ensure database store message is processed before reply job (Gitlab #364)
+
+2022-08-30 dr|z3d
+ * Wrapper: Reduce restart delay and jvm timeout (new installs)
+ * I2PSnark: Persist torrent filters via localStorage
 
 2022-08-29 zzz
  * SSU2: Implement ack-immediate flag

@@ -55,7 +55,7 @@
 <ul>
 <li><code>http://stats.i2p/cgi-bin/newhosts.txt</code></li>
 <li><code>http://reg.i2p/export/hosts.txt</code></li>
-<li><code>http://identiguy.i2p/hosts.txt</code></li>
+<li><code>http://scanner.linuxfarm.i2p/hosts.txt</code></li>
 <li><code>http://notbob.i2p/hosts.txt</code></li>
 <li><code>http://skank.i2p/hosts.txt</code></li>
 </ul>

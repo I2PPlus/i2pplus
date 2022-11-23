@@ -38,7 +38,7 @@ public class OOMListener implements I2PThread.OOMEventListener {
         try {
             // boost priority to help us shut down
             // this may or may not do anything...
-            Thread.currentThread().setPriority(Thread.MAX_PRIORITY - 1);
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         } catch (OutOfMemoryError oome) {}
         try {
             Router.clearCaches();

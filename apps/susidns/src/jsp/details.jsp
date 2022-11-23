@@ -41,9 +41,9 @@
 <%
     String query = request.getQueryString();
 %>
+<style type="text/css">body{display:none;pointer-events:none}</style>
 </head>
 <body id="dtls">
-<style type="text/css">body{opacity: 0;}</style>
 <div class="page">
 <div id="navi">
 <a class="abook router<%=(query.contains("book=router") ? " details selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
@@ -201,6 +201,6 @@
 </div><%-- book --%>
 </div><%-- page --%>
 <span data-iframe-height></span>
-<style type="text/css">body{opacity: 1 !important;}</style>
+<style type="text/css">body{display:block;pointer-events:auto}</style>
 </body>
 </html>

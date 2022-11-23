@@ -25,7 +25,7 @@ td>*{vertical-align:middle}
 .langselect input[name="lang"]:checked+img{margin-left:-10px;margin-top:-20px}
 .main li,ul.statlist li b,ul.statlist a[name]{line-height:1.6}
 .main table{line-height:1.3;font-size:10pt}
-.main,#sidebar,p,b,a,.messages,.messages li,div.error,.error ul li,.applabel a,.sitemapLabel a,code,pre,tt,#newsDisplay,#newsDisplay a,#newsStatus,.infohelp,.infowarn,.main li,ul.statlist li b,ul.statlist a[name],.themechoice,.sitemapLabel,.configtable td.infohelp,p.infohelp,td.infohelp,p.infowarn,td.infowarn,#debugmode,.sybilinfo{font-size:11pt;font-weight:400;line-height:1.4;vertical-align:baseline}
+.main,#sidebar,p,b,a,.messages,.messages li,div.error,.error ul li,.applabel a,.sitemapLabel a,code,pre,tt,#newsDisplay,#newsDisplay a,#newsStatus,.infohelp,.infowarn,.main li,ul.statlist li b,ul.statlist a[name],.themechoice,.sitemapLabel,.configtable td.infohelp,p.infohelp,td.infohelp,p.infowarn,td.infowarn,#debugmode,.sybilinfo{font-size:11pt;font-weight:400;line-height:1.6;vertical-align:baseline}
 .newsentry+hr{margin-bottom:5px}
 .news p,.news a,.sb_notice,.sb_notice a,.search select,.search button,.search input[type=text]{font-size:10pt}
 .percentBarOuter{margin-top:-3px;margin-bottom:-5px}
@@ -43,6 +43,7 @@ td>*{vertical-align:middle}
 #console div[lang="zh"],#console li,#console p{line-height:170%;letter-spacing:.15em;word-spacing:0;font-size:10.5pt}
 #console li{list-style:none;margin-left:40px}
 #fullhistory{margin-top:-13px}
+#help li, #help p,#help code,#help pre{line-height:2;font-size:110%}
 #leasesetdebug th a,table#leasesetsummary th a,#tunnels.main h3 a,#logs h3 a,.tab,.tab2,.confignav a{font-size:11pt;margin-right:-2px}
 #minigraph{margin-top:-24px}
 #routerlogs li,#criticallogs li,pre#service_logs{font-size:9pt}

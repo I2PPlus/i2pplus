@@ -82,7 +82,7 @@ class ClientManager {
     /** Disable local-local "loopback", force all traffic through tunnels @since 0.9.44 */
     private static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
 
-    private static final int INTERNAL_QUEUE_SIZE = 256;
+    private static final int INTERNAL_QUEUE_SIZE = (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 1024*1024*1024) ? 256 : 512;
 
     private static final long REQUEST_LEASESET_TIMEOUT = 60*1000;
 

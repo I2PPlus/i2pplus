@@ -42,7 +42,7 @@ class FloodfillMonitorJob extends JobImpl {
     private static final long MIN_CHANGE_DELAY = 3*60*60*1000;
 
 //    private static final int MIN_FF = 5000;
-    private static final int MIN_FF = 2500;
+    private static final int MIN_FF = 500;
     private static final int MAX_FF = 999999;
     static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
     private Boolean autoff = true;

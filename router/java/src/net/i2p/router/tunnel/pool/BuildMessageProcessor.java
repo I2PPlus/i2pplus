@@ -56,22 +56,25 @@ class BuildMessageProcessor {
     private DecayingBloomFilter selectFilter() {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
+        boolean isAndroid = SystemVersion.isAndroid();
         int m;
-        if ((isSlow && maxMemory < 256*1024*1024L) || maxMemory < 96*1024*1024L) {
+        if (maxMemory < 256*1024*1024L) {
             // 32 KB
             // appx 500 part. tunnels or 6K req/hr
             m = 17;
-        } else if (isSlow) {
-            m = 20;
-//        } else if (maxMemory >= 4096*1024*1024L) {
+        } else if (isSlow || isAndroid) {
+            // 64 KB
+            // appx 1K part. tunnels or 12K req/hr
+            m = 18;
+//        } else if (maxMemory >= 16384*1024*1024L) {
 //            // 128 MB
 //            // appx 1280K part. tunnels or 15.36M req/hr
 //            m = 29;
-        } else if (maxMemory >= 2048*1024*1024L) {
-            // 64 MB
-            // appx 640K part. tunnels or 7.68M req/hr
-            m = 28;
-        } else if (maxMemory >= 1536*1024*1024L) {
+//        } else if (maxMemory >= 8192*1024*1024L && SystemVersion.getCores() >= 8) {
+//            // 64 MB
+//            // appx 640K part. tunnels or 7.68M req/hr
+//            m = 28;
+        } else if (maxMemory >= 2048*1024*1024L && SystemVersion.getCores() >= 4) {
             // 32 MB
             // appx 320K part. tunnels or 3.84M req/hr
             m = 27;
@@ -102,7 +105,7 @@ class BuildMessageProcessor {
         // ... rather than duplicating all the logic in LoadRouterInfoJob,
         // just look for a short router.keys.dat file.
         // If it doesn't exist, it will be created later as EC.
-        // If we're rekeing to EC, it's ok to have a longer duration this time.
+        // If we're rekeying to EC, it's ok to have a longer duration this time.
         File f = new File(ctx.getConfigDir(), "router.keys.dat");
         boolean isEC = f.length() < 663;
         int duration;

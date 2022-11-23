@@ -165,7 +165,7 @@ class EstablishmentManager {
 
     /** for the DSM and or netdb store */
     private static final int DATA_MESSAGE_TIMEOUT = 10*1000;
-    
+
     private static final int IB_BAN_TIME = 15*60*1000;
 
     /**
@@ -244,7 +244,7 @@ class EstablishmentManager {
             loadTokens();
         _alive = true;
         I2PThread t = new I2PThread(new Establisher(), "UDPEstablisher", true);
-        t.setPriority(I2PThread.MAX_PRIORITY - 1);
+        t.setPriority(I2PThread.MAX_PRIORITY);
         t.start();
     }
 

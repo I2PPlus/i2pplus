@@ -140,7 +140,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  This maybe could be shorter than RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
      *  because we are sending direct, but unresponsive floodfills may take a while due to timeouts.
      */
-    static final long PUBLISH_TIMEOUT = 90*1000;
+//    static final long PUBLISH_TIMEOUT = 90*1000;
+    static final long PUBLISH_TIMEOUT = 80*1000;
 
     /**
      * Send our RI to the closest floodfill.
@@ -593,7 +594,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         long maxMemory = SystemVersion.getMaxMemory();
         // 250 for every 32 MB, min of 250, max of 1250
 //        MAX_DB_BEFORE_SKIPPING_SEARCH = (int) Math.max(250l, Math.min(1250l, maxMemory / ((32 * 1024 * 1024l) / 250)));
-        MAX_DB_BEFORE_SKIPPING_SEARCH = 4000;
+        MAX_DB_BEFORE_SKIPPING_SEARCH = 2500;
     }
 
     /**
