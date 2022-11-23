@@ -21,7 +21,7 @@ public class NetDbHelper extends FormHandler {
     private String _routerPrefix;
     private String _version;
     private String _country;
-    private String _family, _caps, _ip, _sybil, _mtu, _ssucaps, _ipv6, _transport;
+    private String _family, _caps, _ip, _sybil, _mtu, _ssucaps, _ipv6, _transport, _hostname;
     private int _full, _port, _cost, _page, _mode;
     private long _date;
     private int _limit = DEFAULT_LIMIT;
@@ -41,14 +41,14 @@ public class NetDbHelper extends FormHandler {
                                            _x("Local Router"),                  // 1
                                            _x("Router Lookup"),                 // 2
                                            _x("All Routers"),                   // 3
-//                                           _x("All Routers with Stats"),   // 4
-                                           _x("All Routers"),   // 4
+                                           _x("All Routers"),                   // 4
                                            _x("LeaseSets"),                     // 5
                                            // advanced below here
-//                                           "LeaseSet Debug",                    // 6
+//                                           "LeaseSet Debug",                  // 6
                                            _x("LeaseSets"),                     // 6
                                            _x("Sybil Analysis"),                // 7
-                                           "Advanced Lookup"   };               // 8
+                                           _x("Advanced Lookup"),               // 8
+                                           _x("LeaseSet Lookup")   };           // 9
 
     private static final String links[] =
                                           {"",                                  // 0
@@ -59,7 +59,8 @@ public class NetDbHelper extends FormHandler {
                                            "?l=1",                              // 5
                                            "?l=2",                              // 6
                                            "?f=3",                              // 7
-                                           "?f=4" };                            // 8
+                                           "?f=4",                              // 8
+                                           "" };                                // 9
 
     public void setRouter(String r) {
         if (r != null && r.length() > 0)
@@ -188,6 +189,12 @@ public class NetDbHelper extends FormHandler {
         _lease = _debug || "1".equals(l);
     }
 
+    /** @since 0.9.57 */
+    public void setLeaseset(String f) {
+        if (f != null && f.length() > 0)
+            _hostname = DataHelper.stripHTML(f);
+    }
+
     /** @since 0.9.36 */
     public void setLimit(String f) {
         try {
@@ -288,6 +295,8 @@ public class NetDbHelper extends FormHandler {
                                               _mtu, _ipv6, _ssucaps, _transport, _cost);
             } else if (_lease) {
                 renderer.renderLeaseSetHTML(_out, _debug);
+            } else if (_hostname != null) {
+                renderer.renderLeaseSet(_out, _hostname, true);
             } else if (_full == 3) {
                 if (_mode == 12 && !_postOK)
                     _mode = 0;
@@ -328,6 +337,8 @@ public class NetDbHelper extends FormHandler {
             return 7;
         if (_full == 4)
             return 8;
+        if (_hostname != null)
+            return 9;
         return 0;
     }
 
@@ -343,6 +354,8 @@ public class NetDbHelper extends FormHandler {
         int tab = getTab();
         for (int i = 0; i < titles.length; i++) {
             if (i == 2 && tab != 2)
+                continue;   // can't nav to lookup
+            if (i == 9 && tab != 9)
                 continue;   // can't nav to lookup
             if (i == 3 && isAdvanced())
                 continue; // only show All Routers (with full stats) in adv. mode
@@ -405,6 +418,7 @@ public class NetDbHelper extends FormHandler {
                    "<td><b>Router Family</b></td><td><input type=\"text\" name=\"fam\"></td></tr>\n" +
                    "<tr><td><b>Hash Prefix</b></td><td><input type=\"text\" name=\"r\"></td>\n" +
                    "<td><b>IP Address</b></td><td><input type=\"text\" name=\"ip\" title=\"IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6\"></td></tr>\n" +
+                   "<tr><td><b>Hostname or b32</b></td><td><input type=\"text\" name=\"ls\"></td><td></td></tr>\n" +
                    "<tr><td><b>IPv6 Prefix</b></td><td><input type=\"text\" name=\"ipv6\"></td>\n" +
                    "<td><b>MTU</b></td><td><input type=\"text\" name=\"mtu\"></td></tr>\n" +
                    "<tr><td><b>Port Number</b></td><td><input type=\"text\" name=\"port\"></td>\n" +
