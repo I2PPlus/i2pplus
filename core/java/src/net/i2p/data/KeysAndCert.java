@@ -85,6 +85,10 @@ public class KeysAndCert extends DataStructureImpl {
         return EncType.ELGAMAL_2048;
     }
 
+    /**
+     *  Valid for RouterIdentities. May contain random padding for Destinations.
+     *  @since 0.9.42
+     */
     public PublicKey getPublicKey() {
         return _publicKey;
     }
@@ -211,7 +215,11 @@ public class KeysAndCert extends DataStructureImpl {
         buf.append("\n* Hash: ").append(getHash().toBase64());
         // TODO: avoid duplication of info: "Certificate type: Certificate: Type..."
         buf.append("\n* Certificate type: ").append(_certificate);
-        buf.append("\n* Public Key: ").append(_publicKey);
+        if ((_publicKey != null && _publicKey.getType() != EncType.ELGAMAL_2048) ||
+            !(this instanceof Destination)) {
+            // router identities only
+            buf.append("\n* Public Key: ").append(_publicKey);
+        }
         buf.append("\n* Public Signing Key: ").append(_signingKey);
         if (_padding != null)
             buf.append("\n* Padding: ").append(_padding.length).append(" bytes");
