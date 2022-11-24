@@ -1701,8 +1701,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         @Override
         public String toString() {
             if ("".equals(id))
-                return "UpdateItem " + type;
-            return "UpdateItem " + type + ' ' + id;
+                return type.toString();
+            return type.toString() + ' ' + id;
         }
     }
 
@@ -1832,7 +1832,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
         Collections.sort(list);
         for (String e : list) {
-            buf.append("[").append(e).append("]<br>");
+            buf.append(e).append("<br>");
         }
     }
 
@@ -1842,7 +1842,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             String key = entry.getKey().toString();
             String val = entry.getValue().toString();
-            list.add("[" + key + "] = " + val + "<br>");
+            list.add("<b>" + key + ":</b> " + val + "<br>");
         }
         Collections.sort(list);
         for (String e : list) {

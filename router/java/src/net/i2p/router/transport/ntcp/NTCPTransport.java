@@ -728,6 +728,29 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
+     * @return 8 bytes:
+     *         version 1 4 bytes all zeros
+     *         version 2 ipv4 in/out, ipv6 in/out
+     * @since 0.9.57
+     */
+    public int[] getPeerCounts() {
+        int[] rv = new int[8];
+        final long now = _context.clock().now();
+        for (NTCPConnection con : _conByIdent.values()) {
+            if ((con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000) ||
+                (con.getMessagesReceived() > 0 && con.getTimeSinceReceive(now) <= 60*1000)) {
+                int idx = 4;
+                if (con.isIPv6())
+                    idx += 2;
+                if (!con.isInbound())
+                    idx++;
+                rv[idx]++;
+            }
+        }
+        return rv;
+    }
+
+    /**
      * For /peers UI only. Not a public API, not for external use.
      *
      * @return not a copy, do not modify
