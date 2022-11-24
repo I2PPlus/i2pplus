@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
     xhr.responseType = "document";
     var udp = document.getElementById("udp");
     var ntcp = document.getElementById("ntcp");
+    var summary = document.getElementById("transportSummary");
     xhr.onreadystatechange = function () {
       if (xhr.readyState==4 && xhr.status==200) {
         if (udp) {
@@ -52,22 +53,28 @@ document.addEventListener("DOMContentLoaded", function() {
           var udpParent = udp.parentNode;
           if (!Object.is(udp.innerHTML, udpResponse.innerHTML))
             udpParent.replaceChild(udpResponse, udp);
-        }
-        if (ntcp) {
+        } else if (ntcp) {
           var ntcpResponse = xhr.responseXML.getElementById("ntcp");
           var ntcpParent = ntcp.parentNode;
           if (!Object.is(ntcp.innerHTML, ntcpResponse.innerHTML))
             ntcpParent.replaceChild(ntcpResponse, ntcp);
+        } else if (summary) {
+          var summaryResponse = xhr.responseXML.getElementById("transportSummary");
+          var summaryParent = summary.parentNode;
+          if (!Object.is(summary.innerHTML, summaryResponse.innerHTML))
+            summaryParent.replaceChild(summaryResponse, summary);
         }
       }
     }
     window.addEventListener("pageshow", progressx.hide());
-    ntcp.addEventListener("mouseover", lazyload());
-    udp.addEventListener("mouseover", lazyload());
+    if (ntcp != null)
+        ntcp.addEventListener("mouseover", lazyload());
+    if (udp != null)
+        udp.addEventListener("mouseover", lazyload());
     xhr.send();
   }, 15000);
 }, true);
 </script>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide();lazyload());</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());window.addEventListener("pageshow", lazyload());</script>
 </body>
 </html>
