@@ -46,8 +46,9 @@ document.addEventListener("DOMContentLoaded", function() {
     var udp = document.getElementById("udp");
     var ntcp = document.getElementById("ntcp");
     var summary = document.getElementById("transportSummary");
+    var autorefresh = document.getElementById("autorefresh");
     xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
+      if (xhr.readyState==4 && xhr.status==200 && autorefresh.checked) {
         if (udp) {
           var udpResponse = xhr.responseXML.getElementById("udp");
           var udpParent = udp.parentNode;

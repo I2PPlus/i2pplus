@@ -162,7 +162,10 @@ public class PeerHelper extends HelperBase {
     private void renderSummary(Writer out) throws IOException {
         // summary
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3 id=\"transports\">").append(_t("Peer Connections")).append("</h3><table id=\"transportSummary\"><tr>")
+        buf.append("<h3 id=\"transports\">").append(_t("Peer Connections"))
+           .append("<label class=\"script\" hidden><input name=\"autorefresh\" id=\"autorefresh\" type=\"checkbox\" class=\"optbox slider\" checked=\"checked\">")
+           .append(_t("Auto-refresh")).append("</label></h3>\n")
+           .append("<table id=\"transportSummary\">\n<tr>")
            .append("<th>").append(_t("Transport")).append("</th>")
            .append("<th title=\"").append(_t("Active in the last minute")).append("\">").append(_t("Count")).append("</th>")
            .append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
@@ -215,7 +218,7 @@ public class PeerHelper extends HelperBase {
             }
             buf.append(">").append(cnt);
         }
-        buf.append("</td></tr></table>\n");
+        buf.append("</td></tr>\n</table>\n");
         out.write(buf.toString());
     }
 
@@ -343,10 +346,13 @@ public class PeerHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(4*1024);
         buf.append("<div id=\"ntcp\">\n<h3 id=\"ntcpcon\" title=\"")
            .append(_t("Current / maximum permitted")).append("\">")
-           .append(_t("NTCP connections")).append(":&nbsp; ").append(peers.size())
+//           .append(_t("NTCP connections")).append(":&nbsp; ").append(peers.size())
+           .append(_t("NTCP connections")).append(":&nbsp; ").append(nt.countActivePeers())
            .append(" / ").append(nt.getMaxConnections())
            .append("&nbsp;<span class=\"reachability\">").append(_t("Status")).append(": ")
-           .append(nt.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span></h3>\n")
+           .append(nt.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>")
+           .append("<label class=\"script\" hidden><input name=\"autorefresh\" id=\"autorefresh\" type=\"checkbox\" class=\"optbox slider\" checked=\"checked\">")
+           .append(_t("Auto-refresh")).append("</label></h3>\n")
            .append("<div class=\"widescroll\">\n<table id=\"ntcpconnections\">\n");
         if (peers.size() != 0) {
             buf.append("<tr><th class=\"peer\">").append(_t("Peer")).append("</th>" +
@@ -437,7 +443,8 @@ public class PeerHelper extends HelperBase {
 
         if (!peers.isEmpty()) {
             buf.append("<tr class=\"tablefooter\"><td class=\"peer\"><b>")
-               .append(ngettext("{0} peer", "{0} peers", peers.size()));
+//               .append(ngettext("{0} peer", "{0} peers", peers.size()));
+               .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
             buf.append("</b></td><td class=\"direction\">&nbsp;</td><td class=\"ipv6\">&nbsp;</td>" +
@@ -511,9 +518,10 @@ public class PeerHelper extends HelperBase {
         int numRTTPeers = 0;
 
         StringBuilder buf = new StringBuilder(4*1024);
-        buf.append("<div id=\"udp\">\n<h3 id=\"udpcon\" title=\"")
-           .append(_t("Current / maximum permitted")).append("\">")
-           .append(_t("UDP connections")).append(":&nbsp; ").append(peers.size())
+        buf.append("<div id=\"udp\">\n")
+           .append("<h3 id=\"udpcon\" title=\"").append(_t("Current / maximum permitted")).append("\">")
+//           .append(_t("UDP connections")).append(":&nbsp; ").append(peers.size())
+           .append(_t("UDP connections")).append(":&nbsp; ").append(ut.countActivePeers())
            .append(" / ").append(ut.getMaxConnections());
         //buf.append(". ").append(_t("Timeout")).append(": ").append(DataHelper.formatDuration2(_expireTimeout));
         final boolean isAdvanced = isAdvanced();
@@ -521,8 +529,9 @@ public class PeerHelper extends HelperBase {
             buf.append("&nbsp;<span class=\"reachability\">").append(_t("Status")).append(": ")
                .append(ut.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>");
         }
-        buf.append("</h3>\n");
-        buf.append("<div class=\"widescroll\">\n<table id=\"udpconnections\" ");
+        buf.append("<label class=\"script\" hidden><input name=\"autorefresh\" id=\"autorefresh\" type=\"checkbox\" class=\"optbox slider\" checked=\"checked\">")
+           .append(_t("Auto-refresh")).append("</label></h3>\n")
+           .append("<div class=\"widescroll\">\n<table id=\"udpconnections\" ");
         if (isAdvanced()) {
             buf.append("class=\"advancedview\"");
         }
@@ -784,7 +793,8 @@ public class PeerHelper extends HelperBase {
 
       if (numPeers > 0) {
         buf.append("<tr class=\"tablefooter\"><td class=\"peer\"><b>")
-           .append(ngettext("{0} peer", "{0} peers", peers.size()))
+//           .append(ngettext("{0} peer", "{0} peers", peers.size()))
+           .append(ngettext("{0} peer", "{0} peers", ut.countActivePeers()))
            .append("</b></td><td class=\"direction\">&nbsp;</td><td class=\"ipv6\">&nbsp;</td><td class=\"ssuversion\">&nbsp;</td><td class=\"idle\">&nbsp;</td>" +
                    "<td class=\"inout\" nowrap><span class=\"right\"><b>");
         String bwin = formatKBps(bpsIn).replace(".00", "");
