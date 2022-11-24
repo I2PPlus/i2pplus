@@ -684,6 +684,11 @@ h3[id="udpcon"]{width:auto}
 #peerdefs img[width="12"]{margin-right:3px;margin-left:2px}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center / 12px}
 #transportSummary th.out span{background:var(--out) no-repeat center center / 12px}
+#transports .script,#ntcpcon .script,#udpcon .script{margin: -4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
+#transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
+#transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
+#peers #autorefresh{margin-right:4px}
+
 /* profiles */
 .profilegroup{margin:3px 0 3px 10px;display:inline-block}
 .profilegroup:first-child{margin-top:6px}
@@ -1953,11 +1958,12 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #debug th:first-child{text-align:left}
 #debug td:last-child{vertical-align:top}
 #debug h2,#debug h3{border-radius:0}
-#debug h2{margin-top:11px;padding:10px 10px 8px;font-size:11.5pt;background:var(--bug) no-repeat right 6px center,var(--h3),#010;background-size:18px,2px}
+#debug h2{margin-top:11px;padding:10px 10px 8px;font-size:11.5pt;background:var(--bug) no-repeat right 10px center,var(--h3),#010;background-size:18px,2px}
 #debug h2#debug_portmapper{margin-top:15px}
 #debug h2 + hr,.buckets hr{display:none}
 #debug h3{border-width:1px;padding:5px 10px;font-size:10pt}
 .debug_container{margin-top:-11px;border:var(--border);padding:10px 15px;background:#000800}
+.debug_container:not(.buckets){columns:2 600px}
 .debug_container:empty::after{content:"None";display:inline-block;font-style:italic}
 .buckets{margin-top:-13px;margin-bottom:10px;padding-bottom:14px;max-height:600px;overflow:auto;word-break:break-all}
 .debug_container + h3,.debug_outboundsessions{margin-top:-1px}
@@ -1980,6 +1986,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #bucketSet code{user-select:all}
 .bucketsContainer,.bucketCount{margin:0;text-align:center;border:var(--border_soft);box-shadow:var(--highlight)}
 .bucketsContainer{margin:-1px 0 -8px;padding:5px;background:#000700}
+.bucketsContainer+br+br{display:none}
 .bucketCount{padding:3px 0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.7),rgba(0,0,0,0)),var(--label)}
 .bucket{margin:2px;padding:1px 4px;max-width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#880;font-family:var(--monospaced);box-shadow:0 0 0 1px #030,var(--highlight);background:#010;user-select:all}
 .bucket:empty{display:none}
