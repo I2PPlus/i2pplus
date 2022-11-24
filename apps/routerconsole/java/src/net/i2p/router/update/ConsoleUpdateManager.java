@@ -1832,7 +1832,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
         Collections.sort(list);
         for (String e : list) {
-            buf.append(append(e).append("<br>");
+            buf.append(e).append("<br>");
         }
     }
 
