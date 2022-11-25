@@ -239,10 +239,10 @@ public class PeerHelper extends HelperBase {
                     buf.append("<span class=\"tab2\">");
                 buf.append(_t(titles[i]));
             } else {
-                if (i == 2) {
+                if (i == 1) {
                     if (!_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_NTCP))
                         continue;
-                } else if (i == 3) {
+                } else if (i == 2) {
                     if (!_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP))
                         continue;
                 }
