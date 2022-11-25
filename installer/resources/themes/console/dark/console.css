@@ -676,6 +676,7 @@ h3[id="udpcon"]{width:auto}
 #udpconnections .tablefooter:hover td{border-top:var(--border)}
 #transportSummary th,#transportSummary td,#transportSummary .tablefooter td{padding:8px;width:14%}
 #transportSummary th:first-child,#transportSummary td:first-child,#transportSummary .tablefooter td:first-child{width:30%}
+#peers .tablefooter{background:var(--th)}
 #peerdefs{margin-bottom:11px}
 #peerdefs td{padding:4px;line-height:1.4;background:repeating-linear-gradient(180deg,#000,#000 1px,#000800 2px,#000800 3px)}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
@@ -688,6 +689,7 @@ h3[id="udpcon"]{width:auto}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
 #transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
 #peers #autorefresh{margin-right:4px}
+#peers .tab,#peers .tab2{min-width:96px}
 
 /* profiles */
 .profilegroup{margin:3px 0 3px 10px;display:inline-block}

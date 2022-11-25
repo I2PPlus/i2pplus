@@ -583,22 +583,6 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 .tablefooter,.tablefooter:hover td{background:linear-gradient(180deg,#010014,#010010 50%,#010010 100%)}
 .formaction{margin-bottom:-5px;padding:7px 5px;text-align:right}
 
-/* peers - sort icons */
-#ntcpconnections th,#udpconnections th{background:#000010}
-#udpconnections th{padding-top:3px;vertical-align:top;text-align:center}
-.sortup,.sortdown,.sortupactive,.sortdownactive{margin:4px 1px 0;padding:1px 0;width:16px;height:12px;display:inline-block;vertical-align:middle;text-align:center;border:1px solid #117;border:var(--border_inner);border-radius:1px;background-size:10px auto,100%}
-.sortup,.sortdown{box-shadow:var(--highlight);opacity:.5}
-.sortup img,.sortdown img,.sortupactive img,.sortdownactive img{margin:0;padding:0;opacity:0;width:16px;height:14px;vertical-align:middle;text-align:center}
-.sortup{background:var(--mv_up) no-repeat center center / 16px 14px,linear-gradient(180deg,#004,#000)}
-.sortdown{background:var(--mv_down) no-repeat center center / 16px 14px,linear-gradient(180deg,#004,#000)}
-.sortup:hover{border:1px solid var(--hover);background:var(--mv_up_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
-.sortdown:hover{border:1px solid var(--hover);background:var(--mv_down_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
-.sortup a:focus,.sortdown a:focus{margin-top:-1px;height:14px;width:16px;display:inline-block;border-radius:1px;background:rgba(237,207,255,.2)}
-.sortupactive,.sortdownactive{border:1px solid #005;box-shadow:inset 2px 2px 1px #000;opacity:1}
-.sortupactive{background:var(--mv_up_hover) no-repeat center center,#005}
-.sortdownactive{background:var(--mv_down_hover) no-repeat center center,#005}
-.backlogged{line-height:0;vertical-align:middle}
-
 /* configure */
 .optionlist{columns:500px auto;padding-bottom:1px}
 .optionlist label{min-width:300px;background:#001;break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
@@ -1565,6 +1549,31 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peerdefs{line-height:1.5}
 #peerdefs td{padding:3px}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
+#transportSummary td {text-align:center}
+#peers .tablefooter td{font-weight:700;background:var(--th)}
+#transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center / 12px}
+#transportSummary th.out span{background:var(--out) no-repeat center center / 12px}
+#transports .script,#ntcpcon .script,#udpcon .script{margin: -4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
+#transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
+#transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
+#peers #autorefresh{margin-right:4px}
+#peers .tab,#peers .tab2{min-width:96px}
+
+/* peers - sort icons */
+#ntcpconnections th,#udpconnections th{background:#000010}
+#udpconnections th{padding-top:3px;vertical-align:top;text-align:center}
+.sortup,.sortdown,.sortupactive,.sortdownactive{margin:4px 1px 0;padding:1px 0;width:16px;height:12px;display:inline-block;vertical-align:middle;text-align:center;border:1px solid #117;border:var(--border_inner);border-radius:1px;background-size:10px auto,100%}
+.sortup,.sortdown{box-shadow:var(--highlight);opacity:.5}
+.sortup img,.sortdown img,.sortupactive img,.sortdownactive img{margin:0;padding:0;opacity:0;width:16px;height:14px;vertical-align:middle;text-align:center}
+.sortup{background:var(--mv_up) no-repeat center center / 16px 14px,linear-gradient(180deg,#004,#000)}
+.sortdown{background:var(--mv_down) no-repeat center center / 16px 14px,linear-gradient(180deg,#004,#000)}
+.sortup:hover{border:1px solid var(--hover);background:var(--mv_up_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
+.sortdown:hover{border:1px solid var(--hover);background:var(--mv_down_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
+.sortup a:focus,.sortdown a:focus{margin-top:-1px;height:14px;width:16px;display:inline-block;border-radius:1px;background:rgba(237,207,255,.2)}
+.sortupactive,.sortdownactive{border:1px solid #005;box-shadow:inset 2px 2px 1px #000;opacity:1}
+.sortupactive{background:var(--mv_up_hover) no-repeat center center,#005}
+.sortdownactive{background:var(--mv_down_hover) no-repeat center center,#005}
+.backlogged{line-height:0;vertical-align:middle}
 
 /* banlist */
 #bannedpeercount{background:#000 var(--ban) no-repeat 15px center / 28px}
@@ -2472,6 +2481,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #peers th,#peers td{min-width:0}
 #peers th,#peers .tablefooter td{font-size:85%}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
+#peers #transportSummary .ipv6{display:table-cell}
 #peers .routerid{padding-right:5px}
 #tunnels .flag{margin-left:3px}
 #tunnels th,#tunnels td{padding-left:2px;padding-right:2px}

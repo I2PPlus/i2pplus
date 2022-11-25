@@ -22,6 +22,7 @@ p:empty{display:none}
 tt,code{font-size:8.5pt;font-weight:700;color:#050}
 code{text-align:left;font-size:8.5pt;color:#030}
 i{padding-right:2px}
+img + tt{margin-left:4px}
 ol{margin:0 0 10px;padding:0}
 ul{margin:20px 0;padding:0}
 table{margin:1px 0 5px;width:100%;font-size:9pt;border:1px solid var(--border_inner);border-collapse:collapse;background:#fafaff}
@@ -35,6 +36,7 @@ tr:last-child td{border-bottom:1px solid var(--border_inner)}
 th code{user-select:all}
 td.optionsave,.formaction,#addkeyring tr:last-child td{padding:8px 6px}
 td{padding:3px 5px;color:var(--ink);vertical-align:middle;border-top:var(--border_soft);border-bottom:var(--border_soft)}
+tt{font-size:8.5pt;font-weight:700;letter-spacing:.1em}
 tt::selection,.sybil_routerinfo th code::selection{color:#fff;background:#070}
 b,#routerinformation td:first-child{color:var(--ink_light)}
 h1,.confignav{position:relative}
@@ -102,7 +104,7 @@ h4.sb_info + hr + form{margin-bottom:-1px;padding-top:5px}
 #sb_internals a:hover,#sb_advanced a:hover,#sb_help a:hover{background:#ffd;border-radius:3px}
 #sb_internals td{padding:0}
 #sb_peers td:first-child,#sb_peersadvanced td:first-child,#sb_tunnels td:first-child,#sb_queue td:first-child,#sb_bandwidth td:first-child,#sb_general td:first-child,#sb_shortgeneral td:first-child,#sb_advancedgeneral td:first-child{text-transform:capitalize}
-#sidebar #sb_localtunnels{margin-top:-9px/*;border:var(--border_soft)*/}
+#sidebar #sb_localtunnels{margin-top:-9px}
 #sb_localtunnels tr:nth-child(odd){background:var(--row_odd)}
 #sb_localtunnels tr:nth-child(even){background:var(--row_even)}
 #sb_localtunnels tr:nth-child(n+2){border-top:1px solid #ededff}
@@ -870,7 +872,7 @@ h3#scheduledjobs + ol li::before{background:var(--timer) no-repeat 6px center/12
 .joblog hr{margin:15px 0}
 .joblog h3{margin-bottom:5px}
 
-.smallhead th,#ntcpconnections th{font-size:8pt}
+.smallhead th,#ntcpconnections th,#transportSummary th{font-size:8pt}
 .mediumtags{font-weight:700}
 .cells{padding-top:4px;padding-bottom:4px;border-left:var(--border_soft);border-top:var(--border_soft);border-bottom:var(--border_soft)}
 .tablefooter{background:#f8f8ff}
@@ -886,10 +888,6 @@ h3#scheduledjobs + ol li::before{background:var(--timer) no-repeat 6px center/12
 table#addkeyring tr:last-child td{padding:5px;border-top:1px solid var(--border_inner)}
 #refreshsidebar tr:first-child td{padding-left:50px;background:var(--timer) no-repeat 15px center/28px,var(--th)}
 #refreshsidebar tr:first-child td:last-child{background:var(--th)}
-
-/* peers,profiles,tunnels */
-tt{font-size:8.5pt;font-weight:700;letter-spacing:.1em}
-img + tt{margin-left:4px}
 
 /* peers */
 .confignav + #udp > h3#udpcon{margin-top:15px}
@@ -924,6 +922,17 @@ h3#udpcon{margin-top:7px}
 #ntcpconnections td:first-child,#udpconnections td:first-child{min-width:58px}
 #peer_thresholds{position:absolute;top:10px;width:100%}
 #thresholds tr:hover td,#leasesetdebug tr:hover td,tr:hover .cells{box-shadow:inset 0 0 0 1px #ffe;transition:ease all .05s}
+#transportSummary td {text-align:center;padding:8px;font-style:normal}
+#transportSummary tr:hover{background:#ffd}
+#peers .tablefooter td{font-weight:700;background:var(--th)}
+#transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center / 12px}
+#transportSummary th.out span{background:var(--out) no-repeat center center / 12px}
+#transports {margin-bottom:-2px}
+#transports .script,#ntcpcon .script,#udpcon .script{margin: -3px 0 -4px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
+#transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
+#transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
+#peers #autorefresh{margin-right:4px}
+#peers .tab,#peers .tab2{min-width:96px}
 
 /* tunnels */
 .tunneldisplay,.statusnotes,#config_service .infohelp,#config_service .formaction{position:relative;z-index:100}
@@ -2303,6 +2312,7 @@ p#pluginconfigtext{margin-top:11px}
 #peers #ntcpconnections th.queue{font-size:0}
 #peers #ntcpconnections th.queue::after{width:16px;height:16px;display:inline-block;background:var(--err) no-repeat center center/16px;content:""}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
+#peers #transportSummary .ipv6{display:table-cell}
 }
 
 @media screen and (max-width:1200px){

@@ -1745,6 +1745,20 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #peerdefs ul{margin:0;padding:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
 #peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;line-height:1.6;border:1px solid #bbd;box-shadow:var(--highlight),0 0 1px var(--bg4);background:rgba(250,250,255,.5)}
 #peer_thresholds h3,#profiles .widescroll + .tabletitle{margin-top:13px}
+#transportSummary th{font-size:85%}
+#transportSummary td{text-align:center;padding:8px;font-style:normal;border:1px solid var(--border_softer);background:#fff}
+#transportSummary th:first-child,#transportSummary td:first-child{border-left:1px solid var(--border_color)}
+#transportSummary th:last-child,#transportSummary td:last-child{border-right:1px solid var(--border_color)}
+#transportSummary tr:not(.tablefooter):hover td{background:#ffd}
+#peers .tablefooter td{font-weight:700;border-top:1px solid var(--border_color);border-bottom:1px solid var(--border_color);background:var(--th)}
+#transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center / 12px}
+#transportSummary th.out span{background:var(--out) no-repeat center center / 12px}
+#transports{margin-bottom:-2px}
+#transports .script,#ntcpcon .script,#udpcon .script{margin: -3px 0 -4px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
+#transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
+#transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
+#peers #autorefresh{margin-right:4px}
+#peers .tab,#peers .tab2{min-width:96px}
 
 /* routerinfo */
 #routerinfo p{padding:0;margin:-5px -5px 0;border:none;box-shadow:0 0 1px #ccf;filter:none}
@@ -1997,8 +2011,13 @@ iframe{height:0}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:12px}
 }
 
-@media screen and (max-width:1400px){#peers #ntcpconnections th.queue{font-size:0} #peers #ntcpconnections th.queue::after{width:16px;height:16px;display:inline-block;background:var(--err) no-repeat center center / 16px;content:""}
-#peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none} .cells.peer,.cells.direction{min-width:0} .cells.idle,.cells.inout{min-width:90px}}
+@media screen and (max-width:1400px){
+#peers #ntcpconnections th.queue{font-size:0}
+#peers #ntcpconnections th.queue::after{width:16px;height:16px;display:inline-block;background:var(--err) no-repeat center center / 16px;content:""}
+#peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
+#peers #transportSummary .ipv6{display:table-cell}
+.cells.peer,.cells.direction{min-width:0} .cells.idle,.cells.inout{min-width:90px}
+}
 
 @media screen and (max-width:1200px){
 .applink,.sitemapLink,.sitemapLabel{width:120px}
