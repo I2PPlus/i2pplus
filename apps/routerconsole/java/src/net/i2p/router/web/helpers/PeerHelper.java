@@ -9,6 +9,7 @@ import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -17,6 +18,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.TransportManager;
+import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.ntcp.NTCPConnection;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.PeerState;
@@ -24,6 +26,7 @@ import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.web.HelperBase;
 import static net.i2p.router.web.helpers.UDPSorters.*;
 import net.i2p.util.Addresses;
+import net.i2p.util.AddressType;
 import net.i2p.util.SystemVersion;
 
 
@@ -97,7 +100,9 @@ public class PeerHelper extends HelperBase {
      */
     private void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         if (_context.commSystem().isDummy()) {
-            out.write("<p class=\"infohelp\">No peer connections available (i2p.vmCommSystem=true)</p>");
+            out.write("<p class=\"infohelp\">");
+            out.write(_t("No peer connections available");
+            out.write(": <code>i2p.vmCommSystem=true</code></p>");
             return;
         }
         renderNavBar(out);
@@ -160,21 +165,32 @@ public class PeerHelper extends HelperBase {
      *  @since 0.9.56
      */
     private void renderSummary(Writer out) throws IOException {
-        // summary
+        Set<AddressType> connected = Addresses.getConnectedAddressTypes();
+        TransportUtil.IPv6Config ntcpConfig = TransportUtil.getIPv6Config(_context, "NTCP");
+        TransportUtil.IPv6Config ssuConfig = TransportUtil.getIPv6Config(_context, "SSU");
+        boolean showIPv4 = connected.contains(AddressType.IPV4) &&
+                           (ntcpConfig != TransportUtil.IPv6Config.IPV6_ONLY ||
+                            ssuConfig != TransportUtil.IPv6Config.IPV6_ONLY);
+        boolean showIPv6 = connected.contains(AddressType.IPV6) &&
+                           (ntcpConfig != TransportUtil.IPv6Config.IPV6_DISABLED ||
+                            ssuConfig != TransportUtil.IPv6Config.IPV6_DISABLED);
         StringBuilder buf = new StringBuilder(512);
         buf.append("<h3 id=\"transports\">").append(_t("Peer Connections"))
            .append("<label class=\"script\" hidden><input name=\"autorefresh\" id=\"autorefresh\" type=\"checkbox\" class=\"optbox slider\" checked=\"checked\">")
            .append(_t("Auto-refresh")).append("</label></h3>\n")
            .append("<table id=\"transportSummary\">\n<tr>")
            .append("<th>").append(_t("Transport")).append("</th>")
-           .append("<th title=\"").append(_t("Active in the last minute")).append("\">").append(_t("Count")).append("</th>")
-           .append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
-           .append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>")
-           .append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
-           .append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>")
-           .append("</tr>\n");
+           .append("<th title=\"").append(_t("Active in the last minute")).append("\">").append(_t("Count")).append("</th>");
+        if (showIPv4) {
+           buf.append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
+              .append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
+        }
+        if (showIPv6) {
+            buf.append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
+               .append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
+        }
+        buf.append("</tr>\n");
         boolean warnInbound = !_context.router().isHidden() && _context.router().getUptime() > 15*60*1000;
-        boolean warnIPv6 = Addresses.isConnectedIPv6();
         int[] totals = new int[5];
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         for (Map.Entry<String, Transport> e : transports.entrySet()) {
@@ -195,10 +211,14 @@ public class PeerHelper extends HelperBase {
                     totals[0] += total;
                 buf.append(">").append(total);
                 for (int i = 0; i < 4; i++) {
+                    if (!showIPv4 && i < 2)
+                        continue;
+                    if (!showIPv6 && i >= 2)
+                        break;
                     int cnt = counts[idx + i];
                     buf.append("</td><td");
                     if (cnt <= 0) {
-                        if ((i >= 2 || warnIPv6) && ((i & 0x01) != 0 || warnInbound))
+                        if ((i & 0x01) != 0 || warnInbound)
                             buf.append(" class=\"notice\"");
                     } else {
                         totals[i + 1] += cnt;
@@ -210,10 +230,14 @@ public class PeerHelper extends HelperBase {
         }
         buf.append("<tr class=\"tablefooter\"><td><b>").append(_t("Total")).append("</b>");
         for (int i = 0; i < 5; i++) {
+            if (!showIPv4 && i > 0 && i < 3)
+                continue;
+            if (!showIPv6 && i >= 3)
+                break;
             int cnt = totals[i];
             buf.append("</td><td");
             if (cnt <= 0) {
-                if ((i >= 3 || warnIPv6) && ((i & 0x01) == 0 || warnInbound))
+                if ((i & 0x01) == 0 || warnInbound)
                     buf.append(" class=\"warn\"");
             }
             buf.append(">").append(cnt);
