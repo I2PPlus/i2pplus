@@ -101,7 +101,7 @@ public class PeerHelper extends HelperBase {
     private void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         if (_context.commSystem().isDummy()) {
             out.write("<p class=\"infohelp\">");
-            out.write(_t("No peer connections available");
+            out.write(_t("No peer connections available"));
             out.write(": <code>i2p.vmCommSystem=true</code></p>");
             return;
         }
