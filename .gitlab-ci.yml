@@ -30,8 +30,9 @@ Java11:
   script:
     - java -version
     - ant installer
-    - ant updaterCompactWithDocs
-    - ant updater200CompactWithDocs
+    - ant updaterCompact
+#    - ant updaterCompactWithDocs
+#    - ant updater200CompactWithDocs
     - ant i2psnark
 #    - ant tarball
 
