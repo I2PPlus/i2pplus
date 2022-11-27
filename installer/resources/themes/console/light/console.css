@@ -1402,6 +1402,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo,p.hashdist + a[name] + table.syb
 #netdblookup input[type=checkbox]{margin-left:3px}
 #netdblookup input[type=text]{margin-top:5px;margin-bottom:5px}
 #netdblookup tr:nth-last-child(n+4) input[type=text]{width:calc(100% - 5px)}
+#netdblookup select{margin-left:3px;width:calc(100% - 5px)}
 #netdblookup button.search{padding-left:22px;background:var(--search) no-repeat 6px center/12px,var(--btn)}
 #netdblookup button.search:hover{background:var(--search) no-repeat 6px center/12px,var(--btn_hover)}
 

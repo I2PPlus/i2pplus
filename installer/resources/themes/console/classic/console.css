@@ -1152,7 +1152,7 @@ p.family + p.family,p.sybil_info + p.sybil_info{margin-top:-4px}
 #netdblookup td:nth-child(odd){padding-right:0;white-space:nowrap;text-align:right;font-weight:700}
 #netdblookup td:nth-child(even){width:50%}
 #netdblookup td.subheading{text-align:left}
-#netdblookup tr:nth-last-child(n+3) input[type=text]{width:calc(100% - 8px)}
+#netdblookup tr:nth-last-child(n+3) input[type=text],#netdblookup select{width:calc(100% - 8px)}
 #netdblookup tr:nth-last-child(2) input[type=text]{width:calc(45% + 2px)}
 #closetorouter{margin-left:6px}
 .subheading{padding:10px;text-align:left;border:var(--border);background:var(--bg)}

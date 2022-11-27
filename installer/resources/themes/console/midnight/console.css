@@ -1155,7 +1155,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"]{padding:10px;word-spacing
 .subheading b{font-size:10pt}
 #netdblookup .optbox{margin:10px}
 #netdblookup .optionsave{padding:10px}
-#netdblookup tr:nth-last-child(n+3) input[type=text]{width:calc(100% - 30px)}
+#netdblookup select,#netdblookup tr:nth-last-child(n+3) input[type=text]{width:calc(100% - 30px)}
 #netdb .tabletitle{margin-bottom:-2px}
 .sybil_distance th{padding:5px;text-align:left}
 .sybil_distance th:last-child,.sybil_distance td:last-child{text-align:right}

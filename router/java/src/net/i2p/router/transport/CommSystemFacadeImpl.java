@@ -617,14 +617,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @return Map of two-letter lower case code to untranslated country name, unmodifiable
      * @since 0.9.53
      */
-
-/*
     public Map<String, String> getCountries() {
         if (_geoIP == null)
             return Collections.emptyMap();
         return _geoIP.getCountries();
     }
-*/
 
     /** Provide a consistent "look" for displaying router IDs in the console */
     @Override

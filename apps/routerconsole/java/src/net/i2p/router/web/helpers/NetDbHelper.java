@@ -1,9 +1,12 @@
 package net.i2p.router.web.helpers;
 
 import java.io.IOException;
+import java.text.Collator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
@@ -11,6 +14,8 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.SystemVersion;
 import net.i2p.router.sybil.Analysis;
 import net.i2p.router.web.FormHandler;
+import net.i2p.router.web.Messages;
+
 
 /**
  *  /netdb
@@ -414,19 +419,45 @@ public class NetDbHelper extends FormHandler {
                    "<tr><td colspan=\"4\" class=\"subheading\"><b>Enter one search field <i>only</i></b></td></tr>\n" +
                    "<tr><td><b>Capabilities</b></td><td><input type=\"text\" name=\"caps\" title=\"e.g. f or XOfR\"></td>\n" +
                    "<td><b>Cost</b></td><td><input type=\"text\" name=\"cost\"></td></tr>\n" +
-                   "<tr><td><b>Country Code</b></td><td><input type=\"text\" name=\"c\" title=\"e.g. ru\"></td>\n" +
+                   //"<tr><td><b>Country Code</b></td><td><input type=\"text\" name=\"c\" title=\"e.g. ru\"></td>\n" +
+                   "<tr><td><b>Country</b></td><td><select name=\"c\"><option value=\"\" selected=\"selected\"></option>");
+        Map<String, String> sorted = new TreeMap<String, String>(Collator.getInstance());
+        for (Map.Entry<String, String> e : _context.commSystem().getCountries().entrySet()) {
+            String tr = Messages.getString(e.getValue(), _context, Messages.COUNTRY_BUNDLE_NAME);
+            sorted.put(tr, e.getKey());
+        }
+        for (Map.Entry<String, String> e : sorted.entrySet()) {
+            _out.write("<option value=\"" + e.getValue() + "\">" + e.getKey() + "</option>\n");
+        }
+        _out.write("</select></td>" +
                    "<td><b>Router Family</b></td><td><input type=\"text\" name=\"fam\"></td></tr>\n" +
                    "<tr><td><b>Hash Prefix</b></td><td><input type=\"text\" name=\"r\"></td>\n" +
                    "<td><b>IP Address</b></td><td><input type=\"text\" name=\"ip\" title=\"IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6\"></td></tr>\n" +
-                   "<tr><td><b>Hostname or b32</b></td><td><input type=\"text\" name=\"ls\"></td><td></td></tr>\n" +
+                   "<tr><td><b>Hostname or b32</b></td><td><input type=\"text\" name=\"ls\"></td><td></td><td></td></tr>\n" +
                    "<tr><td><b>IPv6 Prefix</b></td><td><input type=\"text\" name=\"ipv6\"></td>\n" +
                    "<td><b>MTU</b></td><td><input type=\"text\" name=\"mtu\"></td></tr>\n" +
                    "<tr><td><b>Port Number</b></td><td><input type=\"text\" name=\"port\"></td>\n" +
-                   "<td><b>Signature Type</b></td><td><input type=\"text\" name=\"type\"></td></tr>\n" +
+                   //"<td><b>Signature Type</b></td><td><input type=\"text\" name=\"type\"></td></tr>\n" +
+                   "<td><b>Signature Type</b></td><td><select name=\"type\"><option value=\"\" selected=\"selected\"></option>");
+        for (SigType type : EnumSet.allOf(SigType.class)) {
+            _out.write("<option value=\"" + type + "\">" + type + "</option>\n");
+        }
+        _out.write("</select></td></tr>\n" +
                    "<tr><td><b>SSU Capabilities</b></td><td><input type=\"text\" name=\"ssucaps\"></td>\n" +
-                   "<td><b>Encryption Type</b></td><td><input type=\"text\" name=\"etype\"></td></tr>\n" +
+                   //"<td><b>Encryption Type</b></td><td><input type=\"text\" name=\"etype\"></td></tr>\n" +
+                   "<td><b>Encryption Type</b></td><td><select name=\"etype\"><option value=\"\" selected=\"selected\"></option>");
+        for (EncType type : EnumSet.allOf(EncType.class)) {
+            _out.write("<option value=\"" + type + "\">" + type + "</option>\n");
+        }
+        _out.write("</select></td></tr>\n" +
                    "<tr><td><b>Router Version</b></td><td><input type=\"text\" name=\"v\"></td>\n" +
-                   "<td><b>Transport</b></td><td><input type=\"text\" name=\"tr\" title=\"e.g. SSU or NTCP2\"></td></tr>\n" +
+                   //"<td><b>Transport</b></td><td><input type=\"text\" name=\"tr\" title=\"e.g. SSU or NTCP2\"></td></tr>\n" +
+                   "<td><b>Transport</b></td><td><select name=\"tr\"><option value=\"\" selected=\"selected\">" +
+                   "<option value=\"NTCP\">NTCP</option>\n" +
+                   "<option value=\"NTCP2\">NTCP2</option>\n" +
+                   "<option value=\"SSU\">SSU</option>\n" +
+                   "<option value=\"SSU2\">SSU2</option>\n" +
+                   "</select></td></tr>\n" +
                    "<tr><td colspan=\"4\" class=\"subheading\"><b>Add Sybil analysis (must pick one above)</b></td></tr>\n" +
                    "<tr id=\"sybilSearch\"><td><b>Sybil close to</b></td><td colspan=\"3\"><input type=\"text\" name=\"sybil2\" title=\"Router hash, destination hash, b32, or from address book\">&nbsp;" +
                    "<label for=\"closetorouter\"><b>or Sybil close to this router</b></label><input type=\"checkbox\" class=\"optbox\" value=\"1\" name=\"sybil\" id=\"closetorouter\"></td></tr>\n" +

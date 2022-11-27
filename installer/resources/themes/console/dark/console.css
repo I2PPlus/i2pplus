@@ -1094,6 +1094,7 @@ p.family + p.family,.sybil_info + .sybil_info{margin-top:-4px}
 #netdblookup td.optionsave{padding:10px}
 #netdblookup .optbox{margin:10px }
 #netdblookup input[type=text]{width:calc(100% - 11px)}
+#netdblookup select{width:calc(100% - 10px)}
 
 /* leasesets */
 .leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:var(--border)}
