@@ -419,7 +419,6 @@ public class NetDbHelper extends FormHandler {
                    "<tr><td colspan=\"4\" class=\"subheading\"><b>Enter one search field <i>only</i></b></td></tr>\n" +
                    "<tr><td><b>Capabilities</b></td><td><input type=\"text\" name=\"caps\" title=\"e.g. f or XOfR\"></td>\n" +
                    "<td><b>Cost</b></td><td><input type=\"text\" name=\"cost\"></td></tr>\n" +
-                   //"<tr><td><b>Country Code</b></td><td><input type=\"text\" name=\"c\" title=\"e.g. ru\"></td>\n" +
                    "<tr><td><b>Country</b></td><td><select name=\"c\"><option value=\"\" selected=\"selected\"></option>");
         Map<String, String> sorted = new TreeMap<String, String>(Collator.getInstance());
         for (Map.Entry<String, String> e : _context.commSystem().getCountries().entrySet()) {
@@ -430,10 +429,11 @@ public class NetDbHelper extends FormHandler {
             _out.write("<option value=\"" + e.getValue() + "\">" + e.getKey() + "</option>\n");
         }
         _out.write("</select></td>" +
-                   "<td><b>Router Family</b></td><td><input type=\"text\" name=\"fam\"></td></tr>\n" +
+                   "<td><b>Country Code</b></td><td><input type=\"text\" name=\"c\" title=\"e.g. ru\"></td></tr>\n" +
                    "<tr><td><b>Hash Prefix</b></td><td><input type=\"text\" name=\"r\"></td>\n" +
                    "<td><b>IP Address</b></td><td><input type=\"text\" name=\"ip\" title=\"IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6\"></td></tr>\n" +
-                   "<tr><td><b>Hostname or b32</b></td><td><input type=\"text\" name=\"ls\"></td><td></td><td></td></tr>\n" +
+                   "<tr><td><b>Hostname or b32</b></td><td><input type=\"text\" name=\"ls\"></td>\n" +
+                   "<td><b>Router Family</b></td><td><input type=\"text\" name=\"fam\"></td></tr>\n" +
                    "<tr><td><b>IPv6 Prefix</b></td><td><input type=\"text\" name=\"ipv6\"></td>\n" +
                    "<td><b>MTU</b></td><td><input type=\"text\" name=\"mtu\"></td></tr>\n" +
                    "<tr><td><b>Port Number</b></td><td><input type=\"text\" name=\"port\"></td>\n" +
