@@ -157,7 +157,9 @@ function refreshTorrents(timestamp) {
             if (thead && typeof theadResponse !== "undefined" && !Object.is(thead.innerHTML, theadResponse.innerHTML))
               thead.innerHTML = theadResponse.innerHTML;
               setLinks();
-              initFilterBar();
+              if (filterbar) {
+                  initFilterBar();
+              }
           }
         }
 
@@ -167,7 +169,9 @@ function refreshTorrents(timestamp) {
             if (typeof mainsectionResponse !== "undefined" && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML))
               mainsection.innerHTML = mainsectionResponse.innerHTML;
               setLinks();
-              initFilterBar();
+              if (filterbar) {
+                  initFilterBar();
+              }
           } else if (files) {
             var dirlist = document.getElementById("dirlist");
             var notfound = document.getElementById("NotFound");
