@@ -16,6 +16,7 @@ function initToggle() {
     if (shrinkLog) {
         shrinkLog.remove();
     }
+    localStorage.setItem("screenlog", "collapsed");
   }
 
   if (mainsection) {
@@ -29,6 +30,7 @@ function initToggle() {
       x.setAttribute("id", "expandLog");
       document.head.appendChild(x);
       screenlog.classList.add("xpanded");
+      localStorage.setItem("screenlog", "expanded")
     }
 
     function shrink() {
@@ -40,6 +42,33 @@ function initToggle() {
       s.setAttribute("id", "shrinkLog");
       document.head.appendChild(s);
       screenlog.classList.add("collapsed");
+      localStorage.setItem("screenlog", "collapsed");
+    }
+
+    function checkStatus() {
+      const logStatus = localStorage.getItem("screenlog");
+      switch (logStatus) {
+        case "expanded":
+          expand();
+          break;
+        case "collapsed":
+          shrink();
+          break;
+        default:
+          shrink();
+      }
+    }
+
+    const logStatus = localStorage.getItem("screenlog");
+    switch (logStatus) {
+      case "expanded":
+       expand();
+        break;
+      case "collapsed":
+        shrink();
+        break;
+      default:
+        shrink();
     }
 
   }
@@ -47,13 +76,20 @@ function initToggle() {
   const ex = document.getElementById("expand");
   const sh = document.getElementById("shrink");
 
-  if (sh)
+  if (sh) {
     sh.addEventListener("click", shrink, false);
-  if (ex)
+  }
+
+  if (ex) {
     ex.addEventListener("click", expand, false);
+  }
 
 }
 
-screenlog.addEventListener("mouseover", function() {
+screenlog.addEventListener("click", function() {
+  initToggle();
+}, false);
+
+document.addEventListener("DOMContentLoaded", function() {
   initToggle();
 }, false);
