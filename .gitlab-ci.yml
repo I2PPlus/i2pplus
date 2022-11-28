@@ -19,6 +19,7 @@ before_script:
   # install dependencies to build EXEs and packages
   - apt-get update -yqq
   - apt-get install -yqq libc6-i386 ant gettext zip apt-utils swapspace zram-config
+  - set ANT_OPTS=-Xmx2G
 
 Java11:
   stage: build
