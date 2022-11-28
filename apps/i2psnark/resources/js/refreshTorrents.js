@@ -46,12 +46,13 @@ function refreshTorrents(timestamp) {
 
   setLinks();
   navbar.addEventListener("mouseover", setLinks, false);
-  if (torrents)
+  if (debug) {
     debug.addEventListener("mouseover", setLinks, false);
+  }
 
   var xhrsnark = new XMLHttpRequest();
 
-  if (torrents) {
+  if (torrents || noload || down) {
   xhrsnark.open("GET", url);
   xhrsnark.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
   xhrsnark.responseType = "document";
@@ -70,7 +71,9 @@ function refreshTorrents(timestamp) {
         var debuginfo = document.getElementsByClassName("debuginfo");
         if (torrents) {
           var torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
-          var filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
+          if (filterbar) {
+            var filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
+          }
         }
 
         if (down || noload || (torrents && (!filterbar && typeof filterbarResponse !== "undefined")))
@@ -205,7 +208,7 @@ function refreshTorrents(timestamp) {
     }
   }
   xhrsnark.send();
-}
+  }
 }
 
 export {refreshTorrents};
