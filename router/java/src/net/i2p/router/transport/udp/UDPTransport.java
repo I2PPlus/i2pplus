@@ -426,6 +426,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             }
         }
         _enableSSU2 = enableSSU2;
+        if (!_enableSSU1 && !_enableSSU2)
+            throw new IllegalArgumentException("Must enable SSU 1 or 2");
         byte[] ikey = null;
         String b64Ikey = null;
         if (_enableSSU2) {
@@ -685,7 +687,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _establisher = new EstablishmentManager(_context, this);
 
         if (_handler == null)
-            _handler = new PacketHandler(_context, this, _enableSSU2, _establisher, _inboundFragments, _testManager, _introManager);
+            _handler = new PacketHandler(_context, this, _enableSSU1, _enableSSU2, _establisher,
+                                         _inboundFragments, _testManager, _introManager);
 
         // See comments in DummyThrottle.java
         if (USE_PRIORITY && _refiller == null)
@@ -768,7 +771,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(newPort));
                     localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
-                    RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
+                    RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                     replaceCurrentExternalAddress(local, true);
                     if (isIPv6Firewalled() || _context.getBooleanProperty(PROP_IPV6_FIREWALLED)) {
                         setReachabilityStatus(Status.IPV4_UNKNOWN_IPV6_FIREWALLED, true);
@@ -783,7 +786,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(newPort));
                     localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
-                    RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
+                    RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                     replaceCurrentExternalAddress(local, false);
                     if (isIPv4Firewalled()) {
                         setReachabilityStatus(Status.IPV4_FIREWALLED_IPV6_UNKNOWN);
@@ -965,8 +968,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             (!SSU2Util.ENABLE_RELAY && (addr.getHost() == null || addr.getPort() <= 0)) ||
             (!v.equals(SSU2_VERSION) && !v.startsWith(SSU2_VERSION_ALT))) {
             // his address is SSU1 or is outbound SSU2 only
-            //return (rv == 1 && _enableSSU1) ? 1 : 0;
-            return (rv == 1) ? 1 : 0;
+            return (rv == 1 && _enableSSU1) ? 1 : 0;
         }
         // his address is SSU2
         // do not validate the s/i b64, we will just catch it later
@@ -1463,7 +1465,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                                 OrderedProperties localOpts = new OrderedProperties();
                                 localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(ourPort));
                                 localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
-                                RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
+                                RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                                 replaceCurrentExternalAddress(local, true);
                                 if (_log.shouldWarn())
                                     _log.warn("New IPv6 address, assuming still firewalled [" +
@@ -2473,6 +2475,13 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         return _enableSSU2 ? STYLE2 : null;
     }
 
+    /**
+     * @return "SSU" unless SSU1 disabled, then "SSU2"
+     * @since 0.9.57
+     */
+    private String getPublishStyle() {
+        return _enableSSU1 ? STYLE : STYLE2;
+    }
 
     @Override
     public void send(OutNetMessage msg) {
@@ -2803,7 +2812,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 if (old == null || !host.equals(old.getHost()) || port != old.getPort()) {
                     options.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
                     options.setProperty(UDPAddress.PROP_HOST, host);
-                    RouterAddress local = new RouterAddress(STYLE, options, SSU_OUTBOUND_COST);
+                    RouterAddress local = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
                     replaceCurrentExternalAddress(local, isIPv6);
                     options = new OrderedProperties();
                 }
@@ -2828,7 +2837,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             if (_enableSSU2 && (mtu >= PeerState2.MIN_MTU || mtu == 0))
                 addSSU2Options(options);
             RouterAddress current = getCurrentAddress(false);
-            RouterAddress addr = new RouterAddress(STYLE, options, SSU_OUTBOUND_COST);
+            RouterAddress addr = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
             if (!addr.deepEquals(current)) {
                 if (_log.shouldInfo())
                     _log.info("Address rebuilt: " + addr, new Exception());
@@ -2919,7 +2928,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             }
             if (_enableSSU2 && (mtu >= PeerState2.MIN_MTU || mtu == 0))
                 addSSU2Options(options);
-            RouterAddress addr = new RouterAddress(STYLE, options, cost);
+            RouterAddress addr = new RouterAddress(getPublishStyle(), options, cost);
 
             RouterAddress current = getCurrentAddress(isIPv6);
             boolean wantsRebuild = !addr.deepEquals(current);
@@ -2933,7 +2942,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
                     localOpts.setProperty(UDPAddress.PROP_HOST, host);
-                    local = new RouterAddress(STYLE, localOpts, cost);
+                    local = new RouterAddress(getPublishStyle(), localOpts, cost);
                 }
                 replaceCurrentExternalAddress(local, isIPv6);
             }
@@ -2955,7 +2964,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                         opts.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
                     if (_enableSSU2)
                         addSSU2Options(opts);
-                    RouterAddress addr6 = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
+                    RouterAddress addr6 = new RouterAddress(getPublishStyle(), opts, SSU_OUTBOUND_COST);
                     replaceAddress(addr6);
                 }
                 // warning, this calls back into us with allowRebuildRouterInfo = false,
@@ -2980,7 +2989,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 OrderedProperties localOpts = new OrderedProperties();
                 localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
                 localOpts.setProperty(UDPAddress.PROP_HOST, host);
-                RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
+                RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                 replaceCurrentExternalAddress(local, isIPv6);
             }
             // Make an empty "4" or "6" address
@@ -2990,7 +2999,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 opts.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
             if (_enableSSU2 && (mtu >= PeerState2.MIN_MTU || mtu == 0))
                 addSSU2Options(opts);
-            RouterAddress addr = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
+            RouterAddress addr = new RouterAddress(getPublishStyle(), opts, SSU_OUTBOUND_COST);
             RouterAddress current = getCurrentAddress(isIPv6);
             boolean wantsRebuild = !addr.deepEquals(current);
             if (!wantsRebuild)
