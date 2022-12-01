@@ -36,10 +36,9 @@
 <div id="troubleshoot">
 <h2><%=intl._t("Troubleshooting")%>&nbsp;I2P+</h2>
 
-<ul>
-
 <p><%=intl._t("If you're experiencing issues with running I2P+, the following information may help identify and resolve the problem:")%></p>
 
+<ul>
 <li><b><%=intl._t("Be Patient!")%></b><br>
 <%=intl._t("I2P+ may be slow to integrate into network the first time you run it as it bootstraps into the network and learns of additional peers. The longer your I2P+ router is running, the better it will perform, so try and keep your router on as long as you can, 24/7 if possible! If, after 30 minutes, your <i>Active: [connected/recent]</i> count still has less than 10 peers, or your total number of <i>Integrated</i> peers is less than 5, there are several things you can do to check for problems:")%></li>
 
