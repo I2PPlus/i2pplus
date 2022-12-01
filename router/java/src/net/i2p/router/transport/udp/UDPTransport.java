@@ -879,7 +879,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         UDPPacket.clearCache();
         UDPAddress.clearCache();
         _lastInboundIPv6 = 0;
-        _hmac.clearCache();
+        if (_hmac != null)
+            _hmac.clearCache();
     }
 
     /**

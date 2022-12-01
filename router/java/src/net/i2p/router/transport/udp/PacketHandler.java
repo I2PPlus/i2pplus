@@ -290,9 +290,15 @@ class PacketHandler {
             }
         }
 
+        ///////////
+        // Begin SSU1-only methods (except group 4)
+        ///////////
+
         /**
          * Group 1: Established conn
          * Decrypt and validate the packet then call handlePacket()
+         *
+         * SSU1 only.
          */
         private void receivePacket(UDPPacketReader reader, UDPPacket packet, PeerState state) {
             AuthType auth = AuthType.NONE;
@@ -345,6 +351,9 @@ class PacketHandler {
          * Here we attempt to validate the packet with our intro key,
          * then decrypt the packet with our intro key,
          * then call handlePacket().
+         *
+         * This falls back to SSU2 for PeerType.NEW_PEER.
+         * If SSU1 is disabled, call receiveSSU2Packet() directly, don't call this.
          *
          * @param peerType OUTBOUND_FALLBACK, INBOUND_FALLBACK, or NEW_PEER
          */
@@ -480,6 +489,8 @@ class PacketHandler {
         }
 
         /**
+         * SSU1 only.
+         *
          * @param state non-null
          */
         private void receivePacket(UDPPacketReader reader, UDPPacket packet, InboundEstablishState state) {
@@ -489,6 +500,8 @@ class PacketHandler {
         /**
          * Group 2: Inbound establishing conn
          * Decrypt and validate the packet then call handlePacket()
+         *
+         * SSU1 only.
          *
          * @param state non-null
          * @param allowFallback if it isn't valid for this establishment state, try as a non-establishment packet
@@ -529,6 +542,8 @@ class PacketHandler {
         /**
          * Group 3: Outbound establishing conn
          * Decrypt and validate the packet then call handlePacket()
+         *
+         * SSU1 only.
          *
          * @param state non-null
          */
@@ -800,6 +815,8 @@ class PacketHandler {
             }
         }
     }
+
+    //// End SSU1-only methods ////
 
     //// Begin SSU2 Handling ////
 
