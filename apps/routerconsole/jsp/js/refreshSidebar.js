@@ -1,6 +1,8 @@
 /* RefreshSidebar by dr|z3d */
 /* License: AGPLv3 or later */
 
+import {initSectionToggle} from "/js/sectionToggle.js";
+
 function refreshSidebar(timestamp) {
   'use strict';
   var pageVisibility = document.visibilityState;
@@ -13,6 +15,8 @@ function refreshSidebar(timestamp) {
   var netstatus = document.getElementById("sb_status");
   var sb = document.querySelector("#sidebar");
   var shutdownstatus = document.getElementById("sb_shutdownStatus");
+
+  var toggle = document.querySelectorAll(".toggleSection");
 
   xhr.open("GET", "/xhr1.jsp?requestURI=" + uri + "&t=" + new Date().getTime(), true);
   xhr.responseType = "document";
@@ -27,7 +31,6 @@ function refreshSidebar(timestamp) {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
         var sbResponse = xhr.responseXML.getElementById("sb");
-
         if (down) {
           uncollapse();
           refreshAll();
@@ -35,11 +38,12 @@ function refreshSidebar(timestamp) {
 
         function updateVolatile() {
           uncollapse();
-          var updating = document.querySelectorAll(".volatile:not(.hide");
-          var updatingResponse = xhr.responseXML.querySelectorAll(".volatile:not(.hide)");
+          initSectionToggle();
+          var updating = document.querySelectorAll(".volatile");
+          var updatingResponse = xhr.responseXML.querySelectorAll(".volatile");
           var i;
           for (i = 0; i < updating.length; i += 1) {
-            if (typeof updating[i] !== "undefined" && typeof updatingResponse[i] !== "undefined") {
+            if (typeof updating[i] !== "undefined" && !typeof updating[i].classList.contains("hide") && typeof updatingResponse[i] !== "undefined") {
               if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
                 if (updating.length === updatingResponse.length) {
                   updating[i].outerHTML = updatingResponse[i].outerHTML;
@@ -89,7 +93,7 @@ function refreshSidebar(timestamp) {
           var c;
           for (c = 0; c < collapsed.length; c += 1) {
             var styleHidden = collapsed[c].getAttribute("hidden");
-            if (styleHidden) {
+            if (styleHidden && !styleHidden.classList.contains("hide")) {
               collapsed[c].removeAttribute("hidden");
             }
           }
@@ -164,13 +168,14 @@ function refreshSidebar(timestamp) {
 
           hideSections();
           modElements();
-
         }
         setTimeout(isDown, 2950);
       }
     }
   };
+  xhr.addEventListener("load", initSectionToggle);
   xhr.send();
+
 }
 
 export {refreshSidebar};

@@ -7,24 +7,23 @@
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   var visibility = document.visibilityState;
   var repeat;
+  refreshSidebar();
   if (refresh > 0) {
-    window.requestAnimationFrame(refreshSidebar);
     function runTimer() {
       var repeat = setTimeout(function updateSidebar() {
-        window.requestAnimationFrame(refreshSidebar);
+        refreshSidebar();
         setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
       }, <%=intl.getRefresh()%> * 1000);
     }
     runTimer();
-  }
+    }
 </script>
 <%
     } else {
 %>
-
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
-  window.requestAnimationFrame(refreshSidebar);
+  window.addEventListener("pageshow", refreshSidebar);
 </script>
 <%
     }

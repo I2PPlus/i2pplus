@@ -707,7 +707,7 @@ public class SummaryHelper extends HelperBase {
         if (link) {
            buf.append("</a>");
         }
-        buf.append("</h3>\n<hr class=\"b\">\n");
+        buf.append("<input type=\"checkbox\" id=\"toggle_sb_localtunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
             DataHelper.sort(clients, new AlphaComparator());
             buf.append("<table id=\"sb_localtunnels\" class=\"volatile\">");
@@ -1054,7 +1054,8 @@ public class SummaryHelper extends HelperBase {
                    .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
                    .append("</b></h4>");
             }
-        } else if (dver != null && _context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress()) {
+        } else if (dver != null && _context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress() &&
+                   !_context.getProperty("router.updatePolicy").equals("install")) {
             buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update volatile\"><b>")
                .append(_t("Updating after restart")).append("&hellip;</b></h4>");
         }
@@ -1112,7 +1113,7 @@ public class SummaryHelper extends HelperBase {
                     System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
                 System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce+"");
                 String uri = getRequestURI();
-                buf.append("<form action=\"").append(uri).append("\" method=\"POST\" class=\"volatile\">\n")
+                buf.append("<form id=\"sb_updateform\" action=\"").append(uri).append("\" method=\"POST\" class=\"volatile\" target=\"processSidebarForm\">\n")
                    .append("<input type=\"hidden\" name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
                 if (avail) {
                     buf.append("<span id=\"updateAvailable\" class=\"volatile\">").append(_t("Release update available")).append("<br><i>")

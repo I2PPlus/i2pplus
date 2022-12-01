@@ -163,7 +163,7 @@ class SummaryBarRenderer {
            .append(_t("I2P Router Help &amp; FAQ"))
            .append("\">")
            .append(_t("Help &amp; FAQ"))
-           .append("</a></h3><hr class=\"b\">\n" +
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_help\" class=\"toggleSection script\" checked hidden></h3><hr class=\"b\">\n" +
                    "<table id=\"sb_help\">\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
@@ -361,7 +361,8 @@ class SummaryBarRenderer {
                .append(_t("Configure startup of clients and webapps (services); manually start dormant services"))
                .append("\">")
                .append(_t("Services"))
-               .append("</a></h3>\n<hr class=\"b\">\n<table id=\"sb_services\" class=\"volatile collapse\">\n<tr>\n<td>");
+               .append("</a><input type=\"checkbox\" id=\"toggle_sb_services\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n")
+               .append("<table id=\"sb_services\" class=\"volatile collapse\">\n<tr>\n<td>");
             for (String row : svcs.values()) {
                 buf.append(row);
             }
@@ -421,7 +422,7 @@ class SummaryBarRenderer {
            .append(_t("I2P Router Sitemap"))
            .append("\">")
            .append(_t("Internals"))
-           .append("</a></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_internals\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_internals\" class=\"volatile collapse\">\n<tr>\n<td>\n");
 
         // Store all items in map so they are sorted by translated name, then output
@@ -543,7 +544,7 @@ class SummaryBarRenderer {
            .append(_t("Advanced Configuration"))
            .append("\" href=\"/configadvanced\" target=\"_top\">")
            .append(_t("Advanced"))
-           .append("</a></h3>\n")
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_advanced\" class=\"toggleSection script\" checked hidden></h3>\n")
 
            .append("<hr class=\"b\">\n<table id=\"sb_advanced\" class=\"collapse\">\n<tr><td>");
 
@@ -622,7 +623,7 @@ class SummaryBarRenderer {
            .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
            .append("\">")
            .append(_t("Router Info"))
-           .append("</a></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_general\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
 
                    "<table id=\"sb_general\" class=\"volatile\">" +
                    "<tr title=\"")
@@ -682,7 +683,7 @@ class SummaryBarRenderer {
            .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
            .append("\">")
            .append(_t("Router Info"))
-           .append("</a></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_advancedgeneral\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
 
                    "<table id=\"sb_advancedgeneral\" class=\"volatile\">\n" +
                    "<tr title=\"")
@@ -806,7 +807,7 @@ class SummaryBarRenderer {
                .append(_t("Configure I2P Updates"))
                .append("\">")
                .append(_t("Update Status"))
-               .append("</a></h3>\n<hr class=\"b\">\n")
+               .append("</a><input type=\"checkbox\" id=\"toggle_sb_updatesection\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n")
                .append(updateStatus)
                .append("\n</div>\n");
         }
@@ -825,7 +826,7 @@ class SummaryBarRenderer {
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
-           .append("</a></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_peers\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_peers\" class=\"volatile\">\n" +
                    "<tr title=\"");
         if (isAdvanced())
@@ -906,7 +907,7 @@ class SummaryBarRenderer {
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
-           .append("</a></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_peersadvanced\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_peersadvanced\" class=\"volatile\">\n" +
                    "<tr title=\"")
            .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"))
@@ -992,7 +993,7 @@ class SummaryBarRenderer {
            .append(_t("Configure router bandwidth allocation"))
            .append("\" target=\"_top\">")
            .append(_t("Bandwidth in/out"))
-           .append("</a></h3>\n<hr class=\"b\">" +
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_bandwidth\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">" +
                    "<table id=\"sb_bandwidth\" class=\"volatile\">\n" +
                    "<tr><td><b>")
            .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", _t("Current")))  // lie and say 3 sec since 1 sec would appear as 1000 ms
@@ -1067,7 +1068,7 @@ class SummaryBarRenderer {
            .append(_t("View existing tunnels and tunnel build status"))
            .append("\">")
            .append(_t("Tunnels"))
-           .append("</a></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_tunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_tunnels\" class=\"volatile\">\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
             buf.append("<tr title=\"")
@@ -1150,7 +1151,7 @@ class SummaryBarRenderer {
            .append(_t("What's in the router's job queue?"))
            .append("\">")
            .append(_t("Congestion"))
-           .append("</a></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=\"checkbox\" id=\"toggle_sb_queue\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_queue\" class=\"volatile\">\n" +
                    "<tr title=\"")
            .append(_t("Indicates router performance"))
@@ -1289,7 +1290,8 @@ class SummaryBarRenderer {
                         // Set up title and pre-headings stuff.
                         buf.append("<h3><a href=\"/news\">")
                            .append(_t("News &amp; Updates"))
-                           .append("</a></h3><hr class=\"b\"><div id=\"sb_newsheadings\">\n<table>\n");
+                           .append("</a><input type=\"checkbox\" id=\"toggle_sb_newsheadings\" class=\"toggleSection script\" checked hidden></h3><hr class=\"b\">")
+                           .append("<div id=\"sb_newsheadings\">\n<table>\n");
                     }
                     buf.append("<tr><td><a href=\"/?news=1&amp;consoleNonce=")
                        .append(consoleNonce)

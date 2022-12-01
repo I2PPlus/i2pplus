@@ -33,6 +33,7 @@
    boolean hasOverride = themeOverride.exists();
 %>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script nonce="<%=cspNonce%>" type="module" src="/js/sectionToggle.js"></script>
 <link rel="preload" href="<%=themePath%>global.css" as="style">
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
