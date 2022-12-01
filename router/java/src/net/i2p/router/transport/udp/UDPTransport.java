@@ -332,6 +332,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
 
     /**
+     *  @param dh non-null to enable SSU1
      *  @param xdh non-null to enable SSU2
      */
     public UDPTransport(RouterContext ctx, DHSessionKeyBuilder.Factory dh, X25519KeyFactory xdh) {
@@ -363,7 +364,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _cachedBid[i] = new SharedBid(BID_VALUES[i]);
         }
 
-        _packetBuilder = new PacketBuilder(_context, this);
+        _packetBuilder = (dh != null) ? new PacketBuilder(_context, this) : null;
         _packetBuilder2 = (xdh != null) ? new PacketBuilder2(_context, this) : null;
         _fragments = new OutboundMessageFragments(_context, this, _activeThrottle);
         _inboundFragments = new InboundMessageFragments(_context, _fragments, this);
@@ -379,7 +380,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         _v4IntroducersSelectedOn = -1;
         _v6IntroducersSelectedOn = -1;
         _lastInboundReceivedOn = -1;
-        _hmac = new SSUHMACGenerator();
+        _hmac = (dh != null) ? new SSUHMACGenerator() : null;
         _mtu = PeerState.LARGE_MTU;
         _mtu_ipv6 = PeerState.MIN_IPV6_MTU;
         setupPort();
@@ -535,22 +536,24 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (_log.shouldInfo())
             _log.info("Starting SSU transport listener...");
 
-        // set up random intro key, as of 0.9.48
-        byte[] ikey = new byte[SessionKey.KEYSIZE_BYTES];
-        _introKey = new SessionKey(ikey);
-        String sikey = _context.getProperty(PROP_INTRO_KEY);
-        if (sikey != null &&
-            _context.getEstimatedDowntime() < MIN_DOWNTIME_TO_REKEY) {
-            byte[] saved = Base64.decode(sikey);
-            if (saved != null && saved.length == SessionKey.KEYSIZE_BYTES) {
-                System.arraycopy(saved, 0, ikey, 0, SessionKey.KEYSIZE_BYTES);
+        if (_enableSSU1) {
+            // set up random intro key, as of 0.9.48
+            byte[] ikey = new byte[SessionKey.KEYSIZE_BYTES];
+            _introKey = new SessionKey(ikey);
+            String sikey = _context.getProperty(PROP_INTRO_KEY);
+            if (sikey != null &&
+                _context.getEstimatedDowntime() < MIN_DOWNTIME_TO_REKEY) {
+                byte[] saved = Base64.decode(sikey);
+                if (saved != null && saved.length == SessionKey.KEYSIZE_BYTES) {
+                    System.arraycopy(saved, 0, ikey, 0, SessionKey.KEYSIZE_BYTES);
+                } else {
+                    _context.random().nextBytes(ikey);
+                    _context.router().saveConfig(PROP_INTRO_KEY, Base64.encode(ikey));
+                }
             } else {
                 _context.random().nextBytes(ikey);
                 _context.router().saveConfig(PROP_INTRO_KEY, Base64.encode(ikey));
             }
-        } else {
-            _context.random().nextBytes(ikey);
-            _context.router().saveConfig(PROP_INTRO_KEY, Base64.encode(ikey));
         }
 
         // bind host
@@ -902,8 +905,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     * Introduction key that people should use to contact us
-     *
+     * Introduction key that people should use to contact us,
+     * or null if SSU1 disabled.
      */
     SessionKey getIntroKey() { return _introKey; }
 
@@ -2908,7 +2911,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (directIncluded || introducersIncluded) {
             // This is called via TransportManager.configTransports() before startup(), prevent NPE
             // Note that peers won't connect to us without this - see EstablishmentManager
-            if (_introKey != null)
+            if (_enableSSU1 && _introKey != null)
                 options.setProperty(UDPAddress.PROP_INTRO_KEY, _introKey.toBase64());
 
             // SSU seems to regulate at about 85%, so make it a little higher.
@@ -3538,15 +3541,15 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     *  @return a new DHSessionKeyBuilder
+     *  @return a new DHSessionKeyBuilder, or null if SSU1 disabled
      *  @since 0.9
      */
     DHSessionKeyBuilder getDHBuilder() {
-        return _dhFactory.getBuilder();
+        return _enableSSU1 ? _dhFactory.getBuilder() : null;
     }
 
     /**
-     *  @return the factory
+     *  @return the factory, or null if SSU1 disabled
      *  @since 0.9.2
      */
     DHSessionKeyBuilder.Factory getDHFactory() {
@@ -3562,7 +3565,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     *  @return the SSU HMAC
+     *  @return the SSU HMAC, or null if SSU1 disabled
      *  @since 0.9.42
      */
     HMACGenerator getHMAC() {
@@ -3570,7 +3573,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     *  @return the PacketBuilder
+     *  @return the PacketBuilder, or null if SSU1 disabled
      *  @since 0.9.52
      */
     PacketBuilder getBuilder() {
