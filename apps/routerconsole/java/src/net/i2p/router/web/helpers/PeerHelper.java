@@ -189,6 +189,7 @@ public class PeerHelper extends HelperBase {
         buf.append("</tr>\n");
         boolean warnInbound = !_context.router().isHidden() && _context.router().getUptime() > 15*60*1000;
         int[] totals = new int[5];
+        int rows = 0;
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         for (Map.Entry<String, Transport> e : transports.entrySet()) {
             String style = e.getKey();
@@ -199,6 +200,7 @@ public class PeerHelper extends HelperBase {
                     continue;
                     if (style.equals("SSU") && idx == 0 && !_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_SSU1))
                     continue;
+                rows++;
                 buf.append("<tr><td><b>").append(style).append(1 + (idx / 4)).append("</b></td><td");
                 int total = 0;
                 for (int i = 0; i < 4; i++) {
@@ -227,21 +229,24 @@ public class PeerHelper extends HelperBase {
                 buf.append("</td></tr>\n");
             }
         }
-        buf.append("<tr class=\"tablefooter\"><td><b>").append(_t("Total")).append("</b>");
-        for (int i = 0; i < 5; i++) {
-            if (!showIPv4 && i > 0 && i < 3)
-                continue;
-            if (!showIPv6 && i >= 3)
-                break;
-            int cnt = totals[i];
-            buf.append("</td><td");
-            if (cnt <= 0) {
-                if ((i & 0x01) == 0 || warnInbound)
-                    buf.append(" class=\"warn\"");
+        if (rows > 1) {
+            buf.append("<tr class=\"tablefooter\"><td><b>").append(_t("Total")).append("</b>");
+            for (int i = 0; i < 5; i++) {
+                if (!showIPv4 && i > 0 && i < 3)
+                    continue;
+                if (!showIPv6 && i >= 3)
+                    break;
+                int cnt = totals[i];
+                buf.append("</td><td");
+                    if (cnt <= 0) {
+                        if ((i & 0x01) == 0 || warnInbound)
+                            buf.append(" class=\"warn\"");
+                        }
+                        buf.append(">").append(cnt);
             }
-            buf.append(">").append(cnt);
+            buf.append("</td></tr>\n");
         }
-        buf.append("</td></tr>\n</table>\n");
+        buf.append("</table>\n");
         out.write(buf.toString());
     }
 
