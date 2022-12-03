@@ -210,7 +210,7 @@ h3:hover .toggleSection{display:inline-block}
 .toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 .toggleSection:not(:checked){padding-top:6px}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#sidebar h3 a .badge:not([hidden]),#tunnelCount{word-spacing:-.4em;letter-spacing:0;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;border-radius:1px;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
+#sidebar h3 a .badge:not([hidden]),#tunnelCount{letter-spacing:0;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;border-radius:1px;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
 
 /* buttons & inputs */
 button a,button a:visited{font-weight:400;color:var(--ink_light)}
