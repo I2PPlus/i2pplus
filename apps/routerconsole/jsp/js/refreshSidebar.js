@@ -65,12 +65,16 @@ function refreshSidebar() {
           var queueResponse = xhr.responseXML.getElementById("sb_queue");
           var memBar = document.getElementById("sb_memoryBar");
           var memBarResponse = xhr.responseXML.getElementById("sb_memoryBar");
+          var updateBar = document.querySelector(".sb_updatestatus + percentBarOuter");
+          var updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + percentBarOuter");
           var routerControl = document.getElementById("sb_routerControl");
           var routerControlResponse = xhr.responseXML.getElementById("sb_routerControl");
           var updateSection = document.getElementById("sb_updatesection");
           var updateSectionHR = document.querySelector("#sb_updatesection + hr");
           var updateForm = document.getElementById("sb_updateform");
           var updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
+          var updateStatus = document.getElementById("sb_updatestatus");
+          var updateStatusResponse = xhr.responseXML.getElementById("sb_updatestatus");
           var netStatus = document.querySelector("sb_netstatus");
           var netStatusResponse = xhr.responseXML.querySelector("sb_netstatus");
           var tunnelBuildStatus = document.querySelector("sb_tunnelBuildstatus");
@@ -117,12 +121,19 @@ function refreshSidebar() {
           if (memBar != undefined && !Object.is(memBar.innerHTML, memBarResponse.innerHTML)) {
             memBar.outerHTML = memBarResponse.outerHTML;
           }
+          if (updateBar != undefined && !Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
+            updateBar.outerHTML = updateBarResponse.outerHTML;
+          }
+          if (updateStatus != undefined && !Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
+            updateStatus.outerHTML = updateStatusResponse.outerHTML;
+          }
           if (updateSection != undefined && updateForm != undefined && updateForm.hidden != true && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
             updateForm.innerHTML = updateFormResponse.innerHTML;
             if (updateSectionHR.hidden == true) {
               updateSectionHR.hidden = null;
             }
           }
+
           if (routerControl != undefined && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
             routerControl.outerHTML = routerControlResponse.outerHTML;
           }
@@ -159,7 +170,7 @@ function refreshSidebar() {
             ctx.imageSmoothingQuality = "high";
             ctx.globalCompositeOperation = "source-out";
             ctx.globalAlpha = 1;
-            minigraph.style.background = image.src;
+            //minigraph.style.background = image.src;
 
             function renderGraph() {
               minigraph.width = 245;

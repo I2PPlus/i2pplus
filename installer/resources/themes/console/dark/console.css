@@ -2673,7 +2673,7 @@ input[type=text],input[type=password]{padding:7px 9px}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin-bottom:-3px;min-width:40px;max-width:40px}
 .newsAuthor{padding-left:18px;background-size:13px}
 #sb_memoryBar.percentBarOuter{margin:-6px 0 -8px}
-#sb_graphcontainer{margin:-6px 0 -8px;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 16px,rgba(64,160,64,.3) 17px,rgba(0,0,0,0) 17px,rgba(0,0,0,0) 32px),repeating-linear-gradient(to top,rgba(0,0,0,0),rgba(48,152,48,.2),rgba(0,0,0,0) 1px,rgba(0,0,0,0) 16px)}
+#sb_graphcontainer{margin:-6px 0 -8px;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 16px,rgba(64,160,64,.3) 17px,rgba(0,0,0,0) 17px,rgba(0,0,0,0) 32px),repeating-linear-gradient(to top,rgba(0,0,0,0),rgba(48,152,48,.2),rgba(0,0,0,0) 1px,rgba(0,0,0,0) 19px)}
 #clock{margin-left:-1px}
 .sb_info.sb_update{padding:5px 5px 6px}
 .sb_info .percentBarText{margin-top:-1px}
@@ -2748,7 +2748,7 @@ h4#updateplugins{margin-top:-15px}
 #peers .routerid .flag img{margin:-3px -1px 1px}
 #pluginconfigtext + form > input{margin-top:3px}
 #reseedconfig input[type=text],#reseedconfig input[type=password]{width:250px}
-#sb_graphcontainer{height:50px}
+#sb_graphcontainer{height:54px}
 #sb_localtunnels a{max-width:200px}
 #sb_memoryBar .percentBarText{margin-top:-2px}
 #sb_services a:link,#sb_internals a:link,#sb_advanced a:link,#sb_help a:link{max-width:216px}
