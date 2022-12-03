@@ -89,7 +89,7 @@ function refreshSidebar() {
           var b;
           for (b = 0; b < badges.length; b += 1) {
             if (typeof badges[b] !== "undefined" && typeof badgesResponse[b] !== "undefined") {
-              badges[b].outerHTML = badgesResponse[b].outerHTML;
+              badges[b].innerHTML = badgesResponse[b].innerHTML;
               if (badges.length !== badgesResponse.length) {
                 window.requestAnimationFrame(refreshAll);
               }
@@ -156,6 +156,13 @@ function refreshSidebar() {
             updateForm.innerHTML = updateFormResponse.innerHTML;
             if (updateSectionHR.hidden == true) {
               updateSectionHR.hidden = null;
+            }
+          } else {
+            if (updateSection != undefined && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
+              updateSection.innerHTML = updateSectionResponse.innerHTML;
+              if (updateSectionHR.hidden == true) {
+                updateSectionHR.hidden = null;
+             }
             }
           }
           if (routerControl != undefined && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
