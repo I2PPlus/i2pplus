@@ -81,6 +81,8 @@ function refreshSidebar() {
           var tunnelStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
           var notice = document.getElementById("sb_notice");
           var noticeResponse = xhr.responseXML.getElementById("sb_notice");
+          var shutdownStatus = document.getElementById("sb_shutdownstatus");
+          var shutdownStatusResponse = xhr.responseXML.getElementById("sb_shutdownstatus");
           var badges = document.querySelectorAll("h3 a .badge");
           var badgesResponse = xhr.responseXML.querySelectorAll("h3 a .badge");
 
@@ -148,6 +150,9 @@ function refreshSidebar() {
           }
           if (notice != undefined && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
             notice.innerHTML = noticeResponse.innerHTML;
+          }
+          if (shutdownStatus != undefined && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
+            shutdownStatus.innerHTML = shutdownStatusResponse.innerHTML;
           }
           if (updateSection != undefined && updateForm != undefined && updateForm.hidden != true && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
             updateForm.innerHTML = updateFormResponse.innerHTML;
