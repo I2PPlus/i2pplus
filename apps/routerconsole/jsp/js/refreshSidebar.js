@@ -77,8 +77,24 @@ function refreshSidebar() {
           var updateStatusResponse = xhr.responseXML.getElementById("sb_updatestatus");
           var netStatus = document.querySelector("sb_netstatus");
           var netStatusResponse = xhr.responseXML.querySelector("sb_netstatus");
-          var tunnelBuildStatus = document.querySelector("sb_tunnelBuildstatus");
-          var tunnelBuildStatusResponse = xhr.responseXML.querySelector("sb_tunnelBuildstatus");
+          var tunnelStatus = document.getElementById("sb_tunnelstatus");
+          var tunnelStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
+          var notice = document.getElementById("sb_notice");
+          var noticeResponse = xhr.responseXML.getElementById("sb_notice");
+          var badges = document.querySelectorAll("h3 a .badge");
+          var badgesResponse = xhr.responseXML.querySelectorAll("h3 a .badge");
+
+          var b;
+          for (b = 0; i < badges.length; b += 1) {
+            if (typeof badges[b] !== "undefined" && typeof badgesResponse[b] !== "undefined") {
+              if (!Object.is(badges[b].innerHTML, badgesResponse[b].innerHTML)) {
+                badges[b].outerHTML = badgesResponse[b].outerHTML;
+              }
+              if (badges.length !== badgesResponse.length) {
+                window.requestAnimationFrame(refreshAll);
+              }
+            }
+          }
 
           if (clock != undefined && !Object.is(clock.innerHTML, clockResponse.innerHTML)) {
             clock.outerHTML = clockResponse.outerHTML;
@@ -105,7 +121,7 @@ function refreshSidebar() {
           }
           if (localTunnels != undefined && localTunnels.hidden != true && !Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
             localTunnels.outerHTML = localTunnelsResponse.outerHTML;
-            if (tunnelCount && !Object.is(tunnelCount.innerHTML, tunnelCountResponse.innerHTML)) {
+            if (tunnelCount) {
               var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
               if (doubleCount) {
                 doubleCount.remove();
@@ -127,13 +143,18 @@ function refreshSidebar() {
           if (updateStatus != undefined && !Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
             updateStatus.outerHTML = updateStatusResponse.outerHTML;
           }
+          if (tunnelStatus != undefined && !Object.is(tunnelStatus.innerHTML, tunnelStatusResponse.innerHTML)) {
+            tunnelStatus.outerHTML = tunnelStatusResponse.outerHTML;
+          }
+          if (notice != undefined && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
+            notice.innerHTML = noticeResponse.innerHTML;
+          }
           if (updateSection != undefined && updateForm != undefined && updateForm.hidden != true && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
             updateForm.innerHTML = updateFormResponse.innerHTML;
             if (updateSectionHR.hidden == true) {
               updateSectionHR.hidden = null;
             }
           }
-
           if (routerControl != undefined && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
             routerControl.outerHTML = routerControlResponse.outerHTML;
           }
@@ -143,11 +164,11 @@ function refreshSidebar() {
           var i;
           for (i = 0; i < updating.length; i += 1) {
             if (typeof updating[i] !== "undefined" && typeof updatingResponse[i] !== "undefined") {
-              if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
+              //if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
                 if (updating.length !== updatingResponse.length) {
                   window.requestAnimationFrame(refreshAll);
                 }
-              }
+              //}
             }
           }
         }
@@ -237,11 +258,11 @@ function refreshSidebar() {
           function hideSections() {
             var collapse = document.querySelectorAll("#sidebar .collapse");
             var h;
-             for (h = 0; h < collapse.length; h += 1) {
-                collapse[h].setAttribute("hidden", "");
-                if (collapse[h].nextElementSibling != null && collapse[h].nextElementSibling.nodeName == "HR") {
-                  collapse[h].nextElementSibling.setAttribute("hidden", "");
-                }
+            for (h = 0; h < collapse.length; h += 1) {
+              collapse[h].setAttribute("hidden", "");
+              if (collapse[h].nextElementSibling != null && collapse[h].nextElementSibling.nodeName == "HR") {
+                collapse[h].nextElementSibling.setAttribute("hidden", "");
+              }
             }
             if (shutdownstatus) {
               shutdownstatus.setAttribute("hidden", "");
@@ -265,6 +286,13 @@ function refreshSidebar() {
             var clock = document.querySelector("#clock");
             if (clock != null) {
               clock.innerHTML = "--:--:--";
+            }
+            var badges = document.querySelectorAll("h3 a .badge");
+            var b;
+            for (b = 0; i < badges.length; b += 1) {
+              if (typeof badges[b] !== "undefined") {
+              badges[b].innerHTML = "-";
+              }
             }
             netstatus.innerHTML = '<span id="down">Router is down</span>';
           }

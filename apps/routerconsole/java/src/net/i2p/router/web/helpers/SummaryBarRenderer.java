@@ -822,10 +822,12 @@ class SummaryBarRenderer {
     public String renderPeersHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
+        int active = _helper.getActivePeers();
         buf.append("<h3><a href=\"/peers\" target=\"_top\" title=\"")
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
+           .append(" <span class=\"badge\" hidden>").append(active).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_peers\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_peers\" class=\"volatile\">\n" +
                    "<tr title=\"");
@@ -838,7 +840,6 @@ class SummaryBarRenderer {
                    "<td><a href=\"/peers\"><b>")
            .append(_t("Active"))
            .append("</b></a></td><td class=\"digits\"><span>");
-        int active = _helper.getActivePeers();
         buf.append(active);
         if (isAdvanced()) {
             buf.append(SummaryHelper.THINSP).append(Math.max(active, _helper.getActiveProfiles()));
@@ -903,10 +904,12 @@ class SummaryBarRenderer {
     public String renderPeersAdvancedHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
+        int active = _helper.getActivePeers();
         buf.append("<h3><a href=\"/peers\" target=\"_top\" title=\"")
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
+           .append(" <span class=\"badge\" hidden>").append(active).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_peersadvanced\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_peersadvanced\" class=\"volatile\">\n" +
                    "<tr title=\"")
@@ -915,7 +918,6 @@ class SummaryBarRenderer {
                    "<td><b>")
            .append(_t("Active"))
            .append("</b></td><td class=\"digits\"><span>");
-        int active = _helper.getActivePeers();
         buf.append(active)
            .append(SummaryHelper.THINSP)
            .append(Math.max(active, _helper.getActiveProfiles()))
@@ -1064,10 +1066,14 @@ class SummaryBarRenderer {
     public String renderTunnelsHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
+        int partTunnels = _helper.getParticipatingTunnels();
         buf.append("<h3><a href=\"/tunnels\" target=\"_top\" title=\"")
            .append(_t("View existing tunnels and tunnel build status"))
            .append("\">")
            .append(_t("Tunnels"))
+           .append(" <span class=\"badge\" hidden>")
+           .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels() +
+                   _helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels() + partTunnels).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_tunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_tunnels\" class=\"volatile\">\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
@@ -1094,9 +1100,6 @@ class SummaryBarRenderer {
 
            String maxTunnels = _context.getProperty("router.maxParticipatingTunnels");
            RouterInfo ri = _context.router().getRouterInfo();
-           int partTunnels = _helper.getParticipatingTunnels();
-//           if (partTunnels >= 2)
-//               partTunnels = partTunnels - 1; // fix duplicate display
            if ((maxTunnels == null || partTunnels > 0
                || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")
                && partTunnels > 0) {
@@ -1151,6 +1154,7 @@ class SummaryBarRenderer {
            .append(_t("What's in the router's job queue?"))
            .append("\">")
            .append(_t("Congestion"))
+           .append(" <span class=\"badge\" hidden>").append(_helper.getJobLag()).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_queue\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_queue\" class=\"volatile\">\n" +
                    "<tr title=\"")

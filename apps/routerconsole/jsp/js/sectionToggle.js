@@ -236,6 +236,7 @@ function sectionToggler() {
       document.getElementById("sb_queue").hidden = true;
       document.querySelector("#sb_queue + hr").hidden = true;
       document.getElementById("toggle_sb_queue").checked = false;
+      document.querySelector("#sidebar h3 a[href=\"/jobs\"] .badge").hidden = null;
       localStorage["section_queue"] = "hide";
     }
   }
@@ -245,6 +246,7 @@ function sectionToggler() {
       document.getElementById("sb_queue").hidden = null;
       document.querySelector("#sb_queue + hr").hidden = null;
       document.getElementById("toggle_sb_queue").checked = true;
+      document.querySelector("#sidebar h3 a[href=\"/jobs\"] .badge").hidden = true;
       localStorage.removeItem("section_queue");
     }
   }
@@ -262,6 +264,7 @@ function sectionToggler() {
       document.getElementById("sb_tunnels").hidden = true;
       document.querySelector("#sb_tunnels + hr").hidden = true;
       document.getElementById("toggle_sb_tunnels").checked = false;
+      document.querySelector("#sidebar h3 a[href=\"/tunnels\"] .badge").hidden = null;
       localStorage["section_tunnels"] = "hide";
     }
   }
@@ -271,6 +274,7 @@ function sectionToggler() {
       document.getElementById("sb_tunnels").hidden = null;
       document.querySelector("#sb_tunnels + hr").hidden = null;
       document.getElementById("toggle_sb_tunnels").checked = true;
+      document.querySelector("#sidebar h3 a[href=\"/tunnels\"] .badge").hidden = true;
       localStorage.removeItem("section_tunnels");
     }
   }
@@ -288,6 +292,7 @@ function sectionToggler() {
       document.getElementById("sb_peers").hidden = true;
       document.querySelector("#sb_peers + hr").hidden = true;
       document.getElementById("toggle_sb_peers").checked = false;
+      document.querySelector("#sidebar h3 a[href=\"/peers\"] .badge").hidden = null;
       localStorage["section_peers"] = "hide";
     }
   }
@@ -297,6 +302,7 @@ function sectionToggler() {
       document.getElementById("sb_peers").hidden = null;
       document.querySelector("#sb_peers + hr").hidden = null;
       document.getElementById("toggle_sb_peers").checked = true;
+      document.querySelector("#sidebar h3 a[href=\"/peers\"] .badge").hidden = true;
       localStorage.removeItem("section_peers");
     }
   }
