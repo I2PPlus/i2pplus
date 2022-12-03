@@ -87,7 +87,7 @@ function refreshSidebar() {
           var badgesResponse = xhr.responseXML.querySelectorAll("h3 a .badge");
 
           var b;
-          for (b = 0; i < badges.length; b += 1) {
+          for (b = 0; b < badges.length; b += 1) {
             if (typeof badges[b] !== "undefined" && typeof badgesResponse[b] !== "undefined") {
               if (!Object.is(badges[b].innerHTML, badgesResponse[b].innerHTML)) {
                 badges[b].outerHTML = badgesResponse[b].outerHTML;
@@ -169,11 +169,9 @@ function refreshSidebar() {
           var i;
           for (i = 0; i < updating.length; i += 1) {
             if (typeof updating[i] !== "undefined" && typeof updatingResponse[i] !== "undefined") {
-              //if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
-                if (updating.length !== updatingResponse.length) {
+              if (updating.length !== updatingResponse.length) {
                   window.requestAnimationFrame(refreshAll);
-                }
-              //}
+              }
             }
           }
         }
