@@ -65,8 +65,8 @@ function refreshSidebar() {
           var queueResponse = xhr.responseXML.getElementById("sb_queue");
           var memBar = document.getElementById("sb_memoryBar");
           var memBarResponse = xhr.responseXML.getElementById("sb_memoryBar");
-          var updateBar = document.querySelector(".sb_updatestatus + percentBarOuter");
-          var updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + percentBarOuter");
+          var updateBar = document.querySelector(".sb_updatestatus + .percentBarOuter");
+          var updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + .percentBarOuter");
           var routerControl = document.getElementById("sb_routerControl");
           var routerControlResponse = xhr.responseXML.getElementById("sb_routerControl");
           var updateSection = document.getElementById("sb_updatesection");
