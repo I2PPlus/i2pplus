@@ -1,9 +1,9 @@
 /* SectionToggler by dr|z3d */
 /* License: AGPLv3 or later */
 
-function initSectionToggle() {
+import {refreshSidebar} from "/js/refreshSidebar.js";
 
-  var sb = document.getElementById("sidebar");
+function sectionToggler() {
 
   function toggle_sb_updatesection() {
     if (document.querySelector("#sb_updateform") != undefined) {
@@ -17,13 +17,9 @@ function initSectionToggle() {
 
   function hide_updatesection() {
     if (document.querySelector("#sb_updateform") != undefined) {
-      document.querySelector("#sb_updatesection").classList.remove("volatile");
-      document.querySelector("#sb_updateform").classList.remove("volatile");
-      document.querySelector("#sb_updateform").classList.add("hide");
-      document.querySelector("#sb_updateform").style.display = "none";
       document.querySelector("#sb_updateform").hidden = true;
       document.querySelector("#sb_updatesection + hr").hidden = true;
-      document.querySelector("#sb_updatesection h3").classList.add("collapsed");
+      document.querySelector("#sb_updatesection > h3").classList.add("collapsed");
       document.getElementById("toggle_sb_updatesection").checked = false;
       localStorage["section_updatesection"] = "hide";
     }
@@ -31,13 +27,9 @@ function initSectionToggle() {
 
   function show_updatesection() {
     if (document.querySelector("#sb_updateform") != undefined) {
-      document.querySelector("#sb_updatesection").classList.add("volatile");
-      document.querySelector("#sb_updateform").classList.add("volatile");
-      document.querySelector("#sb_updateform").classList.remove("hide");
-      document.querySelector("#sb_updateform").style.display = null;
       document.querySelector("#sb_updateform").hidden = null;
       document.querySelector("#sb_updatesection + hr").hidden = null;
-      document.querySelector("#sb_updatesection h3").classList.remove("collapsed");
+      document.querySelector("#sb_updatesection > h3").classList.remove("collapsed");
       document.getElementById("toggle_sb_updatesection").checked = true;
       localStorage.removeItem("section_updatesection");
     }
@@ -53,10 +45,6 @@ function initSectionToggle() {
 
   function hide_general() {
     if (document.getElementById("sb_general") != undefined) {
-      document.getElementById("sb_general").classList.remove("volatile");
-      document.getElementById("sb_general").classList.add("hide");
-      document.getElementById("sb_general").style.display = "none";
-      document.querySelector("#sb_general + hr").style.display = "none";
       document.getElementById("sb_general").hidden = true;
       document.querySelector("#sb_general + hr").hidden = true;
       document.getElementById("toggle_sb_general").checked = false;
@@ -66,10 +54,6 @@ function initSectionToggle() {
 
   function show_general() {
     if (document.getElementById("sb_general") != undefined) {
-      document.getElementById("sb_general").classList.add("volatile");
-      document.getElementById("sb_general").classList.remove("hide");
-      document.getElementById("sb_general").style.display = null;
-      document.querySelector("#sb_general + hr").style.display = null;
       document.getElementById("sb_general").hidden = null;
       document.querySelector("#sb_general + hr").hidden = null;
       document.getElementById("toggle_sb_general").checked = true;
@@ -87,10 +71,6 @@ function initSectionToggle() {
 
   function hide_shortgeneral() {
     if (document.getElementById("sb_shortgeneral") != undefined) {
-      document.getElementById("sb_shortgeneral").classList.remove("volatile");
-      document.getElementById("sb_shortgeneral").classList.add("hide");
-      document.getElementById("sb_shortgeneral").style.display = "none";
-      document.querySelector("#sb_shortgeneral + hr").style.display = "none";
       document.getElementById("sb_shortgeneral").hidden = true;
       document.querySelector("#sb_shortgeneral + hr").hidden = true;
       document.getElementById("toggle_sb_shortgeneral").checked = false;
@@ -100,10 +80,6 @@ function initSectionToggle() {
 
   function show_shortgeneral() {
     if (document.getElementById("sb_shortgeneral") != undefined) {
-      document.getElementById("sb_shortgeneral").classList.add("volatile");
-      document.getElementById("sb_shortgeneral").classList.remove("hide");
-      document.getElementById("sb_shortgeneral").style.display = null;
-      document.querySelector("#sb_shortgeneral + hr").style.display = null;
       document.getElementById("sb_shortgeneral").hidden = null;
       document.querySelector("#sb_shortgeneral + hr").hidden = null;
       document.getElementById("toggle_sb_shortgeneral").checked = true;
@@ -121,10 +97,6 @@ function initSectionToggle() {
 
   function hide_advancedgeneral() {
     if (document.getElementById("sb_advancedgeneral") != undefined) {
-      document.getElementById("sb_advancedgeneral").classList.remove("volatile");
-      document.getElementById("sb_advancedgeneral").classList.add("hide");
-      document.getElementById("sb_advancedgeneral").style.display = "none";
-      document.querySelector("#sb_advancedgeneral + hr").style.display = "none";
       document.getElementById("sb_advancedgeneral").hidden = true;
       document.querySelector("#sb_advancedgeneral + hr").hidden = true;
       document.getElementById("toggle_sb_advancedgeneral").checked = false;
@@ -134,10 +106,6 @@ function initSectionToggle() {
 
   function show_advancedgeneral() {
     if (document.getElementById("sb_advancedgeneral") != undefined) {
-      document.getElementById("sb_advancedgeneral").classList.add("volatile");
-      document.getElementById("sb_advancedgeneral").classList.remove("hide");
-      document.getElementById("sb_advancedgeneral").style.display = null;
-      document.querySelector("#sb_advancedgeneral + hr").style.display = null;
       document.getElementById("sb_advancedgeneral").hidden = null;
       document.querySelector("#sb_advancedgeneral + hr").hidden = null;
       document.getElementById("toggle_sb_advancedgeneral").checked = true;
@@ -155,11 +123,11 @@ function initSectionToggle() {
 
   function hide_bandwidth() {
     if (document.getElementById("sb_bandwidth") != undefined) {
-      document.getElementById("sb_bandwidth").classList.add("hide");
-      document.getElementById("sb_bandwidth").style.display = "none";
-      document.querySelector("#sb_bandwidth + hr").style.display = "none";
       document.getElementById("sb_bandwidth").hidden = true;
-      document.querySelector("#sb_bandwidth + hr").hidden = true;
+      if (document.querySelector("#sb_bandwidth + hr") != undefined) {
+        document.querySelector("#sb_bandwidth + hr").hidden = true;
+        document.querySelector("#sb_bandwidth + hr").style.display = null;
+      }
       document.getElementById("toggle_sb_bandwidth").checked = false;
       localStorage["section_bandwidth"] = "hide";
     }
@@ -167,11 +135,11 @@ function initSectionToggle() {
 
   function show_bandwidth() {
     if (document.getElementById("sb_bandwidth") != undefined) {
-      document.getElementById("sb_bandwidth").classList.remove("hide");
-      document.getElementById("sb_bandwidth").style.display = null;
-      document.querySelector("#sb_bandwidth + hr").style.display = null;
       document.getElementById("sb_bandwidth").hidden = null;
-      document.querySelector("#sb_bandwidth + hr").hidden = null;
+      if (document.querySelector("#sb_bandwidth + hr") != undefined) {
+        document.querySelector("#sb_bandwidth + hr").hidden = null;
+        document.querySelector("#sb_bandwidth + hr").style.display = "block";
+      }
       document.getElementById("toggle_sb_bandwidth").checked = true;
       localStorage.removeItem("section_bandwidth");
     }
@@ -187,9 +155,6 @@ function initSectionToggle() {
 
   function hide_services() {
     if (document.getElementById("sb_services") != undefined) {
-      document.getElementById("sb_services").classList.add("hide");
-      document.getElementById("sb_services").style.display = "none";
-      document.querySelector("#sb_services + hr").style.display = "none";
       document.getElementById("sb_services").hidden = true;
       document.querySelector("#sb_services + hr").hidden = true;
       document.getElementById("toggle_sb_services").checked = false;
@@ -199,9 +164,6 @@ function initSectionToggle() {
 
   function show_services() {
     if (document.getElementById("sb_services") != undefined) {
-      document.getElementById("sb_services").classList.remove("hide");
-      document.getElementById("sb_services").style.display = null;
-      document.querySelector("#sb_services + hr").style.display = null;
       document.getElementById("sb_services").hidden = null;
       document.querySelector("#sb_services + hr").hidden = null;
       document.getElementById("toggle_sb_services").checked = true;
@@ -219,9 +181,6 @@ function initSectionToggle() {
 
   function hide_internals() {
     if (document.getElementById("sb_internals") != undefined) {
-      document.getElementById("sb_internals").classList.add("hide");
-      document.getElementById("sb_internals").style.display = "none";
-      document.querySelector("#sb_internals + hr").style.display = "none";
       document.getElementById("sb_internals").hidden = true;
       document.querySelector("#sb_internals + hr").hidden = true;
       document.getElementById("toggle_sb_internals").checked = false;
@@ -231,9 +190,6 @@ function initSectionToggle() {
 
   function show_internals() {
     if (document.getElementById("sb_internals") != undefined) {
-      document.getElementById("sb_internals").classList.remove("hide");
-      document.getElementById("sb_internals").style.display = null;
-      document.querySelector("#sb_internals + hr").style.display = null;
       document.getElementById("sb_internals").hidden = null;
       document.querySelector("#sb_internals + hr").hidden = null;
       document.getElementById("toggle_sb_internals").checked = true;
@@ -251,9 +207,6 @@ function initSectionToggle() {
 
   function hide_advanced() {
     if (document.getElementById("sb_advanced") != undefined) {
-      document.getElementById("sb_advanced").classList.add("hide");
-      document.getElementById("sb_advanced").style.display = "none";
-      document.querySelector("#sb_advanced + hr").style.display = "none";
       document.getElementById("sb_advanced").hidden = true;
       document.querySelector("#sb_advanced + hr").hidden = true;
       document.getElementById("toggle_sb_advanced").checked = false;
@@ -263,9 +216,6 @@ function initSectionToggle() {
 
   function show_advanced() {
     if (document.getElementById("sb_advanced") != undefined) {
-      document.getElementById("sb_advanced").classList.remove("hide");
-      document.getElementById("sb_advanced").style.display = null;
-      document.querySelector("#sb_advanced + hr").style.display = null;
       document.getElementById("sb_advanced").hidden = null;
       document.querySelector("#sb_advanced + hr").hidden = null;
       document.getElementById("toggle_sb_advanced").checked = true;
@@ -283,9 +233,6 @@ function initSectionToggle() {
 
   function hide_queue() {
     if (document.getElementById("sb_queue") != undefined) {
-      document.getElementById("sb_queue").classList.add("hide");
-      document.getElementById("sb_queue").style.display = "none";
-      document.querySelector("#sb_queue + hr").style.display = "none";
       document.getElementById("sb_queue").hidden = true;
       document.querySelector("#sb_queue + hr").hidden = true;
       document.getElementById("toggle_sb_queue").checked = false;
@@ -295,9 +242,6 @@ function initSectionToggle() {
 
   function show_queue() {
     if (document.getElementById("sb_queue") != undefined) {
-      document.getElementById("sb_queue").classList.remove("hide");
-      document.getElementById("sb_queue").style.display = null;
-      document.querySelector("#sb_queue + hr").style.display = null;
       document.getElementById("sb_queue").hidden = null;
       document.querySelector("#sb_queue + hr").hidden = null;
       document.getElementById("toggle_sb_queue").checked = true;
@@ -315,9 +259,6 @@ function initSectionToggle() {
 
   function hide_tunnels() {
     if (document.getElementById("sb_tunnels") != undefined) {
-      document.getElementById("sb_tunnels").classList.add("hide");
-      document.getElementById("sb_tunnels").style.display = "none";
-      document.querySelector("#sb_tunnels + hr").style.display = "none";
       document.getElementById("sb_tunnels").hidden = true;
       document.querySelector("#sb_tunnels + hr").hidden = true;
       document.getElementById("toggle_sb_tunnels").checked = false;
@@ -327,9 +268,6 @@ function initSectionToggle() {
 
   function show_tunnels() {
     if (document.getElementById("sb_tunnels") != undefined) {
-      document.getElementById("sb_tunnels").classList.remove("hide");
-      document.getElementById("sb_tunnels").style.display = null;
-      document.querySelector("#sb_tunnels + hr").style.display = null;
       document.getElementById("sb_tunnels").hidden = null;
       document.querySelector("#sb_tunnels + hr").hidden = null;
       document.getElementById("toggle_sb_tunnels").checked = true;
@@ -347,9 +285,6 @@ function initSectionToggle() {
 
   function hide_peers() {
     if (document.getElementById("sb_peers") != undefined) {
-      document.getElementById("sb_peers").classList.add("hide");
-      document.getElementById("sb_peers").style.display = "none";
-      document.querySelector("#sb_peers + hr").style.display = "none";
       document.getElementById("sb_peers").hidden = true;
       document.querySelector("#sb_peers + hr").hidden = true;
       document.getElementById("toggle_sb_peers").checked = false;
@@ -359,9 +294,6 @@ function initSectionToggle() {
 
   function show_peers() {
     if (document.getElementById("sb_peers") != undefined) {
-      document.getElementById("sb_peers").classList.remove("hide");
-      document.getElementById("sb_peers").style.display = null;
-      document.querySelector("#sb_peers + hr").style.display = null;
       document.getElementById("sb_peers").hidden = null;
       document.querySelector("#sb_peers + hr").hidden = null;
       document.getElementById("toggle_sb_peers").checked = true;
@@ -377,19 +309,10 @@ function initSectionToggle() {
     }
   }
 
-  const localTunnelsTitle = document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML;
-
   function hide_localtunnels() {
     if (document.getElementById("sb_localtunnels") != undefined) {
-      document.getElementById("sb_localtunnels").classList.add("hide");
-      document.getElementById("sb_localtunnels").style.display = "none";
       document.getElementById("sb_localtunnels").hidden = true;
-      var tunnelCount = document.getElementById("sb_localtunnels").childElementCount;
-      if (document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML.indexOf(tunnelCount) == -1) {
-        document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML += " [" + tunnelCount + "]";
-      }
       if (document.querySelector("#sb_localtunnels + hr")) {
-        document.querySelector("#sb_localtunnels + hr").style.display = "none";
         document.querySelector("#sb_localtunnels + hr").hidden = true;
       }
       document.getElementById("toggle_sb_localtunnels").checked = false;
@@ -399,16 +322,20 @@ function initSectionToggle() {
 
   function show_localtunnels() {
     if (document.getElementById("sb_localtunnels") != undefined) {
-      document.getElementById("sb_localtunnels").classList.remove("hide");
-      document.getElementById("sb_localtunnels").style.display = null;
       document.getElementById("sb_localtunnels").hidden = null;
-      document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML = localTunnelsTitle;
       if (document.querySelector("#sb_localtunnels + hr")) {
-        document.querySelector("#sb_localtunnels + hr").style.display = null;
         document.querySelector("#sb_localtunnels + hr").hidden = null;
       }
       document.getElementById("toggle_sb_localtunnels").checked = true;
       localStorage.removeItem("section_localtunnels");
+    }
+  }
+
+  function countTunnels() {
+    var tunnelCount = document.querySelectorAll("img[src*=\"images/local_\"]").length;
+    if (document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML.indexOf(tunnelCount) == -1) {
+      var displayCount = " <span id=\"tunnelCount\">" + tunnelCount + "</span>";
+      document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML += displayCount;
     }
   }
 
@@ -427,22 +354,24 @@ function initSectionToggle() {
     if (localStorage["section_updatesection"] != null) {hide_updatesection()}
   }
 
-  function addListeners() {
-    if (document.querySelector("#sb_updateform")) {document.getElementById("toggle_sb_updatesection").addEventListener("click", toggle_sb_updatesection)}
-    if (document.getElementById("toggle_sb_advanced")) {document.getElementById("toggle_sb_advanced").addEventListener("click", toggle_sb_advanced)}
-    if (document.getElementById("toggle_sb_advancedgeneral")) {document.getElementById("toggle_sb_advancedgeneral").addEventListener("click", toggle_sb_advancedgeneral)}
-    if (document.getElementById("toggle_sb_bandwidth")) {document.getElementById("toggle_sb_bandwidth").addEventListener("click", toggle_sb_bandwidth)}
-    if (document.getElementById("toggle_sb_general")) {document.getElementById("toggle_sb_general").addEventListener("click", toggle_sb_general)}
-    if (document.getElementById("toggle_sb_internals")) {document.getElementById("toggle_sb_internals").addEventListener("click", toggle_sb_internals)}
-    if (document.getElementById("toggle_sb_localtunnels")) {document.getElementById("toggle_sb_localtunnels").addEventListener("click", toggle_sb_localtunnels)}
-    if (document.getElementById("toggle_sb_peers")) {document.getElementById("toggle_sb_peers").addEventListener("click", toggle_sb_peers)}
-    if (document.getElementById("toggle_sb_queue")) {document.getElementById("toggle_sb_queue").addEventListener("click", toggle_sb_queue)}
-    if (document.getElementById("toggle_sb_services")) {document.getElementById("toggle_sb_services").addEventListener("click", toggle_sb_services)}
-    if (document.getElementById("toggle_sb_shortgeneral")) {document.getElementById("toggle_sb_shortgeneral").addEventListener("click", toggle_sb_shortgeneral)}
-    if (document.getElementById("toggle_sb_tunnels")) {document.getElementById("toggle_sb_tunnels").addEventListener("click", toggle_sb_tunnels)}
+  function addToggleListeners() {
+    if (document.querySelector("#sb_updateform") != undefined) {document.getElementById("toggle_sb_updatesection").addEventListener("click", toggle_sb_updatesection)}
+    if (document.getElementById("toggle_sb_advanced") != undefined) {document.getElementById("toggle_sb_advanced").addEventListener("click", toggle_sb_advanced)}
+    if (document.getElementById("toggle_sb_advancedgeneral") != undefined) {document.getElementById("toggle_sb_advancedgeneral").addEventListener("click", toggle_sb_advancedgeneral)}
+    if (document.getElementById("toggle_sb_bandwidth") != undefined) {document.getElementById("toggle_sb_bandwidth").addEventListener("click", toggle_sb_bandwidth)}
+    if (document.getElementById("toggle_sb_general") != undefined) {document.getElementById("toggle_sb_general").addEventListener("click", toggle_sb_general)}
+    if (document.getElementById("toggle_sb_internals") != undefined) {document.getElementById("toggle_sb_internals").addEventListener("click", toggle_sb_internals)}
+    if (document.getElementById("toggle_sb_localtunnels") != undefined) {document.getElementById("toggle_sb_localtunnels").addEventListener("click", toggle_sb_localtunnels)}
+    if (document.getElementById("toggle_sb_peers") != undefined) {document.getElementById("toggle_sb_peers").addEventListener("click", toggle_sb_peers)}
+    if (document.getElementById("toggle_sb_queue") != undefined) {document.getElementById("toggle_sb_queue").addEventListener("click", toggle_sb_queue)}
+    if (document.getElementById("toggle_sb_services") != undefined) {document.getElementById("toggle_sb_services").addEventListener("click", toggle_sb_services)}
+    if (document.getElementById("toggle_sb_shortgeneral") != undefined) {document.getElementById("toggle_sb_shortgeneral").addEventListener("click", toggle_sb_shortgeneral)}
+    if (document.getElementById("toggle_sb_tunnels") != undefined) {document.getElementById("toggle_sb_tunnels").addEventListener("click", toggle_sb_tunnels)}
   }
 
+  countTunnels();
   checkToggleStatus();
-  addListeners();
+  addToggleListeners();
 }
-export {initSectionToggle};
+
+export {sectionToggler};

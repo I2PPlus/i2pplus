@@ -13,4 +13,3 @@
 <% /* for non-script */ %>
 <%@include file="xhr1.jsi" %>
 </div>
-

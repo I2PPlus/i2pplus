@@ -1,9 +1,9 @@
 /* RefreshSidebar by dr|z3d */
 /* License: AGPLv3 or later */
 
-import {initSectionToggle} from "/js/sectionToggle.js";
+import {sectionToggler} from "/js/sectionToggle.js";
 
-function refreshSidebar(timestamp) {
+function refreshSidebar() {
   'use strict';
   var pageVisibility = document.visibilityState;
   var xhr = new XMLHttpRequest();
@@ -15,8 +15,6 @@ function refreshSidebar(timestamp) {
   var netstatus = document.getElementById("sb_status");
   var sb = document.querySelector("#sidebar");
   var shutdownstatus = document.getElementById("sb_shutdownStatus");
-
-  var toggle = document.querySelectorAll(".toggleSection");
 
   xhr.open("GET", "/xhr1.jsp?requestURI=" + uri + "&t=" + new Date().getTime(), true);
   xhr.responseType = "document";
@@ -30,24 +28,105 @@ function refreshSidebar(timestamp) {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
-        var sbResponse = xhr.responseXML.getElementById("sb");
+        xhr.addEventListener("loaded", sectionToggler);
+        if (xhr.reponseType !== "undefined") {
+          var sbResponse = xhr.responseXML.getElementById("sb");
+          var xhrDOM = new DOMParser().parseFromString(xhr.sbResponse, "text/html");
+        }
+
         if (down) {
           uncollapse();
           refreshAll();
         }
 
-        function updateVolatile() {
-          uncollapse();
-          initSectionToggle();
+        function updateVolatile(timestamp) {
+          //uncollapse();
+          sectionToggler();
+          var clock = document.getElementById("clock");
+          var clockResponse = xhr.responseXML.getElementById("clock");
+          var bandwidth = document.getElementById("sb_bandwidth");
+          var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
+          var graphStats = document.getElementById("sb_graphstats");
+          var graphStatsResponse = xhr.responseXML.getElementById("sb_graphstats");
+          var advancedGeneral = document.getElementById("sb_advancedgeneral");
+          var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
+          var shortGeneral = document.getElementById("sb_shortgeneral");
+          var shortGeneralResponse = xhr.responseXML.getElementById("sb_shortgeneral");
+          var general = document.getElementById("sb_general");
+          var generalResponse = xhr.responseXML.getElementById("sb_general");
+          var tunnels = document.getElementById("sb_tunnels");
+          var tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
+          var localTunnels = document.getElementById("sb_localtunnels");
+          var localTunnelsResponse = xhr.responseXML.getElementById("sb_localtunnels");
+          var peers = document.getElementById("sb_peers");
+          var peersResponse = xhr.responseXML.getElementById("sb_peers");
+          var queue = document.getElementById("sb_queue");
+          var queueResponse = xhr.responseXML.getElementById("sb_queue");
+          var memBar = document.getElementById("sb_memoryBar");
+          var memBarResponse = xhr.responseXML.getElementById("sb_memoryBar");
+          var routerControl = document.getElementById("sb_routerControl");
+          var routerControlResponse = xhr.responseXML.getElementById("sb_routerControl");
+          var updateSection = document.getElementById("sb_updatesection");
+          var updateSectionHR = document.querySelector("#sb_updatesection + hr");
+          var updateForm = document.getElementById("sb_updateform");
+          var updateForm = xhr.responseXML.getElementById("sb_updateform");
+          var netStatus = document.querySelector("sb_netstatus");
+          var netStatusResponse = xhr.responseXML.querySelector("sb_netstatus");
+          var tunnelBuildStatus = document.querySelector("sb_tunnelBuildstatus");
+          var tunnelBuildStatusResponse = xhr.responseXML.querySelector("sb_tunnelBuildstatus");
+
+          if (clock != undefined && !Object.is(clock.innerHTML, clockResponse.innerHTML)) {
+            clock.outerHTML = clockResponse.outerHTML;
+          }
+          if (bandwidth != undefined && bandwidth.hidden != true && !Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML)) {
+            bandwidth.outerHTML = bandwidthResponse.outerHTML;
+            graphStats.innerHTML = graphStats.innerHTML;
+            graphStats.style.opacity = null;
+          } else if (bandwidth.hidden == true) {
+            graphStats.innerHTML = graphStatsResponse.innerHTML;
+            graphStats.style.opacity = "1";
+          }
+          if (advancedGeneral != undefined && advancedGeneral.hidden != true && !Object.is(advancedGeneral.innerHTML, advancedGeneralResponse.innerHTML)) {
+            advancedGeneral.outerHTML = advancedGeneralResponse.outerHTML;
+          }
+          if (shortGeneral != undefined && shortGeneral.hidden != true && !Object.is(shortGeneral.innerHTML, shortGeneralResponse.innerHTML)) {
+            shortGeneral.outerHTML = shortGeneralResponse.outerHTML;
+          }
+          if (general != undefined && general.hidden != true && !Object.is(general.innerHTML, generalResponse.innerHTML)) {
+            general.outerHTML = generalResponse.outerHTML;
+          }
+          if (tunnels != undefined && tunnels.hidden != true && !Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
+            tunnels.outerHTML = tunnelsResponse.outerHTML;
+          }
+          if (localTunnels != undefined && localTunnels.hidden != true && !Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
+            localTunnels.outerHTML = localTunnelsResponse.outerHTML;
+          }
+          if (peers != undefined && peers.hidden != true && !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
+            peers.outerHTML = peersResponse.outerHTML;
+          }
+          if (queue != undefined && queue.hidden != true && !Object.is(queue.innerHTML, queueResponse.innerHTML)) {
+            queue.outerHTML = queueResponse.outerHTML;
+          }
+          if (memBar != undefined && !Object.is(memBar.innerHTML, memBarResponse.innerHTML)) {
+            memBar.outerHTML = memBarResponse.outerHTML;
+          }
+          if (updateSection != undefined && updateForm != undefined && updateForm.hidden != true && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
+            updateForm.innerHTML = updateFormResponse.innerHTML;
+            if (updateSectionHR.hidden == true) {
+              updateSectionHR.hidden = null;
+            }
+          }
+          if (routerControl != undefined && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
+            routerControl.outerHTML = routerControlResponse.outerHTML;
+          }
+
           var updating = document.querySelectorAll(".volatile");
           var updatingResponse = xhr.responseXML.querySelectorAll(".volatile");
           var i;
           for (i = 0; i < updating.length; i += 1) {
-            if (typeof updating[i] !== "undefined" && !typeof updating[i].classList.contains("hide") && typeof updatingResponse[i] !== "undefined") {
+            if (typeof updating[i] !== "undefined" && typeof updatingResponse[i] !== "undefined") {
               if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
-                if (updating.length === updatingResponse.length) {
-                  updating[i].outerHTML = updatingResponse[i].outerHTML;
-                } else {
+                if (updating.length !== updatingResponse.length) {
                   window.requestAnimationFrame(refreshAll);
                 }
               }
@@ -59,6 +138,7 @@ function refreshSidebar(timestamp) {
           if (typeof sbResponse !== "undefined" && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
             xhrContainer.innerHTML = sbResponse.innerHTML;
           }
+          sectionToggler();
         }
 
         function refreshGraph(timestamp) {
@@ -68,8 +148,11 @@ function refreshSidebar(timestamp) {
             const image = new Image(245, 50);
             image.onload = renderGraph;
             image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
             ctx.globalCompositeOperation = "source-out";
             ctx.globalAlpha = 1;
+            minigraph.style.background = image.src;
 
             function renderGraph() {
               minigraph.width = 245;
@@ -80,6 +163,7 @@ function refreshSidebar(timestamp) {
         }
 
         function uncollapse() {
+          sectionToggler();
           var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
           var a;
           for (a = 1; a < sectionTitle.length - 1; a += 1) {
@@ -89,11 +173,11 @@ function refreshSidebar(timestamp) {
             }
           }
 
-          var collapsed = document.querySelectorAll("#sidebar .collapse, #sidebar .collapse + hr");
+          var collapsed = document.querySelectorAll("#sidebar .volatile.collapse, #sidebar .volatile.collapse + hr");
           var c;
           for (c = 0; c < collapsed.length; c += 1) {
             var styleHidden = collapsed[c].getAttribute("hidden");
-            if (styleHidden && !styleHidden.classList.contains("hide")) {
+            if (styleHidden) {
               collapsed[c].removeAttribute("hidden");
             }
           }
@@ -108,7 +192,8 @@ function refreshSidebar(timestamp) {
 
         if (pageVisibility == "visible") {
           removeMeta();
-          window.requestAnimationFrame(updateVolatile);
+          //window.requestAnimationFrame(updateVolatile);
+          updateVolatile();
 
           var minigraph = document.getElementById("minigraph");
           if (minigraph) {
@@ -173,7 +258,7 @@ function refreshSidebar(timestamp) {
       }
     }
   };
-  xhr.addEventListener("load", initSectionToggle);
+  xhr.addEventListener("loaded", sectionToggler);
   xhr.send();
 
 }

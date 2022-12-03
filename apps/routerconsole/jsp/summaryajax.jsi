@@ -8,22 +8,26 @@
   var visibility = document.visibilityState;
   var repeat;
   refreshSidebar();
-  if (refresh > 0) {
-    function runTimer() {
-      var repeat = setTimeout(function updateSidebar() {
-        refreshSidebar();
+  function runTimer() {
+    var repeat = setTimeout(function updateSidebar() {
+      refreshSidebar();
+      if (visibility = "visible") {
         setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
-      }, <%=intl.getRefresh()%> * 1000);
-    }
-    runTimer();
-    }
+      } else if (refresh <= 10) {
+        setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000 + 5);
+      } else {
+        setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
+      }
+    }, <%=intl.getRefresh()%> * 1000);
+  }
+  runTimer();
 </script>
 <%
     } else {
 %>
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
-  window.addEventListener("pageshow", refreshSidebar);
+  refreshSidebar();
 </script>
 <%
     }

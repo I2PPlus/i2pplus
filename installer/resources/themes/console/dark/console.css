@@ -250,6 +250,17 @@ p:empty + .sb_notice{margin-top:9px}
 .tunnelBuildStatus.hidden{color:#999}
 .tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) var(--center) / 15px}
 
+/* section toggler */
+#sidebar h3{position:relative}
+.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;background:#010 var(--dropdown) no-repeat center calc(50% - 2px) / 10px;appearance:none;box-shadow:none;border-left:var(--border);display:none}
+h3:hover .toggleSection{display:inline-block;z-index:999}
+.toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
+.toggleSection:not(:checked){padding-top:6px}
+.toggleSection:active{box-shadow:var(--btn_shadow_active);background-color:var(--hover)}
+.toggleSection:checked:active{box-shadow:var(--highlight), inset 3px -3px 3px 3px rgba(0,0,0,.8), 0 0 0 1px #000}
+#sb_updatesection h3.collapsed a::after{content:"*"}
+#tunnelCount{background:#010;border-radius:1px;font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #141, 0 0 0 1px #000 inset}
+
 /* main section */
 .sb,.main,h1,#news,.confignav,.tab,.tab2,table.search,.applink,.sitemapLink,.sitemapLabel{border:var(--border_hard)}
 .main,#news,h1,.sorry{margin-left:226px}
