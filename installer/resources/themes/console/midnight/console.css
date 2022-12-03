@@ -486,7 +486,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .toggleSection:active{box-shadow:var(--btn_shadow_active);background-color:var(--hover)}
 .toggleSection:checked:active{box-shadow:var(--highlight), inset 3px -3px 3px 3px rgba(0,0,0,.8), 0 0 0 1px #000}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#sidebar h3 a .badge:not([hidden]),#tunnelCount{word-spacing:-.4em;text-transform:lowercase;background:#002;border-radius:1px;font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c, 0 0 0 1px #000 inset}
+#sidebar h3 a .badge:not([hidden]),#tunnelCount{word-spacing:-.4em;letter-spacing:0;text-transform:lowercase;background:#002;border-radius:1px;font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c, 0 0 0 1px #000 inset}
 #tunnelCount+#tunnelCount{display:none}
 
 /* top navigation */

@@ -89,9 +89,7 @@ function refreshSidebar() {
           var b;
           for (b = 0; b < badges.length; b += 1) {
             if (typeof badges[b] !== "undefined" && typeof badgesResponse[b] !== "undefined") {
-              if (!Object.is(badges[b].innerHTML, badgesResponse[b].innerHTML)) {
-                badges[b].outerHTML = badgesResponse[b].outerHTML;
-              }
+              badges[b].outerHTML = badgesResponse[b].outerHTML;
               if (badges.length !== badgesResponse.length) {
                 window.requestAnimationFrame(refreshAll);
               }
