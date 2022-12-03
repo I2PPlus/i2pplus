@@ -178,7 +178,8 @@ class EstablishmentManager {
     private static final String PROP_DISABLE_EXT_OPTS = "i2np.udp.disableExtendedOptions";
 
     // SSU 2
-    private static final int MAX_TOKENS = 512;
+    //private static final int MAX_TOKENS = 512;
+    private static final int MAX_TOKENS = 4096;
     public static final long IB_TOKEN_EXPIRATION = 2*60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
