@@ -58,6 +58,7 @@ function refreshSidebar() {
           var tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
           var localTunnels = document.getElementById("sb_localtunnels");
           var localTunnelsResponse = xhr.responseXML.getElementById("sb_localtunnels");
+          var tunnelCount = document.getElementById("tunnelCount");
           var peers = document.getElementById("sb_peers");
           var peersResponse = xhr.responseXML.getElementById("sb_peers");
           var queue = document.getElementById("sb_queue");
@@ -69,7 +70,7 @@ function refreshSidebar() {
           var updateSection = document.getElementById("sb_updatesection");
           var updateSectionHR = document.querySelector("#sb_updatesection + hr");
           var updateForm = document.getElementById("sb_updateform");
-          var updateForm = xhr.responseXML.getElementById("sb_updateform");
+          var updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
           var netStatus = document.querySelector("sb_netstatus");
           var netStatusResponse = xhr.responseXML.querySelector("sb_netstatus");
           var tunnelBuildStatus = document.querySelector("sb_tunnelBuildstatus");
@@ -100,6 +101,12 @@ function refreshSidebar() {
           }
           if (localTunnels != undefined && localTunnels.hidden != true && !Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
             localTunnels.outerHTML = localTunnelsResponse.outerHTML;
+            if (tunnelCount && !Object.is(tunnelCount.innerHTML, tunnelCountResponse.innerHTML)) {
+              var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
+              if (doubleCount) {
+                doubleCount.remove();
+              }
+            }
           }
           if (peers != undefined && peers.hidden != true && !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
             peers.outerHTML = peersResponse.outerHTML;

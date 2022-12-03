@@ -250,7 +250,7 @@ function sectionToggler() {
   }
 
   function toggle_sb_tunnels() {
-    if (document.getElementById("toggle_sb_tunnels").checked == false) {
+    if (document.getElementById("toggle_sb_tunnels").checked == false && document.getElementById("sb_tunnels") != undefined) {
       hide_tunnels();
     } else {
       show_tunnels();
@@ -334,8 +334,14 @@ function sectionToggler() {
   function countTunnels() {
     var tunnelCount = document.querySelectorAll("img[src*=\"images/local_\"]").length;
     if (document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML.indexOf(tunnelCount) == -1) {
-      var displayCount = " <span id=\"tunnelCount\">" + tunnelCount + "</span>";
-      document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML += displayCount;
+      if (tunnelCount > 0) {
+        var displayCount = " <span id=\"tunnelCount\">" + tunnelCount + "</span>";
+        document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML += displayCount;
+      }
+      var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
+      if (doubleCount) {
+        doubleCount.remove();
+      }
     }
   }
 
