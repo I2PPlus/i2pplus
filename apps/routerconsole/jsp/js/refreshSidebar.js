@@ -79,6 +79,10 @@ function refreshSidebar() {
           var tunnelStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
           var updateBar = document.querySelector(".sb_updatestatus + .percentBarOuter");
           var updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + .percentBarOuter");
+          var updateForm = document.getElementById("sb_updateform");
+          var updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
+          var updateProgress = document.getElementById("sb_updateprogress");
+          var updateProgressResponse = xhr.responseXML.getElementById("sb_updateprogress");
           var updateSection = document.getElementById("sb_updatesection");
           var updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
           var updateSectionHR = document.querySelector("#sb_updatesection + hr");
@@ -153,8 +157,19 @@ function refreshSidebar() {
           if (shutdownStatus != undefined && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
             shutdownStatus.innerHTML = shutdownStatusResponse.innerHTML;
           }
-          if (updateSection != undefined && updateSection.hidden != true && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
-            updateSection.innerHTML = updateSectionResponse.innerHTML;
+          if (updateProgress != undefined && !Object.is(updateprogress.innerHTML, updateprogressResponse.innerHTML)) {
+            updateProgress.innerHTML = updateProgressResponse.innerHTML;
+          } else if (updateProgress != undefined && updateProgressResponse == undefined) {
+            updateProgress.remove();
+          }
+          if (updateSection != undefined && updateSection.classList.contains("hide") != true && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
+            updateSection.outerHTML = updateSectionResponse.outerHTML;
+            if (updateSectionHR.hidden == true) {
+              updateSectionHR.hidden = null;
+            }
+          }
+          if (updateForm != undefined && updateForm.hidden != true && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
+            updateForm.outerHTML = updateFormResponse.outerHTML;
             if (updateSectionHR.hidden == true) {
               updateSectionHR.hidden = null;
             }
