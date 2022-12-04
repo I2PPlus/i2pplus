@@ -257,9 +257,10 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 .toggleSection:not(:checked){padding-top:6px}
 .toggleSection:active{box-shadow:var(--btn_shadow_active);background-color:var(--hover)}
-.toggleSection:checked:active{box-shadow:var(--highlight), inset 3px -3px 3px 3px rgba(0,0,0,.8), 0 0 0 1px #000}
+.toggleSection:checked:active{box-shadow:var(--highlight),inset 3px -3px 3px 3px rgba(0,0,0,.8),0 0 0 1px #000}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#sidebar h3 a .badge,#tunnelCount{letter-spacing:0;word-spacing:-0.02em;text-transform:lowercase;background:#010;border-radius:1px;font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #141, 0 0 0 1px #000 inset}
+#sidebar h3 a .badge,#tunnelCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);border-radius:1px;font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #141,0 0 0 1px #000 inset}
+#sidebar h3:hover a .badge,h3:hover #tunnelCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #sidebar h3 a .badge[hidden]{display:none;}
 #tunnelCount+#tunnelCount{display:none}
 
@@ -698,7 +699,7 @@ h3[id="udpcon"]{width:auto}
 #peerdefs img[width="12"]{margin-right:3px;margin-left:2px}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center / 12px}
 #transportSummary th.out span{background:var(--out) no-repeat center center / 12px}
-#transports .script,#ntcpcon .script,#udpcon .script{margin: -4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
+#transports .script,#ntcpcon .script,#udpcon .script{margin:-4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
 #transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
 #peers #autorefresh{margin-right:4px}

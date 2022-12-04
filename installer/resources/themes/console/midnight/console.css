@@ -1,9 +1,9 @@
-/* I2P Theme:Midnight */
-/* Description:Dark blue with chrome highlights */
+/* I2P Theme: Midnight */
+/* Description: Dark blue with chrome highlights */
 /* Dedicated to sponge */
 /* Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
 /* Additional thanks to NASA for the planet earth image */
-/* Author:dr|z3d */
+/* Author: dr|z3d */
 
 @import url(global.css);
 
@@ -312,7 +312,7 @@ p:empty + .sb_notice{margin-top:10px}
 #sb_localid + #sb_version{margin-top:6px;margin-bottom:5px}
 #sidebar tr{border:0;background-image:none;background-color:transparent}
 #sidebar tr:nth-child(even){background:rgba(16,16,48,.5)}
-#sidebar #sb_general tr:hover,#sidebar #sb_shortgeneral tr:hover,#sidebar #sb_advancedgeneral tr:hover,#sidebar #sb_bandwidth tr:hover,#sidebar #sb_tunnels tr:hover,#sidebar #sb_peers tr:hover,#sidebar #sb_queue tr:hover {background:linear-gradient(90deg,rgba(16,16,32,.7),rgba(32,32,96,.5))}
+#sidebar #sb_general tr:hover,#sidebar #sb_shortgeneral tr:hover,#sidebar #sb_advancedgeneral tr:hover,#sidebar #sb_bandwidth tr:hover,#sidebar #sb_tunnels tr:hover,#sidebar #sb_peers tr:hover,#sidebar #sb_queue tr:hover{background:linear-gradient(90deg,rgba(16,16,32,.7),rgba(32,32,96,.5))}
 #sidebar td:nth-child(2)::before{display:inline-block;min-height:22px;vertical-align:middle;content:""}
 #sidebar form{margin:-4px -9px -7px}
 .sb_notice + p:empty + form{margin-top:9px}
@@ -484,9 +484,10 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 .toggleSection:not(:checked){padding-top:6px}
 .toggleSection:active{box-shadow:var(--btn_shadow_active);background-color:var(--hover)}
-.toggleSection:checked:active{box-shadow:var(--highlight), inset 3px -3px 3px 3px rgba(0,0,0,.8), 0 0 0 1px #000}
+.toggleSection:checked:active{box-shadow:var(--highlight),inset 3px -3px 3px 3px rgba(0,0,0,.8),0 0 0 1px #000}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#sidebar h3 a .badge:not([hidden]),#tunnelCount{letter-spacing:0;word-spacing:-0.02em;text-transform:lowercase;background:#002;border-radius:1px;font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c, 0 0 0 1px #000 inset}
+#sidebar h3 a .badge:not([hidden]),#tunnelCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);border-radius:1px;font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
+#sidebar h3:hover a .badge,h3:hover #tunnelCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #tunnelCount+#tunnelCount{display:none}
 
 /* top navigation */
@@ -1560,11 +1561,11 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peerdefs{line-height:1.5}
 #peerdefs td{padding:3px}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
-#transportSummary td {text-align:center}
+#transportSummary td{text-align:center}
 #peers .tablefooter td{font-weight:700;background:var(--th)}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center / 12px}
 #transportSummary th.out span{background:var(--out) no-repeat center center / 12px}
-#transports .script,#ntcpcon .script,#udpcon .script{margin: -4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
+#transports .script,#ntcpcon .script,#udpcon .script{margin:-4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
 #transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
 #peers #autorefresh{margin-right:4px}

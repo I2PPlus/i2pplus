@@ -1,6 +1,6 @@
 /* I2P Theme: Light */
 /* Description: Light blue highlights. */
-/* Author:dr|z3d */
+/* Author: dr|z3d */
 
 @import url(global.css);
 
@@ -118,7 +118,7 @@ h4.sb_info + hr + form{margin-bottom:-1px;padding-top:5px}
 #sb_localtunnels td.tunnelReady{background-image:var(--local_up)}
 #sb_localtunnels td.tunnelRebuilding{background-image:var(--local_down)}
 #sb_localtunnels td.tunnelServer,#sb_localtunnels tr:hover td.tunnelServer{background-image:var(--server)}
-#sb_localtunnels td.tunnelI2PSnark,#sb_localtunnels tr:hover td.tunnelI2PSnark{background-image: url(/themes/console/images/snark.svg)}
+#sb_localtunnels td.tunnelI2PSnark,#sb_localtunnels tr:hover td.tunnelI2PSnark{background-image:url(/themes/console/images/snark.svg)}
 #sb_localtunnels td img::after{content:"";display:inline-block;height:16px}
 #sb_localtunnels tr:hover{background:#ffd}
 #sb_localtunnels td[colspan="3"],#sb_localtunnels tr:hover td[colspan="3"]{line-height:20px;font-size:0;background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px)}
@@ -185,7 +185,7 @@ input[type=checkbox].toggleSection:checked:active{box-shadow:var(--highlight),in
 input[type=checkbox].toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#sidebar h3 a .badge:not([hidden]),#tunnelCount{letter-spacing:0;word-spacing:-0.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;border-radius:1px;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
+#sidebar h3 a .badge:not([hidden]),#tunnelCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;border-radius:1px;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
 
 /* ajax router down */
 #down{margin:-4px -6px -5px;width:100%;display:inline-block;line-height:32px;font-size:0;color:#770;box-shadow:inset 0 0 0 1px #800,inset 0 0 4px 2px #ffe,inset 0 0 5px 0 #ffd;background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px);background-size:300%;animation:down linear 10s reverse infinite}
@@ -934,13 +934,13 @@ h3#udpcon{margin-top:7px}
 #ntcpconnections td:first-child,#udpconnections td:first-child{min-width:58px}
 #peer_thresholds{position:absolute;top:10px;width:100%}
 #thresholds tr:hover td,#leasesetdebug tr:hover td,tr:hover .cells{box-shadow:inset 0 0 0 1px #ffe;transition:ease all .05s}
-#transportSummary td {text-align:center;padding:8px;font-style:normal}
+#transportSummary td{text-align:center;padding:8px;font-style:normal}
 #transportSummary tr:hover{background:#ffd}
 #peers .tablefooter td{font-weight:700;background:var(--th)}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center / 12px}
 #transportSummary th.out span{background:var(--out) no-repeat center center / 12px}
-#transports {margin-bottom:-2px}
-#transports .script,#ntcpcon .script,#udpcon .script{margin: -3px 0 -4px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
+#transports{margin-bottom:-2px}
+#transports .script,#ntcpcon .script,#udpcon .script{margin:-3px 0 -4px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
 #transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
 #peers #autorefresh{margin-right:4px}

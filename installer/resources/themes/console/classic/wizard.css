@@ -1,9 +1,9 @@
 /* I2P+ Classic theme wizard specifics */
-/* Author: dr|z3d, 2022 */
+/* Author:dr|z3d,2022 */
 
-#wizardpage #sidebar .cancel {margin:4px 0 6px}
+#wizardpage #sidebar .cancel{margin:4px 0 6px}
 #wizardpage #sidebar #sb_logo{height:44px !important}
-#wizardpage p {font-size:110%}
+#wizardpage p{font-size:110%}
 #wizardpage .yes,#wizardpage .no{width:20px;height:20px;display:inline-block;font-size:0}
 #wizardpage .yes{background:var(--yes) no-repeat center center}
 #wizardpage .no{background:var(--no) no-repeat center center}
@@ -19,4 +19,4 @@
 #bandwidthTestRunning{margin:10px 0;padding:10px;width:calc(100% - 22px);text-align:center;font-style:italic;font-weight:700}
 .langselect{margin:3px 2px 4px;float:none}
 .optionsave{border:1px solid var(--border);background:none}
-.wizardbuttons {margin-bottom:10px}
+.wizardbuttons{margin-bottom:10px}

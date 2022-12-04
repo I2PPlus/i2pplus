@@ -42,49 +42,50 @@ function refreshSidebar() {
         function updateVolatile(timestamp) {
           //uncollapse();
           sectionToggler();
-          var clock = document.getElementById("clock");
-          var clockResponse = xhr.responseXML.getElementById("clock");
-          var bandwidth = document.getElementById("sb_bandwidth");
-          var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
-          var graphStats = document.getElementById("sb_graphstats");
-          var graphStatsResponse = xhr.responseXML.getElementById("sb_graphstats");
           var advancedGeneral = document.getElementById("sb_advancedgeneral");
           var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
-          var shortGeneral = document.getElementById("sb_shortgeneral");
-          var shortGeneralResponse = xhr.responseXML.getElementById("sb_shortgeneral");
+          var badges = document.querySelectorAll("h3 a .badge");
+          var badgesResponse = xhr.responseXML.querySelectorAll("h3 a .badge");
+          var bandwidth = document.getElementById("sb_bandwidth");
+          var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
+          var clock = document.getElementById("clock");
+          var clockResponse = xhr.responseXML.getElementById("clock");
           var general = document.getElementById("sb_general");
           var generalResponse = xhr.responseXML.getElementById("sb_general");
-          var tunnels = document.getElementById("sb_tunnels");
-          var tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
+          var graphStats = document.getElementById("sb_graphstats");
+          var graphStatsResponse = xhr.responseXML.getElementById("sb_graphstats");
           var localTunnels = document.getElementById("sb_localtunnels");
           var localTunnelsResponse = xhr.responseXML.getElementById("sb_localtunnels");
-          var tunnelCount = document.getElementById("tunnelCount");
+          var memBar = document.getElementById("sb_memoryBar");
+          var memBarResponse = xhr.responseXML.getElementById("sb_memoryBar");
+          var netStatus = document.querySelector("sb_netstatus");
+          var netStatusResponse = xhr.responseXML.querySelector("sb_netstatus");
+          var notice = document.getElementById("sb_notice");
+          var noticeResponse = xhr.responseXML.getElementById("sb_notice");
           var peers = document.getElementById("sb_peers");
           var peersResponse = xhr.responseXML.getElementById("sb_peers");
           var queue = document.getElementById("sb_queue");
           var queueResponse = xhr.responseXML.getElementById("sb_queue");
-          var memBar = document.getElementById("sb_memoryBar");
-          var memBarResponse = xhr.responseXML.getElementById("sb_memoryBar");
-          var updateBar = document.querySelector(".sb_updatestatus + .percentBarOuter");
-          var updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + .percentBarOuter");
           var routerControl = document.getElementById("sb_routerControl");
           var routerControlResponse = xhr.responseXML.getElementById("sb_routerControl");
-          var updateSection = document.getElementById("sb_updatesection");
-          var updateSectionHR = document.querySelector("#sb_updatesection + hr");
-          var updateForm = document.getElementById("sb_updateform");
-          var updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
-          var updateStatus = document.getElementById("sb_updatestatus");
-          var updateStatusResponse = xhr.responseXML.getElementById("sb_updatestatus");
-          var netStatus = document.querySelector("sb_netstatus");
-          var netStatusResponse = xhr.responseXML.querySelector("sb_netstatus");
-          var tunnelStatus = document.getElementById("sb_tunnelstatus");
-          var tunnelStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
-          var notice = document.getElementById("sb_notice");
-          var noticeResponse = xhr.responseXML.getElementById("sb_notice");
+          var shortGeneral = document.getElementById("sb_shortgeneral");
+          var shortGeneralResponse = xhr.responseXML.getElementById("sb_shortgeneral");
           var shutdownStatus = document.getElementById("sb_shutdownstatus");
           var shutdownStatusResponse = xhr.responseXML.getElementById("sb_shutdownstatus");
-          var badges = document.querySelectorAll("h3 a .badge");
-          var badgesResponse = xhr.responseXML.querySelectorAll("h3 a .badge");
+          var tunnelCount = document.getElementById("tunnelCount");
+          var tunnels = document.getElementById("sb_tunnels");
+          var tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
+          var tunnelStatus = document.getElementById("sb_tunnelstatus");
+          var tunnelStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
+          var updateBar = document.querySelector(".sb_updatestatus + .percentBarOuter");
+          var updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + .percentBarOuter");
+          var updateForm = document.getElementById("sb_updateform");
+          var updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
+          var updateSection = document.getElementById("sb_updatesection");
+          var updateSectionHR = document.querySelector("#sb_updatesection + hr");
+          var updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
+          var updateStatus = document.getElementById("sb_updatestatus");
+          var updateStatusResponse = xhr.responseXML.getElementById("sb_updatestatus");
 
           var b;
           for (b = 0; b < badges.length; b += 1) {
@@ -295,11 +296,11 @@ function refreshSidebar() {
             if (clock != null) {
               clock.innerHTML = "--:--:--";
             }
-            var badges = document.querySelectorAll("h3 a .badge");
+            var badges = document.querySelectorAll("#sidebar h3 a .badge");
             var b;
-            for (b = 0; i < badges.length; b += 1) {
+            for (b = 0; b < badges.length; b += 1) {
               if (typeof badges[b] !== "undefined") {
-              badges[b].innerHTML = "-";
+                badges[b].innerHTML = "-";
               }
             }
             netstatus.innerHTML = '<span id="down">Router is down</span>';
