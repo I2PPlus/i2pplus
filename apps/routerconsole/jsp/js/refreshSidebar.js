@@ -79,11 +79,9 @@ function refreshSidebar() {
           var tunnelStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
           var updateBar = document.querySelector(".sb_updatestatus + .percentBarOuter");
           var updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + .percentBarOuter");
-          var updateForm = document.getElementById("sb_updateform");
-          var updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
           var updateSection = document.getElementById("sb_updatesection");
-          var updateSectionHR = document.querySelector("#sb_updatesection + hr");
           var updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
+          var updateSectionHR = document.querySelector("#sb_updatesection + hr");
           var updateStatus = document.getElementById("sb_updatestatus");
           var updateStatusResponse = xhr.responseXML.getElementById("sb_updatestatus");
 
@@ -153,17 +151,10 @@ function refreshSidebar() {
           if (shutdownStatus != undefined && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
             shutdownStatus.innerHTML = shutdownStatusResponse.innerHTML;
           }
-          if (updateSection != undefined && updateForm != undefined && updateForm.hidden != true && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
-            updateForm.innerHTML = updateFormResponse.innerHTML;
+          if (updateSection != undefined && updateSection.hidden != true && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
+            updateSection.innerHTML = updateSectionResponse.innerHTML;
             if (updateSectionHR.hidden == true) {
               updateSectionHR.hidden = null;
-            }
-          } else {
-            if (updateSection != undefined && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
-              updateSection.innerHTML = updateSectionResponse.innerHTML;
-              if (updateSectionHR.hidden == true) {
-                updateSectionHR.hidden = null;
-             }
             }
           }
           if (routerControl != undefined && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
