@@ -163,13 +163,11 @@ function refreshSidebar() {
           } else if (updateProgress != undefined && updateProgressResponse == undefined) {
             updateProgress.remove();
           }
-          if (updateSection != undefined && updateSection.classList.contains("hide") != true && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
+          if (updateSection != undefined && updateSection.classList.contains("hide") != true) {
             updateSection.outerHTML = updateSectionResponse.outerHTML;
             if (updateSectionHR.hidden == true) {
               updateSectionHR.hidden = null;
             }
-          } else if (updateSection != undefined && updateSection.classList.contains("hide") != true && updateSectionResponse == undefined) {
-            window.requestAnimationFrame(refreshAll);
           }
           if (updateForm != undefined && updateForm.hidden != true && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
             updateForm.outerHTML = updateFormResponse.outerHTML;
