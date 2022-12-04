@@ -337,20 +337,6 @@ function sectionToggler() {
     }
   }
 
-  function countTunnels() {
-    var tunnelCount = document.querySelectorAll("img[src*=\"images/local_\"]").length;
-    if (document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML.indexOf(tunnelCount) == -1) {
-      if (tunnelCount > 0) {
-        var displayCount = " <span id=\"tunnelCount\">" + tunnelCount + "</span>";
-        document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML += displayCount;
-      }
-      var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
-      if (doubleCount) {
-        doubleCount.remove();
-      }
-    }
-  }
-
   function checkToggleStatus() {
     if (localStorage["section_advancedgeneral"] != null) {hide_advancedgeneral()}
     if (localStorage["section_advanced"] != null) {hide_advanced()}
@@ -381,9 +367,22 @@ function sectionToggler() {
     if (document.getElementById("toggle_sb_tunnels") != undefined) {document.getElementById("toggle_sb_tunnels").addEventListener("click", toggle_sb_tunnels)}
   }
 
-  countTunnels();
   checkToggleStatus();
   addToggleListeners();
 }
 
-export {sectionToggler};
+function countTunnels() {
+  var tunnelCount = document.querySelectorAll("img[src*=\"images/local_\"]").length;
+  if (document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML.indexOf(tunnelCount) == -1) {
+    if (tunnelCount > 0) {
+      var displayCount = " <span id=\"tunnelCount\">" + tunnelCount + "</span>";
+      document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML += displayCount;
+    }
+    var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
+    if (doubleCount) {
+      doubleCount.remove();
+    }
+  }
+}
+
+export {sectionToggler, countTunnels};

@@ -1,7 +1,7 @@
 /* RefreshSidebar by dr|z3d */
 /* License: AGPLv3 or later */
 
-import {sectionToggler} from "/js/sectionToggle.js";
+import {sectionToggler, countTunnels} from "/js/sectionToggle.js";
 
 function refreshSidebar() {
   'use strict';
@@ -313,7 +313,10 @@ function refreshSidebar() {
       }
     }
   };
-  xhr.addEventListener("loaded", sectionToggler);
+  xhr.addEventListener("loaded", () => {
+    sectionToggler();
+    countTunnels();
+  });
   xhr.send();
 
 }
