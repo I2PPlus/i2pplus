@@ -2673,7 +2673,7 @@ class EstablishmentManager {
             _inboundTokens.put(peer, tok);
         }
         if (_log.shouldDebug())
-            _log.debug("Added Inbound " + tok + " for [" + peer.toBase64().substring(0,6) + "]");
+            _log.debug("Added Inbound " + tok + " for [" + peer + "]");
         return tok;
     }
 
@@ -2697,7 +2697,7 @@ class EstablishmentManager {
         }
         boolean rv = tok.getExpiration() >= _context.clock().now();
         if (rv && _log.shouldDebug())
-            _log.debug("Used Inbound " + tok + " for [" + peer.toBase64().substring(0,6) + "]");
+            _log.debug("Used Inbound " + tok + " for [" + peer + "]");
         return rv;
     }
 
