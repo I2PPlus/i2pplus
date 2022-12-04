@@ -6,6 +6,7 @@ import {sectionToggler, countTunnels} from "/js/sectionToggle.js";
 function refreshSidebar() {
   'use strict';
   var pageVisibility = document.visibilityState;
+  var meta = document.querySelector('[http-equiv="refresh"]');
   var xhr = new XMLHttpRequest();
   var uri = location.pathname.substring(1);
   var xhrContainer = document.getElementById("xhr");
@@ -167,6 +168,8 @@ function refreshSidebar() {
             if (updateSectionHR.hidden == true) {
               updateSectionHR.hidden = null;
             }
+          } else if (updateSection != undefined && updateSection.classList.contains("hide") != true && updateSectionResponse == undefined) {
+            window.requestAnimationFrame(refreshAll);
           }
           if (updateForm != undefined && updateForm.hidden != true && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
             updateForm.outerHTML = updateFormResponse.outerHTML;
@@ -241,14 +244,15 @@ function refreshSidebar() {
         }
 
         function removeMeta() {
-          var meta = document.querySelector('[http-equiv="refresh"]');
           if (meta != null) {
             meta.remove();
           }
         }
 
         if (pageVisibility == "visible") {
-          removeMeta();
+          if (meta != null) {
+            removeMeta();
+          }
           //window.requestAnimationFrame(updateVolatile);
           updateVolatile();
 
@@ -262,7 +266,9 @@ function refreshSidebar() {
         } else if (xhr.readyState == 4 && xhr.status == 200) {
 
           setTimeout(function() {
-            removeMeta();
+            if (meta != null) {
+              removeMeta();
+            }
             var metarefresh = document.createElement("meta");
             metarefresh.httpEquiv = "refresh";
             metarefresh.content = "1800";
