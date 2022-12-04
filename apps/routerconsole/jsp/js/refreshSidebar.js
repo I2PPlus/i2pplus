@@ -95,6 +95,8 @@ function refreshSidebar() {
             }
           }
 
+          countTunnels();
+
           if (clock != undefined && !Object.is(clock.innerHTML, clockResponse.innerHTML)) {
             clock.outerHTML = clockResponse.outerHTML;
           }
@@ -178,6 +180,7 @@ function refreshSidebar() {
             xhrContainer.innerHTML = sbResponse.innerHTML;
           }
           sectionToggler();
+          countTunnels();
         }
 
         function refreshGraph(timestamp) {
