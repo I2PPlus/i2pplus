@@ -89,7 +89,7 @@ function refreshSidebar() {
 
           var b;
           for (b = 0; b < badges.length; b += 1) {
-            if (typeof badges[b] !== "undefined" && typeof badgesResponse[b] !== "undefined") {
+            if (typeof badges[b] !== "undefined") {
               badges[b].innerHTML = badgesResponse[b].innerHTML;
               if (badges.length !== badgesResponse.length) {
                 window.requestAnimationFrame(refreshAll);
@@ -313,6 +313,7 @@ function refreshSidebar() {
       }
     }
   };
+
   xhr.addEventListener("loaded", () => {
     sectionToggler();
     countTunnels();

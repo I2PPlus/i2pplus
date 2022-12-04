@@ -1154,7 +1154,13 @@ class SummaryBarRenderer {
            .append(_t("What's in the router's job queue?"))
            .append("\">")
            .append(_t("Congestion"))
-           .append(" <span class=\"badge\" hidden>").append(_helper.getJobLag()).append("</span>")
+           .append(" <span class=\"badge\" hidden>");
+        if (_context.router().getUptime() < 5*60*1000) {
+           buf.append("-");
+        } else {
+           buf.append(_helper.getJobLag());
+        }
+        buf.append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_queue\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_queue\" class=\"volatile\">\n" +
                    "<tr title=\"")
