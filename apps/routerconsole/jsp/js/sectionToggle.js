@@ -377,6 +377,10 @@ function countTunnels() {
     if (tunnelCountLength > 0) {
       var displayCount = " <span id=\"tunnelCount\">" + tunnelCountLength + "</span>";
       document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML += displayCount;
+      var badgeCount = document.getElementById("tunnelCount").innerHTML;
+      if (badgeCount != tunnelCountLength) {
+        badgeCount = tunnelCountLength;
+      }
     }
     var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
     if (doubleCount) {
