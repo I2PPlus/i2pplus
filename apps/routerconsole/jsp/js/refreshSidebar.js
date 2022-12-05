@@ -163,7 +163,7 @@ function refreshSidebar() {
               updateSectionHR.hidden = null;
             }
           }
-          if (updateProgress != undefined && !Object.is(updateprogress.innerHTML, updateprogressResponse.innerHTML)) {
+          if (updateProgress != undefined && !Object.is(updateProgress.innerHTML, updateProgressResponse.innerHTML)) {
             updateProgress.innerHTML = updateProgressResponse.innerHTML;
           }
           if (tunnelBuildStatus != undefined && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
