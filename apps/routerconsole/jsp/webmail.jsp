@@ -31,6 +31,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("webmail")%>
 </head>
 <body class="embed">

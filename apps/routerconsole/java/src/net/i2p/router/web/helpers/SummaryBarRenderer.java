@@ -827,7 +827,7 @@ class SummaryBarRenderer {
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
-           .append(" <span class=\"badge\" hidden>").append(active).append("</span>")
+           .append(" <span class=\"badge\" hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_peers\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_peers\" class=\"volatile\">\n" +
                    "<tr title=\"");
@@ -909,7 +909,7 @@ class SummaryBarRenderer {
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
-           .append(" <span class=\"badge\" hidden>").append(active).append("</span>")
+           .append(" <span class=\"badge\" hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_peersadvanced\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_peersadvanced\" class=\"volatile\">\n" +
                    "<tr title=\"")
@@ -1071,7 +1071,7 @@ class SummaryBarRenderer {
            .append(_t("View existing tunnels and tunnel build status"))
            .append("\">")
            .append(_t("Tunnels"))
-           .append(" <span class=\"badge\" hidden>")
+           .append(" <span class=\"badge\" hidden title=\"").append(_t("Total number of tunnels in use")).append("\">")
            .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels() +
                    _helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels() + partTunnels).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_tunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
@@ -1154,7 +1154,7 @@ class SummaryBarRenderer {
            .append(_t("What's in the router's job queue?"))
            .append("\">")
            .append(_t("Congestion"))
-           .append(" <span class=\"badge\" hidden>");
+           .append(" <span class=\"badge\" hidden title=\"").append(_t("Job lag")).append("\">");
         if (_context.router().getUptime() < 5*60*1000) {
            buf.append("-");
         } else {

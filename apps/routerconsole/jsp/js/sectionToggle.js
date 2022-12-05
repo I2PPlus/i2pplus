@@ -372,10 +372,10 @@ function sectionToggler() {
 }
 
 function countTunnels() {
-  var tunnelCount = document.querySelectorAll("img[src*=\"images/local_\"]").length;
-  if (document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML.indexOf(tunnelCount) == -1) {
-    if (tunnelCount > 0) {
-      var displayCount = " <span id=\"tunnelCount\">" + tunnelCount + "</span>";
+  var tunnelCountLength = document.querySelectorAll("img[src*=\"images/local_\"]").length;
+  if (document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML.indexOf(tunnelCountLength) == -1) {
+    if (tunnelCountLength > 0) {
+      var displayCount = " <span id=\"tunnelCount\">" + tunnelCountLength + "</span>";
       document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]").innerHTML += displayCount;
     }
     var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");

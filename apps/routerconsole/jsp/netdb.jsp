@@ -11,13 +11,14 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("network database")%>
 <!-- tablesort.js https://github.com/tristen/tablesort/ -->
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <!-- end tablesort.js -->
-</head>
+<head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
@@ -55,7 +56,6 @@
  <jsp:getProperty name="formhandler" property="netDbSummary" />
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("netdbcountrylist"));</script>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>

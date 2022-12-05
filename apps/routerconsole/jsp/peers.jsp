@@ -11,12 +11,12 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("peer connections")%>
-</head>
+<head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <h1 class="netwrk"><%=intl._t("Network Peers")%></h1>
 <div class="main" id="peers">
  <jsp:useBean class="net.i2p.router.web.helpers.PeerHelper" id="peerHelper" scope="request" />

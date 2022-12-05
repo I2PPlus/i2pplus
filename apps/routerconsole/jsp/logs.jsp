@@ -11,6 +11,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("logs")%>
 </head>
 <body id="i2plogs">

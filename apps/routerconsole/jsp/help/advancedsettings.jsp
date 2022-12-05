@@ -12,9 +12,8 @@
 <head>
 <%@include file="../css.jsi" %>
 <title><%=intl._t("Advanced Configuration Help - I2P+")%></title>
-</head>
+<head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Advanced Configuration Help")%></h1>
 <div class="main" id="help">

@@ -12,9 +12,8 @@
 <head>
 <%@include file="../css.jsi" %>
 <title><%=intl._t("Tunnel Filtering")%> - I2P+</title>
-</head>
+<head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Tunnel Filtering")%></h1>
 <div class="main" id="help">

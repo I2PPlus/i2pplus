@@ -11,11 +11,12 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("config UI")%>
 <style type="text/css">input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 <script charset="utf-8" src="/js/ajax.js" type="text/javascript"></script>
 <meta http-equiv="Refresh" content= "0;URL=/configui">
-</head>
+<head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>

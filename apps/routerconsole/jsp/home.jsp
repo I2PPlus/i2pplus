@@ -11,10 +11,10 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("home")%>
 </head>
 <body id="homepage">
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
 %>
@@ -104,7 +104,6 @@
 </div>
 </div>
 </div>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

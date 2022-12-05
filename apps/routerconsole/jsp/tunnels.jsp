@@ -11,6 +11,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("local tunnels")%>
 </head>
 <body id="routertunnels">
@@ -51,7 +52,6 @@
     }, 15000);
   }
 </script>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>
