@@ -142,7 +142,7 @@ function refreshSidebar() {
             memBar.outerHTML = memBarResponse.outerHTML;
           }
           if (updateBar != undefined && !Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
-            if (updateBarResponse != undefined) {
+            if (updateBarResponse != null) {
               updateBar.outerHTML = updateBarResponse.outerHTML;
             } else {
               window.requestAnimationFrame(refreshAll);
