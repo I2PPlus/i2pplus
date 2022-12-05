@@ -141,9 +141,11 @@ function refreshSidebar() {
           if (memBar != undefined && !Object.is(memBar.innerHTML, memBarResponse.innerHTML)) {
             memBar.outerHTML = memBarResponse.outerHTML;
           }
-          if (updateBar != undefined && !Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
+          if (updateBar != undefined) {
             if (updateBarResponse != null) {
-              updateBar.outerHTML = updateBarResponse.outerHTML;
+               if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
+                 updateBar.outerHTML = updateBarResponse.outerHTML;
+               }
             } else {
               window.requestAnimationFrame(refreshAll);
             }
