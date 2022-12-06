@@ -231,7 +231,13 @@ function refreshSidebar() {
 
         function refreshGraph() {
           var minigraph = document.getElementById("minigraph");
+          var graphContainer = document.getElementById("sb_graphcontainer");
+          var graphContainerHR = document.querySelector("#sb_graphcontainer + hr");
           if (minigraph) {
+            if (graphContainer.hidden == true) {
+              graphContainer.hidden = null;
+              graphContainerHR.hidden = null;
+            }
             const ctx = minigraph.getContext("2d");
             const image = new Image(245, 50);
             image.onload = renderGraph;
@@ -353,11 +359,9 @@ function refreshSidebar() {
             }
             netStatus.innerHTML = '<span id="down">Router is down</span>';
           }
-
           hideSections();
           modElements();
         }
-        //setTimeout(isDown, 2950);
         setTimeout(isDown, 5000);
       }
     }
