@@ -6,7 +6,7 @@
 <head>
 <%@include file="../css.jsi" %>
 <title><%=intl._t("Web Hosting")%> - I2P+</title>
-<head>
+</head>
 <body>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Web hosting on I2P")%></h1>
@@ -97,7 +97,7 @@
 
 </div>
 </div>
-<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

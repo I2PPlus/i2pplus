@@ -11,7 +11,6 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("graphs")%>
  <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
  <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />

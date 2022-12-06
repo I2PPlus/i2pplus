@@ -12,7 +12,6 @@
 <head>
 <title>Sitemap - I2P+</title>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body class="<%=lang%>">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -478,5 +477,6 @@
 </div>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

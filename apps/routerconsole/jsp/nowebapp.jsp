@@ -13,9 +13,8 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("WebApp Not Found")%>
-<head>
+</head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
@@ -25,5 +24,6 @@
 <%=intl._t("Please visit the {0}config clients page{1} to start it.", "<a href=\"/configwebapps.jsp#webapp\" target=\"_top\">", "</a>")%>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

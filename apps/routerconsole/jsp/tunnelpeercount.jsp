@@ -11,7 +11,6 @@
 <html lang="<%=lang%>" id="count">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("tunnel peer count")%>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
@@ -32,9 +31,10 @@
 <jsp:setProperty name="tunnelPeerCountHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% tunnelPeerCountHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount" />
-<script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("tunnelPeerCount"));</script>
 </div>
+<script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("tunnelPeerCount"));</script>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

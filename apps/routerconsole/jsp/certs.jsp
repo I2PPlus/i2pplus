@@ -11,9 +11,8 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("Certificates")%>
-<head>
+</head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %><h1 class="conf adv"><%=intl._t("Certificates")%></h1>
@@ -25,5 +24,6 @@
 <span id="end"></span>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

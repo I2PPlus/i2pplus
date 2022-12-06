@@ -17,7 +17,6 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <title>Sidebar - I2P+</title>
 <%
     // try hard to avoid an error page in the iframe after shutdown
@@ -98,5 +97,6 @@
 %>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

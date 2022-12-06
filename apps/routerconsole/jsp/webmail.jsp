@@ -31,7 +31,6 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("webmail")%>
 </head>
 <body class="embed">
@@ -65,7 +64,6 @@
   window.addEventListener("pageshow", progressx.hide());
 </script>
 </div>
-<%@include file="summaryajax.jsi" %>
 <style type="text/css">iframe{opacity:1}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html>

@@ -11,7 +11,6 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("peer profiles")%>
 
 <!-- tablesort.js https://github.com/tristen/tablesort/ -->
@@ -20,7 +19,7 @@
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type="text/javascript"></script>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <!-- end tablesort.js -->
-<head>
+</head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
@@ -85,5 +84,6 @@
   }, true);
 </script>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

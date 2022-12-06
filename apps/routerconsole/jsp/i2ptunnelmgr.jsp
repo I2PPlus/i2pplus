@@ -30,9 +30,8 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("Tunnel Manager")%>
-<head>
+</head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
@@ -64,7 +63,6 @@
   window.addEventListener("pageshow", progressx.hide());
 </script>
 </div>
-<%@include file="summaryajax.jsi" %>
 <style type="text/css">iframe{opacity:1}#tunnelmgr::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html>

@@ -11,9 +11,8 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("Jar File Dump")%>
-<head>
+</head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %><h1 class="conf adv debug">Jar File Dump</h1>
@@ -23,5 +22,6 @@
 <jsp:getProperty name="dumpHelper" property="fileSummary" />
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

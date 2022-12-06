@@ -11,9 +11,8 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("config logging")%>
-<head>
+</head>
 <body>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigLoggingHelper" id="logginghelper" scope="request" />
 <jsp:setProperty name="logginghelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -83,5 +82,6 @@
 </form>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

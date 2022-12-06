@@ -11,7 +11,6 @@
 <html lang="<%=lang%>" id="participatingTunnels">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("participating tunnels")%>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
@@ -38,5 +37,6 @@
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

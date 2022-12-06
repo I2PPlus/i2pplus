@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import net.i2p.data.DataHelper;
@@ -788,17 +789,37 @@ public class SummaryHelper extends HelperBase {
      */
     private class AlphaComparator implements Comparator<Destination> {
         private final String xsc = _t("Shared Clients");
+        private final String snark = _t("I2PSnark");
 
         public int compare(Destination lhs, Destination rhs) {
             String lname = getName(lhs);
             String rname = getName(rhs);
-            boolean lshared = lname.startsWith("Shared Clients") || lname.startsWith(xsc);
-            boolean rshared = rname.startsWith("Shared Clients") || rname.startsWith(xsc);
-            if (lshared && !rshared)
-                return -1;
-            if (rshared && !lshared)
-                return 1;
-            return Collator.getInstance().compare(lname, rname);
+            List<Destination> clients = new ArrayList<Destination>(_context.clientManager().listClients());
+            for (Destination client : clients) {
+                Hash h = client.calculateHash();
+                boolean lSnark = lname.equals("I2PSnark") || lname.equals(snark);
+                boolean rSnark = rname.startsWith("I2PSnark") || rname.startsWith(snark);
+                boolean isServer = _context.clientManager().shouldPublishLeaseSet(h) && !lname.equals(_t("I2PSnark")) || !rname.equals((_t("I2PSnark")));
+                boolean lServer = _context.clientManager().shouldPublishLeaseSet(h) && !lname.equals(_t("I2PSnark"));
+                boolean rServer = _context.clientManager().shouldPublishLeaseSet(h) && !rname.equals(_t("I2PSnark"));
+                boolean lClient = !isServer;
+                boolean rClient = !isServer;
+                boolean lPing = (lname.startsWith("Ping") && lname.contains("[")) || lname.equals("I2Ping");
+                boolean rPing = (rname.startsWith("Ping") && rname.contains("[")) || rname.equals("I2Ping");
+
+                if (lServer) {lname = "a_" + lname; rname = "a_" + rname;}
+                if (lClient) {lname = "b_" + lname; rname = "b_" + rname;}
+                if (lPing) {lname = "c_" + lname; rname = "c_" + rname;}
+                if (lSnark && !rSnark)
+                    return -1;
+                else if (lServer && !rServer)
+                    return 0;
+                else if (lClient && !rClient)
+                    return 1;
+                else if (lPing && !rPing)
+                    return 2;
+            }
+            return Collator.getInstance().compare(lname.toLowerCase(), rname.toLowerCase());
         }
     }
 

@@ -33,7 +33,6 @@
    boolean hasOverride = themeOverride.exists();
 %>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" type="module" src="/js/sectionToggle.js"></script>
 <link rel="preload" href="<%=themePath%>global.css" as="style">
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
@@ -67,7 +66,6 @@
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
     // As of Chrome 56, Firefox 50, Opera 43. "same-origin" not widely supported.
     response.setHeader("Referrer-Policy", "no-referrer");
-    response.addHeader("Set-Cookie", "SameSite=Strict; HttpOnly");
     String uri = request.getRequestURI();
     if (uri.contains("override.css"))
         response.setHeader("Cache-Control", "no-cache, private, max-age=84600, must-revalidate");

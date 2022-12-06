@@ -73,7 +73,6 @@
 <html lang="<%=lang%>" id="consolewizard">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("New Install Wizard")%>
 <%
     wizhelper.setContextId(i2pcontextId);

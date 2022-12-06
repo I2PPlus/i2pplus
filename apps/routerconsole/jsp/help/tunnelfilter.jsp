@@ -12,7 +12,7 @@
 <head>
 <%@include file="../css.jsi" %>
 <title><%=intl._t("Tunnel Filtering")%> - I2P+</title>
-<head>
+</head>
 <body>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Tunnel Filtering")%></h1>
@@ -153,7 +153,7 @@ deny file /path/enemies.txt<br>
 </div>
 
 </div>
-<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

@@ -10,14 +10,13 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <%=intl.title("config clients")%>
 <style type='text/css'> button span.hide {display:none;} input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";
 </script>
 <script charset="utf-8" src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<head>
+</head>
 <body>
 
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -80,5 +79,6 @@
 </div>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

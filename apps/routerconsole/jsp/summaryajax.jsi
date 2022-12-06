@@ -5,22 +5,18 @@
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
-  var visibility = document.visibilityState;
-  var repeat;
-  refreshSidebar();
-  function runTimer() {
-    var repeat = setTimeout(function updateSidebar() {
+  var refreshInterval = refresh * 1000;
+  var timerId = setInterval(updateSidebar, refreshInterval);
+  function updateSidebar() {
+    if (document.visible = true) {
       refreshSidebar();
-      if (visibility = "visible") {
-        setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
-      } else if (refresh <= 10) {
-        setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000 + 5);
-      } else {
-        setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
-      }
-    }, <%=intl.getRefresh()%> * 1000);
+    } else {
+     cancelRefresh();
+    }
   }
-  runTimer();
+  function cancelRefresh() {
+    clearInterval(timerId);
+  }
 </script>
 <%
     } else {

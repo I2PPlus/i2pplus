@@ -5,7 +5,6 @@ import {sectionToggler, countTunnels} from "/js/sectionToggle.js";
 
 function refreshSidebar() {
   'use strict';
-  var pageVisibility = document.visibilityState;
   var meta = document.querySelector('[http-equiv="refresh"]');
   var xhr = new XMLHttpRequest();
   var uri = location.pathname.substring(1);
@@ -38,7 +37,8 @@ function refreshSidebar() {
   var updateSectionHR = document.querySelector("#sb_updatesection + hr");
   var updateStatus = document.getElementById("sb_updatestatus");
 
-  xhr.open("GET", "/xhr1.jsp?requestURI=" + uri + "&t=" + new Date().getTime(), true);
+  //xhr.open("GET", "/xhr1.jsp?requestURI=" + uri + "&t=" + new Date().getTime(), true);
+  xhr.open("GET", "/xhr1.jsp?requestURI=" + uri, true);
   xhr.responseType = "document";
   xhr.overrideMimeType("text/html");
   xhr.setRequestHeader("Accept", "text/html");
@@ -50,32 +50,28 @@ function refreshSidebar() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
-        xhr.addEventListener("loaded", sectionToggler);
-        if (xhr.reponseType !== "undefined") {
-          var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
-          var badgesResponse = xhr.responseXML.querySelectorAll("h3 a .badge");
-          var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
-          var clockResponse = xhr.responseXML.getElementById("clock");
-          var generalResponse = xhr.responseXML.getElementById("sb_general");
-          var graphStatsResponse = xhr.responseXML.getElementById("sb_graphstats");
-          var localTunnelsResponse = xhr.responseXML.getElementById("sb_localtunnels");
-          var memBarResponse = xhr.responseXML.getElementById("sb_memoryBar");
-          var netStatusResponse = xhr.responseXML.querySelector("sb_netstatus");
-          var noticeResponse = xhr.responseXML.getElementById("sb_notice");
-          var peersResponse = xhr.responseXML.getElementById("sb_peers");
-          var queueResponse = xhr.responseXML.getElementById("sb_queue");
-          var routerControlResponse = xhr.responseXML.getElementById("sb_routerControl");
-          var sbResponse = xhr.responseXML.getElementById("sb");
-          var shortGeneralResponse = xhr.responseXML.getElementById("sb_shortgeneral");
-          var shutdownStatusResponse = xhr.responseXML.getElementById("sb_shutdownstatus");
-          var tunnelBuildStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
-          var tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
-          var updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + .percentBarOuter");
-          var updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
-          var updateProgressResponse = xhr.responseXML.getElementById("sb_updateprogress");
-          var updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
-          var updateStatusResponse = xhr.responseXML.getElementById("sb_updatestatus");
-        }
+
+        var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
+        var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
+        var clockResponse = xhr.responseXML.getElementById("clock");
+        var generalResponse = xhr.responseXML.getElementById("sb_general");
+        var graphStatsResponse = xhr.responseXML.getElementById("sb_graphstats");
+        var localTunnelsResponse = xhr.responseXML.getElementById("sb_localtunnels");
+        var memBarResponse = xhr.responseXML.getElementById("sb_memoryBar");
+        var netStatusResponse = xhr.responseXML.querySelector("sb_netstatus");
+        var noticeResponse = xhr.responseXML.getElementById("sb_notice");
+        var peersResponse = xhr.responseXML.getElementById("sb_peers");
+        var queueResponse = xhr.responseXML.getElementById("sb_queue");
+        var routerControlResponse = xhr.responseXML.getElementById("sb_routerControl");
+        var shortGeneralResponse = xhr.responseXML.getElementById("sb_shortgeneral");
+        var shutdownStatusResponse = xhr.responseXML.getElementById("sb_shutdownStatus");
+        var tunnelBuildStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
+        var tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
+        var updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + .percentBarOuter");
+        var updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
+        var updateProgressResponse = xhr.responseXML.getElementById("sb_updateprogress");
+        var updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
+        var updateStatusResponse = xhr.responseXML.getElementById("sb_updatestatus");
 
         if (down) {
           uncollapse();
@@ -83,125 +79,157 @@ function refreshSidebar() {
           countTunnels();
         }
 
-        function updateVolatile(timestamp) {
-
+        function updateVolatile() {
           //uncollapse();
           sectionToggler();
 
           var b;
           for (b = 0; b < badges.length; b += 1) {
-            if (typeof badges[b] !== "undefined") {
-              badges[b].innerHTML = badgesResponse[b].innerHTML;
-              if (badges.length !== badgesResponse.length) {
-                window.requestAnimationFrame(refreshAll);
+            if (typeof badges[b] !== null) {
+              var badgesResponse = xhr.responseXML.querySelectorAll("h3 a .badge");
+              if (typeof badgesResponse[b] !== null) {
+                badges[b].innerHTML = badgesResponse[b].innerHTML;
               }
             }
           }
 
           countTunnels();
 
-          if (clock != undefined && !Object.is(clock.innerHTML, clockResponse.innerHTML)) {
-            clock.outerHTML = clockResponse.outerHTML;
+          if (clock != null && clockResponse != null) {
+            clock.innerHTML = clockResponse.innerHTML;
           }
-          if (bandwidth != undefined && bandwidth.hidden != true && !Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML)) {
-            bandwidth.outerHTML = bandwidthResponse.outerHTML;
-            graphStats.innerHTML = graphStats.innerHTML;
-            graphStats.style.opacity = null;
-          } else if (bandwidth.hidden == true) {
-            graphStats.innerHTML = graphStatsResponse.innerHTML;
-            graphStats.style.opacity = "1";
+          if (bandwidth != null && bandwidthResponse != null && !Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML)) {
+            bandwidth.innerHTML = bandwidthResponse.innerHTML;
           }
-          if (advancedGeneral != undefined && advancedGeneral.hidden != true && !Object.is(advancedGeneral.innerHTML, advancedGeneralResponse.innerHTML)) {
-            advancedGeneral.outerHTML = advancedGeneralResponse.outerHTML;
+          if (graphStats != null) {
+            if (bandwidth != null && bandwidth.hidden != true) {
+              graphStats.style.opacity = null;
+            } else {
+                graphStats.style.opacity = "1";
+            }
           }
-          if (shortGeneral != undefined && shortGeneral.hidden != true && !Object.is(shortGeneral.innerHTML, shortGeneralResponse.innerHTML)) {
-            shortGeneral.outerHTML = shortGeneralResponse.outerHTML;
+          if (graphStats != null && graphStatsResponse != null) {
+              graphStats.innerHTML = graphStatsResponse.innerHTML;
           }
-          if (general != undefined && general.hidden != true && !Object.is(general.innerHTML, generalResponse.innerHTML)) {
-            general.outerHTML = generalResponse.outerHTML;
+          if (advancedGeneral != null && advancedGeneralResponse != null && !Object.is(advancedGeneral.innerHTML, advancedGeneralResponse.innerHTML)) {
+            advancedGeneral.innerHTML = advancedGeneralResponse.innerHTML;
           }
-          if (tunnels != undefined && tunnels.hidden != true && !Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
-            tunnels.outerHTML = tunnelsResponse.outerHTML;
+          if (shortGeneral != null && shortGeneralResponse != null && !Object.is(shortGeneral.innerHTML, shortGeneralResponse.innerHTML)) {
+            shortGeneral.innerHTML = shortGeneralResponse.innerHTML;
           }
-          if (localTunnels != undefined && localTunnels.hidden != true && !Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
-            localTunnels.outerHTML = localTunnelsResponse.outerHTML;
-            if (tunnelCount) {
-              var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
-              if (doubleCount) {
-                doubleCount.remove();
+          if (general != null && generalResponse != null && !Object.is(general.innerHTML, generalResponse.innerHTML)) {
+            general.innerHTML = generalResponse.innerHTML;
+          }
+          if (tunnels != null && tunnelsResponse != null && !Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
+            tunnels.innerHTML = tunnelsResponse.innerHTML;
+          }
+          if (localTunnels != null && localTunnelsResponse != null && localTunnels.hidden != true) {
+            if (!Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
+              localTunnels.innerHTML = localTunnelsResponse.innerHTML;
+            }
+          }
+          if (tunnelCount) {
+            var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
+            if (doubleCount) {
+              doubleCount.remove();
+            }
+          }
+          if (peers != null && peersResponse != null && !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
+            peers.innerHTML = peersResponse.innerHTML;
+          }
+          if (queue !== null) {
+            if (queueResponse !== null && !Object.is(queue.innerHTML, queueResponse.innerHTML)) {
+              queue.innerHTML = queueResponse.innerHTML;
+            }
+          }
+          if (memBar != null && memBarResponse != null && !Object.is(memBar.innerHTML, memBarResponse.innerHTML)) {
+            memBar.innerHTML = memBarResponse.innerHTML;
+          }
+          if (updateBar != null) {
+            if (updateBarResponse != null) {
+               if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
+                 updateBar.innerHTML = updateBarResponse.innerHTML;
+                 var updateH3 = document.querySelector("#sb_updatesection > h3 a").innerHTML;
+                 updateH3.classList.add("updating");
+                 var spinner = "<span id=\"updateSpinner\"></span>";
+                 if (updateH3.innerHTML.indexOf(spinner) == -1) {
+                   updateH3.innerHTML += spinner;
+                 }
+               } else {
+                refreshAll();
               }
             }
           }
-          if (peers != undefined && peers.hidden != true && !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
-            peers.outerHTML = peersResponse.outerHTML;
-          }
-          if (queue != undefined && queue.hidden != true && !Object.is(queue.innerHTML, queueResponse.innerHTML)) {
-            queue.outerHTML = queueResponse.outerHTML;
-          }
-          if (memBar != undefined && !Object.is(memBar.innerHTML, memBarResponse.innerHTML)) {
-            memBar.outerHTML = memBarResponse.outerHTML;
-          }
-          if (updateBar != undefined) {
-            if (updateBarResponse != null) {
-               if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
-                 updateBar.outerHTML = updateBarResponse.outerHTML;
-               }
-            } else {
-              window.requestAnimationFrame(refreshAll);
+          if (updateSection.classList.contains("collapsed") != true && updateStatus != null) {
+            if (updateStatusResponse != null && !updateBar == null) {
+              if (!Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
+                updateStatus.innerHTML = updateStatusResponse.innerHTML;
+              }
             }
           }
-          if (updateStatus != undefined && !Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
-            updateStatus.outerHTML = updateStatusResponse.outerHTML;
-          }
-          if (updateSection != undefined && updateSection.classList.contains("hide") != true) {
-            updateSection.outerHTML = updateSectionResponse.outerHTML;
-            if (updateSectionHR.hidden == true) {
-              updateSectionHR.hidden = null;
+          if (updateSection.classList.contains("collapsed") != true && updateForm != null) {
+            if (updateFormResponse != null) {
+              if (!Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
+                updateForm.innerHTML = updateFormResponse.innerHTML;
+                if (updateSectionHR.hidden == true) {
+                updateSectionHR.hidden = null;
+                }
+              }
             }
           }
-          if (updateForm != undefined && updateForm.hidden != true && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
-            updateForm.outerHTML = updateFormResponse.outerHTML;
-            if (updateSectionHR.hidden == true) {
-              updateSectionHR.hidden = null;
+          if (updateSection.classList.contains("collapsed") != true && updateProgress != null) {
+            if (updateProgressResponse != null) {
+              if (!Object.is(updateProgress.innerHTML, updateProgressResponse.innerHTML)) {
+                updateProgress.innerHTML = updateProgressResponse.innerHTML;
+              }
             }
           }
-          if (updateProgress != undefined && !Object.is(updateProgress.innerHTML, updateProgressResponse.innerHTML)) {
-            updateProgress.innerHTML = updateProgressResponse.innerHTML;
-          }
-          if (tunnelBuildStatus != undefined && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
+          if (tunnelBuildStatus != null && tunnelBuildStatusResponse != null && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
             tunnelBuildStatus.innerHTML = tunnelBuildStatusResponse.innerHTML;
           }
-          if (notice != undefined && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
+          if (notice != null && noticeResponse != null && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
             notice.innerHTML = noticeResponse.innerHTML;
           }
-          if (shutdownStatus != undefined && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
+          if (shutdownStatus != null && shutdownStatusResponse != null && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
             shutdownStatus.innerHTML = shutdownStatusResponse.innerHTML;
           }
-          if (routerControl != undefined && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
+          if (routerControl != null && routerControlResponse != null && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
             routerControl.outerHTML = routerControlResponse.outerHTML;
           }
+        }
 
+        function checkSections() {
           var updating = document.querySelectorAll(".volatile");
           var updatingResponse = xhr.responseXML.querySelectorAll(".volatile");
           var i;
           for (i = 0; i < updating.length; i += 1) {
-            if (typeof updating[i] !== "undefined" && typeof updatingResponse[i] !== "undefined") {
-              if (updating.length !== updatingResponse.length) {
-                  window.requestAnimationFrame(refreshAll);
+            if (typeof updating[i] !== null) {
+              if (typeof updatingResponse[i] !== null) {
+                updateVolatile();
+                sectionToggler();
+                countTunnels();
+              }
+              if (localTunnels !== null && localTunnels.hidden != true) {
+                if (localTunnels.hidden != true && updating.length != updatingResponse.length) {
+                  refreshAll();
+                }
               }
             }
           }
         }
 
-        function refreshAll(timestamp) {
-          if (typeof sbResponse !== "undefined" && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
-            xhrContainer.innerHTML = sbResponse.innerHTML;
+        function refreshAll() {
+          if (sb !== null) {
+            var sbResponse = xhr.responseXML.getElementById("sb");
+            if (sbResponse !== null && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
+              xhrContainer.innerHTML = sbResponse.innerHTML;
+              sectionToggler();
+              countTunnels();
+            }
           }
-          sectionToggler();
-          countTunnels();
         }
 
-        function refreshGraph(timestamp) {
+        function refreshGraph() {
           var minigraph = document.getElementById("minigraph");
           if (minigraph) {
             const ctx = minigraph.getContext("2d");
@@ -249,25 +277,27 @@ function refreshSidebar() {
           }
         }
 
-        if (pageVisibility == "visible") {
+        if (document.hidden != true) {
+          checkSections();
           if (meta != null) {
             removeMeta();
           }
-          //window.requestAnimationFrame(updateVolatile);
-          updateVolatile();
 
           var minigraph = document.getElementById("minigraph");
           if (minigraph) {
-            window.requestAnimationFrame(refreshGraph);
+            //window.requestAnimationFrame(refreshGraph);
+            refreshGraph();
             var minigraphResponse = xhr.responseXML.getElementById("minigraph");
             minigraph = minigraphResponse;
           }
-
+        }
+/*
         } else if (xhr.readyState == 4 && xhr.status == 200) {
 
           setTimeout(function() {
             if (meta != null) {
               removeMeta();
+              refreshAll();
             }
             var metarefresh = document.createElement("meta");
             metarefresh.httpEquiv = "refresh";
@@ -275,7 +305,7 @@ function refreshSidebar() {
             document.head.appendChild(metarefresh);
           }, 120000);
         }
-
+*/
       } else {
 
         function isDown() {
@@ -288,12 +318,12 @@ function refreshSidebar() {
                 collapse[h].nextElementSibling.setAttribute("hidden", "");
               }
             }
-            if (shutdownStatus != undefined) {
+            if (shutdownStatus != null) {
               shutdownStatus.setAttribute("hidden", "");
             }
             if (localTunnels) {
               localTunnels.innerHTML = '<tr id="routerdown"><td colspan="3"></td></tr>';
-              if (tunnelCount != undefined) {
+              if (tunnelCount != null) {
                 tunnelCount.innerHTML = "-";
               }
             }
@@ -317,7 +347,7 @@ function refreshSidebar() {
             var badges = document.querySelectorAll("#sidebar h3 a .badge");
             var b;
             for (b = 0; b < badges.length; b += 1) {
-              if (typeof badges[b] !== "undefined") {
+              if (typeof badges[b] != null) {
                 badges[b].innerHTML = "-";
               }
             }
@@ -327,14 +357,16 @@ function refreshSidebar() {
           hideSections();
           modElements();
         }
-        setTimeout(isDown, 2950);
+        //setTimeout(isDown, 2950);
+        setTimeout(isDown, 5000);
       }
     }
   };
 
   xhr.addEventListener("loaded", () => {
-    sectionToggler();
     countTunnels();
+    checkSections();
+    sectionToggler();
   });
   xhr.send();
 
