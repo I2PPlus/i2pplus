@@ -32,9 +32,9 @@ Java8:
     - ant pkg
     - ant tarball
     - ant updaterCompact
-    - ant Updater200Compact
+    - ant UpdaterCompact200
     - ant i2psnark
-#    - ant javadoc-zip
+    - ant javadoc-zip
 #    - ./installer/resources/makegeoip.sh
 #    - ant updater200WithJettyAndGeoIP
 #    - ant updaterWithJetty
