@@ -160,14 +160,14 @@ function refreshSidebar() {
               }
             }
           }
-          if (updateSection.classList.contains("collapsed") != true && updateStatus != null) {
+          if (updateSection != null && updateSection.classList.contains("collapsed") != true && updateStatus != null) {
             if (updateStatusResponse != null && !updateBar == null) {
               if (!Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
                 updateStatus.innerHTML = updateStatusResponse.innerHTML;
               }
             }
           }
-          if (updateSection.classList.contains("collapsed") != true && updateForm != null) {
+          if (updateSection != null &&  updateSection.classList.contains("collapsed") != true && updateForm != null) {
             if (updateFormResponse != null) {
               if (!Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
                 updateForm.innerHTML = updateFormResponse.innerHTML;
@@ -177,7 +177,7 @@ function refreshSidebar() {
               }
             }
           }
-          if (updateSection.classList.contains("collapsed") != true && updateProgress != null) {
+          if (updateSection != null && updateSection.classList.contains("collapsed") != true && updateProgress != null) {
             if (updateProgressResponse != null) {
               if (!Object.is(updateProgress.innerHTML, updateProgressResponse.innerHTML)) {
                 updateProgress.innerHTML = updateProgressResponse.innerHTML;
