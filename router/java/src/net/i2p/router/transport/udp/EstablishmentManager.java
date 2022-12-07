@@ -134,15 +134,16 @@ class EstablishmentManager {
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
 //    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 20 : 40;
 //    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = 150;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 50 : 200;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 200 : 400;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 256;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 512;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
 
     /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
     private static final int MAX_QUEUED_OUTBOUND = 50;
 
     /** max queued msgs per peer while the peer connection is queued */
-    private static final int MAX_QUEUED_PER_PEER = 16;
+//    private static final int MAX_QUEUED_PER_PEER = 16;
+    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 16 : 64;
 
     private static final long MAX_NONCE = 0xFFFFFFFFl;
 
@@ -183,7 +184,8 @@ class EstablishmentManager {
 
     // SSU 2
     private static final int MIN_TOKENS = 128;
-    private static final int MAX_TOKENS = 2048;
+//    private static final int MAX_TOKENS = 2048;
+    private static final int MAX_TOKENS = 8192;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
@@ -206,7 +208,8 @@ class EstablishmentManager {
         _inboundBans = new LHMCache<RemoteHostId, Long>(32);
         if (_enableSSU2) {
             // roughly scale based on expected traffic
-            int tokenCacheSize = Math.max(MIN_TOKENS, Math.min(MAX_TOKENS, 3 * _transport.getMaxConnections() / 4));
+//            int tokenCacheSize = Math.max(MIN_TOKENS, Math.min(MAX_TOKENS, 3 * _transport.getMaxConnections() / 4));
+            int tokenCacheSize = Math.max(MIN_TOKENS, Math.min(MAX_TOKENS, _transport.getMaxConnections()));
             _inboundTokens = new InboundTokens(tokenCacheSize);
             _outboundTokens = new LHMCache<RemoteHostId, Token>(tokenCacheSize);
         } else {
