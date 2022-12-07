@@ -63,7 +63,7 @@ h4.sb_info{margin-top:-11px}
 h4.sb_info + hr + form{margin-bottom:-1px;padding-top:5px}
 .sb_info a{vertical-align:baseline}
 .sb_info b{line-height:1.2}
-#sidebar{margin-bottom:2px;padding:8px;width:192px;text-align:center;font-size:8pt;color:var(--ink);clear:left;border:1px solid var(--border);border-radius:2px;box-shadow:var(--bevel);background:#fafaff}
+#sidebar{margin-bottom:2px;padding:8px;width:192px;text-align:center;font-size:8pt;color:var(--ink);clear:left;border:1px solid var(--border);border-radius:2px;box-shadow:var(--bevel);background:#fafaff;contain:paint}
 #sb_logo{margin:0 0 0 -5px;height:35px !important;padding:0 0 1px;text-align:center}
 #error500 #sidebar img[src$="i2plogo.png"]{margin-bottom:-3px;width:186px}
 #sb_logo img{opacity:.9;transition:ease opacity .15s;margin:0;width:200px;height:auto;image-rendering:-webkit-optimize-contrast;filter:sepia(1) hue-rotate(190deg);transition:ease filter .05s;user-select:none}
@@ -79,7 +79,7 @@ h4.sb_info + hr + form{margin-bottom:-1px;padding-top:5px}
 #sidebar input[type=text]{text-align:right}
 #sidebar hr{margin:8px -7px;height:1px;border-bottom:1px solid #afafcf;box-shadow:inset 0 1px 1px 1px #fff;background:#adadeb}
 #sidebar hr.b{margin-bottom:5px;height:0;border-bottom:1px solid transparent;background:transparent}
-#sidebar h3{margin:-9px -7px -2px;padding:2px 0;letter-spacing:.04em;text-transform:uppercase;font-size:9.5pt;border:1px solid #afafcf;border-left:none;border-right:none;border-radius:0;box-shadow:var(--highlight);background:#e7e7ff var(--h3);filter:none}
+#sidebar h3{margin:-9px -7px -3px;padding:2px 0;letter-spacing:.04em;text-transform:uppercase;font-size:9.5pt;border:1px solid #afafcf;border-left:none;border-right:none;border-radius:0;box-shadow:var(--highlight);background:#e7e7ff var(--h3);filter:none}
 #sidebar h3:hover{background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
 #sidebar h3:active{box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.4);background:var(--hover);transition:ease box-shadow .05s}
 #sidebar h3 a,#sidebar h3 a:visited{padding:3px 0 2px;display:inline-block;width:calc(100% - 4px);line-height:1.1;word-spacing:-.12em;text-transform:uppercase;text-decoration:none;color:var(--a)}
@@ -89,9 +89,9 @@ h4.sb_info + hr + form{margin-bottom:-1px;padding-top:5px}
 #sidebar h4::after{padding-top:8px;padding-bottom:8px;content:"";display:inline-block;box-sizing:border-box;min-height:12px;vertical-align:middle}
 #sidebar h4 a{vertical-align:baseline}
 .sb table{margin:-8px -5px -5px;width:202px;position:relative;text-align:center;overflow:hidden;font-size:8pt;border:none;background-image:none;background-color:transparent}
-.sb table:not(#sb_localtunnels):not(#sb_services)::before{width:0;height:1px;position:absolute;top:-2px;left:-1px;display:block;background:#f90;content:"";animation:ease-in bar .15s reverse;will-change:transform}
+.sb table:not(#sb_localtunnels):not(#sb_services) tr::before{width:0;height:1px;position:absolute;z-index:9999;top:-2px;left:-1px; right:-1px;display:block;background:#f90;content:"";animation:bar .03s steps(3) reverse;will-change:transform;contain:paint}
 #sidebar #sb_internals td,#sidebar #sb_advanced td,#sidebar #sb_services td,#sidebar #sb_help td{text-align:center}
-#sidebar tr,#sidebar tr:nth-child(n+0){background-image:none;background-color:transparent;border:0}
+#sidebar tr,#sidebar tr:nth-child(n+0){background-image:none;background-color:transparent;border:0;contain:paint}
 #sidebar td{padding:0 2px;border:none;background-image:none}
 #sidebar td:first-child,#sb_localtunnels td:nth-child(2){text-align:left}
 #sidebar td:last-child{text-align:right}
@@ -132,7 +132,7 @@ h4.sb_info + hr + form{margin-bottom:-1px;padding-top:5px}
 #sb_bandwidthgraph{margin:-5px 0 0 3px;padding:0;width:100%;border-collapse:separate;border-spacing:0;border:1px solid #89f;border-radius:2px;box-shadow:0 0 1px #e0e0eb;transition:ease border .7s}
 #sb_bandwidthgraph:hover{border:1px solid var(--hover);cursor:zoom-in;transition:ease border .7s}
 a:active #sb_bandwidthgraph{border:1px solid var(--active)}
-#sb_graphstats{padding:2px 8px;display:inline-block;position:relative;z-index:10000;font-size:110%;font-weight:700;text-shadow:0 1px 1px rgba(255,255,255,.9);border:1px solid #adadeb;border-top:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.45);background:linear-gradient(180deg,rgba(255,255,255,.45) 50%,rgba(220,220,255,.45) 50%);opacity:0;transition:ease opacity .1s .2s;pointer-events:none}
+#sb_graphstats{padding:2px 8px;display:inline-block;position:relative;z-index:10000;font-size:110%;font-weight:700;text-shadow:0 1px 1px rgba(255,255,255,.9);border:1px solid #adadeb;border-top:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.45);background:linear-gradient(180deg,rgba(255,255,255,.75) 50%,rgba(220,220,255,.65) 50%);opacity:0;transition:ease opacity .1s .2s;pointer-events:none}
 #sb_graphcontainer:hover #sb_graphstats{opacity:1;transition:ease opacity .1s}
 #sb_graphcontainer:not([hidden]){margin:-6px -5px -10px;height:38px;display:inline-block;overflow:hidden;box-shadow:inset 0 0 0 2px #fff,inset 0 0 1px 1px #adadeb;border:1px solid #afafcf;box-shadow:0 0 1px #e0e0eb,var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(32,32,64,.05)),repeating-linear-gradient(to left,rgba(255,255,255,.0) 18px,rgba(120,120,255,.4) 18px,rgba(255,255,255,.0) 19px,rgba(255,255,255,.0) 36px),repeating-linear-gradient(to top,rgba(0,0,0,0),rgba(0,0,0,0) 14px,rgba(120,120,255,.4) 14px,rgba(0,0,0,0) 15px)}
 #sb_graphcontainer:hover{border:1px solid var(--hover)}
@@ -193,7 +193,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar #localtunnelsActive span{display:inline-block;font-size:90%;font-weight:600;text-transform:lowercase;vertical-align:middle!important;margin:1px 5px;line-height:16px;width:auto;letter-spacing:3px}
 #sidebar #localtunnelsActive span.count_0{display:none}
 #sidebar #localtunnelsActive img {width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
-#sidebar #localtunnelSummary{margin:-7px auto -8px -1px}
+#sidebar #localtunnelSummary{margin:-12px auto -6px}
 
 /* ajax router down */
 #down{margin:-4px -6px -5px;width:100%;display:inline-block;line-height:32px;font-size:0;color:#770;box-shadow:inset 0 0 0 1px #800,inset 0 0 4px 2px #ffe,inset 0 0 5px 0 #ffd;background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px);background-size:300%;animation:down linear 10s reverse infinite}
@@ -2235,7 +2235,7 @@ iframe.iframed{margin:10px 0 0}
 #tunnelpeercount .lazy,.newsentry.lazy{contain:none}
 
 /* animations */
-@keyframes bar{from{width:calc(100% + 2px)}}
+@keyframes bar{from{width:260%}}
 @keyframes down{from{background-position:center center,100%}}
 @keyframes downloadbar{from{background:repeating-linear-gradient(135deg,rgba(221,221,255,.7) 1px,rgba(221,221,255,.7) 6px,rgba(238,238,255,.7) 7px,rgba(238,238,255,.7) 11px)} to{background:var(--activity)}}
 @keyframes fade{from{filter:opacity(1)}to{filter:opacity(0)}}
@@ -2571,6 +2571,10 @@ h3#pconfig,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
 #sidebar #sb_logo{margin-top:4px;height:41px !important}
 #sidebar #sb_newsheadings table{width:240px}
 #sidebar table[id^="sb_"]{width:238px}
+#sidebar hr[hidden] + div:not([hidden]),#sidebar hr[hidden] + table:not([hidden]){margin-top:-8px}
+#sidebar hr[hidden] ~ h3{margin-top:-12px}
+#sidebar hr[hidden] ~ #sb_advanced:not([hidden]) ~ h3{margin-top:-9px}
+#sidebar hr[hidden] ~ h4{margin-bottom:-4px}
 #sybilTask th{font-size:12pt}
 #tunnelPeerCount .flag img{margin:2px 1px 0 -2px;border:none}
 #tunnelPeerCount .flag{width:19px}

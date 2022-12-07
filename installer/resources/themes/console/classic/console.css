@@ -53,7 +53,7 @@ a.script{word-spacing:normal;letter-spacing:normal}
 .sb_notice + .sb_notice{margin-top:8px}
 .sb_notice a{padding:0;vertical-align:baseline}
 p:empty + .sb_notice{margin-top:7px}
-#sidebar{margin:0 0 5px;padding:9px 1px 7px 1px;width:204px;line-height:1.25;word-wrap:break-word;text-align:center;font-size:9pt;color:inherit;border:var(--border);background:var(--bg)}
+#sidebar{margin:0 0 5px;padding:9px 1px 7px 1px;width:204px;line-height:1.25;word-wrap:break-word;text-align:center;font-size:9pt;color:inherit;border:var(--border);background:var(--bg);contain:paint}
 #xhr{margin-top:15px}
 #sidebar a{padding:2px;vertical-align:middle;user-select:none}
 #sidebar input[type=text]{text-align:right}
@@ -68,8 +68,8 @@ p:empty + .sb_notice{margin-top:7px}
 #sidebar h4{margin:-7px -1px -7px -1px;padding:8px 2px 4px;line-height:1.08;text-transform:capitalize;font-size:8.5pt;color:#1f7096;border:none;box-shadow:inset 0 0 2px 1px #f2f7fa;text-decoration:none;background:var(--label_focus)}
 #sidebar h4 a{padding:0;vertical-align:text-bottom}
 #sidebar tr,#sidebar table,#sidebar td{background:none;border:none}
-.sb table{margin:-5px 0 -5px 0;padding:0;width:204px;position:relative;overflow:hidden;table-layout:fixed;text-align:center;font-size:8pt}
-#sidebar table:not(#sb_localtunnels):not(#sb_services)::before{width:0;height:2px;display:block;position:absolute;top:-4px;left:-1px;background:#bfb;content:"";animation:ease-in bar .15s reverse;will-change:transform}
+.sb table{margin:-5px 0 -5px 0;padding:0;width:204px;position:relative;overflow:hidden;text-align:center;font-size:8pt}
+#sidebar table:not(#sb_localtunnels):not(#sb_services) tr::before{width:0;height:2px;display:inline-block;position:absolute;z-index:9999;top:-4px;left:-1px;background:#bfb;content:"";animation:bar .05s steps(3) reverse;will-change:transform}
 #sidebar td{padding:0 3px}
 #sidebar p{padding:0}
 #sidebar b,#sidebar td:first-child a:not(hover):not(:active) b,#sidebar td:first-child a:not(hover):not(:active):not(:visited) b{text-transform:capitalize;color:var(--ink_light)}
@@ -180,10 +180,10 @@ p:empty + .sb_notice{margin-top:7px}
 #minigraph:hover{cursor:zoom-in}
 #minigraphcontainer{margin-top:-57px;margin-left:1px;width:240px;height:38px;contain:paint;background-size:239px 40px;background-repeat:no-repeat}
 #sb_graphcontainer{margin:-5px 1px -6px 1px;padding:0 5px 0 0;height:38px;overflow:hidden;contain:paint;border:var(--border);box-shadow:var(--highlight);background:var(--grid),var(--bg);background-position:left 0 top -2px;background-size:200px 36px;background-repeat:no-repeat}
-#sb_graphcontainer:hover #sb_graphstats{opacity:.8;transition:ease opacity .3s}
+#sb_graphcontainer:hover #sb_graphstats{opacity:1;transition:ease opacity .3s}
 #sb_bandwidthgraph{margin:-20px 0 0 0;padding:0;width:202px;border-collapse:separate;border-spacing:0;border:var(--border);will-change:transform}
 #sb_bandwidthgraph td{padding:0 1px;height:38px;vertical-align:top;box-shadow:inset 0 0 0 1px #fdfdff,inset 0 0 1px 1px #77f}
-#sb_graphstats{padding:2px 8px;position:relative;z-index:10;display:inline-block;font-weight:700;border:var(--border);border-top:none;border-radius:0 0 3px 3px;box-shadow:0 0 0 1px rgba(255,255,255,.6) inset;background:rgba(255,255,255,.45);opacity:0;transition:ease opacity .3s;pointer-events:none}
+#sb_graphstats{padding:2px 8px;position:relative;z-index:10;display:inline-block;font-weight:700;border:var(--border);border-top:none;border-radius:0 0 3px 3px;box-shadow:0 0 0 1px rgba(255,255,255,.6) inset;background:rgba(255,255,255,.75);opacity:0;transition:ease opacity .3s;pointer-events:none}
 
 /* status bars */
 .percentBarOuter,#bandwidthTestRunning{width:196px;margin:-4px 0 -5px 3px;position:relative;text-align:center;border:var(--border);box-shadow:0 0 1px rgba(200,200,200,.8),var(--highlight);box-shadow:var(--btn_shadow_active);background:repeating-linear-gradient(90deg,rgba(210,210,255,.7) 1px,rgba(210,210,255,.7) 2px,rgba(230,230,255,.7) 2px,rgba(230,230,255,.7) 4px)}
@@ -213,7 +213,7 @@ h3:hover .toggleSection{display:inline-block}
 #sb_updatesection.collapsed > *:not(h3) {display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}
 #updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center / 20px;animation: spin 3s ease 0s both}
-#sidebar #localtunnelsActive,#sidebar #localtunnelsActive td{text-align:center!important;background:none;padding:3px 0!important;line-height:16px;vertical-align:middle!important;text-align:center}
+#sidebar #localtunnelsActive,#sidebar #localtunnelsActive td{text-align:center!important;background:none;padding:3px 0 4px!important;line-height:16px;vertical-align:middle!important;text-align:center}
 #sidebar #localtunnelsActive span{display:inline-block;font-size:90%;font-weight:600;text-transform:lowercase;vertical-align:middle!important;margin:1px 4px;line-height:16px;width:auto;letter-spacing:2px}
 #sidebar #localtunnelsActive span.count_0{display:none}
 #sidebar #localtunnelsActive img {width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
@@ -2002,7 +2002,7 @@ iframe{height:0}
 
 /*animations */
 @keyframes downloadbar{from{background:repeating-linear-gradient(135deg,rgba(221,221,255,.7) 1px,rgba(221,221,255,.7) 6px,rgba(238,238,255,.7) 7px,rgba(238,238,255,.7) 11px)} to{background:var(--updating)}}
-@keyframes bar{from{width:calc(100% + 2px)}}
+@keyframes bar{from{width:260%}}
 @keyframes disappear{from{visibility:visible} to{visibility:hidden}}
 @keyframes down{from{background-position:center center,100%}}
 @keyframes fade{from{opacity:1} to{opacity:0}}
