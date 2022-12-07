@@ -42,7 +42,9 @@ function sectionToggler() {
   function show_updatesection() {
     if (sb_updatesection !== null) {
       sb_updatesection.classList.remove("collapsed");
-      document.querySelector("#sb_updatesection > h3").classList.remove("collapsed");
+      if (document.querySelector("#sb_updatesection > h3") !== null) {
+        document.querySelector("#sb_updatesection > h3").classList.remove("collapsed");
+      }
       document.getElementById("toggle_sb_updatesection").checked = true;
     }
     localStorage.removeItem("section_updatesection");
