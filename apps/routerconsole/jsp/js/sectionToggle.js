@@ -29,25 +29,25 @@ function sectionToggler() {
   }
 
   function hide_updatesection() {
-    if (sb_updatesection !== null) {
+    if (sb_updatesection !== null && document.getElementById("toggle_sb_updatesection") != null) {
       if (sb_updatesection.hidden != true) {
         sb_updatesection.classList.add("collapsed");
         document.querySelector("#sb_updatesection > h3").classList.add("collapsed");
       }
       document.getElementById("toggle_sb_updatesection").checked = false;
+      localStorage["section_updatesection"] = "hide";
     }
-    localStorage["section_updatesection"] = "hide";
   }
 
   function show_updatesection() {
-    if (sb_updatesection !== null) {
+    if (sb_updatesection !== null && document.getElementById("toggle_sb_updatesection") != null) {
       sb_updatesection.classList.remove("collapsed");
       if (document.querySelector("#sb_updatesection > h3") !== null) {
         document.querySelector("#sb_updatesection > h3").classList.remove("collapsed");
       }
       document.getElementById("toggle_sb_updatesection").checked = true;
+      localStorage.removeItem("section_updatesection");
     }
-    localStorage.removeItem("section_updatesection");
   }
 
   function toggle_general() {
