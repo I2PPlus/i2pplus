@@ -243,7 +243,9 @@ function sectionToggler() {
   function show_advanced() {
     if (sb_advanced !== null) {
       sb_advanced.hidden = null;
-      document.querySelector("#sb_advanced.collapsed + hr").hidden = null;
+      if (document.querySelector("#sb_advanced.collapsed + hr") !== null) {
+        document.querySelector("#sb_advanced.collapsed + hr").hidden = null;
+      }
       document.getElementById("sb_advanced").classList.remove("collapsed");
       document.getElementById("toggle_sb_advanced").checked = true;
       localStorage.removeItem("section_advanced");
