@@ -2165,6 +2165,8 @@ input[type=text]:focus::placeholder,#homesearch input.search:focus::placeholder{
 #logs a.configure:active::after{transform:rotate(90deg);transition:linear transform .2s}
 #logs a.delete:active::after{opacity:.7;transform:scale(.85)}
 #logs pre,#logs li{font-weight:700}
+#logs table {position:relative}
+#logs table::before{width:calc(100% - 16px);transform:scaleX(0);height:2px;position:absolute;top:1px;left:8px;z-index:999;display:block;background:linear-gradient(to right,rgba(255,96,0,.3),#f50,rgba(255,96,0,.3));content:"";animation:bar .01s steps(2) reverse;backface-visibility:hidden;will-change:transform}
 #criticallogs + .tabletitle{margin-bottom:-2px}
 #criticallogs ul{margin:-6px -11px;border:var(--border)}
 #criticallogs ul:empty{display:none}
