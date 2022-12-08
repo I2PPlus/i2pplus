@@ -63,6 +63,7 @@ function sectionToggler() {
       sb_general.hidden = true;
       document.querySelector("#sb_general + hr").hidden = true;
       document.getElementById("toggle_sb_general").checked = false;
+      document.querySelector("#sidebar h3 a[href=\"/info\"] .badge").hidden = null;
       localStorage["section_general"] = "hide";
     }
   }
@@ -72,10 +73,12 @@ function sectionToggler() {
       sb_general.hidden = null;
       document.querySelector("#sb_general + hr").hidden = null;
       document.getElementById("toggle_sb_general").checked = true;
+      document.querySelector("#sidebar h3 a[href=\"/info\"] .badge").hidden = true;
       localStorage.removeItem("section_general");
     }
   }
 
+/**
   function toggle_shortgeneral() {
     if (document.getElementById("toggle_sb_shortgeneral").checked != true) {
       hide_shortgeneral();
@@ -101,6 +104,7 @@ function sectionToggler() {
       localStorage.removeItem("section_shortgeneral");
     }
   }
+**/
 
   function toggle_advancedgeneral() {
     if (document.getElementById("toggle_sb_advancedgeneral").checked != true) {
@@ -115,6 +119,7 @@ function sectionToggler() {
       sb_advancedgeneral.hidden = true;
       document.querySelector("#sb_advancedgeneral + hr").hidden = true;
       document.getElementById("toggle_sb_advancedgeneral").checked = false;
+      document.querySelector("#sidebar h3 a[href=\"/info\"] .badge").hidden = null;
       localStorage["section_advancedgeneral"] = "hide";
     }
   }
@@ -124,6 +129,7 @@ function sectionToggler() {
       sb_advancedgeneral.hidden = null;
       document.querySelector("#sb_advancedgeneral + hr").hidden = null;
       document.getElementById("toggle_sb_advancedgeneral").checked = true;
+      document.querySelector("#sidebar h3 a[href=\"/info\"] .badge").hidden = true;
       localStorage.removeItem("section_advancedgeneral");
     }
   }
@@ -413,7 +419,7 @@ function sectionToggler() {
     if (localStorage.getItem("section_peers") !== null) {hide_peers()} else {show_peers()}
     if (localStorage.getItem("section_queue") !== null) {hide_queue()} else {show_queue()}
     if (localStorage.getItem("section_services") !== null) {hide_services()} else {show_services()}
-    if (localStorage.getItem("section_shortgeneral") !== null) {hide_shortgeneral()} else {show_shortgeneral()}
+    //if (localStorage.getItem("section_shortgeneral") !== null) {hide_shortgeneral()} else {show_shortgeneral()}
     if (localStorage.getItem("section_tunnels") !== null) {hide_tunnels()} else {show_tunnels()}
     if (localStorage.getItem("section_updatesection") !== null) {hide_updatesection()} else {show_updatesection()}
     if (localStorage.getItem("section_newsheadings") !== null) {hide_newsheadings()} else {show_newsheadings()}
@@ -430,7 +436,7 @@ function sectionToggler() {
     if (document.getElementById("toggle_sb_peers") !== null) {document.getElementById("toggle_sb_peers").addEventListener("click", toggle_peers)}
     if (document.getElementById("toggle_sb_queue") !== null) {document.getElementById("toggle_sb_queue").addEventListener("click", toggle_queue)}
     if (document.getElementById("toggle_sb_services") !== null) {document.getElementById("toggle_sb_services").addEventListener("click", toggle_services)}
-    if (document.getElementById("toggle_sb_shortgeneral") !== null) {document.getElementById("toggle_sb_shortgeneral").addEventListener("click", toggle_shortgeneral)}
+    //if (document.getElementById("toggle_sb_shortgeneral") !== null) {document.getElementById("toggle_sb_shortgeneral").addEventListener("click", toggle_shortgeneral)}
     if (document.getElementById("toggle_sb_tunnels") !== null) {document.getElementById("toggle_sb_tunnels").addEventListener("click", toggle_tunnels)}
     if (document.getElementById("toggle_sb_updatesection") !== null) {document.getElementById("toggle_sb_updatesection").addEventListener("click", toggle_updatesection)}
   }

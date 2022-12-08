@@ -260,7 +260,8 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .toggleSection:active{box-shadow:var(--btn_shadow_active);background:var(--hover) var(--expand_active) no-repeat center center / 10px}
 .toggleSection:checked:active{background:var(--hover) var(--collapse_active) no-repeat center center / 10px}
 #sb_updatesection h3.collapsed:not(.updating) a::after{content:"*"}
-#sidebar h3 a .badge,#tunnelCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);border-radius:1px;font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #141,0 0 0 1px #000 inset}
+#sidebar h3 a .badge,#tunnelCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #141,var(--highlight);position:relative;z-index: 999}
+#sidebar h3 a[href="/info"] .badge{text-transform:capitalize}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #sidebar h3 a .badge[hidden]{display:none}
 #tunnelCount+#tunnelCount{display:none}

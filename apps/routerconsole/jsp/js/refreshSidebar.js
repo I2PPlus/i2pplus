@@ -360,7 +360,7 @@ function refreshSidebar() {
             if (clock != null) {
               clock.innerHTML = "--:--:--";
             }
-            var badges = document.querySelectorAll("#sidebar h3 a .badge");
+            var badges = document.querySelectorAll("h3 a .badge");
             var b;
             for (b = 0; b < badges.length; b += 1) {
               if (typeof badges[b] != null) {

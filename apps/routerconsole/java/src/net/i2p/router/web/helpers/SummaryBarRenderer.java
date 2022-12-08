@@ -669,6 +669,8 @@ class SummaryBarRenderer {
            .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
            .append("\">")
            .append(_t("Router Info"))
+           .append(" <span class=\"badge\" hidden title=\"").append(_t("How long we've been running for this session"))
+           .append("\">").append(_t("Up")).append(" ").append(_helper.getUptime()).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_general\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
 
                    "<table id=\"sb_general\" class=\"volatile\">" +
@@ -729,6 +731,8 @@ class SummaryBarRenderer {
            .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
            .append("\">")
            .append(_t("Router Info"))
+           .append(" <span class=\"badge\" hidden title=\"").append(_t("How long we've been running for this session"))
+           .append("\">").append(_t("Up")).append(" ").append(_helper.getUptime()).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_advancedgeneral\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
 
                    "<table id=\"sb_advancedgeneral\" class=\"volatile\">\n" +
