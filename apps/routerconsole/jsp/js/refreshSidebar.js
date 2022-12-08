@@ -1,13 +1,14 @@
 /* RefreshSidebar by dr|z3d */
 /* License: AGPLv3 or later */
 
-import {sectionToggler, countTunnels} from "/js/sectionToggle.js";
+import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
 
 function refreshSidebar() {
   'use strict';
   var meta = document.querySelector('[http-equiv="refresh"]');
   var xhr = new XMLHttpRequest();
-  var uri = location.pathname.substring(1);
+//  var uri = location.pathname.substring(1);
+  var uri = location.pathname;
   var xhrContainer = document.getElementById("xhr");
 
   var advancedGeneral = document.getElementById("sb_advancedgeneral");
@@ -77,6 +78,7 @@ function refreshSidebar() {
           uncollapse();
           refreshAll();
           countTunnels();
+          countNewsItems();
         }
 
         function updateVolatile() {
@@ -94,6 +96,7 @@ function refreshSidebar() {
           }
 
           countTunnels();
+          countNewsItems();
 
           if (clock != null && clockResponse != null) {
             clock.innerHTML = clockResponse.innerHTML;
@@ -210,6 +213,7 @@ function refreshSidebar() {
                 updateVolatile();
                 sectionToggler();
                 countTunnels();
+                countNewsItems();
               }
               if (localTunnels !== null && localTunnels.hidden != true) {
                 if (localTunnels.hidden != true && updating.length != updatingResponse.length) {
@@ -227,6 +231,7 @@ function refreshSidebar() {
               xhrContainer.innerHTML = sbResponse.innerHTML;
               sectionToggler();
               countTunnels();
+              countNewsItems();
             }
           }
         }
@@ -379,6 +384,7 @@ function refreshSidebar() {
 
   xhr.addEventListener("loaded", () => {
     countTunnels();
+    countNewsItems();
     checkSections();
     sectionToggler();
   });

@@ -209,7 +209,7 @@ h3:hover .toggleSection{display:inline-block}
 .toggleSection:checked:active{box-shadow:var(--highlight),inset 3px -3px 3px 1px rgba(32,32,64,.3)}
 .toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 .toggleSection:not(:checked){padding-top:6px}
-#sidebar h3 a .badge:not([hidden]),#tunnelCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
+#sidebar h3 a .badge:not([hidden]),#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sb_updatesection.collapsed > *:not(h3) {display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}

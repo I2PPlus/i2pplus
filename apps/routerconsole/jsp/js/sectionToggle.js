@@ -464,4 +464,27 @@ function countTunnels() {
   }
 }
 
-export {sectionToggler, countTunnels};
+function countNewsItems() {
+  if (document.getElementById("sb_newsheadings") !== null) {
+    var newsItemsLength = document.querySelectorAll("#sb_newsheadings table tr").length;
+    var newsH3 = document.querySelector("#sidebar h3 a[href=\"/news\"]");
+    if (newsH3.innerHTML.indexOf(newsItemsLength) == -1) {
+      if (newsItemsLength > 0) {
+        var displayCount = " <span id=\"newsCount\">" + newsItemsLength + "</span>";
+        newsH3.innerHTML += displayCount;
+        var newsCount = document.getElementById("newsCount").innerHTML;
+        var newsBadge = document.getElementById("newsCount");
+        if (newsCount != newsItemsLength) {
+          newsCount = newsItemsLength;
+          newsBadge.outerHTML = displayCount;
+        }
+      }
+    }
+    var doubleCount = document.querySelector("#newsCount + #newsCount");
+    if (doubleCount) {
+      doubleCount.remove();
+    }
+  }
+}
+
+export {sectionToggler, countTunnels, countNewsItems};

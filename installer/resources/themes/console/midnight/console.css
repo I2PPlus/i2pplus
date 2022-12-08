@@ -441,10 +441,10 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .toggleSection:not(:checked){padding-top:6px}
 .toggleSection:active{box-shadow:var(--btn_shadow_active);background-color:var(--hover)}
 .toggleSection:checked:active{box-shadow:var(--highlight),inset 3px -3px 3px 3px rgba(0,0,0,.8),0 0 0 1px #000}
-#sidebar h3 a .badge:not([hidden]),#tunnelCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
+#sidebar h3 a .badge:not([hidden]),#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
-#sidebar h3:hover a .badge,h3:hover #tunnelCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
-#tunnelCount+#tunnelCount{display:none}
+#sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
+#tunnelCount+#tunnelCount,#newsCount+#newsCount{display:none}
 #sb_updatesection.collapsed > *:not(h3) {display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}
 #updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center / 20px;animation: spin 3s ease 0s both}
