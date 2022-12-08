@@ -187,7 +187,9 @@ function sectionToggler() {
   function show_services() {
     if (sb_services !== null) {
       sb_services.hidden = null;
-      document.querySelector("#sb_services.collapsed + hr").hidden = null;
+      if (document.querySelector("#sb_services.collapsed + hr") !== null) {
+        document.querySelector("#sb_services.collapsed + hr").hidden = null;
+      }
       document.getElementById("sb_services").classList.remove("collapsed");
       document.getElementById("toggle_sb_services").checked = true;
       localStorage.removeItem("section_services");
@@ -215,7 +217,9 @@ function sectionToggler() {
   function show_internals() {
     if (sb_internals !== null) {
       sb_internals.hidden = null;
-      document.querySelector("#sb_internals.collapsed + hr").hidden = null;
+      if (document.querySelector("#sb_internals.collapsed + hr") !== null) {
+        document.querySelector("#sb_internals.collapsed + hr").hidden = null;
+      }
       document.getElementById("sb_internals").classList.remove("collapsed");
       document.getElementById("toggle_sb_internals").checked = true;
       localStorage.removeItem("section_internals");
