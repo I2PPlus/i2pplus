@@ -1153,7 +1153,7 @@ class SummaryBarRenderer {
                   .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
                   .append("\">" +
                           "<td><a href=\"/tunnelsparticipating\"><b>")
-                  .append(_t("Participating"))
+                  .append(_t("Participating").replace("Participating","Transit"))
                   .append("</b></a></td><td class=\"digits\"><span>")
                   .append(partTunnels)
                   .append("</span></td></tr>\n");
@@ -1201,7 +1201,7 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Congestion"))
            .append(" <span class=\"badge\" hidden title=\"").append(_t("Job lag")).append("\">");
-        if (_context.router().getUptime() < 5*60*1000) {
+        if (_context.router().getUptime() < 2*60*1000) {
            buf.append("-");
         } else {
            buf.append(_helper.getJobLag());
