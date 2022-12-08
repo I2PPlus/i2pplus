@@ -181,7 +181,7 @@ function sectionToggler() {
   function show_services() {
     if (sb_services !== null) {
       sb_services.hidden = null;
-      //document.querySelector("#sb_services + hr").hidden = null;
+      document.querySelector("#sb_services.collapsed + hr").hidden = null;
       document.getElementById("sb_services").classList.remove("collapsed");
       document.getElementById("toggle_sb_services").checked = true;
       localStorage.removeItem("section_services");
@@ -209,7 +209,7 @@ function sectionToggler() {
   function show_internals() {
     if (sb_internals !== null) {
       sb_internals.hidden = null;
-      //document.querySelector("#sb_internals + hr").hidden = null;
+      document.querySelector("#sb_internals.collapsed + hr").hidden = null;
       document.getElementById("sb_internals").classList.remove("collapsed");
       document.getElementById("toggle_sb_internals").checked = true;
       localStorage.removeItem("section_internals");
@@ -237,7 +237,7 @@ function sectionToggler() {
   function show_advanced() {
     if (sb_advanced !== null) {
       sb_advanced.hidden = null;
-//      document.querySelector("#sb_advanced + hr").hidden = null;
+      document.querySelector("#sb_advanced.collapsed + hr").hidden = null;
       document.getElementById("sb_advanced").classList.remove("collapsed");
       document.getElementById("toggle_sb_advanced").checked = true;
       localStorage.removeItem("section_advanced");

@@ -28,6 +28,7 @@ body{height:calc(100% - 2px)}
 #wizardpage .sb form{padding:13px 0 15px}
 .wizardbuttons{margin-top:-14px}
 .bandwidthtester #wizard p + p{padding-top:0}
+#bandwidthTestRunning{margin:-4px 0;padding:7px 3px;width:100%;display:inline-block;vertical-align:middle;color:#dd8;text-shadow:0 1px 1px #000;box-shadow:0 0 0 1px #337,var(--highlight),inset 0 0 2px 1px #26235c;background:#001;box-sizing:border-box}
 
 @media screen and (min-width:1500px){
 #wizardpage #sidebar #sb_logo img{margin-left:-1px;width:223px}

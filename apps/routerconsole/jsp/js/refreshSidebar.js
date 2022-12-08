@@ -259,7 +259,6 @@ function refreshSidebar() {
         }
 
         function uncollapse() {
-          sectionToggler();
           var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
           var a;
           for (a = 1; a < sectionTitle.length - 1; a += 1) {
@@ -269,18 +268,19 @@ function refreshSidebar() {
             }
           }
 
-          var collapsed = document.querySelectorAll("#sidebar .volatile.collapse, #sidebar .volatile.collapse + hr");
+          var collapsed = document.querySelectorAll("#sidebar .volatile.collapse, #sidebar .volatile.collapse + hr, #sidebar table.volatile + hr");
           var c;
           for (c = 0; c < collapsed.length; c += 1) {
             var styleHidden = collapsed[c].getAttribute("hidden");
             if (styleHidden) {
-              collapsed[c].removeAttribute("hidden");
+              collapsed[c].hidden = null;
             }
           }
+          sectionToggler();
         }
 
         function removeMeta() {
-          if (meta != null) {
+          if (meta !== null) {
             meta.remove();
           }
         }
