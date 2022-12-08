@@ -326,6 +326,14 @@ function refreshSidebar() {
                 collapse[h].nextElementSibling.setAttribute("hidden", "");
               }
             }
+            var collapsed = document.querySelectorAll("#sidebar table.collapsed");
+            var c;
+            for (c = 0; c < collapsed.length; c += 1) {
+              collapsed[c].classList.remove("collapsed");
+              if (collapsed[c].nextElementSibling != null && collapsed[c].nextElementSibling.nodeName == "HR") {
+                collapsed[c].nextElementSibling.setAttribute("hidden", "");
+              }
+            }
             if (shutdownStatus != null) {
               shutdownStatus.setAttribute("hidden", "");
             }
