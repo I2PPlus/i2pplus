@@ -563,15 +563,7 @@ class ProfileOrganizerRenderer {
     }
 
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00");
-
-    private final static String num(double num) {
-        if (num >= 1.0d) {
-            synchronized (_fmt) { return _fmt.format(num); }
-        } else {
-            return NA;
-        }
-    }
-
+    private final static String num(double num) { synchronized (_fmt) { return _fmt.format(num); } }
     private final static String NA = "";
 
     private String avg (PeerProfile prof, long rate, RateAverages ra) {
