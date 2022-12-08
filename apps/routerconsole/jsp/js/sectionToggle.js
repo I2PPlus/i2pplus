@@ -171,7 +171,8 @@ function sectionToggler() {
   function hide_services() {
     if (sb_services !== null) {
       sb_services.hidden = true;
-      document.querySelector("#sb_services + hr").hidden = true;
+      //document.querySelector("#sb_services + hr").hidden = true;
+      document.getElementById("sb_services").classList.add("collapsed");
       document.getElementById("toggle_sb_services").checked = false;
       localStorage["section_services"] = "hide";
     }
@@ -180,7 +181,8 @@ function sectionToggler() {
   function show_services() {
     if (sb_services !== null) {
       sb_services.hidden = null;
-      document.querySelector("#sb_services + hr").hidden = null;
+      //document.querySelector("#sb_services + hr").hidden = null;
+      document.getElementById("sb_services").classList.remove("collapsed");
       document.getElementById("toggle_sb_services").checked = true;
       localStorage.removeItem("section_services");
     }
@@ -197,7 +199,8 @@ function sectionToggler() {
   function hide_internals() {
     if (sb_internals !== null) {
       sb_internals.hidden = true;
-      document.querySelector("#sb_internals + hr").hidden = true;
+      //document.querySelector("#sb_internals + hr").hidden = true;
+      document.getElementById("sb_internals").classList.add("collapsed");
       document.getElementById("toggle_sb_internals").checked = false;
       localStorage["section_internals"] = "hide";
     }
@@ -206,7 +209,8 @@ function sectionToggler() {
   function show_internals() {
     if (sb_internals !== null) {
       sb_internals.hidden = null;
-      document.querySelector("#sb_internals + hr").hidden = null;
+      //document.querySelector("#sb_internals + hr").hidden = null;
+      document.getElementById("sb_internals").classList.remove("collapsed");
       document.getElementById("toggle_sb_internals").checked = true;
       localStorage.removeItem("section_internals");
     }
@@ -223,7 +227,8 @@ function sectionToggler() {
   function hide_advanced() {
     if (sb_advanced !== null) {
       sb_advanced.hidden = true;
-      document.querySelector("#sb_advanced + hr").hidden = true;
+      //document.querySelector("#sb_advanced + hr").hidden = true;
+      document.getElementById("sb_advanced").classList.add("collapsed");
       document.getElementById("toggle_sb_advanced").checked = false;
       localStorage["section_advanced"] = "hide";
     }
@@ -232,7 +237,8 @@ function sectionToggler() {
   function show_advanced() {
     if (sb_advanced !== null) {
       sb_advanced.hidden = null;
-      document.querySelector("#sb_advanced + hr").hidden = null;
+//      document.querySelector("#sb_advanced + hr").hidden = null;
+      document.getElementById("sb_advanced").classList.remove("collapsed");
       document.getElementById("toggle_sb_advanced").checked = true;
       localStorage.removeItem("section_advanced");
     }

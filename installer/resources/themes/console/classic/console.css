@@ -218,6 +218,7 @@ h3:hover .toggleSection{display:inline-block}
 #sidebar #localtunnelsActive span.count_0{display:none}
 #sidebar #localtunnelsActive img {width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
 #sidebar #localtunnelSummary{margin:-7px auto -8px}
+.sb_icon,#sb_internals.collapsed,#sb_services.collapsed,#sb_advanced.collapsed, #sidebar table.collapsed+hr{display:none!important}
 
 /* buttons & inputs */
 button a,button a:visited{font-weight:400;color:var(--ink_light)}

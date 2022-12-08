@@ -150,10 +150,12 @@ function refreshSidebar() {
                if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
                  updateBar.innerHTML = updateBarResponse.innerHTML;
                  var updateH3 = document.querySelector("#sb_updatesection > h3 a").innerHTML;
-                 updateH3.classList.add("updating");
-                 var spinner = "<span id=\"updateSpinner\"></span>";
-                 if (updateH3.innerHTML.indexOf(spinner) == -1) {
-                   updateH3.innerHTML += spinner;
+                 if (updateH3 !=- null) {
+                   updateH3.classList.add("updating");
+                   var spinner = "<span id=\"updateSpinner\"></span>";
+                   if (updateH3.innerHTML.indexOf(spinner) == -1) {
+                     updateH3.innerHTML += spinner;
+                   }
                  }
                } else {
                 refreshAll();
