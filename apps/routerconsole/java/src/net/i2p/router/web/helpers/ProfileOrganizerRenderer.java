@@ -565,8 +565,7 @@ class ProfileOrganizerRenderer {
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00");
 
     private final static String num(double num) {
-//        if (num >= 1.0d) {
-        if (num >= 0.1d) {
+        if (num >= 1.0d) {
             synchronized (_fmt) { return _fmt.format(num); }
         } else {
             return NA;
