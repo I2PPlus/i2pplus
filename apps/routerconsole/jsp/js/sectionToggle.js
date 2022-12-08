@@ -390,13 +390,15 @@ function sectionToggler() {
       var clientSpan = '<span id="clientCount" class="count_' + clients + '">' + clients + ' x <img src="/themes/console/images/client.svg"></span>';
       var pingSpan = '<span id="pingCount" class="count_' + pings + '">' + pings + ' x <img src="/themes/console/images/ping.svg"></span>';
       var summary = snarkSpan + " " + serverSpan + " " + clientSpan + " " + pingSpan;
-      var sb_localtunnels = sb_localtunnels;
       var summaryTable = '<table id="localtunnelSummary"><tr id="localtunnelsActive"><td>' + summary + '</td></tr></table>';
       var localTunnelSummary = document.getElementById("localtunnelSummary");
       if (document.getElementById("localtunnelSummary") == null) {
         sb_localtunnels.outerHTML += summaryTable;
       } else {
         localTunnelSummary.outerHTML = summaryTable;
+        if (localTunnelSummary.outerHTML != summaryTable.outerHTML) {
+          localTunnelSummary.outerHTML = summaryTable;
+        }
       }
       document.getElementById("toggle_sb_localtunnels").checked = false;
       localStorage["section_localtunnels"] = "hide";
