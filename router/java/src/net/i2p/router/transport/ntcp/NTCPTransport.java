@@ -1036,11 +1036,11 @@ public class NTCPTransport extends TransportImpl {
         _finisher.start();
         _pumper.startPumping();
 
-        long maxMemory = SystemVersion.getMaxMemory();
+        long maxMemory = SystemVersion.getMaxMemory()*1024*1024;
         int nr, nw;
-        if (maxMemory < 32*1024*1024) {
+        if (maxMemory < 32) {
             nr = nw = 1;
-        } else if (maxMemory < 64*1024*1024) {
+        } else if (maxMemory < 64) {
             nr = nw = 2;
         } else {
             nr = Math.max(MIN_CONCURRENT_READERS, Math.min(MAX_CONCURRENT_READERS, _context.bandwidthLimiter().getInboundKBytesPerSecond() / 20));
