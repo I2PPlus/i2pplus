@@ -158,6 +158,8 @@ function refreshSidebar() {
                   }
                 }
               }
+            } else {
+              refreshAll();
             }
           }
           if (updateSection != null && updateSection.classList.contains("collapsed") != true && updateStatus != null) {
