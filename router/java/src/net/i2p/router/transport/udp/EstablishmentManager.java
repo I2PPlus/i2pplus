@@ -2659,7 +2659,7 @@ class EstablishmentManager {
         // shorten expiration based on average eviction time
         RateStat rs = _context.statManager().getRate("udp.inboundTokenLifetime");
         if (rs != null) {
-            Rate r = rs.getRate(5*60*1000);
+            Rate r = rs.getRate(10*60*1000);
             if (r != null) {
                 long lifetime = (long) (r.getAverageValue() * 0.9d); // margin
                 if (lifetime > 0) {
