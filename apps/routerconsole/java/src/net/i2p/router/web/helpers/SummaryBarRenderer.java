@@ -458,9 +458,9 @@ class SummaryBarRenderer {
             .append(_t("View historical log of router events"))
             .append("\">")
             .append(nbsp(tx))
-            .append("</a>\n")
-            .append("<a class=sb_icon target=_top href=\"/events?from=604800\" title=\"").append(tx)
-            .append("\" hidden><span><img src=/themes/console/images/textstats.svg></span></a>\n");
+            .append("</a>\n");
+            //.append("<a class=sb_icon target=_top href=\"/events?from=604800\" title=\"").append(tx)
+            //.append("\" hidden><span><img src=/themes/console/images/textstats.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         if (!StatSummarizer.isDisabled(_context)) {
@@ -628,7 +628,7 @@ class SummaryBarRenderer {
             .append("\" href=\"/netdb?f=4\" target=\"_top\">")
             .append(nbsp(tx))
             .append("</a>\n")
-            .append("<a class=sb_icon target=_top href=\"/netdb^f=4\" title=\"").append(tx)
+            .append("<a class=sb_icon target=_top href=\"/netdb?f=4\" title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/searchnetdb.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
@@ -1142,7 +1142,7 @@ class SummaryBarRenderer {
            .append(_t("Used for building and testing tunnels, and communicating with floodfill peers")).append(" (").append(_t("inbound / outbound")).append(")")
            .append("\">" +
                    "<td><a href=\"/tunnels#exploratory\"><b>")
-           .append(_t("Exploratory"))
+           .append(_t("Exploratory").replace("Exploratory", "Utility"))
            .append("</b></a></td><td class=\"digits\"><span>")
 //           .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels())
            .append(_helper.getInboundTunnels()).append(" / ").append(_helper.getOutboundTunnels())
@@ -1205,7 +1205,7 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Congestion"))
            .append(" <span class=\"badge\" hidden title=\"").append(_t("Job lag")).append("\">");
-        if (_context.router().getUptime() < 2*60*1000) {
+        if (_context.router().getUptime() < 60*1000) {
            buf.append("-");
         } else {
            buf.append(_helper.getJobLag());
@@ -1220,11 +1220,12 @@ class SummaryBarRenderer {
            .append(_t("Job lag"))
            .append("</b></td><td class=\"digits\">");
         if (_context.jobQueue().getMaxLag() > 1000) {
-            buf.append("<span class=\"warntext\">").append(_helper.getJobLag()).append("</span>");
+            buf.append("<span class=\"warntext\">");
         } else {
-            buf.append("<span>").append(_helper.getJobLag()).append("</span>");
+            buf.append("<span>");
         }
-        buf.append("</td></tr>\n" +
+        buf.append(_helper.getJobLag()).append("</span>")
+            .append("</td></tr>\n" +
                    "<tr title=\"")
            .append(_t("Indicates how quickly outbound messages to other I2P routers are sent"))
            .append("\">" +
