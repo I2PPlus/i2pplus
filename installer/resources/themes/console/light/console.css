@@ -177,7 +177,7 @@ p:empty + .sb_notice{margin-top:9px}
 
 /* sidebar toggler */
 #sidebar h3,#sidebar h3 a{position:relative;z-index:10}
-input[type=checkbox].toggleSection{position:absolute;top:-4px;right:-6px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;background:#fff var(--dropdown) no-repeat center calc(50% - 2px) / 10px;appearance:none;box-shadow:none;border-left:1px solid #afafcf;display:none;z-index:999}
+input[type=checkbox].toggleSection{position:absolute;top:-4px;right:-6px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;background:#fff var(--dropdown) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:none;border-left:1px solid #afafcf;display:none;z-index:999}
 input[type=checkbox].toggleSection{display:none}
 h3:hover .toggleSection{display:inline-block}
 input[type=checkbox].toggleSection:active{box-shadow:var(--btn_shadow_active)}
@@ -189,7 +189,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sb_updatesection.collapsed > *:not(h3) {display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center / 20px;animation: spin 3s ease 0s both}
+#updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center/20px;animation: spin 3s ease 0s both}
 #sidebar #localtunnelsActive,#sidebar #localtunnelsActive td{text-align:center!important;background:none;padding:3px 0!important;line-height:16px;vertical-align:middle!important;text-align:center}
 #sidebar #localtunnelsActive span{display:inline-block;font-size:90%;font-weight:600;text-transform:lowercase;vertical-align:middle!important;margin:1px 5px;line-height:16px;width:auto;letter-spacing:3px}
 #sidebar #localtunnelsActive span.count_0{display:none}
@@ -490,10 +490,13 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 #logs ul{margin:-5px 0 -3px;width:100%;display:inline-block;word-break:break-all}
 #logs ul li{margin:0 0 -1px -4px;padding-left:0;width:calc(100% + 2px)}
 #logs a.configure,#logs a.delete,#logs a.configure:hover,#logs a.delete:hover,#logs a.configure:focus,#logs a.delete:focus,#logs a.active:hover,#logs a.active:hover{border-left:none;box-shadow:none;background:none;display:inline-block}
-#logs a.delete::after,#logs a.configure::after{margin:-7px -8px -6px 0;padding:8px 4px 8px 20px;border-left:1px solid #aab}
+#logs a.delete::after,#logs a.configure::after,#logs #eventlogLink::after{margin:-7px -8px -6px 0;padding:8px 4px 8px 20px;border-left:1px solid #aab}
 #logs a.configure::after{padding-left:23px;padding-right:6px}
 #logs a.delete:hover::after{background:var(--close_hover) no-repeat center center/14px}
 #logs a.delete::after{width:19px;height:16px;display:inline-block;background:var(--close) no-repeat center center/14px;content:""}
+#logs #eventlogLink{margin:-8px 4px -14px 4px;display:inline-block;float:right;font-size:0;border-bottom:none;background:none}
+#logs #eventlogLink::after{width:19px;height:16px;padding:12px 8px 8px 4px;display:inline-block;border-left:none;background:url(/themes/console/images/logs.svg) no-repeat center center/16px;content:""}
+#logs #eventlogLink:hover::after{transform:scale(1.2)}
 #logs #enviro{user-select:all;cursor:text}
 #logs #enviro:hover td{color:var(--ink_darker);border-top:1px inset transparent;border-bottom:1px inset transparent;border-left:none;box-shadow:none;background:rgba(255,255,239,.4)}
 #logs #enviro:hover td:first-child b{color:#26262f}
@@ -962,8 +965,8 @@ h3#udpcon{margin-top:7px}
 #transportSummary td{text-align:center;padding:8px;font-style:normal}
 #transportSummary tr:hover{background:#ffd}
 #peers .tablefooter td{font-weight:700;background:var(--th)}
-#transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center / 12px}
-#transportSummary th.out span{background:var(--out) no-repeat center center / 12px}
+#transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center/12px}
+#transportSummary th.out span{background:var(--out) no-repeat center center/12px}
 #transports{margin-bottom:-2px}
 #transports .script,#ntcpcon .script,#udpcon .script{margin:-3px 0 -4px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
@@ -2570,7 +2573,7 @@ h3#pconfig,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
 #plugininstall2{margin-top:-15px}
 #sb_general,#sb_shortgeneral,#sb_advancedgeneral,#sb_bandwidth,#sb_peers,#sb_peersadvanced,#sb_tunnels,#sb_queue{margin-top:-12px;margin-bottom:-6px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:14px}
-#sb_graphcontainer{height:44px}
+#sb_graphcontainer:not([hidden]){height:44px}
 #sb_internals a,#sb_advanced a,#sb_help a{max-width:232px}
 #sb_internals,#sb_advanced,#sb_help{width:240px}
 #sb_localtunnels a{max-width:188px}
