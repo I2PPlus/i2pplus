@@ -973,6 +973,9 @@ h3#udpcon{margin-top:7px}
 #transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
+#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle}
+#peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
+#peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}
 
 /* tunnels */
 .tunneldisplay,.statusnotes,#config_service .infohelp,#config_service .formaction{position:relative;z-index:100}

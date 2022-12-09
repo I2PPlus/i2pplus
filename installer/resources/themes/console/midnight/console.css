@@ -1566,6 +1566,9 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peers .routerid,#profiles .routerid{padding:3px 2px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:2px;background:var(--element)}
 #peers .routerid img,#profiles .routerid img{margin-right:0}
 #peers .cells{box-shadow:none}
+#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle}
+#peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
+#peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}
 #peers img[src$="bound.svg"],#profiles img[src$="bound.svg"],#tunnels img[src$="bound.svg"]{opacity:0}
 #peers .infohelp{margin:14px 0 1px}
 #peers .routerid{margin:0;padding-right:4px}

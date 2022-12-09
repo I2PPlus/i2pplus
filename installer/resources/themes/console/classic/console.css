@@ -1742,6 +1742,9 @@ span.right,span.left{margin:0 1px;display:inline-block;width:40%}
 #peers .widescroll + .tabletitle{margin-top:9px}
 #peers td.direction i{display:inline-block;width:100%;margin:3px -3px -4px;font-style:normal;font-size:90%;text-align:center;color:#412;border-top:1px solid var(--bg4);border-radius:2px}
 #peers .spacer{display:none}
+#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle}
+#peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
+#peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}
 #peers img[src$="bound.svg"],#profiles img[src$="bound.svg"],#tunnels img[src$="bound.svg"]{opacity:0}
 #peers > #ntcpcon{margin-top:0}
 table[id*="connections"] td{text-align:center}

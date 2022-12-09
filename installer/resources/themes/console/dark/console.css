@@ -684,6 +684,9 @@ tr:hover .cells,#profiles tr:hover td{box-shadow:none}
 #peers .confignav + h3{margin-top:12px}
 #peers h3:nth-child(n+2){margin-top:2px}
 #ntcpconnections + h3 + #udpconnections,#ntcpconnections,#udpconnections{margin-bottom:10px}
+#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle}
+#peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
+#peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}
 #peers img[src$="bound.svg"],#profiles img[src$="bound.svg"],#tunnels img[src$="bound.svg"]{opacity:0}
 #peers table{margin-bottom:9px}
 h3[id$="con"]{margin-bottom:-2px;border-radius:0;padding:8px 10px;font-size:10pt;word-spacing:.1em;letter-spacing:.08em;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%);border:var(--border)}

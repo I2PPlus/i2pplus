@@ -344,6 +344,11 @@ public class PeerHelper extends HelperBase {
                 continue;
             buf.append("<tr class=\"lazy\"><td class=\"cells peer\" nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(con.getRemotePeer().calculateHash()));
+            buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(con.getRemoteIP()))
+               .append("\" target=\"_blank\" title=\"").append(_t("Lookup remote address")).append(' ')
+               .append(Addresses.toString(con.getRemoteIP(), con.getChannel().socket().getPort())).append(' ')
+               .append(_t("on")).append(" gwhois.org").append("\">")
+               .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
             buf.append("</td><td class=\"cells direction\">");
             if (con.isInbound())
                 buf.append("<span class=\"inbound\"><img src=\"/themes/console/images/inbound.svg\" alt=\"Inbound\" title=\"")
@@ -567,6 +572,11 @@ public class PeerHelper extends HelperBase {
                 continue; // don't include old peers
             buf.append("<tr class=\"lazy\"><td class=\"cells peer\" nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer()));
+            buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(peer.getRemoteIP()))
+               .append("\" target=\"_blank\" title=\"").append(_t("Lookup remote address")).append(' ')
+               .append(Addresses.toString(peer.getRemoteIP(), peer.getRemotePort()))
+               .append(' ').append(_t("on")).append(" gwhois.org").append("\">")
+               .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
             buf.append("</td><td class=\"cells direction\" nowrap>");
             if (peer.isInbound())
                 buf.append("<span class=\"inbound\"><img src=\"/themes/console/images/inbound.svg\" alt=\"Inbound\" title=\"").append(_t("Inbound"));
@@ -574,9 +584,11 @@ public class PeerHelper extends HelperBase {
                 buf.append("<span class=\"outbound\"><img src=\"/themes/console/images/outbound.svg\" alt=\"Outbound\" title=\"").append(_t("Outbound"));
             buf.append("\"></span>");
             if (peer.getWeRelayToThemAs() > 0)
-                buf.append("&nbsp;&nbsp;<span class=\"inbound small\"><img src=\"/themes/console/images/outbound.svg\" height=\"8\" width=\"8\" alt=\"^\" title=\"").append(_t("We offered to introduce them")).append("\">");
+                buf.append("&nbsp;&nbsp;<span class=\"inbound small\"><img src=\"/themes/console/images/outbound.svg\" height=\"8\" width=\"8\" alt=\"^\" title=\"")
+                    .append(_t("We offered to introduce them")).append("\">");
             if (peer.getTheyRelayToUsAs() > 0)
-                buf.append("&nbsp;&nbsp;<span class=\"outbound small\"><img src=\"/themes/console/images/inbound.svg\" height=\"8\" width=\"8\" alt=\"V\" title=\"").append(_t("They offered to introduce us")).append("\">");
+                buf.append("&nbsp;&nbsp;<span class=\"outbound small\"><img src=\"/themes/console/images/inbound.svg\" height=\"8\" width=\"8\" alt=\"V\" title=\"")
+                   .append(_t("They offered to introduce us")).append("\">");
             if (peer.getWeRelayToThemAs() > 0 || peer.getTheyRelayToUsAs() > 0)
                 buf.append("</span>");
             if (isAdvanced) {
