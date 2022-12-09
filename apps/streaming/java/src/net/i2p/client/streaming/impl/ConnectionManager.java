@@ -56,7 +56,7 @@ class ConnectionManager {
     private final Map<Long, Object> _recentlyClosed;
     private static final Object DUMMY = new Object();
 
-     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
     /** cache of the property to detect changes */
     private static volatile String _currentBlacklist = "";

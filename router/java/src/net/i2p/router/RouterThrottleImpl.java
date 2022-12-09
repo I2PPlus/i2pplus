@@ -53,7 +53,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** = TrivialPreprocessor.PREPROCESSED_SIZE */
     private static final int PREPROCESSED_SIZE = 1024;
 
-    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
     public RouterThrottleImpl(RouterContext context) {
         _context = context;

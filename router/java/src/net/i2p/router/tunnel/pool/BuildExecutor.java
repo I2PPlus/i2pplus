@@ -52,7 +52,7 @@ class BuildExecutor implements Runnable {
     private static final int MAX_CONCURRENT_BUILDS = SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ? 10 : Math.max(SystemVersion.getCores() * 3, 16);
     /** accept replies up to a minute after we gave up on them */
     private static final long GRACE_PERIOD = 60*1000;
-    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
     public boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
