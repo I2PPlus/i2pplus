@@ -152,8 +152,8 @@ function refreshSidebar() {
             if (updateBarResponse != null) {
               if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
                 updateBar.innerHTML = updateBarResponse.innerHTML;
-                var updateH3 = document.querySelector("#sb_updatesection > h3 a").innerHTML;
-                if (updateH3 !=- null) {
+                if (updateH3 != null) {
+                  var updateH3 = document.querySelector("#sb_updatesection > h3 a").innerHTML;
                   updateH3.classList.add("updating");
                   var spinner = "<span id=\"updateSpinner\"></span>";
                   if (updateH3.innerHTML.indexOf(spinner) == -1) {
@@ -189,6 +189,13 @@ function refreshSidebar() {
               }
             }
           }
+//          if (updateSection != null) {
+//            if (updateProgressResponse != null) {
+//              if (!Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
+//                updateProgress.innerHTML = updateProgressResponse.innerHTML;
+//              }
+//            }
+//          }
           if (tunnelBuildStatus != null && tunnelBuildStatusResponse != null && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
             tunnelBuildStatus.innerHTML = tunnelBuildStatusResponse.innerHTML;
           }
@@ -282,6 +289,8 @@ function refreshSidebar() {
             }
           }
           sectionToggler();
+          countTunnels();
+          countNewsItems();
         }
 
         function removeMeta() {
@@ -383,10 +392,10 @@ function refreshSidebar() {
   };
 
   xhr.addEventListener("loaded", () => {
-    countTunnels();
-    countNewsItems();
     checkSections();
     sectionToggler();
+    countTunnels();
+    countNewsItems();
   });
   xhr.send();
 
