@@ -50,19 +50,22 @@ document.addEventListener("DOMContentLoaded", function() {
       if (xhr.readyState==4 && xhr.status==200 && autorefresh.checked) {
         if (udp) {
           var udpResponse = xhr.responseXML.getElementById("udp");
-          var udpParent = udp.parentNode;
+          //var udpParent = udp.parentNode;
           if (!Object.is(udp.innerHTML, udpResponse.innerHTML))
-            udpParent.replaceChild(udpResponse, udp);
+            //udpParent.replaceChild(udpResponse, udp);
+            udp.innerHTML = udpResponse.innerHTML;
         } else if (ntcp) {
           var ntcpResponse = xhr.responseXML.getElementById("ntcp");
-          var ntcpParent = ntcp.parentNode;
+          //var ntcpParent = ntcp.parentNode;
           if (!Object.is(ntcp.innerHTML, ntcpResponse.innerHTML))
-            ntcpParent.replaceChild(ntcpResponse, ntcp);
+            ntcp.innerHTML = ntcpResponse.innerHTML;
+            //ntcpParent.replaceChild(ntcpResponse, ntcp);
         } else if (summary) {
           var summaryResponse = xhr.responseXML.getElementById("transportSummary");
-          var summaryParent = summary.parentNode;
+          //var summaryParent = summary.parentNode;
           if (!Object.is(summary.innerHTML, summaryResponse.innerHTML))
-            summaryParent.replaceChild(summaryResponse, summary);
+            summary.innerHTML = summaryResponse.innerHTML;
+            //summaryParent.replaceChild(summaryResponse, summary);
         }
       }
     }
