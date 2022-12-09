@@ -104,8 +104,17 @@
     if (last >= 0) {
 %>
 &nbsp;<a class="delete" title="<%=intl._t("Clear logs")%>" href="logs?clear=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  } %>
+<%
+    }
+%>
 &nbsp;<a class="configure" title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a>
+<%
+    if (logsHelper.isAdvanced()) {
+%>
+&nbsp;<a id="eventlogLink" title="<%=intl._t("View event log")%>" href="/events?from=604800">[<%=intl._t("Events")%>]</a>
+<%
+    }
+%>
 </h3>
 <table id="routerlogs" class="logtable">
 <tbody>
@@ -125,7 +134,9 @@
     if (llast >= 0) {
 %>
 &nbsp;<a class="delete" title="<%=intl._t("Clear logs")%>" href="logs?svc=<%=llast%>&amp;svct=<%=lts%>&amp;svcf=<%=filename%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  } %>
+<%
+    }
+%>
 </h3>
 <table id="wrapperlogs" class="logtable">
 <tbody>
