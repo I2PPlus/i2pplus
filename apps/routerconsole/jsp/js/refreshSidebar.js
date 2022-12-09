@@ -10,6 +10,7 @@ function refreshSidebar() {
 //  var uri = location.pathname.substring(1);
   var uri = location.pathname;
   var xhrContainer = document.getElementById("xhr");
+  let isDownTimer;
 
   var advancedGeneral = document.getElementById("sb_advancedgeneral");
   var badges = document.querySelectorAll("h3 a .badge");
@@ -51,6 +52,10 @@ function refreshSidebar() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
+
+        if (isDownTimer !== null) {
+          clearTimeout(isDownTimer);
+        }
 
         var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
         var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
@@ -386,7 +391,7 @@ function refreshSidebar() {
           hideSections();
           modElements();
         }
-        setTimeout(isDown, 5000);
+        var isDownTimer = setTimeout(isDown, 5000);
       }
     }
   };
