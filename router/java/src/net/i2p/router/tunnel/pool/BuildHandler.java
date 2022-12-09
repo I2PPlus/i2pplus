@@ -898,6 +898,8 @@ class BuildHandler implements Runnable {
                     _log.warn("Dropping tunnel request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 _context.commSystem().mayDisconnect(from);
+                // fake failed so we won't use him for our tunnels
+                _context.profileManager().tunnelFailed(from, 400);
                  return;
             }
             if (result == ParticipatingThrottler.Result.REJECT) {
@@ -905,6 +907,8 @@ class BuildHandler implements Runnable {
                     _log.warn("Rejecting tunnel request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+                // fake failed so we won't use him for our tunnels
+                _context.profileManager().tunnelFailed(from, 200);
             }
         }
         if (response == 0 && (!isOutEnd) && _throttler != null) {
@@ -915,6 +919,8 @@ class BuildHandler implements Runnable {
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 if (from != null)
                     _context.commSystem().mayDisconnect(from);
+                // fake failed so we won't use him for our tunnels
+                _context.profileManager().tunnelFailed(nextPeer, 400);
                  return;
             }
             if (result == ParticipatingThrottler.Result.REJECT) {
@@ -922,6 +928,8 @@ class BuildHandler implements Runnable {
                     _log.warn("Rejecting tunnel request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+                // fake failed so we won't use him for our tunnels
+                _context.profileManager().tunnelFailed(nextPeer, 200);
             }
         }
 
@@ -1156,6 +1164,8 @@ class BuildHandler implements Runnable {
                             if (_log.shouldWarn())
                                 _log.warn("Dropping tunnel request [ID: " + reqId + "] (throttled), previous hop -> [" + fh.toBase64().substring(0,6) + "]");
                             _context.statManager().addRateData("tunnel.dropReqThrottle", 1);
+                            // fake failed so we won't use him for our tunnels
+                            _context.profileManager().tunnelFailed(fh, 400);
                             accept = false;
                         }
                     }
