@@ -356,7 +356,7 @@ function refreshSidebar() {
                 collapse[h].nextElementSibling.setAttribute("hidden", "");
               }
             }
-            var collapsed = document.querySelectorAll("#sidebar table.collapsed");
+            var collapsed = document.querySelectorAll("#sidebar table.collapsed, #sb_newsheadings.collapsed");
             var c;
             for (c = 0; c < collapsed.length; c += 1) {
               collapsed[c].classList.remove("collapsed");
