@@ -588,6 +588,7 @@ class PeerTestManager {
             // we never received anything from bob - he is either down,
             // ignoring us, or unable to get a Charlie to respond
             status = Status.UNKNOWN;
+            // TODO disconnect from Bob if version 2?
         }
 
         if (_log.shouldInfo())
@@ -961,7 +962,7 @@ class PeerTestManager {
             state = _activeTests.get(lNonce);
 
         if (_log.shouldDebug())
-            _log.debug("Received PeerTest from [" + fromPeer + "] \n* " +
+            _log.debug("Received PeerTest message from [" + fromPeer + "] \n* " +
                        "Time: " + DataHelper.formatTime(time) +
                        "; Message: " + msg +
                        "; Status: " + status +
@@ -1281,6 +1282,7 @@ class PeerTestManager {
                 if (status != 0) {
                     if (_log.shouldInfo())
                         _log.info("Message #4 status " + status + ' ' + test);
+                    // TODO validate sig anyway, mark charlie unreachable if status is 69 (banned)
                 } else if (cps != null && cps.isIPv6() == isIPv6) {
                     if (_log.shouldInfo())
                         _log.info("Charlie is connected " + test);
@@ -1315,20 +1317,21 @@ class PeerTestManager {
                                     } else {
                                         try {
                                            charlieIP = InetAddress.getByAddress(ip);
+                                            charliePort = ra.getPort();
+                                            if (!TransportUtil.isValidPort(charliePort)) {
+                                                if (_log.shouldWarn())
+                                                    _log.warn("BAD port (" + charliePort + ") detected for Charlie: " + test + '\n' + ra);
+                                                charliePort = 0;
+                                            }
                                         } catch (UnknownHostException uhe) {
                                            if (_log.shouldWarn())
-                                                _log.warn("Charlie's IP not found: " + test + '\n' + ra, uhe);
+                                                _log.warn("Charlie's IP address not found: " + test + '\n' + ra, uhe);
                                         }
                                     }
                                 } else {
+                                    // i2pd Bob picks firewalled Charlie
                                     if (_log.shouldWarn())
-                                        _log.warn("Charlie's IP not found: " + test + '\n' + ra);
-                                }
-                                charliePort = ra.getPort();
-                                if (!TransportUtil.isValidPort(charliePort)) {
-                                    if (_log.shouldWarn())
-                                        _log.warn("Bad port detected for Charlie: " + test + '\n' + ra);
-                                    charliePort = 0;
+                                        _log.warn("Charlie's IP address not found: " + test + '\n' + ra);
                                 }
                             } else {
                                 if (_log.shouldWarn())
@@ -1378,7 +1381,8 @@ class PeerTestManager {
                     return;
                 }
                 test.setReceiveCharlieTime(now);
-                test.setAlicePortFromCharlie(testPort);
+                // Do NOT set this here, only for msg 7, this is how testComplete() knows we got msg 7
+                //test.setAlicePortFromCharlie(testPort);
                 try {
                     InetAddress addr = InetAddress.getByAddress(testIP);
                     test.setAliceIPFromCharlie(addr);
@@ -1451,8 +1455,14 @@ class PeerTestManager {
                 }
                 // this is our second charlie, yay!
                 test.setReceiveCharlieTime(now);
+                // i2pd did not send address block in msg 7 until 0.9.57
+                if (addrBlockPort != 0) {
                 // use the IP/port from the address block
                 test.setAlicePortFromCharlie(addrBlockPort);
+                } else if (!_transport.isSnatted()) {
+                    // assume good if we aren't snatted
+                    test.setAlicePortFromCharlie(test.getAlicePort());
+                }
                 if (addrBlockIP != null) {
                     try {
                         InetAddress addr = InetAddress.getByAddress(addrBlockIP);
