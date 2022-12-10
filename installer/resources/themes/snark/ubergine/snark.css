@@ -360,7 +360,7 @@ thead img{margin:0 2px;padding:0;max-height:22px;vertical-align:middle;border:1p
 a img{outline:none}
 a img:hover,a img:focus,a:focus img{filter:drop-shadow(0 0 1px #f60)}
 thead img.disable,img.disable:hover{opacity:.3}
-thead img:hover,thead img:focus,thead a:hover img,thead a:focus img{opacity:1;filter:drop-shadow(0 0 1px #f60);border:1px solid transparent}
+thead a img:hover,thead a img:focus,thead a:hover img,thead a:focus img{opacity:1;filter:drop-shadow(0 0 1px #f60);border:1px solid transparent}
 thead a:active img{filter:drop-shadow(0 0 1px #f30);transform:scale(0.9)}
 input[type=submit]:disabled:active,a.control:disabled:active{filter:drop-shadow(0 0 1px #101)}
 .script .control{padding-left:0}
