@@ -486,6 +486,8 @@ class EstablishmentManager {
                             keyBytes = null;
                     }
                     if (keyBytes == null) {
+                        if (_log.shouldWarn())
+                            _log.warn("No intro key\n" + toRouterInfo);
                         _transport.markUnreachable(toHash);
                         _transport.failed(msg, "Peer has no key, cannot establish connection -> marking unreachable");
                         return;
@@ -1569,7 +1571,7 @@ class EstablishmentManager {
     }
 
     /**
-     *  We are Alice, we sent a RelayRequest to Bob and got a response back.
+     *  We are Alice, send a RelayRequest to Bob.
      *
      *  SSU 2 only.
      *
@@ -1611,6 +1613,7 @@ class EstablishmentManager {
         if (_log.shouldDebug())
             _log.debug("Sending relay request to " + bob + " for " + charlie);
         _transport.send(packet);
+        bob.setLastSendTime(_context.clock().now());
     }
 
     /**

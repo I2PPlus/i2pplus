@@ -327,7 +327,9 @@ class PeerTestManager {
                 packet = _packetBuilder2.buildPeerTestFromAlice(data, bob);
             }
             _transport.send(packet);
-            test.setLastSendTime(_context.clock().now());
+            long now = _context.clock().now();
+            test.setLastSendTime(now);
+            test.getBob().setLastSendTime(now);
         } else {
             _currentTest = null;
         }
@@ -606,7 +608,7 @@ class PeerTestManager {
      */
     private void honorStatus(Status status, boolean isIPv6) {
         if (_log.shouldInfo())
-            _log.info("Test results (IPv6? " + isIPv6 + "): status = " + status);
+            _log.info("Test results IPv" + (isIPv6 ? '6' : '4') + " status " + status);
         _transport.setReachabilityStatus(status, isIPv6);
     }
 
@@ -640,6 +642,8 @@ class PeerTestManager {
                 _context.statManager().addRateData("udp.testBadIP", 1);
                 return;
             }
+        } else {
+            fromPeer.setLastReceiveTime(_context.clock().now());
         }
 
         UDPPacketReader.PeerTestReader testInfo = reader.getPeerTestReader();
@@ -989,12 +993,14 @@ class PeerTestManager {
 
         // common checks
 
+        long now = _context.clock().now();
         if (msg >= 1 && msg <= 4) {
             if (fromPeer == null) {
                 if (_log.shouldWarn())
                     _log.warn("Bad message " + msg + " out-of-session from " + from);
                 return;
             }
+            fromPeer.setLastReceiveTime(now);
         } else {
             if (fromPeer != null) {
                 if (_log.shouldWarn())
@@ -1028,7 +1034,6 @@ class PeerTestManager {
                 return;
             }
         }
-        long now = _context.clock().now();
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
             if (_log.shouldWarn())
@@ -1057,6 +1062,7 @@ class PeerTestManager {
                     UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(SSU2Util.TEST_REJECT_BOB_ADDRESS,
                                                                             Hash.FAKE_HASH, data, fromPeer);
                     _transport.send(packet);
+                    fromPeer.setLastSendTime(now);
                     return;
                 }
                 if (_throttle.shouldThrottle(fromIP)) {
@@ -1065,6 +1071,7 @@ class PeerTestManager {
                     UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(SSU2Util.TEST_REJECT_BOB_LIMIT,
                                                                             Hash.FAKE_HASH, data, fromPeer);
                     _transport.send(packet);
+                    fromPeer.setLastSendTime(now);
                     return;
                 }
                 Hash alice = fromPeer.getRemotePeer();
@@ -1076,6 +1083,7 @@ class PeerTestManager {
                     UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(SSU2Util.TEST_REJECT_BOB_UNSPEC,
                                                                             Hash.FAKE_HASH, data, fromPeer);
                     _transport.send(packet);
+                    fromPeer.setLastSendTime(now);
                     return;
                 }
                 // validate signed data
@@ -1089,6 +1097,7 @@ class PeerTestManager {
                     UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(SSU2Util.TEST_REJECT_BOB_SIGFAIL,
                                                                             Hash.FAKE_HASH, data, fromPeer);
                     _transport.send(packet);
+                    fromPeer.setLastSendTime(now);
                     return;
                 }
                 PeerState charlie = _transport.pickTestPeer(CHARLIE, fromPeer.getVersion(), isIPv6, from);
@@ -1099,6 +1108,7 @@ class PeerTestManager {
                     UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(SSU2Util.TEST_REJECT_BOB_NO_CHARLIE,
                                                                             Hash.FAKE_HASH, data, fromPeer);
                     _transport.send(packet);
+                    fromPeer.setLastSendTime(now);
                     return;
                 }
                 InetAddress aliceIP = fromPeer.getRemoteIPAddress();
@@ -1122,6 +1132,7 @@ class PeerTestManager {
                 // FIXME this will probably get there before the RI
                 UDPPacket packet = _packetBuilder2.buildPeerTestToCharlie(alice, data, (PeerState2) charlie);
                 _transport.send(packet);
+                charlie.setLastSendTime(now);
                 break;
             }
 
@@ -1207,6 +1218,7 @@ class PeerTestManager {
                 if (_log.shouldDebug())
                     _log.debug("Sending message #3 response " + rcode + " nonce " + lNonce + " to " + fromPeer);
                 _transport.send(packet);
+                fromPeer.setLastSendTime(now);
                 if (rcode == SSU2Util.TEST_ACCEPT) {
                     // send msg 5
                     if (_log.shouldDebug())
@@ -1258,6 +1270,7 @@ class PeerTestManager {
                     _log.debug("Sending message #4 to Alice on " + state);
                 UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(status, charlie, data, alice);
                 _transport.send(packet);
+                alice.setLastSendTime(now);
                 // we are done
                 _activeTests.remove(lNonce);
                 break;
@@ -1619,6 +1632,7 @@ class PeerTestManager {
                                                                  aliceIntroKey, nonce,
                                                                  state.getBobCipherKey(), state.getBobMACKey());
             _transport.send(packet);
+            bob.setLastSendTime(now);
 
             packet = _packetBuilder.buildPeerTestToAlice(aliceIP, alicePort, aliceIntroKey,
                                                          _transport.getIntroKey(), nonce);
