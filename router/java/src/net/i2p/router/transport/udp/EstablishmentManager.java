@@ -779,10 +779,10 @@ class EstablishmentManager {
             }
         } else {
             try {
-                state.receiveSessionRequestAfterRetry(packet);
+                state.receiveSessionOrTokenRequestAfterRetry(packet);
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] Received corrupt SessionRequest after Retry from: " + state, gse);
+                    _log.warn("[SSU2] Received corrupt Session or Token Request after Retry from: " + state, gse);
                 return;
             }
         }
@@ -1328,7 +1328,7 @@ class EstablishmentManager {
     /**
      *  This handles both initial send and retransmission of Session Created,
      *  and, for SSU2, send of Retry.
-     *  Retry is never retransmnitted.
+     *  Retry is never retransmitted except in response to a retransmitted Token Request.
      *
      *  This may be called more than once.
      *
@@ -1371,6 +1371,7 @@ class EstablishmentManager {
 
               case IB_STATE_TOKEN_REQUEST_RECEIVED:
               case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
+              case IB_STATE_RETRY_SENT:     // got a retransmitted token request
                 if (_log.shouldDebug())
                     _log.debug("Sending Retry to: " + state);
                 pkt = _builder2.buildRetryPacket(state2, 0);
@@ -2299,7 +2300,9 @@ class EstablishmentManager {
                     //if (_log.shouldDebug())
                     //    _log.debug("Removing completely confirmed inbound state");
                     break;
-                } else if (cur.getLifetime() > MAX_IB_ESTABLISH_TIME) {
+                } else if (cur.getLifetime() > MAX_IB_ESTABLISH_TIME ||
+                           (istate == IB_STATE_RETRY_SENT &&           // limit time to get sess. req after retry
+                            cur.getLifetime() >= 5 * InboundEstablishState.RETRANSMIT_DELAY)) {
                     // took too long
                     iter.remove();
                     inboundState = cur;
@@ -2356,13 +2359,8 @@ class EstablishmentManager {
                         sendDestroy(inboundState);
                         processExpired(inboundState);
                     } else if (inboundState.getNextSendTime() <= now) {
-                        if (istate == IB_STATE_RETRY_SENT) {
-                            // Retry is never retransmitted
-                            inboundState.fail();
-                            processExpired(inboundState);
-                        } else {
+                        // resend created or retry
                             sendCreated(inboundState);
-                        }
                     }
                     break;
 
