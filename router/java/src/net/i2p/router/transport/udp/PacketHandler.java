@@ -57,8 +57,8 @@ class PacketHandler {
      *  There's no use making it any larger, as messages will just be thrown out there.
      */
     private static final long GRACE_PERIOD = Router.CLOCK_FUDGE_FACTOR + 30*1000;
-//    private static final long MAX_SKEW = 90*24*60*60*1000L;
-    private static final long MAX_SKEW = 24*60*60*1000L;
+//    static final long MAX_SKEW = 90*24*60*60*1000L;
+    static final long MAX_SKEW = 24*60*60*1000L;
 
     private enum AuthType { NONE, INTRO, BOBINTRO, SESSION }
 
@@ -913,8 +913,13 @@ class PacketHandler {
                     header.getType() != SSU2Util.SESSION_REQUEST_FLAG_BYTE ||
                     header.getVersion() != 2 ||
                     header.getNetID() != _networkID) {
-                    if (_log.shouldWarn())
-                        _log.warn("Failed decrypt Session Request after Retry \n* " + header + " on " + state);
+                    if (_log.shouldWarn()) {
+                        if (header == null) {
+                            // packet too short, possibly token-request-after-retry? let's see...
+                            header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
+                        }
+                        _log.warn("Failed to decrypt SessionRequest after Retry \n* " + header + " on " + state);
+                    }
                     return false;
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
@@ -1041,8 +1046,8 @@ class PacketHandler {
                 header.getType() != SSU2Util.RETRY_FLAG_BYTE ||
                 header.getVersion() != 2 ||
                 header.getNetID() != _networkID) {
-                if (_log.shouldWarn())
-                    _log.warn("Does not decrypt as Session Created or Retry \n* " + header + " on " + state);
+                if (_log.shouldInfo())
+                    _log.info("Does not decrypt as Session Created or Retry \n* " + header + " on " + state);
                 return false;
             }
             type = SSU2Util.RETRY_FLAG_BYTE;
