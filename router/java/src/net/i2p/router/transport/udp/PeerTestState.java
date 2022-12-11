@@ -184,22 +184,22 @@ class PeerTestState {
            .append(" started ").append(DataHelper.formatTime(_beginTime))
            .append(" as ").append(_ourRole.toString());
         if (_aliceIP != null) {
-            buf.append(" [Alice");
+            buf.append(" [Alice: ");
             if (_ourRole == Role.ALICE)
-                buf.append(" (Local)");
+                buf.append(" LOCAL]");
             else
                 buf.append(_aliceIP).append(':').append(_alicePort).append("]");
         }
         if (_aliceIPFromCharlie != null)
             buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
         if (_bob != null)
-            buf.append(" [Bob: ").append(_bob.toString()).append"]");
+            buf.append(" [Bob: ").append(_bob.toString()).append("]");
         else
-            buf.append(" [Bob: Local]");
+            buf.append(" [Bob: LOCAL]");
         if (_charlieIP != null) {
             buf.append(" [Charlie: ");
             if (_ourRole == Role.CHARLIE)
-                buf.append("Local]");
+                buf.append("LOCAL]");
             else
                 buf.append(_charlieIP).append(':').append(_charliePort).append("]");
         }
