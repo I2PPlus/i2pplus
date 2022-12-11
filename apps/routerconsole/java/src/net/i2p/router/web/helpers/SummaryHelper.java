@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import net.i2p.data.DataHelper;
@@ -707,7 +708,7 @@ public class SummaryHelper extends HelperBase {
         if (link) {
            buf.append("</a>");
         }
-        buf.append("</h3>\n<hr class=\"b\">\n");
+        buf.append("<input type=\"checkbox\" id=\"toggle_sb_localtunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
             DataHelper.sort(clients, new AlphaComparator());
             buf.append("<table id=\"sb_localtunnels\" class=\"volatile\">");
@@ -788,17 +789,37 @@ public class SummaryHelper extends HelperBase {
      */
     private class AlphaComparator implements Comparator<Destination> {
         private final String xsc = _t("Shared Clients");
+        private final String snark = _t("I2PSnark");
 
         public int compare(Destination lhs, Destination rhs) {
             String lname = getName(lhs);
             String rname = getName(rhs);
-            boolean lshared = lname.startsWith("Shared Clients") || lname.startsWith(xsc);
-            boolean rshared = rname.startsWith("Shared Clients") || rname.startsWith(xsc);
-            if (lshared && !rshared)
-                return -1;
-            if (rshared && !lshared)
-                return 1;
-            return Collator.getInstance().compare(lname, rname);
+            List<Destination> clients = new ArrayList<Destination>(_context.clientManager().listClients());
+            for (Destination client : clients) {
+                Hash h = client.calculateHash();
+                boolean lSnark = lname.equals("I2PSnark") || lname.equals(snark);
+                boolean rSnark = rname.startsWith("I2PSnark") || rname.startsWith(snark);
+                boolean isServer = _context.clientManager().shouldPublishLeaseSet(h) && !lname.equals(_t("I2PSnark")) || !rname.equals((_t("I2PSnark")));
+                boolean lServer = _context.clientManager().shouldPublishLeaseSet(h) && !lname.equals(_t("I2PSnark"));
+                boolean rServer = _context.clientManager().shouldPublishLeaseSet(h) && !rname.equals(_t("I2PSnark"));
+                boolean lClient = !isServer;
+                boolean rClient = !isServer;
+                boolean lPing = (lname.startsWith("Ping") && lname.contains("[")) || lname.equals("I2Ping");
+                boolean rPing = (rname.startsWith("Ping") && rname.contains("[")) || rname.equals("I2Ping");
+
+                if (lServer) {lname = "a_" + lname; rname = "a_" + rname;}
+                if (lClient) {lname = "b_" + lname; rname = "b_" + rname;}
+                if (lPing) {lname = "c_" + lname; rname = "c_" + rname;}
+                if (lSnark && !rSnark)
+                    return -1;
+                else if (lServer && !rServer)
+                    return 0;
+                else if (lClient && !rClient)
+                    return 1;
+                else if (lPing && !rPing)
+                    return 2;
+            }
+            return Collator.getInstance().compare(lname.toLowerCase(), rname.toLowerCase());
         }
     }
 
@@ -895,12 +916,11 @@ public class SummaryHelper extends HelperBase {
     public String getJobLag() {
         if (_context == null)
             return "0";
-
         RateStat rs = _context.statManager().getRate("jobQueue.jobLag");
         if (rs == null)
             return "0";
         Rate lagRate = rs.getRate(60*1000);
-        if (lagRate.getAverageValue() < 2)
+        if (lagRate.getAverageValue() < 1)
             return DataHelper.formatDuration2((double)lagRate.getAverageValue());
         else
           return DataHelper.formatDuration2((long)lagRate.getAverageValue());
@@ -1054,7 +1074,8 @@ public class SummaryHelper extends HelperBase {
                    .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
                    .append("</b></h4>");
             }
-        } else if (dver != null && _context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress()) {
+        } else if (dver != null && _context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress() &&
+                   !_context.getProperty("router.updatePolicy").equals("install")) {
             buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update volatile\"><b>")
                .append(_t("Updating after restart")).append("&hellip;</b></h4>");
         }
@@ -1112,7 +1133,7 @@ public class SummaryHelper extends HelperBase {
                     System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
                 System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce+"");
                 String uri = getRequestURI();
-                buf.append("<form action=\"").append(uri).append("\" method=\"POST\" class=\"volatile\">\n")
+                buf.append("<form id=\"sb_updateform\" action=\"").append(uri).append("\" method=\"POST\" class=\"volatile\" target=\"processSidebarForm\">\n")
                    .append("<input type=\"hidden\" name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
                 if (avail) {
                     buf.append("<span id=\"updateAvailable\" class=\"volatile\">").append(_t("Release update available")).append("<br><i>")

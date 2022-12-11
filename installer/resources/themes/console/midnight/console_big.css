@@ -1,97 +1,97 @@
-/* I2P Theme: Midnight Theme Override */
-/* Description: Larger fontsize & styling override to accomodate foreign charactersets */
-/* Author: dr|z3d */
+/* I2P Theme:Midnight Theme Override */
+/* Description:Larger fontsize & styling override to accomodate foreign charactersets */
+/* Author:dr|z3d */
 
 /* sidepanel */
-.sb {font: 9.5pt/125%}
-.sb h3 {padding: 2px 4px}
-.sb h3, .sb h3 a {font-size: 11.5pt}
-.sb h4, .sb h4 a {font-size: 10.5pt; letter-spacing: 0}
-#sidebar td {font-size: 9pt}
-#sb_internals, #sb_advanced, #sb_help {width: calc(100% + 9px); overflow: visibile}
-#sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {margin: 0}
-#sidebar td a {line-height: 1.4; font-size: 10pt}
-#sb_newsheadings a {margin-top: 0}
-#sb_notice, #sb_notice a {font-size: 10pt}
-.tunnelBuildStatus::before {margin-top: -2px; vertical-align: middle}
+.sb{font:9.5pt/125%}
+.sb h3{padding:2px 4px}
+.sb h3,.sb h3 a{font-size:11.5pt}
+.sb h4,.sb h4 a{font-size:10.5pt;letter-spacing:0}
+#sidebar td{font-size:9pt}
+#sb_internals,#sb_advanced,#sb_help{width:calc(100% + 9px);overflow:visibile}
+#sb_internals td:first-child,#sb_advanced td:first-child,#sb_help td:first-child{margin:0}
+#sidebar td a{line-height:1.4;font-size:10pt}
+#sb_newsheadings a{margin-top:0}
+#sb_notice,#sb_notice a{font-size:10pt}
+.tunnelBuildStatus::before{margin-top:-2px;vertical-align:middle}
 
-button.search {white-space: nowrap; font-size: 11pt}
-#newsDisplay, #newsDisplay a, #newsStatus {font-size: 11pt}
-.applabel, .themechoice, .langselect {width: 152px}
-.ui_lang, .themechoice {width: 156px; line-height: 140%}
-.appicon {height: 50px}
-.applink img {padding: 12px 60px 40px}
-.applabel a, .applabel a:hover {padding: 4px 2px}
-.applabel a, .applabel a:hover, .themelabel, .applink td {font-size: 11pt}
-#news #newsDisplay a, #graphopts a, #routerinfo a {padding: 0 10px 1px}
+button.search{white-space:nowrap;font-size:11pt}
+#newsDisplay,#newsDisplay a,#newsStatus{font-size:11pt}
+.applabel,.themechoice,.langselect{width:152px}
+.ui_lang,.themechoice{width:156px;line-height:140%}
+.appicon{height:50px}
+.applink img{padding:12px 60px 40px}
+.applabel a,.applabel a:hover{padding:4px 2px}
+.applabel a,.applabel a:hover,.themelabel,.applink td{font-size:11pt}
+#news #newsDisplay a,#graphopts a,#routerinfo a{padding:0 10px 1px}
 
 /* configui */
-.ui_lang {font-size: 10pt}
-.themechoice .optbox {min-width: 156px; margin-left: -50px}
+.ui_lang{font-size:10pt}
+.themechoice .optbox{min-width:156px;margin-left:-50px}
 
 /* end configui */
-label, select, select option, #configstats th b, .infohelp, .infowarn {font-size: 11pt}
-.messages li, code {font-weight: 400; font-size: 11pt}
-.confignav, .sorry {font-size: 12pt}
-.tab, .tab2 {margin-right: -4px}
+label,select,select option,#configstats th b,.infohelp,.infowarn{font-size:11pt}
+.messages li,code{font-weight:400;font-size:11pt}
+.confignav,.sorry{font-size:12pt}
+.tab,.tab2{margin-right:-4px}
 
 /* welcome */
-div[lang="zh"], div[lang="zh"] a, ul li, div[lang="zh"] p {letter-spacing: .1em; word-spacing: .1em; line-height: 160%}
-div[lang="zh"], div[lang="zh"] a, div[lang="zh"] p, div[lang="zh"] li{font-size: 10pt}
-div[lang="zh"] p {margin-left: 15px; margin-right: 15px}
-div[lang="zh"] li {margin-top: 5px; margin-bottom: 5px}
-div[lang="zh"] li:last-child {margin-bottom: -10px}
-ul.links li {text-align: justify}
-.twocol {margin-top: 15px; margin-bottom: -15px}
-#externali2cp td label + br {display: none}
-#externali2cp td label {margin-right: 8px; white-space: nowrap}
+div[lang="zh"],div[lang="zh"] a,ul li,div[lang="zh"] p{letter-spacing:.1em;word-spacing:.1em;line-height:160%}
+div[lang="zh"],div[lang="zh"] a,div[lang="zh"] p,div[lang="zh"] li{font-size:10pt}
+div[lang="zh"] p{margin-left:15px;margin-right:15px}
+div[lang="zh"] li{margin-top:5px;margin-bottom:5px}
+div[lang="zh"] li:last-child{margin-bottom:-10px}
+ul.links li{text-align:justify}
+.twocol{margin-top:15px;margin-bottom:-15px}
+#externali2cp td label + br{display:none}
+#externali2cp td label{margin-right:8px;white-space:nowrap}
 
 /* global overrides */
-@media screen and (min-width: 0) {a, b, .sb h3 a, .sb h4 {font-weight: 400; font-size: 100%}
-body, p, #news p {font: 11pt "Noto Sans", Verdana, "Bitstream Vera Sans", Helvetica, Sans, sans-serif; font-size-adjust: .6}
-.logo a:link {font-size: 11pt}
-h1 {font-weight: 400}
-h2, h2 a[name], h3, #applinks, #sitelinks {font-size: 14pt; font-weight: 400; letter-spacing: .1em}
-h2, h2 a[name] {font-size: 16pt}
-div.main, div.main p, div.news p {line-height: 140%}
-div.joblog li i {font-weight: normaL}
-b, div.joblog b {font-size: 110%}
-p, div[id^="config_"] th, #consolepass tr:first-child td {font-size: 11pt}
-input[type=submit], input[type="reset"], input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:active, input[type="reset"]:active, input[type=submit]:focus, input[type="reset"]:focus, input.reload[value="Force garbage collection"], input.reload[value="Force garbage collection"]:hover {display: inline-block; font-size: 12pt; font-weight: 400; line-height: 140%; letter-spacing: .05em}
-.sb hr {position: relative; z-index: 999}
-p tt {font-size: 10pt}
-h3#pluginmanage {margin-bottom: -15px}
-h3#pconfig {margin-bottom: -16px}
+@media screen and (min-width:0){a,b,.sb h3 a,.sb h4{font-weight:400;font-size:100%}
+body,p,#news p{font:11pt "Noto Sans",Verdana,"Bitstream Vera Sans",Helvetica,Sans,sans-serif;font-size-adjust:.6}
+.logo a:link{font-size:11pt}
+h1{font-weight:400}
+h2,h2 a[name],h3,#applinks,#sitelinks{font-size:14pt;font-weight:400;letter-spacing:.1em}
+h2,h2 a[name]{font-size:16pt}
+div.main,div.main p,div.news p{line-height:140%}
+div.joblog li i{font-weight:normaL}
+b,div.joblog b{font-size:110%}
+p,div[id^="config_"] th,#consolepass tr:first-child td{font-size:11pt}
+input[type=submit],input[type="reset"],input[type=submit]:hover,input[type="reset"]:hover,input[type=submit]:active,input[type="reset"]:active,input[type=submit]:focus,input[type="reset"]:focus,input.reload[value="Force garbage collection"],input.reload[value="Force garbage collection"]:hover{display:inline-block;font-size:12pt;font-weight:400;line-height:140%;letter-spacing:.05em}
+.sb hr{position:relative;z-index:999}
+p tt{font-size:10pt}
+h3#pluginmanage{margin-bottom:-15px}
+h3#pconfig{margin-bottom:-16px}
 }
 /* responsive layout */
-@media screen and (min-width: 800px) {label, select, select option, #configstats th b, p.infohelp, p.infowarn, td.infohelp, td.infowarn {font-size: 11pt; font-weight: 400}
-input[type=text], input[type=password], textarea {font-size: 11pt}
-.logo a:link {font-size: 11pt}
+@media screen and (min-width:800px){label,select,select option,#configstats th b,p.infohelp,p.infowarn,td.infohelp,td.infowarn{font-size:11pt;font-weight:400}
+input[type=text],input[type=password],textarea{font-size:11pt}
+.logo a:link{font-size:11pt}
 }
-@media screen and (min-width: 1500px) {
-.sb, .sb .xhr {font: 9.5pt/125%}
-.sb .stop, .sb .reload {min-width: 106px}
-h1 {font-size: 20pt; padding: 14px 15px 16px}
-span#newtab {margin-top: 4px}
-.newsentry h3 > * {font-size: 11pt}
-.newsAuthor {font-size: 10pt; font-weight: 700; background-position: 2px center}
-.applink a:link, .applink a:hover, .applink a:active {font-size: 11pt}
-.langselect .optbox {margin-bottom: -32px}
-.langselect input[name="lang"]:checked + img {margin-left: -95px}
-.logo a:link {font-size: 12pt}
- div[lang="zh"] a {font-size: 10.5pt}
-}
-
-@media screen and @supports (display: -webkit-box) and (min-width: 1500px) {
-.langselect img {margin-left: -20px; margin-top: -31px}
-.langselect input[name="lang"]:checked + img {margin-left: -15px; margin-top: -27px}
-input[type=submit], input[type="reset"], input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:active, input[type="reset"]:active, input[type=submit]:focus, input[type="reset"]:focus, input.reload[value="Force garbage collection"], input.reload[value="Force garbage collection"]:hover, .main input[type=submit], .main input[type="reset"], .main input[type=submit]:hover, .main input[type="reset"]:hover, .main input[type=submit]:focus, .main input[type="reset"]:focus, .main input[type=submit]:active, .main input[type="reset"]:active {padding-top: 3px; padding-bottom: 3px; background-position: 8px center}
+@media screen and (min-width:1500px){
+.sb,.sb .xhr{font:9.5pt/125%}
+.sb .stop,.sb .reload{min-width:106px}
+h1{font-size:20pt;padding:14px 15px 16px}
+span#newtab{margin-top:4px}
+.newsentry h3 > *{font-size:11pt}
+.newsAuthor{font-size:10pt;font-weight:700;background-position:2px center}
+.applink a:link,.applink a:hover,.applink a:active{font-size:11pt}
+.langselect .optbox{margin-bottom:-32px}
+.langselect input[name="lang"]:checked + img{margin-left:-95px}
+.logo a:link{font-size:12pt}
+ div[lang="zh"] a{font-size:10.5pt}
 }
 
-@media screen and (min-width: 1840px) {
-.applink {min-width: 164px; margin: 3px 4px 5px}
-.applabel {width: 160px}
-.applabel a, .applabel a:hover {max-width: 154px}
-.logo a:link {font-size: 12pt}
- div[lang="zh"] a, #console div[lang="zh"] code {font-size: 11.5pt}
+@media screen and @supports (display:-webkit-box) and (min-width:1500px){
+.langselect img{margin-left:-20px;margin-top:-31px}
+.langselect input[name="lang"]:checked + img{margin-left:-15px;margin-top:-27px}
+input[type=submit],input[type="reset"],input[type=submit]:hover,input[type="reset"]:hover,input[type=submit]:active,input[type="reset"]:active,input[type=submit]:focus,input[type="reset"]:focus,input.reload[value="Force garbage collection"],input.reload[value="Force garbage collection"]:hover,.main input[type=submit],.main input[type="reset"],.main input[type=submit]:hover,.main input[type="reset"]:hover,.main input[type=submit]:focus,.main input[type="reset"]:focus,.main input[type=submit]:active,.main input[type="reset"]:active{padding-top:3px;padding-bottom:3px;background-position:8px center}
+}
+
+@media screen and (min-width:1840px){
+.applink{min-width:164px;margin:3px 4px 5px}
+.applabel{width:160px}
+.applabel a,.applabel a:hover{max-width:154px}
+.logo a:link{font-size:12pt}
+ div[lang="zh"] a,#console div[lang="zh"] code{font-size:11.5pt}
 }

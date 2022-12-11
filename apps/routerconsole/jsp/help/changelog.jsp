@@ -14,7 +14,6 @@
 <title><%=intl._t("Change Log")%> - I2P+</title>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Change Log")%></h1>
 <div class="main" id="help">
@@ -44,7 +43,7 @@
 <p id="fullhistory"><a href="/history.txt" target="_blank" rel="noreferrer"><%=intl._t("View the full change log")%></a></p>
 </div>
 </div>
-<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

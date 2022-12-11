@@ -154,8 +154,8 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
 %>
 </div>
 <span id="endOfPage"></span>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>
 <%

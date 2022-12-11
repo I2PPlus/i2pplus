@@ -1,9 +1,9 @@
-/* I2P Theme:Midnight */
-/* Description:Dark blue with chrome highlights */
+/* I2P Theme: Midnight */
+/* Description: Dark blue with chrome highlights */
 /* Dedicated to sponge */
 /* Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
 /* Additional thanks to NASA for the planet earth image */
-/* Author:dr|z3d */
+/* Author: dr|z3d */
 
 @import url(global.css);
 
@@ -82,13 +82,13 @@ form > table{font-size:9pt}
 .outbound{background:var(--out) no-repeat center center}
 .inbound,.outbound{display:inline-block;width:16px;height:16px;vertical-align:middle;background-size:16px}
 .viewedit br{display:none}
-.viewedit .configpeer:hover,.viewedit .configpeer:focus{background:var(--edit_hover) no-repeat center center / 12px,var(--element)}
+.viewedit .configpeer:hover,.viewedit .configpeer:focus{background:var(--edit_hover) no-repeat center center/12px,var(--element)}
 .viewprofile,.configpeer,.familysearch{margin:1px 2px;padding:4px;width:12px;height:12px;vertical-align:middle;display:inline-block;line-height:0;font-size:0;border:var(--border_badge);box-shadow:var(--highlight);background:var(--element)}
-.viewprofile{background:var(--eye) no-repeat center center / 12px,var(--element)}
+.viewprofile{background:var(--eye) no-repeat center center/12px,var(--element)}
 .viewprofile:hover,.familysearch:hover,.configpeer:hover,.viewprofile:focus,.familysearch:focus,.configpeer:focus{border:1px solid var(--a)}
-.viewprofile:hover,.viewprofile:focus{background:var(--eye_hover) no-repeat center center / 12px,var(--element)}
-.configpeer{background:var(--edit) no-repeat center center / 12px,var(--element)}
-.familysearch{background:var(--family) no-repeat center center / 12px,var(--element)}
+.viewprofile:hover,.viewprofile:focus{background:var(--eye_hover) no-repeat center center/12px,var(--element)}
+.configpeer{background:var(--edit) no-repeat center center/12px,var(--element)}
+.familysearch{background:var(--family) no-repeat center center/12px,var(--element)}
 
 /* standard buttons and inputs */
 #sidebar h3:hover{background:linear-gradient(90deg,rgba(64,0,64,.1),rgba(96,0,96,.2),rgba(64,0,64,.1)),linear-gradient(180deg,#1d1a2d 50%,#000 50%)}
@@ -101,134 +101,134 @@ input[class="check"]{margin-left:10px}
 #config_tunnels select{width:50%;text-align:center}
 
 /* buttons */
-input.accept[value^="Unban"]{padding:6px 9px 6px 25px;background:var(--unban) no-repeat 8px center / 14px,var(--btn)}
-input.accept[value^="Unban"]:hover,input.accept[value^="Unban"]:focus{background:var(--unban) no-repeat 8px center / 14px,var(--btn_hover)}
-input.accept[value^="Unban"]:active{padding:6px 9px 6px 25px;background:var(--unban) no-repeat 8px center / 14px,var(--btn_active)}
-input.accept[value^="Create"]{padding:6px 9px 6px 25px;background:var(--add) no-repeat 8px center / 11px,var(--btn)}
-input.accept[value^="Create"]:hover,input.accept[value^="Create"]:focus{background:var(--add) no-repeat 8px center / 11px,var(--btn_hover)}
-input.accept[value^="Create"]:active{background:var(--add) no-repeat 8px center / 11px,var(--btn_active)}
-input.accept[value^="Filter"]{padding:6px 9px 6px 25px;background:var(--filter) no-repeat 8px center / 14px,var(--btn)}
-input.accept[value^="Filter"]:hover,input.accept[value^="Filter"]:focus{background:var(--filter) no-repeat 8px center / 14px,var(--btn_hover)}
-input.add,button.add{padding:6px 9px 6px 22px;background:var(--add) no-repeat 8px center / 10px,var(--btn)}
-input.add:hover,button.add:hover,input.add:focus,button.add:focus{background:var(--add) no-repeat 8px center / 10px,var(--btn_hover)}
-input.add:active,button.add:active{background:var(--add) no-repeat 8px center / 10px,var(--btn_active)}
-input.add[value^="Adjust"]{padding:6px 9px 6px 25px;background:var(--edit) no-repeat 8px center / 14px,var(--btn)}
-input.add[value^="Adjust"]:hover,input.add[value^="Adjust"]:focus{background:var(--edit_hover) no-repeat 8px center / 14px,var(--btn_hover)}
-input.add[value^="Adjust"]:active{padding:6px 9px 6px 25px;background:var(--edit) no-repeat 8px center / 14px,var(--btn_active)}
-input.accept[value^="Show"],input.check[value^="View"],input.showconsole{padding:6px 9px 6px 25px;background:var(--eye) no-repeat 8px center / 14px,var(--btn)}
-input.accept[value^="Show"]:hover,input.check[value^="View"]:hover,input.accept[value^="Show"]:focus,input.check[value^="View"]:focus,input.showconsole:hover,input.showconsole:focus{background:var(--eye) no-repeat 8px center / 14px,var(--btn_hover)}
-input.accept[value^="Show"]:active,input.check[value^="View"]:active,input.showconsole:active{padding:6px 9px 6px 25px;background:var(--eye) no-repeat 8px center / 14px,var(--btn_active)}
-input.accept,button.accept{padding:6px 9px 6px 25px;background:var(--yes) no-repeat 8px center / 12px,var(--btn)}
-input.accept:hover,input.accept:focus{background:var(--yes) no-repeat 8px center / 12px,var(--btn_hover)}
-input.accept:active{padding:6px 9px 6px 25px;background:var(--yes) no-repeat 8px center / 12px,var(--btn_active)}
-input.cancel[type=reset],input.cancel[type=submit]{padding:6px 9px 6px 25px;background:var(--no) no-repeat 10px center / 10px,var(--btn)}
-input.cancel[type=reset]:hover,input.cancel[type=submit]:hover,input.cancel[type=reset]:focus,input.cancel[type=submit]:focus{background:var(--no) no-repeat 10px center / 10px,var(--btn_hover)}
-input.cancel[type=reset]:active,input.cancel[type=submit]:active{background:var(--no) no-repeat 10px center / 10px,var(--btn_active)}
-input.cancel[value^="Hide"],input.delete[value^="Do not view"],input.hideconsole{padding:6px 9px 6px 25px;background:var(--hide) no-repeat 8px center / 14px,var(--btn)}
-input.cancel[value^="Hide"]:hover,input.delete[value^="Do not view"]:hover,input.cancel[value^="Hide"]:focus,input.delete[value^="Do not view"]:focus,input.hideconsole:hover,input.hideconsole:focus{background:var(--hide) no-repeat 8px center / 14px,var(--btn_hover)}
-input.cancel[value^="Hide"]:active,input.delete[value^="Do not view"]:active,input.hideconsole:active{padding:6px 9px 6px 25px;background:var(--hide) no-repeat 8px center / 14px,var(--btn_active)}
-input.check{padding:6px 9px 6px 25px;background:var(--yes) no-repeat 8px center / 14px,var(--btn)}
-input.check:hover,input.check:focus{background:var(--yes) no-repeat 8px center / 14px,var(--btn_hover)}
-input.check:active{padding:6px 9px 6px 27px;background:var(--yes) no-repeat 8px center / 14px,var(--btn_active)}
-input.check[value$="updates"]{padding:6px 9px 6px 27px;background:var(--refresh) no-repeat 8px center / 16px,var(--btn)}
-input.check[value$="updates"]:hover,input.check[value$="updates"]:focus{background:var(--refresh_hover) no-repeat 8px center / 16px,var(--btn_hover);background-blend-mode:normal}
-input.check[value$="updates"]:active{padding:6px 9px 6px 27px;background:var(--refresh_active) no-repeat 8px center / 16px,var(--btn_active);background-blend-mode:luminosity}
-input.delete,button.delete{padding:6px 9px 6px 25px;background:var(--nuke) no-repeat 8px center / 14px,var(--btn)}
-input.delete:hover,input.delete:focus{background:var(--nuke) no-repeat 8px center / 14px,var(--btn_hover)}
-input.delete:active{padding:6px 9px 6px 25px;background:var(--nuke) no-repeat 8px center / 14px,var(--btn_active);background-blend-mode:luminosity}
-input.delete[value^="Ban"]{padding:6px 9px 6px 25px;background:var(--doban) no-repeat 8px center / 14px,var(--btn)}
-input.delete[value^="Ban"]:hover,input.delete[value^="Ban"]:focus{background:var(--doban) no-repeat 8px center / 14px,var(--btn_hover)}
-input.delete[value^="Ban"]:active{padding:6px 9px 6px 25px;background:var(--doban) no-repeat 8px center / 14px,var(--btn_active)}
-input.download{padding:6px 9px 6px 25px;background:var(--download) no-repeat 8px center / 14px,var(--btn)}
-input.download:hover,input.download:focus{background:var(--download) no-repeat 8px center / 14px,var(--btn_hover)}
-input.download:active{padding:6px 9px 6px 25px;background:var(--download) no-repeat 8px center / 14px,var(--btn_active)}
-input.download[value^="Join"]{padding:6px 9px 6px 27px;background:var(--family) no-repeat 8px center / 14px,var(--btn)}
-input.download[value^="Join"]:hover,input.download[value^="Join"]:focus{background:var(--family) no-repeat 8px center / 14px,var(--btn_hover)}
-input.download[value^="Join"]:active{background:var(--family) no-repeat 8px center / 14px,var(--btn_active)}
-input.download[value$="from File"],input.download[value$="from file"]{padding:6px 9px 6px 25px;background:var(--package) no-repeat 8px center / 14px,var(--btn)}
-input.download[value$="from File"]:hover,input.download[value$="from File"]:focus,input.download[value$="from file"]:hover,input.download[value$="from file"]:focus{background:var(--package) no-repeat 8px center / 14px,var(--btn_hover)}
-input.download[value$="from file"]:active,input.download[value$="from File"]:active{padding:6px 9px 6px 25px;background:var(--package) no-repeat 8px center / 14px,var(--btn_active)}
-input.download[value^="Dump"]{padding:6px 9px 6px 25px;background:var(--bug) no-repeat 8px center / 14px,var(--btn)}
-input.download[value^="Dump"]:hover,input.download[value^="Dump"]:focus{padding:6px 9px 6px 25px;background:var(--bug) no-repeat 8px center / 14px,var(--btn_hover)}
-input.download[value^="Dump"]:active{padding:6px 9px 6px 25px;background:var(--bug) no-repeat 8px center / 14px,var(--btn_active)}
-input.go[type=submit],input[value="GO"]{padding:6px 9px 6px 25px;background:var(--go) no-repeat 8px center / 14px,var(--btn)}
-input.go[type=submit]:hover,input[value="GO"]:hover,input.go:focus,input[value="GO"]:focus{background:var(--go) no-repeat 8px center / 14px,var(--btn_hover)}
-input.go[type=submit]:active,input[value="GO"]:active{padding:6px 9px 6px 25px;background:var(--go) no-repeat 8px center / 14px,var(--btn_active)}
-input.go[value^="Create"]{padding:6px 9px 6px 25px;background:var(--wizard) no-repeat 8px center / 15px,var(--btn)}
-input.go[value^="Create"]:hover,input.go[value^="Create"]:focus{background:var(--wizard) no-repeat 8px center / 15px,var(--btn_hover)}
-input.go[value^="Create"]:active{padding:6px 9px 6px 25px;background:var(--wizard) no-repeat 8px center / 15px,var(--btn_active)}
-input.back[type=submit]{padding:6px 7px 6px 23px;background:var(--back) no-repeat 6px center / 14px,var(--btn)}
-input.back[type=submit]:hover,input.back:focus{background:var(--hover) var(--back) no-repeat 6px center / 14px}
-input.reload{padding:6px 9px 6px 25px;background:var(--reset) no-repeat 8px center / 14px,var(--btn)}
-input.reload:hover,input.reload:focus{background:var(--reset_hover) no-repeat 8px center / 14px,var(--btn_hover)}
-input.reload:active{padding:6px 9px 6px 25px;background:var(--reset_active) no-repeat 8px center / 14px,var(--btn_active)}
-input.reload[value$="restart"]{padding:6px 9px 6px 25px;background:var(--restart) no-repeat 8px center / 12px,var(--btn)}
-input.reload[value$="restart"]:hover,input.reload[value$="restart"]:focus{background:var(--restart_hover) no-repeat 8px center / 12px,var(--btn_hover);background-blend-mode:normal}
-input.reload[value$="restart"]:active{padding:6px 9px 6px 25px;background:var(--restart_hover) no-repeat 8px center / 12px,var(--btn_active)}
-input.reload[value^="Update"]{padding:6px 9px 6px 25px;background:var(--refresh) no-repeat 8px center / 14px,var(--btn)}
-input.reload[value^="Update"]:hover,input.reload[value^="Update"]:focus{background:var(--refresh_hover) no-repeat 8px center / 14px,var(--btn_hover)}
-input.reload[value^="Update"]:active{padding:6px 9px 6px 25px;background:var(--refresh_hover) no-repeat 8px center / 14px,var(--btn_active)}
-input.reload[value="Force GC"],input.reload[value="Force garbage collection"]{padding:6px 9px 6px 25px;background:var(--recycle) no-repeat 8px center / 13px,var(--btn)}
-input.reload[value="Force GC"]:hover,input.reload[value="Force GC"]:focus,input.reload[value="Force garbage collection"]:hover,input.reload[value="Force garbage collection"]:focus{background:var(--recycle) no-repeat 8px center / 13px,var(--btn_hover)}
-input.reload[value="Force garbage collection"]:active,input.reload[value="Force garbage collection"]:active{padding:6px 9px 6px 25px;background:var(--recycle) no-repeat 8px center / 13px,var(--btn_active)}
-input.stop,button.stop{padding:6px 9px 6px 25px;background:var(--shutdown) no-repeat 8px center / 13px,var(--btn)}
-input.stop:hover,input.stop:focus{padding:6px 9px 6px 25px;background:var(--shutdown_hover) no-repeat 8px center / 13px,var(--btn_hover);background-blend-mode:normal}
-input.stop:active{padding:6px 9px 6px 25px;background:var(--shutdown_hover) no-repeat 8px center / 13px,var(--btn_active)}
-button.search{padding:5px 12px 5px 30px;background:var(--search) no-repeat 11px center / 14px,var(--btn)}
-button.search:hover,button.search:focus{background:var(--search) no-repeat 11px center / 14px,var(--btn_hover)}
-button.search:active{background:var(--search) no-repeat 11px center / 14px,var(--btn_active)}
+input.accept[value^="Unban"]{padding:6px 9px 6px 25px;background:var(--unban) no-repeat 8px center/14px,var(--btn)}
+input.accept[value^="Unban"]:hover,input.accept[value^="Unban"]:focus{background:var(--unban) no-repeat 8px center/14px,var(--btn_hover)}
+input.accept[value^="Unban"]:active{padding:6px 9px 6px 25px;background:var(--unban) no-repeat 8px center/14px,var(--btn_active)}
+input.accept[value^="Create"]{padding:6px 9px 6px 25px;background:var(--add) no-repeat 8px center/11px,var(--btn)}
+input.accept[value^="Create"]:hover,input.accept[value^="Create"]:focus{background:var(--add) no-repeat 8px center/11px,var(--btn_hover)}
+input.accept[value^="Create"]:active{background:var(--add) no-repeat 8px center/11px,var(--btn_active)}
+input.accept[value^="Filter"]{padding:6px 9px 6px 25px;background:var(--filter) no-repeat 8px center/14px,var(--btn)}
+input.accept[value^="Filter"]:hover,input.accept[value^="Filter"]:focus{background:var(--filter) no-repeat 8px center/14px,var(--btn_hover)}
+input.add,button.add{padding:6px 9px 6px 22px;background:var(--add) no-repeat 8px center/10px,var(--btn)}
+input.add:hover,button.add:hover,input.add:focus,button.add:focus{background:var(--add) no-repeat 8px center/10px,var(--btn_hover)}
+input.add:active,button.add:active{background:var(--add) no-repeat 8px center/10px,var(--btn_active)}
+input.add[value^="Adjust"]{padding:6px 9px 6px 25px;background:var(--edit) no-repeat 8px center/14px,var(--btn)}
+input.add[value^="Adjust"]:hover,input.add[value^="Adjust"]:focus{background:var(--edit_hover) no-repeat 8px center/14px,var(--btn_hover)}
+input.add[value^="Adjust"]:active{padding:6px 9px 6px 25px;background:var(--edit) no-repeat 8px center/14px,var(--btn_active)}
+input.accept[value^="Show"],input.check[value^="View"],input.showconsole{padding:6px 9px 6px 25px;background:var(--eye) no-repeat 8px center/14px,var(--btn)}
+input.accept[value^="Show"]:hover,input.check[value^="View"]:hover,input.accept[value^="Show"]:focus,input.check[value^="View"]:focus,input.showconsole:hover,input.showconsole:focus{background:var(--eye) no-repeat 8px center/14px,var(--btn_hover)}
+input.accept[value^="Show"]:active,input.check[value^="View"]:active,input.showconsole:active{padding:6px 9px 6px 25px;background:var(--eye) no-repeat 8px center/14px,var(--btn_active)}
+input.accept,button.accept{padding:6px 9px 6px 25px;background:var(--yes) no-repeat 8px center/12px,var(--btn)}
+input.accept:hover,input.accept:focus{background:var(--yes) no-repeat 8px center/12px,var(--btn_hover)}
+input.accept:active{padding:6px 9px 6px 25px;background:var(--yes) no-repeat 8px center/12px,var(--btn_active)}
+input.cancel[type=reset],input.cancel[type=submit]{padding:6px 9px 6px 25px;background:var(--no) no-repeat 10px center/10px,var(--btn)}
+input.cancel[type=reset]:hover,input.cancel[type=submit]:hover,input.cancel[type=reset]:focus,input.cancel[type=submit]:focus{background:var(--no) no-repeat 10px center/10px,var(--btn_hover)}
+input.cancel[type=reset]:active,input.cancel[type=submit]:active{background:var(--no) no-repeat 10px center/10px,var(--btn_active)}
+input.cancel[value^="Hide"],input.delete[value^="Do not view"],input.hideconsole{padding:6px 9px 6px 25px;background:var(--hide) no-repeat 8px center/14px,var(--btn)}
+input.cancel[value^="Hide"]:hover,input.delete[value^="Do not view"]:hover,input.cancel[value^="Hide"]:focus,input.delete[value^="Do not view"]:focus,input.hideconsole:hover,input.hideconsole:focus{background:var(--hide) no-repeat 8px center/14px,var(--btn_hover)}
+input.cancel[value^="Hide"]:active,input.delete[value^="Do not view"]:active,input.hideconsole:active{padding:6px 9px 6px 25px;background:var(--hide) no-repeat 8px center/14px,var(--btn_active)}
+input.check{padding:6px 9px 6px 25px;background:var(--yes) no-repeat 8px center/14px,var(--btn)}
+input.check:hover,input.check:focus{background:var(--yes) no-repeat 8px center/14px,var(--btn_hover)}
+input.check:active{padding:6px 9px 6px 27px;background:var(--yes) no-repeat 8px center/14px,var(--btn_active)}
+input.check[value$="updates"]{padding:6px 9px 6px 27px;background:var(--refresh) no-repeat 8px center/16px,var(--btn)}
+input.check[value$="updates"]:hover,input.check[value$="updates"]:focus{background:var(--refresh_hover) no-repeat 8px center/16px,var(--btn_hover);background-blend-mode:normal}
+input.check[value$="updates"]:active{padding:6px 9px 6px 27px;background:var(--refresh_active) no-repeat 8px center/16px,var(--btn_active);background-blend-mode:luminosity}
+input.delete,button.delete{padding:6px 9px 6px 25px;background:var(--nuke) no-repeat 8px center/14px,var(--btn)}
+input.delete:hover,input.delete:focus{background:var(--nuke) no-repeat 8px center/14px,var(--btn_hover)}
+input.delete:active{padding:6px 9px 6px 25px;background:var(--nuke) no-repeat 8px center/14px,var(--btn_active);background-blend-mode:luminosity}
+input.delete[value^="Ban"]{padding:6px 9px 6px 25px;background:var(--doban) no-repeat 8px center/14px,var(--btn)}
+input.delete[value^="Ban"]:hover,input.delete[value^="Ban"]:focus{background:var(--doban) no-repeat 8px center/14px,var(--btn_hover)}
+input.delete[value^="Ban"]:active{padding:6px 9px 6px 25px;background:var(--doban) no-repeat 8px center/14px,var(--btn_active)}
+input.download{padding:6px 9px 6px 25px;background:var(--download) no-repeat 8px center/14px,var(--btn)}
+input.download:hover,input.download:focus{background:var(--download) no-repeat 8px center/14px,var(--btn_hover)}
+input.download:active{padding:6px 9px 6px 25px;background:var(--download) no-repeat 8px center/14px,var(--btn_active)}
+input.download[value^="Join"]{padding:6px 9px 6px 27px;background:var(--family) no-repeat 8px center/14px,var(--btn)}
+input.download[value^="Join"]:hover,input.download[value^="Join"]:focus{background:var(--family) no-repeat 8px center/14px,var(--btn_hover)}
+input.download[value^="Join"]:active{background:var(--family) no-repeat 8px center/14px,var(--btn_active)}
+input.download[value$="from File"],input.download[value$="from file"]{padding:6px 9px 6px 25px;background:var(--package) no-repeat 8px center/14px,var(--btn)}
+input.download[value$="from File"]:hover,input.download[value$="from File"]:focus,input.download[value$="from file"]:hover,input.download[value$="from file"]:focus{background:var(--package) no-repeat 8px center/14px,var(--btn_hover)}
+input.download[value$="from file"]:active,input.download[value$="from File"]:active{padding:6px 9px 6px 25px;background:var(--package) no-repeat 8px center/14px,var(--btn_active)}
+input.download[value^="Dump"]{padding:6px 9px 6px 25px;background:var(--bug) no-repeat 8px center/14px,var(--btn)}
+input.download[value^="Dump"]:hover,input.download[value^="Dump"]:focus{padding:6px 9px 6px 25px;background:var(--bug) no-repeat 8px center/14px,var(--btn_hover)}
+input.download[value^="Dump"]:active{padding:6px 9px 6px 25px;background:var(--bug) no-repeat 8px center/14px,var(--btn_active)}
+input.go[type=submit],input[value="GO"]{padding:6px 9px 6px 25px;background:var(--go) no-repeat 8px center/14px,var(--btn)}
+input.go[type=submit]:hover,input[value="GO"]:hover,input.go:focus,input[value="GO"]:focus{background:var(--go) no-repeat 8px center/14px,var(--btn_hover)}
+input.go[type=submit]:active,input[value="GO"]:active{padding:6px 9px 6px 25px;background:var(--go) no-repeat 8px center/14px,var(--btn_active)}
+input.go[value^="Create"]{padding:6px 9px 6px 25px;background:var(--wizard) no-repeat 8px center/15px,var(--btn)}
+input.go[value^="Create"]:hover,input.go[value^="Create"]:focus{background:var(--wizard) no-repeat 8px center/15px,var(--btn_hover)}
+input.go[value^="Create"]:active{padding:6px 9px 6px 25px;background:var(--wizard) no-repeat 8px center/15px,var(--btn_active)}
+input.back[type=submit]{padding:6px 7px 6px 23px;background:var(--back) no-repeat 6px center/14px,var(--btn)}
+input.back[type=submit]:hover,input.back:focus{background:var(--hover) var(--back) no-repeat 6px center/14px}
+input.reload{padding:6px 9px 6px 25px;background:var(--reset) no-repeat 8px center/14px,var(--btn)}
+input.reload:hover,input.reload:focus{background:var(--reset_hover) no-repeat 8px center/14px,var(--btn_hover)}
+input.reload:active{padding:6px 9px 6px 25px;background:var(--reset_active) no-repeat 8px center/14px,var(--btn_active)}
+input.reload[value$="restart"]{padding:6px 9px 6px 25px;background:var(--restart) no-repeat 8px center/12px,var(--btn)}
+input.reload[value$="restart"]:hover,input.reload[value$="restart"]:focus{background:var(--restart_hover) no-repeat 8px center/12px,var(--btn_hover);background-blend-mode:normal}
+input.reload[value$="restart"]:active{padding:6px 9px 6px 25px;background:var(--restart_hover) no-repeat 8px center/12px,var(--btn_active)}
+input.reload[value^="Update"]{padding:6px 9px 6px 25px;background:var(--refresh) no-repeat 8px center/14px,var(--btn)}
+input.reload[value^="Update"]:hover,input.reload[value^="Update"]:focus{background:var(--refresh_hover) no-repeat 8px center/14px,var(--btn_hover)}
+input.reload[value^="Update"]:active{padding:6px 9px 6px 25px;background:var(--refresh_hover) no-repeat 8px center/14px,var(--btn_active)}
+input.reload[value="Force GC"],input.reload[value="Force garbage collection"]{padding:6px 9px 6px 25px;background:var(--recycle) no-repeat 8px center/13px,var(--btn)}
+input.reload[value="Force GC"]:hover,input.reload[value="Force GC"]:focus,input.reload[value="Force garbage collection"]:hover,input.reload[value="Force garbage collection"]:focus{background:var(--recycle) no-repeat 8px center/13px,var(--btn_hover)}
+input.reload[value="Force garbage collection"]:active,input.reload[value="Force garbage collection"]:active{padding:6px 9px 6px 25px;background:var(--recycle) no-repeat 8px center/13px,var(--btn_active)}
+input.stop,button.stop{padding:6px 9px 6px 25px;background:var(--shutdown) no-repeat 8px center/13px,var(--btn)}
+input.stop:hover,input.stop:focus{padding:6px 9px 6px 25px;background:var(--shutdown_hover) no-repeat 8px center/13px,var(--btn_hover);background-blend-mode:normal}
+input.stop:active{padding:6px 9px 6px 25px;background:var(--shutdown_hover) no-repeat 8px center/13px,var(--btn_active)}
+button.search{padding:5px 12px 5px 30px;background:var(--search) no-repeat 11px center/14px,var(--btn)}
+button.search:hover,button.search:focus{background:var(--search) no-repeat 11px center/14px,var(--btn_hover)}
+button.search:active{background:var(--search) no-repeat 11px center/14px,var(--btn_active)}
 
 /* client/plugin/webapps buttons aka project "X" */
 button.control,button.control:hover,button.control:focus{padding:12px;line-height:0;font-size:0;background-size:14px,100%;background-position:center center;background-blend-mode:normal}
-button.accept.control{background:var(--start) no-repeat center center / 14px,var(--btn)}
-button.accept.control:hover,button.accept.control:focus{background:var(--start_hover) no-repeat center center / 14px,var(--btn_hover)}
-button.accept.control:active{background:var(--start_active) no-repeat center center / 14px,var(--btn_active)}
-button.stop.control{background:var(--stop) no-repeat center center / 14px,var(--btn)}
-button.stop.control:hover,button.stop.control:focus{background:var(--stop_hover) no-repeat center center / 14px,var(--btn_hover)}
-button.stop.control:active{background:var(--stop_active) no-repeat center center / 14px,var(--btn_active)}
-button.add.control{background:var(--edit) no-repeat center center / 16px,var(--btn)}
-button.add.control:hover,button.add.control:focus{background:var(--edit_hover) no-repeat center center / 16px,var(--btn_hover)}
-button.add.control:active{background:var(--edit_hover) no-repeat center center / 16px,var(--btn_active)}
-button.delete.control{background:var(--nuke) no-repeat center center / 14px,var(--btn)}
-button.delete.control:hover,button.delete.control:focus{background:var(--nuke) no-repeat center center / 14px,var(--btn_hover)}
-button.delete.control:active{background:var(--nuke) no-repeat center center / 14px,var(--btn_active);background-blend-mode:luminosity}
-button.check.control{background:var(--refresh) no-repeat center center / 16px,var(--btn)}
-button.check.control:hover,button.check.control:focus{background:var(--refresh_hover) no-repeat center center / 16px,var(--btn_hover);background-blend-mode:normal}
-button.check.control:active{background:var(--refresh_active) no-repeat center center / 16px,var(--btn_active)}
-button.download.control{background:var(--download) no-repeat center center / 14px,var(--btn)}
-button.download.control:hover,button.download.control:focus{background:var(--download) no-repeat center center / 14px,var(--btn_hover)}
-button.download.control:active{background:var(--download) no-repeat center center / 14px,var(--btn_active)}
+button.accept.control{background:var(--start) no-repeat center center/14px,var(--btn)}
+button.accept.control:hover,button.accept.control:focus{background:var(--start_hover) no-repeat center center/14px,var(--btn_hover)}
+button.accept.control:active{background:var(--start_active) no-repeat center center/14px,var(--btn_active)}
+button.stop.control{background:var(--stop) no-repeat center center/14px,var(--btn)}
+button.stop.control:hover,button.stop.control:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
+button.stop.control:active{background:var(--stop_active) no-repeat center center/14px,var(--btn_active)}
+button.add.control{background:var(--edit) no-repeat center center/16px,var(--btn)}
+button.add.control:hover,button.add.control:focus{background:var(--edit_hover) no-repeat center center/16px,var(--btn_hover)}
+button.add.control:active{background:var(--edit_hover) no-repeat center center/16px,var(--btn_active)}
+button.delete.control{background:var(--nuke) no-repeat center center/14px,var(--btn)}
+button.delete.control:hover,button.delete.control:focus{background:var(--nuke) no-repeat center center/14px,var(--btn_hover)}
+button.delete.control:active{background:var(--nuke) no-repeat center center/14px,var(--btn_active);background-blend-mode:luminosity}
+button.check.control{background:var(--refresh) no-repeat center center/16px,var(--btn)}
+button.check.control:hover,button.check.control:focus{background:var(--refresh_hover) no-repeat center center/16px,var(--btn_hover);background-blend-mode:normal}
+button.check.control:active{background:var(--refresh_active) no-repeat center center/16px,var(--btn_active)}
+button.download.control{background:var(--download) no-repeat center center/14px,var(--btn)}
+button.download.control:hover,button.download.control:focus{background:var(--download) no-repeat center center/14px,var(--btn_hover)}
+button.download.control:active{background:var(--download) no-repeat center center/14px,var(--btn_active)}
 
 /* sidebar */
 
 /* buttons */
 #sidebar button{margin:2px;min-width:87px;background-blend-mode:normal}
 #sidebar .reload,#sidebar .stop{margin-top:3px;margin-bottom:3px;padding:7px 5px;min-width:92px;text-indent:-99999px;background-size:16px,100%;background-position:center center}
-#sidebar .reload,#sidebar .reload[value$="restart"]{padding:7px 5px;background:var(--restart) no-repeat center center / 14px,var(--btn_sidebar)}
-#sidebar .reload:hover,#sidebar .reload:focus,#sidebar .reload[value$="restart"]:hover,#sidebar .reload[value$="restart"]:focus{padding:6px 5px;background:var(--shutdown_hover) no-repeat 37% center / 14px,var(--restart_hover) no-repeat 63% center / 14px,var(--btn_hover)}
-#sidebar .reload:active,#sidebar .reload[value$="restart"]:active{padding:7px 5px;background:var(--shutdown) no-repeat 37% center / 14px,var(--restart) no-repeat 63% center / 14px,var(--btn_active)}
-#sidebar .stop{padding:7px 5px;background:var(--shutdown) no-repeat center center / 14px,var(--btn_sidebar)}
-#sidebar .stop:hover,#sidebar .stop:focus{padding:7px 5px;background:var(--shutdown_hover) no-repeat center center / 14px,var(--btn_hover)}
-#sidebar .stop:active{padding:7px 5px;background:var(--shutdown) no-repeat center center / 14px,var(--btn_active)}
-#sidebar .cancel{padding:7px 9px 7px 25px;background:var(--no) no-repeat 10px center / 10px,var(--btn_sidebar)}
+#sidebar .reload,#sidebar .reload[value$="restart"]{padding:7px 5px;background:var(--restart) no-repeat center center/14px,var(--btn_sidebar)}
+#sidebar .reload:hover,#sidebar .reload:focus,#sidebar .reload[value$="restart"]:hover,#sidebar .reload[value$="restart"]:focus{padding:6px 5px;background:var(--shutdown_hover) no-repeat 37% center/14px,var(--restart_hover) no-repeat 63% center/14px,var(--btn_hover)}
+#sidebar .reload:active,#sidebar .reload[value$="restart"]:active{padding:7px 5px;background:var(--shutdown) no-repeat 37% center/14px,var(--restart) no-repeat 63% center/14px,var(--btn_active)}
+#sidebar .stop{padding:7px 5px;background:var(--shutdown) no-repeat center center/14px,var(--btn_sidebar)}
+#sidebar .stop:hover,#sidebar .stop:focus{padding:7px 5px;background:var(--shutdown_hover) no-repeat center center/14px,var(--btn_hover)}
+#sidebar .stop:active{padding:7px 5px;background:var(--shutdown) no-repeat center center/14px,var(--btn_active)}
+#sidebar .cancel{padding:7px 9px 7px 25px;background:var(--no) no-repeat 10px center/10px,var(--btn_sidebar)}
 #sidebar #sb_downloadUnsignedDevUpdate,#sidebar #sb_downloadSignedDevUpdate,#sidebar #sb_downloadReleaseUpdate{padding:6px 16px 6px 30px;margin:4px 0 6px;font-size:110%;border-radius:15px;background-position:12px center}
 #sidebar #sb_downloadUnsignedDevUpdate:active,#sidebar #sb_downloadSignedDevUpdate:active,#sidebar #sb_downloadReleaseUpdate:active{color:#7171d1;text-shadow:none;-webkit-text-stroke:0}
 
 /* Show text on context specific buttons (eg deferred shutdown) */
 #sidebar .reload[value="restartImmediate"],#sidebar .stop[value="shutdownImmediate"],#sb_manualReseed,#sidebar .cancel{padding:6px 9px 6px 25px;min-width:0;text-indent:0;text-align:left;text-transform:capitalize}
-#sidebar .reload[value="restartImmediate"]{background:var(--restart) no-repeat left 6px center / 12px,var(--btn_sidebar)}
-#sidebar .reload[value="restartImmediate"]:hover{padding:7px 9px 7px 25px;background:var(--restart_hover) no-repeat left 6px center / 12px,var(--btn_hover)}
-#sidebar .reload[value="restartImmediate"]:focus,#sidebar .reload[value="restartImmediate"]:active{padding:7px 9px 7px 25px;background:var(--hover) var(--restart_hover) no-repeat left 6px center / 12px}
-#sidebar .stop[value="shutdownImmediate"]{background:var(--shutdown) no-repeat left 6px center / 12px,var(--btn_sidebar)}
-#sidebar .stop[value="shutdownImmediate"]:hover{padding:7px 9px 7px 25px;background:#000 var(--shutdown_hover) no-repeat left 6px center / 12px}
-#sidebar .stop[value="shutdownImmediate"]:focus,#sidebar .stop[value="shutdownImmediate"]:active{padding:7px 9px 7px 25px;background:var(--shutdown_hover) no-repeat left 6px center / 12px}
+#sidebar .reload[value="restartImmediate"]{background:var(--restart) no-repeat left 6px center/12px,var(--btn_sidebar)}
+#sidebar .reload[value="restartImmediate"]:hover{padding:7px 9px 7px 25px;background:var(--restart_hover) no-repeat left 6px center/12px,var(--btn_hover)}
+#sidebar .reload[value="restartImmediate"]:focus,#sidebar .reload[value="restartImmediate"]:active{padding:7px 9px 7px 25px;background:var(--hover) var(--restart_hover) no-repeat left 6px center/12px}
+#sidebar .stop[value="shutdownImmediate"]{background:var(--shutdown) no-repeat left 6px center/12px,var(--btn_sidebar)}
+#sidebar .stop[value="shutdownImmediate"]:hover{padding:7px 9px 7px 25px;background:#000 var(--shutdown_hover) no-repeat left 6px center/12px}
+#sidebar .stop[value="shutdownImmediate"]:focus,#sidebar .stop[value="shutdownImmediate"]:active{padding:7px 9px 7px 25px;background:var(--shutdown_hover) no-repeat left 6px center/12px}
 #sb_manualReseed{background:var(--download) no-repeat left 6px center,var(--btn_sidebar);background-size:14px auto,100%,100%,100%}
-#sb_manualReseed:hover{padding:7px 9px 7px 25px;background:#000 var(--download_hover) no-repeat left 6px center / 14px}
-#sb_manualReseed:focus,#sb_manualReseed:active{padding:7px 9px 7px 25px;background:var(--hover) var(--download_hover) no-repeat left 6px center / 14px}
-#sidebar .download,#sidebar .download:hover,#sidebar .download:focus{min-width:0;background:var(--download) no-repeat 7px center / 15px}
+#sb_manualReseed:hover{padding:7px 9px 7px 25px;background:#000 var(--download_hover) no-repeat left 6px center/14px}
+#sb_manualReseed:focus,#sb_manualReseed:active{padding:7px 9px 7px 25px;background:var(--hover) var(--download_hover) no-repeat left 6px center/14px}
+#sidebar .download,#sidebar .download:hover,#sidebar .download:focus{min-width:0;background:var(--download) no-repeat 7px center/15px}
 #sidebar .download,#sidebar .download:hover,#sidebar .download:focus,#sidebar .download:active{padding:7px 9px 7px 25px;background-size:15px,100%;background-position:7px center}
-#sidebar .download:hover{background:var(--download_hover) no-repeat 7px center / 15px,var(--btn_hover)}
-#sidebar .download:active{background:var(--hover) var(--download) no-repeat 7px center / 15px}
+#sidebar .download:hover{background:var(--download_hover) no-repeat 7px center/15px,var(--btn_hover)}
+#sidebar .download:active{background:var(--hover) var(--download) no-repeat 7px center/15px}
 
 #sb_wrap{margin:0 0 10px 5px;padding:0;width:200px;display:block;float:left;clear:left;position:absolute;text-align:center;border:0}
 #sidebar{background:var(--bg_main);background-size:4px 100%,100% 4px}
@@ -252,8 +252,8 @@ button.download.control:active{background:var(--download) no-repeat center cente
 #sidebar ul{text-align:left}
 .sb table{margin:-4px -7px -5px -8px;width:200px;overflow:hidden;text-align:center;font-size:8pt;border:0;background-image:none;background-color:transparent;border-collapse:separate;border-spacing:1px}
 #sidebar table{position:relative;max-width:none;border-collapse:collapse}
-#sidebar table:not(#sb_localtunnels):not(#sb_services)::before{width:0;height:1px;display:block;position:absolute;top:-2px;left:-1px;z-index:99999;background:linear-gradient(to left,#717,#404);content:"";animation:ease-in bar .1s reverse;will-change:transform}
-#sidebar tr{box-shadow:none}
+#sidebar table:not(#sb_localtunnels):not(#sb_services) tr::before{width:0;height:1px;display:block;position:absolute;top:-2px;left:-1px;z-index:99999;background:linear-gradient(to left,#717,#404);content:"";animation:bar .03s steps(3) reverse;will-change:transform}
+#sidebar tr{box-shadow:none;contain:paint}
 .sb td{padding:0 2px;max-width:180px;word-spacing:-0.1em;border:0;background-image:none}
 .sb td:first-child{max-width:90px;text-transform:capitalize}
 #sidebar td:first-child,#sb_localtunnels td:nth-child(2){text-align:left}
@@ -312,7 +312,7 @@ p:empty + .sb_notice{margin-top:10px}
 #sb_localid + #sb_version{margin-top:6px;margin-bottom:5px}
 #sidebar tr{border:0;background-image:none;background-color:transparent}
 #sidebar tr:nth-child(even){background:rgba(16,16,48,.5)}
-#sidebar #sb_general tr:hover,#sidebar #sb_shortgeneral tr:hover,#sidebar #sb_advancedgeneral tr:hover,#sidebar #sb_bandwidth tr:hover,#sidebar #sb_tunnels tr:hover,#sidebar #sb_peers tr:hover,#sidebar #sb_queue tr:hover {background:linear-gradient(90deg,rgba(16,16,32,.7),rgba(32,32,96,.5))}
+#sidebar #sb_general tr:hover,#sidebar #sb_shortgeneral tr:hover,#sidebar #sb_advancedgeneral tr:hover,#sidebar #sb_bandwidth tr:hover,#sidebar #sb_tunnels tr:hover,#sidebar #sb_peers tr:hover,#sidebar #sb_queue tr:hover{background:linear-gradient(90deg,rgba(16,16,32,.7),rgba(32,32,96,.5))}
 #sidebar td:nth-child(2)::before{display:inline-block;min-height:22px;vertical-align:middle;content:""}
 #sidebar form{margin:-4px -9px -7px}
 .sb_notice + p:empty + form{margin-top:9px}
@@ -330,27 +330,27 @@ p:empty + .sb_notice{margin-top:10px}
 #sb_services td{padding:0}
 #sb_services a,#sb_services a:hover,#sb_services a:active{border-bottom:var(--border);outline:none;position:relative;z-index:30}
 #sb_services a,#sb_services a:visited{background-blend-mode:luminosity;color:var(--a)}
-#sidebar #sb_services a:hover{color:var(--a_hover);background:#1e0b28 var(--plugin) no-repeat 5px center / 16px;background-blend-mode:normal}
+#sidebar #sb_services a:hover{color:var(--a_hover);background:#1e0b28 var(--plugin) no-repeat 5px center/16px;background-blend-mode:normal}
 #sidebar #sb_services a{margin:0;padding:4px 5px 4px 27px;width:calc(100% - 33px);border-bottom:var(--border_inner);border-radius:0;text-align:left;text-decoration:none;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;clear:both}
-#sb_services a{background:rgba(0,0,16,.3) var(--plugin) no-repeat 5px center / 16px}
-#sb_services a[href*="mail"]{background:rgba(0,0,16,.3) var(--mail) no-repeat 6px center / 14px}
-#sidebar #sb_services a[href*="mail"]:hover{background:#1e0b28 var(--mail) no-repeat 6px center / 14px}
-#sb_services a[href*="dns"]{background:rgba(0,0,16,.3) var(--abook) no-repeat 5px center / 16px}
-#sidebar #sb_services a[href*="dns"]:hover{background:#1e0b28 var(--abook) no-repeat 5px center / 16px}
-#sb_services a[href*="tunnel"]{background:rgba(0,0,16,.3) var(--tunnman) no-repeat 5px center / 16px}
-#sidebar #sb_services a[href*="tunnel"]:hover{background:#1e0b28 var(--tunnman) no-repeat 5px center / 16px}
-#sb_services a[href*="bote"]{background:rgba(0,0,16,.3) var(--bote) no-repeat 5px center / 16px}
-#sidebar #sb_services a[href*="bote"]:hover{background:#1e0b28 var(--bote) no-repeat 5px center / 16px}
-#sb_services a[href="/orchid/"],#sb_services a[href*="/orchid/"]{background:rgba(0,0,16,.3) var(--orchid) no-repeat 5px center / 16px}
-#sidebar #sb_services a[href="/orchid/"]:hover,#sb_services a[href*="/orchid/"]:hover{background:#1e0b28 var(--orchid) no-repeat 5px center / 16px}
-#sb_services a[href*="/outproxy"]{background:rgba(0,0,16,.3) var(--socks) no-repeat 5px center / 16px}
-#sidebar #sb_services a[href*="/outproxy"]:hover{background:#1e0b28 var(--socks) no-repeat 5px center / 16px}
-#sb_services a[href*="torrents"]{background:rgba(0,0,16,.3) var(--snark) no-repeat 5px center / 16px}
-#sidebar #sb_services a[href*="torrents"]:hover{background:#1e0b28 var(--snark) no-repeat 5px center / 16px}
-#sb_services a[href*="7658"],#sb_services a[href*="7668"]{background:rgba(0,0,16,.3) var(--webserver) no-repeat 5px center / 16px}
-#sidebar #sb_services a[href*="7658"]:hover,#sb_services a[href*="7668"]:hover{background:#1e0b28 var(--webserver) no-repeat 5px center / 16px}
-#sb_services a[href*="/tracker"]{background:rgba(0,0,16,.3) var(--zzzot) no-repeat 5px center / 16px}
-#sidebar #sb_services a[href*="/tracker"]:hover{background:#1e0b28 var(--zzzot) no-repeat 5px center / 16px}
+#sb_services a{background:rgba(0,0,16,.3) var(--plugin) no-repeat 5px center/16px}
+#sb_services a[href*="mail"]{background:rgba(0,0,16,.3) var(--mail) no-repeat 6px center/14px}
+#sidebar #sb_services a[href*="mail"]:hover{background:#1e0b28 var(--mail) no-repeat 6px center/14px}
+#sb_services a[href*="dns"]{background:rgba(0,0,16,.3) var(--abook) no-repeat 5px center/16px}
+#sidebar #sb_services a[href*="dns"]:hover{background:#1e0b28 var(--abook) no-repeat 5px center/16px}
+#sb_services a[href*="tunnel"]{background:rgba(0,0,16,.3) var(--tunnman) no-repeat 5px center/16px}
+#sidebar #sb_services a[href*="tunnel"]:hover{background:#1e0b28 var(--tunnman) no-repeat 5px center/16px}
+#sb_services a[href*="bote"]{background:rgba(0,0,16,.3) var(--bote) no-repeat 5px center/16px}
+#sidebar #sb_services a[href*="bote"]:hover{background:#1e0b28 var(--bote) no-repeat 5px center/16px}
+#sb_services a[href="/orchid/"],#sb_services a[href*="/orchid/"]{background:rgba(0,0,16,.3) var(--orchid) no-repeat 5px center/16px}
+#sidebar #sb_services a[href="/orchid/"]:hover,#sb_services a[href*="/orchid/"]:hover{background:#1e0b28 var(--orchid) no-repeat 5px center/16px}
+#sb_services a[href*="/outproxy"]{background:rgba(0,0,16,.3) var(--socks) no-repeat 5px center/16px}
+#sidebar #sb_services a[href*="/outproxy"]:hover{background:#1e0b28 var(--socks) no-repeat 5px center/16px}
+#sb_services a[href*="torrents"]{background:rgba(0,0,16,.3) var(--snark) no-repeat 5px center/16px}
+#sidebar #sb_services a[href*="torrents"]:hover{background:#1e0b28 var(--snark) no-repeat 5px center/16px}
+#sb_services a[href*="7658"],#sb_services a[href*="7668"]{background:rgba(0,0,16,.3) var(--webserver) no-repeat 5px center/16px}
+#sidebar #sb_services a[href*="7658"]:hover,#sb_services a[href*="7668"]:hover{background:#1e0b28 var(--webserver) no-repeat 5px center/16px}
+#sb_services a[href*="/tracker"]{background:rgba(0,0,16,.3) var(--zzzot) no-repeat 5px center/16px}
+#sidebar #sb_services a[href*="/tracker"]:hover{background:#1e0b28 var(--zzzot) no-repeat 5px center/16px}
 #sidebar #sb_services a:active{color:var(--active);box-shadow:var(--btn_shadow_active);background-color:#461b5e}
 
 /* news */
@@ -363,8 +363,7 @@ p:empty + .sb_notice{margin-top:10px}
 #sb_newsheadings tr:last-child td{border-bottom:none}
 
 /* minigraph */
-#sb_graphstats{padding:2px 8px;display:inline-block;position:relative;z-index:1000;font-weight:700;border:var(--border_hover);border-top:none;background:#001;opacity:0;transition:ease opacity .3s}
-a:active #sb_graphstats{border-color:var(--active)}
+#sb_graphstats{margin-top:1px;padding:2px 8px;display:inline-block;position:relative;z-index:1000;font-weight:700;border:1px solid #26235c;border-top:none;background:rgba(0,0,0,.65);opacity:0;transition:ease opacity .3s}
 #sb_graphcontainer:hover #sb_graphstats{opacity:1;transition:ease opacity .3s}
 #sb_graphcontainer{margin:-6px -9px -8px;padding:0 1px;height:44px;position:relative;z-index:10;overflow:hidden;box-shadow:inset 0 0 0 1px #26235c,inset 0 0 0 2px #000,inset 0 0 3px 1px #004;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 14px,rgba(112,107,199,.7) 15px,rgba(0,0,0,0) 15px,rgba(0,0,0,0) 30px),repeating-linear-gradient(to top,rgba(0,0,0,0),rgba(112,107,199,.3),rgba(0,0,0,0) 1px,rgba(0,0,0,0) 14px)}
 #sidebar #minigraph{margin:-19px -1px 0;width:198px;height:40px}
@@ -376,7 +375,7 @@ a:active #sb_graphstats{border-color:var(--active)}
 /* status bar */
 .percentBarOuter{position:relative;vertical-align:middle;border:var(--border_inner);box-shadow:var(--highlight),inset 0 2px 2px 2px rgba(0,0,0,.45);background:repeating-linear-gradient(90deg,#000 1px,#000 2px,#003 2px,#003 4px);opacity:1}
 #sidebar .percentBarOuter{margin:5px 0 -6px;width:calc(100% - 2px)}
-.percentBarOuter:hover .percentBarText{opacity:1;transition:ease opacity .2s}
+.percentBarOuter:hover .percentBarText{opacity:1;transition:ease opacity .2s;pointer-events:none}
 .percentBarInner{height:14px;max-width:100%;box-shadow:var(--highlight),inset 0 -2px 4px rgba(0,0,0,.6);background:linear-gradient(90deg,rgba(0,0,0,0) 100px,rgba(255,0,255,.1) 160px,rgba(0,0,255,.15)),linear-gradient(180deg,#33a,#226 50%,#003 50%,#000)}
 #sb_memoryBar .percentBarInner{background:var(--membarinner)}
 #sb_memoryBar.percentBarOuter{margin:-5px -8px -7px;width:calc(100% + 14px);background:linear-gradient(90deg,rgba(0,0,0,0),rgba(255,0,255,.05),rgba(255,0,0,.12)),repeating-linear-gradient(90deg,#000 1px,#000 2px,#003 2px,#003 4px)}
@@ -417,25 +416,59 @@ a:active #sb_graphstats{border-color:var(--active)}
 .sb_netstatus.running:hover,.sb_netstatus.hidden:hover,.sb_netstatus.firewalled:hover,.sb_netstatus.testing:hover{font-size:inherit}
 
 /* tunnel build status */
-#bandwidthTestRunning{margin:-4px 0;padding:7px 3px;width:100%;display:inline-block;vertical-align:middle;color:#dd8;text-shadow:0 1px 1px #000;box-shadow:0 0 0 1px #337,var(--highlight),inset 0 0 2px 1px #26235c;background:#001;box-sizing:border-box}
-
-/* tunnel build status */
 .tunnelBuildStatus{font-size:90%;color:#393}
 .tunnelBuildStatus::before{margin:0 0 -1px;width:16px;height:16px;display:inline-block;border-radius:50%;content:"";transform:scale(.7)}
-.tunnelBuildStatus.accepting::before{background:var(--tunn_ready) no-repeat center center / 15px}
-.tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) no-repeat center center / 15px}
+.tunnelBuildStatus.accepting::before{background:var(--tunn_ready) no-repeat center center/15px}
+.tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) no-repeat center center/15px}
 .tunnelBuildStatus.starting{color:#aa0}
-.tunnelBuildStatus.starting::before{background:var(--tunn_starting) no-repeat center center / 15px}
+.tunnelBuildStatus.starting::before{background:var(--tunn_starting) no-repeat center center/15px}
 .tunnelBuildStatus.rejecting{color:#933}
-.tunnelBuildStatus.rejecting::before{background:var(--tunn_reject) no-repeat center center / 15px}
+.tunnelBuildStatus.rejecting::before{background:var(--tunn_reject) no-repeat center center/15px}
 .tunnelBuildStatus.hidden{color:#999}
-.tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) no-repeat center center / 15px}
+.tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) no-repeat center center/15px}
 
 /* update */
 #updateAvailable{margin:3px 0;width:100%;display:inline-block;line-height:1.2;font-size:9pt}
 #updateAvailable + br + button + br + #updateAvailable::before{margin:4px 0;content:"";display:inline-block;height:1px;background:#113;width:calc(100% - 20px)}
 #updateAvailable + br + button + br + #updateAvailable{margin-top:2px}
 #updateAvailable + br + button + br + #updateAvailable + br + button{margin-bottom:5px}
+
+/* section toggler */
+#sidebar h3{position:relative}
+.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;background:#002 var(--dropdown) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:none;border-left:var(--border);display:none}
+h3:hover .toggleSection{display:inline-block;z-index:999}
+.toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
+.toggleSection:not(:checked){padding-top:6px}
+.toggleSection:active{box-shadow:var(--btn_shadow_active);background-color:var(--hover)}
+.toggleSection:checked:active{box-shadow:var(--highlight),inset 3px -3px 3px 3px rgba(0,0,0,.8),0 0 0 1px #000}
+#sidebar h3 a .badge:not([hidden]),#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
+#sidebar h3 a[href="/info"] .badge{text-transform:none}
+#sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
+#tunnelCount+#tunnelCount,#newsCount+#newsCount{display:none}
+#sb_updatesection.collapsed > *:not(h3) {display:none}
+#sb_updatesection h3.collapsed a::after{content:"*"}
+#updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center/20px;animation: spin 3s ease 0s both}
+#sidebar #localtunnelsActive,#sidebar #localtunnelsActive td{text-align:center!important;background:none;padding:3px 0!important;line-height:16px;vertical-align:middle!important;text-align:center}
+#sidebar #localtunnelsActive span{display:inline-block;font-size:90%;font-weight:600;text-transform:lowercase;vertical-align:middle!important;margin:1px 4px;line-height:16px;width:auto;letter-spacing:2px}
+#sidebar #localtunnelsActive span.count_0{display:none}
+#sidebar #localtunnelsActive img {width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
+#sidebar #localtunnelSummary{margin:-7px auto -8px}
+.sb_icon,#sb_internals.collapsed,#sb_services.collapsed,#sb_advanced.collapsed{display:none!important}
+#sidebar table.collapsed + hr{display:block!important}
+#sidebar table[hidden] + hr{display:none!important}
+#sidebar #sb_internals.collapsed td,#sidebar #sb_advanced.collapsed td,#sidebar #sb_services.collapsed td{padding:1px;width:calc(100% + 10px)!important;max-width:unset!important;display:flex;vertical-align:middle;text-align:center!important}
+#sidebar #sb_internals.collapsed a:not(.sb_icon),#sidebar #sb_advanced.collapsed a:not(.sb_icon),#sidebar #sb_services.collapsed a:not(.sb_icon){display:none!important}
+#sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed,#sidebar #sb_services.collapsed{display:table!important}
+#sidebar #sb_internals:not(.collapsed) .sb_icon,#sidebar #sb_advanced:not(.collapsed) .sb_icon,#sidebar #sb_services:not(.collapsed) .sb_icon{display:none}
+#sidebar #sb_internals.collapsed .sb_icon,#sidebar #sb_advanced.collapsed .sb_icon,#sidebar #sb_services.collapsed .sb_icon{margin:1px 0;display:inline-block!important;vertical-align:middle;text-align:center;background:var(--badge);padding:5px;box-shadow:var(--bevel);flex:auto}
+#sidebar #sb_internals.collapsed .sb_icon:hover,#sidebar #sb_advanced.collapsed .sb_icon:hover,#sidebar #sb_services.collapsed .sb_icon:hover,#sidebar #sb_internals.collapsed .sb_icon:focus,#sidebar #sb_advanced.collapsed .sb_icon:focus,#sidebar #sb_services.collapsed .sb_icon:focus{box-shadow:var(--bevel_hover);background:var(--badge_hover)}
+#sidebar #sb_internals.collapsed .sb_icon img,#sidebar #sb_advanced.collapsed .sb_icon img,#sidebar #sb_services.collapsed .sb_icon img{margin:0;width:19px;height:19px;display:inline-block;vertical-align:middle!important;mix-blend-mode:luminosity}
+#sidebar #sb_internals.collapsed .sb_icon:hover img,#sidebar #sb_advanced.collapsed .sb_icon:hover img,#sidebar #sb_services.collapsed .sb_icon:hover img{transform:scale(1.1);mix-blend-mode:normal}
+#sidebar #sb_internals.collapsed .sb_icon:active,#sidebar #sb_advanced.collapsed .sb_icon:active,#sidebar #sb_services.collapsed .sb_icon:active{box-shadow:var(--bevel_hover),4px 4px 4px rgba(0,0,0,.7) inset;background:var(--badge_active)}
+#sidebar #sb_internals.collapsed .sb_icon:active img,#sidebar #sb_advanced.collapsed .sb_icon:active img,#sidebar #sb_services.collapsed .sb_icon:active img{transform:scale(.9) translateY(2px);mix-blend-mode:luminosity}
+#sidebar #sb_internals .sb_icon span,#sidebar #sb_advanced .sb_icon span,#sidebar #sb_services .sb_icon span{margin:0!important;display:inline-block}
+#sidebar table.collapsed + hr{display:block!important}
+#sidebar #sb_services.collapsed{margin:-9px -11px -13px -11px!important;width:calc(100% + 19px)!important}
 
 /* news */
 div[id^="config_"].main{padding-bottom:14px}
@@ -470,8 +503,8 @@ div[id^="config_"].main{padding-bottom:14px}
 #newsStatus,#news #newsDisplay,#news #newsDisplay a,#graphopts a,#routerinfo a{display:inline-block}
 #newsStatus,#news #newsDisplay a{font-size:8pt}
 #newsStatus{float:left;color:var(--ink)}
-.news h3,#newspage h3{padding-left:30px;text-align:left;font-size:9.5pt;letter-spacing:.08em;color:var(--ink);padding:6px 10px 6px 30px;background:var(--news) no-repeat left 9px center / 14px,var(--title)}
-.news h3{font-size:11pt;border:none;border-bottom:var(--border_inner);background:var(--news) no-repeat 8px center / 16px,var(--title)}
+.news h3,#newspage h3{padding-left:30px;text-align:left;font-size:9.5pt;letter-spacing:.08em;color:var(--ink);padding:6px 10px 6px 30px;background:var(--news) no-repeat left 9px center/14px,var(--title)}
+.news h3{font-size:11pt;border:none;border-bottom:var(--border_inner);background:var(--news) no-repeat 8px center/16px,var(--title)}
 #news .newsentry h3{border:var(--border_inner)}
 #news ul{margin:12px 25px 8px;text-align:left}
 #news li{margin:6px 0;padding-left:3px}
@@ -500,12 +533,12 @@ h3 + p,h3 + table{position:relative;z-index:20}
 #tunnels h3:first-child{margin-top:10px}
 #tunnels h3 a:not(.lsview),#logs a.delete,#logs a.configure{font-size:0}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs a.configure::after,#logs a.delete::after,#applinks a::after,#sitelinks a::after{padding:0;width:16px;height:16px;float:right;background:var(--settings) no-repeat center center;background-size:16px;content:""}
-#tunnels h3 a[href^="/configtunnels#"]:hover::after,#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,#tunnels h3 a[href^="/configtunnels#"]:focus::after,#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,#logs a.configure:hover::after,#logs a.configure:focus::after,#applinks a:hover::after,#applinks a:focus::after,#sitelinks a:hover::after,#sitelinks a:focus::after{background:var(--settings_hover) no-repeat center center /  16px}
-#tunnels h3 a[href^="/configtunnels#"]:active::after,#tunnels h3 a[href$="i2ptunnelmgr"]:active::after,#logs a.configure:active::after,#applinks a:active::after,#sitelinks a:active::after{background:var(--settings_active) no-repeat center center / 16px;transform:rotate(90deg);transition:linear transform .2s}
-#config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before,#version a::before{width:18px;height:14px;display:inline-block;vertical-align:middle;background:var(--eye) no-repeat left center / 14px;content:""}
-#config_logging h3 a:hover::before,#config_logging h3 a:focus::before,#version a:hover::before,#version a:focus::before{background:var(--eye_hover) no-repeat left center / 14px}
-#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-1px;width:15px;background:var(--settings) no-repeat left center / 12px}
-#webappconfiguration a:hover::before,#webappconfiguration a:focus::before,#i2pclientconfig a:hover::before,#i2pclientconfig a:focus::before,#pluginmanage a:hover::before,#pluginmanage a:focus::before{background:var(--settings_hover) no-repeat left center / 12px}
+#tunnels h3 a[href^="/configtunnels#"]:hover::after,#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,#tunnels h3 a[href^="/configtunnels#"]:focus::after,#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,#logs a.configure:hover::after,#logs a.configure:focus::after,#applinks a:hover::after,#applinks a:focus::after,#sitelinks a:hover::after,#sitelinks a:focus::after{background:var(--settings_hover) no-repeat center center/ 16px}
+#tunnels h3 a[href^="/configtunnels#"]:active::after,#tunnels h3 a[href$="i2ptunnelmgr"]:active::after,#logs a.configure:active::after,#applinks a:active::after,#sitelinks a:active::after{background:var(--settings_active) no-repeat center center/16px;transform:rotate(90deg);transition:linear transform .2s}
+#config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before,#version a::before{width:18px;height:14px;display:inline-block;vertical-align:middle;background:var(--eye) no-repeat left center/14px;content:""}
+#config_logging h3 a:hover::before,#config_logging h3 a:focus::before,#version a:hover::before,#version a:focus::before{background:var(--eye_hover) no-repeat left center/14px}
+#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-1px;width:15px;background:var(--settings) no-repeat left center/12px}
+#webappconfiguration a:hover::before,#webappconfiguration a:focus::before,#i2pclientconfig a:hover::before,#i2pclientconfig a:focus::before,#pluginmanage a:hover::before,#pluginmanage a:focus::before{background:var(--settings_hover) no-repeat left center/12px}
 #tunnels h3 + h3{margin-top:-1px}
 #tunnels h3 + h3 a{display:none}
 #tunnels .infohelp{margin-bottom:10px}
@@ -521,7 +554,7 @@ p#upnpconfig,p#ipchange,p#ipv6config,p#tcpconfig,p#confignotes,p#defaultswork{ma
 #externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#netconfig label::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#graphs .nowrap::before{min-height:40px}
 
 /* notifications */
-.messages{padding:20px 10px;margin:-4px 0 11px;font-weight:700;font-size:9.5pt;color:var(--ink);border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #808;background:#000 var(--infohelp) no-repeat 15px center / 28px}
+.messages{padding:20px 10px;margin:-4px 0 11px;font-weight:700;font-size:9.5pt;color:var(--ink);border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #808;background:#000 var(--infohelp) no-repeat 15px center/28px}
 .messages i{padding-left:45px;display:inline-block;float:none;text-align:left;line-height:2}
 .messages span.error{color:#d6fffd}
 .messages span.notice{font-style:italic}
@@ -583,22 +616,6 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 .tablefooter,.tablefooter:hover td{background:linear-gradient(180deg,#010014,#010010 50%,#010010 100%)}
 .formaction{margin-bottom:-5px;padding:7px 5px;text-align:right}
 
-/* peers - sort icons */
-#ntcpconnections th,#udpconnections th{background:#000010}
-#udpconnections th{padding-top:3px;vertical-align:top;text-align:center}
-.sortup,.sortdown,.sortupactive,.sortdownactive{margin:4px 1px 0;padding:1px 0;width:16px;height:12px;display:inline-block;vertical-align:middle;text-align:center;border:1px solid #117;border:var(--border_inner);border-radius:1px;background-size:10px auto,100%}
-.sortup,.sortdown{box-shadow:var(--highlight);opacity:.5}
-.sortup img,.sortdown img,.sortupactive img,.sortdownactive img{margin:0;padding:0;opacity:0;width:16px;height:14px;vertical-align:middle;text-align:center}
-.sortup{background:var(--mv_up) no-repeat center center / 16px 14px,linear-gradient(180deg,#004,#000)}
-.sortdown{background:var(--mv_down) no-repeat center center / 16px 14px,linear-gradient(180deg,#004,#000)}
-.sortup:hover{border:1px solid var(--hover);background:var(--mv_up_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
-.sortdown:hover{border:1px solid var(--hover);background:var(--mv_down_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
-.sortup a:focus,.sortdown a:focus{margin-top:-1px;height:14px;width:16px;display:inline-block;border-radius:1px;background:rgba(237,207,255,.2)}
-.sortupactive,.sortdownactive{border:1px solid #005;box-shadow:inset 2px 2px 1px #000;opacity:1}
-.sortupactive{background:var(--mv_up_hover) no-repeat center center,#005}
-.sortdownactive{background:var(--mv_down_hover) no-repeat center center,#005}
-.backlogged{line-height:0;vertical-align:middle}
-
 /* configure */
 .optionlist{columns:500px auto;padding-bottom:1px}
 .optionlist label{min-width:300px;background:#001;break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
@@ -611,7 +628,7 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 .optionlist,.optionsingle,#reseedssl,#updatehelper .optionlist:hover,#updateProxyHostPort .optionlist:hover{vertical-align:middle}
 .options input[type=checkbox],.suboption .optbox{margin:0 3px 0 0}
 #i2pupdates .optionsingle,#homesites.formaction,#homeapps.formaction,#oldhome tr:last-child,#bandwidthconfig .optionsave,#clientsconfig.formaction,#addkeyring tr:last-child td,#loggingoptions tr:last-child td,#webappconfigactions.formaction,#configstats .optionsave{box-shadow:var(--highlight),inset 0 0 0 2px transparent,inset 0 0 2px 1px #191939,inset 0 0 5px 3px #002;background:var(--panel)}
-p#keyringhelp,p#webappconfig,p#availableplugins,p#pluginconfigtext,p#clientdefaultshelp,p#bwshare,p#editclients,p#upnpstatus,p#gatherstats{padding:20px 25px 20px 55px;border:var(--border_inner);background:#000 var(--infohelp) no-repeat 15px center / 28px}
+p#keyringhelp,p#webappconfig,p#availableplugins,p#pluginconfigtext,p#clientdefaultshelp,p#bwshare,p#editclients,p#upnpstatus,p#gatherstats{padding:20px 25px 20px 55px;border:var(--border_inner);background:#000 var(--infohelp) no-repeat 15px center/28px}
 #config_reseed p.infohelp,#config_family p.infohelp,p#tunnelconfig{margin-top:0}
 p#keyringhelp,#ffconf,#bwlimiter,#i2pclientconfig,.confignav + h3,#advancedclientconfig,.confignav + .infowarn,#webappconfig,#config_logging h3,#iptransport,.confignav + form > h3,#pluginmanage,.confignav + .infohelp,#statsForm > h3.ptitle,.infowarn + .infohelp{margin-top:-4px}
 b.suboption{margin:0;padding:5px 12px 6px 10px;display:inline-block;text-shadow:0 1px 1px #000;border:var(--border_inner);border-bottom:none;box-shadow:var(--highlight);background:linear-gradient(90deg,rgba(0,0,16,.5),rgba(0,0,0,0) 30%),linear-gradient(180deg,#141221 50%,#001 50%)}
@@ -619,7 +636,7 @@ label:hover .optbox{box-shadow:none}
 th.options{padding:8px 5px 8px 10px;font-size:9pt}
 #clientconfig td,#webappconfig td{padding-top:10px;padding-bottom:10px}
 #config_network .optionlist:hover,#config_i2cp .optionlist:hover,#reseedssl:hover,#manualreseed .optionsingle:hover,.optiontextarea:hover,#reseed_urlselection:hover{border:var(--border_inner)}
-#plugininstall tr:nth-child(3) td:nth-last-child(2),#config_reseed #manualreseed tr:nth-child(3) td:nth-last-child(2){padding:15px 25px 15px 55px;background:var(--files) no-repeat 15px center / 28px,var(--panel)}
+#plugininstall tr:nth-child(3) td:nth-last-child(2),#config_reseed #manualreseed tr:nth-child(3) td:nth-last-child(2){padding:15px 25px 15px 55px;background:var(--files) no-repeat 15px center/28px,var(--panel)}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after,#bandwidthconfig .optionsingle::after,.optionlist label::before,#netconfig label::before,#externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#reseed_urlselection label::before,#reseedproxytype label::before,#graphs .nowrap::before{display:inline-block;vertical-align:middle;content:""}
 #pconfig{margin-top:-4px}
 #pluginconfig,#i2pupdates,.homelinkedit,#peerdefs{margin-top:-1px}
@@ -713,7 +730,7 @@ tr.addnew{border-top:var(--border_inner)}
 #exportfamily,#newfamily{margin-bottom:14px}
 #config_family .optionsingle td{border:none !important}
 #createNewFamily table,#createNewFamily tr,#createNewFamily td{border:none}
-#exportfamily tr:nth-child(2) td:first-child{padding:15px 25px 15px 55px;background:#000 var(--joinfamily) no-repeat 15px center / 28px}
+#exportfamily tr:nth-child(2) td:first-child{padding:15px 25px 15px 55px;background:#000 var(--joinfamily) no-repeat 15px center/28px}
 #leavefamily{margin-bottom:10px}
 #joinfamily .optionsingle{padding:5px 5px 0 45px;box-shadow:var(--highlight),inset 0 0 2px 1px #191939;background:var(--key) no-repeat 10px center,var(--panel);background-size:28px,100%,100%}
 #joinfamily tr:nth-child(n+3){background:#000}
@@ -721,9 +738,9 @@ tr.addnew{border-top:var(--border_inner)}
 #leavefamily tr:last-child td:first-child{padding:15px 25px 15px 55px;background:#000 var(--leavefamily) no-repeat 12px center;background-size:28px}
 #newfamily{margin:13px 0 -3px}
 #newfamily .optionsingle{padding:5px 5px 0 45px;box-shadow:var(--highlight),inset 0 0 2px 1px #191939;background:var(--tag) no-repeat 10px center,var(--panel);background-size:28px,100%,100%}
-#config_family .infohelp.joinfamily{padding:15px 25px 15px 55px;background:#000 var(--joinfamily) no-repeat 15px center / 28px}
-#config_family .infohelp.newfamily{padding:15px 25px 15px 55px;background:#000 var(--newfamily) no-repeat 15px center / 28px}
-#config_family .infohelp{padding:15px 25px 15px 55px;background:#000 var(--family) no-repeat 15px center / 28px}
+#config_family .infohelp.joinfamily{padding:15px 25px 15px 55px;background:#000 var(--joinfamily) no-repeat 15px center/28px}
+#config_family .infohelp.newfamily{padding:15px 25px 15px 55px;background:#000 var(--newfamily) no-repeat 15px center/28px}
+#config_family .infohelp{padding:15px 25px 15px 55px;background:#000 var(--family) no-repeat 15px center/28px}
 
 /* service */
 #config_service{padding-bottom:0}
@@ -736,14 +753,14 @@ tr.addnew{border-top:var(--border_inner)}
 #shutdownrouter,#restartrouter,#servicedebug,#browseronstart,#rononstartup,#systray{margin-top:11px}
 
 /* service info */
-#shutdownrouter + p,#restartrouter + p,#servicedebug + p,#browseronstart + p,#runonstartup + p,#systray + p{margin:5px 0 -20px;padding:10px 15px 10px 50px;text-align:left;border:var(--border_inner);border-bottom:none;background:#010008 var(--infohelp) no-repeat 15px center / 28px}
+#shutdownrouter + p,#restartrouter + p,#servicedebug + p,#browseronstart + p,#runonstartup + p,#systray + p{margin:5px 0 -20px;padding:10px 15px 10px 50px;text-align:left;border:var(--border_inner);border-bottom:none;background:#010008 var(--infohelp) no-repeat 15px center/28px}
 #servicedebug + p + p{margin-bottom:-21px;margin-top:20px;padding:10px;border:var(--border_inner);border-bottom:none;background:#010010}
 
 /* net */
 #iptransport{margin-bottom:11px}
 p#ipconfig,p#ipv4config,p#udpconfig,p#externaltcp{padding:10px;border:var(--border_inner);border-bottom:none;background:#010010}
 #defaultswork{margin-bottom:11px;padding:15px 25px 15px 55px}
-#confignotes{margin-bottom:-21px;padding:15px 25px 15px 55px;background:var(--infohelp) no-repeat 15px center / 28px}
+#confignotes{margin-bottom:-21px;padding:15px 25px 15px 55px;background:var(--infohelp) no-repeat 15px center/28px}
 #bandwidthconfig{margin-bottom:1px;padding:5px 10px}
 #bandwidthconfig td:not(.infohelp):first-child{width:200px;white-space:nowrap}
 #bandwidthconfig input,#bandwidthconfig select{margin-right:3px}
@@ -804,7 +821,7 @@ th.options,#externali2cp th{padding:7px 10px}
 #plugininstall input.cancel{display:none}
 #plugininstall input[type=text]{width:50%;min-width:400px}
 #installPluginFile,#installPluginUrl{box-shadow:var(--highlight),inset 0 0 2px 1px #191939;background:var(--panel)}
-#installPluginFile td:first-child{padding:10px 25px 10px 55px;border-right:none;background:var(--files) no-repeat 15px center / 28px}
+#installPluginFile td:first-child{padding:10px 25px 10px 55px;border-right:none;background:var(--files) no-repeat 15px center/28px}
 #installPluginFile td:last-child,#installPluginUrl td:last-child,#newfamily table td:last-child,#joinfamily table td:last-child{padding:10px 5px 10px 10px;width:1%;white-space:nowrap;text-align:right}
 #installPluginUrl input[type=text],#installPluginFile input[type="file"],#config_family input[type=text],#config_family input[type="file"]{width:calc(100% - 10px)}
 #installPluginUrl input[type=text],#installPluginFile input[type="file"]{width:100%}
@@ -816,7 +833,7 @@ th.options,#externali2cp th{padding:7px 10px}
 #webappconfig th:nth-child(2),#webappconfig th:nth-child(3){text-align:center}
 #webappconfig th:last-child{text-align:left;padding-left:5px}
 #webappconfig td:first-child::after{min-height:28px;display:inline-block;vertical-align:middle;content:""}
-#webappconfigtext{margin:12px 0 3px 0;background:#000 var(--editclient) no-repeat 15px center / 28px}
+#webappconfigtext{margin:12px 0 3px 0;background:#000 var(--editclient) no-repeat 15px center/28px}
 
 /* clients */
 #configclient{margin-top:-11px}
@@ -848,11 +865,11 @@ input[type="hidden"] + p + p{border:var(--border_inner);padding:10px;margin-top:
 #tunnelconfig td:nth-child(n+2){text-align:left}
 #tunnelconfigsave{margin-top:-32px}
 #tunnelconfig th{background:#000}
-#tunnelconfig th[colspan="3"] > font::before{display:inline-block;width:20px;height:16px;vertical-align:middle;background:var(--infowarn) no-repeat left center / 16px;opacity:.7;content:""}
-#tunnelconfig .inbound,#tunnelconfig .outbound{padding-left:34px;width:auto;height:auto;display:table-cell;background:var(--in) no-repeat 10px center / 14px,var(--th)}
-#tunnelconfig .outbound{background:var(--out) no-repeat 10px center / 14px,var(--th)}
+#tunnelconfig th[colspan="3"] > font::before{display:inline-block;width:20px;height:16px;vertical-align:middle;background:var(--infowarn) no-repeat left center/16px;opacity:.7;content:""}
+#tunnelconfig .inbound,#tunnelconfig .outbound{padding-left:34px;width:auto;height:auto;display:table-cell;background:var(--in) no-repeat 10px center/14px,var(--th)}
+#tunnelconfig .outbound{background:var(--out) no-repeat 10px center/14px,var(--th)}
 #tunnelconfig th{padding:10px 8px;background:var(--th)}
-#tunnelconfig th:not(.th_title)[colspan="4"]{padding:10px 10px 10px 34px;text-transform:none;letter-spacing:0;word-spacing:0;text-shadow:var(--textshadow);background:var(--infowarn) no-repeat 10px center / 20px,var(--th)}
+#tunnelconfig th:not(.th_title)[colspan="4"]{padding:10px 10px 10px 34px;text-transform:none;letter-spacing:0;word-spacing:0;text-shadow:var(--textshadow);background:var(--infowarn) no-repeat 10px center/20px,var(--th)}
 #tunnelconfig th:not([colspan="4"]):first-child,#tunnelconfig th:not([colspan="4"]):last-child{width:30%}
 #tunnelconfig th a{pointer-events:none}
 #tunnelconfig td:first-child{white-space:nowrap;text-align:right;font-weight:700}
@@ -898,8 +915,8 @@ form[action="/createreseed"] > h3{margin-bottom:-13px;padding:10px;word-spacing:
 #config_reseed form{margin:0;padding:0}
 #config_reseed #manualreseed .optionsingle table,#config_reseed #manualreseed .optionsingle tr,#config_reseed #manualreseed .optionsingle td{padding-left:40px;background:none;border:none;box-shadow:none}
 #config_reseed #manualreseed .optionsingle td:last-child{padding-right:12px;padding-left:0;width:1%;white-space:nowrap;text-align:right}
-#config_reseed #manualreseed tr:nth-child(5) td:nth-last-child(2),#plugininstall tr:nth-child(5) td:nth-last-child(2){padding:15px 25px 15px 55px;background:#000 var(--files) no-repeat 15px center / 28px}
-#config_reseed #manualreseed tr:nth-last-child(2) td.infohelp{padding:15px 25px 15px 55px;background:#000 var(--package) no-repeat 15px center / 28px}
+#config_reseed #manualreseed tr:nth-child(5) td:nth-last-child(2),#plugininstall tr:nth-child(5) td:nth-last-child(2){padding:15px 25px 15px 55px;background:#000 var(--files) no-repeat 15px center/28px}
+#config_reseed #manualreseed tr:nth-last-child(2) td.infohelp{padding:15px 25px 15px 55px;background:#000 var(--package) no-repeat 15px center/28px}
 #config_reseed .optionsave input[type=submit]{display:inline-block}
 #config_reseed .optionsingle{margin:0}
 #config_reseed .optionsingle.optiontextarea,#reseedssl,#config_reseed td.optionsave,#manualreseed #reseedurl,#manualreseed#reseedcreatefile,#manualreseed #reseedzip{box-shadow:var(--highlight),inset 0 0 2px 1px #191939}
@@ -910,9 +927,9 @@ form[action="/createreseed"] > h3{margin-bottom:-13px;padding:10px;word-spacing:
 #config_reseed .suboption label:last-child,#externali2cp .suboption label{margin-right:0}
 #config_reseed .suboption .optbox,.suboption .optbox[name="sauth"],#externali2cp .suboption .optbox{margin:-3px 3px 3px;margin-bottom:0}
 #config_reseed td.optionsave,#netconfig td.optionsave{padding:12px 8px;border:var(--border_inner)}
-#config_reseed #reseedcreatefile{background:var(--createzip) no-repeat 15px center / 28px,var(--panel);text-align:justify}
-#config_reseed #reseedurl{background:var(--link) no-repeat 15px center / 28px,var(--panel)}
-#config_reseed #reseedzip{background:var(--files) no-repeat 15px center / 28px,var(--panel)}
+#config_reseed #reseedcreatefile{background:var(--createzip) no-repeat 15px center/28px,var(--panel);text-align:justify}
+#config_reseed #reseedurl{background:var(--link) no-repeat 15px center/28px,var(--panel)}
+#config_reseed #reseedzip{background:var(--files) no-repeat 15px center/28px,var(--panel)}
 #manualreseed{margin:-1px 0 -4px;background:none}
 #manualreseed .optionlist input[type=text],#manualreseed .optionlist input[type="file"]{min-width:0;max-width:50%;width:50%}
 #manualreseed .optionsingle{padding:5px}
@@ -955,7 +972,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 
 /* sidebar */
 #config_summarybar h3.tabletitle:first-of-type{margin-top:-4px}
-#config_summarybar #refreshsidebar td:not(.optionsave){padding-left:50px;border:none;background:var(--timer) no-repeat 15px center / 28px}
+#config_summarybar #refreshsidebar td:not(.optionsave){padding-left:50px;border:none;background:var(--timer) no-repeat 15px center/28px}
 #refreshsidebar{margin-bottom:12px}
 #refreshsidebar .optionsave{padding:12px 8px 12px 0;background:none}
 #sidebarconf{margin-top:-1px}
@@ -1006,7 +1023,7 @@ tr:nth-child(4) .net_bwrate::before{width:22px;background:var(--share) left top 
 .net_datausage{margin:3px -7px -4px;padding:4px 5px;display:inline-block;width:100%;min-width:320px;white-space:nowrap;text-align:center;font-style:italic;border-top:var(--border_inner);background:#001}
 #config_bandwidth tr:nth-last-child(2) .infohelp b{margin-right:-1px;font-size:120%}
 #bandwidthconfig td:not(.infohelp){background:#000}
-#config_bandwidth .h3navlinks a{margin:-3px 0 0 -20px;width:24px;height:24px;display:inline-block;color:transparent;font-size:0;background:url(/themes/console/images/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px;text-shadow:none;border:none;contain:paint}
+#config_bandwidth .h3navlinks a{margin:-3px 0 0 -20px;width:24px;height:24px;display:inline-block;color:transparent;font-size:0;background:url(/themes/console/images/networkconfig.svg) no-repeat calc(100% - 8px) center/22px;text-shadow:none;border:none;contain:paint}
 #config_bandwidth .h3navlinks::before{margin-top:-8px;content:"";display:inline-block;border-left:var(--border_inner);width:1px;height:52px;vertical-align:middle}
 #config_bandwidth .h3navlinks a:hover{filter:drop-shadow(0 0 1px var(--a_hover)) drop-shadow(0 0 2px var(--a_hover))}
 #config_bandwidth .h3navlinks a:active{filter:none;transform:scale(.9)}
@@ -1035,7 +1052,7 @@ tr:nth-child(4) .net_bwrate::before{width:22px;background:var(--share) left top 
 #enablefull td{padding:4px 3px 4px 6px}
 #enablefull input[type=submit]{float:right}
 #enablefull label{margin-top:4px;display:inline-block}
-#enablefullstats{background:#000 var(--stats) no-repeat 15px center / 28px}
+#enablefullstats{background:#000 var(--stats) no-repeat 15px center/28px}
 #enablefullstats{margin-top:5px;padding:5px 10px;border:var(--border_inner)}
 #enablefullstats .optbox{vertical-align:middle}
 .stattograph{margin:3px 1px;padding:6px 8px 6px 14px;width:220px;position:relative;display:inline-block;font-size:90%;text-align:left;color:#252;border:var(--border);border-left-width:3px;border-radius:1px;box-sizing:border-box;background:#000}
@@ -1058,11 +1075,11 @@ tr:nth-child(4) .net_bwrate::before{width:22px;background:var(--share) left top 
 .configtable input,.configtable textarea,.configtable select{margin-left:5px}
 .configtable{margin-top:-1px;margin-bottom:-2px}
 .configtable + .tabletitle{margin-top:12px}
-.configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p.sybilinfo,p.infowarn,td.infowarn{padding:20px 25px 20px 55px;white-space:normal;text-align:justify;font-weight:400;border-top:var(--border_inner);border-bottom:var(--border_inner);background:#001 var(--infohelp) no-repeat 15px center / 28px}
+.configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p.sybilinfo,p.infowarn,td.infowarn{padding:20px 25px 20px 55px;white-space:normal;text-align:justify;font-weight:400;border-top:var(--border_inner);border-bottom:var(--border_inner);background:#001 var(--infohelp) no-repeat 15px center/28px}
 .configtable td{padding:6px 10px;line-height:1.8}
 .configtable td.tabletextarea{padding:0}
 .configtable tr:last-child{border-top:var(--border_inner)}
-#config_ui p.infohelp{margin-bottom:8px;background:#000 var(--ui) no-repeat 15px center / 28px}
+#config_ui p.infohelp{margin-bottom:8px;background:#000 var(--ui) no-repeat 15px center/28px}
 #criticallogs + h3.tabletitle a:first-child{padding-left:10px}
 #criticallogs + h3.tabletitle a:last-child{padding-left:20px;padding-right:20px}
 #externali2cp th{text-align:left}
@@ -1171,7 +1188,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"]{padding:10px;word-spacing
 .subheading b{font-size:10pt}
 #netdblookup .optbox{margin:10px}
 #netdblookup .optionsave{padding:10px}
-#netdblookup tr:nth-last-child(n+3) input[type=text]{width:calc(100% - 30px)}
+#netdblookup select,#netdblookup tr:nth-last-child(n+3) input[type=text]{width:calc(100% - 30px)}
 #netdb .tabletitle{margin-bottom:-2px}
 .sybil_distance th{padding:5px;text-align:left}
 .sybil_distance th:last-child,.sybil_distance td:last-child{text-align:right}
@@ -1204,11 +1221,13 @@ a[name="criticallogs"] + p + h3 + p + ul{margin-bottom:15px;border:var(--border_
 .logtable ul li{margin-left:15px;list-style:none}
 .nologs i{padding:8px;display:inline-block}
 #bugreports{margin-top:10px}
-#bugreports td{padding:15px 25px 15px 55px;background:var(--bug) no-repeat 15px center / 28px}
+#bugreports td{padding:15px 25px 15px 55px;background:var(--bug) no-repeat 15px center/28px}
 #logs a.delete:active::after{background:var(--close_active) no-repeat center center;transform:scale(.85)}
-#logs a.delete::after{margin:0 8px;background:var(--close) no-repeat center center / 14px}
-#logs a.delete:hover::after,#logs a.delete:focus::after{background:var(--close_hover) no-repeat center center / 14px}
-#logs .embedlink{margin:2px 0;font-size:85%}
+#logs a.delete::after{margin:0 8px;background:var(--close) no-repeat center center/14px}
+#logs a.delete:hover::after,#logs a.delete:focus::after{background:var(--close_hover) no-repeat center center/14px}
+#logs #eventlogLink{display:inline-block;float:right;line-height:0;font-size:0;border-bottom:none;background:none}
+#logs #eventlogLink::after{margin:0 12px 0 8px;width:16px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/logs.svg) no-repeat center center/14px;content:"";filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)}
+#logs #eventlogLink:hover::after{transform:scale(1.2)}
 #logs #enviro:hover #cputype{background:none}
 #logs #enviro:hover td{color:#dd0;border-top:1px inset transparent;border-bottom:1px inset transparent;background:#001}
 #logs #enviro:hover{user-select:all;cursor:text}
@@ -1228,7 +1247,7 @@ a[name="criticallogs"] + p + h3 + p + ul{margin-bottom:15px;border:var(--border_
 #routerlogs td p,#wrapperlogs td p{margin:0;padding:2px 10px}
 #routerlogs tr:first-child td,#wrapperlogs tr:first-child td{border-bottom:var(--border_inner)}
 #routerlogs tr:last-child,#routerlogs tr:nth-child(n+2) td,#wrapperlogs tr:last-child{background:none;padding:0}
-
+#logs table::before{width:0;height:2px;position:absolute;top:1px;left:0;z-index:999;display:block;background:linear-gradient(90deg,#404,#717);content:"";animation:bar .1s steps(2) reverse,fade .05s ease .1s reverse;backface-visibility:hidden;will-change:transform}
 table[id$="logs"] tr:nth-child(even){background:#000}
 table[id$="logs"] tr:nth-child(odd){background:#010011}
 table[id$="logs"] ul{margin:1px 17px -6px -12px}
@@ -1343,8 +1362,8 @@ h3[id="udpcon"]{width:auto}
 /* home */
 #home .welcome h2{margin-top:12px}
 #homepanel{margin:0 -8px}
-#applinks,#sitelinks{margin:11px -8px -9px -8px;padding:7px 8px 7px 34px;font-size:10.5pt;text-align:left;text-transform:uppercase;letter-spacing:.08em;word-spacing:.1em;letter-spacing:2px;border:var(--border);background:url(images/favicon.svg) no-repeat 10px center / 16px,var(--title);background-blend-mode:luminosity}
-#sitelinks{margin-bottom:-13px;position:relative;top:-4px;clear:left;background:var(--globe) no-repeat 10px center / 16px,var(--title)}
+#applinks,#sitelinks{margin:11px -8px -9px -8px;padding:7px 8px 7px 34px;font-size:10.5pt;text-align:left;text-transform:uppercase;letter-spacing:.08em;word-spacing:.1em;letter-spacing:2px;border:var(--border);background:url(images/favicon.svg) no-repeat 10px center/16px,var(--title);background-blend-mode:luminosity}
+#sitelinks{margin-bottom:-13px;position:relative;top:-4px;clear:left;background:var(--globe) no-repeat 10px center/16px,var(--title)}
 #applinks a,#sitelinks a{width:auto;display:inline;font-size:0}
 #applinks img,#sitelinks img{margin-top:1px;opacity:.5}
 #applinks a img,#sitelinks a img{display:none}
@@ -1401,7 +1420,7 @@ h3[id="udpcon"]{width:auto}
 #searchbar input.search{margin:4px 4px 3px 167px;padding-left:10px;padding-right:44px;min-width:240px;border:var(--border);border-left:none}
 #searchbar input.search:not(:hover)::placeholder{opacity:0}
 #searchbar input.search:focus{padding-right:43px;border:var(--border);filter:none}
-#searchbar button{padding:0 3px 0 0;position:absolute;right:5px;top:5px;font-size:0;height:29px;width:36px;min-width:0;border:none;border-left:var(--border);background:var(--search) no-repeat center center / 14px,var(--btn);background-position:center center;background-blend-mode:luminosity}
+#searchbar button{padding:0 3px 0 0;position:absolute;right:5px;top:5px;font-size:0;height:29px;width:36px;min-width:0;border:none;border-left:var(--border);background:var(--search) no-repeat center center/14px,var(--btn);background-position:center center;background-blend-mode:luminosity}
 #searchbar button:hover,#searchbar button:focus{background-blend-mode:normal}
 #searchbar button:active{box-shadow:var(--highlight),inset 3px 3px 2px #1e0b28;background-size:12px,100%;background-blend-mode:luminosity}
 #searchbar button:active{box-shadow:var(--btn_shadow_active)}
@@ -1425,12 +1444,12 @@ a:hover .sitemapLink{color:var(--hover)}
 .sitemapLink:active img{transform:scale(0.9)}
 #sitemapcontainer{padding:3px 0}
 #sitemapcontainer:last-child{padding:4px 0 2px}
-#sitemapcontainer h3{margin:10px -7px 8px;padding:8px 8px 8px 30px;letter-spacing:.12em;font-size:10.5pt;border:var(--border);background:url(images/favicon.svg) no-repeat 8px center / 16px,var(--title)}
+#sitemapcontainer h3{margin:10px -7px 8px;padding:8px 8px 8px 30px;letter-spacing:.12em;font-size:10.5pt;border:var(--border);background:url(images/favicon.svg) no-repeat 8px center/16px,var(--title)}
 #sitemapcontainer h3:nth-child(n+2){margin-top:1px}
-#sitemapcontainer h3:nth-of-type(2){background:var(--infobox) no-repeat 8px center / 16px,var(--title)}
-#sitemapcontainer h3:nth-of-type(3){background:var(--configure) no-repeat 8px center / 16px,var(--title)}
-#sitemapcontainer h3:nth-of-type(4){background:var(--help) no-repeat 8px center / 16px,var(--title)}
-#sitemapcontainer h3:nth-of-type(5){background:var(--globe) no-repeat 8px center / 16px,var(--title)}
+#sitemapcontainer h3:nth-of-type(2){background:var(--infobox) no-repeat 8px center/16px,var(--title)}
+#sitemapcontainer h3:nth-of-type(3){background:var(--configure) no-repeat 8px center/16px,var(--title)}
+#sitemapcontainer h3:nth-of-type(4){background:var(--help) no-repeat 8px center/16px,var(--title)}
+#sitemapcontainer h3:nth-of-type(5){background:var(--globe) no-repeat 8px center/16px,var(--title)}
 
 /* netdb */
 .netdbentry,.leaseset{width:100%;margin-bottom:10px}
@@ -1463,36 +1482,36 @@ span#distance{color:#d6fffd}
 .addtobook a{font-size:0}
 .addtobook a::after{width:16px;height:16px;display:inline-block;vertical-align:middle;background:url(/themes/susidns/midnight/images/helper.svg);background-size:16px;content:""}
 .viewfullentry,.viewprofile,.configpeer{font-size:0}
-#noleasesets,#notinitialized,.netdbnotfound{margin-top:-4px;margin-bottom:10px;padding:20px 25px 20px 55px;text-align:left;font-weight:700;border:var(--border_inner);background:#000 var(--infohelp) no-repeat 15px center / 28px}
+#noleasesets,#notinitialized,.netdbnotfound{margin-top:-4px;margin-bottom:10px;padding:20px 25px 20px 55px;text-align:left;font-weight:700;border:var(--border_inner);background:#000 var(--infohelp) no-repeat 15px center/28px}
 
 /* infohelp/warn */
-#addkeyring td.infohelp{padding:20px 25px 20px 55px;background:#001 var(--keys) no-repeat 15px center / 28px}
-#bandwidthconfig tr:first-child .infohelp{padding:15px 25px 15px 55px;background:#001 var(--speed) no-repeat 15px center / 28px}
-#config_peers tr:nth-child(3) td.infohelp{padding:15px 25px 15px 55px;background:#000 var(--ban) no-repeat 15px center / 28px}
-#config_reseed p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--reseed) no-repeat 15px center / 28px}
-#consolepass tr:first-child td{padding:20px 25px 20px 55px;background:#000 var(--useradd) no-repeat 15px center / 28px}
-#events form[action="events"]{padding:10px 10px 10px 55px;background:#001 var(--logs) no-repeat 15px center / 28px}
-#floodfillconfig tr:first-child .infohelp{padding:15px 25px 15px 55px;background:#000 var(--floodfill) no-repeat 15px center / 28px}
+#addkeyring td.infohelp{padding:20px 25px 20px 55px;background:#001 var(--keys) no-repeat 15px center/28px}
+#bandwidthconfig tr:first-child .infohelp{padding:15px 25px 15px 55px;background:#001 var(--speed) no-repeat 15px center/28px}
+#config_peers tr:nth-child(3) td.infohelp{padding:15px 25px 15px 55px;background:#000 var(--ban) no-repeat 15px center/28px}
+#config_reseed p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--reseed) no-repeat 15px center/28px}
+#consolepass tr:first-child td{padding:20px 25px 20px 55px;background:#000 var(--useradd) no-repeat 15px center/28px}
+#events form[action="events"]{padding:10px 10px 10px 55px;background:#001 var(--logs) no-repeat 15px center/28px}
+#floodfillconfig tr:first-child .infohelp{padding:15px 25px 15px 55px;background:#000 var(--floodfill) no-repeat 15px center/28px}
 #floodfillconfig tr:nth-child(2) b{margin-right:8px}
 #floodfillconfig tr:nth-child(2) td{padding:15px 10px 15px 18px}
-#browseronstart + p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--firefox) no-repeat 15px center / 28px}
-#restartrouter + p.infohelp,#config_family .infohelp.needrestart{padding:15px 25px 15px 55px;background:#000 var(--reboot) no-repeat 15px center / 28px}
-#servicedebug + p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--bug) no-repeat 15px center / 28px}
-#shutdownrouter + p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--power) no-repeat 15px center / 28px}
-#systray + p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--systray) no-repeat 15px center / 28px}
+#browseronstart + p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--firefox) no-repeat 15px center/28px}
+#restartrouter + p.infohelp,#config_family .infohelp.needrestart{padding:15px 25px 15px 55px;background:#000 var(--reboot) no-repeat 15px center/28px}
+#servicedebug + p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--bug) no-repeat 15px center/28px}
+#shutdownrouter + p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--power) no-repeat 15px center/28px}
+#systray + p.infohelp{padding:15px 25px 15px 55px;background:#000 var(--systray) no-repeat 15px center/28px}
 .infohelp,#helptranslate,#consolepass tr:first-child td,#gatherstats{white-space:normal;line-height:1.4;box-shadow:var(--highlight),inset 0 0 2px 1px #606}
 .infowarn{box-shadow:var(--highlight),inset 0 0 2px 1px rgba(255,0,0,.6)}
-#clientconf.infohelp,#webappconfig.infohelp{padding:15px 25px 15px 55px;background:#000 var(--editclient) no-repeat 15px center / 28px}
-#debugmode{padding:15px 25px 15px 55px;background:#001 var(--bug) no-repeat 15px center / 28px}
-#enablefullstats,#gatherstats{padding:15px 25px 15px 55px;background:#000 var(--stats) no-repeat 15px center / 28px}
-#plugininstall .infohelp{padding:15px 25px 15px 55px;background:#000 var(--plugin) no-repeat 15px center / 28px}
-p#pluginconfigtext{padding:15px 25px 15px 55px;vertical-align:middle;background:#000 var(--pluginconfig) no-repeat 15px center / 28px}
-#bugreports td.infohelp{padding:15px 25px 15px 55px;background:#001 var(--bug) no-repeat 15px center / 28px}
+#clientconf.infohelp,#webappconfig.infohelp{padding:15px 25px 15px 55px;background:#000 var(--editclient) no-repeat 15px center/28px}
+#debugmode{padding:15px 25px 15px 55px;background:#001 var(--bug) no-repeat 15px center/28px}
+#enablefullstats,#gatherstats{padding:15px 25px 15px 55px;background:#000 var(--stats) no-repeat 15px center/28px}
+#plugininstall .infohelp{padding:15px 25px 15px 55px;background:#000 var(--plugin) no-repeat 15px center/28px}
+p#pluginconfigtext{padding:15px 25px 15px 55px;vertical-align:middle;background:#000 var(--pluginconfig) no-repeat 15px center/28px}
+#bugreports td.infohelp{padding:15px 25px 15px 55px;background:#001 var(--bug) no-repeat 15px center/28px}
 #events form[action="events"] > *{vertical-align:middle}
 
 /* tunnels */
 a[href^="https://gwhois"]:hover::after,a[href^="https://gwhois"]:focus::after{opacity:1;mix-blend-mode:normal;transform:scale(1.2);overflow:auto}
-a[href^="https://gwhois"]::after{margin:0 1px 0;width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat left center / 11px;opacity:.7;content:"";mix-blend-mode:luminosity}
+a[href^="https://gwhois"]::after{margin:0 1px 0;width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat left center/11px;opacity:.7;content:"";mix-blend-mode:luminosity}
 .b32{margin:-2px 8px 0 0;text-transform:none;font-size:80%;color:#990;float:right;vertical-align:middle}
 .b32{margin:-3px 6px 0 0;padding:4px 8px;min-width:0;line-height:1}
 h3 .b32{font-size:inherit}
@@ -1503,7 +1522,7 @@ img + tt{letter-spacing:.15em}
 .tunnel_cap{padding:2px 3px;color:var(--ink)}
 .tunnel_cap:empty{border:none}
 .tunnel_cap:empty::after{content:"?"}
-.tunnel_id{margin-left:6px;padding-left:13px;min-width:78px;display:inline-block;text-align:center;background:var(--hardhat) no-repeat left center / 12px}
+.tunnel_id{margin-left:6px;padding-left:13px;min-width:78px;display:inline-block;text-align:center;background:var(--hardhat) no-repeat left center/12px}
 .tunnel_local,span.b32,.routerid{margin-right:2px;padding:2px;min-width:64px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
 span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 .tunnel_local{padding:2px;font-size:80%;text-transform:lowercase}
@@ -1515,14 +1534,14 @@ span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 #tunnel_defs td:nth-child(even){width:1%;white-space:nowrap}
 #tunnel_defs td:nth-last-child(2){border-right:none !important}
 #tunnel_defs .tunnel_cap{margin:2px 8px}
-#tunnels h3.client{padding-left:34px;background:var(--client) no-repeat 8px center / 19px,var(--title)}
+#tunnels h3.client{padding-left:34px;background:var(--client) no-repeat 8px center/19px,var(--title)}
 #tunnels h3{padding-top:8px;padding-bottom:8px}
-#tunnels h3:last-of-type{padding-left:34px;background:var(--speed) no-repeat 8px center / 19px,var(--title)}
+#tunnels h3:last-of-type{padding-left:34px;background:var(--speed) no-repeat 8px center/19px,var(--title)}
 #tunnels h3 img{margin:0 4px 0 0}
-#tunnels h3.ping{padding-left:34px;background:var(--ping) no-repeat 8px center / 19px,var(--title)}
-#tunnels h3.server{padding-left:34px;background:var(--server) no-repeat 8px center / 19px,var(--title)}
-#tunnels #exploratory{padding-left:34px;background:var(--globe) no-repeat 8px center / 19px,var(--title)}
-#tunnels #participating{padding-left:34px;background:var(--share) no-repeat 8px center / 19px,var(--title)}
+#tunnels h3.ping{padding-left:34px;background:var(--ping) no-repeat 8px center/19px,var(--title)}
+#tunnels h3.server{padding-left:34px;background:var(--server) no-repeat 8px center/19px,var(--title)}
+#tunnels #exploratory{padding-left:34px;background:var(--globe) no-repeat 8px center/19px,var(--title)}
+#tunnels #participating{padding-left:34px;background:var(--share) no-repeat 8px center/19px,var(--title)}
 #tunnels th{padding:7px 2px 8px;font-size:90%}
 #tunnels td{padding:5px 2px}
 #tunnels .tunneldisplay .cells:nth-child(3){white-space:nowrap}
@@ -1547,6 +1566,9 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peers .routerid,#profiles .routerid{padding:3px 2px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:2px;background:var(--element)}
 #peers .routerid img,#profiles .routerid img{margin-right:0}
 #peers .cells{box-shadow:none}
+#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle}
+#peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
+#peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}
 #peers img[src$="bound.svg"],#profiles img[src$="bound.svg"],#tunnels img[src$="bound.svg"]{opacity:0}
 #peers .infohelp{margin:14px 0 1px}
 #peers .routerid{margin:0;padding-right:4px}
@@ -1565,9 +1587,34 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peerdefs{line-height:1.5}
 #peerdefs td{padding:3px}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
+#transportSummary td{text-align:center}
+#peers .tablefooter td{font-weight:700;background:var(--th)}
+#transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center/12px}
+#transportSummary th.out span{background:var(--out) no-repeat center center/12px}
+#transports .script,#ntcpcon .script,#udpcon .script{margin:-4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
+#transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
+#transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
+#peers #autorefresh{margin-right:4px}
+#peers .tab,#peers .tab2{min-width:96px}
+
+/* peers - sort icons */
+#ntcpconnections th,#udpconnections th{background:#000010}
+#udpconnections th{padding-top:3px;vertical-align:top;text-align:center}
+.sortup,.sortdown,.sortupactive,.sortdownactive{margin:4px 1px 0;padding:1px 0;width:16px;height:12px;display:inline-block;vertical-align:middle;text-align:center;border:1px solid #117;border:var(--border_inner);border-radius:1px;background-size:10px auto,100%}
+.sortup,.sortdown{box-shadow:var(--highlight);opacity:.5}
+.sortup img,.sortdown img,.sortupactive img,.sortdownactive img{margin:0;padding:0;opacity:0;width:16px;height:14px;vertical-align:middle;text-align:center}
+.sortup{background:var(--mv_up) no-repeat center center/16px 14px,linear-gradient(180deg,#004,#000)}
+.sortdown{background:var(--mv_down) no-repeat center center/16px 14px,linear-gradient(180deg,#004,#000)}
+.sortup:hover{border:1px solid var(--hover);background:var(--mv_up_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
+.sortdown:hover{border:1px solid var(--hover);background:var(--mv_down_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
+.sortup a:focus,.sortdown a:focus{margin-top:-1px;height:14px;width:16px;display:inline-block;border-radius:1px;background:rgba(237,207,255,.2)}
+.sortupactive,.sortdownactive{border:1px solid #005;box-shadow:inset 2px 2px 1px #000;opacity:1}
+.sortupactive{background:var(--mv_up_hover) no-repeat center center,#005}
+.sortdownactive{background:var(--mv_down_hover) no-repeat center center,#005}
+.backlogged{line-height:0;vertical-align:middle}
 
 /* banlist */
-#bannedpeercount{background:#000 var(--ban) no-repeat 15px center / 28px}
+#bannedpeercount{background:#000 var(--ban) no-repeat 15px center/28px}
 #banlist{margin:-1px 0 13px;padding:4px;background:#000;columns:328px auto;column-gap:0}
 #banlist tt{margin-left:8px;display:inline-block;line-height:1;font-size:90%;color:#393}
 #banlist tt a{margin-left:-4px;padding-left:0}
@@ -1625,7 +1672,7 @@ b.netdb_transport{display:inline-block;margin-right:5px}
 .signingkey.encryption{padding-left:18px;background:var(--lock) 4px calc(50% - 1px) no-repeat,var(--element);background-size:12px,100%}
 .signingkey{margin:2px 0;padding:2px 4px 2px 16px;display:inline-block;font-size:90%;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--crypto) no-repeat 3px center,var(--element);background-size:12px,100%}
 .netdbentry tr:nth-child(2) td:last-child b,.netdbentry .familyname,.netdbStats li,.netdbStats b,#netdb .netdbentry th b,#netdb .netdbentry td:first-child b,#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code,.netdb_addressesli,.netdb_ouraddresses,.netdb_ouraddresses .netdb_transport{display:inline-block}
-.familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center / 11px}
+.familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
 #netdb .longstat{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #netdb .ls_crypto span.nowrap{max-width:400px}
 #netdb .netdbentry th{padding-top:6px;padding-bottom:6px}
@@ -1696,8 +1743,8 @@ p.sybil_info + a[name] + .sybil_routerinfo,p.hashdist + a[name] + .sybil_routeri
 .threatpoints + ul li:last-child{margin-bottom:-5px}
 .sybil_routerinfo + .threatpoints + ul + a[name] + table{margin-top:-11px}
 .sybil_routerinfo + .threatpoints + ul{margin-bottom:10px}
-p.sybilinfo.experimental{background:#001 var(--experimental) no-repeat 15px center / 28px}
-p.sybilinfo{margin-bottom:10px;padding:15px 25px 15px 55px;background:#001 var(--sybil) no-repeat 15px center / 28px}
+p.sybilinfo.experimental{background:#001 var(--experimental) no-repeat 15px center/28px}
+p.sybilinfo{margin-bottom:10px;padding:15px 25px 15px 55px;background:#001 var(--sybil) no-repeat 15px center/28px}
 p#debugmode,p.sybilinfo{margin-top:-4px}
 #sybilnav + .sybilinfo,#sybilnav + form > .sybilinfo{margin-top:0}
 h3.sybils + div,h3.sybils + a[name] + table{margin-top:-1px}
@@ -1756,7 +1803,7 @@ h3.sybils + div,h3.sybils + a[name] + table{margin-top:-1px}
 #sybilnav ul li:hover::before{mix-blend-mode:normal}
 #sybilnav ul li:active::before{mix-blend-mode:luminosity}
 #sybilnav ul li#reviewStored::before{background:var(--eye) no-repeat center center;background-size:16px}
-#sybilnav ul li#runNew::before{background:var(--start) no-repeat center center / 12px}
+#sybilnav ul li#runNew::before{background:var(--start) no-repeat center center/12px}
 #sybilnav ul li#configurePeriodic::before{background:var(--settings) no-repeat center center;background-size:16px}
 #sybilnav ul li#floodfillSummary::before{background:var(--floodfill) no-repeat center center;background-size:16px}
 #sybilnav ul li#sameFamily::before{background:var(--family) no-repeat center center;background-size:16px}
@@ -1771,7 +1818,7 @@ h3.sybils + div,h3.sybils + a[name] + table{margin-top:-1px}
 #stats form > *{vertical-align:middle}
 #tunnelconfig th img{font-size:0}
 #tunnelconfig th{text-align:left}
-#url td:first-child{padding:15px 25px 15px 55px;border-right:none;background:var(--link) no-repeat 15px center / 28px}
+#url td:first-child{padding:15px 25px 15px 55px;border-right:none;background:var(--link) no-repeat 15px center/28px}
 
 /* profiles */
 
@@ -1850,7 +1897,7 @@ html,body{height:100%}
 #routerinformation h3{padding-top:10px;line-height:1.3}
 #routerinformation h3:first-of-type{margin-bottom:10px}
 #routerinformation .h3navlinks a{line-height:1.7}
-#routerinformation #version::before,#routerinformation #enviro + h3::before,#routerinformation #transports::before{margin:-2px 9px 0 2px;width:17px;height:17px;display:inline-block;vertical-align:middle;background:url(images/favicon.svg) no-repeat center center / 17px;content:"";filter:saturate(.5)}
+#routerinformation #version::before,#routerinformation #enviro + h3::before,#routerinformation #transports::before{margin:-2px 9px 0 2px;width:17px;height:17px;display:inline-block;vertical-align:middle;background:url(images/favicon.svg) no-repeat center center/17px;content:"";filter:saturate(.5)}
 #routerinformation #enviro + h3::before{background-image:url(/themes/console/images/server.svg)}
 #routerinformation #transports::before{background-image:url(/themes/console/images/globe.svg)}
 #routerinfo p{padding:0;margin:11px 0 10px;border:none;filter:none}
@@ -1869,7 +1916,7 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 /* jardump */
 #jardump{padding:0;overflow:auto}
 #jardump{margin-top:-1px;margin-bottom:0;font-size:8pt;border:none}
-#revision,#jardump a tt{padding-left:12px;background:var(--gitlab) no-repeat left center / 10px}
+#revision,#jardump a tt{padding-left:12px;background:var(--gitlab) no-repeat left center/10px}
 #jardump tt{letter-spacing:-.03em;font-size:9pt;font-weight:400}
 #jardump a tt{padding-left:13px;background-size:11px}
 #jardump td:nth-child(4) tt{font-size:8pt}
@@ -1880,8 +1927,8 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 #jardump th:first-child,#jardump td:first-child{text-align:left}
 #jardump .subheading{padding:8px 5px;border-color:#26235c;border-bottom-width:2px;border-top-width:2px;box-shadow:var(--bevel)}
 #jardump .subheading code{font-weight:700}
-.subheading.routerfiles{background:url(images/favicon.svg) no-repeat right 5px center / 16px,var(--th);background-blend-mode:luminosity}
-.subheading.pluginfiles{background:var(--plugin) no-repeat right 5px center / 16px,var(--th);background-blend-mode:luminosity}
+.subheading.routerfiles{background:url(images/favicon.svg) no-repeat right 5px center/16px,var(--th);background-blend-mode:luminosity}
+.subheading.pluginfiles{background:var(--plugin) no-repeat right 5px center/16px,var(--th);background-blend-mode:luminosity}
 #jardump td{border-right:1px inset #120f35}
 #jardump td:nth-child(2){text-align:right;font-style:italic}
 #jardump td:last-child{word-break:break-all;text-align:left;border-right:none}
@@ -2113,7 +2160,7 @@ h1::first-letter{font-size:107%}
 
 /* tunnels */
 .tunnels_participating td.cells:first-child{font-size:0}
-.ibgw::after,.obep::after,.ptcp::after{width:28px;height:28px;display:inline-block;background:var(--ibgw) no-repeat center center / 28px;content:""}
+.ibgw::after,.obep::after,.ptcp::after{width:28px;height:28px;display:inline-block;background:var(--ibgw) no-repeat center center/28px;content:""}
 .obep::after{background:var(--obep) no-repeat center center}
 .ptcp::after{background:var(--ptcp) no-repeat center center}
 #tunnels .cells:first-child{width:1%;max-width:64px;min-width:64px}
@@ -2184,9 +2231,9 @@ h1,.main h2,#applinks,#sitelinks,.main h3{-webkit-text-stroke:1px rgba(179,186,2
 .leaseset:target th,.leaseset:target td{background:#000}
 
 .lsdest,.leaseset th:last-child a[href$="i2p/"]{margin-left:3px;padding:2px 4px 4px;display:inline-block;border:var(--border_badge);border-radius:2px;background:var(--label)}
-.lsdest{padding-left:22px;border-radius:0;border-left-width:4px;border-right-width:4px;background:var(--hardhat) no-repeat 4px center / 14px,var(--label)}
-.lsdest.published{padding-left:38px;background:var(--hardhat) no-repeat 4px center / 14px,var(--globe) no-repeat 22px center / 12px,var(--label)}
-.leaseset th:last-child a[href$="i2p/"]{padding-left:22px;background:var(--link) no-repeat 5px center / 12px,var(--label)}
+.lsdest{padding-left:22px;border-radius:0;border-left-width:4px;border-right-width:4px;background:var(--hardhat) no-repeat 4px center/14px,var(--label)}
+.lsdest.published{padding-left:38px;background:var(--hardhat) no-repeat 4px center/14px,var(--globe) no-repeat 22px center/12px,var(--label)}
+.leaseset th:last-child a[href$="i2p/"]{padding-left:22px;background:var(--link) no-repeat 5px center/12px,var(--label)}
 
 /* profiles group icons */
 #profilelist .fast.integrated{background:var(--fast) no-repeat left center,var(--highcap) no-repeat center center,var(--integrated) no-repeat right center}
@@ -2247,20 +2294,20 @@ h1,.main h2,#applinks,#sitelinks,.main h3{-webkit-text-stroke:1px rgba(179,186,2
 #help h2{font-size:12pt}
 #help .confignav + div > h2,#help .confignav + .infohelp + div > h2{margin-top:-5px}
 
-#configurationhelp h2,#advancedsettings h2,#filterlist h2{padding-left:38px;background:var(--settings_inert) no-repeat 10px center / 20px,var(--title)}
-#sidebarhelp h2,#reachabilityhelp h2{padding-left:38px;background:url(/themes/console/images/sidebar.svg) no-repeat 10px center / 20px,var(--title)}
-#reseedhelp h2{padding-left:38px;background:var(--reseed) no-repeat 10px center / 20px,var(--title)}
-#newuserguide h2{padding-left:38px;background:var(--question) no-repeat 10px center / 20px,var(--title)}
-#newuserguide h2{padding-left:38px;background:url(images/favicon.svg) no-repeat 10px center / 20px,var(--title)}
-#troubleshoot h2{padding-left:38px;background:var(--wrench) no-repeat 10px center / 20px,var(--title)}
-#legal h2{padding-left:38px;background:var(--legal) no-repeat 10px center / 20px,var(--title)}
-#faq h2,#glossary h2{padding-left:38px;background:var(--question) no-repeat 10px center / 20px,var(--title)}
-#webhosting h2{padding-left:38px;background:var(--server) no-repeat 10px center / 20px,var(--title)}
-#themeoverride h2{padding-left:38px;background:var(--ui) no-repeat 10px center / 20px,var(--title)}
-#browserconfig h2{padding-left:38px;background:var(--firefox) no-repeat 10px center / 20px,var(--title)}
-#tunnman h2{padding-left:38px;background:var(--hardhat) no-repeat 10px center / 20px,var(--title)}
+#configurationhelp h2,#advancedsettings h2,#filterlist h2{padding-left:38px;background:var(--settings_inert) no-repeat 10px center/20px,var(--title)}
+#sidebarhelp h2,#reachabilityhelp h2{padding-left:38px;background:url(/themes/console/images/sidebar.svg) no-repeat 10px center/20px,var(--title)}
+#reseedhelp h2{padding-left:38px;background:var(--reseed) no-repeat 10px center/20px,var(--title)}
+#newuserguide h2{padding-left:38px;background:var(--question) no-repeat 10px center/20px,var(--title)}
+#newuserguide h2{padding-left:38px;background:url(images/favicon.svg) no-repeat 10px center/20px,var(--title)}
+#troubleshoot h2{padding-left:38px;background:var(--wrench) no-repeat 10px center/20px,var(--title)}
+#legal h2{padding-left:38px;background:var(--legal) no-repeat 10px center/20px,var(--title)}
+#faq h2,#glossary h2{padding-left:38px;background:var(--question) no-repeat 10px center/20px,var(--title)}
+#webhosting h2{padding-left:38px;background:var(--server) no-repeat 10px center/20px,var(--title)}
+#themeoverride h2{padding-left:38px;background:var(--ui) no-repeat 10px center/20px,var(--title)}
+#browserconfig h2{padding-left:38px;background:var(--firefox) no-repeat 10px center/20px,var(--title)}
+#tunnman h2{padding-left:38px;background:var(--hardhat) no-repeat 10px center/20px,var(--title)}
 #changelog h2,#advancedsettings h2{margin:0 0 -11px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
-#changelog h2{padding-left:38px;background:var(--changelog) no-repeat 10px center / 20px,var(--title)}
+#changelog h2{padding-left:38px;background:var(--changelog) no-repeat 10px center/20px,var(--title)}
 #advancedsettings h2{margin-bottom:-13px}
 #advancedsettings p.infohelp{margin-top:12px;margin-bottom:-2px}
 #advancedsettings #configinfo{margin-bottom:9px}
@@ -2268,9 +2315,9 @@ h1,.main h2,#applinks,#sitelinks,.main h3{-webkit-text-stroke:1px rgba(179,186,2
 
 /* link icons */
 .sitelink,.chatlink,.consolelink{white-space:nowrap;border-radius:1px}
-.sitelink{padding:0 3px 0 17px;background:var(--link) no-repeat 2px center / 12px}
-.chatlink{padding:0 3px 0 17px;background:var(--chat) no-repeat 2px center / 12px}
-.sitelink.external{padding:0 3px 0 19px;background:var(--planet) no-repeat 3px center / 12px}
+.sitelink{padding:0 3px 0 17px;background:var(--link) no-repeat 2px center/12px}
+.chatlink{padding:0 3px 0 17px;background:var(--chat) no-repeat 2px center/12px}
+.sitelink.external{padding:0 3px 0 19px;background:var(--planet) no-repeat 3px center/12px}
 
 /* help/webhosting */
 #webhosting th{text-align:left;padding-left:10px}
@@ -2351,13 +2398,13 @@ p + .twocol,div[lang="de"] p + .twocol{margin:10px 25px}
 
 /* console error messages */
 #error500 #sidebar hr ~ a{line-height:2.5}
-.sorry{margin:-1px 3px 10px 212px;padding:35px 20px 35px 75px;min-width:545px;color:var(--ink);font-size:110%;text-align:justify;word-wrap:break-word;border:var(--border_inner);border-radius:0 0 2px 2px;box-shadow:var(--highlight),inset 0 0 0 2px #320951,inset 0 0 4px 2px #005;background:#001 var(--err) no-repeat 19px center / 40px}
+.sorry{margin:-1px 3px 10px 212px;padding:35px 20px 35px 75px;min-width:545px;color:var(--ink);font-size:110%;text-align:justify;word-wrap:break-word;border:var(--border_inner);border-radius:0 0 2px 2px;box-shadow:var(--highlight),inset 0 0 0 2px #320951,inset 0 0 4px 2px #005;background:#001 var(--err) no-repeat 19px center/40px}
 div.sorry hr{color:transparent;background:none;height:1px;border-top:1px solid var(--ink);margin:20px 0;opacity:.5}
-#warning2{margin-top:-1px;margin-bottom:5px;padding:20px 30px 10px;min-width:580px;font-size:10.5pt;background:#000 var(--earth) no-repeat scroll bottom right / auto 180px}
+#warning2{margin-top:-1px;margin-bottom:5px;padding:20px 30px 10px;min-width:580px;font-size:10.5pt;background:#000 var(--earth) no-repeat scroll bottom right/auto 180px}
 #warning2 h3{margin:29px -29px 10px;padding:10px;border-width:1px;border-left:none;border-right:none;box-shadow:inset 0 0 0 1px #320951}
 #warning2 p{line-height:1.3}
 #warning2 b{margin-right:5px;display:inline-block;min-width:140px;text-align:right}
-#stacktrace p:first-child{padding:10px 0 10px 44px;font-weight:700;background:var(--err) no-repeat left center / 28px}
+#stacktrace p:first-child{padding:10px 0 10px 44px;font-weight:700;background:var(--err) no-repeat left center/28px}
 
 /* iframed */
 iframe{height:0}
@@ -2464,7 +2511,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #floodfills th:nth-child(8),#floodfills td:nth-child(8),#floodfills th:nth-child(13),#floodfills td:nth-child(13),#floodfills th:nth-child(14),#floodfills td:nth-child(14){display:none}
 #peers th,#peers .tablefooter td{font-size:85%}
 #peers #ntcpconnections th.queue{font-size:0}
-#peers #ntcpconnections th.queue::after{width:16px;height:16px;display:inline-block;background:var(--err) no-repeat center center / 16px;content:""}
+#peers #ntcpconnections th.queue::after{width:16px;height:16px;display:inline-block;background:var(--err) no-repeat center center/16px;content:""}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
 }
 
@@ -2472,6 +2519,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #peers th,#peers td{min-width:0}
 #peers th,#peers .tablefooter td{font-size:85%}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
+#peers #transportSummary .ipv6{display:table-cell}
 #peers .routerid{padding-right:5px}
 #tunnels .flag{margin-left:3px}
 #tunnels th,#tunnels td{padding-left:2px;padding-right:2px}

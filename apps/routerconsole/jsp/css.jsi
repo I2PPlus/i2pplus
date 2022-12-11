@@ -1,3 +1,4 @@
+<%@page trimDirectiveWhitespaces="true"%>
 <%
    /*
     * This will be included inside <head>...</head> as it sets the stylesheet.
@@ -31,6 +32,13 @@
                       java.io.File.separatorChar;
    java.io.File themeOverride = new java.io.File(themeBase + "override.css");
    boolean hasOverride = themeOverride.exists();
+%>
+<%
+    if (theme.contains("dark") || theme.contains("night")) {
+%>
+<style>html{background:#000}</style>
+<%
+    }
 %>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <link rel="preload" href="<%=themePath%>global.css" as="style">
@@ -66,7 +74,6 @@
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
     // As of Chrome 56, Firefox 50, Opera 43. "same-origin" not widely supported.
     response.setHeader("Referrer-Policy", "no-referrer");
-    response.addHeader("Set-Cookie", "SameSite=Strict; HttpOnly");
     String uri = request.getRequestURI();
     if (uri.contains("override.css"))
         response.setHeader("Cache-Control", "no-cache, private, max-age=84600, must-revalidate");

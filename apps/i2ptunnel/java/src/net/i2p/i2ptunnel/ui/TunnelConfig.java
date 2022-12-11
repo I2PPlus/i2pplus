@@ -891,10 +891,8 @@ public class TunnelConfig {
                 TunnelController.TYPE_HTTP_SERVER.equals(_type) ||
                 TunnelController.TYPE_IRC_SERVER.equals(_type) ||
                 TunnelController.TYPE_STREAMR_SERVER.equals(_type)) {
-//                dflt = "4,0";
                 dflt = "4";
             } else {
-//                dflt = "0";
                 dflt = "4,0";
             }
             String senc = config.getProperty(OPT + "i2cp.leaseSetEncType", dflt);

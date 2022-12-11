@@ -1,56 +1,56 @@
 /* Console Theme "Midnight" - Mobile Override */
-/* Author: dr|z3d */
+/* Author:dr|z3d */
 
 @import url(../mobile.css);
 
-#sidebar table[id^="sb_"], #sidebar #sb_localtunnels {
-  width: 100%;
+#sidebar table[id^="sb_"],#sidebar #sb_localtunnels{
+  width:100%;
 }
 
-#sidebar h3 {
-  padding: 8px 8px 6px;
+#sidebar h3{
+  padding:8px 8px 6px;
 }
 
-#sidebar h3, #sidebar h3 a {
-  font-size: 12pt;
+#sidebar h3,#sidebar h3 a{
+  font-size:12pt;
 }
 
-#sidebar .percentBarOuter, #sidebar .percentBarInner, #sidebar .percentBarText {
-  height: 20px;
+#sidebar .percentBarOuter,#sidebar .percentBarInner,#sidebar .percentBarText{
+  height:20px;
 }
 
-#sidebar .percentBarOuter {
-  margin: -2px 4px 2px;
-  width: calc(100% - 10px);
+#sidebar .percentBarOuter{
+  margin:-2px 4px 2px;
+  width:calc(100% - 10px);
 }
 
-#sidebar #sb_memoryBar .percentBarInner {
-  background: var(--membarinner);
+#sidebar #sb_memoryBar .percentBarInner{
+  background:var(--membarinner);
 }
 
-#sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child, .sb td:first-child {
- max-width: none;
+#sb_internals td:first-child,#sb_advanced td:first-child,#sb_help td:first-child,.sb td:first-child{
+ max-width:none;
 }
 
-#sidebar #sb_services a, #sidebar #sb_internals a, #sidebar #sb_advanced a {
-  padding: 5px 8px;
-  text-align: center;
-  max-width: none;
+#sidebar #sb_services a,#sidebar #sb_internals a,#sidebar #sb_advanced a{
+  padding:5px 8px;
+  text-align:center;
+  max-width:none;
 }
 
-#sidebar #sb_routerControl button {
-  margin: 4px 3px;
-  padding: 10px;
-  min-width: calc(50% - 20px);
+#sidebar #sb_routerControl button{
+  margin:4px 3px;
+  padding:10px;
+  min-width:calc(50% - 20px);
 }
 
-#sidebar #sb_localtunnels td {padding: 3px}
+#sidebar #sb_localtunnels td{padding:3px}
 
-#sb_tunnels + hr + h4 {
-  padding: 12px;
+#sb_tunnels + hr + h4{
+  padding:12px;
 }
 
-#clock {
-  margin: -8px -9px -10px;
-  padding: 15px 0 12px;
+#clock{
+  margin:-8px -9px -10px;
+  padding:15px 0 12px;
 }

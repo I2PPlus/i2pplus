@@ -64,48 +64,65 @@
 </form>
 <h3 id="advancedconfig" class="tabletitle"><%=intl._t("Advanced I2P Configuration")%>&nbsp;<span class="h3navlinks"><a title="Help with additional configuration settings" href="/help/advancedsettings">[Additional Options]</a></span></h3>
 <%
-  String advConfig = advancedhelper.getSettings();
-  if (advancedhelper.isAdvanced()) {
+    String advConfig = advancedhelper.getSettings();
+    if (advancedhelper.isAdvanced()) {
 %>
 <form action="" method="POST">
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <input type="hidden" name="action" value="blah" >
 <input type="hidden" name="nofilter_oldConfig" value="<%=advConfig%>" >
-<% }  // isAdvanced %>
+<%
+    }  // isAdvanced
+%>
 <table class="configtable" id="advconf">
-<% if (advancedhelper.isAdvanced()) { %>
+<%
+    if (advancedhelper.isAdvanced()) {
+%>
 <tr>
 <td class="infohelp">
 <b><%=intl._t("NOTE")%>:</b> <%=intl._t("Some changes may require a restart to take effect.")%>
 </td>
 </tr>
-<% } else { %>
+<%
+    } else {
+%>
 <tr>
 <td>
 <%=intl._t("To make changes, edit the file: {0}", "<tt>" + advancedhelper.getConfigFileName() + "</tt>")%>
 </td>
 </tr>
-<% }  // isAdvanced %>
+<%
+    }  // isAdvanced
+%>
 <tr>
 <td class="tabletextarea">
 <textarea id="advancedsettings" rows="32" cols="60" name="nofilter_config" wrap="off" spellcheck="false" <% if (!advancedhelper.isAdvanced()) { %>readonly="readonly"<% } %>><%=advConfig%></textarea>
 </td>
 </tr>
-<% if (advancedhelper.isAdvanced()) { %>
+<%
+    if (advancedhelper.isAdvanced()) {
+%>
 <tr>
 <td class="optionsave" align="right">
 <input type="reset" class="cancel" value="<%=intl._t("Cancel")%>" >
 <input type="submit" name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>" >
 </td>
 </tr>
-<% }  // isAdvanced %>
+<%
+    }  // isAdvanced
+%>
 </table>
-<% if (advancedhelper.isAdvanced()) { %>
+<%
+    if (advancedhelper.isAdvanced()) {
+%>
 </form>
-<% }  // isAdvanced %>
+<%
+    }  // isAdvanced
+%>
 </div>
 </div>
 </div>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
+</html>

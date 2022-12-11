@@ -64,7 +64,7 @@ class ParticipatingThrottler {
         int count = counter.increment(h);
         Result rv;
         if (count > limit) {
-            if (count > limit) {
+            if (count > limit * 10 / 9) {
                 int random = (1 + context.random().nextInt(15) * context.random().nextInt(60)) * 1000;
                 int bantime = Math.max(random, (5 + context.random().nextInt(10)) * 60 * 1000);
                 int period = bantime / 60 / 1000;

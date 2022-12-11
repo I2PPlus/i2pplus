@@ -14,7 +14,6 @@
 <title><%=intl._t("Reseeding Help")%> - I2P+</title>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Reseeding Help")%></h1>
 <div class="main" id="help">
@@ -105,7 +104,7 @@
 
 </div>
 </div>
-<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

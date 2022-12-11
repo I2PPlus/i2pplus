@@ -24,7 +24,7 @@
 <div class="main" id="stats">
 <jsp:getProperty name="oldhelper" property="stats" />
 </div>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

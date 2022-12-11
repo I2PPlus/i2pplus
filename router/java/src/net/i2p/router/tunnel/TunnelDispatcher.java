@@ -93,7 +93,7 @@ public class TunnelDispatcher implements Service {
     /** for shouldDropParticipatingMessage() */
     enum Location {OBEP, PARTICIPANT, IBGW}
 
-    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
     /** Creates a new instance of TunnelDispatcher */
     public TunnelDispatcher(RouterContext ctx) {

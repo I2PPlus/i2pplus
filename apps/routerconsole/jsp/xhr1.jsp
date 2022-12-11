@@ -1,5 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%
    // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
    if (request.getCharacterEncoding() == null)
@@ -14,10 +15,11 @@
    } catch (IllegalStateException ise) {}
    // Browser should not load this directly
    response.setHeader("X-Frame-Options", "DENY");
-   response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'none'; script-src 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'");
+   //response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'none'; script-src 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'");
+   response.setHeader("Content-Security-Policy", "default-src 'none'; base-uri 'self'");
    response.setHeader("X-XSS-Protection", "1; mode=block");
    response.setHeader("X-Content-Type-Options", "nosniff");
-   response.setHeader("Cache-Control", "private, max-age=3, no-store, must-revalidate");
+   response.setHeader("Cache-Control", "private, no-cache, max-age=3");
 %>
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
 <jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />

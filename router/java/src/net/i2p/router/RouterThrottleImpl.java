@@ -38,7 +38,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long DEFAULT_REJECT_STARTUP_TIME = 10*60*1000;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
-    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 : SystemVersion.isARM() ? 800 : 4000;
+    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 : SystemVersion.isARM() && SystemVersion.getCores() < 4 ? 800 : SystemVersion.isARM() ? 2000 : 4000;
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
 
     /**
@@ -53,7 +53,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** = TrivialPreprocessor.PREPROCESSED_SIZE */
     private static final int PREPROCESSED_SIZE = 1024;
 
-    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
     public RouterThrottleImpl(RouterContext context) {
         _context = context;
@@ -233,7 +233,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                     avg = min;
                 // if the current tunnel count is higher than 1.3 * the average...
                 if ( (avg > 0) && (avg*tunnelGrowthFactor < numTunnels) ) {
-                    // we're accelerating, lets try not to take on too much too fast
+                    // we're accelerating, let's try not to take on too much too fast
                     double probAccept = (avg*tunnelGrowthFactor) / numTunnels;
                     probAccept *= probAccept; // square the decelerator for tunnel counts
                     int v = _context.random().nextInt(100);
@@ -385,7 +385,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (availBps < MIN_AVAILABLE_BPS) {
 //            if (_log.shouldWarn())
             _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
-                                                     "Bps) is less than minimum required (" + MIN_AVAILABLE_BPS + "Bps)");
+                      "Bps) is less than minimum required (" + MIN_AVAILABLE_BPS + "Bps)");
             setTunnelStatus(LIMIT_STR);
             return false;
         }
@@ -419,10 +419,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (availBps <= 0) {
             probReject = 1;
             reject = true;
-            if (_log.shouldWarn())
-                _log.warn("Reject avail / maxK/ used " + availBps + " / " + maxKBps + " / "
-                          + used + "\n* pReject = 1 numTunnels = " + numTunnels
-                          + " est = " + bytesAllocated);
+            //if (_log.shouldWarn())
+            _log.warn("Rejecting participating tunnel -> Insufficient bandwidth available" +
+                      "\n* Available: " + availBps + "; Maximum allocated: " + maxKBps + "; In use: " + used +
+                      "\n* Active tunnels: " + numTunnels + "; Estimated bandwidth required = " + bytesAllocated);
         } else {
             // limit at 90% - 4KBps (see above)
             float maxBps = (maxKBps * 1024f * 0.9f) - MIN_AVAILABLE_BPS;
@@ -437,7 +437,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                                + " est = " + bytesAllocated);
             } else {
                 probReject = Math.pow(pctFull, 16); // steep curve
-            double rand = _context.random().nextFloat();
+                double rand = _context.random().nextFloat();
                 reject = rand <= probReject;
                 if (reject && _log.shouldWarn())
                     _log.warn("Reject avail / maxK / used " + availBps + " / " + maxKBps + " / "
@@ -516,20 +516,20 @@ public class RouterThrottleImpl implements RouterThrottle {
     private double getTunnelGrowthFactor() {
         try {
 //            return Double.parseDouble(_context.getProperty("router.tunnelGrowthFactor", "1.3"));
-            return Double.parseDouble(_context.getProperty("router.tunnelGrowthFactor", "2.5"));
+            return Double.parseDouble(_context.getProperty("router.tunnelGrowthFactor", "5"));
         } catch (NumberFormatException nfe) {
 //            return 1.3;
-            return 2.5;
+            return 5;
         }
     }
 
     private double getTunnelTestTimeGrowthFactor() {
         try {
 //            return Double.parseDouble(_context.getProperty("router.tunnelTestTimeGrowthFactor", "1.3"));
-            return Double.parseDouble(_context.getProperty("router.tunnelTestTimeGrowthFactor", "2.5"));
+            return Double.parseDouble(_context.getProperty("router.tunnelTestTimeGrowthFactor", "5"));
         } catch (NumberFormatException nfe) {
 //            return 1.3;
-            return 2.5;
+            return 5;
         }
     }
 

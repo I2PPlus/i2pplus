@@ -14,7 +14,6 @@
 <title><%=intl._t("Advanced Configuration Help - I2P+")%></title>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Advanced Configuration Help")%></h1>
 <div class="main" id="help">
@@ -98,6 +97,9 @@
 <li><%=intl._t("Router running a non-native, software emulated version of the Java BigInteger library")%></li>
 </ul></td></tr>
 
+<tr><th>router.minThrottleTunnels={n}</th></tr>
+<tr><td><%=intl._t("This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 2000 if system is running on ARM and 4 or more cores available, otherwise 4000]")%></td></tr>
+
 <tr><th>router.rebuildKeys={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]")%></td></tr>
 
@@ -131,10 +133,10 @@
 <tr><th>router.codelInterval={n} <span class="plus">I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]")%></td></tr>
 
-<tr><th>router.router.codelMaxQueue={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.codelMaxQueue={n} <span class="plus">I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]")%></td></tr>
 
-<tr><th>router.router.codelBacklog={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.codelBacklog={n} <span class="plus">I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]")%></td></tr>
 
 <tr><th>router.codelTarget={n} <span class="plus">I2P+</span></th></tr>
@@ -225,7 +227,7 @@
 
 </div>
 </div>
-<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

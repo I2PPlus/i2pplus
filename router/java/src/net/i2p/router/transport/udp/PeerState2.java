@@ -28,7 +28,6 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.udp.InboundMessageFragments.ModifiableLong;
 import net.i2p.router.transport.udp.PacketBuilder.Fragment;
-
 import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.util.HexDump;
 import net.i2p.util.Log;
@@ -44,7 +43,7 @@ import net.i2p.util.SimpleTimer2;
  *
  * @since 0.9.54
  */
-public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback, SSU2Bitfield.Callback {
+public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback, SSU2Bitfield.Callback, SSU2Sender {
     private final long _sendConnID;
     private final long _rcvConnID;
     private final AtomicInteger _packetNumber = new AtomicInteger();
@@ -68,6 +67,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private long _sentMessagesLastExpired;
     private byte[] _ourIP;
     private int _ourPort;
+    private int _destroyReason;
 
     // Session Confirmed retransmit
     private byte[][] _sessConfForReTX;
@@ -301,19 +301,53 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     // SSU 2 things
 
+    /// begin SSU2Sender interface ///
+
     /**
      * Next outbound packet number,
      * starts at 1 for Alice (0 is Session Confirmed) and 0 for Bob
+     * @since public since 0.9.57 for SSU2Sender interface only
      */
-    long getNextPacketNumber() { return _packetNumber.getAndIncrement(); }
-    long getSendConnID() { return _sendConnID; }
+    public long getNextPacketNumber() { return _packetNumber.getAndIncrement(); }
+    /**
+     * @since public since 0.9.57 for SSU2Sender interface only
+     */
+    public long getSendConnID() { return _sendConnID; }
+    /**
+     * Caller must sync on returned object when encrypting
+     * @since public since 0.9.57 for SSU2Sender interface only
+     */
+    public CipherState getSendCipher() { return _sendCha; }
+    /**
+     * @since public since 0.9.57 for SSU2Sender interface only
+     */
+    public byte[] getSendHeaderEncryptKey1() { return _sendHeaderEncryptKey1; }
+    /**
+     * @since public since 0.9.57 for SSU2Sender interface only
+     */
+    public byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
+    /**
+     * @since 0.9.57
+     */
+    public void setDestroyReason(int reason) { _destroyReason = reason; }
+
+    /// end SSU2Sender interface ///
+
     long getRcvConnID() { return _rcvConnID; }
-    /** caller must sync on returned object when encrypting */
-    CipherState getSendCipher() { return _sendCha; }
-    byte[] getSendHeaderEncryptKey1() { return _sendHeaderEncryptKey1; }
     byte[] getRcvHeaderEncryptKey1() { return _rcvHeaderEncryptKey1; }
-    byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
     byte[] getRcvHeaderEncryptKey2() { return _rcvHeaderEncryptKey2; }
+
+    /**
+     * @return 0 (REASON_UNSPEC) if unset
+     * @since 0.9.57 for PeerStateDestroyed
+     */
+    int getDestroyReason() { return _destroyReason; }
+
+    /**
+     * @since 0.9.57 for PeerStateDestroyed
+     */
+    CipherState getRcvCipher() { return _rcvCha; }
+
 
     void setOurAddress(byte[] ip, int port) {
         _ourIP = ip; _ourPort = port;
@@ -321,7 +355,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     byte[] getOurIP() { return _ourIP; }
     int getOurPort() { return _ourPort; }
 
-    SSU2Bitfield getReceivedMessages() {
+    /**
+     *  @since public since 0.9.57 for SSU2Sender interface only
+     */
+    public SSU2Bitfield getReceivedMessages() {
         // logged in PacketBuilder2
         //if (_log.shouldDebug())
         //    _log.debug("[SSU2] Sending ACKs " + _receivedMessages + " on " + this);
@@ -333,7 +370,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         return _receivedMessages;
     }
 
-    SSU2Bitfield getAckedMessages() { return _ackedMessages; }
+    /**
+     *  @since public since 0.9.57 for SSU2Sender interface only
+     */
+    public SSU2Bitfield getAckedMessages() { return _ackedMessages; }
 
     /**
      *  @param packet fully encrypted, header and body decryption will be done here
@@ -636,6 +676,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotToken(long token, long expires) {
+        if (_log.shouldInfo())
+            _log.info("Got TOKEN block: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
     }
 
@@ -764,12 +806,16 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo())
             _log.info("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count + " from " + this);
-        if (reason != SSU2Util.REASON_TERMINATION) {
+        if (reason == SSU2Util.REASON_TERMINATION) {
+            // this should only happen at shutdown, where we don't have a post-termination handler
+        } else {
             UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_TERMINATION, this);
             _transport.send(pkt);
         }
-        _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
-        _dead = true;
+        if (!_dead) {
+            _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
+            _dead = true;
+        }
     }
 
     public void gotPathChallenge(RemoteHostId from, byte[] data) {
@@ -797,12 +843,16 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                             _log.warn("Migration successful, changed address from " + _remoteHostId + " to " + from + " for " + this);
                         _transport.changePeerAddress(this, from);
                         _mtu = MIN_MTU;
-                        EstablishmentManager.Token token = _transport.getEstablisher().getInboundToken(from);
-                        SSU2Payload.Block block = new SSU2Payload.NewTokenBlock(token.token, token.expires);
-                        UDPPacket pkt = _transport.getBuilder2().buildPacket(Collections.<Fragment>emptyList(),
-                                                                             Collections.singletonList(block),
-                                                                             this);
-                        _transport.send(pkt);
+                        if (isIPv6() || !_transport.isSnatted()) {
+                            EstablishmentManager.Token token = _transport.getEstablisher().getInboundToken(from);
+                            SSU2Payload.Block block = new SSU2Payload.NewTokenBlock(token);
+                            UDPPacket pkt = _transport.getBuilder2().buildPacket(Collections.<Fragment>emptyList(),
+                                                                                 Collections.singletonList(block),
+                                                                                 this);
+                            _transport.send(pkt);
+                        } else {
+                            messagePartiallyReceived();
+                        }
                     } else {
                         // caller will handle
                         // ACK-eliciting
@@ -873,9 +923,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  so we can process acks.
      *
      *  @param length including ip/udp header, for logging only
+     *  @since public since 0.9.57 for SSU2Sender interface only
      *
      */
-    void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments) {
+    public void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments) {
         List<PacketBuilder.Fragment> old = _sentMessages.putIfAbsent(Long.valueOf(pktNum), fragments);
         if (old != null) {
             // shouldn't happen
@@ -969,9 +1020,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      *  Flag byte to be sent in header
      *
-     *  @since 0.9.56
+     *  @since 0.9.56, public since 0.9.57 for SSU2Sender interface
      */
-    byte getFlags() {
+    public byte getFlags() {
         return shouldRequestImmediateAck() ? (byte) 0x01 : 0;
     }
 

@@ -1,3 +1,63 @@
+2022-12-10 zzz
+ * SSU: Update activity timestamps for relay and peer test messages
+ * SSU2: Peer Test fixes
+
+2022-12-09 zzz
+ * SSU: Don't bid on SSU1 addresses when disabled
+ * Tunnels: Tighten the hop throttle
+
+2022-12-08 zzz
+ * SSU2: Fix rare IAE creating ACK block
+
+2022-12-07 zzz
+ * Console: Profile tabs cleanup
+ * SSU2: Post-termination handler improvements
+
+2022-12-06 zzz
+ * SSU2: Add handler to process post-termination messages
+
+2022-12-04 zzz
+ * SSU2: Token improvements and fixes
+
+2022-12-02 zzz
+ * Debian: Fix for stray symlinks in / (gitlab #376)
+
+2022-11-30 zzz
+ * SSU: Start work on option to disable SSU 1
+
+2022-11-28 zzz
+ * i2ptunnel: Update encryption type defaults
+ * Util: Add path length constraint = 0 to selfsigned certs
+
+2022-11-26 zzz
+ * Console: Hide IPv4/v6 columns on /peers status tab
+ * i2ptunnel: Fix SOCKS outproxy port configuration
+ * SSU: Don't build a 4 cap address at startup if configured for IPv6-only
+ * SSU2: Avoid rare NPE handling apparent session confirmed without inbound state
+ * Util: Fast check for random nextInt(1) and nextLong(1)
+
+2022-11-25 zzz
+ * i2ptunnel: Allow IRCv3 ACCOUNT and CHGHOST through the filter
+ * Profiles: Don't let one corrupt file kill the loader thread
+
+2022-11-24 zzz
+ * Console, i2psnark standalone: Fix UI configuration for Argentinan Spanish
+ * i2psnark: Add partial Danish translation
+ * i2psnark standalone: Enable zh_TW UI configuration
+
+2022-11-23 zzz
+ * Build: Add debcheckpatch to release targets
+ * CLI: Sort MTU output by address
+ * Console:
+   - Add status and banned tabs to /peers (WIP)
+   - Cleanup /debug update and app manager sections
+ * Crypto: Don't use AccessController in I2PProvider, deprecated as of Java 17
+ * i2ptunnel:
+   - SOCKS 5 tunnel improvements and torsocks support
+   - Fix log message on config migration
+ * Router: KeysAndCert compressible padding (Proposal 161, Gitlab MR !66)
+ * SSU2: Increase Session Created max padding
+
 2022-11-21 I2P+ 2.0.0+ released
 
 2022-11-19 dr|z3d

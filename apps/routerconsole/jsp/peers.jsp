@@ -16,7 +16,6 @@
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<%@include file="summaryajax.jsi" %>
 <h1 class="netwrk"><%=intl._t("Network Peers")%></h1>
 <div class="main" id="peers">
  <jsp:useBean class="net.i2p.router.web.helpers.PeerHelper" id="peerHelper" scope="request" />
@@ -46,23 +45,27 @@ document.addEventListener("DOMContentLoaded", function() {
     var udp = document.getElementById("udp");
     var ntcp = document.getElementById("ntcp");
     var summary = document.getElementById("transportSummary");
+    var autorefresh = document.getElementById("autorefresh");
     xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
+      if (xhr.readyState==4 && xhr.status==200 && autorefresh.checked) {
         if (udp) {
           var udpResponse = xhr.responseXML.getElementById("udp");
-          var udpParent = udp.parentNode;
+          //var udpParent = udp.parentNode;
           if (!Object.is(udp.innerHTML, udpResponse.innerHTML))
-            udpParent.replaceChild(udpResponse, udp);
+            //udpParent.replaceChild(udpResponse, udp);
+            udp.innerHTML = udpResponse.innerHTML;
         } else if (ntcp) {
           var ntcpResponse = xhr.responseXML.getElementById("ntcp");
-          var ntcpParent = ntcp.parentNode;
+          //var ntcpParent = ntcp.parentNode;
           if (!Object.is(ntcp.innerHTML, ntcpResponse.innerHTML))
-            ntcpParent.replaceChild(ntcpResponse, ntcp);
+            ntcp.innerHTML = ntcpResponse.innerHTML;
+            //ntcpParent.replaceChild(ntcpResponse, ntcp);
         } else if (summary) {
           var summaryResponse = xhr.responseXML.getElementById("transportSummary");
-          var summaryParent = summary.parentNode;
+          //var summaryParent = summary.parentNode;
           if (!Object.is(summary.innerHTML, summaryResponse.innerHTML))
-            summaryParent.replaceChild(summaryResponse, summary);
+            summary.innerHTML = summaryResponse.innerHTML;
+            //summaryParent.replaceChild(summaryResponse, summary);
         }
       }
     }
@@ -76,5 +79,6 @@ document.addEventListener("DOMContentLoaded", function() {
 }, true);
 </script>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());window.addEventListener("pageshow", lazyload());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

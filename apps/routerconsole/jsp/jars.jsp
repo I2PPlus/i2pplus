@@ -21,7 +21,7 @@
 <jsp:setProperty name="dumpHelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:getProperty name="dumpHelper" property="fileSummary" />
 </div>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

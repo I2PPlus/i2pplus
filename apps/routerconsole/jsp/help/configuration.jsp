@@ -14,7 +14,6 @@
 <title><%=intl._t("Configuration Help")%> - I2P+</title>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Configuration Help")%></h1>
 <div class="main" id="help">
@@ -81,7 +80,7 @@
 <p><%=intl._t("Note: Most of the options in the Tunnel Manager have tooltips; be sure to check those before you change settings you don't fully understand!")%></p>
 </div>
 </div>
-<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

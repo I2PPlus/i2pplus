@@ -43,7 +43,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     static final AtomicLong __id = new AtomicLong();
     private final long _id;
 
-    private static final long[] CODEL_RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+    private static final long[] CODEL_RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";

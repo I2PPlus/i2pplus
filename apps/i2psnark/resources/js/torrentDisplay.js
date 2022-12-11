@@ -5,32 +5,33 @@ var filtered = document.querySelectorAll(".filtered");
 
 function initFilterBar() {
 
-  var btnAll = document.getElementById("all");
-  var btnActive = document.getElementById("active");
-  var btnInactive = document.getElementById("inactive");
-  var btnDownloading = document.getElementById("downloading");
-  var btnSeeding = document.getElementById("seeding");
-  var btnComplete = document.getElementById("complete");
-  var btnIncomplete = document.getElementById("incomplete");
-  var btnStopped = document.getElementById("stopped");
-
-  var allOdd = document.querySelectorAll(".rowOdd");
-  var allEven = document.querySelectorAll(".rowEven");
   var active = document.querySelectorAll(".active:not(.peerinfo)");
-  var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
-  var downloading = document.querySelectorAll(".downloading");
-  var seeding = document.querySelectorAll(".seeding");
+  var allEven = document.querySelectorAll(".rowEven");
+  var allOdd = document.querySelectorAll(".rowOdd");
+  var btnActive = document.getElementById("active");
+  var btnAll = document.getElementById("all");
+  var btnComplete = document.getElementById("complete");
+  var btnDownloading = document.getElementById("downloading");
+  var btnInactive = document.getElementById("inactive");
+  var btnIncomplete = document.getElementById("incomplete");
+  var btnSeeding = document.getElementById("seeding");
+  var btnStopped = document.getElementById("stopped");
   var complete = document.querySelectorAll(".complete");
-  var incomplete = document.querySelectorAll(".incomplete");
-  var stopped = document.querySelectorAll(".stopped");
-  var peerinfo = document.querySelectorAll(".peerinfo");
+  var css = document.createElement("link");
   var debuginfo = document.querySelectorAll(".debuginfo");
+  var downloading = document.querySelectorAll(".downloading");
+  var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
+  var incomplete = document.querySelectorAll(".incomplete");
+  var peerinfo = document.querySelectorAll(".peerinfo");
+  var seeding = document.querySelectorAll(".seeding");
+  var stopped = document.querySelectorAll(".stopped");
   var tfoot = document.getElementById("snarkFoot");
-  if (tfoot)
+
+  if (tfoot !== null) {
     var tfootInner = tfoot.getElementsByClassName("tr")[0];
+  }
 
   function clean() {
-
     var filter = document.getElementById("filter");
     if (filter) {
         filter.remove();
@@ -45,7 +46,7 @@ function initFilterBar() {
 
   function countFiltered() {
     filtered = document.querySelectorAll(".filtered");
-      showResults();
+    showResults();
   }
 
   function showResults() {
@@ -60,29 +61,32 @@ function initFilterBar() {
     cell.colSpan = 12;
     var on = "";
     var peers = peerinfo.length;
-    if (btnActive.checked)
+    if (btnActive.checked) {
       on = "active";
-    else if (btnInactive.checked)
+    } else if (btnInactive.checked) {
       on = "inactive";
-    else if (btnDownloading.checked)
+    } else if (btnDownloading.checked) {
       on = "downloading";
-    else if (btnSeeding.checked)
+    } else if (btnSeeding.checked) {
       on = "seeding";
-    else if (btnComplete.checked)
+    } else if (btnComplete.checked) {
       on = "completed";
-    else if (btnIncomplete.checked)
+    } else if (btnIncomplete.checked) {
       on = "incomplete";
-    else if (btnStopped.checked)
+    } else if (btnStopped.checked) {
       on = "stopped";
+    }
     if (!btnAll.checked) {
-        if (filtered.length == 1)
+        if (filtered.length === 1) {
           cell.innerHTML = "Displaying " + (filtered.length) + " " + on + " torrent";
-        else
+        } else {
           cell.innerHTML = "Displaying " + (filtered.length) + " " + on + " torrents";
+        }
     } else {
       var filterResults = document.getElementById("filterResults");
-      if (filterResults)
+      if (filterResults) {
         cleanResults();
+      }
       filterResults.style.display = "none";
     }
   }
@@ -92,15 +96,15 @@ function initFilterBar() {
     var resultsSize = results.length;
     if (resultsSize > 0) {
       results.forEach((elem) => {
-        if (elem != tfootInner)
+        if (tfoot !== null && elem !== tfootInner) {
           elem.remove();
+        }
       });
     }
   }
 
   function showAll() {
     clean();
-    var css = document.createElement("link");
     css.type = "text/css";
     css.rel = "stylesheet";
     css.href = ".resources/filters/all.css";
@@ -112,7 +116,6 @@ function initFilterBar() {
 
   function showActive() {
     clean();
-    var css = document.createElement("link");
     css.type = "text/css";
     css.rel = "stylesheet";
     css.href = ".resources/filters/active.css";
@@ -128,7 +131,6 @@ function initFilterBar() {
 
   function showInactive() {
     clean();
-    var css = document.createElement("link");
     css.type = "text/css";
     css.rel = "stylesheet";
     css.href = ".resources/filters/inactive.css";
@@ -144,7 +146,6 @@ function initFilterBar() {
 
   function showDownloading() {
     clean();
-    var css = document.createElement("link");
     css.type = "text/css";
     css.rel = "stylesheet";
     css.href = ".resources/filters/downloading.css";
@@ -160,7 +161,6 @@ function initFilterBar() {
 
   function showSeeding() {
     clean();
-    var css = document.createElement("link");
     css.type = "text/css";
     css.rel = "stylesheet";
     css.href = ".resources/filters/seeding.css";
@@ -176,7 +176,6 @@ function initFilterBar() {
 
   function showComplete() {
     clean();
-    var css = document.createElement("link");
     css.type = "text/css";
     css.rel = "stylesheet";
     css.href = ".resources/filters/complete.css";
@@ -192,7 +191,6 @@ function initFilterBar() {
 
   function showIncomplete() {
     clean();
-    var css = document.createElement("link");
     css.type = "text/css";
     css.rel = "stylesheet";
     css.href = ".resources/filters/incomplete.css";
@@ -208,7 +206,6 @@ function initFilterBar() {
 
   function showStopped() {
     clean();
-    var css = document.createElement("link");
     css.type ="text/css";
     css.rel ="stylesheet";
     css.href =".resources/filters/stopped.css";
@@ -271,6 +268,9 @@ function initFilterBar() {
   }
 }
 
+var query = window.location.search;
+var url = location.href;
+
 function setQuery() {
   if (query) {
     window.localStorage.setItem("queryString", url);
@@ -289,12 +289,13 @@ function clearLocalStorage() {
   window.localStorage.clear();
 }
 
-if (typeof bar !== "undefined" || bar) {
+if (bar !== null) {
   initFilterBar();
 }
 
-document.querySelectorAll(".sortIcon").forEach(item => {
-  item.addEventListener('click', event => {
-    setQuery, false;
-  })
-})
+var sortIcon = document.querySelectorAll(".sortIcon");
+sortIcon.forEach(function (item) {
+  item.addEventListener("click", () => {
+    setQuery();
+  });
+});

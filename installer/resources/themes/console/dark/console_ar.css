@@ -140,7 +140,7 @@ td{text-align:right}
 #tunnels.main h3 a{float:left}
 #updateHelper b,#updateProxyHostPort b,#i2pupdates b{text-align:left}
 #wrapperlogs pre,table[id$="logs"] ul,.logtable ul li{direction:ltr;text-align:left}
-#xhr {margin:0 -9px 0 auto}
+#xhr{margin:0 -9px 0 auto}
 
 @media screen and (min-width:1500px){
 .main,.news,h1[class],.sorry{margin-right:260px;margin-left:6px}

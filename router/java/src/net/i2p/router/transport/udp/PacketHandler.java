@@ -40,7 +40,7 @@ class PacketHandler {
     private final Map<RemoteHostId, Object> _failCache;
     private final BlockingQueue<UDPPacket> _inboundQueue;
     private static final Object DUMMY = new Object();
-    private final boolean _enableSSU2;
+    private final boolean _enableSSU1, _enableSSU2;
     private final int _networkID;
 
     private static final int TYPE_POISON = -99999;
@@ -57,16 +57,17 @@ class PacketHandler {
      *  There's no use making it any larger, as messages will just be thrown out there.
      */
     private static final long GRACE_PERIOD = Router.CLOCK_FUDGE_FACTOR + 30*1000;
-//    private static final long MAX_SKEW = 90*24*60*60*1000L;
-    private static final long MAX_SKEW = 24*60*60*1000L;
+//    static final long MAX_SKEW = 90*24*60*60*1000L;
+    static final long MAX_SKEW = 24*60*60*1000L;
 
     private enum AuthType { NONE, INTRO, BOBINTRO, SESSION }
 
-    PacketHandler(RouterContext ctx, UDPTransport transport, boolean enableSSU2, EstablishmentManager establisher,
+    PacketHandler(RouterContext ctx, UDPTransport transport, boolean enableSSU1, boolean enableSSU2, EstablishmentManager establisher,
                   InboundMessageFragments inbound, PeerTestManager testManager, IntroductionManager introManager) {
         _context = ctx;
         _log = ctx.logManager().getLog(PacketHandler.class);
         _transport = transport;
+        _enableSSU1 = enableSSU1;
         _enableSSU2 = enableSSU2;
         _establisher = establisher;
         _inbound = inbound;
@@ -272,7 +273,10 @@ class PacketHandler {
                             _log.debug("Packet received is not for an Inbound or Outbound establishment");
                         // ok, not already known establishment, try as a new one
                         // Last chance for success, using our intro key
-                        receivePacket(reader, packet, PeerType.NEW_PEER);
+                        if (_enableSSU1)
+                            receivePacket(reader, packet, PeerType.NEW_PEER);
+                        else
+                            receiveSSU2Packet(rem, packet, (InboundEstablishState2) null);
                     }
                 }
             } else {
@@ -286,9 +290,15 @@ class PacketHandler {
             }
         }
 
+        ///////////
+        // Begin SSU1-only methods (except group 4)
+        ///////////
+
         /**
          * Group 1: Established conn
          * Decrypt and validate the packet then call handlePacket()
+         *
+         * SSU1 only.
          */
         private void receivePacket(UDPPacketReader reader, UDPPacket packet, PeerState state) {
             AuthType auth = AuthType.NONE;
@@ -342,6 +352,9 @@ class PacketHandler {
          * then decrypt the packet with our intro key,
          * then call handlePacket().
          *
+         * This falls back to SSU2 for PeerType.NEW_PEER.
+         * If SSU1 is disabled, call receiveSSU2Packet() directly, don't call this.
+         *
          * @param peerType OUTBOUND_FALLBACK, INBOUND_FALLBACK, or NEW_PEER
          */
         private void receivePacket(UDPPacketReader reader, UDPPacket packet, PeerType peerType) {
@@ -376,12 +389,14 @@ class PacketHandler {
                         } else if (len >= SSU2Util.MIN_DATA_LEN) {
                             byte[] k1 = _transport.getSSU2StaticIntroKey();
                             long id = SSU2Header.decryptDestConnID(packet.getPacket(), k1);
-                            if (_transport.wasRecentlyClosed(id)) {
+                            PeerStateDestroyed dead = _transport.getRecentlyClosed(id);
+                            if (dead != null) {
                                 // Probably termination ack.
                                 // Prevent attempted SSU1 fallback processing and adding to fail cache
                                 if (_log.shouldDebug())
-                                    _log.debug("Dropping " + len + " byte packet from " + remoteHost +
+                                    _log.debug("Handling " + len + " byte packet from " + remoteHost +
                                                " for recently closed ID " + id);
+                                dead.receivePacket(remoteHost, packet);
                                 return;
                             }
                         }
@@ -476,6 +491,8 @@ class PacketHandler {
         }
 
         /**
+         * SSU1 only.
+         *
          * @param state non-null
          */
         private void receivePacket(UDPPacketReader reader, UDPPacket packet, InboundEstablishState state) {
@@ -485,6 +502,8 @@ class PacketHandler {
         /**
          * Group 2: Inbound establishing conn
          * Decrypt and validate the packet then call handlePacket()
+         *
+         * SSU1 only.
          *
          * @param state non-null
          * @param allowFallback if it isn't valid for this establishment state, try as a non-establishment packet
@@ -525,6 +544,8 @@ class PacketHandler {
         /**
          * Group 3: Outbound establishing conn
          * Decrypt and validate the packet then call handlePacket()
+         *
+         * SSU1 only.
          *
          * @param state non-null
          */
@@ -797,6 +818,8 @@ class PacketHandler {
         }
     }
 
+    //// End SSU1-only methods ////
+
     //// Begin SSU2 Handling ////
 
 
@@ -855,12 +878,14 @@ class PacketHandler {
                             ps2.receivePacket(from, packet);
                             return true;
                         }
-                        if (_transport.wasRecentlyClosed(id)) {
+                        PeerStateDestroyed dead = _transport.getRecentlyClosed(id);
+                        if (dead != null) {
                             // Probably termination ack.
                             // Prevent attempted SSU1 fallback processing and adding to fail cache
                             if (_log.shouldDebug())
-                                _log.debug("Dropping " + packet.getPacket().getLength() + " byte packet from " + from +
+                                _log.debug("Handling " + packet.getPacket().getLength() + " byte packet from " + from +
                                            " for recently closed ID " + id);
+                            dead.receivePacket(from, packet);
                             return true;
                         }
 
@@ -868,6 +893,11 @@ class PacketHandler {
                     return false;
                 }
                 type = header.getType();
+                if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
+                    // one in a million decrypt of SSU 1 packet with type/version/netid all correct?
+                    // can't have session confirmed with null state, avoid NPE below
+                    return false;
+                }
             } else {
                 type = SSU2Util.SESSION_REQUEST_FLAG_BYTE;
             }
@@ -883,8 +913,13 @@ class PacketHandler {
                     header.getType() != SSU2Util.SESSION_REQUEST_FLAG_BYTE ||
                     header.getVersion() != 2 ||
                     header.getNetID() != _networkID) {
-                    if (_log.shouldWarn())
-                        _log.warn("Failed decrypt Session Request after Retry \n* " + header + " on " + state);
+                    if (_log.shouldWarn()) {
+                        if (header == null) {
+                            // packet too short, possibly token-request-after-retry? let's see...
+                            header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
+                        }
+                        _log.warn("Failed to decrypt SessionRequest after Retry \n* " + header + " on " + state);
+                    }
                     return false;
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
@@ -1011,8 +1046,8 @@ class PacketHandler {
                 header.getType() != SSU2Util.RETRY_FLAG_BYTE ||
                 header.getVersion() != 2 ||
                 header.getNetID() != _networkID) {
-                if (_log.shouldWarn())
-                    _log.warn("Does not decrypt as Session Created or Retry \n* " + header + " on " + state);
+                if (_log.shouldInfo())
+                    _log.info("Does not decrypt as Session Created or Retry \n* " + header + " on " + state);
                 return false;
             }
             type = SSU2Util.RETRY_FLAG_BYTE;

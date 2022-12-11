@@ -90,7 +90,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 4));
 
         // The following are for TestJob
-        long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+        long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
         ctx.statManager().createRequiredRateStat("tunnel.testFailedTime", "Time for tunnel test failure (ms)", "Tunnels",
                                          RATES);
         ctx.statManager().createRateStat("tunnel.testExploratoryFailedTime", "Time to fail exploratory tunnel test (max 60s)", "Tunnels [Exploratory]",

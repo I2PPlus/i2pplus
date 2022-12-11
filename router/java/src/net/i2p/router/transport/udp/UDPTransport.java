@@ -77,7 +77,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     /** RemoteHostId to PeerState */
     private final Map<RemoteHostId, PeerState> _peersByRemoteHost;
     private final Map<Long, PeerState2> _peersByConnID;
-    private final Map<Long, Object> _recentlyClosedConnIDs;
+    private final Map<Long, PeerStateDestroyed> _recentlyClosedConnIDs;
     private PacketHandler _handler;
     private EstablishmentManager _establisher;
     private final MessageQueue _outboundMessages;
@@ -106,6 +106,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     private int _mtu_ipv6 = PeerState.MIN_IPV6_MTU;
     private int _mtu_ssu2 = PeerState2.MIN_SSU_IPV4_MTU;
     private int _mtu_ssu2_ipv6 = PeerState2.MIN_SSU_IPV6_MTU;
+    private final int _defaultMTU;
     private boolean _mismatchLogged;
     private final int _networkID;
 
@@ -168,7 +169,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     private static final int DROPLIST_PERIOD = 10*60*1000;
     public static final String STYLE = "SSU";
     public static final String PROP_INTERNAL_PORT = "i2np.udp.internalPort";
-    private static final Object DUMMY = Integer.valueOf(0);
 
     /** now unused, we pick a random port
      *  @deprecated unused
@@ -288,6 +288,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                                                                     Status.REJECT_UNSOLICITED,
                                                                     Status.IPV4_FIREWALLED_IPV6_OK,
                                                                     Status.IPV4_SNAT_IPV6_OK,
+                                                                    Status.IPV4_SNAT_IPV6_UNKNOWN,
                                                                     Status.IPV4_FIREWALLED_IPV6_UNKNOWN);
 
     private static final Set<Status> STATUS_IPV6_FW =    EnumSet.of(Status.IPV4_OK_IPV6_FIREWALLED,
@@ -298,6 +299,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                                                                     Status.REJECT_UNSOLICITED,
                                                                     Status.IPV4_FIREWALLED_IPV6_OK,
                                                                     Status.IPV4_SNAT_IPV6_OK,
+                                                                    Status.IPV4_SNAT_IPV6_UNKNOWN,
                                                                     Status.IPV4_FIREWALLED_IPV6_UNKNOWN,
                                                                     Status.IPV4_OK_IPV6_FIREWALLED,
                                                                     Status.IPV4_UNKNOWN_IPV6_FIREWALLED,
@@ -330,8 +332,13 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     private static final Set<Status> STATUS_OK =         EnumSet.of(Status.OK,
                                                                     Status.IPV4_DISABLED_IPV6_OK);
 
+    private static final Set<Status> STATUS_IPV4_SNAT =  EnumSet.of(Status.DIFFERENT,
+                                                                    Status.IPV4_SNAT_IPV6_OK,
+                                                                    Status.IPV4_SNAT_IPV6_UNKNOWN);
+
 
     /**
+     *  @param dh non-null to enable SSU1
      *  @param xdh non-null to enable SSU2
      */
     public UDPTransport(RouterContext ctx, DHSessionKeyBuilder.Factory dh, X25519KeyFactory xdh) {
@@ -343,7 +350,13 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         _peersByIdent = new ConcurrentHashMap<Hash, PeerState>(128);
         _peersByRemoteHost = new ConcurrentHashMap<RemoteHostId, PeerState>(128);
         _peersByConnID = (xdh != null) ? new ConcurrentHashMap<Long, PeerState2>(32) : null;
-        _recentlyClosedConnIDs = (xdh != null) ? new LHMCache<Long, Object>(24) : null;
+        if (xdh != null) {
+            // roughly scale based on expected traffic
+            int sz = Math.max(16, Math.min(128, getMaxConnections() / 16));
+            _recentlyClosedConnIDs = new DestroyedCache(sz);
+        } else {
+            _recentlyClosedConnIDs = null;
+        }
         _dropList = new ConcurrentHashSet<RemoteHostId>(2);
         _endpoints = new CopyOnWriteArrayList<UDPEndpoint>();
 
@@ -363,7 +376,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _cachedBid[i] = new SharedBid(BID_VALUES[i]);
         }
 
-        _packetBuilder = new PacketBuilder(_context, this);
+        _packetBuilder = (dh != null) ? new PacketBuilder(_context, this) : null;
         _packetBuilder2 = (xdh != null) ? new PacketBuilder2(_context, this) : null;
         _fragments = new OutboundMessageFragments(_context, this, _activeThrottle);
         _inboundFragments = new InboundMessageFragments(_context, _fragments, this);
@@ -379,7 +392,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         _v4IntroducersSelectedOn = -1;
         _v6IntroducersSelectedOn = -1;
         _lastInboundReceivedOn = -1;
-        _hmac = new SSUHMACGenerator();
+        _hmac = (dh != null) ? new SSUHMACGenerator() : null;
         _mtu = PeerState.LARGE_MTU;
         _mtu_ipv6 = PeerState.MIN_IPV6_MTU;
         setupPort();
@@ -409,6 +422,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
         // SSU2 key and IV generation if required
         _enableSSU1 = dh != null;
+        _defaultMTU = _enableSSU1 ? PeerState.LARGE_MTU : PeerState2.DEFAULT_MTU;
         boolean enableSSU2 = xdh != null;
         if (enableSSU2) {
             // if any ipv4 address is lower than 1280 MTU, disable
@@ -417,7 +431,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 try {
                     InetAddress addr = InetAddress.getByName(ips);
                     int mtu = MTU.getMTU(addr, true);
-                    if (mtu > 0 && mtu < PeerState2.MIN_MTU) {
+                    if (mtu > 0 && mtu < PeerState2.MIN_MTU && _enableSSU1) {
                         _log.logAlways(Log.WARN, "Disabling SSU2, MTU is " + mtu + ", minimum is " + PeerState2.MIN_MTU);
                         enableSSU2 = false;
                         break;
@@ -426,6 +440,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             }
         }
         _enableSSU2 = enableSSU2;
+        if (!_enableSSU1 && !_enableSSU2)
+            throw new IllegalArgumentException("Must enable SSU 1 or 2");
         byte[] ikey = null;
         String b64Ikey = null;
         if (_enableSSU2) {
@@ -533,22 +549,24 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (_log.shouldInfo())
             _log.info("Starting SSU transport listener...");
 
-        // set up random intro key, as of 0.9.48
-        byte[] ikey = new byte[SessionKey.KEYSIZE_BYTES];
-        _introKey = new SessionKey(ikey);
-        String sikey = _context.getProperty(PROP_INTRO_KEY);
-        if (sikey != null &&
-            _context.getEstimatedDowntime() < MIN_DOWNTIME_TO_REKEY) {
-            byte[] saved = Base64.decode(sikey);
-            if (saved != null && saved.length == SessionKey.KEYSIZE_BYTES) {
-                System.arraycopy(saved, 0, ikey, 0, SessionKey.KEYSIZE_BYTES);
+        if (_enableSSU1) {
+            // set up random intro key, as of 0.9.48
+            byte[] ikey = new byte[SessionKey.KEYSIZE_BYTES];
+            _introKey = new SessionKey(ikey);
+            String sikey = _context.getProperty(PROP_INTRO_KEY);
+            if (sikey != null &&
+                _context.getEstimatedDowntime() < MIN_DOWNTIME_TO_REKEY) {
+                byte[] saved = Base64.decode(sikey);
+                if (saved != null && saved.length == SessionKey.KEYSIZE_BYTES) {
+                    System.arraycopy(saved, 0, ikey, 0, SessionKey.KEYSIZE_BYTES);
+                } else {
+                    _context.random().nextBytes(ikey);
+                    _context.router().saveConfig(PROP_INTRO_KEY, Base64.encode(ikey));
+                }
             } else {
                 _context.random().nextBytes(ikey);
                 _context.router().saveConfig(PROP_INTRO_KEY, Base64.encode(ikey));
             }
-        } else {
-            _context.random().nextBytes(ikey);
-            _context.router().saveConfig(PROP_INTRO_KEY, Base64.encode(ikey));
         }
 
         // bind host
@@ -685,7 +703,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _establisher = new EstablishmentManager(_context, this);
 
         if (_handler == null)
-            _handler = new PacketHandler(_context, this, _enableSSU2, _establisher, _inboundFragments, _testManager, _introManager);
+            _handler = new PacketHandler(_context, this, _enableSSU1, _enableSSU2, _establisher,
+                                         _inboundFragments, _testManager, _introManager);
 
         // See comments in DummyThrottle.java
         if (USE_PRIORITY && _refiller == null)
@@ -768,7 +787,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(newPort));
                     localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
-                    RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
+                    RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                     replaceCurrentExternalAddress(local, true);
                     if (isIPv6Firewalled() || _context.getBooleanProperty(PROP_IPV6_FIREWALLED)) {
                         setReachabilityStatus(Status.IPV4_UNKNOWN_IPV6_FIREWALLED, true);
@@ -783,7 +802,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(newPort));
                     localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
-                    RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
+                    RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                     replaceCurrentExternalAddress(local, false);
                     if (isIPv4Firewalled()) {
                         setReachabilityStatus(Status.IPV4_FIREWALLED_IPV6_UNKNOWN);
@@ -829,7 +848,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         // must be after pusher and setting external addresses
         _establisher.startup();
         _handler.startup();
-        rebuildExternalAddress(false, false);
+        rebuildExternalAddress(false, v6only);
     }
 
     public synchronized void shutdown() {
@@ -865,6 +884,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _peersByConnID.clear();
         if (_recentlyClosedConnIDs != null) {
             synchronized(_addDropLock) {
+                for (PeerStateDestroyed psd : _recentlyClosedConnIDs.values()) {
+                    psd.kill();
+                }
                 _recentlyClosedConnIDs.clear();
             }
         }
@@ -873,7 +895,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         UDPPacket.clearCache();
         UDPAddress.clearCache();
         _lastInboundIPv6 = 0;
-        _hmac.clearCache();
+        if (_hmac != null)
+            _hmac.clearCache();
     }
 
     /**
@@ -899,8 +922,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     * Introduction key that people should use to contact us
-     *
+     * Introduction key that people should use to contact us,
+     * or null if SSU1 disabled.
      */
     SessionKey getIntroKey() { return _introKey; }
 
@@ -965,8 +988,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             (!SSU2Util.ENABLE_RELAY && (addr.getHost() == null || addr.getPort() <= 0)) ||
             (!v.equals(SSU2_VERSION) && !v.startsWith(SSU2_VERSION_ALT))) {
             // his address is SSU1 or is outbound SSU2 only
-            //return (rv == 1 && _enableSSU1) ? 1 : 0;
-            return (rv == 1) ? 1 : 0;
+            return (rv == 1 && _enableSSU1) ? 1 : 0;
         }
         // his address is SSU2
         // do not validate the s/i b64, we will just catch it later
@@ -1138,6 +1160,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
      */
     public int getMTU(boolean ipv6) {
         // TODO multiple interfaces of each type
+        if (!_enableSSU1)
+            return getSSU2MTU(ipv6);
         return ipv6 ? _mtu_ipv6 : _mtu;
     }
 
@@ -1463,7 +1487,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                                 OrderedProperties localOpts = new OrderedProperties();
                                 localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(ourPort));
                                 localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
-                                RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
+                                RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                                 replaceCurrentExternalAddress(local, true);
                                 if (_log.shouldWarn())
                                     _log.warn("New IPv6 address, assuming still firewalled [" +
@@ -1667,10 +1691,21 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
      * Was the state for this SSU2 receive connection ID recently closed?
      * @since 0.9.56
      */
-    boolean wasRecentlyClosed(long rcvConnID) {
+    PeerStateDestroyed getRecentlyClosed(long rcvConnID) {
         Long id = Long.valueOf(rcvConnID);
         synchronized(_addDropLock) {
-            return _recentlyClosedConnIDs.get(id) != null;
+            return _recentlyClosedConnIDs.get(id);
+        }
+    }
+
+    /**
+     * Stop listening for packets on a destroyed connection
+     * @since 0.9.57
+     */
+    void removeRecentlyClosed(PeerStateDestroyed peer) {
+        Long id = Long.valueOf(peer.getRcvConnID());
+        synchronized(_addDropLock) {
+            _recentlyClosedConnIDs.remove(id);
         }
     }
 
@@ -1848,7 +1883,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             if (oldPeer != peer && oldPeer.getVersion() == 2) {
                 PeerState2 state2 = (PeerState2) oldPeer;
                 Long id = Long.valueOf(state2.getRcvConnID());
-                _recentlyClosedConnIDs.put(id, DUMMY);
+                _recentlyClosedConnIDs.put(id, new PeerStateDestroyed(_context, this, state2));
                 _peersByConnID.remove(id);
             }
         }
@@ -2056,7 +2091,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             Long id = Long.valueOf(state2.getRcvConnID());
             // for now, we don't save the PeerState2 for doing termination retransmissions,
             // but we may in the future
-            _recentlyClosedConnIDs.put(id, DUMMY);
+            _recentlyClosedConnIDs.put(id, new PeerStateDestroyed(_context, this, state2));
             _peersByConnID.remove(id);
         }
 
@@ -2416,8 +2451,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         List<RouterAddress> addrs = getTargetAddresses(target);
         for (int i = 0; i < addrs.size(); i++) {
             RouterAddress addr = addrs.get(i);
-            //if (getSSUVersion(addr) == 0)
-            //    continue;
+            if (!_enableSSU1 && addr.getTransportStyle().equals("SSU") && !"2".equals(addr.getOption("v")))
+                continue;
             if (addr.getOption("itag0") == null) {
                 // No introducers
                 // Skip outbound-only or invalid address/port
@@ -2473,6 +2508,13 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         return _enableSSU2 ? STYLE2 : null;
     }
 
+    /**
+     * @return "SSU" unless SSU1 disabled, then "SSU2"
+     * @since 0.9.57
+     */
+    private String getPublishStyle() {
+        return _enableSSU1 ? STYLE : STYLE2;
+    }
 
     @Override
     public void send(OutNetMessage msg) {
@@ -2803,7 +2845,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 if (old == null || !host.equals(old.getHost()) || port != old.getPort()) {
                     options.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
                     options.setProperty(UDPAddress.PROP_HOST, host);
-                    RouterAddress local = new RouterAddress(STYLE, options, SSU_OUTBOUND_COST);
+                    RouterAddress local = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
                     replaceCurrentExternalAddress(local, isIPv6);
                     options = new OrderedProperties();
                 }
@@ -2823,12 +2865,12 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 mtu = getMTU(false);
             }
             options.setProperty(UDPAddress.PROP_CAPACITY, caps);
-            if (mtu != PeerState.LARGE_MTU && mtu > 0)
+            if (mtu != _defaultMTU && mtu > 0)
                 options.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
             if (_enableSSU2 && (mtu >= PeerState2.MIN_MTU || mtu == 0))
                 addSSU2Options(options);
             RouterAddress current = getCurrentAddress(false);
-            RouterAddress addr = new RouterAddress(STYLE, options, SSU_OUTBOUND_COST);
+            RouterAddress addr = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
             if (!addr.deepEquals(current)) {
                 if (_log.shouldInfo())
                     _log.info("Address rebuilt: " + addr, new Exception());
@@ -2893,13 +2935,13 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
         // MTU since 0.9.2
         int mtu = getMTU(isIPv6);
-        if (mtu != PeerState.LARGE_MTU && mtu > 0)
+        if (mtu != _defaultMTU && mtu > 0)
             options.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
 
         if (directIncluded || introducersIncluded) {
             // This is called via TransportManager.configTransports() before startup(), prevent NPE
             // Note that peers won't connect to us without this - see EstablishmentManager
-            if (_introKey != null)
+            if (_enableSSU1 && _introKey != null)
                 options.setProperty(UDPAddress.PROP_INTRO_KEY, _introKey.toBase64());
 
             // SSU seems to regulate at about 85%, so make it a little higher.
@@ -2919,7 +2961,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             }
             if (_enableSSU2 && (mtu >= PeerState2.MIN_MTU || mtu == 0))
                 addSSU2Options(options);
-            RouterAddress addr = new RouterAddress(STYLE, options, cost);
+            RouterAddress addr = new RouterAddress(getPublishStyle(), options, cost);
 
             RouterAddress current = getCurrentAddress(isIPv6);
             boolean wantsRebuild = !addr.deepEquals(current);
@@ -2933,7 +2975,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
                     localOpts.setProperty(UDPAddress.PROP_HOST, host);
-                    local = new RouterAddress(STYLE, localOpts, cost);
+                    local = new RouterAddress(getPublishStyle(), localOpts, cost);
                 }
                 replaceCurrentExternalAddress(local, isIPv6);
             }
@@ -2951,11 +2993,11 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     OrderedProperties opts = new OrderedProperties();
                     opts.setProperty(UDPAddress.PROP_CAPACITY, CAP_IPV6);
                     mtu = getMTU(true);
-                    if (mtu > 0)
+                    if (mtu != _defaultMTU && mtu > 0)
                         opts.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
                     if (_enableSSU2)
                         addSSU2Options(opts);
-                    RouterAddress addr6 = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
+                    RouterAddress addr6 = new RouterAddress(getPublishStyle(), opts, SSU_OUTBOUND_COST);
                     replaceAddress(addr6);
                 }
                 // warning, this calls back into us with allowRebuildRouterInfo = false,
@@ -2980,17 +3022,17 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 OrderedProperties localOpts = new OrderedProperties();
                 localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
                 localOpts.setProperty(UDPAddress.PROP_HOST, host);
-                RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
+                RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                 replaceCurrentExternalAddress(local, isIPv6);
             }
             // Make an empty "4" or "6" address
             OrderedProperties opts = new OrderedProperties();
             opts.setProperty(UDPAddress.PROP_CAPACITY, isIPv6 ? CAP_IPV6 : CAP_IPV4);
-            if (mtu != PeerState.LARGE_MTU && mtu > 0)
+            if (mtu != _defaultMTU && mtu > 0)
                 opts.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
             if (_enableSSU2 && (mtu >= PeerState2.MIN_MTU || mtu == 0))
                 addSSU2Options(opts);
-            RouterAddress addr = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
+            RouterAddress addr = new RouterAddress(getPublishStyle(), opts, SSU_OUTBOUND_COST);
             RouterAddress current = getCurrentAddress(isIPv6);
             boolean wantsRebuild = !addr.deepEquals(current);
             if (!wantsRebuild)
@@ -3196,6 +3238,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 case DIFFERENT:
                 case IPV4_FIREWALLED_IPV6_OK:
                 case IPV4_FIREWALLED_IPV6_UNKNOWN:
+                case IPV4_SNAT_IPV6_OK:
+                case IPV4_SNAT_IPV6_UNKNOWN:
                 if (_log.shouldDebug())
                     _log.debug("IPv4 Introducers required because our status is [" + status + "]");
                 return true;
@@ -3529,15 +3573,15 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     *  @return a new DHSessionKeyBuilder
+     *  @return a new DHSessionKeyBuilder, or null if SSU1 disabled
      *  @since 0.9
      */
     DHSessionKeyBuilder getDHBuilder() {
-        return _dhFactory.getBuilder();
+        return _enableSSU1 ? _dhFactory.getBuilder() : null;
     }
 
     /**
-     *  @return the factory
+     *  @return the factory, or null if SSU1 disabled
      *  @since 0.9.2
      */
     DHSessionKeyBuilder.Factory getDHFactory() {
@@ -3553,7 +3597,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     *  @return the SSU HMAC
+     *  @return the SSU HMAC, or null if SSU1 disabled
      *  @since 0.9.42
      */
     HMACGenerator getHMAC() {
@@ -3561,7 +3605,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     *  @return the PacketBuilder
+     *  @return the PacketBuilder, or null if SSU1 disabled
      *  @since 0.9.52
      */
     PacketBuilder getBuilder() {
@@ -3901,6 +3945,14 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
+     *  Is IPv4 Symmetric NATted?
+     *  @since 0.9.57
+     */
+    boolean isSnatted() { 
+        return STATUS_IPV4_SNAT.contains(getReachabilityStatus());
+    }
+
+    /**
      * @deprecated unused
      */
     @Override
@@ -4023,6 +4075,28 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         public void timeReached() {
             if (introducersRequired(false) || introducersRequired(true))
                 _introManager.pingIntroducers();
+        }
+    }
+
+    /**
+     * For PeerStateDestroyed, to kill the timers on overflow,
+     * else the memory won't be freed.
+     *
+     * @since 0.9.57
+     */
+    private static class DestroyedCache extends LHMCache<Long, PeerStateDestroyed> {
+
+        public DestroyedCache(int max) {
+            super(max);
+        }
+
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<Long, PeerStateDestroyed> eldest) {
+            boolean rv = super.removeEldestEntry(eldest);
+            if (rv) {
+                eldest.getValue().kill();
+            }
+            return rv;
         }
     }
 

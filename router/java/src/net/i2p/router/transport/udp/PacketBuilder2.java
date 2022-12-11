@@ -2,6 +2,7 @@ package net.i2p.router.transport.udp;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -148,7 +149,7 @@ class PacketBuilder2 {
      *
      *  @param otherBlocks may be null or empty
      */
-    public UDPPacket buildPacket(List<Fragment> fragments, List<Block> otherBlocks, PeerState2 peer) {
+    public UDPPacket buildPacket(List<Fragment> fragments, List<Block> otherBlocks, SSU2Sender peer) {
         // calculate data size
         int numFragments = fragments.size();
         int dataSize = 0;
@@ -303,7 +304,9 @@ class PacketBuilder2 {
 
         packet.setPriority(priority);
         if (fragments.isEmpty()) {
-            peer.getAckedMessages().set(pktNum); // not ack-eliciting
+            SSU2Bitfield acked =  peer.getAckedMessages();
+            if (acked != null)     // null for PeerStateDestroyed
+                acked.set(pktNum); // not ack-eliciting
             packet.markType(1);
             packet.setFragmentCount(-1);
             packet.setMessageType(TYPE_ACK);
@@ -356,15 +359,15 @@ class PacketBuilder2 {
      *  Build a data packet with a termination block.
      *  This will also include acks, a new token block, and padding.
      */
-    public UDPPacket buildSessionDestroyPacket(int reason, PeerState2 peer) {
+    public UDPPacket buildSessionDestroyPacket(int reason, SSU2Sender peer) {
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Sending termination " + reason + " to " + peer);
+            _log.debug("[SSU2] Sending termination " + reason + " to : " + peer);
+        peer.setDestroyReason(reason);
         List<Block> blocks = new ArrayList<Block>(2);
-        if (peer.getKeyEstablishedTime() - _context.clock().now() > EstablishmentManager.IB_TOKEN_EXPIRATION / 2 &&
-            !_context.router().gracefulShutdownInProgress()) {
+        if (peer.isIPv6() || !_transport.isSnatted()) {
             // update token
             EstablishmentManager.Token token = _transport.getEstablisher().getInboundToken(peer.getRemoteHostId());
-            Block block = new SSU2Payload.NewTokenBlock(token.token, token.expires);
+            Block block = new SSU2Payload.NewTokenBlock(token);
             blocks.add(block);
         }
         Block block = new SSU2Payload.TerminationBlock(reason, peer.getReceivedMessages().getHighestSet());
@@ -378,7 +381,7 @@ class PacketBuilder2 {
      * Build a new SessionRequest packet for the given peer, encrypting it
      * as necessary.
      *
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildTokenRequestPacket(OutboundEstablishState2 state) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
@@ -399,7 +402,7 @@ class PacketBuilder2 {
      * Build a new SessionRequest packet for the given peer, encrypting it
      * as necessary.
      *
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildSessionRequestPacket(OutboundEstablishState2 state) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
@@ -420,7 +423,7 @@ class PacketBuilder2 {
      * Build a new SessionCreated packet for the given peer, encrypting it
      * as necessary.
      *
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildSessionCreatedPacket(InboundEstablishState2 state) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
@@ -432,7 +435,8 @@ class PacketBuilder2 {
         pkt.setLength(LONG_HEADER_SIZE);
         int port = state.getSentPort();
         encryptSessionCreated(packet, state.getHandshakeState(), state.getSendHeaderEncryptKey1(),
-                              state.getSendHeaderEncryptKey2(), state.getSentRelayTag(), state.getNextToken(),
+                              state.getSendHeaderEncryptKey2(), state.getSentRelayTag(),
+                              null, // state.getNextToken(), // send with termination only
                               sentIP, port);
         pkt.setSocketAddress(state.getSentAddress());
         packet.setMessageType(TYPE_CREAT);
@@ -446,7 +450,7 @@ class PacketBuilder2 {
      * as necessary.
      *
      * @param terminationCode 0 normally, nonzero to send termination block
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildRetryPacket(InboundEstablishState2 state, int terminationCode) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
@@ -469,6 +473,28 @@ class PacketBuilder2 {
     }
 
     /**
+     * Build a new Retry packet with a termination code, for a rejection
+     * direct from the EstablishmentManager. No InboundEstablishState2 required.
+     *
+     * @param terminationCode must be greater than zero
+     * @return ready to send packet, non-null
+     * @since 0.9.57
+     */
+    public UDPPacket buildRetryPacket(RemoteHostId to, SocketAddress toAddr, long destID, long srcID, int terminationCode) {
+        long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
+        UDPPacket packet = buildLongPacketHeader(destID, n, RETRY_FLAG_BYTE, srcID, 0);
+        DatagramPacket pkt = packet.getPacket();
+        pkt.setLength(LONG_HEADER_SIZE);
+        byte[] introKey = _transport.getSSU2StaticIntroKey();
+        encryptRetry(packet, introKey, n, introKey, introKey,
+                     to.getIP(), to.getPort(), terminationCode);
+        pkt.setSocketAddress(toAddr);
+        packet.setMessageType(TYPE_CREAT);
+        packet.setPriority(PRIORITY_LOW);
+        return packet;
+    }
+    
+    /**
      * Build a new series of SessionConfirmed packets for the given peer,
      * encrypting it as necessary.
      *
@@ -477,7 +503,7 @@ class PacketBuilder2 {
      * the establish state via confirmedPacketsSent(), and the state will
      * transmit them via the new PeerState2.
      *
-     * @return ready to send packets, or null if there was a problem
+     * @return ready to send packets, non-null
      */
     public UDPPacket[] buildSessionConfirmedPackets(OutboundEstablishState2 state, RouterInfo ourInfo) {
         boolean gzip = false;
@@ -538,7 +564,7 @@ class PacketBuilder2 {
     /**
      * Build a single new SessionConfirmed packet for the given peer, unfragmented.
      *
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     private UDPPacket buildSessionConfirmedPacket(OutboundEstablishState2 state, SSU2Payload.RIBlock block) {
         UDPPacket packet = buildShortPacketHeader(state.getSendConnID(), 0, SESSION_CONFIRMED_FLAG_BYTE);
@@ -546,7 +572,8 @@ class PacketBuilder2 {
         pkt.setLength(SHORT_HEADER_SIZE);
         boolean isIPv6 = state.getSentIP().length == 16;
         encryptSessionConfirmed(packet, state.getHandshakeState(), state.getMTU(), 1, 0, isIPv6,
-                                state.getSendHeaderEncryptKey1(), state.getSendHeaderEncryptKey2(), block, state.getNextToken());
+                                state.getSendHeaderEncryptKey1(), state.getSendHeaderEncryptKey2(), block,
+                                null); // state.getNextToken());  // send with termination only
         pkt.setSocketAddress(state.getSentAddress());
         packet.setMessageType(TYPE_CONF);
         packet.setPriority(PRIORITY_HIGH);
@@ -654,7 +681,7 @@ class PacketBuilder2 {
      * Build a packet as Alice, to Bob to begin a  peer test.
      * In-session, message 1.
      *
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildPeerTestFromAlice(byte[] signedData, PeerState2 bob) {
         Block block = new SSU2Payload.PeerTestBlock(1, 0, null, signedData);
@@ -667,7 +694,7 @@ class PacketBuilder2 {
      * Build a packet as Alice to Charlie.
      * Out-of-session, message 6.
      *
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildPeerTestFromAlice(InetAddress toIP, int toPort, SessionKey introKey,
                                             long sendID, long rcvID, byte[] signedData) {
@@ -690,7 +717,7 @@ class PacketBuilder2 {
      * In-session, message 4.
      *
      * @param charlieHash fake hash (all zeros) if rejected by bob
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildPeerTestToAlice(int code, Hash charlieHash, byte[] signedData, PeerState2 alice) {
         Block block = new SSU2Payload.PeerTestBlock(4, code, charlieHash, signedData);
@@ -703,7 +730,7 @@ class PacketBuilder2 {
      * Build a packet as Charlie to Alice.
      * Out-of-session, messages 5 and 7.
      *
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildPeerTestToAlice(InetAddress aliceIP, int alicePort, SessionKey introKey,
                                           boolean firstSend,
@@ -726,7 +753,7 @@ class PacketBuilder2 {
      * Build a packet as Bob to Charlie to help test Alice.
      * In-session, message 2.
      *
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildPeerTestToCharlie(Hash aliceHash, byte[] signedData, PeerState2 charlie) {
         Block block = new SSU2Payload.PeerTestBlock(2, 0, aliceHash, signedData);
@@ -739,7 +766,7 @@ class PacketBuilder2 {
      * Build a packet as Charlie to Bob verifying that we will help test Alice.
      * In-session, message 3.
      *
-     * @return ready to send packet, or null if there was a problem
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildPeerTestToBob(int code, byte[] signedData, PeerState2 bob) {
         Block block = new SSU2Payload.PeerTestBlock(3, code, null, signedData);
@@ -753,7 +780,7 @@ class PacketBuilder2 {
      *  In-session.
      *
      *  @param signedData flag + signed data
-     *  @return null on failure
+     *  @return non-null
      */
     UDPPacket buildRelayRequest(byte[] signedData, PeerState2 bob) {
         Block block = new SSU2Payload.RelayRequestBlock(signedData);
@@ -768,7 +795,7 @@ class PacketBuilder2 {
      *  In-session.
      *
      *  @param signedData flag + alice hash + signed data
-     *  @return null on failure
+     *  @return non-null
      */
     UDPPacket buildRelayIntro(byte[] signedData, PeerState2 charlie) {
         Block block = new SSU2Payload.RelayIntroBlock(signedData);
@@ -783,7 +810,7 @@ class PacketBuilder2 {
      *
      *  @param signedData flag + response code + signed data + optional token
      *  @param state Alice or Bob
-     *  @return null on failure
+     *  @return non-null
      */
     UDPPacket buildRelayResponse(byte[] signedData, PeerState2 state) {
         Block block = new SSU2Payload.RelayResponseBlock(signedData);
@@ -819,8 +846,8 @@ class PacketBuilder2 {
      *  @return a packet with the first 32 bytes filled in
      */
     private UDPPacket buildLongPacketHeader(long destID, long pktNum, byte type, long srcID, long token) {
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] Building long header with DestinationID [" + destID + "] \n* Packet [#" + pktNum + "]; Type: " + type + "; SourceID [" + srcID + "]; Token [" + token + "]");
+        //if (_log.shouldDebug())
+        //    _log.debug("[SSU2] Building long header with DestinationID [" + destID + "] \n* Packet [#" + pktNum + "]; Type: " + type + "; SourceID [" + srcID + "]; Token [" + token + "]");
         UDPPacket packet = buildShortPacketHeader(destID, pktNum, type);
         byte data[] = packet.getPacket().getData();
         data[13] = PROTOCOL_VERSION;
@@ -904,6 +931,7 @@ class PacketBuilder2 {
 
     /**
      *  @param packet containing only 32 byte header
+     *  @param token may be null
      */
     private void encryptSessionCreated(UDPPacket packet, HandshakeState state,
                                        byte[] hdrKey1, byte[] hdrKey2, long relayTag,
@@ -925,7 +953,7 @@ class PacketBuilder2 {
                 blocks.add(block);
             }
             if (token != null) {
-                block = new SSU2Payload.NewTokenBlock(token.token, token.expires);
+                block = new SSU2Payload.NewTokenBlock(token);
                 len += block.getTotalLength();
                 blocks.add(block);
             }
@@ -975,7 +1003,7 @@ class PacketBuilder2 {
 
     /**
      *  Also used for hole punch with a relay request block.
-     *  Also used for retry with ptBlock = null
+     *  Also used for retry with (usually) ptBlock = null
      *
      *  @param packet containing only 32 byte header
      *  @param ptBlock Peer Test or Relay Request block. Null for retry.
@@ -1067,6 +1095,7 @@ class PacketBuilder2 {
      *
      *  @param packet containing only 16 byte header
      *  @param addPadding force-add exactly this size a padding block, for jumbo only
+     *  @param token may be null
      */
     private void encryptSessionConfirmed(UDPPacket packet, HandshakeState state, int mtu, int numFragments, int addPadding,
                                          boolean isIPv6, byte[] hdrKey1, byte[] hdrKey2,
@@ -1083,7 +1112,7 @@ class PacketBuilder2 {
             blocks.add(riblock);
             // only if room
             if (token != null && mtu - (SHORT_HEADER_SIZE + KEY_LEN + MAC_LEN + len + MAC_LEN) >= 15) {
-                Block block = new SSU2Payload.NewTokenBlock(token.token, token.expires);
+                Block block = new SSU2Payload.NewTokenBlock(token);
                 len += block.getTotalLength();
                 blocks.add(block);
             }
@@ -1186,9 +1215,5 @@ class PacketBuilder2 {
                 padlen += 5;
         }
         return new SSU2Payload.PaddingBlock(padlen);
-    }
-
-    private void writePayload(List<Block> blocks, byte[] data, int off) {
-        SSU2Payload.writePayload(data, off, blocks);
     }
 }

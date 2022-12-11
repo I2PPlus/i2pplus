@@ -5,26 +5,25 @@
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
-  var visibility = document.visibilityState;
-  var repeat;
-  if (refresh > 0) {
-    window.requestAnimationFrame(refreshSidebar);
-    function runTimer() {
-      var repeat = setTimeout(function updateSidebar() {
-        window.requestAnimationFrame(refreshSidebar);
-        setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
-      }, <%=intl.getRefresh()%> * 1000);
+  var refreshInterval = refresh * 1000;
+  var timerId = setInterval(updateSidebar, refreshInterval);
+  function updateSidebar() {
+    if (document.visible = true) {
+      refreshSidebar();
+    } else {
+     cancelRefresh();
     }
-    runTimer();
+  }
+  function cancelRefresh() {
+    clearInterval(timerId);
   }
 </script>
 <%
     } else {
 %>
-
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
-  window.requestAnimationFrame(refreshSidebar);
+  refreshSidebar();
 </script>
 <%
     }

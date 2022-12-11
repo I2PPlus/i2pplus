@@ -352,9 +352,9 @@ public class I2PSnarkServlet extends BasicServlet {
                       "<script charset=\"utf-8\" src=\".resources/js/delete.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             if (delay > 0) {
                 out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n");
-                //debug = true;
-                if (debug) {
-                    out.write("import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debug - comment out when done
+                debug = false;
+                if (debug && _context.isRouterContext()) {
+                    out.write("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debug - comment out when done
                 } else {
                     out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                 }
@@ -568,12 +568,21 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<li class=\"msg\">" + msg + "</li>\n");
             }
             out.write("</ul>\n</div>\n");
-            out.write("<script charset=\"utf-8\" src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+            debug = false;
+            if (debug && _context.isRouterContext()) {
+                out.write("<script charset=\"utf-8\" src=\"/themes/js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
+            } else {
+                out.write("<script charset=\"utf-8\" src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+            }
             int delay = 0;
             delay = _manager.getRefreshDelaySeconds();
-            if (delay > 0 && _context.isRouterContext())
-                out.write("<script charset=\"utf-8\" type=\"text/javascript\" src=\"" + _contextPath + WARBASE + "js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
-                //out.write("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/themes/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
+            if (delay > 0 && _context.isRouterContext()) {
+                if (debug) {
+                    out.write("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/themes/js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
+                } else {
+                    out.write("<script charset=\"utf-8\" type=\"text/javascript\" src=\"" + _contextPath + WARBASE + "js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
+                }
+            }
         }
     }
 
@@ -1108,9 +1117,12 @@ public class I2PSnarkServlet extends BasicServlet {
 
             // load torrentDisplay script here to ensure table has loaded into dom
             if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
-                out.write("<script charset=\"utf-8\" src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION +
-                          "\" type=\"text/javascript\" async></script>\n");
-                out.write("<script charset=\"utf-8\" src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debug - comment out when done
+                if (debug && _context.isRouterContext()) {
+                    out.write("<script charset=\"utf-8\" src=\"/themes/js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debug
+                } else {
+                    out.write("<script charset=\"utf-8\" src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION +
+                              "\" type=\"text/javascript\" async></script>\n");
+                }
             }
             return start == 0;
     }
@@ -4570,10 +4582,13 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         int delay = _manager.getRefreshDelaySeconds();
         if (delay > 0) {
-            buf.append("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
-                       "import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-//                       "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" + // debug
-                       "var ajaxDelay = " + (delay * 1000) + ";\n" +
+            buf.append("<script nonce=\"" + cspNonce + "\" type=\"module\">\n");
+            if (debug && _context.isRouterContext()) {
+                buf.append("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debugging
+            } else {
+                buf.append("import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
+            }
+            buf.append("var ajaxDelay = " + (delay * 1000) + ";\n" +
                        "var visibility = document.visibilityState;\n" +
                        "var cycle;\n" +
                        "if (visibility = \"visible\") {\n" +

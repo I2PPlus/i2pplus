@@ -191,12 +191,12 @@ public class GraphHelper extends FormHandler {
                            + "\">");
                 String title = _t("Combined bandwidth graph");
                 if (hiDPI) {
-                    _out.write("<img class=\"statimage\""
+                    _out.write("<img loading=lazy class=\"statimage\""
                                + " src=\"viewstat.jsp?stat=bw.combined"
                                + "&amp;periodCount=" + _periodCount
                                + "&amp;width=" + (_width * 2));
                 } else {
-                    _out.write("<img class=\"statimage\""
+                    _out.write("<img loading=lazy class=\"statimage\""
                                + " src=\"viewstat.jsp?stat=bw.combined"
                                + "&amp;periodCount=" + _periodCount
                                + "&amp;width=" + _width);
@@ -240,7 +240,7 @@ public class GraphHelper extends FormHandler {
                            //+ "&amp;h=" + (3 * _height)
                 _out.write((_showEvents ? "&amp;showEvents=1" : "")
                            + "\">");
-                _out.write("<img class=\"statimage\" border=\"0\""
+                _out.write("<img loading=lazy class=\"statimage\" border=\"0\""
                            + " src=\"viewstat.jsp?stat="
                            + r.getRateStat().getName().replace(" ", "%20")
                            + "&amp;showEvents=" + _showEvents

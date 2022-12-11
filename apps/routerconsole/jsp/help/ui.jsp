@@ -14,7 +14,6 @@
 <title><%=intl._t("User Interface Help")%> - I2P+</title>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("User Interface Help")%></h1>
 <div class="main" id="help">
@@ -144,7 +143,7 @@
 <%=intl._t("If I2P cannot connect to the internet, a reading of 0ms may be indicated.")%></p>
 </div>
 </div>
-<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

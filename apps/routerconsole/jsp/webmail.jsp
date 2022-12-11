@@ -64,8 +64,8 @@
   window.addEventListener("pageshow", progressx.hide());
 </script>
 </div>
-<%@include file="summaryajax.jsi" %>
 <style type="text/css">iframe{opacity:1}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>
 <%

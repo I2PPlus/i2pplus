@@ -14,7 +14,6 @@
 <title><%=intl._t("Help Section")%> - I2P+</title>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Help &amp; Support")%></h1>
 <div class="main" id="help">
@@ -33,7 +32,7 @@
 <li id="help_webhosting"><a href="webhosting"><b><%=intl._t("Webhosting on I2P")%></b></a><br><%=intl._t("An introduction to hosting websites on the I2P network")%></li>
 </ul>
 </div>
-<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

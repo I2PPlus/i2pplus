@@ -473,30 +473,30 @@ public class Rate {
         PersistenceHelper.addDate(buf, addComments, prefix, ".currentDate",
                               "Data written:", now());
         PersistenceHelper.add(buf, addComments, prefix, ".currentTotalValue",
-                              "Total value of data points in current (uncoalesced) period: " + _currentTotalValue, _currentTotalValue);
+                              "Total value of data points in current period (uncoalesced): " + _currentTotalValue, _currentTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".currentEventCount",
-                              "Total number of events in current (uncoalesced) period: " + _currentEventCount, _currentEventCount);
+                              "Total events in current period (uncoalesced): " + _currentEventCount, _currentEventCount);
         PersistenceHelper.addTime(buf, addComments, prefix, ".currentTotalEventTime",
-                              "Total time used by events in current (uncoalesced) period:",
+                              "Total time used by events in current period (uncoalesced):",
                               _currentTotalEventTime);
         PersistenceHelper.add(buf, addComments, prefix, ".lastTotalValue",
-                              "Total value of data points in most recent (coalesced) period: " + _lastTotalValue, _lastTotalValue);
+                              "Total value of data points in most recent period (coalesced): " + _lastTotalValue, _lastTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".lastEventCount",
-                              "Total number of events in most recent (coalesced) period: " + _lastEventCount, _lastEventCount);
+                              "Total events in most recent period (coalesced): " + _lastEventCount, _lastEventCount);
         PersistenceHelper.addTime(buf, addComments, prefix, ".lastTotalEventTime",
-                              "Total time used by events in most recent (coalesced) period:",
+                              "Total time used by events in most recent period (coalesced):",
                               _lastTotalEventTime);
         PersistenceHelper.add(buf, addComments, prefix, ".extremeTotalValue",
                               "Total value of data points in most extreme period: " + _extremeTotalValue, _extremeTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".extremeEventCount",
-                              "Total number of events in most extreme period: " + _extremeEventCount, _extremeEventCount);
+                              "Total events in most extreme period: " + _extremeEventCount, _extremeEventCount);
         PersistenceHelper.addTime(buf, addComments, prefix, ".extremeTotalEventTime",
                               "Total time used by events in most extreme period:",
                               _extremeTotalEventTime);
         PersistenceHelper.add(buf, addComments, prefix, ".lifetimeTotalValue",
                               "Total value of data points since this stat was created: " + _lifetimeTotalValue, _lifetimeTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".lifetimeEventCount",
-                              "Total number of events since this stat was created: " + _lifetimeEventCount, _lifetimeEventCount);
+                              "Total events since this stat was created: " + _lifetimeEventCount, _lifetimeEventCount);
         PersistenceHelper.addTime(buf, addComments, prefix, ".lifetimeTotalEventTime",
                               "Total time used by events since this stat was created:",
                               _lifetimeTotalEventTime);

@@ -404,7 +404,7 @@ class ProfilePersistenceHelper {
 
             fixupFirstHeardAbout(profile);
             return profile;
-        } catch (IOException e) {
+        } catch (Exception e) {
             if (_log.shouldWarn())
                 _log.warn("Error loading properties from " + file.getAbsolutePath(), e);
             file.delete();

@@ -85,9 +85,9 @@ class IntroductionManager {
     private final UDPTransport _transport;
     private final PacketBuilder _builder;
     private final PacketBuilder2 _builder2;
-    /** map of relay tag to PeerState that should receive the introduction */
+    /** map of relay tag to Charlie PeerState that should receive the introduction (we are Bob) */
     private final Map<Long, PeerState> _outbound;
-    /** map of relay tag to PeerState who have given us introduction tags */
+    /** map of relay tag to Bob PeerState who have given us introduction tags (we are Charlie) */
     private final Map<Long, PeerState> _inbound;
     /** map of relay nonce to alice PeerState who requested it */
     private final ConcurrentHashMap<Long, PeerState2> _nonceToAlice;
@@ -252,7 +252,7 @@ class IntroductionManager {
                         _log.info("Reusing introducer: " + ua.getIntroducerHost(i));
                 } else {
                     // SSU 2
-                    if (ssu2count >= 2)
+                    if (_builder != null && ssu2count >= 2)
                         continue;
                     intro = new Introducer(ua.getIntroducerHash(i), tag, sexp);
                     ssu2count++;
@@ -277,7 +277,7 @@ class IntroductionManager {
                     if (b64.equals(intro.shash))
                         continue outerloop;
                 }
-                if (ssu2count >= 2)
+                if (_builder != null && ssu2count >= 2)
                     continue;
             }
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
@@ -291,6 +291,7 @@ class IntroductionManager {
                 dlm.setMessageExpiration(now + 10*1000);
                 dlm.setFrom(_context.routerHash());
                 _transport.send(dlm, cur);
+                cur.setLastSendTime(now);
                 continue;
             }
             // FIXME we can include all his addresses including IPv6 even if we don't support IPv6 (isValid() is false)
@@ -761,6 +762,8 @@ class IntroductionManager {
 
         // send that peer an introduction for alice
         _transport.send(_builder.buildRelayIntro(aliceRelayID, charlie, rrReader));
+        long now = _context.clock().now();
+        charlie.setLastSendTime(now);
 
         // send alice back charlie's info
         // lookup session so we can use session key if available
@@ -783,6 +786,7 @@ class IntroductionManager {
         } else {
             if (_log.shouldDebug())
                 _log.debug("Sending RelayResponse (in-session) to: " + alice);
+            aliceState.setLastSendTime(now);
         }
         _transport.send(_builder.buildRelayResponse(alice, charlie, rrReader.readNonce(),
                                                     cipherKey, macKey));
@@ -800,6 +804,7 @@ class IntroductionManager {
     void receiveRelayRequest(PeerState2 alice, byte[] data) {
         long time = DataHelper.fromLong(data, 8, 4) * 1000;
         long now = _context.clock().now();
+        alice.setLastReceiveTime(now);
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
             if (_log.shouldWarn())
@@ -818,8 +823,8 @@ class IntroductionManager {
         RouterInfo aliceRI = null;
         int rcode;
         if (charlie == null) {
-            if (_log.shouldWarn())
-                _log.warn("Relay tag not found " + tag + " from " + alice);
+            if (_log.shouldInfo())
+                _log.info("Relay tag not found " + tag + " from " + alice);
             rcode = SSU2Util.RELAY_REJECT_BOB_NO_TAG;
         } else if (charlie.getVersion() != 2) {
             if (_log.shouldWarn())
@@ -871,6 +876,7 @@ class IntroductionManager {
             System.arraycopy(alice.getRemotePeer().getData(), 0, idata, 1, Hash.HASH_LENGTH);
             System.arraycopy(data, 0, idata, 1 + Hash.HASH_LENGTH, data.length);
             packet = _builder2.buildRelayIntro(idata, (PeerState2) charlie);
+            charlie.setLastSendTime(now);
         } else {
             // send rejection to Alice
             SigningPrivateKey spk = _context.keyManager().getSigningPrivateKey();
@@ -884,6 +890,7 @@ class IntroductionManager {
             if (_log.shouldInfo())
                 _log.info("Send relay response rejection as bob " + rcode + " to alice " + alice);
             packet = _builder2.buildRelayResponse(data, alice);
+            alice.setLastSendTime(now);
         }
         _transport.send(packet);
     }
@@ -1059,7 +1066,7 @@ class IntroductionManager {
         if (rcode == SSU2Util.RELAY_ACCEPT) {
             RemoteHostId aliceID = new RemoteHostId(testIP, testPort);
             EstablishmentManager.Token tok = _transport.getEstablisher().getInboundToken(aliceID, 60*1000);
-            token = tok.token;
+            token = tok.getToken();
         } else {
             token = 0;
         }
@@ -1077,6 +1084,7 @@ class IntroductionManager {
                       " with token " + token +
                       " for Alice " + Addresses.toString(testIP, testPort) + ' ' + aliceRI);
         _transport.send(packet);
+        bob.setLastSendTime(now);
         if (rcode == SSU2Util.RELAY_ACCEPT) {
             // send hole punch with the same data we sent to Bob
             if (_log.shouldDebug())
@@ -1104,6 +1112,7 @@ class IntroductionManager {
         long nonce = DataHelper.fromLong(data, 0, 4);
         long time = DataHelper.fromLong(data, 4, 4) * 1000;
         long now = _context.clock().now();
+        peer.setLastReceiveTime(now);
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
             if (_log.shouldWarn())
@@ -1149,6 +1158,7 @@ class IntroductionManager {
             if (_log.shouldDebug())
                 _log.debug("Received relay response " + status + " as bob, forward " + " nonce " + nonce + " to " + alice);
             _transport.send(packet);
+            alice.setLastSendTime(now);
         } else {
             // We are Alice, give to EstablishmentManager to check sig and process
             if (_log.shouldDebug())

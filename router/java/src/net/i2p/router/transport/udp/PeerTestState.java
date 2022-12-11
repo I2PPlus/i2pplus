@@ -182,23 +182,35 @@ class PeerTestState {
         buf.append("\n* PeerTest ").append(_testNonce)
            .append(_isIPv6 ? " [IPv6]" : " [IPv4]")
            .append(" started ").append(DataHelper.formatTime(_beginTime))
-           .append(" as ").append(_ourRole.toString()).append("\n*");
-        if (_aliceIP != null)
-            buf.append(" [Alice: ").append(_aliceIP).append(':').append(_alicePort).append("]");
+           .append(" as ").append(_ourRole.toString());
+        if (_aliceIP != null) {
+            buf.append(" [Alice: ");
+            if (_ourRole == Role.ALICE)
+                buf.append(" LOCAL]");
+            else
+                buf.append(_aliceIP).append(':').append(_alicePort).append("]");
+        }
         if (_aliceIPFromCharlie != null)
             buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
         if (_bob != null)
             buf.append(" [Bob: ").append(_bob.toString()).append("]");
-        if (_charlieIP != null)
-            buf.append(" [Charlie: ").append(_charlieIP).append(':').append(_charliePort).append("]");
+        else
+            buf.append(" [Bob: LOCAL]");
+        if (_charlieIP != null) {
+            buf.append(" [Charlie: ");
+            if (_ourRole == Role.CHARLIE)
+                buf.append("LOCAL]");
+            else
+                buf.append(_charlieIP).append(':').append(_charliePort).append("]");
+        }
         if (_lastSendTime > 0)
             buf.append("\n* Last send after ").append(_lastSendTime - _beginTime).append("ms");
         if (_receiveAliceTime > 0)
-            buf.append("; Rcvd from Alice after ").append(_receiveAliceTime - _beginTime).append("ms");
+            buf.append("; Received from Alice after ").append(_receiveAliceTime - _beginTime).append("ms");
         if (_receiveBobTime > 0)
-            buf.append("; Rcvd from Bob after ").append(_receiveBobTime - _beginTime).append("ms");
+            buf.append("; Received from Bob after ").append(_receiveBobTime - _beginTime).append("ms");
         if (_receiveCharlieTime > 0)
-            buf.append("; Rcvd from Charlie after ").append(_receiveCharlieTime - _beginTime).append("ms");
+            buf.append("; Received from Charlie after ").append(_receiveCharlieTime - _beginTime).append("ms");
         buf.append("; Packets relayed: ").append(_packetsRelayed.get());
         return buf.toString();
     }

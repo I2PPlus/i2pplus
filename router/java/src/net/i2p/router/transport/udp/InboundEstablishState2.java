@@ -470,7 +470,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     public long getSendConnID() { return _sendConnID; }
     public long getRcvConnID() { return _rcvConnID; }
     public long getToken() { return _token; }
+    /**
+     *  @return may be null
+     */
     public EstablishmentManager.Token getNextToken() {
+        if (_aliceIP.length == 4 && _transport.isSnatted())
+            return null;
         return _transport.getEstablisher().getInboundToken(_remoteHostId);
     }
     public HandshakeState getHandshakeState() { return _handshakeState; }
@@ -509,9 +514,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new IllegalStateException("Bad state for Retry Sent: " + _currentState);
         _currentState = InboundState.IB_STATE_RETRY_SENT;
         _lastSend = _context.clock().now();
-        // Won't really be retransmitted, they have 9 sec to respond or
+        // Won't really be retransmitted, they have 5 sec to respond or
         // EstablishmentManager.handleInbound() will fail the connection
-        _nextSend = _lastSend + (3 * RETRANSMIT_DELAY);
+        // Alice will retransmit at 1 and 3 seconds, so wait 5
+        // We're not going to wait for the 3rd retx at 7 seconds.
+        _nextSend = _lastSend + (5 * RETRANSMIT_DELAY);
     }
 
     /**

@@ -1,57 +1,57 @@
 /* Console Theme "Classic" - Mobile Override */
-/* Author: dr|z3d */
+/* Author:dr|z3d */
 
 @import url(../mobile.css);
 
-#sidebar button[type="submit"], #sidebar button[type="reset"] {
-  margin: 5px;
-  padding: 12px;
-  min-width: 45%;
+#sidebar button[type="submit"],#sidebar button[type="reset"]{
+  margin:5px;
+  padding:12px;
+  min-width:45%;
 }
 
-#sidebar h3 a {
-  font-size: 12pt;
-  letter-spacing: 0.1em;
+#sidebar h3 a{
+  font-size:12pt;
+  letter-spacing:0.1em;
 }
 
-#sidebar h3::after {
- min-height: 28px;
- display: inline-block;
- vertical-align: middle;
- content: "";
+#sidebar h3::after{
+ min-height:28px;
+ display:inline-block;
+ vertical-align:middle;
+ content:"";
 }
 
-#sidebar .percentBarOuter {
-  width: auto;
+#sidebar .percentBarOuter{
+  width:auto;
 }
 
-#sidebar table, table[id^="sb_"], #sidebar #sb_services, #sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {
-  width: calc(100% - 3px);
-  margin: -7px -8px -7px 2px;
+#sidebar table,table[id^="sb_"],#sidebar #sb_services,#sidebar #sb_internals,#sidebar #sb_advanced,#sidebar #sb_help{
+  width:calc(100% - 3px);
+  margin:-7px -8px -7px 2px;
 }
 
-#sidebar td {
-  border-bottom: 1px solid var(--border_softer);
+#sidebar td{
+  border-bottom:1px solid var(--border_softer);
 }
 
-#sidebar tr:last-child td {
-  border-bottom: none;
+#sidebar tr:last-child td{
+  border-bottom:none;
 }
 
-#sidebar tr:nth-child(odd) {
-  background: var(--bg3);
+#sidebar tr:nth-child(odd){
+  background:var(--bg3);
 }
 
-#sidebar #sb_services a, #sidebar #sb_internals a, #sidebar #sb_advanced a {
-  padding: 5px 8px;
-  box-shadow: 0 0 0 1px var(--border_soft);
+#sidebar #sb_services a,#sidebar #sb_internals a,#sidebar #sb_advanced a{
+  padding:5px 8px;
+  box-shadow:0 0 0 1px var(--border_soft);
 }
 
-#sidebar #sb_localtunnels {
-  width: calc(100% - 2px)
+#sidebar #sb_localtunnels{
+  width:calc(100% - 2px)
 }
 
-#sidebar #sb_localtunnels td {
-  padding: 8px;
-  background-size: 20px;
+#sidebar #sb_localtunnels td{
+  padding:8px;
+  background-size:20px;
 }

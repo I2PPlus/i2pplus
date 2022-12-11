@@ -617,14 +617,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @return Map of two-letter lower case code to untranslated country name, unmodifiable
      * @since 0.9.53
      */
-
-/*
     public Map<String, String> getCountries() {
         if (_geoIP == null)
             return Collections.emptyMap();
         return _geoIP.getCountries();
     }
-*/
 
     /** Provide a consistent "look" for displaying router IDs in the console */
     @Override
@@ -642,14 +639,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 String countryName = getCountryName(c);
                 if (countryName.length() > 2)
                     countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-                buf.append("<a href=\"/netdb?c=" + c + "\"><img height=\"12\" width=\"16\" loading=\"lazy\" decoding=\"async\" alt=\"")
+                buf.append("<a href=\"/netdb?c=" + c + "\"><img height=\"12\" width=\"16\" alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" title=\"");
                 buf.append(countryName).append(" &bullet; ");
                 if (ri != null && ip != null)
                     buf.append(ip);
                 buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a></span> ");
             } else {
-                buf.append("<img class=\"unknownflag\" height=\"12\" width=\"16\" loading=\"lazy\" alt=\"??\"" +
+                buf.append("<img class=\"unknownflag\" height=\"12\" width=\"16\" alt=\"??\"" +
                            " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append(" &bullet; ");
                 if (ri != null && ip != null)
                     buf.append(ip);
@@ -670,7 +667,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             buf.append("</tt></span>");
         } else {
             buf.append("<span class=\"routerid\"><span class=\"flag\">")
-               .append("<img class=\"unknownflag\" height=\"12\" width=\"16\" loading=\"lazy\" alt=\"??\"" +
+               .append("<img class=\"unknownflag\" height=\"12\" width=\"16\" alt=\"??\"" +
                        " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"))
                .append("\"></span><tt>");
            if (h != null)

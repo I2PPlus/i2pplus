@@ -27,7 +27,7 @@ th,td,.mediumtags,div.news,.newscontent p{font-size:10pt;font-weight:400}
 .tunneldisplay th{font-size:10.5pt}
 .ui_lang{font-size:9pt}
 #applinks,#sitelinks{font-size:13pt}
-#applinks a[href$="configapps"],#sitelinks a[href$="configsites"]{padding: 11px 0 5px 9px}
+#applinks a[href$="configapps"],#sitelinks a[href$="configsites"]{padding:11px 0 5px 9px}
 #clock{font-size:16pt}
 #config_family p.infohelp{margin-bottom:12px}
 #config_service p.infohelp,#config_clients p.infohelp,#config_clients p.infowarn,#config_clients p#pluginconfig,#config_tunnels p.infohelp,#enablefullstats{margin-top:12px}
@@ -50,7 +50,7 @@ th,td,.mediumtags,div.news,.newscontent p{font-size:10pt;font-weight:400}
 #sidebar a{word-spacing:.1em;font-size:10pt;line-height:1.3}
 #sidebar b{font-size:9.5pt;font-weight:400}
 #sidebarconf button{padding:3px}
-#sidebar form button.download {font-size:8.5pt}
+#sidebar form button.download{font-size:8.5pt}
 #sidebar h3 a{font-size:11pt}
 #sidebar h3,#sidebar h4,#sidebar p,#sidebar h3 a,#sidebar a{text-shadow:none}
 #sidebar h4,#sidebar h4 a{font-size:10.5pt}

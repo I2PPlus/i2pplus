@@ -35,8 +35,8 @@
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
 <script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("tunnels_part"));</script>
 </div>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>

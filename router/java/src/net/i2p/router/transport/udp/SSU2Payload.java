@@ -355,8 +355,6 @@ class SSU2Payload {
                     break;
 
                 case BLOCK_TERMINATION:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
                     if (len < 9)
                         throw new IOException("Bad length for TERMINATION: " + len);
                     long last = DataHelper.fromLong8(payload, i);
@@ -666,13 +664,12 @@ class SSU2Payload {
         private final int rc;
 
         /*
+         * @param acnt 255 max
          * @param ranges nack/ack/nack/ack
          * @param rangeCount ranges length / 2
          */
         public AckBlock(long thru, int acnt, byte[] ranges, int rangeCount) {
             super(BLOCK_ACK);
-            if (rangeCount > 255)
-                throw new IllegalArgumentException();
             if (acnt > 255)
                 throw new IllegalArgumentException();
             t = thru;
@@ -846,12 +843,11 @@ class SSU2Payload {
     }
 
     public static class NewTokenBlock extends Block {
-        private final long t, e;
+        private final EstablishmentManager.Token tok;
 
-        public NewTokenBlock(long token, long expires) {
+        public NewTokenBlock(EstablishmentManager.Token token) {
             super(BLOCK_NEWTOKEN);
-            t = token;
-            e = expires / 1000;
+            tok = token;
         }
 
         public int getDataLength() {
@@ -859,9 +855,9 @@ class SSU2Payload {
         }
 
         public int writeData(byte[] tgt, int off) {
-            DataHelper.toLong(tgt, off, 4, e);
+            DataHelper.toLong(tgt, off, 4, tok.getExpiration() / 1000);
             off += 4;
-            DataHelper.toLong8(tgt, off, t);
+            DataHelper.toLong8(tgt, off, tok.getToken());
             return off + 8;
         }
     }

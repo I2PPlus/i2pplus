@@ -99,7 +99,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int IP_CLOSE_BYTES = 3;
     /** TOTAL_SEARCH_LIMIT * SINGLE_SEARCH_TIME, plus some extra */
 //    private static final int MAX_SEARCH_TIME = 30*1000;
-    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 8*1000 : 6*1000;
+    private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 20*1000 : 15*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move

@@ -1253,8 +1253,9 @@ class PacketBuilder {
             long exp = addr.getIntroducerExpiration(i);
             // let's not use an introducer on a privileged port, sounds like trouble
             if (iaddr == null) {
-                if (_log.shouldWarn())
-                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                // normal, SSU2 slots
+                if (_log.shouldInfo())
+                    _log.info("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
                                "] slot " + i + " -> No address");
                 continue;
             }

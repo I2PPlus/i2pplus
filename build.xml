@@ -68,6 +68,8 @@
         <echo message=" updater                                      Build updater for existing installs &#10140; ./i2pupdate.zip" />
         <echo message=" signed-updater                               Signed Updater &#10140; ./i2pupdate.su3 (Java14+ compatible)" />
         <echo message=" updaterCompact                               Updater w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme" />
+        <echo message=" updaterCompactRouterConsole                  Updater with RouterConsole and console/webapp themes only" />
+        <echo message=" updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)" />
         <echo message=" updaterCompactWithDocs                       Compact updater with readme and proxy docs" />
         <echo message=" updaterCompactWithGeoIP                      Compact updater with GeoIP database" />
         <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only" />
@@ -1694,6 +1696,8 @@
 
     <target name="updater" depends="prepupdate, zipit" />
     <target name="updaterCompact" depends="prepupdatecompact, zipit" />
+    <target name="updaterCompactRouterConsole" depends="prepupdateRouterConsole, prepthemeupdates, zipit" />
+    <target name="updaterCompactRouterConsoleNoThemes" depends="prepupdateRouterConsole, zipit" />
     <target name="updaterCompactWithDocs" depends="prepupdatecompact, prepConsoleDocUpdates, zipit" />
     <target name="updaterCompactWithGeoIP" depends="prepupdatecompact, prepgeoupdate, zipit" />
     <target name="updaterCompactWithJettyAndGeoIP" depends="prepupdatecompact, prepgeoupdate, prepjupdate, zipit" />
@@ -1930,6 +1934,11 @@
     <target name="prepupdateRouter" depends="buildrouter, deletepkg-temp">
         <copy file="build/i2p.jar" todir="pkg-temp/lib/" />
         <copy file="build/router.jar" todir="pkg-temp/lib/" />
+    </target>
+
+    <target name="prepupdateRouterConsole" depends="buildRouterConsole, deletepkg-temp">
+        <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
+        <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
     </target>
 
     <!-- jbigi.jar -->
