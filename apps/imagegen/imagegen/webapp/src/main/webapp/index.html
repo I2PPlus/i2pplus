@@ -3,7 +3,7 @@
 <head>
 <title>Imagegen - I2P+</title>
 <meta charset="utf-8">
-<link rel="icon" href="/themes/console/classic/images/favicon.ico">
+<link rel="icon shortcut" href="/themes/console/classic/images/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/themes/imagegen/imagegen.css" type="text/css">
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js"></script>
 </head>
@@ -20,17 +20,14 @@ This is the webapp that creates identification images. They can be found in the 
 <div id="identicon">
 
 <table cellspacing="10" align="center">
-<tr>
-<th colspan="4" class="title">Identicons for the hostname: <i>planet.i2p</i></th>
-</tr>
-<tr>
-<th>16x16</th><th>32x32</th><th>64x64</th><th>256x256</th>
-</tr>
+<tr><th colspan="5" class="title">Identicons for the hostname: <i id="id_hostname">planet.i2p</i></th></tr>
+<tr><th>16x16</th><th>32x32</th><th>64x64</th><th>256x256</th><th>1024x1024 (scaled)</th></tr>
 <tr>
 <td><img src="id?c=planet.i2p&amp;s=16" width=16 height=16></td>
 <td><img src="id?c=planet.i2p&amp;s=32" width=32 height=32></td>
 <td><img src="id?c=planet.i2p&amp;s=64" width=64 height=64></td>
 <td rowspan="3"><img src="id?c=planet.i2p&amp;s=256" width=256 height=256></td>
+<td rowspan="3"><img src="id?c=planet.i2p&amp;s=1024" width=256 height=256></td>
 </tr>
 <tr><th>22x22</th><th>48x48</th><th>96x96</th></tr>
 <tr>
@@ -40,10 +37,10 @@ This is the webapp that creates identification images. They can be found in the 
 </tr>
 </table>
 
-<form action="/imagegen/id" method="get" target="_blank">
+<form id="idgen" action="/imagegen/id" method="get" target="_blank">
 <div class="formtitle">Identicon Generator</div>
-<input type="text" name="c" required placeholder="I2P hostname to encode" title="Enter I2P hostname">
-<select name="s" title="Select image output size">
+<input type="text" id="id_input" name="c" required placeholder="I2P hostname to encode" title="Enter I2P hostname">
+<select name="s" id="id_select" title="Select image output size">
 <option value="16">16 by 16 pixels</option>
 <option value="22">22 by 22 pixels</option>
 <option value="32">32 by 32 pixels</option>
@@ -63,24 +60,21 @@ This is the webapp that creates identification images. They can be found in the 
 
 <div id="qr">
 <table cellspacing="10" align="center">
-<tr>
-<th colspan="3" class="title">QR Codes for URL: <i>https://geti2p.net</i></th>
-</tr>
-<tr>
-<th>128x128</th><th>160x160</th><th>256x256</th>
-</tr>
+<tr><th colspan="4" class="title">QR Codes for URL: <i id="qr_hostname">https://geti2p.net</i></th></tr>
+<tr><th>128x128</th><th>160x160</th><th>256x256</th><th>1024x1024 (scaled)</th></tr>
 <tr>
 <td><img src="qr?c=https%3a%2f%2fgeti2p.net%2f&amp;s=128" width=128 height=128></td>
 <td><img src="qr?c=https%3a%2f%2fgeti2p.net%2f&amp;s=160&amp;t=geti2p.net" width=160 height=160></td>
 <td><img src="qr?c=https%3a%2f%2fgeti2p.net%2f&amp;s=256&amp;t=geti2p.net" width=256 height=256></td>
+<td><img src="qr?c=https%3a%2f%2fgeti2p.net%2f&amp;s=1024&amp;t=geti2p.net" width=256 height=256></td>
 </tr>
 </table>
 
-<form action="/imagegen/qr" method="get" target="_blank">
+<form id="qrgen" action="/imagegen/qr" method="get" target="_blank">
 <div class="formtitle">QR Code Generator</div>
-<input type="text" name="c" required placeholder="URL to encode" title="Enter URL">
-<input type="text" name="t" placeholder="optional display text" title="Optional text to be displayed underneath the QR code">
-<select name="s" title="Select image output size">
+<input type="text" id="qr_input" name="c" required placeholder="URL to encode" title="Enter URL">
+<input type="text" id="qr_inputText" name="t" placeholder="optional display text" title="Optional text to be displayed underneath the QR code">
+<select id="qr_select" name="s" title="Select image output size">
 <option value="128">128 by 128 pixels</option>
 <option value="160" selected="selected">160 by 160 pixels</option>
 <option value="256">256 by 256 pixels</option>
@@ -99,16 +93,10 @@ This technique renders an ASCII-Art representation of a digital fingerprint so t
 
 <div id="randomart">
 <table>
-<tr>
-<th colspan="2" class="title">Random Art for hostname: <i id="ra_hostname">i2p-projekt.i2p</i></th>
-</tr>
-<tr>
-<th>HTML Test [SHA256]</th>
-<!--<th>UTF-8 Text Test</th>-->
-</tr>
+<tr><th colspan="2" class="title">Random Art for hostname: <i id="ra_hostname">i2p-projekt.i2p</i></th></tr>
+<tr><th>HTML Test [SHA256]</th></tr>
 <tr>
 <td><iframe id="htmlart" name="htmlart" src="ra?c=i2p-projekt.i2p&amp;m=html" width="360" height="360" scrolling="no"><a href="ra?c=i2p-projekt.i2p&amp;m=html">HTML test</a></iframe></td>
-<!--<td><iframe src="ra?c=i2p-projekt.i2p&amp;m=text" width="300" height="300" scrolling="no"><a href="ra?c=i2p-projekt.i2p&amp;m=text">UTF-8 text test</a></iframe></td>-->
 </tr>
 </table>
 
@@ -124,6 +112,6 @@ This technique renders an ASCII-Art representation of a digital fingerprint so t
 
 <div id="nav"><a href="../">Return to I2P Console</a></div>
 <span data-iframe-height></span>
-<script type="text/javascript" src="RAhostname.js"></script>
+<script type="text/javascript" src="imagegen.js"></script>
 </body>
 </html>
