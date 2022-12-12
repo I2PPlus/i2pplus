@@ -1131,7 +1131,7 @@ class SummaryBarRenderer {
                .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
                .append("\">" +
                        "<td><a href=\"/tunnels#client_tunnels\"><b>")
-               .append(_t("Client"))
+               .append(_t("Client").replace("Client", "Service"))
                .append("</b></a></td><td class=\"digits\"><span>")
 //               .append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
                .append(_helper.getInboundClientTunnels()).append(" / ").append(_helper.getOutboundClientTunnels())
