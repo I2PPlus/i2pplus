@@ -749,8 +749,10 @@ class EstablishmentManager {
             try {
                 state = new InboundEstablishState2(_context, _transport, packet);
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn())
-                    _log.warn("[SSU2] Received corrupt Session/TokenRequest from: " + from, gse);
+                if (_log.shouldDebug())
+                    _log.warn("[SSU2] Received corrupt Session or Token Request from: " + from, gse);
+                else if (_log.shouldWarn())
+                    _log.warn("[SSU2] Received corrupt Session or Token Request from: " + from + "\n* " + gse.getMessage());
                 _context.statManager().addRateData("udp.establishDropped", 1);
                 return;
             }
@@ -781,8 +783,10 @@ class EstablishmentManager {
             try {
                 state.receiveSessionOrTokenRequestAfterRetry(packet);
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn())
+                if (_log.shouldDebug())
                     _log.warn("[SSU2] Received corrupt Session or Token Request after Retry from: " + state, gse);
+                else if (_log.shouldWarn())
+                    _log.warn("[SSU2] Received corrupt Session or Token Request after Retry from: " + state + "\n* " + gse.getMessage());
                 return;
             }
         }
@@ -850,8 +854,8 @@ class EstablishmentManager {
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
         _transport.send(packet);
     }
-    
-    /** 
+
+    /**
      * got a SessionConfirmed (should only happen as part of an inbound
      * establishment)
      *
@@ -886,8 +890,10 @@ class EstablishmentManager {
         try {
             state.receiveSessionConfirmed(packet);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldWarn())
+            if (_log.shouldDebug())
                 _log.warn("[SSU2] Received CORRUPT SessionConfirmed from: " + state, gse);
+            else if (_log.shouldWarn())
+                _log.warn("[SSU2] Received CORRUPT SessionConfirmed from: " + state + "\n* " + gse.getMessage());
             // state called fail()
             return;
         }
@@ -938,8 +944,10 @@ class EstablishmentManager {
         try {
             state.receiveSessionCreated(packet);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldWarn())
+            if (_log.shouldDebug())
                 _log.warn("[SSU2] Received CORRUPT SessionCreated from: " + state, gse);
+            else if (_log.shouldWarn())
+                _log.warn("[SSU2] Received CORRUPT SessionCreated from: " + state + "\n* " + gse.getMessage());
             // state called fail()
             return;
         }
@@ -958,8 +966,10 @@ class EstablishmentManager {
         try {
             state.receiveRetry(packet);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldWarn())
+            if (_log.shouldDebug())
                 _log.warn("[SSU2] Received CORRUPT Retry from: " + state, gse);
+            else if (_log.shouldWarn())
+                _log.warn("[SSU2] Received CORRUPT Retry from: " + state + "\n* " + gse.getMessage());
             // state called fail()
             return;
         }
