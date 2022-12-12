@@ -171,7 +171,7 @@ class PeerTestJob extends JobImpl {
             boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             String bw = peerInfo.getBandwidthTier();
             String version = peerInfo.getVersion();
-            if (peerInfo != null && cap != null && reachable && VersionComparator.comp(version, "0.9.55") >= 0 &&
+            if (peerInfo != null && cap != null && reachable && VersionComparator.comp(version, "0.9.56") >= 0 &&
 //                (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
