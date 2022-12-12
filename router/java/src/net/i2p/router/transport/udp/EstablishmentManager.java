@@ -2113,8 +2113,8 @@ class EstablishmentManager {
                 // his port or is behind a symmetric NAT
                 if (_log.shouldWarn())
                     _log.warn("HolePunch source mismatch on " + state +
-                              " resp. block: " + Addresses.toString(ip, port) +
-                              " rcvd. from: " + id);
+                              "\n * Response block: " + Addresses.toString(ip, port) +
+                              "; Received from: " + id);
                 if (!TransportUtil.isValidPort(fromPort)) {
                     _context.statManager().addRateData("udp.relayBadIP", 1);
                     _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), "Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
