@@ -40,11 +40,11 @@ class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
     private boolean _keepTesting;
-    private final int DEFAULT_PEER_TEST_DELAY = 5*1000;
+    private final int DEFAULT_PEER_TEST_DELAY = SystemVersion.isSlow() ? 8*1000 : 5*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
-    private static final int DEFAULT_PEER_TEST_CONCURRENCY = 3;
+    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 1 : SystemVersion.getCores() <= 2 ? 2 : SystemVersion.getCores() >= 8 ? 4 : 3;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
-    private static final int DEFAULT_PEER_TEST_TIMEOUT = 800;
+    private static final int DEFAULT_PEER_TEST_TIMEOUT = 750;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
 
     /** Creates a new instance of PeerTestJob */
