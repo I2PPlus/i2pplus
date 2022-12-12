@@ -807,7 +807,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                "; Receive ID: " + _rcvConnID +
                "; Send ID: " + _sendConnID +
                " -> " + _currentState +
-               (_introducers != null ? (" Introducers: " + _introducers.toString()) : "");
+               (_introducers != null ? ("\n* Introducers: " + _introducers.toString()) : "");
     }
 
     /**
