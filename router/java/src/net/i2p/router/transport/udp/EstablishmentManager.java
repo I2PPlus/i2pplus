@@ -1286,7 +1286,7 @@ class EstablishmentManager {
         _transport.addRemotePeerState(peer);
         _transport.setIP(remote.calculateHash(), state.getSentIP());
 
-        _context.statManager().addRateData("udp.outboundEstablishTime", state.getLifetime());
+        _context.statManager().addRateData("udp.outboundEstablishTime", state.getLifetime(now));
         DatabaseStoreMessage dbsm = null;
         if (version == 1) {
             // version 2 sends our RI in handshake
@@ -2310,9 +2310,9 @@ class EstablishmentManager {
                     //if (_log.shouldDebug())
                     //    _log.debug("Removing completely confirmed inbound state");
                     break;
-                } else if (cur.getLifetime() > MAX_IB_ESTABLISH_TIME ||
+                } else if (cur.getLifetime(now) > MAX_IB_ESTABLISH_TIME ||
                            (istate == IB_STATE_RETRY_SENT &&           // limit time to get sess. req after retry
-                            cur.getLifetime() >= 5 * InboundEstablishState.RETRANSMIT_DELAY)) {
+                            cur.getLifetime(now) >= 5 * InboundEstablishState.RETRANSMIT_DELAY)) {
                     // took too long
                     iter.remove();
                     inboundState = cur;
@@ -2442,7 +2442,7 @@ class EstablishmentManager {
                     iter.remove();
                     outboundState = cur;
                     break;
-                } else if (cur.getLifetime() >= MAX_OB_ESTABLISH_TIME) {
+                } else if (cur.getLifetime(now) >= MAX_OB_ESTABLISH_TIME) {
                     // took too long
                     iter.remove();
                     outboundState = cur;
@@ -2481,7 +2481,7 @@ class EstablishmentManager {
             //if (_log.shouldDebug())
             //    _log.debug("Processing for outbound: " + outboundState);
             synchronized (outboundState) {
-                boolean expired = outboundState.getLifetime() >= MAX_OB_ESTABLISH_TIME;
+                boolean expired = outboundState.getLifetime(now) >= MAX_OB_ESTABLISH_TIME;
                 switch (outboundState.getState()) {
                     case OB_STATE_UNKNOWN:  // fall thru
                     case OB_STATE_INTRODUCED:
@@ -3184,7 +3184,7 @@ class EstablishmentManager {
         private void doFailsafe(long now) {
             for (Iterator<OutboundEstablishState> iter = _liveIntroductions.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime() > 3*MAX_OB_ESTABLISH_TIME) {
+                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
                     if (_log.shouldWarn())
                         _log.warn("Failsafe removal of LiveIntroduction: " + state);
@@ -3192,7 +3192,7 @@ class EstablishmentManager {
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByClaimedAddress.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime() > 3*MAX_OB_ESTABLISH_TIME) {
+                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
                     if (_log.shouldWarn())
                         _log.warn("Failsafe removal of OutboundByClaimedAddress: " + state);
@@ -3200,7 +3200,7 @@ class EstablishmentManager {
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByHash.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime() > 3*MAX_OB_ESTABLISH_TIME) {
+                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
                     if (_log.shouldWarn())
                         _log.warn("Failsafe removal of OutboundByHash: " + state);
