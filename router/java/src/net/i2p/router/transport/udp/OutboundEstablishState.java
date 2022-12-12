@@ -709,7 +709,7 @@ class OutboundEstablishState {
             _remoteHostId = new RemoteHostId(bobIP, bobPort);
         }
         if (_log.shouldInfo())
-            _log.info("Introduced to " + _remoteHostId + ", now let's get on with establishing...");
+            _log.info("Introduced to " + _remoteHostId + ", attempting to establish connection...");
     }
 
     /**
@@ -725,7 +725,7 @@ class OutboundEstablishState {
             return false;
         long now = _context.clock().now();
         if (_log.shouldInfo())
-            _log.info(toString() + " accelerating SessionRequest by " + (_nextSend - now) + " ms");
+            _log.info(toString() + " accelerating SessionRequest by " + (_nextSend - now) + "ms");
         _nextSend = now;
         return true;
     }
@@ -776,8 +776,7 @@ class OutboundEstablishState {
     /** @since 0.8.9 */
     @Override
     public String toString() {
-        return "OutboundEstablishState " + _remotePeer.getHash().toBase64().substring(0, 6) + ' ' + _remoteHostId +
-               "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) +
-               ' ' + _currentState;
+        return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
+               "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) + ' ' + _currentState;
     }
 }

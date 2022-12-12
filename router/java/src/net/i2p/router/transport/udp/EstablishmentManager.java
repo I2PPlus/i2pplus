@@ -850,7 +850,7 @@ class EstablishmentManager {
         if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID)
             return;
         if (_log.shouldWarn())
-            _log.warn("Send immediate termination " + terminationCode + " on type " + type + " to: " + to);
+            _log.warn("Sending immediate termination " + terminationCode + " on type " + type + " to: " + to);
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
         _transport.send(packet);
     }
