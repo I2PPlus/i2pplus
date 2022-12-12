@@ -61,7 +61,8 @@ class ParticipatingThrottler {
 //        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
         int limit = isSlow ? Math.max(MAX_LIMIT / 4, numTunnels * (PERCENT_LIMIT / 4) / 100)
                     : !isQuadCore ? Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100)
-                    : Math.max(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100);
+                    : SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 2 * 1024*1024*1024 ? Math.max(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100)
+                    : Math.min(MAX_LIMIT, numTunnels * (PERCENT_LIMIT) / 100);
         int count = counter.increment(h);
         Result rv;
         if (count > limit) {
