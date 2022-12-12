@@ -233,7 +233,7 @@ class PeerTestState {
             else
                 buf.append(_charlieIP).append(':').append(_charliePort).append("]");
             if (_previousCharlies != null && !_previousCharlies.isEmpty())
-                buf.append(" [Previous: ").append(_previousCharlies) + "]");
+                buf.append(" [Previous: ").append(_previousCharlies).append("]");
         }
         if (_lastSendTime > 0)
             buf.append("\n* Last send after ").append(_lastSendTime - _beginTime).append("ms");
