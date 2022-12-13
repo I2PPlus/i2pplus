@@ -64,7 +64,7 @@ class GetBidsJob extends JobImpl {
         Hash us = context.routerHash();
         if (to.equals(us)) {
             if (log.shouldError())
-                log.error("Send a message to ourselves? nuh uh..." + msg);
+                log.error("Send a message to ourselves? nuh uh..." + msg, new Exception("I did it"));
             context.statManager().addRateData("transport.bidFailSelf", msg.getLifetime());
             fail(context, msg);
             return;
