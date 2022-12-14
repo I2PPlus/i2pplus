@@ -1155,7 +1155,9 @@ class PeerTestManager {
                 SessionKey aliceIntroKey = null;
                 int rcode;
                 PeerState aps = _transport.getPeerState(h);
-                if (aps != null && aps.isIPv6() == isIPv6) {
+                if (_transport.isSnatted()) {
+                    rcode = SSU2Util.TEST_REJECT_CHARLIE_ADDRESS;
+                } else if (aps != null && aps.isIPv6() == isIPv6) {
                     rcode = SSU2Util.TEST_REJECT_CHARLIE_CONNECTED;
                 } else if (_transport.getEstablisher().getInboundState(from) != null ||
                            _transport.getEstablisher().getOutboundState(from) != null) {
@@ -1401,8 +1403,7 @@ class PeerTestManager {
                 test.setCharlieIntroKey(charlieIntroKey);
                 if (test.getReceiveCharlieTime() > 0) {
                     // send msg 6
-                    if (_log.shouldDebug())
-                        _log.debug("Sending message #6 to charlie on " + test);
+                    // logged in sendTestToCharlie()
                     synchronized(this) {
                         sendTestToCharlie();
                     }
@@ -1435,8 +1436,7 @@ class PeerTestManager {
                 }
                 if (test.getCharlieIntroKey() != null) {
                     // send msg 6
-                    if (_log.shouldDebug())
-                        _log.debug("Sending message #6 to Charlie on " + test);
+                    // logged in sendTestToCharlie()
                     synchronized(this) {
                         sendTestToCharlie();
                     }
