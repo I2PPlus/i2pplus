@@ -147,6 +147,7 @@ Sybil (AS-Choopa):104.238.134.0/23
 Sybil (AS-Choopa):202.182.96.0-202.182.127.255
 Sybil (AS-Choopa):45.77.250.0-45.77.251.255
 Sybil (AS-Choopa):66.42.48.0-66.42.63.255
+Tunnel Abuse:CyLg6w8lypk1gnAX-CdG8O4NCR86hq8ifge6QKXAoJg=
+Tunnel Abuse:DtQsGzkbeR3nilr6ZvywR2O7-f0XaaV~YfHXohqwjgI=
 Tunnel Abuse:JbifzqZZqeTXtxK6KDqNUPWaW-phKqeS~tfJT82SIYI=
 Tunnel Abuse:QPUV1bW6arN2zp3gTBMvOEvgSuKbXUqk2oqHkb~UoSw=
-Tunnel Abuse:CyLg6w8lypk1gnAX-CdG8O4NCR86hq8ifge6QKXAoJg=
