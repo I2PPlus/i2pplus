@@ -1,6 +1,6 @@
-/* I2P Theme: Light */
-/* Description: Light blue highlights. */
-/* Author: dr|z3d */
+/* I2P Theme:Light */
+/* Description:Light blue highlights. */
+/* Author:dr|z3d */
 
 @import url(global.css);
 
@@ -89,7 +89,7 @@ h4.sb_info + hr + form{margin-bottom:-1px;padding-top:5px}
 #sidebar h4::after{padding-top:8px;padding-bottom:8px;content:"";display:inline-block;box-sizing:border-box;min-height:12px;vertical-align:middle}
 #sidebar h4 a{vertical-align:baseline}
 .sb table{margin:-8px -5px -5px;width:202px;position:relative;text-align:center;overflow:hidden;font-size:8pt;border:none;background-image:none;background-color:transparent}
-.sb table:not(#sb_localtunnels):not(#sb_services) tr::before{width:0;height:1px;position:absolute;z-index:9999;top:-2px;left:-1px; right:-1px;display:block;background:#f90;content:"";animation:bar .03s steps(3) reverse;will-change:transform;contain:paint}
+.sb table:not(#sb_localtunnels):not(#sb_services) tr::before{width:0;height:1px;position:absolute;z-index:9999;top:-2px;left:-1px;right:-1px;display:block;background:#f90;content:"";animation:bar .03s steps(3) reverse;will-change:transform;contain:paint}
 #sidebar #sb_internals td,#sidebar #sb_advanced td,#sidebar #sb_services td,#sidebar #sb_help td{text-align:center}
 #sidebar tr,#sidebar tr:nth-child(n+0){background-image:none;background-color:transparent;border:0;contain:paint}
 #sidebar td{padding:0 2px;border:none;background-image:none}
@@ -184,16 +184,17 @@ input[type=checkbox].toggleSection:active{box-shadow:var(--btn_shadow_active)}
 input[type=checkbox].toggleSection:checked:active{box-shadow:var(--highlight),inset 3px -3px 3px 1px rgba(32,32,64,.3)}
 input[type=checkbox].toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
-#sidebar .toggleSection::before, #sidebar .toggleSection::after{display:none!important}
+#sidebar .toggleSection::before,#sidebar .toggleSection::after{display:none!important}
 #sidebar h3 a .badge:not([hidden]),#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
-#sb_updatesection.collapsed > *:not(h3) {display:none}
+#sb_updatesection.collapsed > h3.collapsed{margin-bottom:-10px}
+#sb_updatesection.collapsed > *:not(h3){display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center/20px;animation: spin 3s ease 0s both}
+#updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center/20px;animation:spin 3s ease 0s both}
 #sidebar #localtunnelsActive,#sidebar #localtunnelsActive td{text-align:center!important;background:none;padding:3px 0!important;line-height:16px;vertical-align:middle!important;text-align:center}
 #sidebar #localtunnelsActive span{display:inline-block;font-size:90%;font-weight:600;text-transform:lowercase;vertical-align:middle!important;margin:1px 5px;line-height:16px;width:auto;letter-spacing:3px}
 #sidebar #localtunnelsActive span.count_0{display:none}
-#sidebar #localtunnelsActive img {width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
+#sidebar #localtunnelsActive img{width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
 #sidebar #localtunnelSummary{margin:-12px auto -6px}
 #sidebar #sb_internals.collapsed td,#sidebar #sb_advanced.collapsed td,#sidebar #sb_services.collapsed td{padding:1px!important;vertical-align:middle;display:flex;align-items:start;width:calc(100% - 1px)}
 #sidebar #sb_internals.collapsed a:not(.sb_icon),#sidebar #sb_advanced.collapsed a:not(.sb_icon),#sidebar #sb_services.collapsed a:not(.sb_icon){display:none!important}
@@ -213,12 +214,14 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_peers_condensed[hidden],#sb_tunnels_condensed[hidden]{display:none!important}
 #sb_peers_condensed:not([hidden])+hr,#sb_tunnels_condensed:not([hidden])+hr{display:block}
 #sb_peers_condensed,#sb_tunnels_condensed{margin:-12px -5px -7px;padding:3px 0}
+#sb_tunnels_condensed{margin-bottom:-11px}
+#homepage #sb_tunnels_condensed{margin-bottom:-7px}
 #sidebar #sb_peers_condensed td,#sidebar #sb_tunnels_condensed td{padding:2px;display:flex;max-width:unset;text-align:center!important;background:none;padding:3px 0!important;vertical-align:middle!important;text-align:center!important}
 #sb_peers_condensed .sb_icon,#sb_tunnels_condensed .sb_icon{margin:0;flex:auto;padding:5px;height:16px;text-align:center!important;box-shadow:0 0 0 1px #dfdfec inset,0 0 0 2px #fff inset;display:inline-block;background-blend-mode:luminosity}
 #sb_peers_condensed .sb_icon:hover,#sb_peers_condensed .sb_icon:focus,#sb_tunnels_condensed .sb_icon:hover,#sb_tunnels_condensed .sb_icon:focus{box-shadow:var(--bevel_hover);background-blend-mode:normal}
 #sb_peers_condensed .sb_icon:active,#sb_tunnels_condensed .sb_icon:active{box-shadow:var(--bevel_hover),4px 4px 4px rgba(0,0,0,.7) inset}
 #sb_peers_condensed span:not(.badge),#sb_tunnels_condensed span:not(.badge){display:inline-block;position:relative;margin:0;width:100%;height:19px}
-#sb_peers_condensed .badge,#sb_tunnels_condensed .badge{position:absolute;right:-3px;top:-3px;left:auto;display:inline-block;background:rgba(228,228,255,.45);text-align:center;padding:1px 3px 2px!important;min-width:20px;border-radius:0 0 2px 0;margin:0;line-height:1;pointer-events:none}
+#sb_peers_condensed .badge,#sb_tunnels_condensed .badge{margin:0;padding:1px 3px 2px!important;min-width:20px;position:absolute;right:-3px;top:-3px;left:auto;display:inline-block;line-height:1;text-align:center;text-shadow: 1px 1px 1px rgba(255,255,255,.3);border-radius:0 0 2px 0;background:rgba(228,228,255,.45);pointer-events:none}
 .sb_icon#fast{background:var(--fast) no-repeat 25% center/19px,var(--badge)}
 .sb_icon#floodfill{background:var(--floodfill) no-repeat 25% center/19px,var(--badge)}
 .sb_icon#firewalled{background:var(--net_firewalled) no-repeat 25% center/19px,var(--badge)}
@@ -2622,7 +2625,7 @@ h3#pconfig,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
 #sb_memoryBar .percentBarText{padding:0 0 2px}
 #sb_services{width:242px}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
-#sidebar form{margin-bottom:-2px}
+#sidebar form{margin-bottom:0;padding-bottom:5px}
 #sidebar h3::after{min-height:19px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
 #sidebar h3 a{padding:4px 0 2px;font-size:11pt}
 #sidebar{margin-bottom:5px;width:228px}
