@@ -716,6 +716,10 @@ class BuildHandler implements Runnable {
         boolean isInGW = req.readIsInboundGateway();
         boolean isOutEnd = req.readIsOutboundEndpoint();
 
+        int random = (5 + _context.random().nextInt(15) * _context.random().nextInt(60)) * 1000;
+        int bantime = Math.max(random, (5 + _context.random().nextInt(10)) * 60 * 1000);
+        int period = bantime / 60 / 1000;
+
         Hash from = state.fromHash;
         if (from == null && state.from != null)
             from = state.from.calculateHash();
@@ -725,8 +729,13 @@ class BuildHandler implements Runnable {
         if (isInGW && isOutEnd) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
             _log.error("Dropping hostile build request, IBGW+OBEP: " + req);
-            if (from != null)
+            if (from != null) {
                 _context.commSystem().mayDisconnect(from);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (IBGW+OBEP)", null, null, _context.clock().now() + bantime);
+                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
+                          " minutes for hostile tunnel request (Inbound Gateway & OutBound Endpoint)");
+
+            }
             return;
         }
 
@@ -734,9 +743,13 @@ class BuildHandler implements Runnable {
             nextId <= 0 || nextId > TunnelId.MAX_ID_VALUE) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
             if (_log.shouldWarn())
-                _log.warn("Dropping hostile build request, bad tunnel ID: " + req);
-            if (from != null)
+                _log.warn("Dropping hostile build request, BAD tunnel ID: " + req);
+            if (from != null) {
                 _context.commSystem().mayDisconnect(from);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (BAD Tunnel ID)", null, null, _context.clock().now() + bantime * 3);
+                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
+                          " minutes for hostile tunnel request (BAD Tunnel ID)");
+            }
             return;
         }
 
@@ -748,8 +761,12 @@ class BuildHandler implements Runnable {
             // old i2pd
             if (_log.shouldWarn())
                 _log.warn("Dropping hostile build request, we are the next hop: " + req);
-            if (from != null)
+            if (from != null) {
                 _context.commSystem().mayDisconnect(from);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (double hop)", null, null, _context.clock().now() + bantime * 3);
+                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
+                          " minutes for hostile tunnel request (We are 2 hops in a row!)");
+            }
             return;
         }
         if (!isInGW) {
@@ -760,6 +777,10 @@ class BuildHandler implements Runnable {
                 _context.statManager().addRateData("tunnel.rejectHostile", 1);
                 if (_log.shouldWarn())
                     _log.warn("Dropping hostile build request, we are the previous hop: " + req);
+                _context.commSystem().mayDisconnect(from);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (previous hop)", null, null, _context.clock().now() + bantime * 3);
+                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
+                          " minutes for hostile tunnel request (We are the previous hop!)");
                 return;
             }
         }
@@ -772,6 +793,9 @@ class BuildHandler implements Runnable {
                 if (_log.shouldWarn())
                     _log.warn("Dropping hostile build request with the same previous and next hop: " + req);
                 _context.commSystem().mayDisconnect(from);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (duplicate hops in chain)", null, null, _context.clock().now() + bantime * 3);
+                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
+                          " minutes for hostile tunnel request (duplicate hops in chain)");
                 return;
             }
         }
@@ -798,8 +822,12 @@ class BuildHandler implements Runnable {
             _context.statManager().addRateData("tunnel.rejectTooOld", 1);
             if (_log.shouldWarn())
                 _log.warn("Dropping build request (too old)... replay attack? " + DataHelper.formatDuration(timeDiff) + ": " + req);
-            if (from != null)
+            if (from != null) {
                 _context.commSystem().mayDisconnect(from);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (possible replay attack)", null, null, _context.clock().now() + bantime * 3);
+                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
+                          " minutes for hostile tunnel request (too old, replay attack?)");
+            }
             return;
         }
         if (timeDiff < 0 - MAX_REQUEST_FUTURE) {
@@ -808,6 +836,9 @@ class BuildHandler implements Runnable {
                 _log.warn("Dropping build request (too far in future) " + DataHelper.formatDuration(0 - timeDiff) + ": " + req);
             if (from != null)
                 _context.commSystem().mayDisconnect(from);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (too far in future)", null, null, _context.clock().now() + bantime);
+                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
+                          " minutes for hostile tunnel request (too far in future)");
             return;
         }
 
