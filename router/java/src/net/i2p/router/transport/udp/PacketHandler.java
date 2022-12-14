@@ -889,7 +889,6 @@ class PacketHandler {
                             dead.receivePacket(from, packet);
                             return true;
                         }
-
                     }
                     return false;
                 }
@@ -898,6 +897,13 @@ class PacketHandler {
                     // one in a million decrypt of SSU 1 packet with type/version/netid all correct?
                     // can't have session confirmed with null state, avoid NPE below
                     return false;
+                }
+                if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE &&
+                    packet.getPacket().getLength() == SSU2Util.MIN_HANDSHAKE_DATA_LEN - 1) {
+                    // i2pd short 87 byte session request thru 0.9.56, drop packet
+                    if (_log.shouldWarn())
+                        _log.warn("Short Session Request len 87 on " + state);
+                    return true;
                 }
             } else {
                 type = SSU2Util.SESSION_REQUEST_FLAG_BYTE;
@@ -916,11 +922,18 @@ class PacketHandler {
                     header.getNetID() != _networkID) {
                     // possibly token-request-after-retry? let's see...
                     header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
+                    if (header != null && header.getType() == SSU2Util.SESSION_REQUEST_FLAG_BYTE &&
+                        header.getVersion() == 2 && header.getNetID() == _networkID &&
+                        packet.getPacket().getLength() == 87) {
+                        // i2pd short 87 byte session request thru 0.9.56, drop packet
+                        if (_log.shouldWarn())
+                            _log.warn("Short Session Request after Retry len 87 on " + state);
+                        return true;
+                    }
                     if (header == null ||
                         header.getType() != SSU2Util.TOKEN_REQUEST_FLAG_BYTE ||
                         header.getVersion() != 2 ||
                         header.getNetID() != _networkID) {
-                        // i2pd short 87 byte session request thru 0.9.56
                         if (_log.shouldWarn())
                             _log.warn("Failed to decrypt Session or Token Request after Retry \n* " + header +
                                       " (" + packet.getPacket().getLength() + " bytes) on " + state);
@@ -930,15 +943,18 @@ class PacketHandler {
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Bad Source Connection ID \n* " + header + " on " + state);
+                        _log.warn("Bad Source Conn id " + header +
+                                  " len " + packet.getPacket().getLength() + " on " + state);
                     // TODO could be a retransmitted Session Request,
                     // tell establisher?
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
+                    // i2pd bug changing after retry, thru 0.9.56, drop packet
                     if (_log.shouldWarn())
-                        _log.warn("Bad Destination Connection ID \n* " + header + " on " + state);
-                    return false;
+                        _log.warn("Bad Destination Connection ID \n* " + header +
+                                  " (" + packet.getPacket().getLength() + " bytes) on " + state);
+                    return true;
                 }
                 type = header.getType();
             } else {
