@@ -895,6 +895,14 @@ public class SummaryHelper extends HelperBase {
             return _context.tunnelManager().getParticipatingCount();
     }
 
+    public String getMaxParticipatingTunnels() {
+        int defaultMax = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ? 2*1000 : 8*1000;
+        if (_context.getProperty("router.maxParticipatingTunnels") != null)
+            return _context.getProperty("router.maxParticipatingTunnels");
+        else
+            return Integer.toString(defaultMax);
+    }
+
     /** @since 0.7.10 */
     public String getShareRatio() {
         if (_context == null)

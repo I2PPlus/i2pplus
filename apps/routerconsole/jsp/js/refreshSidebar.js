@@ -13,7 +13,7 @@ function refreshSidebar() {
   let isDownTimer;
 
   var advancedGeneral = document.getElementById("sb_advancedgeneral");
-  var badges = document.querySelectorAll("h3 a .badge");
+  var badges = document.querySelectorAll(".badge");
   var bandwidth = document.getElementById("sb_bandwidth");
   var clock = document.getElementById("clock");
   var down = document.getElementById("down");
@@ -98,7 +98,7 @@ function refreshSidebar() {
           var b;
           for (b = 0; b < badges.length; b += 1) {
             if (badges[b] !== null) {
-              var badgesResponse = xhr.responseXML.querySelectorAll("h3 a .badge");
+              var badgesResponse = xhr.responseXML.querySelectorAll(".badge");
               if (badgesResponse[b] !== null) {
                 badges[b].innerHTML = badgesResponse[b].innerHTML;
               }
@@ -199,13 +199,11 @@ function refreshSidebar() {
               }
             }
           }
-//          if (updateSection !== null) {
-//            if (updateProgressResponse !== null) {
-//              if (!Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
-//                updateProgress.innerHTML = updateProgressResponse.innerHTML;
-//              }
-//            }
-//          }
+          if (updateSection !== null && updateSection.hidden !== true) {
+            if (!Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
+              updateSection.innerHTML = updateSectionResponse.innerHTML;
+            }
+          }
           if (tunnelBuildStatus !== null && tunnelBuildStatusResponse !== null && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
             tunnelBuildStatus.innerHTML = tunnelBuildStatusResponse.innerHTML;
           }
@@ -348,7 +346,7 @@ function refreshSidebar() {
 
         function isDown() {
           function hideSections() {
-            var collapse = document.querySelectorAll("#sidebar .collapse");
+            var collapse = document.querySelectorAll("#sidebar .collapse, #sb_peers_condensed, #sb_tunnels_condensed");
             var h;
             for (h = 0; h < collapse.length; h += 1) {
               collapse[h].setAttribute("hidden", "");
@@ -389,7 +387,7 @@ function refreshSidebar() {
             if (clock !== null) {
               clock.innerHTML = "--:--:--";
             }
-            var badges = document.querySelectorAll("h3 a .badge");
+            var badges = document.querySelectorAll(".badge, #tunnelCount, #newsCount");
             var b;
             for (b = 0; b < badges.length; b += 1) {
               if (badges[b] !== null) {
