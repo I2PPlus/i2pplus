@@ -1386,7 +1386,7 @@ class SummaryBarRenderer {
                         break;
                     if (i == 0) {
                         // Set up title and pre-headings stuff.
-                        buf.append("<h3><a href=\"/news\">")
+                        buf.append("<h3 id=sb_newsH3><a href=\"/news\">")
                            .append(_t("News &amp; Updates"))
                            .append("</a><input type=\"checkbox\" id=\"toggle_sb_newsheadings\" class=\"toggleSection script\" checked hidden></h3><hr class=\"b\">")
                            .append("<div id=\"sb_newsheadings\">\n<table>\n");
