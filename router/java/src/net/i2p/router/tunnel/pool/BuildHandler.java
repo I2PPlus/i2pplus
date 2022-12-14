@@ -526,8 +526,8 @@ class BuildHandler implements Runnable {
                       " received " + (timeSinceReceived+decryptTime) + "ms ago");
         if (req == null) {
             // no records matched, or the decryption failed.  bah
-            if (_log.shouldWarn()) {
-                _log.warn("Request [MsgID " + state.msg.getUniqueId() + "] could not be decrypted from [" +
+            if (_log.shouldInfo()) {
+                _log.info("Request [MsgID " + state.msg.getUniqueId() + "] could not be decrypted from [" +
                           from.toBase64().substring(0,6) + "]");
             }
             _context.statManager().addRateData("tunnel.dropDecryptFail", 1);
