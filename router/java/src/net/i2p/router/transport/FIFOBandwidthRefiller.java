@@ -9,6 +9,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  *  Thread that runs several times a second to "give" bandwidth to
@@ -53,7 +54,7 @@ public class FIFOBandwidthRefiller implements Runnable {
 
     // no longer allow unlimited bandwidth - the user must specify a value, else use defaults below (KBps)
 //    public static final int DEFAULT_INBOUND_BANDWIDTH = 300;
-    public static final int DEFAULT_INBOUND_BANDWIDTH = 1000;
+    public static final int DEFAULT_INBOUND_BANDWIDTH = 1024;
     /**
      *  Caution, do not make DEFAULT_OUTBOUND_BANDWIDTH * DEFAULT_SHARE_PCT &gt; 32
      *  without thinking about the implications (default connection limits, for example)
@@ -63,27 +64,35 @@ public class FIFOBandwidthRefiller implements Runnable {
 //    public static final int DEFAULT_OUTBOUND_BANDWIDTH = 60;
     public static final int DEFAULT_OUTBOUND_BANDWIDTH = 128;
 //    public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 300;
-    public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 1000;
+    public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 1024;
 //    public static final int DEFAULT_OUTBOUND_BURST_BANDWIDTH = 60;
     public static final int DEFAULT_OUTBOUND_BURST_BANDWIDTH = 128;
 
     public static final int DEFAULT_BURST_SECONDS = 60;
 
     /** For now, until there is some tuning and safe throttling, we set the floor at this inbound (KBps) */
-    public static final int MIN_INBOUND_BANDWIDTH = 5;
+//    public static final int MIN_INBOUND_BANDWIDTH = 5;
+    public static final int MIN_INBOUND_BANDWIDTH = 32;
     /** For now, until there is some tuning and safe throttling, we set the floor at this outbound (KBps) */
-    public static final int MIN_OUTBOUND_BANDWIDTH = 5;
+//    public static final int MIN_OUTBOUND_BANDWIDTH = 5;
+    public static final int MIN_OUTBOUND_BANDWIDTH = 32;
     /** For now, until there is some tuning and safe throttling, we set the floor at this during burst (KBps) */
-    public static final int MIN_INBOUND_BANDWIDTH_PEAK = 5;
+//    public static final int MIN_INBOUND_BANDWIDTH_PEAK = 5;
+    public static final int MIN_INBOUND_BANDWIDTH_PEAK = 32;
     /** For now, until there is some tuning and safe throttling, we set the floor at this during burst (KBps) */
-    public static final int MIN_OUTBOUND_BANDWIDTH_PEAK = 5;
+//    public static final int MIN_OUTBOUND_BANDWIDTH_PEAK = 5;
+    public static final int MIN_OUTBOUND_BANDWIDTH_PEAK = 32;
     /**
      *  Max for reasonable Bloom filter false positive rate.
      *  Do not increase without adding a new Bloom filter size!
      *  See util/DecayingBloomFilter and tunnel/BloomFilterIVValidator.
      */
 //    public static final int MAX_OUTBOUND_BANDWIDTH = 16384;
-    public static final int MAX_OUTBOUND_BANDWIDTH = 32768;
+    //public static final int MAX_OUTBOUND_BANDWIDTH = 32768;
+    public static final int MAX_OUTBOUND_BANDWIDTH = SystemVersion.isSlow() || SystemVersion.getCores() == 1 ? 16384 :
+                                                     SystemVersion.getCores() < 3 || SystemVersion.getMaxMemory() < 1024*1024*1024 ? 32768 :
+                                                     SystemVersion.getCores() < 6 || SystemVersion.getMaxMemory() < 3072*1024*1024 ? 65536 :
+                                                     131072;
 
     private static final float MAX_SHARE_PERCENTAGE = 0.90f;
     private static final float SHARE_LIMIT_FACTOR = 0.95f;
@@ -93,7 +102,7 @@ public class FIFOBandwidthRefiller implements Runnable {
      * the bandwidth limiter will get an update this often (ms)
      */
 //    private static final long REPLENISH_FREQUENCY = 40;
-    private static final long REPLENISH_FREQUENCY = 50;
+    private static final long REPLENISH_FREQUENCY = 250;
 
     FIFOBandwidthRefiller(RouterContext context, FIFOBandwidthLimiter limiter) {
         _limiter = limiter;
