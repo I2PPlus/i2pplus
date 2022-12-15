@@ -221,7 +221,7 @@ class PeerTestState {
            .append(" as ").append(_ourRole.toString());
         if (_aliceIP != null) {
             buf.append(" [Alice: ");
-            if (_ourRole == Role.ALICE)
+            if (_ourRole == Role.ALICE) {
                 buf.append(" LOCAL]");
             } else {
                 buf.append(_aliceIP).append(':').append(_alicePort).append("]");
@@ -237,7 +237,7 @@ class PeerTestState {
             buf.append(" [Bob: LOCAL]");
         if (_charlieIP != null) {
             buf.append(" [Charlie: ");
-            if (_ourRole == Role.CHARLIE)
+            if (_ourRole == Role.CHARLIE) {
                 buf.append("LOCAL]");
             } else {
                 buf.append(_charlieIP).append(':').append(_charliePort).append("]");
