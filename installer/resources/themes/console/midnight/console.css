@@ -2707,7 +2707,7 @@ h4#updateplugins{margin-top:-15px}
 #reseedconfig input[type=text],#reseedconfig input[type=password]{width:250px}
 #sb_general,#sb_shortgeneral,#sb_advancedgeneral,#sb_bandwidth,#sb_peers,#sb_peersadvanced,#sb_tunnels,#sb_queue{margin-top:-7px;margin-bottom:-10px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:18px}
-#sb_graphcontainer{margin:-5px -8px -8px}
+#sb_graphcontainer{margin:-5px -8px -8px;height:45px}
 #sidebar td:nth-child(2)::before{min-height:23px}
 #sb_internals,#sb_advanced,#sb_help{width:240px}
 #sb_localtunnels a{max-width:188px}
