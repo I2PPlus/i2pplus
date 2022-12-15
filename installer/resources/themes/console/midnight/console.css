@@ -2498,6 +2498,10 @@ iframe.iframed{margin:15px 0 0}
 @media screen and (max-width:1800px){
 #criticallogs + h3.tabletitle a:first-child{padding-left:4px;padding-right:10px}
 #criticallogs + h3.tabletitle a:last-child{padding-left:20px;padding-right:12px}
+#sb_internals.collapsed td{width:calc(100% + 37px)}
+#sb_services.collapsed td{width:calc(100% + 95px)}
+#sidebar #sb_services.collapsed td .sb_icon{margin-bottom:-2px}
+#sb_advanced.collapsed td{width:calc(100% + 66px)}
 }
 
 @media screen and (max-width:1499px){
@@ -2536,6 +2540,9 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #sitemap .applink img{padding-left:62px;padding-right:62px}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs a.configure::after,#logs a.delete::after{width:14px;height:14px;background-size:12px}
 .tunnel_peer img,.routerid img{margin:1px 2px -1px 0}
+#sb_internals .sb_icon[href="/jobs"]{display:none!important}
+#sb_internals.collapsed td, #sb_advanced.collapsed td{width:calc(100% + 30px)}
+#sb_services.collapsed td{width:calc(100% + 59px)}
 }
 
 @media screen and (max-width:1400px){
