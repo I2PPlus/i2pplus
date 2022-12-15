@@ -972,9 +972,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
         List<PacketBuilder.Fragment> fragments = _sentMessages.remove(Long.valueOf(pktNum));
         if (fragments == null) {
-            // shouldn't happen
-            if (_log.shouldInfo())
-                _log.info("[SSU2] New ACK of packet " + pktNum + " not found from " + this);
+            // TODO
+            // peer test, relay, path challenge/response
+            // We don't track these and route the acks anywhere
+            if (_log.shouldDebug())
+                _log.debug("[SSU2] New ACK of packet " + pktNum + " not found from " + this);
             return;
         }
         if (_log.shouldDebug())
