@@ -107,13 +107,19 @@ class PeerTestState {
     public InetAddress getCharlieIP() { return _charlieIP; }
 
     /**
+     * SSU2 only, null for SSU1.
+     * @since 0.9.57
+     */
+    public Hash getCharlieHash() { return _charlieHash; }
+
+    /**
      * @param hash SSU2 only, null for SSU1
      * @since 0.9.54
      */
     public void setCharlie(InetAddress ip, int port, Hash hash) {
         _charlieIP = ip;
         _charliePort = port;
-        if (_charlieHash != null && _previousCharlies != null)
+        if (_charlieHash != null && _previousCharlies != null && !_charlieHash.equals(hash))
             _previousCharlies.add(_charlieHash);
         _charlieHash = hash;
     }
@@ -217,8 +223,11 @@ class PeerTestState {
             buf.append(" [Alice: ");
             if (_ourRole == Role.ALICE)
                 buf.append(" LOCAL]");
-            else
+            } else {
                 buf.append(_aliceIP).append(':').append(_alicePort).append("]");
+                if (_aliceHash != null)
+                    buf.append(' ').append(_aliceHash.toBase64().substring(0, 6));
+            }
         }
         if (_aliceIPFromCharlie != null)
             buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
@@ -230,8 +239,11 @@ class PeerTestState {
             buf.append(" [Charlie: ");
             if (_ourRole == Role.CHARLIE)
                 buf.append("LOCAL]");
-            else
+            } else {
                 buf.append(_charlieIP).append(':').append(_charliePort).append("]");
+                if (_charlieHash != null)
+                    buf.append(' ').append(_charlieHash.toBase64().substring(0, 6));
+            }
             if (_previousCharlies != null && !_previousCharlies.isEmpty())
                 buf.append(" [Previous: ").append(_previousCharlies).append("]");
         }
