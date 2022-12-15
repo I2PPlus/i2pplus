@@ -630,8 +630,8 @@ class BuildHandler implements Runnable {
                 handleReq(ri, _state, _req, _nextPeer);
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 1);
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("Lookup deferred successfully, but we couldn't find [" + _nextPeer.toBase64().substring(0,6) + "] ? " + _req);
+                if (_log.shouldInfo())
+                    _log.info("Lookup deferred successfully, but we couldn't find [" + _nextPeer.toBase64().substring(0,6) + "] ? " + _req);
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
             }
         }
@@ -657,10 +657,10 @@ class BuildHandler implements Runnable {
             getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
             getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
             Hash from = _state.fromHash;
-            if (_log.shouldWarn()) {
+            if (_log.shouldInfo()) {
                 if (from == null && _state.from != null)
                     from = _state.from.calculateHash();
-                    _log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT / 1000 + "s) locating peer for next hop " + _req +
+                    _log.info("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT / 1000 + "s) locating peer for next hop " + _req +
                               "\n* From: " + from + " [MsgID " + _state.msg.getUniqueId() + "]");
             }
             if (_nextPeer != null)
@@ -1363,9 +1363,9 @@ class BuildHandler implements Runnable {
             //getContext().tunnelDispatcher().remove(_cfg);
             getContext().statManager().addRateData("tunnel.rejectTimeout2", 1);
             Log log = getContext().logManager().getLog(BuildHandler.class);
-            if (log.shouldWarn())
+            if (log.shouldInfo())
 //                log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop, dropping tunnel..." + _cfg);
-                log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop" + _cfg);
+                log.info("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop" + _cfg);
         }
     }
 
