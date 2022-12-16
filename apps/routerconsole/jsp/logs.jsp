@@ -72,7 +72,7 @@
     int last = logsHelper.getLastCriticalMessageNumber();
     if (last >= 0) {
 %>
-<h3 class="tabletitle"><%=intl._t("Critical Logs")%>
+<h3 class="tabletitle"><%=intl._t("Critical / Error Level Logs")%>
 <%
     }
     if ((ct1 != null || ct2 != null || (ct3 != null && ct4 != null && ct5 != null)) && ctn != null) {

@@ -39,7 +39,7 @@ import net.i2p.data.DataHelper;
  * writes them where appropriate.
  *
  * As of 0.9.41, this class may be overridden via I2PAppContext.setLogManager()
- * 
+ *
  */
 public class LogManager implements Flushable {
     public final static String CONFIG_LOCATION_PROP = "loggerConfigLocation";
@@ -88,7 +88,8 @@ public class LogManager implements Flushable {
 //    public final static String DEFAULT_ROTATIONLIMIT = "2";
     public final static String DEFAULT_ROTATIONLIMIT = "3";
     public final static String DEFAULT_DEFAULTLEVEL = Log.STR_ERROR;
-    public final static String DEFAULT_ONSCREENLEVEL = Log.STR_CRIT;
+//    public final static String DEFAULT_ONSCREENLEVEL = Log.STR_CRIT;
+    public final static String DEFAULT_ONSCREENLEVEL = Log.STR_ERROR;
     private static final int MIN_FILESIZE_LIMIT = 16*1024;
     private final static boolean DEFAULT_GZIP = false;
     private static final int DEFAULT_MIN_GZIP_SIZE = 64*1024;
