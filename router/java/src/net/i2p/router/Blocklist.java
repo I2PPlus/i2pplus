@@ -268,9 +268,9 @@ public class Blocklist {
             for (Hash peer : _peerBlocklist.keySet()) {
                 String reason;
                 String comment = _peerBlocklist.get(peer);
-                String peerhash = peer.toBase64().substring(0,4);
+                String peerhash = peer.toBase64().substring(0,6);
                 if (comment != null)
-                    reason = " <b>➜</b> " + _x("Hash: {0}");
+                    reason = " <b>➜</b> " + _x("Hash") + ": " + peerhash;
                 else
                     reason = " <b>➜</b> " + _x("Banned by Router Hash");
                 _context.banlist().banlistRouterForever(peer, reason, comment);
@@ -719,10 +719,10 @@ public class Blocklist {
             // lower log level at startup when initializing from blocklist files
             if (source == null && _log.shouldWarn())
 //                _log.warn("Added: " + Addresses.toString(ip), new Exception("source"));
-                _log.warn("Adding " + Addresses.toString(ip) + " to blocklist for duration of session -> Source: " + source);
+                _log.warn("Banning " + Addresses.toString(ip) + " for duration of session -> Source: " + source);
             else if (_log.shouldDebug())
 //                _log.debug("Added: " + Addresses.toString(ip) + " source: " + source);
-                _log.debug("Adding " + Addresses.toString(ip) + " to blocklist for duration of session -> Source: " + source, new Exception("Source"));
+                _log.debug("Banning " + Addresses.toString(ip) + " for duration of session -> Source: " + source, new Exception("Source"));
         }
     }
 
@@ -1074,14 +1074,14 @@ public class Blocklist {
     private void banlist(Hash peer, byte[] ip) {
         // Temporary reason, until the job finishes
         String sip = Addresses.toString(ip);
-        String reason = " <b>➜</b> " + _x("Blocklist") + ": <a title=\"Lookup on gwhois.org\" class=whois href=https://gwhois.org/" +
-                         sip + " target=_blank>" + sip + "</a>";
+        String reason = " -> " + _x("Blocklist") + ": " + sip;
         if (sip != null && sip.startsWith("127.") || "0:0:0:0:0:0:0:1".equals(sip) ||
             sip.startsWith("192.168.") || sip.startsWith("10.") ||
             (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31)) {
-            // i2pd bug, possibly at startup, don't ban forever
-            _context.banlist().banlistRouter(peer, reason, sip, null,
-                                             _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
+                // i2pd bug, possibly at startup, don't ban forever
+                _context.banlist().banlistRouter(peer, " <b>➜</b> " + _x("Blocklist") + ": <a title=\"Lookup on gwhois.org\" class=whois href=https://gwhois.org/" +
+                sip + " target=_blank>" + sip + "</a>",
+                sip, null, _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
             return;
         }
         _context.banlist().banlistRouterForever(peer, reason, sip);
