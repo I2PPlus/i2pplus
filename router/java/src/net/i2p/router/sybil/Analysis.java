@@ -464,9 +464,9 @@ public class Analysis extends JobImpl implements RouterApp {
                 String reason = " <b>➜</b> " + day + ": Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
                 if (_log.shouldWarn()) {
                     if (ri != null)
-                        _log.warn("Banned by " + reason + " and blocking IPs:\n" + ri);
+                        _log.warn("Banning " + reason.replace("<b>➜</b>", "->") + "\n* Blocked IP Address(es): " + ri);
                     else
-                        _log.warn("Banned " + h.toBase64() + " by " + reason);
+                        _log.warn("Banning " + h.toBase64() + ' ' + reason.replace("<b>➜</b>", "->"));
                 }
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
             }

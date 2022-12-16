@@ -191,9 +191,9 @@ public class Banlist {
      *  @since 0.9.18
      */
     public boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, long expireOn) {
-        long banDuration = (_context.clock().now() + expireOn) / 1000 / 60;
+        long banDuration =  ((expireOn - _context.clock().now()) / 1000) / 60;
         if (peer == null) {
-            _log.error("ban null?", new Exception());
+            _log.error("Cannot apply router ban, peer is null", new Exception());
             return false;
         }
         if (peer.equals(_context.routerHash())) {
@@ -205,7 +205,7 @@ public class Banlist {
         boolean wasAlready = false;
         if (_log.shouldInfo())
             _log.info("Banning [" + peer.toBase64().substring(0,6) + "] for " + banDuration + " minutes" +
-               ((transport != null) ? " on transport " + transport : "") + reason.replace("<b>", "").replace("</b>", ""));
+               ((transport != null) ? " on transport " + transport : "") + reason.replace("<b>➜</b>", "->"));
 
         Entry e = new Entry();
         e.expireOn = expireOn;
@@ -261,7 +261,7 @@ public class Banlist {
     private void unbanlistRouter(Hash peer, boolean realUnbanlist, String transport) {
         if (peer == null) return;
         if (_log.shouldDebug())
-            _log.debug("Removing ban from [" + peer.toBase64().substring(0,6) + "]"
+            _log.debug("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]"
                       + (transport != null ? "/" + transport : ""));
         boolean fully = false;
 
@@ -285,7 +285,7 @@ public class Banlist {
             //}
             _context.messageHistory().unbanlist(peer);
             if (_log.shouldInfo() && e != null)
-                _log.info("Removing ban from [" + peer.toBase64().substring(0,6) + "]"
+                _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]"
                           + (transport != null ? " / " + transport : ""));
         }
     }
