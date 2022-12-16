@@ -498,7 +498,7 @@ class BuildHandler implements Runnable {
         if (from != null && _context.banlist().isBanlisted(from)) {
             // Usually won't have connected, but may have been banlisted after connect
             if (_log.shouldWarn())
-                _log.warn("Drop request, previous peer is banned: " + from);
+                _log.warn("Dropping request, previous peer is banned: " + from);
             _context.commSystem().mayDisconnect(from);
             return -1;
         }
@@ -731,7 +731,7 @@ class BuildHandler implements Runnable {
             _log.error("Dropping hostile build request, IBGW+OBEP: " + req);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
-                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (IBGW+OBEP)", null, null, _context.clock().now() + bantime);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (IBGW+OBEP)", null, null, _context.clock().now() + bantime * 3);
                 _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
                           " minutes for hostile tunnel request (Inbound Gateway & OutBound Endpoint)");
 
@@ -836,7 +836,7 @@ class BuildHandler implements Runnable {
                 _log.warn("Dropping build request (too far in future) " + DataHelper.formatDuration(0 - timeDiff) + ": " + req);
             if (from != null)
                 _context.commSystem().mayDisconnect(from);
-                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (too far in future)", null, null, _context.clock().now() + bantime);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (too far in future)", null, null, _context.clock().now() + bantime * 3);
                 _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
                           " minutes for hostile tunnel request (too far in future)");
             return;
