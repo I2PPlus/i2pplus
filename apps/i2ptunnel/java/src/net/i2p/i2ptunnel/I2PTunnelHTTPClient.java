@@ -483,7 +483,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     method = params[0];
                     if (method.toUpperCase(Locale.US).equals("CONNECT")) {
                         // this makes things easier later, by spoofing a
-                        // protocol so the URI parser find the host and port
+                        // protocol so the URI parser finds the host and port
                         // For in-net outproxy, will be fixed up below
                         request = "https://" + request + '/';
                     }
