@@ -199,8 +199,9 @@ function refreshSidebar() {
               }
             }
           }
-          if (updateSection !== null && updateSection.hidden !== true) {
+          if (updateSection !== null) {
             if (!Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
+              updateSection.hidden = null;
               updateSection.innerHTML = updateSectionResponse.innerHTML;
             }
           }
