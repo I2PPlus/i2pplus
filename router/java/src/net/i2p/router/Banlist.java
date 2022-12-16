@@ -96,7 +96,7 @@ public class Banlist {
                 //    prof.unbanlist();
                 _context.messageHistory().unbanlist(peer);
                 if (_log.shouldInfo())
-                    _log.info("Removing router [" + peer.toBase64().substring(0,6) + "] from banlist (ban has expired)");
+                    _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
             }
 
             requeue(30*1000);
@@ -191,6 +191,7 @@ public class Banlist {
      *  @since 0.9.18
      */
     public boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, long expireOn) {
+        long banDuration = (_context.clock().now() + expireOn) / 1000 / 60;
         if (peer == null) {
             _log.error("ban null?", new Exception());
             return false;
@@ -203,9 +204,8 @@ public class Banlist {
         }
         boolean wasAlready = false;
         if (_log.shouldInfo())
-            _log.info("Banlisting [" + peer.toBase64().substring(0,6) + "] " +
- //              ((transport != null) ? " on transport " + transport : ""), new Exception("Banlist cause: " + reason));
-               ((transport != null) ? " on transport " + transport : "") + "(" + reason + ")");
+            _log.info("Banning [" + peer.toBase64().substring(0,6) + "] for " + banDuration + " minutes" +
+               ((transport != null) ? " on transport " + transport : "") + reason.replace("<b>", "").replace("</b>", ""));
 
         Entry e = new Entry();
         e.expireOn = expireOn;
@@ -285,8 +285,8 @@ public class Banlist {
             //}
             _context.messageHistory().unbanlist(peer);
             if (_log.shouldInfo() && e != null)
-                _log.info("Unbanlisting router " + peer.toBase64()
-                          + (transport != null ? "/" + transport : ""));
+                _log.info("Removing ban from [" + peer.toBase64().substring(0,6) + "]"
+                          + (transport != null ? " / " + transport : ""));
         }
     }
 
@@ -315,7 +315,7 @@ public class Banlist {
             //    prof.unbanlist();
             _context.messageHistory().unbanlist(peer);
             if (_log.shouldInfo())
-                _log.info("Unbanlisting (expired) " + peer.toBase64());
+                _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
         }
 
         return rv;

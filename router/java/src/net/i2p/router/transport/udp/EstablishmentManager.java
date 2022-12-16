@@ -1840,7 +1840,7 @@ class EstablishmentManager {
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _context.banlist().banlistRouter(charlieHash, "Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                _context.banlist().banlistRouter(charlieHash, " <b>➜</b> Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                 charlie.fail();
                 return;
             }
@@ -1888,7 +1888,7 @@ class EstablishmentManager {
                 _log.debug("Received RelayResponse rejection " + code + " from Charlie " + charlie);
             charlie2.setIntroState(bobHash, istate);
             if (code == RELAY_REJECT_CHARLIE_BANNED)
-                _context.banlist().banlistRouter(charlieHash, "They banned us", null, null, _context.clock().now() + 6*60*60*1000);
+                _context.banlist().banlistRouter(charlieHash, " <b>➜</b> They banned us", null, null, _context.clock().now() + 6*60*60*1000);
             charlie.fail();
             _liveIntroductions.remove(lnonce);
         } else {
@@ -2087,7 +2087,7 @@ class EstablishmentManager {
                 if (_log.shouldWarn())
                     _log.warn("BAD IP address length " + iplen + " from " + state);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), "Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                 state.fail();
                 return;
             }
@@ -2103,7 +2103,7 @@ class EstablishmentManager {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("BAD HolePunch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), "Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                 state.fail();
                 return;
             }
@@ -2117,7 +2117,7 @@ class EstablishmentManager {
                               "; Received from: " + id);
                 if (!TransportUtil.isValidPort(fromPort)) {
                     _context.statManager().addRateData("udp.relayBadIP", 1);
-                    _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), "Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                    _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                     state.fail();
                     return;
                 }
