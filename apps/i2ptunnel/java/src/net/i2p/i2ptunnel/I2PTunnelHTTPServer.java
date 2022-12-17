@@ -743,8 +743,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 //Change headers to protect server identity
                 StringBuilder command = new StringBuilder(128);
-                Map<String, List<String>> headers = readHeaders(null, serverin, command,
-                    SERVER_SKIPHEADERS, _ctx);
+                Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx);
                 String modifiedHeaders = formatHeaders(headers, command);
 
                 if (_shouldCompress) {
@@ -1009,7 +1008,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
       if (entry == null) {
           headers.put(key, entry = new ArrayList<String>(1));
       } else {
-            entry.clear();
+          entry.clear();
       }
       entry.add(value);
     }
@@ -1048,8 +1047,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @since public since 0.9.57 for SOCKS
      */
     public static Map<String, List<String>> readHeaders(I2PSocket socket, InputStream in, StringBuilder command,
-                                                           String[] skipHeaders, I2PAppContext ctx) throws IOException {
-      HashMap<String, List<String>> headers = new HashMap<String, List<String>>();
+      String[] skipHeaders, I2PAppContext ctx) throws IOException {
+        HashMap<String, List<String>> headers = new HashMap<String, List<String>>();
         StringBuilder buf = new StringBuilder(128);
 
         // slowloris / darkloris
