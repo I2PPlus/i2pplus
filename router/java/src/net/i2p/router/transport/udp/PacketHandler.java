@@ -902,7 +902,7 @@ class PacketHandler {
                     packet.getPacket().getLength() == SSU2Util.MIN_HANDSHAKE_DATA_LEN - 1) {
                     // i2pd short 87 byte session request thru 0.9.56, drop packet
                     if (_log.shouldWarn())
-                        _log.warn("Short Session Request len 87 on " + state);
+                        _log.warn("Received Short SessionRequest (87 bytes) from " + from);
                     return true;
                 }
             } else {
@@ -927,7 +927,7 @@ class PacketHandler {
                         packet.getPacket().getLength() == 87) {
                         // i2pd short 87 byte session request thru 0.9.56, drop packet
                         if (_log.shouldWarn())
-                            _log.warn("Short Session Request after Retry len 87 on " + state);
+                            _log.warn("Received Short SessionRequest (87 bytes) after Retry on " + state);
                         return true;
                     }
                     if (header == null ||
@@ -943,8 +943,8 @@ class PacketHandler {
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Bad Source Conn id " + header +
-                                  " len " + packet.getPacket().getLength() + " on " + state);
+                        _log.warn("Received Bad Source Connection ID \n* " + header +
+                                  " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     // TODO could be a retransmitted Session Request,
                     // tell establisher?
                     return false;
@@ -952,7 +952,7 @@ class PacketHandler {
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     // i2pd bug changing after retry, thru 0.9.56, drop packet
                     if (_log.shouldWarn())
-                        _log.warn("Bad Destination Connection ID \n* " + header +
+                        _log.warn("Received Bad Destination Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     return true;
                 }
@@ -963,19 +963,19 @@ class PacketHandler {
                 if (header == null) {
                     // Java I2P thru 0.9.56 retransmits session confirmed with 1-2 byte packets
                     if (_log.shouldWarn())
-                        _log.warn("Session Confirmed too short len: " +
-                                  + packet.getPacket().getLength() + " on " + state);
+                        _log.warn("Received SessionConfirmed packet was too short (" +
+                                  + packet.getPacket().getLength() + " bytes) on " + state);
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Bad Destination Connection ID \n* " + header + " on " + state);
+                        _log.warn("Received Bad Destination Connection ID \n* " + header + " on " + state);
                     return false;
                 }
                 if (header.getPacketNumber() != 0 ||
                     header.getType() != SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
                     if (_log.shouldWarn())
-                        _log.warn("Queue possible data packet with header \n* " + header + " on: " + state);
+                        _log.warn("Queueing possible data packet (" + packet.getPacket().getLength() + " bytes) on: " + state);
                     // TODO either attempt to decrypt as a retransmitted
                     // Session Request or Token Request,
                     // or just tell establisher so it can retransmit Session Created or Retry
@@ -1017,7 +1017,7 @@ class PacketHandler {
                 _establisher.receiveHolePunch(from, packet);
         } else {
             if (_log.shouldWarn())
-                _log.warn("Received unknown SSU2 message \n* " + header + " from " + from);
+                _log.warn("Received UNKNOWN SSU2 message \n* " + header + " from " + from);
         }
         return true;
     }
@@ -1048,7 +1048,7 @@ class PacketHandler {
                 // and Retry, so we can bail out now if it doesn't match
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Bad Destination Connection ID \n* " + header);
+                        _log.warn("Received BAD Destination Connection ID \n* " + header);
                     return false;
                 }
             }
@@ -1079,12 +1079,12 @@ class PacketHandler {
         }
         if (header.getDestConnID() != state.getRcvConnID()) {
             if (_log.shouldWarn())
-                _log.warn("Bad Destination Connection ID \n* " + header);
+                _log.warn("Received BAD Destination Connection ID \n* " + header);
             return false;
         }
         if (header.getSrcConnID() != state.getSendConnID()) {
             if (_log.shouldWarn())
-                _log.warn("Bad Source Connection ID \n* " + header);
+                _log.warn("Received BAD Source Connection ID \n* " + header);
             return false;
         }
 
