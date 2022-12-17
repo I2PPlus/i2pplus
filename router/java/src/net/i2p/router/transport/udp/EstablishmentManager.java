@@ -787,6 +787,8 @@ class EstablishmentManager {
                     _log.warn("[SSU2] Received corrupt Session or Token Request after Retry from: " + state, gse);
                 else if (_log.shouldWarn())
                     _log.warn("[SSU2] Received corrupt Session or Token Request after Retry from: " + state + "\n* " + gse.getMessage());
+                // state called fail()
+                _inboundStates.remove(state.getRemoteHostId());
                 return;
             }
         }
@@ -895,6 +897,7 @@ class EstablishmentManager {
             else if (_log.shouldWarn())
                 _log.warn("[SSU2] Received CORRUPT SessionConfirmed from: " + state + "\n* " + gse.getMessage());
             // state called fail()
+            _inboundStates.remove(state.getRemoteHostId());
             return;
         }
         InboundEstablishState.InboundState istate = state.getState();
@@ -949,6 +952,7 @@ class EstablishmentManager {
             else if (_log.shouldWarn())
                 _log.warn("[SSU2] Received CORRUPT SessionCreated from: " + state + "\n* " + gse.getMessage());
             // state called fail()
+            _outboundStates.remove(state.getRemoteHostId());
             return;
         }
         notifyActivity();
@@ -971,6 +975,7 @@ class EstablishmentManager {
             else if (_log.shouldWarn())
                 _log.warn("[SSU2] Received CORRUPT Retry from: " + state + "\n* " + gse.getMessage());
             // state called fail()
+            _outboundStates.remove(state.getRemoteHostId());
             return;
         }
         notifyActivity();
