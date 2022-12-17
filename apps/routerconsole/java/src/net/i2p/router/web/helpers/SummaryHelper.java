@@ -698,16 +698,14 @@ public class SummaryHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(512);
         boolean link = _context.portMapper().isRegistered("i2ptunnel");
-        buf.append("<h3>");
-        if (link) {
-            buf.append("<a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
-              .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
-              .append("\">");
-        }
-        buf.append(_t("Service Tunnels"));
-        if (link) {
-           buf.append("</a>");
-        }
+        buf.append("<h3");
+        if (!link)
+            buf.append(" id=\"unregistered\"");
+        buf.append("><a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
+           .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
+           .append("\">")
+           .append(_t("Service Tunnels"))
+           .append("</a>");
         buf.append("<input type=\"checkbox\" id=\"toggle_sb_localtunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
             DataHelper.sort(clients, new AlphaComparator());
