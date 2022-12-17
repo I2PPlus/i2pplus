@@ -1,16 +1,13 @@
-import {initFilterBar} from "/.resources/js/torrentDisplay.js";
+import {initFilterBar, checkFilterBar} from "/i2psnark/.resources/js/torrentDisplay.js";
 
-function refreshTorrents(timestamp) {
-
+function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");
   var control = document.getElementById("torrentInfoControl");
   var debuginfo = document.getElementsByClassName("debuginfo");
-  var debug = tfoot.getElementById("#debugMode");
   var dirlist = document.getElementById("dirlist");
   var down = document.getElementById("down");
   var files = document.getElementById("dirInfo");
   var filterbar = document.getElementById("torrentDisplay");
-  var home = navbar.querySelector(".nav_main");
   var incomplete = document.getElementsByClassName("incomplete");
   var info = document.getElementById("torrentInfoStats");
   var mainsection = document.getElementById("mainsection");
@@ -28,6 +25,9 @@ function refreshTorrents(timestamp) {
   var torrents = document.getElementById("torrents");
   var url = location.href;
   var xhrsnark = new XMLHttpRequest();
+
+  if (navbar !== null) {var home = document.querySelector(".nav_main");}
+  if (tfoot !== null) {var debug = document.getElementById("#debugMode");}
 
   if (torrents || noload) {
     if (savedQuery !== null) {
@@ -75,13 +75,13 @@ function refreshTorrents(timestamp) {
           if (filterbar) {
             var filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
             if (!filterbar && filterbarResponse !== null) {
-              window.requestAnimationFrame(refreshAll);
+              refreshAll();
             }
           }
         }
 
         if (down || noload) {
-          window.requestAnimationFrame(refreshAll);
+          refreshAll();
         }
 
         if (!down && !noload) {
@@ -109,7 +109,7 @@ function refreshTorrents(timestamp) {
         }
 
         if (files || torrents) {
-            window.requestAnimationFrame(updateVolatile);
+            updateVolatile();
         }
 
         if (complete) {
@@ -156,7 +156,7 @@ function refreshTorrents(timestamp) {
                     updating[u].innerHTML = updatingResponse[u].innerHTML;
                   }
                 } else {
-                  window.requestAnimationFrame(refreshAll);
+                  refreshAll();
                 }
               }
             }
@@ -217,6 +217,9 @@ function refreshTorrents(timestamp) {
       }
     }
   };
+  xhrsnark.addEventListener("loaded", () => {
+    checkFilterBar();
+  });
   xhrsnark.send();
   }
 }

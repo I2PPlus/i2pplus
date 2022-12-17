@@ -268,34 +268,42 @@ function initFilterBar() {
   }
 }
 
-var query = window.location.search;
-var url = location.href;
+function checkFilterBar() {
+  var query = window.location.search;
+  var url = location.href;
 
-function setQuery() {
-  if (query) {
-    window.localStorage.setItem("queryString", url);
+  function setQuery() {
+    if (query) {
+      window.localStorage.setItem("queryString", url);
+    }
   }
-}
 
-function clearQuery() {
-  window.localStorage.removeItem("queryString");
-}
+/**
+  function clearQuery() {
+    window.localStorage.removeItem("queryString");
+  }
 
-function clearFilter() {
-  window.localStorage.removeItem("filter");
-}
+  function clearFilter() {
+    window.localStorage.removeItem("filter");
+  }
 
-function clearLocalStorage() {
-  window.localStorage.clear();
-}
+  function clearLocalStorage() {
+    window.localStorage.clear();
+  }
+**/
 
-if (bar !== null) {
-  initFilterBar();
-}
+  if (bar !== null) {
+    initFilterBar();
+  }
 
-var sortIcon = document.querySelectorAll(".sortIcon");
-sortIcon.forEach(function (item) {
-  item.addEventListener("click", () => {
-    setQuery();
+  var sortIcon = document.querySelectorAll(".sortIcon");
+  sortIcon.forEach(function (item) {
+    item.addEventListener("click", () => {
+      setQuery();
+    });
   });
-});
+}
+
+checkFilterBar();
+
+export {initFilterBar, checkFilterBar};
