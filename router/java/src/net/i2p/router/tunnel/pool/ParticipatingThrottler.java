@@ -75,7 +75,7 @@ class ParticipatingThrottler {
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
 //                if (_log.shouldWarn())
                 _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for " + period +
-                          " minutes for excessive transit tunnel requests (Limit: " + limit + " in " + 11*60*1000 / LIFETIME_PORTION + "s)");
+                          " minutes for excessive transit tunnel requests (Limit: " + limit * 10 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
                 rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
