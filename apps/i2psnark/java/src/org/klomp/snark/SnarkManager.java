@@ -3089,9 +3089,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         Set<String> existingNames = listTorrentFiles();
 //        if (_log.shouldDebug())
-//            _log.debug("DirectoryMonitor found the following torrents in " + dir + ":\n* " + DataHelper.toString(foundNames) + " existing: " + DataHelper.toString(existingNames));
-//            _log.debug("DirectoryMonitor found " + files.length + " torrents in " + dir + ":\n* " + DataHelper.toString(foundNames));
-        // lets find new ones first...
+//            _log.debug("DirectoryMonitor found the following torrents in " + dir + ":\n* " +
+//                        DataHelper.toString(foundNames) + " existing: " + DataHelper.toString(existingNames));
+//            _log.debug("DirectoryMonitor found " + files.length + " torrents in " + dir + ":\n* " +
+//                        DataHelper.toString(foundNames));
+        // let's find new ones first...
+        int count = 0;
         for (String name : foundNames) {
             if (existingNames.contains(name)) {
                 // already known.  noop
@@ -3108,6 +3111,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         _log.error("Unable to add torrent: " + name);
                         disableTorrentFile(name);
                         rv = false;
+                    }
+                    if (shouldStart && (count++ & 0x3f) == 49) {
+                        // try to prevent OOMs at startup
+                        try { Thread.sleep(1500); } catch (InterruptedException ie) {}
                     }
                 } catch (Snark.RouterException e) {
                     addMessage(_t("Error: Could not add torrent: {0}", name) + ": " + e.getMessage());
@@ -3298,21 +3305,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     *  If not connected, thread it, otherwise inline
+     *  Always thread it
      *  @since 0.9.1
      */
     public void startAllTorrents() {
-        if (_util.connected()) {
-            startAll();
-        } else {
+        if (!_util.connected()) {
             addMessage(_t("Opening the I2P tunnel and starting all torrents."));
             for (Snark snark : _snarks.values()) {
                 // mark it for the UI
                 snark.setStarting();
             }
-            (new I2PAppThread(new ThreadedStarter(null), "TorrentStarterAll", true)).start();
-            try { Thread.sleep(200); } catch (InterruptedException ie) {}
         }
+        (new I2PAppThread(new ThreadedStarter(null), "TorrentStarterAll", true)).start();
+        try { Thread.sleep(200); } catch (InterruptedException ie) {}
     }
 
     /**
@@ -3342,12 +3347,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *  @since 0.9.1
      */
     private void startAll() {
+        int count = 0;
         for (Snark snark : _snarks.values()) {
             if (snark.isStopped()) {
                 try {
                     snark.startTorrent();
                 } catch (RuntimeException re) {
                     // Snark.fatal() will log and call fatal() here for user message before throwing
+                }
+                if ((count++ & 0x3f) == 49) {
+                    // try to prevent OOMs
+                    try { Thread.sleep(1500); } catch (InterruptedException ie) {}
                 }
             }
         }
