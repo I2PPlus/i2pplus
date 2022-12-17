@@ -743,7 +743,7 @@ class BuildHandler implements Runnable {
             nextId <= 0 || nextId > TunnelId.MAX_ID_VALUE) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
             if (_log.shouldWarn())
-                _log.warn("Dropping hostile build request, BAD tunnel ID: " + req);
+                _log.warn("Dropping hostile build request, BAD Tunnel ID: " + req);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, "Hostile Tunnel Request (BAD Tunnel ID)", null, null, _context.clock().now() + bantime * 3);
