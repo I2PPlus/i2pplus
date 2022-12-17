@@ -1888,11 +1888,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             }
         }
 
-        // Should always be direct... except maybe for hidden mode?
-        // or do we always know the IP by now?
-        if (remoteId.getIP() == null && _log.shouldWarn())
-            _log.warn("Add indirect: " + peer);
-
         // don't do this twice
         PeerState oldPeer2 = _peersByRemoteHost.put(remoteId, peer);
         if (oldPeer2 != null && oldPeer2 != peer && oldPeer2 != oldPeer) {
@@ -1956,6 +1951,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             }
         }
         
+/*
         synchronized(_rebuildLock) {
             rebuildIfNecessary();
             Status status = getReachabilityStatus();
@@ -1964,6 +1960,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 _testEvent.forceRunSoon(peer.isIPv6());
             }
         }
+*/
         return true;
     }
 
@@ -3065,11 +3062,10 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _needsRebuild = false;
             return addr;
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Local SSU address rebuild failed"
-                           + "\n* Couldn't specify the direct or indirect info; Need introducers? "
-//                         + introducersRequired + " ipv6? " + isIPv6, new Exception("source"));
-                           + introducersRequired);
+            if (_log.shouldLog(Log.WARN))
+                _log.warn("Wanted to rebuild my SSU address, but couldn't specify either the direct or indirect info (needs introducers? " 
+                           + introducersRequired +
+                           " IPv6? " + isIPv6 + ')');
             _needsRebuild = true;
             // save the external address, even if we didn't publish it
             if (port > 0 && host != null) {
@@ -3873,6 +3869,39 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
      */
     private void locked_setReachabilityStatus(Status newStatus, boolean isIPv6) {
         Status old = _reachabilityStatus;
+        if (newStatus == Status.UNKNOWN) {
+            // now that addRemotePeerState() doesn't schedule peer tests like crazy,
+            // we need to reschedule here
+            boolean runtest = false;
+            switch (old) {
+                case UNKNOWN:
+                    runtest = true;
+                    break;
+
+                case IPV4_UNKNOWN_IPV6_OK:
+                case IPV4_UNKNOWN_IPV6_FIREWALLED:
+                    if (!isIPv6)
+                        runtest = true;
+                    break;
+
+                case IPV4_OK_IPV6_UNKNOWN:
+                case IPV4_DISABLED_IPV6_UNKNOWN:
+                case IPV4_FIREWALLED_IPV6_UNKNOWN:
+                case IPV4_SNAT_IPV6_UNKNOWN:
+                    if (isIPv6)
+                        runtest = true;
+                    break;
+            }
+            if (runtest || old != _reachabilityStatusPending) {
+                if (_log.shouldWarn())
+                    _log.warn("Old status: " + old + " unchanged after update: UNKNOWN, reschedule test! ipv6? " + isIPv6);
+                _testEvent.forceRunSoon(isIPv6);
+            } else {
+                // run a little sooner than usual
+                _testEvent.forceRunSoon(isIPv6, 5*60*1000);
+            }
+            return;
+        }
         // merge new status into old
         Status status = Status.merge(old, newStatus);
         _testEvent.setLastTested(isIPv6);
