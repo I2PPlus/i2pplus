@@ -751,6 +751,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 //if (shouldAddResponseHeaders()) {
 
+/**
                     // add cache-control header if not present
                     String cc = getEntryOrNull(headers, "Cache-Control");
                     if (cc == null || !cc.toLowerCase(Locale.US).contains("cache-control"))
@@ -776,7 +777,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     if (ref == null || !ref.toLowerCase(Locale.US).contains("referrer-policy"))
                         setEntry(headers, "Referrer-Policy", "same-origin");
                 //}
-
+**/
                 String modifiedHeaders = formatHeaders(headers, command);
 
                 if (_shouldCompress) {
