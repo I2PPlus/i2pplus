@@ -688,6 +688,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers
          */
+
+        //public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
+        //                           I2PAppContext ctx, Log log, boolean shouldCompress, boolean addHeaders) {
+
         public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                    I2PAppContext ctx, Log log, boolean shouldCompress) {
             _webserver = webserver;
@@ -749,33 +753,43 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 StringBuilder command = new StringBuilder(128);
                 Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx);
 
+/**
+                // Make adding headers an (opt-in?) tunnel option
+                // TODO Exclude local proxy error pages; different caching policies for different resource types?
                 //if (shouldAddResponseHeaders()) {
 
-/**
                     // add cache-control header if not present
-                    String cc = getEntryOrNull(headers, "Cache-Control");
-                    if (cc == null || !cc.toLowerCase(Locale.US).contains("cache-control"))
+                    //String cc = getEntryOrNull(headers, "Cache-Control");
+                    //if (cc == null || !cc.toLowerCase(Locale.US).equals("cache-control"))
+                    boolean cc = headers.containsKey("Cache-Control");
+                    if (!cc)
                         setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
 
                     // add allow header if not present
-                    String allow = getEntryOrNull(headers, "Allow");
-                    if (cc == null || !cc.toLowerCase(Locale.US).contains("allow"))
+                    boolean allow = headers.containsKey("Allow");
+                    if (!allow)
                         setEntry(headers, "Allow", "GET, POST, HEAD");
 
                     // add x-frame-options header if not present
-                    String xf = getEntryOrNull(headers, "X-Frame-Options");
-                    if (xf == null || !xf.toLowerCase(Locale.US).contains("x-frame-options"))
+                    boolean xf = headers.containsKey("X-Frame-Options");
+                    if (!xf)
                         setEntry(headers, "X-Frame-Options", "SAMEORIGIN");
 
                     // add content-security-policy header if not present
-                    //String csp = getEntryOrNull(headers, "Content-Security-Policy");
-                    //if (csp == null || !csp.toLowerCase(Locale.US).contains("content-security-policy"))
-                    //    setEntry(headers, "Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'");
+                    //boolean csp = headers.containsKey("Content-Security-Policy");
+                    //if (!csp)
+                    //    addEntry(headers, "Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'");
 
                     // add referrer-policy header if not present
-                    String ref = getEntryOrNull(headers, "Referrer-Policy");
-                    if (ref == null || !ref.toLowerCase(Locale.US).contains("referrer-policy"))
+                    boolean rp = headers.containsKey("Referrer-Policy");
+                    if (!rp)
                         setEntry(headers, "Referrer-Policy", "same-origin");
+
+                    // add x-xss-protection header if not present
+                    boolean xss = headers.containsKey("X-XSS-Protection");
+                    if (!xss)
+                        setEntry(headers, "X-XSS-Protection", "1; mode=block");
+
                 //}
 **/
                 String modifiedHeaders = formatHeaders(headers, command);
