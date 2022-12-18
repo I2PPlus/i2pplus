@@ -203,9 +203,10 @@ public class Banlist {
             return false;
         }
         boolean wasAlready = false;
+        String logReason = reason.replace("<b>➜</b>", "->");
         if (_log.shouldInfo())
-            _log.info("Banning [" + peer.toBase64().substring(0,6) + "] for " + banDuration + " minutes" +
-               ((transport != null) ? " on transport " + transport : "") + reason.replace("<b>➜</b>", "->"));
+            _log.info("Banning [" + peer.toBase64().substring(0,6) + "] for " + banDuration + " minutes " +
+               ((transport != null) ? "on transport " + transport : "") + logReason);
 
         Entry e = new Entry();
         e.expireOn = expireOn;

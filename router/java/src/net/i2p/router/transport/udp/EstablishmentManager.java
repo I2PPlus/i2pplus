@@ -831,7 +831,7 @@ class EstablishmentManager {
         if (count > MAX_TERMINATIONS) {
             // not everybody listens or backs off...
             if (_log.shouldWarn())
-                _log.warn("Rate limit " + count + " not sending termination to: " + to);
+                _log.warn("Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") -> No more termination packets to: " + to);
             return;
         }
         // very basic validation that this is probably in response to a good packet.
