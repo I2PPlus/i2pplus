@@ -943,7 +943,7 @@ class PacketHandler {
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Received Bad Source Connection ID \n* " + header +
+                        _log.warn("Received BAD Source Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     // TODO could be a retransmitted Session Request,
                     // tell establisher?
@@ -952,7 +952,7 @@ class PacketHandler {
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     // i2pd bug changing after retry, thru 0.9.56, drop packet
                     if (_log.shouldWarn())
-                        _log.warn("Received Bad Destination Connection ID \n* " + header +
+                        _log.warn("Received BAD Destination Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     return true;
                 }
@@ -969,7 +969,7 @@ class PacketHandler {
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     if (_log.shouldWarn())
-                        _log.warn("Received Bad Destination Connection ID \n* " + header + " on " + state);
+                        _log.warn("Received BAD Destination Connection ID \n* " + header + " on " + state);
                     return false;
                 }
                 if (header.getPacketNumber() != 0 ||
