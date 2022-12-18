@@ -627,7 +627,7 @@ public class GeoIP {
             }
         } catch (IOException ioe) {
             if (_log.shouldError())
-                _log.error("Error reading the geoFile", ioe);
+                _log.error("Error reading the GeoIP file", ioe);
         } finally {
             if (br != null) try { br.close(); } catch (IOException ioe) {}
         }
@@ -730,8 +730,8 @@ public class GeoIP {
                     String name = fullName(country);
                     if (name == null)
                         name = country;
-                    _log.logAlways(Log.WARN, "Setting hidden mode to protect you in " + name +
-                                             ", you may override on the network configuration page");
+                    _log.logAlways(Log.WARN, "Enabling Hidden mode for additional security features in " + name +
+                                             "\n* You may override this setting on the network configuration page if required");
                 }
                 ctx.router().rebuildRouterInfo();
             }
@@ -763,7 +763,7 @@ public class GeoIP {
         for (Hash h : ctx.netDb().getAllRouters()) {
             String hisCountry = ctx.commSystem().getCountry(h);
             if (country.equals(hisCountry)) {
-                ctx.banlist().banlistRouterForever(h, "In our country");
+                ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
             }
         }
     }
