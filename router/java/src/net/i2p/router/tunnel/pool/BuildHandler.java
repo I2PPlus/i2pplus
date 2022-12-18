@@ -717,7 +717,7 @@ class BuildHandler implements Runnable {
         boolean isOutEnd = req.readIsOutboundEndpoint();
 
         int random = (3 + _context.random().nextInt(5) * _context.random().nextInt(60)) * 1000;
-        int bantime = Math.min(random, (5 + _context.random().nextInt(10)) * 60 * 1000);
+        int bantime = Math.max(Math.min(random, (5 + _context.random().nextInt(10)) * 60 * 1000), 60*1000);
         int period = bantime / 60 / 1000;
 
         Hash from = state.fromHash;
