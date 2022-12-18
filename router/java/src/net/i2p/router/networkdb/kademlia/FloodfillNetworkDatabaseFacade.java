@@ -54,7 +54,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
 //    public static final int MAX_TO_FLOOD = 3;
-    public static final int MAX_TO_FLOOD = 8;
+    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 5 : 10;
 
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
 //    private static final int FLOOD_TIMEOUT = 30*1000;
@@ -62,7 +62,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;
-    private static final int NEXT_FLOOD_QTY = 4;
+    private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 3 : 6;
 
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
         super(context);
@@ -141,7 +141,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  because we are sending direct, but unresponsive floodfills may take a while due to timeouts.
      */
 //    static final long PUBLISH_TIMEOUT = 90*1000;
-    static final long PUBLISH_TIMEOUT = 80*1000;
+    static final long PUBLISH_TIMEOUT = 45*1000;
 
     /**
      * Send our RI to the closest floodfill.
