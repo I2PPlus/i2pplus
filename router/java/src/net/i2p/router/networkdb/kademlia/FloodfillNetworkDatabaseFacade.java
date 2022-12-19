@@ -26,6 +26,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 import net.i2p.router.CommSystemFacade.Status;
+import net.i2p.util.VersionComparator;
 
 /**
  *  The network database
@@ -63,6 +64,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;
     private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 4 : 6;
+    private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 750 : 400;
 
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
         super(context);
@@ -619,11 +621,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             if (isNew) {
                 if (_log.shouldDebug())
-                    _log.debug("Direct RI lookup for " + peer.toBase64());
+                    _log.debug("Direct RouterInfo lookup for [" + peer.toBase64().substring(0,6) + "]");
                 _context.jobQueue().addJob(searchJob);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Pending Direct RI lookup for " + peer.toBase64());
+                    _log.debug("Pending Direct RouterInfo lookup for [" + peer.toBase64().substring(0,6) + "]");
                 searchJob.addDeferred(onFindJob, onFailedLookupJob, 10*1000, false);
             }
             return;
@@ -654,27 +656,35 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         // should we skip the search?
         boolean forceExplore = _context.getBooleanProperty("router.exploreWhenFloodfill");
-        if ((_floodfillEnabled && !forceExplore) ||
-            _context.jobQueue().getMaxLag() > 500 ||
-            _context.banlist().isBanlistedForever(peer)) {
-//            knownRouters > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+        String MIN_VERSION = "0.9.56";
+        boolean isHidden = _context.router().isHidden();
+        String v = info.getVersion();
+        boolean uninteresting = (info != null && info.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                 info.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                 info.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                 VersionComparator.comp(v, MIN_VERSION) < 0) && !isHidden &&
+                                 _context.netDb().getKnownRouters() > 2000;
+        if ((_floodfillEnabled && !forceExplore) || _context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH ||
+            _context.banlist().isBanlistedForever(peer) || uninteresting || knownRouters > MAX_DB_BEFORE_SKIPPING_SEARCH) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at
             // once, and then firing off 3000 netDb lookup tasks)
             // Also don't queue a search if we have plenty of routerinfos
             // (KBucketSetSize() includes leasesets but avoids locking)
 //            super.lookupBeforeDropping(peer, info); // we don't want the routerinfo deleted, so this is commented out
-            if (_floodfillEnabled && !forceExplore) {
-                if (_log.shouldInfo())
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - Floodfill mode active");
-            } else if (_context.banlist().isBanlistedForever(peer)) {
-                if (_log.shouldInfo())
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - banlisted");
-//            } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
-//                if (_log.shouldInfo())
-//                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - kbucket is full");
-            } else
-                if (_log.shouldInfo())
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - router overload");
+            if (_log.shouldInfo()) {
+                if (_floodfillEnabled && !forceExplore) {
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Floodfill mode active");
+                } else if (_context.banlist().isBanlistedForever(peer)) {
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
+                } else if (uninteresting) {
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
+                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
+                } else {
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
+                }
+            }
+            super.lookupBeforeDropping(peer, info);
             return;
         }
         // this sends out the search to the floodfill peers even if we already have the
