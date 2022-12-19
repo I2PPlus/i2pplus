@@ -718,10 +718,8 @@ public class Blocklist {
         if (rv) {
             // lower log level at startup when initializing from blocklist files
             if (source == null && _log.shouldWarn())
-//                _log.warn("Added: " + Addresses.toString(ip), new Exception("source"));
-                _log.warn("Banning " + Addresses.toString(ip) + " for duration of session -> Source: " + source);
+                _log.warn("Banning " + Addresses.toString(ip) + " for duration of session");
             else if (_log.shouldDebug())
-//                _log.debug("Added: " + Addresses.toString(ip) + " source: " + source);
                 _log.debug("Banning " + Addresses.toString(ip) + " for duration of session -> Source: " + source, new Exception("Source"));
         }
     }
