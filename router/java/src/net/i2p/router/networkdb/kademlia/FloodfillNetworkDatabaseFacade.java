@@ -658,14 +658,17 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         boolean forceExplore = _context.getBooleanProperty("router.exploreWhenFloodfill");
         String MIN_VERSION = "0.9.56";
         boolean isHidden = _context.router().isHidden();
+        boolean slow = info.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
+        boolean fast = info.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
         String v = info.getVersion();
-        boolean uninteresting = (info != null && info.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                 info.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                 info.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                 VersionComparator.comp(v, MIN_VERSION) < 0) && !isHidden &&
-                                 _context.netDb().getKnownRouters() > 2000;
+        boolean uninteresting = info != null && !isHidden && (slow || VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                (_context.netDb().getKnownRouters() > 2000 && !fast);
         if ((_floodfillEnabled && !forceExplore) || _context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH ||
-            _context.banlist().isBanlistedForever(peer) || uninteresting || knownRouters > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+            _context.banlist().isBanlistedForever(peer) || uninteresting) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at
             // once, and then firing off 3000 netDb lookup tasks)
             // Also don't queue a search if we have plenty of routerinfos
@@ -678,8 +681,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
                 } else if (uninteresting) {
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
-                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
+//                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+//                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
                 } else {
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
                 }
