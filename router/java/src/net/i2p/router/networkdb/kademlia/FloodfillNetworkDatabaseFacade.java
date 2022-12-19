@@ -62,7 +62,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;
-    private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 3 : 6;
+    private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 4 : 6;
 
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
         super(context);
@@ -586,7 +586,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /** NTCP cons drop quickly but SSU takes a while, so it's prudent to keep this
      *  a little higher than 1 or 2. */
 //    protected final static int MIN_ACTIVE_PEERS = 5;
-    protected final static int MIN_ACTIVE_PEERS = 20;
+    protected final static int MIN_ACTIVE_PEERS = SystemVersion.isSlow() ? 16 : 40;
 
     /** @since 0.8.7 */
     private static final int MAX_DB_BEFORE_SKIPPING_SEARCH;
@@ -655,7 +655,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // should we skip the search?
         boolean forceExplore = _context.getBooleanProperty("router.exploreWhenFloodfill");
         if ((_floodfillEnabled && !forceExplore) ||
-            _context.jobQueue().getMaxLag() > 1000 ||
+            _context.jobQueue().getMaxLag() > 500 ||
             _context.banlist().isBanlistedForever(peer)) {
 //            knownRouters > MAX_DB_BEFORE_SKIPPING_SEARCH) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at
