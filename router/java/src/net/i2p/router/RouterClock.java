@@ -42,6 +42,7 @@ public class RouterClock extends Clock {
     /** use system time for this */
     private long _lastChanged;
     private int _lastStratum;
+    private long _lastProposedOffset;
     private final RouterTimestamper _timeStamper;
 
     /**
@@ -110,6 +111,7 @@ public class RouterClock extends Clock {
      */
     private synchronized void setOffset(long offsetMs, boolean force, int stratum) {
         long delta = offsetMs - _offset;
+        long systemNow = System.currentTimeMillis();
         if (!force) {
             if (!_isSystemClockBad && (offsetMs > MAX_OFFSET || offsetMs < 0 - MAX_OFFSET)) {
                 Log log = getLog();
@@ -119,7 +121,7 @@ public class RouterClock extends Clock {
             }
 
             // only allow substantial modifications before the first 10 minutes
-            if (_alreadyChanged && (System.currentTimeMillis() - _startedOn > 10 * 60 * 1000)) {
+            if (_alreadyChanged && (systemNow - _startedOn > 10 * 60 * 1000)) {
                 if ( (delta > MAX_LIVE_OFFSET) || (delta < 0 - MAX_LIVE_OFFSET) ) {
                     Log log = getLog();
                     if (log.shouldWarn())
@@ -138,7 +140,7 @@ public class RouterClock extends Clock {
 
             // only listen to a worse stratum if it's been a while
             if (_alreadyChanged && stratum > _lastStratum &&
-                System.currentTimeMillis() - _lastChanged < MIN_DELAY_FOR_WORSE_STRATUM) {
+                systemNow - _lastChanged < MIN_DELAY_FOR_WORSE_STRATUM) {
                 Log log = getLog();
                 if (log.shouldDebug())
                     log.debug("Ignoring update from a stratum " + stratum +
@@ -182,7 +184,7 @@ public class RouterClock extends Clock {
         // a previous step adjustment.
         // This allows NTP to trump a peer offset after a soft restart
         if (_alreadyChanged &&
-            (stratum >= _lastStratum || System.currentTimeMillis() - _startedOn > 60*1000)) {
+            (stratum >= _lastStratum || systemNow - _startedOn > 60*1000)) {
             // Update the target offset, slewing will take care of the rest
             if (delta > 15*1000)
                 getLog().logAlways(Log.WARN, "Warning - Updating target clock offset to " + offsetMs + "ms from " + _offset + "ms (Stratum: " + stratum + ")");
@@ -190,7 +192,7 @@ public class RouterClock extends Clock {
                 getLog().info("Updating target clock offset to " + offsetMs + "ms from " + _offset + "ms (Stratum: " + stratum + ")");
 
             if (!_statCreated) {
-//                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
+//                  _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
                 _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
                 _statCreated = true;
             }
@@ -202,19 +204,42 @@ public class RouterClock extends Clock {
             }
         } else {
             Log log = getLog();
-            if (log.shouldInfo())
-                log.info("Initializing clock offset to " + offsetMs + "ms (Stratum: " + stratum + ")");
-            _alreadyChanged = true;
-            if (_context.getBooleanProperty(PROP_DISABLE_ADJUSTMENT)) {
-                log.error("Clock adjustment disabled", new Exception());
+            // For setting the clock based on peer skew (DEFAULT_STRATUM)
+            // we require a simple consensus of two consecutive peers
+            // to be within 1 minute of each other, and take the average.
+            if (stratum < DEFAULT_STRATUM ||
+                (_lastProposedOffset != 0 && Math.abs(_lastProposedOffset - offsetMs) < 60*1000)) {
+                if (stratum >= DEFAULT_STRATUM && _lastProposedOffset != 0) {
+                    // within 30 sec of each other, take the average
+                    offsetMs = (_lastProposedOffset + offsetMs) / 2;
+                    delta = offsetMs - _offset;
+                }
+                if (log.shouldInfo())
+//                    log.info("Initializing clock offset to " + offsetMs + "ms (Stratum: " + stratum + ")", new Exception());
+                    log.info("Initializing clock offset to " + offsetMs + "ms (Stratum: " + stratum + ")");
+                _alreadyChanged = true;
+               _lastProposedOffset = 0;
+                if (_context.getBooleanProperty(PROP_DISABLE_ADJUSTMENT)) {
+                    log.error("Clock adjustment disabled", new Exception());
+                } else {
+                    _offset = offsetMs;
+                    _desiredOffset = offsetMs;
+                    // this is used by the JobQueue
+                   fireOffsetChanged(delta);
+                }
             } else {
-                _offset = offsetMs;
-                _desiredOffset = offsetMs;
-                // this is used by the JobQueue
-                fireOffsetChanged(delta);
+                if (log.shouldInfo())
+//                    log.info("Pending clock offset " + offsetMs + "ms (Stratum: " + stratum + ")", new Exception());
+                    log.info("Pending clock offset " + offsetMs + "ms (Stratum: " + stratum + ")");
+                    // so we know we were here
+                if (offsetMs == 0)
+                    _lastProposedOffset = 1;
+                else
+                    _lastProposedOffset = offsetMs;
+                return;
             }
         }
-        _lastChanged = System.currentTimeMillis();
+        _lastChanged = systemNow;
         _lastStratum = stratum;
 
     }
@@ -253,40 +278,32 @@ public class RouterClock extends Clock {
      */
     @Override
     public long now() {
-//        long systemNow = System.currentTimeMillis();
-//        // copy the global, so two threads don't both increment or decrement _offset
-//        long offset = _offset;
-//        long sinceLastSlewed = systemNow - _lastSlewed;
-        long adjustedNow = super.now();        long sinceLastSlewed = adjustedNow - _lastSlewed;        // using adjustedNow means a small change        // effectively slewing forward every MAX_SLEW - 1        // slewing backward every MAX_SLEW + 1        if (sinceLastSlewed < MAX_SLEW && sinceLastSlewed >= 0)            return adjustedNow; // return ASAP if nothing to do
+        long systemNow = System.currentTimeMillis();
+        // copy the global, so two threads don't both increment or decrement _offset
+        long offset = _offset;
+        long sinceLastSlewed = systemNow - _lastSlewed;
         if (sinceLastSlewed >= MASSIVE_SHIFT_FORWARD ||
             sinceLastSlewed <= 0 - MASSIVE_SHIFT_BACKWARD) {
-//            _lastSlewed = systemNow;
-            _lastSlewed = adjustedNow;
+            _lastSlewed = systemNow;
             notifyMassive(sinceLastSlewed);
-//        } else if (sinceLastSlewed >= MAX_SLEW) {
-//            // copy the global
-            return adjustedNow;        }        if (sinceLastSlewed >= MAX_SLEW) {
+        } else if (sinceLastSlewed >= MAX_SLEW) {
+            // copy the global
             long desiredOffset = _desiredOffset;
-            long offset = _offset;            long delta = 0;
             if (desiredOffset > offset) {
-//                // slew forward
-//                offset += Math.min(10, sinceLastSlewed / MAX_SLEW);
-//                _offset = offset;
-                delta = 1; // The Math.min is useless, if it is > 1 we need an updated desiredOffset first
+                // slew forward
+                offset += Math.min(10, sinceLastSlewed / MAX_SLEW);
+                _offset = offset;
             } else if (desiredOffset < offset) {
-//                // slew backward, but don't let the clock go backward
-//                // this should be the first call since systemNow
-//                // was greater than lastSled + MAX_SLEW, i.e. different
-//                // from the last systemNow, thus we won't let the clock go backward,
-//                // no need to track when we were last called.
-//                _offset = --offset;
-                delta = -1;
+                // slew backward, but don't let the clock go backward
+                // this should be the first call since systemNow
+                // was greater than lastSled + MAX_SLEW, i.e. different
+                // from the last systemNow, thus we won't let the clock go backward,
+                // no need to track when we were last called.
+                _offset = --offset;
             }
-//            _lastSlewed = systemNow;
-            _offset = offset + delta;            _lastSlewed = adjustedNow;            return delta + adjustedNow;
+            _lastSlewed = systemNow;
         }
-//        return offset + systemNow;
-        return adjustedNow; // doing nothing if system clock went backward        // and we will do nothing for many seconds until clock >= lastslewed + MAX_SLEW
+        return offset + systemNow;
     }
 
     /*
