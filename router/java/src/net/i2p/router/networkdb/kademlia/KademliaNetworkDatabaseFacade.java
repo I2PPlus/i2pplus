@@ -793,7 +793,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _kb.remove(key);
             if (_log.shouldInfo())
 //                _log.info("Not searching for negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
-                _log.info("Deleted RouterInfo [" + key.toBase64().substring(0,6) + "] -> lookup failed");
+                _log.info("Deleted RouterInfo [" + key.toBase64().substring(0,6) + "] -> Lookup failure");
                 _context.jobQueue().addJob(onFailedLookupJob);
         } else if (key != null && isNegativeCached(key)) {
             _ds.remove(key);
@@ -1290,9 +1290,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR) {
             long age = routerInfo.getPublished() - now;
-            if (_log.shouldInfo())
-                _log.info("Peer [" + routerId + "] published their RouterInfo in the future\n* Publish date: "
-                          + new Date(routerInfo.getPublished()), new Exception());
+            if (_log.shouldWarn()) {
+                _log.warn("Peer [" + routerId + "] published their RouterInfo in the future\n* Publish date: " + new Date(routerInfo.getPublished()));
+            }
             return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " in the future";
         }
 //        if (upLongEnough && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
@@ -1520,7 +1520,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _ds.remove(peer);
         if (_log.shouldInfo())
 //            _log.info("Removed kbucket entry for [" + peer.toBase64().substring(0,6) + "]");
-            _log.info("Deleted RouterInfo [" + peer.toBase64().substring(0,6) + "] - failed lookup");
+            _log.info("Deleted RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
     }
 
     public void unpublish(LeaseSet localLeaseSet) {
