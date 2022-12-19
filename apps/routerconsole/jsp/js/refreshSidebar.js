@@ -7,7 +7,6 @@ function refreshSidebar() {
   'use strict';
   var meta = document.querySelector('[http-equiv="refresh"]');
   var xhr = new XMLHttpRequest();
-//  var uri = location.pathname.substring(1);
   var uri = location.pathname;
   var xhrContainer = document.getElementById("xhr");
   let isDownTimer;
@@ -42,7 +41,6 @@ function refreshSidebar() {
   var updateSectionHR = document.querySelector("#sb_updatesection + hr");
   var updateStatus = document.getElementById("sb_updatestatus");
 
-  //xhr.open("GET", "/xhr1.jsp?requestURI=" + uri + "&t=" + new Date().getTime(), true);
   xhr.open("GET", "/xhr1.jsp?requestURI=" + uri, true);
   xhr.responseType = "document";
   xhr.overrideMimeType("text/html");
@@ -92,7 +90,7 @@ function refreshSidebar() {
         }
 
         function updateVolatile() {
-          //uncollapse();
+          uncollapse();
           sectionToggler();
 
           var b;
@@ -223,7 +221,6 @@ function refreshSidebar() {
           if (services !== null && servicesResponse !== null && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
             services.outerHTML = servicesResponse.outerHTML;
           }
-
         }
 
         function checkSections() {
@@ -322,27 +319,12 @@ function refreshSidebar() {
           }
 
           if (minigraph) {
-            //window.requestAnimationFrame(refreshGraph);
             refreshGraph();
             var minigraphResponse = xhr.responseXML.getElementById("minigraph");
             minigraph = minigraphResponse;
           }
         }
-/*
-        } else if (xhr.readyState === 4 && xhr.status === 200) {
 
-          setTimeout(function() {
-            if (meta !== null) {
-              removeMeta();
-              refreshAll();
-            }
-            var metarefresh = document.createElement("meta");
-            metarefresh.httpEquiv = "refresh";
-            metarefresh.content = "1800";
-            document.head.appendChild(metarefresh);
-          }, 120000);
-        }
-*/
       } else {
 
         function isDown() {
@@ -355,7 +337,7 @@ function refreshSidebar() {
                 collapse[h].nextElementSibling.setAttribute("hidden", "");
               }
             }
-            var collapsed = document.querySelectorAll("#sidebar table.collapsed, #sb_newsheadings.collapsed");
+            var collapsed = document.querySelectorAll("#sidebar table:not(#sb_peers_condensed):not(#sb_tunnels_condensed).collapsed, #sb_newsheadings.collapsed");
             var c;
             for (c = 0; c < collapsed.length; c += 1) {
               collapsed[c].classList.remove("collapsed");
