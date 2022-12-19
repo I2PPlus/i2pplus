@@ -64,6 +64,14 @@ table{background:#000}
 #globalTunnelControl.iframed.panel:first-child ~ .panel#clients::after{width:100%;height:8px;display:block;content:""}
 #serverTunnels{margin:-1px 0 10px}
 
+/* screenlog */
+#screenlog{position:relative;contain:paint}
+#screenlog span{margin:0;height:calc(100% + 2px);display:flex;align-items:stretch;position:absolute;top:-1px;bottom:-1px;right:-1px;vertical-align:middle}
+#screenlog .iconize{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0}
+#screenlog .clearlog{border-left:var(--border);background: rgba(0,0,0,.3) var(--close) no-repeat center center / 16px}
+#screenlog .clearlog:hover{background: rgba(0,0,32,.5) var(--close_hover) no-repeat center center / 16px}
+#screenlog .clearlog:active{box-shadow:var(--btn_shadow_active);background: #113 var(--close) no-repeat center center / 14px}
+
 .base32{max-width:120px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:text-bottom}
 #clientAuth td:last-child b{margin:0;padding:0 8px}
 #clientAuth td:last-child{width:1%;text-align:center}
