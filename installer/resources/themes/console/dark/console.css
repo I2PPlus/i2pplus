@@ -286,7 +286,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #sidebar table.collapsed + hr{display:block}
 #sb_peers[hidden] + #sb_peers_condensed,#sb_tunnels[hidden] + #sb_tunnels_condensed{display:table}
 #sb_peers_condensed[hidden],#sb_tunnels_condensed[hidden]{display:none}
-#sb_peers_condensed:not([hidden])+hr,#sb_tunnels_condensed:not([hidden])+hr{display:block}
+#sb_peers_condensed+hr,#sb_tunnels_condensed+hr{display:block}
 #sb_peers_condensed,#sb_tunnels_condensed{margin:-7px -1px -9px -1px;width:calc(100% + 1px);padding:3px 0}
 #sidebar #sb_peers_condensed td,#sidebar #sb_tunnels_condensed td{padding:2px;display:flex;max-width:unset}
 #sb_peers_condensed .sb_icon,#sb_tunnels_condensed .sb_icon{margin:0;flex:auto;padding:5px;box-shadow:var(--bevel);display:inline-block;background-blend-mode:luminosity}
