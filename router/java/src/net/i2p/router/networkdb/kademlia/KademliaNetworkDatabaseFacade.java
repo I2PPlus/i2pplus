@@ -1278,14 +1278,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             } else {
                 if (_log.shouldWarn())
                     _log.warn("Even though peer [" + routerInfo.toBase64().substring(0,6) + "] is old, we have only " + existing
-                              + " peers left - not expiring");
+                              + " peers left - not expiring...");
             }
         }
         String riHash = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR) {
             long age = routerInfo.getPublished() - now;
             if (_log.shouldWarn()) {
-                _log.warn("Peer [" + riHash + "] published their RouterInfo in the future\n* Publish date: " + new Date(routerInfo.getPublished()));
+                _log.warn("Peer [" + riHash + "] published their RouterInfo in the future\n* Published: " + new Date(routerInfo.getPublished()));
                 _log.warn("Banning [" + riHash + "] for 15m -> RouterInfo from the future!");
             }
             _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
