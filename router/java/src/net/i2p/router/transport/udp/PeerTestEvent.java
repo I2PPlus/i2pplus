@@ -128,7 +128,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             return;
         _forceRun = isIPv6 ? FORCE_IPV6 : FORCE_IPV4;
         if (_log.shouldDebug())
-            _log.debug("Rescheduling " + isIPv6 ? "IPv6" : "" + " test to run in " + net.i2p.data.DataHelper.formatDuration(delay) + "...");
+            _log.debug("Rescheduling IPv" + (isIPv6 ? "6" : "4") + " test to run in " + net.i2p.data.DataHelper.formatDuration(delay) + "...");
         reschedule(delay);
     }
 
