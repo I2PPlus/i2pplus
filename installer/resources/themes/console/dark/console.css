@@ -1305,7 +1305,7 @@ th code{user-select:all}
 .sybil_info + a[name] + table.sybil_routerinfo,p.hashdist + a[name] + table.sybil_routerinfo{margin-top:10px}
 #sybilSearch td:nth-child(2){text-align:left}
 #sybilSearch input[type=text]{width:calc(50% - 66px)}
-#sybilTask{margin:31px 0 -4px}
+#sybilTask{margin:31px 0 9px}
 #sybilTask th{padding-left:8px;text-transform:uppercase;letter-spacing:.1em;font-size:11pt;text-align:left}
 #sybilTask select,#sybilTask input{margin:6px}
 #sybilTask select,#sybilTask input[type=text]{width:140px}
