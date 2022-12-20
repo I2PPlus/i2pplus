@@ -118,8 +118,9 @@
 #<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:;;ffff;0;0/96
 # End freenetworktutorials bogons
 #
+# IPv4
+#
 Chinese Floodfill Flooder:159.226.40.7
-Corrupt Message Spammer:m8CkfwwvPF~9xYjfGVIl4d~ypW7VjE0nxFZN1rh48XM=
 Friend of the Chinese Floodfill Flooder:159.226.40.3
 Public Web Proxy:93.157.12.0/24
 Sybil:103.149.170.0/23
@@ -137,22 +138,9 @@ Sybil:163.44.149.31
 Sybil:178.21.164.0/24
 Sybil:185.69.185.0/24
 Sybil:185.69.186.0/24
-Sybil:2001;19f0;4400;4376;5400;ff;fe47;bcbd
-Sybil:2001;19f0;5801;1d4;5400;ff;fe38;a26e
-Sybil:2001;19f0;5c01;1df;5400;ff;fe3e;ba8f
-Sybil:2001;19f0;7001;cb;5400;ff;fe47;c952
-Sybil:2001;19f0;7001;d99;5400;ff;fe41;829c
-Sybil:2001;19f0;7402;24d;5400;ff;fe41;9153
-Sybil:2001;df6;b800;1128;a163;44;149;310
 Sybil:202.182.126.246
 Sybil:213.142.149.0/24
 Sybil:213.238.166.0/24
-Sybil:2400;8500;1302;802;a133;130;124;1855
-Sybil:2400;8500;1302;816;a150;95;128;165b
-Sybil:2400;8500;1302;819;a150;95;134;1590
-Sybil:2400;8500;1302;824;a150;95;144;951
-Sybil:2400;8500;1302;825;150;95;147;89
-Sybil:2400;8500;1302;828;a150;95;153;2202
 Sybil:45.32.125.149
 Sybil:45.32.152.247
 Sybil:45.32.60.71
@@ -185,6 +173,26 @@ Sybil:66.42.58.61
 Sybil:95.47.57.0/24
 Sybil:95.85.100.0/22
 Sybil:95.85.104.0/22
+#
+# IPv6
+#
+Sybil:2001;19f0;4400;4376;5400;ff;fe47;bcbd
+Sybil:2001;19f0;5801;1d4;5400;ff;fe38;a26e
+Sybil:2001;19f0;5c01;1df;5400;ff;fe3e;ba8f
+Sybil:2001;19f0;7001;cb;5400;ff;fe47;c952
+Sybil:2001;19f0;7001;d99;5400;ff;fe41;829c
+Sybil:2001;19f0;7402;24d;5400;ff;fe41;9153
+Sybil:2001;df6;b800;1128;a163;44;149;310
+Sybil:2400;8500;1302;802;a133;130;124;1855
+Sybil:2400;8500;1302;816;a150;95;128;165b
+Sybil:2400;8500;1302;819;a150;95;134;1590
+Sybil:2400;8500;1302;824;a150;95;144;951
+Sybil:2400;8500;1302;825;150;95;147;89
+Sybil:2400;8500;1302;828;a150;95;153;2202
+#
+# Router hashes
+#
+Corrupt Message Spammer:m8CkfwwvPF~9xYjfGVIl4d~ypW7VjE0nxFZN1rh48XM=
 Tunnel Abuse:CyLg6w8lypk1gnAX-CdG8O4NCR86hq8ifge6QKXAoJg=
 Tunnel Abuse:DtQsGzkbeR3nilr6ZvywR2O7-f0XaaV~YfHXohqwjgI=
 Tunnel Abuse:JbifzqZZqeTXtxK6KDqNUPWaW-phKqeS~tfJT82SIYI=
