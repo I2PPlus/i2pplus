@@ -408,7 +408,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _context.statManager().createRateStat("netDb.floodThrottled", "How often we decline to flood the NetDb", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
             // following are for HFDSMJ
             _context.statManager().createRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive an old NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive a stale NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
         }
     }
 
@@ -466,7 +466,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 //        if (key == null) throw new IllegalArgumentException("Searchin' for nothing, eh?");
         if (key == null) {
             if (_log.shouldWarn())
-                _log.warn("Not searching for a null key");
+                _log.warn("Not searching for a NULL key!");
             return null;
         } else {
             boolean isNew = false;
@@ -596,7 +596,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         long maxMemory = SystemVersion.getMaxMemory();
         // 250 for every 32 MB, min of 250, max of 1250
 //        MAX_DB_BEFORE_SKIPPING_SEARCH = (int) Math.max(250l, Math.min(1250l, maxMemory / ((32 * 1024 * 1024l) / 250)));
-        MAX_DB_BEFORE_SKIPPING_SEARCH = 2500;
+        MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 2000 : 2500;
     }
 
     /**
