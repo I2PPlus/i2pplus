@@ -66,6 +66,10 @@ select[disabled]:focus,select[disabled]:active{margin:0;padding:0;color:var(--in
 input[type="hidden"],input.default{display:none}
 h2,h3{margin:10px 0 -1px;padding:8px 10px 6px 30px;position:relative;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:11pt;color:var(--ink_light);border:var(--border);box-shadow:var(--highlight);background:var(--h2)}
 .iframed h2,.iframed h3{margin-top:12px}
+.unbold{font-weight:400}
+#notReady,#down{margin:35px auto 30px;padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:1px solid #900;border-radius:2px;box-shadow:var(--highlight);background:#ffe}
+textarea::placeholder,input::placeholder{font-style:italic}
+textarea:focus::placeholder,input:focus::placeholder,#filter input:focus::placeholder{opacity:0}
 
 /* title images */
 #messages h2{background:var(--logs) no-repeat 5px center / 20px,var(--h2)}
@@ -255,12 +259,16 @@ input::placeholder{text-align:center;font-size:80%;opacity:.7}
 #tunnelOpts table td:first-child{border-left:none}
 #tunnelOpts table td:last-child{border-right:none}
 
-.unbold{font-weight:400}
-#notReady,#down{margin:35px auto 30px;padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:1px solid #900;border-radius:2px;box-shadow:var(--highlight);background:#ffe}
-textarea::placeholder,input::placeholder{font-style:italic}
-textarea:focus::placeholder,input:focus::placeholder,#filter input:focus::placeholder{opacity:0}
 #filter{vertical-align:top}
 #filter input::placeholder{color:var(--ink);opacity:.4}
+
+/* screenlog */
+#screenlog{position:relative;contain:paint}
+#screenlog span{margin:0;height:calc(100% + 2px);display:flex;align-items:stretch;position:absolute;top:-1px;bottom:-1px;right:-1px;vertical-align:middle}
+#screenlog .iconize{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0}
+#screenlog .clearlog{border-left:var(--border);background: rgba(255,255,255,.3) var(--close) no-repeat center center / 16px}
+#screenlog .clearlog:hover{box-shadow:none;background: rgba(255,255,255.5) var(--close_hover) no-repeat center center / 16px}
+#screenlog .clearlog:active{box-shadow:var(--btn_shadow_active);background: #f2f2f2 var(--close) no-repeat center center / 14px}
 
 /* responsive layout */
 @media screen and (max-width:1300px){

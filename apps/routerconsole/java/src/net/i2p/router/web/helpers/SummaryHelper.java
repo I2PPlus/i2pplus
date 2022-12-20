@@ -398,8 +398,8 @@ public class SummaryHelper extends HelperBase {
             case IPV4_UNKNOWN_IPV6_FIREWALLED:
             case IPV4_DISABLED_IPV6_UNKNOWN:
             default:
-                RouterAddress ra = routerInfo.getTargetAddress("SSU");
-                if (ra == null && _context.router().getUptime() > 5*60*1000) {
+                List<RouterAddress> ra = routerInfo.getTargetAddresses("SSU", "SSU2");
+                if (ra.isEmpty() && _context.router().getUptime() > 5*60*1000) {
                     if (getActivePeers() <= 0)
                         return new NetworkStateMessage(NetworkState.ERROR, _t("No Active Peers")); // TODO: display advice in .sb_warning -> _t("Check Network Connection and Firewall"));
                     else if (_context.getProperty(ConfigNetHelper.PROP_I2NP_NTCP_HOSTNAME) == null ||
@@ -698,16 +698,14 @@ public class SummaryHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(512);
         boolean link = _context.portMapper().isRegistered("i2ptunnel");
-        buf.append("<h3>");
-        if (link) {
-            buf.append("<a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
-              .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
-              .append("\">");
-        }
-        buf.append(_t("Service Tunnels"));
-        if (link) {
-           buf.append("</a>");
-        }
+        buf.append("<h3");
+        if (!link)
+            buf.append(" id=\"unregistered\"");
+        buf.append("><a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
+           .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
+           .append("\">")
+           .append(_t("Service Tunnels"))
+           .append("</a>");
         buf.append("<input type=\"checkbox\" id=\"toggle_sb_localtunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
             DataHelper.sort(clients, new AlphaComparator());
@@ -893,6 +891,14 @@ public class SummaryHelper extends HelperBase {
             return 0;
         else
             return _context.tunnelManager().getParticipatingCount();
+    }
+
+    public String getMaxParticipatingTunnels() {
+        int defaultMax = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ? 2*1000 : 8*1000;
+        if (_context.getProperty("router.maxParticipatingTunnels") != null)
+            return _context.getProperty("router.maxParticipatingTunnels");
+        else
+            return Integer.toString(defaultMax);
     }
 
     /** @since 0.7.10 */

@@ -1,5 +1,7 @@
-const mainsection = document.getElementById("mainsection");
-const screenlog = document.getElementById("screenlog");
+var mainsection = document.getElementById("mainsection");
+var screenlog = document.getElementById("screenlog");
+var ex = document.getElementById("expand");
+var sh = document.getElementById("shrink");
 
 function initToggle() {
 
@@ -46,7 +48,7 @@ function initToggle() {
     }
 
     function checkStatus() {
-      const logStatus = localStorage.getItem("screenlog");
+      var logStatus = localStorage.getItem("screenlog");
       switch (logStatus) {
         case "expanded":
           expand();
@@ -59,7 +61,7 @@ function initToggle() {
       }
     }
 
-    const logStatus = localStorage.getItem("screenlog");
+    var logStatus = localStorage.getItem("screenlog");
     switch (logStatus) {
       case "expanded":
        expand();
@@ -73,23 +75,10 @@ function initToggle() {
 
   }
 
-  const ex = document.getElementById("expand");
-  const sh = document.getElementById("shrink");
-
-  if (sh) {
-    sh.addEventListener("click", shrink, false);
-  }
-
-  if (ex) {
-    ex.addEventListener("click", expand, false);
-  }
+  sh.addEventListener("click", shrink, false);
+  ex.addEventListener("click", expand, false);
 
 }
 
-screenlog.addEventListener("click", function() {
-  initToggle();
-}, false);
-
-document.addEventListener("DOMContentLoaded", function() {
-  initToggle();
-}, false);
+sh.addEventListener("click", initToggle,false);
+ex.addEventListener("click", initToggle,false);

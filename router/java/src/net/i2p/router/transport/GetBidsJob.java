@@ -64,7 +64,7 @@ class GetBidsJob extends JobImpl {
         Hash us = context.routerHash();
         if (to.equals(us)) {
             if (log.shouldError())
-                log.error("Send a message to ourselves? nuh uh..." + msg);
+                log.error("Send a message to ourselves? nuh uh..." + msg, new Exception("I did it"));
             context.statManager().addRateData("transport.bidFailSelf", msg.getLifetime());
             fail(context, msg);
             return;
@@ -76,7 +76,7 @@ class GetBidsJob extends JobImpl {
             if (failedCount == 0) {
                 context.statManager().addRateData("transport.bidFailNoTransports", msg.getLifetime());
                 // This used to be "no common transports" but it is almost always no transports at all
-                context.banlist().banlistRouter(to, "<b>➜</b> " + _x("No transports (hidden or starting up?)"));
+                context.banlist().banlistRouter(to, " <b>➜</b> " + _x("No transports (hidden or starting up?)"));
             } else if (failedCount >= tmgr.getTransportCount()) {
                 context.statManager().addRateData("transport.bidFailAllTransports", msg.getLifetime());
             }

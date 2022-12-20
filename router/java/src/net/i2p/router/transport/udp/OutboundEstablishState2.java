@@ -49,8 +49,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     private final Map<Hash, IntroState> _introducers;
     private long _token;
     private HandshakeState _handshakeState;
-    private final byte[] _sendHeaderEncryptKey1;
-    private final byte[] _rcvHeaderEncryptKey1;
+    // Bob's intro key, same for send and receive
+    private final byte[] _headerEncryptKey1;
     private byte[] _sendHeaderEncryptKey2;
     private byte[] _rcvHeaderEncryptKey2;
     private final byte[] _rcvRetryHeaderEncryptKey2;
@@ -112,6 +112,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         INTRO_STATE_FAILED,
         /** this peer is not an introducer */
         INTRO_STATE_INVALID,
+        /** this peer is us */
+        INTRO_STATE_US,
         /** we got an accept from Charlie via this introducer */
         INTRO_STATE_SUCCESS
     }
@@ -184,6 +186,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                     long exp = addr.getIntroducerExpiration(i);
                     if (exp != 0 && exp < _establishBegin)
                         istate = IntroState.INTRO_STATE_EXPIRED;
+                    else if (h.equals(_context.routerHash()))
+                        istate = IntroState.INTRO_STATE_US;
                     else if (_context.banlist().isBanlisted(h))
                         istate = IntroState.INTRO_STATE_REJECTED;
                     else
@@ -211,8 +215,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _rcvConnID = rcid;
 
         byte[] ik = introKey.getData();
-        _sendHeaderEncryptKey1 = ik;
-        _rcvHeaderEncryptKey1 = ik;
+        _headerEncryptKey1 = ik;
         _sendHeaderEncryptKey2 = ik;
         //_rcvHeaderEncryptKey2 will be set after the Session Request message is created
         _rcvRetryHeaderEncryptKey2 = ik;
@@ -238,6 +241,16 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         createNewState(_routerAddress);
     }
 
+    /**
+     *  This will be called 0 times if we don't have a token and never get a retry;
+     *  once if we have a token;
+     *  and twice if the token we had was bad and we got a retry.
+     *  We must regenerate the handshake state if we get a new token, because
+     *  we only save the full encrypted packet for retransmission, and
+     *  the encryption changes if the token does.
+     *
+     *  caller must synch
+     */
     private void createNewState(RouterAddress addr) {
         String ss = addr.getOption("s");
         if (ss == null)
@@ -255,6 +268,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _handshakeState.getRemotePublicKey().setPublicKey(publicKey, 0);
         _handshakeState.getLocalKeyPair().setKeys(_transport.getSSU2StaticPrivKey(), 0,
                                                   _transport.getSSU2StaticPubKey(), 0);
+        // we must invalidate any old saved session request
+        _sessReqForReTX = null;
     }
 
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
@@ -343,7 +358,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldWarn())
-            _log.warn("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count);
+            _log.warn("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count + "\n* " + this);
         // this sets the state to FAILED
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
@@ -367,12 +382,19 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                 // his problem
                 _context.banlist().banlistRouter(skewString, bob, _x("Excessive clock skew: {0}"));
             } else {
-                boolean skewOK = skew < PacketHandler.MAX_SKEW && skew > (0 - PacketHandler.MAX_SKEW);
-                if (skewOK && !_context.clock().getUpdatedSuccessfully()) {
+                if (!_context.clock().getUpdatedSuccessfully()) {
                     // adjust the clock one time in desperation
                     _context.clock().setOffset(0 - skew, true);
                     if (skew != 0)
-                        _log.logAlways(Log.WARN, "NTP failure, UDP adjusting clock by " + skewString);
+                        _log.logAlways(Log.WARN, "NTP failure, SSU2 adjusted clock by " + skewString +
+                                                 " source router: " + bob.toBase64());
+
+                    if (!_context.clock().getUpdatedSuccessfully()) {
+                        // clock update was either rejected or is pending.
+                        // ban the router briefly so the other transport does not try it,
+                        // and we will get a 2nd opinion.
+                        _context.banlist().banlistRouter(bob, _x("Excessive clock skew: {0}"), skewString, null, _context.clock().now() + 5*60*1000);
+                    }
                 } else {
                     _context.banlist().banlistRouter(skewString, bob, _x("Excessive clock skew: {0}"));
                 }
@@ -450,8 +472,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         return _transport.getEstablisher().getInboundToken(_remoteHostId);
     }
     public HandshakeState getHandshakeState() { return _handshakeState; }
-    public byte[] getSendHeaderEncryptKey1() { return _sendHeaderEncryptKey1; }
-    public byte[] getRcvHeaderEncryptKey1() { return _rcvHeaderEncryptKey1; }
+    public byte[] getSendHeaderEncryptKey1() { return _headerEncryptKey1; }
+    public byte[] getRcvHeaderEncryptKey1() { return _headerEncryptKey1; }
     public byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
     /**
      *  @return null before Session Request is sent (i.e. we sent a Token Request first)
@@ -489,7 +511,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      *  @since 0.9.56
      */
     private void locked_receiveRetry(UDPPacket packet) throws GeneralSecurityException {
-        ////// TODO state check
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
         if (!from.equals(_bobSocketAddress))
@@ -505,11 +526,18 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             throw new GeneralSecurityException("Conn ID mismatch: 1: " + _sendConnID + " 2: " + sid);
         long token = DataHelper.fromLong8(data, off + TOKEN_OFFSET);
         // continue and decrypt even if token == 0 to get and log termination reason
-        if (token != 0)
-            _token = token;
+        if (token != 0) {
+            if (token != _token) {
+                if (_currentState == OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN) {
+                    // we already got a retry with a different token
+                    throw new GeneralSecurityException("Token mismatch: expected: " + _token + " got: " + token);
+                }
+                _token = token;
+            }
+        }
         _timeReceived = 0;
         ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
-        chacha.initializeKey(_rcvHeaderEncryptKey1, 0);
+        chacha.initializeKey(_headerEncryptKey1, 0);
         long n = DataHelper.fromLong(data, off + PKT_NUM_OFFSET, 4);
         chacha.setNonce(n);
         try {
@@ -528,6 +556,17 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         // generally will be with termination, so do this check after
         if (token == 0)
             throw new GeneralSecurityException("Bad token 0 in retry");
+        // we do the state check here, after all the validation,
+        // so we can check for termination first.
+        if (_currentState != OutboundState.OB_STATE_TOKEN_REQUEST_SENT &&
+            _currentState != OutboundState.OB_STATE_REQUEST_SENT) {
+            // not fatal
+            if (_log.shouldWarn())
+                _log.warn("Got out-of-order Retry with token " + token + " on: " + this);
+            // retransmit session request, rate limit
+            _nextSend = Math.max(_context.clock().now(), _lastSend + 750);
+            return;
+        }
         if (_timeReceived == 0)
             throw new GeneralSecurityException("No DateTime block in Retry");
         // _nextSend is now(), from packetReceived()
@@ -536,7 +575,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             throw new GeneralSecurityException("Skew exceeded in Retry: " + _skew);
         createNewState(_routerAddress);
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received a retry on " + this);
+            _log.debug("[SSU2] Received a retry token " + token + "\n* " + this);
         _currentState = OutboundState.OB_STATE_RETRY_RECEIVED;
     }
 
@@ -603,17 +642,29 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (_timeReceived == 0)
             throw new GeneralSecurityException("No DateTime block in Session/Token Request");
         // _nextSend is now(), from packetReceived()
-        _skew = _nextSend - _timeReceived;
+        if (_requestSentCount == 1)
+            _rtt = (int) (_nextSend - _requestSentTime);
+        _skew = (_nextSend - _timeReceived) - (_rtt / 2);
+        if (!_context.clock().getUpdatedSuccessfully() &&
+            _timeReceived > BuildTime.getEarliestTime() &&
+            _timeReceived < BuildTime.getLatestTime()) {
+            // adjust the clock one time, so we don't have to wait for NTCP to do it
+            _context.clock().setOffset(0 - _skew, true);
+            if (_skew != 0) {
+                String skewString = DataHelper.formatDuration(Math.abs(_skew));
+                Hash bob = _remotePeer.calculateHash();
+                _log.logAlways(Log.WARN, "NTP failure, SSU2 adjusted clock by " + skewString +
+                                         " source router: " + bob.toBase64());
+            }
+        }
+        // Unlikely, we would have gotten a termination from him and failed already,
+        // unless our skew limit is stricter than bob's.
         if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW)
-            throw new GeneralSecurityException("Skew exceeded in Session/Token Request: " + _skew);
+            throw new GeneralSecurityException("Skew exceeded in Session Created: " + _skew);
         _sessReqForReTX = null;
         _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessionConfirmed");
 
         _currentState = OutboundState.OB_STATE_CREATED_RECEIVED;
-
-        if (_requestSentCount == 1) {
-            _rtt = (int) (_nextSend - _requestSentTime);
-        }
     }
 
     /**
@@ -718,7 +769,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                                      _remotePeer.calculateHash(),
                                      false, _rtt, sender, rcvr,
                                      _sendConnID, _rcvConnID,
-                                     _sendHeaderEncryptKey1, h_ab, h_ba);
+                                     _headerEncryptKey1, h_ab, h_ba);
             _currentState = OutboundState.OB_STATE_CONFIRMED_COMPLETELY;
             _pstate.confirmedPacketsSent(_sessConfForReTX);
             // PS2.super adds CLOCK_SKEW_FUDGE that doesn't apply here
@@ -802,12 +853,13 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     @Override
     public String toString() {
-        return "OutboundEstablishState2 [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
+        return "[SSU2] OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
                "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) +
                "; Receive ID: " + _rcvConnID +
                "; Send ID: " + _sendConnID +
+               "; Token: " + _token +
                " -> " + _currentState +
-               (_introducers != null ? (" Introducers: " + _introducers.toString()) : "");
+               (_introducers != null ? ("\n* Introducers: " + _introducers.toString()) : "");
     }
 
     /**

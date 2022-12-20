@@ -164,7 +164,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             _timeoutMs = Math.max(timeoutMs * 3, MAX_SEARCH_TIME * 2);
             totalSearchLimit += 2;
         } else {
-            String MIN_VERSION = "0.9.55";
+            String MIN_VERSION = "0.9.56";
             if (ri != null) {
                 String v = ri.getVersion();
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
@@ -352,7 +352,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                         // go around again
                     }
 
-                    String MIN_VERSION = "0.9.55";
+                    String MIN_VERSION = "0.9.56";
                     boolean isHidden = getContext().router().isHidden();
                     RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
                     if (ri != null) {
@@ -496,7 +496,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
                     failed(peer, false);
                     if (_log.shouldWarn())
-                        _log.warn("[Job " + getJobId() + "] Not doing zero-hop lookup to unknown [" + peer.toBase64().substring(0,6) + "]");
+                        _log.warn("[Job " + getJobId() + "] Not doing zero-hop lookup to UNKNOWN [" + peer.toBase64().substring(0,6) + "]");
                     return;
                 }
             }

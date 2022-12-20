@@ -145,7 +145,6 @@ class SummaryBarRenderer {
                 buf.append(renderTunnelStatusHTML());
             else if ("Destinations".equals(section))
                 buf.append(renderDestinationsHTML());
-//            else if ("NewsHeadings".equals(section) && !requestURI.contains("news"))
             else if ("NewsHeadings".equals(section) && requestURI.contains("home")) // only render on homepage
                 buf.append(renderNewsHeadingsHTML());
             else if ("Clock".equals(section))
@@ -947,6 +946,19 @@ class SummaryBarRenderer {
            .append(_helper.getAllPeers())
            .append("</span></td></tr>\n" +
                    "</table>\n");
+
+        buf.append("<table id=\"sb_peers_condensed\" class=\"volatile\" hidden>\n")
+           .append("<tr><td>")
+           .append("<a class=\"sb_icon\" id=\"floodfill\" href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
+           .append("\"><span><span class=\"badge\">").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
+           .append("<a class=\"sb_icon\" id=\"fast\" href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
+           .append("\"><span><span class=\"badge\">").append(_helper.getFastPeers()).append("</span></span></a>\n")
+           .append("<a class=\"sb_icon\" id=\"firewalled\" href=\"/netdb?caps=U\" title=\"").append(_t("Unreachable"))
+           .append("\"><span><span class=\"badge\">").append(_helper.getUnreachablePeers()).append("</span></span></a>\n")
+           .append("<a class=\"sb_icon\" id=\"banned\" href=\"/profiles?f=3\" title=\"").append(_t("Banned"))
+           .append("\"><span><span class=\"badge\">").append(_helper.getBanlistedPeers()).append("</span></span></a>\n")
+           .append("</td></tr>\n</table>\n");
+
         return buf.toString();
     }
 
@@ -1030,6 +1042,19 @@ class SummaryBarRenderer {
            .append(_helper.getBanlistedPeers())
            .append("</span></td></tr>\n" +
                    "</table>\n");
+
+        buf.append("<table id=\"sb_peers_condensed\" class=\"volatile\" hidden>\n")
+           .append("<tr><td>")
+           .append("<a class=\"sb_icon\" id=\"floodfill\" href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
+           .append("\"><span><span class=\"badge\">").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
+           .append("<a class=\"sb_icon\" id=\"fast\" href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
+           .append("\"><span><span class=\"badge\">").append(_helper.getFastPeers()).append("</span></span></a>\n")
+           .append("<a class=\"sb_icon\" id=\"firewalled\" href=\"/netdb?caps=U\" title=\"").append(_t("Unreachable"))
+           .append("\"><span><span class=\"badge\">").append(_helper.getUnreachablePeers()).append("</span></span></a>\n")
+           .append("<a class=\"sb_icon\" id=\"banned\" href=\"/profiles?f=3\" title=\"").append(_t("Banned"))
+           .append("\"><span><span class=\"badge\">").append(_helper.getBanlistedPeers()).append("</span></span></a>\n")
+           .append("</td></tr>\n</table>\n");
+
         return buf.toString();
     }
 
@@ -1117,13 +1142,16 @@ class SummaryBarRenderer {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
         int partTunnels = _helper.getParticipatingTunnels();
+        String maxTunnels = _helper.getMaxParticipatingTunnels();
+        int totalTunnels =_helper.getInboundTunnels() + _helper.getOutboundTunnels() + _helper.getInboundClientTunnels() +
+                          _helper.getOutboundClientTunnels() + partTunnels;
+        RouterInfo ri = _context.router().getRouterInfo();
         buf.append("<h3><a href=\"/tunnels\" target=\"_top\" title=\"")
            .append(_t("View existing tunnels and tunnel build status"))
            .append("\">")
            .append(_t("Tunnels"))
            .append(" <span class=\"badge\" hidden title=\"").append(_t("Total number of tunnels in use")).append("\">")
-           .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels() +
-                   _helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels() + partTunnels).append("</span>")
+           .append(totalTunnels).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_tunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_tunnels\" class=\"volatile\">\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
@@ -1131,9 +1159,8 @@ class SummaryBarRenderer {
                .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
                .append("\">" +
                        "<td><a href=\"/tunnels#client_tunnels\"><b>")
-               .append(_t("Client"))
+               .append(_t("Client").replace("Client", "Service"))
                .append("</b></a></td><td class=\"digits\"><span>")
-//               .append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
                .append(_helper.getInboundClientTunnels()).append(" / ").append(_helper.getOutboundClientTunnels())
                .append("</span></td></tr>\n");
         }
@@ -1144,56 +1171,66 @@ class SummaryBarRenderer {
                    "<td><a href=\"/tunnels#exploratory\"><b>")
            .append(_t("Exploratory").replace("Exploratory", "Utility"))
            .append("</b></a></td><td class=\"digits\"><span>")
-//           .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels())
            .append(_helper.getInboundTunnels()).append(" / ").append(_helper.getOutboundTunnels())
            .append("</span></td></tr>\n");
 
-           String maxTunnels = _context.getProperty("router.maxParticipatingTunnels");
-           RouterInfo ri = _context.router().getRouterInfo();
-           if ((maxTunnels == null || partTunnels > 0
-               || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")
-               && partTunnels > 0) {
-               buf.append("<tr title=\"")
-                  .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
-                  .append("\">" +
-                          "<td><a href=\"/tunnelsparticipating\"><b>")
-                  .append(_t("Participating").replace("Participating","Transit"))
-                  .append("</b></a></td><td class=\"digits\"><span>")
-                  .append(partTunnels)
-                  .append("</span></td></tr>\n");
-           }
-           buf.append("<tr title=\"")
-              .append(_t("Total number of tunnels in use"))
-              .append("\">" +
-                      "<td><a href=\"/tunnelpeercount\"><b>")
-              .append(_t("Total"))
-              .append("</b></a></td><td class=\"digits\"><span>")
-              .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels() +
-                      _helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels() +
-                      partTunnels)
-              .append("</span></td></tr>\n");
-           buf.append("<tr title=\"")
-              .append(_t("Concurrent tunnel builds (averaged over a minute) / single tunnel build time"))
-              .append("\">" +
-                      "<td><b>")
-              .append(_t("Concurrency"))
-              .append("</b></td><td class=\"digits\"><span>")
-              .append(_helper.getConcurrency())
-              .append("</span></td></tr>\n");
+            if ((maxTunnels == null || partTunnels > 0 || Integer.valueOf(maxTunnels) > 0) &&
+                !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K") && partTunnels > 0) {
+                buf.append("<tr title=\"")
+                   .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
+                   .append(" (").append(_t("Current / Maximum")).append(")")
+                   .append("\">" +
+                           "<td><a href=\"/tunnelsparticipating\"><b>")
+                   .append(_t("Participating").replace("Participating","Transit"))
+                   .append("</b></a></td><td class=\"digits\"><span>")
+                   .append(partTunnels).append(" / ").append(maxTunnels)
+                   .append("</span></td></tr>\n");
+            }
+            buf.append("<tr title=\"")
+               .append(_t("Total number of tunnels in use"))
+               .append("\">" +
+                       "<td><a href=\"/tunnelpeercount\"><b>")
+               .append(_t("Total"))
+               .append("</b></a></td><td class=\"digits\"><span>")
+               .append(totalTunnels)
+               .append("</span></td></tr>\n");
+            buf.append("<tr title=\"")
+               .append(_t("Concurrent tunnel builds (averaged over a minute) / single tunnel build time"))
+               .append("\">" +
+                       "<td><b>")
+               .append(_t("Concurrency"))
+               .append("</b></td><td class=\"digits\"><span>")
+               .append(_helper.getConcurrency())
+               .append("</span></td></tr>\n");
 
-           if ((maxTunnels == null || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
-                !ri.getBandwidthTier().equals("K") && !_helper.getShareRatio().toString().equals("0")) {
-               buf.append("<tr title=\"")
-                  .append(_t("The ratio of tunnel hops we provide to tunnel hops we use - a value greater than 1.00 indicates a positive contribution to the network"))
-                  .append("\">" +
-                          "<td><b>")
-                  .append(_t("Share ratio"))
-                  .append("</b></td><td class=\"digits\"><span>")
-                  .append(_helper.getShareRatio())
-                  .append("</span></td></tr>\n");
-           }
+            if ((maxTunnels == null || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
+                 !ri.getBandwidthTier().equals("K") && !_helper.getShareRatio().toString().equals("0")) {
+                buf.append("<tr title=\"")
+                   .append(_t("The ratio of tunnel hops we provide to tunnel hops we use - a value greater than 1.00 indicates a positive contribution to the network"))
+                   .append("\">" +
+                           "<td><b>")
+                   .append(_t("Share ratio"))
+                   .append("</b></td><td class=\"digits\"><span>")
+                   .append(_helper.getShareRatio())
+                   .append("</span></td></tr>\n");
+            }
 
-           buf.append("</table>\n");
+            buf.append("</table>\n");
+
+            buf.append("<table id=\"sb_tunnels_condensed\" class=\"volatile\" hidden>\n")
+               .append("<tr><td>")
+               .append("<a class=\"sb_icon\" id=\"service\" href=\"/tunnels#client_tunnels\" title=\"").append(_t("Service")).append(' ').append(_t("tunnels"))
+               .append("\"><span><span class=\"badge\">").append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
+               .append("</span></span></a>\n")
+               .append("<a class=\"sb_icon\" id=\"transit\" href=\"/tunnelsparticipating\" title=\"").append(_t("Transit")).append(' ').append(_t("tunnels"))
+               .append("\"><span><span class=\"badge\">").append(partTunnels).append("</span></span></a>\n")
+               .append("<a class=\"sb_icon\" id=\"utility\" href=\"/tunnels#exploratory\" title=\"").append(_t("Utility")).append(' ').append(_t("tunnels"))
+               .append("\"><span><span class=\"badge\">").append(_helper.getInboundTunnels() + _helper.getOutboundTunnels())
+               .append("</span></span></a>\n")
+               .append("<a class=\"sb_icon\" id=\"tcount\" href=\"/tunnelpeercount\" title=\"").append(_t("Tunnel Count by Peer"))
+               .append("\"><span><span class=\"badge\">").append(totalTunnels).append("</span></span></a>\n")
+               .append("</td></tr>\n</table>\n");
+
         return buf.toString();
     }
 
@@ -1349,7 +1386,7 @@ class SummaryBarRenderer {
                         break;
                     if (i == 0) {
                         // Set up title and pre-headings stuff.
-                        buf.append("<h3><a href=\"/news\">")
+                        buf.append("<h3 id=sb_newsH3><a href=\"/news\">")
                            .append(_t("News &amp; Updates"))
                            .append("</a><input type=\"checkbox\" id=\"toggle_sb_newsheadings\" class=\"toggleSection script\" checked hidden></h3><hr class=\"b\">")
                            .append("<div id=\"sb_newsheadings\">\n<table>\n");

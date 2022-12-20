@@ -11,6 +11,7 @@ import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.SessionKey;
 import net.i2p.data.Signature;
@@ -332,8 +333,17 @@ class InboundEstablishState {
             _currentState = InboundState.IB_STATE_CREATED_SENT;
     }
 
-    /** how long have we been trying to establish this session? */
-    public long getLifetime() { return _context.clock().now() - _establishBegin; }
+    /**
+     * how long have we been trying to establish this session?
+     */
+    public long getLifetime() { return getLifetime(_context.clock().now()); }
+
+    /**
+     * how long have we been trying to establish this session?
+     * @since 0.9.57
+     */
+    public long getLifetime(long now) { return now - _establishBegin; }
+
     public long getEstablishBeginTime() { return _establishBegin; }
 
     /**
@@ -386,6 +396,15 @@ class InboundEstablishState {
                     // _x() in UDPTransport
                     _context.banlist().banlistRouterForever(_receivedUnconfirmedIdentity.calculateHash(),
                                                             " <b>➜</b> " + "Unsupported signature type");
+                    fail();
+                }
+                Hash h = _receivedUnconfirmedIdentity.calculateHash();
+                if (_context.banlist().isBanlistedForever(h)) {
+                    // validate sig to prevent spoofing
+                    if (getConfirmedIdentity() != null)
+                       _context.blocklist().add(_aliceIP);
+                    if (_log.shouldLog(Log.WARN))
+                        _log.warn("Router is banned: " + h.toBase64() + " on " + this);
                     fail();
                 }
             } else {

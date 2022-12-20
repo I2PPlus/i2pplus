@@ -1,6 +1,8 @@
 package net.i2p.router.transport.udp;
 
+import java.util.ArrayList;
 import java.net.InetAddress;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.data.DataHelper;
@@ -31,6 +33,10 @@ class PeerTestState {
     private Hash _aliceHash;
     // SSU2 only
     private Hash _charlieHash;
+    // SSU2 BOB only
+    private byte[] _testData;
+    // SSU2 BOB only
+    private final List<Hash> _previousCharlies;
     private final long _beginTime;
     private long _lastSendTime;
     private long _receiveAliceTime;
@@ -49,6 +55,7 @@ class PeerTestState {
         _isIPv6 = isIPv6;
         _testNonce = nonce;
         _beginTime = now;
+        _previousCharlies = role == Role.BOB ? new ArrayList<Hash>(8) : null;
     }
 
     public long getNonce() { return _testNonce; }
@@ -98,6 +105,13 @@ class PeerTestState {
     }
     public InetAddress getBobIP() { return _bob.getRemoteIPAddress(); }
     public InetAddress getCharlieIP() { return _charlieIP; }
+
+    /**
+     * SSU2 only, null for SSU1.
+     * @since 0.9.57
+     */
+    public Hash getCharlieHash() { return _charlieHash; }
+
     /**
      * @param hash SSU2 only, null for SSU1
      * @since 0.9.54
@@ -105,8 +119,18 @@ class PeerTestState {
     public void setCharlie(InetAddress ip, int port, Hash hash) {
         _charlieIP = ip;
         _charliePort = port;
+        if (_charlieHash != null && _previousCharlies != null && !_charlieHash.equals(hash))
+            _previousCharlies.add(_charlieHash);
         _charlieHash = hash;
     }
+
+    /**
+     * SSU2 only, BOB only, else returns null.
+     * Does not include current charlie.
+     * @since 0.9.57
+     */
+    public List<Hash> getPreviousCharlies() { return _previousCharlies; }
+
     public InetAddress getAliceIPFromCharlie() { return _aliceIPFromCharlie; }
     public void setAliceIPFromCharlie(InetAddress ip) { _aliceIPFromCharlie = ip; }
     /**
@@ -173,6 +197,18 @@ class PeerTestState {
     public long getReceiveCharlieTime() { return _receiveCharlieTime; }
     public void setReceiveCharlieTime(long when) { _receiveCharlieTime = when; }
 
+    /**
+     *  SSU2 only, we are Bob
+     *  @since 0.9.57
+     */
+    public byte[] getTestData() { return _testData; }
+
+    /**
+     *  SSU2 only, we are Bob
+     *  @since 0.9.57
+     */
+    public void setTestData(byte[] data) { _testData = data; }
+
     /** @return new value */
     public int incrementPacketsRelayed() { return _packetsRelayed.incrementAndGet(); }
 
@@ -185,10 +221,13 @@ class PeerTestState {
            .append(" as ").append(_ourRole.toString());
         if (_aliceIP != null) {
             buf.append(" [Alice: ");
-            if (_ourRole == Role.ALICE)
+            if (_ourRole == Role.ALICE) {
                 buf.append(" LOCAL]");
-            else
+            } else {
                 buf.append(_aliceIP).append(':').append(_alicePort).append("]");
+                if (_aliceHash != null)
+                    buf.append(' ').append(_aliceHash.toBase64().substring(0, 6));
+            }
         }
         if (_aliceIPFromCharlie != null)
             buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
@@ -198,10 +237,15 @@ class PeerTestState {
             buf.append(" [Bob: LOCAL]");
         if (_charlieIP != null) {
             buf.append(" [Charlie: ");
-            if (_ourRole == Role.CHARLIE)
+            if (_ourRole == Role.CHARLIE) {
                 buf.append("LOCAL]");
-            else
+            } else {
                 buf.append(_charlieIP).append(':').append(_charliePort).append("]");
+                if (_charlieHash != null)
+                    buf.append(' ').append(_charlieHash.toBase64().substring(0, 6));
+            }
+            if (_previousCharlies != null && !_previousCharlies.isEmpty())
+                buf.append(" [Previous: ").append(_previousCharlies).append("]");
         }
         if (_lastSendTime > 0)
             buf.append("\n* Last send after ").append(_lastSendTime - _beginTime).append("ms");

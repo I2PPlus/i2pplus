@@ -59,6 +59,12 @@
 <tr><th>routerconsole.redirectToHTTPS={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]")%></td></tr>
 
+<tr><th>router.blocklist.enable={true|false}</th></tr>
+<tr><td><%=intl._t("This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]")%></td></tr>
+
+<tr><th>router.blocklist.file={/path/to/additional_blocklist.txt}</th></tr>
+<tr><td><%=intl._t("This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]")%></td></tr>
+
 <tr><th>router.buildHandlerThreads={n}</th></tr>
 <tr><td><%=intl._t("Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks.")%></td></tr>
 

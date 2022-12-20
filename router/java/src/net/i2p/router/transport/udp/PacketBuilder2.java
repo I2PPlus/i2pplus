@@ -304,9 +304,14 @@ class PacketBuilder2 {
 
         packet.setPriority(priority);
         if (fragments.isEmpty()) {
-            SSU2Bitfield acked =  peer.getAckedMessages();
-            if (acked != null)     // null for PeerStateDestroyed
-                acked.set(pktNum); // not ack-eliciting
+            SSU2Bitfield acked = peer.getAckedMessages();
+            if (acked != null) {     // null for PeerStateDestroyed
+                try {
+                    acked.set(pktNum); // not ack-eliciting
+                } catch (IndexOutOfBoundsException e) {
+                    // shift too big, ignore, we're dead or about to be
+                }
+            }
             packet.markType(1);
             packet.setFragmentCount(-1);
             packet.setMessageType(TYPE_ACK);
@@ -340,7 +345,11 @@ class PacketBuilder2 {
         encryptDataPacket(packet, peer.getSendCipher(), pktNum, peer.getSendHeaderEncryptKey1(), peer.getSendHeaderEncryptKey2());
         setTo(packet, peer.getRemoteIPAddress(), peer.getRemotePort());
         packet.setPriority(PRIORITY_LOW);
-        peer.getAckedMessages().set(pktNum); // not ack-eliciting
+        try {
+            peer.getAckedMessages().set(pktNum); // not ack-eliciting
+        } catch (IndexOutOfBoundsException e) {
+            // shift too big, ignore, we're dead or about to be
+        }
         return packet;
     }
 
@@ -462,8 +471,8 @@ class PacketBuilder2 {
         byte sentIP[] = state.getSentIP();
         pkt.setLength(LONG_HEADER_SIZE);
         int port = state.getSentPort();
-        encryptRetry(packet, state.getSendHeaderEncryptKey1(), n, state.getSendHeaderEncryptKey1(),
-                     state.getSendHeaderEncryptKey2(),
+        byte[] introKey = state.getSendHeaderEncryptKey1();
+        encryptRetry(packet, introKey, n, introKey, introKey,
                      sentIP, port, terminationCode);
         pkt.setSocketAddress(state.getSentAddress());
         packet.setMessageType(TYPE_CREAT);
@@ -616,7 +625,6 @@ class PacketBuilder2 {
         int count = 1 + ((remaining + maxAddl - 1) / maxAddl);
 
         // put jumbo into the first packet, we will put data0 back below
-        // TODO if last packet is less than 8 bytes the header decryption will fail, add padding
         byte[] jumbo = new byte[overhead + addPadding + block.getTotalLength()];
         System.arraycopy(data0, off, jumbo, 0, SHORT_HEADER_SIZE);
         pkt.setData(jumbo);
@@ -795,11 +803,21 @@ class PacketBuilder2 {
      *  In-session.
      *
      *  @param signedData flag + alice hash + signed data
+     *  @param riBlock to include, may be null
      *  @return non-null
      */
-    UDPPacket buildRelayIntro(byte[] signedData, PeerState2 charlie) {
+    UDPPacket buildRelayIntro(byte[] signedData, Block riBlock, PeerState2 charlie) {
         Block block = new SSU2Payload.RelayIntroBlock(signedData);
-        UDPPacket rv = buildPacket(Collections.<Fragment>emptyList(), Collections.singletonList(block), charlie);
+        List<Block> blocks;
+        if (riBlock != null) {
+            // RouterInfo must be first
+            blocks = new ArrayList<Block>(2);
+            blocks.add(riBlock);
+            blocks.add(block);
+        } else {
+            blocks = Collections.singletonList(block);
+        }
+        UDPPacket rv = buildPacket(Collections.<Fragment>emptyList(), blocks, charlie);
         rv.setMessageType(TYPE_INTRO);
         return rv;
     }

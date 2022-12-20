@@ -1,38 +1,41 @@
 #
-# If you have a 'split' directory installation, with configuration
-# files in ~/.i2p (Linux), %LOCALAPPDATA%\I2P (Windows),
-# or /Users/(user)/Library/Application Support/i2p (Mac), be sure to
-# edit the file in the configuration directory, NOT the install directory.
-# When running as a Linux daemon, the configuration directory is /var/lib/i2p
-# and the install directory is /usr/share/i2p .
-# When running as a Windows service, the configuration directory is \ProgramData\i2p
-# and the install directory is \Program Files\i2p .
+#  To add entries to the blocklist, make sure you edit blocklist.txt in I2P's configuration
+#  directory, NOT the installation directory, as the installation directory file will be
+#  overwritten when the router is updated.
+#    * Linux (manual java install): ~/.i2p
+#    * Linux (repo or deb install running as daemon):
+#      - Configuration directory: /var/lib/i2p
+#      - Application directory: /usr/share/i2p
+#    * Windows (as application): %APPDATA%\I2P
+#    * Windows (as service):
+#      - Configuration directory: \ProgramData\i2p
+#      - Install directory: \Program Files\i2p
+#    * MacOS: /Users/(user)/Library/Application Support/i2p
 #
-# The file in the install directory will be overwritten when you update I2P.
-# As of release 0.9.18, the router reads and merges the files in the install directory
-# and the config directory. Additionally, if the advanded configuration
-# router.blocklist.file=/path/to/otherlist.txt is set, this file will be
-# read in and merged as well.
+#  As of release 0.9.18, the router reads and merges the files in the install directory
+#  and the config directory. Additionally, if the advanced configuration
+#  router.blocklist.file=/path/to/otherlist.txt is set, this file will be
+#  read in and merged as well.
 #
-# If there is no blocklist.txt file in the configuration directory, create it and
-# add entries as desired.
+#  If there is no blocklist.txt file in the configuration directory, create it and
+#  add entries as desired.
 #
+#  Blocking is enabled by default.
+#  To disable blocking, set router.blocklist.enable=false on http://127.0.0.1:7657/configadvanced
 #
-# Blocking is enabled by default.
-# To disable blocking, set router.blocklist.enable=false on configadvanced.jsp.
+#  Add additional entries as desired, sorting not required.
+#  Note that this file is only read at router startup.
 #
-# Add additional entries as desired, sorting not required.
-# This file is only read at router startup.
-# To manually block a router after startup, use the form on http://127.0.0.1:7657/configpeer.jsp
-# Warning - a large list will increase memory usage.
-# Please do not block too broadly, it will segment and harm the network.
-# For example, http://www.bluetack.co.uk/config/splist.zip is very broad and includes Tor users, it is not recommended.
-# A more reasonable list: http://www.bluetack.co.uk/config/level1.zip
-# Note: bluetack blocklists now require a subscription. See https://forum.transmissionbt.com/viewtopic.php?f=2&t=15652
+#  To manually block a router after startup, use the form on http://127.0.0.1:7657/configpeer
+#  Note that this method will only block the router for the duration of the router session
 #
-# We have included the bogons from http://www.team-cymru.org/Services/Bogons/http.html ,
-# but you will have to update your blocklist manually if the bogon list changes.
-# You must update this list yourself, it is not overwritten by the update process.
+#  Warning - a large list will increase memory usage.
+#  Please do not block too broadly, it will segment and harm the network.
+#
+#  We have included the bogons (private ip address segments) from
+#  https://www.team-cymru.com/bogon-reference-http
+#  but you will have to update your blocklist manually if the bogon list changes.
+#  You must update this list yourself, it is not overwritten by the update process.
 #
 #   * Acceptable formats (IPV4 only):
 #   *   #comment (# must be in column 1)
@@ -52,64 +55,74 @@
 #   * No whitespace allowed after the last ':'.
 #   *
 #   * For further information and downloads:
-#   *   http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
 #   *   http://blocklist.googlepages.com/
 #   *   https://www.team-cymru.com/bogon-reference.html
 #
-Chinese Floodfill Flooder:159.226.40.7
-Friend of the Chinese Floodfill Flooder:159.226.40.3
+# IPv4: https://team-cymru.org/Services/Bogons/bogon-bn-agg.txt
+#
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:0.0.0.0/8
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:10.0.0.0/8
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:100.64.0.0/10
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:127.0.0.0/8
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:169.254.0.0/16
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:172.16.0.0/12
-# <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.0.0/24
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.0.0/24
 <a href="https://tools.ietf.org/html/rfc6890#ref-2" target="_blank">Bogon</a>:192.0.0.0/29
-<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.0.8/32
-<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.0.170/32
-<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.0.171/32
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.2.0/24
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.168.0.0/16
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:198.18.0.0/15
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:198.51.100.0/24
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:203.0.113.0/24
-<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:224.0.0.0/4
-<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:240.0.0.0/4
-
-Sybil:45.32.60.71
-Sybil:45.32.62.37
-Sybil:45.32.125.149
-Sybil:45.32.152.247
-Sybil:45.63.50.207
-Sybil:45.63.76.128
-Sybil:45.76.47.3
-Sybil:45.76.98.64
-Sybil:45.76.112.208
-Sybil:45.76.129.193
-Sybil:45.76.152.150
-Sybil:45.77.14.112
-Sybil:45.77.29.172
-Sybil:45.77.132.75
-Sybil:45.77.250.252
-Sybil:47.88.6.66
-Sybil:47.88.7.8
-Sybil:47.88.136.46
-Sybil:47.88.136.86
-Sybil:47.88.138.200
-Sybil:47.88.159.58
-Sybil:47.88.169.149
-Sybil:47.89.38.177
-Sybil:47.90.1.15
-Sybil:47.90.1.26
-Sybil:47.90.120.30
-Sybil:47.208.97.112
-Sybil:51.211.161.115
-Sybil:66.42.58.61
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:224.0.0.0/3
+# End Team Cymru bogons
+#
+# IPv6: https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/
+# Commented out for now, no support for ipv6 ranges or masks
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:100;;/64
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:;;1/128
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;7f00;;/40
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;a00;;/40
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;a9fe;;/48
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;ac10;;/44
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c000;200;;/56
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c000;;/56
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c0a8;;/48
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c612;;/47
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c633;6400;;/56
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;cb00;7100;;/56
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;e000;;/36
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;f000;;/36
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;ffff;ffff;;/64
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;10;;/28
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;;/40
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;db8;;/32
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;;/24
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;7f00;;/24
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;a00;;/24
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;a9fe;;/32
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;ac10;;/28
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c000;200;;/40
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c000;;/40
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c0a8;;/32
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c612;;/31
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c633;6400;;/40
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;cb00;7100;;/40
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;e000;;/20
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;f000;;/20
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;ffff;ffff;;/48
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:;;/96
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:fc00;;/7
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:fe80;;/10
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:fec0;;/10
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:ff00;;/8
+#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:;;ffff;0;0/96
+# End freenetworktutorials bogons
+#
+# IPv4
+#
+Chinese Floodfill Flooder:159.226.40.7
+Friend of the Chinese Floodfill Flooder:159.226.40.3
 Public Web Proxy:93.157.12.0/24
-Sybil:95.47.57.0/24
-Sybil:95.85.100.0/22
-Sybil:95.85.104.0/22
 Sybil:103.149.170.0/23
 Sybil:104.156.254.54
 Sybil:104.207.153.96
@@ -128,28 +141,59 @@ Sybil:185.69.186.0/24
 Sybil:202.182.126.246
 Sybil:213.142.149.0/24
 Sybil:213.238.166.0/24
-Sybil:2001;df6;b800;1128;a163;44;149;310
+Sybil:45.32.125.149
+Sybil:45.32.152.247
+Sybil:45.32.60.71
+Sybil:45.32.62.37
+Sybil:45.63.50.207
+Sybil:45.63.76.128
+Sybil:45.76.112.208
+Sybil:45.76.129.193
+Sybil:45.76.152.150
+Sybil:45.76.47.3
+Sybil:45.76.98.64
+Sybil:45.77.132.75
+Sybil:45.77.14.112
+Sybil:45.77.250.252
+Sybil:45.77.29.172
+Sybil:47.208.97.112
+Sybil:47.88.136.46
+Sybil:47.88.136.86
+Sybil:47.88.138.200
+Sybil:47.88.159.58
+Sybil:47.88.169.149
+Sybil:47.88.6.66
+Sybil:47.88.7.8
+Sybil:47.89.38.177
+Sybil:47.90.1.15
+Sybil:47.90.120.30
+Sybil:47.90.1.26
+Sybil:51.211.161.115
+Sybil:66.42.58.61
+Sybil:95.47.57.0/24
+Sybil:95.85.100.0/22
+Sybil:95.85.104.0/22
+#
+# IPv6
+#
 Sybil:2001;19f0;4400;4376;5400;ff;fe47;bcbd
 Sybil:2001;19f0;5801;1d4;5400;ff;fe38;a26e
 Sybil:2001;19f0;5c01;1df;5400;ff;fe3e;ba8f
 Sybil:2001;19f0;7001;cb;5400;ff;fe47;c952
 Sybil:2001;19f0;7001;d99;5400;ff;fe41;829c
 Sybil:2001;19f0;7402;24d;5400;ff;fe41;9153
-Sybil:2400;8500;1302;816;a150;95;128;165b
+Sybil:2001;df6;b800;1128;a163;44;149;310
 Sybil:2400;8500;1302;802;a133;130;124;1855
+Sybil:2400;8500;1302;816;a150;95;128;165b
 Sybil:2400;8500;1302;819;a150;95;134;1590
 Sybil:2400;8500;1302;824;a150;95;144;951
 Sybil:2400;8500;1302;825;150;95;147;89
 Sybil:2400;8500;1302;828;a150;95;153;2202
-Sybil:45.77.250.252
-Sybil:202.182.126.246
-Sybil:45.77.14.112
-Sybil:66.42.58.61
-Tunnel Abuse:JbifzqZZqeTXtxK6KDqNUPWaW-phKqeS~tfJT82SIYI=
+#
+# Router hashes
+#
 Corrupt Message Spammer:m8CkfwwvPF~9xYjfGVIl4d~ypW7VjE0nxFZN1rh48XM=
-Sybil (AS-Choopa):45.77.250.0-45.77.251.255
-Sybil (AS-Choopa):104.207.158.0-104.207.159.255
-Sybil (AS-Choopa):104.238.134.0/23
-Sybil (AS-Choopa):202.182.96.0-202.182.127.255
-Sybil (AS-Choopa):66.42.48.0-66.42.63.255
+Tunnel Abuse:CyLg6w8lypk1gnAX-CdG8O4NCR86hq8ifge6QKXAoJg=
+Tunnel Abuse:DtQsGzkbeR3nilr6ZvywR2O7-f0XaaV~YfHXohqwjgI=
+Tunnel Abuse:JbifzqZZqeTXtxK6KDqNUPWaW-phKqeS~tfJT82SIYI=
 Tunnel Abuse:QPUV1bW6arN2zp3gTBMvOEvgSuKbXUqk2oqHkb~UoSw=

@@ -187,6 +187,16 @@ th.tunnelControl{text-align:center}
 #serverTunnels td,#clientTunnels td{border-top:var(--border_softer)}
 #tunnelListPage th:nth-child(n+2),.tunnelProperties td:nth-child(n+2){text-align:center}
 
+/* screenlog */
+#screenlog{position:relative;contain:paint}
+#screenlog span{margin:0;height:calc(100% + 2px);display:flex;align-items:stretch;position:absolute;top:-1px;bottom:-1px;right:-1px;vertical-align:middle}
+#screenlog .iconize{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0;box-shadow:var(--highlight),inset 0 0 1px 1px #ddf}
+#screenlog .iconize:hover,#screenlog .iconize:focus{box-shadow:var(--highlight),inset 0 0 1px 1px #f60}
+#screenlog .iconize:active{box-shadow:var(--highlight), inset 5px 5px 5px rgba(0,0,0,.2)}
+#screenlog .clearlog{border-left:1px solid var(--border_inner);background: rgba(255,255,255,.3) var(--close) no-repeat center center / 16px}
+#screenlog .clearlog:hover{background: rgba(255,255,255.5) var(--close_hover) no-repeat center center / 16px}
+#screenlog .clearlog:active{background: #f2f2f2 var(--close) no-repeat center center / 14px}
+
 /* edit */
 .tunnelConfig tr,.tunnelConfig th:first-child,.tunnelConfig td:first-child{border-left:1px solid var(--border_inner)}
 .tunnelConfig tr,.tunnelConfig th:last-child,.tunnelConfig td:last-child{border-right:1px solid var(--border_inner)}

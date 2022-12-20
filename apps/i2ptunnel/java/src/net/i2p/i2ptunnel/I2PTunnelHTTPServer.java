@@ -55,6 +55,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     public static final String OPT_REJECT_REFERER = "rejectReferer";
     public static final String OPT_REJECT_USER_AGENTS = "rejectUserAgents";
     public static final String OPT_USER_AGENTS = "userAgentRejectList";
+    public static final String OPT_ADD_RESPONSE_HEADERS = "addResponseHeaders";
 //    public static final int DEFAULT_POST_WINDOW = 5*60;
     public static final int DEFAULT_POST_WINDOW = 3*60;
 //    public static final int DEFAULT_POST_BAN_TIME = 20*60;
@@ -618,6 +619,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 s.setSoTimeout(SERVER_READ_TIMEOUT_POST);
 
             boolean compress = allowGZIP && useGZIP;
+            //boolean addHeaders = shouldAddResponseHeaders();
             Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(), _log, compress);
             // run in the unlimited client pool
             //t.start();
@@ -678,6 +680,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         // shadows _log in super()
         private final Log _log;
         private final boolean _shouldCompress;
+        //private final boolean _addHeaders;
 
 //        private static final int BUF_SIZE = 8*1024;
         private static final int BUF_SIZE = 32*1024;
@@ -685,6 +688,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers
          */
+
+        //public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
+        //                           I2PAppContext ctx, Log log, boolean shouldCompress, boolean addHeaders) {
+
         public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                    I2PAppContext ctx, Log log, boolean shouldCompress) {
             _webserver = webserver;
@@ -693,6 +700,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             _ctx = ctx;
             _log = log;
             _shouldCompress = shouldCompress;
+            //_addHeaders = addHeaders;
         }
 
         public void run() {
@@ -743,8 +751,47 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 //Change headers to protect server identity
                 StringBuilder command = new StringBuilder(128);
-                Map<String, List<String>> headers = readHeaders(null, serverin, command,
-                    SERVER_SKIPHEADERS, _ctx);
+                Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx);
+
+/**
+                // Make adding headers an (opt-in?) tunnel option
+                // TODO Exclude local proxy error pages; different caching policies for different resource types?
+                //if (shouldAddResponseHeaders()) {
+
+                    // add cache-control header if not present
+                    //String cc = getEntryOrNull(headers, "Cache-Control");
+                    //if (cc == null || !cc.toLowerCase(Locale.US).equals("cache-control"))
+                    boolean cc = headers.containsKey("Cache-Control");
+                    if (!cc)
+                        setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
+
+                    // add allow header if not present
+                    boolean allow = headers.containsKey("Allow");
+                    if (!allow)
+                        setEntry(headers, "Allow", "GET, POST, HEAD");
+
+                    // add x-frame-options header if not present
+                    boolean xf = headers.containsKey("X-Frame-Options");
+                    if (!xf)
+                        setEntry(headers, "X-Frame-Options", "SAMEORIGIN");
+
+                    // add content-security-policy header if not present
+                    //boolean csp = headers.containsKey("Content-Security-Policy");
+                    //if (!csp)
+                    //    addEntry(headers, "Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'");
+
+                    // add referrer-policy header if not present
+                    boolean rp = headers.containsKey("Referrer-Policy");
+                    if (!rp)
+                        setEntry(headers, "Referrer-Policy", "same-origin");
+
+                    // add x-xss-protection header if not present
+                    boolean xss = headers.containsKey("X-XSS-Protection");
+                    if (!xss)
+                        setEntry(headers, "X-XSS-Protection", "1; mode=block");
+
+                //}
+**/
                 String modifiedHeaders = formatHeaders(headers, command);
 
                 if (_shouldCompress) {
@@ -1009,7 +1056,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
       if (entry == null) {
           headers.put(key, entry = new ArrayList<String>(1));
       } else {
-            entry.clear();
+          entry.clear();
       }
       entry.add(value);
     }
@@ -1048,8 +1095,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @since public since 0.9.57 for SOCKS
      */
     public static Map<String, List<String>> readHeaders(I2PSocket socket, InputStream in, StringBuilder command,
-                                                           String[] skipHeaders, I2PAppContext ctx) throws IOException {
-      HashMap<String, List<String>> headers = new HashMap<String, List<String>>();
+      String[] skipHeaders, I2PAppContext ctx) throws IOException {
+        HashMap<String, List<String>> headers = new HashMap<String, List<String>>();
         StringBuilder buf = new StringBuilder(128);
 
         // slowloris / darkloris
@@ -1218,5 +1265,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             super(s);
         }
     }
-}
 
+/**
+    private boolean shouldAddResponseHeaders() {
+        Properties opts = getTunnel().getClientOptions();
+        String addHeaders = opts.getProperty(OPT_ADD_RESPONSE_HEADERS);
+        if (addHeaders.toLowerCase() == "false") {
+             return false;
+        } else {
+            return true;
+        }
+    }
+**/
+
+}

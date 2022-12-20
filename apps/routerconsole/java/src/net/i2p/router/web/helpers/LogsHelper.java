@@ -29,7 +29,8 @@ public class LogsHelper extends HelperBase {
 
     private static final String _jstlVersion = jstlVersion();
 
-    private static final int MAX_WRAPPER_LINES = 250;
+//    private static final int MAX_WRAPPER_LINES = 250;
+    private static final int MAX_WRAPPER_LINES = 500;
     private static final String PROP_LAST_WRAPPER = "routerconsole.lastWrapperLogEntry";
 
     /** @since 0.8.12 */

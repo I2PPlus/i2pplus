@@ -26,6 +26,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 import net.i2p.router.CommSystemFacade.Status;
+import net.i2p.util.VersionComparator;
 
 /**
  *  The network database
@@ -54,7 +55,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
 //    public static final int MAX_TO_FLOOD = 3;
-    public static final int MAX_TO_FLOOD = 8;
+    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 5 : 10;
 
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
 //    private static final int FLOOD_TIMEOUT = 30*1000;
@@ -62,7 +63,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;
-    private static final int NEXT_FLOOD_QTY = 4;
+    private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 4 : 6;
+    private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 750 : 400;
 
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
         super(context);
@@ -141,7 +143,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  because we are sending direct, but unresponsive floodfills may take a while due to timeouts.
      */
 //    static final long PUBLISH_TIMEOUT = 90*1000;
-    static final long PUBLISH_TIMEOUT = 80*1000;
+    static final long PUBLISH_TIMEOUT = 45*1000;
 
     /**
      * Send our RI to the closest floodfill.
@@ -586,7 +588,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /** NTCP cons drop quickly but SSU takes a while, so it's prudent to keep this
      *  a little higher than 1 or 2. */
 //    protected final static int MIN_ACTIVE_PEERS = 5;
-    protected final static int MIN_ACTIVE_PEERS = 20;
+    protected final static int MIN_ACTIVE_PEERS = SystemVersion.isSlow() ? 16 : 40;
 
     /** @since 0.8.7 */
     private static final int MAX_DB_BEFORE_SKIPPING_SEARCH;
@@ -619,11 +621,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             if (isNew) {
                 if (_log.shouldDebug())
-                    _log.debug("Direct RI lookup for " + peer.toBase64());
+                    _log.debug("Direct RouterInfo lookup for [" + peer.toBase64().substring(0,6) + "]");
                 _context.jobQueue().addJob(searchJob);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Pending Direct RI lookup for " + peer.toBase64());
+                    _log.debug("Pending Direct RouterInfo lookup for [" + peer.toBase64().substring(0,6) + "]");
                 searchJob.addDeferred(onFindJob, onFailedLookupJob, 10*1000, false);
             }
             return;
@@ -636,13 +638,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         String nofail = _context.getProperty("router.noFailGracePeriod");
         if (nofail != null)
             DONT_FAIL_PERIOD = Long.valueOf(nofail)*60*1000;
-            int knownRouters = getKBucketSetSize();
-            if (info.getNetworkId() == _networkID &&
-            (knownRouters < MIN_REMAINING_ROUTERS ||
-             _context.router().getUptime() < DONT_FAIL_PERIOD ||
-             _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) ||
-             _context.commSystem().getStatus() == Status.DISCONNECTED) {
-            if (_context.router().getUptime() < DONT_FAIL_PERIOD) {
+        int knownRouters = getKBucketSetSize();
+        if (info.getNetworkId() == _networkID && (knownRouters < MIN_REMAINING_ROUTERS ||
+            (_context.router().getUptime() < DONT_FAIL_PERIOD && knownRouters < 2500) ||
+            _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) ||
+            _context.commSystem().getStatus() == Status.DISCONNECTED) {
+            if (_context.router().getUptime() < DONT_FAIL_PERIOD && knownRouters < 2500) {
                 if (_log.shouldInfo())
                     _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed; not dropping (startup grace period)");
             } else {
@@ -654,27 +655,39 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         // should we skip the search?
         boolean forceExplore = _context.getBooleanProperty("router.exploreWhenFloodfill");
-        if ((_floodfillEnabled && !forceExplore) ||
-            _context.jobQueue().getMaxLag() > 1000 ||
-            _context.banlist().isBanlistedForever(peer)) {
-//            knownRouters > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+        Hash us = _context.routerHash();
+        String MIN_VERSION = "0.9.56";
+        boolean isHidden = _context.router().isHidden();
+        boolean slow = info.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
+        boolean fast = info.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
+        String v = info.getVersion();
+        boolean uninteresting = info != null && !isHidden && (slow || VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                (_context.netDb().getKnownRouters() > 2000 && !fast) && !us.equals(info.getIdentity().getHash());
+        if ((_floodfillEnabled && !forceExplore) || _context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH ||
+            _context.banlist().isBanlistedForever(peer) || uninteresting) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at
             // once, and then firing off 3000 netDb lookup tasks)
             // Also don't queue a search if we have plenty of routerinfos
             // (KBucketSetSize() includes leasesets but avoids locking)
-//            super.lookupBeforeDropping(peer, info); // we don't want the routerinfo deleted, so this is commented out
-            if (_floodfillEnabled && !forceExplore) {
-                if (_log.shouldInfo())
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - Floodfill mode active");
-            } else if (_context.banlist().isBanlistedForever(peer)) {
-                if (_log.shouldInfo())
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - banlisted");
-//            } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
-//                if (_log.shouldInfo())
-//                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - kbucket is full");
-            } else
-                if (_log.shouldInfo())
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - router overload");
+            if (_log.shouldInfo()) {
+                if (_floodfillEnabled && !forceExplore) {
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Floodfill mode active");
+                } else if (_context.banlist().isBanlistedForever(peer)) {
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
+                } else if (uninteresting) {
+                    _log.info("Skipping lookup and dropping [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
+                    new DropLookupFailedJob(_context, peer, info);
+//                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+//                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
+                } else {
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
+                }
+            }
+            //super.lookupBeforeDropping(peer, info); // don't bother with a lookup, just drop if uninteresting
             return;
         }
         // this sends out the search to the floodfill peers even if we already have the

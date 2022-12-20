@@ -94,11 +94,46 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     *  Call at transport shutdown
+     *  Direct from IES2, there was never a PS2.
+     *  Caller must send termination after creating.
+     */
+    public PeerStateDestroyed(RouterContext ctx, UDPTransport transport, RemoteHostId id,
+                              long sendID, long rcvID, CipherState sendCha, CipherState rcvCha,
+                              byte[] sendKey1, byte[] sendKey2, byte[] rcvKey2,
+                              int reason) {
+        _context = ctx;
+        _transport = transport;
+        _log = ctx.logManager().getLog(PeerStateDestroyed.class);
+        _remoteHostId = id;
+        _mtu = 1280;
+        _packetNumber = new AtomicInteger();
+        _sendConnID = sendID;
+        _rcvConnID = rcvID;
+        _sendCha = sendCha;
+        _rcvCha = rcvCha;
+        _sendHeaderEncryptKey1 = sendKey1;
+        _rcvHeaderEncryptKey1 = _transport.getSSU2StaticIntroKey();
+        _sendHeaderEncryptKey2 = sendKey2;
+        _rcvHeaderEncryptKey2 = rcvKey2;
+        _receivedMessages = new SSU2Bitfield(256, 0);
+        // ack the Session Confirmed
+        _receivedMessages.set(0);
+        _destroyReason = reason;
+        _destroyedOn = _context.clock().now();
+        _ackTimer = new ACKTimer();
+        // don't schedule ack timer to resend termination
+        _killTimer = new KillTimer();
+        _killTimer.schedule(MAX_LIFETIME);
+    }
+
+    /**
+     *  Call at transport shutdown or cache eviction
      */
     public void kill() {
         _ackTimer.cancel();
         _killTimer.cancel();
+        _sendCha.destroy();
+        _rcvCha.destroy();
     }
 
     /// begin SSU2Sender interface ///
@@ -177,8 +212,9 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
                 return;
             }
             if (header.getType() != DATA_FLAG_BYTE) {
+                // for direct from IES2, these could be retransmitted session confirmed
                 if (_log.shouldWarn())
-                    _log.warn("bad data pkt type " + (header.getType() & 0xff) + " size " + len + " on " + this);
+                    _log.warn("bad data pkt type " + header.getType() + " size " + len + " on " + this);
                 return;
             }
             long n = header.getPacketNumber();
@@ -280,9 +316,13 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         if (_log.shouldInfo())
             _log.info("Got TERMINATION block, reason: " + reason + " (our reason " + _destroyReason + ") on " + this);
         if (reason == SSU2Util.REASON_TERMINATION) {
+            // prevent any additional tranmissions if other packets come in
+            // i2pd has a bug and may send I2NP after termination ack
+            _wantACKSendSince = _context.clock().now() + 9999999;
             // cancel termination retx, fire kill timer sooner
             _ackTimer.cancel();
             _killTimer.reschedule(15*1000);
+
         } else {
             // If we received a destroy besides reason_termination, send reason_termination
             // Note that i2pd before 0.9.57 has a bug and will send a second termination in response to our first ack
@@ -354,10 +394,12 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
 
         public void timeReached() {
-            if (_log.shouldDebug())
-                _log.debug("Done listening for " + PeerStateDestroyed.this);
+            //if (_log.shouldDebug())
+            //    _log.debug("Done listening for " + PeerStateDestroyed.this);
             _ackTimer.cancel();
             _transport.removeRecentlyClosed(PeerStateDestroyed.this);
+            _sendCha.destroy();
+            _rcvCha.destroy();
         }
     }
 

@@ -149,7 +149,8 @@ abstract class LogWriter implements Runnable {
             System.out.print(dmsg);
         dmsg = dupMessage(dupCount, lastRecord, BUFFER_DISPLAYED_REVERSE, true);
         _manager.getBuffer().add(dmsg);
-        if (lastRecord.getPriority() >= Log.CRIT)
+//        if (lastRecord.getPriority() >= Log.CRIT)
+        if (lastRecord.getPriority() >= Log.ERROR)
             _manager.getBuffer().addCritical(dmsg);
     }
 
@@ -192,7 +193,8 @@ abstract class LogWriter implements Runnable {
         // we always add to the console buffer, but only sometimes write to stdout
         _manager.getBuffer().add(val);
         int priority = rec.getPriority();
-        if (priority >= Log.CRIT)
+//        if (priority >= Log.CRIT)
+        if (priority >= Log.ERROR)
             _manager.getBuffer().addCritical(val);
         // Default is CRIT
         if (_manager.getDisplayOnScreenLevel() <= priority) {

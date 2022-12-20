@@ -33,16 +33,26 @@
   if (msgs.length() > 0) {
 %>
 <div class="panel" id="messages">
-<h2><%=intl._t("Status Messages")%></h2>
+<h2 id="screenlog"><%=intl._t("Status Messages")%>
+<%
+      if (isInitialized) {
+%>
+<span>
+<a class="control clearlog iconize script" href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
+</span>
+<%
+      }  // isInitialized
+%>
+</h2>
 <table id="statusMessagesTable">
 <tr>
-<td id="tunnelMessages" class="volatile">
-<textarea id="statusMessages" rows="4" cols="60" readonly="readonly">
+<td id="tunnelMessages">
+<textarea id="statusMessages" rows="4" cols="60" readonly>
 <%=msgs%></textarea>
 </td>
 </tr>
-<tr>
-<td class="buttons volatile">
+<tr id="screenlog_buttons" hidden>
+<td class="buttons">
 <a class="control refresh iconize" href="list"><%=intl._t("Refresh")%></a>
 <%
       if (isInitialized) {
@@ -549,6 +559,7 @@ ElGamal-2048
 <script charset="utf-8" src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
+<noscript><style type="text/css">.script{display:none!important}#screenlog_buttons{display:table-row!important}</style></noscript>
 <style type="text/css">body{display:block;pointer-events:auto}</style>
 </body>
 </html>

@@ -1,16 +1,16 @@
-FROM jlesage/baseimage:alpine-3.10-glibc as builder
+FROM jlesage/baseimage:alpine-3.15-glibc as builder
 
 ENV APP_HOME="/i2p"
 
 WORKDIR /tmp/build
 COPY . .
 
-RUN add-pkg --virtual build-base gettext tar bzip2 apache-ant openjdk17 \
+RUN add-pkg --virtual build-base gettext tar bzip2 apache-ant openjdk17 ttf-opensans \
     && ant preppkg-linux-only \
     && rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.* \
     && del-pkg build-base gettext tar bzip2 apache-ant openjdk17
 
-FROM jlesage/baseimage:alpine-3.10-glibc
+FROM jlesage/baseimage:alpine-3.15-glibc
 ENV APP_HOME="/i2p"
 
 RUN add-pkg openjdk17-jre
@@ -24,13 +24,13 @@ COPY docker/rootfs/ /
 VOLUME ["${APP_HOME}/.i2p"]
 VOLUME ["/i2psnark"]
 
-EXPOSE 7654 7656 7657 7658 4444 6668 7659 7660 4445 12345
+EXPOSE 7654 7656 7657 7658 4444 6668 7659 7660 7667 12345
 
 # Metadata.
 LABEL \
       org.label-schema.name="i2p" \
-      org.label-schema.description="Docker container for I2P" \
+      org.label-schema.description="Docker container for I2P+" \
       org.label-schema.version="1.0" \
-      org.label-schema.vcs-url="https://github.com/i2p/i2p.i2p" \
+      org.label-schema.vcs-url="https://gitlab.com/i2pplus/I2P.Plus" \
       org.label-schema.schema-version="1.0"
 

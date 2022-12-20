@@ -168,7 +168,7 @@ class PeerTestManager {
     /** initial - ContinueTest adds backoff */
     private static final int RESEND_TIMEOUT = 4*1000;
 //    private static final int MAX_TEST_TIME = 30*1000;
-    private static final int MAX_TEST_TIME = 15*1000;
+    private static final int MAX_TEST_TIME = 20*1000;
     private static final long MAX_SKEW = 2*60*1000;
     private static final long MAX_NONCE = (1l << 32) - 1l;
 
@@ -571,7 +571,7 @@ class PeerTestManager {
         boolean isIPv6 = test.isIPv6();
         Status status;
         if (test.getAlicePortFromCharlie() > 0) {
-            // we received a second message from charlie
+            // we received a second message (7) from charlie
             if ( (test.getAlicePort() == test.getAlicePortFromCharlie()) &&
                  (test.getAliceIP() != null) && (test.getAliceIPFromCharlie() != null) &&
                  (test.getAliceIP().equals(test.getAliceIPFromCharlie())) ) {
@@ -581,10 +581,10 @@ class PeerTestManager {
                 status = isIPv6 ? Status.IPV4_UNKNOWN_IPV6_FIREWALLED : Status.IPV4_SNAT_IPV6_UNKNOWN;
             }
         } else if (test.getReceiveCharlieTime() > 0) {
-            // we received only one message from charlie
+            // we received only one message (5) from charlie
             status = Status.UNKNOWN;
         } else if (test.getReceiveBobTime() > 0) {
-            // we received a message from bob but no messages from charlie
+            // we received a message from bob (4) but no messages from charlie
             status = isIPv6 ? Status.IPV4_UNKNOWN_IPV6_FIREWALLED : Status.IPV4_FIREWALLED_IPV6_UNKNOWN;
         } else {
             // we never received anything from bob - he is either down,
@@ -1100,7 +1100,7 @@ class PeerTestManager {
                     fromPeer.setLastSendTime(now);
                     return;
                 }
-                PeerState charlie = _transport.pickTestPeer(CHARLIE, fromPeer.getVersion(), isIPv6, from);
+                PeerState charlie = _transport.pickTestPeer(CHARLIE, 2, isIPv6, from);
                 if (charlie == null) {
                     if (_log.shouldLog(Log.WARN))
                         _log.warn("Unable to pick a Charlie (no peer), IPv6? " + isIPv6);
@@ -1119,6 +1119,8 @@ class PeerTestManager {
                 state.setCharlie(charlie.getRemoteIPAddress(), charlie.getRemotePort(), charlie.getRemotePeer());
                 state.setReceiveAliceTime(now);
                 state.setLastSendTime(now);
+                // save alice-signed test data in case we need to send to another charlie
+                state.setTestData(data);
                 _activeTests.put(lNonce, state);
                 _context.simpleTimer2().addEvent(new RemoveTest(lNonce), MAX_BOB_LIFETIME);
                 // send alice RI to charlie
@@ -1153,7 +1155,9 @@ class PeerTestManager {
                 SessionKey aliceIntroKey = null;
                 int rcode;
                 PeerState aps = _transport.getPeerState(h);
-                if (aps != null && aps.isIPv6() == isIPv6) {
+                if (_transport.isSnatted()) {
+                    rcode = SSU2Util.TEST_REJECT_CHARLIE_ADDRESS;
+                } else if (aps != null && aps.isIPv6() == isIPv6) {
                     rcode = SSU2Util.TEST_REJECT_CHARLIE_CONNECTED;
                 } else if (_transport.getEstablisher().getInboundState(from) != null ||
                            _transport.getEstablisher().getOutboundState(from) != null) {
@@ -1237,6 +1241,33 @@ class PeerTestManager {
             // charlie to bob, in-session
             case 3: {
                 state.setReceiveCharlieTime(now);
+                if (status != SSU2Util.TEST_ACCEPT &&
+                    now - state.getBeginTime() < MAX_BOB_LIFETIME /  2) {
+                    List<Hash> prev = state.getPreviousCharlies();
+                    if (prev.size() < 7) {
+                        PeerState charlie = _transport.pickTestPeer(CHARLIE, 2, isIPv6, from);
+                        if (charlie != null && charlie != fromPeer && !prev.contains(charlie.getRemotePeer())) {
+                            Hash alice = state.getAlice().getRemotePeer();
+                            RouterInfo aliceRI = _context.netDb().lookupRouterInfoLocally(alice);
+                            if (aliceRI != null) {
+                                if (_log.shouldInfo())
+                                    _log.info("Charlie response " + status + " picked a new one " + charlie + " on " + state);
+                                state.setCharlie(charlie.getRemoteIPAddress(), charlie.getRemotePort(), charlie.getRemotePeer());
+                                state.setLastSendTime(now);
+                                DatabaseStoreMessage dbsm = new DatabaseStoreMessage(_context);
+                                dbsm.setEntry(aliceRI);
+                                dbsm.setMessageExpiration(now + 10*1000);
+                                _transport.send(dbsm, charlie);
+                                UDPPacket packet = _packetBuilder2.buildPeerTestToCharlie(alice, state.getTestData(), (PeerState2) charlie);
+                                _transport.send(packet);
+                                charlie.setLastSendTime(now);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (status != SSU2Util.TEST_ACCEPT && _log.shouldWarn())
+                    _log.warn("Charlie response " + status + " no more to choose from on " + state);
                 state.setLastSendTime(now);
                 PeerState2 alice = state.getAlice();
                 Hash charlie = fromPeer.getRemotePeer();
@@ -1267,7 +1298,7 @@ class PeerTestManager {
                 // forward to alice, don't bother to validate signed data
                 // FIXME this will probably get there before the RI
                 if (_log.shouldDebug())
-                    _log.debug("Sending message #4 to Alice on " + state);
+                    _log.debug("Sending message #4 status " + status + " to Alice on " + state);
                 UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(status, charlie, data, alice);
                 _transport.send(packet);
                 alice.setLastSendTime(now);
@@ -1372,8 +1403,7 @@ class PeerTestManager {
                 test.setCharlieIntroKey(charlieIntroKey);
                 if (test.getReceiveCharlieTime() > 0) {
                     // send msg 6
-                    if (_log.shouldDebug())
-                        _log.debug("Sending message #6 to charlie on " + test);
+                    // logged in sendTestToCharlie()
                     synchronized(this) {
                         sendTestToCharlie();
                     }
@@ -1406,8 +1436,7 @@ class PeerTestManager {
                 }
                 if (test.getCharlieIntroKey() != null) {
                     // send msg 6
-                    if (_log.shouldDebug())
-                        _log.debug("Sending message #6 to Charlie on " + test);
+                    // logged in sendTestToCharlie()
                     synchronized(this) {
                         sendTestToCharlie();
                     }
@@ -1467,7 +1496,8 @@ class PeerTestManager {
                    // ??
                 }
                 // this is our second charlie, yay!
-                test.setReceiveCharlieTime(now);
+                // Do NOT set this here, this is only for msg 5
+                //test.setReceiveCharlieTime(now);
                 // i2pd did not send address block in msg 7 until 0.9.57
                 if (addrBlockPort != 0) {
                 // use the IP/port from the address block

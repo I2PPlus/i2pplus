@@ -9,6 +9,7 @@ default:
       - i2psnark-standalone.zip
       - javadoc.zip
       - i2p.tar.bz2
+      - i2pplus_latest_source.tar.gz
     expire_in: 8 weeks
 
 stages:
@@ -35,6 +36,7 @@ Java8:
     - ant updater200Compact
     - ant i2psnark
     - ant javadoc-zip
+    - git archive --format=tar.gz -o i2pplus_latest_source.tar.gz HEAD
 #    - ./installer/resources/makegeoip.sh
 #    - ant updater200WithJettyAndGeoIP
 #    - ant updaterWithJetty

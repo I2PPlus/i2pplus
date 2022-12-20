@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.data.DataHelper;
@@ -55,7 +54,7 @@ import net.i2p.util.VersionComparator;
 public abstract class TransportImpl implements Transport {
     private final Log _log;
     private TransportEventListener _listener;
-    protected final List<RouterAddress> _currentAddresses;
+    private final List<RouterAddress> _currentAddresses;
     // Only used by NTCP. SSU does not use. See send() below.
     private final BlockingQueue<OutNetMessage> _sendPool;
     protected final RouterContext _context;
@@ -114,7 +113,7 @@ public abstract class TransportImpl implements Transport {
         //_context.statManager().createRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", new long[] { 60*1000l });
         _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue", "Transport", RATES );
 
-        _currentAddresses = new CopyOnWriteArrayList<RouterAddress>();
+        _currentAddresses = new ArrayList<RouterAddress>(3);
         if (getStyle().equals("NTCP"))
             _sendPool = new ArrayBlockingQueue<OutNetMessage>(8);
         else
@@ -574,11 +573,13 @@ public abstract class TransportImpl implements Transport {
     /**
      *  What addresses are we currently listening to?
      *  Replaces getCurrentAddress()
-     *  @return all addresses, non-null
+     *  @return a copy of all addresses, non-null
      *  @since IPv6
      */
     public List<RouterAddress> getCurrentAddresses() {
-        return _currentAddresses;
+        synchronized(_currentAddresses) {
+            return new ArrayList<RouterAddress>(_currentAddresses);
+        }
     }
 
     /**
@@ -592,9 +593,11 @@ public abstract class TransportImpl implements Transport {
      *  @since IPv6
      */
     public RouterAddress getCurrentAddress(boolean ipv6) {
-        for (RouterAddress ra : _currentAddresses) {
-            if (ipv6 == TransportUtil.isIPv6(ra))
-                return ra;
+        synchronized(_currentAddresses) {
+            for (RouterAddress ra : _currentAddresses) {
+                if (ipv6 == TransportUtil.isIPv6(ra))
+                    return ra;
+            }
         }
         return null;
     }
@@ -604,17 +607,21 @@ public abstract class TransportImpl implements Transport {
      *  @since IPv6
      */
     public boolean hasCurrentAddress() {
-        return !_currentAddresses.isEmpty();
+        synchronized(_currentAddresses) {
+            return !_currentAddresses.isEmpty();
+        }
     }
 
     /**
      * Ask the transport to update its address based on current information and return it
      * Transports should override.
-     * @return all addresses, non-null
+     * @return a copy of all addresses, non-null
      * @since 0.7.12
      */
     public List<RouterAddress> updateAddress() {
-        return _currentAddresses;
+        synchronized(_currentAddresses) {
+            return new ArrayList<RouterAddress>(_currentAddresses);
+        }
     }
 
     /**
@@ -627,22 +634,33 @@ public abstract class TransportImpl implements Transport {
      *  @param address null to remove all
      */
     protected void replaceAddress(RouterAddress address) {
+        boolean isIPv6;
+        if (address != null) {
+            isIPv6 = TransportUtil.isIPv6(address);
         if (_log.shouldWarn())
-//             _log.warn("Replacing address with " + address, new Exception());
-             _log.warn("Replacing existing address\n* " + address);
-        if (address == null) {
-            _currentAddresses.clear();
+//            _log.warn("Replacing  IPv" + (isIPv6 ? '6' : '4') + " address with " + address, new Exception());
+            _log.warn("Replacing  IPv" + (isIPv6 ? '6' : '4') + " address with " + address);
         } else {
-            boolean isIPv6 = TransportUtil.isIPv6(address);
-            for (RouterAddress ra : _currentAddresses) {
-                if (isIPv6 == TransportUtil.isIPv6(ra))
-                    // COWAL
-                    _currentAddresses.remove(ra);
+            isIPv6 = false;
+        }
+        int sz;
+        synchronized(_currentAddresses) {
+            if (address == null) {
+                _currentAddresses.clear();
+                sz = 0;
+            } else {
+                for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext(); ) {
+                    RouterAddress ra = iter.next();
+                    if (isIPv6 == TransportUtil.isIPv6(ra)) {
+                        iter.remove();
+                    }
+                }
+                _currentAddresses.add(address);
+                sz = _currentAddresses.size();
             }
-            _currentAddresses.add(address);
         }
         if (_log.shouldWarn())
-             _log.warn("[" + getStyle() + "] now has " + _currentAddresses.size() + " addresses");
+             _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
         if (_listener != null)
             _listener.transportAddressChanged();
     }
@@ -659,11 +677,15 @@ public abstract class TransportImpl implements Transport {
         if (_log.shouldWarn())
 //             _log.warn("[" + getStyle() + "] Removing address " + address, new Exception());
              _log.warn("Removing exisiting address\n* " + address);
-        boolean changed = _currentAddresses.remove(address);
-            changed = true;
+        boolean changed;
+        int sz;
+        synchronized(_currentAddresses) {
+            changed = _currentAddresses.remove(address);
+            sz = _currentAddresses.size();
+        }
         if (changed) {
             if (_log.shouldWarn())
-                 _log.warn("[" + getStyle() + "] now has " + _currentAddresses.size() + " addresses");
+                 _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
             if (_listener != null)
                 _listener.transportAddressChanged();
         } else {
@@ -685,16 +707,20 @@ public abstract class TransportImpl implements Transport {
 //             _log.warn("Removing addresses, ipv6? " + ipv6, new Exception());
              _log.warn("Removing addresses, ipv6? " + ipv6);
         boolean changed = false;
-        for (RouterAddress ra : _currentAddresses) {
-            if (ipv6 == TransportUtil.isIPv6(ra)) {
-                // COWAL
-                if (_currentAddresses.remove(ra))
+        int sz;
+        synchronized(_currentAddresses) {
+            for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext(); ) {
+                RouterAddress ra = iter.next();
+                if (ipv6 == TransportUtil.isIPv6(ra)) {
+                    iter.remove();
                     changed = true;
+                }
             }
+            sz = _currentAddresses.size();
         }
         if (changed) {
             if (_log.shouldWarn())
-                 _log.warn("[" + getStyle() + "] now has " + _currentAddresses.size() + " addresses");
+                 _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
             if (_listener != null)
                 _listener.transportAddressChanged();
         } else {

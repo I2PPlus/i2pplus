@@ -216,6 +216,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (now >= _sentMessagesLastExpired + SENT_MESSAGES_CLEAN_TIME) {
             _sentMessagesLastExpired = now;
             if (!_sentMessages.isEmpty()) {
+                // TODO is this the right place for this check?
+                long ahead =  _packetNumber.get() - _ackedMessages.getHighestSet();
+                if (ahead > BITFIELD_SIZE) {
+                    if (_log.shouldWarn())
+                        _log.warn("Fail after " + ahead + "unacked packets on " + this);
+                    _transport.sendDestroy(this, REASON_FRAME_TIMEOUT);
+                    _transport.dropPeer(this, true, "Too many unacked packets");
+                }
                 if (_log.shouldDebug())
                     _log.debug("[SSU2] finishMessages() over " + _sentMessages.size() + " pending acks");
                 loop:
@@ -227,8 +235,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                             continue loop;
                     }
                     iter.remove();
-                    if (_log.shouldWarn())
-                        _log.warn("[SSU2] Cleaned from sentMessages: " + frags);
+                    if (_log.shouldInfo())
+                        _log.info("[SSU2] Cleaned from sentMessages: " + frags);
                 }
             }
         }
@@ -399,7 +407,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         try {
             SSU2Header.Header header = SSU2Header.trialDecryptShortHeader(packet, _rcvHeaderEncryptKey1, _rcvHeaderEncryptKey2);
             if (header == null) {
-                if (_log.shouldWarn())
+                // Java I2P thru 0.9.55 would send 35-39 byte ping packets
+                // Java I2P thru 0.9.56 retransmits session confirmed with 1-2 byte packets
+                if (len > 2 && len < 35 && _log.shouldWarn())
                     _log.warn("[SSU2] Inbound packet too short [" + len + " bytes] from " + this);
                 return;
             }
@@ -485,6 +495,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     _pathChallengeSendCount = 1;
                                     _pendingRemoteHostId = from;
                                     sendPathChallenge(dpacket.getAddress(), from.getPort());
+                                    setLastSendTime(_migrationStarted);
                                 } else {
                                     // don't attempt to switch
                                     if (_log.shouldWarn())
@@ -517,6 +528,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                         _migrationNextSendTime = now + (PATH_CHALLENGE_DELAY << _pathChallengeSendCount);
                                         _pathChallengeSendCount++;
                                         sendPathChallenge(dpacket.getAddress(), from.getPort());
+                                        setLastSendTime(now);
                                     }
                                     limitSending = true;
                                 } else {
@@ -827,6 +839,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                                              this);
         // TODO send to from address?
         _transport.send(pkt);
+        long now = _context.clock().now();
+        setLastSendTime(now);
+        setLastReceiveTime(now);
     }
 
     public void gotPathResponse(RemoteHostId from, byte[] data) {
@@ -850,6 +865,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                                                                  Collections.singletonList(block),
                                                                                  this);
                             _transport.send(pkt);
+                            long now = _context.clock().now();
+                            setLastSendTime(now);
+                            setLastReceiveTime(now);
                         } else {
                             messagePartiallyReceived();
                         }
@@ -954,9 +972,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
         List<PacketBuilder.Fragment> fragments = _sentMessages.remove(Long.valueOf(pktNum));
         if (fragments == null) {
-            // shouldn't happen
-            if (_log.shouldInfo())
-                _log.info("[SSU2] New ACK of packet " + pktNum + " not found from " + this);
+            // TODO
+            // peer test, relay, path challenge/response
+            // We don't track these and route the acks anywhere
+            if (_log.shouldDebug())
+                _log.debug("[SSU2] New ACK of packet " + pktNum + " not found from " + this);
             return;
         }
         if (_log.shouldDebug())
@@ -1008,7 +1028,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             byte data[] = pkt.getData();
             int off = pkt.getOffset();
             System.arraycopy(_sessConfForReTX[i], 0, data, off, _sessConfForReTX[i].length);
-            pkt.setLength(_sessConfForReTX.length);
+            pkt.setLength(_sessConfForReTX[i].length);
             pkt.setAddress(addr);
             pkt.setPort(_remotePort);
             packet.setMessageType(PacketBuilder2.TYPE_CONF);
@@ -1024,6 +1044,13 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     public byte getFlags() {
         return shouldRequestImmediateAck() ? (byte) 0x01 : 0;
+    }
+
+    /**
+     * @since 0.9.57
+     */
+    boolean isDead() {
+        return _dead;
     }
 
     /**

@@ -154,16 +154,17 @@ public class Analysis extends JobImpl implements RouterApp {
                 return;
             Blocklist bl = _context.blocklist();
             Banlist ban = _context.banlist();
+            String source = _persister.getBlocklistFile().toString();
             for (Map.Entry<String, Long> e : map.entrySet()) {
                 String s = e.getKey();
                 if (s.contains(".") || s.contains(":")) {
-                    bl.add(s);
+                    bl.add(s, source);
                 } else {
                     byte[] b = Base64.decode(s);
                     if (b != null && b.length == Hash.HASH_LENGTH) {
                         Hash h = Hash.create(b);
                         long until = e.getValue().longValue();
-                        String reason = "<b>➜</b> Sybil Analysis";
+                        String reason = " <b>➜</b> Sybil Analysis";
                         ban.banlistRouter(h, reason, null, null, until);
                     }
                 }
@@ -463,9 +464,9 @@ public class Analysis extends JobImpl implements RouterApp {
                 String reason = " <b>➜</b> " + day + ": Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
                 if (_log.shouldWarn()) {
                     if (ri != null)
-                        _log.warn("Banned by " + reason + " and blocking IPs:\n" + ri);
+                        _log.warn("Banning " + reason.replace("<b>➜</b>", "->") + "\n* Blocked IP Address(es): " + ri);
                     else
-                        _log.warn("Banned " + h.toBase64() + " by " + reason);
+                        _log.warn("Banning " + h.toBase64() + ' ' + reason.replace("<b>➜</b>", "->"));
                 }
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
             }
