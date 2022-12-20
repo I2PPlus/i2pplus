@@ -95,8 +95,9 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
         if (bob != null) {
             if (_log.shouldInfo())
                 _log.info("Running periodic test with Bob: " + bob);
-            _testManager.runTest(bob);
-            setLastTested(isIPv6);
+            boolean started = _testManager.runTest(bob);
+            if (started)
+                setLastTested(isIPv6);
         } else {
             if (_log.shouldWarn())
                 _log.warn("Unable to run Peer Test, no peers available - v6? " + isIPv6);
@@ -119,15 +120,15 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
      *  @since 0.9.39
      */
     public synchronized void forceRunSoon(boolean isIPv6, long delay) {
-        if (_log.shouldDebug())
-            _log.debug("PTE.forceRunSoon() - v6? " + isIPv6, new Exception());
+        //if (_log.shouldDebug())
+        //    _log.debug("PTE.forceRunSoon() - v6? " + isIPv6, new Exception());
         if (!isIPv6 && _transport.isIPv4Firewalled())
             return;
         if (isIPv6 && _transport.isIPv6Firewalled())
             return;
         _forceRun = isIPv6 ? FORCE_IPV6 : FORCE_IPV4;
         if (_log.shouldDebug())
-            _log.debug("Rescheduling test to run in " + net.i2p.data.DataHelper.formatDuration(delay) + "...");
+            _log.debug("Rescheduling " + isIPv6 ? "IPv6" : "" + " test to run in " + net.i2p.data.DataHelper.formatDuration(delay) + "...");
         reschedule(delay);
     }
 
@@ -165,8 +166,8 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             _lastTestedV6.set(now);
         else
             _lastTested.set(now);
-        if (_log.shouldDebug())
-            _log.debug("PeerTestEvent setLastTested() - v6? " + isIPv6, new Exception());
+        //if (_log.shouldDebug())
+        //    _log.debug("PeerTestEvent setLastTested() - v6? " + isIPv6, new Exception());
     }
 
     private boolean shouldTest() {
