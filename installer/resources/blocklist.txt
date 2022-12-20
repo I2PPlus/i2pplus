@@ -132,7 +132,8 @@ Sybil:95.85.104.0/22
 #
 # IPv6
 #
-Bogon:;;1
+Bogon (IPv6 localhost):;;1
+Bogon (IPv6 default route):0;0;0;0;0;0;0;0
 Sybil:2001;19f0;4400;4376;5400;ff;fe47;bcbd
 Sybil:2001;19f0;5801;1d4;5400;ff;fe38;a26e
 Sybil:2001;19f0;5c01;1df;5400;ff;fe3e;ba8f
