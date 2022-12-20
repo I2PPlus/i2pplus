@@ -779,18 +779,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
             if (uninteresting && !isHidden && !us.equals(ri.getIdentity().getHash())) {
                 if (_log.shouldInfo())
-                    _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                    _log.info("Dropping uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "]");
                 _ds.remove(key);
                 _kb.remove(key);
             }
         } else if (key != null && _context.banlist().isBanlistedForever(key)) {
             if (_log.shouldInfo())
-                _log.info("Deleted blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Dropping blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
             _ds.remove(key);
             _kb.remove(key);
         } else if (key != null && isNegativeCached(key)) {
             if (_log.shouldInfo())
-                _log.info("Deleted negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Dropping negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
             _ds.remove(key);
             _kb.remove(key);
             if (onFailedLookupJob != null)
@@ -1517,7 +1517,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _ds.remove(peer);
         if (_log.shouldInfo())
 //            _log.info("Removed kbucket entry for [" + peer.toBase64().substring(0,6) + "]");
-            _log.info("Deleted RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
+            _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
     }
 
     public void unpublish(LeaseSet localLeaseSet) {
