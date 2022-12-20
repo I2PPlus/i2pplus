@@ -55,13 +55,9 @@
 <h1 class="netwrk"><%=intl._t("Network Database")%></h1>
 <%
     } else if (f != null) {
-        if (f.equals("1")) {
+        if (f.equals("1") || f.equals("2")) {
 %>
 <h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("All Routers")%></h1>
-<%
-        } else if (f.equals("2")) {
-%>
-<h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("All Routers")%> (<%=intl._t("Compact mode")%>)</h1>
 <%
         } else if (f.equals("3")) {
 %>
