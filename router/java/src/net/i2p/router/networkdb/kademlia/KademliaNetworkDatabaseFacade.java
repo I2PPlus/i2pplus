@@ -879,7 +879,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.jobQueue().removeJob(j);
         j.getTiming().setStartAfter(nextTime);
         if (_log.shouldInfo())
-            _log.info("Queued local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing in " + PUBLISH_DELAY / 1000 + "s");
+            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing in " + PUBLISH_DELAY / 1000 + "s");
 //            "\n* Publishing: " + (new Date(nextTime)));
         _context.jobQueue().addJob(j);
     }
@@ -1273,12 +1273,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (existing >= MIN_REMAINING_ROUTERS) {
                 if (_log.shouldInfo())
 //                    _log.info("Expired RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]", new Exception());
-                    _log.info("Expired RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                    _log.info("Dropping stale RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] -> " +
+                              "Published " + DataHelper.formatDuration(age) + " ago");
                 return "Published " + DataHelper.formatDuration(age) + " ago";
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Even though peer [" + routerInfo.toBase64().substring(0,6) + "] is old, we have only " + existing
-                              + " peers left - not expiring...");
+                    _log.warn("Even though peer [" + routerInfo.toBase64().substring(0,6) + "] is stale, we have only " + existing
+                              + " peers left - not dropping...");
             }
         }
         String riHash = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
@@ -1496,7 +1497,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // it has expired *or* its tunnels are failing and we want to see if there
         // are any updates
         if (_log.shouldInfo())
-            _log.info("Dropped LeaseSet [" + dbEntry.toBase64().substring(0,6) + "] -> Lookup / tunnel failure");
+            _log.info("Dropping LeaseSet [" + dbEntry.toBase64().substring(0,6) + "] -> Lookup / tunnel failure");
         _ds.remove(dbEntry, false);
     }
 

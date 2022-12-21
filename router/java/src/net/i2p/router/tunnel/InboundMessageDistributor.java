@@ -143,7 +143,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     // drop it, since we should only get the above message types down
                     // client tunnels
                     _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, type);
-                    _log.error("Dropped dangerous message (" + msg + ") sent down a tunnel for [" +
+                    _log.error("Dropping dangerous message (" + msg + ") sent down a tunnel for [" +
                                _client.toBase64().substring(0,6) + "]", new Exception("cause"));
                     return;
 
@@ -173,7 +173,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
 
                 default:
                     _context.statManager().addRateData("tunnel.dropDangerousExplTunnelMessage", 1, type);
-                    _log.error("Dropped dangerous message (" + msg + ") sent down Exploratory tunnel", new Exception("cause"));
+                    _log.error("Dropping dangerous message (" + msg + ") sent down Exploratory tunnel", new Exception("cause"));
                     return;
             } // switch
         } // client != null
@@ -281,7 +281,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                                     // open an attack vector)
                                     _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
                                                                        DatabaseStoreMessage.MESSAGE_TYPE);
-                                    _log.error("Dropped dangerous message (" + dsm + ") sent down a tunnel for: " +
+                                    _log.error("Dropping dangerous message (" + dsm + ") sent down a tunnel for: " +
                                                _client, new Exception("cause"));
                                     return;
                                 }
@@ -327,7 +327,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                             // as that might open an attack vector
                             _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
                                                                data.getType());
-                            _log.error("Dropped dangerous message (" + data + ") down a tunnel for: " + _client, new Exception("cause"));
+                            _log.error("Dropping dangerous message (" + data + ") down a tunnel for: " + _client, new Exception("cause"));
                 } else {
                             _context.inNetMessagePool().add(data, null, null);
                 }

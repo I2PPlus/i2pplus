@@ -28,7 +28,7 @@ class RouterFragmentHandler extends FragmentHandler {
     @Override
     protected void noteFailure(long messageId, String status) {
         if (_log.shouldInfo())
-            _log.info("Dropped [MsgID " + messageId + "]: " + status);
+            _log.info("Dropping [MsgID " + messageId + "]: " + status);
         _context.messageHistory().droppedFragmentedMessage(messageId, status);
     }
 }
