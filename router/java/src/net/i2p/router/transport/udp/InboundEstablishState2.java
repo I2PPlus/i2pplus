@@ -390,8 +390,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotRelayTagRequest() {
-        if (!ENABLE_RELAY)
-            return;
         if (_log.shouldDebug())
             _log.debug("[SSU2] Received RelayTagRequest");
         _introductionRequested = true;
@@ -402,29 +400,21 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotRelayRequest(byte[] data) {
-        if (!ENABLE_RELAY)
-            return;
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
     }
 
     public void gotRelayResponse(int status, byte[] data) {
-        if (!ENABLE_RELAY)
-            return;
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
     }
 
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
-        if (!ENABLE_RELAY)
-            return;
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
     }
 
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
-        if (!ENABLE_PEER_TEST)
-            return;
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
         _transport.getPeerTestManager().receiveTest(_remoteHostId, _pstate, msg, status, h, data);
