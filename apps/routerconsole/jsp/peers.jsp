@@ -16,19 +16,34 @@
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
+<jsp:useBean class="net.i2p.router.web.helpers.PeerHelper" id="peerHelper" scope="request" />
+<jsp:setProperty name="peerHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:setProperty name="peerHelper" property="urlBase" value="peers.jsp" />
+<jsp:setProperty name="peerHelper" property="transport" value="<%=request.getParameter(\"transport\")%>" />
+<jsp:setProperty name="peerHelper" property="sort" value="<%=request.getParameter(\"sort\") != null ? request.getParameter(\"sort\") : \"\"%>" />
+<%
+    String req = request.getParameter("transport");
+    if (req == null) {
+%>
 <h1 class="netwrk"><%=intl._t("Network Peers")%></h1>
+<%
+    } else if (req.equals("ntcp")) {
+%>
+<h1 class="netwrk"><%=intl._t("Network Peers")%> &ndash; NTCP</h1>
+<%
+    } else if (req.equals("ssu")) {
+%>
+<h1 class="netwrk"><%=intl._t("Network Peers")%> &ndash; SSU</h1>
+<%
+    }
+%>
 <div class="main" id="peers">
- <jsp:useBean class="net.i2p.router.web.helpers.PeerHelper" id="peerHelper" scope="request" />
- <jsp:setProperty name="peerHelper" property="contextId" value="<%=i2pcontextId%>" />
 <%
     peerHelper.storeWriter(out);
     if (allowIFrame)
         peerHelper.allowGraphical();
 %>
- <jsp:setProperty name="peerHelper" property="urlBase" value="peers.jsp" />
- <jsp:setProperty name="peerHelper" property="sort" value="<%=request.getParameter(\"sort\") != null ? request.getParameter(\"sort\") : \"\"%>" />
- <jsp:setProperty name="peerHelper" property="transport" value="<%=request.getParameter(\"transport\")%>" />
- <jsp:getProperty name="peerHelper" property="peerSummary" />
+<jsp:getProperty name="peerHelper" property="peerSummary" />
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">
