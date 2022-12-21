@@ -680,6 +680,7 @@ public class SybilRenderer {
              buf.append(":</b></p>\n");
              renderRouterInfo(buf, info, null, false, false);
              found = true;
+        }
         for (RouterInfo info : ri64) {
              buf.append("<p class=\"sybil_info\"><b>");
              buf.append(_t("Same IPv6 /64 as us"));
@@ -694,8 +695,9 @@ public class SybilRenderer {
              renderRouterInfo(buf, info, null, false, false);
              found = true;
         }
-        if (!found)
+        if (!found) {
             buf.append("<p class=\"notfound\">").append(_t("None")).append("</p>\n");
+        }
         writeBuf(out, buf);
     }
 
