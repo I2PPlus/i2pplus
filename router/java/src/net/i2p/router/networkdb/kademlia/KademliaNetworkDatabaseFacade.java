@@ -779,18 +779,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
             if (uninteresting && !isHidden && !us.equals(ri.getIdentity().getHash())) {
                 if (_log.shouldInfo())
-                    _log.info("Dropping uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Uninteresting");
                 _ds.remove(key);
                 _kb.remove(key);
             }
         } else if (key != null && _context.banlist().isBanlistedForever(key)) {
             if (_log.shouldInfo())
-                _log.info("Dropping blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted");
             _ds.remove(key);
             _kb.remove(key);
         } else if (key != null && isNegativeCached(key)) {
             if (_log.shouldInfo())
-                _log.info("Dropping negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
             _ds.remove(key);
             _kb.remove(key);
             if (onFailedLookupJob != null)
