@@ -1286,8 +1286,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR) {
             long age = routerInfo.getPublished() - now;
             if (_log.shouldWarn()) {
-                _log.warn("Peer [" + riHash + "] published their RouterInfo in the future\n* Published: " + new Date(routerInfo.getPublished()));
-                _log.warn("Banning [" + riHash + "] for 15m -> RouterInfo from the future!");
+                _log.warn("Ignoring peer [" + riHash + "] -> RouterInfo published in the future\n* Published: " + new Date(routerInfo.getPublished()));
+                //_log.warn("Banning [" + riHash + "] for 15m -> RouterInfo from the future!");
             }
             _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
                                              new Date(routerInfo.getPublished()) + ")", null, null, 15*60*1000);

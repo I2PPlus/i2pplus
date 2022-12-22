@@ -675,16 +675,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // (KBucketSetSize() includes leasesets but avoids locking)
             if (_log.shouldInfo()) {
                 if (_floodfillEnabled && !forceExplore) {
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Floodfill mode active");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill mode active");
                 } else if (_context.banlist().isBanlistedForever(peer)) {
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
                 } else if (uninteresting) {
-                    _log.info("Skipping lookup and dropping [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
+                    _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
                     new DropLookupFailedJob(_context, peer, info);
 //                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
 //                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
                 } else {
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
                 }
             }
             //super.lookupBeforeDropping(peer, info); // don't bother with a lookup, just drop if uninteresting
