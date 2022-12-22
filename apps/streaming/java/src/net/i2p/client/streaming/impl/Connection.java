@@ -768,8 +768,8 @@ class Connection {
 
         if (cleanDisconnect) {
             if (_log.shouldDebug())
-                _log.debug("Clean disconnecting - removed from Connection Manager? " + removeFromConMgr +
-                           "\n* " + toString(), new Exception("discon"));
+                _log.debug("Clean disconnecting -> Removed from Connection Manager? " + removeFromConMgr +
+                           "\n* " + toString(), new Exception("Disconnected"));
             _outputStream.closeInternal();
         } else {
             _hardDisconnected = true;
@@ -777,13 +777,13 @@ class Connection {
                 // only send a RESET if we ever got something (and he didn't RESET us),
                 // otherwise don't waste the crypto and tags
                 if (_log.shouldWarn())
-                    _log.warn("Hard disconnecting and sending reset - removed from Connection Manager? " + removeFromConMgr +
+                    _log.warn("Hard disconnecting and sending reset -> Removed from Connection Manager? " + removeFromConMgr +
 //                             "\n* " + toString(), new Exception("cause"));
                               "\n* " + toString());
                 sendReset();
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Hard disconnecting - removed from Connection Manager? " + removeFromConMgr +
+                    _log.warn("Hard disconnecting -> Removed from Connection Manager? " + removeFromConMgr +
 //                              "\n* " + toString(), new Exception("cause"));
                               "\n* " + toString());
             }
