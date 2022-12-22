@@ -732,8 +732,8 @@ class BuildHandler implements Runnable {
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (IBGW+OBEP)", null, null, _context.clock().now() + bantime);
-                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
-                          " minutes for hostile tunnel request (Inbound Gateway & OutBound Endpoint)");
+                _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Hostile tunnel request (Inbound Gateway & Outbound Endpoint)");
 
             }
             return;
@@ -747,8 +747,8 @@ class BuildHandler implements Runnable {
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (BAD Tunnel ID)", null, null, _context.clock().now() + bantime);
-                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
-                          " minutes for hostile tunnel request (BAD Tunnel ID)");
+                _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Hostile tunnel request (BAD TunnelID)");
             }
             return;
         }
@@ -764,8 +764,8 @@ class BuildHandler implements Runnable {
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (double hop)", null, null, _context.clock().now() + bantime);
-                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
-                          " minutes for hostile tunnel request (We are 2 hops in a row!)");
+                _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Hostile tunnel request (We are 2 hops in a row!)");
             }
             return;
         }
@@ -779,8 +779,8 @@ class BuildHandler implements Runnable {
                     _log.warn("Dropping hostile build request, we are the previous hop: " + req);
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (previous hop)", null, null, _context.clock().now() + bantime);
-                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
-                          " minutes for hostile tunnel request (We are the previous hop!)");
+                _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Hostile tunnel request (We are the previous hop!)");
                 return;
             }
         }
@@ -794,8 +794,8 @@ class BuildHandler implements Runnable {
                     _log.warn("Dropping hostile build request with the same previous and next hop: " + req);
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (duplicate hops in chain)", null, null, _context.clock().now() + bantime);
-                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
-                          " minutes for hostile tunnel request (duplicate hops in chain)");
+                _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Hostile tunnel request (duplicate hops in chain)");
                 return;
             }
         }
@@ -825,8 +825,8 @@ class BuildHandler implements Runnable {
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (possible replay attack)", null, null, _context.clock().now() + bantime);
-                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
-                          " minutes for hostile tunnel request (too old, replay attack?)");
+                _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Hostile tunnel request (too old, replay attack?)");
             }
             return;
         }
@@ -837,8 +837,8 @@ class BuildHandler implements Runnable {
             if (from != null)
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (too far in future)", null, null, _context.clock().now() + bantime);
-                _log.warn("Temp banning router [" + from.toBase64().substring(0,6) + "] for " + period +
-                          " minutes for hostile tunnel request (too far in future)");
+                _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Hostile tunnel request (too far in future)");
             return;
         }
 
@@ -1010,7 +1010,7 @@ class BuildHandler implements Runnable {
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
                 _context.statManager().addRateData("tunnel.rejectDupID", 1);
                 if (_log.shouldWarn())
-                    _log.warn("Duplicate Tunnel ID failure: " + req);
+                    _log.warn("Duplicate TunnelID failure: " + req);
             }
         }
 
@@ -1110,7 +1110,7 @@ class BuildHandler implements Runnable {
                 outMessage = MessageWrapper.wrap(_context, replyMsg, req.readGarlicKeys());
                 if (outMessage == null) {
                     if (_log.shouldWarn())
-                        _log.warn("OTBRM encrypt fail");
+                        _log.warn("OutboundTunnelBuildReplyMessage encryption failure");
                     return;
                 }
             } else {
