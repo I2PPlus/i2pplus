@@ -379,7 +379,9 @@ class PeerTestManager {
         if (!expired()) {
             if (_log.shouldDebug())
                 _log.debug("Sending message #6 to Charlie: " + test);
-            test.setLastSendTime(_context.clock().now());
+            long now = _context.clock().now();
+            test.setLastSendTime(now);
+            test.setSendCharlieTime(now);
             UDPPacket packet;
             if (test.getBob().getVersion() == 1) {
                 packet = _packetBuilder.buildPeerTestFromAlice(test.getCharlieIP(), test.getCharliePort(),
@@ -617,7 +619,7 @@ class PeerTestManager {
             // we received only one message (5) from charlie
             // change in 0.9.57; previously returned UNKNOWN always
             if (_transport.isSnatted()) {
-            status = Status.UNKNOWN;
+                status = Status.UNKNOWN;
             } else {
                 // assume good
                 status = isIPv6 ? Status.IPV4_UNKNOWN_IPV6_OK : Status.IPV4_OK_IPV6_UNKNOWN;
@@ -1061,6 +1063,7 @@ class PeerTestManager {
                         _transport.send(packet);
                         alice.setLastSendTime(now);
                         state.setSendAliceTime(now);
+                        state.setReceiveAliceTime(now);
                         return;
                     } else if (msg == 2) {
                         if (_log.shouldDebug())
@@ -1069,15 +1072,20 @@ class PeerTestManager {
                         UDPPacket packet = _packetBuilder2.buildPeerTestToBob(state.getStatus(), data, bob);
                         _transport.send(packet);
                         bob.setLastSendTime(now);
+                        state.setReceiveBobTime(now);
                         // should we retx msg 5 also?
                         return;
                     } else {
                         // msg 1 but haven't heard from a good charlie yet
-                        // TODO pick a new charlie
+                        // TODO retransmit to the old charlie, or if it's been too long, pick a new charlie
                     }
                 }
                 if (_log.shouldWarn())
                     _log.warn("Duplicate message " + msg + " from " + fromPeer + " on " + state);
+                if (msg == 1)
+                    state.setReceiveAliceTime(now);
+                else
+                    state.setReceiveBobTime(now);
                 return;
             }
             if (_activeTests.size() >= MAX_ACTIVE_TESTS) {
@@ -1523,6 +1531,22 @@ class PeerTestManager {
                         _log.warn("Test nonce mismatch? " + nonce);
                     return;
                 }
+                if (test.getSendCharlieTime() > 0) {
+                    // After sending msg 6, we will ignore any msg 5 received
+                    // we ignore completely, including any ip/port mismatch
+                    // Do not call setCharlieReceiveTime()
+                    if (_log.shouldDebug())
+                        _log.debug("Ignoring message #5 after sending message #6, from Charlie " + from + " on " + test);
+                    return;
+                }
+                long prev = test.getReceiveCharlieTime();
+                test.setReceiveCharlieTime(now);
+                if (prev > 0) {
+                    // we ignore completely, including any ip/port mismatch
+                    if (_log.shouldDebug())
+                        _log.debug("Dup msg 5 from Charlie " + from + " on " + test);
+                    return;
+                }
                 InetAddress charlieIP = test.getCharlieIP();
                 if (charlieIP == null) {
                     // msg 5 before msg 4
@@ -1568,7 +1592,6 @@ class PeerTestManager {
                         }
                     }
                 }
-                test.setReceiveCharlieTime(now);
                 // Do NOT set this here, only for msg 7, this is how testComplete() knows we got msg 7
                 //test.setAlicePortFromCharlie(testPort);
                 try {
@@ -1641,6 +1664,13 @@ class PeerTestManager {
                         _log.warn("Test nonce mismatch? " + nonce);
                     return;
                 }
+                if (test.getReceiveBobTime() <= 0) {
+                    // can't happen, we can't send msg 6 w/o msg 4
+                    if (_log.shouldWarn())
+                        _log.warn("Received message #7 WITHOUT message #4??? on " + test);
+                    testComplete();
+                    return;
+                }
                 if (test.getReceiveCharlieTime() <= 0) {
                    // ??
                 }
@@ -1648,30 +1678,42 @@ class PeerTestManager {
                 // Do NOT set this here, this is only for msg 5
                 //test.setReceiveCharlieTime(now);
                 // i2pd did not send address block in msg 7 until 0.9.57
-                if (addrBlockPort != 0) {
-                // use the IP/port from the address block
-                test.setAlicePortFromCharlie(addrBlockPort);
+                // Do basic validation of address block IP/port.
+                boolean bad = false;
+                if (addrBlockIP != null) {
+                    if (_transport.isValid(addrBlockIP)) {
+                        try {
+                            InetAddress addr = InetAddress.getByAddress(addrBlockIP);
+                            test.setAliceIPFromCharlie(addr);
+                        } catch (UnknownHostException uhe) {}
+                    } else {
+                        bad = true;
+                    }
+                } else {
+                    // assume good
+                    test.setAliceIPFromCharlie(test.getAliceIP());
+                }
+                if (!bad && addrBlockPort != 0) {
+                    if (addrBlockPort >= 1024) {
+                        // use the IP/port from the address block
+                        test.setAlicePortFromCharlie(addrBlockPort);
+                    } else {
+                        bad = true;
+                    }
                 } else if (!_transport.isSnatted()) {
                     // assume good if we aren't snatted
                     test.setAlicePortFromCharlie(test.getAlicePort());
                 }
-                if (addrBlockIP != null) {
-                    try {
-                        InetAddress addr = InetAddress.getByAddress(addrBlockIP);
-                        test.setAliceIPFromCharlie(addr);
-                    } catch (UnknownHostException uhe) {
-                        if (_log.shouldWarn())
-                            _log.warn("Charlie @ " + from + " said we were an invalid IP address: " + uhe.getMessage(), uhe);
-                        _context.statManager().addRateData("udp.testBadIP", 1);
-                    }
-                } else {
-                    test.setAliceIPFromCharlie(test.getAliceIP());
+                if (bad) {
+                    if (_log.shouldWarn())
+                        _log.warn("Charlie said we had an invalid IP/port: " +
+                                  Addresses.toString(addrBlockIP, addrBlockPort) + " on " + test);
+                    _context.statManager().addRateData("udp.testBadIP", 1);
+                    // TODO ban charlie or put on a list?
                 }
-                if (test.getReceiveBobTime() > 0)
-                    testComplete();
+                testComplete();
                 break;
             }
-
             default:
                 return;
         }
@@ -1768,8 +1810,8 @@ class PeerTestManager {
             state = new PeerTestState(CHARLIE, bob, sz == 16, nonce, now);
         } else {
             if (state.getReceiveBobTime() > now - (RESEND_TIMEOUT / 2)) {
-                if (_log.shouldWarn())
-                    _log.warn("Too soon, not retransmitting " + state);
+                if (_log.shouldDebug())
+                    _log.debug("Too soon, not retransmitting " + state);
                 return;
             }
         }
@@ -1781,7 +1823,7 @@ class PeerTestManager {
             boolean expectV6 = state.isIPv6();
             if ((!expectV6 && sz != 4) ||
                 (expectV6 && sz != 16))
-                throw new UnknownHostException("Bad size - expect v6? " + expectV6 + " act sz: " + sz);
+                throw new UnknownHostException("BAD size - expect v6? " + expectV6 + " act sz: " + sz);
             int alicePort = testInfo.readPort();
             if (alicePort == 0)
                 throw new UnknownHostException("port 0");

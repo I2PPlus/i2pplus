@@ -43,6 +43,7 @@ class PeerTestState {
     private long _receiveBobTime;
     private long _receiveCharlieTime;
     private long _sendAliceTime;
+    private long _sendCharlieTime;
     private int _status;
     private final AtomicInteger _packetsRelayed = new AtomicInteger();
 
@@ -212,6 +213,18 @@ class PeerTestState {
     public void setSendAliceTime(long when) { _sendAliceTime = when; }
 
     /**
+     * when did we send to Charlie, SSU2 Alice only
+     * @since 0.9.57
+     */
+    public long getSendCharlieTime() { return _sendCharlieTime; }
+
+    /**
+     * when did we send to Charlie, SSU2 Alice only
+     * @since 0.9.57
+     */
+    public void setSendCharlieTime(long when) { _sendCharlieTime = when; }
+
+    /**
      * what code did we send to alice, SSU2 Bob only
      * @since 0.9.57
      */
@@ -273,16 +286,20 @@ class PeerTestState {
                     buf.append(' ').append(_charlieHash.toBase64().substring(0, 6));
             }
             if (_previousCharlies != null && !_previousCharlies.isEmpty())
-                buf.append(" [Previous: ").append(_previousCharlies).append("]");
+                buf.append(" previous: ").append(_previousCharlies);
         }
         if (_lastSendTime > 0)
-            buf.append("\n* Last send after ").append(_lastSendTime - _beginTime).append("ms");
+            buf.append("\n* Last send after ").append(_lastSendTime - _beginTime);
+        if (_sendAliceTime > 0)
+            buf.append("; Last send to Alice ").append(DataHelper.formatTime(_sendAliceTime));
         if (_receiveAliceTime > 0)
-            buf.append("; Received from Alice after ").append(_receiveAliceTime - _beginTime).append("ms");
+            buf.append("; Received from Alice after ").append(_receiveAliceTime - _beginTime);
         if (_receiveBobTime > 0)
-            buf.append("; Received from Bob after ").append(_receiveBobTime - _beginTime).append("ms");
+            buf.append("; Received from Bob after ").append(_receiveBobTime - _beginTime);
+        if (_sendCharlieTime > 0)
+            buf.append("; Last send to Charlie ").append(DataHelper.formatTime(_sendCharlieTime));
         if (_receiveCharlieTime > 0)
-            buf.append("; Received from Charlie after ").append(_receiveCharlieTime - _beginTime).append("ms");
+            buf.append("; Received from Charlie after ").append(_receiveCharlieTime - _beginTime);
         buf.append("; Packets relayed: ").append(_packetsRelayed.get());
         return buf.toString();
     }
