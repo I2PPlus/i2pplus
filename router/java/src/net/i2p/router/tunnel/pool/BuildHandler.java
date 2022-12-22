@@ -90,7 +90,7 @@ class BuildHandler implements Runnable {
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
 
 //    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 10*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = SystemVersion.isSlow() ? 15*1000 : 10*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
 
     /** limits on concurrent next-hop RI lookup */
@@ -109,7 +109,7 @@ class BuildHandler implements Runnable {
      *  10s was not enough.
      */
 //    private static final int NEXT_HOP_SEND_TIMEOUT = 25*1000;
-    private static final int NEXT_HOP_SEND_TIMEOUT = 20*1000;
+    private static final int NEXT_HOP_SEND_TIMEOUT = SystemVersion.isSlow() ? 25*1000 : 20*1000;
 
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
     /** must be > 1 hour due to rounding down */
