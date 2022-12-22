@@ -365,6 +365,9 @@ class EventPumper implements Runnable {
                 } else {
                     // another 100% CPU workaround
                     // TODO remove or only if we appear to be looping with no interest ops
+                    int pause = SystemVersion.isSlow() ? 30 :
+                                SystemVersion.getCores() < 8 || SystemVersion.getMaxMemory() < 1024*1024*1024 ? 20 :
+                                10;
                     if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
                         if (_log.shouldInfo())
                             _log.info("EventPumper throttle " + loopCount + " loops in " +
@@ -372,7 +375,7 @@ class EventPumper implements Runnable {
                         _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
                         try {
 //                            Thread.sleep(25);
-                            Thread.sleep(10);
+                            Thread.sleep(pause);
                         } catch (InterruptedException ie) {}
                     }
                 }
