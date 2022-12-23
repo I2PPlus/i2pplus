@@ -834,8 +834,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-//    private static final long PUBLISH_DELAY = 3*1000;
-    private static final long PUBLISH_DELAY = 5*1000;
+    private static final long PUBLISH_DELAY = 20*1000;
 
     /**
      * @throws IllegalArgumentException if the leaseSet is not valid
@@ -879,7 +878,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.jobQueue().removeJob(j);
         j.getTiming().setStartAfter(nextTime);
         if (_log.shouldInfo())
-            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing in " + PUBLISH_DELAY / 1000 + "s");
+            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing in " + nextTime / 1000 + "s");
 //            "\n* Publishing: " + (new Date(nextTime)));
         _context.jobQueue().addJob(j);
     }
@@ -1273,7 +1272,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (existing >= MIN_REMAINING_ROUTERS) {
                 if (_log.shouldInfo())
 //                    _log.info("Expired RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]", new Exception());
-                    _log.info("Dropping stale RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] -> " +
+                    _log.info("Dropping RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] -> " +
                               "Published " + DataHelper.formatDuration(age) + " ago");
                 return "Published " + DataHelper.formatDuration(age) + " ago";
             } else {
@@ -1320,7 +1319,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
             long age = now - routerInfo.getPublished();
                 return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
-        }
+            }
         } else {
                 if (upLongEnough && (routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION) && !us.equals(routerInfo.getIdentity().getHash())) {
                     long age = _context.clock().now() - routerInfo.getPublished();
