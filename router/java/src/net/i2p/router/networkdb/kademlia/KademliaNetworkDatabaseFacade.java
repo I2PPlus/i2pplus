@@ -1527,10 +1527,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (data == null) {
             if (_log.shouldWarn())
-                _log.warn("Unpublished UNKNOWN LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "]");
+                _log.warn("Unpublishing UNKNOWN local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "]");
         } else {
             if (_log.shouldInfo())
-                _log.info("Unpublished LeaseSet [" + h.toBase64().substring(0,6) + "]");
+                _log.info("Unpublishing local LeaseSet [" + h.toBase64().substring(0,6) + "]");
         }
         // now update it if we can to remove any leases
     }
