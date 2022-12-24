@@ -55,16 +55,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
 //    public static final int MAX_TO_FLOOD = 3;
-    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 5 : 10;
+    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 3 : 5;
 
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
 //    private static final int FLOOD_TIMEOUT = 30*1000;
-    private static final int FLOOD_TIMEOUT = 10*1000;
+    private static final int FLOOD_TIMEOUT = 60*1000;
     private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;
-    private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 4 : 6;
-    private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 750 : 400;
+    private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 2 : 3;
+    private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 400;
 
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
         super(context);
@@ -408,7 +408,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _context.statManager().createRateStat("netDb.floodThrottled", "How often we decline to flood the NetDb", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
             // following are for HFDSMJ
             _context.statManager().createRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive an old NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive a stale NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
         }
     }
 
@@ -466,7 +466,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 //        if (key == null) throw new IllegalArgumentException("Searchin' for nothing, eh?");
         if (key == null) {
             if (_log.shouldWarn())
-                _log.warn("Not searching for a null key");
+                _log.warn("Not searching for a NULL key!");
             return null;
         } else {
             boolean isNew = false;
@@ -596,7 +596,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         long maxMemory = SystemVersion.getMaxMemory();
         // 250 for every 32 MB, min of 250, max of 1250
 //        MAX_DB_BEFORE_SKIPPING_SEARCH = (int) Math.max(250l, Math.min(1250l, maxMemory / ((32 * 1024 * 1024l) / 250)));
-        MAX_DB_BEFORE_SKIPPING_SEARCH = 2500;
+        MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 2000 : 2500;
     }
 
     /**
@@ -675,16 +675,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // (KBucketSetSize() includes leasesets but avoids locking)
             if (_log.shouldInfo()) {
                 if (_floodfillEnabled && !forceExplore) {
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Floodfill mode active");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill mode active");
                 } else if (_context.banlist().isBanlistedForever(peer)) {
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
                 } else if (uninteresting) {
-                    _log.info("Skipping lookup and dropping [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
+                    _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
                     new DropLookupFailedJob(_context, peer, info);
 //                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
 //                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
                 } else {
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
                 }
             }
             //super.lookupBeforeDropping(peer, info); // don't bother with a lookup, just drop if uninteresting

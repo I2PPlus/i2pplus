@@ -519,7 +519,7 @@ class EstablishmentManager {
                                                        requestIntroduction,
                                                        sessionKey, addr, _transport.getDHFactory());
                     } else if (version == 2) {
-                        boolean requestIntroduction = SSU2Util.ENABLE_RELAY && !isIndirect &&
+                        boolean requestIntroduction = !isIndirect &&
                                                       _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
                         state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
                                                             toIdentity, requestIntroduction, sessionKey, ra, addr);
@@ -800,8 +800,7 @@ class EstablishmentManager {
                 _log.debug("[SSU2] Received DUPLICATE Session/TokenRequest from: " + state);
         }
         // call for both Session and Token request, why not
-        if (SSU2Util.ENABLE_RELAY &&
-            state.isIntroductionRequested() &&
+        if (state.isIntroductionRequested() &&
             state.getSentRelayTag() == 0 &&     // only set once
             state.getSentPort() >= 1024 &&
             _transport.canIntroduce(state.getSentIP().length == 16)) {
@@ -1550,9 +1549,12 @@ class EstablishmentManager {
                         if (_log.shouldDebug())
                             _log.debug("Found connected introducer " + bob + " for " + state);
                         long tag = addr.getIntroducerTag(i);
-                        sendRelayRequest(tag, (PeerState2) bob, state);
+                        boolean ok = sendRelayRequest(tag, (PeerState2) bob, state);
                         // this transitions the state
-                        state2.introSent(h);
+                        if (ok)
+                            state2.introSent(h);
+                        else
+                            state2.setIntroState(h, INTRO_STATE_DISCONNECTED);
                         return;
                     }
                 }
@@ -1653,9 +1655,10 @@ class EstablishmentManager {
      *  SSU 2 only.
      *
      *  @param charlie must be SSU2
+     *  @return success
      *  @since 0.9.55
      */
-    private void sendRelayRequest(long tag, PeerState2 bob, OutboundEstablishState charlie) {
+    private boolean sendRelayRequest(long tag, PeerState2 bob, OutboundEstablishState charlie) {
         // pick our IP based on what address we're connecting to
         UDPAddress cra = charlie.getRemoteAddress();
         RouterAddress ourra;
@@ -1669,13 +1672,13 @@ class EstablishmentManager {
         if (ourra == null) {
             if (_log.shouldWarn())
                 _log.warn("No address to send in relay request");
-            return;
+            return false;
         }
         byte[] ourIP = ourra.getIP();
         if (ourIP == null) {
             if (_log.shouldWarn())
                 _log.warn("No IP to send in relay request");
-            return;
+            return false;
         }
         // Bob should already have our RI, especially if we just connected; we do not resend it here.
         int ourPort = _transport.getRequestedPort();
@@ -1685,13 +1688,19 @@ class EstablishmentManager {
         if (data == null) {
             if (_log.shouldWarn())
                 _log.warn("Signature failure (no data)");
-             return;
+            return false;
         }
-        UDPPacket packet = _builder2.buildRelayRequest(data, bob);
+        UDPPacket packet;
+        try {
+            packet = _builder2.buildRelayRequest(data, bob);
+        } catch (IOException ioe) {
+            return false;
+        }
         if (_log.shouldDebug())
             _log.debug("Sending relay request to " + bob + " for " + charlie);
         _transport.send(packet);
         bob.setLastSendTime(_context.clock().now());
+        return true;
     }
 
     /**
@@ -2188,9 +2197,13 @@ class EstablishmentManager {
     }
 
     /**
-     *  Note that while a SessionConfirmed could in theory be fragmented,
+     *  SSU 1 and 2.
+     *
+     *  For SSU 1, while a SessionConfirmed could in theory be fragmented,
      *  in practice a RouterIdentity is 387 bytes and a single fragment is 512 bytes max,
      *  so it will never be fragmented.
+     *
+     *  For SSU 2, it contains a full router info, so it may be fragmented.
      *
      *  Caller must synch on state.
      */
@@ -2204,19 +2217,23 @@ class EstablishmentManager {
             return;
         }
 
-        if (!_transport.isValid(state.getReceivedIP()) || !_transport.isValid(state.getRemoteHostId().getIP())) {
+        byte[] ip = state.getReceivedIP();
+        int port = state.getReceivedPort();
+        // don't need to revalidate the remoteHostID IP, we did that before we started
+        // not isValidPort() because we could be snatted
+        if (!_transport.isValid(ip) || port < 1024) {
             state.fail();
             return;
         }
 
         // gives us the opportunity to "detect" our external addr
-        _transport.externalAddressReceived(state.getRemoteIdentity().calculateHash(), state.getReceivedIP(), state.getReceivedPort());
+        _transport.externalAddressReceived(state.getRemoteIdentity().calculateHash(), ip, port);
 
         int version = state.getVersion();
         UDPPacket packets[];
         if (version == 1) {
-        // signs if we havent signed yet
-        state.prepareSessionConfirmed();
+            // signs if we havent signed yet
+            state.prepareSessionConfirmed();
             packets = _builder.buildSessionConfirmedPackets(state, _context.router().getRouterInfo().getIdentity());
         } else {
             OutboundEstablishState2 state2 = (OutboundEstablishState2) state;

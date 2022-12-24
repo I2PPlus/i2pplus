@@ -76,52 +76,8 @@
 <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:224.0.0.0/3
 # End Team Cymru bogons
 #
-# IPv6: https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/
-# Commented out for now, no support for ipv6 ranges or masks
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:100;;/64
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:;;1/128
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;7f00;;/40
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;a00;;/40
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;a9fe;;/48
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;ac10;;/44
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c000;200;;/56
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c000;;/56
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c0a8;;/48
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c612;;/47
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;c633;6400;;/56
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;cb00;7100;;/56
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;e000;;/36
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;f000;;/36
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;0;ffff;ffff;;/64
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;10;;/28
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;;/40
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2001;db8;;/32
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;;/24
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;7f00;;/24
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;a00;;/24
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;a9fe;;/32
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;ac10;;/28
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c000;200;;/40
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c000;;/40
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c0a8;;/32
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c612;;/31
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;c633;6400;;/40
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;cb00;7100;;/40
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;e000;;/20
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;f000;;/20
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:2002;ffff;ffff;;/48
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:;;/96
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:fc00;;/7
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:fe80;;/10
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:fec0;;/10
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:ff00;;/8
-#<a href="https://freenetworktutorials.com/ipv4-and-ipv6-bogon-address-list/" target="_blank">Bogon</a>:;;ffff;0;0/96
-# End freenetworktutorials bogons
-#
 # IPv4
 #
-Chinese Floodfill Flooder:159.226.40.7
-Friend of the Chinese Floodfill Flooder:159.226.40.3
 Public Web Proxy:93.157.12.0/24
 Sybil:103.149.170.0/23
 Sybil:104.156.254.54
@@ -176,6 +132,8 @@ Sybil:95.85.104.0/22
 #
 # IPv6
 #
+Bogon (IPv6 localhost):;;1
+Bogon (IPv6 default route):0;0;0;0;0;0;0;0
 Sybil:2001;19f0;4400;4376;5400;ff;fe47;bcbd
 Sybil:2001;19f0;5801;1d4;5400;ff;fe38;a26e
 Sybil:2001;19f0;5c01;1df;5400;ff;fe3e;ba8f

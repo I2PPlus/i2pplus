@@ -180,11 +180,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
          "\r\n" +
-         "<!DOCTYPE html>\n<html>\n<head><title>503 Service Unavailable</title></head>\n" +
-         ERR_STYLE +
-         "<h2>503 Service Unavailable</h2>\n" +
-         "<p>This I2P website is not configured for SSL.</p>\n" +
-         "</body>\n</html>";
+         "<html>\n<head><title>503 Service Unavailable</title></head>\n" +
+         "<center><h1>503 Service Unavailable (SSL not configured)</h1></center>\n" +
+         "<hr>\n" +
+         "</body>\n" +
+         "</html>";
 
     private final static String ERR_REQUEST_URI_TOO_LONG =
          "HTTP/1.1 414 Request URI too long\r\n" +
@@ -193,11 +193,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
          "\r\n" +
-         "<!DOCTYPE html>\n<html>\n<head><title>414 Request URI Too Long</title></head>\n" +
-         ERR_STYLE +
-         "<h2>414 Request URI too long</h2>\n" +
-         "<p>The requested URL contains too many characters and cannot be processed.</p>\n" +
-         "</body>\n</html>";
+         "<html>\n<head><title>414 Request URI Too Long</title></head>\n" +
+         "<center><h1>414 Request URI too long</h1></center>\n" +
+         "<hr>\n" +
+         //"<p>The requested URL contains too many characters and cannot be processed.</p>\n" +
+         "</body>" +
+         "\n</html>";
 
     private final static String ERR_HEADERS_TOO_LARGE =
          "HTTP/1.1 431 Request header fields too large\r\n" +
@@ -206,11 +207,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
          "\r\n" +
-         "<!DOCTYPE html>\n<html>\n<head><title>431 Request Header Fields Too Large</title></head>\n" +
-         ERR_STYLE +
-         "<h2>431 Request header fields too large</h2>\n" +
-         "<p>The request headers submitted by your client are too large and cannot be processed.</p>\n" +
-         "</body>\n</html>";
+         "<html>\n<head><title>431 Request Header Fields Too Large</title></head>\n" +
+         "<center><h1>431 Request header fields too large</h1></center>\n" +
+         "<hr>\n" +
+         //"<p>The request headers submitted by your client are too large and cannot be processed.</p>\n" +
+         "</body>\n" +
+         "</html>";
 
     /** @since protected since 0.9.33 for I2PTunnelHTTPClientBase, was private */
     protected final static String ERR_REQUEST_TIMEOUT =
@@ -221,11 +223,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Proxy-Connection: close\r\n" +
          "\r\n" +
          "<html>\n" +
-         "<head><title>408 Request Time-out</title><meta http-equiv=\"refresh\" content=\"15\"></head>\n" +
-         "<body>\n" +
-         "<center><h1>408 Request Time-out</h1></center>\n" +
-         "<hr>\n" +
-         "</body>\n" +
+         //"<head><title>408 Request Time-out</title><meta http-equiv=\"refresh\" content=\"15\"></head>\n" +
+         "<head><meta http-equiv=\"refresh\" content=\"5\"></head>\n" +
+         //"<body>\n" +
+         //"<center><h1>408 Request Time-out</h1></center>\n" +
+         //"<hr>\n" +
+         //"</body>\n" +
          "</html>";
 
     private final static String ERR_BAD_REQUEST =
@@ -235,11 +238,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
          "\r\n" +
-         "<!DOCTYPE html>\n<html>\n<head><title>400 Bad Request</title></head>\n" +
-         ERR_STYLE +
-         "<h2>400 Bad request</h2>\n" +
-         "<p>The datastream sent by your client is malformed and cannot be processed.</p>\n" +
-         "</body>\n</html>";
+         "<html>\n<head><title>400 Bad Request</title></head>\n" +
+         "<center><h1>400 Bad request (malformed datastream)</h1></center>\n" +
+         "<hr>\n" +
+         //"<p>The datastream sent by your client is malformed and cannot be processed.</p>\n" +
+         "</body>\n" +
+         "</html>";
 
     public I2PTunnelHTTPServer(InetAddress host, int port, String privData, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(host, port, privData, l, notifyThis, tunnel);

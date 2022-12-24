@@ -20,15 +20,16 @@ class RequestThrottler {
     private final Log _log;
 
     /** portion of the tunnel lifetime */
-    private static final int LIFETIME_PORTION = 6;
-    private boolean isSlow = SystemVersion.isSlow();
-    private boolean isQuadCore = SystemVersion.getCores() >=4;
+//    private static final int LIFETIME_PORTION = 6;
+    private static final int LIFETIME_PORTION = 4;
+    private static boolean isSlow = SystemVersion.isSlow();
+    private static boolean isQuadCore = SystemVersion.getCores() >=4;
 //    private static final int MIN_LIMIT = 45 / LIFETIME_PORTION;
 //    private static final int MAX_LIMIT = 165 / LIFETIME_PORTION;
-    private static final int MIN_LIMIT = 1024 / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = 4096 / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = 64 / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = 512 / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 60 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 32 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
 
     RequestThrottler(RouterContext ctx) {
@@ -40,9 +41,12 @@ class RequestThrottler {
 
     /** increments before checking */
     boolean shouldThrottle(Hash h) {
+        int portion = isSlow ? 6 : 4;
+        int min = (isSlow ? MIN_LIMIT / 2 : MIN_LIMIT) / portion;
+        int max = (isSlow ? MAX_LIMIT / 2 : MAX_LIMIT) / portion;
+        int percent = (isSlow ? PERCENT_LIMIT / 4 * 3 : PERCENT_LIMIT) / portion;
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
-        int limit = isSlow || !isQuadCore ? Math.max(MIN_LIMIT / 2, Math.min(MAX_LIMIT / 2, numTunnels * PERCENT_LIMIT / 100)) :
-                                            Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
+        int limit = Math.max(MIN_LIMIT, Math.min(max, numTunnels * percent / 100));
         int count = counter.increment(h);
         boolean rv = count > limit;
         if (rv) {

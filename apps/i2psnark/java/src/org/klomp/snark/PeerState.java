@@ -517,7 +517,7 @@ class PeerState implements DataLoader
                 if (!choked)
                   out.sendRequest(dropReq);
                 if (_log.shouldDebug())
-                  _log.debug("Dropped " + dropReq + " with [" + peer + "]");
+                  _log.debug("Dropping " + dropReq + " with [" + peer + "]");
               }
           }
         outstandingRequests.remove(0);

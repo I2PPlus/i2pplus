@@ -42,6 +42,9 @@ class PeerTestState {
     private long _receiveAliceTime;
     private long _receiveBobTime;
     private long _receiveCharlieTime;
+    private long _sendAliceTime;
+    private long _sendCharlieTime;
+    private int _status;
     private final AtomicInteger _packetsRelayed = new AtomicInteger();
 
     public enum Role {ALICE, BOB, CHARLIE};
@@ -198,13 +201,51 @@ class PeerTestState {
     public void setReceiveCharlieTime(long when) { _receiveCharlieTime = when; }
 
     /**
-     *  SSU2 only, we are Bob
+     * when did we send to alice, SSU2 Bob only
+     * @since 0.9.57
+     */
+    public long getSendAliceTime() { return _sendAliceTime; }
+
+    /**
+     * when did we send to alice, SSU2 Bob only
+     * @since 0.9.57
+     */
+    public void setSendAliceTime(long when) { _sendAliceTime = when; }
+
+    /**
+     * when did we send to Charlie, SSU2 Alice only
+     * @since 0.9.57
+     */
+    public long getSendCharlieTime() { return _sendCharlieTime; }
+
+    /**
+     * when did we send to Charlie, SSU2 Alice only
+     * @since 0.9.57
+     */
+    public void setSendCharlieTime(long when) { _sendCharlieTime = when; }
+
+    /**
+     * what code did we send to alice, SSU2 Bob only
+     * @since 0.9.57
+     */
+    public int getStatus() { return _status; }
+
+    /**
+     * what code did we send to alice, SSU2 Bob only
+     * @since 0.9.57
+     */
+    public void setStatus(int status) { _status = status; }
+
+    /**
+     *  Get for retransmission.
+     *  SSU2 only, we are Alice, Bob or Charlie
      *  @since 0.9.57
      */
     public byte[] getTestData() { return _testData; }
 
     /**
-     *  SSU2 only, we are Bob
+     *  Save for retransmission.
+     *  SSU2 only, we are Alice, Bob or Charlie
      *  @since 0.9.57
      */
     public void setTestData(byte[] data) { _testData = data; }
@@ -222,12 +263,10 @@ class PeerTestState {
         if (_aliceIP != null) {
             buf.append(" [Alice: ");
             if (_ourRole == Role.ALICE) {
-                buf.append(" LOCAL]");
-            } else {
-                buf.append(_aliceIP).append(':').append(_alicePort).append("]");
-                if (_aliceHash != null)
-                    buf.append(' ').append(_aliceHash.toBase64().substring(0, 6));
-            }
+                buf.append(" LOCAL: ");
+            buf.append(_aliceIP).append(':').append(_alicePort).append("]");
+            if (_aliceHash != null)
+                buf.append(' ').append(_aliceHash.toBase64().substring(0, 6));
         }
         if (_aliceIPFromCharlie != null)
             buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
@@ -245,16 +284,20 @@ class PeerTestState {
                     buf.append(' ').append(_charlieHash.toBase64().substring(0, 6));
             }
             if (_previousCharlies != null && !_previousCharlies.isEmpty())
-                buf.append(" [Previous: ").append(_previousCharlies).append("]");
+                buf.append(" previous: ").append(_previousCharlies);
         }
         if (_lastSendTime > 0)
-            buf.append("\n* Last send after ").append(_lastSendTime - _beginTime).append("ms");
+            buf.append("\n* Last send after ").append(_lastSendTime - _beginTime);
+        if (_sendAliceTime > 0)
+            buf.append("; Last send to Alice ").append(DataHelper.formatTime(_sendAliceTime));
         if (_receiveAliceTime > 0)
-            buf.append("; Received from Alice after ").append(_receiveAliceTime - _beginTime).append("ms");
+            buf.append("; Received from Alice after ").append(_receiveAliceTime - _beginTime);
         if (_receiveBobTime > 0)
-            buf.append("; Received from Bob after ").append(_receiveBobTime - _beginTime).append("ms");
+            buf.append("; Received from Bob after ").append(_receiveBobTime - _beginTime);
+        if (_sendCharlieTime > 0)
+            buf.append("; Last send to Charlie ").append(DataHelper.formatTime(_sendCharlieTime));
         if (_receiveCharlieTime > 0)
-            buf.append("; Received from Charlie after ").append(_receiveCharlieTime - _beginTime).append("ms");
+            buf.append("; Received from Charlie after ").append(_receiveCharlieTime - _beginTime);
         buf.append("; Packets relayed: ").append(_packetsRelayed.get());
         return buf.toString();
     }

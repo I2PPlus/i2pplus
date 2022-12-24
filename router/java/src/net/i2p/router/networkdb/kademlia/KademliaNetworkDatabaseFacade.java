@@ -778,30 +778,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      _context.netDb().getKnownRouters() > 3000;
 
             if (uninteresting && !isHidden && !us.equals(ri.getIdentity().getHash())) {
-                _ds.remove(key);
-//                _kb.remove(key);
                 if (_log.shouldInfo())
-                    _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Uninteresting");
+                _ds.remove(key);
+                _kb.remove(key);
             }
-
         } else if (key != null && _context.banlist().isBanlistedForever(key)) {
-            if (_log.shouldWarn())
-//                _log.warn("Not searching for blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
-                _log.warn("Deleted blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
-            if (onFailedLookupJob != null)
-                _context.jobQueue().addJob(onFailedLookupJob);
+            if (_log.shouldInfo())
+                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted");
             _ds.remove(key);
             _kb.remove(key);
-            if (_log.shouldInfo())
-//                _log.info("Not searching for negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
-                _log.info("Deleted RouterInfo [" + key.toBase64().substring(0,6) + "] -> Lookup failure");
-                _context.jobQueue().addJob(onFailedLookupJob);
         } else if (key != null && isNegativeCached(key)) {
+            if (_log.shouldInfo())
+                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
             _ds.remove(key);
             _kb.remove(key);
-            if (_log.shouldInfo())
-//                _log.info("Not searching for negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
-                _log.info("Deleted negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
             if (onFailedLookupJob != null)
                 _context.jobQueue().addJob(onFailedLookupJob);
         } else {
@@ -843,7 +834,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    private static final long PUBLISH_DELAY = 3*1000;
+    private static final long PUBLISH_DELAY = 20*1000;
 
     /**
      * @throws IllegalArgumentException if the leaseSet is not valid
@@ -887,8 +878,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.jobQueue().removeJob(j);
         j.getTiming().setStartAfter(nextTime);
         if (_log.shouldInfo())
-            _log.info("Queued LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "]" +
-            "\n* Publishing: " + (new Date(nextTime)));
+            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing in " + nextTime / 1000 + "s");
+//            "\n* Publishing: " + (new Date(nextTime)));
         _context.jobQueue().addJob(j);
     }
 
@@ -1281,23 +1272,24 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (existing >= MIN_REMAINING_ROUTERS) {
                 if (_log.shouldInfo())
 //                    _log.info("Expired RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]", new Exception());
-                    _log.info("Expired RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                    _log.info("Dropping RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] -> " +
+                              "Published " + DataHelper.formatDuration(age) + " ago");
                 return "Published " + DataHelper.formatDuration(age) + " ago";
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Even though peer [" + routerInfo.toBase64().substring(0,6) + "] is old, we have only " + existing
-                              + " peers left - not expiring");
+                    _log.warn("Even though peer [" + routerInfo.toBase64().substring(0,6) + "] is stale, we have only " + existing
+                              + " peers left - not dropping...");
             }
         }
         String riHash = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR) {
             long age = routerInfo.getPublished() - now;
             if (_log.shouldWarn()) {
-                _log.warn("Peer [" + riHash + "] published their RouterInfo in the future\n* Publish date: " + new Date(routerInfo.getPublished()));
-                _log.warn("Banning [" + riHash + "] for 15m -> RouterInfo from the future!");
+                _log.warn("Ignoring [" + riHash + "] -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
+                //_log.warn("Banning [" + riHash + "] for 15m -> RouterInfo from the future!");
             }
-            _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
-                                             new Date(routerInfo.getPublished()) + ")", null, null, 15*60*1000);
+            //_context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
+            //                                 new Date(routerInfo.getPublished()) + ")", null, null, 15*60*1000);
             return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " in the future";
         }
 //        if (upLongEnough && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
@@ -1327,7 +1319,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
             long age = now - routerInfo.getPublished();
                 return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
-        }
+            }
         } else {
                 if (upLongEnough && (routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION) && !us.equals(routerInfo.getIdentity().getHash())) {
                     long age = _context.clock().now() - routerInfo.getPublished();
@@ -1504,7 +1496,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // it has expired *or* its tunnels are failing and we want to see if there
         // are any updates
         if (_log.shouldInfo())
-            _log.info("Dropped LeaseSet [" + dbEntry.toBase64().substring(0,6) + "] -> Lookup / tunnel failure");
+            _log.info("Dropping LeaseSet [" + dbEntry.toBase64().substring(0,6) + "] -> Lookup / tunnel failure");
         _ds.remove(dbEntry, false);
     }
 
@@ -1525,7 +1517,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _ds.remove(peer);
         if (_log.shouldInfo())
 //            _log.info("Removed kbucket entry for [" + peer.toBase64().substring(0,6) + "]");
-            _log.info("Deleted RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
+            _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
     }
 
     public void unpublish(LeaseSet localLeaseSet) {
@@ -1535,10 +1527,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (data == null) {
             if (_log.shouldWarn())
-                _log.warn("Unpublished UNKNOWN LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "]");
+                _log.warn("Unpublishing UNKNOWN local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "]");
         } else {
             if (_log.shouldInfo())
-                _log.info("Unpublished LeaseSet [" + h.toBase64().substring(0,6) + "]");
+                _log.info("Unpublishing local LeaseSet [" + h.toBase64().substring(0,6) + "]");
         }
         // now update it if we can to remove any leases
     }

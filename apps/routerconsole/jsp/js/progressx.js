@@ -41,18 +41,12 @@
                 '0'      : 'rgba(220,  48,  16,  .8)',
                 '1.0'    : 'rgba(255,  96,   0,  .8)'
             },
-//            shadowBlur   : 10,
-//            shadowColor  : 'rgba(0,   0,   0,   .6)'
         },
         repaint = function() {
             canvas.width = window.innerWidth
-//            canvas.height = options.barThickness * 5 // need space for shadow
-            canvas.height = options.barThickness // nuke the shadow
+            canvas.height = options.barThickness
 
             var ctx = canvas.getContext('2d')
-//            ctx.shadowBlur = options.shadowBlur
-//            ctx.shadowColor = options.shadowColor
-
             var lineGradient = ctx.createLinearGradient(0, 0, canvas.width, 0)
             for (var stop in options.barColors)
                 lineGradient.addColorStop(stop, options.barColors[stop])

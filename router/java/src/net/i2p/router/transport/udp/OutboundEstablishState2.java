@@ -315,8 +315,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     public void gotRelayTag(long tag) {
-        if (!ENABLE_RELAY)
-            return;
         if (_log.shouldDebug())
             _log.debug("[SSU2] Received relay tag " + tag);
         _receivedRelayTag = tag;
@@ -573,6 +571,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _skew = _nextSend - _timeReceived;
         if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW)
             throw new GeneralSecurityException("Skew exceeded in Retry: " + _skew);
+        // required, but we don't really need it until Session Created, just check there
+        //if (_aliceIP == null)
+        //    throw new GeneralSecurityException("No Address block in Retry");
         createNewState(_routerAddress);
         if (_log.shouldDebug())
             _log.debug("[SSU2] Received a retry token " + token + "\n* " + this);
@@ -640,7 +641,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             return;
         }
         if (_timeReceived == 0)
-            throw new GeneralSecurityException("No DateTime block in Session/Token Request");
+            throw new GeneralSecurityException("No DateTime block in Session Created");
+        // EstablishmentManager.sendConfirmation() will validate IP but expects it non-null
+        if (_aliceIP == null)
+            throw new GeneralSecurityException("No Address block in Session Created");
         // _nextSend is now(), from packetReceived()
         if (_requestSentCount == 1)
             _rtt = (int) (_nextSend - _requestSentTime);

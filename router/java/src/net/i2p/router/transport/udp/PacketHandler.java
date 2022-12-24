@@ -660,7 +660,7 @@ class PacketHandler {
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", skew);
                     if (_log.shouldWarn())
-                        _log.warn("Dropped connection - packet too far in the past: " + new Date(sendOn) + packet +
+                        _log.warn("Dropping connection - packet too far in the past: " + new Date(sendOn) + packet +
                                   " PeerState: " + state);
                 } else {
                     if (_log.shouldWarn())
@@ -685,7 +685,7 @@ class PacketHandler {
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", 0-skew);
                     if (_log.shouldWarn())
-                        _log.warn("Dropped connection - packet too far in the future " + packet + "; PeerState: " + state +
+                        _log.warn("Dropping connection - packet too far in the future " + packet + "; PeerState: " + state +
                                   "\n* Date: " + new Date(sendOn));
                 } else {
                     if (_log.shouldWarn())
@@ -1014,13 +1014,11 @@ class PacketHandler {
         } else if (type == SSU2Util.PEER_TEST_FLAG_BYTE) {
             if (_log.shouldDebug())
                 _log.debug("Received a Peer Test");
-            if (SSU2Util.ENABLE_PEER_TEST)
-                _testManager.receiveTest(from, packet);
+            _testManager.receiveTest(from, packet);
         } else if (type == SSU2Util.HOLE_PUNCH_FLAG_BYTE) {
             if (_log.shouldDebug())
                 _log.debug("Received a Hole Punch");
-            if (SSU2Util.ENABLE_RELAY)
-                _establisher.receiveHolePunch(from, packet);
+            _establisher.receiveHolePunch(from, packet);
         } else {
             if (_log.shouldWarn())
                 _log.warn("Received UNKNOWN SSU2 message \n* " + header + " from " + from);

@@ -323,7 +323,7 @@ public class MessageHistory {
         if (!_doLog) return;
         StringBuilder buf = new StringBuilder(128);
         buf.append(getPrefix());
-        buf.append("dropped message ").append(msgId).append(" for unknown tunnel [").append(id.getTunnelId());
+        buf.append("dropped message ").append(msgId).append(" for UNKNOWN tunnel [").append(id.getTunnelId());
         buf.append("] from [").append(getName(from)).append("]").append(" expiring on ");
         buf.append(getTime(expiration.getTime()));
         addEntry(buf.toString());
@@ -342,7 +342,7 @@ public class MessageHistory {
         if (from != null)
             buf.append(from.toBase64());
         else
-            buf.append("unknown");
+            buf.append("UNKNOWN");
         buf.append("] expiring in ").append(message.getMessageExpiration()-_context.clock().now()).append("ms");
         addEntry(buf.toString());
     }
@@ -356,7 +356,7 @@ public class MessageHistory {
         if (from != null)
             buf.append(from.toBase64());
         else
-            buf.append("unknown");
+            buf.append("UNKNOWN");
         buf.append(": ").append(info);
         addEntry(buf.toString());
         //if (_log.shouldError())
@@ -489,7 +489,7 @@ public class MessageHistory {
         if (!_doLog) return;
         StringBuilder buf = new StringBuilder(64);
         buf.append(getPrefix());
-        buf.append("Receive payload message [").append(messageId).append("]");
+        buf.append("Received payload message [").append(messageId).append("]");
         addEntry(buf.toString());
     }
 
@@ -504,7 +504,7 @@ public class MessageHistory {
         if (!_doLog) return;
         StringBuilder buf = new StringBuilder(128);
         buf.append(getPrefix());
-        buf.append("Send payload message in [").append(messageId).append("] in [").append(timeToSend).append("] successfully? ").append(successfullySent);
+        buf.append("Sent payload message in [").append(messageId).append("] in [").append(timeToSend).append("] successfully? ").append(successfullySent);
         addEntry(buf.toString());
     }
 
@@ -565,7 +565,7 @@ public class MessageHistory {
         if (msgId == -1) throw new IllegalArgumentException("why are you -1?");
         StringBuilder buf = new StringBuilder(48);
         buf.append(getPrefix());
-        buf.append("Dropped data message ").append(msgId).append(" for unknown tunnel ").append(tunnelId);
+        buf.append("Dropping data message ").append(msgId).append(" for UNKNOWN tunnel ").append(tunnelId);
         addEntry(buf.toString());
     }
     public void droppedTunnelGatewayMessageUnknown(long msgId, long tunnelId) {
@@ -573,7 +573,7 @@ public class MessageHistory {
         if (msgId == -1) throw new IllegalArgumentException("why are you -1?");
         StringBuilder buf = new StringBuilder(48);
         buf.append(getPrefix());
-        buf.append("Dropped gateway message ").append(msgId).append(" for unknown tunnel ").append(tunnelId);
+        buf.append("Dropping gateway message ").append(msgId).append(" for UNKNOWN tunnel ").append(tunnelId);
         addEntry(buf.toString());
     }
 
@@ -582,9 +582,9 @@ public class MessageHistory {
      *
      */
     private final static String getName(Hash router) {
-        if (router == null) return "unknown";
+        if (router == null) return "UNKNOWN";
         String str = router.toBase64();
-        if ( (str == null) || (str.length() < 6) ) return "invalid";
+        if ( (str == null) || (str.length() < 6) ) return "INVALID";
         return str.substring(0, 6);
     }
 

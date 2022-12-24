@@ -143,12 +143,12 @@ class PacketHandler {
                 if (con.getOptions().getAnswerPings())
                     receivePing(con, packet);
                 else if (_log.shouldWarn())
-                    _log.warn("Dropping ECHO packet on existing con: " + packet);
+                    _log.warn("Dropping ECHO packet [" + packet + "] on existing connection");
             } else if (packet.getReceiveStreamId() > 0) {
                 receivePong(packet);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("ECHO packet received with no stream IDs: " + packet);
+                    _log.warn("ECHO packet [" + packet + "] received with no StreamIDs");
             }
             packet.releasePayload();
             return;
@@ -215,7 +215,7 @@ class PacketHandler {
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     if (_log.shouldWarn())
-                        _log.warn("Received a SYN packet with the wrong IDs, sending reset: " + packet);
+                        _log.warn("Received a SYN packet [" + packet + "] with the wrong IDs, sending reset");
                     sendReset(packet);
                     packet.releasePayload();
                 } else {
@@ -257,7 +257,7 @@ class PacketHandler {
         _cache.release(ba);
         if (!ok) {
             if (_log.shouldWarn())
-                _log.warn("Can't send reset after receiving spoofed packet: " + packet);
+                _log.warn("Can't send reset after receiving spoofed packet [" + packet + "]");
             return;
         }
         sendResetUnverified(packet);
@@ -292,24 +292,24 @@ class PacketHandler {
                 if (_manager.answerPings())
                     receivePing(null, packet);
                 else if (_log.shouldWarn())
-                    _log.warn("Dropping ECHO packet on unknown connection: " + packet);
+                    _log.warn("Dropping ECHO packet [" + packet + "] on UNKNOWN connection");
             } else if (packet.getReceiveStreamId() > 0) {
                 receivePong(packet);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("ECHO packet received with no stream IDs: " + packet);
+                    _log.warn("ECHO packet [" + packet + "] received with no StreamIDs");
             }
             packet.releasePayload();
         } else {
             // this happens a lot
             if (_log.shouldInfo() && !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
-                _log.info("Packet received on an unknown stream (and not an ECHO or SYN): " + packet);
+                _log.info("Packet [" + packet + "] received on an UNKNOWN stream (and not an ECHO or SYN)");
             if (sendId <= 0) {
                 Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
                 if (con != null) {
                     if ( (con.getHighestAckedThrough() <= 5) && (packet.getSequenceNum() <= 5) ) {
                         if (_log.shouldInfo())
-                            _log.info("Received additional packet without SendStreamID after the SYN\n* " + con + ": " + packet);
+                            _log.info("Received additional packet [" + packet + "] without SendStreamID after the SYN \n* " + con);
                     } else {
                         if (_log.shouldWarn())
                             _log.warn("hrmph, received while ACK of SYN was in flight\n* " + con + ": " + packet + " ACKed: " + con.getAckedPackets());
@@ -322,8 +322,7 @@ class PacketHandler {
                 // if it has a send ID, it's almost certainly for a recently removed connection.
                 if (_log.shouldWarn()) {
                     boolean recent = _manager.wasRecentlyClosed(packet.getSendStreamId());
-                    _log.warn("Dropping packet with send ID but no connection found; recently disconnected? " +
-                              recent + ' ' + packet);
+                    _log.warn("Dropping packet [" + packet + "] with Send ID but no connection found -> Recently disconnected? " + recent);
                 }
                 // don't bother sending reset
                 // TODO send reset if recent && has data?
@@ -349,15 +348,14 @@ class PacketHandler {
                 // Then ConnectionHandler.accept() will check the connection list
                 // and call receivePacket() above instead of receiveConnection().
                 if (_log.shouldWarn()) {
-                    _log.warn("Packet belongs to no other connections, putting on the SYN queue: " + packet);
+                    _log.warn("Packet [" + packet + "] belongs to no other connections, putting on the SYN queue");
                 }
                 if (_log.shouldDebug()) {
                     StringBuilder buf = new StringBuilder(128);
                     for (Connection con : _manager.listConnections()) {
                         buf.append(con.toString()).append(" ");
                     }
-                    _log.debug("Connections: " + buf.toString() + " sendId: "
-                               + (sendId > 0 ? Packet.toId(sendId) : " unknown"));
+                    _log.debug("Connections: " + buf.toString() + " SendID: " + (sendId > 0 ? Packet.toId(sendId) : " unknown"));
                 }
                 //packet.releasePayload();
                 _manager.getConnectionHandler().receiveNewSyn(packet);
@@ -383,7 +381,7 @@ class PacketHandler {
         _cache.release(ba);
         if (!ok) {
             if (_log.shouldWarn())
-                _log.warn("Bad ping, dropping: " + packet);
+                _log.warn("BAD ping, dropping: " + packet);
         } else {
             _manager.receivePing(con, packet);
         }

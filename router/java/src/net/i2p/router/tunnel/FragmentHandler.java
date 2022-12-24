@@ -611,9 +611,9 @@ class FragmentHandler {
                     _failed.incrementAndGet();
                     noteFailure(_msg.getMessageId(), _msg.toString());
                     if (_log.shouldInfo())
-                        _log.warn("Dropped incomplete fragmented message " + _msg);
+                        _log.warn("Dropping incomplete fragmented message " + _msg);
                     else if (_log.shouldWarn())
-                        _log.warn("Dropped incomplete fragmented message [MsgID " + _msg.getMessageId() + "]");
+                        _log.warn("Dropping incomplete fragmented message [MsgID " + _msg.getMessageId() + "]");
                     _context.statManager().addRateData("tunnel.fragmentedDropped", _msg.getFragmentCount(), _msg.getLifetime());
                     _msg.failed();
                 } else {

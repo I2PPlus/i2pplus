@@ -19,6 +19,7 @@ import net.i2p.CoreVersion;
 public class CommandLine {
 
     protected static final List<String> CLASSES = Arrays.asList(new String[] {
+        "help",
         "freenet.support.CPUInformation.CPUID",
         "net.i2p.CoreVersion",
         "net.i2p.client.naming.LookupDest",
@@ -64,15 +65,33 @@ public class CommandLine {
 
     /** will only return if command not found */
     protected static void exec(String args[], List<String> classes) {
+        boolean help = false;
         String cmd = args[0].toLowerCase(Locale.US);
+        if (cmd.equals("help")) {
+            if (args.length != 2)
+                return;
+            cmd = args[1].toLowerCase(Locale.US);
+            args[1] = "-?";
+            help = true;
+        }
         for (String cls : classes) {
             String ccmd = cls.substring(cls.lastIndexOf('.') + 1).toLowerCase(Locale.US);
             if (cmd.equals(ccmd)) {
                 try {
+                    Class<?> c = Class.forName(cls, true, ClassLoader.getSystemClassLoader());
+                    if (help) {
+                        // if it has a usage() method, call that instead
+                        try {
+                            Method usage = c.getDeclaredMethod("usage", (Class[]) null);
+                            usage.setAccessible(true);
+                            usage.invoke(null);
+                            System.exit(0);
+                        } catch (Exception e) {}
+                        // else fall through to try main("-?")
+                    }
+                    Method main = c.getMethod("main", String[].class);
                     String[] cargs = new String[args.length - 1];
                     System.arraycopy(args, 1, cargs, 0, args.length - 1);
-                    Class<?> c = Class.forName(cls, true, ClassLoader.getSystemClassLoader());
-                    Method main = c.getMethod("main", String[].class);
                     main.invoke(null, (Object) cargs);
                     System.exit(0);
                 } catch (Exception e) {
@@ -92,14 +111,33 @@ public class CommandLine {
     protected static void printCommands(List<String> classes) {
         System.err.println("Available commands:");
         List<String> cmds = new ArrayList<String>(classes.size());
+        int max = 0;
         for (String cls : classes) {
             String ccmd = cls.substring(cls.lastIndexOf('.') + 1).toLowerCase(Locale.US);
             cmds.add(ccmd);
+            if (ccmd.length() > max)
+                max = ccmd.length();
         }
         Collections.sort(cmds);
+        StringBuilder buf = new StringBuilder(80);
         for (String cmd : cmds) {
-            System.err.println("    " + cmd);
+            int len = buf.length();
+            if (len == 0)
+                buf.append("    ");
+            buf.append(cmd);
+            if (len > 80 - max) {
+                System.err.println(buf);
+                buf.setLength(0);
+            } else {
+                int spc = 1 + max - cmd.length();
+                for (int i = 0; i < spc; i++) {
+                    buf.append(' ');
+                }
+            }
         }
-        System.err.println("Enter command for detailed help.");
+        if (buf.length() > 0)
+            System.out.println(buf);
+        System.err.println();
+        System.err.println("Enter \"help command\" for detailed help.");
     }
 }

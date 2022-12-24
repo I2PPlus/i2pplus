@@ -667,7 +667,7 @@ public class Blocklist {
      * @param ip IPv4 or IPv6
      */
     public void add(String ip) {
-        byte[] pib = Addresses.getIP(ip);
+        byte[] pib = Addresses.getIPOnly(ip);
         if (pib == null) return;
         add(pib, null);
     }
@@ -682,7 +682,7 @@ public class Blocklist {
      * @since 0.9.57
      */
     public void add(String ip, String source) {
-        byte[] pib = Addresses.getIP(ip);
+        byte[] pib = Addresses.getIPOnly(ip);
         if (pib == null) return;
         add(pib, source);
     }
@@ -743,6 +743,9 @@ public class Blocklist {
      * @return true if it was NOT previously on the list
      */
     private boolean add(int ip) {
+        // save space, don't put in both
+        if (isPermanentlyBlocklisted(ip))
+            return false;
         Integer iip = Integer.valueOf(ip);
         synchronized(_singleIPBlocklist) {
             return _singleIPBlocklist.put(iip, DUMMY) == null;
@@ -877,7 +880,7 @@ public class Blocklist {
      * @param ip IPv4 or IPv6
      */
     public boolean isBlocklisted(String ip) {
-        byte[] pib = Addresses.getIP(ip);
+        byte[] pib = Addresses.getIPOnly(ip);
         if (pib == null) return false;
         return isBlocklisted(pib);
     }
@@ -1195,6 +1198,8 @@ public class Blocklist {
      *  Single IPs blocked until restart. Unsorted.
      *
      *  Public for console only, not a public API
+     *  As of 0.9.57, will not contain IPs permanently banned,
+     *  except for ones banned permanently after being added to the transient list.
      *
      *  @return a copy, unsorted
      *  @since 0.9.48

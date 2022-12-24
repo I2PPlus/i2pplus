@@ -775,7 +775,7 @@ public class GeoIP {
      * @param ip IPv4 or IPv6
      */
     public void add(String ip) {
-        byte[] pib = Addresses.getIP(ip);
+        byte[] pib = Addresses.getIPOnly(ip);
         if (pib == null) return;
         add(pib);
     }
@@ -817,7 +817,7 @@ public class GeoIP {
      * @return lower-case code, generally two letters, or null.
      */
     public String get(String ip) {
-        byte[] pib = Addresses.getIP(ip);
+        byte[] pib = Addresses.getIPOnly(ip);
         if (pib == null) return null;
         return get(pib);
     }

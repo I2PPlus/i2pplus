@@ -38,10 +38,10 @@ class ParticipatingThrottler {
     private static final int LIFETIME_PORTION = 3;
 //    private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
 //    private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
-    private static final int MIN_LIMIT = 64 / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = 256 / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = 36 / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = 192 / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 3 / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 10 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
     private boolean isSlow = SystemVersion.isSlow();
     private boolean isQuadCore = SystemVersion.getCores() >=4;
@@ -59,24 +59,26 @@ class ParticipatingThrottler {
     Result shouldThrottle(Hash h) {
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
 //        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
-        int limit = isSlow ? Math.max(MAX_LIMIT / 5, numTunnels * (PERCENT_LIMIT / 5) / 100)
-                    : !isQuadCore ? Math.max(MAX_LIMIT / 4, numTunnels * (PERCENT_LIMIT / 4) / 100)
-                    : SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 2 * 1024*1024*1024 ? Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100)
-                    : Math.max(MAX_LIMIT / 3, numTunnels * (PERCENT_LIMIT / 3) / 100);
+        int limit = isSlow ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 5, numTunnels * (PERCENT_LIMIT / 5) / 100))
+                    : !isQuadCore ? Math.min((MIN_LIMIT * 3 / 2), Math.max(MAX_LIMIT / 4, numTunnels * (PERCENT_LIMIT / 4) / 100))
+                    : SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 2 * 1024*1024*1024 ?
+                      Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100))
+                    : Math.min(MIN_LIMIT * 2,(Math.max(MAX_LIMIT / 3, numTunnels * (PERCENT_LIMIT / 3) / 100)));
         int count = counter.increment(h);
         Result rv;
         if (count > limit) {
             if (count > limit * 10 / 9) {
-                int random = (1 + context.random().nextInt(15) * context.random().nextInt(60)) * 1000;
+                int random = (1 + context.random().nextInt(12) * context.random().nextInt(60)) * 1000;
                 int bantime = Math.max(random, (5 + context.random().nextInt(10)) * 60 * 1000);
                 int period = bantime / 60 / 1000;
-                context.banlist().banlistRouter(h, "Excessive participating tunnels", null, null, context.clock().now() + bantime);
+                context.banlist().banlistRouter(h, "Excessive transit tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
 //                if (_log.shouldWarn())
                 _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for " + period +
-                          " minutes for excessive transit tunnel requests (Limit: " + limit * 10 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                          "m -> Excessive transit tunnel requests (Limit: " + limit * 10 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
                 rv = Result.DROP;
+                //rv = Result.REJECT; // do we want to signal to the peer that we're busy?
             } else {
                 rv = Result.REJECT;
             }

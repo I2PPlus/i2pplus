@@ -192,14 +192,16 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             int reason = rie.getReason();
             PeerStateDestroyed psd = createPeerStateDestroyed(reason);
             _transport.addRecentlyClosed(psd);
-            UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(reason, psd);
-            _transport.send(pkt);
-            if (_log.shouldWarn()) {
-                if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending TERMINATION reason " + reason + " to " + psd);
-                _log.warn("[SSU2]InboundEstablishState payload error", rie);
-            }
-            throw new GeneralSecurityException("[SSU2] InboundEstablishState payload error: " + this, rie);
+            try {
+                UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(reason, psd);
+                _transport.send(pkt);
+                if (_log.shouldWarn()) {
+                    if (_log.shouldDebug())
+                        _log.debug("[SSU2] Sending TERMINATION reason " + reason + " to " + psd);
+                    _log.warn("[SSU2]InboundEstablishState payload error", rie);
+                }
+            } catch (IOException ioe) {}
+            throw new GeneralSecurityException("IES2 payload error: " + this, rie);
         } catch (DataFormatException dfe) {
             // no in-session response possible
             if (_log.shouldWarn())
@@ -390,8 +392,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotRelayTagRequest() {
-        if (!ENABLE_RELAY)
-            return;
         if (_log.shouldDebug())
             _log.debug("[SSU2] Received RelayTagRequest");
         _introductionRequested = true;
@@ -402,29 +402,21 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotRelayRequest(byte[] data) {
-        if (!ENABLE_RELAY)
-            return;
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
     }
 
     public void gotRelayResponse(int status, byte[] data) {
-        if (!ENABLE_RELAY)
-            return;
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
     }
 
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
-        if (!ENABLE_RELAY)
-            return;
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
     }
 
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
-        if (!ENABLE_PEER_TEST)
-            return;
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
         _transport.getPeerTestManager().receiveTest(_remoteHostId, _pstate, msg, status, h, data);
