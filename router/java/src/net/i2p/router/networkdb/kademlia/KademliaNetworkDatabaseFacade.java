@@ -878,8 +878,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.jobQueue().removeJob(j);
         j.getTiming().setStartAfter(nextTime);
         if (_log.shouldInfo())
-            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing in " + nextTime / 1000 + "s");
-//            "\n* Publishing: " + (new Date(nextTime)));
+            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing at " + (new Date(nextTime)));
         _context.jobQueue().addJob(j);
     }
 

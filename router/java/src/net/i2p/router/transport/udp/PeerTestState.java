@@ -262,7 +262,7 @@ class PeerTestState {
            .append(" as ").append(_ourRole.toString());
         if (_aliceIP != null) {
             buf.append(" [Alice: ");
-            if (_ourRole == Role.ALICE) {
+            if (_ourRole == Role.ALICE)
                 buf.append(" LOCAL: ");
             buf.append(_aliceIP).append(':').append(_alicePort).append("]");
             if (_aliceHash != null)
@@ -276,13 +276,12 @@ class PeerTestState {
             buf.append(" [Bob: LOCAL]");
         if (_charlieIP != null) {
             buf.append(" [Charlie: ");
-            if (_ourRole == Role.CHARLIE) {
+            if (_ourRole == Role.CHARLIE)
                 buf.append("LOCAL]");
-            } else {
+            else
                 buf.append(_charlieIP).append(':').append(_charliePort).append("]");
                 if (_charlieHash != null)
                     buf.append(' ').append(_charlieHash.toBase64().substring(0, 6));
-            }
             if (_previousCharlies != null && !_previousCharlies.isEmpty())
                 buf.append(" previous: ").append(_previousCharlies);
         }
