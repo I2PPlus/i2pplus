@@ -878,7 +878,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.jobQueue().removeJob(j);
         j.getTiming().setStartAfter(nextTime);
         if (_log.shouldInfo())
-            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing at " + (new Date(nextTime)));
+            //_log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing at " + (new Date(nextTime)));
+            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] for publication...");
         _context.jobQueue().addJob(j);
     }
 
@@ -1284,7 +1285,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR) {
             long age = routerInfo.getPublished() - now;
             if (_log.shouldWarn()) {
-                _log.warn("Ignoring [" + riHash + "] -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> Invalid publication date \n* Published: " + new Date(routerInfo.getPublished()));
                 //_log.warn("Banning [" + riHash + "] for 15m -> RouterInfo from the future!");
             }
             //_context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
