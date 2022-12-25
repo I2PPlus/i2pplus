@@ -188,13 +188,13 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         byte[] ip = _con.getRemoteIP();
         if (_context.banlist().isBanlistedForever(aliceHash)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping inbound connection from permanently banlisted peer at " + Addresses.toString(ip) + "[" + aliceHash.toBase64().substring(0,6) + "]");
+                _log.warn("Dropping inbound connection from permanently banlisted peer at " + Addresses.toString(ip) + " [" + aliceHash.toBase64().substring(0,6) + "]");
             // So next time we will not accept the con from this IP,
             // rather than doing the whole handshake
             if(ip != null)
                _context.blocklist().add(ip);
             if (getVersion() < 2)
-                fail("Banlisting incompatible router [" + aliceHash.toBase64().substring(0,6) + "] -> no NTCP2 support");
+                fail("Banlisting incompatible router [" + aliceHash.toBase64().substring(0,6) + "] -> No NTCP2 support");
             else if (_log.shouldWarn())
                 _log.warn("Peer is banlisted forever [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
