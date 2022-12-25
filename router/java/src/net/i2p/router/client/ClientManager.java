@@ -82,9 +82,11 @@ class ClientManager {
     /** Disable local-local "loopback", force all traffic through tunnels @since 0.9.44 */
     private static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
 
-    private static final int INTERNAL_QUEUE_SIZE = (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 1024*1024*1024) ? 256 : 512;
+//    private static final int INTERNAL_QUEUE_SIZE = 256;
+    private static final int INTERNAL_QUEUE_SIZE = SystemVersion.isSlow() ? 192 : SystemVersion.getMaxMemory() < 1024*1024*1024 ? 384 : 512;
 
-    private static final long REQUEST_LEASESET_TIMEOUT = 60*1000;
+//    private static final long REQUEST_LEASESET_TIMEOUT = 60*1000;
+    private static final long REQUEST_LEASESET_TIMEOUT = 90*1000;
 
     /** 2 bytes, save 65535 for unknown */
     private static final int MAX_SESSION_ID = 65534;
@@ -190,7 +192,7 @@ class ClientManager {
      */
     public synchronized void shutdown(String msg) {
         _isStarted = false;
-        _log.info("Shutting down the ClientManager");
+        _log.info("Shutting down the ClientManager...");
         for (ClientListenerRunner listener : _listeners)
             listener.stopListening();
         _listeners.clear();
@@ -221,7 +223,7 @@ class ClientManager {
     public I2CPMessageQueue internalConnect() throws I2PSessionException {
         if (!_isStarted) {
             if (_wasStarted)
-                throw new I2PSessionException("Router client manager is shut down");
+                throw new I2PSessionException("Router ClientManager is shut down");
             // don't throw the early birds out
             // ClientManager starts shortly after the console, should be less than a second
             // Wait up to 60 secs before giving up
@@ -230,11 +232,11 @@ class ClientManager {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException ie) {
-                    throw new I2PSessionException("Router client manager interrupted", ie);
+                    throw new I2PSessionException("Router ClientManager interrupted", ie);
                 }
             } while (!_isStarted && i++ < 300);
             if (!_isStarted)
-                throw new I2PSessionException("Router client manager failed to start");
+                throw new I2PSessionException("Router ClientManager failed to start");
         }
         LinkedBlockingQueue<I2CPMessage> in = new LinkedBlockingQueue<I2CPMessage>(INTERNAL_QUEUE_SIZE);
         LinkedBlockingQueue<I2CPMessage> out = new LinkedBlockingQueue<I2CPMessage>(INTERNAL_QUEUE_SIZE);
