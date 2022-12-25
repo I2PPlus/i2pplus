@@ -1,8 +1,6 @@
 /* SectionToggler by dr|z3d */
 /* License: AGPLv3 or later */
 
-import {refreshSidebar} from "/js/refreshSidebar.js";
-
 function sectionToggler() {
 
   var sb_advanced = document.getElementById("sb_advanced");
