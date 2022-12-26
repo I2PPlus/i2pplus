@@ -82,18 +82,18 @@ class TunnelRenderer {
                 // skip aliases, we will print a header under the main tunnel pool below
                 continue;
             }
-            String b64 = client.toBase64().substring(0, 4);
+            String b64 = client.toBase64().substring(0,4);
             if (isLocal) {
                 out.write("<h3 class=\"");
                 if (_context.clientManager().shouldPublishLeaseSet(client))
                     out.write("server ");
-                else if ((name.startsWith("Ping") && name.contains("[")) || name.equals("I2Ping"))
+                else if ((getTunnelName(in).startsWith("Ping") && getTunnelName(in).contains("[")) || getTunnelName(in).equals("I2Ping"))
                     out.write("ping ");
                 else
                     out.write("client ");
                 out.write("tabletitle\" ");
                 out.write("id=\"" + client.toBase64().substring(0,4) + "\" >");
-                out.write(dname);
+                out.write(getTunnelName(in));
                 // links are set to float:right in CSS so they will be displayed in reverse order
                 if (debug /*&& (!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping")*/)
                     out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
