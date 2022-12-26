@@ -98,8 +98,7 @@
 <th class="tunnelControl"><%=intl._t("Control")%></th>
 </tr>
 <%
-        for (int curServer = 0; curServer < indexBean.getTunnelCount(); curServer++) {
-            if (indexBean.isClient(curServer)) continue;
+        for (int curServer : indexBean.getControllerNumbers(false)) {
 %>
 <tr class="tunnelProperties">
 <td class="tunnelName">
@@ -332,9 +331,8 @@ ElGamal-2048
 <th class="tunnelControl"><%=intl._t("Control")%></th>
 </tr>
 <%
-        for (int curClient = 0; curClient < indexBean.getTunnelCount(); curClient++) {
+        for (int curClient : indexBean.getControllerNumbers(true)) {
             boolean isShared = indexBean.isSharedClient(curClient);
-            if (!indexBean.isClient(curClient)) continue;
             String clientDesc = indexBean.getTunnelDescription(curClient);
 %>
 <tr class="tunnelProperties">
