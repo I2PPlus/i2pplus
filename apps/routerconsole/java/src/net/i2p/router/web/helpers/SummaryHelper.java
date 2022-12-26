@@ -698,9 +698,9 @@ public class SummaryHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(512);
         boolean link = _context.portMapper().isRegistered("i2ptunnel");
-        buf.append("<h3");
+        buf.append("<h3 id=\"sb_localTunnelsHeading\"");
         if (!link)
-            buf.append(" id=\"unregistered\"");
+            buf.append(" class=\"unregistered\"");
         buf.append("><a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
            .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
            .append("\">")
@@ -778,6 +778,12 @@ public class SummaryHelper extends HelperBase {
             buf.append("<table id=\"sb_localtunnels\" class=\"volatile\">\n<tr><td colspan=\"3\"><center><i>")
                .append(_t("none")).append("</i></center></td></tr>\n</table>\n");
         }
+        buf.append("<table id=\"localtunnelSummary\" hidden>\n<tr id=\"localtunnelsActive\">\n<td>")
+           .append("<span id=\"snarkCount\" class=\"count_0\">0 x <img src=\"/themes/console/images/snark.svg\"></span>")
+           .append("<span id=\"serverCount\" class=\"count_0\">0 x <img src=\"/themes/console/images/server.svg\"></span>")
+           .append("<span id=\"clientCount\" class=\"count_0\">0 x <img src=\"/themes/console/images/client.svg\"></span>")
+           .append("<span id=\"pingCount\" class=\"count_0\">0 x <img src=\"/themes/console/images/ping.svg\"></span>")
+           .append("</td>\n</tr>\n</table>\n");
         return buf.toString();
     }
 

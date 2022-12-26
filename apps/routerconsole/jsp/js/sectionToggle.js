@@ -3,6 +3,7 @@
 
 function sectionToggler() {
 
+  var localtunnelSummary = document.getElementById("localtunnelSummary");
   var sb_advanced = document.getElementById("sb_advanced");
   var sb_advancedgeneral = document.getElementById("sb_advancedgeneral");
   var sb_bandwidth = document.getElementById("sb_bandwidth");
@@ -353,7 +354,6 @@ function sectionToggler() {
       sb_localtunnels.classList.add("collapsed");
       var clients = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/client.svg"]').length;
       var clientSpan = '<span id="clientCount" class="count_' + clients + '">' + clients + ' x <img src="/themes/console/images/client.svg"></span>';
-      var localTunnelSummary = document.getElementById("localtunnelSummary");
       var pings = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/ping.svg"]').length;
       var pingSpan = '<span id="pingCount" class="count_' + pings + '">' + pings + ' x <img src="/themes/console/images/ping.svg"></span>';
       var servers = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/server.svg"]').length;
@@ -362,13 +362,9 @@ function sectionToggler() {
       var snarkSpan = '<span id="snarkCount" class="count_' + snarks + '">' + snarks + ' x <img src="/themes/console/images/snark.svg"></span>';
       var summary = snarkSpan + " " + serverSpan + " " + clientSpan + " " + pingSpan;
       var summaryTable = '<table id="localtunnelSummary"><tr id="localtunnelsActive"><td>' + summary + '</td></tr></table>';
-      if (document.getElementById("localtunnelSummary") === null) {
-        sb_localtunnels.outerHTML += summaryTable;
-      } else {
-        localTunnelSummary.outerHTML = summaryTable;
-        if (localTunnelSummary.outerHTML !== summaryTable.outerHTML) {
-          localTunnelSummary.outerHTML = summaryTable;
-        }
+      if (localtunnelSummary !== null) {
+        localtunnelSummary.hidden = null;
+        localtunnelSummary.outerHTML = summaryTable;
       }
       document.getElementById("toggle_sb_localtunnels").checked = false;
       localStorage["section_localtunnels"] = "hide";
@@ -378,8 +374,8 @@ function sectionToggler() {
   function show_localtunnels() {
     if (sb_localtunnels !== null) {
       sb_localtunnels.hidden = null;
-      if (document.getElementById("localtunnelSummary") !== null) {
-        document.getElementById("localtunnelSummary").hidden = true;
+      if (localtunnelSummary !== null) {
+        localtunnelSummary.hidden = true;
       }
       document.getElementById("toggle_sb_localtunnels").checked = true;
       localStorage.removeItem("section_localtunnels");
