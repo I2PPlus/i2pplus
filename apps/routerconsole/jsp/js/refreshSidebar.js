@@ -20,6 +20,7 @@ function refreshSidebar() {
   var graphStats = document.getElementById("sb_graphstats");
   var internals = document.getElementById("sb_internals");
   var localTunnels = document.getElementById("sb_localtunnels");
+  var localTunnelSummary = document.getElementById("localtunnelSummary");
   var memBar = document.getElementById("sb_memoryBar");
   var minigraph = document.getElementById("minigraph");
   var netStatus = document.getElementById("sb_status");
@@ -137,6 +138,21 @@ function refreshSidebar() {
           if (localTunnels !== null && localTunnelsResponse !== null && localTunnels.hidden !== true) {
             if (!Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
               localTunnels.innerHTML = localTunnelsResponse.innerHTML;
+            }
+          }
+          if (localTunnelSummary !== null) {
+            var clients = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/client.svg"]').length;
+            var clientSpan = '<span id="clientCount" class="count_' + clients + '">' + clients + ' x <img src="/themes/console/images/client.svg"></span>';
+            var pings = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/ping.svg"]').length;
+            var pingSpan = '<span id="pingCount" class="count_' + pings + '">' + pings + ' x <img src="/themes/console/images/ping.svg"></span>';
+            var servers = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/server.svg"]').length;
+            var serverSpan = '<span id="serverCount" class="count_' + servers + '">' + servers + ' x <img src="/themes/console/images/server.svg"></span>';
+            var snarks = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/snark.svg"]').length;
+            var snarkSpan = '<span id="snarkCount" class="count_' + snarks + '">' + snarks + ' x <img src="/themes/console/images/snark.svg"></span>';
+            var summary = snarkSpan + " " + serverSpan + " " + clientSpan + " " + pingSpan;
+            var summaryTable = '<table id="localtunnelSummary"><tr id="localtunnelsActive"><td>' + summary + '</td></tr></table>';
+            if (localTunnelSummary.innerHTML !== summaryTable.innerHTML) {
+              localTunnelSummary.innerHTML = summaryTable.innerHTML;
             }
           }
           if (tunnelCount) {
