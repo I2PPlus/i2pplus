@@ -145,12 +145,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * know anyone or just started up) -- see validate() below
      */
 //    private final static long ROUTER_INFO_EXPIRATION = 27*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION = 28*60*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION = 24*60*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_MIN = 90*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_MIN = 16*60*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_SHORT = 75*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 8*60*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 6*60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
     static final String PROP_ROUTER_INFO_EXPIRATION_ADJUSTED = "router.expireRouterInfo";
 
@@ -194,7 +194,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final int KAD_B = 5;
     static final String PROP_KAD_B = "router.exploreKadB";
 
-    private static final long[] RATES = { 60*1000, 60*60*1000 };
+    private static final long[] RATES = { 60*1000, 60*60*1000, 24*60*60*1000 };
 
     public KademliaNetworkDatabaseFacade(RouterContext context) {
         _context = context;
@@ -365,7 +365,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // Don't run until after RefreshRoutersJob has run, and after validate() will return invalid for old routers.
         if (!_context.commSystem().isDummy()) {
             Job erj = new ExpireRoutersJob(_context, this);
-             erj.getTiming().setStartAfter(_context.clock().now() + 2*60*60*1000);
+//             erj.getTiming().setStartAfter(_context.clock().now() + 2*60*60*1000);
+             erj.getTiming().setStartAfter(_context.clock().now() + 45*60*1000);
             _context.jobQueue().addJob(erj);
         }
 
@@ -1312,8 +1313,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 &&
-            routerInfo.getPublished() < now - 4*60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
-                return "RouterInfo [" + routerId + "] is K or L tier and was published over 4 hours ago";
+            //routerInfo.getPublished() < now - 4*60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
+            routerInfo.getPublished() < now - 60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
+                //return "RouterInfo [" + routerId + "] is K or L tier and was published over 4 hours ago";
+                return "RouterInfo [" + routerId + "] is K or L tier and was published over an hour ago";
 
         if (expireRI != null && !us.equals(routerInfo.getIdentity().getHash())) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
