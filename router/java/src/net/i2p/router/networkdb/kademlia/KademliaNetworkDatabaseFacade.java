@@ -1251,6 +1251,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // As the net grows this won't be sufficient, and we'll have to implement
         // flushing some from memory, while keeping all on disk.
         long adjustedExpiration;
+        int existing = _kb.size();
         String expireRI = _context.getProperty("router.expireRouterInfo");
         String routerId = "";
         if (routerInfo != null)
@@ -1265,11 +1266,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                           ROUTER_INFO_EXPIRATION_MIN +
                                           ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
 */
-        adjustedExpiration = ROUTER_INFO_EXPIRATION;
+        adjustedExpiration = existing > 5000 ? ROUTER_INFO_EXPIRATION / 2 :
+                             existing > 2500 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
+                             ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !routerInfo.isCurrent(adjustedExpiration)) {
             long age = now - routerInfo.getPublished();
-            int existing = _kb.size();
             if (existing >= MIN_REMAINING_ROUTERS) {
                 if (_log.shouldInfo())
 //                    _log.info("Expired RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]", new Exception());
