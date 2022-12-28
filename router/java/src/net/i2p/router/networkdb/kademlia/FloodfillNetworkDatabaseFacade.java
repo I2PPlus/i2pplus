@@ -61,8 +61,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 //    private static final int FLOOD_TIMEOUT = 30*1000;
     private static final int FLOOD_TIMEOUT = 90*1000;
     private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
-//    private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
-    private static final long NEXT_RKEY_LS_ADVANCE_TIME = 9*60*1000;
+    private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;
     private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 2 : 3;
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 400;
