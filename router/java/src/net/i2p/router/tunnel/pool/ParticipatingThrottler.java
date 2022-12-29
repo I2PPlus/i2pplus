@@ -7,6 +7,11 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+import net.i2p.router.Router;
+
 /**
  * Count how often we have accepted a tunnel with the peer
  * as the previous or next hop.
@@ -57,11 +62,19 @@ class ParticipatingThrottler {
 
     /** increments before checking */
     Result shouldThrottle(Hash h) {
+        RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
+        boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isLowShare = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0);
+        boolean isFast = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
+                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
+                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
 //        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
-        int limit = isSlow ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 5, numTunnels * (PERCENT_LIMIT / 5) / 100))
+        int limit = isUnreachable || isLowShare ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 12, numTunnels * (PERCENT_LIMIT / 8) / 100))
+                    : isSlow ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 5, numTunnels * (PERCENT_LIMIT / 5) / 100))
                     : !isQuadCore ? Math.min((MIN_LIMIT * 3 / 2), Math.max(MAX_LIMIT / 4, numTunnels * (PERCENT_LIMIT / 4) / 100))
-                    : SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 2 * 1024*1024*1024 ?
+                    : (SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 2 * 1024*1024*1024) || isFast ?
                       Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100))
                     : Math.min(MIN_LIMIT * 2,(Math.max(MAX_LIMIT / 3, numTunnels * (PERCENT_LIMIT / 3) / 100)));
         int count = counter.increment(h);
