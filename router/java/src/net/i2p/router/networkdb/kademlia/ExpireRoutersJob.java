@@ -52,6 +52,8 @@ class ExpireRoutersJob extends JobImpl {
                     _log.info("Deleted " + removed + " expired RouterInfo file from NetDb");
                 else if (removed > 1)
                     _log.info("Deleted " + removed + " expired RouterInfo files from NetDb");
+                else if (_log.shouldDebug() && getContext().netDb().getKnownRouters() > 2000)
+                    _log.debug("No expired RouterInfo files found - next check in " + ((RERUN_DELAY_MS / 3) / 1000 / 60) + "m");
                 else if (_log.shouldDebug())
                     _log.debug("No expired RouterInfo files found - next check in " + (RERUN_DELAY_MS / 1000 / 60) + "m");
         }
