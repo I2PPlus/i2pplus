@@ -81,8 +81,7 @@ class ParticipatingThrottler {
         Result rv;
         if (count > limit) {
             if (count > limit * 10 / 9) {
-                int random = (1 + context.random().nextInt(12) * context.random().nextInt(60)) * 1000;
-                int bantime = Math.max(random, (5 + context.random().nextInt(10)) * 60 * 1000);
+                int bantime = 15*60*1000;
                 int period = bantime / 60 / 1000;
                 context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
