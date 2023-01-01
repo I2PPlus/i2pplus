@@ -1086,8 +1086,10 @@ public class SummaryHelper extends HelperBase {
                    .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
                    .append("</b></h4>");
             }
-        } else if (dver != null && _context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress() &&
-                   !_context.getProperty("router.updatePolicy").equals("install")) {
+        } else if (dver != null && _context.router().gracefulShutdownInProgress() &&
+                   !NewsHelper.isUpdateInProgress() &&
+                   (_context.getProperty("router.updatePolicy") != null &&
+                   !_context.getProperty("router.updatePolicy").equals("install"))) {
             buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update volatile\"><b>")
                .append(_t("Updating after restart")).append("&hellip;</b></h4>");
         }
