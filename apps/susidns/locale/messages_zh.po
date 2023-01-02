@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 03:56+0000\n"
+"POT-Creation-Date: 2023-01-02 11:32+0000\n"
 "PO-Revision-Date: 2022-09-16 11:51+0000\n"
 "Last-Translator: Beta Ba <linsui555@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
@@ -117,14 +117,14 @@ msgstr[0] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:997
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1001
 msgid "Add"
 msgstr "添加"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:971
 msgid "Replace"
 msgstr "替换"
 
@@ -233,7 +233,7 @@ msgstr "未选择要删除的记录。"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
 msgid "Add Alternate"
 msgstr "添加备用"
 
@@ -254,7 +254,7 @@ msgstr "错误:无法写入地址簿文件"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
 msgid ""
 "Invalid form submission, probably because you used the \"back\" or "
 "\"reload\" button on your browser. Please resubmit."
@@ -265,14 +265,14 @@ msgstr ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:166
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
 msgid ""
 "If the problem persists, verify that you have cookies enabled in your "
 "browser."
 msgstr "如果问题持续出现，请检查您的浏览器是否已启用cookie。"
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:231
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:225
 msgid "Save"
@@ -283,7 +283,7 @@ msgid "Configuration saved."
 msgstr "配置已保存"
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:229
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:223
 msgid "Reload"
@@ -360,7 +360,7 @@ msgstr[0] "跳过了 {0} 个文件中重复的条目"
 msgid "Import from file failed"
 msgstr "从文件导入失败"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:140
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
 msgid "Subscriptions saved."
 msgstr "订阅已保存。"
 
@@ -373,26 +373,26 @@ msgstr "订阅已保存。"
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:151
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:221
 msgid "Update"
 msgstr "更新"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:154
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
 #, fuzzy
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr "订阅已保存，正在通过订阅地址更新地址簿。"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr "无法更新订阅。HTTP代理没有运行!"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:162
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
 msgid "Subscriptions reloaded."
 msgstr "订阅设置已重新载入。"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:194
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1015
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1019
 msgid "Import"
 msgstr "导入"
 
@@ -542,8 +542,8 @@ msgid "Mark for deletion"
 msgstr "标记为删除"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:895
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:951
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1013
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:955
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1017
 msgid "Cancel"
 msgstr "取消"
 
@@ -552,14 +552,22 @@ msgid "Add new destination"
 msgstr "添加新目标"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
+msgid "e.g. newdomain.i2p"
+msgstr ""
+
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:949
 msgid "B64 or B32"
 msgstr "B64或B32"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1009
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:953
+msgid "Full destination or b32 address"
+msgstr ""
+
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1013
 msgid "Import from hosts.txt file"
 msgstr "从 hosts.txt 文件导入"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1011
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1015
 #, fuzzy
 msgid "Select file"
 msgstr "清除过滤器"

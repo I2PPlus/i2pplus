@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-14 02:56+0000\n"
+"POT-Creation-Date: 2023-01-02 11:31+0000\n"
 "PO-Revision-Date: 2021-02-05 15:27+0000\n"
 "Last-Translator: g3600303 <g3600303@trbvm.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/otf/I2P/language/ja/)\n"
@@ -536,7 +536,7 @@ msgid "Host"
 msgstr "ホスト"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1475
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1533
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1536
 msgid "Base32"
 msgstr ""
 
@@ -576,7 +576,7 @@ msgstr ""
 "このアドレスは、購読ベースのアドレスが保存されているルータのアドレス帳に保存"
 "されます。"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1496
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1497
 #, fuzzy
 msgid ""
 "If you want to keep track of sites you have added manually, add to your "
@@ -586,30 +586,30 @@ msgstr ""
 "アドレス帳に追加してください。"
 
 #. FIXME wasn't escaped
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1499
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1571
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1500
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1576
 msgid "Save & continue"
 msgstr "保存と続行"
 
 #. only blockfile supports multiple books
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1505
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1507
 #, fuzzy, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "ルーターのアドレス帳に {0} を保存し、ウェブサイトを続行"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1506
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1508
 msgid ""
 "This address will be saved to your Master addressbook. Select this option "
 "for addresses you wish to keep separate from the main router address book, "
 "but don't mind publishing."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1510
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1513
 #, fuzzy, java-format
 msgid "Save {0} to private addressbook and continue to website"
 msgstr "プライベートのアドレス帳に {0} を保存して、ウェブサイトを続行"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1511
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1514
 #, fuzzy
 msgid ""
 "This address will be saved to your Private addressbook, ensuring it is never "
@@ -618,53 +618,53 @@ msgstr ""
 "このアドレスはプライベートなアドレス帳へ保存され、公開されないことを確実にし"
 "ました。"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1536
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1539
 msgid "Base32 address requires lookup password"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1538
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1541
 msgid "Base32 address requires encryption key"
 msgstr "Base32 アドレスは暗号化鍵を要求します"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1540
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1543
 msgid "Base32 address requires encryption key and lookup password"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1542
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1545
 msgid "Base32 address decryption failure, check encryption key"
 msgstr "Base32アドレスの複合失敗、暗号化キーを確認してください"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1553
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1556
 msgid "Generate"
 msgstr "生成"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1554
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1557
 msgid "Encryption key"
 msgstr "暗号化鍵"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1555
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1558
 msgid ""
 "You must either enter a PSK encryption key provided by the server operator, "
 "or generate a DH encryption key and send that to the server operator."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1556
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1560
 msgid "Ask the server operator for help."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1557
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1561
 msgid "Enter PSK encryption key"
 msgstr "PSK暗号化鍵を入力"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1559
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1563
 msgid "Generate new DH encryption key"
 msgstr "新しいDH暗号化鍵を生成"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1565
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1570
 msgid "Lookup password"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1566
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1571
 msgid "You must enter the password provided by the server operator."
 msgstr ""
 

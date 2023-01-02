@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 03:56+0000\n"
+"POT-Creation-Date: 2023-01-02 11:32+0000\n"
 "PO-Revision-Date: 2020-05-14 01:58+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/otf/I2P/language/"
@@ -114,14 +114,14 @@ msgstr[1] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:997
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1001
 msgid "Add"
 msgstr "Ekleyin"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:971
 msgid "Replace"
 msgstr "Değiştirin"
 
@@ -230,7 +230,7 @@ msgstr "Silinmek için seçilmiş bir kayıt yok."
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
 msgid "Add Alternate"
 msgstr "Alternatif Ekle"
 
@@ -251,7 +251,7 @@ msgstr "HATA: Adres defteri dosyasına yazılamadı."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
 msgid ""
 "Invalid form submission, probably because you used the \"back\" or "
 "\"reload\" button on your browser. Please resubmit."
@@ -262,7 +262,7 @@ msgstr ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:166
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
 msgid ""
 "If the problem persists, verify that you have cookies enabled in your "
 "browser."
@@ -270,7 +270,7 @@ msgstr ""
 "Sorun sürerse, tarayıcınızda çerezlerin etkinleştirilmiş olduğuna emin olun."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:231
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:225
 msgid "Save"
@@ -281,7 +281,7 @@ msgid "Configuration saved."
 msgstr "Yapılandırma kaydedildi."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:229
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:223
 msgid "Reload"
@@ -360,7 +360,7 @@ msgstr[1] "Dosyadaki {0} çift kayıt atlandı"
 msgid "Import from file failed"
 msgstr "Dosyadan içe aktarılamadı"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:140
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
 msgid "Subscriptions saved."
 msgstr "Abonelikler kaydedildi."
 
@@ -373,28 +373,28 @@ msgstr "Abonelikler kaydedildi."
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:151
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:221
 msgid "Update"
 msgstr ""
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:154
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
 #, fuzzy
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr ""
 "Abonelikler kaydedildi, adres defteri abonelik kaynaklarına göre "
 "güncelleniyor."
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr ""
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:162
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
 msgid "Subscriptions reloaded."
 msgstr "Abonelikler yeniden yüklendi"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:194
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1015
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1019
 msgid "Import"
 msgstr "İçe Aktar"
 
@@ -546,8 +546,8 @@ msgid "Mark for deletion"
 msgstr "Silmek üzere işaretleyin"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:895
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:951
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1013
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:955
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1017
 msgid "Cancel"
 msgstr "İptal"
 
@@ -556,14 +556,23 @@ msgid "Add new destination"
 msgstr "Yeni hedef ekleyin"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
+msgid "e.g. newdomain.i2p"
+msgstr ""
+
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:949
 msgid "B64 or B32"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1009
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:953
+#, fuzzy
+msgid "Full destination or b32 address"
+msgstr "Hedef ya da Base 32 Adresi"
+
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1013
 msgid "Import from hosts.txt file"
 msgstr "hosts.txt dosyasından içe aktar"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1011
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1015
 #, fuzzy
 msgid "Select file"
 msgstr "süzgeci temizleyin"
@@ -1082,9 +1091,6 @@ msgstr ""
 
 #~ msgid "This address book is empty."
 #~ msgstr "Bu adres defteri boş."
-
-#~ msgid "Destination or Base 32 Address"
-#~ msgstr "Hedef ya da Base 32 Adresi"
 
 #~ msgid "File"
 #~ msgstr "Dosya"
