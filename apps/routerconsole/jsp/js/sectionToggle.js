@@ -228,6 +228,35 @@ function sectionToggler() {
     }
   }
 
+  function toggle_help() {
+    if (document.getElementById("toggle_sb_help").checked !== true) {
+      hide_help();
+    } else {
+      show_help();
+    }
+  }
+
+  function hide_help() {
+    if (sb_help !== null) {
+      sb_help.hidden = true;
+      document.getElementById("sb_help").classList.add("collapsed");
+      document.getElementById("toggle_sb_help").checked = false;
+      localStorage["section_help"] = "hide";
+    }
+  }
+
+  function show_help() {
+    if (sb_help !== null) {
+      sb_help.hidden = null;
+      if (document.querySelector("#sb_help.collapsed + hr") !== null) {
+        document.querySelector("#sb_help.collapsed + hr").hidden = null;
+      }
+      document.getElementById("sb_help").classList.remove("collapsed");
+      document.getElementById("toggle_sb_help").checked = true;
+      localStorage.removeItem("section_help");
+    }
+  }
+
   function toggle_queue() {
     if (document.getElementById("toggle_sb_queue").checked !== true) {
       hide_queue();
@@ -387,6 +416,7 @@ function sectionToggler() {
     if (localStorage.getItem("section_advanced") !== null) {hide_advanced();} else {show_advanced();}
     if (localStorage.getItem("section_bandwidth") !== null) {hide_bandwidth();} else {show_bandwidth();}
     if (localStorage.getItem("section_general") !== null) {hide_general();} else {show_general();}
+    if (localStorage.getItem("section_help") !== null) {hide_general();} else {show_general();}
     if (localStorage.getItem("section_internals") !== null) {hide_internals();} else {show_internals();}
     if (localStorage.getItem("section_localtunnels") !== null) {hide_localtunnels();} else {show_localtunnels();}
     if (localStorage.getItem("section_peers") !== null) {hide_peers();} else {show_peers();}
@@ -402,6 +432,7 @@ function sectionToggler() {
     if (document.getElementById("toggle_sb_advanced") !== null) {document.getElementById("toggle_sb_advanced").addEventListener("click", toggle_advanced);}
     if (document.getElementById("toggle_sb_bandwidth") !== null) {document.getElementById("toggle_sb_bandwidth").addEventListener("click", toggle_bandwidth);}
     if (document.getElementById("toggle_sb_general") !== null) {document.getElementById("toggle_sb_general").addEventListener("click", toggle_general);}
+    if (document.getElementById("toggle_sb_help") !== null) {document.getElementById("toggle_sb_help").addEventListener("click", toggle_help);}
     if (document.getElementById("toggle_sb_internals") !== null) {document.getElementById("toggle_sb_internals").addEventListener("click", toggle_internals);}
     if (document.getElementById("toggle_sb_localtunnels") !== null) {document.getElementById("toggle_sb_localtunnels").addEventListener("click", toggle_localtunnels);}
     if (document.getElementById("toggle_sb_newsheadings") !== null) {document.getElementById("toggle_sb_newsheadings").addEventListener("click", toggle_newsheadings);}
