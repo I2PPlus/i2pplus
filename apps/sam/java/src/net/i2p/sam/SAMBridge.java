@@ -219,9 +219,8 @@ public class SAMBridge implements Runnable, ClientApp {
             !"::1".equals(_listenHost) &&
             !"0:0:0:0:0:0:0:1".equals(_listenHost) &&
             !(_useSSL && Boolean.parseBoolean(i2cpProps.getProperty(SAMBridge.PROP_AUTH)))) {
-            String m = "SECURITY WARNING: SAM interface not restricted to localhost, and SSL and Authentication are not enabled.\n" +
-                       "Remote access to local services may be possible.\n" +
-                       "Please check command line and configuration.";
+            String m = "SECURITY WARNING: SAM interface not restricted to localhost, and SSL and Authentication are not enabled." +
+                       "\n* Remote access to local services may be possible -> Please check command line and configuration.";
             _log.logAlways(Log.WARN, m);
             System.out.println(m);
         }

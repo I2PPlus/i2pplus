@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-22 22:55+0000\n"
+"POT-Creation-Date: 2023-01-02 11:30+0000\n"
 "PO-Revision-Date: 2019-11-24 13:40+0000\n"
 "Last-Translator: Pablo Di Noto <pdinoto@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/otf/I2P/language/es/)\n"
@@ -138,7 +138,7 @@ msgstr "INFO"
 msgid "WARN"
 msgstr "WARN"
 
-#: ../java/src/net/i2p/util/LogWriter.java:165
+#: ../java/src/net/i2p/util/LogWriter.java:166
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"

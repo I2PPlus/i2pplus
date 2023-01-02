@@ -25,7 +25,7 @@ mkdir -p lib bin/local
 
 
 # If JAVA_HOME isn't set, try to figure it out on our own
-[ -z $JAVA_HOME ] && . ../find-java-home
+[ -z "$JAVA_HOME" ] && . ../find-java-home
 if [ ! -f "$JAVA_HOME/include/jni.h" ]; then
     echo "ERROR: Cannot find jni.h! Looked in \"$JAVA_HOME/include/jni.h\"" >&2
     echo "Please set JAVA_HOME to a java home that has the JNI" >&2
@@ -39,13 +39,13 @@ cd bin/local
 
 echo "Building..."
 if [ "$1" != "dynamic" ]; then
-    case `uname -sr` in
+    case $(uname -sr) in
         Darwin*)
             # --with-pic is required for static linking
-            ../../gmp-${GMP_VER}/configure --with-pic;;
+            ../../gmp-"${GMP_VER}"/configure --with-pic;;
         *)
             # and it's required for ASLR
-            ../../gmp-${GMP_VER}/configure --with-pic;;
+            ../../gmp-"${GMP_VER}"/configure --with-pic;;
     esac
     make
     make check
@@ -55,13 +55,13 @@ else
     sh ../../build_jbigi.sh dynamic
 fi
 
-cp *jbigi???* ../../lib/
+cp -- *jbigi???* ../../lib/
 echo 'Library copied to lib/'
 cd ../..
 
 if [ "$1" != "notest" ]; then
     if [ -z "$I2P" ]; then
-        if [ -r $HOME/i2p/lib/i2p.jar ]; then
+        if [ -r "$HOME/i2p/lib/i2p.jar" ]; then
             I2P="$HOME/i2p"
         elif [ -r /usr/share/i2p/lib/i2p.jar ]; then
             I2P="/usr/share/i2p"

@@ -53,7 +53,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     public synchronized void startup() {
-        _log.info("Starting up the client subsystem");
+        _log.info("Starting up the Client Manager...");
         int port = _context.getProperty(PROP_CLIENT_PORT, DEFAULT_PORT);
         _manager = new ClientManager(_context, port);
         _manager.start();
@@ -82,7 +82,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public boolean isAlive() { return _manager != null && _manager.isAlive(); }
 
-    private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
+//    private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
+    private static final long MAX_TIME_TO_REBUILD = 11*60*1000;
 
     @Override
     public boolean verifyClientLiveliness() {

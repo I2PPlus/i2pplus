@@ -332,7 +332,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     private static final Set<Status> STATUS_OK =         EnumSet.of(Status.OK,
                                                                     Status.IPV4_DISABLED_IPV6_OK);
 
-    private static final Set<Status> STATUS_IPV4_SNAT =  EnumSet.of(Status.DIFFERENT,
+    private static final Set<Status> STATUS_IPV4_SYMNAT =  EnumSet.of(Status.DIFFERENT,
                                                                     Status.IPV4_SNAT_IPV6_OK,
                                                                     Status.IPV4_SNAT_IPV6_UNKNOWN);
 
@@ -1375,7 +1375,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                           TransportUtil.isValidPort(ourPort);
         boolean explicitSpecified = explicitAddressSpecified();
         boolean inboundRecent;
-        if (ourIP.length == 4)
+        boolean isIPv6 = ourIP.length == 16;
+        if (!isIPv6)
             inboundRecent = _lastInboundReceivedOn + ALLOW_IP_CHANGE_INTERVAL > System.currentTimeMillis();
         else
             inboundRecent = _lastInboundIPv6 + ALLOW_IP_CHANGE_INTERVAL > _context.clock().now();
@@ -1408,7 +1409,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             return;
         }
 
-        RouterAddress addr = getCurrentExternalAddress(ourIP.length == 16);
+        RouterAddress addr = getCurrentExternalAddress(isIPv6);
         if (inboundRecent && addr != null && addr.getPort() > 0 && addr.getHost() != null) {
             // use OS clock since its an ordering thing, not a time thing
             // Note that this fails us if we switch from one IP to a second, then back to the first,
@@ -1416,45 +1417,47 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             // leaving us thinking the second IP is still good.
             if (_log.shouldDebug())
                 _log.debug("Ignoring IP address suggestion as we have received an inbound connection recently");
-        } else {
-            // New IP
-            boolean changeIt = false;
-            synchronized(this) {
-                if (ourIP.length == 4) {
-                    if (from.equals(_lastFromv4) || !eq(_lastOurIPv4, _lastOurPortv4, ourIP, ourPort)) {
+            return;
+        }
+
+        // Still could be the same IP/port, we don't check until changeAddress() below.
+        boolean changeIt = false;
+        Hash lastFrom = null;
+        synchronized(this) {
+            if (!isIPv6) {
+                if (from.equals(_lastFromv4) || !eq(_lastOurIPv4, _lastOurPortv4, ourIP, ourPort)) {
                     if (_log.shouldInfo())
                         _log.info("[" + from.toBase64().substring(0,6) + "] told us we have a new IP address: "
                                   + Addresses.toString(ourIP, ourPort) + "; awaiting confirmation from another peer");
-                    } else {
-                        changeIt = true;
-                    }
-                    _lastFromv4 = from;
-                    _lastOurIPv4 = ourIP;
-                    _lastOurPortv4 = ourPort;
-                } else if (ourIP.length == 16) {
-                    if (from.equals(_lastFromv6) || !eq(_lastOurIPv6, _lastOurPortv6, ourIP, ourPort)) {
-                    if (_log.shouldInfo())
-                        _log.info("[" + from.toBase64().substring(0,6) + "] told us we have a new IP address: "
-                                  + Addresses.toString(ourIP, ourPort) + "; awaiting confirmation from another peer");
-                    } else {
-                        changeIt = true;
-                    }
-                    _lastFromv6 = from;
-                    _lastOurIPv6 = ourIP;
-                    _lastOurPortv6 = ourPort;
                 } else {
-                    return;
+                    changeIt = true;
+                        lastFrom = _lastFromv4;
                 }
+                _lastFromv4 = from;
+                _lastOurIPv4 = ourIP;
+                _lastOurPortv4 = ourPort;
+                } else {
+                if (from.equals(_lastFromv6) || !eq(_lastOurIPv6, _lastOurPortv6, ourIP, ourPort)) {
+                    if (_log.shouldInfo())
+                        _log.info("[" + from.toBase64().substring(0,6) + "] told us we have a new IP address: "
+                                  + Addresses.toString(ourIP, ourPort) + "; awaiting confirmation from another peer");
+                } else {
+                    changeIt = true;
+                        lastFrom = _lastFromv6;
+                }
+                _lastFromv6 = from;
+                _lastOurIPv6 = ourIP;
+                _lastOurPortv6 = ourPort;
             }
-            if (changeIt) {
-                if (_log.shouldInfo())
-                    _log.info("[" + from.toBase64().substring(0,6) + "] and another peer agree we have a new IP address: "
-                              + Addresses.toString(ourIP, ourPort) + "; updating...");
-                // Never change port for IPv6 or if we have UPnP
-                if (_haveUPnP || ourIP.length == 16)
-                    ourPort = 0;
-                changeAddress(ourIP, ourPort);
-            }
+        }
+        if (changeIt) {
+            if (_log.shouldInfo())
+                _log.info("[" + from.toBase64().substring(0,6) + "] and [" + lastFrom.toBase64().substring(0,6) + "] agree we have a new IP address: "
+                          + Addresses.toString(ourIP, ourPort) + "; updating...");
+            // Never change port for IPv6 or if we have UPnP
+            if (_haveUPnP || ourIP.length == 16)
+                ourPort = 0;
+            changeAddress(ourIP, ourPort);
         }
     }
 
@@ -4093,8 +4096,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
      *  Is IPv4 Symmetric NATted?
      *  @since 0.9.57
      */
-    boolean isSnatted() {
-        return STATUS_IPV4_SNAT.contains(getReachabilityStatus());
+    boolean isSymNatted() { 
+        return STATUS_IPV4_SYMNAT.contains(getReachabilityStatus());
     }
 
     /**
@@ -4140,13 +4143,18 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     PeerState pickTestPeer(PeerTestState.Role peerRole, int version, boolean isIPv6, RemoteHostId dontInclude) {
         if (peerRole == ALICE)
             throw new IllegalArgumentException();
+        // if we are or may be symmetric natted, require SSU2 so we don't let an SSU1 test change the state
+        boolean requireV2 = peerRole == BOB && !isIPv6 && _enableSSU2 &&
+                            (isSymNatted() || STATUS_IPV4_SYMNAT.contains(_reachabilityStatusPending));
         List<PeerState> peers = new ArrayList<PeerState>(_peersByIdent.values());
         for (Iterator<PeerState> iter = new RandomIterator<PeerState>(peers); iter.hasNext(); ) {
             PeerState peer = iter.next();
             if (peerRole == BOB) {
-                // Skip SSU2 until we have support for peer test
                 version = peer.getVersion();
-                if (version != 1) {
+                if (version == 1) {
+                    if (requireV2)
+                        continue;
+                } else {
                     // we must know our IP/port
                     PeerState2 bob = (PeerState2) peer;
                     if (bob.getOurIP() == null || bob.getOurPort() <= 0)

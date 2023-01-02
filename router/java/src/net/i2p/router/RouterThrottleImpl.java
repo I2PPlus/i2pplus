@@ -33,19 +33,24 @@ public class RouterThrottleImpl implements RouterThrottle {
 //    private static final long JOB_LAG_LIMIT_TUNNEL = 500;
     private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 400 : 300;
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
-    public static final int DEFAULT_MAX_TUNNELS = (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024) ? 2*1000 : 8*1000;
+    public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 2*1000 :
+                                                  SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
+                                                  SystemVersion.getCores() >= 8 ? 12*1000 :
+                                                  8*1000;
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
     private static final long DEFAULT_REJECT_STARTUP_TIME = 10*60*1000;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
-    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 : SystemVersion.isARM() && SystemVersion.getCores() < 4 ? 800 : SystemVersion.isARM() ? 2000 : 4000;
+    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 :
+                                                            SystemVersion.isARM() && SystemVersion.getCores() < 4 ? 800 :
+                                                            SystemVersion.isARM() ? 1200 : 2500;
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
 
     /**
      *  TO BE FIXED - SEE COMMENTS BELOW
      */
 //    private static final int DEFAULT_MAX_PROCESSINGTIME = 2250;
-    private static final int DEFAULT_MAX_PROCESSINGTIME = 1500;
+    private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 1500 : 750;
 
     /** tunnel acceptance */
     public static final int TUNNEL_ACCEPT = 0;
@@ -515,21 +520,23 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private double getTunnelGrowthFactor() {
         try {
-//            return Double.parseDouble(_context.getProperty("router.tunnelGrowthFactor", "1.3"));
-            return Double.parseDouble(_context.getProperty("router.tunnelGrowthFactor", "5"));
+            String p = _context.getProperty("router.tunnelGrowthFactor");
+            if (p == null)
+                return 1.3d;
+            return Double.parseDouble(p);
         } catch (NumberFormatException nfe) {
-//            return 1.3;
-            return 5;
+            return 1.3d;
         }
     }
 
     private double getTunnelTestTimeGrowthFactor() {
         try {
-//            return Double.parseDouble(_context.getProperty("router.tunnelTestTimeGrowthFactor", "1.3"));
-            return Double.parseDouble(_context.getProperty("router.tunnelTestTimeGrowthFactor", "5"));
+            String p = _context.getProperty("router.tunnelTestTimeGrowthFactor");
+            if (p == null)
+                return 1.3d;
+            return Double.parseDouble(p);
         } catch (NumberFormatException nfe) {
-//            return 1.3;
-            return 5;
+            return 1.3d;
         }
     }
 

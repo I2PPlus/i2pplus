@@ -2657,7 +2657,7 @@ class EstablishmentManager {
         if (expires > now + 2*60*1000) {
             // don't save if symmetric natted
             byte[] ip = peer.getIP();
-            if (ip != null && ip.length == 4 && _transport.isSnatted())
+            if (ip != null && ip.length == 4 && _transport.isSymNatted())
                 return;
         }
         Token tok = new Token(token, expires, now);
@@ -3229,32 +3229,35 @@ class EstablishmentManager {
                         _log.warn("Failsafe removal of OutboundByHash: " + state);
                 }
             }
-            int count = 0;
-            synchronized(_inboundTokens) {
-                for (Iterator<Token> iter = _inboundTokens.values().iterator(); iter.hasNext(); ) {
-                    Token tok = iter.next();
-                    if (tok.getExpiration() < now) {
-                        iter.remove();
-                        count++;
+            if (_inboundTokens != null) {
+                // SSU2 only
+                int count = 0;
+                synchronized(_inboundTokens) {
+                    for (Iterator<Token> iter = _inboundTokens.values().iterator(); iter.hasNext(); ) {
+                        Token tok = iter.next();
+                        if (tok.getExpiration() < now) {
+                            iter.remove();
+                            count++;
+                        }
                     }
                 }
-            }
-            if (count > 0 && _log.shouldDebug())
-                _log.debug("Expired " + count + " inbound tokens");
-            count = 0;
-            synchronized(_outboundTokens) {
-                for (Iterator<Token> iter = _outboundTokens.values().iterator(); iter.hasNext(); ) {
-                    Token tok = iter.next();
-                    if (tok.getExpiration() < now) {
-                        iter.remove();
-                        count++;
+                if (count > 0 && _log.shouldDebug())
+                    _log.debug("Expired " + count + " inbound tokens");
+                count = 0;
+                synchronized(_outboundTokens) {
+                    for (Iterator<Token> iter = _outboundTokens.values().iterator(); iter.hasNext(); ) {
+                        Token tok = iter.next();
+                        if (tok.getExpiration() < now) {
+                            iter.remove();
+                            count++;
+                        }
                     }
                 }
+                if (count > 0 && _log.shouldDebug())
+                    _log.debug("Expired " + count + " outbound tokens");
+                _terminationCounter.clear();
+                _transport.getIntroManager().cleanup();
             }
-            if (count > 0 && _log.shouldDebug())
-                _log.debug("Expired " + count + " outbound tokens");
-            _terminationCounter.clear();
-            _transport.getIntroManager().cleanup();
         }
     }
 }

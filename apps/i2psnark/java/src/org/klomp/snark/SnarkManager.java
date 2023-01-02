@@ -3112,10 +3112,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         disableTorrentFile(name);
                         rv = false;
                     }
-                    if (shouldStart && (count++ & 0x3f) == 49) {
-                        // try to prevent OOMs at startup
-                        try { Thread.sleep(1500); } catch (InterruptedException ie) {}
-                    }
                 } catch (Snark.RouterException e) {
                     addMessage(_t("Error: Could not add torrent: {0}", name) + ": " + e.getMessage());
                     _log.error("Unable to add torrent: " + name + "\n* Reason: " + e.getMessage());
@@ -3125,6 +3121,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _log.error("Unable to add torrent: " + name + "\n* Reason: " + e.getMessage());
                     disableTorrentFile(name);
                     rv = false;
+                }
+                if (shouldStart && (count++ & 0x0f) == 15) {
+                    // try to prevent OOMs at startup
+                    try { Thread.sleep(250); } catch (InterruptedException ie) {}
                 }
             }
         }
@@ -3355,9 +3355,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 } catch (RuntimeException re) {
                     // Snark.fatal() will log and call fatal() here for user message before throwing
                 }
-                if ((count++ & 0x3f) == 49) {
+                if ((count++ & 0x0f) == 15) {
                     // try to prevent OOMs
-                    try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+                    try { Thread.sleep(250); } catch (InterruptedException ie) {}
                 }
             }
         }

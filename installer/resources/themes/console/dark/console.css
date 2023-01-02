@@ -69,10 +69,11 @@ ul{margin:0;padding:0}
 /* sidebar */
 #sbwrap,#sidebar,#xhr{width:194px}
 #sb_wrap{margin:0 0 10px 5px;padding:0;display:block;text-align:center;will-change:transform}
+#sb_wrap::after{margin-bottom:14px;display:inline-block;content:""}
 .iframed #sb_wrap{display:none}
 #xhr{margin:0 auto 0 -9px;display:block;width:calc(100% + 19px)}
 .sb table{margin:-5px auto -6px -1px;width:calc(100% + 1px);position:relative;overflow:hidden;text-align:center;font-size:8pt;border:none;border-collapse:collapse;box-shadow:var(--bevel_hard)}
-#sidebar{padding:8px 10px 8px;width:194px;text-align:center;font-size:8pt;border:var(--border);border-radius:3px;background:var(--mainbg);contain:paint}
+#sidebar{padding:8px 10px 8px;text-align:center;font-size:8pt;border:var(--border);border-radius:3px;background:var(--mainbg);contain:paint}
 #sb_logo{width:100%;margin:-8px 0 -9px -10px;padding:9px 10px 10px;display:inline-block;border-radius:3px 3px 0 0;box-shadow:var(--bevel);background:linear-gradient(180deg,rgba(0,64,0,.3),rgba(0,24,0,.3)),repeating-linear-gradient(90deg,rgba(0,80,0,.1) 1px,rgba(0,16,0,.3) 2px,rgba(0,16,0,.3) 3px);background-size:100%,100% 4px}
 #sb_logo:hover{box-shadow:var(--highlight),inset 0 0 0 2px rgba(255,96,0,.6);background:linear-gradient(180deg,rgba(0,64,0,.6),rgba(0,24,0,.6)),repeating-linear-gradient(90deg,rgba(0,80,0,.1) 1px,rgba(0,16,0,.3) 2px,rgba(0,16,0,.3) 3px);background-size:100%,100% 4px;transition:ease background .15s}
 #sb_logo:active{box-shadow:var(--highlight),inset 0 0 0 2px rgba(255,144,0,.5),inset 6px 6px 6px rgba(0,0,0,.7);background:linear-gradient(180deg,rgba(0,32,0,.3),rgba(0,48,0,.3)),repeating-linear-gradient(90deg,rgba(0,80,0,.1) 1px,rgba(0,16,0,.3) 2px,rgba(0,16,0,.3) 3px)}
@@ -261,6 +262,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .toggleSection:checked:active{background:var(--hover) var(--collapse_active) no-repeat center center/10px}
 #sb_updatesection h3.collapsed:not(.updating) a::after{content:"*"}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #141,var(--highlight);position:relative;z-index: 999;animation: fade .25s ease .5s reverse both}
+#tunnelCount{animation:none}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #sidebar h3 a .badge[hidden]{display:none}

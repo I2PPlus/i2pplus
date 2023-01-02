@@ -1,26 +1,22 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.JobImpl;
-import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
-
-import java.util.Date;
-import java.util.Random;
 import net.i2p.router.CommSystemFacade.Status;
-
 import net.i2p.router.Job;
-import net.i2p.router.NetworkDatabaseFacade;
-
+import net.i2p.router.JobImpl;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.RouterContext;
+import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
 

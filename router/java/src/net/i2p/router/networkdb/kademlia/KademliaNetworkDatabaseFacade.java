@@ -145,12 +145,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * know anyone or just started up) -- see validate() below
      */
 //    private final static long ROUTER_INFO_EXPIRATION = 27*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION = 28*60*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION = 24*60*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_MIN = 90*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_MIN = 16*60*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_SHORT = 75*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 8*60*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 6*60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
     static final String PROP_ROUTER_INFO_EXPIRATION_ADJUSTED = "router.expireRouterInfo";
 
@@ -194,7 +194,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final int KAD_B = 5;
     static final String PROP_KAD_B = "router.exploreKadB";
 
-    private static final long[] RATES = { 60*1000, 60*60*1000 };
+    private static final long[] RATES = { 60*1000, 60*60*1000, 24*60*60*1000 };
 
     public KademliaNetworkDatabaseFacade(RouterContext context) {
         _context = context;
@@ -365,7 +365,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // Don't run until after RefreshRoutersJob has run, and after validate() will return invalid for old routers.
         if (!_context.commSystem().isDummy()) {
             Job erj = new ExpireRoutersJob(_context, this);
-             erj.getTiming().setStartAfter(_context.clock().now() + 2*60*60*1000);
+//             erj.getTiming().setStartAfter(_context.clock().now() + 2*60*60*1000);
+             erj.getTiming().setStartAfter(_context.clock().now() + 45*60*1000);
             _context.jobQueue().addJob(erj);
         }
 
@@ -878,8 +879,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.jobQueue().removeJob(j);
         j.getTiming().setStartAfter(nextTime);
         if (_log.shouldInfo())
-            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing in " + nextTime / 1000 + "s");
-//            "\n* Publishing: " + (new Date(nextTime)));
+            //_log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing at " + (new Date(nextTime)));
+            _log.info("Queuing local LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] for publication...");
         _context.jobQueue().addJob(j);
     }
 
@@ -1250,6 +1251,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // As the net grows this won't be sufficient, and we'll have to implement
         // flushing some from memory, while keeping all on disk.
         long adjustedExpiration;
+        int existing = _kb.size();
         String expireRI = _context.getProperty("router.expireRouterInfo");
         String routerId = "";
         if (routerInfo != null)
@@ -1264,11 +1266,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                           ROUTER_INFO_EXPIRATION_MIN +
                                           ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
 */
-        adjustedExpiration = ROUTER_INFO_EXPIRATION;
+        adjustedExpiration = existing > 5000 ? ROUTER_INFO_EXPIRATION / 2 :
+                             existing > 2500 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
+                             ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !routerInfo.isCurrent(adjustedExpiration)) {
             long age = now - routerInfo.getPublished();
-            int existing = _kb.size();
             if (existing >= MIN_REMAINING_ROUTERS) {
                 if (_log.shouldInfo())
 //                    _log.info("Expired RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]", new Exception());
@@ -1285,7 +1288,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR) {
             long age = routerInfo.getPublished() - now;
             if (_log.shouldWarn()) {
-                _log.warn("Ignoring [" + riHash + "] -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> Invalid publication date \n* Published: " + new Date(routerInfo.getPublished()));
                 //_log.warn("Banning [" + riHash + "] for 15m -> RouterInfo from the future!");
             }
             //_context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
@@ -1312,8 +1315,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 &&
-            routerInfo.getPublished() < now - 4*60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
-                return "RouterInfo [" + routerId + "] is K or L tier and was published over 4 hours ago";
+            //routerInfo.getPublished() < now - 4*60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
+            routerInfo.getPublished() < now - 60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
+                //return "RouterInfo [" + routerId + "] is K or L tier and was published over 4 hours ago";
+                return "RouterInfo [" + routerId + "] is K or L tier and was published over an hour ago";
 
         if (expireRI != null && !us.equals(routerInfo.getIdentity().getHash())) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {

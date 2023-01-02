@@ -1,3 +1,27 @@
+2022-12-31 zzz
+ * i2psnark:
+   - Update tracker list after editing torrent (Gitlab #380)
+   - Throttle torrent startup to prevent OOMs
+
+2022-12-30 zzz
+ * UPnP: Catch AssertionError when closing SSDP multicast socket
+ * Util: Add methods to convert IPv6 addresses to canonical RFC 5952 strings
+
+2022-12-29 zzz
+ * Tunnels: Limit requested client tunnels during congestion
+
+2022-12-26 zzz
+ * Console: Sort tunnels by name on /tunnels, /configtunnels, /i2ptunnel
+ * Router: Don't blocklist our own IP
+ * SSU:
+   - Fix NPE when SSU2 disabled
+   - Redesign peer test symmetric NAT detection
+
+2022-12-23 zzz
+ * SSU2:
+   - More peer test fixes
+   - Refactor in-session PacketBuilder2 methods to throw IOE
+
 2022-12-22 zzz
  * SSU:
    - Further restrict states to publish peer test cap

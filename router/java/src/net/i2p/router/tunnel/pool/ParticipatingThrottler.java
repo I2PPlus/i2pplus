@@ -7,6 +7,11 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+import net.i2p.router.Router;
+
 /**
  * Count how often we have accepted a tunnel with the peer
  * as the previous or next hop.
@@ -57,26 +62,33 @@ class ParticipatingThrottler {
 
     /** increments before checking */
     Result shouldThrottle(Hash h) {
+        RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
+        boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isLowShare = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0);
+        boolean isFast = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
+                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
+                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
 //        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
-        int limit = isSlow ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 5, numTunnels * (PERCENT_LIMIT / 5) / 100))
+        int limit = isUnreachable || isLowShare ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 12, numTunnels * (PERCENT_LIMIT / 8) / 100))
+                    : isSlow ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 5, numTunnels * (PERCENT_LIMIT / 5) / 100))
                     : !isQuadCore ? Math.min((MIN_LIMIT * 3 / 2), Math.max(MAX_LIMIT / 4, numTunnels * (PERCENT_LIMIT / 4) / 100))
-                    : SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 2 * 1024*1024*1024 ?
+                    : (SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 2 * 1024*1024*1024) || isFast ?
                       Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100))
                     : Math.min(MIN_LIMIT * 2,(Math.max(MAX_LIMIT / 3, numTunnels * (PERCENT_LIMIT / 3) / 100)));
         int count = counter.increment(h);
         Result rv;
         if (count > limit) {
             if (count > limit * 10 / 9) {
-                int random = (1 + context.random().nextInt(12) * context.random().nextInt(60)) * 1000;
-                int bantime = Math.max(random, (5 + context.random().nextInt(10)) * 60 * 1000);
+                int bantime = 15*60*1000;
                 int period = bantime / 60 / 1000;
-                context.banlist().banlistRouter(h, "Excessive transit tunnels", null, null, context.clock().now() + bantime);
+                context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
 //                if (_log.shouldWarn())
-                _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Excessive transit tunnel requests (Limit: " + limit * 10 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Excessive tunnel requests (Limit: " + limit * 10 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
                 rv = Result.DROP;
                 //rv = Result.REJECT; // do we want to signal to the peer that we're busy?
             } else {

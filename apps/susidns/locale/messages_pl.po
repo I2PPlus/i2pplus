@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 03:56+0000\n"
+"POT-Creation-Date: 2023-01-02 11:31+0000\n"
 "PO-Revision-Date: 2019-04-24 14:22+0000\n"
 "Last-Translator: erinm\n"
 "Language-Team: Polish (http://www.transifex.com/otf/I2P/language/pl/)\n"
@@ -128,14 +128,14 @@ msgstr[3] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:997
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1001
 msgid "Add"
 msgstr "Dodaj"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:971
 msgid "Replace"
 msgstr "Zastąp"
 
@@ -248,7 +248,7 @@ msgstr "Brak wpisów wybranych do usunięcia."
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
 msgid "Add Alternate"
 msgstr "Dodaj alternatywny"
 
@@ -269,7 +269,7 @@ msgstr "BŁĄD: Nie można zapisać pliku książki adresowej."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
 msgid ""
 "Invalid form submission, probably because you used the \"back\" or "
 "\"reload\" button on your browser. Please resubmit."
@@ -280,7 +280,7 @@ msgstr ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:166
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
 msgid ""
 "If the problem persists, verify that you have cookies enabled in your "
 "browser."
@@ -289,7 +289,7 @@ msgstr ""
 "plików cookie w przeglądarce."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:231
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:225
 msgid "Save"
@@ -300,7 +300,7 @@ msgid "Configuration saved."
 msgstr "Konfiguracja zapisana."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:229
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:223
 msgid "Reload"
@@ -385,7 +385,7 @@ msgstr[3] ""
 msgid "Import from file failed"
 msgstr ""
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:140
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
 msgid "Subscriptions saved."
 msgstr "Subskrypcje zapisane."
 
@@ -398,28 +398,28 @@ msgstr "Subskrypcje zapisane."
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:151
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:221
 msgid "Update"
 msgstr ""
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:154
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
 #, fuzzy
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr ""
 "Subskrypcje zapisane, trwa teraz aktualizowanie książki adresowej ze źródeł "
 "subskrypcji."
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr ""
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:162
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
 msgid "Subscriptions reloaded."
 msgstr "Subskrypcje przeładowane."
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:194
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1015
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1019
 msgid "Import"
 msgstr "Zaimportuj"
 
@@ -571,8 +571,8 @@ msgid "Mark for deletion"
 msgstr "Zaznacz do usunięcia"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:895
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:951
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1013
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:955
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1017
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -581,14 +581,22 @@ msgid "Add new destination"
 msgstr "Dodaj nowe miejsce przeznaczenia"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
+msgid "e.g. newdomain.i2p"
+msgstr ""
+
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:949
 msgid "B64 or B32"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1009
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:953
+msgid "Full destination or b32 address"
+msgstr ""
+
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1013
 msgid "Import from hosts.txt file"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1011
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1015
 #, fuzzy
 msgid "Select file"
 msgstr "wyczyść filtr"

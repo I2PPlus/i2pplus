@@ -1336,6 +1336,9 @@ public class Snark
    */
   public void replaceMetaInfo(MetaInfo metainfo) {
       meta = metainfo;
+      TrackerClient tc = trackerclient;
+      if (tc != null)
+          tc.reinitialize();
   }
 
   ///////////// Begin StorageListener methods

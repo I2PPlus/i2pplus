@@ -88,7 +88,7 @@ class LeaseRequestState {
 
     @Override
     public String toString() {
-        return "leaseSet request asking for " + _requestedLeaseSet
+        return "LeaseSet request asking for " + _requestedLeaseSet
                + " having received " + _grantedLeaseSet
                + " succeeding? " + _successful
                + " expiring on " + _expiration;

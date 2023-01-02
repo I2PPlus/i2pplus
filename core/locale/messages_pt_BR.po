@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-22 22:55+0000\n"
+"POT-Creation-Date: 2023-01-02 11:30+0000\n"
 "PO-Revision-Date: 2019-12-17 17:16+0000\n"
 "Last-Translator: blueboy, 2020\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/otf/"
@@ -127,7 +127,7 @@ msgstr "INFORMAÇÃO"
 msgid "WARN"
 msgstr "AVISO"
 
-#: ../java/src/net/i2p/util/LogWriter.java:165
+#: ../java/src/net/i2p/util/LogWriter.java:166
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"

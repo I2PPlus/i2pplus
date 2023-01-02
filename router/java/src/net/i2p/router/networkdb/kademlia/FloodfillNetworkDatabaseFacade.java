@@ -59,7 +59,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
 //    private static final int FLOOD_TIMEOUT = 30*1000;
-    private static final int FLOOD_TIMEOUT = 60*1000;
+    private static final int FLOOD_TIMEOUT = 90*1000;
     private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;

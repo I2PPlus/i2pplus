@@ -93,7 +93,7 @@ class EventPumper implements Runnable {
 //    private static final int FAILSAFE_LOOP_COUNT = 512;
     private static final int FAILSAFE_LOOP_COUNT = 1024;
 //    private static final long SELECTOR_LOOP_DELAY = 200;
-    private static final long SELECTOR_LOOP_DELAY = 50;
+    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 100 : 50;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
@@ -114,9 +114,9 @@ class EventPumper implements Runnable {
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
 
 //    private static final int MIN_MINB = 4;
-    private static final int MIN_MINB = 16;
+    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : 16;
 //    private static final int MAX_MINB = 12;
-    private static final int MAX_MINB = 128;
+    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : 128;
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {
