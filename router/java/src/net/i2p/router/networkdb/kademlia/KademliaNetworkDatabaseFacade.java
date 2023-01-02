@@ -151,7 +151,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final static long ROUTER_INFO_EXPIRATION_SHORT = 75*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 6*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
+//    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 15*60*1000l;
     static final String PROP_ROUTER_INFO_EXPIRATION_ADJUSTED = "router.expireRouterInfo";
 
     static final String PROP_VALIDATE_ROUTERS_AFTER = "router.validateRoutersAfter";
@@ -1266,8 +1267,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                           ROUTER_INFO_EXPIRATION_MIN +
                                           ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
 */
-        adjustedExpiration = existing > 5000 ? ROUTER_INFO_EXPIRATION / 2 :
-                             existing > 2500 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
+        adjustedExpiration = existing > 3000 ? ROUTER_INFO_EXPIRATION / 3 :
+                             existing > 2000 ? ROUTER_INFO_EXPIRATION / 2 :
+                             existing > 1500 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
                              ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !routerInfo.isCurrent(adjustedExpiration)) {
@@ -1298,16 +1300,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 //        if (upLongEnough && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
             if (routerInfo.getAddresses().isEmpty())
-                return "RouterInfo [" + routerId + "] has no addresses and was published over 45 minutes ago";
+                return "RouterInfo [" + routerId + "] has no addresses and was published over 15 minutes ago";
             // This should cover the introducers case below too
             // And even better, catches the case where the router is unreachable but knows no introducers
             if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || routerInfo.getAddresses().isEmpty())
-                return "RouterInfo [" + routerId + "] is unreachable and was published over 45 minutes ago";
+                return "RouterInfo [" + routerId + "] is unreachable and was published over 15 minutes ago";
             // Just check all the addresses, faster than getting just the SSU ones
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 // Introducers change often, introducee will ping introducer for 2 hours
                 if (ra.getOption("itag0") != null)
-                    return "RouterInfo [" + routerId + "] has SSU Introducers and was published over 45 minutes ago";
+                    return "RouterInfo [" + routerId + "] has SSU Introducers and was published over 15 minutes ago";
             }
         }
 
