@@ -1,5 +1,4 @@
 2022-12-31 zzz
- * Console: Change color palette for graphs on dark theme
  * i2psnark:
    - Update tracker list after editing torrent (Gitlab #380)
    - Throttle torrent startup to prevent OOMs
