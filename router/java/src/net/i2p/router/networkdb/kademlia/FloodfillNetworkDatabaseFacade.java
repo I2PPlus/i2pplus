@@ -660,7 +660,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         boolean isHidden = _context.router().isHidden();
         boolean slow = info.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                       info.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                       info.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0;
         boolean fast = info.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
