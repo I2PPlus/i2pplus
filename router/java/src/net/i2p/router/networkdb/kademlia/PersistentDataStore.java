@@ -594,8 +594,9 @@ public class PersistentDataStore extends TransientDataStore {
                             _log.warn("Skipping since NetDb copy is newer than " + _routerFile);
                     } else if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                               ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0) {
-                        // don't store unreachable or K/L tier peers & delete any existing ri files
+                               ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                               ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) {
+                        // don't store unreachable or K,L,M tier peers & delete any existing ri files
                         corrupt = true;
                         if (_log.shouldInfo()) {
                             if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty())
