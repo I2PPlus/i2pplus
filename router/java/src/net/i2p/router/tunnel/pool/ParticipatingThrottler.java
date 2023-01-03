@@ -65,7 +65,8 @@ class ParticipatingThrottler {
         RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
         boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         boolean isLowShare = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0);
+                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0);
         boolean isFast = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
@@ -81,7 +82,7 @@ class ParticipatingThrottler {
         Result rv;
         if (count > limit) {
             if (count > limit * 10 / 9) {
-                int bantime = 15*60*1000;
+                int bantime = 30*60*1000;
                 int period = bantime / 60 / 1000;
                 context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
