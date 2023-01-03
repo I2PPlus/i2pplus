@@ -87,7 +87,7 @@
 <tr><td><%=intl._t("Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]")%></td></tr>
 
 <tr><th>router.maxTunnelPercentage={n}</th></tr>
-<tr><td><%=intl._t("Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 15% in I2P+, 33% in I2P]")%></td></tr>
+<tr><td><%=intl._t("Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]")%></td></tr>
 
 <tr><th>router.networkDatabase.flat={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]")%></td></tr>
@@ -152,7 +152,7 @@
 <tr><td><%=intl._t("This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]")%></td></tr>
 
 <tr><th>router.exploreBredth={n} <span class="plus">I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!")%></td></tr>
+<tr><td><%=intl._t("This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!")%></td></tr>
 
 <tr><th>router.exploreBuckets={n} <span class="plus">I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers.")%></td></tr>
