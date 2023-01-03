@@ -716,8 +716,7 @@ class BuildHandler implements Runnable {
         boolean isInGW = req.readIsInboundGateway();
         boolean isOutEnd = req.readIsOutboundEndpoint();
 
-        int random = (3 + _context.random().nextInt(8) * _context.random().nextInt(60)) * 1000;
-        int bantime = Math.max(Math.min(random, (5 + _context.random().nextInt(10)) * 60 * 1000), 2*60*1000);
+        int bantime = 30*60*1000;
         int period = bantime / 60 / 1000;
 
         Hash from = state.fromHash;
@@ -734,7 +733,6 @@ class BuildHandler implements Runnable {
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (IBGW+OBEP)", null, null, _context.clock().now() + bantime);
                 _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
                           "m -> Hostile tunnel request (Inbound Gateway & Outbound Endpoint)");
-
             }
             return;
         }
