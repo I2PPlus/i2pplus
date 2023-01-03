@@ -44,7 +44,7 @@ class ExploreJob extends SearchJob {
     /** how many peers to explore through concurrently */
     static final String PROP_EXPLORE_BREDTH = "router.exploreBredth";
 //    private static final int EXPLORE_BREDTH = 1;
-    private static final int EXPLORE_BREDTH = 2;
+    private static final int EXPLORE_BREDTH = SystemVersion.isSlow() ? 1 : 2;
 
     /** Only send the closest "don't tell me about" refs...
      *  Override to make this bigger because we want to include both the
@@ -201,17 +201,17 @@ class ExploreJob extends SearchJob {
     @Override
     protected int getBredth() {
         String exploreBredth = getContext().getProperty(PROP_EXPLORE_BREDTH);
-        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 2000) {
+        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1000) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 2000 known peers)");
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 known peers)");
             return EXPLORE_BREDTH * 3;
-        } else if (exploreBredth == null && getContext().netDb().getKnownRouters() > 4000) {
+        } else if (exploreBredth == null && getContext().netDb().getKnownRouters() > 3000) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (over 4000 known peers)");
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (over 3000 known peers)");
             return 1;
         } else if (exploreBredth == null) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 4000 known peers)");
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 3000 known peers)");
             return EXPLORE_BREDTH * 2;
         } else {
             if (_log.shouldInfo())
