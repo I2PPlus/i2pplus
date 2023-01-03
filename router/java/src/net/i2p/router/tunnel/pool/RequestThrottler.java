@@ -52,7 +52,7 @@ class RequestThrottler {
         boolean rv = count > limit;
         if (rv) {
             if (count > limit * 10 / 9) {
-                int bantime = 15*60*1000;
+                int bantime = 30*60*1000;
                 int period = bantime / 60 / 1000;
                 context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
