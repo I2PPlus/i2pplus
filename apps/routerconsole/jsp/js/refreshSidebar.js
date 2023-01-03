@@ -178,7 +178,7 @@ function refreshSidebar() {
               if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
                 updateBar.innerHTML = updateBarResponse.innerHTML;
                 if (updateH3 !== null) {
-                  var updateH3 = document.querySelector("#sb_updatesection > h3 a").innerHTML;
+                  var updateH3 = document.querySelector("#sb_updatesection > h3 a");
                   updateH3.classList.add("updating");
                   var spinner = "<span id=\"updateSpinner\"></span>";
                   if (updateH3.innerHTML.indexOf(spinner) === -1) {
