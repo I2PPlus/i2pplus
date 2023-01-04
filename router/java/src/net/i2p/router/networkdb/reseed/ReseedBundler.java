@@ -100,7 +100,8 @@ public class ReseedBundler {
             boolean hasIPv4 = false;
             boolean dupIP = false;
             for (RouterAddress addr : addrs) {
-                if ("SSU".equals(addr.getTransportStyle() || "SSU2".equals(style)) && addr.getOption("itag0") != null) {
+                String style = addr.getTransportStyle();
+                if (("SSU".equals(style) || "SSU2".equals(style)) && addr.getOption("itag0") != null) {
                     hasIntro = true;
                     break;
                 }
