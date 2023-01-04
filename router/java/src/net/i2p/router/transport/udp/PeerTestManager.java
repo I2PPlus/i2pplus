@@ -336,7 +336,7 @@ class PeerTestManager {
                             }
                         }
                     } else if (bobTime <= 0) {
-                        // received from Charlie, but no reply from Bob.  Send it to 
+                        // received from Charlie, but no reply from Bob.  Send it to
                         // Bob again so he retransmits his reply.
                         // Bob handles dups / retx as of 0.9.57
                         //if (state.getBob().getVersion() == 1)
@@ -672,7 +672,7 @@ class PeerTestManager {
         test.setReceiveCharlieTime(0);
         test.setReceiveBobTime(0);
         testComplete();
-    }    
+    }
 
     /**
      * Evaluate the info we have and act accordingly, since the test has either timed out or
@@ -2380,7 +2380,7 @@ class PeerTestManager {
         }
     }
 
-    /** 
+    /**
      * SSU 2 Charlie only.
      * Retransmit msg 5 if necessary, and then
      * forget about charlie's nonce after a short while.
@@ -2432,7 +2432,7 @@ class PeerTestManager {
         }
     }
 
-    /** 
+    /**
      * Send RI and Peer Test. SSU2 only. We are Bob.
      *
      * Msg 2 Bob to Charlie with Alice's RI
@@ -2494,7 +2494,7 @@ class PeerTestManager {
         to.setLastSendTime(now);
     }
 
-    /** 
+    /**
      * Simple fix for RI getting there before PeerTest.
      * SSU2 only. We are Bob, for delaying msg sent after RI to Alice or Charlie.
      * @since 0.9.57
@@ -2543,8 +2543,8 @@ class PeerTestManager {
                 _context.netDb().store(h, ri);
                 // ignore flood request
             } catch (IllegalArgumentException iae) {
-                if (_log.shouldWarn())
-                    _log.warn("RouterInfo store fail: " + ri, iae);
+                if (_log.shouldInfo())
+                    _log.info("RouterInfo store fail: " + ri, iae);
             }
         }
 

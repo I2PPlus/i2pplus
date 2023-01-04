@@ -1693,8 +1693,8 @@ public class NTCPConnection implements Closeable {
                     }
                 }
             } catch (IllegalArgumentException iae) {
-                if (_log.shouldWarn())
-                    _log.warn("RouterInfo store fail: " + ri, iae);
+                if (_log.shouldInfo())
+                    _log.info("RouterInfo store fail: " + ri, iae);
             }
         }
 
