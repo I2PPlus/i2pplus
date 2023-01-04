@@ -522,10 +522,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         try {
             String p = _context.getProperty("router.tunnelGrowthFactor");
             if (p == null)
-                return 1.3d;
+                return 1.2d;
             return Double.parseDouble(p);
         } catch (NumberFormatException nfe) {
-            return 1.3d;
+            return 1.2d;
         }
     }
 
@@ -533,10 +533,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         try {
             String p = _context.getProperty("router.tunnelTestTimeGrowthFactor");
             if (p == null)
-                return 1.3d;
+                return 1.2d;
             return Double.parseDouble(p);
         } catch (NumberFormatException nfe) {
-            return 1.3d;
+            return 1.2d;
         }
     }
 
