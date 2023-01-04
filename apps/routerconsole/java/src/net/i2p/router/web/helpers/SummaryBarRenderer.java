@@ -373,7 +373,7 @@ class SummaryBarRenderer {
                .append("\">")
                .append(_t("Services"))
                .append("</a><input type=\"checkbox\" id=\"toggle_sb_services\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n")
-               .append("<table id=\"sb_services\" class=\"volatile collapse\">\n<tr>\n<td>");
+               .append("<table id=\"sb_services\" class=\"collapse\">\n<tr>\n<td>");
             for (String row : svcs.values()) {
                 buf.append(row);
             }
@@ -434,7 +434,7 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Internals"))
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_internals\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_internals\" class=\"volatile collapse\">\n<tr>\n<td>\n");
+                   "<table id=\"sb_internals\" class=\"collapse\">\n<tr>\n<td>\n");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
@@ -882,7 +882,7 @@ class SummaryBarRenderer {
            .append(_t("Peers"))
            .append(" <span class=\"badge\" hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_peers\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_peers\" class=\"volatile\">\n" +
+                   "<table id=\"sb_peers\">\n" +
                    "<tr title=\"");
         if (isAdvanced())
             buf.append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"));
@@ -951,7 +951,7 @@ class SummaryBarRenderer {
            .append("</span></td></tr>\n" +
                    "</table>\n");
 
-        buf.append("<table id=\"sb_peers_condensed\" class=\"volatile\" hidden>\n")
+        buf.append("<table id=\"sb_peers_condensed\" hidden>\n")
            .append("<tr><td>")
            .append("<a class=\"sb_icon\" id=\"floodfill\" href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
            .append("\"><span><span class=\"badge\">").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
@@ -977,7 +977,7 @@ class SummaryBarRenderer {
            .append(_t("Peers"))
            .append(" <span class=\"badge\" hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_peersadvanced\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_peersadvanced\" class=\"volatile\">\n" +
+                   "<table id=\"sb_peersadvanced\">\n" +
                    "<tr title=\"")
            .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"))
            .append("\">" +
@@ -1047,7 +1047,7 @@ class SummaryBarRenderer {
            .append("</span></td></tr>\n" +
                    "</table>\n");
 
-        buf.append("<table id=\"sb_peers_condensed\" class=\"volatile\" hidden>\n")
+        buf.append("<table id=\"sb_peers_condensed\" hidden>\n")
            .append("<tr><td>")
            .append("<a class=\"sb_icon\" id=\"floodfill\" href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
            .append("\"><span><span class=\"badge\">").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
@@ -1075,7 +1075,7 @@ class SummaryBarRenderer {
            .append("\" target=\"_top\">")
            .append(_t("Bandwidth in/out"))
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_bandwidth\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">" +
-                   "<table id=\"sb_bandwidth\" class=\"volatile\">\n" +
+                   "<table id=\"sb_bandwidth\">\n" +
                    "<tr><td><b>")
            .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", _t("Current")))  // lie and say 3 sec since 1 sec would appear as 1000 ms
            .append("</b></td><td class=\"digits\"><span>")
@@ -1157,7 +1157,7 @@ class SummaryBarRenderer {
            .append(" <span class=\"badge\" hidden title=\"").append(_t("Total number of tunnels in use")).append("\">")
            .append(totalTunnels).append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_tunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_tunnels\" class=\"volatile\">\n");
+                   "<table id=\"sb_tunnels\">\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
             buf.append("<tr title=\"")
                .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
@@ -1221,7 +1221,7 @@ class SummaryBarRenderer {
 
             buf.append("</table>\n");
 
-            buf.append("<table id=\"sb_tunnels_condensed\" class=\"volatile\" hidden>\n")
+            buf.append("<table id=\"sb_tunnels_condensed\" hidden>\n")
                .append("<tr><td>")
                .append("<a class=\"sb_icon\" id=\"service\" href=\"/tunnels#client_tunnels\" title=\"").append(_t("Service")).append(' ').append(_t("tunnels"))
                .append("\"><span><span class=\"badge\">").append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
@@ -1253,7 +1253,7 @@ class SummaryBarRenderer {
         }
         buf.append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_queue\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_queue\" class=\"volatile\">\n" +
+                   "<table id=\"sb_queue\">\n" +
                    "<tr title=\"")
            .append(_t("Indicates router performance"))
            .append("\">" +
