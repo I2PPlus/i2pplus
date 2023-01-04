@@ -110,6 +110,9 @@ function refreshSidebar() {
           if (clock !== null && clockResponse !== null) {
             clock.innerHTML = clockResponse.innerHTML;
           }
+          if (netStatus !== null && netStatusResponse !== null && !Object.is(netStatus.innerHTML, netStatusResponse.innerHTML)) {
+            netStatus.outerHTML = netStatusResponse.outerHTML;
+          }
           if (bandwidth !== null && bandwidthResponse !== null && !Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML)) {
             bandwidth.innerHTML = bandwidthResponse.innerHTML;
           }
