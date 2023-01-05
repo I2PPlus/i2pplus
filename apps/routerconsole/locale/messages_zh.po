@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 03:50+0000\n"
+"POT-Creation-Date: 2023-01-05 13:26+0000\n"
 "PO-Revision-Date: 2022-11-14 14:07+0000\n"
 "Last-Translator: xtoaster <zhazhenzhong@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
@@ -371,7 +371,7 @@ msgstr "{0} 端口 {1,number,#####} 通过 UPnP 转发失败。"
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:596
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:969
 #: ../java/strings/Strings.java:69
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:617
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:621
 msgid "Router"
 msgstr "路由器"
 
@@ -1230,7 +1230,7 @@ msgstr "服务器位置"
 #. I2CP
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:42
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:32
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:541
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:545
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:641
 msgid "I2CP"
 msgstr "I2CP"
@@ -1240,7 +1240,7 @@ msgid "I2PTunnel"
 msgstr "I2P 隧道"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:625
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:629
 msgid "SAM"
 msgstr "SAM"
 
@@ -1679,7 +1679,7 @@ msgstr "Torrents"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:93
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:330
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:594
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:653
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:657
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:331
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:489
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:497
@@ -1959,7 +1959,7 @@ msgstr "名称"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:62
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:758
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:509
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:513
 msgid "Destination"
 msgstr "目标址"
 
@@ -2206,7 +2206,7 @@ msgstr "高级"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:471
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:613
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:617
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:493
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:471
@@ -3298,7 +3298,7 @@ msgstr "网络数据库搜索工具"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:51
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:593
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:597
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:527
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:534
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:542
@@ -4546,7 +4546,7 @@ msgstr "估计的租约集总数"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:678
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:699
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:581
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:585
 msgid "LeaseSet"
 msgstr "租约集"
 
@@ -4630,7 +4630,7 @@ msgstr "路由器密钥"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:876
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:880
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:577
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:581
 msgid "Lease"
 msgstr "租约"
 
@@ -4910,7 +4910,7 @@ msgid "Hidden or starting up"
 msgstr "隐身或正在启动"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1514
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:633
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:637
 msgid "SSU"
 msgstr "SSU"
 
@@ -5594,7 +5594,7 @@ msgstr "容量"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:921
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:956
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1052
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:529
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:533
 msgid "Floodfill"
 msgstr "参与洪泛"
 
@@ -6513,7 +6513,7 @@ msgstr "添加、删除、编辑或控制客户端隧道和服务器隧道"
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:807
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:808
 #: ../java/strings/Strings.java:53
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:561
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:565
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
@@ -10809,10 +10809,24 @@ msgstr ""
 "被映射到地址簿中的一个.i2p域。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:501
+msgid "B33"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:503
+msgid ""
+"An address containing an encrypted LeaseSet is informally referred to as a "
+"b33 address, an extension of a base32 address with the host's public key and "
+"signature type encoded into the address instead of a lookup hash. This "
+"address type is required for blinded Leasesets. More information: <a "
+"href=https://geti2p.net/spec/b32encrypted class='sitelink external' "
+"target=_blank rel=noreferrer>B33 Specification</a>"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:505
 msgid "BOB"
 msgstr "BOB"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:503
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:507
 msgid ""
 "BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router "
 "protocol, superseded by <i>SAM</i>. For more information, see the <a "
@@ -10823,11 +10837,11 @@ msgstr ""
 "<i>SAM</i>所取代。 了解更多，请查看 <a href=\"https://geti2p.net/en/docs/api/"
 "bob\" class=\"sitelink external\" target=\"_blank\">在线文档</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:505
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:509
 msgid "Clearnet"
 msgstr "Clearnet/表网"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:507
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:511
 msgid ""
 "Clearnet normally refers to the publicly accessible internet, the opposite "
 "of the darknet that typically describes the encrypted, anonymous services "
@@ -10840,7 +10854,7 @@ msgstr ""
 "Clearnet_(networking)\" class=\"sitelink external\" "
 "target=\"_blank\">Wikipedia article</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:511
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:515
 msgid ""
 "The unique cryptographic identity of the inbound endpoint of a tunnel "
 "providing access to a service on the I2P network, represented as a Base32 or "
@@ -10849,11 +10863,11 @@ msgstr ""
 "提供访问I2P网络服务的隧道入站端点的唯一加密身份，以公钥的Base32或Base64哈希值"
 "表示。相当于一个IP地址+端口。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:513
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:517
 msgid "Eepget"
 msgstr "Eepget"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:515
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:519
 msgid ""
 "A command-line application supplied with I2P that is used to request URL "
 "resources, similar to <a href=https://www.gnu.org/software/wget/ "
@@ -10869,11 +10883,11 @@ msgstr ""
 "target=\"_blank\">curl</a>. Eepget也被路由器内部使用，例如从补种服务器补种。"
 "Eepget默认使用HTTP代理 <code>127.0.0.1:4444</code>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:517
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:521
 msgid "Eephead"
 msgstr "Eephead"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:519
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:523
 msgid ""
 "A command-line application supplied with I2P+ (Linux/MacOS) that is used to "
 "perform a <code>head</code> request on a specified http resource on the "
@@ -10884,11 +10898,11 @@ msgstr ""
 "进行 headrequest，从远程服务器返回各种响应头。默认情况下，eephead 使用 HTTP "
 "代理<code>127.0.0.1:4444</code>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:521
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:525
 msgid "Eepsite"
 msgstr "匿名网站"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:523
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:527
 msgid ""
 "A website hosted on the I2P network. By default, a <a href=https://www."
 "eclipse.org/jetty/about.html class='sitelink external' target=_blank "
@@ -10901,11 +10915,11 @@ msgstr ""
 "</a> 被配置和运行在 <a href=\"http://127.0.0.1:7658/\" "
 "target=\"_blank\">http://127.0.0.1:7658/</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:525
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:529
 msgid "Exploratory Tunnel"
 msgstr "探测隧道"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:527
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:531
 msgid ""
 "A tunnel used by the router for communicating with other routers to perform "
 "various \"housekeeping\" functions such as learning and publishing "
@@ -10916,7 +10930,7 @@ msgstr ""
 "</i>，测试客户端隧道，以及获取和验证网络中的其他路由器。这些隧道通常是低带宽"
 "的。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:531
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:535
 msgid ""
 "A router on the network tasked with providing and receiving information "
 "about other routers and services on the network. The current minimum share "
@@ -10934,11 +10948,11 @@ msgstr ""
 "database#floodfill\" class=\"sitelink external\" target=\"_blank\">在线文档</"
 "a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:533
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:537
 msgid "Garlic Routing"
 msgstr "大蒜路由"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:535
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:539
 msgid ""
 "A variant of onion routing that encrypts multiple messages together to make "
 "it more difficult for attackers to perform traffic analysis and to increase "
@@ -10950,11 +10964,11 @@ msgstr ""
 "据传输速度。 了解更多，请参阅  <a href=\"https://geti2p.net/en/docs/how/"
 "garlic-routing\" class=\"sitelink external\" target=\"_blank\">在线文档</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:537
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:541
 msgid "Hidden Mode"
 msgstr "隐身模式"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:539
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:543
 msgid ""
 "A router configured to run in Hidden Mode will not publish its details to "
 "the <i>Network Database</i> and will not participate in routing traffic for "
@@ -10964,7 +10978,7 @@ msgstr ""
 "配置为在隐藏模式下运行的路由器不会将其详细信息发布到 网络数据库 ，也不会中继"
 "其他路由器的流量。 在严格的国家/地区运行的路由器会自动以隐藏模式运行。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:543
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:547
 msgid ""
 "The I2P Client Protocol (I2CP) enables external applications (clients) to "
 "communicate with I2P over single TCP socket, by default using port 7654. For "
@@ -10977,11 +10991,11 @@ msgstr ""
 "net/en/docs/protocol/i2cp\" class=\"sitelink external\" target=\"_blank\">在"
 "线文档</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:545
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:549
 msgid "I2NP"
 msgstr "I2NP"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:547
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:551
 msgid ""
 "The I2P Network Protocol (I2NP) manages the routing and mixing of messages "
 "between routers, in addition to the transport selection (where more than one "
@@ -10993,11 +11007,11 @@ msgstr ""
 "议选择（支持多种协议）。 有在线文档 <a href=\"https://geti2p.net/en/docs/"
 "protocol/i2np\" class=\"sitelink external\" target=\"_blank\">在线文档</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:549
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:553
 msgid "I2P+"
 msgstr "I2P+"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:551
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:555
 msgid ""
 "A soft fork of the Java I2P software which retains full compatibility, "
 "providing an enhanced user interface and improvements to network "
@@ -11010,11 +11024,11 @@ msgstr ""
 "进。 查看 <a href=\"http://skank.i2p/static/i2p+.html\" class=\"sitelink\" "
 "target=\"_blank\">http://skank.i2p/static/i2p+.html</a> 了解更多。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:553
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:557
 msgid "I2PBote (plugin)"
 msgstr "I2PBote (插件)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:555
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:559
 msgid ""
 "An unmaintained I2P plugin that provides serverless, end-to-end encrypted e-"
 "mail within the I2P network. For more information, see <a href=http://bote."
@@ -11027,11 +11041,11 @@ msgstr ""
 "i2p/</a>. 源代码可在 <a href=\"https://github.com/i2p/i2p.i2p-bote\" "
 "class=\"sitelink external\" target=\"_blank\">github</a>查看。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:557
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:561
 msgid "i2pd"
 msgstr "i2pd"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:559
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:563
 msgid ""
 "An alternative implementation of an I2P router coded in C++. For more "
 "information, see <a href=https://i2pd.website/ class='sitelink external' "
@@ -11042,7 +11056,7 @@ msgstr ""
 "用 C++ 编写的 I2P 路由。 更多信息请查看 <a href=\"https://i2pd.website/\" "
 "class=\"sitelink external\" target=\"_blank\">https://i2pd.website/</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:563
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:567
 msgid ""
 "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink external' "
 "target=_blank rel=noreferrer>Snark BitTorrent client</a> refactored for use "
@@ -11055,21 +11069,21 @@ msgstr ""
 "target=\"_blank\">Snark BitTorrent </a> 为I2P网络设计的分支，通常作为 Java "
 "I2P 默认应用程序套件的一部分提供，也可作为独立的 Java 应用程序使用。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:565
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:569
 msgid "Introducer"
 msgstr "介绍人"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:567
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
 msgid ""
 "A router that facilitates the connection to the network of another router "
 "that is behind a firewall."
 msgstr "便于连接到防火墙后面的另一个路由器的路由器。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:569
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:573
 msgid "Jump Service"
 msgstr "跳转服务"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:575
 msgid ""
 "A simple CGI application that takes a hostname as a parameter and returns a "
 "301 redirect to the proper URL with a <code>?i2paddresshelper=key</code> "
@@ -11083,11 +11097,11 @@ msgstr ""
 "字符串并将密钥用作实际目标。 此外，代理将缓存密钥，因此在重新启动之前不需要地"
 "址助手，并提供将解析的地址添加到地址簿的选项。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:573
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:577
 msgid "Laptop Mode"
 msgstr "笔记本模式"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:575
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:579
 msgid ""
 "An <a href=/confignet#ipchange>optional configuration</a> that automatically "
 "changes your <a href=/netdb?r=.>router identity</a> and <a href=/"
@@ -11104,13 +11118,13 @@ msgstr ""
 "起来。尤其是 IP 地址可能会经常更改，例如当您从多个位置在笔记本电脑上运行 I2P "
 "时。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:579
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:583
 msgid ""
 "The information that defines the authorization for a particular tunnel to "
 "receive messages targeting a <i>Destination</i>."
 msgstr "定义某条隧道接收针对某个<i>目标</i>的信息的授权。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:583
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:587
 msgid ""
 "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A 0-"
 "hop server tunnel will only have one lease, regardless of the number of "
@@ -11119,11 +11133,11 @@ msgstr ""
 "一个<i>目标</i>的一组隧道入口点（租约）。 注意：无论配置了多少个隧道，一个 0 "
 "跳服务器隧道都只有一个租约。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:585
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:589
 msgid "Monotone / mtn"
 msgstr "Monotone / mtn"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:587
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:591
 msgid ""
 "The distributed version control system (DVCS) previously used to maintain "
 "I2P's source code, now superseded by git."
@@ -11132,11 +11146,11 @@ msgstr ""
 "href=\"https://geti2p.net/en/get-involved/guides/monotone\" class=\"sitelink "
 "external\" target=\"_blank\">在线文档</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:589
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:593
 msgid "Multihoming"
 msgstr "Multihoming/多宿主"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:591
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:595
 msgid ""
 "Services may be hosted on multiple routers simultaneously, by sharing the "
 "same private key for the destination. Multihoming can further enhance the "
@@ -11150,7 +11164,7 @@ msgstr ""
 "器，当池中的服务器脱机时，所提供的服务将保持可用，这使得将服务器停机时间与路"
 "由器脱机相关联变得更加困难。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:595
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:599
 msgid ""
 "A distributed database containing router contact information (RouterInfos) "
 "and destination contact information (LeaseSets). A single router maintains "
@@ -11169,11 +11183,11 @@ msgstr ""
 "href=\"https://geti2p.net/en/docs/how/network-database\" class=\"sitelink "
 "external\" target=\"_blank\">在线文档</a>."
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:597
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:601
 msgid "NTCP / NTCP2"
 msgstr "NTCP / NTCP2"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:599
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:603
 msgid ""
 "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use "
 "Java's NIO (New I/O) TCP implementation to deliver I2NP messages between "
@@ -11188,11 +11202,11 @@ msgstr ""
 "geti2p.net/en/docs/transport/ntcp\" class=\"sitelink external\" "
 "target=\"_blank\">在线文档</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:601
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:605
 msgid "Orchid (plugin)"
 msgstr "Orchid/兰花（插件）"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:603
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:607
 msgid ""
 "A java implementation of a Tor client, available as an I2P plugin. Can be "
 "used as the default <i>outproxy</i> if configured in the relevant SOCKS or "
@@ -11208,11 +11222,11 @@ msgstr ""
 "github.com/i2p/i2p.plugins.orchid\" class=\"sitelink external\" "
 "target=\"_blank\">github</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:605
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:609
 msgid "Outproxy"
 msgstr "I2P 出口代理"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:607
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:611
 msgid ""
 "A service on the network that provides a proxy connection to the "
 "<i>clearnet</i>. By default, I2P has an HTTP outproxy configured for web "
@@ -11221,11 +11235,11 @@ msgstr ""
 "网络上的一项服务，提供与<i>表网</i>代理。  默认情况下，I2P 配置了一个 HTTP 代"
 "理，在 <code>127.0.0.1:4444</code>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:609
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:613
 msgid "Participation"
 msgstr "参与构建隧道"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:611
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:615
 msgid ""
 "The act of contributing to the network by permitting other routers to build "
 "tunnels using your router in a tunnel chain. At least 12KB/s upstream "
@@ -11238,7 +11252,7 @@ msgstr ""
 "至少需要分配 12KB/s 的上行带宽才能参与。 请注意，防火墙路由器的参与程度将受到"
 "限制，隐藏模式的路由器将根本不能参与。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:615
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:619
 msgid ""
 "The process of acquiring router identities, normally via <i>clearnet</i> "
 "servers, to ensure your router can communicate and build tunnels with other "
@@ -11250,7 +11264,7 @@ msgstr ""
 "与网络上的其他路由器通信并建立隧道。 当路由器没有其他对等方的路由器身份时（通"
 "常在安装后立即），重新播种的过程也称为 <i>bootstrapping（引导）</i>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:619
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:623
 msgid ""
 "The core I2P software, which routes encrypted packets on the I2P network. "
 "All routers by default participate in the network except routers running in "
@@ -11262,11 +11276,11 @@ msgstr ""
 "络，除了在被认为是敌对国家（见 <i>严格国家</i>）的路由器之外，这既有助于网"
 "络，又为通过路由器连接到 I2P 网络的任何客户端或服务器提供掩护流量。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:621
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:625
 msgid "Router Identity"
 msgstr "路由身份"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:623
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:627
 msgid ""
 "Information defining the unique identity of a router on the network which "
 "includes its IP address (or the IP addresses of intermediate introducers) "
@@ -11277,7 +11291,7 @@ msgstr ""
 "口、公共签名和加密密钥。 路由器身份与 NetDB中的对等节点相关联。 也称为"
 "<i>RouterInfo</i>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:627
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:631
 msgid ""
 "SAM (Simple Anonymous Messaging) is a protocol which allows a client "
 "application written in any programming language to communicate over I2P, by "
@@ -11290,11 +11304,11 @@ msgstr ""
 "参阅 <a href=\"https://geti2p.net/en/docs/api/samv3\" class=\"sitelink "
 "external\" target=\"_blank\">在线文档</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:629
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:633
 msgid "Shared Client"
 msgstr "共享隧道客户端"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:631
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:635
 msgid ""
 "In order to use a single set of tunnels for multiple client services, "
 "clients can be configured from the <i>Tunnel Manager</i> to operate in "
@@ -11307,7 +11321,7 @@ msgstr ""
 "道</i> 模式下运行。这种模式下共享隧道的客户端共享相同的隧道选项，这可以节约资"
 "源，并将来自多个客户端的流量混合到一套隧道中，使流量分析更加困难。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:635
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:639
 msgid ""
 "SSU (Secure Semi-reliable UDP) is an I2P network transport providing "
 "encrypted, connection-oriented, point-to-point connections, in addition to "
@@ -11320,11 +11334,11 @@ msgstr ""
 "href=\"https://geti2p.net/en/docs/transport/ssu\" class=\"sitelink "
 "external\" target=\"_blank\">在线文档</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:637
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:641
 msgid "Strict Countries"
 msgstr "严格国家"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:639
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:643
 msgid ""
 "A list of countries derived from the <a href=https://freedomhouse.org/report/"
 "countries-world-freedom-2019 class='sitelink external' target=_blank "
@@ -11349,11 +11363,11 @@ msgstr ""
 "苏丹、斯威士兰（斯威士兰）、叙利亚、塔吉克斯坦、泰国、土耳其、土库曼斯坦、委"
 "内瑞拉、阿拉伯联合酋长国、乌兹别克斯坦、西撒哈拉, 也门。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:641
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:645
 msgid "Tunnel"
 msgstr "隧道"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:643
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:647
 msgid ""
 "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink "
 "external' target=_blank rel=noreferrer>unidirectional</a> encrypted "
@@ -11364,11 +11378,11 @@ msgstr ""
 "unidirectional\" class=\"sitelink external\" target=\"_blank\">单向</a>加密通"
 "信途径，类似于Tor中的线路，只是Tor线路是双向的。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:645
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:649
 msgid "Tunnel Endpoint"
 msgstr "隧道终点"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:647
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:651
 msgid ""
 "The last router in a tunnel, which may be the <i>Outbound Endpoint</i>, "
 "where the client's tunnels meet the <i>Inbound Gateway</i> of the "
@@ -11379,11 +11393,11 @@ msgstr ""
 "i> 目标服务器的隧道，或者是 <i>入站终点</i> ,这是该链中连接到目标服务器的最后"
 "一个路由器。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:649
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:653
 msgid "Tunnel Gateway"
 msgstr "隧道起点"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:651
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:655
 msgid ""
 "The first router in a tunnel. For inbound tunnels, this is the one mentioned "
 "in the <i>LeaseSet</i> published in the <i>Network Database</i>. For "
@@ -11392,7 +11406,7 @@ msgstr ""
 "隧道中的第一个路由器。对于入站隧道，这是发表于 <i>网络数据库</i>中的 <i>租约"
 "集</i> 。对于出站隧道，发起路由器是网关。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:655
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:659
 msgid ""
 "A web application supplied with the router that permits creation and "
 "configuration of client and server tunnels. Also referred to as the "
@@ -11401,19 +11415,19 @@ msgstr ""
 "一个随路由器提供的网络应用程序，允许创建和配置客户和服务器隧道。也被称为  <i>"
 "隐藏服务管理器</i>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:657
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:661
 msgid "Tunnel Participant"
 msgstr "隧道参与者"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:659
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:663
 msgid "A router in a tunnel not designated as a gateway or endpoint."
 msgstr "隧道中未指定为网关或端点的路由器。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:661
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:665
 msgid "ZzzOT (plugin)"
 msgstr "ZzzOT (plugin)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:663
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:667
 msgid ""
 "A Java I2P plugin implementation of a BitTorrent <a href=https://en."
 "wikipedia.org/wiki/Opentracker class='sitelink external' target=_blank "
