@@ -68,6 +68,9 @@
 <tr><th>router.buildHandlerThreads={n}</th></tr>
 <tr><td><%=intl._t("Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks.")%></td></tr>
 
+<tr><th>router.defaultProcessingTimeThrottle={n}</th></tr>
+<tr><td><%=intl._t("This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay<i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]")%></td></tr>
+
 <tr><th>router.disableTunnelTesting={true|false}</th></tr>
 <tr><td><%=intl._t("Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]")%></td></tr>
 
@@ -104,7 +107,7 @@
 </ul></td></tr>
 
 <tr><th>router.minThrottleTunnels={n}</th></tr>
-<tr><td><%=intl._t("This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 2000 if system is running on ARM and 4 or more cores available, otherwise 4000]")%></td></tr>
+<tr><td><%=intl._t("This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]")%></td></tr>
 
 <tr><th>router.rebuildKeys={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]")%></td></tr>
