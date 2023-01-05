@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-02 11:31+0000\n"
+"POT-Creation-Date: 2023-01-05 03:50+0000\n"
 "PO-Revision-Date: 2022-11-14 14:07+0000\n"
 "Last-Translator: xtoaster <zhazhenzhong@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
@@ -9329,6 +9329,14 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:515
 msgid ""
+"This setting, in milliseconds, overrides the default message processing time "
+"limit (indicated as <i>Message Delay<i> in the Congestion sidebar section) "
+"before the router is determined to be congested and transit tunnel requests "
+"are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:517
+msgid ""
 "Periodically test tunnels to determine the average lag, and display the "
 "results in the Congestion sidepanel section. To enable, set this value to "
 "false. [Default is false]"
@@ -9336,7 +9344,7 @@ msgstr ""
 "定期测试隧道以确定平均滞后，并在拥塞侧面板部分中显示结果。若要启用，请将此值"
 "设置为 false。[默认值为假]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:517
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:519
 msgid ""
 "When set to true, the router will change its identity and UDP port every "
 "time the router restarts. [Default is false]"
@@ -9344,7 +9352,7 @@ msgstr ""
 "设置为 true 时，路由器将在每次路由器重新启动时更改其标识和 UDP 端口。[默认值"
 "为假]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:519
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:521
 msgid ""
 "This setting determines which <a href=/profiles#profile_defs>peer "
 "capabilities</a> will not be used to build your router's tunnels. e.g. "
@@ -9353,7 +9361,7 @@ msgstr ""
 "此设置确定哪些< href=/profiles#profile_defs>peer 功能</a>将不用于构建路由器的"
 "隧道。例如<code>：router.excludePeerCaps=LMN</code>"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:521
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:523
 msgid ""
 "When set to true, if your router is serving as a floodfill for the network, "
 "your <a href=/configadvanced#ffconf>floodfill participation</a> will be "
@@ -9362,7 +9370,7 @@ msgstr ""
 "设置为 true 时，如果您的路由器用作网络的 floodfill，则您的 < a href=/"
 "configadvanced#ffconf>floodfill 参与</a>将对其他路由器隐藏。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:523
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:525
 msgid ""
 "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be "
 "run. The default value is determined by the amount of memory allocated to "
@@ -9375,7 +9383,7 @@ msgstr ""
 "置为 3，对于小于 256M 设置为 4，对于大于 256MB，设置为 5。注意： 更改此设置需"
 "要重新启动路由器。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:525
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
 msgid ""
 "Determines the maximum number of participating tunnels the router can build. "
 "To disable participation completely, set to 0. [Default is 8000, or 2000 if "
@@ -9384,16 +9392,17 @@ msgstr ""
 "确定路由器可以构建的参与隧道的最大数量。要完全禁用参与，请设置为 0。[默认值"
 "为 8000，如果在 Arm 或 Android 上运行，则为 2000]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:529
+#, fuzzy
 msgid ""
 "Defines the maximum percentage of active local tunnels (client and "
-"exploratory) that a peer will be used for. [Default is 15% in I2P+, 33% in "
+"exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in "
 "I2P]"
 msgstr ""
 "定义对等方将用于的活动本地隧道（客户端和探索隧道）的最大百分比。[I2P+ 中的默"
 "认值为 15%，I2P 中的默认值为 33%]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:529
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:531
 msgid ""
 "When set to true, the router info files stored in your profile's netDB "
 "directory will not be split into 64 sub-directories. [Default is false]"
@@ -9401,7 +9410,7 @@ msgstr ""
 "设置为 true 时，存储在配置文件的 netDB 目录中的路由器信息文件将不会拆分为 64 "
 "个子目录。[默认值为假]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:531
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:533
 msgid ""
 "When set to true, your router will not be classified as slow, regardless of "
 "the specifications of your host system. Ordinarily, routers running on hosts "
@@ -9412,46 +9421,46 @@ msgstr ""
 "通常，在具有以下特征的主机上运行的路由器将被归类为慢速路由器，并且将相应地修"
 "改各种与性能相关的路由器选项："
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:533
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:535
 msgid "Host OS running Android"
 msgstr "运行安卓系统的主机操作系统"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:535
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:537
 msgid "Host OS running on ARM (MacOS excepted)"
 msgstr "在 ARM 上运行的主机操作系统（MacOS 除外）"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:537
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:539
 msgid "32bit host OS running with less than 4 detected cores"
 msgstr "在32 位操作系统上运行，检测到的核心少于 4 个"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:539
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
 msgid ""
 "64bit host OS running with 1 detected core and less than 384MB allocated to "
 "the JVM"
 msgstr ""
 "在64 位主机操作系统上运行，只检测到 1 个内核，分配给 JVM 的内存小于 384MB"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
 msgid "Less than 256MB allocated to the JVM"
 msgstr "分配给 JVM 的内存小于 256MB"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
 msgid ""
 "Router running a non-native, software emulated version of the Java "
 "BigInteger library"
 msgstr "运行 Java BigInteger 库的非本机软件模拟版本的路由器"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
 msgid ""
 "This settings allows you to configure the minimum number of hosted "
 "participating tunnels before the router starts to reject tunnel requests "
 "based on anticipated bandwidth requirements. [Default is 100 if system is "
 "running Android, 800 if system is running on ARM and less than 4 cores "
-"available, 2000 if system is running on ARM and 4 or more cores available, "
-"otherwise 4000]"
+"available, 1200 if system is running on ARM and 4 or more cores available, "
+"otherwise 2500]"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:549
 msgid ""
 "When set to true, the router will change its identity and UDP port when the "
 "router restarts and then delete the key from router.config to prevent "
@@ -9460,7 +9469,7 @@ msgstr ""
 "设置为 true 时，路由器将在路由器重新启动时更改其标识和 UDP 端口，然后从 "
 "router.config 中删除密钥以防止进一步更改。[默认值为假]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:549
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:551
 msgid ""
 "When configured, this sets a hard limit for the number of tunnels the router "
 "is permitted to build concurrently. By default the router uses the average "
@@ -9470,7 +9479,7 @@ msgstr ""
 "配置后，这将为允许路由器同时构建的隧道数设置硬限制。默认情况下，路由器使用平"
 "均构建时间和当前出站带宽来确定最佳构建速率。[需要重新启动]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:551
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:553
 msgid ""
 "If you wish to install unsigned (.zip) I2P updates, this should be added to "
 "your <code>router.config</code> file unless you have already configured "
@@ -9483,7 +9492,7 @@ msgstr ""
 "况下，已设置此选项。注意：从 I2P+ 0.9.48+ 开始，默认情况下启用<a href=/"
 "configupdate#i2pupdates>未签名更新的安装</a>。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:553
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
 msgid ""
 "This setting allows you to configure the update url for the unsigned update "
 "feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. "
@@ -9494,7 +9503,7 @@ msgstr ""
 "i2pupdate 结尾.zip</code>。注意：除非您信任更新的来源，否则不要安装未签名的更"
 "新！"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
 msgid ""
 "This setting permits disabling SSU tests to determine if your router is "
 "firewalled and can be enabled for routers that are definitely not firewalled "
@@ -9506,7 +9515,7 @@ msgstr ""
 "防火墙但遇到间歇性防火墙问题的路由器启用。如果禁用测试，SSU 和 NTCP 都应在路"
 "由器信息页面上报告< a href=/info>的当前公共 IP 地址</a>。[需要重新启动]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:559
 msgid ""
 "This setting determines which transport takes priority when communicating "
 "with peers. By default, NTCP is favored over UDP (SSU). By setting the value "
@@ -9519,7 +9528,7 @@ msgstr ""
 "否则UDP将被优先考虑；当设置为 \"always \"时，无论是否存在预先存在的NTCP连接，"
 "UDP将始终被使用。[默认值是false]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:559
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
 msgid ""
 "This tunnel-specific setting allows you to enable or disable replies to "
 "pings sent to servers hosted by the router. To disable pings, you must add "
@@ -9530,7 +9539,7 @@ msgstr ""
 "要禁用 ping，必须将 <code>i2p.streaming.answerPings=false</code> 行添加到隧道"
 "管理器中服务器配置的<i>“自定义选项”</i>部分。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:563
 msgid ""
 "When set to true, I2P runs without network connectivity, which is helpful if "
 "you are constantly restarting the router to test code updates as this "
@@ -9539,7 +9548,7 @@ msgstr ""
 "设置为 true 时，I2P 在没有网络连接的情况下运行，如果您不断重新启动路由器以测"
 "试代码更新，这将非常有用，因为这可以防止网络中断。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:563
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:565
 msgid ""
 "This setting, when enabled, introduces a random pong delay of up to 50ms for "
 "all ping-enabled servers hosted by the router. Default is disabled. [Restart "
@@ -9548,7 +9557,7 @@ msgstr ""
 "启用此设置后，将为路由器托管的所有启用了 ping 的服务器引入长达 50 毫秒的随机 "
 "ping 延迟。默认值处于禁用状态。[需要重新启动]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:565
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:567
 msgid ""
 "This setting, when enabled, modifies the maximum additional random pong "
 "delay introduced for ping-enabled servers, if <code>i2p.streaming."
@@ -9559,7 +9568,7 @@ msgstr ""
 "用 ping 的服务器引入的最大额外随机 pong 延迟。除非显式设置，否则将使用默认值 "
 "50ms。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:567
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:569
 msgid ""
 "This setting (in milliseconds) determines how long a packet may stay in the "
 "CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
@@ -9567,20 +9576,20 @@ msgstr ""
 "此设置（以毫秒为单位）确定数据包在丢弃之前可以在 CoDel 队列中保留多长时间。默"
 "认值为 1000 毫秒。 [需要重新启动]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:569
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:571
 msgid ""
 "This setting determines the maximum number of messages in the outbound queue "
 "before it is marked as full. [Default is 768]"
 msgstr "此设置确定出站队列中在标记为已满之前的最大邮件数。[默认值为 768]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:571
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:573
 msgid ""
 "This setting determines the maximum number of messages above the maximum "
 "queue value before further messages are dropped. [Default is 128]"
 msgstr ""
 "此设置确定在丢弃更多邮件之前，超出最大队列值的最大邮件数。[默认值为 128]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:573
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:575
 msgid ""
 "This setting (in milliseconds) allows you to manually configure the queue "
 "delay target value for the CoDel queue management system. Default is 50ms. "
@@ -9589,7 +9598,7 @@ msgstr ""
 "此设置（以毫秒为单位）允许您手动配置 CoDel 队列管理系统的队列延迟目标值。默认"
 "值为 50 毫秒。[需要重新启动]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:575
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:577
 msgid ""
 "This setting (in hours) determines how old a RouterInfo in the NetDb is (its "
 "last known publication date) before it's classified as stale and deleted. "
@@ -9600,19 +9609,21 @@ msgstr ""
 "最后一次已知的发布日期）的年龄。[默认值为 28 小时，除非路由器是 洪泛，在这种"
 "情况下，默认值为 8 小时]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:577
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:579
+#, fuzzy
 msgid ""
 "This setting determines the number of peers to explore in parallel when the "
-"Peer Exploration Job runs [default is 1 peer]. Note that increasing this "
-"value will increase the bandwidth requirements for the exploration, and "
-"setting this value too high may cause excessive message delay and interfere "
-"with other services, so use with caution!"
+"Peer Exploration Job runs [default is 1 peer at a time when more than 3000 "
+"peers are known]. Note that increasing this value will increase the "
+"bandwidth requirements for the exploration, and setting this value too high "
+"may cause excessive message delay and interfere with other services, so use "
+"with caution!"
 msgstr ""
 "此设置确定在对等浏览作业运行时要并行浏览的对等节点数 [默认为 1 个对等节点]。"
 "请注意，增加此值会增加浏览的带宽要求，将此值设置得太高可能会导致消息延迟过长"
 "并干扰其他服务，因此请谨慎使用！"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:579
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:581
 msgid ""
 "This setting determines the number of NetDb DHT buckets the Peer Exploration "
 "Job will reference when run. By default, the number of buckets to explore "
@@ -9624,7 +9635,7 @@ msgstr ""
 "的存储桶数量会有所不同，具体取决于路由器是否已运行超过一小时、路由器是否处于"
 "隐藏状态或处于“K”带宽层中，以及已知路由器的数量。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:581
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:583
 msgid ""
 "This setting (in seconds) allows you to override the delay between runs of "
 "the Peer Exploration Job which attempts to locate new peers to add to the "
@@ -9642,7 +9653,7 @@ msgstr ""
 "者如果您希望减少总体带宽使用量，则可能希望增加延迟。注意： 对于 洪泛 路由器，"
 "此作业不会运行。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:583
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:585
 msgid ""
 "This setting determines the maximum number of peer hashes to queue for "
 "exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
@@ -9650,7 +9661,7 @@ msgstr ""
 "此设置确定要排队进行浏览的最大对等哈希数。在 I2P 中，最大值为 128，在 I2P+ "
 "中，默认值为 512。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:585
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:587
 msgid ""
 "This setting determines whether a router acting as a floodfill will explore "
 "the NetDb to learn about new peers. [Default is false, restart required]"
@@ -9658,7 +9669,7 @@ msgstr ""
 "此设置确定充当 floodfill 的路由器是否会浏览 NetDb 以了解新的对等节点。[默认值"
 "为假，需要重新启动]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:587
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:589
 msgid ""
 "This setting, when set to true, prevents a router from directly "
 "communicating with other routers, forcing the use of introducers. [Default "
@@ -9667,7 +9678,7 @@ msgstr ""
 "此设置设置为 true 时，将阻止路由器直接与其他路由器通信，从而强制使用引入器。"
 "[默认值为假，除非路由器处于隐藏模式]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:589
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:591
 msgid ""
 "This setting allows you to exclude older routers from your NetDb. Routers "
 "older than the default or the value you set will be deleted from the NetDb "
@@ -9681,20 +9692,20 @@ msgstr ""
 "器。注意： 从 I2P+ 版本 0.9.46+ 开始，只有运行最新版本的路由器才用于构建本地"
 "隧道。[需要重新启动]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:591
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:593
 msgid ""
 "This setting determines the number of peer tests to run concurrently, used "
 "to determine peer latency. [Default is 4]"
 msgstr "此设置确定要并发运行的对等测试数，用于确定对等延迟。[默认值为 4]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:593
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:595
 msgid ""
 "This setting determines the delay between peer test jobs, configured in "
 "milliseconds. [Default is 5000]"
 msgstr ""
 "此设置确定对等测试作业之间的延迟，以毫秒为单位进行配置。[默认值为 5000]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:595
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:597
 msgid ""
 "To determine peer latency, this setting allocates the maximum time a peer "
 "test should take before being considered a failure, configured in "
@@ -9706,37 +9717,37 @@ msgstr ""
 "为单位进行配置。如果超时配置的超时低于平均成功测试，则将使用平均成功测试值。"
 "[默认值为 1000]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:597
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:599
 msgid ""
 "This setting determines whether stats about our router are sporadically "
 "published to the NetDb. [Default is false]"
 msgstr "此设置确定有关路由器的统计信息是否偶尔发布到 NetDb。[默认值为假]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:599
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:601
 msgid ""
 "This setting configures the initial size of the outbound message queue. "
 "[Default is 64]"
 msgstr "此设置配置出站消息队列的初始大小。[默认值为 64]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:601
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:603
 msgid ""
 "This setting configures the maximum size of the inbound message queue. "
 "[Default is 1024]"
 msgstr "此设置配置入站邮件队列的最大大小。[默认值为 1024]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:603
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:605
 msgid ""
 "This setting configures the maximum number of inbound messages queued per "
 "cycle (pump). [Default is 24]"
 msgstr "此设置配置每个周期（泵）排队的最大入站邮件数。[默认值为 24]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:605
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:607
 msgid ""
 "This setting configures the maximum number of outbound messages queued per "
 "cycle (pump). [Default is 64]"
 msgstr "此设置配置每个周期（泵）排队的最大入站邮件数。[默认值为 24]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:607
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:609
 msgid ""
 "This setting (in milliseconds) allows you to manually configure the delay "
 "between router refresh updates run by the Refresh Routers Job. By default "
@@ -9748,7 +9759,7 @@ msgid ""
 "lag, and is not recommended for sustained use."
 msgstr "此设置配置每个周期（泵）排队的最大出站邮件数。[默认值为 64]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:609
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:611
 msgid ""
 "This setting (in hours) allows you to manually configure how old a "
 "RouterInfo is in order for it to be checked by the Refresh Routers Job. By "
@@ -9763,7 +9774,7 @@ msgstr ""
 "refreshTimeout</code> 的值。请注意，将此值设置为 2000 毫秒以下将增加网络流"
 "量，并可能引入作业延迟，因此不建议持续使用。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:611
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:613
 msgid ""
 "This setting (in seconds) allows you to manually configure the amount of "
 "time to wait before an attempt to refresh a router is determined to have "
@@ -9774,7 +9785,7 @@ msgstr ""
 "展，并随着 NetDb 大小的增长而增加。值为 0 将强制路由器刷新作业检查 NetDb 中的"
 "每个路由器，而不考虑期限。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:613
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:615
 msgid ""
 "This setting determines whether routers classified as uninteresting (K or L "
 "tier, unreachable or older than 0.9.50) are checked during the refresh "
@@ -9783,7 +9794,7 @@ msgstr ""
 "此设置（以秒为单位）允许您手动配置在确定刷新路由器的尝试失败之前等待的时间"
 "量。[默认值为 20 秒]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:615
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:617
 msgid ""
 "This setting (in minutes) allows you to manually configure how long to wait "
 "after startup before RouterInfos in the NetDb are checked for validity, "
@@ -9797,7 +9808,7 @@ msgstr ""
 "此设置确定在运行 1 小时后刷新路由器过程中是否检查分类为无趣的路由器（K 层或 "
 "L 层、无法访问或早于 0.9.50）。[默认值为假]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:617
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:619
 msgid ""
 "This setting, when set to true, will enable HiDPI mode for the graphs on <a "
 "href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the "
@@ -9811,7 +9822,7 @@ msgstr ""
 "认值为 60 分钟]注意： 此设置与较旧的路由器（默认情况下早于 0.9.29）无关，只要"
 "尝试使用 NetDb 存储，就会从 NetDb 中删除并禁止使用路由器会话。"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:619
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:621
 msgid ""
 "This setting, when set to true, will display a Peer Test Average readout in "
 "the Congestion section of the sidebar, calculated by adding the successful "
@@ -9823,7 +9834,7 @@ msgstr ""
 "启用后，您可能需要刷新页面才能看到应用的设置，并且图形显示可能需要几个刷新周"
 "期才能稳定。请注意，应该在浏览器中启用 Javascript。[实验]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:621
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:623
 msgid ""
 "This setting, when set to true, will display the <i>Sites of Interest</i> "
 "links on <a href=/sitemap>the sitemap</a>. [Default is false]"
@@ -9832,7 +9843,7 @@ msgstr ""
 "计算方法是将成功的对等测试平均值和失败的测试所花费的平均超额时间相加。平均值"
 "可以用作确定最佳<code>路由器.peerTestTimeout</code> 值的指南。[默认值为假]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:623
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:625
 msgid ""
 "This setting permits the configuration of alternative NTP servers required "
 "to ensure that your router maintains accurate clock time. [Default is 0.pool."
@@ -9841,7 +9852,7 @@ msgstr ""
 "此设置设置为 true 时，将在站点地图上显示“<i>感兴趣的网站</i>< href=/"
 "sitemap>。</a>[默认值为假]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:625
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:627
 msgid ""
 "If set to true, this option will place an icon in the system tray / "
 "notification area, with basic service control options. [Disabled by default]"
@@ -9849,7 +9860,7 @@ msgstr ""
 "此设置允许配置所需的备用 NTP 服务器，以确保您的路由器保持准确的时钟时间。[默"
 "认值为 0.pool.ntp.org，1.pool.ntp.org，2.pool.ntp.org]"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:627
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:629
 msgid ""
 "This setting allows configuration of the maximum number of files per torrent "
 "I2PSnark will permit, when downloading or creating a torrent. Note that "

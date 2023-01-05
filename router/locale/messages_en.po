@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-02 11:29+0000\n"
+"POT-Creation-Date: 2023-01-05 03:48+0000\n"
 "PO-Revision-Date: 2010-06-15 14:09+0100\n"
 "Last-Translator: duck <duck@mail.i2p>\n"
 "Language-Team: duck <duck@mail.i2p>\n"
@@ -106,15 +106,15 @@ msgid "Declining all tunnel requests:<br>"
 msgstr ""
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:847
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:845
 msgid "Hidden Mode"
 msgstr ""
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:885
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:916
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:883
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:914
 msgid "Declining tunnel requests:<br>"
 msgstr ""
 
@@ -193,23 +193,23 @@ msgstr ""
 msgid "Dropping tunnel requests: Overloaded"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:847
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:845
 msgid "Declining requests:"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:885
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:883
 msgid "Request overload"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:916
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:914
 msgid "Connection limit reached"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1184
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1219
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1182
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1217
 msgid "Dropping tunnel requests: High load"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1300
 msgid "Dropping tunnel requests: Queue time"
 msgstr ""
