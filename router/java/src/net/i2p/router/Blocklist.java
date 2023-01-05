@@ -1168,7 +1168,7 @@ public class Blocklist {
         if ((!blFile.exists()) || blFile.length() <= 0) {
             // just ban it and be done
             if (_log.shouldWarn())
-                _log.warn("Banlisting " + peer);
+                _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session");
             _context.banlist().banlistRouterForever(peer, " <b>➜</b> " + "Banned");
             return;
         }
@@ -1201,7 +1201,7 @@ public class Blocklist {
                         //}
                         //reason = reason + " banned by " + BLOCKLIST_FILE_DEFAULT + " entry \"" + buf + "\"";
                         if (_log.shouldWarn())
-                            _log.warn("Banlisting " + peer + " (Source: blocklist.txt)");
+                            _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Source: blocklist.txt");
                         _context.banlist().banlistRouterForever(peer, reason, buf.toString());
                         return;
                     }
