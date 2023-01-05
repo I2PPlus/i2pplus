@@ -42,6 +42,9 @@
 <p><b><%=intl._t("Base32 (B32) / Base64 (B64)")%></b><br>
 <%=intl._t("A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (which always ends with .b32.i2p) is a hash of a <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services on the network, the Base64 hash is often mapped to an .i2p domain in the addressbook.")%></p>
 
+<p><b><%=intl._t("B33")%></b><br>
+<%=intl._t("An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>")%></p>
+
 <p><b><%=intl._t("BOB")%></b><br>
 <%=intl._t("BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router protocol, superseded by <i>SAM</i>. For more information, see the <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online documentation</a>.")%></p>
 
