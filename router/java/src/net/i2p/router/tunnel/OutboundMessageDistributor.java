@@ -12,6 +12,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * When a message arrives at the outbound tunnel endpoint, this distributor
@@ -29,8 +30,11 @@ class OutboundMessageDistributor {
     private static final long MAX_DISTRIBUTE_TIME = 15*1000;
     // This is probably too high, to be reduced later
 //    private static final int MAX_ROUTERS_PER_PERIOD = 60;
-    private static final int MAX_ROUTERS_PER_PERIOD = 8;
 //    private static final long NEW_ROUTER_PERIOD = 30*1000;
+    private static final int coreCount = SystemVersion.getCores();
+    private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 8 :
+                                                      coreCount < 4 || SystemVersion.getMaxMemory() < 512*1024*1024 ? 16 :
+                                                      Math.max(coreCount * 8, 24);
     private static final long NEW_ROUTER_PERIOD = 5*1000;
 
     /**
@@ -58,7 +62,7 @@ class OutboundMessageDistributor {
         if (shouldDrop(target)) {
             _context.statManager().addRateData("tunnel.dropAtOBEP", 1);
             if (_log.shouldWarn())
-                 _log.warn("Dropping " + msg + " at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] (new connection throttle) \n* Target: ["
+                 _log.warn("Dropping " + msg + " at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] -> New connection throttle \n* Target: ["
                             + target.toBase64().substring(0,6) + "]");
             return;
         }
