@@ -1191,18 +1191,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // throws UnsupportedCryptoException
             processStoreFailure(key, routerInfo);
             if (_log.shouldWarn())
-                //_log.warn("Invalid RouterInfo signature detected for [" + routerInfo.toBase64().substring(0,6) + "] -> Malformed RouterInfo");
-                _log.warn("Banning [" + routerInfo.toBase64().substring(0,6) + "] for duration of session -> Malformed RouterInfo");
-            _context.banlist().banlistRouter(key, " <b>➜</b> Malformed RouterInfo", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_FOREVER);
+                _log.warn("Invalid RouterInfo signature detected for [" + routerInfo.toBase64().substring(0,6) + "]");
+                //_log.warn("Banning [" + routerInfo.toBase64().substring(0,6) + "] for duration of session -> Malformed RouterInfo");
+            //_context.banlist().banlistRouter(key, " <b>➜</b> Malformed RouterInfo", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_FOREVER);
             return "Invalid RouterInfo signature";
         }
         int id = routerInfo.getNetworkId();
         if (id != _networkID) {
             if (id == -1) {
                 // old i2pd bug, possibly at startup, don't ban forever
-                _context.banlist().banlistRouter(key, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
+                _context.banlist().banlistRouter(key, " <b>➜</b> No Network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
             } else {
-            _context.banlist().banlistRouterForever(key, " <b>➜</b> " + "Not in our network: " + id);
+                _context.banlist().banlistRouterForever(key, " <b>➜</b> " + "Not in our Network: " + id);
             }
             if (_log.shouldWarn())
                 _log.warn("BAD Network detected for [" + routerInfo.toBase64().substring(0,6) + "]");
@@ -1218,7 +1218,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     // never fail our own router, that would cause a restart and rekey
                     if (h.equals(_context.routerHash()))
                         break;
-                    return "BAD family " + r + ' ' + h;
+                    return "BAD Family " + r + ' ' + h;
 
                 case NO_SIG:
                     // Routers older than 0.9.54 that added a family and haven't restarted
