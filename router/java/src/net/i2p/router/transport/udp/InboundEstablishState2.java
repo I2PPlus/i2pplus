@@ -272,7 +272,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new DataFormatException("No SSU2 address, IPv6? " + isIPv6 + ": " + ri);
         String siv = ra.getOption("i");
         if (siv == null)
-            throw new DataFormatException("no SSU2 IKey");
+            throw new DataFormatException("No SSU2 IKey");
         byte[] ik = Base64.decode(siv);
         if (ik == null)
             throw new DataFormatException("BAD SSU2 IKey");
