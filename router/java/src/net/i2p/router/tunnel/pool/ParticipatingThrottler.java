@@ -89,7 +89,7 @@ class ParticipatingThrottler {
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                 if (_log.shouldWarn())
                     _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Excessive tunnel requests (Limit: " + limit * 11 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                          "m -> Excessive tunnel requests (Limit: " + (limit * 11 / 9) + " in " + 11*60 / LIFETIME_PORTION + "s)");
                 rv = Result.DROP;
             } else if (!isLowShare && !isUnreachable && count > limit * 10 / 9) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
@@ -97,16 +97,16 @@ class ParticipatingThrottler {
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                 if (_log.shouldWarn())
                     _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Excessive tunnel requests (Limit: " + limit * 10 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                          "m -> Excessive tunnel requests (Limit: " + (limit * 10 / 9) + " in " + 11*60 / LIFETIME_PORTION + "s)");
                 rv = Result.DROP;
                 //rv = Result.REJECT; // do we want to signal to the peer that we're busy?
-            } else if ((isLowShare || isUnreachable) && count > limit * 12 / 9) {
+            } else if ((isLowShare || isUnreachable) && count > limit * 5 / 3) {
                context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                 if (_log.shouldWarn())
                     _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Excessive tunnel requests (Limit: " + limit * 12 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                          "m -> Excessive tunnel requests (Limit: " + (limit * 5 / 3) + " in " + 11*60 / LIFETIME_PORTION + "s)");
                 rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
