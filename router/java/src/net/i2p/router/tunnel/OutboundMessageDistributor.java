@@ -33,8 +33,8 @@ class OutboundMessageDistributor {
 //    private static final long NEW_ROUTER_PERIOD = 30*1000;
     private static final int coreCount = SystemVersion.getCores();
     private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 8 :
-                                                      coreCount < 4 || SystemVersion.getMaxMemory() < 512*1024*1024 ? 16 :
-                                                      Math.max(coreCount * 8, 24);
+                                                      coreCount < 2 || SystemVersion.getMaxMemory() < 512*1024*1024 ? 12 :
+                                                      Math.max(coreCount * 3, 16);
     private static final long NEW_ROUTER_PERIOD = 5*1000;
 
     /**
