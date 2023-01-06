@@ -1191,7 +1191,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // throws UnsupportedCryptoException
             processStoreFailure(key, routerInfo);
             if (_log.shouldWarn())
-                _log.warn("Invalid RouterInfo signature detected for [" + routerInfo.toBase64().substring(0,6) + "] -> Forged RouterInfo structure!");
+                //_log.warn("Invalid RouterInfo signature detected for [" + routerInfo.toBase64().substring(0,6) + "] -> Malformed RouterInfo");
+                _log.warn("Banning [" + routerInfo.toBase64().substring(0,6) + "] for duration of session -> Malformed RouterInfo");
+            _context.banlist().banlistRouter(key, " <b>➜</b> Malformed RouterInfo", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_FOREVER);
             return "Invalid RouterInfo signature";
         }
         int id = routerInfo.getNetworkId();
