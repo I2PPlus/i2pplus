@@ -83,7 +83,7 @@ class ParticipatingThrottler {
         int bantime = 30*60*1000;
         int period = bantime / 60 / 1000;
         if (count > limit) {
-            if (isFast && count > limit * 10 / 9) {
+            if (!isLowShare && !isUnreachable && count > limit * 10 / 9) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
@@ -92,7 +92,7 @@ class ParticipatingThrottler {
                           "m -> Excessive tunnel requests (Limit: " + limit * 10 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
                 rv = Result.DROP;
                 //rv = Result.REJECT; // do we want to signal to the peer that we're busy?
-            } else if (!isFast && count > limit * 12 / 9) {
+            } else if ((isLowShare || isUnreachable) && count > limit * 12 / 9) {
                context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
