@@ -66,22 +66,6 @@ class BuildMessageProcessor {
             // 64 KB
             // appx 1K part. tunnels or 12K req/hr
             m = 18;
-//        } else if (maxMemory >= 16384*1024*1024L) {
-//            // 128 MB
-//            // appx 1280K part. tunnels or 15.36M req/hr
-//            m = 29;
-//        } else if (maxMemory >= 8192*1024*1024L && SystemVersion.getCores() >= 8) {
-//            // 64 MB
-//            // appx 640K part. tunnels or 7.68M req/hr
-//            m = 28;
-//        } else if (maxMemory >= 2048*1024*1024L && SystemVersion.getCores() >= 4) {
-//            // 32 MB
-//            // appx 320K part. tunnels or 3.84M req/hr
-//            m = 27;
-//        } else if (maxMemory >= 1024*1024*1024L && SystemVersion.getCores() >= 4) {
-//            // 16 MB
-//            // appx 160K part. tunnels or 1.92M req/hr
-//            m = 26;
         } else if (maxMemory >= 1024*1024*1024L) {
             // 8 MB
             // appx 80K part. tunnels or 960K req/hr

@@ -10,6 +10,7 @@ function refreshSidebar() {
   var uri = location.pathname;
   var xhrContainer = document.getElementById("xhr");
   let isDownTimer;
+  var count = 0;
 
   var advancedGeneral = document.getElementById("sb_advancedgeneral");
   var badges = document.querySelectorAll(".badge");
@@ -54,7 +55,7 @@ function refreshSidebar() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-
+        count ++;
         var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
         var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
         var clockResponse = xhr.responseXML.getElementById("clock");
@@ -109,6 +110,9 @@ function refreshSidebar() {
 
           if (clock !== null && clockResponse !== null) {
             clock.innerHTML = clockResponse.innerHTML;
+          }
+          if (netStatus !== null && netStatusResponse !== null && !Object.is(netStatus.innerHTML, netStatusResponse.innerHTML)) {
+            netStatus.outerHTML = netStatusResponse.outerHTML;
           }
           if (bandwidth !== null && bandwidthResponse !== null && !Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML)) {
             bandwidth.innerHTML = bandwidthResponse.innerHTML;
@@ -178,7 +182,7 @@ function refreshSidebar() {
               if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
                 updateBar.innerHTML = updateBarResponse.innerHTML;
                 if (updateH3 !== null) {
-                  var updateH3 = document.querySelector("#sb_updatesection > h3 a").innerHTML;
+                  var updateH3 = document.querySelector("#sb_updatesection > h3 a");
                   updateH3.classList.add("updating");
                   var spinner = "<span id=\"updateSpinner\"></span>";
                   if (updateH3.innerHTML.indexOf(spinner) === -1) {
@@ -232,11 +236,17 @@ function refreshSidebar() {
           if (routerControl !== null && routerControlResponse !== null && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
             routerControl.outerHTML = routerControlResponse.outerHTML;
           }
-          if (internals !== null && internalsResponse !== null && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
-            internals.outerHTML = internalsResponse.outerHTML;
+          if (count > 2) {
+            if (internals !== null && internalsResponse !== null && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
+              internals.outerHTML = internalsResponse.outerHTML;
+              count --;
+            }
           }
-          if (services !== null && servicesResponse !== null && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
-            services.outerHTML = servicesResponse.outerHTML;
+          if (count > 2) {
+            if (services !== null && servicesResponse !== null && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
+              services.outerHTML = servicesResponse.outerHTML;
+              count --;
+            }
           }
         }
 

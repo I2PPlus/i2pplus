@@ -159,8 +159,8 @@ public class SybilRenderer {
                    "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a>/li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a>/li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=7\">" + _t("Pair distance") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=8\">" + _t("Close to us") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=9\">" + _t("Close to us tomorrow") + "</a></li>\n" +

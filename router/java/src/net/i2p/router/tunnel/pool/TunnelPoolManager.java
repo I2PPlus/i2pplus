@@ -82,12 +82,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         Boolean isSlow = SystemVersion.isSlow();
         int share = TunnelDispatcher.getShareBandwidth(ctx);
         if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
-            _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 6));
+            _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 8));
         else if (cores < 4)
             _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", 3);
 
         else
-            _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 4));
+            _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 6));
 
         // The following are for TestJob
         long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
@@ -686,7 +686,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
 //    private static final int DEFAULT_MAX_PCT_TUNNELS = 33;
-    private static final int DEFAULT_MAX_PCT_TUNNELS = 15;
+    private static final int DEFAULT_MAX_PCT_TUNNELS = 10;
     /**
      *  For reliability reasons, don't allow a peer in more than x% of
      *  client and exploratory tunnels.

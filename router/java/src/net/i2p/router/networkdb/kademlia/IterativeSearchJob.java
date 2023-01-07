@@ -170,6 +170,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
                                         VersionComparator.comp(v, MIN_VERSION) < 0) && known > 2000;
                                         // && ctx.router().getUptime() > 15*60*1000 && !isHidden;
                 if (uninteresting) {
@@ -360,6 +361,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                         boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
                                                 VersionComparator.comp(v, MIN_VERSION) < 0) && !isHidden &&
                                                 getContext().netDb().getKnownRouters() > 2000;
                                                 //&& getContext().router().getUptime() > 15*60*1000 && !isHidden;

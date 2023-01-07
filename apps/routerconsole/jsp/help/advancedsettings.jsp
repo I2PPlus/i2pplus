@@ -68,6 +68,9 @@
 <tr><th>router.buildHandlerThreads={n}</th></tr>
 <tr><td><%=intl._t("Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks.")%></td></tr>
 
+<tr><th>router.defaultProcessingTimeThrottle={n}</th></tr>
+<tr><td><%=intl._t("This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay<i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]")%></td></tr>
+
 <tr><th>router.disableTunnelTesting={true|false}</th></tr>
 <tr><td><%=intl._t("Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]")%></td></tr>
 
@@ -87,7 +90,7 @@
 <tr><td><%=intl._t("Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]")%></td></tr>
 
 <tr><th>router.maxTunnelPercentage={n}</th></tr>
-<tr><td><%=intl._t("Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 15% in I2P+, 33% in I2P]")%></td></tr>
+<tr><td><%=intl._t("Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]")%></td></tr>
 
 <tr><th>router.networkDatabase.flat={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]")%></td></tr>
@@ -104,7 +107,7 @@
 </ul></td></tr>
 
 <tr><th>router.minThrottleTunnels={n}</th></tr>
-<tr><td><%=intl._t("This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 2000 if system is running on ARM and 4 or more cores available, otherwise 4000]")%></td></tr>
+<tr><td><%=intl._t("This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]")%></td></tr>
 
 <tr><th>router.rebuildKeys={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]")%></td></tr>
@@ -152,7 +155,7 @@
 <tr><td><%=intl._t("This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]")%></td></tr>
 
 <tr><th>router.exploreBredth={n} <span class="plus">I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!")%></td></tr>
+<tr><td><%=intl._t("This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!")%></td></tr>
 
 <tr><th>router.exploreBuckets={n} <span class="plus">I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers.")%></td></tr>

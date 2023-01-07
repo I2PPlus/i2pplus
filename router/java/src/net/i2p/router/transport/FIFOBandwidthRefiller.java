@@ -92,6 +92,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     public static final int MAX_OUTBOUND_BANDWIDTH = SystemVersion.isSlow() || SystemVersion.getCores() == 1 ? 16384 :
                                                      SystemVersion.getCores() < 3 || SystemVersion.getMaxMemory() < 1024*1024*1024 ? 32768 :
                                                      SystemVersion.getCores() < 6 || SystemVersion.getMaxMemory() < 3072*1024*1024 ? 65536 :
+                                                     SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 4096*1024*1024 ? 262144 :
                                                      131072;
 
     private static final float MAX_SHARE_PERCENTAGE = 0.90f;

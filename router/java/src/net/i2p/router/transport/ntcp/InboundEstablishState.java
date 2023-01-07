@@ -305,12 +305,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             System.arraycopy(_X, KEY_SIZE - IV_SIZE, _prevEncrypted, 0, IV_SIZE);
             _context.aes().decrypt(_X, 0, _X, 0, bobHash, _transport.getNTCP2StaticIV(), KEY_SIZE);
             if (DataHelper.eqCT(_X, 0, ZEROKEY, 0, KEY_SIZE)) {
-                fail("Bad message #1: X = 0");
+                fail("BAD message #1: X = 0");
                 return;
             }
             // fast MSB check for key < 2^255
             if ((_X[KEY_SIZE - 1] & 0x80) != 0) {
-                fail("Bad PK message #1");
+                fail("BAD PK message #1");
                 return;
             }
 
@@ -334,10 +334,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     // delayed fail for probing resistance
                     // need more bytes before failure
                     if (_log.shouldDebug())
-                        _log.warn("Bad message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                        _log.warn("BAD message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
                                   " more bytes, waiting for " + _padlen1 + " more bytes", gse);
                     else if (_log.shouldWarn())
-                        _log.warn("Bad message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                        _log.warn("BAD message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
                                   " more bytes, waiting for " + _padlen1 + " more bytes \n* General Security Exception: " +  gse.getMessage());
                     changeState(State.IB_NTCP2_READ_RANDOM);
                 } else {
@@ -353,7 +353,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _log.debug("After message #1: " + _handshakeState.toString());
             int v = options[1] & 0xff;
             if (v != NTCPTransport.NTCP2_INT_VERSION) {
-                fail("Bad version: " + v);
+                fail("BAD version: " + v);
                 return;
             }
             // network ID cross-check, proposal 147, as of 0.9.42
@@ -366,7 +366,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     // So next time we will not accept the con from this IP
                     _context.blocklist().add(ip);
                 }
-                fail("Bad NetworkId: " + v);
+                fail("BAD NetworkId: " + v);
                 return;
             }
             _padlen1 = (int) DataHelper.fromLong(options, 2, 2);
@@ -390,7 +390,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 //return;
             }
             if (_msg3p2len < MSG3P2_MIN || _msg3p2len > MSG3P2_MAX) {
-                fail("Bad msg3p2 (length: " + _msg3p2len + " bytes)");
+                fail("BAD msg3p2 (length: " + _msg3p2len + " bytes)");
                 return;
             }
             if (_padlen1 <= 0) {
@@ -413,10 +413,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _received += src.remaining();
             if (_received < _padlen1) {
                 if (_log.shouldWarn())
-                    _log.warn("Bad message #1: received " + src.remaining() +
+                    _log.warn("BAD message #1: received " + src.remaining() +
                               " more bytes, waiting for " + (_padlen1 - _received) + " more bytes");
             } else {
-                fail("Bad message #1: failing after getting " + src.remaining() + " more bytes");
+                fail("BAD message #1: failing after getting " + src.remaining() + " more bytes");
             }
             return;
         }
@@ -464,11 +464,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             } catch (GeneralSecurityException gse) {
                 // TODO delayed failure per spec, as in NTCPConnection.delayedClose()
                 _dataReadBufs.release(ptmp, false);
-                fail("Bad message #3, part 1 is:\n" + net.i2p.util.HexDump.dump(tmp, 0, MSG3P1_SIZE), gse);
+                fail("BAD message #3, part 1 is:\n" + net.i2p.util.HexDump.dump(tmp, 0, MSG3P1_SIZE), gse);
                 return;
             } catch (RuntimeException re) {
                 _dataReadBufs.release(ptmp, false);
-                fail("Bad message #3", re);
+                fail("BAD message #3", re);
                 return;
             }
             if (_log.shouldDebug())
@@ -477,17 +477,17 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 // calls callbacks below
                 NTCP2Payload.processPayload(_context, this, payload, 0, _msg3p2len - MAC_SIZE, true);
             } catch (IOException ioe) {
-                if (_log.shouldWarn())
-//                    _log.warn("Bad msg 3 payload", ioe);
-                    _log.warn("Bad message #3 payload \n* IO Error:" + ioe.getMessage());
+                if (_log.shouldInfo())
+//                    _log.warn("BAD msg 3 payload", ioe);
+                    _log.info("BAD message #3 payload \n* IO Error:" + ioe.getMessage());
                 // probably payload frame/block problems
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0)
                     _msg3p2FailReason = NTCPConnection.REASON_FRAMING;
             } catch (DataFormatException dfe) {
-                if (_log.shouldWarn())
-//                    _log.warn("Bad msg 3 payload", dfe);
-                    _log.warn("Bad message #3 payload \n* Data Format Exception: " + dfe.getMessage());
+                if (_log.shouldInfo())
+//                    _log.warn("BAD msg 3 payload", dfe);
+                    _log.info("BAD message #3 payload \n* Data Format Exception: " + dfe.getMessage());
                 // probably RI signature failure
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0) {
@@ -502,9 +502,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _context.statManager().addRateData("ntcp.invalidInboundSignature", 1);
             } catch (I2NPMessageException ime) {
                 // shouldn't happen, no I2NP msgs in msg3p2
-                if (_log.shouldWarn())
-//                    _log.warn("Bad msg 3 payload", ime);
-                    _log.warn("Bad message #3 payload \n* I2NP Message Exception: " + ime.getMessage());
+                if (_log.shouldInfo())
+//                    _log.warn("BAD msg 3 payload", ime);
+                    _log.info("BAD message #3 payload \n* I2NP Message Exception: " + ime.getMessage());
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0)
                     _msg3p2FailReason = 0;
@@ -538,15 +538,15 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         } catch (GeneralSecurityException gse) {
             // buffer length error
             if (!_log.shouldWarn())
-//                _log.error("Bad msg 2 out", gse);
-                _log.warn("Bad message #2 out\n* General Secruity Exception: " + gse.getMessage());
-            fail("Bad msg 2 out", gse);
+//                _log.error("BAD msg 2 out", gse);
+                _log.warn("BAD message #2 out\n* General Security Exception: " + gse.getMessage());
+            fail("BAD message #2 out", gse);
             return;
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-//                _log.error("Bad msg 2 out", re);
-                _log.error("Bad message #2 out \n* Runtime Exception: " + re.getMessage());
-            fail("Bad message #2 out", re);
+//                _log.error("BAD msg 2 out", re);
+                _log.error("BAD message #2 out \n* Runtime Exception: " + re.getMessage());
+            fail("BAD message #2 out", re);
             return;
         }
         if (_log.shouldDebug())
@@ -596,7 +596,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (_msg3p2FailReason >= 0) {
             if (_log.shouldWarn())
-                _log.warn("Failed msg3p2, code " + _msg3p2FailReason + " for " + this);
+                _log.warn("Failed message #3 part 2 (Code: " + _msg3p2FailReason + ") for " + this);
             _con.failInboundEstablishment(sender, sip_ba, _msg3p2FailReason);
             changeState(State.CORRUPT);
         } else {
@@ -640,7 +640,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         List<RouterAddress> addrs = ri.getTargetAddresses(NTCPTransport.STYLE, NTCPTransport.STYLE2);
         if (addrs.isEmpty()) {
             _msg3p2FailReason = NTCPConnection.REASON_S_MISMATCH;
-            throw new DataFormatException("no NTCP in RI: " + ri);
+            throw new DataFormatException("No NTCP in RouterInfo: " + ri);
         }
         String s = null;
         for (RouterAddress addr : addrs) {
@@ -655,19 +655,19 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         }
         if (s == null) {
             _msg3p2FailReason = NTCPConnection.REASON_S_MISMATCH;
-            throw new DataFormatException("no s in RI: " + ri);
+            throw new DataFormatException("No s in RouterInfo: " + ri);
         }
         byte[] sb = Base64.decode(s);
         if (sb == null || sb.length != KEY_SIZE) {
             _msg3p2FailReason = NTCPConnection.REASON_S_MISMATCH;
-            throw new DataFormatException("bad s in RI: " + ri);
+            throw new DataFormatException("BAD s in RouterInfo: " + ri);
         }
         byte[] nb = new byte[32];
         // compare to the _handshakeState
         _handshakeState.getRemotePublicKey().getPublicKey(nb, 0);
         if (!DataHelper.eqCT(sb, 0, nb, 0, KEY_SIZE)) {
             _msg3p2FailReason = NTCPConnection.REASON_S_MISMATCH;
-            throw new DataFormatException("s mismatch in RI: " + ri);
+            throw new DataFormatException("s mismatch in RouterInfo: " + ri);
         }
         _aliceIdent = ri.getIdentity();
         Hash h = _aliceIdent.calculateHash();
@@ -681,7 +681,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
                 if (fndf.floodConditional(ri)) {
                     if (_log.shouldDebug())
-                        _log.debug("Flooded the RI: " + h);
+                        _log.debug("Flooded the RouterInfo: " + h);
                 } else {
                     if (_log.shouldInfo())
                         _log.info("Flood request but we didn't: " + h);
@@ -696,7 +696,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // don't change reason if already set as clock skew
             if (_msg3p2FailReason <= 0)
                 _msg3p2FailReason = NTCPConnection.REASON_MSG3;
-            throw new DataFormatException("RI store fail: " + ri, iae);
+            throw new DataFormatException("RouterInfo store fail: " + ri, iae);
         }
         _con.setRemotePeer(_aliceIdent);
     }

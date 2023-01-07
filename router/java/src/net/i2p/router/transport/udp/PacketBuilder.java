@@ -1255,19 +1255,19 @@ class PacketBuilder {
             if (iaddr == null) {
                 // normal, SSU2 slots
                 if (_log.shouldInfo())
-                    _log.info("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                    _log.info("Cannot build a RelayRequest for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
                                "] slot " + i + " -> No address");
                 continue;
             }
             if (ikey == null || tag <= 0) {
                 if (_log.shouldWarn())
-                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                    _log.warn("Cannot build a RelayRequest for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
                                "] slot " + i + " -> No key/tag");
                 continue;
             }
             if  (exp > 0 && exp < cutoff) {
                 if (_log.shouldWarn())
-                    _log.warn("Cannot build a relay request for " + Addresses.toString(iaddr.getAddress(), iport) +
+                    _log.warn("Cannot build a RelayRequest for " + Addresses.toString(iaddr.getAddress(), iport) +
                               " [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
                               "] \n* Expired: " + DataHelper.formatTime(exp));
                 continue;
@@ -1278,7 +1278,7 @@ class PacketBuilder {
                 // FIXME this will have already failed in isValid() above, right?
                 (Arrays.equals(iaddr.getAddress(), _transport.getExternalIP()) && !_transport.allowLocal())) {
                 if (_log.shouldWarn())
-                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                    _log.warn("Cannot build a RelayRequest for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
                               "] \n* Reason: Introducer address is invalid or blocklisted: " + Addresses.toString(iaddr.getAddress(), iport));
                 // TODO implement some sort of introducer banlist
                 continue;
@@ -1300,8 +1300,8 @@ class PacketBuilder {
                 if (bobState.getVersion() > 1) {
                     // TODO cross-version relaying, maybe
                     if (_log.shouldWarn())
-                        _log.warn("Cannot build SSU1 relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6)
-                                   + "] through SSU2-connected introducer " + bobState);
+                        _log.warn("Cannot build SSU1 RelayRequest for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6)
+                                   + "] through SSU2-connected Introducer " + bobState);
                     continue;
                 }
                 // established session (since 0.9.12)
@@ -1313,17 +1313,17 @@ class PacketBuilder {
                 cipherKey = new SessionKey(ikey);
                 macKey = cipherKey;
                 if (_log.shouldInfo())
-                    _log.info("Sending relay request (with intro key) to " + Addresses.toString(iaddr.getAddress(), iport));
+                    _log.info("Sending RelayRequest (with intro key) to " + Addresses.toString(iaddr.getAddress(), iport));
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Sending relay request (in-session) to " + Addresses.toString(iaddr.getAddress(), iport));
+                    _log.info("Sending RelayRequest (in-session) to " + Addresses.toString(iaddr.getAddress(), iport));
             }
 
             UDPPacket pkt = buildRelayRequest(iaddr, iport, cipherKey, macKey, tag, ourIntroKey, state.getIntroNonce());
             if (pkt != null)
                 rv.add(pkt);
             else if (_log.shouldWarn())
-                _log.warn("Cannot build a relay request for " + Addresses.toString(iaddr.getAddress(), iport) + " [" +
+                _log.warn("Cannot build a RelayRequest for " + Addresses.toString(iaddr.getAddress(), iport) + " [" +
                           state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) + "] -> No valid address to send to");
         }
         return rv;

@@ -933,7 +933,7 @@ class PacketHandler {
                         packet.getPacket().getLength() == 87) {
                         // i2pd short 87 byte session request thru 0.9.56, drop packet
                         if (_log.shouldWarn())
-                            _log.warn("Received Short SessionRequest (87 bytes) after Retry on " + state);
+                            _log.warn("Received short SessionRequest (87 bytes) after Retry on " + state);
                         return true;
                     }
                     if (header == null ||
@@ -980,8 +980,8 @@ class PacketHandler {
                 }
                 if (header.getPacketNumber() != 0 ||
                     header.getType() != SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
-                    if (_log.shouldWarn())
-                        _log.warn("Queueing possible data packet (" + packet.getPacket().getLength() + " bytes) on: " + state);
+                    if (_log.shouldInfo())
+                        _log.info("Queueing possible data packet (" + packet.getPacket().getLength() + " bytes) on: " + state);
                     // TODO either attempt to decrypt as a retransmitted
                     // Session Request or Token Request,
                     // or just tell establisher so it can retransmit Session Created or Retry
@@ -1001,23 +1001,23 @@ class PacketHandler {
         SSU2Header.acceptTrialDecrypt(packet, header);
         if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Received a Session Request on " + state);
+                _log.debug("Received a SessionRequest on " + state);
             _establisher.receiveSessionOrTokenRequest(from, state, packet);
         } else if (type == SSU2Util.TOKEN_REQUEST_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Received a Token Request on " + state);
+                _log.debug("Received a TokenRequest on " + state);
             _establisher.receiveSessionOrTokenRequest(from, state, packet);
         } else if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Received a Session Confirmed on " + state);
+                _log.debug("Received a SessionConfirmed on " + state);
             _establisher.receiveSessionConfirmed(state, packet);
         } else if (type == SSU2Util.PEER_TEST_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Received a Peer Test");
+                _log.debug("Received a PeerTest");
             _testManager.receiveTest(from, packet);
         } else if (type == SSU2Util.HOLE_PUNCH_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Received a Hole Punch");
+                _log.debug("Received a HolePunch");
             _establisher.receiveHolePunch(from, packet);
         } else {
             if (_log.shouldWarn())
@@ -1066,7 +1066,7 @@ class PacketHandler {
             header.getVersion() != 2 ||
             header.getNetID() != _networkID) {
             if (_log.shouldInfo())
-                _log.info("Does not decrypt as Session Created, attempt to decrypt as Retry \n* " + header);
+                _log.info("Does not decrypt as SessionCreated, attempting to decrypt as Retry \n* " + header);
             k2 = state.getRcvRetryHeaderEncryptKey2();
             header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
             if (header == null ||
@@ -1074,7 +1074,7 @@ class PacketHandler {
                 header.getVersion() != 2 ||
                 header.getNetID() != _networkID) {
                 if (_log.shouldInfo())
-                    _log.info("Does not decrypt as Session Created or Retry \n* " + header + " on " + state);
+                    _log.info("Does not decrypt as SessionCreated or Retry \n* " + header + " on " + state);
                 return false;
             }
             type = SSU2Util.RETRY_FLAG_BYTE;
@@ -1096,7 +1096,7 @@ class PacketHandler {
         SSU2Header.acceptTrialDecrypt(packet, header);
         if (type == SSU2Util.SESSION_CREATED_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Received a Session Created on " + state);
+                _log.debug("Received a SessionCreated on " + state);
             _establisher.receiveSessionCreated(state, packet);
         } else {
             if (_log.shouldDebug())

@@ -69,10 +69,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         _context.statManager().createRateStat("router.throttleNetworkCause", "JobQueue lag when an I2NP event was throttled", "Router [Throttle]", RATES);
         //_context.statManager().createRateStat("router.throttleNetDbCause", "How lagged the jobQueue was when a networkDb request was throttled", "Throttle", RATES);
         _context.statManager().createRateStat("router.throttleTunnelCause", "JobQueue lag when a tunnel request was throttled", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("tunnel.bytesAllocatedAtAccept", "Allocated bytes for participating tunnels when we accepted a request", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.bytesAllocatedAtAccept", "Allocated bytes for transit tunnels when we accepted a request", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelProcessingTime1m", "Message processing time when we throttle a tunnel", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelMaxExceeded", "Participating tunnels when max limit reached", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelProbTooFast", "Participating tunnels beyond previous 1h average when we throttle", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelMaxExceeded", "Transit tunnels when max limit reached", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelProbTooFast", "Transit tunnels beyond previous 1h average when we throttle", "Router [Throttle]", RATES);
         //_context.statManager().createRateStat("router.throttleTunnelProbTestSlow", "How slow are our tunnel tests when our average exceeds the old average and we throttle?", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBandwidthExceeded", "Bandwidth allocated when we refuse to build tunnel (bandwidth exceeded)", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Bytes permitted to be sent when we get a tunnel request", "Router [Throttle]", RATES);
@@ -522,10 +522,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         try {
             String p = _context.getProperty("router.tunnelGrowthFactor");
             if (p == null)
-                return 1.3d;
+                return 1.2d;
             return Double.parseDouble(p);
         } catch (NumberFormatException nfe) {
-            return 1.3d;
+            return 1.2d;
         }
     }
 
@@ -533,10 +533,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         try {
             String p = _context.getProperty("router.tunnelTestTimeGrowthFactor");
             if (p == null)
-                return 1.3d;
+                return 1.2d;
             return Double.parseDouble(p);
         } catch (NumberFormatException nfe) {
-            return 1.3d;
+            return 1.2d;
         }
     }
 

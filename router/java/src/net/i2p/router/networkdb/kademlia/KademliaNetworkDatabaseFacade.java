@@ -148,10 +148,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final static long ROUTER_INFO_EXPIRATION = 24*60*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_MIN = 90*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_SHORT = 75*60*1000l;
+//    private final static long ROUTER_INFO_EXPIRATION_SHORT = 75*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_SHORT = 15*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 6*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
+//    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 15*60*1000l;
     static final String PROP_ROUTER_INFO_EXPIRATION_ADJUSTED = "router.expireRouterInfo";
 
     static final String PROP_VALIDATE_ROUTERS_AFTER = "router.validateRoutersAfter";
@@ -774,6 +776,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
                                      VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                      _context.router().getUptime() > 15*60*1000 &&
                                      _context.netDb().getKnownRouters() > 3000;
@@ -1188,16 +1191,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // throws UnsupportedCryptoException
             processStoreFailure(key, routerInfo);
             if (_log.shouldWarn())
-                _log.warn("Invalid RouterInfo signature detected for [" + routerInfo.toBase64().substring(0,6) + "] -> Forged RouterInfo structure!");
+                _log.warn("Invalid RouterInfo signature detected for [" + routerInfo.toBase64().substring(0,6) + "]");
+                //_log.warn("Banning [" + routerInfo.toBase64().substring(0,6) + "] for duration of session -> Malformed RouterInfo");
+            //_context.banlist().banlistRouter(key, " <b>➜</b> Malformed RouterInfo", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_FOREVER);
             return "Invalid RouterInfo signature";
         }
         int id = routerInfo.getNetworkId();
         if (id != _networkID) {
             if (id == -1) {
                 // old i2pd bug, possibly at startup, don't ban forever
-                _context.banlist().banlistRouter(key, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
+                _context.banlist().banlistRouter(key, " <b>➜</b> No Network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
             } else {
-            _context.banlist().banlistRouterForever(key, " <b>➜</b> " + "Not in our network: " + id);
+                _context.banlist().banlistRouterForever(key, " <b>➜</b> " + "Not in our Network: " + id);
             }
             if (_log.shouldWarn())
                 _log.warn("BAD Network detected for [" + routerInfo.toBase64().substring(0,6) + "]");
@@ -1213,7 +1218,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     // never fail our own router, that would cause a restart and rekey
                     if (h.equals(_context.routerHash()))
                         break;
-                    return "BAD family " + r + ' ' + h;
+                    return "BAD Family " + r + ' ' + h;
 
                 case NO_SIG:
                     // Routers older than 0.9.54 that added a family and haven't restarted
@@ -1266,8 +1271,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                           ROUTER_INFO_EXPIRATION_MIN +
                                           ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
 */
-        adjustedExpiration = existing > 5000 ? ROUTER_INFO_EXPIRATION / 2 :
-                             existing > 2500 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
+        adjustedExpiration = existing > 3000 ? ROUTER_INFO_EXPIRATION / 3 :
+                             existing > 2000 ? ROUTER_INFO_EXPIRATION / 2 :
+                             existing > 1500 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
                              ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !routerInfo.isCurrent(adjustedExpiration)) {
@@ -1298,16 +1304,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 //        if (upLongEnough && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
             if (routerInfo.getAddresses().isEmpty())
-                return "RouterInfo [" + routerId + "] has no addresses and was published over 45 minutes ago";
+                return "RouterInfo [" + routerId + "] has no addresses and was published over 15m ago";
             // This should cover the introducers case below too
             // And even better, catches the case where the router is unreachable but knows no introducers
             if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || routerInfo.getAddresses().isEmpty())
-                return "RouterInfo [" + routerId + "] is unreachable and was published over 45 minutes ago";
+                return "RouterInfo [" + routerId + "] is unreachable and was published over 15m ago";
             // Just check all the addresses, faster than getting just the SSU ones
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 // Introducers change often, introducee will ping introducer for 2 hours
                 if (ra.getOption("itag0") != null)
-                    return "RouterInfo [" + routerId + "] has SSU Introducers and was published over 45 minutes ago";
+                    return "RouterInfo [" + routerId + "] has SSU Introducers and was published over 15m ago";
             }
         }
 
@@ -1315,10 +1321,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 &&
-            //routerInfo.getPublished() < now - 4*60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
-            routerInfo.getPublished() < now - 60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
-                //return "RouterInfo [" + routerId + "] is K or L tier and was published over 4 hours ago";
-                return "RouterInfo [" + routerId + "] is K or L tier and was published over an hour ago";
+            routerInfo.getPublished() < now - 15*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
+                return "RouterInfo [" + routerId + "] is K or L tier and was published over 15m ago";
 
         if (expireRI != null && !us.equals(routerInfo.getIdentity().getHash())) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
@@ -1334,10 +1338,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null && !us.equals(routerInfo.getIdentity().getHash())) {
-                    return "Router [" + routerId + "] is SSU only without introducers and was published over 45 minutes ago";
+                    return "Router [" + routerId + "] is SSU only without introducers and was published over 15m ago";
                 } else {
                     if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 && !us.equals(routerInfo.getIdentity().getHash()))
-                    return "Router [" + routerId + "] is unreachable on any transport and was published over 45 minutes ago";
+                    return "Router [" + routerId + "] is unreachable on any transport and was published over 15m ago";
                 }
             }
         }

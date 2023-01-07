@@ -12,6 +12,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * When a message arrives at the outbound tunnel endpoint, this distributor
@@ -29,9 +30,12 @@ class OutboundMessageDistributor {
     private static final long MAX_DISTRIBUTE_TIME = 15*1000;
     // This is probably too high, to be reduced later
 //    private static final int MAX_ROUTERS_PER_PERIOD = 60;
-    private static final int MAX_ROUTERS_PER_PERIOD = 256;
 //    private static final long NEW_ROUTER_PERIOD = 30*1000;
-    private static final long NEW_ROUTER_PERIOD = 15*1000;
+    private static final int coreCount = SystemVersion.getCores();
+    private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 8 :
+                                                      coreCount < 2 || SystemVersion.getMaxMemory() < 512*1024*1024 ? 12 :
+                                                      Math.max(coreCount * 3, 16);
+    private static final long NEW_ROUTER_PERIOD = 5*1000;
 
     /**
      *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
@@ -58,7 +62,7 @@ class OutboundMessageDistributor {
         if (shouldDrop(target)) {
             _context.statManager().addRateData("tunnel.dropAtOBEP", 1);
             if (_log.shouldWarn())
-                 _log.warn("Dropping " + msg + " at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] (new connection throttle) \n* Target: ["
+                 _log.warn("Dropping " + msg + " at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] -> New connection throttle \n* Target: ["
                             + target.toBase64().substring(0,6) + "]");
             return;
         }
@@ -67,7 +71,7 @@ class OutboundMessageDistributor {
             if (_log.shouldInfo())
                 _log.info("Outbound distributor to [" + target.toBase64().substring(0,6)
                            + "]." + (tunnel != null ? tunnel.getTunnelId() + "" : "")
-                           + ": no info locally, searching...");
+                           + " -> No local info, searching...");
             // TODO - should we set the search timeout based on the message timeout,
             // or is that a bad idea due to clock skews?
             _context.netDb().lookupRouterInfo(target, new DistributeJob(_context, msg, target, tunnel), null, MAX_DISTRIBUTE_TIME);

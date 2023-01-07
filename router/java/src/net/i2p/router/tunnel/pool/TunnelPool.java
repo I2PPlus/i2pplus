@@ -58,7 +58,7 @@ public class TunnelPool {
     /** if less than one success in this many, reduce length (exploratory only) */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
-    private static final long STARTUP_TIME = 40*60*1000;
+    private static final long STARTUP_TIME = SystemVersion.isSlow() ? 40*60*1000 : 30*60*1000;
 
     TunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPeerSelector sel) {
         _context = ctx;
@@ -358,52 +358,52 @@ public class TunnelPool {
                 if (fails > 12) {
                     rv = 1;
                     if (_log.shouldWarn())
-                        _log.warn("Limit to 1 tunnel after " + fails + " consec. build timeouts on " + this);
+                        _log.warn("Limiting to 1 tunnel after " + fails + " consecutive build timeouts on " + this);
                 } else if (fails > 8) {
                     rv = Math.max(1, rv / 3);
                     if (_log.shouldWarn())
-                        _log.warn("Limit to " + rv + " tunnels after " + fails + " consec. build timeouts on " + this);
+                        _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
                 } else if (rv > 2) {
                     rv--;
                     if (_log.shouldWarn())
-                        _log.warn("Limit to " + rv + " tunnels after " + fails + " consec. build timeouts on " + this);
+                        _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
                 }
             }
             return rv;
         }
         // TODO high-bw non-ff also
-        if ((_context.netDb().floodfillEnabled() && _context.router().getUptime() > 5*60*1000) || SystemVersion.getMaxMemory() >= 1024*1024*1024) {
+        if (((_context.netDb().floodfillEnabled() && _context.router().getUptime() > 5*60*1000) || SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 4) {
             rv += 2;
        // Since we're running RefreshRouters on a repeat cycle (I2P+) let's keep a couple of extras available
        } else if (_settings.isExploratory() && rv < 2 && _context.router().getUptime() > 10*60*1000) {
             rv += 1;
-        }
-        if (rv > 1) {
-            RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
-            RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
-            RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
-            if (e != null && r != null && s != null) {
-                Rate er = e.getRate(10*60*1000);
-                Rate rr = r.getRate(10*60*1000);
-                Rate sr = s.getRate(10*60*1000);
-                if (er != null && rr != null && sr != null) {
-                    RateAverages ra = RateAverages.getTemp();
-                    long ec = er.computeAverages(ra, false).getTotalEventCount();
-                    long rc = rr.computeAverages(ra, false).getTotalEventCount();
-                    long sc = sr.computeAverages(ra, false).getTotalEventCount();
-                    long tot = ec + rc + sc;
-                    if (tot >= BUILD_TRIES_QUANTITY_OVERRIDE) {
-                        if (1000 * sc / tot <=  1000 / BUILD_TRIES_QUANTITY_OVERRIDE)
+       }
+       if (rv > 1) {
+           RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
+           RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
+           RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
+           if (e != null && r != null && s != null) {
+               Rate er = e.getRate(10*60*1000);
+               Rate rr = r.getRate(10*60*1000);
+               Rate sr = s.getRate(10*60*1000);
+               if (er != null && rr != null && sr != null) {
+                   RateAverages ra = RateAverages.getTemp();
+                   long ec = er.computeAverages(ra, false).getTotalEventCount();
+                   long rc = rr.computeAverages(ra, false).getTotalEventCount();
+                   long sc = sr.computeAverages(ra, false).getTotalEventCount();
+                   long tot = ec + rc + sc;
+                   if (tot >= BUILD_TRIES_QUANTITY_OVERRIDE) {
+                       if (1000 * sc / tot <=  1000 / BUILD_TRIES_QUANTITY_OVERRIDE)
                             rv--;
-                    }
-                }
-            }
-        }
-        if (_context.router().getUptime() < STARTUP_TIME) {
-            // more exploratory during startup, when we are refreshing the netdb RIs
-            rv++;
-        }
-        return rv;
+                   }
+               }
+           }
+       }
+       if (_context.router().getUptime() < STARTUP_TIME && rv < 3) {
+           // more exploratory during startup, when we are refreshing the netdb RIs
+           rv++;
+       }
+       return rv;
     }
 
 
@@ -468,7 +468,7 @@ public class TunnelPool {
         _settings = settings;
         if (_settings != null) {
             if (_log.shouldInfo())
-                _log.info(toString() + " -> settings updated \n" + settings);
+                _log.info(toString() + " -> Settings updated \n" + settings);
             _manager.getExecutor().repoll(); // in case we need more
         }
     }
@@ -541,7 +541,7 @@ public class TunnelPool {
             } else {
                 if (_log.shouldWarn())
                     _log.warn(toString() + "\n* Unable to build a new LeaseSet on removal (" + remaining
-                              + " remaining) -> requesting a new tunnel");
+                              + " remaining) -> Requesting a new tunnel...");
                 if (_settings.getAllowZeroHop())
                     buildFallback();
             }
@@ -694,7 +694,7 @@ public class TunnelPool {
 
         if (_settings.isExploratory() || _settings.getAllowZeroHop()) {
             if (_log.shouldInfo())
-                _log.info(toString() + "\n* Building a fallback tunnel (usable: " + usable + " needed: " + quantity + ")");
+                _log.info(toString() + "\n* Building a fallback tunnel (Usable: " + usable + "; Needed: " + quantity + ")");
 
             // runs inline, since its 0hop
             _manager.getExecutor().buildTunnel(configureNewTunnel(true));
@@ -813,7 +813,7 @@ public class TunnelPool {
             TunnelId inId = tunnel.getReceiveTunnelId(0);
             Hash gw = tunnel.getPeer(0);
             if ( (inId == null) || (gw == null) ) {
-                _log.error(toString() + ": broken? tunnel has no inbound gateway/tunnelId? " + tunnel);
+                _log.error(toString() + ": broken? Tunnel has no InboundGateway / TunnelID? " + tunnel);
                 continue;
             }
             Lease lease = new Lease();

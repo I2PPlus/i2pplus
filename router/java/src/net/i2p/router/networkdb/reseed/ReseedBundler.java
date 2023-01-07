@@ -66,7 +66,7 @@ public class ReseedBundler {
         Hash me = _context.routerHash();
         int routerCount = 0;
         int copied = 0;
-        long tooOld = System.currentTimeMillis() - 16*60*60*1000L; // 16 hours
+        long tooOld = System.currentTimeMillis() - 8*60*60*1000L; // 8 hours
         List<RouterInfo> infos = new ArrayList<RouterInfo>(_context.netDb().getRouters());
         // IP to router hash
         Map<String, Hash> ipMap = new HashMap<String, Hash>(count);
@@ -100,7 +100,8 @@ public class ReseedBundler {
             boolean hasIPv4 = false;
             boolean dupIP = false;
             for (RouterAddress addr : addrs) {
-                if ("SSU".equals(addr.getTransportStyle()) && addr.getOption("itag0") != null) {
+                String style = addr.getTransportStyle();
+                if (("SSU".equals(style) || "SSU2".equals(style)) && addr.getOption("itag0") != null) {
                     hasIntro = true;
                     break;
                 }

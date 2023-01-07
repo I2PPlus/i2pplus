@@ -460,7 +460,7 @@ public class ProfileOrganizer {
      *
      */
 //    private final static int MAX_BAD_REPLIES_PER_HOUR = 5;
-    private final static int MAX_BAD_REPLIES_PER_HOUR = 8; // increase value to factor in old peers marked as invalid
+    private final static int MAX_BAD_REPLIES_PER_HOUR = 32; // increase value to factor in old peers marked as invalid
 
     /**
      * Does the given peer send us bad replies - either invalid store messages

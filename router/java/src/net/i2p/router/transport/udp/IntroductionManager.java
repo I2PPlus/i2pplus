@@ -931,7 +931,7 @@ class IntroductionManager {
                  return;
             }
             if (_log.shouldInfo())
-                _log.info("Send relay response rejection as Bob (Reason: " + rcode + ") to Alice " + alice);
+                _log.info("Send RelayReponse rejection as Bob (Reason: " + rcode + ") to Alice " + alice);
             UDPPacket packet = _builder2.buildRelayResponse(data, alice);
             alice.setLastSendTime(now);
         _transport.send(packet);
@@ -982,7 +982,7 @@ class IntroductionManager {
         return true;
     }
 
-    /** 
+    /**
      * Wait for RI.
      * @since 0.9.55
      */
@@ -1115,12 +1115,12 @@ class IntroductionManager {
             ourIP = ourra.getIP();
             if (ourIP == null) {
                 if (_log.shouldWarn())
-                    _log.warn("No IP to send in relay response");
+                    _log.warn("No IP address to send in RelayReponse");
                 rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
             }
         } else {
             if (_log.shouldWarn())
-                _log.warn("No address to send in relay response");
+                _log.warn("No address to send in RelayReponse");
             rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
         }
         int ourPort = _transport.getRequestedPort();
@@ -1212,11 +1212,11 @@ class IntroductionManager {
                                              _context.routerHash(), null, signedData, spk)) {
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Signature failed relay response as bob from charlie:\n" + charlie);
+                            _log.warn("Signature failed RelayReponse as Bob from Charlie:\n" + charlie);
                     }
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Signer RI not found " + peer);
+                        _log.warn("Signer's RouterInfo not found " + peer);
                 }
             }
             byte[] idata = new byte[2 + data.length];
@@ -1226,14 +1226,14 @@ class IntroductionManager {
             try {
                 UDPPacket packet = _builder2.buildRelayResponse(idata, alice);
                 if (_log.shouldDebug())
-                    _log.debug("Received relay response " + status + " as Bob, forwarding " + " nonce " + nonce + " to Alice " + alice);
+                    _log.debug("Received RelayReponse " + status + " as Bob, forwarding " + " nonce " + nonce + " to Alice " + alice);
                 _transport.send(packet);
                 alice.setLastSendTime(now);
             } catch (IOException ioe) {}
         } else {
             // We are Alice, give to EstablishmentManager to check sig and process
             if (_log.shouldDebug())
-                _log.debug("Received relay response " + status + " as Alice " + " nonce " + nonce + " from " + peer);
+                _log.debug("Received RelayReponse " + status + " as Alice " + " nonce " + nonce + " from " + peer);
             _transport.getEstablisher().receiveRelayResponse(peer, nonce, status, data);
         }
     }
@@ -1285,7 +1285,7 @@ class IntroductionManager {
                (!_context.blocklist().isBlocklisted(ip));
     }
 
-    /** 
+    /**
      * Loop and cleanup _nonceToAlice
      * Called from EstablishmentManager doFailSafe() so we don't need a cleaner timer here.
      * @since 0.9.57

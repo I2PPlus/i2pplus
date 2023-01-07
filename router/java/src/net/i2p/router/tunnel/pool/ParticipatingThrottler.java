@@ -65,7 +65,8 @@ class ParticipatingThrottler {
         RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
         boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         boolean isLowShare = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0);
+                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0);
         boolean isFast = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
@@ -79,20 +80,39 @@ class ParticipatingThrottler {
                     : Math.min(MIN_LIMIT * 2,(Math.max(MAX_LIMIT / 3, numTunnels * (PERCENT_LIMIT / 3) / 100)));
         int count = counter.increment(h);
         Result rv;
+        int bantime = 30*60*1000;
+        int period = bantime / 60 / 1000;
         if (count > limit) {
-            if (count > limit * 10 / 9) {
-                int bantime = 15*60*1000;
-                int period = bantime / 60 / 1000;
+            if (isFast && !isUnreachable && count > limit * 11 / 9) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                 // drop after any accepted tunnels have expired
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
-//                if (_log.shouldWarn())
-                _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Excessive tunnel requests (Limit: " + limit * 10 / 9 + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Excessive tunnel requests (Count / limit: " + count + " / " + (limit * 11 / 9) + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                rv = Result.DROP;
+            } else if (!isLowShare && !isUnreachable && count > limit * 10 / 9) {
+                context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
+                // drop after any accepted tunnels have expired
+                context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Excessive tunnel requests (Count / limit: " + count + " / " + (limit * 10 / 9) + " in " + 11*60 / LIFETIME_PORTION + "s)");
                 rv = Result.DROP;
                 //rv = Result.REJECT; // do we want to signal to the peer that we're busy?
+            } else if ((isLowShare || isUnreachable) && count > limit * 5 / 3) {
+               context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
+                // drop after any accepted tunnels have expired
+                context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Excessive tunnel requests (Count / limit: " + count + " / " + (limit * 5 / 3) + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
+                if (_log.shouldWarn())
+                    _log.warn("Rejecting tunnel requests from [" + h.toBase64().substring(0,6) + "] " +
+                              "-> High number of requests (Count / limit: " + count + " / " + limit + " in " + 11*60 / LIFETIME_PORTION + "s)");
             }
         } else {
             rv = Result.ACCEPT;

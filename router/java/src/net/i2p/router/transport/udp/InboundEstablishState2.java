@@ -195,23 +195,22 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             try {
                 UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(reason, psd);
                 _transport.send(pkt);
-                if (_log.shouldWarn()) {
-                    if (_log.shouldDebug())
-                        _log.debug("[SSU2] Sending TERMINATION reason " + reason + " to " + psd);
-                    _log.warn("[SSU2]InboundEstablishState payload error", rie);
+                if (_log.shouldInfo()) {
+                    _log.info("[SSU2] Sending TERMINATION reason " + reason + " to " + psd);
+                    _log.info("[SSU2] InboundEstablishState Payload Error", rie);
                 }
             } catch (IOException ioe) {}
-            throw new GeneralSecurityException("IES2 payload error: " + this, rie);
+            throw new GeneralSecurityException("IES2 Payload Error: " + this, rie);
         } catch (DataFormatException dfe) {
             // no in-session response possible
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] InboundEstablishState payload error", dfe);
-            throw new GeneralSecurityException("IES2 payload error: " + this, dfe);
+            if (_log.shouldInfo())
+                _log.info("[SSU2] InboundEstablishState Payload Error", dfe);
+            throw new GeneralSecurityException("IES2 Payload Error: " + this, dfe);
         } catch (Exception e) {
             if (!e.toString().contains("RouterInfo store fail"))
-                if (_log.shouldWarn())
-                    _log.warn("[SSU2] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
-            throw new GeneralSecurityException("IES2 payload error", e);
+                if (_log.shouldInfo())
+                    _log.info("[SSU2] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
+            throw new GeneralSecurityException("IES2 Payload Error", e);
         }
     }
 
@@ -273,7 +272,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new DataFormatException("No SSU2 address, IPv6? " + isIPv6 + ": " + ri);
         String siv = ra.getOption("i");
         if (siv == null)
-            throw new DataFormatException("no SSU2 IKey");
+            throw new DataFormatException("No SSU2 IKey");
         byte[] ik = Base64.decode(siv);
         if (ik == null)
             throw new DataFormatException("BAD SSU2 IKey");

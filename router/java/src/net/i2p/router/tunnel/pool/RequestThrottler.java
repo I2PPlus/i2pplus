@@ -7,6 +7,7 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 
+
 /**
  * Like ParticipatingThrottler, but checked much earlier,
  * cleaned more frequently, and with more than double the min and max limits.
@@ -50,8 +51,17 @@ class RequestThrottler {
         int count = counter.increment(h);
         boolean rv = count > limit;
         if (rv) {
-            if (_log.shouldWarn())
-                _log.warn("Throttling tunnel requests from [" + h.toBase64().substring(0,6) + "]");
+            if (count > limit * 10 / 9) {
+                int bantime = 30*60*1000;
+                int period = bantime / 60 / 1000;
+                context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
+                context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
+                _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
+                          "m -> Excessive tunnel requests (Limit: " + (limit * 10 / 9) + " in " + (11*60 / portion) + "s)");
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("Throttling tunnel requests from [" + h.toBase64().substring(0,6) + "]");
+            }
         }
 /*
         if (rv && count == 2 * limit) {
@@ -74,7 +84,7 @@ class RequestThrottler {
     /**
      *  @since 0.9.52
      */
-/*
+
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) { this.h = h; }
@@ -82,5 +92,5 @@ class RequestThrottler {
             context.commSystem().forceDisconnect(h);
         }
     }
-*/
+
 }
