@@ -71,7 +71,7 @@ class OutboundMessageDistributor {
             if (_log.shouldInfo())
                 _log.info("Outbound distributor to [" + target.toBase64().substring(0,6)
                            + "]." + (tunnel != null ? tunnel.getTunnelId() + "" : "")
-                           + ": no info locally, searching...");
+                           + " -> No local info, searching...");
             // TODO - should we set the search timeout based on the message timeout,
             // or is that a bad idea due to clock skews?
             _context.netDb().lookupRouterInfo(target, new DistributeJob(_context, msg, target, tunnel), null, MAX_DISTRIBUTE_TIME);
