@@ -2405,7 +2405,7 @@ class PeerTestManager {
             long remaining = state.getBeginTime() + MAX_CHARLIE_LIFETIME - now;
             if (remaining <= 0) {
                 if (_log.shouldDebug())
-                    _log.debug("Expired as charlie on " + state);
+                    _log.debug("Expired as Charlie on " + state);
                 _activeTests.remove(_nonce);
                 return;
             }
@@ -2417,7 +2417,7 @@ class PeerTestManager {
 
             // retransmit at 4/8/12 sec, no backoff
             if (_log.shouldDebug())
-                _log.debug("Retx msg 5 to alice on " + state);
+                _log.debug("Resending message #5 to Alice on " + state);
             long nonce = _nonce.longValue();
             long sendId = (nonce << 32) | nonce;
             long rcvId = ~sendId;
