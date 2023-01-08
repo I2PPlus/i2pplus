@@ -1742,6 +1742,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         synchronized(_addDropLock) {
             if (_recentlyClosedConnIDs.containsKey(id)){
                 oldPSD = _recentlyClosedConnIDs.put(id, peer);
+                oldPSD = _recentlyClosedConnIDs.get(id);
             }else{
                 oldPSD = _recentlyClosedConnIDs.get(id);
             }
@@ -1939,6 +1940,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 PeerStateDestroyed oldPSD;
                 if (_recentlyClosedConnIDs.containsKey(id)){
                     oldPSD = _recentlyClosedConnIDs.put(id, newPSD);
+                    oldPSD = _recentlyClosedConnIDs.get(id);
                 }else{
                     oldPSD = _recentlyClosedConnIDs.get(id);
                 }
@@ -2203,6 +2205,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             PeerStateDestroyed oldPSD;
             if (_recentlyClosedConnIDs.containsKey(id)){
                 oldPSD = _recentlyClosedConnIDs.put(id, newPSD);
+                oldPSD = _recentlyClosedConnIDs.get(id);
             }else{
                 oldPSD = _recentlyClosedConnIDs.get(id);
             }
