@@ -151,6 +151,7 @@ Sybil:2400;8500;1302;828;a150;95;153;2202
 # Router hashes
 #
 Corrupt Message Spammer:m8CkfwwvPF~9xYjfGVIl4d~ypW7VjE0nxFZN1rh48XM=
+Excessive introducers:UmwTBVrrW6E-tICIipnJc5eQihZJxXr6gBKkewRmIz0=
 Tunnel Abuse:CyLg6w8lypk1gnAX-CdG8O4NCR86hq8ifge6QKXAoJg=
 Tunnel Abuse:DtQsGzkbeR3nilr6ZvywR2O7-f0XaaV~YfHXohqwjgI=
 Tunnel Abuse:JbifzqZZqeTXtxK6KDqNUPWaW-phKqeS~tfJT82SIYI=
