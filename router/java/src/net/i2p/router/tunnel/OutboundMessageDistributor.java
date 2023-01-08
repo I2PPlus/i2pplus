@@ -70,7 +70,7 @@ class OutboundMessageDistributor {
         if (info == null) {
             if (_log.shouldInfo())
                 _log.info("Outbound distributor to [" + target.toBase64().substring(0,6)
-                           + "]." + (tunnel != null ? tunnel.getTunnelId() + "" : "")
+                           + "]" + (tunnel != null ? "." + tunnel.getTunnelId() + "" : "")
                            + " -> No local info, searching...");
             // TODO - should we set the search timeout based on the message timeout,
             // or is that a bad idea due to clock skews?
