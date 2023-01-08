@@ -1740,7 +1740,11 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         Long id = Long.valueOf(peer.getRcvConnID());
         PeerStateDestroyed oldPSD;
         synchronized(_addDropLock) {
-            oldPSD = _recentlyClosedConnIDs.putIfAbsent(id, peer);
+            if (_recentlyClosedConnIDs.containsKey(id)){
+                oldPSD = _recentlyClosedConnIDs.put(id, peer);
+            }else{
+                oldPSD = _recentlyClosedConnIDs.get(id);
+            }
         }
         if (oldPSD != null)
             peer.kill();
@@ -1932,7 +1936,12 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 PeerState2 state2 = (PeerState2) oldPeer;
                 Long id = Long.valueOf(state2.getRcvConnID());
                 PeerStateDestroyed newPSD = new PeerStateDestroyed(_context, this, state2);
-                PeerStateDestroyed oldPSD = _recentlyClosedConnIDs.putIfAbsent(id, newPSD);
+                PeerStateDestroyed oldPSD;
+                if (_recentlyClosedConnIDs.containsKey(id)){
+                    oldPSD = _recentlyClosedConnIDs.put(id, newPSD);
+                }else{
+                    oldPSD = _recentlyClosedConnIDs.get(id);
+                }
                 if (oldPSD != null)
                     newPSD.kill();
                 _peersByConnID.remove(id);
@@ -2191,7 +2200,12 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             PeerState2 state2 = (PeerState2) peer;
             Long id = Long.valueOf(state2.getRcvConnID());
             PeerStateDestroyed newPSD = new PeerStateDestroyed(_context, this, state2);
-            PeerStateDestroyed oldPSD = _recentlyClosedConnIDs.putIfAbsent(id, newPSD);
+            PeerStateDestroyed oldPSD;
+            if (_recentlyClosedConnIDs.containsKey(id)){
+                oldPSD = _recentlyClosedConnIDs.put(id, newPSD);
+            }else{
+                oldPSD = _recentlyClosedConnIDs.get(id);
+            }
             if (oldPSD != null)
                 newPSD.kill();
             _peersByConnID.remove(id);
