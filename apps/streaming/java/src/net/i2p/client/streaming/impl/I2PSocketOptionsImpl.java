@@ -1,8 +1,8 @@
 package net.i2p.client.streaming.impl;
 
 import java.util.Properties;
-
 import net.i2p.client.streaming.I2PSocketOptions;
+import net.i2p.util.SystemVersion;
 
 /**
  * Define the configuration for streaming and verifying data on the socket.
@@ -16,7 +16,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     private int _localPort;
     private int _remotePort;
 
-    public static final int DEFAULT_BUFFER_SIZE = 1024*64;
+    public static final int DEFAULT_BUFFER_SIZE = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 256*1024*1024 ? 64*1024 : 256*1024;
     public static final int DEFAULT_READ_TIMEOUT = -1;
     public static final int DEFAULT_WRITE_TIMEOUT = -1;
     public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
