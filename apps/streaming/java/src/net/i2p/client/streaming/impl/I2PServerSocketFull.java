@@ -23,7 +23,7 @@ class I2PServerSocketFull implements I2PServerSocket {
     /**
      * Waits for the next socket connecting.  If a remote user tried to make a
      * connection and the local application wasn't .accept()ing new connections,
-     * they should get refused (if .accept() doesnt occur in some small period).
+     * they should get refused (if .accept() doesn't occur in some small period).
      * Warning - unlike regular ServerSocket, may return null (through 0.9.16 only).
      *
      * @return a connected I2PSocket OR NULL through 0.9.16; never null as of 0.9.17
