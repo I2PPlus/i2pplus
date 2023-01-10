@@ -1060,8 +1060,10 @@ class NetDbRenderer {
             }
             buf.append("<table id=\"netdbtiers\">\n");
             buf.append("<thead>\n<tr>\n<th>" + _t("Bandwidth Tier") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
-            buf.append("<tr>\n<td><a href=\"/netdb?caps=K\" title=\"Show all routers with this capability in the NetDb\"><b>K</b></a>Under 12&#8239;KB/s</td>\n<td>")
-               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td>\n</tr>\n");
+            if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size() > 0) {
+                buf.append("<tr>\n<td><a href=\"/netdb?caps=K\" title=\"Show all routers with this capability in the NetDb\"><b>K</b></a>Under 12&#8239;KB/s</td>\n<td>")
+                   .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td>\n</tr>\n");
+            }
             buf.append("<tr>\n<td><a href=\"/netdb?caps=L\" title=\"Show all routers with this capability in the NetDb\"><b>L</b></a>12 - 48&#8239;KB/s</td>\n<td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size()).append("</td>\n</tr>\n");
             buf.append("<tr>\n<td><a href=\"/netdb?caps=M\" title=\"Show all routers with this capability in the NetDb\"><b>M</b></a>49 - 65&#8239;KB/s</td>\n<td>")
@@ -1567,7 +1569,7 @@ class NetDbRenderer {
         } else if (ip.contains(":0:")) {
             // convert to canonical
             return Addresses.toCanonicalString(ip);
-        }		
+        }
         return null;
     }
 
