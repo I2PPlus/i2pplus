@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -688,6 +689,18 @@ public class SummaryHelper extends HelperBase {
     }
 
     /**
+     * Are both the webapp and TCG running?
+     *
+     * @since 0.9.58
+     */
+    public boolean isI2PTunnelRunning() {
+        if (!_context.portMapper().isRegistered(PortMapper.SVC_I2PTUNNEL))
+            return false;
+        ClientAppManager cmgr = _context.clientAppManager();
+        return cmgr != null && cmgr.getRegisteredApp("i2ptunnel") != null;
+    }
+
+    /**
      * Client destinations connected locally.
      *
      * @return html section summary
@@ -697,7 +710,7 @@ public class SummaryHelper extends HelperBase {
         List<Destination> clients = new ArrayList<Destination>(_context.clientManager().listClients());
 
         StringBuilder buf = new StringBuilder(512);
-        boolean link = _context.portMapper().isRegistered("i2ptunnel");
+        boolean link = isI2PTunnelRunning();
         buf.append("<h3 id=\"sb_localTunnelsHeading\"");
         if (!link)
             buf.append(" class=\"unregistered\"");

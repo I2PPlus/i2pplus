@@ -326,7 +326,7 @@ class SummaryBarRenderer {
             svcs.put(tx, rbuf.toString());
         }
 
-        if (pm.isRegistered(PortMapper.SVC_I2PTUNNEL)) {
+        if (_helper.isI2PTunnelRunning()) {
             String tx = _t("Tunnel Manager");
             rbuf.setLength(0);
             rbuf.append("<a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
