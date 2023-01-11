@@ -324,8 +324,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public long getNextPacketNumber() throws IOException {
          if (_dead) {
              IOException ioe = new IOException("Peer is dead: " + _remotePeer.toBase64());
-             if (_log.shouldWarn())
-                 _log.warn("Dead: " + this, ioe);
+             if (_log.shouldDebug())
+                 _log.debug("Dead: " + this, ioe);
+             else if (_log.shouldWarn())
+                 _log.warn("Dead: " + this + "\n*" + ioe.getMessage());
              throw ioe;
          }
          return _packetNumber.getAndIncrement();
@@ -522,7 +524,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     _transport.isValid(from.getIP())) {
                                     // send challenge
                                     if (_log.shouldWarn())
-                                        _log.warn("Start migration to " + from + " on " + this);
+                                        _log.warn("[SSU2] Starting migration to " + from + " on " + this);
                                     _migrationState = MigrationState.MIGRATION_STATE_PENDING;
                                     _migrationStarted = _context.clock().now();
                                     _migrationNextSendTime = _migrationStarted + PATH_CHALLENGE_DELAY;
@@ -535,7 +537,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                 } else {
                                     // don't attempt to switch
                                     if (_log.shouldWarn())
-                                        _log.warn("Not migrating to " + from + " on " + this);
+                                        _log.warn("[SSU2] Not migrating to " + from + " on " + this);
                                 }
                                 limitSending = true;
                             }
@@ -546,7 +548,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                 // cancel
                                 _migrationState = MigrationState.MIGRATION_STATE_NONE;
                                 if (_log.shouldWarn())
-                                    _log.warn("Cancel migration on " + this);
+                                    _log.warn("[SSU2] Cancelling migration on " + this);
                             } else {
                                 // still waiting
                                 long now = _context.clock().now();
@@ -555,10 +557,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     // time exceeded
                                     _migrationState = MigrationState.MIGRATION_STATE_NONE;
                                     if (_log.shouldWarn())
-                                        _log.warn("Migration failed on " + this);
+                                        _log.warn("[SSU2] Migration failed on " + this);
                                 } else if (from.equals(_pendingRemoteHostId)) {
                                     if (_log.shouldWarn())
-                                        _log.warn("Migration pending, got another packet from " + from + " on " + this);
+                                        _log.warn("[SSU2] Migration pending, got another packet from " + from + this);
                                     if (now > _migrationNextSendTime) {
                                         // retransmit challenge
                                         _migrationNextSendTime = now + (PATH_CHALLENGE_DELAY << _pathChallengeSendCount);
@@ -570,7 +572,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                 } else {
                                     // a third ip/port ???
                                     if (_log.shouldWarn())
-                                        _log.warn("Migration pending, got packet from 3rd address " + from + " from " + this);
+                                        _log.warn("[SSU2] Migration pending, got packet from 3rd address " + from + this);
                                     limitSending = true;
                                 }
                             }
@@ -598,7 +600,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     private void sendPathChallenge(InetAddress toIP, int toPort) {
         if (_log.shouldWarn())
-            _log.warn("Send path challenge to " + toIP + ' ' + toPort + " on " + this);
+            _log.warn("[SSU2] Sending path challenge to " + toIP + ' ' + toPort + " on " + this);
         List<SSU2Payload.Block> blocks = new ArrayList<SSU2Payload.Block>(3);
         blocks.add(new SSU2Payload.DateTimeBlock(_context));
         blocks.add(new SSU2Payload.AddressBlock(toIP.getAddress(), toPort));
@@ -645,8 +647,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 }
             }
         } catch (IllegalArgumentException iae) {
-            if (_log.shouldWarn())
-                _log.warn("RI store fail: " + ri, iae);
+            if (_log.shouldDebug())
+                _log.debug("RouterInfo store fail: " + ri, iae);
+            else if (_log.shouldWarn())
+                _log.warn("RouterInfo store fail: " + ri + "\n* " + iae.getMessage());
         }
     }
 
@@ -661,7 +665,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     public void gotRelayTagRequest() {
         if (_log.shouldInfo())
-            _log.info("Received RELAY TAG REQUEST from " + this);
+            _log.info("[SSU2] Received RELAY TAG REQUEST from " + this);
         long tag = getWeRelayToThemAs();
         if (tag <= 0) {
             if (_transport.canIntroduce(isIPv6())) {
@@ -718,7 +722,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     public void gotToken(long token, long expires) {
         if (_log.shouldInfo())
-            _log.info("Got TOKEN block: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
+            _log.info("[SSU2] Received TOKEN block: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
     }
 
@@ -788,9 +792,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             if (_log.shouldInfo()) {
                 if (state != null)
-                    _log.info("[SSU2] Duplicate fragment [" + frag + "] received for " + state);
+                    _log.info("[SSU2] Recieved duplicate fragment [" + frag + "] for " + state);
                 else
-                    _log.info("[SSU2] Duplicate fragment [" + frag + "] received from " + this);
+                    _log.info("[SSU2] Received duplicate fragment [" + frag + "] from " + this);
                 return;
             }
         }
@@ -804,7 +808,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                     return;
                 }
                 if (_log.shouldDebug())
-                _log.debug("[SSU2] Message received completely! " + state);
+                _log.debug("[SSU2] Complete message received! " + state);
             _context.statManager().addRateData("udp.receivedCompleteTime", state.getLifetime(), state.getLifetime());
             _context.statManager().addRateData("udp.receivedCompleteFragments", state.getFragmentCount(), state.getLifetime());
             receiveMessage(state);
@@ -861,7 +865,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     public void gotPathChallenge(RemoteHostId from, byte[] data) {
         if (_log.shouldInfo())
-            _log.info("Got PATH CHALLENGE block, length: " + data.length + " from " + this);
+            _log.info("Received PATH CHALLENGE block, length: " + data.length + " from " + this);
         SSU2Payload.Block block = new SSU2Payload.PathResponseBlock(data);
         try {
             UDPPacket pkt = _transport.getBuilder2().buildPacket(Collections.<Fragment>emptyList(),
@@ -877,7 +881,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     public void gotPathResponse(RemoteHostId from, byte[] data) {
         if (_log.shouldInfo())
-            _log.info("Got PATH RESPONSE block, length: " + data.length + " from " + this);
+            _log.info("Received PATH RESPONSE block, length: " + data.length + " from " + this);
         synchronized(_migrationLock) {
             switch(_migrationState) {
                 case MIGRATION_STATE_PENDING:
@@ -1119,7 +1123,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             _wantACKSendSince = _context.clock().now();
             long delta = Math.min(_rtt/16, 5);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Sending immediate ack in " + delta + ": " + PeerState2.this);
+                _log.debug("[SSU2] Sending immediate ACK in " + delta + ": " + PeerState2.this);
             reschedule(delta, true);
         }
 
