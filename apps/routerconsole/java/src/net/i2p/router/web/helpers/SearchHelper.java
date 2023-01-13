@@ -21,44 +21,46 @@ public class SearchHelper extends HelperBase {
     // in case engines need to know where it came from
     // this reveals more info than needed, namely that user has enabled console search; neutering.
     //private static final String SOURCE = "&ref=console";
-    private static final String SOURCE = "";
     static final String PROP_ENGINES = "routerconsole.searchEngines";
     private static final String PROP_DEFAULT = "routerconsole.searchEngine";
+    private static final String DEFAULT = "i2psearch.i2p";
 
     static final String ENGINES_DEFAULT =
     // TODO: add a checkbox or dropdown to UI to choose default engine
-        "ahmia.i2p"                + S +     "http:/ahmia.i2p/search/?q=%s" + SOURCE + S +
-        "duckduckgo.i2p"           + S +     "http://duckduckgo.i2p/?q=%s" + SOURCE + S +
-        "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + SOURCE + S +
-        "i2psearch.i2p"            + S +     "http://i2psearch.i2p/search?q=%s" + SOURCE + S +
-        "isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + SOURCE + S +
-        "legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + SOURCE + S +
-        "mojeek.i2p"               + S +     "http://mojeek.i2p/search?date=1&size=1&t=40&q=%s" + SOURCE + S +
-        "nitter.skank.i2p"         + S +     "hhttp://nitter.skank.i2p/search?f=tweets&q=%s" + SOURCE + S +
-        "notbob.i2p"               + S +     "http://notbob.i2p/cgi-bin/defcon.cgi?search=%s" + SOURCE + S +
-        "raklet.i2p"               + S +     "http://ransack.i2p/search?page=1&query=%s" + SOURCE + S +
-        "ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + SOURCE + S +
-        "tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + SOURCE + S +
-        "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + SOURCE + S +
-        "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + SOURCE + S +
-        "yacy.idk.i2p"             + S +     "http://yacy.idk.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + SOURCE + S +
-        "zzz.i2p"                  + S +     "http://zzz.i2p/search?type=posts&query=%s" + SOURCE + //S +
-        //"ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + SOURCE + S +
-        //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + SOURCE + S +
-        //"epsilon.i2p"              + S +     "http://epsilon.i2p/search.jsp?q=%s" + SOURCE +  S +
-        //"imperial.i2p"             + S +     "http://imperial.i2p/search/?q=%s" + SOURCE + S +
-        //"seeker.i2p"               + S +     "http://seeker.i2p/index.php?query=%s" + SOURCE + S +
-        //"searchthis.i2p"           + S +     "http://searchthis.i2p/cgi-bin/search.cgi?q=%s" + SOURCE + S +
-        //"simple-search.i2p"        + S +     "http://simple-search.i2p/search.sh?search=%s" + SOURCE + S +
-        //"sprongle.i2p"             + S +     "http://sprongle.i2p/sprongle.php?q=%s" + SOURCE + S +
-        //"torrentfinder.i2p"        + S +     "http://torrentfinder.i2p/?searchq=%s" + SOURCE + S +
-        //"trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + SOURCE + S +
+        "ahmia.i2p"                + S +     "http:/ahmia.i2p/search/?q=%s" + S +
+        "duckduckgo.i2p"           + S +     "http://duckduckgo.i2p/?q=%s" + S +
+        "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + S +
+        "i2psearch.i2p"            + S +     "http://i2psearch.i2p/search?q=%s" + S +
+        "isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + S +
+        "legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
+        "mojeek.i2p"               + S +     "http://mojeek.i2p/search?date=1&size=1&t=40&q=%s" + S +
+        "natter.i2p"               + S +     "http://natter.i2p/search?f=tweets&q=%s" + S +
+        "notbob.i2p"               + S +     "http://notbob.i2p/cgi-bin/defcon.cgi?search=%s" + S +
+        "raklet.i2p"               + S +     "http://raklet.i2p/search?page=1&query=%s" + S +
+        "ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + S +
+        "slashdot.i2p"             + S +     "http://slashdot.i2p/index2.pl?fhfilter=%s" + S +
+        "teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
+        "tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + S +
+        "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + S +
+        "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + S +
+        "yacy.idk.i2p"             + S +     "http://yacy.idk.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
+        "zzz.i2p"                  + S +     "http://zzz.i2p/search?type=posts&query=%s" + //S +
+        //"ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + S +
+        //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + S +
+        //"epsilon.i2p"              + S +     "http://epsilon.i2p/search.jsp?q=%s" +  S +
+        //"imperial.i2p"             + S +     "http://imperial.i2p/search/?q=%s" + S +
+        //"seeker.i2p"               + S +     "http://seeker.i2p/index.php?query=%s" + S +
+        //"searchthis.i2p"           + S +     "http://searchthis.i2p/cgi-bin/search.cgi?q=%s" + S +
+        //"simple-search.i2p"        + S +     "http://simple-search.i2p/search.sh?search=%s" + S +
+        //"sprongle.i2p"             + S +     "http://sprongle.i2p/sprongle.php?q=%s" + S +
+        //"torrentfinder.i2p"        + S +     "http://torrentfinder.i2p/?searchq=%s" + S +
+        //"trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + S +
         "";
 
     public void setEngine(String s) {
         _engine = s;
         if (s != null) {
-            String dflt = _context.getProperty(PROP_DEFAULT);
+            String dflt = _context.getProperty(PROP_DEFAULT, DEFAULT);
             if (!s.equals(dflt))
                 _context.router().saveConfig(PROP_DEFAULT, s);
         }
