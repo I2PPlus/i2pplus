@@ -32,29 +32,29 @@ public class SearchHelper extends HelperBase {
         "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + S +
         "i2psearch.i2p"            + S +     "http://i2psearch.i2p/search?q=%s" + S +
         "isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + S +
-        "legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
         "mojeek.i2p"               + S +     "http://mojeek.i2p/search?date=1&size=1&t=40&q=%s" + S +
         "natter.i2p"               + S +     "http://natter.i2p/search?f=tweets&q=%s" + S +
         "notbob.i2p"               + S +     "http://notbob.i2p/cgi-bin/defcon.cgi?search=%s" + S +
         "raklet.i2p"               + S +     "http://raklet.i2p/search?page=1&query=%s" + S +
-        "ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + S +
         "slashdot.i2p"             + S +     "http://slashdot.i2p/index2.pl?fhfilter=%s" + S +
         "teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
-        "tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + S +
         "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + S +
-        "yacy.idk.i2p"             + S +     "http://yacy.idk.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
         "zzz.i2p"                  + S +     "http://zzz.i2p/search?type=posts&query=%s" + //S +
         //"ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + S +
         //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + S +
         //"epsilon.i2p"              + S +     "http://epsilon.i2p/search.jsp?q=%s" +  S +
         //"imperial.i2p"             + S +     "http://imperial.i2p/search/?q=%s" + S +
+        //"legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
+        //"ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + S +
         //"seeker.i2p"               + S +     "http://seeker.i2p/index.php?query=%s" + S +
         //"searchthis.i2p"           + S +     "http://searchthis.i2p/cgi-bin/search.cgi?q=%s" + S +
         //"simple-search.i2p"        + S +     "http://simple-search.i2p/search.sh?search=%s" + S +
         //"sprongle.i2p"             + S +     "http://sprongle.i2p/sprongle.php?q=%s" + S +
+        //"tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + S +
         //"torrentfinder.i2p"        + S +     "http://torrentfinder.i2p/?searchq=%s" + S +
         //"trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + S +
+        //"yacy.idk.i2p"             + S +     "http://yacy.idk.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
         "";
 
     public void setEngine(String s) {
