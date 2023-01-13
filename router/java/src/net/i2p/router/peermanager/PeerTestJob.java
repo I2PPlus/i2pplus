@@ -171,7 +171,7 @@ class PeerTestJob extends JobImpl {
             boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             String bw = peerInfo.getBandwidthTier();
             String version = peerInfo.getVersion();
-            if (peerInfo != null && cap != null && reachable && VersionComparator.comp(version, "0.9.56") >= 0 &&
+            if (peerInfo != null && cap != null && reachable && VersionComparator.comp(version, "0.9.57") >= 0 &&
 //                (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
@@ -227,10 +227,9 @@ class PeerTestJob extends JobImpl {
         TunnelId outTunnelId = outTunnel.getSendTunnelId(0);
 
         if (_log.shouldDebug()) {
-            _log.debug("[" + peer.getIdentity().getHash().toBase64().substring(0,6) +
-                       "] Initiating peer test:\n* " + outTunnel + "\n* " + inTunnel);
+            _log.debug("Initiating peer test of [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "] \n* Outbound: " + outTunnel + "\n* Inbound: " + inTunnel);
         } else if (_log.shouldInfo()) {
-            _log.info("[" + peer.getIdentity().getHash().toBase64().substring(0,6) + "] Initiating peer test");
+            _log.info("Initiating peer test of [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
         }
 
         ReplySelector sel = new ReplySelector(peer.getIdentity().getHash(), nonce, expiration);
