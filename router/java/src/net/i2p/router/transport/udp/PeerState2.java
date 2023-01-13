@@ -736,7 +736,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (_transport.getInboundFragments().messageReceived(messageId)) {
             _context.statManager().addRateData("udp.ignoreRecentDuplicate", 1);
             if (_log.shouldInfo())
-                _log.info("[SSU2] Received duplicate message [MsgID " + messageId + "] from " + this);
+                _log.info("[SSU2] Received duplicate message [MsgID " + messageId + "]" + this);
             return;
         }
         // complete message, skip IMF and MessageReceiver
@@ -804,11 +804,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 if (_transport.getInboundFragments().messageReceived(messageId)) {
                     _context.statManager().addRateData("udp.ignoreRecentDuplicate", 1);
                     if (_log.shouldInfo())
-                        _log.info("[SSU2] Received duplicate message [MsgID " + messageId + "] from " + this);
+                        _log.info("[SSU2] Received duplicate message [MsgID " + messageId + "]" + this);
                     return;
                 }
                 if (_log.shouldDebug())
-                _log.debug("[SSU2] Complete message received! " + state);
+                    _log.debug("[SSU2] Complete message received! " + state);
             _context.statManager().addRateData("udp.receivedCompleteTime", state.getLifetime(), state.getLifetime());
             _context.statManager().addRateData("udp.receivedCompleteFragments", state.getFragmentCount(), state.getLifetime());
             receiveMessage(state);
