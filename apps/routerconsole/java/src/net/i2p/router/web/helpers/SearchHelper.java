@@ -27,7 +27,7 @@ public class SearchHelper extends HelperBase {
 
     static final String ENGINES_DEFAULT =
     // TODO: add a checkbox or dropdown to UI to choose default engine
-        "ahmia.i2p"                + S +     "http:/ahmia.i2p/search/?q=%s" + S +
+        "ahmia.i2p"                + S +     "http://ahmia.i2p/search/?q=%s" + S +
         "duckduckgo.i2p"           + S +     "http://duckduckgo.i2p/?q=%s" + S +
         "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + S +
         "i2psearch.i2p"            + S +     "http://i2psearch.i2p/search?q=%s" + S +
