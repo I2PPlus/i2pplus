@@ -372,12 +372,12 @@ p:empty + .sb_notice{margin-top:10px}
 #sidebar .percentBarOuter{margin:5px 0 -6px;width:calc(100% - 2px)}
 .percentBarOuter:hover .percentBarText{opacity:1;transition:ease opacity .2s;pointer-events:none}
 .percentBarInner{height:14px;max-width:100%;box-shadow:var(--highlight),inset 0 -2px 4px rgba(0,0,0,.6);background:linear-gradient(90deg,rgba(0,0,0,0) 100px,rgba(255,0,255,.1) 160px,rgba(0,0,255,.15)),linear-gradient(180deg,#33a,#226 50%,#003 50%,#000)}
-#sb_memoryBar .percentBarInner{background:var(--membarinner)}
-#sb_memoryBar.percentBarOuter{margin:-5px -8px -7px;width:calc(100% + 14px);background:linear-gradient(90deg,rgba(0,0,0,0),rgba(255,0,255,.05),rgba(255,0,0,.12)),repeating-linear-gradient(90deg,#000 1px,#000 2px,#003 2px,#003 4px)}
+#sb_memoryBar .percentBarInner,#sb_CPUBar .percentBarInner{background:var(--membarinner)}
+#sb_memoryBar.percentBarOuter,#sb_CPUBar.percentBarOuter{margin:-5px -8px -7px;width:calc(100% + 14px);background:linear-gradient(90deg,rgba(0,0,0,0),rgba(255,0,255,.05),rgba(255,0,0,.12)),repeating-linear-gradient(90deg,#000 1px,#000 2px,#003 2px,#003 4px)}
 .percentBarText{width:100%;font-weight:700;text-align:center;vertical-align:middle;float:left;opacity:0;transition:ease opacity .2s}
-#sb_memoryBar .percentBarText{padding:2px 0 0;width:70%;line-height:22px;float:none;position:absolute;top:-23px;left:15%;right:15%;z-index:999;font-size:110%;border-radius:2px;background:#115;filter:drop-shadow(0 0 1px #337) drop-shadow(0 0 1px #000)}
-#sb_memorybar .percentBarOuter:hover .percentBarText,#sb_memorybar .percentBarOuter:active .percentBarText{opacity:1}
-#sb_memoryBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-15px;border-style:solid;border-width:8px;border-color:#115 transparent transparent transparent;content:""}
+#sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:2px 0 0;width:70%;line-height:22px;float:none;position:absolute;top:-23px;left:15%;right:15%;z-index:999;font-size:110%;border-radius:2px;background:#115;filter:drop-shadow(0 0 1px #337) drop-shadow(0 0 1px #000)}
+#sb_memorybar .percentBarOuter:hover .percentBarText,#sb_memorybar .percentBarOuter:active .percentBarText,#sb_CPUbar .percentBarOuter:hover .percentBarText,#sb_CPUbar .percentBarOuter:active .percentBarText{opacity:1}
+#sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-15px;border-style:solid;border-width:8px;border-color:#115 transparent transparent transparent;content:""}
 
 /* update bar */
 .sb_updatestatus{background:#000;margin:-6px -4px -2px;padding:2px 0 4px;border-bottom:var(--border_inner);color:var(--ink)}
@@ -2485,7 +2485,7 @@ iframe.iframed{margin:15px 0 0}
 .tab,.tab2{margin:0 -2px -1px -2px} .tab2{padding:5px 14px 5px} .tab a,.tab a:visited{padding:4px 16px 3px}
 .tunnelBuildStatus,.tunnelBuildStatus::before{vertical-align:middle}
 #sidebar h4{box-shadow:none}
-#sb_memoryBar{margin-bottom:-6px}
+#sb_memoryBar,#sb_CPUBar{margin-bottom:-6px}
 #manualreseed th:last-child,#manualreseed td:last-child{border-right:var(--border_inner)}
 #reseedconfig .optbox[type=radio]{margin:4px 4px 4px 15px} #manualreseed th:last-child,#manualreseed td:last-child{border-right:var(--border_inner)}
 #reseedproxysslhostport.optionlist{columns:1} .optionsingle#reseedproxytype{columns:2}
@@ -2716,7 +2716,7 @@ h4#updateplugins{margin-top:-15px}
 #sidebar td:nth-child(2)::before{min-height:23px}
 #sb_internals,#sb_advanced,#sb_help{width:240px}
 #sb_localtunnels a{max-width:188px}
-#sb_memoryBar.percentBarOuter{margin:-5px -8px -8px}
+#sb_memoryBar.percentBarOuter,#sb_CPUBar.percentBarOuter{margin:-5px -8px -8px}
 #sb_newsheadings{margin-left:-1px;margin-bottom:-10px;width:200px}
 #sb_newsheadings table{width:218px}
 .sb_notice{margin-bottom:-8px}
