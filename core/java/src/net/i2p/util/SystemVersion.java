@@ -4,6 +4,10 @@ package net.i2p.util;
  * public domain
  */
 
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+import java.text.DecimalFormat;
+
 import java.lang.reflect.Field;
 import java.util.TimeZone;
 import java.util.TreeSet;
@@ -514,4 +518,37 @@ public abstract class SystemVersion {
             System.out.println(k + '=' + v);
         }
     }
+
+    /**
+     * Retrieve CPU Load of the JVM.
+     * @since 0.9.57+
+     */
+    public static String getCPULoad() {
+        DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
+        int cores = SystemVersion.getCores();
+        OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        double loadAvg = osmxb.getProcessCpuLoad() * 100;
+        int load = (int) loadAvg;
+        int max = 100;
+        if (load > max)
+            load = max;
+        return integerFormatter.format(load);
+    }
+
+    /**
+     * Retrieve System Load as percentage (100% equals full system load)
+     * @since 0.9.57+
+     */
+    public static String getSystemLoad() {
+        DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
+        int cores = SystemVersion.getCores();
+        OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
+        int sysLoad = (int) systemLoadAvg;
+        if (sysLoad < 0)
+            return "n/a";
+        else
+            return integerFormatter.format(sysLoad);
+    }
+
 }
