@@ -177,6 +177,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_MINIMAL =
         "ShortRouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -193,6 +194,7 @@ public class SummaryHelper extends HelperBase {
      /** @since 0.9.32 */
     static final String DEFAULT_MINIMAL_ADVANCED =
         "AdvancedRouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -496,17 +498,18 @@ public class SummaryHelper extends HelperBase {
     public String getCPUBar() {
         DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
         int cores = SystemVersion.getCores();
-        //OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        //double loadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
-        double loadAvg = osmxb.getProcessCpuLoad() * 100;
-        int load = (int) loadAvg;
+        OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        OperatingSystemMXBean SunOsMxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
+        double cpuLoadAvg = SunOsMxb.getProcessCpuLoad() * 100;
+        int sysLoad = (int) systemLoadAvg;
+        int cpuLoad = (int) cpuLoadAvg;
         int max = 100;
-        if (load > max)
-            load = max;
-        return "<div class=\"percentBarOuter volatile\" id=\"sb_CPUBar\"><div class=\"percentBarText\">CPU Load: " +
-               load + "%" + " (" + cores + " cores)" +
-               "</div><div class=\"percentBarInner\" style=\"width: " + integerFormatter.format(load) +
+        if (cpuLoad > max)
+            cpuLoad = max;
+        return "<div class=\"percentBarOuter volatile\" id=\"sb_CPUBar\"><div class=\"percentBarText\">CPU: " +
+               cpuLoad + "%" + (sysLoad > 0 ? " | System Load: " + sysLoad + "%" : "") +  //" (" + cores + ' ' + (cores > 1 ? "cores" : "core") + ")" +
+               "</div><div class=\"percentBarInner\" style=\"width: " + integerFormatter.format(cpuLoad) +
                "%;\"></div></div>";
     }
 
