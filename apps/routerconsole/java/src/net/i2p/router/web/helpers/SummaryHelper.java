@@ -40,6 +40,11 @@ import net.i2p.util.SystemVersion;
 
 import net.i2p.router.web.ConfigUpdateHandler;
 
+import java.lang.management.ManagementFactory;
+//import java.lang.management.OperatingSystemMXBean;
+//import java.lang.management.ThreadMXBean;
+
+import com.sun.management.OperatingSystemMXBean;
 
 /**
  * Simple helper to query the appropriate router for data necessary to render
@@ -466,6 +471,42 @@ public class SummaryHelper extends HelperBase {
         return "<div class=\"percentBarOuter volatile\" id=\"sb_memoryBar\"><div class=\"percentBarText\">RAM: " +
                integerFormatter.format(used) + " / " + total + " M" +
                "</div><div class=\"percentBarInner\" style=\"width: " + integerFormatter.format(usedPc) +
+               "%;\"></div></div>";
+    }
+
+    /**
+     * Retrieve CPU Load.
+     * @since 0.9.57+
+     */
+    public String getCPULoad() {
+        DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
+        int cores = SystemVersion.getCores();
+        //OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        //double loadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
+        double loadAvg = osmxb.getProcessCpuLoad() * 100;
+        int load = (int) loadAvg;
+        int max = 100;
+        if (load > max)
+            load = max;
+        return integerFormatter.format(load);
+    }
+
+    /** @since 0.9.57+ */
+    public String getCPUBar() {
+        DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
+        int cores = SystemVersion.getCores();
+        //OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        //double loadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
+        double loadAvg = osmxb.getProcessCpuLoad() * 100;
+        int load = (int) loadAvg;
+        int max = 100;
+        if (load > max)
+            load = max;
+        return "<div class=\"percentBarOuter volatile\" id=\"sb_CPUBar\"><div class=\"percentBarText\">CPU Load: " +
+               load + "%" + " (" + cores + " cores)" +
+               "</div><div class=\"percentBarInner\" style=\"width: " + integerFormatter.format(load) +
                "%;\"></div></div>";
     }
 

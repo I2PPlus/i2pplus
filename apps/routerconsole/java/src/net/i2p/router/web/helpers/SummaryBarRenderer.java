@@ -44,7 +44,7 @@ class SummaryBarRenderer {
     static final String ALL_SECTIONS[] =
         {"HelpAndFAQ", "I2PServices", "I2PInternals", "RouterInfo", "ShortRouterInfo", "AdvancedRouterInfo", "MemoryBar", "NetworkReachability",
         "UpdateStatus", "RestartStatus", "Peers", "PeersAdvanced", "FirewallAndReseedStatus", "Bandwidth", "BandwidthGraph", "Tunnels",
-        "Congestion", "TunnelStatus", "Destinations", "NewsHeadings", "Advanced", "Clock"};
+        "Congestion", "TunnelStatus", "Destinations", "NewsHeadings", "Advanced", "Clock", "CPUBar"};
     static final Map<String, String> SECTION_NAMES;
 
     static {
@@ -71,6 +71,7 @@ class SummaryBarRenderer {
         aMap.put("NewsHeadings", _x("News &amp; Updates"));
         aMap.put("Advanced", _x("Advanced Links"));
         aMap.put("Clock", _x("UTC Clock"));
+        aMap.put("CPUBar", _x("CPU Load"));
         SECTION_NAMES = Collections.unmodifiableMap(aMap);
     }
 
@@ -121,6 +122,8 @@ class SummaryBarRenderer {
                 buf.append(renderAdvancedRouterInfoHTML());
             else if ("MemoryBar".equals(section))
                 buf.append(renderMemoryBarHTML());
+            else if ("CPUBar".equals(section))
+                buf.append(renderCPUBarHTML());
             else if ("NetworkReachability".equals(section))
                 buf.append(renderNetworkReachabilityHTML());
             else if ("UpdateStatus".equals(section))
@@ -792,10 +795,16 @@ class SummaryBarRenderer {
         return buf.toString();
     }
 
-    /** @since 0.9.32 */
+    /** @since 0.9.57+ */
     public String renderMemoryBarHTML() {
         if (_helper == null) return "";
         return _helper.getMemoryBar();
+    }
+
+    /** @since 0.9.57+ */
+    public String renderCPUBarHTML() {
+        if (_helper == null) return "";
+        return _helper.getCPUBar();
     }
 
     public String renderNetworkReachabilityHTML() {
