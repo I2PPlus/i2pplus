@@ -359,16 +359,12 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                 }
                 out.write("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                          "var visibility = document.visibilityState;\n" +
-                          "var cycle;\n" +
-                          "if (visibility = \"visible\") {\n" +
-                          "function timer() {\n" +
-                          "var cycle = setInterval(function() {\n" +
-                          "requestAnimationFrame(refreshTorrents);\n" +
-                          "}, ajaxDelay);\n" +
+                          "var timerId = setInterval(doRefresh, ajaxDelay);\n" +
+                          "function doRefresh() {\n" +
+                          " if (document.visible = true) {refreshTorrents();}\n" +
+                          " else {cancelRefresh();}\n" +
                           "}\n" +
-                          "timer();\n" +
-                          "}\n" +
+                          "function cancelRefresh() {clearInterval(timerId);}\n" +
                           "</script>\n");
             }
         }
