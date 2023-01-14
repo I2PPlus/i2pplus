@@ -189,14 +189,26 @@ public class IterativeSearchJob extends FloodSearchJob {
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
-        if (isLease)
+        int cpuLoad = Integer.valueOf(SystemVersion.getCPULoad());
+        int sysLoad = SystemVersion.getSystemLoad() != null && Integer.valueOf(SystemVersion.getSystemLoad()) > 0 ?
+                      Integer.valueOf(SystemVersion.getSystemLoad()) : 0;
+        boolean isSlow = SystemVersion.isSlow();
+        boolean isSingleCore = SystemVersion.getCores() < 2;
+        if (isLease && cpuLoad < 80 && sysLoad < 80 && !isSingleCore && !isSlow) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 4));
-        else if (ctx.netDb().getKnownRouters() < 1500 || ctx.router().getUptime() < 30*60*1000 || isHidden)
+        } else if ((ctx.netDb().getKnownRouters() < 1500 || ctx.router().getUptime() < 30*60*1000 || isHidden) &&
+                   !isSingleCore && cpuLoad < 80 && sysLoad < 80) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 2);
-        else if (ctx.netDb().getKnownRouters() > 2500 && ctx.router().getUptime() > 30*60*1000 && !isHidden)
+        } else if (ctx.netDb().getKnownRouters() > 2500 && ctx.router().getUptime() > 30*60*1000 && !isHidden && !isSlow && !isSingleCore) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.max(MAX_CONCURRENT - 1, 1));
-        else
+        } else if (cpuLoad > 80 || sysLoad > 80 || isSlow || isSingleCore) {
+            if (isLease)
+                _maxConcurrent = 2;
+            else
+                _maxConcurrent = 1;
+        } else {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.max(MAX_CONCURRENT, 1));
+        }
         _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
         _failedPeers = new HashSet<Hash>(_totalSearchLimit);
         _skippedPeers = new HashSet<Hash>(4);
