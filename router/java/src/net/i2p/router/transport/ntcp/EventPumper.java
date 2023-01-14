@@ -365,7 +365,12 @@ class EventPumper implements Runnable {
                 } else {
                     // another 100% CPU workaround
                     // TODO remove or only if we appear to be looping with no interest ops
-                    int pause = SystemVersion.isSlow() ? 30 :
+
+                    int cpuLoad = Integer.valueOf(SystemVersion.getCPULoad());
+                    int sysLoad = SystemVersion.getSystemLoad() != null && Integer.valueOf(SystemVersion.getSystemLoad()) > 0 ?
+                                  Integer.valueOf(SystemVersion.getSystemLoad()) : 0;
+
+                    int pause = SystemVersion.isSlow() || cpuLoad > 80 || sysLoad > 80 ? 50 :
                                 SystemVersion.getCores() < 8 || SystemVersion.getMaxMemory() < 1024*1024*1024 ? 20 :
                                 10;
                     if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
