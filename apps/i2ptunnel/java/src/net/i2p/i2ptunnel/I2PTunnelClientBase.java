@@ -572,7 +572,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
     private void startup() {
         if (_log.shouldDebug())
-//            _log.debug("Startup " + _clientId, new Exception("I did it"));
             _log.debug("Startup [ClientID " + _clientId + "]");
         // prevent JVM exit when running outside the router
         boolean isDaemon = getTunnel().getContext().isRouterContext();
@@ -610,6 +609,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 startRunning = true;
                 startLock.notify();
             }
+        }
     }
 
     /**
