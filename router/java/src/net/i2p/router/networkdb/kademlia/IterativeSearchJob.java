@@ -189,10 +189,9 @@ public class IterativeSearchJob extends FloodSearchJob {
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
-        int cpuLoad = Integer.valueOf(SystemVersion.getCPULoad());
-        int sysLoad = SystemVersion.getSystemLoad() != null && Integer.valueOf(SystemVersion.getSystemLoad()) > 0 ?
-                      Integer.valueOf(SystemVersion.getSystemLoad()) : 0;
         boolean isSlow = SystemVersion.isSlow();
+        int cpuLoad = SystemVersion.getCPULoad();
+        int sysLoad = SystemVersion.getSystemLoad();
         boolean isSingleCore = SystemVersion.getCores() < 2;
         if (isLease && cpuLoad < 80 && sysLoad < 80 && !isSingleCore && !isSlow) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 4));
