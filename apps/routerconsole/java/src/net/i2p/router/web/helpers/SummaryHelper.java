@@ -502,7 +502,7 @@ public class SummaryHelper extends HelperBase {
     public String getCPUBar() {
         long loadAvg = (long) _context.statManager().getRate("router.cpuLoad").getRate(60*1000).getAvgOrLifetimeAvg();
         return "<div class=\"percentBarOuter volatile\" id=\"sb_CPUBar\"><div class=\"percentBarText\">CPU: " +
-               loadAvg + "%" + (getSystemLoad() > 0 ? " | System Load: " + getSystemLoad() + "%" : "") +
+               getCPULoad() + "%" + (getSystemLoad() > 0 ? " | System Load: " + getSystemLoad() + "%" : "") +
                "</div><div class=\"percentBarInner\" style=\"width: " + loadAvg +
                "%;\"></div></div>";
     }
