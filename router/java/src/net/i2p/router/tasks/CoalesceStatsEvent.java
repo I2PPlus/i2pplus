@@ -16,6 +16,7 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SystemVersion;
 
 /**
  * Coalesce the stats framework every minute
@@ -46,7 +47,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.createRequiredRateStat("router.bannedPeers", _x("Total peers in our banlist"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { 60*1000 });
         sm.createRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { 60*1000, 60*60*1000 });
-        sm.createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
+        sm.createRateStat("clock.skew", _x("Clock step adjustment (ms)"), "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
         _maxMemory = Runtime.getRuntime().maxMemory();
 //        String legend = "(Bytes)";
         String legend = "";
@@ -54,6 +55,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
             legend += "Maximum allocated to the JVM is " + DataHelper.formatSize(_maxMemory) + 'B';
         // router.memoryUsed currently has the max size in the description so it can't be tagged
         sm.createRequiredRateStat("router.memoryUsed", legend, "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.cpuLoad", _x("CPU load average of the JVM"), "Router", new long[] { 60*1000 });
     }
 
     public void timeReached() {
@@ -90,6 +92,8 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.addRateData("router.memoryUsed", used);
         if (_maxMemory - used < LOW_MEMORY_THRESHOLD)
             Router.clearCaches();
+
+        sm.addRateData("router.cpuLoad", (long) SystemVersion.getCPULoad());
 
         _ctx.tunnelDispatcher().updateParticipatingStats(Router.COALESCE_TIME);
 

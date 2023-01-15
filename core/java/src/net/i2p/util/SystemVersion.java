@@ -532,7 +532,6 @@ public abstract class SystemVersion {
         int max = 100;
         if (cpuLoad > max)
             cpuLoad = max;
-        //return integerFormatter.format(cpuLoad);
         return cpuLoad;
     }
 
@@ -549,7 +548,6 @@ public abstract class SystemVersion {
         if (sysLoad < 0)
             return 0;
         else
-            //return integerFormatter.format(sysLoad);
             return sysLoad;
     }
 
