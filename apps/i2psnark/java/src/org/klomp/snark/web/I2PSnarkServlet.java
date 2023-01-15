@@ -636,7 +636,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam)));
             } catch (NumberFormatException nfe) {}
         }
-        int pageSize = Math.max(_manager.getPageSize(), 5);
+//        int pageSize = Math.max(_manager.getPageSize(), 5);
+        int pageSize = _manager.getPageSize();
+        String ps = req.getParameter("ps");
+        if (ps != null) {
+            try { pageSize = Integer.parseInt(ps); } catch (NumberFormatException nfe) {}
+        }
+        if (pageSize < 10)
+            pageSize = 10;
 
         // move pagenav here so we can align it nicely without resorting to hacks
         if (total > 0 && (start > 0 || total > pageSize)) {
