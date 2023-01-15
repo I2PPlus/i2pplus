@@ -744,7 +744,7 @@ class BuildHandler implements Runnable {
                 _log.warn("Dropping hostile build request, BAD Tunnel ID: " + req);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
-                _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (BAD Tunnel ID)", null, null, _context.clock().now() + bantime);
+                _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (BAD Tunnel ID)", null, null, _context.clock().now() + bantime);
                 _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
                           "m -> Hostile tunnel request (BAD TunnelID)");
             }
@@ -761,7 +761,7 @@ class BuildHandler implements Runnable {
                 _log.warn("Dropping hostile build request, we are the next hop: " + req);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
-                _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (double hop)", null, null, _context.clock().now() + bantime);
+                _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (double hop)", null, null, _context.clock().now() + bantime);
                 _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
                           "m -> Hostile tunnel request (We are 2 hops in a row!)");
             }
@@ -777,7 +777,7 @@ class BuildHandler implements Runnable {
                     _log.warn("Dropping hostile build request, we are the previous hop: " + req);
                 if (from != null) {
                     _context.commSystem().mayDisconnect(from);
-                    _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (previous hop)", null, null, _context.clock().now() + bantime);
+                    _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (previous hop)", null, null, _context.clock().now() + bantime);
                     _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
                               "m -> Hostile tunnel request (We are the previous hop!)");
                 }
@@ -794,7 +794,7 @@ class BuildHandler implements Runnable {
                     _log.warn("Dropping hostile build request with the same previous and next hop: " + req);
                 if (from != null) {
                     _context.commSystem().mayDisconnect(from);
-                    _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (duplicate hops in chain)", null, null, _context.clock().now() + bantime);
+                    _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (duplicate hops in chain)", null, null, _context.clock().now() + bantime);
                     _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
                               "m -> Hostile tunnel request (duplicate hops in chain)");
                 }
@@ -826,7 +826,7 @@ class BuildHandler implements Runnable {
                 _log.warn("Dropping build request (too old)... replay attack? " + DataHelper.formatDuration(timeDiff) + ": " + req);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
-                _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (possible replay attack)", null, null, _context.clock().now() + bantime);
+                _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (possible replay attack)", null, null, _context.clock().now() + bantime);
                 _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
                           "m -> Hostile tunnel request (too old, replay attack?)");
             }
@@ -838,7 +838,7 @@ class BuildHandler implements Runnable {
                 _log.warn("Dropping build request (too far in future) " + DataHelper.formatDuration(0 - timeDiff) + ": " + req);
             if (from != null)
                 _context.commSystem().mayDisconnect(from);
-                _context.banlist().banlistRouter(from, " <b>➜</b> HostileTunnel Request (too far in future)", null, null, _context.clock().now() + bantime);
+                _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (too far in future)", null, null, _context.clock().now() + bantime);
                 _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
                           "m -> Hostile tunnel request (too far in future)");
             return;
