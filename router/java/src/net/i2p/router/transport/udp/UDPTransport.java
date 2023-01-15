@@ -3492,11 +3492,12 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             if (_log.shouldDebug())
                 _log.debug("Failed sending " + msg + " to " + msg.getPeer());
         }
-        noteSend(msg, false);
+        //noteSend(msg, false);
         if (m != null)
             super.afterSend(m, false);
     }
 
+/*
     private void noteSend(OutboundMessageState msg, boolean successful) {
         // bail before we do all the work
         if (!_context.messageHistory().getDoLog())
@@ -3534,6 +3535,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                                                   (p != null ? p.getRemotePeer() : null), successful, buf.toString());
         }
     }
+*/
 
     public void failed(OutNetMessage msg, String reason) {
         if (msg == null) return;
@@ -3551,7 +3553,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (msg == null) return;
         if (_log.shouldDebug())
             _log.debug("Sending message succeeded: " + msg);
-        noteSend(msg, true);
+        //noteSend(msg, true);
         OutNetMessage m = msg.getMessage();
         if (m != null)
             super.afterSend(m, true);
