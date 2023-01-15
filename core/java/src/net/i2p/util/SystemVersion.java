@@ -523,32 +523,34 @@ public abstract class SystemVersion {
      * Retrieve CPU Load of the JVM.
      * @since 0.9.57+
      */
-    public static String getCPULoad() {
+    public static int getCPULoad() {
         DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
         int cores = SystemVersion.getCores();
         OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        double loadAvg = osmxb.getProcessCpuLoad() * 100;
-        int load = (int) loadAvg;
+        double cpuLoadAvg = osmxb.getProcessCpuLoad() * 100;
+        int cpuLoad = (int) cpuLoadAvg;
         int max = 100;
-        if (load > max)
-            load = max;
-        return integerFormatter.format(load);
+        if (cpuLoad > max)
+            cpuLoad = max;
+        //return integerFormatter.format(cpuLoad);
+        return cpuLoad;
     }
 
     /**
      * Retrieve System Load as percentage (100% equals full system load)
      * @since 0.9.57+
      */
-    public static String getSystemLoad() {
+    public static int getSystemLoad() {
         DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
         int cores = SystemVersion.getCores();
         OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
         int sysLoad = (int) systemLoadAvg;
         if (sysLoad < 0)
-            return "n/a";
+            return 0;
         else
-            return integerFormatter.format(sysLoad);
+            //return integerFormatter.format(sysLoad);
+            return sysLoad;
     }
 
 }
