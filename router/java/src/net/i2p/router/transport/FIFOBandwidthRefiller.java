@@ -103,7 +103,7 @@ public class FIFOBandwidthRefiller implements Runnable {
      * the bandwidth limiter will get an update this often (ms)
      */
 //    private static final long REPLENISH_FREQUENCY = 40;
-    private static final long REPLENISH_FREQUENCY = 500;
+    private static final long REPLENISH_FREQUENCY = SystemVersion.isSlow() || SystemVersion.getCPULoad() > 80 ? 100 : 20;
 
     FIFOBandwidthRefiller(RouterContext context, FIFOBandwidthLimiter limiter) {
         _limiter = limiter;
