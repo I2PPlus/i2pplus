@@ -17,42 +17,32 @@ function refreshTorrents() {
   var peerinfo = document.getElementsByClassName("peerinfo");
   var query = window.location.search;
   var remaining = document.getElementById("sortRemaining");
-  var savedQuery = window.localStorage.getItem("queryString");
+  var savedQuery = window.localStorage.getItem("snarkURL");
   var snarkInfo = document.getElementById("snarkInfo");
   var tfoot = document.getElementById("snarkFoot");
   var thead = document.getElementById("snarkHead");
   var togglefiles = document.getElementById("toggle_files");
   var torrents = document.getElementById("torrents");
-  var url = location.href;
+  var url = ".ajax/xhr1.html";
   var xhrsnark = new XMLHttpRequest();
 
   if (navbar !== null) {var home = document.querySelector(".nav_main");}
   if (tfoot !== null) {var debug = document.getElementById("#debugMode");}
 
-  if (torrents || noload) {
-    if (savedQuery !== null) {
-      url = location.href + savedQuery;
-    }
-  }
-
-  function getQuery() {
-    if (query !== null && torrents !== null) {
-      url = "/i2psnark/" + query;
-      window.localStorage.setItem("queryString", query);
-      if (savedQuery !== null) {
-        query = savedQuery;
-        url = "/i2psnark/" + savedQuery;
-      }
-    }
+  var query = window.location.search;
+  if (query) {
+    url += query;
+    window.localStorage.setItem("snarkURL", url);
   }
 
   function setLinks() {
     home.href = url;
-    getQuery();
     if (debug !== null) {
       debug.href = savedQuery;
-    } else if (home) {
-      home.href = "/i2psnark/" + savedQuery;
+    } else if (home && query) {
+      home.href = "/i2psnark/" + query;
+    } else {
+      home.href = "/i2psnark/";
     }
   }
 
@@ -64,7 +54,6 @@ function refreshTorrents() {
 
   if (torrents || noload || down) {
   xhrsnark.open("GET", url);
-  xhrsnark.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
   xhrsnark.responseType = "document";
   xhrsnark.onreadystatechange = function() {
 
