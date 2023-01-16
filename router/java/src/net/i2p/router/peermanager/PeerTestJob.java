@@ -42,7 +42,9 @@ class PeerTestJob extends JobImpl {
     private boolean _keepTesting;
     private final int DEFAULT_PEER_TEST_DELAY = SystemVersion.isSlow() ? 8*1000 : 5*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
-    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 1 : SystemVersion.getCores() <= 2 ? 2 : SystemVersion.getCores() >= 8 ? 4 : 3;
+    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 1 :
+                                                             SystemVersion.getCores() <= 2 ? 2 :
+                                                             SystemVersion.getCores() >= 8 ? 4 : 3;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 750;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
@@ -82,7 +84,7 @@ class PeerTestJob extends JobImpl {
     private long getPeerTestDelay() {
         long uptime = getContext().router().getUptime();
         int testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
-        if (uptime > 3*60*60*1000)
+        if (uptime > 3*60*60*1000 || SystemVersion.getCPULoad() > 80)
             return testDelay + 1000;
         else if (uptime >= 3*60*1000)
             return testDelay;
@@ -105,8 +107,8 @@ class PeerTestJob extends JobImpl {
         int cores = SystemVersion.getCores();
         long memory = SystemVersion.getMaxMemory();
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
-        if (cores >=4 && memory >= 512*1024*1024)
-            testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, 4);
+        if (SystemVersion.getCPULoad() > 80)
+            testConcurrent = 1;
         return testConcurrent;
     }
 
@@ -140,7 +142,7 @@ class PeerTestJob extends JobImpl {
         for (RouterInfo peer : peers) {
             testPeer(peer);
         }
-        if (lag > 300) {
+        if (lag > 300 || SystemVersion.getCPULoad() > 80) {
             requeue(getPeerTestDelay() * 2);
             if (_log.shouldWarn())
                 _log.info("High job lag detected (" + lag + "ms) - increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
@@ -172,10 +174,8 @@ class PeerTestJob extends JobImpl {
             String bw = peerInfo.getBandwidthTier();
             String version = peerInfo.getVersion();
             if (peerInfo != null && cap != null && reachable && VersionComparator.comp(version, "0.9.57") >= 0 &&
-//                (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
-//            } else if (peerInfo != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
             } else if (peerInfo != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
                 prof.setCapacityBonus(-30);
                 if (_log.shouldInfo())
