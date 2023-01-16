@@ -76,7 +76,7 @@
 <li><b><%=intl._t("Backlog")%>:</b> <%=intl._t("This is the number of pending requests from other routers to build a participating tunnel through your router. It should usually be close to zero. If it is consistently high, your computer is too slow, and you should reduce your share bandwidth limits.")%></li>
 <li><b><%=intl._t("Accepting/Rejecting")%>:</b> <%=intl._t("Your router's status on accepting or rejecting requests from other routers to build a participating tunnel through your router. Your router may accept all requests, accept or reject a percentage of requests, or reject all requests for a number of reasons, to control the bandwidth and CPU demands and maintain capacity for local clients. <b>Note")%>:</b> <%=intl._t("It will take at least 10 minutes from your router starting for it to accept building participating tunnels in order to ensure your router is stable and successfully bootstrapped to the network.")%></li>
 </ul>
-<p><%=intl._t("<b>Note")%>:</b> This section is not enabled by default unless <a href='/help/configuration#advancedconsole'>Advanced Console mode</a> is enabled. You may enable it on the <a href='/configsidebar'>Sidebar Configuration page</a>.")%></p>
+<p><%=intl._t("<b>Note")%>:</b> <%=intl._t("This section is not enabled by default unless <a href='/help/configuration#advancedconsole'>Advanced Console mode</a> is enabled. You may enable it on the <a href='/configsidebar'>Sidebar Configuration page</a>.")%></p>
 </div>
 <div id="reachabilityhelp">
 <h2><%=intl._t("Reachability Help")%></h2>
