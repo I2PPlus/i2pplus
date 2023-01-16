@@ -48,10 +48,6 @@ function refreshSidebar() {
   xhr.responseType = "document";
   xhr.overrideMimeType("text/html");
   xhr.setRequestHeader("Accept", "text/html");
-  xhr.setRequestHeader("Cache-Control", "no-store, max-age=60");
-  xhr.setRequestHeader("Content-Security-Policy",
-    "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'"
-  );
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
