@@ -82,10 +82,10 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
 //    public static final int DEFAULT_MINIMUM_FAST_PEERS = 8;
-    public static final int DEFAULT_MINIMUM_FAST_PEERS = 150;
+    public static final int DEFAULT_MINIMUM_FAST_PEERS = 200;
     /** this is misnamed, it is really the max minimum number. */
 //    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 40;
-    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 250;
+    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 300;
 //    private static final int ABSOLUTE_MAX_FAST_PEERS = 75;
     private static final int ABSOLUTE_MAX_FAST_PEERS = 350;
 
