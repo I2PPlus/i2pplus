@@ -989,21 +989,22 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels .percentBarInner{background:#030}
 #tunnels .percentBarOuter:hover .percentBarInner{background:rgba(0,48,0,.8)}
 #tunnelPeerCount th,#tunnelPeerCount .cells,#tunnelPeerCount .cells:first-child{width:auto;max-width:inherit;min-width:0}
-#tunnelPeerCount .cells.bar,#tunnelPeerCount th.bar,#tunnelPeerCount td:nth-child(n+3),#tunnelPeerCount th:nth-child(n+3){padding-left:8px;padding-right:8px;width:10%;white-space:nowrap}
-#tunnelPeerCount td:nth-child(3),#tunnelPeerCount th:nth-child(3){width:auto}
+#tunnelPeerCount .cells.bar,#tunnelPeerCount th.bar,#tunnelPeerCount td:nth-child(n+4),#tunnelPeerCount th:nth-child(n+4){padding-left:8px;padding-right:8px;width:8%;white-space:nowrap}
 #tunnels #tunnelPeerCount td:first-child > span{display:inline-block;vertical-align:middle;line-height:1.2}
 #tunnels #tunnelPeerCount td:first-child .version{line-height:1.46}
 #tunnels #tunnelPeerCount td:first-child .configpeer{padding:4.8px}
+#tunnels #tunnelPeerCount .cells:nth-child(2){width:1%;white-space:nowrap}
+#tunnels #tunnelPeerCount td{width:auto}
+#tunnels #tunnelPeerCount th:first-child,#tunnels #tunnelPeerCount td:first-child{padding-left:5px;padding-right:5px;width:3%;max-width:200px;white-space:nowrap;border-left:var(--border)}
 #tunnelPeerCount td:nth-child(3){white-space:normal;word-break:break-all}
 #tunnelPeerCount tr:not(.tablefooter) td{padding:3px;border:var(--border_soft)}
 #tunnelPeerCount tr:nth-last-child(2) td{border-bottom:var(--border)}
-#tunnelPeerCount td:first-child{padding-left:5px;padding-right:5px;width:192px;white-space:nowrap;border-left:var(--border)}
+#tunnelPeerCount td:nth-child(3),#tunnelPeerCount th:nth-child(3){width:auto;min-width:120px;white-space:normal;word-break:break-all}
 #tunnelPeerCount td:last-child{border-right:var(--border)}
 #tunnelPeerCount .configpeer{margin:0 0 0 3px;display:inline-block;vertical-align:middle}
 #tunnelPeerCount .configpeer img{margin:0}
 #tunnelPeerCount tr:not(:last-child):hover td{background:#040}
 #tunnelPeerCount .tablefooter td{border-top:var(--border);background:#000}
-#tunnels #tunnelPeerCount td{width:auto}
 #tunnelPeerCount .routerid{margin-right:3px;min-width:72px}
 #tunnelPeerCount .tunnel_cap{padding:1px;min-width:22px}
 #tunnelPeerCount .ipaddress{min-width:140px;display:inline-block;text-align:right}
