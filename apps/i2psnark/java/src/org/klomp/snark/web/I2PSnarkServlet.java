@@ -228,7 +228,7 @@ public class I2PSnarkServlet extends BasicServlet {
         req.setCharacterEncoding("UTF-8");
 
         String pOverride = _manager.util().connected() ? null : "";
-        String peerString = getQueryString(req, pOverride, null, null);
+        String peerString = getQueryString(req, pOverride, null, null, "");
 
         // AJAX for mainsection
         if ("/.ajax/xhr1.html".equals(path)) {
@@ -441,6 +441,16 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(_t("BTDigg"));
             out.write("</a>");
         }
+        if (_manager.getTorrents().size() > 1) {
+            out.write("<form class=\"search\" id = \"search\" action=\"" + _contextPath + "\" method=\"GET\" hidden>" +
+                      "<input type=\"text\" name=\"s\" size=\"20\" class=\"search snarkNav\" id=\"searchbox\"");
+            String s = req.getParameter("s");
+            if (s != null)
+                out.write(" value=\"" + DataHelper.escapeHTML(s) + '"');
+            out.write(">" +
+                      "<input type=\"reset\" class=\"cancel snarkNav\" value=\"\">" +
+                      "</form>\n");
+        }
         out.write("\n</div>\n");
         String newURL = req.getParameter("newURL");
         if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET"))
@@ -628,6 +638,17 @@ public class I2PSnarkServlet extends BasicServlet {
         String ua = req.getHeader("User-Agent");
         boolean isDegraded = ua != null && ServletUtil.isTextBrowser(ua);
         boolean noThinsp = isDegraded || (ua != null && ua.startsWith("Opera"));
+
+        // search
+        boolean isSearch = false;
+        String search = req.getParameter("s");
+        if (search != null && search.length() > 0) {
+            List<Snark> matches = search(search, snarks);
+            if (matches != null) {
+                snarks = matches;
+                isSearch = true;
+            }
+        }
 
         // pages
         int start = 0;
@@ -951,6 +972,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (!canWrite) {
                     out.write(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                } else if (isSearch) {
+                    out.write(_t("No torrents found."));
                 } else {
                     out.write(_t("No torrents loaded."));
                 }
@@ -1133,6 +1156,42 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     *  search torrents for matching terms
+     *
+     *  @param search non-null
+     *  @param snarks unmodified
+     *  @return null if no valid search, or matching torrents in same order, empty if no match
+     *  @since 0.9.58
+     */
+    private static List<Snark> search(String search, Collection<Snark> snarks) {
+        List<String> searchList = null;
+        String[] terms = DataHelper.split(search, " ");
+        for (int i = 0; i < terms.length; i++) {
+            String term = terms[i];
+            if (term.length() > 0) {
+                if (searchList == null)
+                    searchList = new ArrayList<String>(4);
+                searchList.add(term.toLowerCase(Locale.US));
+            }
+        }
+        if (searchList == null)
+            return null;
+        List<Snark> matches = new ArrayList<Snark>(32);
+        for (Snark snark : snarks) {
+            String lcname = snark.getBaseName().toLowerCase(Locale.US);
+            // search for any term (OR)
+            for (int j = 0; j < searchList.size(); j++) {
+                String term = searchList.get(j);
+                if (lcname.contains(term)) {
+                    matches.add(snark);
+                    break;
+                }
+            }
+        }
+        return matches;
+    }
+
+    /**
      *  hidden inputs for nonce and paramters p, st, and sort
      *
      *  @param out writes to it
@@ -1173,11 +1232,19 @@ public class I2PSnarkServlet extends BasicServlet {
         if (action != null) {
             buf.append("<input type=\"hidden\" name=\"action\" value=\"")
                .append(action).append("\" >\n");
+        } else {
+            // for buttons, keep the search term
+            String sParam = req.getParameter("s");
+            if (sParam != null) {
+                buf.append("<input type=\"hidden\" name=\"s\" value=\"")
+                   .append(DataHelper.escapeHTML(sParam)).append("\" >\n");
+            }
         }
     }
 
     /**
-     *  Build HTML-escaped and stripped query string
+     *  Build HTML-escaped and stripped query string.
+     *  Keeps any existing search param.
      *
      *  @param p override or "" for default or null to keep the same as in req
      *  @param st override or "" for default or null to keep the same as in req
@@ -1186,10 +1253,14 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.16
      */
     private static String getQueryString(HttpServletRequest req, String p, String st, String so) {
-/*
-        long now = System.currentTimeMillis();
-        String time = String.valueOf(now);
-*/
+        return getQueryString(req, p, st, so, null);
+    }
+
+    /**
+     *  @param s search param override or "" for default or null to keep the same as in req
+     *  @since 0.9.58
+     */
+    private static String getQueryString(HttpServletRequest req, String p, String st, String so, String s) {
         String url = req.getRequestURL().toString();
         StringBuilder buf = new StringBuilder(64);
         if (p == null) {
@@ -1228,12 +1299,18 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("&amp;st=");
             buf.append(st);
         }
-/*
-        if ((p == null || !p.equals("")) && (so == null || so.equals("")) && (st == null || st.equals("")) || url.contains("/configure"))
-            buf.append("?time=").append(time);
+        if (s == null) {
+            s = req.getParameter("s");
+            if (s != null)
+                s = DataHelper.escapeHTML(s);
+        }
+        if (s != null && !s.equals("")) {
+            if (buf.length() <= 0)
+                buf.append("?s=");
         else
-            buf.append("&amp;time=").append(time);
-*/
+                buf.append("&amp;s=");
+            buf.append(s);
+        }
         return buf.toString();
     }
 
@@ -1791,8 +1868,34 @@ public class I2PSnarkServlet extends BasicServlet {
                 _manager.addMessage(_t("Error creating torrent - you must enter a file or directory"));
             }
         } else if ("StopAll".equals(action)) {
+            String search = req.getParameter("s");
+            if (search != null && search.length() > 0) {
+                List<Snark> matches = search(search, _manager.getTorrents());
+                if (matches != null) {
+                    for (Snark snark : matches) {
+                        _manager.stopTorrent(snark, false);
+                    }
+                    return;
+                }
+            }
             _manager.stopAllTorrents(false);
         } else if ("StartAll".equals(action)) {
+            String search = req.getParameter("s");
+            if (search != null && search.length() > 0) {
+                List<Snark> matches = search(search, _manager.getTorrents());
+                if (matches != null) {
+                    // TODO thread it
+                    int count = 0;
+                    for (Snark snark : matches) {
+                        _manager.startTorrent(snark);
+                        if ((count++ & 0x0f) == 15) {
+                            // try to prevent OOMs
+                            try { Thread.sleep(250); } catch (InterruptedException ie) {}
+                        }
+                    }
+                    return;
+                }
+            }
             _manager.startAllTorrents();
         } else if ("Clear".equals(action)) {
             String sid = req.getParameter("id");
