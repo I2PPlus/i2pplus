@@ -279,10 +279,15 @@ class BuildHandler implements Runnable {
             long now = _context.clock().now();
             long dropBefore = now - (BuildRequestor.REQUEST_TIMEOUT / 4);
             String PROP_MAX_TUNNELS = _context.getProperty("router.maxParticipatingTunnels");
-//            int maxTunnels = 1000;
-            int maxTunnels = 4000;
+            int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 2*1000 :
+                                      SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
+                                      SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
+            int maxTunnels;
             if (PROP_MAX_TUNNELS != null)
                 maxTunnels = Integer.valueOf(PROP_MAX_TUNNELS);
+            else {
+                maxTunnels = DEFAULT_MAX_TUNNELS;
+            }
             if (state.recvTime <= dropBefore) {
                 if (_log.shouldWarn())
                     _log.warn("Not even trying to handle/decrypt the request " + state.msg.getUniqueId()
@@ -301,6 +306,15 @@ class BuildHandler implements Runnable {
                     _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: High job lag").replace("requests: ", "requests:<br>"));
                 }
                 _context.statManager().addRateData("router.throttleTunnelCause", lag);
+                return;
+            }
+
+            if (SystemVersion.getCPULoad() > 95) {
+                if (_log.shouldWarn() && (maxTunnels > 0)) {
+                    _log.warn("Dropping participating tunnel request due to high system load");
+                    _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: High system load").replace("requests: ", "requests:<br>"));
+                }
+                //_context.statManager().addRateData("router.throttleTunnelCause", lag);
                 return;
             }
 
