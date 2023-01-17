@@ -105,12 +105,8 @@ function initFilterBar() {
 
   function showAll() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/all.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
     btnAll.checked = true;
+    btnAll.style.pointerEvents = "none";
     window.localStorage.setItem("filter", btnAll.id);
   }
 
@@ -281,20 +277,6 @@ function checkFilterBar() {
       window.localStorage.setItem("queryString", url);
     }
   }
-
-/**
-  function clearQuery() {
-    window.localStorage.removeItem("queryString");
-  }
-
-  function clearFilter() {
-    window.localStorage.removeItem("filter");
-  }
-
-  function clearLocalStorage() {
-    window.localStorage.clear();
-  }
-**/
 
   if (bar !== null) {
     initFilterBar();
