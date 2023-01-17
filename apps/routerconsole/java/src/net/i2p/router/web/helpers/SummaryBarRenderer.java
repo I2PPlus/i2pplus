@@ -1289,8 +1289,7 @@ class SummaryBarRenderer {
         }
         buf.append("</td></tr>\n");
 
-        if (_context.getProperty("routerconsole.showPeerTestAvg") != null &&
-            _context.getBooleanProperty("routerconsole.showPeerTestAvg")) {
+        if (_context.getBooleanProperty("routerconsole.showPeerTestAvg")) {
             buf.append("<tr title=\"")
                .append(_t("Average time to test a peer (successful / total)"))
                .append("\">" +
@@ -1304,8 +1303,7 @@ class SummaryBarRenderer {
             buf.append("</span></td></tr>\n");
         }
 
-        if (_context.getProperty("router.disableTunnelTesting") == null ||
-            !_context.getBooleanProperty("router.disableTunnelTesting")) {
+        if (!_context.getBooleanProperty("router.disableTunnelTesting")) {
             buf.append("<tr title=\"")
                .append(_t("Round trip time for a tunnel test"))
                .append("\">" +

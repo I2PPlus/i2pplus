@@ -500,12 +500,19 @@ public class SummaryHelper extends HelperBase {
 
     /** @since 0.9.57+ */
     public String getCPUBar() {
-        long loadAvg = (long) _context.statManager().getRate("router.cpuLoad").getRate(60*1000).getAvgOrLifetimeAvg();
-        int load = loadAvg != 0 ? (Math.toIntExact(loadAvg) / 2) + (getCPULoad() / 2) : getCPULoad();
+        Rate stat = _context.statManager().getRate("router.cpuLoad").getRate(60*1000);
+        long loadAvg;
+        long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
+        if (count > 1) {
+            loadAvg = (long) (getCPULoad() + ((3 * stat.getCurrentTotalValue()) + stat.getLastTotalValue()) / count);
+        } else {
+            loadAvg = getCPULoad();
+        }
+        int load = Math.toIntExact(loadAvg);
         return "<div class=\"percentBarOuter volatile\" id=\"sb_CPUBar\"><div class=\"percentBarText\">CPU: " +
                load + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
                "</div><div class=\"percentBarInner\" style=\"width: " + load +
-               "%;\"></div></div>";
+               "%;max-width: " + load + "\"></div></div>";
     }
 
     /**
