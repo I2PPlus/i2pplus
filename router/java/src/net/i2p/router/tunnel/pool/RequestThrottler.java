@@ -72,7 +72,7 @@ class RequestThrottler {
         boolean rv = count > limit;
         boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
         long loadAvg = (long) context.statManager().getRate("router.CpuLoad").getRate(60*1000).getAvgOrLifetimeAvg();
-        if (SystemVersion.getCPULoad() > 90 && loadAvg > 90) {
+        if (SystemVersion.getCPULoad() > 90 && loadAvg != null && loadAvg > 90) {
             if (_log.shouldWarn())
                 _log.warn("Rejecting tunnel requests from router [" + h.toBase64().substring(0,6) + "] -> " +
                           "System is under sustained high load");
