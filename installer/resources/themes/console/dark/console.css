@@ -990,8 +990,11 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels .percentBarOuter:hover .percentBarInner{background:rgba(0,48,0,.8)}
 #tunnelPeerCount th,#tunnelPeerCount .cells,#tunnelPeerCount .cells:first-child{width:auto;max-width:inherit;min-width:0}
 #tunnelPeerCount .cells.bar,#tunnelPeerCount th.bar,#tunnelPeerCount td:nth-child(n+3),#tunnelPeerCount th:nth-child(n+3){padding-left:8px;padding-right:8px;width:10%;white-space:nowrap}
-#tunnelPeerCount td:first-child,#tunnelPeerCount td:first-child > *{vertical-align:middle;line-height:1.4}
-#tunnelPeerCount td:nth-child(2){white-space:normal;word-break:break-all}
+#tunnelPeerCount td:nth-child(3),#tunnelPeerCount th:nth-child(3){width:auto}
+#tunnels #tunnelPeerCount td:first-child > span{display:inline-block;vertical-align:middle;line-height:1.2}
+#tunnels #tunnelPeerCount td:first-child .version{line-height:1.46}
+#tunnels #tunnelPeerCount td:first-child .configpeer{padding:4.8px}
+#tunnelPeerCount td:nth-child(3){white-space:normal;word-break:break-all}
 #tunnelPeerCount tr:not(.tablefooter) td{padding:3px;border:var(--border_soft)}
 #tunnelPeerCount tr:nth-last-child(2) td{border-bottom:var(--border)}
 #tunnelPeerCount td:first-child{padding-left:5px;padding-right:5px;width:192px;white-space:nowrap;border-left:var(--border)}
@@ -1001,7 +1004,7 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnelPeerCount tr:not(:last-child):hover td{background:#040}
 #tunnelPeerCount .tablefooter td{border-top:var(--border);background:#000}
 #tunnels #tunnelPeerCount td{width:auto}
-#tunnelPeerCount .routerid{min-width:72px}
+#tunnelPeerCount .routerid{margin-right:3px;min-width:72px}
 #tunnelPeerCount .tunnel_cap{padding:1px;min-width:22px}
 #tunnelPeerCount .ipaddress{min-width:140px;display:inline-block;text-align:right}
 #tunnelPeerCount a.script[href^="https://gwhois.org"]::after{margin:-1px 0 1px 3px;width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat center center/11px;opacity:.7;content:""}

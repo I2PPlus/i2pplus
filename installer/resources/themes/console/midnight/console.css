@@ -2207,22 +2207,23 @@ h1::first-letter{font-size:107%}
 #tunnels #peercount{margin-bottom:-3px;background-image:url(/themes/console/images/peers.svg)}
 #tunnels #peercount a{padding:0;vertical-align:middle;line-height:0}
 #tunnelPeerCount{margin-bottom:9px}
-#tunnels #tunnelPeerCount .cells{white-space:nowrap;width:20%;max-width:inherit;min-width:0}
+#tunnels #tunnelPeerCount .cells{white-space:nowrap;width:auto;max-width:inherit;min-width:0}
 #tunnels .percentBarInner{background:#225}
 #tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:transparent}
 #tunnelPeerCount th,#tunnelPeerCount .cells,#tunnelPeerCount .cells:first-child{width:auto;max-width:inherit;min-width:0}
-#tunnels #tunnelPeerCount .cells.bar,#tunnels #tunnelPeerCount th.bar,#tunnels #tunnelPeerCount td:nth-child(n+3),#tunnels #tunnelPeerCount th:nth-child(n+3){padding-left:8px;padding-right:8px;width:10%;white-space:nowrap}
+#tunnels #tunnelPeerCount .cells:nth-child(n+2){width:auto}
+#tunnels #tunnelPeerCount .cells.bar,#tunnels #tunnelPeerCount th.bar,#tunnels #tunnelPeerCount td:nth-child(n+4),#tunnels #tunnelPeerCount th:nth-child(n+4){padding-left:8px;padding-right:8px;white-space:nowrap}
 #tunnels #tunnelPeerCount tr:not(:last-child) td:first-child{padding:2px 0;width:1%;min-width:0;white-space:nowrap;text-align:center;background:linear-gradient(180deg,#112,#001)}
 #tunnels #tunnelPeerCount tr:not(.tablefooter):hover td,#tunnels #tunnelPeerCount tr:not(.tablefooter):hover td:first-child{background:#303}
-#tunnels #tunnelPeerCount td:first-child span,#tunnels #tunnelPeerCount td:first-child tt,#tunnels #tunnelPeerCount td:first-child .configpeer img,#tunnels #tunnelPeerCount td:first-child .routerid img{margin:1px 3px;padding:0;width:auto;min-width:0;display:inline-block;vertical-align:middle;font-weight:700;border:none;box-shadow:none;background:none}
+#tunnels #tunnelPeerCount td:first-child span,#tunnels #tunnelPeerCount td:first-child tt,#tunnels #tunnelPeerCount td:first-child .configpeer img,#tunnels #tunnelPeerCount td:first-child .routerid img{margin:1px 3px;padding:0;min-width:0;display:inline-block;vertical-align:middle;font-weight:700;border:none;box-shadow:none;background:none}
 #tunnels #tunnelPeerCount td:first-child .routerid,#tunnels #tunnelPeerCount td:first-child .flag{margin:1px;padding:0}
 #tunnels #tunnelPeerCount td:first-child tt{margin-left:-2px}
 #tunnels #tunnelPeerCount td:first-child .tunnel_cap{margin-right:4px}
-#tunnels #tunnelPeerCount td:nth-child(2){white-space:normal;word-break:break-all}
+#tunnels #tunnelPeerCount td:nth-child(3){width:auto;white-space:normal;word-break:break-all}
 #tunnelPeerCount tr:not(:last-child) td{padding:3px;border:var(--border_inner);border:var(--border_inner)}
 #tunnelPeerCount tr:nth-last-child(2) td{border-bottom:var(--border_inner)}
 #tunnelPeerCount tr:last-child td{border-top:var(--border_inner);background:#000}
-#tunnelPeerCount td:first-child{border-left:var(--border_inner)}
+#tunnelPeerCount td:first-child{min-width:200px;border-left:var(--border_inner)}
 #tunnelPeerCount td:last-child{border-right:var(--border_inner)}
 #tunnelPeerCount td:first-child span{margin:3px 2px 2px;vertical-align:middle}
 #tunnelPeerCount .tunnel_cap{padding:1px 2px 0}
