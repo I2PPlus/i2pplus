@@ -1197,8 +1197,13 @@ public class I2PSnarkServlet extends BasicServlet {
             if (p != null)
                 p = DataHelper.stripHTML(p);
         }
-        if (p != null && !p.equals(""))
+        if (p != null && !p.equals("")) {
             buf.append("?p=").append(p);
+            if (so != null && !so.equals("")) {
+                buf.append("&amp;sort=");
+                buf.append(so);
+            }
+        }
         if (so == null) {
             so = req.getParameter("sort");
             if (so != null)
