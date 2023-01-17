@@ -80,17 +80,17 @@ class RequestThrottler {
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
                         _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                                  "m -> Excessive tunnel requests (Count / limit: " + count + " / " + (limit * 11 / 9) +
+                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 11 / 9) +
                                   " in " + (11*60 / portion) + "s)");
                 } else {
                     if (_log.shouldInfo())
                         _log.info("Rejecting tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
-                                  "(Count / limit: " + count + " / " + (limit * 11 / 9) + " in " + (11*60 / portion) + "s)");
+                                  "(Count/limit: " + count + "/" + (limit * 11 / 9) + " in " + (11*60 / portion) + "s)");
                 }
             } else {
                 if (_log.shouldWarn())
                     _log.warn("Throttling tunnel requests from [" + h.toBase64().substring(0,6) + "] -> " +
-                              "Count / limit: " + count + " / " + limit + " in " + (11*60 / portion) + "s");
+                              "Count/limit: " + count + "/" + limit + " in " + (11*60 / portion) + "s");
             }
         }
 /*

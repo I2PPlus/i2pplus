@@ -95,12 +95,12 @@ class ParticipatingThrottler {
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
                         _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                                  "m -> Excessive tunnel requests (Count / limit: " + count + " / " + (limit * 11 / 9) +
+                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 11 / 9) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s)");
                 } else {
                     if (_log.shouldInfo())
                         _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
-                              "Count / limit: " + count + " / " + (limit * 11 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
+                              "Count/limit: " + count + "/" + (limit * 11 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
             } else if (!isLowShare && !isUnreachable && count > limit * 10 / 9) {
@@ -110,12 +110,12 @@ class ParticipatingThrottler {
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
                         _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                                  "m -> Excessive tunnel requests (Count / limit: " + count + " / " + (limit * 10 / 9) +
+                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 10 / 9) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s)");
                 } else {
                     if (_log.shouldInfo())
                         _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
-                                  "Count / limit: " + count + " / " + (limit * 10 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
+                                  "Count/limit: " + count + "/" + (limit * 10 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
                 //rv = Result.REJECT; // do we want to signal to the peer that we're busy?
@@ -126,19 +126,19 @@ class ParticipatingThrottler {
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
                         _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                                  "m -> Excessive tunnel requests (Count / limit: " + count + " / " + (limit * 5 / 3) +
+                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 5 / 3) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s)");
                 } else {
                     if (_log.shouldInfo())
                         _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
-                                  "Count / limit: " + count + " / " + (limit * 7 / 3) + " in " + (11*60 / LIFETIME_PORTION) + "s");
+                                  "Count/limit: " + count + "/" + (limit * 7 / 3) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
                 if (_log.shouldWarn())
                     _log.warn("Rejecting tunnel requests from [" + h.toBase64().substring(0,6) + "] " +
-                              "-> High number of requests (Count / limit: " + count + " / " + limit + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                              "-> High number of requests (Count/limit: " + count + "/" + limit + " in " + 11*60 / LIFETIME_PORTION + "s)");
             }
         } else {
             rv = Result.ACCEPT;
