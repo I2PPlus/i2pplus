@@ -72,20 +72,20 @@ class RequestThrottler {
         boolean rv = count > limit;
         boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
         if (rv && enableThrottle) {
-            if (count > limit * 11 / 9) {
+            if (count > limit * 4 / 3) {
                 int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
                 int period = bantime / 60 / 1000;
-                if (count == (limit * 11 / 9) + 1) {
+                if (count == (limit * 4 / 3) + 1) {
                     context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
                         _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 11 / 9) +
+                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 4 / 3) +
                                   " in " + (11*60 / portion) + "s)");
                 } else {
                     if (_log.shouldInfo())
                         _log.info("Rejecting tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
-                                  "(Count/limit: " + count + "/" + (limit * 11 / 9) + " in " + (11*60 / portion) + "s)");
+                                  "(Count/limit: " + count + "/" + (limit * 4 / 3) + " in " + (11*60 / portion) + "s)");
                 }
             } else {
                 if (_log.shouldWarn())
