@@ -202,8 +202,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             }
         } else {
             if (_log.shouldError())
-                _log.error("Invalid DbStoreMessage data type - " + entry.getType()
-                           + ": " + _message);
+                _log.error("Invalid DbStoreMessage data type - " + entry.getType() + ": " + _message);
             // don't ack or flood
             return;
         }
@@ -225,11 +224,16 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 getContext().profileManager().dbStoreReceived(_fromHash, wasNew);
                 getContext().statManager().addRateData("netDb.storeHandled", ackEnd-recvEnd);
             } else {
+                if (invalidMessage.contains("was published")) {
+                    dontBlamePeer = true;
+                    if (_log.shouldWarn())
+                        _log.warn("Peer + [" + _fromHash.toBase64().substring(0,6) + "] sent us a stale RouterInfo \n* " + invalidMessage);
                 // Should we record in the profile?
-                if (_log.shouldDebug())
-                    _log.warn("Peer sent us invalid data \n* " + invalidMessage + _from);
-                else if (_log.shouldWarn())
-                    _log.warn("Peer sent us invalid data \n* " + invalidMessage);
+                } else if (_log.shouldDebug()) {
+                    _log.warn("Peer + [" + _fromHash.toBase64().substring(0,6) + "] sent us invalid data \n* " + invalidMessage + _from);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("Peer + [" + _fromHash.toBase64().substring(0,6) + "] sent us invalid data \n* " + invalidMessage);
+                }
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
             if (_log.shouldWarn())
