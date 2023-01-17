@@ -66,6 +66,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL_NEWUSER =
         "RouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -84,6 +85,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL =
         "RouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -101,6 +103,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL_OLDHOME_NEWUSER =
         "RouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -120,6 +123,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL_OLDHOME =
         "RouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -138,6 +142,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL_ADVANCED =
         "AdvancedRouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -157,6 +162,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL_ADVANCED_OLDHOME =
         "AdvancedRouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
