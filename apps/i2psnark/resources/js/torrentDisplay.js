@@ -270,7 +270,7 @@ function initFilterBar() {
 
 function checkFilterBar() {
   var query = window.location.search;
-  var url = location.href;
+  var url = location.href + "&ps=9999";
 
   function setQuery() {
     if (query) {
