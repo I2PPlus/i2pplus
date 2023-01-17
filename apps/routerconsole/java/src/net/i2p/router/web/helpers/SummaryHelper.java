@@ -965,7 +965,9 @@ public class SummaryHelper extends HelperBase {
     }
 
     public String getMaxParticipatingTunnels() {
-        int defaultMax = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ? 2*1000 : 8*1000;
+        int defaultMax = SystemVersion.isSlow() ? 2*1000 :
+                         SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
+                         SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
         if (_context.getProperty("router.maxParticipatingTunnels") != null)
             return _context.getProperty("router.maxParticipatingTunnels");
         else
