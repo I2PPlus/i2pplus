@@ -232,7 +232,7 @@ public class RouterThrottleImpl implements RouterThrottle {
             Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(10*60*1000);
             if (avgTunnels != null) {
                 double avg = avgTunnels.getAvgOrLifetimeAvg();
-                double tunnelGrowthFactor = getTunnelGrowthFactor();
+                double tunnelGrowthFactor = SystemVersion.isSlow() || SystemVersion.getCPULoad() > 80 ? getTunnelGrowthFactor() : getTunnelGrowthFactor() * 3 / 2;
                 int min = getMinThrottleTunnels();
                 if (avg < min)
                     avg = min;
@@ -242,7 +242,15 @@ public class RouterThrottleImpl implements RouterThrottle {
                     double probAccept = (avg*tunnelGrowthFactor) / numTunnels;
                     probAccept *= probAccept; // square the decelerator for tunnel counts
                     int v = _context.random().nextInt(100);
-                    if (v < probAccept*100) {
+                    long loadAvg;
+                    if (_context.statManager().getRate("router.CpuLoad") != null) {
+                       loadAvg = (long) _context.statManager().getRate("router.CpuLoad").getRate(60*1000).getAvgOrLifetimeAvg();
+                    } else {
+                       loadAvg = 0;
+                    }
+                    if (SystemVersion.getCPULoad() > 90 && loadAvg > 90)
+                        setTunnelStatus(_x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
+                    else if (v < probAccept*100) {
                         // ok
                         if (_log.shouldInfo())
                             _log.info("Probabalistically accept tunnel request (p=" + probAccept
