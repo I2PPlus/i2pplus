@@ -1177,7 +1177,7 @@ class PeerTestManager {
                              byte[] addrBlockIP, int addrBlockPort) {
         if (data[0] != 2) {
             if (_log.shouldWarn())
-                _log.warn("Bad version " + (data[0] & 0xff) + " from " + from + ' ' + fromPeer);
+                _log.warn("Bad version " + (data[0] & 0xff) + from + ' ' + fromPeer);
             return;
         }
         long nonce = DataHelper.fromLong(data, 1, 4);
@@ -1185,7 +1185,7 @@ class PeerTestManager {
         int iplen = data[9] & 0xff;
         if (iplen != 0 && iplen != 6 && iplen != 18) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Bad IP length " + iplen);
+                _log.warn("Bad IP address length " + iplen);
             return;
         }
         boolean isIPv6 = iplen == 18;
@@ -1290,7 +1290,7 @@ class PeerTestManager {
                     }
                 }
                 if (_log.shouldDebug())
-                    _log.debug("Duplicate message " + msg + " from " + fromPeer + " on " + state);
+                    _log.debug("Duplicate message " + msg + fromPeer + " on " + state);
                 if (msg == 1)
                     state.setReceiveAliceTime(now);
                 else
@@ -1315,14 +1315,14 @@ class PeerTestManager {
         } else {
             if (state == null) {
                 if (_log.shouldWarn())
-                    _log.warn("No state found for message " + msg + " from " + fromPeer);
+                    _log.warn("No state found for message " + msg + fromPeer);
                 return;
             }
         }
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
             if (_log.shouldWarn())
-                _log.warn("Too skewed for message " + msg + " from " + fromPeer);
+                _log.warn("Too skewed for message " + msg + fromPeer);
             return;
         }
 
@@ -1474,7 +1474,7 @@ class PeerTestManager {
                         }
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Alice's RouterInfo not found " + h + " for peer test from " + fromPeer);
+                            _log.warn("Alice's RouterInfo [" + h.toBase64().substring(0,6) + "] not found for peer test " + fromPeer);
                         rcode = SSU2Util.TEST_REJECT_CHARLIE_UNKNOWN_ALICE;
                     }
                 }
