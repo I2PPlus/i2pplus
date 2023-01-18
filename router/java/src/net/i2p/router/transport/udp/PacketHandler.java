@@ -880,8 +880,7 @@ class PacketHandler {
                         PeerState2 ps2 = _transport.getPeerState(id);
                         if (ps2 != null) {
                             if (_log.shouldWarn())
-                                _log.warn("Migrated " + packet.getPacket().getLength() + " byte packet from " + from +
-                                          " for " + ps2);
+                                _log.warn("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
                             ps2.receivePacket(from, packet);
                             return true;
                         }
