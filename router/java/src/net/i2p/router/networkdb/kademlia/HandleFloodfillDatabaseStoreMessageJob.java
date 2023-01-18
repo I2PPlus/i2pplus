@@ -227,12 +227,12 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (invalidMessage.contains("was published")) {
                     dontBlamePeer = true;
                     if (_log.shouldWarn())
-                        _log.warn("Peer + [" + _fromHash.toBase64().substring(0,6) + "] sent us a stale RouterInfo \n* " + invalidMessage);
+                        _log.warn("Peer [" + _fromHash.toBase64().substring(0,6) + "] sent us a stale RouterInfo \n* " + invalidMessage);
                 // Should we record in the profile?
                 } else if (_log.shouldDebug()) {
-                    _log.warn("Peer + [" + _fromHash.toBase64().substring(0,6) + "] sent us invalid data \n* " + invalidMessage + _from);
+                    _log.warn("Peer [" + _fromHash.toBase64().substring(0,6) + "] sent us invalid data \n* " + invalidMessage + _from);
                 } else if (_log.shouldWarn()) {
-                    _log.warn("Peer + [" + _fromHash.toBase64().substring(0,6) + "] sent us invalid data \n* " + invalidMessage);
+                    _log.warn("Peer [" + _fromHash.toBase64().substring(0,6) + "] sent us invalid data \n* " + invalidMessage);
                 }
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
