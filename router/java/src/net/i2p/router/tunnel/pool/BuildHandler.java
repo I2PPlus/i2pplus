@@ -283,6 +283,7 @@ class BuildHandler implements Runnable {
                                       SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
                                       SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
             int maxTunnels;
+            boolean highLoad = SystemVersion.getCPULoadAvg() > 95 && SystemVersion.getCPULoad() > 95;
             if (PROP_MAX_TUNNELS != null)
                 maxTunnels = Integer.valueOf(PROP_MAX_TUNNELS);
             else {
@@ -300,24 +301,24 @@ class BuildHandler implements Runnable {
 
             long lag = _context.jobQueue().getMaxLag();
             // TODO reject instead of drop also for a lower limit? see throttle
-            if (lag > JOB_LAG_LIMIT_TUNNEL) {
-                if (_log.shouldWarn() && (maxTunnels > 0)) {
-                    _log.warn("Dropping participating tunnel request due to job lag (" + lag + "ms)");
+            if (lag > JOB_LAG_LIMIT_TUNNEL && maxTunnels > 0) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Dropping tunnel request due to job lag (" + lag + "ms)");
                     _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: High job lag").replace("requests: ", "requests:<br>"));
                 }
                 _context.statManager().addRateData("router.throttleTunnelCause", lag);
                 return;
             }
-
-            if (SystemVersion.getCPULoad() > 95) {
-                if (_log.shouldWarn() && (maxTunnels > 0)) {
-                    _log.warn("Dropping participating tunnel request due to high system load");
+/*
+            if (highLoad && maxTunnels > 0 && _isRunning && !_manager.isShutdown()) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Dropping tunnel request due to high system load");
                     _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: High system load").replace("requests: ", "requests:<br>"));
                 }
                 //_context.statManager().addRateData("router.throttleTunnelCause", lag);
                 return;
             }
-
+*/
             handleRequest(state, now);
 
         //int remaining = _inboundBuildMessages.size();
@@ -553,7 +554,7 @@ class BuildHandler implements Runnable {
         Hash nextPeer = req.readNextIdentity();
         if (_context.banlist().isBanlisted(nextPeer)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping tunnel build request, next peer [" + nextPeer.toBase64().substring(0,6) + "] is banned");
+                _log.warn("Dropping tunnel request, next peer [" + nextPeer.toBase64().substring(0,6) + "] is banned");
             if (from != null)
                 _context.commSystem().mayDisconnect(from);
             return -1;
