@@ -494,6 +494,17 @@ public class SummaryHelper extends HelperBase {
     }
 
     /**
+     * Retrieve CPU Load Average as a percentage.
+     * @since 0.9.57+
+     */
+    public int getCPULoadAvg() {
+        if (_context == null)
+            return 0;
+        else
+            return SystemVersion.getCPULoadAvg();
+    }
+
+    /**
      * Retrieve System Load Average as a percentage.
      * @since 0.9.57+
      */
@@ -506,6 +517,7 @@ public class SummaryHelper extends HelperBase {
 
     /** @since 0.9.57+ */
     public String getCPUBar() {
+/*
         Rate stat = _context.statManager().getRate("router.cpuLoad").getRate(60*1000);
         long loadAvg;
         long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
@@ -515,10 +527,11 @@ public class SummaryHelper extends HelperBase {
             loadAvg = getCPULoad();
         }
         int load = Math.toIntExact(loadAvg);
+*/
         return "<div class=\"percentBarOuter volatile\" id=\"sb_CPUBar\"><div class=\"percentBarText\">CPU: " +
-               load + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
-               "</div><div class=\"percentBarInner\" style=\"width: " + load +
-               "%;max-width: " + load + "\"></div></div>";
+               getCPULoadAvg() + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
+               "</div><div class=\"percentBarInner\" style=\"width:" + getCPULoadAvg() +
+               "%\"></div></div>";
     }
 
     /**
