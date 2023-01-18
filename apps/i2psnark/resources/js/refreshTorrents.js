@@ -3,6 +3,7 @@ import {initFilterBar, checkFilterBar} from "/i2psnark/.resources/js/torrentDisp
 function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");
   var control = document.getElementById("torrentInfoControl");
+  var debug = document.getElementById("#debugMode");
   var debuginfo = document.getElementsByClassName("debuginfo");
   var dirlist = document.getElementById("dirlist");
   var down = document.getElementById("down");
@@ -27,7 +28,6 @@ function refreshTorrents() {
   var xhrsnark = new XMLHttpRequest();
 
   if (navbar !== null) {var home = document.querySelector(".nav_main");}
-  if (tfoot !== null) {var debug = document.getElementById("#debugMode");}
 
   var query = window.location.search;
   if (query) {
@@ -131,7 +131,7 @@ function refreshTorrents() {
           }
         }
 
-        function updateVolatile(timestamp) {
+        function updateVolatile() {
           var updating = document.getElementsByClassName("volatile");
           var updatingResponse = xhrsnark.responseXML.getElementsByClassName("volatile");
           var u;
@@ -166,7 +166,7 @@ function refreshTorrents() {
           }
         }
 
-        function refreshAll(timestamp) {
+        function refreshAll() {
           if (mainsection) {
             var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
             if (mainsectionResponse !== null && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML)) {
