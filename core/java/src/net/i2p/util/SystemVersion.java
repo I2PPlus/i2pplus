@@ -12,6 +12,9 @@ import java.lang.reflect.Field;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateStat;
+
 import net.i2p.I2PAppContext;
 
 /**
@@ -536,19 +539,47 @@ public abstract class SystemVersion {
     }
 
     /**
+     * Retrieve CPU Load Average of the JVM.
+     * @since 0.9.57+
+     */
+    public static int getCPULoadAvg() {
+        if (I2PAppContext.getGlobalContext() == null) {
+            return 0;
+        } else {
+            int max = 100;
+            Rate stat = I2PAppContext.getGlobalContext().statManager().getRate("router.cpuLoad").getRate(60*1000);
+            long loadAvg;
+            long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
+            if (count > 1) {
+                loadAvg = (long) (getCPULoad() + ((3 * stat.getCurrentTotalValue()) + stat.getLastTotalValue()) / count);
+            } else {
+                loadAvg = getCPULoad();
+            }
+            int load = Math.toIntExact(loadAvg);
+            if (load > max)
+                load = max;
+            return load;
+        }
+    }
+
+    /**
      * Retrieve System Load as percentage (100% equals full system load)
      * @since 0.9.57+
      */
     public static int getSystemLoad() {
-        DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
-        int cores = SystemVersion.getCores();
-        OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
-        int sysLoad = (int) systemLoadAvg;
-        if (sysLoad < 0)
+        if (I2PAppContext.getGlobalContext() == null) {
             return 0;
-        else
-            return sysLoad;
+        } else {
+            DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
+            int cores = SystemVersion.getCores();
+            OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+            double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
+            int sysLoad = (int) systemLoadAvg;
+            if (sysLoad < 0)
+                return 0;
+            else
+                return sysLoad;
+        }
     }
 
 }
