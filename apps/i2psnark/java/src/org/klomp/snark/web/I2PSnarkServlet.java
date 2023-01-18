@@ -443,7 +443,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (_manager.getTorrents().size() > 1) {
             out.write("<form id=\"snarkSearch\" action=\"" + _contextPath + "\" method=\"GET\" hidden>\n" +
-                      "<input type=\"search\" name=\"s\" size=\"20\" placeholder=\"");
+                      "<input type=\"search\" required name=\"s\" size=\"20\" placeholder=\"");
             out.write(_t("Search torrents\""));
             String s = req.getParameter("s");
             if (s != null)
