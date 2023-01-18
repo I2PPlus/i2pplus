@@ -228,7 +228,9 @@ public class RouterThrottleImpl implements RouterThrottle {
          * sensitive to sudden rapid growth of load, which are not instantly detected by these metrics.
          * Reduce tunnel growth if we are growing faster than the lag based metrics can detect reliably.
          */
-        if ((numTunnels > getMinThrottleTunnels()) && (DEFAULT_MAX_TUNNELS >= maxTunnels)) {
+        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 90) {
+            setTunnelStatus(_x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
+        } else if ((numTunnels > getMinThrottleTunnels()) && (DEFAULT_MAX_TUNNELS >= maxTunnels)) {
             Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(10*60*1000);
             if (avgTunnels != null) {
                 double avg = avgTunnels.getAvgOrLifetimeAvg();
@@ -242,15 +244,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                     double probAccept = (avg*tunnelGrowthFactor) / numTunnels;
                     probAccept *= probAccept; // square the decelerator for tunnel counts
                     int v = _context.random().nextInt(100);
-                    long loadAvg;
-                    if (_context.statManager().getRate("router.CpuLoad") != null) {
-                       loadAvg = (long) _context.statManager().getRate("router.CpuLoad").getRate(60*1000).getAvgOrLifetimeAvg();
-                    } else {
-                       loadAvg = 0;
-                    }
-                    if (SystemVersion.getCPULoad() > 90 && loadAvg > 90)
-                        setTunnelStatus(_x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
-                    else if (v < probAccept*100) {
+                    if (v < probAccept*100) {
                         // ok
                         if (_log.shouldInfo())
                             _log.info("Probabalistically accept tunnel request (p=" + probAccept
