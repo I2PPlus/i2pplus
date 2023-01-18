@@ -442,14 +442,13 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</a>");
         }
         if (_manager.getTorrents().size() > 1) {
-            out.write("<form class=\"search\" id = \"search\" action=\"" + _contextPath + "\" method=\"GET\" hidden>" +
-                      "<input type=\"text\" name=\"s\" size=\"20\" class=\"search snarkNav\" id=\"searchbox\"");
+            out.write("<form id=\"snarkSearch\" action=\"" + _contextPath + "\" method=\"GET\" hidden>\n" +
+                      "<input type=\"search\" name=\"s\" size=\"20\" placeholder=\"");
+            out.write(_t("Search torrents\""));
             String s = req.getParameter("s");
             if (s != null)
                 out.write(" value=\"" + DataHelper.escapeHTML(s) + '"');
-            out.write(">" +
-                      "<input type=\"reset\" class=\"cancel snarkNav\" value=\"\">" +
-                      "</form>\n");
+            out.write("><input type=\"submit\" value=\"Search\">\n</form>\n");
         }
         out.write("\n</div>\n");
         String newURL = req.getParameter("newURL");
