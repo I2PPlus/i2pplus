@@ -236,9 +236,12 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 }
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
-            if (_log.shouldWarn())
-//                _log.warn("Unknown peer sent bad data\n* " + invalidMessage);
-                _log.warn("Peer [unknown] sent us invalid data \n* " + invalidMessage);
+            if (_log.shouldWarn()) {
+                if (invalidMessage.contains("was published"))
+                    _log.warn("Peer [unknown] sent us a stale RouterInfo \n* " + invalidMessage);
+                else
+                    _log.warn("Peer [unknown] sent us invalid data \n* " + invalidMessage);
+                }
         }
 
         // flood it
