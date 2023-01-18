@@ -93,11 +93,15 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
                 _state.abort();
                 // searchNext() will call fail()
             } catch (IllegalArgumentException iae) {
-                if (_log.shouldWarn())
-//                    _log.warn("Peer " + _peer + " sent us invalid data: ", iae);
-                    _log.warn("Peer [" + _peer.toBase64().substring(0,6) + "] sent us invalid data\n* " + iae.getMessage());
-                // blame the peer
-                getContext().profileManager().dbLookupReply(_peer, 0, 0, 1, 0, timeToReply);
+                if (_log.shouldWarn()) {
+                    if (iae.getMessage().contains("was published over")) {
+                        _log.warn("Peer [" + _peer.toBase64().substring(0,6) + "] sent us a stale RouterInfo \n* " + iae.getMessage());
+                    } else {
+                        _log.warn("Peer [" + _peer.toBase64().substring(0,6) + "] sent us invalid data\n* " + iae.getMessage());
+                        // blame the peer
+                        getContext().profileManager().dbLookupReply(_peer, 0, 0, 1, 0, timeToReply);
+                    }
+                }
             }
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
             _job.replyFound((DatabaseSearchReplyMessage)message, _peer);
