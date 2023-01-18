@@ -204,8 +204,8 @@ class PumpedTunnelGateway extends TunnelGateway {
         }
         queueBuf.clear();
         if (rv && _log.shouldInfo())
-            _log.info("PumpedTunnelGateway remaining to " + _nextHop + " : " + _prequeue.size() +
-                      " Inbound? " + _isInbound + "; Backlogged? " + backlogged);
+            _log.info("PumpedTunnelGateway remaining to [" + _nextHop.toBase64().substring(0,6) + "] -> Pre-queue: " + _prequeue.size() +
+                      "bytes; Inbound? " + _isInbound + "; Backlogged? " + backlogged);
         return rv;
     }
 
