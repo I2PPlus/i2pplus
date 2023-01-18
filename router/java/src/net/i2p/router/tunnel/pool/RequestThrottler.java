@@ -89,8 +89,9 @@ class RequestThrottler {
                     context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 5 / 3) +
+                        _log.warn("Temp banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
+                                  " router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                                  "\n* Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 5 / 3) +
                                   " in " + (11*60 / portion) + "s)");
                 } else {
                     if (_log.shouldInfo())
@@ -99,8 +100,9 @@ class RequestThrottler {
                 }
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Throttling tunnel requests from [" + h.toBase64().substring(0,6) + "] -> " +
-                              "Count/limit: " + count + "/" + limit + " in " + (11*60 / portion) + "s");
+                    _log.warn("Throttling tunnel requests from " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
+                              " router [" + h.toBase64().substring(0,6) + "]" +
+                              "\n* Count/limit: " + count + "/" + limit + " in " + (11*60 / portion) + "s");
             }
         }
 /*

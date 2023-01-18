@@ -94,13 +94,13 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 11 / 9) +
-                                  " in " + 11*60 / LIFETIME_PORTION + "s)");
+                        _log.warn("Temp banning fast router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                                  "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 11 / 9) +
+                                  " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
-                              "Count/limit: " + count + "/" + (limit * 11 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
+                        _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "]" +
+                                  "\n* Count/limit: " + count + "/" + (limit * 11 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
             } else if (!isLowShare && !isUnreachable && count > limit * 10 / 9) {
@@ -109,13 +109,13 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 10 / 9) +
-                                  " in " + 11*60 / LIFETIME_PORTION + "s)");
+                        _log.warn("Temp banning mid-tier router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                                  "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 10 / 9) +
+                                  " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
-                                  "Count/limit: " + count + "/" + (limit * 10 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
+                        _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "]" +
+                                  "\n* Count/limit: " + count + "/" + (limit * 10 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
                 //rv = Result.REJECT; // do we want to signal to the peer that we're busy?
@@ -125,25 +125,27 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning [" + h.toBase64().substring(0,6) + "] for " + period +
-                                  "m -> Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 5 / 3) +
-                                  " in " + 11*60 / LIFETIME_PORTION + "s)");
+                        _log.warn("Temp banning slow or unreachable router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                                  "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 5 / 3) +
+                                  " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
-                                  "Count/limit: " + count + "/" + (limit * 7 / 3) + " in " + (11*60 / LIFETIME_PORTION) + "s");
+                        _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "]" +
+                                  "\n* Count/limit: " + count + "/" + (limit * 7 / 3) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
                 if (_log.shouldWarn())
-                    _log.warn("Rejecting tunnel requests from [" + h.toBase64().substring(0,6) + "] " +
-                              "-> High number of requests (Count/limit: " + count + "/" + limit + " in " + 11*60 / LIFETIME_PORTION + "s)");
+                    _log.warn("Rejecting tunnel requests from " + (isLowShare || isUnreachable ? "slow or unreachable" : isFast ? "fast" : "mid-tier") +
+                              " router [" + h.toBase64().substring(0,6) + "] " +
+                              "\n* High number of requests -> Count/limit: " + count + "/" + limit + " in " + 11*60 / LIFETIME_PORTION + "s");
             }
         } else {
             rv = Result.ACCEPT;
             if (_log.shouldDebug())
-                _log.debug("Accepting tunnel request from [" + h.toBase64().substring(0,6) + "] -> Count: " + count + " in " + 11*60 / LIFETIME_PORTION + "s");
+                _log.debug("Accepting tunnel request from [" + h.toBase64().substring(0,6) + "]" +
+                           "\n* Count: " + count + " in " + 11*60 / LIFETIME_PORTION + "s");
         }
         return rv;
     }
