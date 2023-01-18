@@ -48,8 +48,8 @@ class ParticipatingThrottler {
     private static final int LIFETIME_PORTION = 3;
 //    private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
 //    private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
-    private static final int MIN_LIMIT = 36 / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = (isSlow ? 192 : isHexaCore ? 320 : 256) / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = (isSlow ? 32 : isHexaCore ? 72 : 56) / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = (isSlow ? 192 : isHexaCore ? 512 : 384) / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 3 / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
