@@ -1615,7 +1615,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peers td img{font-size:0}
 #peers .widescroll + h3{margin-top:1px}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before{content:none}
-#ntcpconnections td:nth-child(n+6) span,#ntcpconnections .tablefooter td:nth-child(n+5) span{min-width:40px;display:inline-block;text-align:right}
+#ntcpconnections td:nth-child(n+6) span,#ntcpconnections .tablefooter td:nth-child(n+5) span{min-width:40px;display:inline-block}
 #ntcpconnections td span:empty{display:none}
 #ntcpconnections th,#udpconnections th{padding-top:6px;text-align:center}
 #udpconnections th:nth-child(n+13),#udpconnections .tablefooter th:nth-child(n+10),#udpconnections td:nth-child(n+13),#udpconnections .tablefooter td:nth-child(n+10){padding-right:1%}
