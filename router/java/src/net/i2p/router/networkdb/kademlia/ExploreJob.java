@@ -224,10 +224,14 @@ class ExploreJob extends SearchJob {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + Math.min(EXPLORE_BREDTH + 1, 2) + " concurrent (less than 1000 known peers)");
             return Math.min(EXPLORE_BREDTH + 1, 2);
-        } else {
+        } else if (exploreBredth != null) {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + exploreBredth + " concurrent (custom configuration)");
             return Integer.valueOf(exploreBredth);
+        } else {
+            if (_log.shouldInfo())
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH + " concurrent");
+            return EXPLORE_BREDTH;
         }
     }
 
