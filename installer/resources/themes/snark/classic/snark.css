@@ -116,6 +116,21 @@ a.controld {display: none}
 .nav_search:active {background: var(--search_active) no-repeat 7px center, var(--btn_active)}
 .snarkNav, .snarkNav:hover, .snarkNav:focus {background-size: 16px, 100%}
 
+/* search */
+#snarkSearch{display:block;position:absolute;right:6px;top:2px}
+#snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:none;box-shadow:none;background:transparent}
+#snarkSearch input[type=search]:not(:focus){opacity:0}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding:6px;color:var(--ink_light);border-bottom:1px solid #ddf;opacity:1;transform:translateY(-2px);cursor:text}
+#snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.5;color:var(--ink)}
+#snarkSearch input[type=search]:focus::placeholder{opacity:0}
+#snarkSearch input[type="submit"]{padding:8px 0;width:28px;min-width:0;color:transparent;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.5}
+#snarkSearch input[type="submit"]:hover{background-size:26px}
+#snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
+#snarkSearch:hover input[type="submit"]{opacity:.8}
+#snarkSearch:focus-within input[type="submit"]{opacity:1}
+#searchwrap{position:relative}
+#searchwrap a[href="/i2psnark"]{display:none}
+
 /* screenlog */
 #screenlog {overflow: hidden; width: auto; height: 56px; margin: 0; padding: 3px 5px; text-align: left; border-bottom: var(--border); box-shadow: inset 0 0 0 1px #f2f2ff}
 #screenlog, #screenlog.expanded, #screenlog.collapsed {background: url(images/hat.png) right -4px bottom -10px no-repeat, url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat, linear-gradient(180deg,rgba(240, 240, 255, .7), rgba(232, 232, 255, .7)); background-size: auto 80px, calc(100% + 80px) calc(100% + 20px), 100%; background-position: right -4px bottom -10px, left bottom 1px, center center, center top; background-blend-mode: normal, soft-light, normal}
