@@ -907,7 +907,7 @@ class PacketHandler {
                     packet.getPacket().getLength() == SSU2Util.MIN_HANDSHAKE_DATA_LEN - 1) {
                     // i2pd short 87 byte session request thru 0.9.56, drop packet
                     if (_log.shouldWarn())
-                        _log.warn("Received Short SessionRequest (87 bytes) from " + from);
+                        _log.warn("Received short SessionRequest (87 bytes) from " + from);
                     return true;
                 }
             } else {
