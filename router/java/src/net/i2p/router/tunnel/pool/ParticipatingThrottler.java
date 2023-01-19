@@ -6,6 +6,7 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.VersionComparator;
 
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.NetworkDatabaseFacade;
@@ -87,6 +88,27 @@ class ParticipatingThrottler {
         int bantime = 30*60*1000;
         int period = bantime / 60 / 1000;
         boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
+        String v;
+        if (ri != null) {
+            if (ri.getVersion() != null) {
+                v = ri.getVersion();
+            } else {
+                v = "0.0.0";
+            }
+        } else {
+          v = "NoRI";
+        }
+        String MIN_VERSION = "0.9.55";
+        if (v.equals("0.0.0")) {
+            rv = Result.DROP;
+            if (_log.shouldWarn())
+                _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" + " -> No router version in RouterInfo");
+            context.banlist().banlistRouter(h, " <b>➜</b> No version in RouterInfo", null, null, context.clock().now() + bantime);
+        } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && (isLowShare || isUnreachable)) {
+            rv = Result.DROP;
+            if (_log.shouldWarn())
+                _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) + "] -> Slow/unreachable and older than " + MIN_VERSION);
+        }
         if (count > limit && enableThrottle) {
             if (isFast && !isUnreachable && count > limit * 11 / 9) {
                 if (count == (limit * 11 / 9) + 1) {
@@ -94,12 +116,12 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning fast router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                        _log.warn("Temp banning fast Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 11 / 9) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "]" +
+                        _log.info("Ignoring tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 11 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
@@ -109,12 +131,12 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning mid-tier router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                        _log.warn("Temp banning mid-tier Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 10 / 9) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "]" +
+                        _log.info("Ignoring tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 10 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
@@ -125,12 +147,12 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning slow or unreachable router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
-                                  "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 5 / 3) +
+                        _log.warn("Temp banning slow or unreachable Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                                  "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 7 / 3) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "]" +
+                        _log.info("Ignoring tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 7 / 3) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
@@ -138,7 +160,7 @@ class ParticipatingThrottler {
                 rv = Result.REJECT;
                 if (_log.shouldWarn())
                     _log.warn("Rejecting tunnel requests from " + (isLowShare || isUnreachable ? "slow or unreachable" : isFast ? "fast" : "mid-tier") +
-                              " router [" + h.toBase64().substring(0,6) + "] " +
+                              " Router [" + h.toBase64().substring(0,6) + "] " +
                               "\n* High number of requests -> Count/limit: " + count + "/" + limit + " in " + 11*60 / LIFETIME_PORTION + "s");
             }
         } else {
