@@ -71,13 +71,11 @@ public class JobQueue {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
         if (cores == 1 || SystemVersion.isSlow() || maxMemory < 256*1024*1024L)
-            RUNNERS = 3;
-        else if (cores <= 2)
             RUNNERS = 4;
         else if (cores <= 4)
             RUNNERS = cores + 2;
         else if (maxMemory >= 1024*1024*1024L)
-            RUNNERS = Math.min(cores - 2, 8);
+            RUNNERS = Math.min(cores, 8);
         else if (maxMemory >= 512*1024*1024L)
             RUNNERS = Math.min(cores - 2, 6);
         else
@@ -132,8 +130,9 @@ public class JobQueue {
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
 //    private final static int DEFAULT_MAX_WAITING_JOBS = 25;
-    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 30 : 50;
-    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 350 : 250;
+    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 20 : 30;
+    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 200 :
+                                                SystemVersion.getCPULoadAvg() > 90 ? 10 : 100;
 
     /** @deprecated unimplemented */
 //    @Deprecated
@@ -608,18 +607,22 @@ public class JobQueue {
                                     break;
                                 }
                             }
+                            boolean highLoad = SystemVersion.getCPULoadAvg() > 90 || SystemVersion.getCPULoad() > 95;
+                            boolean isSlow = SystemVersion.isSlow();
+                            boolean isQuadCore = SystemVersion.getCores() >= 4;
+                            boolean isHexaCore = SystemVersion.getCores() >= 6;
                             if (timeToWait < 0)
 //                                timeToWait = 1000;
-                                timeToWait = 100;
+                                timeToWait = highLoad ? 250 : 100;
                             else if (timeToWait < 10)
-                                timeToWait = 10;
+                                timeToWait = highLoad ? 100 : 50;
                                 //timeToWait = 100;
-                            else if (!SystemVersion.isSlow() && SystemVersion.getCores() >= 8 && timeToWait > 3*1000)
-                                timeToWait = 3*1000;
-                            else if (!SystemVersion.isSlow() && SystemVersion.getCores() >= 4 && timeToWait > 5*1000)
-                                timeToWait = 5*1000;
+                            else if (!isSlow && isHexaCore && timeToWait > 2500)
+                                timeToWait = highLoad ? 3500 : 2500;
+                            else if (!isSlow && isQuadCore && timeToWait > 4*1000)
+                                timeToWait = highLoad ? 5*1000 : 4*1000;
                             else if (timeToWait > 10*1000)
-                                timeToWait = 10*1000;
+                                timeToWait = highLoad ? 12*1000 : 10*1000;
                             //if (_log.shouldDebug())
                             //    _log.debug("Waiting " + timeToWait + " before rechecking the timed queue");
                             _nextPumperRun = _context.clock().now() + timeToWait;
