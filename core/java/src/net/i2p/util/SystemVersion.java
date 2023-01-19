@@ -543,7 +543,8 @@ public abstract class SystemVersion {
      * @since 0.9.57+
      */
     public static int getCPULoadAvg() {
-        if (I2PAppContext.getGlobalContext() == null) {
+        if (I2PAppContext.getGlobalContext().statManager() == null ||
+            I2PAppContext.getGlobalContext().statManager().getRate("router.cpuLoad") == null) {
             return 0;
         } else {
             int max = 100;
@@ -567,7 +568,7 @@ public abstract class SystemVersion {
      * @since 0.9.57+
      */
     public static int getSystemLoad() {
-        if (I2PAppContext.getGlobalContext() == null) {
+        if (I2PAppContext.getGlobalContext().statManager() == null) {
             return 0;
         } else {
             DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
