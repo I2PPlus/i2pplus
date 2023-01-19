@@ -890,7 +890,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         _migrationState = MigrationState.MIGRATION_STATE_NONE;
                         _pathChallengeData = null;
                         if (_log.shouldWarn())
-                            _log.warn("Migration successful, changed address from " + _remoteHostId + " to " + from + " for " + this);
+                            _log.warn("Migration successful, changed address from " + _remoteHostId + " to " + from + this);
                         _transport.changePeerAddress(this, from);
                         _mtu = MIN_MTU;
                         if (isIPv6() || !_transport.isSymNatted()) {
