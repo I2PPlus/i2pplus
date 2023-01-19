@@ -73,6 +73,7 @@ input,button,textarea,select,a{outline:none;image-rendering:-webkit-optimize-con
 
 /* search */
 #snarkSearch{margin-left:8px;display:block;position:absolute;right:10px;top:7px}
+.iframed #snarkSearch{top:9px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:none;box-shadow:none;background:transparent}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
 #snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding-right:22px;border-bottom:1px solid #303;opacity:1;transform:translateY(-4px)}
