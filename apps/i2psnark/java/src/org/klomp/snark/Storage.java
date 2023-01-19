@@ -758,7 +758,7 @@ public class Storage implements Closeable {
       } else {
           // Create base as dir.
           if (_log.shouldInfo())
-              _log.info("Creating/Checking directory: " + _base);
+              _log.info("Creating/checking directory: " + _base);
           if (!_base.mkdir() && !_base.isDirectory())
               throw new IOException("Could not create directory " + _base);
 
