@@ -79,7 +79,7 @@ class RequestThrottler {
         }
         if (SystemVersion.getCPULoad() > 90 && loadAvg > 90) {
             if (_log.shouldWarn())
-                _log.warn("Rejecting tunnel requests from router [" + h.toBase64().substring(0,6) + "] -> " +
+                _log.warn("Rejecting tunnel requests from Router [" + h.toBase64().substring(0,6) + "] -> " +
                           "System is under sustained high load");
         } else if (rv && enableThrottle) {
             if (count > limit * 5 / 3) {
