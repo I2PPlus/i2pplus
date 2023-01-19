@@ -222,9 +222,28 @@ public class IterativeSearchJob extends FloodSearchJob {
     public void runJob() {
         if (_facade.isNegativeCached(_key)) {
             if (_log.shouldDebug())
-                _log.debug("Not searching for negative cached key [" + _key.toBase64().substring(0,6) + "]");
+                _log.debug("Not searching for negative cached key for Router [" + _key.toBase64().substring(0,6) + "]");
             failed();
             return;
+        }
+
+        String MIN_VERSION = "0.9.56";
+        boolean isHidden = getContext().router().isHidden();
+        RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
+        if (ri != null) {
+            String v = ri.getVersion();
+            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+            ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+            ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+            ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
+            VersionComparator.comp(v, MIN_VERSION) < 0) && !isHidden &&
+            getContext().netDb().getKnownRouters() > 1500;
+            //&& getContext().router().getUptime() > 15*60*1000 && !isHidden;
+            if (uninteresting) {
+                if (_log.shouldInfo())
+                    _log.info("[Job " + getJobId() + "] Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
+                return;
+            }
         }
 
         // pick some floodfill peers and send out the searches
@@ -363,26 +382,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                         _skippedPeers.add(h);
                         // go around again
                     }
-
-                    String MIN_VERSION = "0.9.56";
-                    boolean isHidden = getContext().router().isHidden();
-                    RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
-                    if (ri != null) {
-                        String v = ri.getVersion();
-                        boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
-                                                VersionComparator.comp(v, MIN_VERSION) < 0) && !isHidden &&
-                                                getContext().netDb().getKnownRouters() > 2000;
-                                                //&& getContext().router().getUptime() > 15*60*1000 && !isHidden;
-                        if (uninteresting) {
-                            if (_log.shouldInfo())
-                                _log.info("[Job " + getJobId() + "] Skipping query: Router [" + _key.toBase64().substring(0,6) + "] is uninteresting");
-                            return;
-                        }
-                    }
-                    else if (peer == null) {
+                    if (peer == null) {
                        return;
                    }
                 }
@@ -658,14 +658,14 @@ public class IterativeSearchJob extends FloodSearchJob {
                     if (peer != null)
                         _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");
                     else
-                        _log.info("[Job " + getJobId() + "] IterativeSearch for unknown Router timed out");
+                        _log.info("[Job " + getJobId() + "] IterativeSearch for Router [unknown] timed out");
                 }
             } else {
                 if (_log.shouldInfo()) {
                     if (peer != null)
                         _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] failed");
                     else
-                        _log.info("[Job " + getJobId() + "] IterativeSearch for unknown Router failed");
+                        _log.info("[Job " + getJobId() + "] IterativeSearch for Router [unknown] failed");
                 }
             }
         }
