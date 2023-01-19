@@ -63,6 +63,8 @@ public class SummaryHelper extends HelperBase {
     boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
     String firstVersion = ctx.getProperty("router.firstVersion");
     String version = net.i2p.CoreVersion.VERSION;
+    private static final String PROP_ADVANCED = "routerconsole.advanced";
+    public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
 
     static final String DEFAULT_FULL_NEWUSER =
         "RouterInfo" + S +
@@ -1012,10 +1014,18 @@ public class SummaryHelper extends HelperBase {
         if (rs == null)
             return "0";
         Rate lagRate = rs.getRate(60*1000);
-        if (lagRate.getAverageValue() < 1)
-            return DataHelper.formatDuration2((double)lagRate.getAverageValue());
-        else
-          return DataHelper.formatDuration2((long)lagRate.getAverageValue());
+        long maxLag = _context.jobQueue().getMaxLag();
+        if (!isAdvanced() || maxLag == 0) {
+            if (lagRate.getAverageValue() < 1)
+                return DataHelper.formatDuration2((double)lagRate.getAverageValue());
+            else
+                return DataHelper.formatDuration2((long)lagRate.getAverageValue());
+        } else {
+            if (lagRate.getAverageValue() < 1)
+                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp;ms";
+            else
+                return (long)lagRate.getAverageValue() + THINSP + maxLag + "&nbsp;ms";
+        }
     }
 
     /**
@@ -1026,7 +1036,6 @@ public class SummaryHelper extends HelperBase {
     public String getMessageDelay() {
         if (_context == null)
             return "0";
-
         return DataHelper.formatDuration2(_context.throttle().getMessageDelay());
     }
 

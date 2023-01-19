@@ -1260,22 +1260,29 @@ class SummaryBarRenderer {
         } else {
            buf.append(_helper.getJobLag());
         }
+        long maxLag = _context.jobQueue().getMaxLag();
         buf.append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_queue\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_queue\">\n" +
-                   "<tr title=\"")
-           .append(_t("Indicates router performance"))
-           .append("\">" +
+                   "<tr title=\"");
+        if (isAdvanced() && maxLag != 0)
+            buf.append(_t("Average job delay / maximum delay"));
+        else
+//            buf.append(_t("Indicates router performance"));
+            buf.append(_t("Average delay before scheduled jobs are run"));
+        buf.append("\">" +
                    "<td><b>")
            .append(_t("Job lag"))
            .append("</b></td><td class=\"digits\">");
-        if (_context.jobQueue().getMaxLag() > 1000) {
+        int maxLagBeforeDrop = SystemVersion.isSlow() ? 400 : 300;
+        if (maxLag > maxLagBeforeDrop) {
             buf.append("<span class=\"warntext\">");
         } else {
             buf.append("<span>");
         }
-        buf.append(_helper.getJobLag()).append("</span>")
-            .append("</td></tr>\n" +
+        buf.append(_helper.getJobLag())
+           .append("</span>")
+           .append("</td></tr>\n" +
                    "<tr title=\"")
            .append(_t("Indicates how quickly outbound messages to other I2P routers are sent"))
            .append("\">" +
