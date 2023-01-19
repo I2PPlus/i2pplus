@@ -784,9 +784,9 @@ class EstablishmentManager {
                 state.receiveSessionOrTokenRequestAfterRetry(packet);
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldDebug())
-                    _log.warn("[SSU2] Received corrupt Session or Token Request after Retry from: " + state, gse);
+                    _log.warn("[SSU2] Received corrupt Session or Token Request after Retry \n* Router: " + state, gse);
                 else if (_log.shouldWarn())
-                    _log.warn("[SSU2] Received corrupt Session or Token Request after Retry from: " + state + "\n* " + gse.getMessage());
+                    _log.warn("[SSU2] Received corrupt Session or Token Request after Retry \n* Router: " + state + "\n* " + gse.getMessage());
                 // state called fail()
                 _inboundStates.remove(state.getRemoteHostId());
                 return;
@@ -797,7 +797,7 @@ class EstablishmentManager {
             if (isNew)
                 _log.debug("[SSU2] Received NEW Session/TokenRequest " + state);
             else
-                _log.debug("[SSU2] Received DUPLICATE Session/TokenRequest from: " + state);
+                _log.debug("[SSU2] Received DUPLICATE Session/TokenRequest \n* Router: " + state);
         }
         // call for both Session and Token request, why not
         if (state.isIntroductionRequested() &&
