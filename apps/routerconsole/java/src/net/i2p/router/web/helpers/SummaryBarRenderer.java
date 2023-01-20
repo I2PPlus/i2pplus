@@ -1217,7 +1217,7 @@ class SummaryBarRenderer {
                .append("</span></td></tr>\n");
             if (_helper.getTunnelBuildSuccess() > 0) {
                 buf.append("<tr title=\"")
-                   .append(_t("Tunnel Build Success (averaged over a minute)"))
+                   .append(_t("Combined utility and service tunnel build success (averaged over 10 minute intervals)"))
                    .append("\">" +
                            "<td><b>")
                    .append(_t("Build Success"))
