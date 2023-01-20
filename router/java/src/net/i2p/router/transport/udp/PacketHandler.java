@@ -584,7 +584,7 @@ class PacketHandler {
                 return;
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Invalid Outbound introduction packet received (stale intro key) for established connection, treating as non-establishment " + packet);
+                    _log.warn("Invalid Outbound introduction packet (stale intro key) received for established connection, treating as non-establishment " + packet);
             }
 
             // ok, we couldn't handle it with the established stuff, so fall back
