@@ -87,6 +87,7 @@ public class TransportManager implements TransportEventListener {
      * Default true for now
      * @since 0.9.57
      */
+    public static final boolean DEFAULT_ENABLE_SSU1 = false;
     public final static String PROP_ENABLE_SSU1 = "i2np.ssu1.enable";
     /**
      * Default true as of 0.9.56
@@ -266,7 +267,7 @@ public class TransportManager implements TransportEventListener {
         Transport udp = null;
         if (_enableUDP) {
 //            boolean enableSSU1 = _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_SSU1);
-            boolean enableSSU1 = _context.getBooleanProperty(PROP_ENABLE_SSU1);
+            boolean enableSSU1 = _context.getProperty(PROP_ENABLE_SSU1, DEFAULT_ENABLE_SSU1);
             boolean enableSSU2 = _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_SSU2);
             DHSessionKeyBuilder.PrecalcRunner dh = enableSSU1 ? _dhThread : null;
             X25519KeyFactory xdh = enableSSU2 ? _xdhThread : null;
