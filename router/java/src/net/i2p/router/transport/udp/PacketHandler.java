@@ -879,8 +879,8 @@ class PacketHandler {
                         long id = header.getDestConnID();
                         PeerState2 ps2 = _transport.getPeerState(id);
                         if (ps2 != null) {
-                            if (_log.shouldWarn())
-                                _log.warn("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
+                            if (_log.shouldInfo())
+                                _log.info("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
                             ps2.receivePacket(from, packet);
                             return true;
                         }
