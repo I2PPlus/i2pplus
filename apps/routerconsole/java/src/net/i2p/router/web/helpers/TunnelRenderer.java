@@ -553,7 +553,7 @@ class TunnelRenderer {
         out.write("<h3 class=\"tabletitle\" id=\"peercount\">" + _t("Tunnel Count By Peer") +
                   "&nbsp;&nbsp;<a class=\"refreshpage\" style=\"float: right;\" href=\"/tunnelpeercount\">" + _t("Refresh") + "</a></h3>\n");
         out.write("<table id=\"tunnelPeerCount\" data-sortable>");
-        out.write("<thead>\n<tr><th>" + _t("Peer") + "</th><th title=\"Primary IP address\">Address</th><th title=\"Client and Exploratory Tunnels\">" +
+        out.write("<thead>\n<tr><th>" + _t("Peer") + "</th><th>" + _t("Tier") + "</th><th title=\"Primary IP address\">Address</th><th title=\"Client and Exploratory Tunnels\">" +
                   _t("Local") + "</th><th class=\"bar\">" + _t("% of total") + "</th>");
         if (!participating.isEmpty())
             out.write("<th>" + _t("Participating") + "</th><th class=\"bar\">" + _t("% of total") + "</th>");
@@ -564,7 +564,7 @@ class TunnelRenderer {
             String ip = info != null ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
             String v = info != null ? info.getOption("router.version") : null;
             out.write("<tr class=\"lazy\"><td class=\"cells\">");
-            out.write(netDbLink(h) + "<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+            out.write(netDbLink(h));
             if (v != null)
                 out.write("<span class=\"version\" title=\"" + _t("Show all routers with this version in the NetDb") +
                           "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
@@ -572,6 +572,8 @@ class TunnelRenderer {
             if (info != null && info.getHash() != null)
                 out.write("<a class=\"configpeer\" href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\">" +
                           _t("Edit") + "</a>");
+            out.write("</td><td class=\"cells\">");
+            out.write("<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
             out.write("</td><td class=\"cells\"><span class=\"ipaddress\">");
             if (info != null && ip != null) {
                 if (!ip.toString().equals("null"))
@@ -612,7 +614,7 @@ class TunnelRenderer {
             out.write("</tr>\n");
         }
         out.write("<tr class=\"tablefooter\" data-sort-method=\"none\"><td data-sort-method=\"none\"><b>" + peerCount + ' ' + _t("unique peers") +
-                  "</b></td><td></td><td data-sort-method=\"none\"><b>" + tunnelCount + ' ' + _t("local") +
+                  "</b></td><td></td><td></td><td data-sort-method=\"none\"><b>" + tunnelCount + ' ' + _t("local") +
                   "</b></td><td data-sort-method=\"none\"></td>");
         if (!participating.isEmpty())
             out.write("<td data-sort-method=\"none\"><b>" + partCount + ' ' + _t("participating") +

@@ -60,6 +60,22 @@ tr {contain:layout}
 .iframed .nav_main,.iframed .nav_main.snarkNav:last-child,.iframed .snarkNav:last-child {border-radius:0}
 .iframed .snarkNav:last-child[href="/i2psnark/"] {margin-top:0}
 
+/* search */
+#snarkSearch{display:block;position:absolute;top:5px;right:10px}
+#snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;color:var(--ink);border:none;box-shadow:none;background:transparent}
+#snarkSearch input[type=search]:not(:focus){opacity:0}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding:6px 22px 6px 6px;border-bottom:1px solid #131;opacity:1;transform:translateY(-10px)}
+#snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.65;color:#252}
+#snarkSearch input[type=search]:focus::placeholder{opacity:0}
+#snarkSearch input[type="submit"]{width:28px;min-width:0;color:transparent;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.4}
+#snarkSearch input[type="submit"]:hover{background-size:26px}
+#snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
+#snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{opacity:.8}
+#searchwrap{position:relative}
+#searchwrap a[href="/i2psnark"]{height:12px;width:12px;display:inline-block;position:absolute;top:calc(50% - 14px);right:4px;font-size:0;background:url(images/delete.svg) no-repeat center center / 12px;border:none;box-shadow:none;opacity:0;filter:none}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown) + a[href="/i2psnark"]{opacity:.5}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown) + a[href="/i2psnark"]:hover{opacity:1}
+
 /* screenlog */
 #screenlog,#screenlog.collapsed {margin:0;padding:3px 5px;width:auto;height:56px;resize:none;overflow:hidden;line-height:1.2;text-align:left;font-size:8.5pt;color:#69f;box-shadow:var(--highlight),inset 0 0 0 2px #020;border-bottom:var(--border)}
 #screenlog,#screenlog.expanded,#screenlog.collapsed {background:repeating-linear-gradient(180deg,rgba(0,16,0,.7) 2px,rgba(0,32,0,.6) 4px),url(images/hat.png) no-repeat scroll right bottom,var(--th),url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px,rgba(0,16,0,.6) 4px),#001000;background-size:100% 4px,80px auto,100%,calc(100% - 80px) calc(100% - 4px),100% 4px;background-position:center center,right bottom,center center,left bottom;background-blend-mode:darken,lighten,screen,luminosity,normal,normal;scrollbar-color:rgba(16,72,16,.8) #000800}

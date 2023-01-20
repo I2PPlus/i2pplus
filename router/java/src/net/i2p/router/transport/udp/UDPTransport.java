@@ -1740,7 +1740,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         Long id = Long.valueOf(peer.getRcvConnID());
         PeerStateDestroyed oldPSD;
         synchronized(_addDropLock) {
-            oldPSD = _recentlyClosedConnIDs.putIfAbsent(id, peer);
+            oldPSD = _recentlyClosedConnIDs.put(id, peer);
+            if (oldPSD != null)
+                _recentlyClosedConnIDs.put(id, oldPSD); // put the old one back
         }
         if (oldPSD != null)
             peer.kill();
@@ -1932,9 +1934,12 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 PeerState2 state2 = (PeerState2) oldPeer;
                 Long id = Long.valueOf(state2.getRcvConnID());
                 PeerStateDestroyed newPSD = new PeerStateDestroyed(_context, this, state2);
-                PeerStateDestroyed oldPSD = _recentlyClosedConnIDs.putIfAbsent(id, newPSD);
-                if (oldPSD != null)
+                PeerStateDestroyed oldPSD = _recentlyClosedConnIDs.put(id, newPSD);
+                if (oldPSD != null) {
+                    // put the old one back, kill new one
+                    _recentlyClosedConnIDs.put(id, oldPSD);
                     newPSD.kill();
+                }
                 _peersByConnID.remove(id);
             }
         }
@@ -2191,9 +2196,12 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             PeerState2 state2 = (PeerState2) peer;
             Long id = Long.valueOf(state2.getRcvConnID());
             PeerStateDestroyed newPSD = new PeerStateDestroyed(_context, this, state2);
-            PeerStateDestroyed oldPSD = _recentlyClosedConnIDs.putIfAbsent(id, newPSD);
-            if (oldPSD != null)
+            PeerStateDestroyed oldPSD = _recentlyClosedConnIDs.put(id, newPSD);
+            if (oldPSD != null) {
+                // put the old one back, kill new one
+                _recentlyClosedConnIDs.put(id, oldPSD);
                 newPSD.kill();
+            }
             _peersByConnID.remove(id);
         }
 
@@ -3484,11 +3492,12 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             if (_log.shouldDebug())
                 _log.debug("Failed sending " + msg + " to " + msg.getPeer());
         }
-        noteSend(msg, false);
+        //noteSend(msg, false);
         if (m != null)
             super.afterSend(m, false);
     }
 
+/*
     private void noteSend(OutboundMessageState msg, boolean successful) {
         // bail before we do all the work
         if (!_context.messageHistory().getDoLog())
@@ -3526,6 +3535,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                                                   (p != null ? p.getRemotePeer() : null), successful, buf.toString());
         }
     }
+*/
 
     public void failed(OutNetMessage msg, String reason) {
         if (msg == null) return;
@@ -3543,7 +3553,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (msg == null) return;
         if (_log.shouldDebug())
             _log.debug("Sending message succeeded: " + msg);
-        noteSend(msg, true);
+        //noteSend(msg, true);
         OutNetMessage m = msg.getMessage();
         if (m != null)
             super.afterSend(m, true);

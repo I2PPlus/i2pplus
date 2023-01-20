@@ -16,6 +16,7 @@ function refreshSidebar() {
   var badges = document.querySelectorAll(".badge");
   var bandwidth = document.getElementById("sb_bandwidth");
   var clock = document.getElementById("clock");
+  var cpuBar = document.getElementById("sb_CPUBar");
   var down = document.getElementById("down");
   var general = document.getElementById("sb_general");
   var graphStats = document.getElementById("sb_graphstats");
@@ -47,10 +48,6 @@ function refreshSidebar() {
   xhr.responseType = "document";
   xhr.overrideMimeType("text/html");
   xhr.setRequestHeader("Accept", "text/html");
-  xhr.setRequestHeader("Cache-Control", "no-store, max-age=60");
-  xhr.setRequestHeader("Content-Security-Policy",
-    "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'"
-  );
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
@@ -59,6 +56,7 @@ function refreshSidebar() {
         var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
         var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
         var clockResponse = xhr.responseXML.getElementById("clock");
+        var cpuBarResponse = xhr.responseXML.getElementById("sb_CPUBar");
         var generalResponse = xhr.responseXML.getElementById("sb_general");
         var graphStatsResponse = xhr.responseXML.getElementById("sb_graphstats");
         var internalsResponse = xhr.responseXML.getElementById("sb_internals");
@@ -176,6 +174,9 @@ function refreshSidebar() {
           }
           if (memBar !== null && memBarResponse !== null && !Object.is(memBar.innerHTML, memBarResponse.innerHTML)) {
             memBar.innerHTML = memBarResponse.innerHTML;
+          }
+          if (cpuBar !== null && cpuBarResponse !== null && !Object.is(cpuBar.innerHTML, cpuBarResponse.innerHTML)) {
+            cpuBar.innerHTML = cpuBarResponse.innerHTML;
           }
           if (updateBar !== null) {
             if (updateBarResponse !== null) {

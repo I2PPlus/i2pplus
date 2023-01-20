@@ -106,11 +106,12 @@ class NetDbRenderer {
      *  @param version may be null
      *  @param country may be null
      *  @param family may be null
+     *  @param highPort if nonzero, a range from port to highPort inclusive
      */
     public void renderRouterInfoHTML(Writer out, int pageSize, int page,
                                      String routerPrefix, String version,
                                      String country, String family, String caps,
-                                     String ip, String sybil, int port, SigType type, EncType etype,
+                                     String ip, String sybil, int port, int highPort, SigType type, EncType etype,
                                      String mtu, String ipv6, String ssucaps,
                                      String tr, int cost) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
@@ -357,7 +358,9 @@ class NetDbRenderer {
                         }
                     } else if (port != 0) {
                         for (RouterAddress ra : ri.getAddresses()) {
-                            if (port == ra.getPort()) {
+                        int raport = ra.getPort();
+                        if (port == raport ||
+                            (highPort > 0 && raport >= port && raport <= highPort)) {
                                 if (skipped < toSkip) {
                                     skipped++;
                                     break;
@@ -469,8 +472,12 @@ class NetDbRenderer {
                     buf.append("IP ").append(ip).append(' ');
                 if (ipv6 != null)
                     buf.append("IP ").append(ipv6).append(' ');
-                if (port != 0)
-                    buf.append(_t("Port")).append(' ').append(port).append(' ');
+                if (port != 0) {
+                    buf.append(_t("Port")).append(' ').append(port);
+                    if (highPort != 0)
+                        buf.append('-').append(highPort);
+                    buf.append(' ');
+                }
                 if (mtu != null)
                     buf.append(_t("MTU")).append(' ').append(mtu).append(' ');
                 if (cost != 0)
@@ -1060,8 +1067,10 @@ class NetDbRenderer {
             }
             buf.append("<table id=\"netdbtiers\">\n");
             buf.append("<thead>\n<tr>\n<th>" + _t("Bandwidth Tier") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
-            buf.append("<tr>\n<td><a href=\"/netdb?caps=K\" title=\"Show all routers with this capability in the NetDb\"><b>K</b></a>Under 12&#8239;KB/s</td>\n<td>")
-               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td>\n</tr>\n");
+            if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size() > 0) {
+                buf.append("<tr>\n<td><a href=\"/netdb?caps=K\" title=\"Show all routers with this capability in the NetDb\"><b>K</b></a>Under 12&#8239;KB/s</td>\n<td>")
+                   .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td>\n</tr>\n");
+            }
             buf.append("<tr>\n<td><a href=\"/netdb?caps=L\" title=\"Show all routers with this capability in the NetDb\"><b>L</b></a>12 - 48&#8239;KB/s</td>\n<td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size()).append("</td>\n</tr>\n");
             buf.append("<tr>\n<td><a href=\"/netdb?caps=M\" title=\"Show all routers with this capability in the NetDb\"><b>M</b></a>49 - 65&#8239;KB/s</td>\n<td>")
@@ -1567,7 +1576,7 @@ class NetDbRenderer {
         } else if (ip.contains(":0:")) {
             // convert to canonical
             return Addresses.toCanonicalString(ip);
-        }		
+        }
         return null;
     }
 

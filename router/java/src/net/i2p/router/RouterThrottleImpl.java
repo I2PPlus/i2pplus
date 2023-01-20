@@ -228,11 +228,13 @@ public class RouterThrottleImpl implements RouterThrottle {
          * sensitive to sudden rapid growth of load, which are not instantly detected by these metrics.
          * Reduce tunnel growth if we are growing faster than the lag based metrics can detect reliably.
          */
-        if ((numTunnels > getMinThrottleTunnels()) && (DEFAULT_MAX_TUNNELS >= maxTunnels)) {
+        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 90) {
+            setTunnelStatus(_x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
+        } else if ((numTunnels > getMinThrottleTunnels()) && (DEFAULT_MAX_TUNNELS >= maxTunnels)) {
             Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(10*60*1000);
             if (avgTunnels != null) {
                 double avg = avgTunnels.getAvgOrLifetimeAvg();
-                double tunnelGrowthFactor = getTunnelGrowthFactor();
+                double tunnelGrowthFactor = SystemVersion.isSlow() || SystemVersion.getCPULoad() > 80 ? getTunnelGrowthFactor() : getTunnelGrowthFactor() * 3 / 2;
                 int min = getMinThrottleTunnels();
                 if (avg < min)
                     avg = min;

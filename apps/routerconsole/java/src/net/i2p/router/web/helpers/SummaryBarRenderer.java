@@ -44,7 +44,7 @@ class SummaryBarRenderer {
     static final String ALL_SECTIONS[] =
         {"HelpAndFAQ", "I2PServices", "I2PInternals", "RouterInfo", "ShortRouterInfo", "AdvancedRouterInfo", "MemoryBar", "NetworkReachability",
         "UpdateStatus", "RestartStatus", "Peers", "PeersAdvanced", "FirewallAndReseedStatus", "Bandwidth", "BandwidthGraph", "Tunnels",
-        "Congestion", "TunnelStatus", "Destinations", "NewsHeadings", "Advanced", "Clock"};
+        "Congestion", "TunnelStatus", "Destinations", "NewsHeadings", "Advanced", "Clock", "CPUBar"};
     static final Map<String, String> SECTION_NAMES;
 
     static {
@@ -71,6 +71,7 @@ class SummaryBarRenderer {
         aMap.put("NewsHeadings", _x("News &amp; Updates"));
         aMap.put("Advanced", _x("Advanced Links"));
         aMap.put("Clock", _x("UTC Clock"));
+        aMap.put("CPUBar", _x("CPU Load"));
         SECTION_NAMES = Collections.unmodifiableMap(aMap);
     }
 
@@ -121,6 +122,8 @@ class SummaryBarRenderer {
                 buf.append(renderAdvancedRouterInfoHTML());
             else if ("MemoryBar".equals(section))
                 buf.append(renderMemoryBarHTML());
+            else if ("CPUBar".equals(section))
+                buf.append(renderCPUBarHTML());
             else if ("NetworkReachability".equals(section))
                 buf.append(renderNetworkReachabilityHTML());
             else if ("UpdateStatus".equals(section))
@@ -326,7 +329,7 @@ class SummaryBarRenderer {
             svcs.put(tx, rbuf.toString());
         }
 
-        if (pm.isRegistered(PortMapper.SVC_I2PTUNNEL)) {
+        if (_helper.isI2PTunnelRunning()) {
             String tx = _t("Tunnel Manager");
             rbuf.setLength(0);
             rbuf.append("<a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
@@ -792,10 +795,16 @@ class SummaryBarRenderer {
         return buf.toString();
     }
 
-    /** @since 0.9.32 */
+    /** @since 0.9.57+ */
     public String renderMemoryBarHTML() {
         if (_helper == null) return "";
         return _helper.getMemoryBar();
+    }
+
+    /** @since 0.9.57+ */
+    public String renderCPUBarHTML() {
+        if (_helper == null) return "";
+        return _helper.getCPUBar();
     }
 
     public String renderNetworkReachabilityHTML() {
@@ -1206,6 +1215,16 @@ class SummaryBarRenderer {
                .append("</b></td><td class=\"digits\"><span>")
                .append(_helper.getConcurrency())
                .append("</span></td></tr>\n");
+            if (_helper.getTunnelBuildSuccess() > 0) {
+                buf.append("<tr title=\"")
+                   .append(_t("Tunnel Build Success (averaged over a minute)"))
+                   .append("\">" +
+                           "<td><b>")
+                   .append(_t("Build Success"))
+                  .append("</b></td><td class=\"digits\"><span>")
+                  .append(_helper.getTunnelBuildSuccess())
+                  .append("%</span></td></tr>\n");
+            }
 
             if ((maxTunnels == null || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
                  !ri.getBandwidthTier().equals("K") && !_helper.getShareRatio().toString().equals("0")) {
@@ -1251,22 +1270,29 @@ class SummaryBarRenderer {
         } else {
            buf.append(_helper.getJobLag());
         }
+        long maxLag = _context.jobQueue().getMaxLag();
         buf.append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_queue\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_queue\">\n" +
-                   "<tr title=\"")
-           .append(_t("Indicates router performance"))
-           .append("\">" +
+                   "<tr title=\"");
+        if (isAdvanced() && maxLag != 0)
+            buf.append(_t("Average job delay / maximum delay"));
+        else
+//            buf.append(_t("Indicates router performance"));
+            buf.append(_t("Average delay before scheduled jobs are run"));
+        buf.append("\">" +
                    "<td><b>")
            .append(_t("Job lag"))
            .append("</b></td><td class=\"digits\">");
-        if (_context.jobQueue().getMaxLag() > 1000) {
+        int maxLagBeforeDrop = SystemVersion.isSlow() ? 400 : 300;
+        if (maxLag > maxLagBeforeDrop) {
             buf.append("<span class=\"warntext\">");
         } else {
             buf.append("<span>");
         }
-        buf.append(_helper.getJobLag()).append("</span>")
-            .append("</td></tr>\n" +
+        buf.append(_helper.getJobLag())
+           .append("</span>")
+           .append("</td></tr>\n" +
                    "<tr title=\"")
            .append(_t("Indicates how quickly outbound messages to other I2P routers are sent"))
            .append("\">" +
@@ -1280,8 +1306,7 @@ class SummaryBarRenderer {
         }
         buf.append("</td></tr>\n");
 
-        if (_context.getProperty("routerconsole.showPeerTestAvg") != null &&
-            _context.getBooleanProperty("routerconsole.showPeerTestAvg")) {
+        if (_context.getBooleanProperty("routerconsole.showPeerTestAvg")) {
             buf.append("<tr title=\"")
                .append(_t("Average time to test a peer (successful / total)"))
                .append("\">" +
@@ -1295,8 +1320,7 @@ class SummaryBarRenderer {
             buf.append("</span></td></tr>\n");
         }
 
-        if (_context.getProperty("router.disableTunnelTesting") == null ||
-            !_context.getBooleanProperty("router.disableTunnelTesting")) {
+        if (!_context.getBooleanProperty("router.disableTunnelTesting")) {
             buf.append("<tr title=\"")
                .append(_t("Round trip time for a tunnel test"))
                .append("\">" +

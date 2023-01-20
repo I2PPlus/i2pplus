@@ -880,8 +880,7 @@ class PacketHandler {
                         PeerState2 ps2 = _transport.getPeerState(id);
                         if (ps2 != null) {
                             if (_log.shouldWarn())
-                                _log.warn("Migrated " + packet.getPacket().getLength() + " byte packet from " + from +
-                                          " for " + ps2);
+                                _log.warn("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
                             ps2.receivePacket(from, packet);
                             return true;
                         }
@@ -908,7 +907,7 @@ class PacketHandler {
                     packet.getPacket().getLength() == SSU2Util.MIN_HANDSHAKE_DATA_LEN - 1) {
                     // i2pd short 87 byte session request thru 0.9.56, drop packet
                     if (_log.shouldWarn())
-                        _log.warn("Received Short SessionRequest (87 bytes) from " + from);
+                        _log.warn("Received short SessionRequest (87 bytes) from " + from);
                     return true;
                 }
             } else {

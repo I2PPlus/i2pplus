@@ -64,6 +64,21 @@ button::-moz-focus-inner, input::-moz-focus-inner {outline: none; border: none}
 .nav_tracker:active {background: var(--hover) var(--tracker_active) no-repeat 8px center}
 .nav_search:active {background: var(--hover) var(--search_active) no-repeat 8px center}
 
+/* search */
+#snarkSearch{display:block;position:absolute;right:8px;top:-2px}
+#snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:none;box-shadow:none;background:transparent}
+#snarkSearch input[type=search]:not(:focus){opacity:0}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding:6px;border-bottom:1px solid #ddf;opacity:1;transform:translateY(-2px)}
+#snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.5;color:var(--ink)}
+#snarkSearch input[type=search]:focus::placeholder{opacity:0}
+#snarkSearch input[type="submit"]{padding:8px 0;width:28px;min-width:0;color:transparent;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.5}
+#snarkSearch input[type="submit"]:hover{background-size:26px}
+#snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
+#snarkSearch:hover input[type="submit"]{opacity:.8}
+#snarkSearch:focus-within input[type="submit"]{opacity:1}
+#searchwrap{position:relative}
+#searchwrap a[href="/i2psnark"]{display:none}
+
 /* screenlog */
 #screenlog, #screenlog.collapsed {margin: -2px 0 0; padding: 3px 5px 3px 5px; min-width: 810px; height: 56px; width: auto; font-size: 8.5pt; text-align: left; overflow: hidden; color: #6e6eb7; border-top: var(--border_soft); border-bottom: var(--border_soft); border-spacing: 0; box-shadow: var(--highlight); contain: paint}
 #screenlog, #screenlog.expanded, #screenlog.collapsed {background: url(images/kitty.png) no-repeat right center, repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px, rgba(220,220,255,.5) 4px), url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat, var(--th); background-size: 60px auto, 100%, calc(100% - 80px) calc(100% - 4px), 100%; background-position: right bottom, center center, left bottom, center center; background-blend-mode: multiply, overlay, luminosity, normal}

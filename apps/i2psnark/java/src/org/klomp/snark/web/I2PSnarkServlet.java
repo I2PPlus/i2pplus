@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.Collator;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,6 +59,8 @@ import org.klomp.snark.Storage;
 import org.klomp.snark.Tracker;
 import org.klomp.snark.TrackerClient;
 import org.klomp.snark.URIUtil;
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.InvalidBEncodingException;
 import org.klomp.snark.dht.DHT;
 import org.klomp.snark.comments.Comment;
 import org.klomp.snark.comments.CommentSet;
@@ -225,7 +228,7 @@ public class I2PSnarkServlet extends BasicServlet {
         req.setCharacterEncoding("UTF-8");
 
         String pOverride = _manager.util().connected() ? null : "";
-        String peerString = getQueryString(req, pOverride, null, null);
+        String peerString = getQueryString(req, pOverride, null, null, "");
 
         // AJAX for mainsection
         if ("/.ajax/xhr1.html".equals(path)) {
@@ -359,16 +362,12 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                 }
                 out.write("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                          "var visibility = document.visibilityState;\n" +
-                          "var cycle;\n" +
-                          "if (visibility = \"visible\") {\n" +
-                          "function timer() {\n" +
-                          "var cycle = setInterval(function() {\n" +
-                          "requestAnimationFrame(refreshTorrents);\n" +
-                          "}, ajaxDelay);\n" +
+                          "var timerId = setInterval(doRefresh, ajaxDelay);\n" +
+                          "function doRefresh() {\n" +
+                          " if (document.visible = true) {refreshTorrents();}\n" +
+                          " else {cancelRefresh();}\n" +
                           "}\n" +
-                          "timer();\n" +
-                          "}\n" +
+                          "function cancelRefresh() {clearInterval(timerId);}\n" +
                           "</script>\n");
             }
         }
@@ -442,6 +441,18 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(_t("BTDigg"));
             out.write("</a>");
         }
+        if (_manager.getTorrents().size() > 1) {
+            out.write("<form id=\"snarkSearch\" action=\"" + _contextPath + "\" method=\"GET\" hidden>\n" +
+                      "<span id=\"searchwrap\"><input type=\"search\" required name=\"s\" size=\"20\" placeholder=\"");
+            out.write(_t("Search torrents"));
+            out.write("\"");
+            String s = req.getParameter("s");
+            if (s != null)
+                out.write(" value=\"" + DataHelper.escapeHTML(s) + '"');
+            out.write("><a href=/i2psnark title=\"");
+            out.write(_t("Clear search"));
+            out.write("\" hidden>x</a></span><input type=\"submit\" value=\"Search\">\n</form>\n");
+        }
         out.write("\n</div>\n");
         String newURL = req.getParameter("newURL");
         if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET"))
@@ -496,28 +507,26 @@ public class I2PSnarkServlet extends BasicServlet {
     private static void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
+        resp.setHeader("Accept-Ranges", "none");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
+        resp.setHeader("Feature-Policy", "fullscreen 'self'");
+        resp.setHeader("Referrer-Policy", "same-origin");
+        resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
-        resp.setHeader("X-Content-Type-Options", "nosniff");
-        resp.setHeader("Referrer-Policy", "same-origin");
-        resp.setHeader("Accept-Ranges", "none");
-        resp.setHeader("Feature-Policy", "fullscreen 'self'");
     }
 
     private static void setXHRHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
-//        resp.setHeader("Cache-Control", "private, max-age=2628000");
-        resp.setHeader("Cache-Control", "no-cache, no-store, private, max-age=0");
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
+        resp.setHeader("Accept-Ranges", "none");
+        resp.setHeader("Cache-Control", "no-cache, private, max-age=60");
+        resp.setHeader("Content-Security-Policy", "default-src 'none'");
+        resp.setHeader("Referrer-Policy", "same-origin");
+        resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
-        resp.setHeader("X-Content-Type-Options", "nosniff");
-        resp.setHeader("Referrer-Policy", "same-origin");
-        resp.setHeader("Accept-Ranges", "none");
-        resp.setHeader("Feature-Policy", "fullscreen 'self'");
     }
 
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
@@ -632,6 +641,17 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isDegraded = ua != null && ServletUtil.isTextBrowser(ua);
         boolean noThinsp = isDegraded || (ua != null && ua.startsWith("Opera"));
 
+        // search
+        boolean isSearch = false;
+        String search = req.getParameter("s");
+        if (search != null && search.length() > 0) {
+            List<Snark> matches = search(search, snarks);
+            if (matches != null) {
+                snarks = matches;
+                isSearch = true;
+            }
+        }
+
         // pages
         int start = 0;
         int total = snarks.size();
@@ -640,7 +660,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam)));
             } catch (NumberFormatException nfe) {}
         }
-        int pageSize = Math.max(_manager.getPageSize(), 5);
+//        int pageSize = Math.max(_manager.getPageSize(), 5);
+        int pageSize = _manager.getPageSize();
+        String ps = req.getParameter("ps");
+        if (ps != null) {
+            try { pageSize = Integer.parseInt(ps); } catch (NumberFormatException nfe) {}
+        }
+        if (pageSize < 10)
+            pageSize = 10;
 
         // move pagenav here so we can align it nicely without resorting to hacks
         if (total > 0 && (start > 0 || total > pageSize)) {
@@ -947,6 +974,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (!canWrite) {
                     out.write(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                } else if (isSearch) {
+                    out.write(_t("No torrents found."));
                 } else {
                     out.write(_t("No torrents loaded."));
                 }
@@ -1129,6 +1158,42 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     *  search torrents for matching terms
+     *
+     *  @param search non-null
+     *  @param snarks unmodified
+     *  @return null if no valid search, or matching torrents in same order, empty if no match
+     *  @since 0.9.58
+     */
+    private static List<Snark> search(String search, Collection<Snark> snarks) {
+        List<String> searchList = null;
+        String[] terms = DataHelper.split(search, " ");
+        for (int i = 0; i < terms.length; i++) {
+            String term = terms[i];
+            if (term.length() > 0) {
+                if (searchList == null)
+                    searchList = new ArrayList<String>(4);
+                searchList.add(term.toLowerCase(Locale.US));
+            }
+        }
+        if (searchList == null)
+            return null;
+        List<Snark> matches = new ArrayList<Snark>(32);
+        for (Snark snark : snarks) {
+            String lcname = snark.getBaseName().toLowerCase(Locale.US);
+            // search for any term (OR)
+            for (int j = 0; j < searchList.size(); j++) {
+                String term = searchList.get(j);
+                if (lcname.contains(term)) {
+                    matches.add(snark);
+                    break;
+                }
+            }
+        }
+        return matches;
+    }
+
+    /**
      *  hidden inputs for nonce and paramters p, st, and sort
      *
      *  @param out writes to it
@@ -1169,11 +1234,19 @@ public class I2PSnarkServlet extends BasicServlet {
         if (action != null) {
             buf.append("<input type=\"hidden\" name=\"action\" value=\"")
                .append(action).append("\" >\n");
+        } else {
+            // for buttons, keep the search term
+            String sParam = req.getParameter("s");
+            if (sParam != null) {
+                buf.append("<input type=\"hidden\" name=\"s\" value=\"")
+                   .append(DataHelper.escapeHTML(sParam)).append("\" >\n");
+            }
         }
     }
 
     /**
-     *  Build HTML-escaped and stripped query string
+     *  Build HTML-escaped and stripped query string.
+     *  Keeps any existing search param.
      *
      *  @param p override or "" for default or null to keep the same as in req
      *  @param st override or "" for default or null to keep the same as in req
@@ -1182,10 +1255,14 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.16
      */
     private static String getQueryString(HttpServletRequest req, String p, String st, String so) {
-/*
-        long now = System.currentTimeMillis();
-        String time = String.valueOf(now);
-*/
+        return getQueryString(req, p, st, so, null);
+    }
+
+    /**
+     *  @param s search param override or "" for default or null to keep the same as in req
+     *  @since 0.9.58
+     */
+    private static String getQueryString(HttpServletRequest req, String p, String st, String so, String s) {
         String url = req.getRequestURL().toString();
         StringBuilder buf = new StringBuilder(64);
         if (p == null) {
@@ -1193,8 +1270,13 @@ public class I2PSnarkServlet extends BasicServlet {
             if (p != null)
                 p = DataHelper.stripHTML(p);
         }
-        if (p != null && !p.equals(""))
+        if (p != null && !p.equals("")) {
             buf.append("?p=").append(p);
+            if (so != null && !so.equals("")) {
+                buf.append("&amp;sort=");
+                buf.append(so);
+            }
+        }
         if (so == null) {
             so = req.getParameter("sort");
             if (so != null)
@@ -1219,12 +1301,18 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("&amp;st=");
             buf.append(st);
         }
-/*
-        if ((p == null || !p.equals("")) && (so == null || so.equals("")) && (st == null || st.equals("")) || url.contains("/configure"))
-            buf.append("?time=").append(time);
+        if (s == null) {
+            s = req.getParameter("s");
+            if (s != null)
+                s = DataHelper.escapeHTML(s);
+        }
+        if (s != null && !s.equals("")) {
+            if (buf.length() <= 0)
+                buf.append("?s=");
         else
-            buf.append("&amp;time=").append(time);
-*/
+                buf.append("&amp;s=");
+            buf.append(s);
+        }
         return buf.toString();
     }
 
@@ -1782,8 +1870,34 @@ public class I2PSnarkServlet extends BasicServlet {
                 _manager.addMessage(_t("Error creating torrent - you must enter a file or directory"));
             }
         } else if ("StopAll".equals(action)) {
+            String search = req.getParameter("s");
+            if (search != null && search.length() > 0) {
+                List<Snark> matches = search(search, _manager.getTorrents());
+                if (matches != null) {
+                    for (Snark snark : matches) {
+                        _manager.stopTorrent(snark, false);
+                    }
+                    return;
+                }
+            }
             _manager.stopAllTorrents(false);
         } else if ("StartAll".equals(action)) {
+            String search = req.getParameter("s");
+            if (search != null && search.length() > 0) {
+                List<Snark> matches = search(search, _manager.getTorrents());
+                if (matches != null) {
+                    // TODO thread it
+                    int count = 0;
+                    for (Snark snark : matches) {
+                        _manager.startTorrent(snark);
+                        if ((count++ & 0x0f) == 15) {
+                            // try to prevent OOMs
+                            try { Thread.sleep(250); } catch (InterruptedException ie) {}
+                        }
+                    }
+                    return;
+                }
+            }
             _manager.startAllTorrents();
         } else if ("Clear".equals(action)) {
             String sid = req.getParameter("id");
@@ -2389,6 +2503,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (ch.startsWith("WebSeed@")) {
                     out.write(ch);
                 } else {
+                    // most clients start -xx, see
+                    // BT spec or libtorrent identify_client.cpp
+                    // Base64 encode -xx
+                    // Anything starting with L is -xx and has an Az version
+                    // snark is 9 nulls followed by 3 3 3 (binary), see Snark
+                    // PeerID.toString() skips nulls
+                    // Base64 encode '\3\3\3' = AwMD
+                    boolean addVersion = true;
                     ch = ch.substring(0, 4);
                     String client;
                     out.write("<span class=\"peerclient\"><tt title=\"");
@@ -2403,20 +2525,55 @@ public class I2PSnarkServlet extends BasicServlet {
                         client = "BiglyBT" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
                     else if ("LVhE".equals(ch))
                         client = "XD" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
-                    else if ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch))
-                        client = "Robert" + "<span class=\"clientVersion\"><i>" + getRobtVersion(pid.getID()) + "</i></span>";
                     else if (ch.startsWith("LV")) // LVCS 1.0.2?; LVRS 1.0.4
                        client = "Transmission" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
                     else if ("LUtU".equals(ch))
                         client = "KTorrent" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                    // libtorrent and downstreams
+                    // https://www.libtorrent.org/projects.html
+                    else if ("LURF".equals(ch))  // DL
+                        client = "Deluge";
+                    else if ("LXFC".equals(ch))  // qB
+                        client = "qBitorrent";
+                    else if ("LUxU".equals(ch))  // LT
+                        client = "libtorrent";
+                    // ancient below here
+                    else if ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch))
+                        client = "Robert" + "<span class=\"clientVersion\"><i>" + getRobtVersion(pid.getID()) + "</i></span>";
                     else if ("CwsL".equals(ch))
                         client = "I2PSnarkXL";
                     else if ("BFJT".equals(ch))
                         client = "I2PRufus";
                     else if ("TTMt".equals(ch))
                         client = "I2P-BT";
-                    else
-                        client = _t("Unknown") + " (" + ch + ')';
+                    else {
+                        // get client + version from handshake
+                        client = null;
+                        Map<String, BEValue> handshake = peer.getHandshakeMap();
+                        if (handshake != null) {
+                            BEValue bev = handshake.get("v");
+                            if (bev != null) {
+                                try {
+                                    String s = bev.getString();
+                                    if (s.length() > 0) {
+                                        if (s.length() > 64)
+                                            s = s.substring(0, 64);
+                                        client = DataHelper.escapeHTML(s);
+                                        addVersion = false;
+                                    }
+                                 } catch (InvalidBEncodingException ibee) {}
+                             }
+                         }
+                         if (client == null)
+                            client = _t("Unknown") + " (" + ch + ')';
+                    }
+
+                    if (addVersion) {
+                        byte[] id = pid.getID();
+                        if (id != null && id[0] == '-')
+                            client += getAzVersion(id);
+                    }
+
                     out.write(client + "</span></span>");
                 }
                 if (t >= 5000) {

@@ -201,22 +201,37 @@ class ExploreJob extends SearchJob {
     @Override
     protected int getBredth() {
         String exploreBredth = getContext().getProperty(PROP_EXPLORE_BREDTH);
-        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1000) {
+        boolean isSingleCore = SystemVersion.getCores() < 2;
+        boolean isSlow = SystemVersion.isSlow();
+        int cpuLoad = SystemVersion.getCPULoad();
+        int sysLoad = SystemVersion.getSystemLoad();
+        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1000 && !isSlow && !isSingleCore && cpuLoad < 80 && sysLoad < 80) {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 known peers)");
             return EXPLORE_BREDTH * 3;
-        } else if (exploreBredth == null && getContext().netDb().getKnownRouters() > 3000) {
+        } else if ((exploreBredth == null && getContext().netDb().getKnownRouters() > 3000) || (cpuLoad > 80 || sysLoad > 80) || (isSlow || isSingleCore)) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (over 3000 known peers)");
+                if (cpuLoad > 80 || sysLoad > 80 || isSlow || isSingleCore)
+                    _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (High CPU/system load or device is low spec)");
+                else
+                    _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (over 3000 known peers)");
             return 1;
-        } else if (exploreBredth == null) {
+        } else if (exploreBredth == null && !isSlow && !isSingleCore && cpuLoad < 80 && sysLoad < 80) {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 3000 known peers)");
             return EXPLORE_BREDTH * 2;
-        } else {
+        } else if (getContext().netDb().getKnownRouters() < 1000) {
+            if (_log.shouldInfo())
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + Math.min(EXPLORE_BREDTH + 1, 2) + " concurrent (less than 1000 known peers)");
+            return Math.min(EXPLORE_BREDTH + 1, 2);
+        } else if (exploreBredth != null) {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + exploreBredth + " concurrent (custom configuration)");
             return Integer.valueOf(exploreBredth);
+        } else {
+            if (_log.shouldInfo())
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH + " concurrent");
+            return EXPLORE_BREDTH;
         }
     }
 

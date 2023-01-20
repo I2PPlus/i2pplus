@@ -1,3 +1,47 @@
+2023-01-11 zzz
+ * SAM: Abort tunnel build if control socket closes
+
+2023-01-11 zzz
+ * Console: Add ability to search netdb for a range of ports
+
+2023-01-10 I2P+ 2.1.0+ released
+
+2023-01-08 zzz
+ * AppArmor: Allow classes.jsa in other locations
+ * SSU:
+   - Fix NPE handling SSU1 peer test msg 7
+   - Build fix for Java 7
+
+2023-01-07 dr|z3d
+ * Router: Increase max outbound bandwidth share if >=8 cores && >=4096MB
+
+2023-01-06 dr|z3d
+ * Router: Enhance participating throttler logging
+
+2023-01-05 dr|z3d
+ * Console: Add b33 definition to glossary
+
+2023-01-04 dr|z3d
+* Router:
+  - Reduce tunnel growth factor for transit tunnels (was 1.3, now 1.2)
+  - Increase timeout/first hop timeout for tunnel local requests
+
+2023-01-03 dr|z3d
+ * Router:
+   - Exclude M tier routers from local tunnel builds by default and
+     don't store RIs on disk
+   - Standardize temp ban for hostile / excessive tunnel requests to 30m
+
+2023-01-03 dr|z3d
+ * Router: Add temp banning to RequestThrottler
+
+2023-01-01 zzz
+ * GeoIP 2023-01-01
+ * i2ptunnel: Do not retry if session limit exceeded
+
+2022-12-31 dr|z3d
+ * Console: Add licensing exception for I2P to help/legal
+
 2022-12-31 zzz
  * i2psnark:
    - Update tracker list after editing torrent (Gitlab #380)
@@ -9,6 +53,9 @@
 
 2022-12-29 zzz
  * Tunnels: Limit requested client tunnels during congestion
+
+2022-12-28 dr|z3d
+ * Router: Adjust min tunnels before throttle, default max part tunnels
 
 2022-12-26 zzz
  * Console: Sort tunnels by name on /tunnels, /configtunnels, /i2ptunnel
@@ -22,6 +69,9 @@
    - More peer test fixes
    - Refactor in-session PacketBuilder2 methods to throw IOE
 
+2022-12-22 dr|z3d
+ * Router: Vary NTCP event pumper thread sleep according to system specs
+
 2022-12-22 zzz
  * SSU:
    - Further restrict states to publish peer test cap
@@ -29,6 +79,11 @@
  * SSU2:
    - Further restrict states to be a peer test Charlie
    - Peer test fixes
+
+2022-12-21 dr|z3d
+ * Tunnels: Harden participating throttler to mitigate against observed abuse
+ * I2Tunnel: Standardize error pages sent by http server tunnel
+ * Console: Add sub-titles to various tabbed pages (NetDb, Profiles, etc)
 
 2022-12-21 zzz
  * CLI: Add a "help" command, improve command listing
@@ -38,6 +93,9 @@
  * Router: Add IPv6 localhost and wildcard to blocklist
  * SSU2: Peer test improvements and fixes
  * Util: Speed up IP string to byte conversion
+
+2022-12-19 dr|z3d
+ * Router: Don't bother with lookups for uninteresting peers
 
 2022-12-19 zzz
  * CLI: Add NewsHandler CLI to fetch news from servers
@@ -53,6 +111,9 @@
 2022-12-18 zzz
  * SSU2: Compress and bundle Alice RI with relay intro
 
+2022-12-17 dr|z3d
+ * I2PSnark: Various javascript improvements/optimizations
+
 2022-12-17 zzz
  * Console: Fix UDP disabled error when SSU 1 disabled
  * SSU:
@@ -64,12 +125,19 @@
    - Send in-session termination after certain session confirmed errors
  * Transport: Fix multiple v4/v6 RouterAddresses
 
+2022-12-16 dr|z3d
+ * Console: Persist error level logs in addition to critical logs
+
 2022-12-15 zzz
  * Router: Change transient IPv4 blocklist to LHMCache
  * SSU2:
    - Check banlist after session confirmed
    - Don't attempt to connect to ourselves as an introducer
    - Fix retransmission of session confirmed
+
+2022-12-14 dr|z3d
+ * Console: Finish implementation of collapsible sidebar sections
+ * Router: Adjust minimum/maximum share bandwidth limits
 
 2022-12-14 zzz
  * Crypto: Fix wrong arguments order in ChaCha20 encrypt, breaking encrypted LS2
@@ -90,6 +158,10 @@
 2022-12-12 zzz
  * SSU2: Bob asks another Peer Test Charlie on rejection
 
+2022-12-11 dr|z3d
+ * Imagegen: Display identicon/QR form submissions in situ;
+   add 1024x1024 scaled examples
+
 2022-12-11 zzz
  * SSU2:
    - Ban peer if he bans us in retry
@@ -103,6 +175,9 @@
  * Graphs: Fix RRD time skew handling
  * SSU: Update activity timestamps for relay and peer test messages
  * SSU2: Peer Test fixes
+
+2022-12-09 dr|z3d
+ * Console: Add link to eventlog on router logs header if in advanced mode
 
 2022-12-09 zzz
  * SSU: Don't bid on SSU1 addresses when disabled
@@ -127,9 +202,16 @@
 2022-11-30 zzz
  * SSU: Start work on option to disable SSU 1
 
+2022-11-28 dr|z3d
+ * Console: Updates to NetDb lookup page (dropdowns from upstream etc)
+ * I2PSnark: Persist screenlog toggle state
+
 2022-11-28 zzz
  * i2ptunnel: Update encryption type defaults
  * Util: Add path length constraint = 0 to selfsigned certs
+
+2022-11-26 dr|z3d
+ * Router: Don't publish extended stats to netdb unless enabled via config
 
 2022-11-26 zzz
  * Console: Hide IPv4/v6 columns on /peers status tab
@@ -141,6 +223,9 @@
 2022-11-25 zzz
  * i2ptunnel: Allow IRCv3 ACCOUNT and CHGHOST through the filter
  * Profiles: Don't let one corrupt file kill the loader thread
+
+2022-11-24 dr|z3d
+ * Console: Add auto-refresh toggle to peers SSU/NTCP table headers
 
 2022-11-24 zzz
  * Console, i2psnark standalone: Fix UI configuration for Argentinan Spanish

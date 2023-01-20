@@ -773,8 +773,10 @@ public class BuildRequestRecord {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* ");
-        buf.append(_isEC ? "ECIES" : "ElGamal");
+        buf.append("\n* Time: ").append(new Date(readRequestTime()))
+           .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
+           .append("\n* ")
+           .append(_isEC ? "ECIES" : "ElGamal");
         if (_data.length == LENGTH_EC_SHORT)
             buf.append(" Short");
         buf.append(" BuildRequestRecord: [");
@@ -790,9 +792,7 @@ public class BuildRequestRecord {
                .append("; Out: ").append(readNextTunnelId());
         }
         buf.append("]")
-           .append("\n* Time: ").append(new Date(readRequestTime()))
-           .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
-           .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
+           .append("\n* Router: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
            .append("\n* Layer Key: ").append(readLayerKey())
            .append("\n* IV Key: ").append(readIVKey());
         if (_data.length != LENGTH_EC_SHORT) {

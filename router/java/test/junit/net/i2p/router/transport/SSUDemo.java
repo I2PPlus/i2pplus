@@ -242,7 +242,7 @@ public class SSUDemo {
         }
 
         public void runJob() {
-            // we know its a FooMessage, since thats the type of message that the handler
+            // we know it's a FooMessage, since that's the type of message that the handler
             // is registered as
             FooMessage m = (FooMessage)_msg;
             System.out.println("RECV FooMessage: " + Base64.encode(m.getData()) + " from " + _from);

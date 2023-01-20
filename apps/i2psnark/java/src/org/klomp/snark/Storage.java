@@ -58,8 +58,7 @@ import net.i2p.util.SystemVersion;
 /**
  * Maintains pieces on disk. Can be used to store and retrieve pieces.
  */
-public class Storage implements Closeable
-{
+public class Storage implements Closeable {
   private final MetaInfo metainfo;
   private final List<TorrentFile> _torrentFiles;
   private final File _base;
@@ -109,22 +108,21 @@ public class Storage implements Closeable
    * @param baseFile the torrent data file or dir
    * @param preserveFileNames if true, do not remap names to a 'safe' charset
    */
-  public Storage(I2PSnarkUtil util, File baseFile, MetaInfo metainfo, StorageListener listener, boolean preserveFileNames)
-  {
-    _util = util;
-    _log = util.getContext().logManager().getLog(Storage.class);
-    _base = baseFile;
-    this.metainfo = metainfo;
-    this.listener = listener;
-    needed = metainfo.getPieces();
-    bitfield = new BitField(needed);
-    piece_size = metainfo.getPieceLength(0);
-    pieces = needed;
-    total_length = metainfo.getTotalLength();
-    List<List<String>> files = metainfo.getFiles();
-    int sz = files != null ? files.size() : 1;
-    _torrentFiles = new ArrayList<TorrentFile>(sz);
-    _preserveFileNames = preserveFileNames;
+  public Storage(I2PSnarkUtil util, File baseFile, MetaInfo metainfo, StorageListener listener, boolean preserveFileNames) {
+      _util = util;
+      _log = util.getContext().logManager().getLog(Storage.class);
+      _base = baseFile;
+      this.metainfo = metainfo;
+      this.listener = listener;
+      needed = metainfo.getPieces();
+      bitfield = new BitField(needed);
+      piece_size = metainfo.getPieceLength(0);
+      pieces = needed;
+      total_length = metainfo.getTotalLength();
+      List<List<String>> files = metainfo.getFiles();
+      int sz = files != null ? files.size() : 1;
+      _torrentFiles = new ArrayList<TorrentFile>(sz);
+      _preserveFileNames = preserveFileNames;
   }
 
   /**
@@ -139,12 +137,8 @@ public class Storage implements Closeable
    * @param created_by may be null
    * @throws IOException when creating and/or checking files fails.
    */
-  public Storage(I2PSnarkUtil util, File baseFile, String announce,
-                 List<List<String>> announce_list,
-                 String created_by,
-                 boolean privateTorrent, StorageListener listener)
-    throws IOException
-  {
+  public Storage(I2PSnarkUtil util, File baseFile, String announce, List<List<String>> announce_list,
+                 String created_by, boolean privateTorrent, StorageListener listener) throws IOException {
       this(util, baseFile, announce, announce_list, created_by, privateTorrent, null, null, listener);
   }
 
@@ -164,77 +158,69 @@ public class Storage implements Closeable
    * @since 0.9.48
    */
   public Storage(I2PSnarkUtil util, File baseFile, String announce,
-                 List<List<String>> announce_list,
-                 String created_by,
-                 boolean privateTorrent, List<String> url_list, String comment, StorageListener listener)
-    throws IOException
-  {
-    _util = util;
-    _base = baseFile;
-    _log = util.getContext().logManager().getLog(Storage.class);
-    this.listener = listener;
-    _preserveFileNames = true;
-    // Create names, rafs and lengths arrays.
-    _torrentFiles = getFiles(baseFile);
+                 List<List<String>> announce_list, String created_by, boolean privateTorrent,
+                 List<String> url_list, String comment, StorageListener listener) throws IOException {
+      _util = util;
+      _base = baseFile;
+      _log = util.getContext().logManager().getLog(Storage.class);
+      this.listener = listener;
+      _preserveFileNames = true;
+      // Create names, rafs and lengths arrays.
+      _torrentFiles = getFiles(baseFile);
 
-    long total = 0;
-    ArrayList<Long> lengthsList = new ArrayList<Long>(_torrentFiles.size());
-    for (TorrentFile tf : _torrentFiles)
-      {
-        long length = tf.length;
-        total += length;
-        lengthsList.add(Long.valueOf(length));
+      long total = 0;
+      ArrayList<Long> lengthsList = new ArrayList<Long>(_torrentFiles.size());
+      for (TorrentFile tf : _torrentFiles) {
+          long length = tf.length;
+          total += length;
+          lengthsList.add(Long.valueOf(length));
       }
 
-    if (total <= 0)
-        throw new IOException("Torrent contains no data");
-    if (total > MAX_TOTAL_SIZE)
-        throw new IOException("Torrent too big (" + total + " bytes), max is " + MAX_TOTAL_SIZE);
+      if (total <= 0)
+          throw new IOException("Torrent contains no data");
+      if (total > MAX_TOTAL_SIZE)
+          throw new IOException("Torrent too big (" + total + " bytes), max is " + MAX_TOTAL_SIZE);
 
-    int pc_size;
-    if (total <= 5*1024*1024)
-        pc_size = DEFAULT_PIECE_SIZE / 4;
-    else if (total <= 10*1024*1024)
-        pc_size = DEFAULT_PIECE_SIZE / 2;
-    else
-        pc_size = DEFAULT_PIECE_SIZE;
-    int pcs = (int) ((total - 1)/pc_size) + 1;
-    while (pcs > (MAX_PIECES / 3) && pc_size < MAX_PIECE_SIZE)
-      {
-        pc_size *= 2;
-        pcs = (int) ((total - 1)/pc_size) +1;
+      int pc_size;
+      if (total <= 5*1024*1024)
+          pc_size = DEFAULT_PIECE_SIZE / 4;
+      else if (total <= 10*1024*1024)
+          pc_size = DEFAULT_PIECE_SIZE / 2;
+      else
+          pc_size = DEFAULT_PIECE_SIZE;
+      int pcs = (int) ((total - 1)/pc_size) + 1;
+      while (pcs > (MAX_PIECES / 3) && pc_size < MAX_PIECE_SIZE) {
+          pc_size *= 2;
+          pcs = (int) ((total - 1)/pc_size) +1;
       }
-    piece_size = pc_size;
-    pieces = pcs;
-    total_length = total;
+      piece_size = pc_size;
+      pieces = pcs;
+      total_length = total;
 
-    bitfield = new BitField(pieces);
-    needed = 0;
+      bitfield = new BitField(pieces);
+      needed = 0;
 
-    List<List<String>> files = new ArrayList<List<String>>(_torrentFiles.size());
-    for (TorrentFile tf : _torrentFiles)
-      {
-        List<String> file = new ArrayList<String>();
-        StringTokenizer st = new StringTokenizer(tf.name, File.separator);
-        while (st.hasMoreTokens())
-          {
-            String part = st.nextToken();
-            file.add(part);
+      List<List<String>> files = new ArrayList<List<String>>(_torrentFiles.size());
+      for (TorrentFile tf : _torrentFiles) {
+          List<String> file = new ArrayList<String>();
+          StringTokenizer st = new StringTokenizer(tf.name, File.separator);
+          while (st.hasMoreTokens()) {
+              String part = st.nextToken();
+              file.add(part);
           }
-        files.add(file);
+          files.add(file);
       }
 
-    if (files.size() == 1 && !baseFile.isDirectory())
-      {
-        files = null;
-        lengthsList = null;
+      if (files.size() == 1 && !baseFile.isDirectory()) {
+          files = null;
+          lengthsList = null;
       }
 
-    // TODO thread this so we can return and show something on the UI
-    byte[] piece_hashes = fast_digestCreate();
-    metainfo = new MetaInfo(announce, baseFile.getName(), null, files,
-                            lengthsList, piece_size, piece_hashes, total, privateTorrent,
-                            announce_list, created_by, url_list, comment);
+      // TODO thread this so we can return and show something on the UI
+      byte[] piece_hashes = fast_digestCreate();
+      metainfo = new MetaInfo(announce, baseFile.getName(), null, files,
+                              lengthsList, piece_size, piece_hashes, total, privateTorrent,
+                              announce_list, created_by, url_list, comment);
 
   }
 
@@ -248,40 +234,38 @@ public class Storage implements Closeable
    *  would do the trick
    */
   private byte[] fast_digestCreate() throws IOException {
-    // Calculate piece_hashes
-    MessageDigest digest = SHA1.getInstance();
+      // Calculate piece_hashes
+      MessageDigest digest = SHA1.getInstance();
 
-    byte[] piece_hashes = new byte[20 * pieces];
+      byte[] piece_hashes = new byte[20 * pieces];
 
-    byte[] piece = new byte[piece_size];
-    for (int i = 0; i < pieces; i++)
-      {
-        int length = getUncheckedPiece(i, piece);
-        digest.update(piece, 0, length);
-        byte[] hash = digest.digest();
-        System.arraycopy(hash, 0, piece_hashes, 20 * i, 20);
-        bitfield.set(i);
+      byte[] piece = new byte[piece_size];
+      for (int i = 0; i < pieces; i++) {
+          int length = getUncheckedPiece(i, piece);
+          digest.update(piece, 0, length);
+          byte[] hash = digest.digest();
+          System.arraycopy(hash, 0, piece_hashes, 20 * i, 20);
+          bitfield.set(i);
       }
-    return piece_hashes;
+      return piece_hashes;
   }
 
-  private List<TorrentFile> getFiles(File base) throws IOException
-  {
-    if (base.getAbsolutePath().equals("/"))
-        throw new IOException("Don't seed root");
-    List<File> files = new ArrayList<File>();
-    addFiles(files, base);
+  private List<TorrentFile> getFiles(File base) throws IOException {
+      if (base.getAbsolutePath().equals("/"))
+          throw new IOException("Don't seed root");
+      List<File> files = new ArrayList<File>();
+      addFiles(files, base);
 
-    int size = files.size();
-    List<TorrentFile> rv = new ArrayList<TorrentFile>(size);
+      int size = files.size();
+      List<TorrentFile> rv = new ArrayList<TorrentFile>(size);
 
-    for (File f : files) {
-        rv.add(new TorrentFile(base, f));
-    }
-    // Sort to prevent exposing OS type, and to make it more likely
-    // the same torrent created twice will have the same infohash.
-    Collections.sort(rv);
-    return rv;
+      for (File f : files) {
+          rv.add(new TorrentFile(base, f));
+      }
+      // Sort to prevent exposing OS type, and to make it more likely
+      // the same torrent created twice will have the same infohash.
+      Collections.sort(rv);
+      return rv;
   }
 
   /**
@@ -309,25 +293,22 @@ public class Storage implements Closeable
   /**
    * Returns the MetaInfo associated with this Storage.
    */
-  public MetaInfo getMetaInfo()
-  {
-    return metainfo;
+  public MetaInfo getMetaInfo() {
+      return metainfo;
   }
 
   /**
    * How many pieces are still missing from this storage.
    */
-  public int needed()
-  {
-    return needed;
+  public int needed() {
+      return needed;
   }
 
   /**
    * Whether or not this storage contains all pieces if the MetaInfo.
    */
-  public boolean complete()
-  {
-    return needed == 0;
+  public boolean complete() {
+      return needed == 0;
   }
 
   /**
@@ -710,8 +691,7 @@ public class Storage implements Closeable
    * The BitField that tells which pieces this storage contains.
    * Do not change this since this is the current state of the storage.
    */
-  public BitField getBitField()
-  {
+  public BitField getBitField() {
     return bitfield;
   }
 
@@ -739,9 +719,8 @@ public class Storage implements Closeable
    *
    * @throws IllegalStateException if called more than once
    */
-  public void check() throws IOException
-  {
-    check(0, null);
+  public void check() throws IOException {
+      check(0, null);
   }
 
   /**
@@ -752,106 +731,100 @@ public class Storage implements Closeable
    *
    * @throws IllegalStateException if called more than once
    */
-  public void check(long savedTime, BitField savedBitField) throws IOException
-  {
-    boolean areFilesPublic = _util.getFilesPublic();
-    boolean useSavedBitField = savedTime > 0 && savedBitField != null;
+  public void check(long savedTime, BitField savedBitField) throws IOException {
+      boolean areFilesPublic = _util.getFilesPublic();
+      boolean useSavedBitField = savedTime > 0 && savedBitField != null;
 
-    if (!_torrentFiles.isEmpty())
-        throw new IllegalStateException();
-    List<List<String>> files = metainfo.getFiles();
-    if (files == null)
-      {
-        // Create base as file.
-        if (_log.shouldInfo())
-            _log.info("Creating/Checking file: " + _base);
-        // createNewFile() can throw a "Permission denied" IOE even if the file exists???
-        // so do it second
-        if (!_base.exists() && !_base.createNewFile())
-          throw new IOException("Could not create file " + _base);
+      if (!_torrentFiles.isEmpty())
+          throw new IllegalStateException();
+      List<List<String>> files = metainfo.getFiles();
+      if (files == null) {
+          // Create base as file.
+          if (_log.shouldInfo())
+              _log.info("Creating/checking file: " + _base);
+          // createNewFile() can throw a "Permission denied" IOE even if the file exists???
+          // so do it second
+          if (!_base.exists() && !_base.createNewFile())
+            throw new IOException("Could not create file " + _base);
 
-        _torrentFiles.add(new TorrentFile(_base, _base, metainfo.getTotalLength()));
-        if (useSavedBitField) {
-            long lm = _base.lastModified();
-            if (lm <= 0 || lm > savedTime)
-                useSavedBitField = false;
-            else if (_base.length() != metainfo.getTotalLength())
-                useSavedBitField = false;
-        }
-      }
-    else
-      {
-        // Create base as dir.
-        if (_log.shouldInfo())
-            _log.info("Creating/Checking directory: " + _base);
-        if (!_base.mkdir() && !_base.isDirectory())
-          throw new IOException("Could not create directory " + _base);
+          _torrentFiles.add(new TorrentFile(_base, _base, metainfo.getTotalLength()));
+          if (useSavedBitField) {
+              long lm = _base.lastModified();
+              if (lm <= 0 || lm > savedTime)
+                  useSavedBitField = false;
+              else if (_base.length() != metainfo.getTotalLength())
+                  useSavedBitField = false;
+          }
+      } else {
+          // Create base as dir.
+          if (_log.shouldInfo())
+              _log.info("Creating/checking directory: " + _base);
+          if (!_base.mkdir() && !_base.isDirectory())
+              throw new IOException("Could not create directory " + _base);
 
-        List<Long> ls = metainfo.getLengths();
-        int size = files.size();
-        long total = 0;
-        for (int i = 0; i < size; i++)
-          {
-            List<String> path = files.get(i);
-            File f = createFileFromNames(_base, path, areFilesPublic);
-            // dup file name check after filtering
-            for (int j = 0; j < i; j++) {
-                if (f.equals(_torrentFiles.get(j).RAFfile)) {
-                    // Rename and start the check over again
-                    // Copy path since metainfo list is unmodifiable
-                    path = new ArrayList<String>(path);
-                    int last = path.size() - 1;
-                    String lastPath = path.get(last);
-                    int dot = lastPath.lastIndexOf('.');
-                    // foo.mp3 -> foo_.mp3; foo -> _foo
-                    if (dot >= 0)
-                        lastPath = lastPath.substring(0, dot) + '_' + lastPath.substring(dot);
-                    else
-                        lastPath = '_' + lastPath;
-                    path.set(last, lastPath);
-                    f = createFileFromNames(_base, path, areFilesPublic);
-                    j = 0;
-                }
-            }
-            long len = ls.get(i).longValue();
-            _torrentFiles.add(new TorrentFile(_base, f, len));
-            total += len;
-            if (useSavedBitField) {
-                long lm = f.lastModified();
-                if (lm <= 0 || lm > savedTime)
-                    useSavedBitField = false;
-                else if (f.length() != len)
-                    useSavedBitField = false;
-            }
+          List<Long> ls = metainfo.getLengths();
+          int size = files.size();
+          long total = 0;
+          for (int i = 0; i < size; i++) {
+              List<String> path = files.get(i);
+              File f = createFileFromNames(_base, path, areFilesPublic);
+              // dup file name check after filtering
+              for (int j = 0; j < i; j++) {
+                  if (f.equals(_torrentFiles.get(j).RAFfile)) {
+                      // Rename and start the check over again
+                      // Copy path since metainfo list is unmodifiable
+                      path = new ArrayList<String>(path);
+                      int last = path.size() - 1;
+                      String lastPath = path.get(last);
+                      int dot = lastPath.lastIndexOf('.');
+                      // foo.mp3 -> foo_.mp3; foo -> _foo
+                      if (dot >= 0)
+                          lastPath = lastPath.substring(0, dot) + '_' + lastPath.substring(dot);
+                      else
+                          lastPath = '_' + lastPath;
+                      path.set(last, lastPath);
+                      f = createFileFromNames(_base, path, areFilesPublic);
+                      j = 0;
+                  }
+              }
+              long len = ls.get(i).longValue();
+              _torrentFiles.add(new TorrentFile(_base, f, len));
+              total += len;
+              if (useSavedBitField) {
+                  long lm = f.lastModified();
+                  if (lm <= 0 || lm > savedTime)
+                      useSavedBitField = false;
+                  else if (f.length() != len)
+                      useSavedBitField = false;
+              }
           }
 
-        // Sanity check for metainfo file.
-        long metalength = metainfo.getTotalLength();
-        if (total != metalength)
-          throw new IOException("File lengths do not add up "
-                                + total + " != " + metalength);
+          // Sanity check for metainfo file.
+          long metalength = metainfo.getTotalLength();
+          if (total != metalength)
+              throw new IOException("File lengths do not add up " + total + " != " + metalength);
       }
-    if (useSavedBitField) {
-      bitfield = savedBitField;
-      needed = metainfo.getPieces() - bitfield.count();
-      _probablyComplete = complete();
+      if (useSavedBitField) {
+          bitfield = savedBitField;
+          needed = metainfo.getPieces() - bitfield.count();
+          _probablyComplete = complete();
       if (_log.shouldInfo())
           _log.info("Found saved state and files unchanged, skipping check");
-    } else {
-      // the following sets the needed variable
-      changed = true;
-      if (_log.shouldInfo())
-          _log.info("Forcing integrity check");
-      checkCreateFiles(false);
-    }
-    if (complete()) {
-        if (_log.shouldInfo())
-            _log.info("Torrent is complete");
-    } else {
-        // fixme saved priorities
-        if (_log.shouldInfo())
-            _log.info("Still need " + needed + " out of " + metainfo.getPieces() + " pieces");
-    }
+      } else {
+          // the following sets the needed variable
+          changed = true;
+          if (_log.shouldInfo())
+              _log.info("Forcing integrity check...");
+          checkCreateFiles(false);
+      }
+      if (complete()) {
+          if (_log.shouldInfo())
+              _log.info("Torrent is complete");
+      } else {
+          // fixme saved priorities
+          if (_log.shouldInfo())
+              _log.info("Still need " + needed + " out of " + metainfo.getPieces() + " pieces");
+      }
   }
 
   /**
@@ -860,8 +833,7 @@ public class Storage implements Closeable
    *
    * @throws IOException on fail
    */
-  public void reopen() throws IOException
-  {
+  public void reopen() throws IOException {
       if (_torrentFiles.isEmpty())
           throw new IOException("Storage not checked yet");
       for (int i = 0; i < _torrentFiles.size(); i++) {

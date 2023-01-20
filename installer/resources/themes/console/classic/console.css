@@ -191,8 +191,9 @@ p:empty + .sb_notice{margin-top:7px}
 .percentBarInner[style="width:100%;"]{border-right:none}
 .percentBarText{white-space:nowrap;text-align:center;font-weight:700;color:var(--ink);text-shadow:0 1px 1px rgba(255,255,255,.8);float:left;width:100%;height:14px;padding:0;opacity:0;transition:ease opacity .2s}
 .percentBarOuter:hover .percentBarText{opacity:1;transition:ease opacity .2s;pointer-events:none}
-#sb_memoryBar .percentBarText{padding:1px 0 4px;width:70%;float:none;position:absolute;top:-20px;left:15%;right:15%;vertical-align:middle;font-size:110%;border-radius:1px;background:#eef;filter:drop-shadow(0 0 1px #ddf) drop-shadow(0 0 1px #779)}
-#sb_memoryBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-15px;border-style:solid;border-width:8px;border-color:#eef transparent transparent transparent;content:""}
+#sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:1px 0 4px;width:90%;float:none;position:absolute;top:-20px;left:5%;right:5%;z-index:9999;vertical-align:middle;font-size:105%;border-radius:1px;background:#eef;filter:drop-shadow(0 0 1px #ddf) drop-shadow(0 0 1px #779);pointer-events:none}
+#sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-15px;border-style:solid;border-width:8px;border-color:#eef transparent transparent transparent;content:""}
+#sb_CPUBar .percentBarInner{border:none;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(240,240,250,.7) 50%,rgba(220,220,255,.7) 50%,rgba(140,140,220,.9)),repeating-linear-gradient(90deg,var(--bg4),var(--bg4) 4px,rgba(0,0,0,0) 5px,rgba(0,0,0,0) 10px) left center/10px 100%,linear-gradient(90deg,rgba(0,0,0,0) 150px,rgba(0,128,0,.3) 150px,rgba(255,96,0,.4),rgba(255,0,0,.5))}
 
 /* updates download bar */
 .sb_update b{margin-top:-4px;display:inline-block;line-height:1.2}
@@ -1996,15 +1997,15 @@ h3 + .statusnotes{margin-top:-1px}
 #tunnels img[src$="bound.png"]{opacity:0}
 #tunnels #peercount{padding-left:30px;background:var(--hardhat) no-repeat 8px 6px/18px,linear-gradient(180deg,var(--bg)50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8) 25%)}
 #tunnelPeerCount .cells{white-space:nowrap;width:auto;max-width:0;min-width:0}
-#tunnelPeerCount .cells.bar,#tunnelPeerCount th.bar,#tunnelPeerCount td:nth-child(n+3),#tunnelPeerCount th:nth-child(n+3){padding-left:8px;padding-right:8px;width:10%;white-space:nowrap}
+#tunnelPeerCount .cells.bar,#tunnelPeerCount th.bar,#tunnelPeerCount td:nth-child(n+2),#tunnelPeerCount th:nth-child(n+2){padding-left:8px;padding-right:8px;width:10%;white-space:nowrap}
 #tunnelPeerCount tr:not(:last-child) td:first-child{width:1%;min-width:200px;white-space:nowrap;background:var(--th);box-sizing:border-box}
 #tunnelPeerCount td:first-child span{border:none;box-shadow:none;background:none}
 #tunnelPeerCount td:first-child > *{vertical-align:middle;line-height:1.2}
-#tunnelPeerCount td:nth-child(2){white-space:normal;word-break:break-all}
+#tunnels #tunnelPeerCount th:nth-child(3),#tunnels #tunnelPeerCount td:nth-child(3){width:auto;white-space:normal;word-break:break-all}
 #tunnelPeerCount .routerid{padding:0 4px 0 2px}
 #tunnelPeerCount tr:not(:last-child) td{padding:3px}
 #tunnelPeerCount td:first-child span{margin:0 1px;vertical-align:middle}
-#tunnelPeerCount td:nth-child(2){text-align:center}
+#tunnelPeerCount td{text-align:center}
 #tunnelPeerCount .tunnel_cap{padding:1px 2px 0}
 #tunnelPeerCount .version{padding-bottom:0}
 #tunnelPeerCount .configpeer{margin:0 0 0 3px;display:inline-block;vertical-align:middle}
@@ -2164,7 +2165,7 @@ div[id^="config"] .tab a{padding-right:13px}
 #sybilnav{margin:5px -6px 8px}
 table[id*="connections"] td,#floodfills td,#profilelist td,#jobstats td,#tunnels td{padding:3px;border-right:1px solid var(--border_soft)}
 #totaljobstats{margin-top:11px}
-#tunnelPeerCount td:nth-child(2),#tunnelPeerCount td:nth-child(2) a{line-height:1.1;font-size:90%}
+#tunnelPeerCount td:nth-child(3),#tunnelPeerCount td:nth-child(3) a{line-height:1.1;font-size:90%}
 #tunnels .cells:first-child{width:1%;max-width:48px;min-width:48px}
 #tunnels .cells:nth-child(2),#tunnels .cells:nth-child(3),.tunnels_participating td:nth-child(4){width:1%;min-width:72px}
 #tunnelPeerCount .cells.bar{min-width:60px}
@@ -2277,7 +2278,7 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #sb_localtunnels a{max-width:194px}
 #sb_logo{height:37px !important}
 #sb_logo img{margin-top:-2px;margin-left:-2px;width:240px;transform:none}
-#sb_memoryBar .percentBarText{padding:1px 0 2px}
+#sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:1px 0 2px}
 #shutdown.formaction,#restart.formaction,#systray.formaction,#runonstart.formaction,#dumpthreads.formaction,#browserstart.formaction,#updateplugins.formaction{margin-top:-15px}
 #sidebar{width:245px}
 #sidebar h3{padding:4px 0 3px}

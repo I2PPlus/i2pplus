@@ -22,7 +22,7 @@ import net.i2p.util.SimpleTimer2;
  * Queue out packets to be sent through the session.
  * Well, that's the theory at least... in practice we just
  * send them immediately with no blocking, since the
- * mode=bestEffort doesnt block in the SDK.
+ * mode=bestEffort doesn't block in the SDK.
  *<p>
  * MessageOutputStream -&gt; ConnectionDataReceiver -&gt; Connection -&gt; PacketQueue -&gt; I2PSession
  */
@@ -281,7 +281,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         Connection con = _messageStatusMap.get(id);
         if (con == null) {
             if (_log.shouldWarn())
-                _log.warn("Received status [" + status + "] for [MsgID " + msgId + "] on unknown connection");
+                _log.warn("Received status [" + status + "] for [MsgID " + msgId + "] on UNKNOWN connection");
             return;
         }
 
@@ -370,7 +370,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
             default:
                 if (_log.shouldWarn())
-                    _log.warn("Received unknown status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
+                    _log.warn("Received UNKNOWN status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 _messageStatusMap.remove(id);
                 break;
         }

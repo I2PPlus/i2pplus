@@ -260,6 +260,17 @@ class PeerTestManager {
                     _log.warn("Unable to get our IP", uhe);
                 return false;
             }
+        } else {
+            // set Alice IP/port, needed for receiveTestReply() checks for msg 7
+            RouterAddress ra = _transport.getCurrentExternalAddress(bob.isIPv6());
+            if (ra != null) {
+                byte[] ourIP = ra.getIP();
+                int ourPort = ra.getPort();
+                try {
+                    InetAddress addr = InetAddress.getByAddress(ourIP);
+                    test.setAlice(addr, ourPort, null);
+                } catch (UnknownHostException uhe) {}
+            }
         }
         _currentTest = test;
         _currentTestComplete = false;
@@ -593,8 +604,24 @@ class PeerTestManager {
 
                     if (_log.shouldDebug())
                         _log.debug("Receive test reply from Charlie: " + test);
-                    boolean portok = testPort == test.getAlicePort();
-                    boolean IPok = DataHelper.eq(ip, test.getAliceIP().getAddress());
+
+                    // fixups if we didn't know our IP/port at the start
+                    int origPort = test.getAlicePort();
+                    InetAddress origAddr = test.getAliceIP();
+                    boolean portok;
+                    if (origPort > 0) {
+                        portok = testPort == origPort;
+                    } else {
+                        portok = true;
+                        test.setAlice(test.getAliceIP(), testPort, null);
+                    }
+                    boolean IPok;
+                    if (origAddr != null) {
+                        IPok = DataHelper.eq(ip, origAddr.getAddress());
+                    } else {
+                        IPok = true;
+                        test.setAlice(addr, test.getAlicePort(), null);
+                    }
                     if (!portok || !IPok) {
                         if (_log.shouldWarn())
                             _log.warn("Charlie said we had a different IP/port: " +
@@ -1150,7 +1177,7 @@ class PeerTestManager {
                              byte[] addrBlockIP, int addrBlockPort) {
         if (data[0] != 2) {
             if (_log.shouldWarn())
-                _log.warn("Bad version " + (data[0] & 0xff) + " from " + from + ' ' + fromPeer);
+                _log.warn("Bad version " + (data[0] & 0xff) + from + ' ' + fromPeer);
             return;
         }
         long nonce = DataHelper.fromLong(data, 1, 4);
@@ -1158,7 +1185,7 @@ class PeerTestManager {
         int iplen = data[9] & 0xff;
         if (iplen != 0 && iplen != 6 && iplen != 18) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Bad IP length " + iplen);
+                _log.warn("Bad IP address length " + iplen);
             return;
         }
         boolean isIPv6 = iplen == 18;
@@ -1263,7 +1290,7 @@ class PeerTestManager {
                     }
                 }
                 if (_log.shouldDebug())
-                    _log.debug("Duplicate message " + msg + " from " + fromPeer + " on " + state);
+                    _log.debug("Duplicate message " + msg + fromPeer + " on " + state);
                 if (msg == 1)
                     state.setReceiveAliceTime(now);
                 else
@@ -1288,14 +1315,14 @@ class PeerTestManager {
         } else {
             if (state == null) {
                 if (_log.shouldWarn())
-                    _log.warn("No state found for message " + msg + " from " + fromPeer);
+                    _log.warn("No state found for message " + msg + fromPeer);
                 return;
             }
         }
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
             if (_log.shouldWarn())
-                _log.warn("Too skewed for message " + msg + " from " + fromPeer);
+                _log.warn("Too skewed for message " + msg + fromPeer);
             return;
         }
 
@@ -1447,7 +1474,7 @@ class PeerTestManager {
                         }
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Alice's RouterInfo not found " + h + " for peer test from " + fromPeer);
+                            _log.warn("Alice's RouterInfo [" + h.toBase64().substring(0,6) + "] not found for peer test " + fromPeer);
                         rcode = SSU2Util.TEST_REJECT_CHARLIE_UNKNOWN_ALICE;
                     }
                 }
@@ -2405,7 +2432,7 @@ class PeerTestManager {
             long remaining = state.getBeginTime() + MAX_CHARLIE_LIFETIME - now;
             if (remaining <= 0) {
                 if (_log.shouldDebug())
-                    _log.debug("Expired as charlie on " + state);
+                    _log.debug("Expired as Charlie on " + state);
                 _activeTests.remove(_nonce);
                 return;
             }
@@ -2417,7 +2444,7 @@ class PeerTestManager {
 
             // retransmit at 4/8/12 sec, no backoff
             if (_log.shouldDebug())
-                _log.debug("Retx msg 5 to alice on " + state);
+                _log.debug("Resending message #5 to Alice on " + state);
             long nonce = _nonce.longValue();
             long sendId = (nonce << 32) | nonce;
             long rcvId = ~sendId;

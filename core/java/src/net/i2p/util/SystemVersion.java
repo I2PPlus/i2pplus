@@ -4,9 +4,16 @@ package net.i2p.util;
  * public domain
  */
 
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+import java.text.DecimalFormat;
+
 import java.lang.reflect.Field;
 import java.util.TimeZone;
 import java.util.TreeSet;
+
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateStat;
 
 import net.i2p.I2PAppContext;
 
@@ -514,4 +521,66 @@ public abstract class SystemVersion {
             System.out.println(k + '=' + v);
         }
     }
+
+    /**
+     * Retrieve CPU Load of the JVM.
+     * @since 0.9.57+
+     */
+    public static int getCPULoad() {
+        DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
+        int cores = SystemVersion.getCores();
+        OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        double cpuLoadAvg = osmxb.getProcessCpuLoad() * 100;
+        int cpuLoad = (int) cpuLoadAvg;
+        int max = 100;
+        if (cpuLoad > max)
+            cpuLoad = max;
+        return cpuLoad;
+    }
+
+    /**
+     * Retrieve CPU Load Average of the JVM.
+     * @since 0.9.57+
+     */
+    public static int getCPULoadAvg() {
+        if (I2PAppContext.getGlobalContext().statManager() == null ||
+            I2PAppContext.getGlobalContext().statManager().getRate("router.cpuLoad") == null) {
+            return 0;
+        } else {
+            int max = 100;
+            Rate stat = I2PAppContext.getGlobalContext().statManager().getRate("router.cpuLoad").getRate(60*1000);
+            long loadAvg;
+            long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
+            if (count > 1) {
+                loadAvg = (long) (getCPULoad() + ((3 * stat.getCurrentTotalValue()) + stat.getLastTotalValue()) / count);
+            } else {
+                loadAvg = getCPULoad();
+            }
+            int load = Math.toIntExact(loadAvg);
+            if (load > max)
+                load = max;
+            return load;
+        }
+    }
+
+    /**
+     * Retrieve System Load as percentage (100% equals full system load)
+     * @since 0.9.57+
+     */
+    public static int getSystemLoad() {
+        if (I2PAppContext.getGlobalContext().statManager() == null) {
+            return 0;
+        } else {
+            DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
+            int cores = SystemVersion.getCores();
+            OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+            double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
+            int sysLoad = (int) systemLoadAvg;
+            if (sysLoad < 0)
+                return 0;
+            else
+                return sysLoad;
+        }
+    }
+
 }

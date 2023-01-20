@@ -1908,7 +1908,7 @@ public class NTCPConnection implements Closeable {
                (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
                            : ("Target: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
                (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
-               (isEstablished() ? "" : " (not established)") +
+               (isEstablished() ? "" : " -> Not established") +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
                " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
                " Last message received: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +

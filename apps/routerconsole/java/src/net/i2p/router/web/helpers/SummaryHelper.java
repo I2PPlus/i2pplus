@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -39,6 +40,11 @@ import net.i2p.util.SystemVersion;
 
 import net.i2p.router.web.ConfigUpdateHandler;
 
+import java.lang.management.ManagementFactory;
+//import java.lang.management.OperatingSystemMXBean;
+//import java.lang.management.ThreadMXBean;
+
+import com.sun.management.OperatingSystemMXBean;
 
 /**
  * Simple helper to query the appropriate router for data necessary to render
@@ -57,9 +63,12 @@ public class SummaryHelper extends HelperBase {
     boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
     String firstVersion = ctx.getProperty("router.firstVersion");
     String version = net.i2p.CoreVersion.VERSION;
+    private static final String PROP_ADVANCED = "routerconsole.advanced";
+    public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
 
     static final String DEFAULT_FULL_NEWUSER =
         "RouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -78,6 +87,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL =
         "RouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -95,6 +105,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL_OLDHOME_NEWUSER =
         "RouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -114,6 +125,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL_OLDHOME =
         "RouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -132,6 +144,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL_ADVANCED =
         "AdvancedRouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -151,6 +164,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_FULL_ADVANCED_OLDHOME =
         "AdvancedRouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -171,6 +185,7 @@ public class SummaryHelper extends HelperBase {
 
     static final String DEFAULT_MINIMAL =
         "ShortRouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -187,6 +202,7 @@ public class SummaryHelper extends HelperBase {
      /** @since 0.9.32 */
     static final String DEFAULT_MINIMAL_ADVANCED =
         "AdvancedRouterInfo" + S +
+        "CPUBar" + S +
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
@@ -469,6 +485,87 @@ public class SummaryHelper extends HelperBase {
     }
 
     /**
+     * Retrieve CPU Load as a percentage.
+     * @since 0.9.58+
+     */
+    public int getCPULoad() {
+        if (_context == null)
+            return 0;
+        else
+            return SystemVersion.getCPULoad();
+    }
+
+    /**
+     * Retrieve CPU Load Average as a percentage.
+     * @since 0.9.58+
+     */
+    public int getCPULoadAvg() {
+        if (_context == null)
+            return 0;
+        else
+            return SystemVersion.getCPULoadAvg();
+    }
+
+    /**
+     * Retrieve System Load Average as a percentage.
+     * @since 0.9.58+
+     */
+    public int getSystemLoad() {
+        if (_context == null)
+            return 0;
+        else
+            return SystemVersion.getSystemLoad();
+    }
+
+    /**
+     * Render JVM CPU Load Bar
+     * @since 0.9.58+
+     */
+    public String getCPUBar() {
+/*
+        Rate stat = _context.statManager().getRate("router.cpuLoad").getRate(60*1000);
+        long loadAvg;
+        long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
+        if (count > 1) {
+            loadAvg = (long) (getCPULoad() + ((3 * stat.getCurrentTotalValue()) + stat.getLastTotalValue()) / count);
+        } else {
+            loadAvg = getCPULoad();
+        }
+        int load = Math.toIntExact(loadAvg);
+*/
+        return "<div class=\"percentBarOuter volatile\" id=\"sb_CPUBar\"><div class=\"percentBarText\">CPU: " +
+               getCPULoadAvg() + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
+               "</div><div class=\"percentBarInner\" style=\"width:" + getCPULoadAvg() +
+               "%\"></div></div>";
+    }
+
+    /**
+     * Retrieve Tunnel build success as a percentage.
+     * @since 0.9.58+
+     */
+    public int getTunnelBuildSuccess() {
+        if (_context == null)
+            return 0;
+        Rate explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(10*60*1000);
+        Rate explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(10*60*1000);
+        Rate explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(10*60*1000);
+        Rate clientSuccess = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(10*60*1000);
+        Rate clientReject = _context.statManager().getRate("tunnel.buildClientReject").getRate(10*60*1000);
+        Rate clientExpire = _context.statManager().getRate("tunnel.buildClientExpire").getRate(10*60*1000);
+        int success = (int)explSuccess.getLastEventCount() + (int)clientSuccess.getLastEventCount();
+        int reject = (int)explReject.getLastEventCount() + (int)clientReject.getLastEventCount();
+        int expire = (int)explExpire.getLastEventCount() + (int)clientExpire.getLastEventCount();
+        int percentage;
+        if (success < 1)
+            success = 1;
+        percentage = (100 * success) / (success + reject + expire);
+        if (percentage == 100 || percentage == 0)
+            return 0;
+        else
+            return percentage;
+    }
+
+    /**
      * How many peers we are talking to now
      *
      */
@@ -688,6 +785,18 @@ public class SummaryHelper extends HelperBase {
     }
 
     /**
+     * Are both the webapp and TCG running?
+     *
+     * @since 0.9.58
+     */
+    public boolean isI2PTunnelRunning() {
+        if (!_context.portMapper().isRegistered(PortMapper.SVC_I2PTUNNEL))
+            return false;
+        ClientAppManager cmgr = _context.clientAppManager();
+        return cmgr != null && cmgr.getRegisteredApp("i2ptunnel") != null;
+    }
+
+    /**
      * Client destinations connected locally.
      *
      * @return html section summary
@@ -697,7 +806,7 @@ public class SummaryHelper extends HelperBase {
         List<Destination> clients = new ArrayList<Destination>(_context.clientManager().listClients());
 
         StringBuilder buf = new StringBuilder(512);
-        boolean link = _context.portMapper().isRegistered("i2ptunnel");
+        boolean link = isI2PTunnelRunning();
         buf.append("<h3 id=\"sb_localTunnelsHeading\"");
         if (!link)
             buf.append(" class=\"unregistered\"");
@@ -900,7 +1009,9 @@ public class SummaryHelper extends HelperBase {
     }
 
     public String getMaxParticipatingTunnels() {
-        int defaultMax = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ? 2*1000 : 8*1000;
+        int defaultMax = SystemVersion.isSlow() ? 2*1000 :
+                         SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
+                         SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
         if (_context.getProperty("router.maxParticipatingTunnels") != null)
             return _context.getProperty("router.maxParticipatingTunnels");
         else
@@ -932,10 +1043,22 @@ public class SummaryHelper extends HelperBase {
         if (rs == null)
             return "0";
         Rate lagRate = rs.getRate(60*1000);
-        if (lagRate.getAverageValue() < 1)
-            return DataHelper.formatDuration2((double)lagRate.getAverageValue());
-        else
-          return DataHelper.formatDuration2((long)lagRate.getAverageValue());
+        long maxLag = _context.jobQueue().getMaxLag();
+        if (!isAdvanced() || maxLag == (double)0) {
+            if (lagRate.getAverageValue() < 1)
+                return DataHelper.formatDuration2((double)lagRate.getAverageValue());
+            else
+                return DataHelper.formatDuration2((long)lagRate.getAverageValue());
+        } else {
+            if (lagRate.getAverageValue() < 1 && (double)maxLag < 1)
+                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + (double)maxLag + "&nbsp;µs";
+            else if (lagRate.getAverageValue() < 1)
+                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp;ms";
+            else if ((double)maxLag < 1)
+                return (long)lagRate.getAverageValue() + "&nbsp;ms" + THINSP + (double)maxLag + "&nbsp;µs";
+            else
+                return (long)lagRate.getAverageValue() + THINSP + maxLag + "&nbsp;ms";
+        }
     }
 
     /**
@@ -946,7 +1069,6 @@ public class SummaryHelper extends HelperBase {
     public String getMessageDelay() {
         if (_context == null)
             return "0";
-
         return DataHelper.formatDuration2(_context.throttle().getMessageDelay());
     }
 

@@ -8,18 +8,20 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
+
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
-import java.util.Random;
-import net.i2p.router.CommSystemFacade.Status;
 
 /**
  * Fire off search jobs for random keys from the explore pool, up to MAX_PER_RUN
@@ -78,6 +80,7 @@ class StartExplorersJob extends JobImpl {
     public void runJob() {
         boolean forceExplore = getContext().getBooleanProperty(PROP_FORCE_EXPLORE);
         boolean isFF = _facade.floodfillEnabled();
+        boolean isCpuHighLoad = SystemVersion.getCPULoad() > 80;
         if (!isFF || forceExplore) {
             if (!(getContext().jobQueue().getMaxLag() > MAX_LAG ||
                   getContext().throttle().getMessageDelay() > MAX_MSG_DELAY ||
@@ -140,11 +143,11 @@ class StartExplorersJob extends JobImpl {
             String exploreDelay = getContext().getProperty(PROP_EXPLORE_DELAY);
             long delay = getNextRunDelay();
             long laggedDelay = 3*60*1000;
-            if (exploreDelay != null) {
+            if (exploreDelay != null && !isCpuHighLoad) {
                 if (_log.shouldInfo())
                     _log.info("Next Peer Exploration run in " + Integer.valueOf(exploreDelay) + "s");
                 requeue(Integer.valueOf(exploreDelay) * 1000);
-            } else if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
+            } else if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 750 || isCpuHighLoad) {
                 if (_log.shouldInfo())
                     _log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s (router is under load)");
                 requeue(laggedDelay);

@@ -27,7 +27,7 @@ public class NetDbHelper extends FormHandler {
     private String _version;
     private String _country;
     private String _family, _caps, _ip, _sybil, _mtu, _ssucaps, _ipv6, _transport, _hostname;
-    private int _full, _port, _cost, _page, _mode;
+    private int _full, _port, _cost, _page, _mode, _highPort;
     private long _date;
     private int _limit = DEFAULT_LIMIT;
     private boolean _lease;
@@ -118,8 +118,16 @@ public class NetDbHelper extends FormHandler {
 
     /** @since 0.9.28 */
     public void setPort(String f) {
+        if (f == null)
+            return;
         try {
-            _port = Integer.parseInt(f);
+            int dash = f.indexOf('-');
+            if (dash > 0) {
+                _port = Integer.parseInt(f.substring(0, dash).trim());
+                _highPort = Integer.parseInt(f.substring(dash + 1).trim());
+            } else {
+                _port = Integer.parseInt(f.trim());
+            }
         } catch (NumberFormatException nfe) {}
     }
 
@@ -296,7 +304,7 @@ public class NetDbHelper extends FormHandler {
                 _ssucaps != null || _transport != null || _cost != 0 || _etype != null) {
                 renderer.renderRouterInfoHTML(_out, _limit, _page,
                                               _routerPrefix, _version, _country,
-                                              _family, _caps, _ip, _sybil, _port, _type, _etype,
+                                              _family, _caps, _ip, _sybil, _port, _highPort, _type, _etype,
                                               _mtu, _ipv6, _ssucaps, _transport, _cost);
             } else if (_lease) {
                 renderer.renderLeaseSetHTML(_out, _debug);
@@ -436,7 +444,7 @@ public class NetDbHelper extends FormHandler {
                    "<td><b>Router Family</b></td><td><input type=\"text\" name=\"fam\"></td></tr>\n" +
                    "<tr><td><b>IPv6 Prefix</b></td><td><input type=\"text\" name=\"ipv6\"></td>\n" +
                    "<td><b>MTU</b></td><td><input type=\"text\" name=\"mtu\"></td></tr>\n" +
-                   "<tr><td><b>Port Number</b></td><td><input type=\"text\" name=\"port\"></td>\n" +
+                   "<tr><td><b>Single port or range</b></td><td><input type=\"text\" name=\"port\"></td>\n" +
                    //"<td><b>Signature Type</b></td><td><input type=\"text\" name=\"type\"></td></tr>\n" +
                    "<td><b>Signature Type</b></td><td><select name=\"type\"><option value=\"\" selected=\"selected\"></option>");
         for (SigType type : EnumSet.allOf(SigType.class)) {

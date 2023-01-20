@@ -172,12 +172,28 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 Set<Hash> routerHashSet = getNearestRouters(lookupType);
                 sendClosest(searchKey, routerHashSet, fromKey, toTunnel);
             }
-        } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO &&
-                   lookupType != DatabaseLookupMessage.Type.LS) {
+        } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && lookupType != DatabaseLookupMessage.Type.LS) {
             RouterInfo info = (RouterInfo) dbe;
+            String cap = info.getCapabilities();
+            String bw = info.getBandwidthTier();
+            boolean isReachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+            boolean isFast = cap != null && isReachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"));
             if (searchKey.equals(_us)) {
                 sendData(searchKey, info, fromKey, toTunnel);
-            } else if (info.isCurrent(EXPIRE_DELAY)) {
+            } else if (info.isCurrent(EXPIRE_DELAY) && isFast) {
+                if (info.isHidden()) {
+                    if (_log.shouldDebug())
+                        _log.debug("Not answering a query for a hidden peer");
+                    Set<Hash> us = Collections.singleton(_us);
+                    sendClosest(searchKey, us, fromKey, toTunnel);
+                } else {
+                    // send that routerInfo to the _message.getFromHash peer
+                    if (_log.shouldDebug())
+                        _log.debug("We do have key [" + searchKey.toBase64().substring(0,6) +
+                                   "] locally as a router info; sending to [" + fromKey.toBase64().substring(0,6) + "]");
+                    sendData(searchKey, info, fromKey, toTunnel);
+                }
+            } else if (info.isCurrent(10*60*1000)) {
                 if (info.isHidden()) {
                     if (_log.shouldDebug())
                         _log.debug("Not answering a query for a hidden peer");

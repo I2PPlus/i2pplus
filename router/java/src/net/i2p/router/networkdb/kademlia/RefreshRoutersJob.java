@@ -17,6 +17,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 
@@ -64,6 +65,7 @@ class RefreshRoutersJob extends JobImpl {
         Random rand = new Random();
         long lag = getContext().jobQueue().getMaxLag();
         int netDbCount = getContext().netDb().getKnownRouters();
+        boolean isCpuHighLoad = SystemVersion.getCPULoad() > 80;
         if (_facade.isInitialized() && lag < 500 && getContext().commSystem().getStatus() != Status.DISCONNECTED && netDbCount < 5000) {
             if (_routers == null || _routers.isEmpty()) {
                 // make a list of all routers, floodfill first
@@ -84,7 +86,7 @@ class RefreshRoutersJob extends JobImpl {
                     RESTART_DELAY_MS *= 12;
                 } else if (netDbCount > 3000) {
                     RESTART_DELAY_MS *= rand.nextInt(12) + 1;
-                } else if (netDbCount > 1000) {
+                } else if (netDbCount > 1000 || isCpuHighLoad) {
                     RESTART_DELAY_MS *= rand.nextInt(3) + 1;
                     requeue(RESTART_DELAY_MS);
                 } else {
@@ -177,7 +179,7 @@ class RefreshRoutersJob extends JobImpl {
             if (netDbCount > 8000) {
                 _log.info("Over 8000 known routers, suspending Refresh Routers job...");
             } else if (lag > 500) {
-                _log.info("Job lag over 500ms, suspending Refresh Routers job");
+                _log.info("Job lag over 500ms, suspending Refresh Routers job...");
             } else if (getContext().commSystem().getStatus() == Status.DISCONNECTED) {
                 _log.info("Network disconnected, suspending Refresh Routers job...");
             }

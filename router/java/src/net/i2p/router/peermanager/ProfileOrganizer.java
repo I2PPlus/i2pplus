@@ -82,10 +82,10 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
 //    public static final int DEFAULT_MINIMUM_FAST_PEERS = 8;
-    public static final int DEFAULT_MINIMUM_FAST_PEERS = 150;
+    public static final int DEFAULT_MINIMUM_FAST_PEERS = 200;
     /** this is misnamed, it is really the max minimum number. */
 //    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 40;
-    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 250;
+    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 300;
 //    private static final int ABSOLUTE_MAX_FAST_PEERS = 75;
     private static final int ABSOLUTE_MAX_FAST_PEERS = 350;
 
@@ -241,9 +241,9 @@ public class ProfileOrganizer {
             return null;
         }
 
-        if (VersionComparator.comp(version, "0.9.56") < 0) {
+        if (VersionComparator.comp(version, "0.9.57") < 0) {
             if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> older than 0.9.56");
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> older than 0.9.57");
            return null;
         }
 
