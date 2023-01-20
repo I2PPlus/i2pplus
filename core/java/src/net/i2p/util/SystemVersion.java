@@ -583,4 +583,30 @@ public abstract class SystemVersion {
         }
     }
 
+    /**
+     * Retrieve Tunnel build success as a percentage.
+     * @since 0.9.58+
+     */
+    public static int getTunnelBuildSuccess() {
+        if (I2PAppContext.getGlobalContext().statManager() == null)
+            return 0;
+        Rate explSuccess = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildExploratorySuccess").getRate(10*60*1000);
+        Rate explReject = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildExploratoryReject").getRate(10*60*1000);
+        Rate explExpire = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildExploratoryExpire").getRate(10*60*1000);
+        Rate clientSuccess = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildClientSuccess").getRate(10*60*1000);
+        Rate clientReject = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildClientReject").getRate(10*60*1000);
+        Rate clientExpire = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildClientExpire").getRate(10*60*1000);
+        int success = (int)explSuccess.getLastEventCount() + (int)clientSuccess.getLastEventCount();
+        int reject = (int)explReject.getLastEventCount() + (int)clientReject.getLastEventCount();
+        int expire = (int)explExpire.getLastEventCount() + (int)clientExpire.getLastEventCount();
+        int percentage;
+        if (success < 1)
+            success = 1;
+        percentage = (100 * success) / (success + reject + expire);
+        if (percentage == 100 || percentage == 0)
+            return 0;
+        else
+            return percentage;
+    }
+
 }
