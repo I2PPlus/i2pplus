@@ -486,7 +486,7 @@ public class SummaryHelper extends HelperBase {
 
     /**
      * Retrieve CPU Load as a percentage.
-     * @since 0.9.57+
+     * @since 0.9.58+
      */
     public int getCPULoad() {
         if (_context == null)
@@ -497,7 +497,7 @@ public class SummaryHelper extends HelperBase {
 
     /**
      * Retrieve CPU Load Average as a percentage.
-     * @since 0.9.57+
+     * @since 0.9.58+
      */
     public int getCPULoadAvg() {
         if (_context == null)
@@ -508,7 +508,7 @@ public class SummaryHelper extends HelperBase {
 
     /**
      * Retrieve System Load Average as a percentage.
-     * @since 0.9.57+
+     * @since 0.9.58+
      */
     public int getSystemLoad() {
         if (_context == null)
@@ -517,7 +517,10 @@ public class SummaryHelper extends HelperBase {
             return SystemVersion.getSystemLoad();
     }
 
-    /** @since 0.9.57+ */
+    /**
+     * Render JVM CPU Load Bar
+     * @since 0.9.58+
+     */
     public String getCPUBar() {
 /*
         Rate stat = _context.statManager().getRate("router.cpuLoad").getRate(60*1000);
@@ -534,6 +537,32 @@ public class SummaryHelper extends HelperBase {
                getCPULoadAvg() + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
                "</div><div class=\"percentBarInner\" style=\"width:" + getCPULoadAvg() +
                "%\"></div></div>";
+    }
+
+    /**
+     * Retrieve Tunnel build success as a percentage.
+     * @since 0.9.58+
+     */
+    public int getTunnelBuildSuccess() {
+        if (_context == null)
+            return 0;
+        Rate explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(10*60*1000);
+        Rate explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(10*60*1000);
+        Rate explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(10*60*1000);
+        Rate clientSuccess = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(10*60*1000);
+        Rate clientReject = _context.statManager().getRate("tunnel.buildClientReject").getRate(10*60*1000);
+        Rate clientExpire = _context.statManager().getRate("tunnel.buildClientExpire").getRate(10*60*1000);
+        int success = (int)explSuccess.getLastEventCount() + (int)clientSuccess.getLastEventCount();
+        int reject = (int)explReject.getLastEventCount() + (int)clientReject.getLastEventCount();
+        int expire = (int)explExpire.getLastEventCount() + (int)clientExpire.getLastEventCount();
+        int percentage;
+        if (success < 1)
+            success = 1;
+        percentage = (100 * success) / (success + reject + expire);
+        if (percentage == 100 || percentage == 0)
+            return 0;
+        else
+            return percentage;
     }
 
     /**
@@ -1015,14 +1044,18 @@ public class SummaryHelper extends HelperBase {
             return "0";
         Rate lagRate = rs.getRate(60*1000);
         long maxLag = _context.jobQueue().getMaxLag();
-        if (!isAdvanced() || maxLag == 0) {
+        if (!isAdvanced() || maxLag == (double)0) {
             if (lagRate.getAverageValue() < 1)
                 return DataHelper.formatDuration2((double)lagRate.getAverageValue());
             else
                 return DataHelper.formatDuration2((long)lagRate.getAverageValue());
         } else {
-            if (lagRate.getAverageValue() < 1)
+            if (lagRate.getAverageValue() < 1 && (double)maxLag < 1)
+                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + (double)maxLag + "&nbsp;µs";
+            else if (lagRate.getAverageValue() < 1)
                 return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp;ms";
+            else if ((double)maxLag < 1)
+                return (long)lagRate.getAverageValue() + "&nbsp;ms" + THINSP + (double)maxLag + "&nbsp;µs";
             else
                 return (long)lagRate.getAverageValue() + THINSP + maxLag + "&nbsp;ms";
         }

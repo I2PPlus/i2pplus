@@ -1215,6 +1215,16 @@ class SummaryBarRenderer {
                .append("</b></td><td class=\"digits\"><span>")
                .append(_helper.getConcurrency())
                .append("</span></td></tr>\n");
+            if (_helper.getTunnelBuildSuccess() > 0) {
+                buf.append("<tr title=\"")
+                   .append(_t("Tunnel Build Success (averaged over a minute)"))
+                   .append("\">" +
+                           "<td><b>")
+                   .append(_t("Build Success"))
+                  .append("</b></td><td class=\"digits\"><span>")
+                  .append(_helper.getTunnelBuildSuccess())
+                  .append("%</span></td></tr>\n");
+            }
 
             if ((maxTunnels == null || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
                  !ri.getBandwidthTier().equals("K") && !_helper.getShareRatio().toString().equals("0")) {
