@@ -31,7 +31,7 @@ class ExpireLeasesJob extends JobImpl {
     private final KademliaNetworkDatabaseFacade _facade;
 
 //    private final static long RERUN_DELAY_MS = 1*60*1000;
-    private final static long RERUN_DELAY_MS = 50*1000;
+    private final static long RERUN_DELAY_MS = 30*1000;
 
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
