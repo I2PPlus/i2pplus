@@ -23,9 +23,9 @@ import net.i2p.util.Log;
 class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
 //    public final static long REPUBLISH_LEASESET_TIMEOUT = 60*1000;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 50*1000;
+    public final static long REPUBLISH_LEASESET_TIMEOUT = 3*60*1000;
 //    private final static int RETRY_DELAY = 20*1000;
-    private final static int RETRY_DELAY = 15*1000;
+    private final static int RETRY_DELAY = 18*1000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     /** this is actually last attempted publish */
@@ -80,7 +80,7 @@ class RepublishLeaseSetJob extends JobImpl {
         if (_log.shouldWarn())
             _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,6) + "]");
         getContext().jobQueue().removeJob(this);
-        requeue(RETRY_DELAY + getContext().random().nextInt(RETRY_DELAY));
+        requeue((RETRY_DELAY + getContext().random().nextInt(RETRY_DELAY)) / 6 * 5);
     }
 
     /**
