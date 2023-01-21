@@ -107,7 +107,7 @@ class PeerTestJob extends JobImpl {
         int cores = SystemVersion.getCores();
         long memory = SystemVersion.getMaxMemory();
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
-        if (SystemVersion.getCPULoad() > 80)
+        if (SystemVersion.getCPULoad() > 90 || SystemVersion.getCPULoadAvg() > 80)
             testConcurrent = 1;
         return testConcurrent;
     }
@@ -142,15 +142,19 @@ class PeerTestJob extends JobImpl {
         for (RouterInfo peer : peers) {
             testPeer(peer);
         }
-        if (lag > 300 || SystemVersion.getCPULoad() > 80) {
+        if (lag > 300 || SystemVersion.getCPULoad() > 90 || SystemVersion.getCPULoadAvg() > 80) {
             requeue(getPeerTestDelay() * 2);
             if (_log.shouldWarn())
-                _log.info("High job lag detected (" + lag + "ms) - increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
+            if (lag > 300) {
+                _log.info("High Job lag (" + lag + "ms) -> Increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
+            } else {
+                _log.info("High CPU load -> Increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
+            }
         } else {
             requeue(getPeerTestDelay());
         }
         if (_log.shouldInfo())
-            _log.info("Next test run in " + getPeerTestDelay() + "ms");
+            _log.info("Next Peer Test run in " + getPeerTestDelay() + "ms");
     }
 
     /**
