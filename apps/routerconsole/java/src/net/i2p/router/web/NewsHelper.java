@@ -66,9 +66,12 @@ public class NewsHelper extends ContentHelper {
      */
     public static boolean isUpdateAvailable() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
+/*
         if (mgr == null) return false;
         return mgr.getUpdateAvailable(ROUTER_SIGNED) != null ||
                mgr.getUpdateAvailable(ROUTER_SIGNED_SU3) != null;
+*/
+        return false;
     }
 
     /**
@@ -90,12 +93,15 @@ public class NewsHelper extends ContentHelper {
      *  @since 0.9.4 moved from NewsFetcher
      */
     public static String updateVersion() {
+/*
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
         if (mgr == null) return null;
         String rv = mgr.getUpdateAvailable(ROUTER_SIGNED_SU3);
         if (rv != null)
             return rv;
         return mgr.getUpdateAvailable(ROUTER_SIGNED);
+*/
+        return null;
     }
 
     /**

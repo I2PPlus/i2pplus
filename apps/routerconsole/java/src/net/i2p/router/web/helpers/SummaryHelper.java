@@ -1221,6 +1221,7 @@ public class SummaryHelper extends HelperBase {
         String constraint = avail ? NewsHelper.updateConstraint() : null;
         String unsignedConstraint = unsignedAvail ? NewsHelper.unsignedUpdateConstraint() : null;
         String devSU3Constraint = devSU3Avail ? NewsHelper.devSU3UpdateConstraint() : null;
+/*
         if (avail && constraint != null &&
             !NewsHelper.isUpdateInProgress() &&
             !_context.router().gracefulShutdownInProgress()) {
@@ -1233,6 +1234,7 @@ public class SummaryHelper extends HelperBase {
             buf.append(constraint).append("</b></h4>");
             avail = false;
         }
+*/
         if (unsignedAvail && unsignedConstraint != null &&
             !NewsHelper.isUpdateInProgress() &&
             !_context.router().gracefulShutdownInProgress()) {
@@ -1271,6 +1273,7 @@ public class SummaryHelper extends HelperBase {
                 String uri = getRequestURI();
                 buf.append("<form id=\"sb_updateform\" action=\"").append(uri).append("\" method=\"POST\" class=\"volatile\" target=\"processSidebarForm\">\n")
                    .append("<input type=\"hidden\" name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
+/*
                 if (avail) {
                     buf.append("<span id=\"updateAvailable\" class=\"volatile\">").append(_t("Release update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getUpdateVersion())
@@ -1280,6 +1283,7 @@ public class SummaryHelper extends HelperBase {
                        .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
+*/
                 if (devSU3Avail) {
                     buf.append("<span id=\"updateAvailable\" class=\"volatile\">").append(_t("Signed development update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getDevSU3UpdateVersion())
@@ -1291,6 +1295,7 @@ public class SummaryHelper extends HelperBase {
                        .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
+
                 if (unsignedAvail) {
                     buf.append("<span id=\"updateAvailable\" class=\"volatile\">");
                     if (source.contains("skank"))
