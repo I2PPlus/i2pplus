@@ -3,6 +3,7 @@
 /* License: AGPL3 or later */
 
 import {initFilterBar, checkFilterBar} from "/i2psnark/.resources/js/torrentDisplay.js";
+//import {initFilterBar, checkFilterBar, refreshFilters} from "/themes/js/torrentDisplay.js";
 
 function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");
@@ -24,6 +25,7 @@ function refreshTorrents() {
   var remaining = document.getElementById("sortRemaining");
   var savedQuery = window.localStorage.getItem("snarkURL");
   var snarkInfo = document.getElementById("snarkInfo");
+  var storage = localStorage.getItem("filter");
   var tfoot = document.getElementById("snarkFoot");
   var thead = document.getElementById("snarkHead");
   var togglefiles = document.getElementById("toggle_files");
@@ -70,7 +72,10 @@ function refreshTorrents() {
     debug.addEventListener("mouseover", setLinks, false);
   }
 
-  if (torrents || noload || down) {
+  if (filterbar && storage) {
+    //initFilterBar();
+    refreshFilters();
+  } else if (torrents || noload || down) {
     xhrsnark.open("GET", url);
     xhrsnark.responseType = "document";
     xhrsnark.onreadystatechange = function() {
@@ -79,12 +84,6 @@ function refreshTorrents() {
       if (xhrsnark.status === 200) {
         if (torrents) {
           var torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
-          if (filterbar) {
-            var filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
-            if (!filterbar && filterbarResponse !== null) {
-              refreshAll();
-            }
-          }
         }
 
         if (down || noload) {
@@ -180,9 +179,6 @@ function refreshTorrents() {
               thead.innerHTML = theadResponse.innerHTML;
             }
             setLinks();
-            if (filterbar) {
-              initFilterBar();
-            }
           }
         }
 
@@ -198,7 +194,7 @@ function refreshTorrents() {
               if (filtercount) {
                 filtercount.remove();
               }
-              initFilterBar();
+              //initFilterBar();
             }
           } else if (files) {
             var dirlistResponse = xhrsnark.responseXML.getElementById("dirlist");
@@ -215,8 +211,7 @@ function refreshTorrents() {
         function clearQuery() {
           window.localStorage.removeItem("queryString");
         }
-
-      } else {
+       } else {
 
         function noAjax() {
           var failMessage = "<div class=\"routerdown\" id=\"down\"><b><span>Router is down<\/span><\/b><\/div>";

@@ -4,18 +4,11 @@
 
 var bar = document.getElementById("torrentDisplay");
 var count;
+var filterbar = document.getElementById("torrentDisplay");
 var filtered = document.querySelectorAll(".filtered");
 var pagenav = document.getElementById("pagenavtop");
 var query = window.location.search;
 var storage = localStorage.getItem("filter");
-if (filtered !== null) {
-  count = filtered.length;
-  if (count < 2) {
-    count = "";
-  }
-} else {
-  count = "";
-}
 
 function initFilterBar() {
 
@@ -43,6 +36,9 @@ function initFilterBar() {
   var stopped = document.querySelectorAll(".stopped");
   var storage = window.localStorage.getItem("filter");
   var tfoot = document.getElementById("snarkFoot");
+  var badge = document.getElementById("filtercount");
+  var badges = document.querySelectorAll("#filtercount.badge");
+  var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{display:none}#torrents tfoot tr:first-child th{border-top:var(--border_filtered)!important}#snarkFoot tr{display:table-row}";
 
   if (!storage) {
     btnAll.checked = true;
@@ -70,34 +66,27 @@ function initFilterBar() {
         pagenav.style.display = "none";
       }
     }
-  }
-
-  function countFiltered() {
-    var dupe = document.querySelector("#filtercount+#filtercount");
-    if (dupe) {
-      dupe.remove();
+    if (badge) {
+      badges.forEach((element) => {
+        element.remove();
+      });
     }
-    setTimeout(displayBadge, 3000);
   }
 
-  function displayBadge() {
-    var activeFilter = document.querySelector("#torrentDisplay input:checked + label");
-    var filtercount = document.querySelector("#torrentDisplay input + label span");
+  function showBadge() {
     var filtered = document.querySelectorAll(".filtered");
-    var results = document.querySelectorAll(".filtered");
-    if (filtercount) {
-      if ((!storage || storage !== "all")) {
-        setTimeout(() => {
-          count = results.length;
-          filtercount.hidden = false;
-          if (count > 0) {
-            filtercount.innerHTML = count;
-          }
-        }, 1000);
-      }
-    } else {
-      activeFilter.innerHTML += "<span id=filtercount hidden></span>";
+    var activeFilter = document.querySelector("#torrentDisplay input:checked + .filterbutton");
+    var count = filtered.length;
+    activeFilter.innerHTML += "<span id=filtercount class=badge></span>";
+    if (count > 1) {
+      var badge = document.getElementById("filtercount");
+      badge.innerHTML = count;
     }
+  }
+
+  function injectCSS() {
+    var stylesheet = "<style type=text/css id=cssfilter>" + rules + "</style>";
+    document.head.innerHTML += stylesheet;
   }
 
   function showAll() {
@@ -111,13 +100,6 @@ function initFilterBar() {
     btnAll.style.pointerEvents = "none";
   }
 
-  var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{display:none}#torrents tfoot tr:first-child th{border-top:var(--border_filtered)!important}#snarkFoot tr{display:table-row}";
-
-  function injectCSS() {
-    var stylesheet = "<style type=text/css id=cssfilter>" + rules + "</style>";
-    document.head.innerHTML += stylesheet;
-  }
-
   function showActive() {
     clean();
     var state = ".active{display:table-row}";
@@ -128,6 +110,7 @@ function initFilterBar() {
     active.forEach((element) => {
       element.classList.add("filtered");
     });
+    showBadge();
   }
 
   function showInactive() {
@@ -140,6 +123,7 @@ function initFilterBar() {
     inactive.forEach((element) => {
       element.classList.add("filtered");
     });
+    showBadge();
   }
 
   function showDownloading() {
@@ -152,6 +136,7 @@ function initFilterBar() {
     downloading.forEach((element) => {
       element.classList.add("filtered");
     });
+    showBadge();
   }
 
   function showSeeding() {
@@ -164,6 +149,7 @@ function initFilterBar() {
     seeding.forEach((element) => {
       element.classList.add("filtered");
     });
+    showBadge();
   }
 
   function showComplete() {
@@ -176,6 +162,7 @@ function initFilterBar() {
     complete.forEach((element) => {
       element.classList.add("filtered");
     });
+    showBadge();
   }
 
   function showIncomplete() {
@@ -188,6 +175,7 @@ function initFilterBar() {
     incomplete.forEach((element) => {
       element.classList.add("filtered");
     });
+    showBadge();
   }
 
   function showStopped() {
@@ -200,17 +188,19 @@ function initFilterBar() {
     stopped.forEach((element) => {
       element.classList.add("filtered");
     });
+    var count = filtered.length;
+    showBadge();
   }
 
   if (bar) {
-     btnAll.addEventListener("click", () => {showAll();doRefresh();});
-     btnActive.addEventListener("click", () => {showActive();doRefresh();countFiltered();});
-     btnInactive.addEventListener("click", () => {showInactive();doRefresh();countFiltered();});
-     btnDownloading.addEventListener("click", () => {showDownloading();doRefresh();countFiltered();});
-     btnSeeding.addEventListener("click", () => {showSeeding();doRefresh();countFiltered();});
-     btnComplete.addEventListener("click", () => {showComplete();doRefresh();countFiltered();});
-     btnIncomplete.addEventListener("click", () => {showIncomplete();doRefresh();countFiltered();});
-     btnStopped.addEventListener("click", () => {showStopped();doRefresh();countFiltered();});
+     btnAll.addEventListener("click", () => {refreshFilters();showAll();});
+     btnActive.addEventListener("click", () => {refreshFilters();showActive();});
+     btnInactive.addEventListener("click", () => {refreshFilters();showInactive();});
+     btnDownloading.addEventListener("click", () => {refreshFilters();showDownloading();});
+     btnSeeding.addEventListener("click", () => {refreshFilters();showSeeding();});
+     btnComplete.addEventListener("click", () => {refreshFilters();showComplete();});
+     btnIncomplete.addEventListener("click", () => {refreshFilters();showIncomplete();});
+     btnStopped.addEventListener("click", () => {refreshFilters();showStopped();});
      switch (window.localStorage.getItem("filter")) {
        case "all":
          btnAll.checked = true;
@@ -248,7 +238,6 @@ function initFilterBar() {
          btnAll.checked = true;
          showAll();
      }
-     countFiltered();
   }
 }
 
@@ -290,14 +279,10 @@ function checkPagenav() {
   }
 }
 
-function doRefresh() {
+function refreshFilters() {
   checkPagenav();
   var headers = new Headers();
   var pagesize = headers.get('X-Snark-Pagesize');
-  var results = document.getElementById("filterResults");
-  if (results) {
-    setTimeout(() => {results.remove();}, 3000);
-  }
   var url = ".ajax/xhr1.html";
   if (!storage && query && pagesize !== null) {
     url = query + "&ps=" + pagesize;
@@ -309,27 +294,36 @@ function doRefresh() {
     url += query + "&ps=9999";
   }
 
-  var xhrsnarkfilter = new XMLHttpRequest();
-  xhrsnarkfilter.responseType = "document";
-  xhrsnarkfilter.open('GET', url, true);
-  xhrsnarkfilter.onreadystatechange = function() {
-    if (xhrsnarkfilter.readyState === 4) {
-      if (xhrsnarkfilter.status === 200) {
+  var xhrfilter = new XMLHttpRequest();
+  xhrfilter.responseType = "document";
+  xhrfilter.open('GET', url, true);
+  xhrfilter.onreadystatechange = function() {
+    if (xhrfilter.readyState === 4) {
+      if (xhrfilter.status === 200) {
         var torrents = document.getElementById("torrents");
-        var torrentsResponse = xhrsnarkfilter.responseXML.getElementById("torrents");
-        torrents.outerHTML = torrentsResponse.outerHTML;
+        var torrentsResponse = xhrfilter.responseXML.getElementById("torrents");
+        if (torrentsResponse !== null && torrents.innerHTML !== torrentsResponse.innerHTML) {
+          torrents.outerHTML = torrentsResponse.outerHTML;
+        }
         if (pagenav && (!storage || storage == "all")) {
-            var pagenavResponse = xhrsnarkfilter.responseXML.getElementById("pagenavtop");
+            var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
             pagenav.outerHTML = pagenavResponse.outerHTML;
             checkPagenav();
+        }
+        if (filterbar) {
+          initFilterBar();
+          var filterbarResponse = xhrfilter.responseXML.getElementById("torrentDisplay");
+          if (!filterbar && filterbarResponse !== null) {
+            filterbar.outerHTML = filterbarReponse.outerHTML;
+          }
         }
       }
     }
   }
-  xhrsnarkfilter.send();
+  xhrfilter.send();
 }
 
-checkFilterBar();
-doRefresh();
+initFilterBar();
+refreshFilters();
 
-export {initFilterBar, checkFilterBar, doRefresh};
+export {initFilterBar, checkFilterBar, refreshFilters};
