@@ -744,7 +744,7 @@ class BuildHandler implements Runnable {
         if (isInGW && isOutEnd) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
             if (_log.shouldWarn())
-                _log.warn("Dropping hostile tunnel request -> IBGW+OBEP " + req;
+                _log.warn("Dropping hostile tunnel request -> IBGW+OBEP " + req);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (IBGW+OBEP)", null, null, _context.clock().now() + bantime);
@@ -758,7 +758,7 @@ class BuildHandler implements Runnable {
             nextId <= 0 || nextId > TunnelId.MAX_ID_VALUE) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
             if (_log.shouldWarn())
-                _log.warn("Dropping hostile tunnel request -> BAD Tunnel ID " + req;
+                _log.warn("Dropping hostile tunnel request -> BAD Tunnel ID " + req);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (BAD Tunnel ID)", null, null, _context.clock().now() + bantime);
@@ -775,7 +775,7 @@ class BuildHandler implements Runnable {
             // No way to recognize if we are every other hop, but see below
             // old i2pd
             if (_log.shouldWarn())
-                _log.warn("Dropping hostile tunnel request -> We are the next hop " + req;
+                _log.warn("Dropping hostile tunnel request -> We are the next hop " + req);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (double hop)", null, null, _context.clock().now() + bantime);
@@ -791,7 +791,7 @@ class BuildHandler implements Runnable {
             if (from == null || _context.routerHash().equals(from)) {
                 _context.statManager().addRateData("tunnel.rejectHostile", 1);
                 if (_log.shouldWarn())
-                    _log.warn("Dropping hostile tunnel request -> We are the previous hop " + req;
+                    _log.warn("Dropping hostile tunnel request -> We are the previous hop " + req);
                 if (from != null) {
                     _context.commSystem().mayDisconnect(from);
                     _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (previous hop)", null, null, _context.clock().now() + bantime);
@@ -840,7 +840,7 @@ class BuildHandler implements Runnable {
         if (timeDiff > maxAge) {
             _context.statManager().addRateData("tunnel.rejectTooOld", 1);
             if (_log.shouldWarn())
-                _log.warn("Dropping hostile tunnel request -> Too old... replay attack? " + DataHelper.formatDuration(timeDiff) + " " + req;
+                _log.warn("Dropping hostile tunnel request -> Too old... replay attack? " + DataHelper.formatDuration(timeDiff) + " " + req);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (possible replay attack)", null, null, _context.clock().now() + bantime);
@@ -852,7 +852,7 @@ class BuildHandler implements Runnable {
         if (timeDiff < 0 - MAX_REQUEST_FUTURE) {
             _context.statManager().addRateData("tunnel.rejectFuture", 1);
             if (_log.shouldWarn())
-                _log.warn("Dropping hostile tunnel request -> Too far in future " + DataHelper.formatDuration(0 - timeDiff) + " " + req;
+                _log.warn("Dropping hostile tunnel request -> Too far in future " + DataHelper.formatDuration(0 - timeDiff) + " " + req);
             if (from != null)
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (too far in future)", null, null, _context.clock().now() + bantime);
@@ -1029,7 +1029,7 @@ class BuildHandler implements Runnable {
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
                 _context.statManager().addRateData("tunnel.rejectDupID", 1);
                 if (_log.shouldWarn())
-                    _log.warn("Duplicate TunnelID failure " + req;
+                    _log.warn("Duplicate TunnelID failure " + req);
             }
         }
 
