@@ -1,7 +1,21 @@
-// setup torrent display buttons so we can show/hide snarks based on status
+/* torrentDisplay.js by dr|3d */
+/* Setup torrent display buttons so we can show/hide snarks based on status */
+/* License: AGPL3 or later */
 
 var bar = document.getElementById("torrentDisplay");
+var count;
 var filtered = document.querySelectorAll(".filtered");
+var pagenav = document.getElementById("pagenavtop");
+var query = window.location.search;
+var storage = localStorage.getItem("filter");
+if (filtered !== null) {
+  count = filtered.length;
+  if (count < 2) {
+    count = "";
+  }
+} else {
+  count = "";
+}
 
 function initFilterBar() {
 
@@ -22,19 +36,26 @@ function initFilterBar() {
   var downloading = document.querySelectorAll(".downloading");
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
   var incomplete = document.querySelectorAll(".incomplete");
+  var filterResults = document.getElementById("filterResults");
+  var pagenav = document.getElementById("pagenavtop");
   var peerinfo = document.querySelectorAll(".peerinfo");
   var seeding = document.querySelectorAll(".seeding");
   var stopped = document.querySelectorAll(".stopped");
+  var storage = window.localStorage.getItem("filter");
   var tfoot = document.getElementById("snarkFoot");
+
+  if (!storage) {
+    btnAll.checked = true;
+  }
 
   if (tfoot !== null) {
     var tfootInner = tfoot.getElementsByClassName("tr")[0];
   }
 
   function clean() {
-    var filter = document.getElementById("filter");
-    if (filter) {
-        filter.remove();
+    var cssfilter = document.getElementById("cssfilter");
+    if (cssfilter) {
+      cssfilter.remove();
     }
     allOdd.forEach((element) => {
       element.classList.remove("filtered");
@@ -42,188 +63,154 @@ function initFilterBar() {
     allEven.forEach((element) => {
       element.classList.remove("filtered");
     });
+    if (pagenav) {
+      if (storage && storage != "all") {
+        pagenav.style.display = "none";
+      } else {
+        pagenav.style.display = "none";
+      }
+    }
   }
 
   function countFiltered() {
-    filtered = document.querySelectorAll(".filtered");
-    showResults();
+    var dupe = document.querySelector("#filtercount+#filtercount");
+    if (dupe) {
+      dupe.remove();
+    }
+    setTimeout(displayBadge, 3000);
   }
 
-  function showResults() {
-    var tbody = document.getElementById("snarkTbody");
-    filtered = document.querySelectorAll(".filtered");
-    var results = document.querySelectorAll(".results");
-    cleanResults();
-    var row = tbody.insertRow(0);
-    row.classList.add("results");
-    row.id = "filterResults";
-    var cell = row.insertCell(0);
-    cell.colSpan = 12;
-    var on = "";
-    var peers = peerinfo.length;
-    if (btnActive.checked) {
-      on = "active";
-    } else if (btnInactive.checked) {
-      on = "inactive";
-    } else if (btnDownloading.checked) {
-      on = "downloading";
-    } else if (btnSeeding.checked) {
-      on = "seeding";
-    } else if (btnComplete.checked) {
-      on = "completed";
-    } else if (btnIncomplete.checked) {
-      on = "incomplete";
-    } else if (btnStopped.checked) {
-      on = "stopped";
-    }
-    if (!btnAll.checked) {
-        if (filtered.length === 1) {
-          cell.innerHTML = "Displaying " + (filtered.length) + " " + on + " torrent";
-        } else {
-          cell.innerHTML = "Displaying " + (filtered.length) + " " + on + " torrents";
-        }
-    } else {
-      var filterResults = document.getElementById("filterResults");
-      if (filterResults) {
-        cleanResults();
+  function displayBadge() {
+    var activeFilter = document.querySelector("#torrentDisplay input:checked + label");
+    var filtercount = document.querySelector("#torrentDisplay input + label span");
+    var filtered = document.querySelectorAll(".filtered");
+    var results = document.querySelectorAll(".filtered");
+    if (filtercount) {
+      if ((!storage || storage !== "all")) {
+        setTimeout(() => {
+          count = results.length;
+          filtercount.hidden = false;
+          if (count > 0) {
+            filtercount.innerHTML = count;
+          }
+        }, 1000);
       }
-      filterResults.style.display = "none";
-    }
-  }
-
-  function cleanResults() {
-    var results = document.querySelectorAll(".results");
-    var resultsSize = results.length;
-    if (resultsSize > 0) {
-      results.forEach((elem) => {
-        if (tfoot !== null && elem !== tfootInner) {
-          elem.remove();
-        }
-      });
+    } else {
+      activeFilter.innerHTML += "<span id=filtercount hidden></span>";
     }
   }
 
   function showAll() {
     clean();
+    checkPagenav();
+    pagenav.removeAttribute("hidden");
+    pagenav.style.display = "";
+    var query = window.location.search;
+    window.localStorage.removeItem("filter");
     btnAll.checked = true;
     btnAll.style.pointerEvents = "none";
-    window.localStorage.setItem("filter", btnAll.id);
+  }
+
+  var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{display:none}#torrents tfoot tr:first-child th{border-top:var(--border_filtered)!important}#snarkFoot tr{display:table-row}";
+
+  function injectCSS() {
+    var stylesheet = "<style type=text/css id=cssfilter>" + rules + "</style>";
+    document.head.innerHTML += stylesheet;
   }
 
   function showActive() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/active.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".active{display:table-row}";
+    rules += state;
+    injectCSS();
     btnActive.checked = true;
     window.localStorage.setItem("filter", btnActive.id);
     active.forEach((element) => {
       element.classList.add("filtered");
     });
-    countFiltered();
   }
 
   function showInactive() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/inactive.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".inactive{display:table-row}";
+    rules += state;
+    injectCSS();
     btnInactive.checked = true;
     window.localStorage.setItem("filter", btnInactive.id);
     inactive.forEach((element) => {
       element.classList.add("filtered");
     });
-    countFiltered();
   }
 
   function showDownloading() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/downloading.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".downloading{display:table-row}";
+    rules += state;
+    injectCSS();
     btnDownloading.checked = true;
     window.localStorage.setItem("filter", btnDownloading.id);
     downloading.forEach((element) => {
       element.classList.add("filtered");
     });
-    countFiltered();
   }
 
   function showSeeding() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/seeding.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".seeding{display:table-row}";
+    rules += state;
+    injectCSS();
     btnSeeding.checked = true;
     window.localStorage.setItem("filter", btnSeeding.id);
     seeding.forEach((element) => {
       element.classList.add("filtered");
     });
-    countFiltered();
   }
 
   function showComplete() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/complete.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".complete{display:table-row}";
+    rules += state;
+    injectCSS();
     btnComplete.checked = true;
     window.localStorage.setItem("filter", btnComplete.id);
     complete.forEach((element) => {
       element.classList.add("filtered");
     });
-    countFiltered();
   }
 
   function showIncomplete() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/incomplete.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".incomplete{display:table-row}";
+    rules += state;
+    injectCSS();
     btnIncomplete.checked = true;
     window.localStorage.setItem("filter", btnIncomplete.id);
     incomplete.forEach((element) => {
       element.classList.add("filtered");
     });
-    countFiltered();
   }
 
   function showStopped() {
     clean();
-    css.type ="text/css";
-    css.rel ="stylesheet";
-    css.href =".resources/filters/stopped.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".stopped{display:table-row}";
+    rules += state;
+    injectCSS();
     btnStopped.checked = true;
     window.localStorage.setItem("filter", btnStopped.id);
     stopped.forEach((element) => {
       element.classList.add("filtered");
     });
-    countFiltered();
   }
 
   if (bar) {
-     btnAll.addEventListener("click", showAll, false);
-     btnActive.addEventListener("click", showActive, false);
-     btnInactive.addEventListener("click", showInactive, false);
-     btnDownloading.addEventListener("click", showDownloading, false);
-     btnSeeding.addEventListener("click", showSeeding, false);
-     btnComplete.addEventListener("click", showComplete, false);
-     btnIncomplete.addEventListener("click", showIncomplete, false);
-     btnStopped.addEventListener("click", showStopped, false);
+     btnAll.addEventListener("click", () => {showAll();doRefresh();});
+     btnActive.addEventListener("click", () => {showActive();doRefresh();countFiltered();});
+     btnInactive.addEventListener("click", () => {showInactive();doRefresh();countFiltered();});
+     btnDownloading.addEventListener("click", () => {showDownloading();doRefresh();countFiltered();});
+     btnSeeding.addEventListener("click", () => {showSeeding();doRefresh();countFiltered();});
+     btnComplete.addEventListener("click", () => {showComplete();doRefresh();countFiltered();});
+     btnIncomplete.addEventListener("click", () => {showIncomplete();doRefresh();countFiltered();});
+     btnStopped.addEventListener("click", () => {showStopped();doRefresh();countFiltered();});
      switch (window.localStorage.getItem("filter")) {
        case "all":
          btnAll.checked = true;
@@ -261,25 +248,26 @@ function initFilterBar() {
          btnAll.checked = true;
          showAll();
      }
+     countFiltered();
   }
 }
 
 function checkFilterBar() {
+
+  var pagenav = document.getElementById("pagenavtop");
   var query = window.location.search;
-  var url = location.href;
   var storage = window.localStorage.getItem("filter");
-  if (storage !== null && storage !== "all") {
-    url = location.href + "&ps=9999";
-  }
 
   function setQuery() {
     if (query) {
-      window.localStorage.setItem("queryString", url);
+      window.localStorage.setItem("queryString", window.location.search);
+      window.location.search = query;
     }
   }
 
   if (bar !== null) {
     initFilterBar();
+    checkPagenav();
   }
 
   var sortIcon = document.querySelectorAll(".sortIcon");
@@ -288,8 +276,60 @@ function checkFilterBar() {
       setQuery();
     });
   });
+
+}
+
+function checkPagenav() {
+  if (pagenav) {
+    if ((storage && storage !== "all")) {
+      pagenav.style.display = "none";
+    } else {
+      pagenav.style.display = "block";
+      pagenav.removeAttribute("hidden");
+    }
+  }
+}
+
+function doRefresh() {
+  checkPagenav();
+  var headers = new Headers();
+  var pagesize = headers.get('X-Snark-Pagesize');
+  var results = document.getElementById("filterResults");
+  if (results) {
+    setTimeout(() => {results.remove();}, 3000);
+  }
+  var url = ".ajax/xhr1.html";
+  if (!storage && query && pagesize !== null) {
+    url = query + "&ps=" + pagesize;
+  } else if (!storage && pagesize !== null) {
+    url = "?ps=" + pagesize;
+  } else if ((storage && storage !== "all") && query == "") {
+    url += "?ps=9999";
+  } else if ((storage && storage !== "all") && query !== "") {
+    url += query + "&ps=9999";
+  }
+
+  var xhrsnarkfilter = new XMLHttpRequest();
+  xhrsnarkfilter.responseType = "document";
+  xhrsnarkfilter.open('GET', url, true);
+  xhrsnarkfilter.onreadystatechange = function() {
+    if (xhrsnarkfilter.readyState === 4) {
+      if (xhrsnarkfilter.status === 200) {
+        var torrents = document.getElementById("torrents");
+        var torrentsResponse = xhrsnarkfilter.responseXML.getElementById("torrents");
+        torrents.outerHTML = torrentsResponse.outerHTML;
+        if (pagenav && (!storage || storage == "all")) {
+            var pagenavResponse = xhrsnarkfilter.responseXML.getElementById("pagenavtop");
+            pagenav.outerHTML = pagenavResponse.outerHTML;
+            checkPagenav();
+        }
+      }
+    }
+  }
+  xhrsnarkfilter.send();
 }
 
 checkFilterBar();
+doRefresh();
 
-export {initFilterBar, checkFilterBar};
+export {initFilterBar, checkFilterBar, doRefresh};

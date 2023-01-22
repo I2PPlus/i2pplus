@@ -1,3 +1,7 @@
+/* refreshTorrents.js by dr|3d */
+/* Selective refresh torrents and other volatile elements in the I2PSnark UI */
+/* License: AGPL3 or later */
+
 import {initFilterBar, checkFilterBar} from "/i2psnark/.resources/js/torrentDisplay.js";
 
 function refreshTorrents() {
@@ -30,9 +34,23 @@ function refreshTorrents() {
   if (navbar !== null) {var home = document.querySelector(".nav_main");}
 
   var query = window.location.search;
+  var storage = window.localStorage.getItem("filter");
+  var headers = new Headers();
+  var pagesize = headers.get('X-Snark-Pagesize');
+
   if (query) {
-    url += query;
+    if (storage) {
+      url += query + "&ps=9999";
+    } else if (pagesize !== null) {
+      url += query + "&ps=" + pagesize;
+    }
+  } else if (storage && filterbar) {
+    url += "?ps=9999";
+  } else if (!storage) {
     window.localStorage.setItem("snarkURL", url);
+    if (pagesize !== null) {
+      url += "&ps=" + pagesize;
+    }
   }
 
   function setLinks() {
@@ -53,9 +71,9 @@ function refreshTorrents() {
   }
 
   if (torrents || noload || down) {
-  xhrsnark.open("GET", url);
-  xhrsnark.responseType = "document";
-  xhrsnark.onreadystatechange = function() {
+    xhrsnark.open("GET", url);
+    xhrsnark.responseType = "document";
+    xhrsnark.onreadystatechange = function() {
 
     if (xhrsnark.readyState === 4) {
       if (xhrsnark.status === 200) {
@@ -111,11 +129,13 @@ function refreshTorrents() {
           }
         }
 
-        var results = document.getElementById("filterResults");
-        if (results) {
-          results.remove();
+/*
+        var filterResults = document.getElementById("filterResults");
+        if (filterResults) {
+          //results.remove();
+          setTimeout(() => {filterResults.style.display = "none";}, 4000);
         }
-
+*/
         if (document.getElementById("setPriority")) { // hide non-functional buttons until we fix folder.js script
           var allHigh = document.getElementById("setallhigh");
           var allNorm = document.getElementById("setallnorm");
@@ -174,6 +194,10 @@ function refreshTorrents() {
             }
             setLinks();
             if (filterbar) {
+              var filtercount = document.getElementById("filtercount");
+              if (filtercount) {
+                filtercount.remove();
+              }
               initFilterBar();
             }
           } else if (files) {
