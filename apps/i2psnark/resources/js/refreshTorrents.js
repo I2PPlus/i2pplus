@@ -2,7 +2,7 @@
 /* Selective refresh torrents and other volatile elements in the I2PSnark UI */
 /* License: AGPL3 or later */
 
-import {initFilterBar, checkFilterBar} from "/i2psnark/.resources/js/torrentDisplay.js";
+import {initFilterBar, checkFilterBar, refreshFilters} from "/i2psnark/.resources/js/torrentDisplay.js";
 //import {initFilterBar, checkFilterBar, refreshFilters} from "/themes/js/torrentDisplay.js";
 
 function refreshTorrents() {
