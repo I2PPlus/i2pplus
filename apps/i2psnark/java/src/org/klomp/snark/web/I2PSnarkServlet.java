@@ -677,11 +677,11 @@ public class I2PSnarkServlet extends BasicServlet {
             pageSize = 10;
 
         // move pagenav here so we can align it nicely without resorting to hacks
-        if (total > 0 && (start > 0 || total > pageSize)) {
+        if (isForm && total > 0 && (start > 0 || total > pageSize)) {
             out.write("<div class=\"pagenavcontrols\" id=\"pagenavtop\">");
             writePageNav(out, req, start, pageSize, total, noThinsp);
             out.write("</div>");
-        } else {
+        } else if (isForm && showStatusFilter && total > pageSize) {
             out.write("<div class=\"pagenavcontrols\" id=\"pagenavtop\" hidden>");
             writePageNav(out, req, start, pageSize, total, noThinsp);
             out.write("</div>");
