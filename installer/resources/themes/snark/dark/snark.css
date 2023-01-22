@@ -693,6 +693,9 @@ input[name="nofilter_commentsName"] {max-width:248px}
 #torrentDisplay label:hover {color:#d50;background:radial-gradient(at center bottom,rgba(255,96,0,.2),rgba(0,0,0,0) 80%),var(--btnAction_hover)}
 #torrentDisplay label:active,#torrentDisplay input:checked + label {color:#b40;text-shadow:none;box-shadow:var(--highlight),inset 3px 3px 3px #000;background:radial-gradient(at center bottom,rgba(255,96,0,.2),rgba(0,0,0,0) 40%),linear-gradient(180deg,#100800,#200800)}
 #torrentDisplay input:checked + label {color:#3b3;text-shadow:0 0 1px #000,0 1px 2px #010;background:radial-gradient(at center bottom,rgba(16,72,16,.3),rgba(0,0,0,0) 50%),linear-gradient(180deg,#000a00,#020);pointer-events:none}
+#filtercount:not(:empty){margin-left:3px;padding:0 2px;min-width:16px;display:inline-block!important;font-size:90%;border-radius:2px;box-shadow:0 0 0 1px #131;background:#000}
+#filtercount+#filtercount,#torrentDisplay input:not(:checked)+label>#filtercount,label[for="all"] #filtercount{display:none!important}
+
 .RateUp,.torrentUploaded {font-style:italic}
 
 /* sections */

@@ -77,7 +77,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 .snarkNav:hover, .snarkNav:visited:hover {color: #930}
 .snarkNav:active, .snarkNav:visited:active {color: #eee}
 .snarkNav, .snarkNav:visited {margin-left: 0; margin-right: 0; border-right: none}
-.snarkNav:last-child {border-right: var(--border)}
+.snarkNav:last-of-type,.snarkNav:last-of-type:visited {border-right: var(--border);border-radius:2px}
 
 /* screenlog */
 #screenlog {margin: 2px 1px 11px; padding: 0 3px; height: 56px; width: calc(100% - 14px); display: inline-block; overflow: hidden; text-align: left; font: bold 8.5pt var(--bodyfont); -webkit-text-stroke: 2px rgba(78,69,63,.35); color: #f8f1ed; border: 1px solid #523d2e; box-shadow: 0 0 0 2px #efe6e0, 0 0 0 3px #3f3833; background: repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px), url(images/whippy.png) no-repeat scroll right 5px bottom -7px / auto 105%, linear-gradient(180deg,#5f554d, #3f3833); background-size: 100% 4px, auto 105%, 100%; scrollbar-color: #a38a75 rgba(63,56,51,.7)}
@@ -620,10 +620,11 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 #torrentDisplay input:checked + label {box-shadow: inset 0 0 0 1px #efe6e0, inset 2px 2px 3px 1px #59513b, 0 0 0 1px rgba(77, 69, 62, 0.1)}
 #torrentDisplay label[for="all"] {border-left: var(--border_hard)}
 #torrentDisplay input:checked + .filterbutton {text-shadow: 0 1px 1px #ebe5e0; background: linear-gradient(180deg,rgba(207, 193, 181, .6), #d7cbc1), repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px); transition: ease background .15s; pointer-events: none}
-
 /* fix firefox rendering bug when filter displays no torrents */
 #torrents tr[style="display: none;"]:last-child {display: table-row}
 #torrents tr[style="display: none;"]:last-child > * {display: none}
+#filtercount:not(:empty){margin-left:3px;padding:0 2px;min-width:16px;display:inline-block!important;font-size:90%;border-radius:2px;box-shadow:0 0 0 1px #59513b;background:#efe6e0}
+#filtercount+#filtercount,#torrentDisplay input:not(:checked)+label>#filtercount,label[for="all"] #filtercount{display:none!important}
 
 .peerCount .left, .peerCount .right {min-width: 12px; display: inline-block}
 .peerCount .left {padding-left: 2px; text-align: left}

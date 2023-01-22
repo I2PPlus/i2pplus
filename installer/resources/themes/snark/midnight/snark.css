@@ -664,6 +664,9 @@ td#bwHelp a{display:inline-block;white-space:nowrap;margin-left:4px}
 #torrentDisplay label:active{color:#943d94;background:var(--nav_active)}
 #torrentDisplay input:checked + label{color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.5);background:#113;pointer-events:none}
 #torrentDisplay label[for="all"]{border-left:1px solid #171c3f}
+#filtercount:not(:empty){margin-left:3px;padding:0 2px;min-width:16px;display:inline-block!important;font-size:90%;border-radius:2px;box-shadow:0 0 0 1px #225;background:#000}
+#filtercount+#filtercount,#torrentDisplay input:not(:checked)+label>#filtercount,label[for="all"] #filtercount{display:none!important}
+
 th.graphicStatus img,td.graphicStatus img{margin:2px;width:auto;height:22px}
 td.trackerLink img{height:16px}
 
