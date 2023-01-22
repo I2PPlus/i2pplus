@@ -504,7 +504,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      *  @since 0.9.16 moved from doGetAndPost()
      */
-    private static void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
+    private void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
+        String pageSize = String.valueOf(_manager.getPageSize());
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
         resp.setHeader("Accept-Ranges", "none");
@@ -515,9 +516,11 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
+        resp.setHeader("X-Snark-Pagesize", pageSize);
     }
 
-    private static void setXHRHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
+    private void setXHRHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
+        String pageSize = String.valueOf(_manager.getPageSize());
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
         resp.setHeader("Accept-Ranges", "none");
@@ -527,6 +530,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
+        resp.setHeader("X-Snark-Pagesize", pageSize);
     }
 
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
@@ -663,6 +667,9 @@ public class I2PSnarkServlet extends BasicServlet {
 //        int pageSize = Math.max(_manager.getPageSize(), 5);
         int pageSize = _manager.getPageSize();
         String ps = req.getParameter("ps");
+        if (ps == "null") {
+            ps = String.valueOf(pageSize);
+        }
         if (ps != null) {
             try { pageSize = Integer.parseInt(ps); } catch (NumberFormatException nfe) {}
         }
@@ -672,6 +679,10 @@ public class I2PSnarkServlet extends BasicServlet {
         // move pagenav here so we can align it nicely without resorting to hacks
         if (total > 0 && (start > 0 || total > pageSize)) {
             out.write("<div class=\"pagenavcontrols\" id=\"pagenavtop\">");
+            writePageNav(out, req, start, pageSize, total, noThinsp);
+            out.write("</div>");
+        } else {
+            out.write("<div class=\"pagenavcontrols\" id=\"pagenavtop\" hidden>");
             writePageNav(out, req, start, pageSize, total, noThinsp);
             out.write("</div>");
         }
