@@ -618,7 +618,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         try {
             return Integer.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT));
         } catch (NumberFormatException nfe) {
-            return MAX_FILES_PER_TORRENT;
+            return DEFAULT_MAX_FILES_PER_TORRENT;
         }
     }
 
