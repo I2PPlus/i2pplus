@@ -157,7 +157,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         int known = ctx.netDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
-        String MIN_VERSION = "0.9.56";
+        String MIN_VERSION = "0.9.57";
         boolean isHidden = ctx.router().isHidden();
         boolean isSingleCore = SystemVersion.getCores() < 2;
         boolean isSlow = SystemVersion.isSlow();
@@ -228,7 +228,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
 
-        String MIN_VERSION = "0.9.56";
+        String MIN_VERSION = "0.9.57";
         boolean isHidden = getContext().router().isHidden();
         RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
         if (ri != null) {

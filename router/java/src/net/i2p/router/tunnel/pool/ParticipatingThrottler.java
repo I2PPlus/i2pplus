@@ -98,7 +98,7 @@ class ParticipatingThrottler {
         } else {
           v = "NoRI";
         }
-        String MIN_VERSION = "0.9.55";
+        String MIN_VERSION = "0.9.57";
         if (v.equals("0.0.0")) {
             rv = Result.DROP;
             if (_log.shouldWarn())

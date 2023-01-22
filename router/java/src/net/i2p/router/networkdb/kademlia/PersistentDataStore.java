@@ -305,7 +305,7 @@ public class PersistentDataStore extends TransientDataStore {
         File dbFile = null;
 
         try {
-            String MIN_VERSION = "0.9.56";
+            String MIN_VERSION = "0.9.57";
             String v = MIN_VERSION;
             boolean unreachable = false;
             if (ri != null) {
@@ -572,7 +572,7 @@ public class PersistentDataStore extends TransientDataStore {
                     RouterInfo ri = new RouterInfo();
                     ri.readBytes(fis, true);  // true = verify sig on read
                     String v = ri.getVersion();
-                    String MIN_VERSION = "0.9.56";
+                    String MIN_VERSION = "0.9.57";
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldError())
@@ -602,7 +602,7 @@ public class PersistentDataStore extends TransientDataStore {
                             if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty())
                                 _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> unreachable");
                             else
-                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> K or L tier");
+                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> K, L or M tier");
                         _routerFile.delete();
                         }
                     } else if (VersionComparator.comp(v, MIN_VERSION) < 0) {

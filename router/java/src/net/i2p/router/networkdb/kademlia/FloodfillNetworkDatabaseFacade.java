@@ -656,7 +656,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // should we skip the search?
         boolean forceExplore = _context.getBooleanProperty("router.exploreWhenFloodfill");
         Hash us = _context.routerHash();
-        String MIN_VERSION = "0.9.56";
+        String MIN_VERSION = "0.9.57";
         boolean isHidden = _context.router().isHidden();
         boolean slow = info.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
