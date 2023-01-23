@@ -590,8 +590,8 @@ public class PersistentDataStore extends TransientDataStore {
                         _routerFile.delete();
                     } else if (ri.getPublished() <= _knownDate) {
                         // Don't store but don't delete
-                        if (_log.shouldWarn())
-                            _log.warn("Skipping since NetDb copy is newer than " + _routerFile);
+                        if (_log.shouldInfo())
+                            _log.info("Skipping since NetDb copy is newer than " + _routerFile);
                     } else if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
