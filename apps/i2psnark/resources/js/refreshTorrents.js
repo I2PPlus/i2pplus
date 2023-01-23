@@ -38,18 +38,13 @@ function refreshTorrents() {
   if (navbar !== null) {var home = document.querySelector(".nav_main");}
 
   if (query) {
-    if (storage) {
+    if (storage && filterbar) {
       url += query + "&ps=9999";
-    } else if (pagesize !== null) {
-      url += query + "&ps=" + pagesize;
+    } else {
+      url += query;
     }
   } else if (storage && filterbar) {
     url += "?ps=9999";
-  } else if (!storage) {
-    window.localStorage.setItem("snarkURL", url);
-    if (pagesize !== null) {
-      url += "&ps=" + pagesize;
-    }
   }
 
   function setLinks() {

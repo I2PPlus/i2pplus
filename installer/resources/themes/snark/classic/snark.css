@@ -23,7 +23,7 @@
 --row_filtered:var(--bg3);
 --section:linear-gradient(180deg,var(--bg2),var(--bg3));
 --title_shadow:var(--highlight),inset 0 0 0 0 var(--bg),0 1px 1px var(--bg4);
---label_shadow_active: 2px 2px 2px rgba(0,0,0,.3) inset;
+--label_shadow_active: 1px 1px 1px rgba(0,0,0,.2) inset,2px 2px 2px rgba(255,255,255,.1) inset;
 }
 
 body{margin:3px 4px;background:var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom / 120px}
@@ -622,12 +622,9 @@ td.peerCount,.nopeers td.peerCount{text-align:center;white-space:nowrap}
 .iframed #torrentDisplay label{margin-top:-1px}
 #torrentDisplay label:last-child{border-right:var(--border)}
 #torrentDisplay label:hover,#torrentDisplay label:focus{color:var(--hover);background:var(--btn_hover2)}
-#torrentDisplay label:active{color:var(--bg);box-shadow:var(--label_shadow_active);background:var(--btn_active)}
-#torrentDisplay input:checked + label,#torrentDisplay input:checked + label:hover,#torrentDisplay input:checked + label:focus{color:#66a;box-shadow:var(--label_shadow_active);background:var(--btn_hover2);cursor:default}
+#torrentDisplay label:active{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--btn_active)}
+#torrentDisplay input:checked + label,#torrentDisplay input:checked + label:hover,#torrentDisplay input:checked + label:focus{color:#66a;box-shadow:var(--btn_shadow_active);background:var(--btn_hover2);cursor:default}
 #torrentDisplay input:checked + label{color:#88c;box-shadow:var(--label_shadow_active);background:linear-gradient(180deg,var(--bg2),var(--bg2));pointer-events:none}
-/* fix firefox rendering bug when filter displays no torrents */
-#torrents tr[style="display:none;"]:last-child{display:table-row}
-#torrents tr[style="display:none;"]:last-child > *{display:none}
 #filtercount:not(:empty){margin-left:4px;padding:0 3px;min-width:18px;display:inline-block!important;line-height:1.1;font-size:90%;border-radius:1px;box-shadow:0 0 0 1px #ddf;background:var(--bg2)}
 #filtercount+#filtercount,#torrentDisplay input:not(:checked)+label>#filtercount,label[for="all"] #filtercount{display:none!important}
 

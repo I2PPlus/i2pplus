@@ -3,7 +3,6 @@
 /* License: AGPL3 or later */
 
 var bar = document.getElementById("torrentDisplay");
-var count;
 var filterbar = document.getElementById("torrentDisplay");
 var filtered = document.querySelectorAll(".filtered");
 var pagenav = document.getElementById("pagenavtop");
@@ -24,7 +23,6 @@ function initFilterBar() {
   var btnSeeding = document.getElementById("seeding");
   var btnStopped = document.getElementById("stopped");
   var complete = document.querySelectorAll(".complete");
-  var css = document.createElement("link");
   var debuginfo = document.querySelectorAll(".debuginfo");
   var downloading = document.querySelectorAll(".downloading");
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
@@ -39,24 +37,14 @@ function initFilterBar() {
   var badges = document.querySelectorAll("#filtercount.badge");
   var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility:collapse}";
 
-  if (!storage) {
-    btnAll.checked = true;
-  }
+  if (!storage) {btnAll.checked = true;}
 
   function clean() {
     var cssfilter = document.getElementById("cssfilter");
-    if (badge !== null) {
-      badge.innerHTML = "";
-    }
-    if (cssfilter) {
-      cssfilter.remove();
-    }
-    allOdd.forEach((element) => {
-      element.classList.remove("filtered");
-    });
-    allEven.forEach((element) => {
-      element.classList.remove("filtered");
-    });
+    if (badge !== null) {badge.innerHTML = "";}
+    if (cssfilter) {cssfilter.remove();}
+    allOdd.forEach((element) => {element.classList.remove("filtered");});
+    allEven.forEach((element) => {element.classList.remove("filtered");});
     if (pagenav) {
       if (storage && storage !== "all") {
         pagenav.style.display = "none";
@@ -64,11 +52,7 @@ function initFilterBar() {
         pagenav.style.display = "none";
       }
     }
-    if (badge) {
-      badges.forEach((element) => {
-        element.remove();
-      });
-    }
+    if (badge) {badges.forEach((element) => {element.remove();});}
   }
 
   function showBadge() {
@@ -109,9 +93,7 @@ function initFilterBar() {
     injectCSS();
     btnActive.checked = true;
     window.localStorage.setItem("filter", btnActive.id);
-    active.forEach((element) => {
-      element.classList.add("filtered");
-    });
+    active.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
 
@@ -122,9 +104,7 @@ function initFilterBar() {
     injectCSS();
     btnInactive.checked = true;
     window.localStorage.setItem("filter", btnInactive.id);
-    inactive.forEach((element) => {
-      element.classList.add("filtered");
-    });
+    inactive.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
 
@@ -135,9 +115,7 @@ function initFilterBar() {
     injectCSS();
     btnDownloading.checked = true;
     window.localStorage.setItem("filter", btnDownloading.id);
-    downloading.forEach((element) => {
-      element.classList.add("filtered");
-    });
+    downloading.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
 
@@ -148,9 +126,7 @@ function initFilterBar() {
     injectCSS();
     btnSeeding.checked = true;
     window.localStorage.setItem("filter", btnSeeding.id);
-    seeding.forEach((element) => {
-      element.classList.add("filtered");
-    });
+    seeding.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
 
@@ -161,9 +137,7 @@ function initFilterBar() {
     injectCSS();
     btnComplete.checked = true;
     window.localStorage.setItem("filter", btnComplete.id);
-    complete.forEach((element) => {
-      element.classList.add("filtered");
-    });
+    complete.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
 
@@ -174,9 +148,7 @@ function initFilterBar() {
     injectCSS();
     btnIncomplete.checked = true;
     window.localStorage.setItem("filter", btnIncomplete.id);
-    incomplete.forEach((element) => {
-      element.classList.add("filtered");
-    });
+    incomplete.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
 
@@ -187,9 +159,7 @@ function initFilterBar() {
     injectCSS();
     btnStopped.checked = true;
     window.localStorage.setItem("filter", btnStopped.id);
-    stopped.forEach((element) => {
-      element.classList.add("filtered");
-    });
+    stopped.forEach((element) => {element.classList.add("filtered");});
     var count = filtered.length;
     showBadge();
   }
@@ -286,14 +256,14 @@ function refreshFilters() {
   var headers = new Headers();
   var pagesize = headers.get("X-Snark-Pagesize");
   var url = ".ajax/xhr1.html";
-  if (!storage && query && pagesize !== null) {
-    url = query + "&ps=" + pagesize;
-  } else if (!storage && pagesize !== null) {
-    url = "?ps=" + pagesize;
-  } else if ((storage && storage !== "all") && query === "") {
+  if (query) {
+    if (storage && filterbar) {
+      url += query + "&ps=9999";
+    } else {
+      url += query;
+    }
+  } else if (storage && filterbar) {
     url += "?ps=9999";
-  } else if ((storage && storage !== "all") && query !== "") {
-    url += query + "&ps=9999";
   }
 
   var xhrfilter = new XMLHttpRequest();
@@ -310,24 +280,18 @@ function refreshFilters() {
         }
         if (pagenav && (!storage || storage === "all")) {
           var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
-          if (pagenavResponse !== null) {
-            pagenav.innerHTML = pagenavResponse.innerHTML;
-          }
+          if (pagenavResponse !== null) {pagenav.innerHTML = pagenavResponse.innerHTML;}
           checkPagenav();
         }
         if (filterbar) {
           initFilterBar();
           var filterbarResponse = xhrfilter.responseXML.getElementById("torrentDisplay");
-          if (!filterbar && filterbarResponse !== null) {
-            filterbar.outerHTML = filterbarResponse.outerHTML;
-          }
+          if (!filterbar && filterbarResponse !== null) {filterbar.outerHTML = filterbarResponse.outerHTML;}
         }
       }
     }
   };
-  if (document.visibilityState === "visible") {
-    xhrfilter.send();
-  }
+  if (document.visibilityState === "visible") {xhrfilter.send();}
 }
 
 initFilterBar();
