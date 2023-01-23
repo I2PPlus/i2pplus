@@ -357,7 +357,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n");
                 debug = false;
                 if (debug && _context.isRouterContext()) {
-                    out.write("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debug - comment out when done
+                    out.write("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                 } else {
                     out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                 }
