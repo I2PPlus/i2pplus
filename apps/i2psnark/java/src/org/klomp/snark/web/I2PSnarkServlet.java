@@ -364,7 +364,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("var ajaxDelay = " + (delay * 1000) + ";\n" +
                           "var timerId = setInterval(doRefresh, ajaxDelay);\n" +
                           "function doRefresh() {\n" +
-                          " if (document.visible = true) {refreshTorrents();}\n" +
+                          " var visibility = document.visibilityState;\n" +
+                          " if (visibility === 'visible') {refreshTorrents();}\n" +
                           " else {cancelRefresh();}\n" +
                           "}\n" +
                           "function cancelRefresh() {clearInterval(timerId);}\n" +

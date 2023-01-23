@@ -412,7 +412,11 @@ function refreshSidebar() {
     countTunnels();
     countNewsItems();
   });
-  xhr.send();
+  if (document.visibilityState === "visible") {
+    xhr.send();
+  } else {
+    xhr.abort();
+  }
 
 }
 
