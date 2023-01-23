@@ -314,9 +314,11 @@ function refreshFilters() {
           torrents.outerHTML = torrentsResponse.outerHTML;
         }
         if (pagenav && (!storage || storage === "all")) {
-            var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
-            pagenav.outerHTML = pagenavResponse.outerHTML;
-            checkPagenav();
+          var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
+          if (pagenavResponse !== null) {
+            pagenav.innerHTML = pagenavResponse.innerHTML;
+          }
+          checkPagenav();
         }
         if (filterbar) {
           initFilterBar();
@@ -328,7 +330,9 @@ function refreshFilters() {
       }
     }
   };
-  xhrfilter.send();
+  if (document.visibilityState === "visible") {
+    xhrfilter.send();
+  }
 }
 
 initFilterBar();

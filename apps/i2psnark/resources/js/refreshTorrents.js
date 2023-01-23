@@ -228,7 +228,8 @@ function refreshTorrents() {
   xhrsnark.addEventListener("loaded", () => {
     checkFilterBar();
   });
-  xhrsnark.send();
+  if (document.visibilityState === "visible") {
+    xhrsnark.send();
   }
 }
 
