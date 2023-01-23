@@ -29,7 +29,6 @@ function initFilterBar() {
   var downloading = document.querySelectorAll(".downloading");
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
   var incomplete = document.querySelectorAll(".incomplete");
-  var filterResults = document.getElementById("filterResults");
   var pagenav = document.getElementById("pagenavtop");
   var peerinfo = document.querySelectorAll(".peerinfo");
   var seeding = document.querySelectorAll(".seeding");
@@ -38,14 +37,10 @@ function initFilterBar() {
   var tfoot = document.getElementById("snarkFoot");
   var badge = document.getElementById("filtercount");
   var badges = document.querySelectorAll("#filtercount.badge");
-  var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{display:none}#torrents tfoot tr:first-child th{border-top:var(--border_filtered)!important}#snarkFoot tr{display:table-row}";
+  var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility:collapse}";
 
   if (!storage) {
     btnAll.checked = true;
-  }
-
-  if (tfoot !== null) {
-    var tfootInner = tfoot.getElementsByClassName("tr")[0];
   }
 
   function clean() {
@@ -109,7 +104,7 @@ function initFilterBar() {
 
   function showActive() {
     clean();
-    var state = ".active{display:table-row}";
+    var state = ".active{visibility:visible}";
     rules += state;
     injectCSS();
     btnActive.checked = true;
@@ -122,7 +117,7 @@ function initFilterBar() {
 
   function showInactive() {
     clean();
-    var state = ".inactive{display:table-row}";
+    var state = ".inactive{visibility:visible}";
     rules += state;
     injectCSS();
     btnInactive.checked = true;
@@ -135,7 +130,7 @@ function initFilterBar() {
 
   function showDownloading() {
     clean();
-    var state = ".downloading{display:table-row}";
+    var state = ".downloading{visibility:visible}";
     rules += state;
     injectCSS();
     btnDownloading.checked = true;
@@ -148,7 +143,7 @@ function initFilterBar() {
 
   function showSeeding() {
     clean();
-    var state = ".seeding{display:table-row}";
+    var state = ".seeding{visibility:visible}";
     rules += state;
     injectCSS();
     btnSeeding.checked = true;
@@ -161,7 +156,7 @@ function initFilterBar() {
 
   function showComplete() {
     clean();
-    var state = ".complete{display:table-row}";
+    var state = ".complete{visibility:visible}";
     rules += state;
     injectCSS();
     btnComplete.checked = true;
@@ -174,7 +169,7 @@ function initFilterBar() {
 
   function showIncomplete() {
     clean();
-    var state = ".incomplete{display:table-row}";
+    var state = ".incomplete{visibility:visible}";
     rules += state;
     injectCSS();
     btnIncomplete.checked = true;
@@ -187,7 +182,7 @@ function initFilterBar() {
 
   function showStopped() {
     clean();
-    var state = ".stopped{display:table-row}";
+    var state = ".stopped{visibility:visible}";
     rules += state;
     injectCSS();
     btnStopped.checked = true;

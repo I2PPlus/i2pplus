@@ -31,14 +31,11 @@ function refreshTorrents() {
   var togglefiles = document.getElementById("toggle_files");
   var torrents = document.getElementById("torrents");
   var url = ".ajax/xhr1.html";
+  var headers = new Headers();
+  var pagesize = headers.get('X-Snark-Pagesize');
   var xhrsnark = new XMLHttpRequest();
 
   if (navbar !== null) {var home = document.querySelector(".nav_main");}
-
-  var query = window.location.search;
-  var storage = window.localStorage.getItem("filter");
-  var headers = new Headers();
-  var pagesize = headers.get('X-Snark-Pagesize');
 
   if (query) {
     if (storage) {
@@ -80,156 +77,126 @@ function refreshTorrents() {
     xhrsnark.responseType = "document";
     xhrsnark.onreadystatechange = function() {
 
-    if (xhrsnark.readyState === 4) {
-      if (xhrsnark.status === 200) {
-        if (torrents) {
-          var torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
-        }
+      if (xhrsnark.readyState === 4) {
+        if (xhrsnark.status === 200) {
+          if (torrents) {
+            var torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
+          }
 
-        if (down || noload) {
-          refreshAll();
-        }
+          if (down || noload) {
+            refreshAll();
+          }
 
-        if (!down && !noload) {
-          refreshHeaderAndFooter();
-        }
+          if (!down && !noload) {
+            refreshHeaderAndFooter();
+          }
 
-        if (info) {
-          var infoResponse = xhrsnark.responseXML.getElementById("torrentInfoStats");
-          if (infoResponse) {
-            var infoParent = info.parentNode;
-            if (!Object.is(info.innerHTML, infoResponse.innerHTML)) {
-              infoParent.replaceChild(infoResponse, info);
+          if (info) {
+            var infoResponse = xhrsnark.responseXML.getElementById("torrentInfoStats");
+            if (infoResponse) {
+              var infoParent = info.parentNode;
+              if (!Object.is(info.innerHTML, infoResponse.innerHTML)) {
+                infoParent.replaceChild(infoResponse, info);
+              }
             }
           }
-        }
 
-        if (control) {
-          var controlResponse = xhrsnark.responseXML.getElementById("torrentInfoControl");
-          if (controlResponse) {
-            var controlParent = control.parentNode;
-            if (!Object.is(control.innerHTML, controlResponse.innerHTML)) {
-              controlParent.replaceChild(controlResponse, control);
+          if (control) {
+            var controlResponse = xhrsnark.responseXML.getElementById("torrentInfoControl");
+            if (controlResponse) {
+              var controlParent = control.parentNode;
+              if (!Object.is(control.innerHTML, controlResponse.innerHTML)) {
+                controlParent.replaceChild(controlResponse, control);
+              }
             }
           }
-        }
 
-        if (files || torrents) {
+          if (files || torrents) {
             updateVolatile();
-        }
+          }
 
-        if (complete) {
-          var completeResponse = xhrsnark.responseXML.getElementsByClassName("completed");
-          var i;
-          for (i = 0; i < complete.length; i++) {
-            if (completeResponse !== null && !Object.is(complete[i].innerHTML, completeResponse[i].innerHTML)) {
-              complete[i].innerHTML = completeResponse[i].innerHTML;
+          if (complete) {
+            var completeResponse = xhrsnark.responseXML.getElementsByClassName("completed");
+            var i;
+            for (i = 0; i < complete.length; i++) {
+              if (completeResponse !== null && !Object.is(complete[i].innerHTML, completeResponse[i].innerHTML)) {
+                complete[i].innerHTML = completeResponse[i].innerHTML;
+              }
             }
           }
-        }
 
-/*
-        var filterResults = document.getElementById("filterResults");
-        if (filterResults) {
-          //results.remove();
-          setTimeout(() => {filterResults.style.display = "none";}, 4000);
-        }
-*/
-        if (document.getElementById("setPriority")) { // hide non-functional buttons until we fix folder.js script
-          var allHigh = document.getElementById("setallhigh");
-          var allNorm = document.getElementById("setallnorm");
-          var allSkip = document.getElementById("setallskip");
-          if (allHigh) {
-            allHigh.remove();
+          if (document.getElementById("setPriority")) { // hide non-functional buttons until we fix folder.js script
+            var allHigh = document.getElementById("setallhigh");
+            var allNorm = document.getElementById("setallnorm");
+            var allSkip = document.getElementById("setallskip");
+            if (allHigh) {allHigh.remove();}
+            if (allNorm) {allNorm.remove();}
+            if (allSkip) {allSkip.remove();}
           }
-          if (allNorm) {
-            allNorm.remove();
-          }
-          if (allSkip) {
-            allSkip.remove();
-          }
-        }
 
-        function updateVolatile() {
-          var updating = document.getElementsByClassName("volatile");
-          var updatingResponse = xhrsnark.responseXML.getElementsByClassName("volatile");
-          var u;
-          for (u = 0; u < updating.length; u++) {
-            if (updating[u] !== null && updatingResponse[u] !== null) {
-              if (!Object.is(updating[u].innerHTML, updatingResponse[u].innerHTML)) {
-                if (updating.length === updatingResponse.length) {
-                  if (torrents) {
-                    updating[u].outerHTML = updatingResponse[u].outerHTML;
-                  } else {
-                    updating[u].innerHTML = updatingResponse[u].innerHTML;
-                  }
-                } else {
-                  refreshAll();
+          function updateVolatile() {
+            var updating = document.getElementsByClassName("volatile");
+            var updatingResponse = xhrsnark.responseXML.getElementsByClassName("volatile");
+            var u;
+            for (u = 0; u < updating.length; u++) {
+              if (updating[u] !== null && updatingResponse[u] !== null) {
+                if (!Object.is(updating[u].innerHTML, updatingResponse[u].innerHTML)) {
+                  if (updating.length === updatingResponse.length) {
+                    if (torrents) {updating[u].outerHTML = updatingResponse[u].outerHTML;}
+                    else {updating[u].innerHTML = updatingResponse[u].innerHTML;}
+                  } else {refreshAll();}
                 }
               }
             }
           }
-        }
 
-        function refreshHeaderAndFooter() {
-          if (thead) {
-            var theadParent = thead.parentNode;
-            var theadResponse = xhrsnark.responseXML.getElementById("snarkHead");
-            if (thead && theadResponse !== null && !Object.is(thead.innerHTML, theadResponse.innerHTML)) {
-              thead.innerHTML = theadResponse.innerHTML;
-            }
-            setLinks();
-          }
-        }
-
-        function refreshAll() {
-          if (mainsection) {
-            var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
-            if (mainsectionResponse !== null && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML)) {
-              mainsection.innerHTML = mainsectionResponse.innerHTML;
-            }
-            setLinks();
-            if (filterbar) {
-              var filtercount = document.getElementById("filtercount");
-              if (filtercount) {
-                filtercount.remove();
+          function refreshHeaderAndFooter() {
+            if (thead) {
+              var theadParent = thead.parentNode;
+              var theadResponse = xhrsnark.responseXML.getElementById("snarkHead");
+              if (thead && theadResponse !== null && !Object.is(thead.innerHTML, theadResponse.innerHTML)) {
+                thead.innerHTML = theadResponse.innerHTML;
               }
-              //initFilterBar();
-            }
-          } else if (files) {
-            var dirlistResponse = xhrsnark.responseXML.getElementById("dirlist");
-            if (dirlistResponse !== null && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && !notfound) {
-              dirlist.innerHTML = dirlistResponse.innerHTML;
+              setLinks();
             }
           }
-        }
 
-        function clearFilter() {
-          window.localStorage.removeItem("filter");
-        }
-
-        function clearQuery() {
-          window.localStorage.removeItem("queryString");
-        }
-       } else {
-
-        function noAjax() {
-          var failMessage = "<div class=\"routerdown\" id=\"down\"><b><span>Router is down<\/span><\/b><\/div>";
-          if (mainsection) {
-            mainsection.innerHTML = failMessage;
-          } else {
-            snarkInfo.innerHTML = failMessage;
+          function refreshAll() {
+            if (mainsection) {
+              var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
+              if (mainsectionResponse !== null && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML)) {
+                mainsection.innerHTML = mainsectionResponse.innerHTML;
+              }
+              setLinks();
+              if (filterbar) {
+                var filtercount = document.getElementById("filtercount");
+                if (filtercount) {filtercount.remove();}
+              }
+            } else if (files) {
+              var dirlistResponse = xhrsnark.responseXML.getElementById("dirlist");
+              if (dirlistResponse !== null && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && !notfound) {
+                dirlist.innerHTML = dirlistResponse.innerHTML;
+              }
+            }
           }
+
+          function clearFilter() {window.localStorage.removeItem("filter");}
+          function clearQuery() {window.localStorage.removeItem("queryString");}
+
+        } else {
+
+          function noAjax() {
+            var failMessage = "<div class=\"routerdown\" id=\"down\"><b><span>Router is down<\/span><\/b><\/div>";
+            if (mainsection) {mainsection.innerHTML = failMessage;}
+            else {snarkInfo.innerHTML = failMessage;}
+          }
+
+          setTimeout(noAjax, 10000);
         }
-        setTimeout(noAjax, 10000);
       }
-    }
-  };
-  xhrsnark.addEventListener("loaded", () => {
-    checkFilterBar();
-  });
-  if (document.visibilityState === "visible") {
-    xhrsnark.send();
+    };
+    xhrsnark.addEventListener("loaded", () => {checkFilterBar();});
+    if (document.visibilityState === "visible") {xhrsnark.send();}
   }
 }
 
