@@ -2,7 +2,6 @@
 /* Setup torrent display buttons so we can show/hide snarks based on status */
 /* License: AGPL3 or later */
 
-var bar = document.getElementById("torrentDisplay");
 var filterbar = document.getElementById("torrentDisplay");
 var filtered = document.querySelectorAll(".filtered");
 var pagenav = document.getElementById("pagenavtop");
@@ -46,11 +45,8 @@ function initFilterBar() {
     allOdd.forEach((element) => {element.classList.remove("filtered");});
     allEven.forEach((element) => {element.classList.remove("filtered");});
     if (pagenav) {
-      if (storage && storage !== "all") {
-        pagenav.style.display = "none";
-      } else {
-        pagenav.style.display = "none";
-      }
+      if (storage && storage !== "all") {pagenav.style.display = "none";}
+      else {pagenav.style.display = "none";}
     }
     if (badge) {badges.forEach((element) => {element.remove();});}
   }
@@ -164,7 +160,7 @@ function initFilterBar() {
     showBadge();
   }
 
-  if (bar) {
+  if (filterbar) {
      btnAll.addEventListener("click", () => {refreshFilters();showAll();});
      btnActive.addEventListener("click", () => {refreshFilters();showActive();});
      btnInactive.addEventListener("click", () => {refreshFilters();showInactive();});
@@ -226,7 +222,7 @@ function checkFilterBar() {
     }
   }
 
-  if (bar !== null) {
+  if (filterbar) {
     initFilterBar();
     checkPagenav();
   }
@@ -244,8 +240,10 @@ function checkPagenav() {
   if (pagenav !== null) {
     if ((storage && storage !== "all")) {
       pagenav.style.display = "none";
+      pagenav.hidden = true;
     } else {
       pagenav.style.display = "block";
+      pagenav.hidden = false;
       pagenav.removeAttribute("hidden");
     }
   }
