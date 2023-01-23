@@ -279,18 +279,19 @@ function refreshSidebar() {
         function refreshGraph() {
           var graphContainer = document.getElementById("sb_graphcontainer");
           var graphContainerHR = document.querySelector("#sb_graphcontainer + hr");
+          var minigraph = document.getElementById("minigraph");
           if (minigraph) {
-            var ctx = minigraph.getContext("2d");
-            var image = new Image(245, 50);
             if (graphContainer.hidden === true) {
               graphContainer.hidden = null;
               graphContainerHR.hidden = null;
             }
+            const ctx = minigraph.getContext("2d");
+            const image = new Image(245, 50);
             image.onload = renderGraph;
-            image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + Date.now();
+            image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = "high";
-            ctx.globalCompositeOperation = "source-out";
+            ctx.globalCompositeOperation = "copy";
             ctx.globalAlpha = 1;
             //minigraph.style.background = image.src;
 
