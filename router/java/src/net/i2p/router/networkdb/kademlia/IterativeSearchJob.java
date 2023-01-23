@@ -188,12 +188,15 @@ public class IterativeSearchJob extends FloodSearchJob {
                 _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
             }
         }
+
+        _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
         _toTry = new TreeSet<Hash>(new XORComparator<Hash>(_rkey));
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
+
         if (isLease && cpuLoad < 80 && sysLoad < 80 && !isSingleCore && !isSlow) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 4));
         } else if ((known < 1500 || ctx.router().getUptime() < 30*60*1000 || isHidden) &&
@@ -228,6 +231,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
 
+/*
         String MIN_VERSION = "0.9.57";
         boolean isHidden = getContext().router().isHidden();
         RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
@@ -246,7 +250,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 return;
             }
         }
-
+*/
         // pick some floodfill peers and send out the searches
         List<Hash> floodfillPeers;
         KBucketSet<Hash> ks = _facade.getKBuckets();
