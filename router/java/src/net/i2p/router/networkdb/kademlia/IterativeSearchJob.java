@@ -170,6 +170,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             _timeoutMs = Math.max(timeoutMs * 3, MAX_SEARCH_TIME * 2);
             totalSearchLimit += 2;
         } else {
+/*
             if (ri != null) {
                 String v = ri.getVersion();
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
@@ -182,7 +183,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                     _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME / 3 * 2);
                     totalSearchLimit = Math.max(totalSearchLimit - 1, 3);
                 }
-            } else if (known < 1500 || isHidden) {
+*/
+            if (known < 1500 || isHidden) {
                 totalSearchLimit += 2;
             } else {
                 _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
