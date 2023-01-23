@@ -150,11 +150,11 @@ function refreshSidebar() {
             var snarks = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/snark.svg"]').length;
             var snarkSpan = '<span id="snarkCount" class="count_' + snarks + '">' + snarks + ' x <img src="/themes/console/images/snark.svg"></span>';
             var summary = snarkSpan + " " + serverSpan + " " + clientSpan + " " + pingSpan;
-            var summaryTable = '<table id="localtunnelSummary"><tr id="localtunnelsActive"><td>' + summary + '</td></tr></table>';
+            var summaryTable = '<tr id="localtunnelsActive"><td>' + summary + '</td></tr>';
             var sb_localTunnelsHeading = document.getElementById("sb_localTunnelsHeading");
             var sb_localTunnelsHeadingResponse = xhr.responseXML.getElementById("sb_localTunnelsHeading");
             sb_localTunnelsHeading.innerHTML = sb_localTunnelsHeadingResponse.innerHTML;
-            localtunnelSummary.outerHTML = summaryTable;
+            localtunnelSummary.innerHTML = summaryTable;
           }
           if (tunnelCount) {
             var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
@@ -414,8 +414,6 @@ function refreshSidebar() {
   });
   if (document.visibilityState === "visible") {
     xhr.send();
-  } else {
-    xhr.abort();
   }
 
 }
