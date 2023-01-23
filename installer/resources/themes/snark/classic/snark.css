@@ -23,6 +23,7 @@
 --row_filtered:var(--bg3);
 --section:linear-gradient(180deg,var(--bg2),var(--bg3));
 --title_shadow:var(--highlight),inset 0 0 0 0 var(--bg),0 1px 1px var(--bg4);
+--label_shadow_active: 2px 2px 2px rgba(0,0,0,.3) inset;
 }
 
 body{margin:3px 4px;background:var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom / 120px}
@@ -617,12 +618,13 @@ td.peerCount,.nopeers td.peerCount{text-align:center;white-space:nowrap}
 #torrentDisplay{margin:-1px 0 0;display:block;position:sticky;top:42px;z-index:500;background:var(--th);border-top:var(--border);border-bottom:var(--border)}
 .iframed #torrentDisplay{position:static}
 #torrentDisplay input{position:absolute;opacity:0;z-index:-1;height:0;width:0}
-#torrentDisplay label{margin:0;padding:3px 8px 4px;display:inline-block;min-width:92px;font-weight:700;font-size:90%;color:var(--nav_a);border-left:var(--border);box-shadow:var(--highlight);background:var(--nav)}
+#torrentDisplay label{margin:0;padding:4px 8px 4px;display:inline-block;min-width:92px;font-weight:700;font-size:90%;color:var(--nav_a);border-left:var(--border);box-shadow:var(--highlight);background:var(--nav);contain:paint}
+.iframed #torrentDisplay label{margin-top:-1px}
 #torrentDisplay label:last-child{border-right:var(--border)}
 #torrentDisplay label:hover,#torrentDisplay label:focus{color:var(--hover);background:var(--btn_hover2)}
-#torrentDisplay label:active{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--btn_active)}
-#torrentDisplay input:checked + label,#torrentDisplay input:checked + label:hover,#torrentDisplay input:checked + label:focus{color:#66a;box-shadow:var(--btn_shadow_active);background:var(--btn_hover2);cursor:default}
-#torrentDisplay input:checked + label{color:#88c;box-shadow:var(--btn_shadow_active);background:linear-gradient(180deg,var(--bg2),var(--bg2));pointer-events:none}
+#torrentDisplay label:active{color:var(--bg);box-shadow:var(--label_shadow_active);background:var(--btn_active)}
+#torrentDisplay input:checked + label,#torrentDisplay input:checked + label:hover,#torrentDisplay input:checked + label:focus{color:#66a;box-shadow:var(--label_shadow_active);background:var(--btn_hover2);cursor:default}
+#torrentDisplay input:checked + label{color:#88c;box-shadow:var(--label_shadow_active);background:linear-gradient(180deg,var(--bg2),var(--bg2));pointer-events:none}
 /* fix firefox rendering bug when filter displays no torrents */
 #torrents tr[style="display:none;"]:last-child{display:table-row}
 #torrents tr[style="display:none;"]:last-child > *{display:none}
