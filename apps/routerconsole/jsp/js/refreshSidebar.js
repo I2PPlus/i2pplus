@@ -4,13 +4,12 @@
 import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
 
 function refreshSidebar() {
-  'use strict';
+  "use strict";
   var meta = document.querySelector('[http-equiv="refresh"]');
   var xhr = new XMLHttpRequest();
   var uri = location.pathname;
   var xhrContainer = document.getElementById("xhr");
-  let isDownTimer;
-  var count = 0;
+  var isDownTimer;
 
   var advancedGeneral = document.getElementById("sb_advancedgeneral");
   var badges = document.querySelectorAll(".badge");
@@ -52,7 +51,6 @@ function refreshSidebar() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        count ++;
         var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
         var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
         var clockResponse = xhr.responseXML.getElementById("clock");
@@ -119,7 +117,7 @@ function refreshSidebar() {
             if (bandwidth !== null && bandwidth.hidden !== true) {
               graphStats.style.opacity = null;
             } else {
-                graphStats.style.opacity = "1";
+              graphStats.style.opacity = "1";
             }
           }
           if (graphStats !== null && graphStatsResponse !== null) {
@@ -237,17 +235,11 @@ function refreshSidebar() {
           if (routerControl !== null && routerControlResponse !== null && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
             routerControl.outerHTML = routerControlResponse.outerHTML;
           }
-          if (count > 2) {
-            if (internals !== null && internalsResponse !== null && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
-              internals.outerHTML = internalsResponse.outerHTML;
-              count --;
-            }
+          if (internals !== null && internalsResponse !== null && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
+            internals.outerHTML = internalsResponse.outerHTML;
           }
-          if (count > 2) {
-            if (services !== null && servicesResponse !== null && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
-              services.outerHTML = servicesResponse.outerHTML;
-              count --;
-            }
+          if (services !== null && servicesResponse !== null && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
+            services.outerHTML = servicesResponse.outerHTML;
           }
         }
 
@@ -285,18 +277,17 @@ function refreshSidebar() {
         }
 
         function refreshGraph() {
-          var minigraph = document.getElementById("minigraph");
           var graphContainer = document.getElementById("sb_graphcontainer");
           var graphContainerHR = document.querySelector("#sb_graphcontainer + hr");
           if (minigraph) {
+            var ctx = minigraph.getContext("2d");
+            var image = new Image(245, 50);
             if (graphContainer.hidden === true) {
               graphContainer.hidden = null;
               graphContainerHR.hidden = null;
             }
-            const ctx = minigraph.getContext("2d");
-            const image = new Image(245, 50);
             image.onload = renderGraph;
-            image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
+            image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + Date.now();
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = "high";
             ctx.globalCompositeOperation = "source-out";

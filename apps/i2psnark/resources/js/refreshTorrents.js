@@ -3,7 +3,7 @@
 /* License: AGPL3 or later */
 
 import {initFilterBar, checkFilterBar, refreshFilters} from "/i2psnark/.resources/js/torrentDisplay.js";
-//import {initFilterBar, checkFilterBar, refreshFilters} from "/themes/js/torrentDisplay.js";
+//import {initFilterBar, checkFilterBar, refreshFilters} from "/themes/js/torrentDisplay.js"; // debugging
 
 function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");
@@ -73,7 +73,7 @@ function refreshTorrents() {
   }
 
   if (filterbar && storage) {
-    //initFilterBar();
+    xhrsnark.abort();
     refreshFilters();
   } else if (torrents || noload || down) {
     xhrsnark.open("GET", url);

@@ -50,6 +50,9 @@ function initFilterBar() {
 
   function clean() {
     var cssfilter = document.getElementById("cssfilter");
+    if (badge !== null) {
+      badge.innerHTML = "";
+    }
     if (cssfilter) {
       cssfilter.remove();
     }
@@ -60,7 +63,7 @@ function initFilterBar() {
       element.classList.remove("filtered");
     });
     if (pagenav) {
-      if (storage && storage != "all") {
+      if (storage && storage !== "all") {
         pagenav.style.display = "none";
       } else {
         pagenav.style.display = "none";
@@ -76,9 +79,11 @@ function initFilterBar() {
   function showBadge() {
     var filtered = document.querySelectorAll(".filtered");
     var activeFilter = document.querySelector("#torrentDisplay input:checked + .filterbutton");
+    var inactiveFilters = document.querySelectorAll("#torrentDisplay input:not(checked) + .filterbutton");
     var count = filtered.length;
+    activeFilter.classList.add("enabled");
     activeFilter.innerHTML += "<span id=filtercount class=badge></span>";
-    if (count > 1) {
+    if (count > 0) {
       var badge = document.getElementById("filtercount");
       badge.innerHTML = count;
     }
@@ -92,8 +97,10 @@ function initFilterBar() {
   function showAll() {
     clean();
     checkPagenav();
-    pagenav.removeAttribute("hidden");
-    pagenav.style.display = "";
+    if (pagenav !== null) {
+      pagenav.removeAttribute("hidden");
+      pagenav.style.display = "";
+    }
     var query = window.location.search;
     window.localStorage.removeItem("filter");
     btnAll.checked = true;
@@ -269,7 +276,7 @@ function checkFilterBar() {
 }
 
 function checkPagenav() {
-  if (pagenav) {
+  if (pagenav !== null) {
     if ((storage && storage !== "all")) {
       pagenav.style.display = "none";
     } else {
@@ -282,13 +289,13 @@ function checkPagenav() {
 function refreshFilters() {
   checkPagenav();
   var headers = new Headers();
-  var pagesize = headers.get('X-Snark-Pagesize');
+  var pagesize = headers.get("X-Snark-Pagesize");
   var url = ".ajax/xhr1.html";
   if (!storage && query && pagesize !== null) {
     url = query + "&ps=" + pagesize;
   } else if (!storage && pagesize !== null) {
     url = "?ps=" + pagesize;
-  } else if ((storage && storage !== "all") && query == "") {
+  } else if ((storage && storage !== "all") && query === "") {
     url += "?ps=9999";
   } else if ((storage && storage !== "all") && query !== "") {
     url += query + "&ps=9999";
@@ -296,7 +303,8 @@ function refreshFilters() {
 
   var xhrfilter = new XMLHttpRequest();
   xhrfilter.responseType = "document";
-  xhrfilter.open('GET', url, true);
+  xhrfilter.abort();
+  xhrfilter.open("GET", url, true);
   xhrfilter.onreadystatechange = function() {
     if (xhrfilter.readyState === 4) {
       if (xhrfilter.status === 200) {
@@ -305,7 +313,7 @@ function refreshFilters() {
         if (torrentsResponse !== null && torrents.innerHTML !== torrentsResponse.innerHTML) {
           torrents.outerHTML = torrentsResponse.outerHTML;
         }
-        if (pagenav && (!storage || storage == "all")) {
+        if (pagenav && (!storage || storage === "all")) {
             var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
             pagenav.outerHTML = pagenavResponse.outerHTML;
             checkPagenav();
@@ -314,12 +322,12 @@ function refreshFilters() {
           initFilterBar();
           var filterbarResponse = xhrfilter.responseXML.getElementById("torrentDisplay");
           if (!filterbar && filterbarResponse !== null) {
-            filterbar.outerHTML = filterbarReponse.outerHTML;
+            filterbar.outerHTML = filterbarResponse.outerHTML;
           }
         }
       }
     }
-  }
+  };
   xhrfilter.send();
 }
 
