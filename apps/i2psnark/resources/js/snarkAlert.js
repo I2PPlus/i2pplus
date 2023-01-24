@@ -13,6 +13,7 @@ const inputAddFile = document.querySelector("input[name='nofilter_newURL']");
 const inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
 const messages = document.getElementById("screenlog");
 const processForm = document.querySelector("iframe");
+var url = ".ajax/xhr1.html";
 const xhrLog = new XMLHttpRequest();
 
 function updateUrl() {
@@ -21,7 +22,6 @@ function updateUrl() {
   var pagesize = headers.get("X-Snark-Pagesize");
   var query = window.location.search;
   var storage = localStorage.getItem("filter");
-  var url = ".ajax/xhr1.html";
 
   if (query) {
     if (storage && filterbar) {
@@ -53,7 +53,7 @@ function updateLog() {
     };
     xhrLog.send();
   }
-  if (document.visibilityState === "visible") {reload();}
+  reload();
 }
 
 function addTorrentNotify() {
@@ -72,7 +72,8 @@ function createTorrentNotify() {
 
 function injectCss() {
   if (!alertCss) {
-    document.head.innerHTML += "<link id=snarkAlert rel=stylesheet href=/i2psnark/.resources/snarkAlert.css type=text/css/>";
+    document.head.innerHTML += "<link id=snarkAlert rel=stylesheet href=/i2psnark/.resources/snarkAlert.css type=text/css>";
+    //document.head.innerHTML += "<link id=snarkAlert rel=stylesheet href=/themes/snark/snarkAlert.css type=text/css>"; // debugging
   }
 }
 
@@ -90,8 +91,4 @@ function hideAlert() {
 addTorrent.addEventListener("submit", addTorrentNotify);
 createTorrent.addEventListener("submit", createTorrentNotify);
 injectCss();
-
-document.addEventListener("visibilitychange", () => {
-  if (document.visible) {
-    updateLog();
-});
+updateLog();

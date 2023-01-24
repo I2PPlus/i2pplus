@@ -2,12 +2,6 @@
 /* Setup torrent display buttons so we can show/hide snarks based on status */
 /* License: AGPL3 or later */
 
-var filterbar = document.getElementById("torrentDisplay");
-var filtered = document.querySelectorAll(".filtered");
-var pagenav = document.getElementById("pagenavtop");
-var query = window.location.search;
-var storage = localStorage.getItem("filter");
-
 function initFilterBar() {
 
   var active = document.querySelectorAll(".active:not(.peerinfo)");
@@ -36,6 +30,12 @@ function initFilterBar() {
   var badges = document.querySelectorAll("#filtercount.badge");
   var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility:collapse}";
 
+  var filterbar = document.getElementById("torrentDisplay");
+  var filtered = document.querySelectorAll(".filtered");
+  var pagenav = document.getElementById("pagenavtop");
+  var query = window.location.search;
+  var storage = localStorage.getItem("filter");
+
   if (!storage) {btnAll.checked = true;}
 
   function clean() {
@@ -46,7 +46,7 @@ function initFilterBar() {
     allEven.forEach((element) => {element.classList.remove("filtered");});
     if (pagenav) {
       if (storage && storage !== "all") {pagenav.style.display = "none";}
-      else {pagenav.style.display = "none";}
+      else {pagenav.style.display = "";}
     }
     if (badge) {badges.forEach((element) => {element.remove();});}
   }
@@ -161,14 +161,14 @@ function initFilterBar() {
   }
 
   if (filterbar) {
-     btnAll.addEventListener("click", () => {refreshFilters();showAll();});
-     btnActive.addEventListener("click", () => {refreshFilters();showActive();});
-     btnInactive.addEventListener("click", () => {refreshFilters();showInactive();});
-     btnDownloading.addEventListener("click", () => {refreshFilters();showDownloading();});
-     btnSeeding.addEventListener("click", () => {refreshFilters();showSeeding();});
-     btnComplete.addEventListener("click", () => {refreshFilters();showComplete();});
-     btnIncomplete.addEventListener("click", () => {refreshFilters();showIncomplete();});
-     btnStopped.addEventListener("click", () => {refreshFilters();showStopped();});
+     btnAll.addEventListener("click", () => {showAll();});
+     btnActive.addEventListener("click", () => {showActive();});
+     btnInactive.addEventListener("click", () => {showInactive();});
+     btnDownloading.addEventListener("click", () => {showDownloading();});
+     btnSeeding.addEventListener("click", () => {showSeeding();});
+     btnComplete.addEventListener("click", () => {showComplete();});
+     btnIncomplete.addEventListener("click", () => {showIncomplete();});
+     btnStopped.addEventListener("click", () => {showStopped();});
      switch (window.localStorage.getItem("filter")) {
        case "all":
          btnAll.checked = true;
@@ -211,16 +211,8 @@ function initFilterBar() {
 
 function checkFilterBar() {
 
-  var pagenav = document.getElementById("pagenavtop");
+  var filterbar = document.getElementById("torrentDisplay");
   var query = window.location.search;
-  var storage = window.localStorage.getItem("filter");
-
-  function setQuery() {
-    if (query) {
-      window.localStorage.setItem("queryString", window.location.search);
-      window.location.search = query;
-    }
-  }
 
   if (filterbar) {
     initFilterBar();
@@ -234,9 +226,18 @@ function checkFilterBar() {
     });
   });
 
+  function setQuery() {
+    if (query) {
+      window.localStorage.setItem("queryString", window.location.search);
+      window.location.search = query;
+    }
+  }
+
 }
 
 function checkPagenav() {
+  var pagenav = document.getElementById("pagenavtop");
+  var storage = window.localStorage.getItem("filter");
   if (pagenav !== null) {
     if ((storage && storage !== "all")) {
       pagenav.style.display = "none";
@@ -251,8 +252,12 @@ function checkPagenav() {
 
 function refreshFilters() {
   checkPagenav();
+  var filterbar = document.getElementById("torrentDisplay");
   var headers = new Headers();
+  var pagenav = document.getElementById("pagenavtop");
   var pagesize = headers.get("X-Snark-Pagesize");
+  var query = window.location.search;
+  var storage = window.localStorage.getItem("filter");
   var url = ".ajax/xhr1.html";
   if (query) {
     if (storage && filterbar) {
@@ -266,7 +271,6 @@ function refreshFilters() {
 
   var xhrfilter = new XMLHttpRequest();
   xhrfilter.responseType = "document";
-  xhrfilter.abort();
   xhrfilter.open("GET", url, true);
   xhrfilter.onreadystatechange = function() {
     if (xhrfilter.readyState === 4) {
@@ -277,9 +281,9 @@ function refreshFilters() {
           torrents.outerHTML = torrentsResponse.outerHTML;
         }
         if (pagenav && (!storage || storage === "all")) {
+          checkPagenav();
           var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
           if (pagenavResponse !== null) {pagenav.innerHTML = pagenavResponse.innerHTML;}
-          checkPagenav();
         }
         if (filterbar) {
           initFilterBar();
@@ -289,12 +293,7 @@ function refreshFilters() {
       }
     }
   };
+  xhrfilter.send();
 }
-
-document.addEventListener("visibilitychange", () => {
-  if (document.visible) {
-    initFilterBar();
-    refreshFilters();
-});
 
 export {initFilterBar, checkFilterBar, refreshFilters};

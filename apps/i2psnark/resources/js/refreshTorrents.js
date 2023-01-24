@@ -67,6 +67,7 @@ function refreshTorrents() {
   if (filterbar && storage) {
     xhrsnark.abort();
     refreshFilters();
+    checkFilterBar();
   } else if (torrents || noload || down) {
     xhrsnark.open("GET", url);
     xhrsnark.responseType = "document";
@@ -190,14 +191,8 @@ function refreshTorrents() {
         }
       }
     };
-    xhrsnark.addEventListener("loaded", () => {checkFilterBar();});
+    xhrsnark.send();
   }
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.visible) {
-      refreshTorrents();
-  });
-
 }
 
 export {refreshTorrents};

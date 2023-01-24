@@ -3056,8 +3056,12 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("</td>\n</tr>\n" +
                   "</table>\n" +
                   "</form>\n</div>\n<span id=\"createNotify\" class=\"notify\" hidden></span>\n</div>\n");
-        out.write("<script charset=\"utf-8\" src=\".resources/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
-        //out.write("<script charset=\"utf-8\" src=\"/themes/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debug
+        debug = false;
+        if (debug && _context.isRouterContext()) {
+            out.write("<script charset=\"utf-8\" src=\"/themes/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+        } else {
+            out.write("<script charset=\"utf-8\" src=\".resources/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+        }
     }
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
@@ -4758,16 +4762,17 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 buf.append("import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
             }
+            if (enableLightbox) {
+                buf.append("import {Lightbox} from \"" + _contextPath + WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\";\n" +
+                           "var lightbox = new Lightbox();\nlightbox.load();\n");
+            }
             buf.append("var ajaxDelay = " + (delay * 1000) + ";\n" +
                        "var visibility = document.visibilityState;\n" +
                        "var cycle;\n" +
-                       "if (visibility = \"visible\") {\n" +
+                       "if (visibility === \"visible\") {\n" +
                        "function timer() {\n" +
                        "var cycle = setInterval(function() {\n" +
-                       "requestAnimationFrame(refreshTorrents);\n");
-            if (enableLightbox)
-                buf.append("import {Lightbox} from \"" + _contextPath + WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\";\n" +
-                           "var lightbox = new Lightbox();\nlightbox.load();\n");
+                       "refreshTorrents();\n");
             buf.append("}, ajaxDelay);\n" +
                        "}\n" +
                        "timer();\n" +
