@@ -123,7 +123,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default _maxConcurrent
      */
 //    private static final int MAX_CONCURRENT = 1;
-    private static final int MAX_CONCURRENT = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 2 : 3;
+    private static final int MAX_CONCURRENT = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 1 : 2;
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
@@ -164,12 +164,31 @@ public class IterativeSearchJob extends FloodSearchJob {
         int cpuLoad = SystemVersion.getCPULoad();
         int cpuLoadAvg = SystemVersion.getCPULoadAvg();
         int sysLoad = SystemVersion.getSystemLoad();
+        _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
+        _expiration = _timeoutMs + ctx.clock().now();
+        _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
+        _toTry = new TreeSet<Hash>(new XORComparator<Hash>(_rkey));
+        _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
+        _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
+        _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
+        _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
+        _failedPeers = new HashSet<Hash>(_totalSearchLimit);
+        _skippedPeers = new HashSet<Hash>(4);
+        _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
+        _fromLocalDest = fromLocalDest;
+         //_maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
+         _maxConcurrent = ctx.router().getUptime() > 30*60*1000 ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
+                                                                  ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
+        if (fromLocalDest != null && !isLease && _log.shouldLog(Log.WARN))
+            _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
+        // all createRateStat in FNDF
 
         // these override the settings in super
         if (isLease) {
-            _timeoutMs = Math.max(timeoutMs * 3, MAX_SEARCH_TIME * 2);
+            _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME * 2);
             totalSearchLimit += 2;
         } else {
+            _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
 /*
             if (ri != null) {
                 String v = ri.getVersion();
@@ -183,21 +202,15 @@ public class IterativeSearchJob extends FloodSearchJob {
                     _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME / 3 * 2);
                     totalSearchLimit = Math.max(totalSearchLimit - 1, 3);
                 }
-*/
             if (known < 1500 || isHidden) {
                 totalSearchLimit += 2;
             } else {
                 _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
             }
+*/
         }
 
-        _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
-        _expiration = _timeoutMs + ctx.clock().now();
-        _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
-        _toTry = new TreeSet<Hash>(new XORComparator<Hash>(_rkey));
-        _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
-        _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
-        _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
+/*
 
         if (ctx.getProperty("netdb.maxConcurrent") != null) {
             _maxConcurrent = Integer.valueOf(ctx.getProperty("netdb.maxConcurrent"));
@@ -213,14 +226,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         } else {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.max(MAX_CONCURRENT, 1));
         }
-        _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
-        _failedPeers = new HashSet<Hash>(_totalSearchLimit);
-        _skippedPeers = new HashSet<Hash>(4);
-        _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
-        _fromLocalDest = fromLocalDest;
-        if (fromLocalDest != null && !isLease && _log.shouldLog(Log.WARN))
-            _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
-        // all createRateStat in FNDF
+*/
     }
 
     @Override
