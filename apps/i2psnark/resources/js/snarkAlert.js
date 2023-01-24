@@ -1,4 +1,4 @@
-/* I2PSnark inline notifications */
+/* I2PSnark Inline Notifications */
 /* Author: dr|z3d */
 /* License: AGPL3 or later */
 
