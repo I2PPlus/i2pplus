@@ -69,7 +69,7 @@ RELEASE
 [options]
   --help or -h   This help.
   -q             quiet(this overrides verbose and debug arguments)
-  -v             verbose(default)
+  -v             verbose (default)
   -d             debug output
   -nr            No graceful restart after download
   --restart      Perform a hard restart without waiting for participating tunnels to expire
@@ -151,7 +151,7 @@ for a in $@; do
             debug="true"
             if [ "$2" ]; then shift; fi
             ;;
-        -v) # be verbose(default)
+        -v) # be verbose (default)
             verbose="true"
             if [ "$2" ]; then shift; fi
             ;;
@@ -428,9 +428,9 @@ start_restart() {
         else # Failed to start once, try a 2nd time
             dry "$I2P/i2prouter start"
             if [ $? -ne 0 ]; then
-                verbose "$I2P/i2prouter start failed twice during the update, please check its status, $0 exiting"
+                verbose "$I2P/i2prouter start failed twice during the update, please check its status, $0 exiting..."
             else
-                verbose "$I2P/i2prouter started on the 2nd try, $0 exiting"
+                verbose "$I2P/i2prouter started on the 2nd try, $0 exiting..."
             fi
             rm_pid
             exit 4
@@ -579,10 +579,10 @@ fi
  # get_url <release> <update location>
 get_url() {
      # I2P+ Stable release download URLs
-    stable_url='i2p;http://skank.i2p/i2pupdate.zip b32;http://qiii4iqrj3fwv4ucaji2oykcvsob75jviycv3ghw7dhzxg2kq53q.b32.i2p/i2pupdate.zip tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/i2pupdate.zip clear;https://i2pplus.github.io/i2pupdate.zip'
+    stable_url='i2p;http://skank.i2p/i2pupdate.zip b32;http://qiii4iqrj3fwv4ucaji2oykcvsob75jviycv3ghw7dhzxg2kq53q.b32.i2p/i2pupdate.zip tor;http://eekmit7xiyu3vjgovu756xj3rzbhycwzgx4gmnyqxau64yzckiluoxad.onion/i2pupdate.zip clear;https://i2pplus.github.io/i2pupdate.zip'
 
      # I2P+ Devel release download URLs
-    devel_url='i2p;http://skank.i2p/dev/i2pupdate.zip b32;http://qiii4iqrj3fwv4ucaji2oykcvsob75jviycv3ghw7dhzxg2kq53q.b32.i2p/dev/i2pupdate.zip tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/dev/i2pupdate.zip git;https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2pupdate.zip?job=Java8'
+    devel_url='i2p;http://skank.i2p/dev/i2pupdate.zip b32;http://qiii4iqrj3fwv4ucaji2oykcvsob75jviycv3ghw7dhzxg2kq53q.b32.i2p/dev/i2pupdate.zip tor;http://eekmit7xiyu3vjgovu756xj3rzbhycwzgx4gmnyqxau64yzckiluoxad.onion/dev/i2pupdate.zip git;https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2pupdate.zip?job=Java8'
      # loop through requests
     if [ "$1" = "stable" ]; then
         for a in $stable_url; do
@@ -690,7 +690,7 @@ if [ -f "$I2P/i2pupdate.zip" ]; then
     debug "removing $I2P/i2pupdate.zip"
     rm -f "$I2P/i2pupdate.zip"
     if [ $? -ne 0 ]; then
-        verbose "Found old $I2P/i2pupdate.zip, failed to remove, unable to continue until file is removed"
+        verbose "Found old $I2P/i2pupdate.zip, failed to remove (write permissions?), unable to continue until file is removed"
         exit 1
     fi
 fi
