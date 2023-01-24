@@ -108,8 +108,8 @@ class RepublishLeaseSetJob extends JobImpl {
                 requeueRepublish();
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("[Job " + getJobId() + "] Publication of LeasetSet for [" + _ls.getDestination().toBase32().substring(0,6) +
-                              "] failed, but not requeueing (newer LeaseSet exists)");
+                    _log.warn("[Job " + getJobId() + "] Not requeueing failed publication of LeaseSet [" +
+                              _ls.getDestination().toBase32().substring(0,6) + "] -> Newer LeaseSet exists");
             }
         }
     }
