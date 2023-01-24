@@ -199,18 +199,17 @@ public class IterativeSearchJob extends FloodSearchJob {
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
 
-        if (isLease && cpuLoad < 80 && sysLoad < 80 && !isSingleCore && !isSlow) {
+        if (ctx.getProperty("netdb.maxConcurrent") != null) {
+            _maxConcurrent = Integer.valueOf(ctx.getProperty("netdb.maxConcurrent"));
+        } else if (cpuLoad < 80 && sysLoad < 80 && !isSingleCore && !isSlow) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 4));
-        } else if ((known < 1500 || ctx.router().getUptime() < 30*60*1000 || isHidden) &&
+        } else if ((known < 1000 || ctx.router().getUptime() < 30*60*1000 || isHidden) && !isSlow &&
                    !isSingleCore && cpuLoad < 80 && cpuLoadAvg < 80) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 2);
-        } else if (known > 2500 && ctx.router().getUptime() > 30*60*1000 && !isHidden && !isSlow && !isSingleCore) {
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.max(MAX_CONCURRENT - 1, 1));
-        } else if (cpuLoad > 80 || cpuLoadAvg > 80 || isSlow || isSingleCore) {
-            if (isLease)
-                _maxConcurrent = 2;
-            else
-                _maxConcurrent = 1;
+        } else if (known > 1500 && ctx.router().getUptime() > 30*60*1000 && !isHidden && !isSlow && !isSingleCore) {
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", 1);
+        } else if (cpuLoad > 80 && cpuLoadAvg > 80 || isSlow || isSingleCore) {
+          _maxConcurrent = 1;
         } else {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.max(MAX_CONCURRENT, 1));
         }
@@ -342,8 +341,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             // not enough time left to bother
             return;
         }
-        if (_expiration - 3000 < now)  {
-            _expiration = 3000;
+        if (_expiration - 1500 < now)  {
+            _expiration = 1500;
         }
         while (true) {
             Hash peer = null;
