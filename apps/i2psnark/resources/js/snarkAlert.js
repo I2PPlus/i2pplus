@@ -2,7 +2,7 @@
 /* Author: dr|z3d */
 /* License: AGPL3 or later */
 
-'use strict';
+"use strict";
 
 const addNotify = document.getElementById("addNotify");
 const addTorrent = document.getElementById("addForm");
@@ -15,16 +15,29 @@ const messages = document.getElementById("screenlog");
 const processForm = document.querySelector("iframe");
 const xhrLog = new XMLHttpRequest();
 
+function updateUrl() {
+  var filterbar = document.getElementById("torrentDisplay");
+  var headers = new Headers();
+  var pagesize = headers.get("X-Snark-Pagesize");
+  var query = window.location.search;
+  var storage = localStorage.getItem("filter");
+  var url = ".ajax/xhr1.html";
+
+  if (query) {
+    if (storage && filterbar) {
+      url += query + "&ps=9999";
+    } else {
+      url += query;
+    }
+  } else if (storage && filterbar) {
+    url += "?ps=9999";
+  }
+}
+
 function updateLog() {
-  xhrLog.open("GET", "/i2psnark/.ajax/xhr1.html" + "?t=" + new Date().getTime(), true);
+  updateUrl();
+  xhrLog.open("GET", url, true);
   xhrLog.responseType = "document";
-  xhrLog.overrideMimeType("text/html");
-  xhrLog.setRequestHeader("Accept", "text/html");
-  xhrLog.setRequestHeader("Cache-Control", "no-store, max-age=0");
-  xhrLog.setRequestHeader(
-    "Content-Security-Policy",
-    "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'"
-  );
   function reload() {
     xhrLog.onreadystatechange = function () {
       if (xhrLog.readyState == 4 && xhrLog.status == 200) {
@@ -40,7 +53,7 @@ function updateLog() {
     };
     xhrLog.send();
   }
-  reload();
+  if (document.visibilityState === "visible") {reload();}
 }
 
 function addTorrentNotify() {
@@ -59,7 +72,7 @@ function createTorrentNotify() {
 
 function injectCss() {
   if (!alertCss) {
-    document.head.innerHTML += '<link id="snarkAlert" rel="stylesheet" href="/i2psnark/.resources/snarkAlert.css" type="text/css"/>';
+    document.head.innerHTML += "<link id=snarkAlert rel=stylesheet href=/i2psnark/.resources/snarkAlert.css type=text/css/>";
   }
 }
 
