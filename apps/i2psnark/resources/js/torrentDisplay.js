@@ -289,10 +289,12 @@ function refreshFilters() {
       }
     }
   };
-  if (document.visibilityState === "visible") {xhrfilter.send();}
 }
 
-initFilterBar();
-refreshFilters();
+document.addEventListener("visibilitychange", () => {
+  if (document.visible) {
+    initFilterBar();
+    refreshFilters();
+});
 
 export {initFilterBar, checkFilterBar, refreshFilters};

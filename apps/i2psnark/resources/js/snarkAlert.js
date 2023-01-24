@@ -90,3 +90,8 @@ function hideAlert() {
 addTorrent.addEventListener("submit", addTorrentNotify);
 createTorrent.addEventListener("submit", createTorrentNotify);
 injectCss();
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visible) {
+    updateLog();
+});

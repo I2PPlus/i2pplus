@@ -191,8 +191,13 @@ function refreshTorrents() {
       }
     };
     xhrsnark.addEventListener("loaded", () => {checkFilterBar();});
-    if (document.visibilityState === "visible") {xhrsnark.send();}
   }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visible) {
+      refreshTorrents();
+  });
+
 }
 
 export {refreshTorrents};
