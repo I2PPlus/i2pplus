@@ -686,7 +686,7 @@ class EstablishmentManager {
                 _log.debug("Received NEW SessionRequest: " + state);
         } else {
             if (_log.shouldDebug())
-                _log.debug("Received duplicate SessionRequest from: " + state);
+                _log.debug("Received duplicate SessionRequest \n* Router: " + state);
         }
 
         notifyActivity();
@@ -871,7 +871,7 @@ class EstablishmentManager {
             state.receiveSessionConfirmed(reader.getSessionConfirmedReader());
             notifyActivity();
             if (_log.shouldDebug())
-                _log.debug("[SSU1] Received SessionConfirmed from: " + state);
+                _log.debug("[SSU1] Received SessionConfirmed\n* Router: " + state);
         } else {
             if (_log.shouldInfo())
                 _log.info("[SSU1] Received possible duplicate SessionConfirmed from: " + from);
@@ -892,9 +892,9 @@ class EstablishmentManager {
             state.receiveSessionConfirmed(packet);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
-                _log.warn("[SSU2] Received CORRUPT SessionConfirmed from: " + state, gse);
+                _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state, gse);
             else if (_log.shouldWarn())
-                _log.warn("[SSU2] Received CORRUPT SessionConfirmed from: " + state + "\n* " + gse.getMessage());
+                _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state + "\n* " + gse.getMessage());
             // state called fail()
             _inboundStates.remove(state.getRemoteHostId());
             return;
@@ -909,7 +909,7 @@ class EstablishmentManager {
         }
         notifyActivity();
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received SessionConfirmed from: " + state);
+            _log.debug("[SSU2] Received SessionConfirmed \n* Router: " + state);
     }
 
     /**
@@ -926,7 +926,7 @@ class EstablishmentManager {
             state.receiveSessionCreated(reader.getSessionCreatedReader());
             notifyActivity();
             if (_log.shouldDebug())
-                _log.debug("[SSU1] Received SessionCreated from: " + state);
+                _log.debug("[SSU1] Received SessionCreated \n* Router: " + state);
         } else {
             if (_log.shouldInfo())
                 _log.info("[SSU1] Received possible duplicate SessionCreated from: " + from);
@@ -947,16 +947,16 @@ class EstablishmentManager {
             state.receiveSessionCreated(packet);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
-                _log.warn("[SSU2] Received CORRUPT SessionCreated from: " + state, gse);
+                _log.warn("[SSU2] Received CORRUPT SessionCreated \n* Router: " + state, gse);
             else if (_log.shouldWarn())
-                _log.warn("[SSU2] Received CORRUPT SessionCreated from: " + state + "\n* " + gse.getMessage());
+                _log.warn("[SSU2] Received CORRUPT SessionCreated \n* Router: " + state + "\n* " + gse.getMessage());
             // state called fail()
             _outboundStates.remove(state.getRemoteHostId());
             return;
         }
         notifyActivity();
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received SessionCreated from: " + state);
+            _log.debug("[SSU2] Received SessionCreated \n* Router: " + state);
     }
 
     /**
@@ -970,16 +970,16 @@ class EstablishmentManager {
             state.receiveRetry(packet);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
-                _log.warn("[SSU2] Received CORRUPT Retry from: " + state, gse);
+                _log.warn("[SSU2] Received CORRUPT Retry \n* Router: " + state, gse);
             else if (_log.shouldWarn())
-                _log.warn("[SSU2] Received CORRUPT Retry from: " + state + "\n* " + gse.getMessage());
+                _log.warn("[SSU2] Received CORRUPT Retry \n* Router: " + state + "\n* " + gse.getMessage());
             // state called fail()
             _outboundStates.remove(state.getRemoteHostId());
             return;
         }
         notifyActivity();
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received Retry with token " + state.getToken() + " from: " + state);
+            _log.debug("[SSU2] Received Retry with token " + state.getToken() + " \n* Router: " + state);
     }
 
     /**
@@ -1065,7 +1065,7 @@ class EstablishmentManager {
         //    _log.log(Log.CRIT, "Admitted " + admitted + " with " + remaining + " remaining queued and " + active + " active");
 
         if (_log.shouldDebug())
-            _log.debug("Outbound SSU connection successfully established\n* " + state);
+            _log.debug("Outbound SSU connection successfully established \n* " + state);
         PeerState peer = handleCompletelyEstablished(state);
         notifyActivity();
         return peer;
@@ -1167,7 +1167,7 @@ class EstablishmentManager {
         //peer.setTheyRelayToUsAs(0);
 
         if (_log.shouldDebug())
-            _log.debug("Inbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "]\n* " + state);
+            _log.debug("Inbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "] \n* " + state);
 
         //if (true) // for now, only support direct
         //    peer.setRemoteRequiresIntroduction(false);
@@ -1285,7 +1285,7 @@ class EstablishmentManager {
         //peer.setWeRelayToThemAs(0);
 
         if (_log.shouldDebug())
-            _log.debug("Outbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "]\n* " + state);
+            _log.debug("Outbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "] \n* " + state);
 
         _transport.addRemotePeerState(peer);
         _transport.setIP(remote.calculateHash(), state.getSentIP());
