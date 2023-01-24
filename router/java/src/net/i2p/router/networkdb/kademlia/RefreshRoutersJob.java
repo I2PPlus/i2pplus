@@ -118,13 +118,15 @@ class RefreshRoutersJob extends JobImpl {
                 long uptime = getContext().router().getUptime();
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.57";
+                Hash us = _context.routerHash();
+                boolean isUs = us.equals(ri.getIdentity().getHash());
                 boolean isHidden = getContext().router().isHidden();
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                          getContext().netDb().getKnownRouters() > 3000 &&
-                                         uptime > 15*60*1000 && !isHidden;
+                                         uptime > 15*60*1000 && !isHidden && !isUs;
                 boolean refreshUninteresting = getContext().getBooleanProperty(PROP_ROUTER_REFRESH_UNINTERESTING);
                 int rapidScan = 10*60*1000;
                 if (uninteresting) {
