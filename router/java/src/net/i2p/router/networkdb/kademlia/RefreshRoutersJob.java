@@ -118,7 +118,7 @@ class RefreshRoutersJob extends JobImpl {
                 long uptime = getContext().router().getUptime();
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.57";
-                Hash us = _context.routerHash();
+                Hash us = getContext().routerHash();
                 boolean isUs = us.equals(ri.getIdentity().getHash());
                 boolean isHidden = getContext().router().isHidden();
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
