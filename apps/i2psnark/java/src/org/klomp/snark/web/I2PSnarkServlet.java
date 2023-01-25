@@ -2985,7 +2985,7 @@ public class I2PSnarkServlet extends BasicServlet {
         //out.write("From file: <input type=\"file\" name=\"newFile\" size=\"50\" value=\"" + newFile + "\" /><br>\n");
         out.write(_t("Data to seed"));
         out.write(":</td><td>"
-                  + "<input type=\"text\" required name=\"nofilter_baseFile\" size=\"85\" value=\""
+                  + "<input type=\"text\" name=\"nofilter_baseFile\" size=\"85\" value=\""
                   + "\" spellcheck=\"false\" title=\"");
         out.write(_t("File or directory to seed (full path or within the directory {0} )",
                     _manager.getDataDir().getAbsolutePath() + File.separatorChar));
@@ -4767,14 +4767,11 @@ public class I2PSnarkServlet extends BasicServlet {
                            "var lightbox = new Lightbox();\nlightbox.load();\n");
             }
             buf.append("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                       "var visibility = document.visibilityState;\n" +
                        "var cycle;\n" +
-                       "if (visibility === \"visible\") {\n" +
                        "function timer() {\n" +
                        "var cycle = setInterval(function() {\n" +
                        "refreshTorrents();\n");
             buf.append("}, ajaxDelay);\n" +
-                       "}\n" +
                        "timer();\n" +
                        "}\n" +
                        "</script>\n");
