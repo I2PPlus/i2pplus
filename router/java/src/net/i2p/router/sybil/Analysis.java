@@ -41,7 +41,7 @@ import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
-import net.i2p.util.ObjectCounter;
+import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
@@ -686,7 +686,7 @@ public class Analysis extends JobImpl implements RouterApp {
      *  @since 0.9.38 split out from renderIPGroups32()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups32(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounter<Integer> oc = new ObjectCounter<Integer>();
+        ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<Integer>();
         for (RouterInfo info : ris) {
             byte[] ip = getIP(info);
             if (ip == null)
@@ -735,7 +735,7 @@ public class Analysis extends JobImpl implements RouterApp {
      *  @since 0.9.38 split out from renderIPGroups24()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups24(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounter<Integer> oc = new ObjectCounter<Integer>();
+        ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<Integer>();
         for (RouterInfo info : ris) {
             byte[] ip = getIP(info);
             if (ip == null)
@@ -788,7 +788,7 @@ public class Analysis extends JobImpl implements RouterApp {
      *  @since 0.9.38 split out from renderIPGroups16()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups16(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounter<Integer> oc = new ObjectCounter<Integer>();
+        ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<Integer>();
         for (RouterInfo info : ris) {
             byte[] ip = getIP(info);
             if (ip == null)
@@ -831,7 +831,7 @@ public class Analysis extends JobImpl implements RouterApp {
      *  @since 0.9.57
      */
     public Map<Long, List<RouterInfo>> calculateIPGroups64(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounter<Long> oc = new ObjectCounter<Long>();
+        ObjectCounterUnsafe<Long> oc = new ObjectCounterUnsafe<Long>();
         for (RouterInfo info : ris) {
             byte[] ip = getIPv6(info);
             if (ip == null)
@@ -896,7 +896,7 @@ public class Analysis extends JobImpl implements RouterApp {
      *  @since 0.9.57
      */
     public Map<Long, List<RouterInfo>> calculateIPGroups48(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounter<Long> oc = new ObjectCounter<Long>();
+        ObjectCounterUnsafe<Long> oc = new ObjectCounterUnsafe<Long>();
         for (RouterInfo info : ris) {
             byte[] ip = getIPv6(info);
             if (ip == null)

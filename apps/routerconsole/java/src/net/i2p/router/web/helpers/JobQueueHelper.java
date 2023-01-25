@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Serializable;
 import java.io.Writer;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,9 +14,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.Job;
 import net.i2p.router.JobStats;
 import net.i2p.router.web.HelperBase;
-import net.i2p.util.ObjectCounter;
-
-import net.i2p.util.SystemVersion;
+import net.i2p.util.ObjectCounterUnsafe;
 
 public class JobQueueHelper extends HelperBase {
 
@@ -144,7 +143,7 @@ public class JobQueueHelper extends HelperBase {
     }
 
     /** @since 0.9.5 */
-    private void getJobCounts(StringBuilder buf, ObjectCounter<String> counter) {
+    private void getJobCounts(StringBuilder buf, ObjectCounterUnsafe<String> counter) {
         List<String> names = new ArrayList<String>(counter.objects());
         if (names.size() < 4)
             return;
@@ -262,16 +261,19 @@ public class JobQueueHelper extends HelperBase {
 
     /** @since 0.8.9 */
     private static class JobStatsComparator implements Comparator<JobStats>, Serializable {
+         private final Collator coll = Collator.getInstance();
+
          public int compare(JobStats l, JobStats r) {
-             return l.getName().compareTo(r.getName());
+             return coll.compare(l.getName(), r.getName());
         }
     }
 
     /** @since 0.9.5 */
     private static class JobCountComparator implements Comparator<String>, Serializable {
-         private final ObjectCounter<String> _counter;
+         private final ObjectCounterUnsafe<String> _counter;
+         private final Collator coll = Collator.getInstance();
 
-         public JobCountComparator(ObjectCounter<String> counter) {
+         public JobCountComparator(ObjectCounterUnsafe<String> counter) {
              _counter = counter;
          }
 
@@ -283,7 +285,7 @@ public class JobQueueHelper extends HelperBase {
                  return -1;
              if (lc < rc)
                  return 1;
-             return l.compareTo(r);
+             return coll.compare(l, r);
         }
     }
 }
