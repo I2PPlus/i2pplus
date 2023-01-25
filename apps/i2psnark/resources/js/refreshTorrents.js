@@ -8,13 +8,14 @@ import {initFilterBar, checkFilterBar, refreshFilters} from "/i2psnark/.resource
 function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");
   var control = document.getElementById("torrentInfoControl");
-  var debug = document.getElementById("#debugMode");
+  var debug = document.getElementById("debugMode");
   var debuginfo = document.getElementsByClassName("debuginfo");
   var dirlist = document.getElementById("dirlist");
   var down = document.getElementById("down");
   var files = document.getElementById("dirInfo");
   var filterbar = document.getElementById("torrentDisplay");
   var incomplete = document.getElementsByClassName("incomplete");
+  var home = document.querySelector(".nav_main");
   var info = document.getElementById("torrentInfoStats");
   var mainsection = document.getElementById("mainsection");
   var navbar = document.getElementById("navbar");
@@ -25,7 +26,7 @@ function refreshTorrents() {
   var remaining = document.getElementById("sortRemaining");
   var savedQuery = window.localStorage.getItem("snarkURL");
   var snarkInfo = document.getElementById("snarkInfo");
-  var storage = localStorage.getItem("filter");
+  var storage = window.localStorage.getItem("filter");
   var tfoot = document.getElementById("snarkFoot");
   var thead = document.getElementById("snarkHead");
   var togglefiles = document.getElementById("toggle_files");
@@ -37,45 +38,40 @@ function refreshTorrents() {
   var xhrsnark = new XMLHttpRequest();
   var xhrfilter = new XMLHttpRequest();
 
-  if (navbar !== null) {var home = document.querySelector(".nav_main");}
-
-  if (storage && filterbar) {
-    debug.hidden = true;
-  } else {
-    debug.hidden = false;
-  }
-
   if (query) {
-    if (storage && filterbar) {
+    if (storage !== null && filterbar) {
       url += query + "&ps=9999";
     } else {
       url += query;
     }
-  } else if (storage && filterbar) {
+  } else if (storage !== null && filterbar) {
     url += "?ps=9999";
   }
 
   function setLinks() {
     home.href = "/i2psnark/";
+
     if (debug !== null) {
       if (savedQuery !== null) {
         debug.href = home.href + savedQuery;
       } else if (query != null) {
         debug.href = home.href + query + "&p=2";
       }
-    } else if (home && query) {
+    }
+
+    if (home && query) {
       home.href = "/i2psnark/" + query;
     }
   }
 
   setLinks();
-  navbar.addEventListener("mouseover", setLinks, false);
+  if (navbar) {navbar.addEventListener("mouseover", setLinks, false);}
   if (debug) {debug.addEventListener("mouseover", setLinks, false);}
 
-  if (filterbar && storage && visible === "visible") {
+  if (filterbar && storage !== null && visible !== "hidden") {
     if (xhrsnark.status !== null) {xhrsnark.abort();}
     checkFilterBar();
-  } else if (torrents || noload || down && visible === "visible") {
+  } else if ((torrents || noload || down) && visible !== "hidden") {
     if (xhrfilter.status !== null) {xhrfilter.abort();}
     xhrsnark.open("GET", url);
     xhrsnark.responseType = "document";

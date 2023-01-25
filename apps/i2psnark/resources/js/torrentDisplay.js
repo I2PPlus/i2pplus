@@ -38,7 +38,7 @@ function initFilterBar() {
   var query = window.location.search;
   var storage = localStorage.getItem("filter");
 
-  if (!storage) {btnAll.checked = true;}
+  if (!storage) {btnAll.checked = true}
 
   function clean() {
     var cssfilter = document.getElementById("cssfilter");
@@ -47,7 +47,7 @@ function initFilterBar() {
     allOdd.forEach((element) => {element.classList.remove("filtered");});
     allEven.forEach((element) => {element.classList.remove("filtered");});
     if (pagenav) {
-      if (storage && storage !== "all") {pagenav.style.display = "none";}
+      if (storage !== null) {pagenav.style.display = "none";}
       else {pagenav.style.display = "";}
     }
     if (badge) {badges.forEach((element) => {element.remove();});}
@@ -248,7 +248,7 @@ function checkPagenav() {
   var pagenav = document.getElementById("pagenavtop");
   var storage = window.localStorage.getItem("filter");
   if (pagenav !== null) {
-    if ((storage && storage !== "all")) {
+    if (storage !== null) {
       pagenav.style.display = "none";
       pagenav.hidden = true;
     } else {
@@ -274,12 +274,12 @@ function refreshFilters() {
   checkPagenav();
 
   if (query) {
-    if (storage && filterbar) {
+    if (storage !== null && filterbar) {
       url += query + "&ps=9999";
     } else {
       url += query;
     }
-  } else if (storage && filterbar) {
+  } else if (storage !== null && filterbar) {
     url += "?ps=9999";
   }
   xhrfilter.responseType = "document";
@@ -307,5 +307,7 @@ function refreshFilters() {
   };
   xhrfilter.send();
 }
+
+document.addEventListener("DOMContentLoaded", checkFilterBar(), true);
 
 export {initFilterBar, checkFilterBar, refreshFilters};
