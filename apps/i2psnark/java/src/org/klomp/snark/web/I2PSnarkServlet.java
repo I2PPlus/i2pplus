@@ -235,14 +235,14 @@ public class I2PSnarkServlet extends BasicServlet {
             setXHRHeaders(resp, cspNonce, false);
             PrintWriter out = resp.getWriter();
             out.write("<!DOCTYPE HTML>\n<html>\n<head>\n");
-            out.write("</head>\n<body id=\"snarkxhr\"><div id=\"mainsection\">\n");
+            out.write("</head>\n<body id=snarkxhr>\n<div id=mainsection>\n");
             writeMessages(out, false, peerString);
             boolean canWrite;
             synchronized(this) {
                 canWrite = _resourceBase.canWrite();
             }
             writeTorrents(out, req, canWrite);
-            out.write("</div></body>\n</html>\n");
+            out.write("\n</div>\n</body>\n</html>\n");
             return;
         }
 
@@ -624,16 +624,16 @@ public class I2PSnarkServlet extends BasicServlet {
                 // then we can show all matches, not just those on page, and paginate as required
                 if (!snarks.isEmpty() && _manager.util().connected()) {
                     // ensure we hide torrent filter bar (if enabled) and js is disabled
-                    out.write("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
-                    out.write("<div id=\"torrentDisplay\" class=\"script\">\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" hidden><label for=\"all\" class=\"filterbutton\">Show All</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\" hidden><label for=\"active\" class=\"filterbutton\">Active</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" hidden><label for=\"inactive\" class=\"filterbutton\">Inactive</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" hidden><label for=\"downloading\" class=\"filterbutton\">Downloading</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\" class=\"filterbutton\">Seeding</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\" hidden><label for=\"complete\" class=\"filterbutton\">Complete</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\" hidden><label for=\"incomplete\" class=\"filterbutton\">Incomplete</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"stopped\" hidden><label for=\"stopped\" class=\"filterbutton\">Stopped</label>\n" +
+                    out.write("<noscript><style type=text/css>.script{display:none}</style></noscript>\n");
+                    out.write("<div id=torrentDisplay class=script>\n" +
+                              "<input type=radio name=torrentDisplay id=all hidden><label for=all class=filterbutton>Show All</label>" +
+                              "<input type=radio name=torrentDisplay id=active hidden><label for=active class=filterbutton>Active</label>" +
+                              "<input type=radio name=torrentDisplay id=inactive hidden><label for=inactive class=filterbutton>Inactive</label>" +
+                              "<input type=radio name=torrentDisplay id=downloading hidden><label for=downloading class=filterbutton>Downloading</label>" +
+                              "<input type=radio name=torrentDisplay id=seeding hidden><label for=seeding class=filterbutton>Seeding</label>" +
+                              "<input type=radio name=torrentDisplay id=complete hidden><label for=complete class=filterbutton>Complete</label>" +
+                              "<input type=radio name=torrentDisplay id=incomplete hidden><label for=incomplete class=filterbutton>Incomplete</label>" +
+                              "<input type=radio name=torrentDisplay id=stopped hidden><label for=stopped class=filterbutton>Stopped</label>\n" +
                               "</div>\n");
                 }
             }
@@ -4714,19 +4714,19 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</tbody>\n<thead><tr id=\"setPriority\"><th colspan=\"5\">");
 
 /* TODO: fixup so works with ajax refresh
-                       "<span class=\"script\">");
+                       "<span class=script>");
             if (!inOrder) {
-                buf.append("<a class=\"control\" id=\"setallhigh\" href=\"#\">")
+                buf.append("<a class=control id=setallhigh href=#>")
                    .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
             }
-            buf.append("<a class=\"control\" id=\"setallnorm\" href=\"#\">")
+            buf.append("<a class=control id=setallnorm href=#>")
                .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n" +
-                       "<a class=\"control\" id=\"setallskip\" href=\"#\">")
+                       "<a class=control id=setallskip href=#>")
                .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
 */
 
-           buf.append("<input type=\"submit\" class=\"accept\" value=\"").append(_t("Save priorities"))
-               .append("\" name=\"savepri\" >\n" +
+           buf.append("<input type=submit class=accept value=\"").append(_t("Save priorities"))
+               .append("\" name=savepri>\n" +
                        "</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
@@ -4750,8 +4750,8 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</form>\n");
         boolean enableLightbox = _manager.util().enableLightbox();
         if (!showRemainingSort && enableLightbox) {
-            buf.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"").append(_contextPath).append(WARBASE + "lightbox.css\">\n");
-            buf.append("<script charset=\"utf-8\" src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n")
+            buf.append("<link type=text/css rel=stylesheet href=").append(_contextPath).append(WARBASE + "lightbox.css>\n");
+            buf.append("<script charset=utf-8 src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n")
                .append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\nvar lightbox = new Lightbox();lightbox.load();\n</script>\n");
         }
         int delay = _manager.getRefreshDelaySeconds();
