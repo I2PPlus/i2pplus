@@ -688,13 +688,14 @@ input[name="nofilter_commentsName"] {max-width:248px}
 #torrentDisplay {margin:-1px 0 -1px;padding:0;display:block;position:sticky;top:44px;z-index:500;border:var(--border);border-left:none;border-right:none;box-shadow:var(--highlight);;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 1px,rgba(0,16,0,.5) 2px,rgba(0,16,0,.5) 3px),linear-gradient(180deg,#004000,#000 75%);background-size:100%,4px 100%,100%}
 .iframed #torrentDisplay {margin:-1px 0;position:static}
 #torrentDisplay input {width:0;height:0;position:absolute;z-index:-1;opacity:0}
-#torrentDisplay label {padding:1px 10px 3px;min-width:80px;display:inline-block;font-weight:700;font-size:9pt;color:#494;text-shadow:0 1px 1px #000;border-right:var(--border);box-shadow:var(--highlight);background:var(--btnAction)}
+#torrentDisplay label {padding:2px 10px;min-width:80px;display:inline-block;font-weight:700;font-size:9pt;color:#494;text-shadow:0 1px 1px #000;border-right:var(--border);box-shadow:var(--highlight);background:var(--btnAction)}
 #torrentDisplay label[for="all"] {border-left:var(--border)}
 #torrentDisplay label:hover {color:#d50;background:radial-gradient(at center bottom,rgba(255,96,0,.2),rgba(0,0,0,0) 80%),var(--btnAction_hover)}
-#torrentDisplay label:active,#torrentDisplay input:checked + label {color:#b40;text-shadow:none;box-shadow:var(--highlight),inset 3px 3px 3px #000;background:radial-gradient(at center bottom,rgba(255,96,0,.2),rgba(0,0,0,0) 40%),linear-gradient(180deg,#100800,#200800)}
+#torrentDisplay label:active,#torrentDisplay input:checked + label {color:#b40;text-shadow:none;box-shadow:var(--highlight),inset 2px 2px 2px rgba(0,0,0,.7);background:radial-gradient(at center bottom,rgba(255,96,0,.2),rgba(0,0,0,0) 40%),linear-gradient(180deg,#100800,#200800)}
 #torrentDisplay input:checked + label {color:#3b3;text-shadow:0 0 1px #000,0 1px 2px #010;background:radial-gradient(at center bottom,rgba(16,72,16,.3),rgba(0,0,0,0) 50%),linear-gradient(180deg,#000a00,#020);pointer-events:none}
-#filtercount:not(:empty){margin-left:3px;padding:0 2px;min-width:16px;display:inline-block!important;font-size:90%;border-radius:2px;box-shadow:0 0 0 1px #131;background:#000}
+#filtercount:not(:empty){margin-left:4px;padding:0 3px;min-width:18px;display:inline-block!important;line-height:1.1;font-size:90%;box-shadow:0 0 0 1px #010,0 0 0 1px rgba(16,92,16,.7) inset;background:var(--badge)}
 #filtercount+#filtercount,#torrentDisplay input:not(:checked)+label>#filtercount,label[for="all"] #filtercount{display:none!important}
++#filterbarActive #torrents tbody tr:not(.filtered):not(.peerinfo):not(.debuginfo){display:none}
 
 .RateUp,.torrentUploaded {font-style:italic}
 
