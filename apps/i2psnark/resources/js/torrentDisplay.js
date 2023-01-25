@@ -29,6 +29,8 @@ function initFilterBar() {
   var badge = document.getElementById("filtercount");
   var badges = document.querySelectorAll("#filtercount.badge");
   var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility:collapse}";
+  var xhrfilter = new XMLHttpRequest();
+  var xhrsnark = new XMLHttpRequest();
 
   var filterbar = document.getElementById("torrentDisplay");
   var filtered = document.querySelectorAll(".filtered");
@@ -40,8 +42,8 @@ function initFilterBar() {
 
   function clean() {
     var cssfilter = document.getElementById("cssfilter");
-    if (badge !== null) {badge.innerHTML = "";}
     if (cssfilter) {cssfilter.remove();}
+    if (badge !== null) {badge.innerHTML = "";}
     allOdd.forEach((element) => {element.classList.remove("filtered");});
     allEven.forEach((element) => {element.classList.remove("filtered");});
     if (pagenav) {
@@ -160,15 +162,21 @@ function initFilterBar() {
     showBadge();
   }
 
+  function onClick() {
+    if (xhrsnark.status !== null) {xhrsnark.abort();}
+    if (xhrfilter.status !== null) {xhrfilter.abort();}
+    refreshFilters();
+  }
+
   if (filterbar) {
-     btnAll.addEventListener("click", () => {showAll();});
-     btnActive.addEventListener("click", () => {showActive();});
-     btnInactive.addEventListener("click", () => {showInactive();});
-     btnDownloading.addEventListener("click", () => {showDownloading();});
-     btnSeeding.addEventListener("click", () => {showSeeding();});
-     btnComplete.addEventListener("click", () => {showComplete();});
-     btnIncomplete.addEventListener("click", () => {showIncomplete();});
-     btnStopped.addEventListener("click", () => {showStopped();});
+     btnAll.addEventListener("click", () => {onClick();showAll();});
+     btnActive.addEventListener("click", () => {onClick();showActive();});
+     btnInactive.addEventListener("click", () => {onClick();showInactive();});
+     btnDownloading.addEventListener("click", () => {onClick();showDownloading();});
+     btnSeeding.addEventListener("click", () => {onClick();showSeeding();});
+     btnComplete.addEventListener("click", () => {onClick();showComplete();});
+     btnIncomplete.addEventListener("click", () => {onClick();showIncomplete();});
+     btnStopped.addEventListener("click", () => {onClick();showStopped();});
      switch (window.localStorage.getItem("filter")) {
        case "all":
          btnAll.checked = true;
@@ -217,6 +225,7 @@ function checkFilterBar() {
   if (filterbar) {
     initFilterBar();
     checkPagenav();
+    refreshFilters();
   }
 
   var sortIcon = document.querySelectorAll(".sortIcon");
@@ -251,7 +260,8 @@ function checkPagenav() {
 }
 
 function refreshFilters() {
-  checkPagenav();
+  var xhrfilter = new XMLHttpRequest();
+  var xhrsnark = new XMLHttpRequest();
   var filterbar = document.getElementById("torrentDisplay");
   var headers = new Headers();
   var pagenav = document.getElementById("pagenavtop");
@@ -259,6 +269,10 @@ function refreshFilters() {
   var query = window.location.search;
   var storage = window.localStorage.getItem("filter");
   var url = ".ajax/xhr1.html";
+  if (xhrsnark.status !== null) {xhrsnark.abort();}
+  if (xhrfilter.status !== null) {xhrfilter.abort();}
+  checkPagenav();
+
   if (query) {
     if (storage && filterbar) {
       url += query + "&ps=9999";
@@ -268,8 +282,6 @@ function refreshFilters() {
   } else if (storage && filterbar) {
     url += "?ps=9999";
   }
-
-  var xhrfilter = new XMLHttpRequest();
   xhrfilter.responseType = "document";
   xhrfilter.open("GET", url, true);
   xhrfilter.onreadystatechange = function() {

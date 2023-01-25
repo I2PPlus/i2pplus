@@ -33,9 +33,17 @@ function refreshTorrents() {
   var url = ".ajax/xhr1.html";
   var headers = new Headers();
   var pagesize = headers.get('X-Snark-Pagesize');
+  var visible = document.visibilityState;
   var xhrsnark = new XMLHttpRequest();
+  var xhrfilter = new XMLHttpRequest();
 
   if (navbar !== null) {var home = document.querySelector(".nav_main");}
+
+  if (storage && filterbar) {
+    debug.hidden = true;
+  } else {
+    debug.hidden = false;
+  }
 
   if (query) {
     if (storage && filterbar) {
@@ -48,27 +56,27 @@ function refreshTorrents() {
   }
 
   function setLinks() {
-    home.href = url;
+    home.href = "/i2psnark/";
     if (debug !== null) {
-      debug.href = savedQuery;
+      if (savedQuery !== null) {
+        debug.href = home.href + savedQuery;
+      } else if (query != null) {
+        debug.href = home.href + query + "&p=2";
+      }
     } else if (home && query) {
       home.href = "/i2psnark/" + query;
-    } else {
-      home.href = "/i2psnark/";
     }
   }
 
   setLinks();
   navbar.addEventListener("mouseover", setLinks, false);
-  if (debug) {
-    debug.addEventListener("mouseover", setLinks, false);
-  }
+  if (debug) {debug.addEventListener("mouseover", setLinks, false);}
 
-  if (filterbar && storage) {
-    xhrsnark.abort();
-    refreshFilters();
+  if (filterbar && storage && visible === "visible") {
+    if (xhrsnark.status !== null) {xhrsnark.abort();}
     checkFilterBar();
-  } else if (torrents || noload || down) {
+  } else if (torrents || noload || down && visible === "visible") {
+    if (xhrfilter.status !== null) {xhrfilter.abort();}
     xhrsnark.open("GET", url);
     xhrsnark.responseType = "document";
     xhrsnark.onreadystatechange = function() {
@@ -164,10 +172,6 @@ function refreshTorrents() {
                 mainsection.innerHTML = mainsectionResponse.innerHTML;
               }
               setLinks();
-              if (filterbar) {
-                var filtercount = document.getElementById("filtercount");
-                if (filtercount) {filtercount.remove();}
-              }
             } else if (files) {
               var dirlistResponse = xhrsnark.responseXML.getElementById("dirlist");
               if (dirlistResponse !== null && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && !notfound) {
@@ -176,7 +180,6 @@ function refreshTorrents() {
             }
           }
 
-          function clearFilter() {window.localStorage.removeItem("filter");}
           function clearQuery() {window.localStorage.removeItem("queryString");}
 
         } else {
