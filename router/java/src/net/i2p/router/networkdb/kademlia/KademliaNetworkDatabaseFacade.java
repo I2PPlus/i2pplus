@@ -1272,9 +1272,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                           ROUTER_INFO_EXPIRATION_MIN +
                                           ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
 */
-        adjustedExpiration = existing > 3000 ? ROUTER_INFO_EXPIRATION / 3 :
-                             existing > 2000 ? ROUTER_INFO_EXPIRATION / 2 :
-                             existing > 1500 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
+        adjustedExpiration = existing > 2000 ? ROUTER_INFO_EXPIRATION / 3 :
+                             existing > 1500 ? ROUTER_INFO_EXPIRATION / 2 :
+                             existing > 1000 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
                              ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !isUs && !routerInfo.isCurrent(adjustedExpiration)) {
@@ -1319,9 +1319,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 &&
+            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0
+            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 &&
             routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION_SHORT && !us.equals(routerInfo.getIdentity().getHash()) && !isUs)
-                return "RouterInfo [" + routerId + "] is K or L tier and was published over 75m ago";
+                return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 75m ago";
 
         if (expireRI != null && !isUs) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
