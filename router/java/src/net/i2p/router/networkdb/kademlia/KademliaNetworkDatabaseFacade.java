@@ -1319,9 +1319,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0
+            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 &&
-            routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION_SHORT && !us.equals(routerInfo.getIdentity().getHash()) && !isUs)
+            routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION_SHORT && !isUs)
                 return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 75m ago";
 
         if (expireRI != null && !isUs) {
@@ -1330,10 +1330,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
             }
         } else {
-                if (upLongEnough && (routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION) && !isUs) {
-                    long age = _context.clock().now() - routerInfo.getPublished();
-                    return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
-                }
+            if (upLongEnough && (routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION) && !isUs) {
+                long age = _context.clock().now() - routerInfo.getPublished();
+                return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
+            }
         }
         if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
             for (RouterAddress ra : routerInfo.getAddresses()) {
