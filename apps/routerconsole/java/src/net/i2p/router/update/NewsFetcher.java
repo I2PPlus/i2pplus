@@ -284,8 +284,7 @@ class NewsFetcher extends UpdateRunner {
                                     return;
                                 }
                             }
-                            if (_log.shouldDebug())
-                                _log.debug("Router is out of date (" + ver + ") -> update advised!");
+                            _log.logAlways(Log.CRIT, "Router is out of date (" + ver + ") -> Update advised!");
                             // TODO if minversion > our version, continue
                             // and look for a second entry with clearnet URLs
                             // TODO clearnet URLs, notify with HTTP_CLEARNET and/or HTTPS_CLEARNET
