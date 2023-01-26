@@ -512,7 +512,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setHeader("Accept-Ranges", "none");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
-        resp.setHeader("Feature-Policy", "fullscreen 'self'");
+        resp.setHeader("Permissions-Policy", "fullscreen=(self)");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
@@ -526,7 +526,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setContentType("text/html; charset=UTF-8");
         resp.setHeader("Accept-Ranges", "none");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=60");
-        resp.setHeader("Content-Security-Policy", "default-src 'none'");
+        resp.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self';");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
@@ -4767,14 +4767,13 @@ public class I2PSnarkServlet extends BasicServlet {
                            "var lightbox = new Lightbox();\nlightbox.load();\n");
             }
             buf.append("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                       "var cycle;\n" +
-                       "function timer() {\n" +
-                       "var cycle = setInterval(function() {\n" +
-                       "refreshTorrents();\n");
-            buf.append("}, ajaxDelay);\n" +
-                       "timer();\n" +
-                       "}\n" +
-                       "</script>\n");
+                        "function doRefresh() {\n" +
+                        " var visibility = document.visibilityState;\n" +
+                        " if (visibility === 'visible') {refreshTorrents();}\n" +
+                        " else {cancelRefresh();}\n" +
+                        "}\n" +
+                        "function cancelRefresh() {clearInterval(timerId);}\n" +
+                        "</script>\n");
         }
         if (!isStandalone())
             buf.append(FOOTER);
