@@ -1566,7 +1566,8 @@ public class Router implements RouterClock.ClockShiftListener {
         if (waitForClients) {
             // Give time for the disconnect messages to get to them
             // so they can shut down correctly before the JVM goes away
-            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+//            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
             if (_log.shouldWarn())
                 _log.warn("Done waiting for clients to disconnect");
         }
