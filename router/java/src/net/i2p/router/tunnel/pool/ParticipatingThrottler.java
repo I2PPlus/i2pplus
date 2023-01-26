@@ -68,7 +68,7 @@ class ParticipatingThrottler {
     Result shouldThrottle(Hash h) {
         RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
         Hash us = context.routerHash();
-        boolean isUs = us.equals(ri.getIdentity().getHash());
+        boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());
         boolean isUnreachable = ri != null && !isUs && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         boolean isLowShare = ri != null && !isUs && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
