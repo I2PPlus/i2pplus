@@ -1,3 +1,4 @@
+<%@page trimDirectiveWhitespaces="true"%>
 <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
 <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
 <%
@@ -5,7 +6,7 @@
 %>
 <jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
-<div id="sb_wrap" style="width:200px;float:left;margin-right:20px">
+<div id="sb_wrap" style=width:200px;float:left;margin-right:20px>
 <%
     // The refresh delay, 0 to disable
     String d = "0";
@@ -28,9 +29,6 @@
             // update disable boolean
             intl.setDisableRefresh(d);
         }
-        if (false && !intl.getDisableRefresh())
-            out.print("<noscript>\n<iframe src=\"/summaryframe.jsp" + newDelay + "\" height=\"1500\" width=\"200\" " +
-                      "scrolling=\"auto\" frameborder=\"0\" title=\"sidepanel\">\n</noscript>\n");
     }
 %>
 <div class="sb" id="sidebar">
@@ -42,29 +40,10 @@
 <%
     } else {
         // Text browsers don't render the two divs side-by-side, so just provide a link
-        out.print("<a href=\"/summaryframe\">");
+        out.print("<a href=/summaryframe>");
         out.print(intl._t("Sidebar"));
         out.print("</a>");
     }
-
-    // d and allowIFrame defined above
-    if (false && !intl.getDisableRefresh()) {
-        out.print("</div><noscript>\n</iframe>\n</noscript>\n");
-    } else if (false && allowIFrame) {
-        // since we don't have an iframe this will reload the base page, and
-        // the new delay will be passed to the iframe above
-        out.print("<noscript>\n<div class=\"refresh\">\n<form action=\"" + request.getRequestURI() + "\" method=\"POST\">\n" +
-                  "<b>");
-        // We have intl defined when this is included, but not when compiled standalone.
-        out.print(intl._t("Refresh (s)"));
-        out.print(":</b> <input size=\"3\" type=\"text\" name=\"refresh\" value=\"60\" >\n" +
-                  "<button type=\"submit\" value=\"Enable\" >");
-        // ditto
-        out.print(intl._t("Enable"));
-        out.print("</button>\n" +
-                  "</form>\n</div>\n</noscript>\n</div>\n");
-    } else {
-        out.print("</div>\n");
-    }
+    out.print("</div>\n");
 %>
 </div>
