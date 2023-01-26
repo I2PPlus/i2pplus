@@ -4,39 +4,39 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.text.Collator;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import java.text.DecimalFormat;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.TunnelId;
+
+import net.i2p.router.CommSystemFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
-import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
+
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
-
-import net.i2p.router.CommSystemFacade;
-import net.i2p.router.transport.CommSystemFacadeImpl;
-import net.i2p.util.ObjectCounter;
-
-import java.util.HashSet;
-
-import net.i2p.data.router.RouterAddress;
 import net.i2p.util.Addresses;
+import net.i2p.util.ObjectCounter;
+import net.i2p.util.ObjectCounterUnsafe;
+
 
 /**
  *  For /tunnels.jsp, used by TunnelHelper.
@@ -171,14 +171,16 @@ class TunnelRenderer {
                         continue;
                     }
                     DataHelper.sort(participating, new TunnelComparator());
+                    Hash to = cfg.getSendTo();
+                    Hash from = cfg.getReceiveFrom();
                     // everything that isn't 'recent' is already in the tunnel.participatingMessageCount stat
                     processed += cfg.getRecentMessagesCount();
                     if (++displayed > DISPLAY_LIMIT)
                         continue;
                     out.write("<tr class=\"lazy\">");
-                    if (cfg.getSendTo() == null)
+                    if (to == null)
                         out.write("<td class=\"cells obep\" title=\"" + _t("Outbound Endpoint") + "\">" + _t("Outbound Endpoint") + "</td>");
-                    else if (cfg.getReceiveFrom() == null)
+                    else if (from == null)
                         out.write("<td class=\"cells ibgw\" title=\"" + _t("Inbound Gateway") + "\">" + _t("Inbound Gateway") + "</td>");
                     else
                         out.write("<td class=\"cells ptcp\" title=\"" + _t("Participant") + "\">" + _t("Participant") + "</td>");
@@ -218,9 +220,9 @@ class TunnelRenderer {
                         else
                             out.write("<td class=\"cells\">" + _t("n/a") + "</td>");
                     }
-                    if (cfg.getReceiveFrom() != null)
-                        out.write("<td class=\"cells\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getReceiveFrom()) +
-                                  "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getReceiveFrom()) + "</b></td>");
+                    if (from != null)
+                        out.write("<td class=\"cells\"><span class=\"tunnel_peer\">" + netDbLink(from) +
+                                  "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(from) + "</b></td>");
                     else
                         out.write("<td class=\"cells\"></td>");
                     long send = cfg.getSendTunnelId();
@@ -231,9 +233,9 @@ class TunnelRenderer {
                         else
                             out.write("<td class=\"cells\"></td>");
                     }
-                    if (cfg.getSendTo() != null)
-                        out.write("<td class=\"cells\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getSendTo()) +
-                                  "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getSendTo()) + "</b></td>");
+                    if (to != null)
+                        out.write("<td class=\"cells\"><span class=\"tunnel_peer\">" + netDbLink(to) +
+                                  "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(to) + "</b></td>");
                     else
                         out.write("<td class=\"cells\"></td>");
                     out.write("</tr>\n");
@@ -264,6 +266,51 @@ class TunnelRenderer {
             out.write("<p class=\"infohelp\">" + _t("No participating tunnels currently active."));
         }
         out.write("</p>");
+    }
+
+    public void renderTransitSummary(Writer out) throws IOException {
+      List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
+      int displayed = 0;
+      if (participating.size() > 1) {
+          // peer table sorted by number of tunnels
+          ObjectCounterUnsafe<Hash> counts = new ObjectCounterUnsafe<Hash>();
+          ObjectCounterUnsafe<Hash> bws = new ObjectCounterUnsafe<Hash>();
+          for (int i = 0; i < participating.size(); i++) {
+              HopConfig cfg = participating.get(i);
+              Hash from = cfg.getReceiveFrom();
+              Hash to = cfg.getSendTo();
+              int msgs = cfg.getProcessedMessagesCount();
+              if (from != null) {
+                  counts.increment(from);
+                  if (msgs > 0)
+                      bws.add(from, msgs);
+              }
+              if (to != null) {
+                  counts.increment(to);
+                  if (msgs > 0)
+                      bws.add(to, msgs);
+              }
+          }
+          // sort and output
+          out.write("<h3 class=\"tabletitle\">Peers in multiple participating tunnels (including inactive)</h3>\n");
+          out.write("<table class=\"tunneldisplay tunnels_participating\"><tr><th>" + _t("Router") + "</th><th>" +
+                    _t("Tunnels") + "</th><th>" + _t("Usage") + "</th></tr>\n");
+          displayed = 0;
+          List<Hash> sort = counts.sortedObjects();
+          for (Hash h : sort) {
+              int count = counts.count(h);
+              if (count <= 1)
+                  break;
+              if (++displayed > DISPLAY_LIMIT)
+                  break;
+              out.write("<tr><td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(h) + "</span></td>\n");
+              out.write("<td class=\"cells\" align=\"center\">" + count + "</td>\n");
+              out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatSize2(bws.count(h) * 1024) + "B</td></tr>\n");
+          }
+          out.write("</table>\n");
+          if (displayed <= 0)
+              out.write("<div class=\"statusnotes\"><b>" + _t("none") + "</b></div>\n");
+        }
     }
 
     public void renderGuide(Writer out) throws IOException {
