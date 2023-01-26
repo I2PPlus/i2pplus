@@ -302,7 +302,7 @@ public class PersistentDataStore extends TransientDataStore {
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(key);
         boolean isHidden = _context.router().isHidden();
         RouterInfo us = _context.netDb().lookupRouterInfoLocally(_context.routerHash());
-        boolean isUs = us.equals(_context.routerHash());
+        boolean isUs = us != null && us.equals(_context.routerHash());
         OutputStream fos = null;
         File dbFile = null;
 
@@ -340,7 +340,7 @@ public class PersistentDataStore extends TransientDataStore {
                     dbFile.delete();
                 }
             } else {
-                if (ri != null) {
+                if (ri != null && !isUs) {
                     if (unreachable) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing unreachable RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
