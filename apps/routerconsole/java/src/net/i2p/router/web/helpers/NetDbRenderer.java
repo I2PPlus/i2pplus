@@ -1057,7 +1057,7 @@ class NetDbRenderer {
                 }
                 buf.append("</table>\n");
             }
-            buf.append("</td>\n<td style=\"vertical-align: top;\">\n");
+            buf.append("</td>\n<td style=vertical-align:top>\n");
             out.write(buf.toString());
             buf.setLength(0);
             if (log.shouldWarn()) {
