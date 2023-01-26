@@ -602,7 +602,7 @@ public class PersistentDataStore extends TransientDataStore {
                         corrupt = true;
                         if (_log.shouldInfo()) {
                             if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty())
-                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> unreachable");
+                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> Unreachable");
                             else
                                 _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> K, L or M tier");
                         _routerFile.delete();
@@ -611,7 +611,7 @@ public class PersistentDataStore extends TransientDataStore {
                         // don't store routerinfos for routers older than 0.9.48
                         corrupt = true;
                         if (_log.shouldInfo())
-                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> older than " + MIN_VERSION);
+                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
                         _routerFile.delete();
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;

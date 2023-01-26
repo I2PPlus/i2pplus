@@ -168,6 +168,7 @@ function refreshTorrents() {
                 mainsection.innerHTML = mainsectionResponse.innerHTML;
               }
               setLinks();
+
             } else if (files) {
               var dirlistResponse = xhrsnark.responseXML.getElementById("dirlist");
               if (dirlistResponse !== null && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && !notfound) {
