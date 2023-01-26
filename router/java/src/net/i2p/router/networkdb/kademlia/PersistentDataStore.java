@@ -176,7 +176,7 @@ public class PersistentDataStore extends TransientDataStore {
      *  they just back up in the queue hogging memory.
      */
 //    private static final int WRITE_LIMIT = 5000;
-    private static final int WRITE_LIMIT = 500;
+    private static final int WRITE_LIMIT = 2000;
 //    private static final long WRITE_DELAY = 10*60*1000;
     private static final long WRITE_DELAY = 90*1000;
 
@@ -302,7 +302,7 @@ public class PersistentDataStore extends TransientDataStore {
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(key);
         boolean isHidden = _context.router().isHidden();
         RouterInfo us = _context.netDb().lookupRouterInfoLocally(_context.routerHash());
-        boolean isUs = us.equals(ri.getIdentity().getHash());
+        boolean isUs = us.equals(_context.routerHash());
         OutputStream fos = null;
         File dbFile = null;
 
