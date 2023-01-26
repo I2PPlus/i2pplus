@@ -358,7 +358,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         // expire old leases
         Job elj = new ExpireLeasesJob(_context, this);
-        elj.getTiming().setStartAfter(_context.clock().now() + 2*60*1000);
+//        elj.getTiming().setStartAfter(_context.clock().now() + 2*60*1000);
+        elj.getTiming().setStartAfter(_context.clock().now() + 90*1000);
         _context.jobQueue().addJob(elj);
 
         //// expire some routers
@@ -366,7 +367,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!_context.commSystem().isDummy()) {
             Job erj = new ExpireRoutersJob(_context, this);
 //             erj.getTiming().setStartAfter(_context.clock().now() + 2*60*60*1000);
-             erj.getTiming().setStartAfter(_context.clock().now() + 45*60*1000);
+             erj.getTiming().setStartAfter(_context.clock().now() + 30*60*1000);
             _context.jobQueue().addJob(erj);
         }
 
@@ -778,9 +779,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
                                      VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                      _context.router().getUptime() > 15*60*1000 &&
-                                     _context.netDb().getKnownRouters() > 3000 && !isUs;
+                                     _context.netDb().getKnownRouters() > 2000 && !isUs;
 
-            if (uninteresting && !isHidden && !us.equals(ri.getIdentity().getHash())) {
+            if (uninteresting && !isHidden) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Uninteresting");
                 _ds.remove(key);
@@ -967,7 +968,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private String validate(Hash key, LeaseSet leaseSet) throws UnsupportedCryptoException {
         if (!key.equals(leaseSet.getHash())) {
             if (_log.shouldWarn())
-                _log.warn("Invalid DbStore attempt! Key does not match LeaseSet destination!" +
+                _log.warn("Invalid NetDb store attempt! Key does not match LeaseSet destination!" +
                           "\n* Key: [" + key.toBase32().substring(0,6) + "]" +
                           "\n* LeaseSet: [" + leaseSet.toBase64().substring(0,6) + "]");
             return "Key does not match LeaseSet destination - " + key.toBase64();
@@ -1116,7 +1117,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         String err = validate(key, leaseSet);
         if (err != null)
-            throw new IllegalArgumentException("Invalid DbStore attempt - " + err);
+            throw new IllegalArgumentException("Invalid NetDb store attempt - " + err);
 
         _ds.put(key, leaseSet);
 
@@ -1181,8 +1182,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private String validate(Hash key, RouterInfo routerInfo) throws IllegalArgumentException {
         if (!key.equals(routerInfo.getIdentity().getHash())) {
             if (_log.shouldWarn())
-                _log.warn("Invalid DbStore attempt! Key does not match routerInfo.identity! Key [" + key.toBase64().substring(0,6) + "] Router [" +
-                           routerInfo.toBase64().substring(0,6) + "]");
+                _log.warn("Invalid NetDb store attempt! Key [" + key.toBase64().substring(0,6) + "] " +
+                          "does not match identity for RouterInfo [" + routerInfo.toBase64().substring(0,6) + "]");
             return "Key does not match routerInfo.identity";
         }
         // todo experimental sig types
@@ -1409,7 +1410,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         String err = validate(key, routerInfo);
         if (err != null)
-            throw new IllegalArgumentException("Invalid DbStore attempt - " + err);
+            throw new IllegalArgumentException("Invalid NetDb store attempt - " + err);
 
         //if (_log.shouldDebug())
         //    _log.debug("RouterInfo " + key.toBase64() + " is stored with "
