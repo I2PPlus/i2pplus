@@ -657,7 +657,7 @@ public class RouterInfo extends DatabaseEntry {
     public String toString() {
         //if (_stringified != null) return _stringified;
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("\n RouterInfo: ");
+        buf.append("RouterInfo: ");
         buf.append("\n* Identity: ").append(_identity);
         buf.append("\n* Signature: ").append(_signature);
         buf.append("\n* Published: ").append(new Date(_published));
