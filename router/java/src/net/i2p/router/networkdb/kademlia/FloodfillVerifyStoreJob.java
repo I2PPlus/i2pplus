@@ -396,7 +396,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 if (_log.shouldWarn()) {
                     _log.warn("[Job " + getJobId() + "] Verify via Floodfill failed (older) for [" + _key.toBase64().substring(0,6) + "]");
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Received older data: " + dsm.getEntry());
+                    _log.info("[Job " + getJobId() + "] Received older data \n* " + dsm.getEntry());
             } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
                 DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage) _message;
                 // assume 0 old, all new, 0 invalid, 0 dup
