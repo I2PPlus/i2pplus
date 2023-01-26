@@ -28,6 +28,7 @@ function initFilterBar() {
   var tfoot = document.getElementById("snarkFoot");
   var badge = document.getElementById("filtercount");
   var badges = document.querySelectorAll("#filtercount.badge");
+  var torrentform = document.getElementById("torrentlist");
   var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility:collapse}";
   var xhrfilter = new XMLHttpRequest();
   var xhrsnark = new XMLHttpRequest();
@@ -38,10 +39,24 @@ function initFilterBar() {
   var query = window.location.search;
   var storage = localStorage.getItem("filter");
 
-  if (!storage) {btnAll.checked = true}
+  checkIfActive();
+
+  function checkIfActive() {
+    if (!storage || btnAll.checked === true) {
+      btnAll.checked = true;
+      if (torrentform) {
+        torrentform.classList.remove("filterbarActive");
+      }
+    } else {
+      if (torrentform && !torrentform.classList.contains("filterbarActive")) {
+        torrentform.classList.add("filterbarActive");
+      }
+    }
+  }
 
   function clean() {
     var cssfilter = document.getElementById("cssfilter");
+    checkIfActive();
     if (cssfilter) {cssfilter.remove();}
     if (badge !== null) {badge.innerHTML = "";}
     allOdd.forEach((element) => {element.classList.remove("filtered");});
@@ -218,9 +233,9 @@ function initFilterBar() {
 }
 
 function checkFilterBar() {
-
   var filterbar = document.getElementById("torrentDisplay");
   var query = window.location.search;
+  var sortIcon = document.querySelectorAll(".sortIcon");
 
   if (filterbar) {
     initFilterBar();
@@ -228,7 +243,6 @@ function checkFilterBar() {
     refreshFilters();
   }
 
-  var sortIcon = document.querySelectorAll(".sortIcon");
   sortIcon.forEach(function (item) {
     item.addEventListener("click", () => {
       setQuery();
@@ -241,7 +255,6 @@ function checkFilterBar() {
       window.location.search = query;
     }
   }
-
 }
 
 function checkPagenav() {

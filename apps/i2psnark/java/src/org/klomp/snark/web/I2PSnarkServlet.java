@@ -362,13 +362,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                 }
                 out.write("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                          "var timerId = setInterval(doRefresh, ajaxDelay);\n" +
-                          "function doRefresh() {\n" +
-                          " var visibility = document.visibilityState;\n" +
-                          " if (visibility === 'visible') {refreshTorrents();}\n" +
-                          " else {cancelRefresh();}\n" +
-                          "}\n" +
-                          "function cancelRefresh() {clearInterval(timerId);}\n" +
+                          "var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
                           "</script>\n");
             }
         }
@@ -4767,13 +4761,8 @@ public class I2PSnarkServlet extends BasicServlet {
                            "var lightbox = new Lightbox();\nlightbox.load();\n");
             }
             buf.append("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                        "function doRefresh() {\n" +
-                        " var visibility = document.visibilityState;\n" +
-                        " if (visibility === 'visible') {refreshTorrents();}\n" +
-                        " else {cancelRefresh();}\n" +
-                        "}\n" +
-                        "function cancelRefresh() {clearInterval(timerId);}\n" +
-                        "</script>\n");
+                       "var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                       "</script>\n");
         }
         if (!isStandalone())
             buf.append(FOOTER);
