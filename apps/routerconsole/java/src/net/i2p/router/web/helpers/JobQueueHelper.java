@@ -15,6 +15,7 @@ import net.i2p.router.Job;
 import net.i2p.router.JobStats;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.ObjectCounterUnsafe;
+import net.i2p.util.SystemVersion;
 
 public class JobQueueHelper extends HelperBase {
 
@@ -88,7 +89,7 @@ public class JobQueueHelper extends HelperBase {
             buf.append("<h3 id=\"readyjobs\">")
                .append(_t("Ready/waiting jobs")).append(": ").append(readyJobs.size())
                .append("</h3>\n<ol class=\"jobqueue\">\n");
-            ObjectCounter<String> counter = new ObjectCounter<String>();
+            ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
             for (int i = 0; i < readyJobs.size(); i++) {
                 Job j = readyJobs.get(i);
                 counter.increment(j.getName());
@@ -110,7 +111,7 @@ public class JobQueueHelper extends HelperBase {
            .append(_t("Scheduled jobs")).append(": ").append(timedJobs.size())
            .append("</h3>\n<ol class=\"jobqueue\">\n");
 
-        ObjectCounter<String> counter = new ObjectCounter<String>();
+        ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
         getJobCounts(buf, counter);
         out.write(buf.toString());
         buf.setLength(0);
