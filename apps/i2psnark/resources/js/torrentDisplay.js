@@ -1,7 +1,6 @@
-// setup torrent display buttons so we can show/hide snarks based on status
-
-var bar = document.getElementById("torrentDisplay");
-var filtered = document.querySelectorAll(".filtered");
+/* torrentDisplay.js by dr|3d */
+/* Setup torrent display buttons so we can show/hide snarks based on status */
+/* License: AGPL3 or later */
 
 function initFilterBar() {
 
@@ -17,213 +16,182 @@ function initFilterBar() {
   var btnSeeding = document.getElementById("seeding");
   var btnStopped = document.getElementById("stopped");
   var complete = document.querySelectorAll(".complete");
-  var css = document.createElement("link");
   var debuginfo = document.querySelectorAll(".debuginfo");
   var downloading = document.querySelectorAll(".downloading");
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
   var incomplete = document.querySelectorAll(".incomplete");
+  var pagenav = document.getElementById("pagenavtop");
   var peerinfo = document.querySelectorAll(".peerinfo");
   var seeding = document.querySelectorAll(".seeding");
   var stopped = document.querySelectorAll(".stopped");
+  var storage = window.localStorage.getItem("filter");
   var tfoot = document.getElementById("snarkFoot");
+  var badge = document.getElementById("filtercount");
+  var badges = document.querySelectorAll("#filtercount.badge");
+  var torrentform = document.getElementById("torrentlist");
+  var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility:collapse}";
+  var xhrfilter = new XMLHttpRequest();
+  var xhrsnark = new XMLHttpRequest();
 
-  if (tfoot !== null) {
-    var tfootInner = tfoot.getElementsByClassName("tr")[0];
+  var filterbar = document.getElementById("torrentDisplay");
+  var filtered = document.querySelectorAll(".filtered");
+  var pagenav = document.getElementById("pagenavtop");
+  var query = window.location.search;
+  var storage = localStorage.getItem("filter");
+
+  checkIfActive();
+
+  function checkIfActive() {
+    if (!storage || btnAll.checked === true) {
+      btnAll.checked = true;
+      if (torrentform) {
+        torrentform.classList.remove("filterbarActive");
+      }
+    } else {
+      if (torrentform && !torrentform.classList.contains("filterbarActive")) {
+        torrentform.classList.add("filterbarActive");
+      }
+    }
   }
 
   function clean() {
-    var filter = document.getElementById("filter");
-    if (filter) {
-        filter.remove();
+    var cssfilter = document.getElementById("cssfilter");
+    checkIfActive();
+    if (cssfilter) {cssfilter.remove();}
+    if (badge !== null) {badge.innerHTML = "";}
+    allOdd.forEach((element) => {element.classList.remove("filtered");});
+    allEven.forEach((element) => {element.classList.remove("filtered");});
+    if (pagenav) {
+      if (storage !== null) {pagenav.style.display = "none";}
+      else {pagenav.style.display = "";}
     }
-    allOdd.forEach((element) => {
-      element.classList.remove("filtered");
-    });
-    allEven.forEach((element) => {
-      element.classList.remove("filtered");
-    });
+    if (badge) {badges.forEach((element) => {element.remove();});}
   }
 
-  function countFiltered() {
-    filtered = document.querySelectorAll(".filtered");
-    showResults();
-  }
-
-  function showResults() {
-    var tbody = document.getElementById("snarkTbody");
-    filtered = document.querySelectorAll(".filtered");
-    var results = document.querySelectorAll(".results");
-    cleanResults();
-    var row = tbody.insertRow(0);
-    row.classList.add("results");
-    row.id = "filterResults";
-    var cell = row.insertCell(0);
-    cell.colSpan = 12;
-    var on = "";
-    var peers = peerinfo.length;
-    if (btnActive.checked) {
-      on = "active";
-    } else if (btnInactive.checked) {
-      on = "inactive";
-    } else if (btnDownloading.checked) {
-      on = "downloading";
-    } else if (btnSeeding.checked) {
-      on = "seeding";
-    } else if (btnComplete.checked) {
-      on = "completed";
-    } else if (btnIncomplete.checked) {
-      on = "incomplete";
-    } else if (btnStopped.checked) {
-      on = "stopped";
-    }
-    if (!btnAll.checked) {
-        if (filtered.length === 1) {
-          cell.innerHTML = "Displaying " + (filtered.length) + " " + on + " torrent";
-        } else {
-          cell.innerHTML = "Displaying " + (filtered.length) + " " + on + " torrents";
-        }
-    } else {
-      var filterResults = document.getElementById("filterResults");
-      if (filterResults) {
-        cleanResults();
-      }
-      filterResults.style.display = "none";
+  function showBadge() {
+    var filtered = document.querySelectorAll(".filtered");
+    var activeFilter = document.querySelector("#torrentDisplay input:checked + .filterbutton");
+    var inactiveFilters = document.querySelectorAll("#torrentDisplay input:not(checked) + .filterbutton");
+    var count = filtered.length;
+    activeFilter.classList.add("enabled");
+    activeFilter.innerHTML += "<span id=filtercount class=badge></span>";
+    if (count > 0) {
+      var badge = document.getElementById("filtercount");
+      badge.innerHTML = count;
     }
   }
 
-  function cleanResults() {
-    var results = document.querySelectorAll(".results");
-    var resultsSize = results.length;
-    if (resultsSize > 0) {
-      results.forEach((elem) => {
-        if (tfoot !== null && elem !== tfootInner) {
-          elem.remove();
-        }
-      });
-    }
+  function injectCSS() {
+    var stylesheet = "<style type=text/css id=cssfilter>" + rules + "</style>";
+    document.head.innerHTML += stylesheet;
   }
 
   function showAll() {
     clean();
+    checkPagenav();
+    if (pagenav !== null) {
+      pagenav.removeAttribute("hidden");
+      pagenav.style.display = "";
+    }
+    var query = window.location.search;
+    window.localStorage.removeItem("filter");
     btnAll.checked = true;
     btnAll.style.pointerEvents = "none";
-    window.localStorage.setItem("filter", btnAll.id);
   }
 
   function showActive() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/active.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".active{visibility:visible}";
+    rules += state;
+    injectCSS();
     btnActive.checked = true;
     window.localStorage.setItem("filter", btnActive.id);
-    active.forEach((element) => {
-      element.classList.add("filtered");
-    });
-    countFiltered();
+    active.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
   }
 
   function showInactive() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/inactive.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".inactive{visibility:visible}";
+    rules += state;
+    injectCSS();
     btnInactive.checked = true;
     window.localStorage.setItem("filter", btnInactive.id);
-    inactive.forEach((element) => {
-      element.classList.add("filtered");
-    });
-    countFiltered();
+    inactive.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
   }
 
   function showDownloading() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/downloading.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".downloading{visibility:visible}";
+    rules += state;
+    injectCSS();
     btnDownloading.checked = true;
     window.localStorage.setItem("filter", btnDownloading.id);
-    downloading.forEach((element) => {
-      element.classList.add("filtered");
-    });
-    countFiltered();
+    downloading.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
   }
 
   function showSeeding() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/seeding.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".seeding{visibility:visible}";
+    rules += state;
+    injectCSS();
     btnSeeding.checked = true;
     window.localStorage.setItem("filter", btnSeeding.id);
-    seeding.forEach((element) => {
-      element.classList.add("filtered");
-    });
-    countFiltered();
+    seeding.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
   }
 
   function showComplete() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/complete.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".complete{visibility:visible}";
+    rules += state;
+    injectCSS();
     btnComplete.checked = true;
     window.localStorage.setItem("filter", btnComplete.id);
-    complete.forEach((element) => {
-      element.classList.add("filtered");
-    });
-    countFiltered();
+    complete.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
   }
 
   function showIncomplete() {
     clean();
-    css.type = "text/css";
-    css.rel = "stylesheet";
-    css.href = ".resources/filters/incomplete.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".incomplete{visibility:visible}";
+    rules += state;
+    injectCSS();
     btnIncomplete.checked = true;
     window.localStorage.setItem("filter", btnIncomplete.id);
-    incomplete.forEach((element) => {
-      element.classList.add("filtered");
-    });
-    countFiltered();
+    incomplete.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
   }
 
   function showStopped() {
     clean();
-    css.type ="text/css";
-    css.rel ="stylesheet";
-    css.href =".resources/filters/stopped.css";
-    css.setAttribute("id", "filter");
-    document.head.appendChild(css);
+    var state = ".stopped{visibility:visible}";
+    rules += state;
+    injectCSS();
     btnStopped.checked = true;
     window.localStorage.setItem("filter", btnStopped.id);
-    stopped.forEach((element) => {
-      element.classList.add("filtered");
-    });
-    countFiltered();
+    stopped.forEach((element) => {element.classList.add("filtered");});
+    var count = filtered.length;
+    showBadge();
   }
 
-  if (bar) {
-     btnAll.addEventListener("click", showAll, false);
-     btnActive.addEventListener("click", showActive, false);
-     btnInactive.addEventListener("click", showInactive, false);
-     btnDownloading.addEventListener("click", showDownloading, false);
-     btnSeeding.addEventListener("click", showSeeding, false);
-     btnComplete.addEventListener("click", showComplete, false);
-     btnIncomplete.addEventListener("click", showIncomplete, false);
-     btnStopped.addEventListener("click", showStopped, false);
+  function onClick() {
+    if (xhrsnark.status !== null) {xhrsnark.abort();}
+    if (xhrfilter.status !== null) {xhrfilter.abort();}
+    refreshFilters();
+  }
+
+  if (filterbar) {
+     btnAll.addEventListener("click", () => {onClick();showAll();});
+     btnActive.addEventListener("click", () => {onClick();showActive();});
+     btnInactive.addEventListener("click", () => {onClick();showInactive();});
+     btnDownloading.addEventListener("click", () => {onClick();showDownloading();});
+     btnSeeding.addEventListener("click", () => {onClick();showSeeding();});
+     btnComplete.addEventListener("click", () => {onClick();showComplete();});
+     btnIncomplete.addEventListener("click", () => {onClick();showIncomplete();});
+     btnStopped.addEventListener("click", () => {onClick();showStopped();});
      switch (window.localStorage.getItem("filter")) {
        case "all":
          btnAll.checked = true;
@@ -265,31 +233,94 @@ function initFilterBar() {
 }
 
 function checkFilterBar() {
+  var filterbar = document.getElementById("torrentDisplay");
   var query = window.location.search;
-  var url = location.href;
-  var storage = window.localStorage.getItem("filter");
-  if (storage !== null && storage !== "all") {
-    url = location.href + "&ps=9999";
-  }
-
-  function setQuery() {
-    if (query) {
-      window.localStorage.setItem("queryString", url);
-    }
-  }
-
-  if (bar !== null) {
-    initFilterBar();
-  }
-
   var sortIcon = document.querySelectorAll(".sortIcon");
+
+  if (filterbar) {
+    initFilterBar();
+    checkPagenav();
+    refreshFilters();
+  }
+
   sortIcon.forEach(function (item) {
     item.addEventListener("click", () => {
       setQuery();
     });
   });
+
+  function setQuery() {
+    if (query) {
+      window.localStorage.setItem("queryString", window.location.search);
+      window.location.search = query;
+    }
+  }
 }
 
-checkFilterBar();
+function checkPagenav() {
+  var pagenav = document.getElementById("pagenavtop");
+  var storage = window.localStorage.getItem("filter");
+  if (pagenav !== null) {
+    if (storage !== null) {
+      pagenav.style.display = "none";
+      pagenav.hidden = true;
+    } else {
+      pagenav.style.display = "block";
+      pagenav.hidden = false;
+      pagenav.removeAttribute("hidden");
+    }
+  }
+}
 
-export {initFilterBar, checkFilterBar};
+function refreshFilters() {
+  var xhrfilter = new XMLHttpRequest();
+  var xhrsnark = new XMLHttpRequest();
+  var filterbar = document.getElementById("torrentDisplay");
+  var headers = new Headers();
+  var pagenav = document.getElementById("pagenavtop");
+  var pagesize = headers.get("X-Snark-Pagesize");
+  var query = window.location.search;
+  var storage = window.localStorage.getItem("filter");
+  var url = ".ajax/xhr1.html";
+  if (xhrsnark.status !== null) {xhrsnark.abort();}
+  if (xhrfilter.status !== null) {xhrfilter.abort();}
+  checkPagenav();
+
+  if (query) {
+    if (storage !== null && filterbar) {
+      url += query + "&ps=9999";
+    } else {
+      url += query;
+    }
+  } else if (storage !== null && filterbar) {
+    url += "?ps=9999";
+  }
+  xhrfilter.responseType = "document";
+  xhrfilter.open("GET", url, true);
+  xhrfilter.onreadystatechange = function() {
+    if (xhrfilter.readyState === 4) {
+      if (xhrfilter.status === 200) {
+        var torrents = document.getElementById("torrents");
+        var torrentsResponse = xhrfilter.responseXML.getElementById("torrents");
+        if (torrentsResponse !== null && torrents.innerHTML !== torrentsResponse.innerHTML) {
+          torrents.outerHTML = torrentsResponse.outerHTML;
+        }
+        if (pagenav && (!storage || storage === "all")) {
+          checkPagenav();
+          var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
+          if (pagenavResponse !== null) {pagenav.innerHTML = pagenavResponse.innerHTML;}
+        }
+        if (filterbar) {
+          initFilterBar();
+          var filterbarResponse = xhrfilter.responseXML.getElementById("torrentDisplay");
+          if (!filterbar && filterbarResponse !== null) {filterbar.outerHTML = filterbarResponse.outerHTML;}
+        }
+      }
+    }
+  };
+  xhrfilter.send();
+}
+
+document.addEventListener("DOMContentLoaded", checkFilterBar(), true);
+
+export {initFilterBar, checkFilterBar, refreshFilters};

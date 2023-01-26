@@ -26,7 +26,6 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
-
 import net.i2p.util.SystemVersion;
 
 /**
@@ -635,7 +634,7 @@ public class TunnelPool {
         long et = now - _lastRateUpdate;
         if (et > 2*60*1000) {
             long bw = 1024 * (_lifetimeProcessed - _lastLifetimeProcessed) * 1000 / et;   // Bps
-            _context.statManager().addRateData(_rateName, bw, 0);
+            _context.statManager().addRateData(_rateName, bw);
             _lastRateUpdate = now;
             _lastLifetimeProcessed = _lifetimeProcessed;
         }
@@ -1003,10 +1002,10 @@ public class TunnelPool {
 
             if (rv > 0 && _log.shouldDebug())
                 _log.debug("[" + toString() + "] New Count: rv: " + rv + "; Allow Zero Hop? " + allowZeroHop
-                       + "; AVG: " + avg + "; LatestTime: " + latesttime
+                       + "; Avg: " + avg + "; LatestTime: " + latesttime
                        + "; Soon: " + expireSoon + "; Later: " + expireLater
                        + "; STD: " + wanted + "; InProgress: " + inProgress + "; Fallback: " + fallback);
-            _context.statManager().addRateData(rateName, rv + inProgress, 0);
+            _context.statManager().addRateData(rateName, rv + inProgress);
             return rv;
         }
 
@@ -1059,7 +1058,7 @@ public class TunnelPool {
 
         int rv = countHowManyToBuild(allowZeroHop, expire30s, expire90s, expire150s, expire210s, expire270s,
                                    expireLater, wanted, inProgress, fallback);
-        _context.statManager().addRateData(rateName, (rv > 0 || inProgress > 0) ? 1 : 0, 0);
+        _context.statManager().addRateData(rateName, (rv > 0 || inProgress > 0) ? 1 : 0);
         return rv;
 
     }

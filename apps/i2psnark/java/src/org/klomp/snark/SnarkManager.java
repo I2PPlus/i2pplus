@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -133,7 +134,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String PROP_META_ACTIVITY = "activity";
 
     private static final String CONFIG_FILE_SUFFIX = ".config";
-    private static final String CONFIG_FILE = "i2psnark" + CONFIG_FILE_SUFFIX;
+    public static final String CONFIG_FILE = "i2psnark" + CONFIG_FILE_SUFFIX;
     private static final String COMMENT_FILE_SUFFIX = ".comments.txt.gz";
     public static final String PROP_FILES_PUBLIC = "i2psnark.filesPublic";
     public static final String PROP_OLD_AUTO_START = "i2snark.autoStart";   // oops
@@ -175,6 +176,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String PROP_COMMENTS = "i2psnark.comments";
     /** @since 0.9.31 */
     private static final String PROP_COMMENTS_NAME = "i2psnark.commentsName";
+    /** @since 0.9.58 */
+    public static final String PROP_MAX_FILES_PER_TORRENT = "i2psnark.maxFilesPerTorrent";
 
 //    public static final int MIN_UP_BW = 10;
     public static final int MIN_UP_BW = 30;
@@ -184,6 +187,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final int DEFAULT_REFRESH_DELAY_SECS = 5;
     private static final int DEFAULT_PAGE_SIZE = 50;
     public static final int DEFAULT_TUNNEL_QUANTITY = 16;
+    public static final int DEFAULT_MAX_FILES_PER_TORRENT = 2000;
     public static final String CONFIG_DIR_SUFFIX = ".d";
     private static final String SUBDIR_PREFIX = "s";
     private static final String B64 = Base64.ALPHABET_I2P;
@@ -614,7 +618,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         try {
             return Integer.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT));
         } catch (NumberFormatException nfe) {
-            return MAX_FILES_PER_TORRENT;
+            return DEFAULT_MAX_FILES_PER_TORRENT;
         }
     }
 
@@ -1077,6 +1081,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         //    _util.setProxy(eepHost, eepPort);
         _util.setMaxUploaders(getInt(PROP_UPLOADERS_TOTAL, Snark.MAX_TOTAL_UPLOADERS));
         _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
+        _util.setMaxFilesPerTorrent(getInt(PROP_MAX_FILES_PER_TORRENT, DEFAULT_MAX_FILES_PER_TORRENT));
         _util.setStartupDelay(getInt(PROP_STARTUP_DELAY, DEFAULT_STARTUP_DELAY));
         _util.setFilesPublic(areFilesPublic());
         _util.setOpenTrackers(getListConfig(PROP_OPENTRACKERS, DEFAULT_OPENTRACKERS));
@@ -1671,10 +1676,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             addMessage(_t("Unable to save the config to {0}", _configFile.getAbsolutePath()));
         }
     }
-
-    /** hardcoded for sanity.  perhaps this should be customizable, for people who increase their ulimit, etc. */
-    public static final int MAX_FILES_PER_TORRENT = 2000;
-    public static final String PROP_MAX_FILES_PER_TORRENT = "i2psnark.maxFilesPerTorrent";
 
     /**
      *  Set of canonical .torrent filenames that we are dealing with.
@@ -2642,9 +2643,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private String validateTorrent(MetaInfo info) {
         List<List<String>> files = info.getFiles();
-        int maxFiles = getMaxFilesPerTorrent();
-        if ( (files != null) && (files.size() > (maxFiles)) ) {
-            return _t("Too many files in \"{0}\" ({1})!", info.getName(), files.size());
+        if (files != null && files.size() > _util.getMaxFilesPerTorrent()) {
+            return _t("Too many files in \"{0}\" ({1})!", info.getName(), files.size()) +
+                   " - limit is " + _util.getMaxFilesPerTorrent() + ", zip them or set " +
+                   PROP_MAX_FILES_PER_TORRENT + '=' + files.size() + " in " +
+                   _configFile.getAbsolutePath() + " and restart";
         } else if ( (files == null) && (info.getName().endsWith(".torrent")) ) {
             return _t("Torrent file \"{0}\" cannot end in \".torrent\"!", info.getName());
         } else if (info.getPieces() <= 0) {

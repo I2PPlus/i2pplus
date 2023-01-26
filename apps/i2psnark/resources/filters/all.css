@@ -1,4 +1,0 @@
-.rowOdd,.rowEven,.peerinfo,.debuginfo{display:table-row}
-#torrentDisplay input#all{pointer-events:none}
-#torrentDisplay input:not(#all){pointer-events:auto}
-#torrentDisplay input#all+label{cursor:default!important}

@@ -523,8 +523,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     TransportUtil.isValidPort(from.getPort()) &&
                                     _transport.isValid(from.getIP())) {
                                     // send challenge
-                                    if (_log.shouldWarn())
-                                        _log.warn("[SSU2] Starting migration to " + from + this);
+                                    if (_log.shouldInfo())
+                                        _log.info("[SSU2] Starting connection migration to " + from + this);
                                     _migrationState = MigrationState.MIGRATION_STATE_PENDING;
                                     _migrationStarted = _context.clock().now();
                                     _migrationNextSendTime = _migrationStarted + PATH_CHALLENGE_DELAY;
@@ -536,8 +536,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     setLastSendTime(_migrationStarted);
                                 } else {
                                     // don't attempt to switch
-                                    if (_log.shouldWarn())
-                                        _log.warn("[SSU2] Not migrating to " + from + this);
+                                    if (_log.shouldInfo())
+                                        _log.info("[SSU2] Not migrating connection to " + from + this);
                                 }
                                 limitSending = true;
                             }
@@ -547,8 +547,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                             if (from.equals(_remoteHostId)) {
                                 // cancel
                                 _migrationState = MigrationState.MIGRATION_STATE_NONE;
-                                if (_log.shouldWarn())
-                                    _log.warn("[SSU2] Cancelling migration on " + this);
+                                if (_log.shouldInfo())
+                                    _log.info("[SSU2] Cancelling connection migration on " + this);
                             } else {
                                 // still waiting
                                 long now = _context.clock().now();
@@ -557,10 +557,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     // time exceeded
                                     _migrationState = MigrationState.MIGRATION_STATE_NONE;
                                     if (_log.shouldWarn())
-                                        _log.warn("[SSU2] Migration failed on " + this);
+                                        _log.warn("[SSU2] Connection migration failed on " + this);
                                 } else if (from.equals(_pendingRemoteHostId)) {
-                                    if (_log.shouldWarn())
-                                        _log.warn("[SSU2] Migration pending, got another packet from " + from + this);
+                                    if (_log.shouldInfo())
+                                        _log.info("[SSU2] Connection migration pending, received another packet from " + from + this);
                                     if (now > _migrationNextSendTime) {
                                         // retransmit challenge
                                         _migrationNextSendTime = now + (PATH_CHALLENGE_DELAY << _pathChallengeSendCount);
@@ -571,8 +571,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     limitSending = true;
                                 } else {
                                     // a third ip/port ???
-                                    if (_log.shouldWarn())
-                                        _log.warn("[SSU2] Migration pending, got packet from 3rd address " + from + this);
+                                    if (_log.shouldInfo())
+                                        _log.info("[SSU2] Connection migration pending, received packet from 3rd address " + from + this);
                                     limitSending = true;
                                 }
                             }
@@ -590,7 +590,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
         } catch (Exception e) {
             if (_log.shouldWarn())
-                _log.warn("[SSU2] BAD encrypted packet from: " + this + '\n' + HexDump.dump(data, off, len), e);
+                _log.warn("[SSU2] Received BAD encrypted packet from: " + this + '\n' + HexDump.dump(data, off, len), e);
         }
     }
 
@@ -842,7 +842,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         } catch (Exception e) {
             // IllegalArgumentException, buggy ack block, let the other blocks get processed
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Bad ACK block\n" + SSU2Bitfield.toString(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0)) +
+                _log.warn("[SSU2] Received Bad ACK block\n" + SSU2Bitfield.toString(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0)) +
                           "\nACK through " + ackThru + " acnt " + acks + (ranges != null ? " Ranges:\n" + HexDump.dump(ranges) : "") +
                           "" + this, e);
         }
@@ -889,8 +889,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         // success
                         _migrationState = MigrationState.MIGRATION_STATE_NONE;
                         _pathChallengeData = null;
-                        if (_log.shouldWarn())
-                            _log.warn("Migration successful, changed address from " + _remoteHostId + " to " + from + this);
+                        if (_log.shouldInfo())
+                            _log.info("Connection migration successful, changed address from " + _remoteHostId + " to " + from + this);
                         _transport.changePeerAddress(this, from);
                         _mtu = MIN_MTU;
                         if (isIPv6() || !_transport.isSymNatted()) {
@@ -1027,7 +1027,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             } else {
                 // will happen with retransmission as a different packet number
                 if (_log.shouldInfo())
-                    _log.info("[SSU2] Dup ACK of fragment " + f.num + state);
+                    _log.info("[SSU2] Duplicate ACK of fragment " + f.num + state);
             }
             long sn = state.getSeqNum();
             if (sn > highest)

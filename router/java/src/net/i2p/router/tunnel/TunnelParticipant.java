@@ -109,7 +109,7 @@ class TunnelParticipant {
                 ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
             if (ri != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Despatched " + msg + " directly to nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "]");
+                    _log.debug("Dispatched " + msg + " directly to nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "]");
                 send(_config, msg, ri);
                 // see comments below
                 //if (_config != null)

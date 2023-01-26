@@ -235,14 +235,14 @@ public class I2PSnarkServlet extends BasicServlet {
             setXHRHeaders(resp, cspNonce, false);
             PrintWriter out = resp.getWriter();
             out.write("<!DOCTYPE HTML>\n<html>\n<head>\n");
-            out.write("</head>\n<body id=\"snarkxhr\"><div id=\"mainsection\">\n");
+            out.write("</head>\n<body id=snarkxhr>\n<div id=mainsection>\n");
             writeMessages(out, false, peerString);
             boolean canWrite;
             synchronized(this) {
                 canWrite = _resourceBase.canWrite();
             }
             writeTorrents(out, req, canWrite);
-            out.write("</div></body>\n</html>\n");
+            out.write("\n</div>\n</body>\n</html>\n");
             return;
         }
 
@@ -357,17 +357,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n");
                 debug = false;
                 if (debug && _context.isRouterContext()) {
-                    out.write("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debug - comment out when done
+                    out.write("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                 } else {
                     out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                 }
                 out.write("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                          "var timerId = setInterval(doRefresh, ajaxDelay);\n" +
-                          "function doRefresh() {\n" +
-                          " if (document.visible = true) {refreshTorrents();}\n" +
-                          " else {cancelRefresh();}\n" +
-                          "}\n" +
-                          "function cancelRefresh() {clearInterval(timerId);}\n" +
+                          "var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
                           "</script>\n");
             }
         }
@@ -504,29 +499,33 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      *  @since 0.9.16 moved from doGetAndPost()
      */
-    private static void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
+    private void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
+        String pageSize = String.valueOf(_manager.getPageSize());
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
         resp.setHeader("Accept-Ranges", "none");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
-        resp.setHeader("Feature-Policy", "fullscreen 'self'");
+        resp.setHeader("Permissions-Policy", "fullscreen=(self)");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
+        resp.setHeader("X-Snark-Pagesize", pageSize);
     }
 
-    private static void setXHRHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
+    private void setXHRHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
+        String pageSize = String.valueOf(_manager.getPageSize());
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
         resp.setHeader("Accept-Ranges", "none");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=60");
-        resp.setHeader("Content-Security-Policy", "default-src 'none'");
+        resp.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self';");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
+        resp.setHeader("X-Snark-Pagesize", pageSize);
     }
 
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
@@ -619,16 +618,16 @@ public class I2PSnarkServlet extends BasicServlet {
                 // then we can show all matches, not just those on page, and paginate as required
                 if (!snarks.isEmpty() && _manager.util().connected()) {
                     // ensure we hide torrent filter bar (if enabled) and js is disabled
-                    out.write("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
-                    out.write("<div id=\"torrentDisplay\" class=\"script\">\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" hidden><label for=\"all\" class=\"filterbutton\">Show All</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\" hidden><label for=\"active\" class=\"filterbutton\">Active</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" hidden><label for=\"inactive\" class=\"filterbutton\">Inactive</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" hidden><label for=\"downloading\" class=\"filterbutton\">Downloading</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\" class=\"filterbutton\">Seeding</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\" hidden><label for=\"complete\" class=\"filterbutton\">Complete</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\" hidden><label for=\"incomplete\" class=\"filterbutton\">Incomplete</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"stopped\" hidden><label for=\"stopped\" class=\"filterbutton\">Stopped</label>\n" +
+                    out.write("<noscript><style type=text/css>.script{display:none}</style></noscript>\n");
+                    out.write("<div id=torrentDisplay class=script>\n" +
+                              "<input type=radio name=torrentDisplay id=all hidden><label for=all class=filterbutton>Show All</label>" +
+                              "<input type=radio name=torrentDisplay id=active hidden><label for=active class=filterbutton>Active</label>" +
+                              "<input type=radio name=torrentDisplay id=inactive hidden><label for=inactive class=filterbutton>Inactive</label>" +
+                              "<input type=radio name=torrentDisplay id=downloading hidden><label for=downloading class=filterbutton>Downloading</label>" +
+                              "<input type=radio name=torrentDisplay id=seeding hidden><label for=seeding class=filterbutton>Seeding</label>" +
+                              "<input type=radio name=torrentDisplay id=complete hidden><label for=complete class=filterbutton>Complete</label>" +
+                              "<input type=radio name=torrentDisplay id=incomplete hidden><label for=incomplete class=filterbutton>Incomplete</label>" +
+                              "<input type=radio name=torrentDisplay id=stopped hidden><label for=stopped class=filterbutton>Stopped</label>\n" +
                               "</div>\n");
                 }
             }
@@ -663,6 +662,9 @@ public class I2PSnarkServlet extends BasicServlet {
 //        int pageSize = Math.max(_manager.getPageSize(), 5);
         int pageSize = _manager.getPageSize();
         String ps = req.getParameter("ps");
+        if (ps == "null") {
+            ps = String.valueOf(pageSize);
+        }
         if (ps != null) {
             try { pageSize = Integer.parseInt(ps); } catch (NumberFormatException nfe) {}
         }
@@ -670,8 +672,12 @@ public class I2PSnarkServlet extends BasicServlet {
             pageSize = 10;
 
         // move pagenav here so we can align it nicely without resorting to hacks
-        if (total > 0 && (start > 0 || total > pageSize)) {
+        if (isForm && total > 0 && (start > 0 || total > pageSize)) {
             out.write("<div class=\"pagenavcontrols\" id=\"pagenavtop\">");
+            writePageNav(out, req, start, pageSize, total, noThinsp);
+            out.write("</div>");
+        } else if (isForm && showStatusFilter && total > pageSize) {
+            out.write("<div class=\"pagenavcontrols\" id=\"pagenavtop\" hidden>");
             writePageNav(out, req, start, pageSize, total, noThinsp);
             out.write("</div>");
         }
@@ -2973,7 +2979,7 @@ public class I2PSnarkServlet extends BasicServlet {
         //out.write("From file: <input type=\"file\" name=\"newFile\" size=\"50\" value=\"" + newFile + "\" /><br>\n");
         out.write(_t("Data to seed"));
         out.write(":</td><td>"
-                  + "<input type=\"text\" required name=\"nofilter_baseFile\" size=\"85\" value=\""
+                  + "<input type=\"text\" name=\"nofilter_baseFile\" size=\"85\" value=\""
                   + "\" spellcheck=\"false\" title=\"");
         out.write(_t("File or directory to seed (full path or within the directory {0} )",
                     _manager.getDataDir().getAbsolutePath() + File.separatorChar));
@@ -3044,8 +3050,12 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("</td>\n</tr>\n" +
                   "</table>\n" +
                   "</form>\n</div>\n<span id=\"createNotify\" class=\"notify\" hidden></span>\n</div>\n");
-        out.write("<script charset=\"utf-8\" src=\".resources/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
-        //out.write("<script charset=\"utf-8\" src=\"/themes/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debug
+        debug = false;
+        if (debug && _context.isRouterContext()) {
+            out.write("<script charset=\"utf-8\" src=\"/themes/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+        } else {
+            out.write("<script charset=\"utf-8\" src=\".resources/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+        }
     }
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
@@ -4698,19 +4708,19 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</tbody>\n<thead><tr id=\"setPriority\"><th colspan=\"5\">");
 
 /* TODO: fixup so works with ajax refresh
-                       "<span class=\"script\">");
+                       "<span class=script>");
             if (!inOrder) {
-                buf.append("<a class=\"control\" id=\"setallhigh\" href=\"#\">")
+                buf.append("<a class=control id=setallhigh href=#>")
                    .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
             }
-            buf.append("<a class=\"control\" id=\"setallnorm\" href=\"#\">")
+            buf.append("<a class=control id=setallnorm href=#>")
                .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n" +
-                       "<a class=\"control\" id=\"setallskip\" href=\"#\">")
+                       "<a class=control id=setallskip href=#>")
                .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
 */
 
-           buf.append("<input type=\"submit\" class=\"accept\" value=\"").append(_t("Save priorities"))
-               .append("\" name=\"savepri\" >\n" +
+           buf.append("<input type=submit class=accept value=\"").append(_t("Save priorities"))
+               .append("\" name=savepri>\n" +
                        "</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
@@ -4734,8 +4744,8 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</form>\n");
         boolean enableLightbox = _manager.util().enableLightbox();
         if (!showRemainingSort && enableLightbox) {
-            buf.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"").append(_contextPath).append(WARBASE + "lightbox.css\">\n");
-            buf.append("<script charset=\"utf-8\" src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n")
+            buf.append("<link type=text/css rel=stylesheet href=").append(_contextPath).append(WARBASE + "lightbox.css>\n");
+            buf.append("<script charset=utf-8 src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n")
                .append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\nvar lightbox = new Lightbox();lightbox.load();\n</script>\n");
         }
         int delay = _manager.getRefreshDelaySeconds();
@@ -4746,20 +4756,12 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 buf.append("import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
             }
-            buf.append("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                       "var visibility = document.visibilityState;\n" +
-                       "var cycle;\n" +
-                       "if (visibility = \"visible\") {\n" +
-                       "function timer() {\n" +
-                       "var cycle = setInterval(function() {\n" +
-                       "requestAnimationFrame(refreshTorrents);\n");
-            if (enableLightbox)
+            if (enableLightbox) {
                 buf.append("import {Lightbox} from \"" + _contextPath + WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\";\n" +
                            "var lightbox = new Lightbox();\nlightbox.load();\n");
-            buf.append("}, ajaxDelay);\n" +
-                       "}\n" +
-                       "timer();\n" +
-                       "}\n" +
+            }
+            buf.append("var ajaxDelay = " + (delay * 1000) + ";\n" +
+                       "var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
                        "</script>\n");
         }
         if (!isStandalone())

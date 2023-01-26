@@ -91,8 +91,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     //getContext().statManager().addRateData("netDb.storeLocalLeaseSetAttempt", 1, 0);
                     // throw rather than return, so that we send the ack below (prevent easy attack)
                     dontBlamePeer = true;
-                    throw new IllegalArgumentException("Peer attempted to store local LeaseSet: " +
-                                                        key.toBase64().substring(0, 6));
+                    throw new IllegalArgumentException("Peer [" + key.toBase64().substring(0, 6) + "] attempted to store LOCAL LeaseSet");
                 }
                 LeaseSet ls = (LeaseSet) entry;
                 //boolean oldrar = ls.getReceivedAsReply();
@@ -188,9 +187,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if ((!newAddr.equals(oldAddr)) &&
                             getContext().blocklist().isBlocklisted(ri)) {
                             if (_log.shouldDebug())
-                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "] " + ri);
+                                _log.warn("New address received for Router [" + key.toBase64().substring(0,6) + "] -> Blocklisting old peer..." + ri);
                             else if (_log.shouldWarn())
-                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "]");
+                                _log.warn("New address received for Router [" + key.toBase64().substring(0,6) + "] -> Blocklisting old peer...");
                         }
                     }
                 }

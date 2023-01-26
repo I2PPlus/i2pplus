@@ -893,7 +893,7 @@ public class PeerState {
         _retransmitTimer = now + _rto;
         if (_log.shouldInfo())
             _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
-                      DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "bps \n* " +
+                      DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "b/s \n* " +
                       "Congestion, RTO: " + oldRto + "ms -> " + _rto + "ms; Timer: " + oldTimer + "ms -> " + _rto +
                       "ms; Window: " + congestionAt + " bytes -> " + _sendWindowBytes +
                       " bytes; SST: " + oldsst + " -> " + _slowStartThreshold +

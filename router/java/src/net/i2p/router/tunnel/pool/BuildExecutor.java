@@ -20,7 +20,6 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
-
 import net.i2p.util.SystemVersion;
 
 /**
@@ -248,7 +247,7 @@ class BuildExecutor implements Runnable {
             }
         }
 
-        _context.statManager().addRateData("tunnel.concurrentBuilds", concurrent, SystemVersion.getCores() / 2);
+        _context.statManager().addRateData("tunnel.concurrentBuilds", concurrent);
 
         long lag = _context.jobQueue().getMaxLag();
         if ( (lag > 2000) && (_context.router().getUptime() > 5*60*1000) ) {
@@ -448,7 +447,7 @@ class BuildExecutor implements Runnable {
                                     continue;
                                 }
                                 long pTime = System.currentTimeMillis() - bef;
-                                _context.statManager().addRateData("tunnel.buildConfigTime", pTime, 0);
+                                _context.statManager().addRateData("tunnel.buildConfigTime", pTime);
                                 if (_log.shouldDebug())
                                     _log.debug("Configuring new tunnel [" + i + "] for " + pool + "\n* " + cfg);
                                 buildTunnel(cfg);
@@ -574,7 +573,7 @@ class BuildExecutor implements Runnable {
             return;
         if (cfg.getLength() > 1) {
             long buildTime = System.currentTimeMillis() - beforeBuild;
-            _context.statManager().addRateData("tunnel.buildRequestTime", buildTime, 0);
+            _context.statManager().addRateData("tunnel.buildRequestTime", buildTime);
         }
         long id = cfg.getReplyMessageId();
         if (id > 0) {
@@ -680,7 +679,7 @@ class BuildExecutor implements Runnable {
         if (rv != null) {
             long requestedOn = rv.getExpiration() - 10*60*1000;
             long rtt = _context.clock().now() - requestedOn;
-            _context.statManager().addRateData("tunnel.buildReplySlow", rtt, 0);
+            _context.statManager().addRateData("tunnel.buildReplySlow", rtt);
             if (_log.shouldInfo())
                 _log.info("Received late reply (RTT: " + rtt + "ms) for: " + rv);
         }

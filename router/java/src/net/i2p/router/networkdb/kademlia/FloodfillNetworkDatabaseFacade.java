@@ -656,7 +656,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // should we skip the search?
         boolean forceExplore = _context.getBooleanProperty("router.exploreWhenFloodfill");
         Hash us = _context.routerHash();
-        String MIN_VERSION = "0.9.56";
+        String MIN_VERSION = "0.9.57";
         boolean isHidden = _context.router().isHidden();
         boolean slow = info.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
@@ -680,7 +680,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 } else if (_context.banlist().isBanlistedForever(peer)) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
                 } else if (uninteresting) {
-                    _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
                     new DropLookupFailedJob(_context, peer, info);
 //                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
 //                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");

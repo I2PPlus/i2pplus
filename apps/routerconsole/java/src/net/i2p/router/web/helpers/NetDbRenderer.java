@@ -53,7 +53,7 @@ import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
-import net.i2p.util.ObjectCounter;
+import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
 
@@ -984,8 +984,8 @@ class NetDbRenderer {
             buf.setLength(0);
         }
 
-        ObjectCounter<String> versions = new ObjectCounter<String>();
-        ObjectCounter<String> countries = new ObjectCounter<String>();
+        ObjectCounterUnsafe<String> versions = new ObjectCounterUnsafe<String>();
+        ObjectCounterUnsafe<String> countries = new ObjectCounterUnsafe<String>();
         int[] transportCount = new int[TNAMES.length];
 
         int skipped = 0;
@@ -1071,8 +1071,10 @@ class NetDbRenderer {
                 buf.append("<tr>\n<td><a href=\"/netdb?caps=K\" title=\"Show all routers with this capability in the NetDb\"><b>K</b></a>Under 12&#8239;KB/s</td>\n<td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td>\n</tr>\n");
             }
-            buf.append("<tr>\n<td><a href=\"/netdb?caps=L\" title=\"Show all routers with this capability in the NetDb\"><b>L</b></a>12 - 48&#8239;KB/s</td>\n<td>")
-               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size()).append("</td>\n</tr>\n");
+            if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size() > 0) {
+                buf.append("<tr>\n<td><a href=\"/netdb?caps=L\" title=\"Show all routers with this capability in the NetDb\"><b>L</b></a>12 - 48&#8239;KB/s</td>\n<td>")
+                   .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size()).append("</td>\n</tr>\n");
+            }
             buf.append("<tr>\n<td><a href=\"/netdb?caps=M\" title=\"Show all routers with this capability in the NetDb\"><b>M</b></a>49 - 65&#8239;KB/s</td>\n<td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW64).size()).append("</td>\n</tr>\n");
             buf.append("<tr>\n<td><a href=\"/netdb?caps=N\" title=\"Show all routers with this capability in the NetDb\"><b>N</b></a>66 - 130&#8239;KB/s</td>\n<td>")
@@ -1156,6 +1158,31 @@ class NetDbRenderer {
          }
 
          public int compare(String l, String r) {
+             return coll.compare(getTranslatedCountry(l),
+                                 getTranslatedCountry(r));
+        }
+    }
+
+    /**
+     *  Reverse sort by count, then forward by translated name.
+     *
+     *  @since 0.9.57
+     */
+    private class CountryCountComparator implements Comparator<String> {
+         private static final long serialVersionUID = 1L;
+         private final ObjectCounterUnsafe<String> counts;
+         private final Collator coll;
+
+         public CountryCountComparator(ObjectCounterUnsafe<String> counts) {
+             super();
+             this.counts = counts;
+             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
+         }
+
+         public int compare(String l, String r) {
+             int rv = counts.count(r) - counts.count(l);
+             if (rv != 0)
+                 return rv;
              return coll.compare(getTranslatedCountry(l),
                                  getTranslatedCountry(r));
         }

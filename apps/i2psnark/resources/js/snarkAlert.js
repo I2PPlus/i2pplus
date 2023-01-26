@@ -1,8 +1,8 @@
-/* I2PSnark inline notifications */
+/* I2PSnark Inline Notifications */
 /* Author: dr|z3d */
 /* License: AGPL3 or later */
 
-'use strict';
+"use strict";
 
 const addNotify = document.getElementById("addNotify");
 const addTorrent = document.getElementById("addForm");
@@ -13,18 +13,31 @@ const inputAddFile = document.querySelector("input[name='nofilter_newURL']");
 const inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
 const messages = document.getElementById("screenlog");
 const processForm = document.querySelector("iframe");
+var url = ".ajax/xhr1.html";
 const xhrLog = new XMLHttpRequest();
 
+function updateUrl() {
+  var filterbar = document.getElementById("torrentDisplay");
+  var headers = new Headers();
+  var pagesize = headers.get("X-Snark-Pagesize");
+  var query = window.location.search;
+  var storage = localStorage.getItem("filter");
+
+  if (query) {
+    if (storage && filterbar) {
+      url += query + "&ps=9999";
+    } else {
+      url += query;
+    }
+  } else if (storage && filterbar) {
+    url += "?ps=9999";
+  }
+}
+
 function updateLog() {
-  xhrLog.open("GET", "/i2psnark/.ajax/xhr1.html" + "?t=" + new Date().getTime(), true);
+  updateUrl();
+  xhrLog.open("GET", url, true);
   xhrLog.responseType = "document";
-  xhrLog.overrideMimeType("text/html");
-  xhrLog.setRequestHeader("Accept", "text/html");
-  xhrLog.setRequestHeader("Cache-Control", "no-store, max-age=0");
-  xhrLog.setRequestHeader(
-    "Content-Security-Policy",
-    "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'"
-  );
   function reload() {
     xhrLog.onreadystatechange = function () {
       if (xhrLog.readyState == 4 && xhrLog.status == 200) {
@@ -59,7 +72,8 @@ function createTorrentNotify() {
 
 function injectCss() {
   if (!alertCss) {
-    document.head.innerHTML += '<link id="snarkAlert" rel="stylesheet" href="/i2psnark/.resources/snarkAlert.css" type="text/css"/>';
+    document.head.innerHTML += "<link id=snarkAlert rel=stylesheet href=/i2psnark/.resources/snarkAlert.css type=text/css>";
+    //document.head.innerHTML += "<link id=snarkAlert rel=stylesheet href=/themes/snark/snarkAlert.css type=text/css>"; // debugging
   }
 }
 
@@ -77,3 +91,4 @@ function hideAlert() {
 addTorrent.addEventListener("submit", addTorrentNotify);
 createTorrent.addEventListener("submit", createTorrentNotify);
 injectCss();
+updateLog();

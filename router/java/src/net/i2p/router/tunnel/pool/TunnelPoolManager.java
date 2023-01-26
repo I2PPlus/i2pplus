@@ -24,7 +24,7 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
-import net.i2p.util.ObjectCounter;
+import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SimpleTimer;
 
 import net.i2p.util.SystemVersion;
@@ -666,7 +666,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /** @return total number of non-fallback expl. + client tunnels */
-    private int countTunnelsPerPeer(ObjectCounter<Hash> lc) {
+    private int countTunnelsPerPeer(ObjectCounterUnsafe<Hash> lc) {
         List<TunnelPool> pools = new ArrayList<TunnelPool>();
         listPools(pools);
         int tunnelCount = 0;
@@ -703,7 +703,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return Set of peers that should not be allowed in another tunnel
      */
     public Set<Hash> selectPeersInTooManyTunnels() {
-        ObjectCounter<Hash> lc = new ObjectCounter<Hash>();
+        ObjectCounterUnsafe<Hash> lc = new ObjectCounterUnsafe<Hash>();
         int tunnelCount = countTunnelsPerPeer(lc);
         Set<Hash> rv = new HashSet<Hash>();
         if (tunnelCount >= 4 && _context.router().getUptime() > 10*60*1000) {

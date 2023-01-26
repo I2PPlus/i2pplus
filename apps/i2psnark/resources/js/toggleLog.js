@@ -1,3 +1,7 @@
+/* toggleLog.js by dr|3d */
+/* Enable toggling height of I2PSnark's screenlog */
+/* License: AGPL3 or later */
+
 var mainsection = document.getElementById("mainsection");
 var screenlog = document.getElementById("screenlog");
 var ex = document.getElementById("expand");

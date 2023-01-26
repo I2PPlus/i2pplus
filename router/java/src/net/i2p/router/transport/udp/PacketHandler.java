@@ -584,7 +584,7 @@ class PacketHandler {
                 return;
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Invalid Outbound introduction packet received (stale intro key) for established connection, treating as non-establishment " + packet);
+                    _log.warn("Invalid Outbound introduction packet (stale intro key) received for established connection, treating as non-establishment " + packet);
             }
 
             // ok, we couldn't handle it with the established stuff, so fall back
@@ -879,8 +879,8 @@ class PacketHandler {
                         long id = header.getDestConnID();
                         PeerState2 ps2 = _transport.getPeerState(id);
                         if (ps2 != null) {
-                            if (_log.shouldWarn())
-                                _log.warn("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
+                            if (_log.shouldInfo())
+                                _log.info("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
                             ps2.receivePacket(from, packet);
                             return true;
                         }

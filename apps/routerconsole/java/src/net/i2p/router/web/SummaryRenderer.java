@@ -335,68 +335,69 @@ class SummaryRenderer {
 
             def.setMinValue(0d);
             String name = _listener.getRate().getRateStat().getName();
+            String graphTitle = name;
 
             if (name.startsWith("tunnel.participatingTunnels"))
-                name = name.replace("tunnel.participatingTunnels", "[Participating] Tunnel Count");
+                graphTitle = name.replace("tunnel.participatingTunnels", "[Participating] Tunnel Count");
             if (name.startsWith("tunnel.participatingMessage"))
-                name = name.replace("tunnel.participatingMessage", "[Participating] Message");
+                graphTitle = name.replace("tunnel.participatingMessage", "[Participating] Message");
             else if (name.startsWith("tunnel.participating"))
-                name = name.replace("tunnel.participating", "[Participating]");
+                graphTitle = name.replace("tunnel.participating", "[Participating]");
             if (name.startsWith("router."))
-                name = name.replace("router.", "[Router] ");
+                graphTitle = name.replace("router.", "[Router] ");
             if (name.startsWith("bw."))
-                name = name.replace("bw.", "[Router] ");
+                graphTitle = name.replace("bw.", "[Router] ");
             if (name.startsWith("Bandwidth usage"))
-                name = name.replace("Bandwidth usage", "[Router] Bandwidth Usage");
+                graphTitle = name.replace("Bandwidth usage", "[Router] Bandwidth Usage");
             if (name.startsWith("tunnel.buildRatio.exploratory."))
-                name = name.replace("tunnel.buildRatio.exploratory.", "[Exploratory] BuildRatio");
+                graphTitle = name.replace("tunnel.buildRatio.exploratory.", "[Exploratory] BuildRatio");
             if (name.startsWith("tunnel.buildExploratory"))
-                name = name.replace("tunnel.buildExploratory", "[Exploratory] Build");
+                graphTitle = name.replace("tunnel.buildExploratory", "[Exploratory] Build");
             if (name.startsWith("tunnel.buildClient"))
-                name = name.replace("tunnel.buildClient", "[Tunnel] BuildClient");
+                graphTitle = name.replace("tunnel.buildClient", "[Tunnel] BuildClient");
             else if (name.startsWith("tunnel.build"))
-                name = name.replace("tunnel.build", "[Tunnel] Build");
+                graphTitle = name.replace("tunnel.build", "[Tunnel] Build");
             else if (name.startsWith("tunnel."))
-                name = name.replace("tunnel.", "[Tunnel] ");
+                graphTitle = name.replace("tunnel.", "[Tunnel] ");
             if (name.contains("MessageCountAvg"))
-                name = name.replace("MessageCountAvg", "MsgCountAvg");
+                graphTitle = name.replace("MessageCountAvg", "MsgCountAvg");
             if (name.startsWith("netDb."))
-                name = name.replace("netDb.", "[NetDb] ");
+                graphTitle = name.replace("netDb.", "[NetDb] ");
             if (name.startsWith("jobQueue."))
-                name = name.replace("jobQueue.", "[JobQueue] ");
+                graphTitle = name.replace("jobQueue.", "[JobQueue] ");
             if (name.startsWith("udp."))
-                name = name.replace("udp.", "[UDP] ");
+                graphTitle = name.replace("udp.", "[UDP] ");
             if (name.startsWith("ntcp."))
-                name = name.replace("ntcp.", "[NTCP] ");
+                graphTitle = name.replace("ntcp.", "[NTCP] ");
             if (name.startsWith("transport."))
-                name = name.replace("transport.", "[Transport] ");
+                graphTitle = name.replace("transport.", "[Transport] ");
             if (name.startsWith("client."))
-                name = name.replace("client.", "[Client] ");
+                graphTitle = name.replace("client.", "[Client] ");
             if (name.startsWith("peer."))
-                name = name.replace("peer.", "[Peer] ");
+                graphTitle = name.replace("peer.", "[Peer] ");
             if (name.startsWith("prng."))
-                name = name.replace("prng.", "[Crypto] pnrg.");
+                graphTitle = name.replace("prng.", "[Crypto] pnrg.");
             if (name.startsWith("crypto."))
-                name = name.replace("crypto.", "[Crypto] ");
+                graphTitle = name.replace("crypto.", "[Crypto] ");
             if (name.startsWith("bwLimiter."))
-                name = name.replace("bwLimiter.", "[BWLimiter] ");
+                graphTitle = name.replace("bwLimiter.", "[BWLimiter] ");
             if (name.startsWith("pbq."))
-                name = name.replace("pbq.", "[Router] pbq.");
+                graphTitle = name.replace("pbq.", "[Router] pbq.");
             if (name.startsWith("codel."))
-                name = name.replace("codel.", "[Router] codel.");
+                graphTitle = name.replace("codel.", "[Router] codel.");
             if (name.startsWith("SDSCache."))
-                name = name.replace("SDSCache.", "[Router] SDSCache.");
+                graphTitle = name.replace("SDSCache.", "[Router] SDSCache.");
             if (name.startsWith("byteCache.memory."))
-                name = name.replace("byteCache.memory.", "[Router] ByteCache:");
+                graphTitle = name.replace("byteCache.memory.", "[Router] ByteCache:");
             if (name.startsWith("stream."))
-                name = name.replace("stream.", "[Stream] ");
+                graphTitle = name.replace("stream.", "[Stream] ");
             if (name.equals("clock.skew"))
-                name = name.replace("clock.skew", "[Router] Clock Skew");
+                graphTitle = name.replace("clock.skew", "[Router] Clock Skew");
             if (name.endsWith("InBps"))
-                name = name.replace("InBps", "Inbound B/s");
+                graphTitle = name.replace("InBps", "Inbound B/s");
             if (name.endsWith("OutBps"))
-                name = name.replace("OutBps", "Outbound B/s");
-            name = CSSHelper.StringFormatter.capitalizeWord(name);
+                graphTitle = name.replace("OutBps", "Outbound B/s");
+            graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
             // heuristic to set K=1024
             //if ((name.startsWith("bw.") || name.indexOf("Size") >= 0 || name.indexOf("Bps") >= 0 || name.indexOf("memory") >= 0)
 
@@ -415,11 +416,11 @@ class SummaryRenderer {
                 else
                     p = DataHelper.formatDuration2(period).replace("&nbsp;", " ");
                 if (showEvents)
-                    title = name + ' ' + _t("events in {0}", p);
+                    title = graphTitle + ' ' + _t("events in {0}", p);
                 else
 //                    title = name + ' ' + _t("{0} avg", p);
                     // hide the '60 sec avg' since everything is now averaged to 60s
-                    title = name.replaceAll("(?<=[a-z])([A-Z])", " $1");
+                    title = graphTitle.replaceAll("(?<=[a-z])([A-Z])", " $1");
                     title = title.substring(0, 1).toUpperCase() + title.substring(1);
                 def.setTitle(title);
             }
@@ -615,9 +616,14 @@ class SummaryRenderer {
                 // NPE here if system is missing fonts - see ticket #915
                 graph = new RrdGraph(def);
             } catch (NullPointerException npe) {
-                _log.error("Error rendering", npe);
+                _log.error("Error rendering graph", npe);
                 StatSummarizer.setDisabled(_context);
-                throw new IOException("Error rendering - disabling graph generation. Missing font? See http://trac.i2p2.i2p/ticket/915");
+                throw new IOException("Error rendering - disabling graph generation. Missing font?");
+            } catch (Error e) {
+                // Docker InternalError see Gitlab #383
+                _log.error("Error rendering graph", e);
+                StatSummarizer.setDisabled(_context);
+                throw new IOException("Error rendering - disabling graph generation. Missing font?");
             }
             int totalWidth = graph.getRrdGraphInfo().getWidth();
             int totalHeight = graph.getRrdGraphInfo().getHeight();

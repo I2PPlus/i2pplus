@@ -1,3 +1,0 @@
-.rowOdd,.rowEven,.peerinfo,.debuginfo{display:none}
-.active,#snarkFoot tr{display:table-row}
-#torrents tfoot tr:first-child th{border-top:var(--border_filtered)!important}

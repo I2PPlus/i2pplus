@@ -9,14 +9,15 @@ package net.i2p.router.tasks;
  */
 
 import net.i2p.data.DataHelper;
+import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
+
 
 /**
  * Coalesce the stats framework every minute
@@ -56,6 +57,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         // router.memoryUsed currently has the max size in the description so it can't be tagged
         sm.createRequiredRateStat("router.memoryUsed", legend, "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.cpuLoad", _x("CPU load average of the JVM"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("tunnel.tunnelBuildSuccessAvg", _x("Average tunnel build success %"), "Tunnels", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
     }
 
     public void timeReached() {
@@ -94,6 +96,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
             Router.clearCaches();
 
         sm.addRateData("router.cpuLoad", (long) SystemVersion.getCPULoad());
+        sm.addRateData("tunnel.tunnelBuildSuccessAvg", (long)SystemVersion.getTunnelBuildSuccess());
 
         _ctx.tunnelDispatcher().updateParticipatingStats(Router.COALESCE_TIME);
 

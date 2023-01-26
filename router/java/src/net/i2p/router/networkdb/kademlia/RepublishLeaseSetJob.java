@@ -23,7 +23,7 @@ import net.i2p.util.Log;
 class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
 //    public final static long REPUBLISH_LEASESET_TIMEOUT = 60*1000;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 50*1000;
+    public final static long REPUBLISH_LEASESET_TIMEOUT = 2*60*1000;
 //    private final static int RETRY_DELAY = 20*1000;
     private final static int RETRY_DELAY = 15*1000;
     private final Hash _dest;
@@ -48,12 +48,12 @@ class RepublishLeaseSetJob extends JobImpl {
             if (getContext().clientManager().isLocal(_dest)) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null) {
-                    if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+                    if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR*3)) {
                         if (_log.shouldWarn())
                             _log.warn("Not publishing a stale LOCAL LeaseSet [" + _dest.toBase32().substring(0,6) + "]", new Exception("Publish expired LOCAL lease?"));
                     } else {
                         if (_log.shouldInfo())
-                            _log.info(getJobId() + ": Publishing LS for " + _dest.toBase32());
+                            _log.info(getJobId() + ": Publishing LeaseSet for " + _dest.toBase32());
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
                         _lastPublished = getContext().clock().now();
@@ -80,7 +80,8 @@ class RepublishLeaseSetJob extends JobImpl {
         if (_log.shouldWarn())
             _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,6) + "]");
         getContext().jobQueue().removeJob(this);
-        requeue(RETRY_DELAY + getContext().random().nextInt(RETRY_DELAY));
+        //requeue((RETRY_DELAY + getContext().random().nextInt(RETRY_DELAY)) / 6 * 5);
+        requeue(RETRY_DELAY);
     }
 
     /**
@@ -108,8 +109,8 @@ class RepublishLeaseSetJob extends JobImpl {
                 requeueRepublish();
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("[Job " + getJobId() + "] Publication of LeasetSet for [" + _ls.getDestination().toBase32().substring(0,6) +
-                              "] failed, but not requeueing (newer LeaseSet exists)");
+                    _log.warn("[Job " + getJobId() + "] Not requeueing failed publication of LeaseSet [" +
+                              _ls.getDestination().toBase32().substring(0,6) + "] -> Newer LeaseSet exists");
             }
         }
     }

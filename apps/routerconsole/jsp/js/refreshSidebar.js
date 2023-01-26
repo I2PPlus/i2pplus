@@ -4,13 +4,12 @@
 import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
 
 function refreshSidebar() {
-  'use strict';
+  "use strict";
   var meta = document.querySelector('[http-equiv="refresh"]');
   var xhr = new XMLHttpRequest();
   var uri = location.pathname;
   var xhrContainer = document.getElementById("xhr");
-  let isDownTimer;
-  var count = 0;
+  var isDownTimer;
 
   var advancedGeneral = document.getElementById("sb_advancedgeneral");
   var badges = document.querySelectorAll(".badge");
@@ -52,7 +51,6 @@ function refreshSidebar() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        count ++;
         var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
         var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
         var clockResponse = xhr.responseXML.getElementById("clock");
@@ -119,7 +117,7 @@ function refreshSidebar() {
             if (bandwidth !== null && bandwidth.hidden !== true) {
               graphStats.style.opacity = null;
             } else {
-                graphStats.style.opacity = "1";
+              graphStats.style.opacity = "1";
             }
           }
           if (graphStats !== null && graphStatsResponse !== null) {
@@ -152,11 +150,11 @@ function refreshSidebar() {
             var snarks = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/snark.svg"]').length;
             var snarkSpan = '<span id="snarkCount" class="count_' + snarks + '">' + snarks + ' x <img src="/themes/console/images/snark.svg"></span>';
             var summary = snarkSpan + " " + serverSpan + " " + clientSpan + " " + pingSpan;
-            var summaryTable = '<table id="localtunnelSummary"><tr id="localtunnelsActive"><td>' + summary + '</td></tr></table>';
+            var summaryTable = '<tr id="localtunnelsActive"><td>' + summary + '</td></tr>';
             var sb_localTunnelsHeading = document.getElementById("sb_localTunnelsHeading");
             var sb_localTunnelsHeadingResponse = xhr.responseXML.getElementById("sb_localTunnelsHeading");
             sb_localTunnelsHeading.innerHTML = sb_localTunnelsHeadingResponse.innerHTML;
-            localtunnelSummary.outerHTML = summaryTable;
+            localtunnelSummary.innerHTML = summaryTable;
           }
           if (tunnelCount) {
             var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
@@ -237,17 +235,11 @@ function refreshSidebar() {
           if (routerControl !== null && routerControlResponse !== null && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
             routerControl.outerHTML = routerControlResponse.outerHTML;
           }
-          if (count > 2) {
-            if (internals !== null && internalsResponse !== null && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
-              internals.outerHTML = internalsResponse.outerHTML;
-              count --;
-            }
+          if (internals !== null && internalsResponse !== null && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
+            internals.outerHTML = internalsResponse.outerHTML;
           }
-          if (count > 2) {
-            if (services !== null && servicesResponse !== null && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
-              services.outerHTML = servicesResponse.outerHTML;
-              count --;
-            }
+          if (services !== null && servicesResponse !== null && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
+            services.outerHTML = servicesResponse.outerHTML;
           }
         }
 
@@ -285,9 +277,9 @@ function refreshSidebar() {
         }
 
         function refreshGraph() {
-          var minigraph = document.getElementById("minigraph");
           var graphContainer = document.getElementById("sb_graphcontainer");
           var graphContainerHR = document.querySelector("#sb_graphcontainer + hr");
+          var minigraph = document.getElementById("minigraph");
           if (minigraph) {
             if (graphContainer.hidden === true) {
               graphContainer.hidden = null;
@@ -299,7 +291,7 @@ function refreshSidebar() {
             image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = "high";
-            ctx.globalCompositeOperation = "source-out";
+            ctx.globalCompositeOperation = "copy";
             ctx.globalAlpha = 1;
             //minigraph.style.background = image.src;
 
@@ -420,7 +412,9 @@ function refreshSidebar() {
     countTunnels();
     countNewsItems();
   });
-  xhr.send();
+  if (document.visibilityState === "visible") {
+    xhr.send();
+  }
 
 }
 
