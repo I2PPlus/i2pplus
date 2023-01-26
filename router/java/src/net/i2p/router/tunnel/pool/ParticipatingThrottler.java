@@ -69,12 +69,12 @@ class ParticipatingThrottler {
         RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
         Hash us = context.routerHash();
         boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());
-        boolean isUnreachable = ri != null && !isUs && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-        boolean isLowShare = ri != null && !isUs && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+        boolean isUnreachable = (ri != null && !isUs) && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isLowShare = (ri != null && !isUs) && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW128) >= 0);
-        boolean isFast = ri != null && !isUs && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
+        boolean isFast = (ri != null && !isUs) && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
