@@ -49,8 +49,8 @@ class ParticipatingThrottler {
     private static final int LIFETIME_PORTION = 3;
 //    private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
 //    private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
-    private static final int MIN_LIMIT = (isSlow ? 32 : isHexaCore ? 72 : 56) / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = (isSlow ? 192 : isHexaCore ? 512 : 384) / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = (isSlow ? 20 : isHexaCore ? 60 : 40) / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = (isSlow ? 100 : isHexaCore ? 500 : 400) / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 3 / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
@@ -67,12 +67,14 @@ class ParticipatingThrottler {
     /** increments before checking */
     Result shouldThrottle(Hash h) {
         RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
-        boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-        boolean isLowShare = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+        Hash us = context.routerHash();
+        boolean isUs = us.equals(ri.getIdentity().getHash());
+        boolean isUnreachable = ri != null && !isUs && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isLowShare = ri != null && !isUs && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW128) >= 0);
-        boolean isFast = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
+        boolean isFast = ri != null && !isUs && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
