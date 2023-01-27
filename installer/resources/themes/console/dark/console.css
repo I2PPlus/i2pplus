@@ -2492,7 +2492,7 @@ iframe{height:0}
 @keyframes grid-fade{from{background:repeating-linear-gradient(90deg,rgba(0,0,0,0),#020 1px,rgba(0,0,0,0) 1px,rgba(0,0,0,0) 10px),repeating-linear-gradient(180deg,#000,#020 1px,#000 1px,#000 10px)} to{background:#000}}
 @keyframes ping{from{filter:saturate(2)}}
 @keyframes progress{from{background-position:200%} to{background-position:0}}
-@keyframes routerdown{from{background-position:-20px center}}
+@keyframes routerdown{from{background-position:-10px center}}
 @keyframes reloader{0%,100%{width:0} 80%,99%{width:120%}}
 @keyframes scaleY{from{transform:scaleY(0)} to{transform:scaleY(1)}}
 @keyframes slide{from{transform:translateY(-20px)} to{transform:translateY(0)}}
