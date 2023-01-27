@@ -828,7 +828,6 @@ class NetDbRenderer {
                         // encrypted, show blinded key type
                         buf.append(ls.getSigningKey().getType()).append("</span>");
                     }
-                    buf.append("</span>");
                     if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
                         buf.append("<br><span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key"))
                            .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0, 8))
@@ -871,7 +870,7 @@ class NetDbRenderer {
                                 buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode()).append("</span> ");
                         }
                     }
-                    buf.append("</td>\n</tr>");
+                    buf.append("</span></td>\n</tr>");
                 }
                 buf.append("<tr");
                 if (debug)
