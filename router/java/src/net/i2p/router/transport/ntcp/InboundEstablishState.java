@@ -342,11 +342,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     changeState(State.IB_NTCP2_READ_RANDOM);
                 } else {
                     // got all we need, fail now
-                    fail("\n* Bad message #1: X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
+                    fail("\n* BAD message #1: X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
                 }
                 return;
             } catch (RuntimeException re) {
-                fail("\n* Bad message #1: X = " + Base64.encode(_X, 0, KEY_SIZE), re);
+                fail("\n* BAD message #1: X = " + Base64.encode(_X, 0, KEY_SIZE), re);
                 return;
             }
             if (_log.shouldDebug())
@@ -390,7 +390,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 //return;
             }
             if (_msg3p2len < MSG3P2_MIN || _msg3p2len > MSG3P2_MAX) {
-                fail("BAD msg3p2 (length: " + _msg3p2len + " bytes)");
+                fail("BAD message #3 part 2 (length: " + _msg3p2len + " bytes)");
                 return;
             }
             if (_padlen1 <= 0) {
@@ -596,7 +596,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (_msg3p2FailReason >= 0) {
             if (_log.shouldWarn())
-                _log.warn("Failed message #3 part 2 (Code: " + _msg3p2FailReason + ") for " + this);
+                _log.warn("Failed message #3 part 2 (Code: " + _msg3p2FailReason + ") \n* For: " + this);
             _con.failInboundEstablishment(sender, sip_ba, _msg3p2FailReason);
             changeState(State.CORRUPT);
         } else {
