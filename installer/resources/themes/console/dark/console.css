@@ -198,7 +198,8 @@ p:empty + .sb_notice{margin-top:9px}
 #contactserver{margin-bottom:-19px;display:block}
 
 /* sidebar ajax router down */
-#down{margin:-6px 0;padding:6px 5px;width:calc(100% - 8px);display:inline-block;font-size:0;color:#a00;text-shadow:var(--textshadow);box-shadow:0 0 1px 0 #030,var(--highlight),inset 0 0 1px 3px #131,inset 0 0 0 4px #000,inset 0 0 7px 3px #010;background:repeating-linear-gradient(135deg,#131,#131 10px,#300 11px,#000 12px,#000 19px,#300 19px,#000 20px);background-position:right center;background-size:125%;animation:routerdown linear 3s forwards infinite}
+#down{margin:-6px 0;padding:6px 5px;width:calc(100% - 8px);display:inline-block;font-size:0;color:#a00;text-shadow:var(--textshadow);box-shadow:0 0 1px 0 #030,var(--highlight),inset 0 0 1px 3px #131,inset 0 0 0 4px #000,inset 0 0 7px 3px #010;background:var(--isdown);background-position:right center;background-size:125%;animation:routerdown linear 3s forwards infinite}
+#routerdown{background:var(--isdown)}
 #nographs{line-height:60px;font-size:0}
 #down::after,#nographs::after{width:26px;height:26px;vertical-align:middle;display:inline-block;background:var(--update) var(--center)/26px;content:"";transform:rotate(0);animation:linear spin 3s forwards infinite}
 #nographs::after{margin:22px 15px 18px;width:48px;height:48px;background-size:48px}
@@ -265,7 +266,8 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #tunnelCount{animation:none}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
-#sidebar h3 a .badge[hidden]{display:none}
+#sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
+#sidebar td .badge:empty::after{display:inline;content:"---"}
 #tunnelCount+#tunnelCount,#newsCount+#newsCount{display:none}
 #sb_updatesection.collapsed > *:not(h3){display:none}
 #updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center/20px;animation: spin 3s ease 0s both}

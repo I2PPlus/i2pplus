@@ -186,7 +186,9 @@ input[type=checkbox].toggleSection:checked:active{box-shadow:var(--highlight),in
 input[type=checkbox].toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar .toggleSection::before,#sidebar .toggleSection::after{display:none}
-#sidebar h3 a .badge:not([hidden]),#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 1px;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
+#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 1px;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
+#sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
+#sidebar td .badge:empty::after{display:inline;content:"---"}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sb_updatesection.collapsed > h3.collapsed{margin-bottom:-10px}
 #sb_updatesection.collapsed > *:not(h3){display:none}

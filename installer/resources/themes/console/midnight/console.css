@@ -429,16 +429,16 @@ p:empty + .sb_notice{margin-top:10px}
 #updateAvailable + br + button + br + #updateAvailable + br + button{margin-bottom:5px}
 
 /* section toggler */
-.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;background:#002 var(--dropdown) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:none;border-left:var(--border);display:none}
+.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;background:var(--dropdown) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:none;display:none}
 .toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 .toggleSection:not(:checked){padding-top:6px}
-.toggleSection:active{box-shadow:var(--btn_shadow_active);background-color:var(--hover)}
-.toggleSection:checked:active{box-shadow:var(--highlight),inset 3px -3px 3px 3px rgba(0,0,0,.8),0 0 0 1px #000}
 h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon,#sb_internals.collapsed,#sb_services.collapsed,#sb_advanced.collapsed{display:none}
 #sb_updatesection.collapsed > *:not(h3){display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#sidebar h3 a .badge:not([hidden]),#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
+#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
+#sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
+#sidebar td .badge:empty::after{display:inline;content:"---"}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #sidebar h3{position:relative}
