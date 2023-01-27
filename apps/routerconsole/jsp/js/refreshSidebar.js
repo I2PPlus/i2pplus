@@ -97,7 +97,7 @@ function refreshSidebar() {
           for (b = 0; b < badges.length; b += 1) {
             if (badges[b] !== null) {
               var badgesResponse = xhr.responseXML.querySelectorAll(".badge");
-              if (badgesResponse[b] !== null) {
+              if (badgesResponse !== null) {
                 badges[b].innerHTML = badgesResponse[b].innerHTML;
               }
             }
@@ -226,7 +226,7 @@ function refreshSidebar() {
           if (updateSection !== null) {
             if (!Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
               updateSection.hidden = null;
-              updateSection.innerHTML = updateSectionResponse.innerHTML;
+              updateSection.outerHTML = updateSectionResponse.outerHTML;
             }
           }
           if (tunnelBuildStatus !== null && tunnelBuildStatusResponse !== null && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
@@ -234,9 +234,13 @@ function refreshSidebar() {
           }
           if (notice !== null && noticeResponse !== null && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
             notice.innerHTML = noticeResponse.innerHTML;
+          } else if (noticeResponse && noticeResponse === null) {
+            notice.remove();
           }
           if (shutdownStatus !== null && shutdownStatusResponse !== null && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
             shutdownStatus.innerHTML = shutdownStatusResponse.innerHTML;
+          } else if (shutdownStatus && shutdownStatusResponse === null) {
+            shutdownStatus.remove();
           }
           if (routerControl !== null && routerControlResponse !== null && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
             routerControl.outerHTML = routerControlResponse.outerHTML;
