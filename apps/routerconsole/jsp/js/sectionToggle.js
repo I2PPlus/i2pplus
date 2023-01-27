@@ -3,6 +3,7 @@
 
 function sectionToggler() {
 
+  var jobBadge = document.querySelector("#sidebar h3 a[href=\"/jobs\"] .badge");
   var localtunnelSummary = document.getElementById("localtunnelSummary");
   var sb_advanced = document.getElementById("sb_advanced");
   var sb_advancedgeneral = document.getElementById("sb_advancedgeneral");
@@ -270,7 +271,9 @@ function sectionToggler() {
       sb_queue.hidden = true;
       document.querySelector("#sb_queue + hr").hidden = true;
       document.getElementById("toggle_sb_queue").checked = false;
-      document.querySelector("#sidebar h3 a[href=\"/jobs\"] .badge").hidden = null;
+      if (jobBadge) {
+        jobBadge.hidden = null;
+      }
       localStorage["section_queue"] = "hide";
     }
   }
@@ -280,7 +283,9 @@ function sectionToggler() {
       sb_queue.hidden = null;
       document.querySelector("#sb_queue + hr").hidden = null;
       document.getElementById("toggle_sb_queue").checked = true;
-      document.querySelector("#sidebar h3 a[href=\"/jobs\"] .badge").hidden = true;
+      if (jobBadge) {
+        jobBadge.hidden = true;
+      }
       localStorage.removeItem("section_queue");
     }
   }
