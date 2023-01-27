@@ -578,7 +578,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</ul>\n</div>\n");
             debug = false;
             if (debug && _context.isRouterContext()) {
-                out.write("<script charset=\"utf-8\" src=\"/themes/js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
+                out.write("<script charset=\"utf-8\" src=\"/themes/js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             } else {
                 out.write("<script charset=\"utf-8\" src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             }
@@ -586,7 +586,7 @@ public class I2PSnarkServlet extends BasicServlet {
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0 && _context.isRouterContext()) {
                 if (debug) {
-                    out.write("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/themes/js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
+                    out.write("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/themes/js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
                 } else {
                     out.write("<script charset=\"utf-8\" type=\"text/javascript\" src=\"" + _contextPath + WARBASE + "js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
                 }
