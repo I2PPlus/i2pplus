@@ -255,7 +255,7 @@ class BuildExecutor implements Runnable {
                 _log.warn("Job queue too lagged (" + lag + "ms) -> Slowing down new tunnel builds...");
             _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
 //            return 0; // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
-            return Math.min(SystemVersion.getCores() / 2, 4);
+            return SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 1 : 2;
         }
 
         // Trim the number of allowed tunnels for overload,
