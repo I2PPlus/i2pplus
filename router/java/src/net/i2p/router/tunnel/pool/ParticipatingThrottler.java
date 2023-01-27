@@ -101,6 +101,7 @@ class ParticipatingThrottler {
           v = "NoRI";
         }
         String MIN_VERSION = "0.9.57";
+/*
         if (v.equals("0.0.0")) {
             rv = Result.DROP;
             if (_log.shouldWarn())
@@ -111,6 +112,7 @@ class ParticipatingThrottler {
             if (_log.shouldWarn())
                 _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) + "] -> Slow/unreachable and older than " + MIN_VERSION);
         }
+*/
         if (count > limit && enableThrottle) {
             if (isFast && !isUnreachable && count > limit * 11 / 9) {
                 if (count == (limit * 11 / 9) + 1) {

@@ -666,8 +666,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
         String v = info.getVersion();
-        boolean uninteresting = info != null && !isHidden && (slow || VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                (_context.netDb().getKnownRouters() > 2000 && !fast) && !us.equals(info.getIdentity().getHash());
+        boolean uninteresting = info != null && !isHidden && (VersionComparator.comp(v, MIN_VERSION) < 0 && !fast) &&
+                                _context.netDb().getKnownRouters() > 2000 && !us.equals(info.getIdentity().getHash());
         if ((_floodfillEnabled && !forceExplore) || _context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH ||
             _context.banlist().isBanlistedForever(peer) || uninteresting) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at

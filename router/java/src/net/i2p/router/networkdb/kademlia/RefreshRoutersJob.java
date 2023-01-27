@@ -146,7 +146,8 @@ class RefreshRoutersJob extends JobImpl {
                             _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "]" +
                                       "\n* Published: " + new Date(ri.getPublished()));
                         else
-                            _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "] - " + Integer.valueOf(refreshTimeout) + "s timeout" +
+                            _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "] - " +
+                                      Integer.valueOf(refreshTimeout) + "s timeout" +
                                       "\n* Published: " + new Date(ri.getPublished()));
 //                    _facade.search(h, null, null, 15*1000, false);
 //                    Job DropLookupFoundJob = new _facade.DropLookupFoundJob();

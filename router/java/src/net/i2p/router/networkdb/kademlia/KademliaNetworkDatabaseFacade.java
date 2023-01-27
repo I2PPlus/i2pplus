@@ -367,7 +367,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!_context.commSystem().isDummy()) {
             Job erj = new ExpireRoutersJob(_context, this);
 //             erj.getTiming().setStartAfter(_context.clock().now() + 2*60*60*1000);
-             erj.getTiming().setStartAfter(_context.clock().now() + 30*60*1000);
+             erj.getTiming().setStartAfter(_context.clock().now() + 60*60*1000);
             _context.jobQueue().addJob(erj);
         }
 
@@ -776,34 +776,35 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
-                                     VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) &&
+                                     VersionComparator.comp(v, MIN_VERSION) < 0 &&
                                      _context.router().getUptime() > 15*60*1000 &&
                                      _context.netDb().getKnownRouters() > 2000 && !isUs;
-
+/*
             if (uninteresting && !isHidden) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Uninteresting");
                 _ds.remove(key);
                 _kb.remove(key);
             }
-        } else if (key != null && _context.banlist().isBanlistedForever(key)) {
-            if (_log.shouldInfo())
-                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted");
-            _ds.remove(key);
-            _kb.remove(key);
-        } else if (key != null && isNegativeCached(key)) {
-            if (_log.shouldInfo())
-                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
-            _ds.remove(key);
-            _kb.remove(key);
-            if (onFailedLookupJob != null)
-                _context.jobQueue().addJob(onFailedLookupJob);
-        } else {
-            search(key, onFindJob, onFailedLookupJob, timeoutMs, false);
+*/
+            if (key != null && _context.banlist().isBanlistedForever(key)) {
+                if (_log.shouldInfo())
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted");
+                _ds.remove(key);
+                _kb.remove(key);
+            } else if (key != null && isNegativeCached(key)) {
+                if (_log.shouldInfo())
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
+                _ds.remove(key);
+                _kb.remove(key);
+                if (onFailedLookupJob != null)
+                    _context.jobQueue().addJob(onFailedLookupJob);
+            } else {
+                search(key, onFindJob, onFailedLookupJob, timeoutMs, false);
+            }
         }
     }
-
     /**
      * This will return immediately with the result or null.
      * However, this may still fire off a lookup if the RI is present but expired (and will return null).
@@ -1296,7 +1297,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR && !isUs) {
             long age = routerInfo.getPublished() - now;
             if (_log.shouldWarn()) {
-                _log.warn("Dropping RouterInfo [" + riHash + "] -> Invalid publication date \n* Published: " + new Date(routerInfo.getPublished()));
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> Invalid publication date " +
+                          "\n* Published: " + new Date(routerInfo.getPublished()));
                 //_log.warn("Banning [" + riHash + "] for 15m -> RouterInfo from the future!");
             }
             //_context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
@@ -1322,8 +1324,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 &&
-            routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION_SHORT && !isUs)
-                return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 75m ago";
+            routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 2) && !isUs)
+                return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 4h ago";
 
         if (expireRI != null && !isUs) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
