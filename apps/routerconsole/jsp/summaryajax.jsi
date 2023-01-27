@@ -1,10 +1,8 @@
 <%
     if (!intl.getDisableRefresh()) {
 %>
-
 <script nonce="<%=cspNonce%>" type="module">
-  //import {refreshSidebar} from "/js/refreshSidebar.js";
-  import {refreshSidebar} from "/themes/js/refreshSidebar.js";
+  import {refreshSidebar} from "/js/refreshSidebar.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   var refreshInterval = refresh * 1000;
   var timerId = setInterval(refreshSidebar, refreshInterval);
@@ -13,8 +11,7 @@
     } else {
 %>
 <script nonce="<%=cspNonce%>" type="module">
-  //import {refreshSidebar} from "/js/refreshSidebar.js";
-  import {refreshSidebar} from "/themes/js/refreshSidebar.js";
+  import {refreshSidebar} from "/js/refreshSidebar.js";
   refreshSidebar();
 </script>
 <%
