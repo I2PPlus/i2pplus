@@ -1163,8 +1163,9 @@ class SummaryBarRenderer {
            .append(_t("View existing tunnels and tunnel build status"))
            .append("\">")
            .append(_t("Tunnels"))
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("Total number of tunnels in use")).append("\">")
-           .append(totalTunnels).append("</span>")
+           .append(" <span class=\"badge\" hidden title=\"").append(_t("Total number of tunnels in use"))
+           .append(_helper.getTunnelBuildSuccess() > 0 ? " / " + _t("Average tunnel build success for last 10m interval") : "").append("\">")
+           .append(totalTunnels).append(_helper.getTunnelBuildSuccess() > 0 ? " / " + _helper.getTunnelBuildSuccess() : "").append("</span>")
            .append("</a><input type=\"checkbox\" id=\"toggle_sb_tunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_tunnels\">\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
@@ -1259,26 +1260,23 @@ class SummaryBarRenderer {
 
     public String renderCongestionHTML() {
         if (_helper == null) return "";
+        long maxLag = _context.jobQueue().getMaxLag();
         StringBuilder buf = new StringBuilder(512);
         buf.append("<h3><a href=\"/jobs\" target=\"_top\" title=\"")
            .append(_t("What's in the router's job queue?"))
            .append("\">")
-           .append(_t("Congestion"))
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("Job lag")).append("\">");
-        if (_context.router().getUptime() < 60*1000) {
-           buf.append("-");
-        } else {
+           .append(_t("Congestion"));
+        if (_context.router().getUptime() > 2*60*1000) {
+           buf.append(" <span class=\"badge\" hidden title=\"").append(_t("Job lag")).append("\">");
            buf.append(_helper.getJobLag());
         }
-        long maxLag = _context.jobQueue().getMaxLag();
-        buf.append("</span>")
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_queue\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
+        buf.append("</span>");
+        buf.append("</a><input type=\"checkbox\" id=\"toggle_sb_queue\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
                    "<table id=\"sb_queue\">\n" +
                    "<tr title=\"");
         if (isAdvanced() && maxLag != 0)
             buf.append(_t("Average job delay / maximum delay"));
         else
-//            buf.append(_t("Indicates router performance"));
             buf.append(_t("Average delay before scheduled jobs are run"));
         buf.append("\">" +
                    "<td><b>")
