@@ -1163,11 +1163,16 @@ class SummaryBarRenderer {
            .append(_t("View existing tunnels and tunnel build status"))
            .append("\">")
            .append(_t("Tunnels"))
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("Total number of tunnels in use"))
-           .append(_helper.getTunnelBuildSuccess() > 0 ? " / " + _t("Average tunnel build success for last 10m interval") : "").append("\">")
-           .append(totalTunnels).append(_helper.getTunnelBuildSuccess() > 0 ? " / " + _helper.getTunnelBuildSuccess() : "").append("</span>")
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_tunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_tunnels\">\n");
+           .append(" <span class=\"badge\" hidden title=\"").append(_t("Total number of tunnels in use"));
+       if (_helper.getTunnelBuildSuccess() > 0) {
+           buf.append(" / ").append(_t("Average tunnel build success for last 10m interval"));
+       }
+       buf.append("\">").append(totalTunnels);
+       if (_helper.getTunnelBuildSuccess() > 0) {
+           buf.append(" / ").append(_helper.getTunnelBuildSuccess()).append("%</span>");
+       }
+       buf.append("</a><input type=\"checkbox\" id=\"toggle_sb_tunnels\" class=\"toggleSection script\" checked hidden>" +
+                  "</h3>\n<hr class=\"b\">\n" + "<table id=\"sb_tunnels\">\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
             buf.append("<tr title=\"")
                .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
