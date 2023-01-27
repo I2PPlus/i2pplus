@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.RandomSource;
+import net.i2p.util.SystemVersion;
 
 import org.cybergarage.http.HTTPRequest;
 
@@ -147,7 +148,10 @@ public class CSSHelper extends HelperBase {
         } catch (RuntimeException e) {
             r = Integer.toString(MIN_REFRESH);
         }
-        return r;
+        if (SystemVersion.getCPULoad() > 90 && Integer.parseInt(r) < 5)
+            return "5";
+        else
+            return r;
     }
 
     /**

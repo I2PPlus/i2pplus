@@ -67,23 +67,21 @@
     response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; font-src 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
     response.setHeader("X-XSS-Protection", "1; mode=block");
     response.setHeader("X-Content-Type-Options", "nosniff");
-    response.setHeader("Permissions-Policy", "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture(), fullscreen=(self), geolocation=(), gyroscope=(), interest-cohort=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), vibrate=(), vr=()");
-    // allow fullscreen in iframes (for video playback)
-    response.setHeader("Feature-Policy", "fullscreen 'self'");
+    response.setHeader("Permissions-Policy", "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture(), fullscreen=(self), geolocation=(), gyroscope=(), interest-cohort=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), vibrate=(), vr=(), fullscreen=(self)");
     // https://www.w3.org/TR/referrer-policy/
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
     // As of Chrome 56, Firefox 50, Opera 43. "same-origin" not widely supported.
     response.setHeader("Referrer-Policy", "no-referrer");
     String uri = request.getRequestURI();
     if (uri.contains("override.css"))
-        response.setHeader("Cache-Control", "no-cache, private, max-age=84600, must-revalidate");
+        response.setHeader("Cache-Control", "private, no-cache, max-age=84600");
     else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
              uri.contains(".woff2") || uri.contains(".woff2") || uri.contains("flags.jsp") || uri.contains(".js") || uri.contains(".css"))
         response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
     else if (uri.endsWith("xhr1.jsp"))
-        response.setHeader("Cache-Control", "private, max-age=0, no-store, must-revalidate");
+        response.setHeader("Cache-Control", "private, no-cache, max-age=60");
     else
-        response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
+        response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");
     String conNonceParam = request.getParameter("consoleNonce");
     if (net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
         intl.setLang(request.getParameter("lang"));

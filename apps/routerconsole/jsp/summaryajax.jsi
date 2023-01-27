@@ -3,26 +3,18 @@
 %>
 
 <script nonce="<%=cspNonce%>" type="module">
-  import {refreshSidebar} from "/js/refreshSidebar.js";
+  //import {refreshSidebar} from "/js/refreshSidebar.js";
+  import {refreshSidebar} from "/themes/js/refreshSidebar.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   var refreshInterval = refresh * 1000;
-  var timerId = setInterval(updateSidebar, refreshInterval);
-  function updateSidebar() {
-    if (document.visible = true) {
-      refreshSidebar();
-    } else {
-     cancelRefresh();
-    }
-  }
-  function cancelRefresh() {
-    clearInterval(timerId);
-  }
+  var timerId = setInterval(refreshSidebar, refreshInterval);
 </script>
 <%
     } else {
 %>
 <script nonce="<%=cspNonce%>" type="module">
-  import {refreshSidebar} from "/js/refreshSidebar.js";
+  //import {refreshSidebar} from "/js/refreshSidebar.js";
+  import {refreshSidebar} from "/themes/js/refreshSidebar.js";
   refreshSidebar();
 </script>
 <%

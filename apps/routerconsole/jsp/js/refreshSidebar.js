@@ -2,10 +2,10 @@
 /* License: AGPLv3 or later */
 
 import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
+//import {sectionToggler, countTunnels, countNewsItems} from "/themes/js/sectionToggle.js"; // debug
 
 function refreshSidebar() {
   "use strict";
-  var meta = document.querySelector('[http-equiv="refresh"]');
   var xhr = new XMLHttpRequest();
   var uri = location.pathname;
   var xhrContainer = document.getElementById("xhr");
@@ -25,6 +25,7 @@ function refreshSidebar() {
   var memBar = document.getElementById("sb_memoryBar");
   var minigraph = document.getElementById("minigraph");
   var netStatus = document.getElementById("sb_status");
+  var newsCount = document.getElementById("newsCount");
   var notice = document.getElementById("sb_notice");
   var peers = document.getElementById("sb_peers");
   var queue = document.getElementById("sb_queue");
@@ -42,6 +43,7 @@ function refreshSidebar() {
   var updateSection = document.getElementById("sb_updatesection");
   var updateSectionHR = document.querySelector("#sb_updatesection + hr");
   var updateStatus = document.getElementById("sb_updatestatus");
+  var visible = document.visibilityState;
 
   xhr.open("GET", "/xhr1.jsp?requestURI=" + uri, true);
   xhr.responseType = "document";
@@ -160,7 +162,11 @@ function refreshSidebar() {
             var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
             if (doubleCount) {
               doubleCount.remove();
+              tunnelCount.classList.add("badge");
             }
+          }
+          if (newsCount) {
+            newsCount.classList.add("badge");
           }
           if (peers !== null && peersResponse !== null && !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
             peers.innerHTML = peersResponse.innerHTML;
@@ -317,6 +323,7 @@ function refreshSidebar() {
           var c;
           for (c = 0; c < collapsed.length; c += 1) {
             var styleHidden = collapsed[c].getAttribute("hidden");
+            var badgesHidden = collapsed[c].visibililty;
             if (styleHidden) {
               collapsed[c].hidden = null;
             }
@@ -326,23 +333,12 @@ function refreshSidebar() {
           countNewsItems();
         }
 
-        function removeMeta() {
-          if (meta !== null) {
-            meta.remove();
-          }
-        }
+        checkSections();
 
-        if (document.hidden !== true) {
-          checkSections();
-          if (meta !== null) {
-            removeMeta();
-          }
-
-          if (minigraph) {
-            refreshGraph();
-            var minigraphResponse = xhr.responseXML.getElementById("minigraph");
-            minigraph = minigraphResponse;
-          }
+        if (minigraph) {
+          refreshGraph();
+          var minigraphResponse = xhr.responseXML.getElementById("minigraph");
+          minigraph = minigraphResponse;
         }
 
       } else {
@@ -369,10 +365,14 @@ function refreshSidebar() {
               shutdownStatus.setAttribute("hidden", "");
             }
             if (localTunnels) {
-              localTunnels.innerHTML = '<tr id="routerdown"><td colspan="3"></td></tr>';
+              localTunnels.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
               if (tunnelCount !== null) {
                 tunnelCount.innerHTML = "-";
+                tunnelCount.classList.add("badge");
               }
+            }
+            if (localtunnelSummary) {
+              localtunnelSummary.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
             }
           }
 
@@ -394,7 +394,7 @@ function refreshSidebar() {
             var b;
             for (b = 0; b < badges.length; b += 1) {
               if (badges[b] !== null) {
-                badges[b].innerHTML = "-";
+                badges[b].innerHTML = "";
               }
             }
             netStatus.innerHTML = '<span id="down">Router is down</span>';
@@ -412,8 +412,11 @@ function refreshSidebar() {
     countTunnels();
     countNewsItems();
   });
-  if (document.visibilityState === "visible") {
+
+  if (visible === "visible") {
     xhr.send();
+  } else if (xhr.status !== null) {
+    xhr.abort();
   }
 
 }
