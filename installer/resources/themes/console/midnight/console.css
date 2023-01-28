@@ -226,6 +226,7 @@ button.download.control:active{background:var(--download) no-repeat center cente
 #sidebar .download:active{background:var(--hover) var(--download) no-repeat 7px center/15px}
 
 #sb_wrap{margin:0 0 10px 5px;padding:0;width:200px;display:block;float:left;clear:left;position:absolute;text-align:center;border:0}
+#sb_wrap.sticky{position:sticky!important;top:2px!important}
 #sidebar{background:var(--bg_main);background-size:4px 100%,100% 4px}
 #sidebar{margin-left:-3px;margin-bottom:7px;padding:8px 10px 8px;width:184px;overflow:hidden;text-align:center;font-size:8pt;color:var(--ink);border:var(--border)}
 #sidebar #sb_logo{height:37px !important}
@@ -429,7 +430,7 @@ p:empty + .sb_notice{margin-top:10px}
 #updateAvailable + br + button + br + #updateAvailable + br + button{margin-bottom:5px}
 
 /* section toggler */
-.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;background:var(--dropdown) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:none;display:none}
+.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;background:var(--dropdown_hover) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:none;display:none}
 .toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 .toggleSection:not(:checked){padding-top:6px}
 h3:hover .toggleSection{display:inline-block;z-index:999}

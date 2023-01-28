@@ -1,4 +1,4 @@
-/* RefreshSidebar by dr|z3d */
+/* I2P+ RefreshSidebar by dr|z3d */
 /* License: AGPLv3 or later */
 
 import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
@@ -54,6 +54,7 @@ function refreshSidebar() {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
         var advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
+        var badgesResponse = xhr.responseXML.querySelectorAll(".badge");
         var bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
         var clockResponse = xhr.responseXML.getElementById("clock");
         var cpuBarResponse = xhr.responseXML.getElementById("sb_CPUBar");
@@ -95,9 +96,8 @@ function refreshSidebar() {
 
           var b;
           for (b = 0; b < badges.length; b += 1) {
-            if (badges[b] !== null) {
-              var badgesResponse = xhr.responseXML.querySelectorAll(".badge");
-              if (badgesResponse !== null) {
+            if (badges !== null && badgesResponse !== null) {
+              if (!Object.is(badges[b].innerHTML, badgesResponse[b].innerHTML)) {
                 badges[b].innerHTML = badgesResponse[b].innerHTML;
               }
             }

@@ -1,3 +1,6 @@
+/* I2P+ StickySidebar by dr|z3d */
+/* License: AGPLv3 or later */
+
 function stickySidebar() {
   var html = document.querySelector("html");
   var htmlHeight = html.getBoundingClientRect().height;
@@ -6,14 +9,16 @@ function stickySidebar() {
   var sbWrap = document.getElementById("sb_wrap");
   var viewportHeight = window.visualViewport.height;
 
-  if ((sbHeight + 5) < viewportHeight && htmlHeight > viewportHeight) {
-    sbWrap.style.position = "sticky";
-    sbWrap.style.top = "5px";
-    sbWrap.classList.add("sticky");
-  } else {
-    sbWrap.style.position = null;
-    sbWrap.style.top = null;
-    sbWrap.classList.remove("sticky");
+  if (sbWrap) {
+    if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight)) {
+      sbWrap.style.position = "sticky";
+      sbWrap.style.top = "5px";
+      sbWrap.classList.add("sticky");
+    } else {
+      sbWrap.style.position = null;
+      sbWrap.style.top = null;
+      sbWrap.classList.remove("sticky");
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-/* SectionToggler by dr|z3d */
+/* I2P+ SectionToggler by dr|z3d */
 /* License: AGPLv3 or later */
 
 function sectionToggler() {
