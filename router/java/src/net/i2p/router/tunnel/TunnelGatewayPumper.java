@@ -39,9 +39,11 @@ class TunnelGatewayPumper implements Runnable {
      *  See additional comments in PTG.
      */
 //    private static final long REQUEUE_TIME = 50;
-    private static final long REQUEUE_TIME = SystemVersion.isSlow() || (SystemVersion.getCores() <= 4 &&
-                                             SystemVersion.getMaxMemory() < 512*1024*1024) ? 50 :
-                                             SystemVersion.getCPULoad() < 80 ? 15 : 30;
+    private static final long REQUEUE_TIME = SystemVersion.isSlow() ? 50 :
+                                             SystemVersion.getCores() < 4 &&
+                                             SystemVersion.getMaxMemory() < 512*1024*1024 ? 40 :
+                                             SystemVersion.getMaxMemory() > 2048*1024*1024 &&
+                                             SystemVersion.getCores() >= 6 ? 20 : 30;
 
     /** Creates a new instance of TunnelGatewayPumper */
     public TunnelGatewayPumper(RouterContext ctx) {
