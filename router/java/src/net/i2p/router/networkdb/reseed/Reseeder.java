@@ -1262,7 +1262,7 @@ public class Reseeder {
             url += SU3_FILENAME + NETID_PARAM + '2';
             URI uri = new URI(url);
             String host = uri.getHost();
-            System.out.println("Testing " + host);
+            System.out.println("Testing: " + host);
             File su3 = new File(host + ".su3");
             try {
                 SSLEepGet get;
@@ -1294,22 +1294,22 @@ public class Reseeder {
                             ri++;
                         }
                         zipf.close();
-                        System.out.println("Test passed for " + host + ", returned " + ri + " router infos");
+                        System.out.println("Test passed: " + ri + " router infos returned");
                         pass++;
                     } else {
-                        System.out.println("Test failed for " + host + " return code: " + rc);
+                        System.out.println("Test failed: status " + rc);
                         su3.delete();
                         fail++;
                     }
                 } else {
                     int rc = get.getStatusCode();
-                    System.out.println("Test failed for " + host + " return code: " + rc);
+                    System.out.println("Test failed: status " + rc);
                     su3.delete();
                     fail++;
                 }
             } catch (IOException ioe) {
-                System.out.println("Test failed for " + host + ": " + ioe);
-                ioe.printStackTrace();
+                System.out.println("Test failed: " + ioe.getMessage());
+                //ioe.printStackTrace();
                 if (su3.exists()) {
                     try {
                         SU3File.main(new String[] {"showversion", su3.getPath()});
@@ -1320,7 +1320,7 @@ public class Reseeder {
             }
             System.out.println();
         }
-        System.out.println("Passed: " + pass + "; Failed: " + fail);
+        System.out.println("Tested " + (pass + fail) + "reseed hosts - " + pass + " passed test, " + fail + " failed");
         if (fail > 0)
             System.exit(1);
     }
