@@ -33,7 +33,7 @@ class RequestThrottler {
     private static boolean isHexaCore = SystemVersion.getCores() >= 6;
 //    private static final int MIN_LIMIT = 45 / LIFETIME_PORTION;
 //    private static final int MAX_LIMIT = 165 / LIFETIME_PORTION;
-    private static final int MIN_LIMIT = 64 / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = (isSlow ? 32 : 64) / LIFETIME_PORTION;
     private static final int MAX_LIMIT = (isSlow ? 256 : isHexaCore ? 512 : 384) / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 25 / LIFETIME_PORTION;
@@ -71,13 +71,7 @@ class RequestThrottler {
         int count = counter.increment(h);
         boolean rv = count > limit;
         boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
-        long loadAvg;
-        if (context.statManager().getRate("router.CpuLoad") != null) {
-            loadAvg = (long) context.statManager().getRate("router.CpuLoad").getRate(60*1000).getAvgOrLifetimeAvg();
-        } else {
-            loadAvg = 0;
-        }
-        if (SystemVersion.getCPULoad() > 90 && loadAvg > 90) {
+        if (SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90) {
             if (_log.shouldWarn())
                 _log.warn("Rejecting tunnel requests from Router [" + h.toBase64().substring(0,6) + "] -> " +
                           "System is under sustained high load");
