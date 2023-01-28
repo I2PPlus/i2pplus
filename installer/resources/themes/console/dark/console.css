@@ -1228,7 +1228,8 @@ th code{user-select:all}
 #netdb a[href$="i2p"]{margin-left:6px;display:inline-block}
 .netdbentry td b,.leaseset td b,#leasesetdebug td b,.sybil_routerinfo td b{color:var(--ink)}
 #leasesetsummary tr:last-child td:last-child{text-align:left}
-#leasesetdebug,#leasesetsummary{margin-bottom:14px}
+#leasesetsummary,#leasesetdebug{margin-bottom:14px}
+.leasesets_container #leasesetdebug{margin:9px 0 2px;column-span:all}
 .leaseset th{padding:3px 5px;position:static;text-align:left;font-weight:400}
 .leaseset th:last-child,.leaseset td:nth-child(2){padding-right:5px;white-space:nowrap;text-align:right}
 .leaseset th:last-child{padding-right:0}
