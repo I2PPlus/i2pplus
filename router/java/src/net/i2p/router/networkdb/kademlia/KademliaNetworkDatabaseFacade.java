@@ -1262,6 +1262,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         int existing = _kb.size();
         String expireRI = _context.getProperty("router.expireRouterInfo");
         String routerId = "";
+        String v = routerInfo.getVersion();
+        String minRouterVersion = "0.9.20";
+        String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
+        boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
         if (routerInfo != null)
             routerId = routerInfo.toBase64().substring(0,6);
         if (expireRI != null)
@@ -1274,9 +1280,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                           ROUTER_INFO_EXPIRATION_MIN +
                                           ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
 */
-        adjustedExpiration = existing > 2000 ? ROUTER_INFO_EXPIRATION / 3 :
-                             existing > 1500 ? ROUTER_INFO_EXPIRATION / 2 :
-                             existing > 1000 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
+        adjustedExpiration = existing > 5000 ? ROUTER_INFO_EXPIRATION / 3 :
+                             existing > 4000 ? ROUTER_INFO_EXPIRATION / 2 :
+                             existing > 3000 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
                              ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !isUs && !routerInfo.isCurrent(adjustedExpiration)) {
@@ -1321,15 +1327,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
 
-        if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 &&
-            routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 2) && !isUs)
-                return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 4h ago";
-
+        if (isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 2)) {
+            return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 4h ago";
+        }
         if (expireRI != null && !isUs) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
-            long age = now - routerInfo.getPublished();
+                long age = now - routerInfo.getPublished();
                 return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
             }
         } else {
@@ -1348,9 +1351,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 }
             }
         }
-        String v = routerInfo.getVersion();
-        String minRouterVersion = "0.9.20";
-        String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
                 _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router too old (" + v + ")");
@@ -1469,7 +1469,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         SigType type = kc.getSigType();
                         if (type == null || !type.isAvailable()) {
                             String stype = (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
-                            _context.banlist().banlistRouterForever(h, " <b>➜</b> " + "Unsupported signature type " + stype);
+                            _context.banlist().banlistRouterForever(h, " <b>➜</b> " + "Unsupported Signature type " + stype);
                             if (_log.shouldWarn())
                                 _log.warn("Unsupported Signature type (" + stype + ") for ["
                                           + h.toBase64().substring(0,6) + "] - banned until restart");
