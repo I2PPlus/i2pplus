@@ -1249,6 +1249,10 @@ public class Reseeder {
      *  @since 0.9.58
      */
     public static void main(String args[]) throws Exception {
+        if (args.length == 1 && args[0].equals("help")) {
+            System.out.println("Usage: reseeder [https://hostname/ ...]");
+            System.exit(1);
+        }
         File f = new File("certificates");
         if (!f.exists()) {
             System.out.println("Must be run from $I2P or have symlink to $I2P/certificates in this directory");
@@ -1283,22 +1287,35 @@ public class Reseeder {
                         su3f.verifyAndMigrate(zip);
                         SU3File.main(new String[] {"showversion", su3.getPath()});
                         String version = su3f.getVersionString();
-                        try {
-                            Long ver = Long.parseLong(version.trim());
-                            ver *= 1000;
-                            if (ver < System.currentTimeMillis() - MAX_FILE_AGE / 4)
-                                throw new IOException("su3 file too old");
-                        } catch (NumberFormatException nfe) {}
+                        long ver = Long.parseLong(version.trim()) * 1000;
+                        long cutoff = System.currentTimeMillis() - MAX_FILE_AGE / 4;
+                        if (ver < cutoff)
+                            throw new IOException("su3 file too old");
                         java.util.zip.ZipFile zipf = new java.util.zip.ZipFile(zip);
                         java.util.Enumeration<? extends java.util.zip.ZipEntry> entries = zipf.entries();
-                        int ri = 0;
+                        int ri = 0, old = 0;
                         while (entries.hasMoreElements()) {
-                            entries.nextElement();
-                            ri++;
+                            java.util.zip.ZipEntry entry = (java.util.zip.ZipEntry) entries.nextElement();
+                            net.i2p.data.router.RouterInfo r = new net.i2p.data.router.RouterInfo();
+                            InputStream in = zipf.getInputStream(entry);
+                            r.readBytes(in);
+                            in.close();
+                            if (r.getPublished() > cutoff)
+                                ri++;
+                            else
+                                old++;
                         }
                         zipf.close();
-                        System.out.println("Success:  " + ri + " RouterInfos returned");
+                        if (old > 0) {
+                            System.out.println("Failure:  " + ri + " old RouterInfos returned");
+                            fail++;
+                        } else if (ri >= 50) {
+                            System.out.println("Success:  " + ri + " RouterInfos returned");
                         pass++;
+                    } else {
+                            System.out.println("Failure:  only " + ri + " RouterInfos returned (less than 50)");
+                            fail++;
+                        }
                     } else {
                         System.out.println("Failure:  Status code " + rc);
                         su3.delete();
@@ -1310,7 +1327,7 @@ public class Reseeder {
                     su3.delete();
                     fail++;
                 }
-            } catch (IOException ioe) {
+            } catch (Exception ioe) {
                 System.out.println("Failure:  " + ioe.getMessage() + "\n");
                 //ioe.printStackTrace();
                 if (su3.exists()) {
