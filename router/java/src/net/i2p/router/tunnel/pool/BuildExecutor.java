@@ -251,10 +251,11 @@ class BuildExecutor implements Runnable {
 
         long lag = _context.jobQueue().getMaxLag();
         int cpuloadavg = SystemVersion.getCPULoadAvg();
-        if ((lag > 2000 && _context.router().getUptime() > 5*60*1000) || cpuloadavg > 95) {
+        int cpuload = SystemVersion.getCPULoad();
+        if (_context.router().getUptime() > 5*60*1000 && (lag > 2000 || (cpuloadavg > 95 && cpuload > 95))) {
             if (_log.shouldWarn())
-                if (cpuloadavg > 95) {
-                    _log.warn("High CPU load average (" + cpuloadavg + "%) -> Slowing down new tunnel builds...");
+                if (cpuloadavg > 95 && cpuload > 95) {
+                    _log.warn("High CPU load (" + cpuloadavg + "%) -> Slowing down new tunnel builds...");
                 } else {
                     _log.warn("Job queue too lagged (" + lag + "ms) -> Slowing down new tunnel builds...");
                 }
