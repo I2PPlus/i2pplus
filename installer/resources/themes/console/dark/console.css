@@ -2037,7 +2037,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #externali2cp input[name="port"]{margin-left:6px}
 
 /* debug */
-#debug{line-height:1.4;padding-bottom:0}
+#debug{line-height:1.4;padding-bottom:11px}
 #debug table{margin-top:-13px}
 #debug th,#debug td{text-align:left;padding:5px 10px}
 #debug th{padding:7px 10px}
@@ -2045,14 +2045,13 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #debug th:first-child{text-align:left}
 #debug td:last-child{vertical-align:top}
 #debug h2,#debug h3{border-radius:0}
-#debug h2{margin-top:11px;padding:10px 10px 8px;font-size:11.5pt;background:var(--bug) no-repeat right 10px center,var(--h3),#010;background-size:18px,2px}
-#debug h2#debug_portmapper{margin-top:15px}
+#debug h2{margin-top:15px;padding:10px 10px 8px;font-size:11.5pt;background:var(--bug) no-repeat right 10px center,var(--h3),#010;background-size:18px,2px}
 #debug h2 + hr,.buckets hr{display:none}
 #debug h3{border-width:1px;padding:5px 10px;font-size:10pt}
 .debug_container{margin-top:-11px;border:var(--border);padding:10px 15px;background:#000800}
 .debug_container:not(.buckets){columns:2 600px}
 .debug_container:empty::after{content:"None";display:inline-block;font-style:italic}
-.buckets{margin-top:-13px;margin-bottom:10px;padding-bottom:14px;max-height:600px;overflow:auto;word-break:break-all}
+.buckets{margin-top:-13px;margin-bottom:10px;word-break:break-all}
 .debug_container + h3,.debug_outboundsessions{margin-top:-1px}
 #debug h2 + h3,.buckets{margin-top:-13px}
 #debug ul,#debug li{margin:0;text-align:left}
@@ -2075,7 +2074,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 .bucketsContainer{margin:-1px 0 -8px;padding:5px;background:#000700}
 .bucketsContainer+br+br{display:none}
 .bucketCount{padding:3px 0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.7),rgba(0,0,0,0)),var(--label)}
-.bucket{margin:2px;padding:1px 4px;max-width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#880;font-family:var(--monospaced);box-shadow:0 0 0 1px #030,var(--highlight);background:#010;user-select:all}
+.bucket{margin:1px 2px -2px;padding:1px 4px;max-width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#880;font-family:var(--monospaced);box-shadow:0 0 0 1px #030,var(--highlight);background:#010;user-select:all}
 .bucket:empty{display:none}
 
 /* jardump */

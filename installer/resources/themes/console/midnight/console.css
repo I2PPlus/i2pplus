@@ -1986,6 +1986,7 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 .revision br::selection,.sha256 br::selection{background:transparent}
 
 /* debug */
+#debug{padding-bottom:11px}
 #debug h2,#debug h3{border-radius:0}
 #debug h2{padding:10px;background:var(--bug) no-repeat right 5px center,var(--title);background-size:24px,4px 100%,100%;background-blend-mode:luminosity,normal}
 #debug h2:first-child,#dht{margin-top:10px}
@@ -1998,7 +1999,7 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 .bucketCount{margin-top:-6px;padding:6px 0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.7),rgba(0,0,0,0)),linear-gradient(180deg,#001 50%,#000 50%)}
 .bucketsContainer,.bucketCount{margin:0;text-align:center;border:1px solid #120f35;box-shadow:var(--highlight)}
 .bucketsContainer{margin:-1px 0 -16px;padding:8px 8px 4px;vertical-align:middle;background:#000007}
-.buckets{margin-top:-13px;margin-bottom:9px;max-height:600px;overflow:auto;word-break:break-all}
+.buckets{margin-top:-13px;margin-bottom:9px;word-break:break-all}
 .bucket{margin:2px;padding:1px 4px;display:inline-block;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#770;font-weight:700;box-shadow:0 0 0 1px #003,var(--highlight);background:#002;user-select:all}
 .bucket::selection{background:#770;color:#fff}
 .bucket:empty{display:none}
@@ -2006,7 +2007,7 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 .debug_container:empty::after{content:"None";display:inline-block;font-style:italic}
 .debug_container + h3,.debug_outboundsessions{margin-top:-1px}
 .debug_container{line-height:1.6}
-.debug_container{margin-top:-11px;padding:10px 15px;border:var(--border_inner);background:#000008}
+.debug_container{margin-top:-13px;padding:10px 15px 0;border:var(--border_inner);background:#000008}
 .debug_inboundsessions{background:var(--in) no-repeat 6px center,var(--title);background-size:16px,4px 100%}
 .debug_outboundsessions,.debug_inboundsessions{padding:8px 10px 6px 28px}
 .debug_outboundsessions{margin-top:-2px;background:var(--out) no-repeat 6px center,var(--title);background-size:16px,4px 100%}

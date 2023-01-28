@@ -1539,7 +1539,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #wrapperlogs pre{white-space:pre-wrap;word-break:break-all;margin:0;padding:0;width:100%;max-height:500px;overflow:auto}
 
 /* debug */
-.debug_container{margin-top:-16px;padding:10px 15px;border:var(--border)}
+.debug_container{margin-top:-14px;padding:10px 15px;border:var(--border)}
 .debug_container,#debug td{line-height:1.4}
 .debug_container:empty,#debug ul:empty{display:none}
 .debug_container + h3{margin-top:-1px}
@@ -1556,11 +1556,12 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 .debug_outboundtarget td,.skm_key td{background:linear-gradient(180deg,#fcfcff,#fafaff 51%,#f6f6ff 100%)}
 .debug_outboundtarget td:first-child{padding-left:3%}
 .debug_outboundtarget td:last-child,.skm_key td:last-child{width:1%;white-space:nowrap}
+#debug {padding-bottom:14px}
 #debug h2{padding:8px 10px;font-size:12pt}
 #debug h3{padding:5px 10px}
 #debug td[colspan="2"]{text-align:left}
 #debug h2{margin:12px 0 10px;background:var(--bug) no-repeat right 6px center/20px,var(--header);background-blend-mode:luminosity,normal}
-#debug h2 + table,#debug h3 + table{margin-top:-11px}
+#debug h2 + table,#debug h3 + table{margin:-11px auto 0}
 #debug h2 + hr{display:none}
 #debug_portmapper{margin-top:14px}
 #debug h3{padding-left:10px}
@@ -1581,7 +1582,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #debug li:first-child{padding:10px 0 0}
 #debug li:last-child{margin-bottom:-9px;padding-bottom:0}
 #bucketSet{margin-bottom:5px}
-#debug .buckets{padding-bottom:0;max-height:600px;overflow:auto;word-break:break-all}
+#debug .buckets{padding-bottom:0;word-break:break-all}
 #debug .buckets .bucketsContainer:last-child{margin-bottom:0}
 #debug .bucketsContainer + br{display:none}
 
