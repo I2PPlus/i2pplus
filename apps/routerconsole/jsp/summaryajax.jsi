@@ -8,7 +8,8 @@
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   var refreshInterval = refresh * 1000;
   var timerId = setInterval(refreshSidebar, refreshInterval);
-  document.addEventListener("DOMContentLoaded", () => {sectionToggler();stickySidebar();});
+  document.addEventListener("DOMContentLoaded", sectionToggler);
+  window.addEventListener("DOMContentLoaded", stickySidebar);
   window.addEventListener("resize", stickySidebar);
 </script>
 <%
@@ -19,7 +20,8 @@
   import {sectionToggler} from "/js/sectionToggle.js";
   import {stickySidebar} from "/js/stickySidebar.js";
   refreshSidebar();
-  document.addEventListener("DOMContentLoaded", () => {sectionToggler();stickySidebar();});
+  document.addEventListener("DOMContentLoaded", sectionToggler);
+  window.addEventListener("DOMContentLoaded", stickySidebar);
   window.addEventListener("resize", stickySidebar);
 </script>
 <%
