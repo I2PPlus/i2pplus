@@ -238,8 +238,7 @@ public class Reseeder {
             if (errors <= 0) {
                 _checker.setStatus(_t("Imported {0} router infos.", fetched));
             } else {
-                _checker.setStatus(
-                    _t("Imported {0} router infos ({1} errors).", fetched, errors));
+                _checker.setStatus(_t("Imported {0} router infos ({1} errors).", fetched, errors));
             }
             System.err.println("Reseed got " + fetched + " router infos from file with " + errors + " errors");
             if (fetched > 0)
@@ -841,12 +840,10 @@ public class Reseeder {
                     contentRaw.delete();
             }
             if (errors <= 0) {
-                _checker.setStatus(
-                    _t("Acquired {0} router infos from reseed hosts", fetched));
-                } else {
-                _checker.setStatus(
-                    _t("Acquired {0} router infos from reseed hosts ({1} errors)", fetched, errors));
-                }
+                _checker.setStatus(_t("Acquired {0} router infos from reseed hosts", fetched));
+            } else {
+                _checker.setStatus(_t("Acquired {0} router infos from reseed hosts ({1} errors)", fetched, errors));
+            }
             System.err.println("Reseed got " + fetched + " router infos " + getDisplayString(seedURL) + " with " + errors + " errors");
             return fetched;
         }
@@ -1307,12 +1304,12 @@ public class Reseeder {
                         }
                         zipf.close();
                         if (old > 0) {
-                            System.out.println("Failure:  " + ri + " old RouterInfos returned");
+                            System.out.println("Failure:  " + old + " old RouterInfos returned");
                             fail++;
                         } else if (ri >= 50) {
                             System.out.println("Success:  " + ri + " RouterInfos returned");
-                        pass++;
-                    } else {
+                            pass++;
+                        } else {
                             System.out.println("Failure:  only " + ri + " RouterInfos returned (less than 50)");
                             fail++;
                         }
