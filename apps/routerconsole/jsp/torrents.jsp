@@ -32,6 +32,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("torrents")%>
 </head>
 <body>
@@ -66,7 +67,6 @@
   window.addEventListener("pageshow", progressx.hide());
 </script>
 <style type="text/css">iframe{opacity:1}#torrents::before{width:100%;animation:fade .3s linear .7s both}</style>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>
 <%

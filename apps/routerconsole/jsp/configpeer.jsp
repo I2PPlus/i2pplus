@@ -10,6 +10,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("config peers")%>
 </head>
 <body>
@@ -89,6 +90,5 @@
 <jsp:getProperty name="peerhelper" property="blocklistSummary" />
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>

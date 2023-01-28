@@ -10,6 +10,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%@include file="csp-unsafe.jsi" %>
 <%=intl.title("graphs")%>
  <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
@@ -126,6 +127,5 @@ if (graph && visibility == "visible") {
 <%  } %>
 </script>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>

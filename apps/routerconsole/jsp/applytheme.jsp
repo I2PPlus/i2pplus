@@ -11,6 +11,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("config UI")%>
 <style type="text/css">input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 <script charset="utf-8" src="/js/ajax.js" type="text/javascript"></script>
@@ -35,6 +36,5 @@
 </div>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>

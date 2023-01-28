@@ -31,6 +31,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("webmail")%>
 </head>
 <body class="embed">
@@ -65,7 +66,6 @@
 </script>
 </div>
 <style type="text/css">iframe{opacity:1}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>
 <%

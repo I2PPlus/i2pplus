@@ -30,6 +30,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("Tunnel Manager")%>
 </head>
 <body>
@@ -64,7 +65,6 @@
 </script>
 </div>
 <style type="text/css">iframe{opacity:1}#tunnelmgr::before{width:100%;animation:fade .3s linear .7s both}</style>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>
 <%

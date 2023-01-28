@@ -45,6 +45,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css_embed.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%@include file="csp-unsafe.jsi" %>
 <%=intl.title(name)%>
 </head>
@@ -155,7 +156,6 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
 </div>
 <span id="endOfPage"></span>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>
 <%

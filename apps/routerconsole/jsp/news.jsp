@@ -10,6 +10,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("News")%>
 </head>
 <body>
@@ -26,6 +27,5 @@
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>
