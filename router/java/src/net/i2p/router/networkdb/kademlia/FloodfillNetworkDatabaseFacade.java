@@ -698,7 +698,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // firing the dropLookupFailedJob, which actually removes our local reference
         //search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 10*1000, false);
         if (_log.shouldDebug())
-            _log.debug("Initiating floodfill lookup of [" + peer.toBase64().substring(0,6) + "]  before dropping..." +
+            _log.debug("Initiating floodfill lookup of [" + peer.toBase64().substring(0,6) + "] before dropping..." +
                        "\n* Published: " + info.getPublished());
         search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000, false);
     }
