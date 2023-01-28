@@ -14,12 +14,12 @@
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("participating tunnels")%>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type="text/javascript"></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
 </head>
 <body id="routertunnels">
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Participating Tunnels")%></h1>
 <div class="main" id="tunnels">
@@ -34,9 +34,9 @@
     tunnelParticipatingHelper.storeWriter(out);
 %>
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
-<script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("tunnels_part"));</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>new Tablesort(document.getElementById("tunnels_part"));</script>
 </div>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

@@ -14,11 +14,11 @@
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("config UI")%>
 <style type="text/css">input.default {width: 1px; height: 1px; visibility: hidden;}</style>
-<script charset="utf-8" src="/js/ajax.js" type="text/javascript"></script>
+<script charset=utf-8 src="/js/ajax.js" type=text/javascript></script>
 <meta http-equiv="Refresh" content= "0;URL=/configui">
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
 <jsp:setProperty name="uihelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
@@ -35,6 +35,6 @@
 <input type="hidden" name="action" value="blah" >
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

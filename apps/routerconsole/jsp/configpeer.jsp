@@ -14,7 +14,7 @@
 <%=intl.title("config peers")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf"><%=intl._t("Peer Manager")%></h1>
 <div class="main" id="config_peers">
@@ -89,6 +89,6 @@
 <h3 class="tabletitle"><%=intl._t("Banned IPs")%></h3>
 <jsp:getProperty name="peerhelper" property="blocklistSummary" />
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

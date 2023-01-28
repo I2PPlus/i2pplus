@@ -14,7 +14,7 @@
 <%=intl.title("config reseeding")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigReseedHelper" id="reseedHelper" scope="request" />
 <jsp:setProperty name="reseedHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -223,7 +223,7 @@
 <td>
 <b class="suboption"><%=intl._t("Select zip or su3 file")%></b>
 <div class="optionsingle" id="reseedzip">
-<form action="" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+<form action="" method="POST" enctype="multipart/form-data" accept-charset=utf-8>
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <table>
 <tr id="file">
@@ -274,6 +274,6 @@
 </tr>
 </table>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

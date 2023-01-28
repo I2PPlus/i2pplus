@@ -385,7 +385,7 @@ A negative rate sets the default.</i><br>
 <%
     if (ipg == 3) {
 %>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" type=text/javascript>
   setInterval(function() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/wizard?page=4&' + new Date().getTime(), true);

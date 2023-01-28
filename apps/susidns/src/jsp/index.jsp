@@ -34,11 +34,11 @@
 <html>
 <head>
 <link rel="preload" href="images/how.svg" as="object">
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title><%=intl._t("Introduction")%> - SusiDNS</title>
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type="text/css">body{display:none;pointer-events:none}</style>
 </head>
 <body id="ovrvw">
@@ -74,7 +74,7 @@
 </p>
 <div class="illustrate" id="svg">
 <% /* load svg via ajax (with noscript fallback) so we can style per theme */ %>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" type=text/javascript>
 var now = Date.now();
 xhr = new XMLHttpRequest();
 xhr.open("GET","/susidns/images/how.svg?time=" + now, false);

@@ -15,7 +15,7 @@
 <%=intl.title("statistics")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.OldConsoleHelper" id="oldhelper" scope="request" />
 <jsp:setProperty name="oldhelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -25,6 +25,6 @@
 <div class="main" id="stats">
 <jsp:getProperty name="oldhelper" property="stats" />
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

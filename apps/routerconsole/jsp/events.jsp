@@ -21,13 +21,13 @@
     eventHelper.storeWriter(out);
     eventHelper.storeMethod(request.getMethod());
 %>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.date.js" type="text/javascript"></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.date.js" type=text/javascript></script>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="log"><%=intl._t("Event Log")%></h1>
 <div class="main" id="events">
@@ -39,8 +39,8 @@
 </div>
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("eventlog"));</script>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>new Tablesort(document.getElementById("eventlog"));</script>
+<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

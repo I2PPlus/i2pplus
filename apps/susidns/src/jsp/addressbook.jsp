@@ -54,16 +54,16 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title>${book.book} <%=intl._t("address book")%> - susidns</title>
 <link rel="preload" href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="preload" href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset="utf-8" src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<script charset="utf-8" src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<script charset="utf-8" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
+<script charset=utf-8 src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
+<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <%
     String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
     String query = request.getQueryString();
@@ -485,7 +485,7 @@
 <%
     if (!book.getBook().equals("published")) {
 %>
-<form method="POST" action="addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset="UTF-8">
+<form method="POST" action="addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset=utf-8>
 <input type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="serial" value="<%=susiNonce%>">
 <input type="hidden" name="begin" value="0">
@@ -507,8 +507,8 @@
 <style type="text/css">body{display:block;pointer-events:auto}</style>
 </div>
 <!--
-<script charset="utf-8" src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset=utf-8 src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 -->
-<script charset="utf-8" src="/js/lazyload.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset=utf-8 src="/js/lazyload.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 </body>
 </html>

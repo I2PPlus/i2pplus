@@ -32,12 +32,12 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title>${book.book} <%=intl._t("addressbook")%> - susidns</title>
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset="utf-8" src="/js/textareaResize.js" type="text/javascript"></script>
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 src="/js/textareaResize.js" type=text/javascript></script>
 <%
     String query = request.getQueryString();
 %>

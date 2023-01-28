@@ -25,9 +25,9 @@
 <html id="tman">
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("SSL Helper")%></title>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
@@ -488,7 +488,7 @@
 %>
 <div class="panel" id="ssl">
 <h2><%=intl._t("SSL Wizard")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2>
-<form method="post" action="ssl" accept-charset="UTF-8">
+<form method="post" action="ssl" accept-charset=utf-8>
 <input type="hidden" name="tunnel" value="<%=curTunnel%>" />
 <input type="hidden" name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
 <input type="hidden" name="type" value="<%=tunnelType%>" />
@@ -848,7 +848,7 @@
   } else {
 %>
 <div id="notReady"><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" type=text/javascript>
   setInterval(function() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/i2ptunnel/?' + new Date().getTime(), true);

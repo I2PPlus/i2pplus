@@ -42,7 +42,7 @@
  <jsp:getProperty name="contenthelper" property="content" />
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

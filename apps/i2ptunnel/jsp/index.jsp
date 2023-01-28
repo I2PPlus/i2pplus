@@ -10,7 +10,7 @@
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
 <html id="tman">
 <head>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
 <link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel="preload" as="script"> 
 <link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
@@ -553,8 +553,8 @@ ElGamal-2048
 <%
   }  // !isInitialized()
 %>
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset="utf-8" src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
 <noscript><style type="text/css">.script{display:none!important}#screenlog_buttons{display:table-row!important}</style></noscript>

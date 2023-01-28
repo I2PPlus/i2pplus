@@ -15,7 +15,7 @@
 <%=intl.title("logs")%>
 </head>
 <body id="i2plogs">
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="log"><%=intl._t("Logs")%></h1>
 <div class="main" id="logs">
@@ -149,7 +149,7 @@
 </tbody>
 </table>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" type=text/javascript>
   var visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {

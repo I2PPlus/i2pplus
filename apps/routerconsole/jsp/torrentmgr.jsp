@@ -18,7 +18,7 @@
 <%=intl.title("torrents")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="snark"><%=intl._t("Torrent Manager")%> <a href="/i2psnark/" target="_blank" title="<%=intl._t("Open in new tab")%>"><span id="newtab"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class="main" id="torrents">
@@ -31,8 +31,8 @@
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2psnark/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
-<script charset="utf-8" type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script charset=utf-8 type=text/javascript src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce="<%=cspNonce%>" type=text/javascript>
   function setupFrame() {
     f = document.getElementById("i2psnarkframe");
     f.addEventListener("load", function() {
@@ -40,8 +40,8 @@
     }, true);
   }
 </script>
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce="<%=cspNonce%>" type=text/javascript>
   document.addEventListener('DOMContentLoaded', function(event) {
     var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2psnarkframe')
   });

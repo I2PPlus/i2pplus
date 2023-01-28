@@ -13,11 +13,11 @@
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("config plugins")%>
 <style type="text/css">input.default{width: 1px; height: 1px; visibility: hidden;}</style>
-<script nonce="<%=cspNonce%>" type="text/javascript">var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";</script>
-<script charset="utf-8" src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script nonce="<%=cspNonce%>" type=text/javascript>var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";</script>
+<script charset=utf-8 src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
 <jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -73,7 +73,7 @@
 </tr>
 </table>
 </form>
-<form action="configplugins" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+<form action="configplugins" method="POST" enctype="multipart/form-data" accept-charset=utf-8>
 <table id="plugininstall2" class="configtable">
 <tr>
 <td colspan="2">
@@ -133,6 +133,6 @@
 %>
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

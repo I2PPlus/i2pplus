@@ -26,8 +26,8 @@
 <html id="tman">
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("Registration Helper")%></title>
-<meta charset="utf-8">
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<meta charset=utf-8>
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
@@ -40,7 +40,7 @@
 <%
   if (editBean.isInitialized()) {
 %>
-<form method="post" enctype="multipart/form-data" action="register" accept-charset="UTF-8">
+<form method="post" enctype="multipart/form-data" action="register" accept-charset=utf-8>
 <div class="panel" id="registration">
 <%
     String tunnelTypeName;
@@ -320,7 +320,7 @@
   } else {
 %>
 <div id="notReady"><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" type=text/javascript>
   setInterval(function() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/i2ptunnel/?' + new Date().getTime(), true);

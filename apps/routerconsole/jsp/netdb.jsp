@@ -13,12 +13,12 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("network database")%>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.NetDbHelper" id="formhandler" scope="request" />
 <jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>" />
@@ -104,8 +104,8 @@
 <%@include file="formhandler.jsi" %>
 <jsp:getProperty name="formhandler" property="netDbSummary" />
 </div>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" type=text/javascript>
   new Tablesort(document.getElementById("netdbcountrylist"));
   window.addEventListener("pageshow", progressx.hide());
 </script>

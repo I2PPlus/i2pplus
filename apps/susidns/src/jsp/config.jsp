@@ -35,11 +35,11 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title><%=intl._t("configuration")%> - susidns</title>
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type="text/css">body{display:none;pointer-events:none}</style>
 </head>
 <body id="cfg">
@@ -58,7 +58,7 @@
 <h3><%=intl._t("Configuration")%></h3>
 <h4><%=intl._t("File location")%>: <span class="storage">${cfg.fileName}</span></h4>
 </div>
-<script charset="utf-8" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <div id="messages">${cfg.messages}</div>
 <form method="POST" action="config#navi">
 <div id="config">

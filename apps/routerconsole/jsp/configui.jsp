@@ -16,7 +16,7 @@
 <style type="text/css">input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -85,6 +85,6 @@
 </div>
 </form>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

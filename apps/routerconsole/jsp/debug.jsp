@@ -21,7 +21,7 @@
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf adv debug">Debug</h1>
 <div class="main" id="debug">
@@ -126,6 +126,6 @@ if (dd == null || dd.equals("0")) {
 
 %>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

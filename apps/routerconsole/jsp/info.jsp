@@ -15,7 +15,7 @@
 <%=intl.title("router information")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="nfo"><%=intl._t("Router Summary")%></h1>
 <div class="main" id="routerinformation">
@@ -54,6 +54,6 @@
 <h3 class="tabletitle"><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console" />
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

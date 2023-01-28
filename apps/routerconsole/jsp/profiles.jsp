@@ -15,14 +15,14 @@
 <%=intl.title("peer profiles")%>
 
 <!-- tablesort.js https://github.com/tristen/tablesort/ -->
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type="text/javascript"></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <!-- end tablesort.js -->
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ProfilesHelper" id="profilesHelper" scope="request" />
 <jsp:setProperty name="profilesHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -56,14 +56,14 @@
 <jsp:getProperty name="profilesHelper" property="summary" />
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" type=text/javascript>
   var ff = document.getElementById("floodfills");
   if (ff) {
     new Tablesort(ff);
   }
 </script>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" type=text/javascript>
   document.addEventListener("DOMContentLoaded", function() {
     setInterval(function() {
       progressx.show();
@@ -103,6 +103,6 @@
     }, 15000);
   }, true);
 </script>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>
