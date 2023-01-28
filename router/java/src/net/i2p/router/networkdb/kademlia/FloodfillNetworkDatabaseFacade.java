@@ -690,16 +690,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 }
             }
             //super.lookupBeforeDropping(peer, info); // don't bother with a lookup, just drop if uninteresting
-            super.lookupBeforeDropping(peer, info);
             return;
         }
         // this sends out the search to the floodfill peers even if we already have the
         // entry locally, firing no job if it gets a reply with an updated value (meaning
         // we shouldn't drop them but instead use the new data), or if they all time out,
-        // firing the dropLookupFailedJob, which actually removes out local reference
-//        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 10*1000, false);
+        // firing the dropLookupFailedJob, which actually removes our local reference
+        //search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 10*1000, false);
         if (_log.shouldDebug())
-            _log.debug("Initiating IterativeSearchJob lookup before dropping for " + peer.toBase64() + ' ' + info.getPublished());
+            _log.debug("Initiating floodfill lookup of [" + peer.toBase64().substring(0,6) + "]  before dropping..." +
+                       "\n* Published: " + info.getPublished());
         search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000, false);
     }
 
