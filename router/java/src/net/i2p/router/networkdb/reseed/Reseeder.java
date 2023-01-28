@@ -1297,18 +1297,18 @@ public class Reseeder {
                         System.out.println("Test passed: " + ri + " router infos returned");
                         pass++;
                     } else {
-                        System.out.println("Test failed: status " + rc);
+                        System.out.println("Test failed: Status code " + rc);
                         su3.delete();
                         fail++;
                     }
                 } else {
                     int rc = get.getStatusCode();
-                    System.out.println("Test failed: status " + rc);
+                    System.out.println("Test failed: Status code " + rc);
                     su3.delete();
                     fail++;
                 }
             } catch (IOException ioe) {
-                System.out.println("Test failed: " + ioe.getMessage());
+                System.out.println("Test failed: " + ioe.getMessage() + "\n");
                 //ioe.printStackTrace();
                 if (su3.exists()) {
                     try {
@@ -1320,7 +1320,7 @@ public class Reseeder {
             }
             System.out.println();
         }
-        System.out.println("Tested " + (pass + fail) + "reseed hosts - " + pass + " passed test, " + fail + " failed");
+        System.out.println("Tested " + (pass + fail) + " reseed hosts - " + pass + " passed, " + fail + " failed");
         if (fail > 0)
             System.exit(1);
     }
