@@ -1268,6 +1268,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
+        boolean isUnreachable = routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         if (routerInfo != null)
             routerId = routerInfo.toBase64().substring(0,6);
         if (expireRI != null)
@@ -1327,9 +1328,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
 
-        if (isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 2)) {
-            return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 4h ago";
-        }
         if (expireRI != null && !isUs) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
                 long age = now - routerInfo.getPublished();
@@ -1346,7 +1344,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null && !isUs) {
                     return "Router [" + routerId + "] is SSU only without introducers and was published over 75m ago";
                 } else {
-                    if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 && !isUs)
+                    if (isUnreachable && !isUs)
                     return "Router [" + routerId + "] is unreachable on any transport and was published over 75m ago";
                 }
             }
@@ -1361,6 +1359,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router too old (" + v + ")");
                 return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
             }
+        }
+        if (isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 4)) {
+            return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 2h ago";
         }
         return null;
     }
