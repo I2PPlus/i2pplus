@@ -1265,6 +1265,7 @@ public class Reseeder {
             String host = uri.getHost();
             System.out.println("Host:     " + host);
             File su3 = new File(host + ".su3");
+            su3.delete();
             try {
                 SSLEepGet get;
                 if (sslState == null) {
@@ -1278,6 +1279,7 @@ public class Reseeder {
                     if (rc == 200) {
                         SU3File su3f = new SU3File(su3);
                         File zip = new File(host + ".zip");
+                        zip.delete();
                         su3f.verifyAndMigrate(zip);
                         SU3File.main(new String[] {"showversion", su3.getPath()});
                         String version = su3f.getVersionString();
