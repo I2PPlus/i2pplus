@@ -4,10 +4,12 @@
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
   import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
+  import {stickySidebar} from "/js/stickySidebar.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   var refreshInterval = refresh * 1000;
   var timerId = setInterval(refreshSidebar, refreshInterval);
-  document.addEventListener("DOMContentLoaded", sectionToggler(), true);
+  document.addEventListener("DOMContentLoaded", () => {sectionToggler();stickySidebar();});
+  window.addEventListener("resize", stickySidebar);
 </script>
 <%
     } else {
@@ -15,8 +17,10 @@
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
   import {sectionToggler} from "/js/sectionToggle.js";
+  import {stickySidebar} from "/js/stickySidebar.js";
   refreshSidebar();
-  document.addEventListener("DOMContentLoaded", sectionToggler(), true);
+  document.addEventListener("DOMContentLoaded", () => {sectionToggler();stickySidebar();});
+  window.addEventListener("resize", stickySidebar);
 </script>
 <%
     }
