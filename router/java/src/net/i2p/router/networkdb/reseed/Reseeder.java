@@ -1258,11 +1258,12 @@ public class Reseeder {
         int pass = 0, fail = 0;
         SSLEepGet.SSLState sslState = null;
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        System.out.println("Initiating reseed hosts test...\n");
         for (String url : urls) {
             url += SU3_FILENAME + NETID_PARAM + '2';
             URI uri = new URI(url);
             String host = uri.getHost();
-            System.out.println("Testing: " + host);
+            System.out.println("Host:     " + host);
             File su3 = new File(host + ".su3");
             try {
                 SSLEepGet get;
@@ -1294,21 +1295,21 @@ public class Reseeder {
                             ri++;
                         }
                         zipf.close();
-                        System.out.println("Test passed: " + ri + " router infos returned");
+                        System.out.println("Success:  " + ri + " RouterInfos returned");
                         pass++;
                     } else {
-                        System.out.println("Test failed: Status code " + rc);
+                        System.out.println("Failure:  Status code " + rc);
                         su3.delete();
                         fail++;
                     }
                 } else {
                     int rc = get.getStatusCode();
-                    System.out.println("Test failed: Status code " + rc);
+                    System.out.println("Failure:  Status code " + rc);
                     su3.delete();
                     fail++;
                 }
             } catch (IOException ioe) {
-                System.out.println("Test failed: " + ioe.getMessage() + "\n");
+                System.out.println("Failure:  " + ioe.getMessage() + "\n");
                 //ioe.printStackTrace();
                 if (su3.exists()) {
                     try {
@@ -1320,7 +1321,7 @@ public class Reseeder {
             }
             System.out.println();
         }
-        System.out.println("Tested " + (pass + fail) + " reseed hosts - " + pass + " passed, " + fail + " failed");
+        System.out.println("Test complete: " + (pass + fail) + " reseed hosts tested - " + pass + " passed, " + fail + " failed");
         if (fail > 0)
             System.exit(1);
     }
