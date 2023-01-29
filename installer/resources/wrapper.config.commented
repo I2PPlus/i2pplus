@@ -36,10 +36,13 @@
 # ********************************************************************************
 #
 #  Initial Java Heap Size (in MB)
+#  This value effectively sets the maximum amount of RAM used by the JVM before a
+#  full garbage collection is initiated. It's recommended to set this to no more
+#  than 25% to 50% of the maximum heap size in order for GC to function optimally.
 wrapper.java.initmemory=128
 
 #  Maximum Java Heap Size (in MB)
-#  The JVM's default is 64MB;  I2P won't work reliably with less than 192MB, though
+#  The JVM's default is 64MB;  I2P+ won't work reliably with less than 192MB, though
 #  with lots of I2PSnark activity in the same JVM, at least 256MB is recommended.
 #  Feel free to reduce the current 512MB I2P+ default if not using I2PSnark heavily
 #  High-bandwidth routers may need to increase to more than 512MB - the wrapper
