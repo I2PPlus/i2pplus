@@ -118,7 +118,8 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  For now, we don't do concurrent, but we keep SINGLE_SEARCH_TIME very short,
      *  so we have effective concurrency in that we fail a search quickly.
      */
-    private final int _maxConcurrent;
+//    private final int _maxConcurrent;
+    private int _maxConcurrent;
     /**
      * The default _maxConcurrent
      */
@@ -177,8 +178,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
          //_maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
-         _maxConcurrent = ctx.router().getUptime() > 30*60*1000 ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
-                                                                  ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
+         _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
+                          ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
         if (fromLocalDest != null && !isLease && _log.shouldLog(Log.WARN))
             _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
         // all createRateStat in FNDF
@@ -189,6 +190,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             totalSearchLimit += 2;
         } else {
             _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
+        }
 /*
             if (ri != null) {
                 String v = ri.getVersion();
@@ -208,25 +210,20 @@ public class IterativeSearchJob extends FloodSearchJob {
                 _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
             }
 */
-        }
-
-/*
-
         if (ctx.getProperty("netdb.maxConcurrent") != null) {
             _maxConcurrent = Integer.valueOf(ctx.getProperty("netdb.maxConcurrent"));
-        } else if (cpuLoad < 80 && sysLoad < 80 && !isSingleCore && !isSlow) {
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 4));
+        } else if (isLease && cpuLoad < 90 && cpuLoadAvg < 90) {
+            ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 2));
         } else if ((known < 1000 || ctx.router().getUptime() < 30*60*1000 || isHidden) && !isSlow &&
-                   !isSingleCore && cpuLoad < 80 && cpuLoadAvg < 80) {
+                   !isSingleCore && (cpuLoad < 80 && cpuLoadAvg < 80)) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 2);
-        } else if (known > 1500 && ctx.router().getUptime() > 30*60*1000 && !isHidden && !isSlow && !isSingleCore) {
+        } else if (known > 1500 || ctx.router().getUptime() > 30*60*1000) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", 1);
-        } else if (cpuLoad > 80 && cpuLoadAvg > 80 || isSlow || isSingleCore) {
-          _maxConcurrent = 1;
+        } else if ((cpuLoad > 90 && cpuLoadAvg > 90) || isSlow || isSingleCore) {
+            _maxConcurrent = 1;
         } else {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.max(MAX_CONCURRENT, 1));
         }
-*/
     }
 
     @Override
