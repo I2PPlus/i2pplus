@@ -43,6 +43,7 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var main = document.getElementById("perfgraphs");
   var graph = document.getElementsByClassName("statimage")[0];
+  var visibility = document.visibilityState;
   function injectCss() {
     graph.addEventListener("load", function() {
       var graphWidth = graph.width;
@@ -98,16 +99,15 @@
     }
     window.addEventListener("pageshow", progressx.hide());
     graph.addEventListener("load", initCss());
-    xhrgraphs.send();
+    if (visibility === "visible") {
+      xhrgraphs.send();
+    } else if (xhrgraphs.status !== null) {
+      xhrgraphs.abort();
+    }
   }
-
-  var visibility = document.visibilityState;
-  if (visibility == "visible") {
-    setTimeout(function refresh() {
-      window.requestAnimationFrame(updateGraphs);
-      setTimeout(refresh, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
-    }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
-  }
+  var refresh = <% out.print(graphHelper.getRefreshValue()); %>;
+  var refreshInterval = refresh * 1000;
+  var timerId = setInterval(updateGraphs, refreshInterval);
 <%
     }
 %>
