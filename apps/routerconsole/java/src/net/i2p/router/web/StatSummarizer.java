@@ -46,7 +46,9 @@ public class StatSummarizer implements Runnable, ClientApp {
     /** list of SummaryListener instances */
     private final List<SummaryListener> _listeners;
     //private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 : 3;
-    private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 : 4;
+    private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 :
+                                                  SystemVersion.getMaxMemory() < 256*1024*1024 ? 4 :
+                                                  SystemVersion.getMaxMemory() < 512*1024*1024 ? 8 : 16;
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private volatile Thread _thread;
@@ -93,7 +95,8 @@ public class StatSummarizer implements Runnable, ClientApp {
         if (isPersistent) {
             String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
             String[] rates = DataHelper.split(spec, ",");
-            syncThreads = Math.min(rates.length / 2, 4);
+//            syncThreads = Math.min(rates.length / 2, 4);
+            syncThreads = Math.min(rates.length / 2, SystemVersion.isSlow() ? 4 : 6);
             // delete files for unconfigured rates
             Set<String> configured = new HashSet<String>(rates.length);
             for (String r : rates) {
@@ -204,30 +207,33 @@ public class StatSummarizer implements Runnable, ClientApp {
 
     /**  @since public since 0.9.33, was package private */
     public static final String DEFAULT_DATABASES = "bw.sendRate.60000" +
-                                                    ",bw.recvRate.60000" +
-//                                                  ",tunnel.testSuccessTime.60000" +
-//                                                  ",udp.outboundActiveCount.60000" +
-//                                                  ",udp.receivePacketSize.60000" +
-//                                                  ",udp.receivePacketSkew.60000" +
-//                                                  ",udp.sendConfirmTime.60000" +
-//                                                  ",udp.sendPacketSize.60000" +
-                                                    ",router.memoryUsed.60000" +
-                                                    ",router.cpuLoad.60000" +
-                                                    ",router.activePeers.60000";
-//                                                  ",router.activeSendPeers.60000" +
-//                                                  ",tunnel.acceptLoad.60000" +
-//                                                  ",tunnel.dropLoadProactive.60000" +
-//                                                  ",tunnel.buildExploratorySuccess.60000" +
-//                                                  ",tunnel.buildExploratoryReject.60000" +
-//                                                  ",tunnel.buildExploratoryExpire.60000" +
-//                                                  ",client.sendAckTime.60000" +
-//                                                  ",client.dispatchNoACK.60000" +
-//                                                  ",ntcp.sendTime.60000" +
-//                                                  ",ntcp.transmitTime.60000" +
-//                                                  ",ntcp.sendBacklogTime.60000" +
-//                                                  ",ntcp.receiveTime.60000" +
-//                                                  ",transport.sendMessageFailureLifetime.60000" +
-//                                                  ",transport.sendProcessingTime.60000";
+                                                   ",bw.recvRate.60000" +
+                                                   ",jobQueue.jobLag.60000" +
+                                                   ",router.activePeers.60000" +
+                                                   ",router.cpuLoad.60000" +
+                                                   ",router.memoryUsed.60000" +
+                                                   ",tunnel.participatingTunnels.60000" +
+                                                   ",tunnel.tunnelBuildSuccessAvg.60000";
+//                                                 ",tunnel.testSuccessTime.60000" +
+//                                                 ",udp.outboundActiveCount.60000" +
+//                                                 ",udp.receivePacketSize.60000" +
+//                                                 ",udp.receivePacketSkew.60000" +
+//                                                 ",udp.sendConfirmTime.60000" +
+//                                                 ",udp.sendPacketSize.60000" +
+//                                                 ",router.activeSendPeers.60000" +
+//                                                 ",tunnel.acceptLoad.60000" +
+//                                                 ",tunnel.dropLoadProactive.60000" +
+//                                                 ",tunnel.buildExploratorySuccess.60000" +
+//                                                 ",tunnel.buildExploratoryReject.60000" +
+//                                                 ",tunnel.buildExploratoryExpire.60000" +
+//                                                 ",client.sendAckTime.60000" +
+//                                                 ",client.dispatchNoACK.60000" +
+//                                                 ",ntcp.sendTime.60000" +
+//                                                 ",ntcp.transmitTime.60000" +
+//                                                 ",ntcp.sendBacklogTime.60000" +
+//                                                 ",ntcp.receiveTime.60000" +
+//                                                 ",transport.sendMessageFailureLifetime.60000" +
+//                                                 ",transport.sendProcessingTime.60000";
 
     private String adjustDatabases(String oldSpecs) {
         String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
