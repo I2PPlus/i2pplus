@@ -165,6 +165,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         int cpuLoad = SystemVersion.getCPULoad();
         int cpuLoadAvg = SystemVersion.getCPULoadAvg();
         int sysLoad = SystemVersion.getSystemLoad();
+        long lag = ctx.jobQueue().getMaxLag();
         _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
@@ -212,7 +213,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 */
         if (ctx.getProperty("netdb.maxConcurrent") != null) {
             _maxConcurrent = Integer.valueOf(ctx.getProperty("netdb.maxConcurrent"));
-        } else if (isLease && cpuLoad < 90 && cpuLoadAvg < 90) {
+        } else if (isLease && cpuLoad < 80 && cpuLoadAvg < 80 && lag < 50) {
             ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 2));
         } else if ((known < 1000 || ctx.router().getUptime() < 30*60*1000 || isHidden) && !isSlow &&
                    !isSingleCore && (cpuLoad < 80 && cpuLoadAvg < 80)) {
