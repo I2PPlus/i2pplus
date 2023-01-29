@@ -74,14 +74,14 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         if (toTunnel == null && fromKey.equals(_us)) {
             if (_log.shouldWarn())
                 // exploratory, no reply key/tag. i2pd bug?
-                _log.warn("Dropping DbLookup for [" + searchKey.toBase64().substring(0,6) + "] with replies to us");
+                _log.warn("Dropping NetDb Lookup for [" + searchKey.toBase64().substring(0,6) + "] with replies to us");
             return;
         }
 
         // If we are hidden we should not get queries, log and return
         if (getContext().router().isHidden() && !searchKey.equals(_us)) {
             if (_log.shouldWarn()) {
-                _log.warn("Uninvited dbLookup received with replies going to " + fromKey.toBase64().substring(0,6) +
+                _log.warn("Uninvited NetDb Lookup received with replies going to " + fromKey.toBase64().substring(0,6) +
                           "] -> [Tunnel " + toTunnel + "]");
             }
             return;
@@ -90,14 +90,14 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         // i2pd bug?
         if (searchKey.equals(Hash.FAKE_HASH)) {
             if (_log.shouldWarn())
-                 _log.warn("Zero lookup", new Exception());
+                 _log.warn("Zero Lookup", new Exception());
              getContext().statManager().addRateData("netDb.DLMAllZeros", 1);
             return;
         }
 
         if (_log.shouldDebug()) {
             if (toTunnel != null)
-                _log.debug("DbLookup received with replies going to [" + fromKey.toBase64().substring(0,6) +
+                _log.debug("NetDb Lookup received with replies going to [" + fromKey.toBase64().substring(0,6) +
                            "] -> [Tunnel " + toTunnel + "]");
             else
                 _log.debug("Handling database lookup message for [" + searchKey.toBase64().substring(0,6) + "] with replies to [" +

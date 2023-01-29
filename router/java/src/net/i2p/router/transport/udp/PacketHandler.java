@@ -660,12 +660,12 @@ class PacketHandler {
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", skew);
                     if (_log.shouldWarn())
-                        _log.warn("Dropping connection - packet too far in the past: " + new Date(sendOn) + packet +
-                                  " PeerState: " + state);
+                        _log.warn("Dropping connection - packet too far in the past \n* Timestamp: " + new Date(sendOn) + packet +
+                                  "; PeerState: " + state);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Packet too far in the past: " + new Date(sendOn) + packet +
-                                  " PeerState: " + state);
+                        _log.warn("Packet too far in the past \n* Timestamp: " + new Date(sendOn) + packet +
+                                  "; PeerState: " + state);
                 }
                 return;
             } else if (skew < 0 - GRACE_PERIOD) {
@@ -685,12 +685,12 @@ class PacketHandler {
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", 0-skew);
                     if (_log.shouldWarn())
-                        _log.warn("Dropping connection - packet too far in the future " + packet + "; PeerState: " + state +
-                                  "\n* Date: " + new Date(sendOn));
+                        _log.warn("Dropping connection - packet too far in the future \n* Timestamp: " + new Date(sendOn) + packet +
+                                  "; PeerState: " + state);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Packet too far in the future " + packet + "; PeerState: " + state +
-                                  "\n* Date: " + new Date(sendOn));
+                        _log.warn("Packet too far in the future \n* Timestamp: " + new Date(sendOn) + packet +
+                                  "; PeerState: " + state);
                 }
                 return;
             }
