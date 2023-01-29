@@ -787,7 +787,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _ds.remove(key);
                 _kb.remove(key);
             }
-
             if (key != null && _context.banlist().isBanlistedForever(key)) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted");
@@ -1247,7 +1246,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String validateUptime = _context.getProperty("router.validateRoutersAfter");
         Hash us = _context.routerHash();
         boolean isUs = us.equals(routerInfo.getIdentity().getHash());
-        boolean upLongEnough = _context.router().getUptime() > 30*60*1000;
+        long uptime = _context.router().getUptime();
+        boolean upLongEnough = uptime > 30*60*1000;
         boolean dontFail = _context.router().getUptime() < DONT_FAIL_PERIOD;
         if (validateUptime != null)
             upLongEnough = _context.router().getUptime() > Integer.valueOf(validateUptime)*60*1000;
@@ -1323,7 +1323,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
             }
         }
-        if (existing > 2000 && isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 8)) {
+        if (uptime > 10*60*1000 && existing > 500 && isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 8)) {
             if (_log.shouldWarn())
                 _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and was published over 1h ago");
             return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 1h ago";
