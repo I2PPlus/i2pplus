@@ -787,6 +787,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _ds.remove(key);
                 _kb.remove(key);
             }
+
             if (key != null && _context.banlist().isBanlistedForever(key)) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted");
@@ -1322,7 +1323,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
             }
         }
-        if (existing > 500 && isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 8)) {
+        if (existing > 2000 && isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 8)) {
             if (_log.shouldWarn())
                 _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and was published over 1h ago");
             return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 1h ago";
