@@ -107,8 +107,8 @@
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var countries = document.getElementById("netdbcountrylist");
-  if (countries) {new Tablesort(document.getElementById(countries), {descending: true});}
-  window.addEventListener("pageshow", progressx.hide());
+  if (countries) {new Tablesort(countries, {descending: true});}
+  window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
 </body>
 </html>
