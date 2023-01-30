@@ -708,7 +708,24 @@ public class ProfileOrganizer {
      * Caution, this does NOT cascade further to non-connected peers, so it should only
      * be used when there is a good number of connected peers.
      *
-     * @param exclude non-null, WARNING - side effect, all not-connected peers are added
+     * @param exclude non-null, not-connected peers will NOT be added, as of 0.9.58
+     */
+    public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
+        selectActiveNotFailingPeers(howMany, exclude, matches, 0, null);
+    }
+
+    /**
+     * Return a set of Hashes for peers that are both not failing and we're actively
+     * talking with.
+     *
+     * We use commSystem().isEstablished(), not profile.getIsActive(), as the
+     * NTCP idle time is now shorter than the 5 minute getIsActive() threshold,
+     * and we're using this to try and limit connections.
+     *
+     * Caution, this does NOT cascade further to non-connected peers, so it should only
+     * be used when there is a good number of connected peers.
+     *
+     * @param exclude non-null, not-connected peers will NOT be added, as of 0.9.58
      * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
      *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
      * @param ipSet may be null only if mask is 0
@@ -716,14 +733,12 @@ public class ProfileOrganizer {
      */
     public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
-            Set<Hash> connected = _context.commSystem().getEstablished();
+            List<Hash> connected = _context.commSystem().getEstablished();
+            if (connected.isEmpty())
+                return;
             getReadLock();
             try {
-                for (Hash peer : _notFailingPeers.keySet()) {
-                    if (!connected.contains(peer))
-                        exclude.add(peer);
-                }
-                locked_selectPeers(_notFailingPeers, howMany, exclude, matches, mask, ipSet);
+                locked_selectActive(connected, howMany, exclude, matches, mask, ipSet);
             } finally { releaseReadLock(); }
         }
     }
@@ -738,6 +753,7 @@ public class ProfileOrganizer {
      *
      * This DOES cascade further to non-connected peers.
      *
+     * @param exclude non-null, not-connected peers will NOT be added, as of 0.9.58
      * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
      *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
      * @param ipSet in/out param, use for multiple calls, may be null only if mask is 0
@@ -745,25 +761,21 @@ public class ProfileOrganizer {
      */
     private void selectActiveNotFailingPeers2(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
-            Set<Hash> connected = _context.commSystem().getEstablished();
-            Map<Hash, PeerProfile> activePeers = new HashMap<Hash, PeerProfile>(connected.size());
-            getReadLock();
-            try {
-                for (Hash peer : connected) {
-                    PeerProfile prof = _notFailingPeers.get(peer);
-                    if (prof != null)
-                        activePeers.put(peer, prof);
-                }
-                locked_selectPeers(activePeers, howMany, exclude, matches, mask, ipSet);
-            } finally { releaseReadLock(); }
+            List<Hash> connected = _context.commSystem().getEstablished();
+            if (!connected.isEmpty()) {
+                getReadLock();
+                try {
+                    locked_selectActive(connected, howMany, exclude, matches, mask, ipSet);
+                } finally { releaseReadLock(); }
+            }
         }
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
-                _log.debug("Need " + howMany + " Not Failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable Failing peers");
+                _log.debug("Need " + howMany + "  active, not failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldDebug())
-                _log.debug(howMany + " Not Failing peers selected for tunnel build");
+                _log.debug(howMany + " not failing peers selected for tunnel build");
         }
     }
 
@@ -854,80 +866,6 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Get the peers the transport layer thinks are unreachable
-     * and peers requiring introducers.
-     *
-     */
-    public List<Hash> selectPeersLocallyUnreachable() {
-        List<Hash> n;
-        int count;
-        getReadLock();
-        try {
-            count = _notFailingPeers.size();
-            n = new ArrayList<Hash>(_notFailingPeers.keySet());
-        } finally { releaseReadLock(); }
-        List<Hash> l = new ArrayList<Hash>(count / 4);
-        for (Hash peer : n) {
-            if (_context.commSystem().wasUnreachable(peer)) {
-                l.add(peer);
-            } else {
-                // Blacklist all peers requiring SSU introducers, because either
-                //  a) it's slow; or
-                //  b) it doesn't work very often; or
-                //  c) in the event they are advertising NTCP, it probably won't work because
-                //     they probably don't have a TCP hole punched in their firewall either.
-                RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
-                if (info != null) {
-                        RouterAddress ra = info.getTargetAddress("SSU");
-                        // peers with no SSU address at all are fine.
-                        // as long as they have NTCP
-                        if (ra == null) {
-                            if (info.getTargetAddresses("NTCP", "NTCP2").isEmpty())
-                                l.add(peer);
-                            continue;
-                        }
-                        // This is the quick way of doing UDPAddress.getIntroducerCount() > 0
-                        if (ra.getOption("itag0") != null)
-                            l.add(peer);
-                }
-            }
-        }
-        StringBuilder buf = new StringBuilder();
-        if (!l.isEmpty()) {
-            // TODO Add count
-            buf.append("Unreachable: " + l.size() + " peers\n* ");
-            for (Hash h : l) {
-                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
-            }
-        }
-//        if (_log.shouldDebug() && l.size() > 0)
-//            _log.debug(buf.toString());
-        if (_log.shouldDebug() && l.size() > 0)
-            _log.debug("Unreachable: " + l.size() + " peers");
-//            _log.debug("Unreachable: " + l);
-        return l;
-    }
-
-    /**
-     * Get the peers that have recently rejected us for bandwidth
-     * recent == last 20s
-     *
-     */
-    public List<Hash> selectPeersRecentlyRejecting() {
-        getReadLock();
-        try {
-            long cutoff = _context.clock().now() - (20*1000);
-            int count = _notFailingPeers.size();
-            List<Hash> l = new ArrayList<Hash>(count / 128);
-            for (PeerProfile prof : _notFailingPeers.values()) {
-                if (prof.getTunnelHistory().getLastRejectedBandwidth() > cutoff)
-                    l.add(prof.getPeer());
-            }
-            return l;
-        } finally { releaseReadLock(); }
-    }
-
-    /**
      * Find the hashes for all peers we are actively profiling
      *
      */
@@ -949,7 +887,7 @@ public class ProfileOrganizer {
     private static final long MAX_EXPIRE_TIME = 3*24*60*60*1000;
 //    private static final long ADJUST_EXPIRE_TIME = 60*1000;
     private static final long ADJUST_EXPIRE_TIME = 3*60*1000;
-    private static final int ENOUGH_PROFILES = 5000;
+    private static final int ENOUGH_PROFILES = 2000;
     private long _currentExpireTime = MAX_EXPIRE_TIME;
 
     /**
@@ -1460,6 +1398,9 @@ public class ProfileOrganizer {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
                 if ((!ok) && _log.shouldWarn())
                     _log.warn("IP address restriction prevents [" + peer.toBase64().substring(0,6) + "] from joining " + matches);
+            } else {
+                if (toExclude != null)
+                    toExclude.add(peer);
             }
             if (ok)
                 matches.add(peer);
@@ -1468,6 +1409,44 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     *
+     * For efficiency. Rather than iterating through _notFailingPeers looking for connected peers,
+     * iterate through the connected peers and then check if failing.
+     *
+     * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
+     *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     * @param ipSet may be null only if mask is 0
+     * @since 0.9.58
+     */
+    private void locked_selectActive(List<Hash> connected, int howMany, Set<Hash> toExclude, Set<Hash> matches,
+                                     int mask, MaskedIPSet ipSet) {
+        // use RandomIterator to avoid shuffling the whole thing
+        for (Iterator<Hash> iter = new RandomIterator<Hash>(connected); (matches.size() < howMany) && iter.hasNext(); ) {
+            Hash peer = iter.next();
+            if (toExclude != null && toExclude.contains(peer))
+                continue;
+            if (matches.contains(peer))
+                continue;
+            if (_us.equals(peer))
+                continue;
+            if (_failingPeers.containsKey(peer))
+                continue;
+            // we assume if connected, it's fine, don't look in _notFailingPeers
+            boolean ok = isSelectable(peer);
+            if (ok) {
+                ok = mask <= 0 || notRestricted(peer, ipSet, mask);
+                if ((!ok) && _log.shouldWarn())
+                    _log.warn("IP restriction prevents " + peer + " from joining " + matches);
+            } else {
+                if (toExclude != null)
+                    toExclude.add(peer);
+            }
+            if (ok)
+                matches.add(peer);
+        }
+    }
+    
     /**
      * Does the peer's IP address NOT match the IP address of any peer already in the set,
      * on any transport, within a given mask?
@@ -1527,6 +1506,9 @@ public class ProfileOrganizer {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
                 if ((!ok) && _log.shouldWarn())
                     _log.warn("IP address restriction prevents [" + peer.toBase64().substring(0,6) + "] from joining " + matches);
+            } else {
+                if (toExclude != null)
+                    toExclude.add(peer);
             }
             if (ok)
                 matches.add(peer);
