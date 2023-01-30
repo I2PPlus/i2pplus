@@ -218,6 +218,7 @@ p:empty + .sb_notice{margin-top:9px}
 #sidebar .firewalled,.tunnelBuildStatus{color:#bb7;box-shadow:var(--bevel)}
 #sidebar .error,.tunnelBuildStatus.rejecting,#sb_warning{color:#900;box-shadow:var(--highlight),inset 0 0 2px 1px #700;background:rgba(96,0,0,.3)}
 .sb_netstatus.running,#sidebar .warn,#sidebar .clockskew{box-shadow:var(--highlight),inset 0 0 2px 1px #730;background:rgba(126,48,0,.3)}
+#sidebar .firewalled{box-shadow:0 0 0 1px rgba(64,0,0,.6) inset,var(--bevel);background:linear-gradient(90deg,rgba(16,0,0,.7),rgba(64,0,0,.4),rgba(16,0,0,.7))}
 #sidebar .warn{color:#900}
 #sidebar .clockskew{color:#990}
 #sidebar .testing,.tunnelBuildStatus.starting,#sb_localtunnels td[colspan="3"]{color:#aa3;box-shadow:var(--highlight),inset 0 0 2px 1px #bb0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.5),rgba(0,0,0,.5) 10px,rgba(56,56,0,.5) 10px,rgba(48,48,0,.5) 20px) repeat center center/400%}
@@ -231,7 +232,7 @@ p:empty + .sb_notice{margin-top:9px}
 .sb_netstatus.testing::before{background:var(--net_starting) var(--center)/16px;filter:drop-shadow(0 0 2px #000) drop-shadow(0 0 4px #000) drop-shadow(0 0 10px rgba(255,255,0,.3))}
 .sb_netstatus.hidden::before{background:var(--net_hidden) var(--center)}
 .sb_netstatus.running::before{background:var(--net_ok) var(--center);filter:drop-shadow(0 0 4px #000)}
-.sb_netstatus.firewalled::before{background:var(--net_firewalled) var(--center);filter:drop-shadow(0 0 4px #000) drop-shadow(0 0 12px rgba(255,72,72,.4))}
+.sb_netstatus.firewalled::before{background:var(--net_firewalled) var(--center);filter:drop-shadow(0 0 4px #000) drop-shadow(0 0 6px rgba(192,64,64,.3))}
 .sb_netstatus.vmcomm::before{background:var(--net_vm) var(--center)}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) var(--center)/14px}
 .sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{margin:-3px 0;height:24px;width:40px;background-size:20px}
@@ -1033,6 +1034,11 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels .cells:nth-child(2),#tunnels .cells:nth-child(3),.tunnels_participating td:nth-child(4){width:2%;max-width:112px;min-width:112px;vertical-align:middle}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 4px 14px 10px}
 #participating a::after,#peercount a::after{margin:-10px 0 -15px -12px;padding:9px 2px 9px 0}
+
+/* transit summary */
+#tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
+#tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
+#tunnels #transitSummary{margin-bottom:10px}
 
 /* netdb */
 #netdb #netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}
