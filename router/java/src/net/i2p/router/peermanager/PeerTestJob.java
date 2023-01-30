@@ -177,10 +177,10 @@ class PeerTestJob extends JobImpl {
             boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             String bw = peerInfo.getBandwidthTier();
             String version = peerInfo.getVersion();
-            if (peerInfo != null && cap != null && reachable && VersionComparator.comp(version, "0.9.57") >= 0 &&
+            if (peerInfo != null && prof != null && cap != null && reachable && VersionComparator.comp(version, "0.9.57") >= 0 &&
                 (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
-            } else if (peerInfo != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
+            } else if (peerInfo != null && prof != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
                 prof.setCapacityBonus(-30);
                 if (_log.shouldInfo())
                     _log.info("[" + peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30 and skipping test -> K, L, M, N or unreachable");
