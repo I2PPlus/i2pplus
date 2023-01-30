@@ -61,7 +61,7 @@
   document.addEventListener('DOMContentLoaded', function(event) {
     var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#susidnsframe')
   });
-  window.addEventListener("pageshow", progressx.hide());
+  window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
 </div>
 <style type="text/css">iframe{opacity:1}#dns::before{width:100%;animation:fade .3s linear .7s both}</style>

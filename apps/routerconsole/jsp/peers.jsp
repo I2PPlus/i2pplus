@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       }
     }
-    window.addEventListener("pageshow", progressx.hide());
+    window.addEventListener("DOMContentLoaded", progressx.hide());
     if (ntcp != null)
         ntcp.addEventListener("mouseover", lazyload());
     if (udp != null)
@@ -94,6 +94,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }, 15000);
 }, true);
 </script>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());window.addEventListener("pageshow", lazyload());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());window.addEventListener("pageshow", lazyload());</script>
 </body>
 </html>

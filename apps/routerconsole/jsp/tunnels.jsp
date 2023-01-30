@@ -47,11 +47,11 @@
               tunnelsParent.replaceChild(tunnelsResponse, tunnels);
         }
       }
-      window.addEventListener("pageshow", progressx.hide());
+      window.addEventListener("DOMContentLoaded", progressx.hide());
       xhr.send();
     }, 15000);
   }
 </script>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

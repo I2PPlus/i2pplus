@@ -125,6 +125,6 @@ A negative rate sets the default.</i><br>
 </table>
 </form>
 </div>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

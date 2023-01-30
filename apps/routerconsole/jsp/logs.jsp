@@ -197,11 +197,11 @@
           }
         }
       }
-      window.addEventListener("pageshow", progressx.hide());
+      window.addEventListener("DOMContentLoaded", progressx.hide());
       xhr.send();
     }, 30000);
   }
-  window.addEventListener("pageshow", progressx.hide());
+  window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
 </body>
 </html>

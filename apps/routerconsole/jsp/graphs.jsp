@@ -97,7 +97,7 @@
           }
       }
     }
-    window.addEventListener("pageshow", progressx.hide());
+    window.addEventListener("DOMContentLoaded", progressx.hide());
     graph.addEventListener("load", initCss());
     if (visibility === "visible") {
       xhrgraphs.send();
@@ -111,7 +111,7 @@
 <%
     }
 %>
-  window.addEventListener("pageshow", progressx.hide());
+  window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
 </body>
 </html>
