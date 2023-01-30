@@ -53,7 +53,7 @@ class RepublishLeaseSetJob extends JobImpl {
                             _log.warn("Not publishing a stale LOCAL LeaseSet [" + _dest.toBase32().substring(0,6) + "]", new Exception("Publish expired LOCAL lease?"));
                     } else {
                         if (_log.shouldInfo())
-                            _log.info(getJobId() + ": Publishing LeaseSet for " + _dest.toBase32());
+                            _log.info("[Job " + getJobId() + "] Publishing LeaseSet for " + _dest.toBase32());
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
                         _lastPublished = getContext().clock().now();

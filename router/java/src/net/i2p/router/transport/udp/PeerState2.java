@@ -599,8 +599,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  @since 0.9.56
      */
     private void sendPathChallenge(InetAddress toIP, int toPort) {
-        if (_log.shouldWarn())
-            _log.warn("[SSU2] Sending path challenge to " + toIP + ":" + toPort + this);
+        if (_log.shouldInfo())
+            _log.info("[SSU2] Sending path challenge to " + toIP.toString().replace("/", "") + ":" + toPort + this);
         List<SSU2Payload.Block> blocks = new ArrayList<SSU2Payload.Block>(3);
         blocks.add(new SSU2Payload.DateTimeBlock(_context));
         blocks.add(new SSU2Payload.AddressBlock(toIP.getAddress(), toPort));
