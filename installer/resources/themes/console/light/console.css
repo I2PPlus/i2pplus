@@ -1075,6 +1075,13 @@ h3#udpcon{margin-top:7px}
 #tunnels .routerid > *{vertical-align:middle}
 #tunnels .routerid img,#profiles .routerid img,#peers .routerid img{margin:0 2px 0 -1px;vertical-align:middle;border-radius:1px}
 
+/* transit summary */
+#tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
+#tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
+#tunnels #transitSummary{margin-bottom:10px}
+#tunnels #transitSummary td:nth-child(n+2) span,#tunnels #transitSummary td:nth-child(n+2) b{min-width:28px;display:inline-block}
+#tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
+
 /* banned peers */
 #banlist{padding:5px 5px 3px 0;display:block;border:1px solid var(--border_inner);border-radius:2px;background:#fafaff;text-align:center;columns:328px auto;column-gap:0}
 #profiles #banlist{margin:-3px 0 2px -5px;padding:0;border:none;background:none}

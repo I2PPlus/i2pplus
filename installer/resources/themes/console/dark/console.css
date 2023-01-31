@@ -1040,6 +1040,7 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
 #tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}
+#tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
 
 /* netdb */
 #netdb #netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}

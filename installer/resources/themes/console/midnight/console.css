@@ -914,6 +914,13 @@ input[type="hidden"] + p + p{border:var(--border_inner);padding:10px;margin-top:
 #config_tunnels input[type=text][disabled]{width:calc(100% - 15px)}
 #config_tunnels select[disabled]{opacity:.7;pointer-events:none}
 
+/* transit summary */
+#tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
+#tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
+#tunnels #transitSummary{margin-bottom:10px}
+#tunnels #transitSummary td:nth-child(n+2) span,#tunnels #transitSummary td:nth-child(n+2) b{min-width:28px;display:inline-block}
+#tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
+
 /* update */
 #config_update #updateHelper select{margin-left:9px;max-width:calc(100% - 220px)}
 #config_update .suboption label[for="newsThroughProxy"]{margin-right:20px}

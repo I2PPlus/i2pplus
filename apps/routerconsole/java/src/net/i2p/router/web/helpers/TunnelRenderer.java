@@ -143,7 +143,7 @@ class TunnelRenderer {
             out.write(_t("Participating"));
             if (!debug)
                 out.write(' ' + _t("tunnels"));
-            out.write("&nbsp;&nbsp;<a class=refreshpage style=float:right href=\"/tunnelsparticipating\">" + _t("Refresh") + "</a></h3>\n");
+            out.write("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelsparticipating\">" + _t("Refresh") + "</a></h3>\n");
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
                 if (!participating.isEmpty()) {
@@ -270,7 +270,7 @@ class TunnelRenderer {
 
     public void renderTransitSummary(Writer out) throws IOException {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
-        if (!participating.isEmpty()) {
+        if (!participating.isEmpty() && participating.size() > 1) {
             int displayed = 0;
             // peer table sorted by number of tunnels
             ObjectCounterUnsafe<Hash> counts = new ObjectCounterUnsafe<Hash>();
@@ -293,15 +293,17 @@ class TunnelRenderer {
             }
 
             // sort and output
-            out.write("<h3 class=tabletitle>Transit Tunnels &ndash; Peer Usage</h3>\n");
+            out.write("<h3 class=tabletitle>Transit Tunnels &ndash; Peer Usage by Count</h3>\n");
             out.write("<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n" +
                       "<thead><tr data-sort-method=none>" +
+                      "<th data-sortable data-sort-method=natural>" + _t("Country") + "</th>" +
                       "<th data-sortable data-sort-method=natural>" + _t("Router") + "</th>" +
                       "<th data-sortable data-sort-method=dotsep>" + _t("Version") + "</th>" +
                       "<th data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
                       "<th data-sortable data-sort-method=dotsep>" + _t("Address") + "</th>" +
                       "<th data-sortable data-sort-method=number>" + _t("Tunnels") + "</th>" +
-                      "<th data-sortable data-sort-method=dotsep>" + _t("Usage")+ "</th>" +
+                      "<th data-sortable data-sort-method=number>" + _t("Usage") + "</th>" +
+                      "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
                       "<th data-sort-method=none>" + _t("Edit") + "</th>" +
                       "</tr></thead>\n<tbody id=transitPeers>\n");
             displayed = 0;
@@ -309,19 +311,28 @@ class TunnelRenderer {
             for (Hash h : sort) {
                 DISPLAY_LIMIT = 50;
                 int count = counts.count(h);
-                if (count <= 1 && (participating.size() == 0 && count == 0))
-                    break;
-                if (count <= 1 && participating.size() > 20)
-                    DISPLAY_LIMIT = 20;
-                if (++displayed > DISPLAY_LIMIT)
-                    break;
                 char cap = getCapacity(h);
+                HopConfig cfg = participating.get(count);
+                int lifetime = count > 0 ? (int) ((_context.clock().now() - cfg.getCreation()) / 1000) : 1;
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
+                String truncHash = h.toBase64().substring(0,4);
                 String ip = info != null ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                 String v = info != null ? info.getOption("router.version") : null;
+                if (count <= 0 && (participating.size() == 0))
+                    break;
+                if (++displayed > DISPLAY_LIMIT)
+                    break;
+                out.write("<tr class=lazy><td class=cells>");
+                out.write(peerFlag(h));
+                out.write("</td><td class=cells>");
+                out.write("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
+                out.write(truncHash);
+                out.write("</a></span></td><td class=cells>");
+/*
                 out.write("<tr class=lazy><td class=cells>");
                 out.write(netDbLink(h));
                 out.write("</td><td class=cells>");
+*/
                 if (v != null) {
                     out.write("<span class=version title=\"" + _t("Show all routers with this version in the NetDb") +
                               "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
@@ -340,10 +351,18 @@ class TunnelRenderer {
                         out.write("<i>" + _t("unknown") + "</i>");
                     }
                 } else {
-                    out.write("<i>" + _t("unknown") + "</i>");
+                     out.write("<i>" + _t("unknown") + "</i>");
                 }
                 out.write("</td><td class=cells align=center>" + count + "</td>");
-                out.write("<td class=cells align=center>" + DataHelper.formatSize2(bws.count(h) * 1024) + "B</td>\n");
+                out.write("<td class=cells align=center>" + (bws.count(h) > 0 ? DataHelper.formatSize2(bws.count(h) * 1024) + "B": "") + "</td>\n");
+                if (lifetime <= 0)
+                    lifetime = 1;
+                if (lifetime > 10*60)
+                    lifetime = 10*60;
+                float bps = 1024 * count / lifetime;
+                float kbps = bps / 1024;
+                out.write("<td class=\"cells bps\">" + (count > 0 && kbps >= 0.01 ? "<span class=right>" + fmt.format(kbps) +
+                          "&#8239;</span><span class=\"left\">KB/s</span>" : "") + "</td>");
                 out.write("<td class=cells align=center>");
                 if (info != null && info.getHash() != null)
                     out.write("<a class=configpeer href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\">" +
@@ -789,6 +808,10 @@ class TunnelRenderer {
 
     private String netDbLink(Hash peer) {
         return _context.commSystem().renderPeerHTML(peer);
+    }
+
+    private String peerFlag(Hash peer) {
+        return _context.commSystem().renderPeerFlag(peer);
     }
 
     /**

@@ -1983,6 +1983,13 @@ h3 + .statusnotes{margin-top:-1px}
 #tunnels h3 a img{margin:3px 3px 0 0}
 #tunnels .tunnel_display .cells:first-child{width:64px}
 
+/* transit summary */
+#tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
+#tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
+#tunnels #transitSummary{margin-bottom:10px}
+#tunnels #transitSummary td:nth-child(n+2) span,#tunnels #transitSummary td:nth-child(n+2) b{min-width:28px;display:inline-block}
+#tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
+
 #filterlist code{margin:0 10px 10px;padding-left:12px;display:inline-block;border-left:2px solid #272}
 #filterlist code + h3,#filterlist ul + h3{margin-top:5px}
 #filterlist p + h3{margin-top:10px}

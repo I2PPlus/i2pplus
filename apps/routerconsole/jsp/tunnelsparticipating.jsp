@@ -36,7 +36,33 @@
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var tunnels = document.getElementById("tunnels_part");
-  if (tunnels) {new Tablesort(tunnels), {descending: true});}
+  var refresh = document.getElementById("refreshPage");
+  if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
+
+  function removeHref() {
+    if (refresh) {refresh.removeAttribute("href");}
+  }
+
+  function updateTunnels() {
+    xhrtunnels.open('GET', '/tunnelsparticipating?' + new Date().getTime(), true);
+    xhrtunnels.responseType = "document";
+    xhrtunnels.onreadystatechange = function () {
+      if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
+        var tunnelsResponse = xhrtunnels.responseXML.getElementById("tunnels_part");
+        if (tunnels && tunnelsResponse && tunnels !== tunnelsResponse) {
+          tunnels.innerHTML = tunnelsResponse.innerHTML;
+          sorter.refresh();
+        }
+      }
+    }
+    if (tunnels) {sorter.refresh();}
+    removeHref();
+    xhrtunnels.send();
+  }
+  if (refresh) {
+    refresh.addEventListener("click", updateTunnels(), true);
+    refresh.addEventListener("mouseover", removeHref(), true);
+  }
 </script>
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>

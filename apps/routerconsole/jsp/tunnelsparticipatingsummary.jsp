@@ -53,12 +53,12 @@
       if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
         var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
         var peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
-        if (peersResponse && peers !== peersResponse) {
+        if ((peers && peersResponse && peers !== peersResponse) || peers && peersResponse) {
           peers.innerHTML = peersResponse.innerHTML;
           sorter.refresh();
+        } else if ((mainResponse && main !== mainResponse) || peersReponse !== null && !peers) {
+          main.innerHTML = mainResponse.innerHTML;
         }
-      } else if (mainResponse && main !== mainResponse) {
-        main.innerHTML = mainResponse.innerHTML;
       }
     }
     if (visibility === "visible") {
