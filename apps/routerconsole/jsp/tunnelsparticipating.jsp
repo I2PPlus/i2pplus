@@ -38,6 +38,7 @@
   var tunnels = document.getElementById("tunnels_part");
   var refresh = document.getElementById("refreshPage");
   var xhrtunnels = new XMLHttpRequest();
+  var visible = document.visibilityState;
   if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
 
   function removeHref() {
@@ -58,12 +59,15 @@
     }
     if (tunnels) {sorter.refresh();}
     removeHref();
-    xhrtunnels.send();
+    if (visible === "visible") {
+      xhrtunnels.send();
+    }
   }
   if (refresh) {
     refresh.addEventListener("click", updateTunnels);
     refresh.addEventListener("mouseover", removeHref);
   }
+  setInterval(updateTunnels, 60000);
 </script>
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
