@@ -508,7 +508,6 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 .joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0;}
 .joblog h3{margin-top:10px}
 .joblog br{margin-bottom:5px}
-#jobs .jobqueue{padding:5px 12px 0 0;display:inline-block;columns:4 400px;column-gap:4px}
 .joblog ol li{padding-bottom:5px;width:calc(100% - 45px);min-width:360px;display:inline-block;text-align:left;list-style-position:inside;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 .joblog ol li:last-child{border:none;text-align:left}
 .joblog ol:empty{display:none}
@@ -521,6 +520,8 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 .joblog table td:first-child{font-weight:700}
 .joblog p{line-height:1.4}
 .joblog th:first-child{padding-left:6px;text-align:left}
+#jobs .jobqueue{padding:5px 12px 0 0;display:inline-block;columns:4 400px;column-gap:4px}
+#jobs .jobqueue:first-of-type{padding-bottom:4px}
 
 /* routerid */
 .routerid,.tunnel_local,#tunnels .tunnel_cap,.version,#netdbtiers a{border:1px solid #030}
