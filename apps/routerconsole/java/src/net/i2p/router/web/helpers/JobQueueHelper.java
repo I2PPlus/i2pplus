@@ -63,7 +63,7 @@ public class JobQueueHelper extends HelperBase {
         if ((activeJobs.size() != 0) && (isAdvanced())) {
             buf.append("<h3 id=\"activejobs\">")
                .append(_t("Active jobs")).append(": ").append(activeJobs.size())
-               .append("</h3>\n<ol class=\"jobqueue\">\n");
+               .append("</h3>\n<ol class=jobqueue>\n");
             for (int i = 0; i < activeJobs.size(); i++) {
                 Job j = activeJobs.get(i);
                 buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ");
@@ -75,7 +75,7 @@ public class JobQueueHelper extends HelperBase {
         if ((justFinishedJobs.size() != 0) && (isAdvanced())) {
             buf.append("<h3 id=\"finishedjobs\">")
                .append(_t("Just finished jobs")).append(": ").append(justFinishedJobs.size())
-               .append("</h3>\n<ol class=\"jobqueue\">\n");
+               .append("</h3>\n<ol class=jobqueue>\n");
             for (int i = 0; i < justFinishedJobs.size(); i++) {
                 Job j = justFinishedJobs.get(i);
                 buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ");
@@ -88,7 +88,7 @@ public class JobQueueHelper extends HelperBase {
         if ((readyJobs.size() != 0) && (isAdvanced())) {
             buf.append("<h3 id=\"readyjobs\">")
                .append(_t("Ready/waiting jobs")).append(": ").append(readyJobs.size())
-               .append("</h3>\n<ol class=\"jobqueue\">\n");
+               .append("</h3>\n<ol class=jobqueue>\n");
             ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
             for (int i = 0; i < readyJobs.size(); i++) {
                 Job j = readyJobs.get(i);
@@ -109,7 +109,7 @@ public class JobQueueHelper extends HelperBase {
 
         buf.append("<h3 id=\"scheduledjobs\">")
            .append(_t("Scheduled jobs")).append(": ").append(timedJobs.size())
-           .append("</h3>\n<ol class=\"jobqueue\">\n");
+           .append("</h3>\n<ol class=jobqueue>\n");
 
         ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
         getJobCounts(buf, counter);
