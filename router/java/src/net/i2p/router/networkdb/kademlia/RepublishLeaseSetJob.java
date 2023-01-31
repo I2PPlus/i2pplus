@@ -48,7 +48,7 @@ class RepublishLeaseSetJob extends JobImpl {
             if (getContext().clientManager().isLocal(_dest)) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null) {
-                    if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR*3)) {
+                    if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR*2)) {
                         if (_log.shouldWarn())
                             _log.warn("Not publishing a stale LOCAL LeaseSet [" + _dest.toBase32().substring(0,6) + "]", new Exception("Publish expired LOCAL lease?"));
                     } else {
@@ -80,8 +80,8 @@ class RepublishLeaseSetJob extends JobImpl {
         if (_log.shouldWarn())
             _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,6) + "]");
         getContext().jobQueue().removeJob(this);
-        //requeue((RETRY_DELAY + getContext().random().nextInt(RETRY_DELAY)) / 6 * 5);
-        requeue(RETRY_DELAY);
+        requeue((RETRY_DELAY + getContext().random().nextInt(RETRY_DELAY)) / 5 * 7);
+        //requeue(RETRY_DELAY);
     }
 
     /**
