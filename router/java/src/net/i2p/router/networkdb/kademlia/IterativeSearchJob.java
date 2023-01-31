@@ -213,7 +213,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 */
         if (ctx.getProperty("netdb.maxConcurrent") != null) {
             _maxConcurrent = Integer.valueOf(ctx.getProperty("netdb.maxConcurrent"));
-        } else if (isLease && cpuLoad < 80 && cpuLoadAvg < 80 && lag < 5) {
+        } else if (isLease && cpuLoad < 80 && cpuLoadAvg < 80 && lag < 10) {
             ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 2));
         } else if ((known < 1000 && ctx.router().getUptime() < 30*60*1000 || isHidden) && !isSlow &&
                    !isSingleCore && (cpuLoad < 80 && cpuLoadAvg < 80)) {
