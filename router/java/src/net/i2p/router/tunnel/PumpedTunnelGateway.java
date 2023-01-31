@@ -144,14 +144,22 @@ class PumpedTunnelGateway extends TunnelGateway {
         // before fragmentation, where we have priority queueing (for OBGW)
         int max;
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
+        boolean highLoad = SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90;
         if (backlogged && _log.shouldInfo())
             _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound);
-        if (backlogged)
+        if (backlogged) {
             max = _isInbound ? 1 : 2;
-        else
+        } else if (highLoad) {
+            max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP / 2) :
+                               _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP / 2);
+            if (_log.shouldInfo()) {
+                _log.info("Router is under high CPU load, halving maximum PumpedTunnelGateway inbound/outbound queues");
+            }
+        } else {
             max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) :
                                _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
+        }
         _prequeue.drainTo(queueBuf, max);
         if (queueBuf.isEmpty())
             return false;
