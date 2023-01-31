@@ -307,13 +307,12 @@ class TunnelRenderer {
             displayed = 0;
             List<Hash> sort = counts.sortedObjects();
             for (Hash h : sort) {
+                DISPLAY_LIMIT = 50;
                 int count = counts.count(h);
                 if (count <= 1 && (participating.size() == 0 && count == 0))
                     break;
                 if (count <= 1 && participating.size() > 20)
                     DISPLAY_LIMIT = 20;
-                else if (count > 10)
-                    DISPLAY_LIMIT = 50;
                 if (++displayed > DISPLAY_LIMIT)
                     break;
                 char cap = getCapacity(h);
@@ -381,7 +380,6 @@ class TunnelRenderer {
                   "<td>" + _t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + " KBps") + "</td>" +
                   "<td>&nbsp;</td></tr>");
         out.write("</tbody></table>");
-
     }
 
     /** @since 0.9.33 */
