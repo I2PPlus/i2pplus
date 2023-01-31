@@ -686,13 +686,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
-        String c = getCountry(peer) != null ? getCountry(peer) : "xx";
+        String c = getCountry(peer);
+        if (c == null) {
+            c = "a0";
+        }
         String h = peer.toBase64();
         if (ri != null) {
-            if (ri != null && c != "xx") {
+            // add a hidden span to facilitate sorting
+            buf.append("<span class=peerFlag><span class=cc hidden>");
+            if (c != "a0" || c != null) {
                 String countryName = getCountryName(c);
-                // add a hidden span to facilitate sorting
-                buf.append("<span class=peerFlag><span class=cc hidden>").append(c.toUpperCase(Locale.US)).append("</span>");
+                buf.append(c.toUpperCase(Locale.US)).append("</span>");
                 if (countryName.length() > 2)
                     countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
                 buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=16 alt=\"")
