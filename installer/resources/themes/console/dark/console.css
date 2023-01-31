@@ -979,6 +979,7 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 .tunneldisplay .routerid{box-sizing:border-box}
 .tunneldisplay .routerid,.tunnel_cap{box-shadow:var(--outline)}
 .tunneldisplay .routerid,.tunnel_local{margin-right:2px;margin-left:0;min-width:64px}
+#refreshPage{cursor:pointer}
 
 /* tunnelPeerCount */
 #peercount{margin-bottom:-3px;background:var(--hardhat) no-repeat 8px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
@@ -1041,6 +1042,7 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}
 #tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
+#tunnels #transitSummary tbody td {animation:highlight .1s ease 0s both}
 
 /* netdb */
 #netdb #netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}

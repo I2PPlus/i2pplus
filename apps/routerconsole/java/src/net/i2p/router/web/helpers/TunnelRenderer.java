@@ -296,13 +296,13 @@ class TunnelRenderer {
             out.write("<h3 class=tabletitle>Transit Tunnels &ndash; Peer Usage by Count</h3>\n");
             out.write("<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n" +
                       "<thead><tr data-sort-method=none>" +
-                      "<th data-sortable data-sort-method=natural>" + _t("Country") + "</th>" +
+                      "<th data-sortable>" + _t("Country") + "</th>" +
                       "<th data-sortable data-sort-method=natural>" + _t("Router") + "</th>" +
                       "<th data-sortable data-sort-method=dotsep>" + _t("Version") + "</th>" +
                       "<th data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
                       "<th data-sortable data-sort-method=dotsep>" + _t("Address") + "</th>" +
                       "<th data-sortable data-sort-method=number>" + _t("Tunnels") + "</th>" +
-                      "<th data-sortable data-sort-method=number>" + _t("Usage") + "</th>" +
+                      "<th data-sortable data-sort-method=dotsep>" + _t("Data") + "</th>" +
                       "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
                       "<th data-sort-method=none>" + _t("Edit") + "</th>" +
                       "</tr></thead>\n<tbody id=transitPeers>\n");
@@ -354,7 +354,8 @@ class TunnelRenderer {
                      out.write("<i>" + _t("unknown") + "</i>");
                 }
                 out.write("</td><td class=cells align=center>" + count + "</td>");
-                out.write("<td class=cells align=center>" + (bws.count(h) > 0 ? DataHelper.formatSize2(bws.count(h) * 1024) + "B": "") + "</td>\n");
+                //out.write("<td class=cells align=center>" + (bws.count(h) > 0 ? DataHelper.formatSize2(bws.count(h) * 1024) + "B": "") + "</td>\n");
+                out.write("<td class=cells align=center>" + (bws.count(h) > 0 ? fmt.format(bws.count(h) / 1024) + "KB": "").replace(".00", "") + "</td>\n");
                 if (lifetime <= 0)
                     lifetime = 1;
                 if (lifetime > 10*60)

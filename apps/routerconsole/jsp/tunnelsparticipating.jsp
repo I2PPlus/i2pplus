@@ -37,6 +37,7 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var tunnels = document.getElementById("tunnels_part");
   var refresh = document.getElementById("refreshPage");
+  var xhrtunnels = new XMLHttpRequest();
   if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
 
   function removeHref() {
@@ -60,8 +61,8 @@
     xhrtunnels.send();
   }
   if (refresh) {
-    refresh.addEventListener("click", updateTunnels(), true);
-    refresh.addEventListener("mouseover", removeHref(), true);
+    refresh.addEventListener("click", updateTunnels);
+    refresh.addEventListener("mouseover", removeHref);
   }
 </script>
 </div>

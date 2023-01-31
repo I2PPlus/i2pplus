@@ -1982,6 +1982,7 @@ h3 + .statusnotes{margin-top:-1px}
 #tunnel_defs tr:first-child td{border-top:var(--border)}
 #tunnels h3 a img{margin:3px 3px 0 0}
 #tunnels .tunnel_display .cells:first-child{width:64px}
+#refreshPage{cursor:pointer}
 
 /* transit summary */
 #tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}

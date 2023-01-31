@@ -1074,6 +1074,7 @@ h3#udpcon{margin-top:7px}
 #tunnel_defs td{padding:4px}
 #tunnels .routerid > *{vertical-align:middle}
 #tunnels .routerid img,#profiles .routerid img,#peers .routerid img{margin:0 2px 0 -1px;vertical-align:middle;border-radius:1px}
+#refreshPage{cursor:pointer}
 
 /* transit summary */
 #tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
