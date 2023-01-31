@@ -154,6 +154,10 @@ public abstract class CommSystemFacade implements Service {
         return peer.toBase64().substring(0, 4);
     }
 
+    public String renderPeerFlag(Hash peer) {
+        return peer.toBase64().substring(0, 4);
+    }
+
     /**
      *  @return SortedMap of style to Transport (a copy)
      *  @since 0.9.31

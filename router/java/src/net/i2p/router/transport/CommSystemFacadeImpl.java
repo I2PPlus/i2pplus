@@ -679,6 +679,35 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return buf.toString();
     }
 
+    /** Render a peer's country flag
+     * @since 0.9.58+
+     */
+    @Override
+    public String renderPeerFlag(Hash peer) {
+        StringBuilder buf = new StringBuilder(128);
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+        String c = getCountry(peer);
+        String h = peer.toBase64();
+        if (ri != null) {
+            if (ri != null && c != null) {
+                String countryName = getCountryName(c);
+                buf.append("<span class=peerFlag><span class=cc hidden>").append(c.toUpperCase(Locale.US)).append("</span>");
+                if (countryName.length() > 2)
+                    countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
+                // add a hidden span to facilitate sorting
+                buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=16 alt=\"")
+                   .append(c.toUpperCase(Locale.US)).append("\" title=\"");
+                buf.append(countryName);
+                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
+            } else {
+                buf.append("<img class=unknownflag width=24 height=16 alt=\"??\"" +
+                           " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append("\">");
+            }
+            buf.append("</span>");
+        }
+        return buf.toString();
+    }
+
     /**
      *  Is everything disabled for testing?
      *  @since 0.8.13
