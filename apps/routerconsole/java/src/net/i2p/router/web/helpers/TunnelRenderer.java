@@ -301,7 +301,7 @@ class TunnelRenderer {
                       "<th data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
                       "<th data-sortable data-sort-method=dotsep>" + _t("Address") + "</th>" +
                       "<th data-sortable data-sort-method=number>" + _t("Tunnels") + "</th>" +
-                      "<th data-sortable data-sort-method=number>" + _t("Usage")+ "</th>" +
+                      "<th data-sortable data-sort-method=dotsep>" + _t("Usage")+ "</th>" +
                       "<th data-sort-method=none>" + _t("Edit") + "</th>" +
                       "</tr></thead>\n<tbody id=transitPeers>\n");
             displayed = 0;
