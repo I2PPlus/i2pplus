@@ -52,11 +52,22 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int MAX_IB_MSGS_PER_PUMP = 24;
     private static final int INITIAL_OB_QUEUE = 64;
     private static final int MAX_IB_QUEUE = 1024;
-*/
     private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : SystemVersion.getCores() < 4 ? 256 : 512;
     private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 24 : SystemVersion.getCores() < 4 ? 96 : 192;
     private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 64 : SystemVersion.getCores() < 4 ? 256 : 512;
     private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : SystemVersion.getCores() < 4 ? 4096 : 8192;
+*/
+    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 1024 :
+                                                    SystemVersion.getCores() < 4 ||
+                                                    SystemVersion.getMaxMemory() < 512*1024*1024 ? 4096 : 8192;
+    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 1024 :
+                                                    SystemVersion.getCores() < 4 ||
+                                                    SystemVersion.getMaxMemory() < 512*1024*1024 ? 4096 : 8192;
+    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 1024 :
+                                                SystemVersion.getCores() < 4 ||
+                                                SystemVersion.getMaxMemory() < 512*1024*1024 ? 4096 : 8192;
+    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : SystemVersion.getCores() < 4 ? 4096 : 8192;
+
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
     public static final String PROP_INITIAL_OB_QUEUE = "router.pumpInitialOutboundQueue";
