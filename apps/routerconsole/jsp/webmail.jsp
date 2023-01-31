@@ -60,7 +60,7 @@
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   document.addEventListener('DOMContentLoaded', function(event) {
-    var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#susimailframe')
+    var iframes = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#susimailframe')
   });
   window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>

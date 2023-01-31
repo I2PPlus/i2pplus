@@ -97,7 +97,7 @@ function setupFrame() {
 <script nonce="<%=cspNonce%>" type=text/javascript>
 var isOldIE = (navigator.userAgent.indexOf("MSIE") !== -1); // Detect IE10 and below
 document.addEventListener('DOMContentLoaded', function(event) {
-var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: isOldIE ? 'max' : 'taggedElement'}, '#<%=appname%>_frame')
+var iframes = iFrameResize({interval: 0, heightCalculationMethod: isOldIE ? 'max' : 'taggedElement'}, '#<%=appname%>_frame')
 });
 </script>
 <%
@@ -146,7 +146,7 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
 <style>iframe {width: 1px; min-width: 100%;}</style>
 <noscript><style>iframe {width: 100%; height: 100%;}</style></noscript>
 <iframe src="<%=url%>" title="<%=appname%>" width="100%" frameborder="0" border="0" scrolling="no" name="<%=appname%>_frame" id="<%=appname%>_frame" onload="setupFrame();scrollToEnd();" allowtransparency="true"></iframe>
-<script nonce="<%=cspNonce%>" type=text/javascript>iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#<%=appname%>_frame');</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#<%=appname%>_frame');</script>
 <%
         }
 %>
