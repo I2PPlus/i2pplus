@@ -303,7 +303,7 @@ class TunnelRenderer {
                       "<th data-sortable data-sort-method=dotsep>" + _t("Address") + "</th>" +
                       "<th data-sortable data-sort-method=number>" + _t("Tunnels") + "</th>" +
                       "<th data-sortable data-sort-method=dotsep>" + _t("Data") + "</th>" +
-                      "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
+                      //"<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
                       "<th data-sort-method=none>" + _t("Edit") + "</th>" +
                       "</tr></thead>\n<tbody id=transitPeers>\n");
             displayed = 0;
@@ -355,16 +355,27 @@ class TunnelRenderer {
                 }
                 out.write("</td><td class=cells align=center>" + count + "</td>");
                 //out.write("<td class=cells align=center>" + (bws.count(h) > 0 ? DataHelper.formatSize2(bws.count(h) * 1024) + "B": "") + "</td>\n");
-                out.write("<td class=cells align=center>" + (bws.count(h) > 0 ? fmt.format(bws.count(h) / 1024) + "KB": "").replace(".00", "") + "</td>\n");
+                out.write("<td class=cells align=center>");
+                if (bws.count(h) > 0) {
+                    out.write("<span class=data>" + fmt.format(bws.count(h)).replace(".00", "") + "KB</span>");
+                } else {
+                    out.write("<span class=\"data hideme\">0KB</span>");
+                }
+/*
                 if (lifetime <= 0)
                     lifetime = 1;
                 if (lifetime > 10*60)
                     lifetime = 10*60;
                 float bps = 1024 * count / lifetime;
                 float kbps = bps / 1024;
-                out.write("<td class=\"cells bps\">" + (count > 0 && kbps >= 0.01 ? "<span class=right>" + fmt.format(kbps) +
-                          "&#8239;</span><span class=\"left\">KB/s</span>" : "") + "</td>");
-                out.write("<td class=cells align=center>");
+                out.write("</td><td class=\"cells bps\">");
+                if (kbps >= 0) {
+                    out.write("<span class=right>" + fmt.format(kbps) + "&#8239;</span><span class=left>KB/s</span>");
+                } else {
+                    out.write("<span class=\"right hideme\">0&#8239;</span><span class=\"left hideme\">KB/s</span>");
+                }
+*/
+                out.write("</td><td class=cells align=center>");
                 if (info != null && info.getHash() != null)
                     out.write("<a class=configpeer href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\">" +
                               _t("Edit") + "</a>");
