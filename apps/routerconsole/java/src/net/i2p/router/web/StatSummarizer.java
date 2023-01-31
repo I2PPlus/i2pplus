@@ -48,7 +48,9 @@ public class StatSummarizer implements Runnable, ClientApp {
     //private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 : 3;
     private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 :
                                                   SystemVersion.getMaxMemory() < 256*1024*1024 ? 4 :
-                                                  SystemVersion.getMaxMemory() < 512*1024*1024 ? 8 : 16;
+                                                  SystemVersion.getMaxMemory() < 384*1024*1024 ? 8 :
+                                                  SystemVersion.getMaxMemory() < 512*1024*1024 ? 12 :
+                                                  SystemVersion.getMaxMemory() < 768*1024*1024 ? 16 : 24;
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private volatile Thread _thread;
@@ -96,7 +98,7 @@ public class StatSummarizer implements Runnable, ClientApp {
             String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
             String[] rates = DataHelper.split(spec, ",");
 //            syncThreads = Math.min(rates.length / 2, 4);
-            syncThreads = Math.min(rates.length / 2, SystemVersion.isSlow() ? 4 : 6);
+            syncThreads = Math.min(rates.length, SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 8));
             // delete files for unconfigured rates
             Set<String> configured = new HashSet<String>(rates.length);
             for (String r : rates) {
