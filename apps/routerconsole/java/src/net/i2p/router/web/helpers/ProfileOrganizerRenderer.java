@@ -37,7 +37,7 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  @param mode 0 = all; 1 = high cap; 2 = floodfill
+     *  @param mode 0 = high cap; 1 = all; 2 = floodfill
      */
     public void renderStatusHTML(Writer out, int mode) throws IOException {
         boolean full = mode == 0;
