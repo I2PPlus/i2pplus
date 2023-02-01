@@ -401,7 +401,7 @@ public class Reseeder {
                 String notify = old.replaceAll("\\(.*\\)", "").replace(" \\.", ""); // remove dupe error msgs
                 _checker.setError(_t("{0}Reseed{1} failed:", "<a href=\"/configreseed\">", "</a>") + ' '  + notify + " <br>" +
                                   _t("For assistance, see the {0}",
-                                    "<a target=\"_top\" href=\"/help/reseed\">" + _t("reseed help") + "</a>"));
+                                    "<a target=_top href=\"/help/reseed\">" + _t("reseed help") + "</a>"));
                 _checker.setStatus("");
             }
             _isRunning = false;

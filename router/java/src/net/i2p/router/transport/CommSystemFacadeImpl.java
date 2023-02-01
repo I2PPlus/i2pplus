@@ -699,18 +699,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append(c.toUpperCase(Locale.US)).append("</span>");
                 if (countryName.length() > 2)
                     countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-                buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=16 alt=\"")
+                buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=18 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" title=\"");
                 buf.append(countryName);
                 buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
             } else {
-                buf.append("<img class=unknownflag width=24 height=16 alt=\"??\"" +
+                buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"" +
                            " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append("\">");
             }
             buf.append("</span>");
         } else {
             buf.append("<span class=peerFlag><span class=cc hidden>A0</span>" +
-                       "<img class=unknownflag width=24 height=16 alt=\"??\"" +
+                       "<img class=unknownflag width=24 height=18 alt=\"??\"" +
                        " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append("\"></span>");
         }
         return buf.toString();
