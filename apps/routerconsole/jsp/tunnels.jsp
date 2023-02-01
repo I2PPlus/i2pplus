@@ -34,8 +34,6 @@
   var visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {
-      progressx.show();
-      progressx.progress(0.5);
       var xhr = new XMLHttpRequest();
       xhr.open('GET', '/tunnels?' + new Date().getTime(), true);
       xhr.responseType = "document";
@@ -48,7 +46,6 @@
               tunnelsParent.replaceChild(tunnelsResponse, tunnels);
         }
       }
-      window.addEventListener("DOMContentLoaded", progressx.hide());
       xhr.send();
     }, 15000);
   }

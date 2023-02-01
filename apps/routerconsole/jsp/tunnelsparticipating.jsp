@@ -36,6 +36,7 @@
 %>
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
 <script nonce="<%=cspNonce%>" type=text/javascript>
+  import {onVisible} from "/js/onVisible.js";
   var main = document.getElementById("tunnels");
   var tunnels = document.getElementById("tunnels_part");
   var tunnels = document.getElementById("tunnels_part");
@@ -43,6 +44,11 @@
   var xhrtunnels = new XMLHttpRequest();
   var visible = document.visibilityState;
   if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
+
+  function initRefresh() {
+    var timerId = setInterval(updateTunnels, 60000););
+    updateTunnels();
+  }
 
   function removeHref() {
     if (refresh) {refresh.removeAttribute("href");}
@@ -65,18 +71,16 @@
     }
     if (tunnels) {sorter.refresh();}
     removeHref();
-    if (visible === "visible") {
-      xhrtunnels.send();
-    }
+    xhrtunnels.send();
   }
   if (refresh) {
     refresh.addEventListener("click", updateTunnels);
     refresh.addEventListener("mouseover", removeHref);
   }
-  setInterval(updateTunnels, 60000);
+  window.addEventListener("DOMContentLoaded", progressx.hide());
+  onVisible(main, () => {initRefresh();});
 </script>
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>
