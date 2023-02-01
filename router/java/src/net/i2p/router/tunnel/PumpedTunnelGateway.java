@@ -144,13 +144,15 @@ class PumpedTunnelGateway extends TunnelGateway {
         // before fragmentation, where we have priority queueing (for OBGW)
         int max;
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
-        boolean highLoad = SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90;
+        boolean highLoad = SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 95;
         if (backlogged && _log.shouldInfo())
             _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound);
         if (backlogged) {
             max = _isInbound ? 1 : 2;
-        } else if (highLoad) {
+/*
+        }
+         else if (highLoad) {
             max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP / 5 * 3) :
                                _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP / 5 * 3);
 
@@ -160,6 +162,7 @@ class PumpedTunnelGateway extends TunnelGateway {
                           "Inbound -> " + MAX_IB_MSGS_PER_PUMP + "/" + MAX_IB_MSGS_PER_PUMP / 5 * 3 + "; " +
                           "Outbound -> " + MAX_OB_MSGS_PER_PUMP + "/" + MAX_OB_MSGS_PER_PUMP / 5 * 3);
             }
+*/
         } else {
             max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) :
                                _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
