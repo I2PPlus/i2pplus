@@ -4,6 +4,7 @@
 function sectionToggler() {
 
   var jobBadge = document.querySelector("#sidebar h3 a[href=\"/jobs\"] .badge");
+  var tunnelsBadge = document.querySelector("#sidebar h3 a[href=\"/tunnels\"] .badge");
   var localtunnelSummary = document.getElementById("localtunnelSummary");
   var sb_advanced = document.getElementById("sb_advanced");
   var sb_advancedgeneral = document.getElementById("sb_advancedgeneral");
@@ -304,6 +305,9 @@ function sectionToggler() {
       sb_tunnels_condensed.hidden = null;
       document.getElementById("toggle_sb_tunnels").checked = null;
       localStorage["section_tunnels"] = "hide";
+      if (tunnelsBadge) {
+        tunnelsBadge.hidden = null;
+      }
     }
   }
 
@@ -313,6 +317,9 @@ function sectionToggler() {
       sb_tunnels_condensed.hidden = true;
       document.getElementById("toggle_sb_tunnels").checked = true;
       localStorage.removeItem("section_tunnels");
+      if (tunnelsBadge) {
+        tunnelsBadge.hidden = true;
+      }
     }
   }
 
