@@ -163,11 +163,7 @@ function refreshSidebar() {
             var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
             if (doubleCount) {
               doubleCount.remove();
-              tunnelCount.classList.add("badge");
             }
-          }
-          if (newsCount) {
-            newsCount.classList.add("badge");
           }
           if (peers !== null && peersResponse !== null && !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
             peers.innerHTML = peersResponse.innerHTML;
@@ -372,8 +368,7 @@ function refreshSidebar() {
             if (localTunnels) {
               localTunnels.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
               if (tunnelCount !== null) {
-                tunnelCount.innerHTML = "-";
-                tunnelCount.classList.add("badge");
+                tunnelCount.innerHTML = "";
               }
             }
             if (localtunnelSummary) {

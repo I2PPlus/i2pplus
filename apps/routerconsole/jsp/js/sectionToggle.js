@@ -303,7 +303,6 @@ function sectionToggler() {
       sb_tunnels.hidden = true;
       sb_tunnels_condensed.hidden = null;
       document.getElementById("toggle_sb_tunnels").checked = null;
-      document.querySelector("#sidebar h3 a[href=\"/tunnels\"] .badge").hidden = null;
       localStorage["section_tunnels"] = "hide";
     }
   }
@@ -313,7 +312,6 @@ function sectionToggler() {
       sb_tunnels.hidden = null;
       sb_tunnels_condensed.hidden = true;
       document.getElementById("toggle_sb_tunnels").checked = true;
-      document.querySelector("#sidebar h3 a[href=\"/tunnels\"] .badge").hidden = true;
       localStorage.removeItem("section_tunnels");
     }
   }
@@ -452,25 +450,16 @@ function sectionToggler() {
 }
 
 function countTunnels() {
-  var tunnMan = document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]");
-  var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
+  var tunnMan = document.getElementById("sb_localTunnelsHeading");
   var tunnelCount = document.querySelectorAll("img[src*=\"images/local_\"]");
   var tunnelsBadge = document.getElementById("tunnelCount");
 
-  if (tunnelCount !== null) {
+  if (tunnMan && tunnelCount !== null) {
     var tunnelCountLength = tunnelCount.length;
-    if (tunnMan) {
-      if (tunnelCountLength !== null && tunnelCountLength > 0) {
-        tunnelsBadge.hidden = null;
-        if (tunnelsBadge.innerHTML !== tunnelCountLength) {
-          tunnelsBadge.innerHTML = tunnelCountLength;
-        }
-      } else {
-        tunnelsBadge.hidden = true;
-      }
-      if (doubleCount) {
-        doubleCount.remove();
-      }
+    if (tunnelCountLength > 0 && tunnelsBadge.innerHTML !== tunnelCountLength) {
+        tunnelsBadge.innerHTML = tunnelCountLength;
+    } else {
+      tunnelsBadge.innerHTML = "";
     }
   }
 }
