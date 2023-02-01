@@ -353,7 +353,7 @@ class TunnelRenderer {
                 } else {
                      out.write("<i>" + _t("unknown") + "</i>");
                 }
-                out.write("</td><td class=cells align=center>" + count + "</td>");
+                out.write("</span></td><td class=cells align=center>" + count + "</td>");
                 //out.write("<td class=cells align=center>" + (bws.count(h) > 0 ? DataHelper.formatSize2(bws.count(h) * 1024) + "B": "") + "</td>\n");
                 out.write("<td class=cells align=center>");
                 if (bws.count(h) > 0) {
