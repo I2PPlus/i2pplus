@@ -14,9 +14,9 @@ public abstract class HelperBase {
     /** @since public since 0.9.33, was package private */
     public static final String PROP_ADVANCED = "routerconsole.advanced";
     /** @since public since 0.9.33, was package private */
-    public static final String CHECKED = " checked=\"checked\" ";
+    public static final String CHECKED = " checked=checked ";
     /** @since 0.9.43 */
-    public static final String SELECTED = " selected=\"selected\" ";
+    public static final String SELECTED = " selected=selected ";
 
     /**
      * Configure this bean to query a particular router context
@@ -52,7 +52,7 @@ public abstract class HelperBase {
      *  Is a boolean property set to true?
      *
      *  @param prop must default to false
-     *  @return non-null, either "" or " checked=\"checked\" "
+     *  @return non-null, either "" or " checked=checked "
      *  @since 0.9.24 consolidated from various helpers
      */
     protected String getChecked(String prop) {

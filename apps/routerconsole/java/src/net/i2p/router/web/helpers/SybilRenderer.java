@@ -234,14 +234,14 @@ public class SybilRenderer {
             renderThreatsHTML(out, buf, now, points);
         } else if (mode == 14) {
             // show run form
-            out.write("<div class=\"infohelp\" id=\"sybilanalysis\">\n");
+            out.write("<div class=infohelp id=\"sybilanalysis\">\n");
             renderRunForm(out, buf, nonce);
             out.write("</div>\n");
         } else if (mode == 15) {
             // show background form
             renderBackgroundForm(out, buf, nonce);
         } else {
-            out.write("<div class=\"infohelp\" id=\"sybilanalysis\">\n<b><i>");
+            out.write("<div class=infohelp id=\"sybilanalysis\">\n<b><i>");
             out.write("Unknown mode " + mode);
             out.write("</i></b></div>\n");
         }
@@ -260,16 +260,16 @@ public class SybilRenderer {
                    "Possible \"threats\" are summarized, however these are unlikely to be real threats. " +
                    "If you see anything you would like to discuss with the devs, contact us on IRC #i2p-dev."));
         out.write("</b></p>\n");
-        out.write("<div class=\"infohelp\" id=\"sybilanalysis\">\n");
+        out.write("<div class=infohelp id=\"sybilanalysis\">\n");
         if (dates.isEmpty()) {
             out.write("<b><i>");
             out.write(_t("No stored analysis"));
             out.write("</b></i></div>");
         } else {
             buf.append("\n<form action=\"netdb\" method=\"POST\">\n" +
-                       "<input type=\"hidden\" name=\"f\" value=\"3\">\n" +
-                       "<input type=\"hidden\" name=\"m\" value=\"12\">\n" +
-                       "<input type=\"hidden\" name=\"nonce\" value=\"").append(nonce).append("\" >\n<b>")
+                       "<input type=hidden name=\"f\" value=\"3\">\n" +
+                       "<input type=hidden name=\"m\" value=\"12\">\n" +
+                       "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n<b>")
                .append(_t("Select stored analysis")).append(":</b> \n" +
                        "<select name=\"date\">\n");
             boolean first = true;
@@ -282,7 +282,7 @@ public class SybilRenderer {
                 buf.append('>').append(DataHelper.formatTime(date.longValue()).replace("-", " ")).append("</option>\n");
             }
             buf.append("</select>\n" +
-                       "<input type=\"submit\" name=\"action\" class=\"go\" value=\"Review\" />\n" +
+                       "<input type=submit name=\"action\" class=\"go\" value=\"Review\" />\n" +
                        "</form>\n</div>\n");
         }
 //        renderRunForm(out, buf, nonce);
@@ -294,20 +294,20 @@ public class SybilRenderer {
      */
     private static void renderRunForm(Writer out, StringBuilder buf, String nonce) throws IOException {
         buf.append("<form class=\"sybilScan\" action=\"netdb\" method=\"POST\">\n" +
-                   "<input type=\"hidden\" name=\"f\" value=\"3\">\n" +
-                   "<input type=\"hidden\" name=\"m\" value=\"13\">\n" +
-                   "<input type=\"hidden\" name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
+                   "<input type=hidden name=\"f\" value=\"3\">\n" +
+                   "<input type=hidden name=\"m\" value=\"13\">\n" +
+                   "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
                    "<table>\n<tr><td><b>")
            .append(_x("Run analysis on Floodfills only"))
-           .append(":</b></td><td><input type=\"submit\" name=\"action\" class=\"go\" value=\"Start Scan\" /> "+
+           .append(":</b></td><td><input type=submit name=\"action\" class=\"go\" value=\"Start Scan\" /> "+
                    "</td></tr>\n</table>\n</form>\n<hr>\n");
         buf.append("<form class=\"sybilScan\" action=\"netdb\" method=\"POST\">\n" +
-                   "<input type=\"hidden\" name=\"f\" value=\"3\">\n" +
-                   "<input type=\"hidden\" name=\"m\" value=\"16\">\n" +
-                   "<input type=\"hidden\" name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
+                   "<input type=hidden name=\"f\" value=\"3\">\n" +
+                   "<input type=hidden name=\"m\" value=\"16\">\n" +
+                   "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
                    "<table><tr><td><b>")
            .append(_x("Run analysis on all routers in NetDb"))
-           .append(":</b></td><td><input type=\"submit\" name=\"action\" class=\"go\" value=\"Start Scan\" />" +
+           .append(":</b></td><td><input type=submit name=\"action\" class=\"go\" value=\"Start Scan\" />" +
                    "</td></tr>\n</table>\n</form>\n");
         writeBuf(out, buf);
     }
@@ -318,14 +318,14 @@ public class SybilRenderer {
     private void renderBackgroundForm(Writer out, StringBuilder buf, String nonce) throws IOException {
         long freq = _context.getProperty(Analysis.PROP_FREQUENCY, Analysis.DEFAULT_FREQUENCY);
         buf.append("<form action=\"netdb\" method=\"POST\">\n" +
-                   "<input type=\"hidden\" name=\"f\" value=\"3\">\n" +
-                   "<input type=\"hidden\" name=\"m\" value=\"15\">\n" +
-                   "<input type=\"hidden\" name=\"nonce\" value=\"").append(nonce).append("\" >\n<p class=\"sybilinfo\"><b>")
+                   "<input type=hidden name=\"f\" value=\"3\">\n" +
+                   "<input type=hidden name=\"m\" value=\"15\">\n" +
+                   "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n<p class=\"sybilinfo\"><b>")
            .append(_t("The sybil detection routine can be configured to scan the Network Database on a regular interval, " +
                       "with the option to block peers meeting the configured threshold. " +
                       "Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."))
            .append("</b></p>\n<table id=\"sybilTask\">\n<tr><th>").append(_t("Configure Background Analysis"))
-           .append("</th></tr>\n<tr><td>\n<div class=\"optionlist\">\n<span class=\"nowrap\"><b>").append(_t("Run task every")).append(":</b>\n" +
+           .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n<span class=\"nowrap\"><b>").append(_t("Run task every")).append(":</b>\n" +
                    "<select name=\"runFrequency\">\n");
         for (int i = 0; i < HOURS.length; i++) {
             buf.append("<option value=\"");
@@ -364,21 +364,21 @@ public class SybilRenderer {
             buf.append("</option>\n");
         }
         buf.append("</select>\n</span><br>\n<span class=\"nowrap\"><b>")
-           .append(_t("Automatic blocking")).append(":</b><label><input type=\"checkbox\" class=\"optbox\" value=\"1\" name=\"block\" ");
+           .append(_t("Automatic blocking")).append(":</b><label><input type=checkbox class=optbox value=\"1\" name=\"block\" ");
         if (auto)
             buf.append(HelperBase.CHECKED);
         buf.append(">").append(_t("Add detected sybils to banlist")).append("</label>")
            .append("</span><br>\n<span class=\"nowrap\"><b>")
-           .append(_t("Block all detected sybils")).append(":</b><label><input type=\"checkbox\" class=\"optbox\" value=\"1\" name=\"nonff\" ");
+           .append(_t("Block all detected sybils")).append(":</b><label><input type=checkbox class=optbox value=\"1\" name=\"nonff\" ");
         if (nonff)
             buf.append(HelperBase.CHECKED);
         buf.append(">").append(_t("Include non-floodfill routers")).append("</label>")
            .append("</span><br>\n<span class=\"nowrap\"><b>")
-           .append(_t("Minimum threshold for block")).append(":</b><input type=\"text\" name=\"threshold\" value=\"")
+           .append(_t("Minimum threshold for block")).append(":</b><input type=text name=\"threshold\" value=\"")
            .append(thresh).append("\">").append(_t("threat points")).append("</span><br>\n<span class=\"nowrap\"><b>")
-           .append(_t("Enforce block for")).append(":</b><input type=\"text\" name=\"days\" value=\"")
+           .append(_t("Enforce block for")).append(":</b><input type=text name=\"days\" value=\"")
            .append(days).append("\">").append(_t("days")).append("</span><br>\n</td></tr>\n")
-           .append("<tr><td class=\"optionsave\"><input type=\"submit\" name=\"action\" class=\"accept\" value=\"Save\" />\n</div>\n</td></tr>\n</table>\n</form>\n");
+           .append("<tr><td class=\"optionsave\"><input type=submit name=\"action\" class=\"accept\" value=\"Save\" />\n</div>\n</td></tr>\n</table>\n</form>\n");
         writeBuf(out, buf);
     }
 
@@ -593,7 +593,7 @@ public class SybilRenderer {
                     String hash = h.toBase64();
                     buf.append("<table class=\"sybil_routerinfo\" id=\"hash_").append(hash,0,6).append("\">\n<tr>" +
                                "<th><b>" + _t("Router") + ":</b> <code>").append(hash).append("</code></th>" +
-                               "<th colspan=\"2\"><b style=\"float:right\">" + _t("Router info not available") +
+                               "<th colspan=2><b style=\"float:right\">" + _t("Router info not available") +
                                "</b></th></tr>\n</table>\n");
                 }
                 buf.append("</span>");
@@ -983,23 +983,23 @@ public class SybilRenderer {
            .replace("Of", "fO")
            .replace("Pf", "fP")
            .replace("Xf", "fX")
-           .replace("f", "<a href=\"/netdb?caps=f\"><span class=\"ff\">F</span></a>")
-           .replace("B", "<a href=\"/netdb?caps=B\"><span class=\"testing\">B</span></a>") // not shown?
-           .replace("C", "<a href=\"/netdb?caps=C\"><span class=\"ssuintro\">C</span></a>") // not shown?
-           .replace("H", "<a href=\"/netdb?caps=H\"><span class=\"hidden\">H</span></a>") // not shown?
-           .replace("R", "<a href=\"/netdb?caps=R\"><span class=\"reachable\">R</span></a>")
-           .replace("U", "<a href=\"/netdb?caps=U\"><span class=\"unreachable\">U</span></a>")
-           .replace("K", "<a href=\"/netdb?caps=K\"><span class=\"tier\">K</span></a>")
-           .replace("L", "<a href=\"/netdb?caps=L\"><span class=\"tier\">L</span></a>")
-           .replace("M", "<a href=\"/netdb?caps=M\"><span class=\"tier\">M</span></a>")
-           .replace("N", "<a href=\"/netdb?caps=N\"><span class=\"tier\">N</span></a>")
-           .replace("O", "<a href=\"/netdb?caps=O\"><span class=\"tier\">O</span></a>")
-           .replace("P", "<a href=\"/netdb?caps=P\"><span class=\"tier\">P</span></a>")
-           .replace("X", "<a href=\"/netdb?caps=X\"><span class=\"tier\">X</span></a>")
+           .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
+           .replace("B", "<a href=\"/netdb?caps=B\"><span class=testing>B</span></a>") // not shown?
+           .replace("C", "<a href=\"/netdb?caps=C\"><span class=ssuintro>C</span></a>") // not shown?
+           .replace("H", "<a href=\"/netdb?caps=H\"><span class=hidden>H</span></a>") // not shown?
+           .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
+           .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
+           .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
+           .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
+           .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
+           .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
+           .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
+           .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
+           .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
            .replace("\"><span", tooltip);
         buf.append(caps);
         buf.append("<a href=\"/netdb?v=").append(DataHelper.stripHTML(info.getVersion())).append("\">")
-            .append("<span class=\"version\" title=\"").append(_t("Show all routers with this version in the NetDb"))
+            .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
             .append("\">").append(DataHelper.stripHTML(info.getVersion())).append("</span></a>");
         if (!isUs) {
            buf.append("<span class=\"netdb_header\">");
@@ -1008,9 +1008,9 @@ public class SybilRenderer {
                buf.append("<a class=\"familysearch\" href=\"/netdb?fam=").append(family).append("\" title=\"").append(_t("Show all routers for this family in NetDb"))
                   .append("\">").append(_t("Family")).append("</a>");
            }
-           buf.append("<a class=\"viewprofile\" href=\"/viewprofile?peer=").append(hash).append("\" title=\"").append(_t("View profile"))
+           buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(hash).append("\" title=\"").append(_t("View profile"))
               .append("\">").append(_t("Profile")).append("</a>")
-              .append("<a class=\"configpeer\" href=\"/configpeer?peer=").append(hash).append("\" title=\"").append(_t("Configure peer"))
+              .append("<a class=configpeer href=\"/configpeer?peer=").append(hash).append("\" title=\"").append(_t("Configure peer"))
               .append("\">").append(_t("Edit")).append("</a>");
            String country = _context.commSystem().getCountry(info.getIdentity().getHash());
            if(country != null) {
@@ -1142,7 +1142,7 @@ public class SybilRenderer {
             return;
         final DecimalFormat fmt = new DecimalFormat("#0.00");
         XORComparator<Hash> xor = new XORComparator<Hash>(Hash.FAKE_HASH);
-        out.write("<h3 class=\"tabletitle\">Group Distances</h3><table class=\"sybil_distance\"><tr><th>Hash<th>Distance from previous</tr>\n");
+        out.write("<h3 class=tabletitle>Group Distances</h3><table class=\"sybil_distance\"><tr><th>Hash<th>Distance from previous</tr>\n");
         Collections.sort(sybils, xor);
         Hash prev = null;
         for (Hash h : sybils) {
@@ -1174,7 +1174,7 @@ public class SybilRenderer {
         final int limit = Math.min(10, sybils.size());
         DateFormat utcfmt = DateFormat.getDateInstance(DateFormat.MEDIUM);
         for (int i = start; i <= days; i++) {
-            out.write("<h3 class=\"tabletitle\">" + _x("Distance for") + ' ' + utcfmt.format(new Date(now)) +
+            out.write("<h3 class=tabletitle>" + _x("Distance for") + ' ' + utcfmt.format(new Date(now)) +
                       "</h3><table class=\"sybil_distance\"><tr><th>Hash<th>Distance<th>Distance from previous</tr>\n");
             Hash rkey = rkgen.getRoutingKey(from, now);
             xor = new XORComparator<Hash>(rkey);
@@ -1204,7 +1204,7 @@ public class SybilRenderer {
     private static void writeDistance(Writer out, DecimalFormat fmt, BigInteger dist) throws IOException {
         double distance = biLog2(dist);
         if (distance < MIN_CLOSE)
-            out.write("<font color=\"red\">");
+            out.write("<font color=red>");
         out.write(fmt.format(distance));
         if (distance < MIN_CLOSE)
             out.write("</font>");

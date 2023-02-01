@@ -25,7 +25,7 @@ public class ConfigTunnelsHelper extends HelperBase {
     public String getForm() {
         StringBuilder buf = new StringBuilder(1024);
         // HTML: <input> cannot be inside a <table>
-        buf.append("<input type=\"hidden\" name=\"pool.0\" value=\"exploratory\" >\n");
+        buf.append("<input type=hidden name=\"pool.0\" value=\"exploratory\" >\n");
         int cur = 1;
         Set<Destination> clients = _context.clientManager().listClients();
         TunnelManagerFacade mgr = _context.tunnelManager();
@@ -39,7 +39,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (sorted.size() > 1)
             DataHelper.sort(sorted, new TPComparator());
         for (TunnelPoolSettings in : sorted) {
-            buf.append("<input type=\"hidden\" name=\"pool.").append(cur).append("\" value=\"");
+            buf.append("<input type=hidden name=\"pool.").append(cur).append("\" value=\"");
             buf.append(in.getDestination().toBase64()).append("\" >\n");
             cur++;
         }
@@ -264,8 +264,8 @@ public class ConfigTunnelsHelper extends HelperBase {
         Properties props = in.getUnknownOptions();
         if (!props.isEmpty()) {
             buf.append("<tr><td><b>" + _t("Inbound options") + ":</b></td>\n" +
-                       "<td colspan=\"2\"><input name=\"").append(index);
-            buf.append(".inboundOptions\" type=\"text\" size=\"32\" disabled=\"disabled\" " +
+                       "<td colspan=2><input name=\"").append(index);
+            buf.append(".inboundOptions\" type=text size=\"32\" disabled=disabled " +
                        "value=\"");
             for (String prop : props.stringPropertyNames()) {
                 String val = props.getProperty(prop);
@@ -276,8 +276,8 @@ public class ConfigTunnelsHelper extends HelperBase {
         props = out.getUnknownOptions();
         if (!props.isEmpty()) {
             buf.append("<tr><td><b>" + _t("Outbound options") + ":</b></td>\n" +
-                       "<td colspan=\"2\"><input name=\"").append(index);
-            buf.append(".outboundOptions\" type=\"text\" size=\"32\" disabled=\"disabled\" " +
+                       "<td colspan=2><input name=\"").append(index);
+            buf.append(".outboundOptions\" type=text size=\"32\" disabled=disabled " +
                        "value=\"");
             for (String prop : props.stringPropertyNames()) {
                 String val = props.getProperty(prop);

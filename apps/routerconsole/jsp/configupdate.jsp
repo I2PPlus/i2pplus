@@ -28,9 +28,9 @@
 <jsp:getProperty name="updatehelper" property="newsStatus" />
 </div>
 <form action="" method="POST">
-<input type="hidden" name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>" >
 <% /* set hidden default */ %>
-<input type="submit" name="action" value="" style="display:none" >
+<input type=submit name="action" value="" style="display:none" >
 <%
     if (updatehelper.canInstall()) {
 %>
@@ -76,7 +76,7 @@
 <%
     } else {
 %>
-<input type="submit" name="action" class="check" value="<%=intl._t("Check for updates")%>" />
+<input type=submit name="action" class="check" value="<%=intl._t("Check for updates")%>" />
 <%
     }
 %>
@@ -101,11 +101,11 @@
 <div class="optionlist" id="updateProxyHostPort">
 <span class="nowrap">
 <b><%=intl._t("I2P proxy host")%>:</b>
-<input type="text" size="10" name="proxyHost" value="<jsp:getProperty name="updatehelper" property="proxyHost" />" />
+<input type=text size="10" name="proxyHost" value="<jsp:getProperty name="updatehelper" property="proxyHost" />" />
 </span><br>
 <span class="nowrap">
 <b><%=intl._t("I2P proxy port")%>:</b>
-<input type="text" size="10" name="proxyPort" value="<jsp:getProperty name="updatehelper" property="proxyPort" />" />
+<input type=text size="10" name="proxyPort" value="<jsp:getProperty name="updatehelper" property="proxyPort" />" />
 </span>
 </div>
 </td>
@@ -115,7 +115,7 @@
 <div class="optionsingle">
 <span class="nowrap">
 <b><%=intl._t("News URL")%>:</b>
-<input type="text" size="60" name="newsURL" <% if (!updatehelper.isAdvanced()) { %>readonly="readonly"<% } %> value="<jsp:getProperty name="updatehelper" property="newsURL" />">
+<input type=text size="60" name="newsURL" <% if (!updatehelper.isAdvanced()) { %>readonly="readonly"<% } %> value="<jsp:getProperty name="updatehelper" property="newsURL" />">
 </span>
 </div>
 </td>
@@ -158,7 +158,7 @@
 <div class="optionsingle">
 <span class="nowrap">
 <b><%=intl._t("Update URL")%>:</b>
-<input type="text" size="60" name="devSU3URL" value="<jsp:getProperty name="updatehelper" property="devSU3URL" />">
+<input type=text size="60" name="devSU3URL" value="<jsp:getProperty name="updatehelper" property="devSU3URL" />">
 </span>
 </div>
 </td>
@@ -177,7 +177,7 @@
 <div class="optionsingle">
 <span class="nowrap">
 <b><%=intl._t("Update URL")%>:</b>
-<input type="text" size="60" name="zipURL" value="<jsp:getProperty name="updatehelper" property="zipURL" />">
+<input type=text size="60" name="zipURL" value="<jsp:getProperty name="updatehelper" property="zipURL" />">
 </span>
 </div>
 </td>
@@ -192,8 +192,8 @@
     }   // if canInstall
 %>
 <tr class="tablefooter"><td class="optionsave">
-<input type="reset" class="cancel" value="<%=intl._t("Cancel")%>" >
-<input type="submit" name="action" class="accept" value="<%=intl._t("Save")%>" >
+<input type=reset class="cancel" value="<%=intl._t("Cancel")%>" >
+<input type=submit name="action" class="accept" value="<%=intl._t("Save")%>" >
 </td>
 </tr>
 </table>

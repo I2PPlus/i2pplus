@@ -699,7 +699,7 @@ class TunnelRenderer {
             out.write("</td><td class=cells><span class=ipaddress>");
             if (info != null && ip != null) {
                 if (!ip.toString().equals("null"))
-                    out.write("<a class=\"script\" href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" + _t("Lookup address on gwhois.org") +
+                    out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" + _t("Lookup address on gwhois.org") +
                               "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
                 else
                     out.write("<i>" + _t("unknown") + "</i>");

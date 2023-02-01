@@ -242,7 +242,7 @@ public class JobQueueHelper extends HelperBase {
                 avgPendingTime = totPendingTime / totRuns;
         }
 
-        buf.append("<tr class=\"tablefooter\">");
+        buf.append("<tr class=tablefooter>");
         buf.append("<td><b>").append(_t("Summary")).append("</b></td>");
         buf.append("<td>").append(totRuns).append("</td>");
         buf.append("<td>").append(totDropped).append("</td>");

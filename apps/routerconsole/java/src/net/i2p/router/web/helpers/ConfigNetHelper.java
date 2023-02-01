@@ -245,7 +245,7 @@ public class ConfigNetHelper extends HelperBase {
         }
         StringBuilder buf = new StringBuilder(128);
 //        for (String addr : addrs) {
-//            buf.append("<input type=\"checkbox\" class=\"optbox\" value=\"foo\" name=\"addr_");
+//            buf.append("<input type=checkbox class=optbox value=\"foo\" name=\"addr_");
 //            buf.append(addr);
 //            buf.append('"');
 //            if (addrs.size() == 1 || configs.contains(addr))
@@ -258,7 +258,7 @@ public class ConfigNetHelper extends HelperBase {
 //            buf.append(_t("Add host name or IP"))
 //               .append(": ");
 //        }
-        buf.append("<input name=\"udpHost1\" type=\"text\" size=\"16\"");
+        buf.append("<input name=\"udpHost1\" type=text size=\"16\"");
         String hostname = _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST);
         boolean specified = hostname != null && hostname.length() > 0;
         if (specified) {

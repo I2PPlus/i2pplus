@@ -118,10 +118,10 @@ public class FileDumpHelper extends HelperBase {
         if (mod > 0)
             buf.append((new Date(mod)).toString().replace(" GMT", ""));
         else
-            buf.append("<font color=\"red\">Not found</font>");
+            buf.append("<font color=red>Not found</font>");
         buf.append("</td><td>");
         if (mod > 0 && !FileUtil.verifyZip(f))
-            buf.append("<font color=\"red\">CORRUPT</font><br>");
+            buf.append("<font color=red>CORRUPT</font><br>");
         byte[] hash = sha256(f);
         if (hash != null) {
             byte[] hh = new byte[16];
@@ -148,7 +148,7 @@ public class FileDumpHelper extends HelperBase {
             if (iv != null)
                 buf.append("<br>");
             if (linkrev) {
-                buf.append("<a target=\"_blank\" rel=\"noreferrer\" href=\"");
+                buf.append("<a target=_blank rel=\"noreferrer\" href=\"");
                 if (builder.equals("zzz"))
                     buf.append(UPSTREAMLINK);
                 else
@@ -182,8 +182,8 @@ public class FileDumpHelper extends HelperBase {
         s = getAtt(att, "Workspace-Changes");
         if (s != null && s != "") {
             // Encase each mod in a span so we can single click select individual mods
-            buf.append("<font color=\"red\"><span class=\"unsignedmod\">")
-               .append(s.replace(",", "</span></font><hr><font color=\"red\"><span class=\"unsignedmod\">"))
+            buf.append("<font color=red><span class=\"unsignedmod\">")
+               .append(s.replace(",", "</span></font><hr><font color=red><span class=\"unsignedmod\">"))
                .append("</span></font>");
         }
         buf.append("</td></tr>\n");

@@ -43,7 +43,7 @@ public class ConfigKeyringHelper extends HelperBase {
         if (rv1 || rv2) {
             buf.append("\n<table id=\"keyringbuttons\" class=\"configtable\"><tr><td class=\"optionsave\">" +
                        "<input type=\"reset\" class=\"cancel\" value=\"").append(_t("Cancel")).append("\">" +
-                       "<input type=\"submit\" name=\"action\" class=\"delete\" value=\"").append(_t("Delete key")).append("\">" +
+                       "<input type=submit name=\"action\" class=\"delete\" value=\"").append(_t("Delete key")).append("\">" +
                        "</td></tr></table>");
         }
         out.write(buf.toString());
@@ -106,7 +106,7 @@ public class ConfigKeyringHelper extends HelperBase {
             buf.append(sk.toBase64());
             buf.append("</code></td><td>");
             if (!local)
-                buf.append("</td><td></td><td></td><td><input value=\"").append(b32).append("\" type=\"checkbox\" name=\"revokeClient\" class=\"optbox\"/>");
+                buf.append("</td><td></td><td></td><td><input value=\"").append(b32).append("\" type=checkbox name=\"revokeClient\" class=optbox/>");
             buf.append("</td></tr>");
             rv = true;
         }
@@ -169,7 +169,7 @@ public class ConfigKeyringHelper extends HelperBase {
                     buf.append(DataHelper.formatDate(t));
                 buf.append("</td><td class=\"revoke\">");
                 if (!local)
-                    buf.append("<input value=\"").append(b32).append("\" type=\"checkbox\" name=\"revokeClient\" class=\"optbox\"/>");
+                    buf.append("<input value=\"").append(b32).append("\" type=checkbox name=\"revokeClient\" class=optbox/>");
                 buf.append("</td></tr>");
                 rv = true;
             }

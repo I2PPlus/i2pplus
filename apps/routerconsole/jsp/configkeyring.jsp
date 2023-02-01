@@ -28,7 +28,7 @@
 <%=intl._t("The router keyring is used to decrypt encrypted LeaseSets.")%>&nbsp;
 <%=intl._t("The keyring may contain keys for local or remote encrypted destinations.")%></p>
 <form action="" method="POST">
-<input type="hidden" name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="keyringhelper" property="summary" />
 <h3 class="tabletitle"><%=intl._t("Manual Keyring Addition")%></h3>
 <table id="addkeyring" class="configtable">
@@ -45,7 +45,7 @@
 </tr>
 <tr>
 <td align="right"><b><%=intl._t("Full destination, name, Base32, or hash")%>:</b></td>
-<td><input type="text" name="peer" size="55"></td>
+<td><input type=text name="peer" size="55"></td>
 </tr>
 <tr>
 <td align="right"><b><%=intl._t("Type")%>:</b></td>
@@ -70,7 +70,7 @@
 </tr>
 <tr>
 <td align="right"><b><%=intl._t("Encryption Key")%>:</b></td>
-<td><input type="text" size="55" name="key" title="<%=intl._t("Leave blank for DH, will be generated automatically")%>"></td>
+<td><input type=text size="55" name="key" title="<%=intl._t("Leave blank for DH, will be generated automatically")%>"></td>
 </tr>
 <tr>
 <td align="right"><b><%=intl._t("Optional lookup password")%>:</b></td>
@@ -78,8 +78,8 @@
 </tr>
 <tr>
 <td align="right" colspan="2" class="optionsave">
-<input type="reset" class="cancel" value="<%=intl._t("Cancel")%>" >
-<input type="submit" name="action" class="add" value="<%=intl._t("Add key")%>" >
+<input type=reset class="cancel" value="<%=intl._t("Cancel")%>" >
+<input type=submit name="action" class="add" value="<%=intl._t("Add key")%>" >
 </td>
 </tr>
 </table>

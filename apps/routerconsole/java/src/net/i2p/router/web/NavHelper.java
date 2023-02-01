@@ -101,7 +101,7 @@ public class NavHelper implements NavService, ClientApp {
                         buf.append(" title=\"").append(tip).append("\"");
                     buf.append('>').append(name.replace(" ", "&nbsp;")).append("</a>\n");
             } else {
-                buf.append(" <a target=\"_blank\" href=\"").append(path.replace(" ", "%20")).append("\"");
+                buf.append(" <a target=_blank href=\"").append(path.replace(" ", "%20")).append("\"");
                 if (tip != null)
                     buf.append(" title=\"").append(tip).append("\"");
                 buf.append('>').append(name.replace(" ", "&nbsp;")).append("</a>\n");

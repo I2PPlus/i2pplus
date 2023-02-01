@@ -98,7 +98,7 @@
 <h3>Setup Wizard</h3>
 <hr>
 <form action="" method="POST">
-<input type="submit" class="cancel" name="skip" value="<%=intl._t("Skip Setup")%>">
+<input type=submit class="cancel" name="skip" value="<%=intl._t("Skip Setup")%>">
 </form>
 </div>
 </div>
@@ -123,9 +123,9 @@
 %>
 <%@include file="formhandler.jsi" %>
 <form action="" method="POST">
-<input type="hidden" name="nonce" value="<%=pageNonce%>">
-<input type="hidden" name="action" value="blah" >
-<input type="hidden" name="page" value="<%=(ipg + 1)%>">
+<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name="action" value="blah" >
+<input type=hidden name="page" value="<%=(ipg + 1)%>">
 <%
     if (ipg == 1) {
         // language selection
@@ -133,7 +133,7 @@
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
 <%-- needed for CSS: --%><div id="config_ui">
-<%-- needed for lang setting in css.jsi: --%><input type="hidden" name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
+<%-- needed for lang setting in css.jsi: --%><input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
 <p class="infohelp" id="flags">
 <%=intl._t("Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>.")%>
 </p>
@@ -250,7 +250,7 @@
 <td>
 <div class="optionsingle bw_in">
 <span class="bw_title"><%=intl._t("Download Speed")%></span>
-<input style="text-align: right; width: 5em" name="inboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />">
+<input style="text-align: right; width: 5em" name="inboundrate" type=text size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />">
 <%=intl._t("KBps In")%>
 </div>
 </td>
@@ -260,7 +260,7 @@
 <%--
 <!-- let's keep this simple...
 bursting up to
-<input name="inboundburstrate" type="text" size="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />"> KBps for
+<input name="inboundburstrate" type=text size="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />"> KBps for
 <jsp:getProperty name="nethelper" property="inboundBurstFactorBox" /><br>
 -->
 --%>
@@ -270,7 +270,7 @@ bursting up to
 <td>
 <div class="optionsingle bw_out">
 <span class="bw_title"><%=intl._t("Upload Speed")%></span>
-<input style="text-align: right; width: 5em" name="outboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />">
+<input style="text-align: right; width: 5em" name="outboundrate" type=text size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />">
 <%=intl._t("KBps Out")%>
 </div>
 </td>
@@ -280,7 +280,7 @@ bursting up to
 <%--
 <!-- let's keep this simple...
  bursting up to
-<input name="outboundburstrate" type="text" size="2" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />"> KBps for
+<input name="outboundburstrate" type=text size="2" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />"> KBps for
 <jsp:getProperty name="nethelper" property="outboundBurstFactorBox" /><br>
 <i>KBps = kilobytes per second = 1024 bytes per second = 8192 bits per second.<br>
 A negative rate sets the default.</i><br>
@@ -351,7 +351,7 @@ A negative rate sets the default.</i><br>
 <%
     if (ipg != 1) {
 %>
-<input type="submit" class="back" name="prev" value="<%=intl._t("Previous")%>">
+<input type=submit class="back" name="prev" value="<%=intl._t("Previous")%>">
 <%
     }
     if (ipg != LAST_PAGE) {
@@ -359,19 +359,19 @@ A negative rate sets the default.</i><br>
 <%
         if (ipg == 2) {
 %>
-<input type="submit" class="cancel" name="skipbw" value="<%=intl._t("Skip Bandwidth Test")%>">
+<input type=submit class="cancel" name="skipbw" value="<%=intl._t("Skip Bandwidth Test")%>">
 <%
         } else if (ipg == 3) {
 %>
-<input type="submit" class="cancel" name="cancelbw" value="<%=intl._t("Cancel Bandwidth Test")%>">
+<input type=submit class="cancel" name="cancelbw" value="<%=intl._t("Cancel Bandwidth Test")%>">
 <%
         }
 %>
-<input type="submit" class="go" name="next" value="<%=intl._t("Next")%>">
+<input type=submit class="go" name="next" value="<%=intl._t("Next")%>">
 <%
     } else {
 %>
-<input type="submit" class="accept" name="done" value="<%=intl._t("Finished")%>">
+<input type=submit class="accept" name="done" value="<%=intl._t("Finished")%>">
 <%
     }
 %>

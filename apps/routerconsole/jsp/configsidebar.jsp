@@ -33,8 +33,8 @@
 <table class="configtable" id="refreshsidebar">
 <tr>
 <td>
-<input type="hidden" name="nonce" value="<%=pageNonce%>" >
-<input type="hidden" name="group" value="0">
+<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="group" value="0">
 <%
     String rval;
     if (intl.getDisableRefresh())
@@ -42,7 +42,7 @@
     else
         rval = intl.getRefresh();
 %>
-<input type="text" name="refreshInterval" maxlength="4" pattern="[0-9]{1,4}" required value="<%=rval%>">
+<input type=text name="refreshInterval" maxlength="4" pattern="[0-9]{1,4}" required value="<%=rval%>">
 <%=intl._t("seconds")%>
 <%
     if (!rval.equals("0")) {
@@ -53,19 +53,19 @@
 %>
 </td>
 <td class="optionsave">
-<input type="submit" name="action" class="accept" value="<%=intl._t("Save")%>" >
+<input type=submit name="action" class="accept" value="<%=intl._t("Save")%>" >
 </td>
 </tr>
 </table>
 </form>
 <h3 class="tabletitle"><%=intl._t("Customize Sidebar")%></h3>
 <form action="" method="POST">
-<input type="hidden" name="nonce" value="<%=pageNonce%>" >
-<input type="hidden" name="group" value="2">
+<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="group" value="2">
 <jsp:getProperty name="summaryhelper" property="configTable" />
 <div class="formaction" id="sidebardefaults">
-<input type="submit" class="reload" name="action" value="<%=intl._t("Restore full default")%>" >
-<input type="submit" class="reload" name="action" value="<%=intl._t("Restore minimal default")%>" >
+<input type=submit class="reload" name="action" value="<%=intl._t("Restore full default")%>" >
+<input type=submit class="reload" name="action" value="<%=intl._t("Restore minimal default")%>" >
 </div>
 </form>
 </div>

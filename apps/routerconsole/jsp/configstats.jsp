@@ -27,14 +27,14 @@
 <jsp:setProperty name="statshelper" property="contextId" value="<%=i2pcontextId%>" />
 <div class="configure">
 <form id="statsForm" name="statsForm" action="" method="POST">
-<input type="hidden" name="action" value="foo" >
-<input type="hidden" name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="action" value="foo" >
+<input type=hidden name="nonce" value="<%=pageNonce%>" >
 <h3 class="tabletitle"><%=intl._t("Configure I2P Stat Collection")%></h3>
 <table id="statconfig" class="configtable">
 <tr><td class="infohelp" id="enablefullstats" colspan="2"><%=intl._t("A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>.")%></td></tr>
-<tr id="enablefull"><td><label><input type="checkbox" class="optbox slider" id="enableFull" name="isFull" value="true" <%
+<tr id="enablefull"><td><label><input type=checkbox class="optbox slider" id="enableFull" name="isFull" value=true <%
  if (statshelper.getIsFull()) { %>checked="checked" <% } %> > <b><%=intl._t("Enable full stats?").replace(" stats?", " stat collection")%></b>
- (<%=intl._t("change requires restart to take effect").replace("change requires restart to take effect", "restart required") %>)</label></td><td class="right"><input type="submit" name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>"></td></tr>
+ (<%=intl._t("change requires restart to take effect").replace("change requires restart to take effect", "restart required") %>)</label></td><td class="right"><input type=submit name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
 <h3 class="tabletitle" id="graphchoice"><%=intl._t("Select Stats for Graphing")%></h3>
 <table id="configstats">
@@ -48,7 +48,7 @@
         } // end iterating over required groups for the current stat
         if (statshelper.getCurrentCanBeGraphed() && !statshelper.getCurrentGraphName().contains("Ping")) {
 %>
-<input hidden type="checkbox" class="optbox" id="<%=statshelper.getCurrentStatName().replace(" ", "_").replace("[", "").replace("]", "")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>"<% if (statshelper.getCurrentIsGraphed()){%> checked="checked"<%}%>>
+<input hidden type=checkbox class=optbox id="<%=statshelper.getCurrentStatName().replace(" ", "_").replace("[", "").replace("]", "")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>"<% if (statshelper.getCurrentIsGraphed()){%> checked="checked"<%}%>>
 <label for="<%=statshelper.getCurrentStatName().replace(" ", "_").replace("[", "").replace("]", "")%>" data-tooltip="<%=statshelper.getCurrentStatDescription()%>">
 <%
     int dot = statshelper.getCurrentStatName().indexOf(".");
@@ -69,8 +69,8 @@
 %>
 </td></tr>
 <tr class="tablefooter"><td colspan="2" align="right" class="optionsave">
-<input type="reset" class="cancel" value="<%=intl._t("Cancel")%>">
-<input type="submit" name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>">
+<input type=reset class="cancel" value="<%=intl._t("Cancel")%>">
+<input type=submit name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>">
 </td></tr>
 </table>
 </form>

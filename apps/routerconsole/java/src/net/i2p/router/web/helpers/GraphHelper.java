@@ -292,7 +292,7 @@ public class GraphHelper extends FormHandler {
             } else {
                 Set<Rate> rates = ss.parseSpecs(_stat);
                 if (rates.size() != 1) {
-                    _out.write("<p class=\"infohelp\">Graphs not enabled for " + _stat + " or the tunnel or service isn't currently running.</p>");
+                    _out.write("<p class=infohelp>Graphs not enabled for " + _stat + " or the tunnel or service isn't currently running.</p>");
                     return "";
                 }
                 Rate r = rates.iterator().next();
@@ -439,14 +439,14 @@ public class GraphHelper extends FormHandler {
         try {
             _out.write("<br><h3 id=\"graphdisplay\" tabindex=\"0\">" + _t("Configure Graph Display") + " <a href=\"configstats\">" + _t("Select Stats") + "</a></h3>");
             _out.write("<form action=\"/updategraphs\" method=\"POST\">\n" +
-                       "<table>\n<tr><td><div class=\"optionlist\">\n<input type=\"hidden\" name=\"action\" value=\"save\">\n" +
-                       "<input type=\"hidden\" name=\"nonce\" value=\"" + nonce + "\" >\n");
+                       "<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=\"action\" value=\"save\">\n" +
+                       "<input type=hidden name=\"nonce\" value=\"" + nonce + "\" >\n");
             _out.write("<span class=\"nowrap\" title=\"" +
                        _t("Note: Dimensions are for graph only (excludes title, labels and legend).") +"\"><b>");
-            _out.write(_t("Graph size") + ":</b>&nbsp; <input size=\"4\" style=\"text-align: right;\" type=\"text\" name=\"width\" value=\"" + _width + "\">" +
-                       _t("pixels wide") + "&nbsp;&nbsp;&nbsp;<input size=\"4\" style=\"text-align: right;\" type=\"text\" name=\"height\" value=\"" + _height + "\">" +
+            _out.write(_t("Graph size") + ":</b>&nbsp; <input size=\"4\" style=\"text-align: right;\" type=text name=\"width\" value=\"" + _width + "\">" +
+                       _t("pixels wide") + "&nbsp;&nbsp;&nbsp;<input size=\"4\" style=\"text-align: right;\" type=text name=\"height\" value=\"" + _height + "\">" +
                        _t("pixels high") + "</span><br>\n<span class=\"nowrap\">\n<b>");
-            _out.write(_t("Display period") + ":</b> <input size=\"5\" style=\"text-align: right;\" type=\"text\" name=\"periodCount\" value=\"" + _periodCount + "\">" +
+            _out.write(_t("Display period") + ":</b> <input size=\"5\" style=\"text-align: right;\" type=text name=\"periodCount\" value=\"" + _periodCount + "\">" +
                        _t("minutes") + "</span><br>\n<span class=\"nowrap\">\n<b>");
             _out.write(_t("Refresh delay") + ":</b> <select name=\"refreshDelay\">");
             for (int i = 0; i < times.length; i++) {
@@ -465,24 +465,24 @@ public class GraphHelper extends FormHandler {
             _out.write("</select></span><br>\n<span class=\"nowrap\">\n<b>");
 
             _out.write(_t("Plot type") + ":</b> ");
-            _out.write("<label><input type=\"radio\" class=\"optbox\" name=\"showEvents\" value=\"false\" " +
+            _out.write("<label><input type=radio class=optbox name=\"showEvents\" value=\"false\" " +
                        (_showEvents ? "" : HelperBase.CHECKED) + ">" + _t("Averages") + "</label>&nbsp;&nbsp;&nbsp;");
-            _out.write("<label><input type=\"radio\" class=\"optbox\" name=\"showEvents\" value=\"true\" " +
+            _out.write("<label><input type=radio class=optbox name=\"showEvents\" value=true " +
                        (_showEvents ? HelperBase.CHECKED : "") + ">" + _t("Events") +
                        "</label></span><br>\n<span class=\"nowrap\">\n<b>");
             _out.write(_t("Hide legend") + ":</b> ");
-            _out.write("<label><input type=\"checkbox\" class=\"optbox slider\" value=\"true\" name=\"hideLegend\"");
+            _out.write("<label><input type=checkbox class=\"optbox slider\" value=true name=\"hideLegend\"");
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
             if (hideLegend)
                 _out.write(HelperBase.CHECKED);
             _out.write(">" + _t("Do not show legend on graphs") + "</label></span><br><span class=\"nowrap\">\n<b>");
             _out.write(_t("Persistence") +
-                       ":</b> <label><input type=\"checkbox\" class=\"optbox slider\" value=\"true\" name=\"persistent\"");
+                       ":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=\"persistent\"");
             boolean persistent = _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT);
             if (persistent)
                 _out.write(HelperBase.CHECKED);
             _out.write(">" + _t("Store graph data on disk") + "</label></span>\n</div>\n</td></tr>\n</table>\n" +
-                       "<hr>\n<div class=\"formaction\" id=\"graphing\"><input type=\"submit\" class=\"accept\" value=\"" +
+                       "<hr>\n<div class=formaction id=\"graphing\"><input type=submit class=\"accept\" value=\"" +
                        _t("Save settings and redraw graphs") + "\"></div>\n</form>\n");
         } catch (IOException ioe) {
             ioe.printStackTrace();

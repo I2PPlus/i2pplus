@@ -79,7 +79,7 @@ class ProfileOrganizerRenderer {
         StringBuilder buf = new StringBuilder(16*1024);
 
         if (mode < 2) {
-            buf.append("<p id=\"profiles_overview\" class=\"infohelp\">");
+            buf.append("<p id=\"profiles_overview\" class=infohelp>");
             buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size()).replace(".", " (active in the last minute).")).append('\n');
             if (older > 0)
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
@@ -124,12 +124,12 @@ class ProfileOrganizerRenderer {
                 if (tier != prevTier) {
                     buf.append("<tr");
                     if (tier == 2)
-                        buf.append(" id=\"highcap_peers\"");
-                    buf.append("><td colspan=\"10\" class=\"separator\"><hr></td></tr>\n");
+                        buf.append(" id=highcap_peers");
+                    buf.append("><td colspan=\"10\" class=separator><hr></td></tr>\n");
                 }
                 prevTier = tier;
 
-                buf.append("<tr class=\"lazy\"><td nowrap>");
+                buf.append("<tr class=lazy><td nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer));
                 // debug
                 //if(prof.getIsExpandedDB())
@@ -144,19 +144,19 @@ class ProfileOrganizerRenderer {
                         .replace("PO", "P")
                         .replace("fR", "Rf")
                         .replace("fU", "Uf")
-                        .replace("f", "<a href=\"/netdb?caps=f\"><span class=\"ff\">F</span></a>")
-                        .replace("B", "<a href=\"/netdb?caps=B\"><span class=\"testing\">B</span></a>")
-                        .replace("C", "<a href=\"/netdb?caps=C\"><span class=\"ssuintro\">C</span></a>")
-                        .replace("H", "<a href=\"/netdb?caps=H\"><span class=\"hidden\">H</span></a>")
-                        .replace("R", "<a href=\"/netdb?caps=R\"><span class=\"reachable\">R</span></a>")
-                        .replace("U", "<a href=\"/netdb?caps=U\"><span class=\"unreachable\">U</span></a>")
-                        .replace("K", "<a href=\"/netdb?caps=K\"><span class=\"tier\">K</span></a>")
-                        .replace("L", "<a href=\"/netdb?caps=L\"><span class=\"tier\">L</span></a>")
-                        .replace("M", "<a href=\"/netdb?caps=M\"><span class=\"tier\">M</span></a>")
-                        .replace("N", "<a href=\"/netdb?caps=N\"><span class=\"tier\">N</span></a>")
-                        .replace("O", "<a href=\"/netdb?caps=O\"><span class=\"tier\">O</span></a>")
-                        .replace("P", "<a href=\"/netdb?caps=P\"><span class=\"tier\">P</span></a>")
-                        .replace("X", "<a href=\"/netdb?caps=X\"><span class=\"tier\">X</span></a>")
+                        .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
+                        .replace("B", "<a href=\"/netdb?caps=B\"><span class=testing>B</span></a>")
+                        .replace("C", "<a href=\"/netdb?caps=C\"><span class=ssuintro>C</span></a>")
+                        .replace("H", "<a href=\"/netdb?caps=H\"><span class=hidden>H</span></a>")
+                        .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
+                        .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
+                        .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
+                        .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
+                        .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
+                        .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
+                        .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
+                        .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
+                        .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
                         .replace("\"><span", tooltip);
                     buf.append("<td>").append(caps);
                 } else {
@@ -166,7 +166,7 @@ class ProfileOrganizerRenderer {
                 buf.append("<td>");
                 String v = info != null ? info.getOption("router.version") : null;
                 if (v != null)
-                    buf.append("<span class=\"version\" title=\"").append(_t("Show all routers with this version in the NetDb"))
+                    buf.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
                        .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">").append(DataHelper.stripHTML(v));
                 buf.append("</a></span></td>");
                 buf.append("<td>");
@@ -189,7 +189,7 @@ class ProfileOrganizerRenderer {
                 long bonus = prof.getSpeedBonus();
                 long capBonus = prof.getCapacityBonus();
                 if (ok && fails == 0) {
-                    buf.append("<span class=\"ok\">").append(_t("OK")).append("</span>");
+                    buf.append("<span class=ok>").append(_t("OK")).append("</span>");
                 } else if (fails > 0) {
                     Rate accepted = prof.getTunnelCreateResponseTime().getRate(60*60*1000);
                     long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
@@ -255,9 +255,9 @@ class ProfileOrganizerRenderer {
                 buf.append("<td>");
 
                 if (bonus >= 9999999)
-                    buf.append("<span class=\"lowlatency\">✔</span>");
+                    buf.append("<span class=lowlatency>✔</span>");
                 else if (capBonus == -30)
-                    buf.append("<span class=\"highlatency\">✖</span>");
+                    buf.append("<span class=highlatency>✖</span>");
                 buf.append("</td>");
 
                 buf.append("<td><span>").append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
@@ -275,10 +275,10 @@ class ProfileOrganizerRenderer {
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
                 }
-                buf.append("</td><td nowrap class=\"viewedit\">");
-                buf.append("<a class=\"viewprofile\" href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
+                buf.append("</td><td nowrap class=viewedit>");
+                buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
                    .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-                buf.append("<br><a class=\"configpeer\" href=\"/configpeer?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("Configure peer"))
+                buf.append("<br><a class=configpeer href=\"/configpeer?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("Configure peer"))
                    .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>");
                 buf.append("</td></tr>\n");
                 // let's not build the whole page in memory (~500 bytes per peer)
@@ -287,8 +287,8 @@ class ProfileOrganizerRenderer {
             }
             buf.append("</table>\n");
 
-            buf.append("<div id=\"peer_thresholds\">\n<h3 class=\"tabletitle\">").append(_t("Thresholds")).append("</h3>\n")
-               .append("<table id=\"thresholds\">\n")
+            buf.append("<div id=peer_thresholds>\n<h3 class=tabletitle>").append(_t("Thresholds")).append("</h3>\n")
+               .append("<table id=thresholds>\n")
                .append("<thead><tr><th><b>")
                .append(_t("Speed")).append(": </b>");
             String spd = (num(_organizer.getSpeedThreshold()).replace(",",""));
@@ -347,7 +347,7 @@ class ProfileOrganizerRenderer {
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
-                buf.append("<tr class=\"lazy\"><td nowrap>");
+                buf.append("<tr class=lazy><td nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer));
                 buf.append("</td>");
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
@@ -358,18 +358,18 @@ class ProfileOrganizerRenderer {
                         .replace("XO", "X")
                         .replace("PO", "P")
                         .replace("f", "")
-                        .replace("B", "<a href=\"/netdb?caps=B\"><span class=\"ssutesting\">B</span></a>") // unneeded?
-                        .replace("C", "<a href=\"/netdb?caps=C\"><span class=\"ssuintro\">C</span></a>") // unneeded?
-                        .replace("H", "<a href=\"/netdb?caps=H\"><span class=\"hidden\">H</span></a>") // unneeded?
-                        .replace("R", "<a href=\"/netdb?caps=R\"><span class=\"reachable\">R</span></a>") // unneeded?
-                        .replace("U", "<a href=\"/netdb?caps=U\"><span class=\"unreachable\">U</span></a>") // unneeded?
-                        .replace("K", "<a href=\"/netdb?caps=K\"><span class=\"tier\">K</span></a>") // unneeded?
-                        .replace("L", "<a href=\"/netdb?caps=L\"><span class=\"tier\">L</span></a>")
-                        .replace("M", "<a href=\"/netdb?caps=M\"><span class=\"tier\">M</span></a>")
-                        .replace("N", "<a href=\"/netdb?caps=N\"><span class=\"tier\">N</span></a>")
-                        .replace("O", "<a href=\"/netdb?caps=O\"><span class=\"tier\">O</span></a>")
-                        .replace("P", "<a href=\"/netdb?caps=P\"><span class=\"tier\">P</span></a>")
-                        .replace("X", "<a href=\"/netdb?caps=X\"><span class=\"tier\">X</span></a>")
+                        .replace("B", "<a href=\"/netdb?caps=B\"><span class=ssutesting>B</span></a>") // unneeded?
+                        .replace("C", "<a href=\"/netdb?caps=C\"><span class=ssuintro>C</span></a>") // unneeded?
+                        .replace("H", "<a href=\"/netdb?caps=H\"><span class=hidden>H</span></a>") // unneeded?
+                        .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>") // unneeded?
+                        .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>") // unneeded?
+                        .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>") // unneeded?
+                        .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
+                        .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
+                        .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
+                        .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
+                        .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
+                        .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
                         .replace("\"><span", tooltip);
                     buf.append("<td>").append(caps).append("</td>");
                 } else {
@@ -395,10 +395,10 @@ class ProfileOrganizerRenderer {
                     buf.append("<td>").append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>");
                     String hourfail = davg(dbh, 60*60*1000l, ra);
                     String dayfail = davg(dbh, 24*60*60*1000l, ra);
-                    buf.append("<td><span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:" +
-                               hourfail + "\"><span class=\"percentBarText\">").append(hourfail).append("</span></span></span>").append("</td>");
-                    buf.append("<td><span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:" +
-                               dayfail + "\"><span class=\"percentBarText\">").append(dayfail).append("</span></span></span>").append("</td>");
+                    buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" +
+                               hourfail + "\"><span class=percentBarText>").append(hourfail).append("</span></span></span>").append("</td>");
+                    buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" +
+                               dayfail + "\"><span class=percentBarText>").append(dayfail).append("</span></span></span>").append("</td>");
                 } else {
                     for (int i = 0; i < 6; i++)
                         buf.append("<td>").append(_t(NA));
@@ -410,48 +410,27 @@ class ProfileOrganizerRenderer {
         }
 
         if (mode < 2) {
-            buf.append("<h3 class=\"tabletitle\">").append(_t("Definitions")).append("</h3>\n")
-               .append("<table id=\"profile_defs\">\n<tbody>\n");
+            buf.append("<h3 class=tabletitle>").append(_t("Definitions")).append("</h3>\n")
+               .append("<table id=profile_defs>\n<tbody>\n");
             buf.append("<tr><td><b>")
                .append(_t("caps")).append(":</b></td><td>").append(_t("Capabilities in the NetDb, not used to determine profiles"))
                .append("</td></tr>\n");
-            buf.append("<tr id=\"capabilities_key\"><td></td><td><table><tbody>");
+            buf.append("<tr id=capabilities_key><td></td><td><table><tbody>");
 /*
             buf.append("<tr>")
                .append("<td><a href=\"/netdb?caps=B\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                    "\"><b class=\"ssutesting\">B</b></a></td><td>").append(_t("SSU Testing")).append("</td>")
                .append("<td><a href=\"/netdb?caps=C\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b class=\"ssuintro\">C</b></a></td><td>").append(_t("SSU Introducer")).append("</td>")
+                       "\"><b class=ssuintro>C</b></a></td><td>").append(_t("SSU Introducer")).append("</td>")
                .append("</tr>\n");
 */
             buf.append("<tr>")
                .append("<td><a href=\"/netdb?caps=f\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b class=\"ff\">F</b></a></td><td>").append(_t("Floodfill")).append("</td>")
+                       "\"><b class=ff>F</b></a></td><td>").append(_t("Floodfill")).append("</td>")
                .append("<td><a href=\"/netdb?caps=R\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b class=\"reachable\">R</b></a></td><td>").append(_t("Reachable")).append("</td>")
-/*
-               .append("<td><a href=\"/netdb?caps=H\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b class=\"hidden\">H</b></a></td><td>").append(_t("Hidden")).append("</td>")
-*/
-
-               .append("</tr>\n");
-/*
-            buf.append("<tr>")
-               .append("<td><a href=\"/netdb?caps=U\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b class=\"unreachable\">U</b></a></td><td>").append(_t("Unreachable")).append("</td>")
+                       "\"><b class=reachable>R</b></a></td><td>").append(_t("Reachable")).append("</td>")
                .append("</tr>\n");
             buf.append("<tr>")
-               .append("<td><a href=\"/netdb?caps=K\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b>K</b></a></td><td>").append(_t("Under {0} shared bandwidth", Router.MIN_BW_L + " KBps")).append("</td>")
-               .append("<td><a href=\"/netdb?caps=L\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b>L</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M))).append("</td>")
-               .append("</tr>\n");
-*/
-            buf.append("<tr>")
-/*
-               .append("<td><a href=\"/netdb?caps=M\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b>M</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_M, Router.MIN_BW_N))).append("</td>")
-*/
                .append("<td><a href=\"/netdb?caps=N\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b>N</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O))).append("</td>")
                .append("<td><a href=\"/netdb?caps=O\" title=\"" + _t("Show all routers with this capability in the NetDb") +
@@ -463,10 +442,6 @@ class ProfileOrganizerRenderer {
                .append("<td><a href=\"/netdb?caps=X\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b>X</b></a></td><td>").append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + " KBps")).append("</td>")
                .append("</tr>\n");
-/*
-            buf.append("<tr>")
-               .append("<td>&nbsp;</td><td>&nbsp;</td></tr>\n");
-*/
             buf.append("</tbody>\n</table>\n</td></tr>\n"); // profile_defs
             buf.append("<tr><td><b>")
                .append(_t("status"))

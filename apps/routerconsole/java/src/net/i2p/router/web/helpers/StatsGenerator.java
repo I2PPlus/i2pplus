@@ -91,11 +91,11 @@ public class StatsGenerator {
             //out.write(buf.toString());
             //buf.setLength(0);
         }
-        buf.append("</select> <input type=\"submit\" value=\"").append(_t("GO")).append("\" />");
+        buf.append("</select> <input type=submit value=\"").append(_t("GO")).append("\" />");
         buf.append("</form>");
 **/
 
-//        buf.append("<script charset=\"utf-8\" type=\"text/javascript\" src=\"/js/clearSelected.js\"></script>");
+//        buf.append("<script charset=utf-8 type=text/javascript src=\"/js/clearSelected.js\"></script>");
 
         out.write(buf.toString());
         buf.setLength(0);
@@ -103,7 +103,7 @@ public class StatsGenerator {
         for (Map.Entry<String, Set<String>> entry : groups.entrySet()) {
             String group = entry.getKey();
             Set<String> stats = entry.getValue();
-            buf.append("<input name=\"statgroup\" type=\"radio\" class=\"toggle_input\" id=\"toggle_").append(group)
+            buf.append("<input name=\"statgroup\" type=radio class=\"toggle_input\" id=\"toggle_").append(group)
                .append("\"");
             if (group.equals(_t("Router")))
                 buf.append(" checked");

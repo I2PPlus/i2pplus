@@ -66,10 +66,10 @@
 <p class="infohelp">To embed local pages in the console, set the <code>url</code> query parameter and optional <code>name</code> parameter, e.g. <a href="http://127.0.0.1:7657/embed?url=imagegen&amp;name=image generator">http://127.0.0.1:7657/embed?url=imagegen&name=image%20generator</a>, or use the form below. Only resources served from 127.0.0.1 or the address the console is running on are supported.</p>
 <div id="embedurl">
 <form action="/embed?url=" method="get">
-<input type="hidden" name="norefresh">
-<label>URL: <input type="text" name="url" size="30" required x-moz-errormessage="Please supply a locally hosted address or console path" placeholder="URL to embed" title="Locally hosted URL or console path"></label>
-<span class="nowrap"><label>Name: <input type="text" name="name" size="15" value="embedded page" title="Optional title for embedded page"></label>
-<input type="submit" value="Embed URL"></span>
+<input type=hidden name="norefresh">
+<label>URL: <input type=text name="url" size="30" required placeholder="URL to embed" title="Locally hosted URL or console path"></label>
+<span class="nowrap"><label>Name: <input type=text name="name" size="15" value="embedded page" title="Optional title for embedded page"></label>
+<input type=submit value="Embed URL"></span>
 </form>
 </div>
 <%
