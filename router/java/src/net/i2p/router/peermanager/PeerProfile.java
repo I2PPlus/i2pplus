@@ -169,10 +169,22 @@ public class PeerProfile {
 
     /**
      * Is this peer active at the moment (sending/receiving messages within the last
-     * 5 minutes)
+     * 1 minute)
      */
     public boolean getIsActive() {
-        return getIsActive(5*60*1000);
+//        return getIsActive(5*60*1000, _context.clock().now());
+        return getIsActive(1*60*1000, _context.clock().now());
+    }
+    
+    /**
+     * Is this peer active at the moment (sending/receiving messages within the last
+     * 5 minutes)
+     *
+     * @since 0.9.58
+     */
+    public boolean getIsActive(long now) {
+//        return getIsActive(5*60*1000, now);
+        return getIsActive(1*60*1000, now);
     }
 
     /** @since 0.8.11 */
@@ -228,18 +240,11 @@ public class PeerProfile {
      *
      * @param period must be one of the periods in the RateStat constructors below
      *        (5*60*1000 or 60*60*1000)
+     *
+     * @since 0.9.58
      */
-    public boolean getIsActive(long period) {
-        //if ( (getSendSuccessSize().getRate(period).getCurrentEventCount() > 0) ||
-        //     (getSendSuccessSize().getRate(period).getLastEventCount() > 0) ||
-        //     (getReceiveSize().getRate(period).getCurrentEventCount() > 0) ||
-        //     (getReceiveSize().getRate(period).getLastEventCount() > 0) ||
-        //     _context.commSystem().isEstablished(_peer) )
-        //    return true;
-        //else
-        //    return false;
-//        long before = _context.clock().now() - period;
-        long before = _context.clock().now() - 60*1000l;
+    public boolean getIsActive(long period, long now) {
+        long before = now - period;
         return getLastHeardFrom() < before ||
                getLastSendSuccessful() < before ||
                isEstablished();
@@ -567,18 +572,11 @@ public class PeerProfile {
      */
     public synchronized void expandProfile() {
         String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
-        //if (_sendSuccessSize == null)
-        //    _sendSuccessSize = new RateStat("sendSuccessSize", "How large successfully sent messages are", group, new long[] { 5*60*1000l, 60*60*1000l });
-        //if (_receiveSize == null)
-        //    _receiveSize = new RateStat("receiveSize", "How large received messages are", group, new long[] { 5*60*1000l, 60*60*1000l } );
         if (_tunnelCreateResponseTime == null)
             _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time (ms) for tunnel create response from the peer", group, RATES);
 
         if (ENABLE_TUNNEL_TEST_RESPONSE_TIME && _tunnelTestResponseTime == null)
             _tunnelTestResponseTime = new RateStat("tunnelTestResponseTime", "Time (ms) to test a tunnel this peer participates in", group, RATES);
-
-//        if (_peerTestResponseTime == null)
-//            _peerTestResponseTime = new RateStat("peerTestResponseTime", "Time (ms) peer takes to respond to a test", group, RATES);
 
         if (_tunnelHistory == null)
             _tunnelHistory = new TunnelHistory(_context, group);
