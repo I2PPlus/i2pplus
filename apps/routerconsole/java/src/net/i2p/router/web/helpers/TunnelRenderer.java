@@ -293,7 +293,7 @@ class TunnelRenderer {
             }
 
             // sort and output
-            out.write("<h3 class=tabletitle>Peer Usage by Tunnel Count</h3>\n");
+            out.write("<h3 class=tabletitle>Transit Tunnel Count by Peer</h3>\n");
             out.write("<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n" +
                       "<thead><tr data-sort-method=none>" +
                       "<th data-sortable>" + _t("Country") + "</th>" +
