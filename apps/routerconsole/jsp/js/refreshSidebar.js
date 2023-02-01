@@ -2,7 +2,6 @@
 /* License: AGPLv3 or later */
 
 import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
-//import {sectionToggler, countTunnels, countNewsItems} from "/themes/js/sectionToggle.js"; // debug
 
 function refreshSidebar() {
   "use strict";
@@ -31,7 +30,7 @@ function refreshSidebar() {
   var queue = document.getElementById("sb_queue");
   var routerControl = document.getElementById("sb_routerControl");
   var services = document.getElementById("sb_services");
-  var sb = document.querySelector("#sidebar");
+  var sb = document.getElementById("sidebar");
   var shortGeneral = document.getElementById("sb_shortgeneral");
   var shutdownStatus = document.getElementById("sb_shutdownStatus");
   var tunnelBuildStatus = document.getElementById("sb_tunnelstatus");
@@ -97,8 +96,8 @@ function refreshSidebar() {
           var b;
           for (b = 0; b < badges.length; b += 1) {
             if (badges !== null && badgesResponse !== null) {
-              if (!Object.is(badges[b].innerHTML, badgesResponse[b].innerHTML)) {
-                badges[b].innerHTML = badgesResponse[b].innerHTML;
+              if (badgesResponse[b] !== null && badges[b] !== badgesReponse[b]) {
+                    badges[b].innerHTML = badgesResponse[b].innerHTML;
               }
             }
           }
@@ -299,7 +298,7 @@ function refreshSidebar() {
             const image = new Image(245, 50);
             image.onload = renderGraph;
             image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
-            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingEnabled = false;
             ctx.imageSmoothingQuality = "high";
             ctx.globalCompositeOperation = "copy";
             ctx.globalAlpha = 1;

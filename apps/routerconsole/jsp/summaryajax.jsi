@@ -5,9 +5,17 @@
   import {refreshSidebar} from "/js/refreshSidebar.js";
   import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
   import {stickySidebar} from "/js/stickySidebar.js";
+  import {onVisible} from "/js/onVisible.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   var refreshInterval = refresh * 1000;
-  var timerId = setInterval(refreshSidebar, refreshInterval);
+  var sb = document.getElementById("sidebar");
+
+  function initRefresh() {
+    var timerId = setInterval(refreshSidebar, refreshInterval);
+    stickySidebar();
+  }
+
+  onVisible(sb, () => {initRefresh();});
   document.addEventListener("DOMContentLoaded", sectionToggler);
   window.addEventListener("DOMContentLoaded", stickySidebar);
   window.addEventListener("resize", stickySidebar);

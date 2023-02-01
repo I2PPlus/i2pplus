@@ -7,10 +7,10 @@
  * So put it in a div.
  */
 %>
-<div id ="sb_logo" style=height:36px>
-<a href="/" target="_top"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" title="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" width="200"></a>
+<div id =sb_logo style=height:36px>
+<a href="/" target="_top"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" title="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" width=200></a>
 </div>
-<div id="xhr">
+<div id=xhr>
 <% /* for non-script */ %>
 <%@include file="xhr1.jsi" %>
 </div>
