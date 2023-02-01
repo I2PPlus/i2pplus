@@ -3,6 +3,7 @@
 /* License: AGPL3 or later */
 
 import {initFilterBar, checkFilterBar, refreshFilters} from "/i2psnark/.resources/js/torrentDisplay.js";
+import {onVisible} from "/i2psnark/.resources/js/onVisible.js";
 //import {initFilterBar, checkFilterBar, refreshFilters} from "/themes/js/torrentDisplay.js"; // debugging
 
 function refreshTorrents() {
@@ -69,8 +70,10 @@ function refreshTorrents() {
   if (debug) {debug.addEventListener("mouseover", setLinks, false);}
 
   if (filterbar && storage !== null && visible !== "hidden") {
-    if (xhrsnark.status !== null) {xhrsnark.abort();}
-    checkFilterBar();
+    onVisible(filterbar, () => {
+      if (xhrsnark.status !== null) {xhrsnark.abort();}
+      checkFilterBar();
+    });
   } else if ((torrents || noload || down) && visible !== "hidden") {
     if (xhrfilter.status !== null) {xhrfilter.abort();}
     xhrsnark.open("GET", url);

@@ -361,9 +361,20 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                 } else {
                     out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
+                    out.write("import {onVisible} from \""  + _contextPath + WARBASE + "js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
                 }
                 out.write("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                          "var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                          "var main = document.getElementById(\"mainsection\");\n" +
+                          "var details = document.getElementById(\"snarkInfo\");\n" +
+                          "function updateIfVisible() {\n" +
+                          " var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                          "}\n" +
+                          "if (main) {\n" +
+                          " onVisible(main, () => {updateIfVisible();});\n" +
+                          "} else if (details) {\n" +
+                          " onVisible(details, () => {updateIfVisible();});\n" +
+                          "}\n" +
+                          "document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
                           "</script>\n");
             }
         }
@@ -1150,7 +1161,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</table>\n");
             if (isForm)
                 out.write("</form>\n");
-
+/**
             // load torrentDisplay script here to ensure table has loaded into dom
             if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
                 if (debug && _context.isRouterContext()) {
@@ -1161,6 +1172,7 @@ public class I2PSnarkServlet extends BasicServlet {
                               "\" type=\"module\" async></script>\n");
                 }
             }
+**/
             return start == 0;
     }
 
@@ -4762,9 +4774,18 @@ public class I2PSnarkServlet extends BasicServlet {
                            "var lightbox = new Lightbox();\nlightbox.load();\n");
             }
             buf.append("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                       "var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
-                       "</script>\n");
-        }
+                       "var main = document.getElementById(\"mainsection\");\n" +
+                       "var details = document.getElementById(\"snarkInfo\");\n" +
+                       "function updateIfVisible() {\n" +
+                       " var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                       "}\n" +
+                       "if (main) {\n" +
+                       " onVisible(main, () => {updateIfVisible();});\n" +
+                       "} else if (details) {\n" +
+                       " onVisible(details, () => {updateIfVisible();});\n" +
+                       "}\n" +
+                       "document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
+                       "</script>\n");        }
         if (!isStandalone())
             buf.append(FOOTER);
         else

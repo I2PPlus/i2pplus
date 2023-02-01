@@ -2,6 +2,8 @@
 /* Setup torrent display buttons so we can show/hide snarks based on status */
 /* License: AGPL3 or later */
 
+import {onVisible} from "/i2psnark/.resources/js/onVisible.js";
+
 function initFilterBar() {
 
   var active = document.querySelectorAll(".active:not(.peerinfo)");
@@ -321,6 +323,11 @@ function refreshFilters() {
   xhrfilter.send();
 }
 
-document.addEventListener("DOMContentLoaded", checkFilterBar(), true);
+function checkIfVisible() {
+  var torrentform = document.getElementById("torrentlist");
+  onVisible(torrentform, () => {checkFilterBar();});
+}
+
+document.addEventListener("DOMContentLoaded", checkIfVisible(), true);
 
 export {initFilterBar, checkFilterBar, refreshFilters};
