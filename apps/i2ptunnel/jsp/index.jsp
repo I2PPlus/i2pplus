@@ -12,7 +12,7 @@
 <head>
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
-<link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel="preload" as="script"> 
+<link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel=preload as=script> 
 <link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
 <link href="<%=indexBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=indexBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
@@ -313,7 +313,7 @@ ElGamal-2048
 <option value="ircserver">IRC</option>
 <option value="streamrserver">Streamr</option>
 </select>
-<input class="control create iconize" type="submit" value="<%=intl._t("Create")%>" />
+<input class="control create iconize" type=submit value="<%=intl._t("Create")%>" />
 </form>
 </td>
 </tr>
@@ -536,7 +536,7 @@ ElGamal-2048
 <option value="connectclient">CONNECT</option>
 <option value="streamrclient">Streamr</option>
 </select>
-<input class="control create iconize" type="submit" value="<%=intl._t("Create")%>" />
+<input class="control create iconize" type=submit value="<%=intl._t("Create")%>" />
 </form>
 </td>
 </tr>

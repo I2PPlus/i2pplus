@@ -489,10 +489,10 @@
 <div class="panel" id="ssl">
 <h2><%=intl._t("SSL Wizard")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2>
 <form method="post" action="ssl" accept-charset=utf-8>
-<input type="hidden" name="tunnel" value="<%=curTunnel%>" />
-<input type="hidden" name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
-<input type="hidden" name="type" value="<%=tunnelType%>" />
-<input type="submit" class="default" name="action" value="Save changes" />
+<input type=hidden name="tunnel" value="<%=curTunnel%>" />
+<input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
+<input type=hidden name="type" value="<%=tunnelType%>" />
+<input type=submit class="default" name="action" value="Save changes" />
 <table>
 <!--<tr><td colspan="4" class="infohelp"><%=intl._t("Experts only!")%></td></tr>-->
 <%
@@ -570,11 +570,11 @@
 %>
 <%--
 <tr><th colspan="4"><%=intl._t("Add Port Routing")%></th></tr>
-<tr><td><input type="text" size="6" maxlength="5" id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
-<td><input type="text" size="20" id="websiteName" name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class="freetext" /></td>
-<td><input value="1" type="checkbox" name="useSSL" class="optbox slider" /></td>
-<td><input type="text" size="20" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" /> :
-<input type="text" size="6" maxlength="5" id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
+<tr><td><input type=text size="6" maxlength="5" id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
+<td><input type=text size="20" id="websiteName" name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class="freetext" /></td>
+<td><input value="1" type=checkbox name="useSSL" class="optbox slider" /></td>
+<td><input type=text size="20" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" /> :
+<input type=text size="6" maxlength="5" id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
 </td></tr>
 --%>
 <tr><th><%=intl._t("Server")%></th><th colspan="2"><%=intl._t("Configuration")%></th><th><!--<%=intl._t("SSL Activation")%>--></th></tr>
@@ -773,19 +773,19 @@
             } else {
 %>
 <tr style="display: none;" hidden="hidden"><td colspan="4">
-<input type="hidden" name="clientAppNumber" value="<%=i%>" />
-<input type="hidden" name="clientConfigFile" value="<%=clientsConfig.getName()%>" />
-<input type="hidden" name="isSSLEnabled" value="<%=isEnabled%>" />
-<input type="hidden" name="nofilter_ksPath" value="<%=ksPath%>" />
-<input type="hidden" name="nofilter_jettySSLFile" value="<%=jettySSLFile%>" />
-<input type="hidden" name="jettySSLHost" value="<%=sslHost%>" />
-<input type="hidden" name="jettySSLPort" value="<%=sslPort%>" />
+<input type=hidden name="clientAppNumber" value="<%=i%>" />
+<input type=hidden name="clientConfigFile" value="<%=clientsConfig.getName()%>" />
+<input type=hidden name="isSSLEnabled" value="<%=isEnabled%>" />
+<input type=hidden name="nofilter_ksPath" value="<%=ksPath%>" />
+<input type=hidden name="nofilter_jettySSLFile" value="<%=jettySSLFile%>" />
+<input type=hidden name="jettySSLHost" value="<%=sslHost%>" />
+<input type=hidden name="jettySSLPort" value="<%=sslPort%>" />
 <%
                 if (ksPW != null) {
                     if (!ksPW.startsWith("OBF:"))
                         ksPW = JettyXmlConfigurationParser.obfuscate(ksPW);
 %>
-<input type="hidden" name="nofilter_obfKeyStorePassword" value="<%=ksPW%>" />
+<input type=hidden name="nofilter_obfKeyStorePassword" value="<%=ksPW%>" />
 <%
                 }
 %>
@@ -794,12 +794,12 @@
                 if (isEnabled && !isPWDefault) {
 %>
 <tr><td class="buttons" colspan="4">
-<button id="controlSave" class="control" type="submit" name="action" value="Disable"><%=intl._t("Disable SSL")%></button></td></tr>
+<button id="controlSave" class="control" type=submit name="action" value="Disable"><%=intl._t("Disable SSL")%></button></td></tr>
 <%
                 } else if (!isPWDefault) {
 %>
 <tr><td class="buttons" colspan="4">
-<button id="controlSave" class="control" type="submit" name="action" value="Enable"><%=intl._t("Enable SSL")%></button></td></tr>
+<button id="controlSave" class="control" type=submit name="action" value="Enable"><%=intl._t("Enable SSL")%></button></td></tr>
 <%
                 } else {
 %>
@@ -808,11 +808,11 @@
 <%
                     if (isEnabled) {
 %>
-<button id="controlSave" class="control" type="submit" name="action" value="Generate"><%=intl._t("Generate new SSL certificate")%></button>
+<button id="controlSave" class="control" type=submit name="action" value="Generate"><%=intl._t("Generate new SSL certificate")%></button>
 <%
                     } else {
 %>
-<button id="controlSave" class="control" type="submit" name="action" value="Generate"><%=intl._t("Generate SSL certificate and enable")%></button>
+<button id="controlSave" class="control" type=submit name="action" value="Generate"><%=intl._t("Generate SSL certificate and enable")%></button>
 <%
                     }
                 }

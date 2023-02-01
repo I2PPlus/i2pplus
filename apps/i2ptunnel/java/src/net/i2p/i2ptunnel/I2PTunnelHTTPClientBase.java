@@ -771,7 +771,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 if (!hasI2PTunnel) {
                     // there are also a couple in auth-header.ht that aren't worth stripping, for auth only
                     DataHelper.replace(out,
-                                       "<span class=\"script\">_(\"You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool " +
+                                       "<span class=script>_(\"You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool " +
                                        "you have defined {2}here{3} (if you have more than one configured).\", \"<a href=\\\"javascript:parent.window.location.reload()\\\">\", " +
                                        "\"</a>\", \"<a href=\\\"http://127.0.0.1:7657/i2ptunnel/index.jsp\\\">\", \"</a>\")</span>",
                                        "");
@@ -1137,7 +1137,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         //   .append(new Date().toString())
         //   .append("</i></div>\n</body>\n</html>\n");
         //return buf.toString();
-        return "<style type=\"text/css\">body{display:block!important;pointer-events:auto!important}</style>\n</body>\n</html>\n";
+        return "<style type=text/css>body{display:block!important;pointer-events:auto!important}</style>\n</body>\n</html>\n";
     }
 
     /**

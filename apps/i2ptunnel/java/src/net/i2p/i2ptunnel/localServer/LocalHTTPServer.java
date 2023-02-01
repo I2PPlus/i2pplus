@@ -91,7 +91,7 @@ public abstract class LocalHTTPServer {
          "\r\n";
 
     private final static String headerLinks =
-        "<link href=\"http://proxy.i2p/themes/console/default/proxy.css\" rel=\"stylesheet\" type=\"text/css\">\n" +
+        "<link href=\"http://proxy.i2p/themes/console/default/proxy.css\" rel=stylesheet type=text/css>\n" +
         "<link rel=\"icon\" href=\"http://proxy.i2p/themes/console/default/images/favicon.svg\">\n";
 
     private final static String logo =

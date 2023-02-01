@@ -452,12 +452,12 @@ public class IndexBean {
         if (tun != null && tun.getListenPort() != null) {
             String port = tun.getListenPort();
             if (port.length() == 0)
-                return "<font color=\"red\">" + _t("Port not set") + "</font>";
+                return "<font color=red>" + _t("Port not set") + "</font>";
             int iport = Addresses.getPort(port);
             if (iport == 0)
-                return "<font color=\"red\">" + _t("Invalid port") + ' ' + port + "</font>";
+                return "<font color=red>" + _t("Invalid port") + ' ' + port + "</font>";
             if (iport < 1024)
-                return "<font color=\"red\" title=\"" +
+                return "<font color=red title=\"" +
                        _t("Warning - ports less than 1024 are not recommended") +
                        "\">" + port + "</font>";
             // dup check, O(n**2)
@@ -474,7 +474,7 @@ public class IndexBean {
                         "0.0.0.0".equals(ifc2) ||
                         "0:0:0:0:0:0:0:0".equals(ifc) ||
                         "0:0:0:0:0:0:0:0".equals(ifc2)) {
-                        return "<font color=\"red\">" +
+                        return "<font color=red>" +
                                _t("Warning - duplicate port") +
                                ": " + port + "</font>";
                     }
@@ -482,7 +482,7 @@ public class IndexBean {
             }
             return port;
         }
-        return "<font color=\"red\">" + _t("Port not set") + "</font>";
+        return "<font color=red>" + _t("Port not set") + "</font>";
     }
 
     public String getTunnelType(int tunnel) {
@@ -562,15 +562,15 @@ public class IndexBean {
                 host = tun.getTargetHost();
             String port = tun.getTargetPort();
             if (host == null || host.length() == 0)
-                host = "<font color=\"red\">" + _t("Host not set") + "</font>";
+                host = "<font color=red>" + _t("Host not set") + "</font>";
             else if (Addresses.getIP(host) == null)
-                host = "<font color=\"red\">" + _t("Invalid address") + ' ' + host + "</font>";
+                host = "<font color=red>" + _t("Invalid address") + ' ' + host + "</font>";
             else if (host.indexOf(':') >= 0)
                 host = '[' + host + ']';
             if (port == null || port.length() == 0)
-                port = "<font color=\"red\">" + _t("Port not set") + "</font>";
+                port = "<font color=red>" + _t("Port not set") + "</font>";
             else if (Addresses.getPort(port) == 0)
-                port = "<font color=\"red\">" + _t("Invalid port") + ' ' + port + "</font>";
+                port = "<font color=red>" + _t("Invalid port") + ' ' + port + "</font>";
             return host + ':' + port;
        }  else
             return "";
