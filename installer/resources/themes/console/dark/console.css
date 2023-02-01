@@ -525,7 +525,7 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 #jobs .jobqueue:first-of-type{padding-bottom:4px}
 
 /* routerid */
-.routerid,.tunnel_local,#tunnels .tunnel_cap,.version,#netdbtiers a{border:1px solid #030}
+.routerid,.tunnel_local,#tunnels .tunnel_cap,.version,#netdbtiers a,.routerHash{border:1px solid #030}
 .buckets br + br{line-height:5px}
 .Lease .flag{padding:2px 4px 2px 2px}
 .leaseNumber + .tunnel_peer .routerid{margin-right:-2px}
@@ -1040,10 +1040,15 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 
 /* transit summary */
 #tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
+#tunnels #transitSummary td{padding:3px 6px}
 #tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}
 #tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
 #tunnels #transitSummary tbody td {animation:highlight .1s ease 0s both}
+#tunnels #transitSummary .routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
+#tunnels #transitSummary .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;box-shadow:0 0 0 1px #131;background:#151}
+#tunnels #transitSummary .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:""}
+#tunnels #transitSummary .peerFlag img{margin:0;padding:1px;width:100%;height:100%;object-fit:cover;box-shadow:var(--highlight)}
 
 /* netdb */
 #netdb #netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}
@@ -1124,7 +1129,7 @@ th > img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bo
 .familysearch img{margin-right:0;margin-left:0}
 .netdb_header .configpeer,.netdb_header .configpeer{margin-right:5px}
 .viewprofile + .viewfullentry,.viewfullentry + .configpeer,.viewprofile + .configpeer{margin-left:-7px}
-.version,#netdbtiers a{margin:0;padding:1px 5px;display:inline-block;text-align:center;font-weight:700;box-shadow:var(--outline);background:var(--badge)}
+.version,#netdbtiers a,.routerHash{margin:0;padding:1px 5px;display:inline-block;text-align:center;font-weight:700;box-shadow:var(--outline);background:var(--badge)}
 .version{display:inline-block;line-height:1.4}
 .netdbentry .version{padding:3px 8px}
 .version:empty{display:none}
