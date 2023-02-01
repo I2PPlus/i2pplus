@@ -98,7 +98,7 @@ public class StatSummarizer implements Runnable, ClientApp {
             String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
             String[] rates = DataHelper.split(spec, ",");
 //            syncThreads = Math.min(rates.length / 2, 4);
-            syncThreads = Math.min(rates.length, SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 8));
+            syncThreads = Math.min(rates.length, SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 6));
             // delete files for unconfigured rates
             Set<String> configured = new HashSet<String>(rates.length);
             for (String r : rates) {
@@ -315,7 +315,7 @@ public class StatSummarizer implements Runnable, ClientApp {
                 //  at java.lang.Class.forName(Class.java:270)
                 //  at sun.font.FontManagerFactory$1.run(FontManagerFactory.java:82)
                 setDisabled();
-                String s = "Error rendering - disabling graph generation. Install fonts-dejavu font package?";
+                String s = "Error rendering - disabling graph generation. Install fonts-open-sans font package?";
                 _log.logAlways(Log.WARN, s);
                 IOException ioe = new IOException(s);
                 ioe.initCause(ncdfe);
@@ -405,7 +405,7 @@ public class StatSummarizer implements Runnable, ClientApp {
                 //  at java.lang.Class.forName(Class.java:270)
                 //  at sun.font.FontManagerFactory$1.run(FontManagerFactory.java:82)
                 setDisabled();
-                String s = "Error rendering - disabling graph generation. Install fonts-dejavu font package?";
+                String s = "Error rendering - disabling graph generation. Install fonts-open-sans font package?";
                 _log.logAlways(Log.WARN, s);
                 IOException ioe = new IOException(s);
                 ioe.initCause(ncdfe);
