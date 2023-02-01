@@ -61,13 +61,13 @@
 <div id="messages">${subs.messages}</div>
 <form method="POST" action="subscriptions#navi">
 <div id="content">
-<input type="hidden" name="serial" value="${subs.serial}" >
+<input type=hidden name="serial" value="${subs.serial}" >
 <textarea name="content" rows="10" cols="80">${subs.content}</textarea>
 </div>
 <div id="buttons">
-<input class="update" style="float: left;" type="submit" name="action" value="<%=intl._t("Update")%>" >
-<!--<input class="reload" type="submit" name="action" value="<%=intl._t("Reload")%>" >-->
-<input class="accept" type="submit" name="action" value="<%=intl._t("Save")%>" >
+<input class="update" style="float: left;" type=submit name="action" value="<%=intl._t("Update")%>" >
+<!--<input class="reload" type=submit name="action" value="<%=intl._t("Reload")%>" >-->
+<input class="accept" type=submit name="action" value="<%=intl._t("Save")%>" >
 </div>
 </form>
 <div class="help" id="helpsubs">

@@ -85,10 +85,10 @@
                 if (showNotes) {
 %>
 <form method="POST" action="details">
-<input type="hidden" name="book" value="${book.book}">
-<input type="hidden" name="serial" value="<%=nonce%>">
-<input type="hidden" name="h" value="<%=detail%>">
-<input type="hidden" name="destination" value="<%=addr.getDestination()%>">
+<input type=hidden name="book" value="${book.book}">
+<input type=hidden name="serial" value="<%=nonce%>">
+<input type=hidden name="h" value="<%=detail%>">
+<input type=hidden name="destination" value="<%=addr.getDestination()%>">
 <%
                 }  // showNotes
 %>
@@ -148,7 +148,7 @@
 <tr class="list${book.trClass}" id="hostNotes">
 <td><%=intl._t("Notes")%></td>
 <td><textarea name="nofilter_notes" rows="3" style="height:6em" cols="70" placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
-<input class="accept" type="submit" name="action" value="<%=intl._t("Save Notes")%>"></td>
+<input class="accept" type=submit name="action" value="<%=intl._t("Save Notes")%>"></td>
 </tr>
 <%
                 }  // showNotes
@@ -164,13 +164,13 @@
 <div id="buttons">
 <form method="POST" action="addressbook">
 <p class="buttons">
-<input type="hidden" name="book" value="${book.book}">
-<input type="hidden" name="serial" value="<%=nonce%>">
-<input type="hidden" name="begin" value="0">
-<input type="hidden" name="end" value="99">
-<input type="hidden" name="checked" value="<%=detail%>">
-<input type="hidden" name="destination" value="<%=addr.getDestination()%>">
-<input class="delete" type="submit" name="action" value="<%=intl._t("Delete Entry")%>" >
+<input type=hidden name="book" value="${book.book}">
+<input type=hidden name="serial" value="<%=nonce%>">
+<input type=hidden name="begin" value="0">
+<input type=hidden name="end" value="99">
+<input type=hidden name="checked" value="<%=detail%>">
+<input type=hidden name="destination" value="<%=addr.getDestination()%>">
+<input class="delete" type=submit name="action" value="<%=intl._t("Delete Entry")%>" >
 </p>
 </form>
 </div><%-- buttons --%>

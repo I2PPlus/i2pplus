@@ -56,8 +56,8 @@
 <head>
 <meta charset=utf-8>
 <title>${book.book} <%=intl._t("address book")%> - susidns</title>
-<link rel="preload" href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
-<link rel="preload" href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
+<link rel=preload href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
+<link rel=preload href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
@@ -91,23 +91,23 @@
 <form action="export" id="exportlist" method="GET" target="_blank" hidden></form>
 <div class="headline" id="addressbook">
 <h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>${book.loadBookMessages}<c:if test="${book.isEmpty}">&nbsp;<span class="results">(<%=intl._t("No entries")%>)</span></c:if>
-<c:if test="${book.isEmpty}"><span id="export"><input form="exportlist" type="submit" class="export" id="exporthosts" <c:if test="${book.isEmpty}">disabled</c:if>></span></c:if>
+<c:if test="${book.isEmpty}"><span id="export"><input form="exportlist" type=submit class="export" id="exporthosts" <c:if test="${book.isEmpty}">disabled</c:if>></span></c:if>
 <c:if test="${book.notEmpty}">
 <%
     if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */
 %>
 <span id="export">
-<input form="exportlist" type="hidden" name="book" value="${book.book}">
-<c:if test="${book.search} != null && ${book.search}.length() > 0"><input form="exportlist" type="hidden" name="search" value="${book.search}"></c:if>
-<c:if test="${book.hasFilter}"><input form="exportlist" type="hidden" name="filter" value="${book.filter}"></c:if>
+<input form="exportlist" type=hidden name="book" value="${book.book}">
+<c:if test="${book.search} != null && ${book.search}.length() > 0"><input form="exportlist" type=hidden name="search" value="${book.search}"></c:if>
+<c:if test="${book.hasFilter}"><input form="exportlist" type=hidden name="filter" value="${book.filter}"></c:if>
 <%
         if (book.isHasFilter() || book.getSearch() != null) {
 %>
-<input form="exportlist" type="submit" class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export results in hosts.txt format")%>">
+<input form="exportlist" type=submit class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export results in hosts.txt format")%>">
 <%
         } else {
 %>
-<input form="exportlist" type="submit" class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export book in hosts.txt format")%>">
+<input form="exportlist" type=submit class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export book in hosts.txt format")%>">
 <%
         }
 %>
@@ -115,7 +115,7 @@
 <%
     } else { /* book.getEntries().length() > 0 */
 %>
-<span id="export"><input form="exportlist" type="submit" class="export" id="exporthosts" disabled></span>
+<span id="export"><input form="exportlist" type=submit class="export" id="exporthosts" disabled></span>
 <%
     }
 %>
@@ -133,23 +133,23 @@
 </div>
 <div id="search">
 <form method="GET" action="addressbook?book=${book.book}">
-<input id="bookname" type="hidden" name="book" value="${book.book}">
-<input type="hidden" name="begin" value="0">
-<input type="hidden" name="end" value="99">
-<input type="hidden" name="filter" value="${book.filter}">
+<input id="bookname" type=hidden name="book" value="${book.book}">
+<input type=hidden name="begin" value="0">
+<input type=hidden name="end" value="99">
+<input type=hidden name="filter" value="${book.filter}">
 <div id="booksearch">
 <%
     if (book.getSearch() == null) {
 %>
-<input class="search" type="text" name="search" value="" size="20">
+<input class="search" type=text name="search" value="" size="20">
 <%
     } else {
 %>
-<input class="search" type="text" name="search" value="${book.search}" size="20">
+<input class="search" type=text name="search" value="${book.search}" size="20">
 <%
     }
 %>
-<input class="search" type="submit" name="submitsearch" value="<%=intl._t("Search")%>">
+<input class="search" type=submit name="submitsearch" value="<%=intl._t("Search")%>">
 </div>
 </form>
 </div>
@@ -392,11 +392,11 @@
 %>
 <c:if test="${book.notEmpty}">
 <form method="POST" action="addressbook">
-<input type="hidden" name="book" value="${book.book}">
-<input type="hidden" name="serial" value="<%=susiNonce%>">
-<input type="hidden" name="begin" value="0">
-<input type="hidden" name="end" value="99">
-<input type="hidden" name="action" value="<%=intl._t("Delete Selected")%>">
+<input type=hidden name="book" value="${book.book}">
+<input type=hidden name="serial" value="<%=susiNonce%>">
+<input type=hidden name="begin" value="0">
+<input type=hidden name="end" value="99">
+<input type=hidden name="action" value="<%=intl._t("Delete Selected")%>">
 <div id="book">
 <table class="book" id="host_list" cellspacing="0" cellpadding="5">
 <tr class="head">
@@ -427,7 +427,7 @@
 <td class="b32link"><span class="addrhlpr"><a href="http://${addr.b32}/" target="_blank" rel="noreferrer" title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
 <td class="helper"><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target="_blank" rel="noreferrer" title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
 <td class="destinations"><div class="destaddress resetScrollLeft" name="dest_${addr.name}" width="200px" tabindex="0">${addr.destination}</div></td>
-<c:if test="${book.validBook}"><td class="checkbox"><input type="checkbox" class="optbox" name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td></c:if>
+<c:if test="${book.validBook}"><td class="checkbox"><input type=checkbox class=optbox name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td></c:if>
 </tr>
 </c:forEach>
 <%
@@ -441,8 +441,8 @@
 <c:if test="${book.validBook}">
 <div id="buttons">
 <p class="buttons">
-<input class="cancel" type="reset" value="<%=intl._t("Cancel")%>">
-<input class="delete" type="submit" name="action" value="<%=intl._t("Delete Selected")%>">
+<input class="cancel" type=reset value="<%=intl._t("Cancel")%>">
+<input class="delete" type=submit name="action" value="<%=intl._t("Delete Selected")%>">
 </p>
 </div>
 </c:if>
@@ -456,29 +456,29 @@
 %>
 <c:if test="${book.isEmpty}"></h3></div><div id="empty"></div></c:if>
 <form method="POST" action="addressbook?book=${book.book}">
-<input type="hidden" name="book" value="${book.book}">
-<input type="hidden" name="serial" value="<%=susiNonce%>">
-<input type="hidden" name="begin" value="0">
-<input type="hidden" name="end" value="99">
+<input type=hidden name="book" value="${book.book}">
+<input type=hidden name="serial" value="<%=susiNonce%>">
+<input type=hidden name="begin" value="0">
+<input type=hidden name="end" value="99">
 <div id="add">
 <h3><%=intl._t("Add new destination")%></h3>
 <table>
-<tr><td><b><%=intl._t("Hostname")%></b></td><td><input type="text" name="hostname" value="${book.hostname}" size="30" required placeholder="<%=intl._t("e.g. newdomain.i2p")%>"></td></tr>
-<tr><td><b><%=intl._t("B64 or B32")%></b></td><td><input type="text" name="destination" value="${book.destination}" size="50" required placeholder="<%=intl._t("Full destination or b32 address")%>"></td></tr>
+<tr><td><b><%=intl._t("Hostname")%></b></td><td><input type=text name="hostname" value="${book.hostname}" size="30" required placeholder="<%=intl._t("e.g. newdomain.i2p")%>"></td></tr>
+<tr><td><b><%=intl._t("B64 or B32")%></b></td><td><input type=text name="destination" value="${book.destination}" size="50" required placeholder="<%=intl._t("Full destination or b32 address")%>"></td></tr>
 </table>
 <p class="buttons">
-<input class="cancel" type="reset" value="<%=intl._t("Cancel")%>">
+<input class="cancel" type=reset value="<%=intl._t("Cancel")%>">
 <c:if test="${book.notEmpty}">
-<input class="accept scrollToNav" type="submit" name="action" value="<%=intl._t("Replace")%>">
+<input class="accept scrollToNav" type=submit name="action" value="<%=intl._t("Replace")%>">
 <%
     if (!book.getBook().equals("published")) {
 %>
-<input class="add scrollToNav" type="submit" name="action" value="<%=intl._t("Add Alternate")%>">
+<input class="add scrollToNav" type=submit name="action" value="<%=intl._t("Add Alternate")%>">
 <%
     }
 %>
 </c:if><% /* book.notEmpty */ %>
-<input class="add scrollToNav" type="submit" name="action" value="<%=intl._t("Add")%>">
+<input class="add scrollToNav" type=submit name="action" value="<%=intl._t("Add")%>">
 </p>
 </div>
 </form>
@@ -486,16 +486,16 @@
     if (!book.getBook().equals("published")) {
 %>
 <form method="POST" action="addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset=utf-8>
-<input type="hidden" name="book" value="${book.book}">
-<input type="hidden" name="serial" value="<%=susiNonce%>">
-<input type="hidden" name="begin" value="0">
-<input type="hidden" name="end" value="99">
+<input type=hidden name="book" value="${book.book}">
+<input type=hidden name="serial" value="<%=susiNonce%>">
+<input type=hidden name="begin" value="0">
+<input type=hidden name="end" value="99">
 <div id="import">
 <h3><%=intl._t("Import from hosts.txt file")%></h3>
 <table><tr><td><b><%=intl._t("Select file")%></b></td><td><input name="file" type="file" accept=".txt" value=""></td></tr></table>
 <p class="buttons">
-<input class="cancel" type="reset" value="<%=intl._t("Cancel")%>">
-<input class="download scrollToNav" type="submit" name="action" value="<%=intl._t("Import")%>">
+<input class="cancel" type=reset value="<%=intl._t("Cancel")%>">
+<input class="download scrollToNav" type=submit name="action" value="<%=intl._t("Import")%>">
 </p>
 </div>
 </form>

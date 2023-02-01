@@ -189,7 +189,7 @@ public class AddressBean
 	public String getSource() {
 		String rv = getProp("s");
                 if (rv.startsWith("http://"))
-                    rv = "<a href=\"" + rv + "\" target=\"_top\">" + rv + "</a>";
+                    rv = "<a href=\"" + rv + "\" target=_top>" + rv + "</a>";
 		return rv;
 	}
 

@@ -33,7 +33,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<link rel="preload" href="images/how.svg" as="object">
+<link rel=preload href="images/how.svg" as="object">
 <meta charset=utf-8>
 <title><%=intl._t("Introduction")%> - SusiDNS</title>
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
