@@ -93,6 +93,7 @@ if (dd == null || dd.equals("0")) {
 
     out.print("<h2>Client Session Key Managers</h2>");
     java.util.Set<net.i2p.data.Destination> clients = ctx.clientManager().listClients();
+    java.util.Set<net.i2p.crypto.SessionKeyManager> skms = new java.util.HashSet<net.i2p.crypto.SessionKeyManager>(clients.size());
     int i = 0;
     for (net.i2p.data.Destination dest : clients) {
         net.i2p.data.Hash h = dest.calculateHash();
@@ -110,7 +111,10 @@ if (dd == null || dd.equals("0")) {
                 out.print("<span id=\"skm_dest\">" + dest.toBase32() + "</span>");
             }
             out.print("</h2>\n");
-            skm.renderStatusHTML(out);
+            if (skms.add(skm))
+                skm.renderStatusHTML(out);
+            else
+                out.print("<p>See Session Key Manager for alternate destination above</p>");
             out.print("</div>\n");
         }
     }
