@@ -35,6 +35,8 @@
 %>
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
 <script nonce="<%=cspNonce%>" type=text/javascript>
+  var main = document.getElementById("tunnels");
+  var tunnels = document.getElementById("tunnels_part");
   var tunnels = document.getElementById("tunnels_part");
   var refresh = document.getElementById("refreshPage");
   var xhrtunnels = new XMLHttpRequest();
@@ -51,9 +53,12 @@
     xhrtunnels.onreadystatechange = function () {
       if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
         var tunnelsResponse = xhrtunnels.responseXML.getElementById("tunnels_part");
+        var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
         if (tunnels && tunnelsResponse && tunnels !== tunnelsResponse) {
           tunnels.innerHTML = tunnelsResponse.innerHTML;
           sorter.refresh();
+        } else if (!tunnels) {
+          main.innerHTML = mainResponse.innerHTML;
         }
       }
     }
