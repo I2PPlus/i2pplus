@@ -708,6 +708,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                            " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append("\">");
             }
             buf.append("</span>");
+        } else {
+            buf.append("<span class=peerFlag><span class=cc hidden>A0</span>" +
+                       "<img class=unknownflag width=24 height=16 alt=\"??\"" +
+                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append("\"></span>");
         }
         return buf.toString();
     }
