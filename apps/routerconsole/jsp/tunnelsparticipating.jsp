@@ -25,7 +25,8 @@
 <div class="main" id="tunnels">
 <div class="confignav">
 <span class="tab" title="Locally hosted tunnels (exploratory and client)"><a href="/tunnels">Local</a></span>
-<span class="tab2">Participating</span>
+<span class="tab2"><%=intl._t("Transit")%></span>
+<span class="tab" title="Top 50 transit tunnel peers"><a href="/tunnelsparticipatingsummary"><%=intl._t("Transit Count by Peer")%></a></span>
 <span class="tab"><a href="/tunnelpeercount">Tunnel Count by Peer</a></span>
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelParticipatingHelper" id="tunnelParticipatingHelper" scope="request" />
