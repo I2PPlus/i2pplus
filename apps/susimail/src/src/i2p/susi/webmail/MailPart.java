@@ -522,7 +522,7 @@ class MailPart {
 
 /****
 	public static void main(String[] args) {
-		String test = "Content-Type: multipart/alternative; boundary=\"__________MIMEboundary__________\"; charset=\"UTF-8\"";
+		String test = "Content-Type: multipart/alternative; boundary=\"__________MIMEboundary__________\"; charset=utf-8";
 		System.out.println(test);
 		String hlc = test.toLowerCase(Locale.US);
 		if (hlc.startsWith( "content-type: ")) {
