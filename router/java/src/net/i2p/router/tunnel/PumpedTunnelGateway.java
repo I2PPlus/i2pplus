@@ -151,10 +151,14 @@ class PumpedTunnelGateway extends TunnelGateway {
         if (backlogged) {
             max = _isInbound ? 1 : 2;
         } else if (highLoad) {
-            max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP / 2) :
-                               _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP / 2);
-            if (_log.shouldInfo()) {
-                _log.info("Router is under high CPU load, halving maximum PumpedTunnelGateway inbound/outbound queues");
+            max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP / 5 * 3) :
+                               _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP / 5 * 3);
+
+            if (_context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP) == null && _log.shouldWarn()) {
+                _log.warn("Router JVM is under sustained high CPU load, reducing queues..." +
+                          "\n* Max messages per pump (default/now): " +
+                          "Inbound -> " + MAX_IB_MSGS_PER_PUMP + "/" + MAX_IB_MSGS_PER_PUMP / 5 * 3 + "; " +
+                          "Outbound -> " + MAX_OB_MSGS_PER_PUMP + "/" + MAX_OB_MSGS_PER_PUMP / 5 * 3);
             }
         } else {
             max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) :
