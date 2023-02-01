@@ -814,6 +814,8 @@ public class SummaryHelper extends HelperBase {
            .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
            .append("\">")
            .append(_t("Service Tunnels"))
+           .append(" <span id=\"tunnelCount\" class=\"badge\" hidden title=\"").append(_t("How many local service tunnels we're running"))
+           .append("\">").append("</span>")
            .append("</a>");
         buf.append("<input type=\"checkbox\" id=\"toggle_sb_localtunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {

@@ -94,10 +94,12 @@ function refreshSidebar() {
           sectionToggler();
 
           var b;
-          for (b = 0; b < badges.length; b += 1) {
+          for (b = 0; b < badges.length; b++) {
             if (badges !== null && badgesResponse !== null) {
-              if (badgesResponse[b] !== null && badges[b] !== badgesReponse[b]) {
-                    badges[b].innerHTML = badgesResponse[b].innerHTML;
+              if (badges.length !== badgesResponse.length) {
+                refreshAll();
+              } else if (badgesResponse !== null && badges[b] !== badgesResponse[b]) {
+                badges[b].innerHTML = badgesResponse[b].innerHTML;
               }
             }
           }

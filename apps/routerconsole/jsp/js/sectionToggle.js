@@ -406,14 +406,14 @@ function sectionToggler() {
   }
 
   function show_localtunnels() {
+    if (localtunnelSummary !== null) {
+      localtunnelSummary.hidden = true;
+    }
     if (sb_localtunnels !== null) {
       sb_localtunnels.hidden = null;
-      if (localtunnelSummary !== null) {
-        localtunnelSummary.hidden = true;
-      }
-      document.getElementById("toggle_sb_localtunnels").checked = true;
-      localStorage.removeItem("section_localtunnels");
     }
+    document.getElementById("toggle_sb_localtunnels").checked = true;
+    localStorage.removeItem("section_localtunnels");
   }
 
   function checkToggleStatus() {
@@ -452,21 +452,21 @@ function sectionToggler() {
 }
 
 function countTunnels() {
+  var tunnMan = document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]");
   var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
   var tunnelCount = document.querySelectorAll("img[src*=\"images/local_\"]");
-  var tunnMan = document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]");
+  var tunnelsBadge = document.getElementById("tunnelCount");
+
   if (tunnelCount !== null) {
     var tunnelCountLength = tunnelCount.length;
-    if (tunnMan !== null && tunnMan.innerHTML.indexOf(tunnelCountLength) === -1) {
+    if (tunnMan) {
       if (tunnelCountLength !== null && tunnelCountLength > 0) {
-        var displayCount = " <span id=\"tunnelCount\">" + tunnelCountLength + "</span>";
-        tunnMan.innerHTML += displayCount;
-        var badgeCount = document.getElementById("tunnelCount").innerHTML;
-        var tunnelsBadge = document.getElementById("tunnelCount");
-        if (badgeCount !== tunnelCountLength) {
-          badgeCount = tunnelCountLength;
-          tunnelsBadge.outerHTML = displayCount;
+        tunnelsBadge.hidden = null;
+        if (tunnelsBadge.innerHTML !== tunnelCountLength) {
+          tunnelsBadge.innerHTML = tunnelCountLength;
         }
+      } else {
+        tunnelsBadge.hidden = true;
       }
       if (doubleCount) {
         doubleCount.remove();
@@ -478,19 +478,15 @@ function countTunnels() {
 function countNewsItems() {
   if (document.getElementById("sb_newsheadings") !== null) {
     var doubleCount = document.querySelector("#newsCount + #newsCount");
-    var newsH3 = document.querySelector("#sidebar h3 a[href=\"/news\"]");
+    var newsBadge = document.getElementById("newsCount");
     var newsItemsLength = document.querySelectorAll("#sb_newsheadings table tr").length;
-    if (newsH3.innerHTML.indexOf(newsItemsLength) === -1) {
-      if (newsItemsLength > 0) {
-        var displayCount = " <span id=\"newsCount\">" + newsItemsLength + "</span>";
-        newsH3.innerHTML += displayCount;
-        var newsBadge = document.getElementById("newsCount");
-        var newsCount = document.getElementById("newsCount").innerHTML;
-        if (newsCount !== newsItemsLength) {
-          newsCount = newsItemsLength;
-          newsBadge.outerHTML = displayCount;
-        }
+    if (newsItemsLength > 0) {
+      newsBadge.hidden = null;
+      if (newsBadge.innerHTML !== newsItemsLength) {
+        newsBadge.innerHTML = newsItemsLength;
       }
+    } else {
+      newsBadge.hidden = false;
     }
     if (doubleCount) {
       doubleCount.remove();
