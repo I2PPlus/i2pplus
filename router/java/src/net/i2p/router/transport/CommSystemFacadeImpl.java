@@ -8,9 +8,11 @@ package net.i2p.router.transport;
  *
  */
 
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -57,6 +59,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
+
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    public boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
+    }
 
     public CommSystemFacadeImpl(RouterContext context) {
         _context = context;
@@ -454,6 +461,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
+                if (enableReverseLookups())
+                    getCanonicalHostName(ip.toString());
             }
             _context.simpleTimer2().addPeriodicEvent(new Lookup(), 5000, LOOKUP_TIME);
         }
@@ -490,6 +499,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public void queueLookup(byte[] ip) {
         _geoIP.add(ip);
+    }
+
+    /**
+     *  @return reverse dns hostname or ip address if unresolvable
+     *  @since 0.9.58+
+     */
+    public String getCanonicalHostName(String hostName) {
+        try {
+            return InetAddress.getByName(hostName).getCanonicalHostName();
+        } catch(IOException exception) {
+            return hostName;
+        }
     }
 
     /**
@@ -634,19 +655,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             String caps = ri.getCapabilities();
             String v = ri.getVersion();
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-            buf.append("<span class=\"routerid\"><span class=\"flag\">");
+            buf.append("<span class=routerid><span class=flag>");
             if (ri != null && c != null) {
                 String countryName = getCountryName(c);
                 if (countryName.length() > 2)
                     countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-                buf.append("<a href=\"/netdb?c=" + c + "\"><img height=\"12\" width=\"16\" alt=\"")
+                buf.append("<a href=\"/netdb?c=" + c + "\"><img height=12 width=16 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" title=\"");
                 buf.append(countryName).append(" &bullet; ");
                 if (ri != null && ip != null)
                     buf.append(ip);
                 buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a></span> ");
             } else {
-                buf.append("<img class=\"unknownflag\" height=\"12\" width=\"16\" alt=\"??\"" +
+                buf.append("<img class=unknownflag height=12 width=16 alt=\"??\"" +
                            " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append(" &bullet; ");
                 if (ri != null && ip != null)
                     buf.append(ip);
@@ -666,8 +687,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append("</a>");
             buf.append("</tt></span>");
         } else {
-            buf.append("<span class=\"routerid\"><span class=\"flag\">")
-               .append("<img class=\"unknownflag\" height=\"12\" width=\"16\" alt=\"??\"" +
+            buf.append("<span class=routerid><span class=flag>")
+               .append("<img class=unknownflag height=12 width=16 alt=\"??\"" +
                        " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"))
                .append("\"></span><tt>");
            if (h != null)

@@ -8,11 +8,13 @@ package net.i2p.router.web.helpers;
  *
  */
 
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.math.BigInteger;         // debug
+import java.net.InetAddress;
 import java.text.Collator;
 import java.text.DecimalFormat;      // debug
 import java.util.ArrayList;
@@ -39,14 +41,15 @@ import net.i2p.data.LeaseSet2;
 import net.i2p.data.PublicKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.JobImpl;
-import net.i2p.router.RouterContext;
-import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.crypto.FamilyKeyCrypto;
-import net.i2p.router.util.HashDistance;   // debug
+import net.i2p.router.JobImpl;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
-import static net.i2p.router.sybil.Util.biLog2;
+import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.GeoIP;
+import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.util.HashDistance;   // debug
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.WebAppStarter;
@@ -56,14 +59,19 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
+import static net.i2p.router.sybil.Util.biLog2;
 
-import net.i2p.router.peermanager.PeerProfile;
 
 class NetDbRenderer {
     private final RouterContext _context;
 
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
+    }
+
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    public boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
     }
 
     /**
@@ -582,10 +590,10 @@ class NetDbRenderer {
         } else {
             buf.append("<table id=\"leasesetsummary\">\n");
         }
-        buf.append("<tr>\n<th colspan=\"4\">Leaseset Summary&nbsp;<span id=\"leasesetTotal\">[Total: ")
+        buf.append("<tr>\n<th colspan=4>Leaseset Summary&nbsp;<span id=\"leasesetTotal\">[Total: ")
            .append(leases.size()).append("]</span></th>\n</tr>\n");
         if (debug) {
-            buf.append("<tr>\n<td><b>Published (RAP) Leasesets:</b></td>\n<td colspan=\"3\">").append(netdb.getKnownLeaseSets()).append("</td>\n</tr>\n")
+            buf.append("<tr>\n<td><b>Published (RAP) Leasesets:</b></td>\n<td colspan=3>").append(netdb.getKnownLeaseSets()).append("</td>\n</tr>\n")
                .append("<tr>\n<td><b>Mod Data:</b></td>\n<td>").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData())).append("</td>\n")
                .append("<td><b>Last Changed:</b></td>\n<td>").append(new Date(_context.routerKeyGenerator().getLastChanged())).append("</td>\n</tr>\n")
                .append("<tr>\n<td><b>Next Mod Data:</b></td>\n<td>").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData())).append("</td>\n")
@@ -627,17 +635,17 @@ class NetDbRenderer {
                 buf.setLength(0);
               } // for each
               if (debug) {
-                  buf.append("<table id=\"leasesetdebug\"><tr><td><b>Network data (only valid if floodfill):</b></td><td colspan=\"3\">");
+                  buf.append("<table id=\"leasesetdebug\"><tr><td><b>Network data (only valid if floodfill):</b></td><td colspan=3>");
                   //buf.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
                   if (median != null) {
                       double log2 = biLog2(median);
                       buf.append("</td></tr>")
-                         .append("<tr>\n<td><b>").append(_t("Median distance (bits)")).append(":</b></td>\n<td colspan=\"3\">").append(fmt.format(log2)).append("</td>\n</tr>\n");
+                         .append("<tr>\n<td><b>").append(_t("Median distance (bits)")).append(":</b></td>\n<td colspan=3>").append(fmt.format(log2)).append("</td>\n</tr>\n");
                       // 2 for 4 floodfills... -1 for median
                       // this can be way off for unknown reasons
                       int total = (int) Math.round(Math.pow(2, 2 + 256 - 1 - log2));
-                      buf.append("<tr>\n<td><b>").append(_t("Estimated total floodfills")).append(":</b></td>\n<td colspan=\"3\">").append(total).append("</td>\n</tr>\n");
-                      buf.append("<tr>\n<td><b>").append(_t("Estimated total leasesets")).append(":</b></td>\n<td colspan=\"3\">").append(total * rapCount / 4);
+                      buf.append("<tr>\n<td><b>").append(_t("Estimated total floodfills")).append(":</b></td>\n<td colspan=3>").append(total).append("</td>\n</tr>\n");
+                      buf.append("<tr>\n<td><b>").append(_t("Estimated total leasesets")).append(":</b></td>\n<td colspan=3>").append(total * rapCount / 4);
                   } else {
                       buf.append("<i>Not floodfill or no data.</i>");
                   }
@@ -912,17 +920,17 @@ class NetDbRenderer {
             buf.append("</div>"); // close leaseset container
             if (debug && median != null) {
                 buf.append("<table class=\"leaseset\" id=\"leasesetsummary\">");
-                buf.append("<tr>\n<th colspan=\"3\">").append(_t("Network Summary")).append("</th><th></th></tr>\n");
-                buf.append("<tr>\n<td><b>").append(_t("Network Data")).append(":</b></td>\n<td colspan=\"3\">");
+                buf.append("<tr>\n<th colspan=3>").append(_t("Network Summary")).append("</th><th></th></tr>\n");
+                buf.append("<tr>\n<td><b>").append(_t("Network Data")).append(":</b></td>\n<td colspan=3>");
                 //buf.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
                 double log2 = biLog2(median);
                 buf.append("</td>\n</tr>\n")
-                   .append("<tr>\n<td><b>").append(_t("Median distance (bits)")).append(":</b></td>\n<td colspan=\"3\">").append(fmt.format(log2)).append("</td>\n</tr>\n");
+                   .append("<tr>\n<td><b>").append(_t("Median distance (bits)")).append(":</b></td>\n<td colspan=3>").append(fmt.format(log2)).append("</td>\n</tr>\n");
                 // 2 for 4 floodfills... -1 for median
                 // this can be way off for unknown reasons
                 int total = (int) Math.round(Math.pow(2, 2 + 256 - 1 - log2));
-                buf.append("<tr>\n<td><b>").append(_t("Estimated total floodfills")).append(":</b></td>\n<td colspan=\"3\">").append(total).append("</td>\n</tr>\n");
-                buf.append("<tr>\n<td><b>").append(_t("Estimated total leasesets")).append(":</b></td>\n<td colspan=\"3\">").append(total * rapCount / 4);
+                buf.append("<tr>\n<td><b>").append(_t("Estimated total floodfills")).append(":</b></td>\n<td colspan=3>").append(total).append("</td>\n</tr>\n");
+                buf.append("<tr>\n<td><b>").append(_t("Estimated total leasesets")).append(":</b></td>\n<td colspan=3>").append(total * rapCount / 4);
                 buf.append("</td>\n</tr>\n</table>\n");
             } // median table
         }  // !empty
@@ -1039,7 +1047,7 @@ class NetDbRenderer {
 
         if (!showStats) {
             // the summary table
-            buf.append("<table id=\"netdboverview\" border=\"0\" cellspacing=\"30\" width=\"100%\">\n<tr>\n<th colspan=\"3\">")
+            buf.append("<table id=\"netdboverview\" border=\"0\" cellspacing=\"30\" width=\"100%\">\n<tr>\n<th colspan=3>")
                .append(_t("Network Database Router Statistics"))
                .append("</th></tr>\n<tr>\n<td style=\"vertical-align: top;\">");
             // versions table
@@ -1262,7 +1270,7 @@ class NetDbRenderer {
             .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
             .append("\">").append(DataHelper.stripHTML(info.getVersion())).append("</span></a>");
         if (!isUs) {
-            buf.append("<span class=\"netdb_header\">");
+            buf.append("<span class=netdb_header>");
             if (family != null) {
                 FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
                 buf.append("<a class=\"familysearch");
@@ -1284,41 +1292,50 @@ class NetDbRenderer {
             String country = _context.commSystem().getCountry(info.getIdentity().getHash());
             if (country != null) {
                 buf.append("<a href=\"/netdb?c=").append(country).append("\">");
-                buf.append("<img height=\"12\" width=\"16\" loading=\"lazy\" alt=\"").append(country.toUpperCase(Locale.US)).append('\"');
+                buf.append("<img height=12 width=16 loading=lazy alt=\"").append(country.toUpperCase(Locale.US)).append('\"');
                 buf.append(" title=\"").append(getTranslatedCountry(country)).append('\"');
                 buf.append(" src=\"/flags.jsp?c=").append(country).append("\"> ").append("</a>");
             } else {
-                buf.append("<img height=\"12\" width=\"16\" loading=\"lazy\" alt=\"??\"").append(" title=\"unknown\"").append(" src=\"/flags.jsp?c=a0\">");
+                buf.append("<img height=12 width=16 loading=lazy alt=\"??\"").append(" title=\"unknown\"").append(" src=\"/flags.jsp?c=a0\">");
             }
             buf.append("</span>");
         } else {
             long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60*1000).getAvgOrLifetimeAvg();
             used /= 1024*1024;
-            buf.append("&nbsp;<span id=\"netdb_ram\"><b>").append(_t("Memory usage")).append(":</b> ").append(used).append("M</span>");
+            buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(used).append("M</span>");
         }
         buf.append("</th></tr>\n<tr>\n");
         long age = _context.clock().now() - info.getPublished();
         if (isUs && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>\n")
-               .append("<td><span class=\"netdb_info\">")
+               .append("<td><span class=netdb_info>")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
         } else if (age > 0) {
             buf.append("<td><b>").append(_t("Published")).append(":</b></td>\n")
-               .append("<td><span class=\"netdb_info\">")
+               .append("<td><span class=netdb_info>")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
-        } else {
+            String address = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
+            boolean isUnreachable = caps.contains("U") || caps.contains("H");
+            if (enableReverseLookups() && !isUnreachable && address != null) {
+                String rdns = getCanonicalHostName(address);
+                if (!rdns.equals(address)) {
+                    buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(":</b> <span class=rdns>")
+                       .append(rdns).append("</span></span>&nbsp;&nbsp;");
+                }
+            }
+         } else {
             // shouldn't happen
             buf.append("<td><b>").append(_t("Published")).append("</td>\n<td>:</b> in ")
-               .append(DataHelper.formatDuration2(0-age)).append("<span class=\"netdb_info\">???</span>&nbsp;&nbsp;");
+               .append(DataHelper.formatDuration2(0-age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
         }
         if (family != null) {
             FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
             buf.append("<span class=\"netdb_family\"><b>").append(_t("Family"))
-               .append(":</b> <span class=\"familyname\">").append(DataHelper.stripHTML(family));
+               .append(":</b> <span class=familyname>").append(DataHelper.stripHTML(family));
             if (fkc != null) {
-               buf.append(" <span class=\"verified\" title=\"")
+               buf.append(" <span class=verified title=\"")
                   .append(_t("Verified family (signing certificate is installed and valid)"))
                   .append("\">[").append(_t("Verified")).append("]</span>");
             }
@@ -1366,12 +1383,12 @@ class NetDbRenderer {
                     String val = (String) e.getValue();
                     // hide keys which are dupes of the router hash displayed in header, and ntcp version
                     if (name.contains("key") || name.contains("itag") || name.contains("iexp") || (name.equals("v") && style.equals("NTCP"))) {
-                        buf.append("<span class=\"hide\"><span class=nowrap><span class=\"netdb_name\">")
+                        buf.append("<span class=hide><span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name)))
-                           .append(":</span> <span class=\"netdb_info\">").append(DataHelper.stripHTML(val)).append("</span></span></span>");
+                           .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span></span>");
                     // tag the hosts and ports so we can make them visually prominent and single clickable
                     } else if (name.contains("host")) {
-                        buf.append("<span class=nowrap><span class=\"netdb_name\">")
+                        buf.append("<span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
                            .append("<span class=\"netdb_info host\">");
                         if (DataHelper.stripHTML(val).equals("::")) {
@@ -1400,7 +1417,7 @@ class NetDbRenderer {
                         }
                         buf.append("</span> ");
                     } else if (name.contains("port")) {
-                        buf.append("<span class=nowrap><span class=\"netdb_name\">")
+                        buf.append("<span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=\"netdb_info port\">").append("<a title=\"")
                            .append(_t("Show all routers with this port in the NetDb")).append("\" ")
@@ -1409,9 +1426,9 @@ class NetDbRenderer {
                            .append(DataHelper.stripHTML(val))
                            .append("</a></span></span> ");
                      } else {
-                        buf.append(" <span class=nowrap><span class=\"netdb_name\">");
+                        buf.append(" <span class=nowrap><span class=netdb_name>");
                         buf.append(_t(DataHelper.stripHTML(name)))
-                           .append(":</span> <span class=\"netdb_info\">").append(DataHelper.stripHTML(val)).append("</span></span> ");
+                           .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span> ");
                      }
                 }
                 if (!isUs) {
@@ -1427,13 +1444,14 @@ class NetDbRenderer {
                 buf.append("<tr>\n<td><b>").append(_t("Stats")).append(":</b><td colspan=2>\n<ul class=\"netdbStats\">");
                 Map<Object, Object> p = info.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
+                    //String name = (String) e.getKey();
                     String key = (String) e.getKey();
                     String netDbKey = DataHelper.stripHTML(key)
                         .replace("caps", "<li class=\"cap_stat hide\" hidden><b>"  + _t("Capabilities")) // hide caps as already in the header
-                        .replace("router.version", "<li class=\"hide\" hidden><b>" + _t("Version")) // hide version as already in the header
-                        .replace("coreVersion", "<li class=\"hide\" hidden><b>"    + _t("Core version")) // do we need this?
+                        .replace("router.version", "<li class=hide hidden><b>" + _t("Version")) // hide version as already in the header
+                        .replace("coreVersion", "<li class=hide hidden><b>"    + _t("Core version")) // do we need this?
                         .replace("netdb.", "")
-                        .replace("netId", "<li class=\"hide\" hidden><b>" + _t("Network ID"))
+                        .replace("netId", "<li class=hide hidden><b>" + _t("Network ID"))
                         .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
                         .replace("knownRouters", "<li><b>" + _t("Routers"))
                         .replace("stat_", "")
@@ -1444,16 +1462,16 @@ class NetDbRenderer {
                         .replace("family", "<li class=\"longstat fam hide\" hidden><b>" + _t("Family"))
                         .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
                         .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
-                        .replace("tunnel.buildExploratoryExpire.60m",  "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels expire (1h)"))
-                        .replace("tunnel.buildExploratoryReject.60m",  "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels reject (1h)"))
-                        .replace("tunnel.buildExploratorySuccess.60m", "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels build success (1h)"))
-                        .replace("tunnel.buildClientExpire.60m",       "<li class=\"longstat \"><b>"  + _t("Client tunnels expire (1h)"))
-                        .replace("tunnel.buildClientReject.60m",       "<li class=\"longstat\"><b>"   + _t("Client tunnels reject (1h)"))
-                        .replace("tunnel.buildClientSuccess.60m",      "<li class=\"longstat\"><b>"   + _t("Client tunnels build success (1h)"))
-                        .replace("tunnel.participatingTunnels.60m",    "<li class=\"longstat\"><b>"   + _t("Participating tunnels (1h)"))
-                        .replace("tunnel.participatingTunnels.60s",    "<li class=\"longstat\"><b>"   + _t("Participating tunnels (60s)"))
-                        .replace("stat_bandwidthSendBps.60m",          "<li class=\"longstat\"><b>"   + _t("Bandwidth send rate (1h)"))
-                        .replace("stat_bandwidthReceiveBps.60m",       "<li class=\"longstat\"><b>"   + _t("Bandwidth receive rate (1h)"));
+                        .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels expire (1h)"))
+                        .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels reject (1h)"))
+                        .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>"   + _t("Exploratory tunnels build success (1h)"))
+                        .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>"  + _t("Client tunnels expire (1h)"))
+                        .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>"   + _t("Client tunnels reject (1h)"))
+                        .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>"   + _t("Client tunnels build success (1h)"))
+                        .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>"   + _t("Participating tunnels (1h)"))
+                        .replace("tunnel.participatingTunnels.60s",    "<li class=longstat><b>"   + _t("Participating tunnels (60s)"))
+                        .replace("stat_bandwidthSendBps.60m",          "<li class=longstat><b>"   + _t("Bandwidth send rate (1h)"))
+                        .replace("stat_bandwidthReceiveBps.60m",       "<li class=longstat><b>"   + _t("Bandwidth receive rate (1h)"));
                     buf.append(netDbKey);
                     String val = (String) e.getValue();
                     String netDbValue = DataHelper.stripHTML(val)
@@ -1498,14 +1516,14 @@ class NetDbRenderer {
                 buf.append("</ul>\n</td>\n</tr>\n");
             }
         } else if (full) {
-            buf.append("<tr>\n<td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=\"netdbStats\">");
+            buf.append("<tr>\n<td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats>");
             Map<Object, Object> p = info.getOptionsMap();
             for (Map.Entry<Object, Object> e : p.entrySet()) {
                 String key = (String) e.getKey();
                 String netDbKey = DataHelper.stripHTML(key)
                     .replace("caps", "<li class=\"cap_stat hide\" hidden><b>"  + _t("Capabilities")) // hide caps as already in the header
-                    .replace("router.version", "<li class=\"hide\" hidden><b>" + _t("Version")) // hide version as already in the header
-                    .replace("coreVersion", "<li class=\"hide\" hidden><b>"    + _t("Core version")) // do we need this?
+                    .replace("router.version", "<li class=hide hidden><b>" + _t("Version")) // hide version as already in the header
+                    .replace("coreVersion", "<li class=hide hidden><b>"    + _t("Core version")) // do we need this?
                     .replace("netdb.", "")
                     .replace("netId", "<hr><li><b>" + _t("Network ID")) // only show for our own id
                     .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
@@ -1518,16 +1536,16 @@ class NetDbRenderer {
                     .replace("family", "<li class=\"longstat fam hide\" hidden><b>" + _t("Family"))
                     .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
                     .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
-                    .replace("tunnel.buildExploratoryExpire.60m",  "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels expire (1h)"))
-                    .replace("tunnel.buildExploratoryReject.60m",  "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels reject (1h)"))
-                    .replace("tunnel.buildExploratorySuccess.60m", "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels build success (1h)"))
-                    .replace("tunnel.buildClientExpire.60m",       "<li class=\"longstat \"><b>"  + _t("Client tunnels expire (1h)"))
-                    .replace("tunnel.buildClientReject.60m",       "<li class=\"longstat\"><b>"   + _t("Client tunnels reject (1h)"))
-                    .replace("tunnel.buildClientSuccess.60m",      "<li class=\"longstat\"><b>"   + _t("Client tunnels build success (1h)"))
-                    .replace("tunnel.participatingTunnels.60m",    "<li class=\"longstat\"><b>"   + _t("Participating tunnels (1h)"))
-                    .replace("tunnel.participatingTunnels.60s",    "<li class=\"longstat\"><b>"   + _t("Participating tunnels (60s)"))
-                    .replace("stat_bandwidthSendBps.60m",          "<li class=\"longstat\"><b>"   + _t("Bandwidth send rate (1h)"))
-                    .replace("stat_bandwidthReceiveBps.60m",       "<li class=\"longstat\"><b>"   + _t("Bandwidth receive rate (1h)"));
+                    .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels expire (1h)"))
+                    .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels reject (1h)"))
+                    .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>"   + _t("Exploratory tunnels build success (1h)"))
+                    .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>"  + _t("Client tunnels expire (1h)"))
+                    .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>"   + _t("Client tunnels reject (1h)"))
+                    .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>"   + _t("Client tunnels build success (1h)"))
+                    .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>"   + _t("Participating tunnels (1h)"))
+                    .replace("tunnel.participatingTunnels.60s",    "<li class=longstat><b>"   + _t("Participating tunnels (60s)"))
+                    .replace("stat_bandwidthSendBps.60m",          "<li class=longstat><b>"   + _t("Bandwidth send rate (1h)"))
+                    .replace("stat_bandwidthReceiveBps.60m",       "<li class=longstat><b>"   + _t("Bandwidth receive rate (1h)"));
                     buf.append(netDbKey);
                     String val = (String) e.getValue();
                     String netDbValue = DataHelper.stripHTML(val)
@@ -1634,5 +1652,17 @@ class NetDbRenderer {
      */
     private String _t(String s, Object o) {
         return Messages.getString(s, o, _context);
+    }
+
+    /**
+     *  @return reverse dns hostname or ip address if unresolvable
+     *  @since 0.9.58+
+     */
+    public String getCanonicalHostName(String hostName) {
+        try {
+            return InetAddress.getByName(hostName).getCanonicalHostName();
+        } catch(IOException exception) {
+            return hostName;
+        }
     }
 }
