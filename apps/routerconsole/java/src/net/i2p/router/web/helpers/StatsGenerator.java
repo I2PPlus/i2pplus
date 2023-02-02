@@ -153,12 +153,12 @@ public class StatsGenerator {
             Frequency curFreq = freq.getFrequency(periods[i]);
             buf.append(DataHelper.formatDuration2(Math.round(curFreq.getAverageInterval())));
             buf.append(" &bullet; ");
-            buf.append("<span class=\"nowrap\">");
+            buf.append("<span class=nowrap>");
             buf.append(_t("Rolling average events per period"));
             buf.append(": <span class=\"statvalue\">");
             buf.append(num(curFreq.getAverageEventsPerPeriod()));
             buf.append("</span> &bullet; ");
-            buf.append("</span> <span class=\"nowrap\">");
+            buf.append("</span> <span class=nowrap>");
             buf.append(_t("Highest events per period"));
             buf.append(": <span class=\"statvalue\">");
             buf.append(num(curFreq.getMaxAverageEventsPerPeriod()));
@@ -169,7 +169,7 @@ public class StatsGenerator {
             //}
             //buf.append(" <i>avg interval between updates:</i> (").append(num(curFreq.getAverageInterval())).append("ms, min ");
             //buf.append(num(curFreq.getMinAverageInterval())).append("ms)");
-            buf.append("</span></span> <span class=\"bullet\">&bullet;</span> <br></span><span class=\"nowrap\"><span class=\"statvalue\">");
+            buf.append("</span></span> <span class=\"bullet\">&bullet;</span> <br></span><span class=nowrap><span class=\"statvalue\">");
             buf.append(_t("Lifetime average events per period")).append(": ");
             buf.append(num(curFreq.getStrictAverageEventsPerPeriod()));
             buf.append("</span></span></li>\n");
@@ -205,7 +205,7 @@ public class StatsGenerator {
             buf.append("<li>");
             renderPeriod(buf, periods[i], _t("rate"));
             if (curRate.getLastEventCount() > 0) {
-                buf.append("<span class=\"nowrap\">");
+                buf.append("<span class=nowrap>");
                 buf.append(_t("Average")).append(": <span class=\"statvalue\">");
                 buf.append(num(curRate.getAverageValue()));
                     buf.append("</span> &bullet; ");
@@ -226,7 +226,7 @@ public class StatsGenerator {
                 // Saturation stats, which nobody understands, even when it isn't meaningless
                 // Don't bother to translate
                 if (showAll && curRate.getLifetimeTotalEventTime() > 0) {
-                    buf.append(" <br><span class=\"nowrap\">");
+                    buf.append(" <br><span class=nowrap>");
                     buf.append("Saturation: <span class=\"statvalue\">");
                     buf.append(pct(curRate.getLastEventSaturation()));
                     buf.append("</span> &bullet; Saturated limit: <span class=\"statvalue\">");
@@ -243,7 +243,7 @@ public class StatsGenerator {
                 double avgFrequency = curRate.getLifetimeEventCount() / (double)numPeriods;
                 buf.append(" &bullet; ").append(_t("Average event count")).append(": <span class=\"statvalue\">");
                 buf.append(num(avgFrequency));
-                buf.append("</span></span> <br><span class=\"nowrap\">");
+                buf.append("</span></span> <br><span class=nowrap>");
                 buf.append(_t("Events in peak period")).append(": <span class=\"statvalue\">");
                 // This isn't really the highest event count, but the event count during the period with the highest total value.
                 buf.append(curRate.getExtremeEventCount());

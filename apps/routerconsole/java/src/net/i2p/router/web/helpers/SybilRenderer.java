@@ -325,7 +325,7 @@ public class SybilRenderer {
                       "with the option to block peers meeting the configured threshold. " +
                       "Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."))
            .append("</b></p>\n<table id=\"sybilTask\">\n<tr><th>").append(_t("Configure Background Analysis"))
-           .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n<span class=\"nowrap\"><b>").append(_t("Run task every")).append(":</b>\n" +
+           .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n<span class=nowrap><b>").append(_t("Run task every")).append(":</b>\n" +
                    "<select name=\"runFrequency\">\n");
         for (int i = 0; i < HOURS.length; i++) {
             buf.append("<option value=\"");
@@ -346,7 +346,7 @@ public class SybilRenderer {
         String thresh = _context.getProperty(Analysis.PROP_THRESHOLD, Double.toString(Analysis.DEFAULT_BLOCK_THRESHOLD));
         long days = _context.getProperty(Analysis.PROP_BLOCKTIME, Analysis.DEFAULT_BLOCK_TIME) / (24*60*60*1000L);
         buf.append("</select>\n")
-           .append("</span><br>\n<span class=\"nowrap\"><b>")
+           .append("</span><br>\n<span class=nowrap><b>")
            .append(_t("Delete scans older than")).append(":</b>\n<select name=\"deleteAge\">\n");
         long age = _context.getProperty(Analysis.PROP_REMOVETIME, Analysis.DEFAULT_REMOVE_TIME);
         for (int i = 0; i <DAYS.length; i++) {
@@ -363,19 +363,19 @@ public class SybilRenderer {
                 buf.append(_t("Never"));
             buf.append("</option>\n");
         }
-        buf.append("</select>\n</span><br>\n<span class=\"nowrap\"><b>")
+        buf.append("</select>\n</span><br>\n<span class=nowrap><b>")
            .append(_t("Automatic blocking")).append(":</b><label><input type=checkbox class=optbox value=\"1\" name=\"block\" ");
         if (auto)
             buf.append(HelperBase.CHECKED);
         buf.append(">").append(_t("Add detected sybils to banlist")).append("</label>")
-           .append("</span><br>\n<span class=\"nowrap\"><b>")
+           .append("</span><br>\n<span class=nowrap><b>")
            .append(_t("Block all detected sybils")).append(":</b><label><input type=checkbox class=optbox value=\"1\" name=\"nonff\" ");
         if (nonff)
             buf.append(HelperBase.CHECKED);
         buf.append(">").append(_t("Include non-floodfill routers")).append("</label>")
-           .append("</span><br>\n<span class=\"nowrap\"><b>")
+           .append("</span><br>\n<span class=nowrap><b>")
            .append(_t("Minimum threshold for block")).append(":</b><input type=text name=\"threshold\" value=\"")
-           .append(thresh).append("\">").append(_t("threat points")).append("</span><br>\n<span class=\"nowrap\"><b>")
+           .append(thresh).append("\">").append(_t("threat points")).append("</span><br>\n<span class=nowrap><b>")
            .append(_t("Enforce block for")).append(":</b><input type=text name=\"days\" value=\"")
            .append(days).append("\">").append(_t("days")).append("</span><br>\n</td></tr>\n")
            .append("<tr><td class=\"optionsave\"><input type=submit name=\"action\" class=\"accept\" value=\"Save\" />\n</div>\n</td></tr>\n</table>\n</form>\n");
@@ -1122,7 +1122,7 @@ public class SybilRenderer {
                     name.startsWith("iport") || name.equals("mtu"))
                     continue;
                 String val = (String) e.getValue();
-                buf.append(" <span class=\"nowrap\"><span class=\"netdb_name\">").append(_t(DataHelper.stripHTML(name))).append(":</span> <span class=\"netdb_info\">");
+                buf.append(" <span class=nowrap><span class=\"netdb_name\">").append(_t(DataHelper.stripHTML(name))).append(":</span> <span class=\"netdb_info\">");
                 buf.append(DataHelper.stripHTML(val));
                 buf.append("</span></span>&nbsp;\n");
             }

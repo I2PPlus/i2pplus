@@ -225,8 +225,8 @@ public class InfoHelper extends HelperBase {
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>" + _t("Installed") + ":</b></td><td>" + installDate + " (" + firstVersion() + ")" +
-                       " &ensp;<span class=\"nowrap\"><b>" + _t("Location") + ":</b> " + appDir.toString() + "</span>" +
-                       " &ensp;<span class=\"nowrap\"><b>" + _t("Config Dir") + ":</b> " + configDir + "</span></td></tr>\n");
+                       " &ensp;<span class=nowrap><b>" + _t("Location") + ":</b> " + appDir.toString() + "</span>" +
+                       " &ensp;<span class=nowrap><b>" + _t("Config Dir") + ":</b> " + configDir + "</span></td></tr>\n");
             buf.append("<tr><td><b>" + _t("Updated") + ":</b></td><td>" + lastUpdate);
             if (updatePolicy() != null)
                 buf.append(" &ensp;<b>" + _t("Update Policy") + ":</b> " + updatePolicy());

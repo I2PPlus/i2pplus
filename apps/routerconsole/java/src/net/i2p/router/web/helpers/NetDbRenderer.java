@@ -821,7 +821,7 @@ class NetDbRenderer {
                     }
                     buf.append("</td>\n</tr>\n<tr>\n<td colspan=2><span class=\"ls_crypto\">");
                     //buf.append(dest.toBase32()).append("<br>");
-                    buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+                    buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
                     if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                         buf.append(dest.getSigningPublicKey().getType()).append("</span>");
                     } else {
@@ -829,13 +829,13 @@ class NetDbRenderer {
                         buf.append(ls.getSigningKey().getType()).append("</span>");
                     }
                     if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                        buf.append("<br><span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key"))
+                        buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key"))
                            .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0, 8))
                            .append("&hellip;]</span>");
                     } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                         LeaseSet2 ls2 = (LeaseSet2) ls;
                         for (PublicKey pk : ls2.getEncryptionKeys()) {
-                            buf.append("<br><span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
+                            buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
                             EncType etype = pk.getType();
                             if (etype != null)
                                 buf.append(etype);
@@ -844,12 +844,12 @@ class NetDbRenderer {
                             buf.append(" [").append(pk.toBase64().substring(0, 8)).append("&hellip;]</span>");
                         }
                     }
-                    buf.append("<br><span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Routing Key"))
+                    buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Routing Key"))
                        .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
                        .append("&hellip;</span></td>\n</tr>\n");
                 } else {
                     buf.append("</td>\n</tr>\n<tr>\n<td colspan=2>");
-                    buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+                    buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
                     if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                         buf.append(dest.getSigningPublicKey().getType());
                     } else {
@@ -858,11 +858,11 @@ class NetDbRenderer {
                     }
                     buf.append("</span> ");
                     if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                        buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048</span>");
+                        buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048</span>");
                     } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                         LeaseSet2 ls2 = (LeaseSet2) ls;
                         for (PublicKey pk : ls2.getEncryptionKeys()) {
-                            buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
+                            buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
                             EncType etype = pk.getType();
                             if (etype != null)
                                 buf.append(etype).append("</span> ");
@@ -1366,12 +1366,12 @@ class NetDbRenderer {
                     String val = (String) e.getValue();
                     // hide keys which are dupes of the router hash displayed in header, and ntcp version
                     if (name.contains("key") || name.contains("itag") || name.contains("iexp") || (name.equals("v") && style.equals("NTCP"))) {
-                        buf.append("<span class=\"hide\"><span class=\"nowrap\"><span class=\"netdb_name\">")
+                        buf.append("<span class=\"hide\"><span class=nowrap><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=\"netdb_info\">").append(DataHelper.stripHTML(val)).append("</span></span></span>");
                     // tag the hosts and ports so we can make them visually prominent and single clickable
                     } else if (name.contains("host")) {
-                        buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
+                        buf.append("<span class=nowrap><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
                            .append("<span class=\"netdb_info host\">");
                         if (DataHelper.stripHTML(val).equals("::")) {
@@ -1400,7 +1400,7 @@ class NetDbRenderer {
                         }
                         buf.append("</span> ");
                     } else if (name.contains("port")) {
-                        buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
+                        buf.append("<span class=nowrap><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=\"netdb_info port\">").append("<a title=\"")
                            .append(_t("Show all routers with this port in the NetDb")).append("\" ")
@@ -1409,7 +1409,7 @@ class NetDbRenderer {
                            .append(DataHelper.stripHTML(val))
                            .append("</a></span></span> ");
                      } else {
-                        buf.append(" <span class=\"nowrap\"><span class=\"netdb_name\">");
+                        buf.append(" <span class=nowrap><span class=\"netdb_name\">");
                         buf.append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=\"netdb_info\">").append(DataHelper.stripHTML(val)).append("</span></span> ");
                      }

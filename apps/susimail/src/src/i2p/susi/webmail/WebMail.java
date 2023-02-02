@@ -3152,12 +3152,12 @@ public class WebMail extends HttpServlet
                             "</tr>\n" +
                             "<tr>" +
                             "<td width=\"30%\">" + _t("POP3 Port") + "</td>" +
-                            "<td width=\"40%\"><input type=text style=\"text-align: right;\" size=\"5\" name=\"" + POP3 +"\" value=\"" +
+                            "<td width=\"40%\"><input type=text style=text-align:right size=\"5\" name=\"" + POP3 +"\" value=\"" +
                             quoteHTML(pop3) + "\"" + (fixed ? " disabled" : "") + "></td>" +
                             "</tr>\n" +
                             "<tr>" +
                             "<td width=\"30%\">" + _t("SMTP Port") + "</td>" +
-                            "<td width=\"40%\"><input type=text style=\"text-align: right;\" size=\"5\" name=\"" + SMTP +"\" value=\"" +
+                            "<td width=\"40%\"><input type=text style=text-align:right size=\"5\" name=\"" + SMTP +"\" value=\"" +
                             quoteHTML(smtp) + "\"" + (fixed ? " disabled" : "") + "></td>" +
                             "</tr>\n");
         }

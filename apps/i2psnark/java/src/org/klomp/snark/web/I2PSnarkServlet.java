@@ -4003,7 +4003,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("</a>")
                    .append("</th></tr>\n");
                 buf.append("<tr id=\"torrentInfoStats\">");
-                buf.append("<td colspan=\"3\"><span class=\"nowrap\">");
+                buf.append("<td colspan=\"3\"><span class=nowrap>");
                 toThemeImg(buf, "file");
                 buf.append("<b>")
                    .append(_t("Size"))
@@ -4011,7 +4011,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(formatSize(snark.getTotalLength()));
                 if (storage != null) {
                     int fileCount = storage.getFileCount();
-                    buf.append("</span>&nbsp;<span class=\"nowrap\">");
+                    buf.append("</span>&nbsp;<span class=nowrap>");
                     toThemeImg(buf, "file");
                     buf.append("<b>")
                        .append(_t("Files"))
@@ -4020,7 +4020,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 int pieces = snark.getPieces();
                 double completion = (pieces - snark.getNeeded()) / (double) pieces;
-                buf.append("</span>&nbsp;<span class=\"nowrap\">");
+                buf.append("</span>&nbsp;<span class=nowrap>");
                 toThemeImg(buf, "file");
                 buf.append("<b>")
                    .append(_t("Pieces"))
@@ -4030,7 +4030,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
 
                 // up ratio
-                buf.append("</span>&nbsp;<span class=\"nowrap\">");
+                buf.append("</span>&nbsp;<span class=nowrap>");
                 toThemeImg(buf, "head_tx");
                 buf.append("<b>")
                    .append(_t("Upload ratio").replace("Upload", "Share"))
@@ -4047,7 +4047,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append('0');
                 }
 
-                buf.append("</span>&nbsp;<span id=\"completion\" class=\"nowrap\">");
+                buf.append("</span>&nbsp;<span id=\"completion\" class=nowrap>");
                 toThemeImg(buf, "head_rx");
                 buf.append("<b>");
                 if (completion < 1.0)
@@ -4106,7 +4106,7 @@ public class I2PSnarkServlet extends BasicServlet {
                        needed = snark.getRemainingLength();
                     }
                     if (needed > 0) {
-                       buf.append("&nbsp;<span class=\"nowrap\">");
+                       buf.append("&nbsp;<span class=nowrap>");
                        toThemeImg(buf, "head_rx");
                        buf.append("<b>")
                           .append(_t("Remaining"))
@@ -4116,7 +4116,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                     long skipped = snark.getSkippedLength();
                     if (skipped > 0) {
-                        buf.append("&nbsp;<span class=\"nowrap\">");
+                        buf.append("&nbsp;<span class=nowrap>");
                         toThemeImg(buf, "head_rx");
                         buf.append("<b>").append(_t("Skipped")).append(":</b> ").append(formatSize(skipped)).append("</span");
                     }
@@ -4127,7 +4127,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         dat = storage.getActivity();
                         if (dat > 0) {
                             String date = fmt.format(new Date(dat));
-                            buf.append("&nbsp;<span class=\"nowrap\">");
+                            buf.append("&nbsp;<span class=nowrap>");
                             toThemeImg(buf, "torrent");
                             buf.append("<b>").append(_t("Last activity")).append(":</b> ").append(date).append("</span>");
                         }
