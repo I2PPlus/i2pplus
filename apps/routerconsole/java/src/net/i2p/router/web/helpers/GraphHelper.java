@@ -497,7 +497,7 @@ public class GraphHelper extends FormHandler {
     @Override
     public String getAllMessages() {
         if (StatSummarizer.isDisabled(_context)) {
-            addFormError("Either the router hasn't initalized yet, or graph generation is not supported with this JVM or OS.");
+            addFormError("Either the router hasn't initialized yet, or graph generation is not supported with this JVM or OS.");
             addFormNotice("JVM: " + System.getProperty("java.vendor") + ' ' +
                          System.getProperty("java.version") + " (" +
                          System.getProperty("java.runtime.name") + ' ' +
