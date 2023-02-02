@@ -3090,7 +3090,7 @@ public class WebMail extends HttpServlet
                         NEW_SUBJECT + "\" value=\"" + quoteHTML(subject) + "\"></td></tr>\n" +
                         "<tr><td></td><td><textarea cols=\"" + Config.getProperty(CONFIG_COMPOSER_COLS, 80) + "\" rows=\"" +
                         Config.getProperty(CONFIG_COMPOSER_ROWS, 10)+ "\" name=\"" + NEW_TEXT + "\">" + text + "</textarea></td></tr>" +
-                        "<tr class=\"bottombuttons spacer\"><td colspan=\"7\"><hr></td></tr>\n" +
+                        "<tr class=\"bottombuttons spacer\"><td colspan=7><hr></td></tr>\n" +
                         "<tr class=\"bottombuttons\" id=\"addattachment\"><td class=right>" + _t("Add Attachment") + "</td>" +
                         "<td class=left><input type=\"file\" size=\"50%\" name=\"" + NEW_FILENAME + "\" value=\"\">&nbsp;");
                         // TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
@@ -3248,7 +3248,7 @@ public class WebMail extends HttpServlet
         String curSort = folder.getCurrentSortBy();
         SortOrder curOrder = folder.getCurrentSortingDirection();
         out.println("</div><table id=\"mailbox\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\">\n" +
-                    "<tr class=\"spacer\"><td colspan=\"7\"><hr></td></tr>\n<tr>\n" +
+                    "<tr class=\"spacer\"><td colspan=7><hr></td></tr>\n<tr>\n" +
                     "<th class=\"mailListDate left\">" + sortHeader(SORT_DATE, _t("Date"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
                     "<th class=\"mailListSender left\">" + sortHeader(SORT_SENDER, showToColumn ? _t("To") : _t("From"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
                     "<th class=\"mailListAttachment center\"></th>\n" +
@@ -3383,14 +3383,14 @@ public class WebMail extends HttpServlet
         }
         if (i == 0)
             out.println("<tr>\n" +
-                            "<td colspan=\"7\">\n<div id=\"emptymailbox\"><i>" + _t("No messages") + "</i>\n</div>\n</td>\n" +
+                            "<td colspan=7>\n<div id=\"emptymailbox\"><i>" + _t("No messages") + "</i>\n</div>\n</td>\n" +
                             "</tr>");
         out.println("<tr class=\"bottombuttons spacer\">\n" +
-                        "<td colspan=\"7\"></td>\n" +
+                        "<td colspan=7></td>\n" +
                         "</tr>\n");
         if (folder.getPages() > 1 && i > 30) {
             // show the buttons again if page is big
-            out.println("<tr id=\"pagenavbottom\">\n<td colspan=\"7\">");
+            out.println("<tr id=\"pagenavbottom\">\n<td colspan=7>");
             showPageButtons(out, folderName, page, folder.getPages(), false);
         }
         if (i > 0) {
@@ -3400,7 +3400,7 @@ public class WebMail extends HttpServlet
                     out.print("<tr class=\"bottombuttons floating\" ");
                 else
                     out.print("<tr class=\"bottombuttons\" ");
-                out.print("id=\"confirmdelete\">\n<td colspan=\"7\">");
+                out.print("id=\"confirmdelete\">\n<td colspan=7>");
                 if (i > 25)
                     out.print("<p class=\"error floating\" ");
                 else
@@ -3412,8 +3412,8 @@ public class WebMail extends HttpServlet
                 out.print("</p></td>\n");
             } else {
                 out.println("<tr class=\"bottombuttons\">\n" +
-                                "<td class=left colspan=\"3\">" + (button(CONFIGURE, _t("Settings"))) + "</td>\n" +
-                                "<td class=right colspan=\"4\">" + (button(DELETE, _t("Delete Selected"))) +
+                                "<td class=left colspan=3>" + (button(CONFIGURE, _t("Settings"))) + "</td>\n" +
+                                "<td class=right colspan=4>" + (button(DELETE, _t("Delete Selected"))) +
                                 "<span class=script>" + button(MARKALL, _t("Mark All")) + "&nbsp;" +
                                 (button(CLEAR, _t("Clear All"))) + "</span></td>");
             }

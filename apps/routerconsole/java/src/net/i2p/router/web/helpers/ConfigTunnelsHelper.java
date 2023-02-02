@@ -116,25 +116,25 @@ public class ConfigTunnelsHelper extends HelperBase {
 
         boolean advanced = isAdvanced();
 
-        buf.append("<tr><th colspan=\"4\" class=\"th_title\"><a name=\"").append(prefix).append("\">");
+        buf.append("<tr><th colspan=4 class=\"th_title\"><a name=\"").append(prefix).append("\">");
         buf.append(name).append("</a></th></tr>\n");
         if (in.getLength() <= 0 ||
             in.getLength() + in.getLengthVariance() <= 0 ||
             out.getLength() <= 0 ||
             out.getLength() + out.getLengthVariance() <= 0) {
-            buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+            buf.append("<tr><th colspan=4><font color=\"#900\">" +
                        _t("ANONYMITY WARNING - Settings include 0-hop tunnels.") +
                        "</font></th></tr>\n");
             if (TransportUtil.getIPv6Config(_context, "SSU") == TransportUtil.IPv6Config.IPV6_ONLY) {
                 // rare, don't bother translating
-                buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+                buf.append("<tr><th colspan=4><font color=\"#900\">" +
                            _t("WARNING - 0-hop tunnels not recommended for IPv6-only routers.") +
                            "</font></th></tr>\n");
             }
             if ((in.getLength() <= 0 || in.getLength() + in.getLengthVariance() <= 0) &&
                 _context.router().isHidden()) {
                 // rare, don't bother translating
-                buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+                buf.append("<tr><th colspan=4><font color=\"#900\">" +
                            _t("WARNING - Inbound 0-hop tunnels not recommended for hidden routers.") +
                            "</font></th></tr>\n");
             }
@@ -142,18 +142,18 @@ public class ConfigTunnelsHelper extends HelperBase {
             in.getLength() + in.getLengthVariance() <= 1 ||
             out.getLength() <= 1 ||
             out.getLength() + out.getLengthVariance() <= 1) {
-            buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+            buf.append("<tr><th colspan=4><font color=\"#900\">" +
                        _t("ANONYMITY WARNING - Settings include 1-hop tunnels.") +
                        "</font></th></tr>\n");
         }
         if (in.getLength() + Math.abs(in.getLengthVariance()) >= WARN_LENGTH ||
             out.getLength() + Math.abs(out.getLengthVariance()) >= WARN_LENGTH)
-            buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+            buf.append("<tr><th colspan=4><font color=\"#900\">" +
                        _t("PERFORMANCE WARNING - Settings include very long tunnels.") +
                        "</font></th></tr>\n");
         if (in.getTotalQuantity() >= WARN_QUANTITY ||
             out.getTotalQuantity() >= WARN_QUANTITY)
-            buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+            buf.append("<tr><th colspan=4><font color=\"#900\">" +
                        _t("PERFORMANCE WARNING - Settings include high tunnel quantities.") +
                        "</font></th></tr>\n");
 

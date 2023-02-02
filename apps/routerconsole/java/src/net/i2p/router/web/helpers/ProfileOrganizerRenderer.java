@@ -125,7 +125,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<tr");
                     if (tier == 2)
                         buf.append(" id=highcap_peers");
-                    buf.append("><td colspan=\"10\" class=separator><hr></td></tr>\n");
+                    buf.append("><td colspan=10 class=separator><hr></td></tr>\n");
                 }
                 prevTier = tier;
 

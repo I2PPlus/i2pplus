@@ -176,7 +176,7 @@ public class ConfigKeyringHelper extends HelperBase {
         }
         if (!rv) {
 //            buf.append("<tr><td colspan=\"").append(local ? '3' : '8').append("\"><i>")
-            buf.append("<tr><td colspan=\"8\"><i>")
+            buf.append("<tr><td colspan=8><i>")
                .append(_t("none")).append("</i></td></tr>");
         }
         buf.append("\n</table>\n");

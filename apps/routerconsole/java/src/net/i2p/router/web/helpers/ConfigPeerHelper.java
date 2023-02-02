@@ -74,7 +74,7 @@ public class ConfigPeerHelper extends HelperBase {
         }
         out.write("</table>");
         out.write("</td><td>");
-        out.write("<table id=\"permabanned\"><tr><th colspan=\"3\"><b>");
+        out.write("<table id=\"permabanned\"><tr><th colspan=3><b>");
         out.write(_t("IPs Permanently Banned"));
         out.write("</b></th></tr>");
         int blocklistSize = bl.getBlocklistSize();

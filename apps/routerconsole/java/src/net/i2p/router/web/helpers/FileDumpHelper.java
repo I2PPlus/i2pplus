@@ -65,21 +65,21 @@ public class FileDumpHelper extends HelperBase {
 
         // our jars
         File dir = _context.getLibDir();
-        buf.append("<tr><th class=\"subheading routerfiles\" colspan=\"9\"><b>Router Jar Files:</b> <code>");
+        buf.append("<tr><th class=\"subheading routerfiles\" colspan=9><b>Router Jar Files:</b> <code>");
         buf.append(dir.getAbsolutePath());
         buf.append("</code></th></tr>\n");
         dumpDir(buf, dir, ".jar", true);
 
         // our wars
         dir = new File(_context.getBaseDir(), "webapps");
-        buf.append("<tr><th class=\"subheading routerfiles\" colspan=\"9\"><b>Router War Files:</b> <code>");
+        buf.append("<tr><th class=\"subheading routerfiles\" colspan=9><b>Router War Files:</b> <code>");
         buf.append(dir.getAbsolutePath());
         buf.append("</code></th></tr>\n");
         dumpDir(buf, dir, ".war", true);
 
         // plugins
         File pluginDir = new File(_context.getConfigDir(), PluginStarter.PLUGIN_DIR);
-        buf.append("<tr><th class=\"subheading pluginfiles\" colspan=\"9\"><b>I2P Plugins:</b> <code>");
+        buf.append("<tr><th class=\"subheading pluginfiles\" colspan=9><b>I2P Plugins:</b> <code>");
         buf.append(pluginDir.getAbsolutePath());
         buf.append("</code></th></tr>");
         File[] files = pluginDir.listFiles();
@@ -87,7 +87,7 @@ public class FileDumpHelper extends HelperBase {
             Arrays.sort(files);
             for (int i = 0; i < files.length; i++) {
                 dir = new File(files[i], "lib");
-                buf.append("<tr><th class=\"subheading pluginfiles\" colspan=\"9\"><b>Plugin File Location:</b> <code>");
+                buf.append("<tr><th class=\"subheading pluginfiles\" colspan=9><b>Plugin File Location:</b> <code>");
                 buf.append(dir.getAbsolutePath());
                 buf.append("</code></th></tr>");
                 dumpDir(buf, dir, ".jar", false);
