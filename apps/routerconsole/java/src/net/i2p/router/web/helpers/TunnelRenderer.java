@@ -308,6 +308,7 @@ class TunnelRenderer {
                       "<th data-sortable data-sort-method=dotsep>" + _t("Version") + "</th>" +
                       "<th data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
                       "<th data-sortable data-sort-method=dotsep>" + _t("Address") + "</th>" +
+                      "<th data-sortable>" + _t("Domain") + "</th>" +
                       "<th data-sortable data-sort-method=number>" + _t("Tunnels") + "</th>" +
                       "<th data-sortable data-sort-method=dotsep>" + _t("Data") + "</th>" +
                       //"<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
@@ -356,16 +357,36 @@ class TunnelRenderer {
                     if (!ip.toString().equals("null")) {
                         out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" +
                                   _t("Lookup address on gwhois.org") + "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
+/*
                         if (enableReverseLookups() && rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
                             out.write("<br><span class=rlookup>");
-                            out.write(rl);
+                            //out.write(rl);
+                            out.write(CommSystemFacadeImpl.getDomain(rl));
                             out.write("</a></span>");
                         }
+*/
+                    out.write("</a>");
                     } else {
                         out.write("<i>" + _t("unknown") + "</i>");
                     }
                 } else {
                      out.write("<i>" + _t("unknown") + "</i>");
+                }
+
+                out.write("</span></td><td class=cells align=center>");
+                if (enableReverseLookups() && rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
+                    //out.write("<br><span class=rlookup>");
+                    //out.write(rl);
+                    out.write("<span class=rlookup title=\"");
+                    out.write(rl);
+                    out.write("\">");
+                    if (!ip.toString().equals(rl)) {
+                        out.write(CommSystemFacadeImpl.getDomain(rl));
+                    }
+                } else {
+                    out.write("<span class=hideme hidden>");
+                    //out.write(_t("unknown"));
+                    out.write("&ndash;");
                 }
                 out.write("</span></td><td class=cells align=center>" + count + "</td>");
                 //out.write("<td class=cells align=center>" + (bws.count(h) > 0 ? DataHelper.formatSize2(bws.count(h) * 1024) + "B": "") + "</td>\n");
@@ -712,23 +733,33 @@ class TunnelRenderer {
                           _t("Edit") + "</a>");
             out.write("</td><td class=cells>");
             out.write("<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
-            out.write("</td><td class=cells><span class=ipaddress>");
+            out.write("</td><td class=\"cells");
+            if (enableReverseLookups() && rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
+                out.write(" rdns\" title=\"");
+                out.write(rl);
+            }
+            out.write("\"><span class=ipaddress>");
             if (info != null && ip != null) {
                 if (!ip.toString().equals("null")) {
-                    out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" + _t("Lookup address on gwhois.org") +
-                              "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript></span>");
+                    out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() +
+                              "+dns\" target=_blank title=\"" + _t("Lookup address on gwhois.org") +
+                              "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
+/*
                     if (enableReverseLookups() && rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
                         out.write("<br><span class=rlookup>");
                         out.write(rl);
                         out.write("</a></span>");
                     }
+*/
                 } else {
-                    out.write("<i>" + _t("unknown") + "</i></span>");
+                    //out.write("<i>" + _t("unknown") + "</i>");
+                    out.write("&ndash;");
                 }
             } else {
-                out.write("<i>" + _t("unknown") + "</i></span>");
+                //out.write("<i>" + _t("unknown") + "</i>");
+                out.write("&ndash;");
             }
-            out.write("</td><td class=cells>");
+            out.write("</span></td><td class=cells>");
             if (lc.count(h) > 0)
                 out.write("" + lc.count(h));
             out.write("</td><td class=\"cells bar\">");

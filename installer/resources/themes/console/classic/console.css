@@ -1986,10 +1986,13 @@ h3 + .statusnotes{margin-top:-1px}
 
 /* transit summary */
 #tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
+#tunnels #transitSummary th{position:relative}
+#tunnels #transitSummary td{padding:3px 6px}
 #tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}
 #tunnels #transitSummary td:nth-child(n+2) span,#tunnels #transitSummary td:nth-child(n+2) b{min-width:28px;display:inline-block}
 #tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
+#tunnels #tunnelPeerCount td.cells.rdns a::before {margin-top:-2.5px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center / 10px;content:""}
 
 #filterlist code{margin:0 10px 10px;padding-left:12px;display:inline-block;border-left:2px solid #272}
 #filterlist code + h3,#filterlist ul + h3{margin-top:5px}

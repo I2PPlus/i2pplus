@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -461,8 +464,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
+/*
                 if (enableReverseLookups())
                     getCanonicalHostName(ip.toString());
+*/
             }
             _context.simpleTimer2().addPeriodicEvent(new Lookup(), 5000, LOOKUP_TIME);
         }
@@ -508,8 +513,24 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public String getCanonicalHostName(String hostName) {
         try {
             return InetAddress.getByName(hostName).getCanonicalHostName();
-        } catch(IOException exception) {
+        } catch(UnknownHostException exception) {
             return hostName;
+        }
+    }
+
+    public static String getDomain(String hostname) throws IOException {
+//        URI uri = new URI(url);
+//        String domain = uri.getHost();
+        String[] domainArray = hostname.split("\\.");
+        if (hostname.endsWith(".uk")) {
+            return domainArray[domainArray.length - 3] + "." +
+                   domainArray[domainArray.length - 2] + "." +
+                   domainArray[domainArray.length - 1];
+        } else if (domainArray.length == 1) {
+            return domainArray[0];
+        } else {
+            return domainArray[domainArray.length - 2] + "." +
+                   domainArray[domainArray.length - 1];
         }
     }
 
