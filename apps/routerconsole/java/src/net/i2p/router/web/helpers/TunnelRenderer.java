@@ -1,5 +1,7 @@
 package net.i2p.router.web.helpers;
 
+import java.net.InetAddress;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -46,6 +48,11 @@ class TunnelRenderer {
 
     private int DISPLAY_LIMIT = 500;
     private final DecimalFormat fmt = new DecimalFormat("#0.00");
+
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    public boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
+    }
 
     public TunnelRenderer(RouterContext ctx) {
         _context = ctx;
@@ -140,7 +147,7 @@ class TunnelRenderer {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty()) {
             out.write("<h3 class=tabletitle id=participating>");
-            out.write(_t("Participating"));
+            out.write(_t("Transit"));
             if (!debug)
                 out.write(' ' + _t("tunnels"));
             out.write("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelsparticipating\">" + _t("Refresh") + "</a></h3>\n");
@@ -315,8 +322,10 @@ class TunnelRenderer {
                 HopConfig cfg = participating.get(count);
                 int lifetime = count > 0 ? (int) ((_context.clock().now() - cfg.getCreation()) / 1000) : 1;
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
+                //String rl = _context.namingService().reverseLookup(h);
                 String truncHash = h.toBase64().substring(0,4);
-                String ip = info != null ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
+                String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
+                String rl = ip != null ? getCanonicalHostName(ip) : null;
                 String v = info != null ? info.getOption("router.version") : null;
                 if (count <= 0 && (participating.size() == 0))
                     break;
@@ -327,7 +336,7 @@ class TunnelRenderer {
                 out.write("</td><td class=cells>");
                 out.write("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
                 out.write(truncHash);
-                out.write("</a></span></td><td class=cells>");
+                 out.write("</td><td class=cells>");
 /*
                 out.write("<tr class=lazy><td class=cells>");
                 out.write(netDbLink(h));
@@ -347,6 +356,11 @@ class TunnelRenderer {
                     if (!ip.toString().equals("null")) {
                         out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" +
                                   _t("Lookup address on gwhois.org") + "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
+                        if (enableReverseLookups() && rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
+                            out.write("<br><span class=rlookup>");
+                            out.write(rl);
+                            out.write("</a></span>");
+                        }
                     } else {
                         out.write("<i>" + _t("unknown") + "</i>");
                     }
@@ -683,8 +697,10 @@ class TunnelRenderer {
         for (Hash h : peerList) {
             char cap = getCapacity(h);
             RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
-            String ip = info != null ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
+            String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
             String v = info != null ? info.getOption("router.version") : null;
+            String truncHash = h.toBase64().substring(0,4);
+            String rl = ip != null ? getCanonicalHostName(ip) : null;
             out.write("<tr class=lazy><td class=cells>");
             out.write(netDbLink(h));
             if (v != null)
@@ -698,15 +714,21 @@ class TunnelRenderer {
             out.write("<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
             out.write("</td><td class=cells><span class=ipaddress>");
             if (info != null && ip != null) {
-                if (!ip.toString().equals("null"))
+                if (!ip.toString().equals("null")) {
                     out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" + _t("Lookup address on gwhois.org") +
-                              "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
-                else
-                    out.write("<i>" + _t("unknown") + "</i>");
+                              "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript></span>");
+                    if (enableReverseLookups() && rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
+                        out.write("<br><span class=rlookup>");
+                        out.write(rl);
+                        out.write("</a></span>");
+                    }
+                } else {
+                    out.write("<i>" + _t("unknown") + "</i></span>");
+                }
             } else {
-                out.write("<i>" + _t("unknown") + "</i>");
+                out.write("<i>" + _t("unknown") + "</i></span>");
             }
-            out.write("</span></td><td class=cells>");
+            out.write("</td><td class=cells>");
             if (lc.count(h) > 0)
                 out.write("" + lc.count(h));
             out.write("</td><td class=\"cells bar\">");
@@ -849,4 +871,13 @@ class TunnelRenderer {
     public String _t(String s, Object o) {
         return Messages.getString(s, o, _context);
     }
+
+    public String getCanonicalHostName(String hostName) {
+        try {
+            return InetAddress.getByName(hostName).getCanonicalHostName();
+        } catch(IOException exception) {
+            return hostName;
+        }
+    }
+
 }

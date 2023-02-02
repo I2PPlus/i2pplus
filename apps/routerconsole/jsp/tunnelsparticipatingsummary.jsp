@@ -57,7 +57,7 @@
           if ((peers && peersResponse && peers !== peersResponse) || peers && peersResponse) {
             peers.innerHTML = peersResponse.innerHTML;
             sorter.refresh();
-          } else if ((mainResponse && main !== mainResponse) || peersReponse !== null && !peers) {
+          } else if ((mainResponse && (main !== mainResponse)) || peersReponse !== null && !peers) {
             main.innerHTML = mainResponse.innerHTML;
           }
         }
