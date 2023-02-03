@@ -518,11 +518,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
+
+    /**
+     *  @return domain name only from reverse dns hostname lookups
+     *  @since 0.9.58+
+     */
     public static String getDomain(String hostname) throws IOException {
-//        URI uri = new URI(url);
-//        String domain = uri.getHost();
         String[] domainArray = hostname.split("\\.");
-        if (hostname.endsWith(".uk")) {
+        if (hostname.endsWith(".uk") || hostname.endsWith(".com.au") || hostname.contains("ip-")) {
             return domainArray[domainArray.length - 3] + "." +
                    domainArray[domainArray.length - 2] + "." +
                    domainArray[domainArray.length - 1];

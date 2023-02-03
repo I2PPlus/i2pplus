@@ -1061,8 +1061,11 @@ h3#udpcon{margin-top:7px}
 #tunnels h3 + h3{margin-top:1px}
 #tunnels h3#exploratory{padding-left:32px;background:var(--globe) no-repeat 8px center/18px,var(--h3),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8) 25%)}
 #tunnels h3#participating{padding-left:32px;background:var(--share) no-repeat 8px center/18px,var(--h3),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8) 25%)}
+#tunnels td{text-align:center}
+#tunnels tbody td{border:var(--border_soft)}
+#tunnels tbody td:last-child{border-right:var(--border)}
 #tunnels td > *{vertical-align:middle}
-#tunnels th:nth-child(n+2),.statusnotes{font-size:90%}
+#tunnels th:nth-child(n+2),.statusnotes, #tunnels tfoot td{font-size:90%}
 #tunnels a .b32{margin:-1px -6px 0 0;padding:3px 4px;float:right;line-height:1;text-transform:none;font-family:var(--monospaced);color:#171;text-shadow:0 0 1px #fff,0 0 2px #ddf;border-radius:1px;box-shadow:0 0 0 1px #bbd,var(--highlight);background:linear-gradient(180deg,#fff,#e2e2ff)}
 #tunnels a:hover .b32,#tunnels a:focus .b32{color:var(--hover)}
 #tunnels a:active .b32{box-shadow:0 0 0 1px #bbd,var(--highlight),inset 3px 3px 3px #778}
@@ -1075,22 +1078,52 @@ h3#udpcon{margin-top:7px}
 #tunnels .routerid > *{vertical-align:middle}
 #tunnels .routerid img,#profiles .routerid img,#peers .routerid img{margin:0 2px 0 -1px;vertical-align:middle;border-radius:1px}
 #refreshPage{cursor:pointer}
+#country,#router,#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
+.ipaddress a{line-height:1}
+#tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
+#tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;line-height:1;vertical-align:text-bottom}
+#tunnels .percentBarInner{background:#99c}
+#tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:transparent}
+#tunnels .percentBarOuter,#tunnels .percentBarText{width:100px}
 
 /* transit summary */
 #tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
 #tunnels #transitSummary th{position:relative}
 #tunnels #transitSummary td{padding:3px 6px}
 #tunnels #transitSummary td:first-child::before{display:inline-block;min-height:32px;vertical-align:middle;content:""}
-#tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
+#tunnels #transitSummary span:not([hidden]),#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}
 #tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
-#tunnels #transitSummary tbody td {animation:highlight .1s ease 0s both}
-#tunnels #transitSummary .routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
-#tunnels #transitSummary .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;border-radius:3px;box-shadow:0 0 0 1px #bbc;background:#ddf}
-#tunnels #transitSummary .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:""}
-#tunnels #transitSummary .peerFlag img{margin:0;padding:1px;width:100%;height:100%;object-fit:cover;border-radius:3px;box-shadow:var(--highlight)}
+.routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
+#tunnels .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;border-radius:3px;box-shadow:0 0 0 1px #bbc;background:#ddf}
+#tunnels .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:""}
+#tunnels .peerFlag img{margin:0;padding:1px;width:24px;height:18px;border-radius:3px;box-shadow:var(--highlight)}
 .rlookup{padding:0 2px 2px;display:inline-block;font-style:italic}
-#tunnels #tunnelPeerCount td.cells.rdns a::before {margin-top:-2.5px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center / 10px;content:""}
+#tunnels .cc{display:none}
+
+/* peercount */
+#tunnels #tunnelPeerCount .cells.bar,#tunnels #tunnelPeerCount th.bar,#tunnels #tunnelPeerCount td:nth-child(n+3),#tunnels #tunnelPeerCount th:nth-child(n+3){padding-left:8px;padding-right:8px;width:10%;white-space:nowrap}
+#tunnels #tunnelPeerCount .cells{max-width:none;min-width:0;white-space:nowrap;text-align:center}
+#tunnels #tunnelPeerCount .routerid{padding:0 4px 0 2px}
+#tunnels #tunnelPeerCount td:first-child{width:1%}
+#tunnels #tunnelPeerCount td:nth-child(2){white-space:normal;word-break:break-all;width:15%}
+#tunnels #tunnelPeerCount tr:not(:last-child) td{padding:3px}
+#tunnelPeerCount .configpeer{margin:0 0 0 3px;display:inline-block}
+#tunnelPeerCount td:first-child span{margin:0 1px;vertical-align:middle}
+#tunnelPeerCount tr:not(:last-child):hover td{background:#ffe}
+#tunnelPeerCount .tunnel_cap{padding:1px 2px 0}
+#tunnels #peercount{padding-left:30px;background:var(--hardhat) no-repeat 7px 6px/18px,var(--h3),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8) 25%)}
+#peercount a::after,#participating a::after{margin:1px 0 0 -2px;height:18px;width:18px;display:inline-block;background:var(--refresh) no-repeat center center;content:""}
+#peercount a:hover::after,#peercount a:focus::after,#participating a:hover::after,#participating a:focus::after{background:var(--refresh_hover) no-repeat center center}
+#peercount a img,#participating a img{opacity:0}
+.inbound,.outbound{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--in) no-repeat center center/16px}
+.outbound{background-image:var(--out)}
+.inbound.small,.outbound.small{background-size:12px;background-position:center center}
+.small img{margin:0;padding:0}
+.direction .small{margin-left:-2px;width:12px}
+#peerdefs li{line-height:1.6}
+#logs .tabletitle,#jobs h3,#tunnels h3[id]{position:relative;overflow:hidden}
+#logs #enviro ~ .tabletitle::after,#jobs h3::after,#tunnels h3[id]::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:linear-gradient(90deg,#d30,var(--hover));content:"";animation:ease-out reloader 1s forwards;opacity:.7}
 
 /* banned peers */
 #banlist{padding:5px 5px 3px 0;display:block;border:1px solid var(--border_inner);border-radius:2px;background:#fafaff;text-align:center;columns:328px auto;column-gap:0}
@@ -1259,7 +1292,7 @@ h3#udpcon{margin-top:7px}
 #profilelist .ssuintro,#floodfills .ssuintro,#capabilities_key .ssuintro,.netdbentry .ssuintro{background:linear-gradient(180deg,#fff,#fbf)}
 
 /* netdb overview */
-.version{margin:0;padding:1px 3px;min-width:44px;display:inline-block;line-height:1.2;vertical-align:middle;text-align:center;font-weight:700;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--row)}
+.version,.routerHash{margin:0;padding:1px 3px;min-width:44px;display:inline-block;line-height:1.2;vertical-align:middle;text-align:center;font-weight:700;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--row)}
 #netdb_ourinfo .version{margin-right:4px}
 #netdboverview th,#netdblookup th{padding:8px 5px 8px 32px;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:11pt;background:var(--globe) no-repeat 8px center/18px,var(--h2)}
 #netdboverview table th{padding:3px 8px;font-size:9pt}
@@ -2252,39 +2285,6 @@ table#consolepass input[name="name"]{margin-right:20px}
 #peers .flag img,#profiles .flag img,#tunnelPeerCount .flag img{margin-left:-2px;display:inline-block}
 #profiles #banlist .flag img{margin:0 -4px 0 0}
 #banlist tt a{margin-left:-3px}
-
-.ipaddress a{line-height:1}
-#tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
-#tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;line-height:1;vertical-align:text-bottom}
-#tunnels .percentBarInner{background:#99c}
-#tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:transparent}
-#tunnels .percentBarOuter,#tunnels .percentBarText{width:100px}
-
-/* peercount */
-#tunnels #tunnelPeerCount .cells.bar,#tunnels #tunnelPeerCount th.bar,#tunnels #tunnelPeerCount td:nth-child(n+3),#tunnels #tunnelPeerCount th:nth-child(n+3){padding-left:8px;padding-right:8px;width:10%;white-space:nowrap}
-#tunnels #tunnelPeerCount .cells{max-width:none;min-width:0;white-space:nowrap;text-align:center}
-#tunnels #tunnelPeerCount .routerid{padding:0 4px 0 2px}
-#tunnels #tunnelPeerCount td:first-child{width:1%}
-#tunnels #tunnelPeerCount td:nth-child(2){white-space:normal;word-break:break-all;width:15%}
-#tunnels #tunnelPeerCount tr:not(:last-child) td{padding:3px}
-#tunnelPeerCount .configpeer{margin:0 0 0 3px;display:inline-block}
-#tunnelPeerCount td:first-child span{margin:0 1px;vertical-align:middle}
-#tunnelPeerCount tr:not(:last-child):hover td{background:#ffe}
-#tunnelPeerCount .tunnel_cap{padding:1px 2px 0}
-#tunnelPeerCount .version{padding-bottom:0}
-#tunnels #peercount{padding-left:30px;background:var(--hardhat) no-repeat 7px 6px/18px,var(--h3),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8) 25%)}
-#peercount a::after,#participating a::after{margin:1px 0 0 -2px;height:18px;width:18px;display:inline-block;background:var(--refresh) no-repeat center center;content:""}
-#peercount a:hover::after,#peercount a:focus::after,#participating a:hover::after,#participating a:focus::after{background:var(--refresh_hover) no-repeat center center}
-#peercount a img,#participating a img{opacity:0}
-
-.inbound,.outbound{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--in) no-repeat center center/16px}
-.outbound{background-image:var(--out)}
-.inbound.small,.outbound.small{background-size:12px;background-position:center center}
-.small img{margin:0;padding:0}
-.direction .small{margin-left:-2px;width:12px}
-#peerdefs li{line-height:1.6}
-#logs .tabletitle,#jobs h3,#tunnels h3[id]{position:relative;overflow:hidden}
-#logs #enviro ~ .tabletitle::after,#jobs h3::after,#tunnels h3[id]::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:linear-gradient(90deg,#d30,var(--hover));content:"";animation:ease-out reloader 1s forwards;opacity:.7}
 
 /* iframe */
 .main.embedded{text-align:center;padding:2px;overflow:hidden}

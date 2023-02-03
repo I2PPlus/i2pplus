@@ -188,7 +188,7 @@ p:empty + .sb_notice{margin-top:7px}
 
 /* status bars */
 .percentBarOuter,#bandwidthTestRunning{width:196px;margin:-4px 0 -5px 3px;position:relative;text-align:center;border:var(--border);box-shadow:0 0 1px rgba(200,200,200,.8),var(--highlight);box-shadow:var(--btn_shadow_active);background:repeating-linear-gradient(90deg,rgba(210,210,255,.7) 1px,rgba(210,210,255,.7) 2px,rgba(230,230,255,.7) 2px,rgba(230,230,255,.7) 4px)}
-.percentBarInner{vertical-align:middle;border:none;border-right:1px solid var(--border_soft);height:14px;max-width:100%;background:linear-gradient(90deg,rgba(0,255,0,.1) 65px,rgba(255,255,0,.1) 110px,rgba(255,128,0,.1) 175px,rgba(255,0,0,.1)),linear-gradient(180deg,rgba(255,255,255,.9),rgba(240,240,250,.7) 50%,rgba(220,220,255,.7) 50%,rgba(140,140,220,.9));box-shadow:var(--highlight)}
+.percentBarInner{vertical-align:middle;border:none;border-right:var(--border_soft);height:14px;max-width:100%;background:linear-gradient(90deg,rgba(0,255,0,.1) 65px,rgba(255,255,0,.1) 110px,rgba(255,128,0,.1) 175px,rgba(255,0,0,.1)),linear-gradient(180deg,rgba(255,255,255,.9),rgba(240,240,250,.7) 50%,rgba(220,220,255,.7) 50%,rgba(140,140,220,.9));box-shadow:var(--highlight)}
 .percentBarInner[style="width:100%;"]{border-right:none}
 .percentBarText{white-space:nowrap;text-align:center;font-weight:700;color:var(--ink);text-shadow:0 1px 1px rgba(255,255,255,.8);float:left;width:100%;height:14px;padding:0;opacity:0;transition:ease opacity .2s}
 .percentBarOuter:hover .percentBarText{opacity:1;transition:ease opacity .2s;pointer-events:none}
@@ -710,7 +710,7 @@ pre#activetransports{margin:-11px 0 0;padding:15px 15px 0;width:calc(100% - 32px
 #i2pupdates input.check,.optbox{margin-left:5px}
 #i2pupdates td.infohelp{padding:20px 15px 20px 40px;background-size:22px;background-position:10px}
 #i2pupdates .infohelp code{user-select:all}
-#sidebarconf tr,.homelinkedit tr,#clientconfig tr,#webappconfig tr,#configstats tr,#tunnelconfig tr,#profiles tr,#floodfills tr,#netdboverview tr,.netdbentry tr,#leasesetdebug tr,#leasesetsummary tr,.leaseset tr,#tunnel_defs tr,.sybil_routerinfo tr,#enviro tr,#routerinformation tr,#schedjobs tr,#jobstats tr,#eventlog tr,.tunneldisplay tr,#udpconnections tr,#ntcpconnections tr,#tunnelPeerCount tr{border-top:1px solid var(--border_softer)}
+#sidebarconf tr,.homelinkedit tr,#clientconfig tr,#webappconfig tr,#configstats tr,#tunnelconfig tr,#profiles tr,#floodfills tr,#netdboverview tr,.netdbentry tr,#leasesetdebug tr,#leasesetsummary tr,.leaseset tr,#tunnel_defs tr,.sybil_routerinfo tr,#enviro tr,#routerinformation tr,#schedjobs tr,#jobstats tr,#eventlog tr,.tunneldisplay tr,#udpconnections tr,#ntcpconnections tr,#tunnelPeerCount tr{border-top:var(--border_softer)}
 #sidebarconf tr:hover,#eventlog tr:hover,.tunneldisplay tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#jardump tr:hover{color:#104e99;background:var(--row_hover)}
 #sidebarconf button{margin:2px}
 #sidebarconf th:nth-child(1){text-align:center}
@@ -824,7 +824,7 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 #banlist li{margin-bottom:5px;padding:5px 7px 5px;width:calc(100% - 9px);position:relative;display:table;line-height:1.5;list-style:none;box-shadow:0 0 0 1px var(--border_soft),0 0 1px 1px #ddd;background:#f9f9ff}
 #banlist li img{margin-right:3px}
 #banlist li:first-child{margin-top:0}
-#banlist li a[href^="configpeer"]{padding:2px 0 1px 2px;position:absolute;top:0;right:0;line-height:0;border-left:1px solid var(--border_soft);border-bottom:1px solid var(--border_soft);filter:none}
+#banlist li a[href^="configpeer"]{padding:2px 0 1px 2px;position:absolute;top:0;right:0;line-height:0;border-left:var(--border_soft);border-bottom:var(--border_soft);filter:none}
 #banlist li a[href^="configpeer"]:hover,#banlist li a[href^="configpeer"]:focus{box-shadow:inset 0 0 0 1px var(--hover)}
 #banlist li a[href^="configpeer"]:active{background:var(--hover);box-shadow:var(--highlight_active)}
 #banlist li hr{margin:2px 30px 1px 0;height:1px;background:var(--bg4)}
@@ -834,7 +834,7 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 #bannedips{margin-bottom:4px}
 #bannedips table{margin-bottom:-1px}
 #bannedips td{padding:0;width:50%;vertical-align:top}
-#bannedips table tr td{border-top:1px solid var(--border_soft)}
+#bannedips table tr td{border-top:var(--border_soft)}
 #bannedips table th,#ipv4 td,#ipv6 td,#permabanned tr:nth-child(2) td{font-size:95%}
 #bannedips table td{padding:4px 2px;text-align:center}
 #bannedips table tr:last-child{border-bottom:var(--border)}
@@ -1058,8 +1058,8 @@ p.infohelp + hr,p.infohelp + p + hr,#tunnelconfig + hr{display:none}
 .graphContainer:active img{transform:scale(.97)}
 .graphspanel{margin:-16px -16px -11px -16px;padding:15px 5px 1px;overflow:hidden;text-align:center}
 .graphspanel h3{margin:10px 20px 10px 20px;text-align:left}
-.graphspanel img{margin:5px 4px;padding:1px;max-width:100%;border:1px solid var(--border_soft);background:var(--bg)}
-.graphspanel a img{vertical-align:top;border:1px solid var(--border_soft);background:var(--bg);opacity:.9}
+.graphspanel img{margin:5px 4px;padding:1px;max-width:100%;border:var(--border_soft);background:var(--bg)}
+.graphspanel a img{vertical-align:top;border:var(--border_soft);background:var(--bg);opacity:.9}
 .graphspanel a img:hover{text-align:center;border:1px solid var(--hover);opacity:1;cursor:zoom-in}
 .singlegraph img:hover{cursor:zoom-out}
 .graphspanel a:active img{border:1px solid #f90}
@@ -1116,7 +1116,7 @@ img.unknownflag{opacity:.8}
 #netdbcountrylist img[src^="/flags"],.netdb_header img[src^="/flags"]{width:24px;height:18px}
 #peers .flag,#profiles .flag{margin:-2px 1px -2px -4px}
 #profiles .flag{margin-left:-3px}
-#tunnels .flag img,#profiles .flag img,#peers .flag img,#netdb img[src^="/flags"]{margin-top:0;margin-bottom:0;border:1px solid var(--border_soft)}
+#tunnels .flag img,#profiles .flag img,#peers .flag img,#netdb img[src^="/flags"]{margin-top:0;margin-bottom:0;border:var(--border_soft)}
 
 /* netdb */
 .netdb_header img,.netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .viewfullentry,.netdb_header a[href^="/netdb?c"]{font-size:0;vertical-align:middle}
@@ -1203,7 +1203,7 @@ p.family + p.family,p.sybil_info + p.sybil_info{margin-top:-4px}
 #leasesetdebug th a,#leasesetsummary th a{word-spacing:normal;letter-spacing:normal;text-transform:capitalize;font-size:0}
 #leasesetdebug td,#leaseset td{padding:5px}
 #leasesetdebug td:nth-child(even){white-space:nowrap;text-align:left}
-#leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:1px solid var(--border_softer)}
+#leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:var(--border_softer)}
 #leasesetdebug td:nth-child(2){width:10px}
 #netdb .debugMode .netdb_leases{margin-right:12px;columns:auto 380px;column-gap:4px;page-break-inside:avoid}
 #netdb .netdb_leases{margin-left:0;columns:8 104px;column-gap:2px}
@@ -1218,7 +1218,7 @@ p.family + p.family,p.sybil_info + p.sybil_info{margin-top:-4px}
 
 /* Advanced lookup */
 #netdblookup{margin-bottom:4px}
-#netdblookup tr:nth-child(n+2){border-top:1px solid var(--border_softer)}
+#netdblookup tr:nth-child(n+2){border-top:var(--border_softer)}
 #netdblookup th{text-align:left;font-size:140% }
 #netdblookup th,#netdblookup td{padding:10px}
 #netdblookup td:nth-child(odd){padding-right:0;white-space:nowrap;text-align:right;font-weight:700}
@@ -1336,7 +1336,7 @@ p.sybil_info,p.family,p.threatpoints,p.hashdist,p.notfound,#sybil_totals{margin:
 #netdboverview th{font-size:10pt;color:var(--ink_light);pointer-events:none}
 #netdboverview th[role="columnheader"]{pointer-events:auto}
 #netdboverview table th{font-size:90%}
-#netdboverview table td:not(:first-child):not(:last-child){border-left:1px solid var(--border_softer);border-right:1px solid var(--border_softer)}
+#netdboverview table td:not(:first-child):not(:last-child){border-left:var(--border_softer);border-right:var(--border_softer)}
 #netdboverview table tr:hover{background:var(--row_hover)}
 #netdboverview table th::before,#netdboverview table td::before{height:24px;display:inline-block;vertical-align:middle;content:""}
 #netdboverview span,#netdboverview a{margin-top:0;margin-bottom:0}
@@ -1379,7 +1379,7 @@ p.sybil_info,p.family,p.threatpoints,p.hashdist,p.notfound,#sybil_totals{margin:
 .statlist li li{margin-left:16px;margin-right:-20px;margin-top:2px;padding:2px 0 2px 5px;line-height:1.5;list-style:none;text-align:left}
 .statlist li li:first-child{margin-top:12px;padding-top:2px;border-top:none}
 .statlist li li::before{margin-left:3px;vertical-align:baseline;content:"\279F\00A0"}
-.statlist li li:last-child{padding-bottom:5px;padding-left:5px;border-bottom:1px solid var(--border_soft)}
+.statlist li li:last-child{padding-bottom:5px;padding-left:5px;border-bottom:var(--border_soft)}
 .statlist li li.noevents{margin-top:15px}
 .statlist li li:last-child::before{margin-left:2px;vertical-align:calc(20% - 3px);content:"\27A1\00A0"}
 .statlist a[href*="graph"]{margin-top:2px}
@@ -1529,10 +1529,10 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #logs li:last-child::after{border:none;margin:-4px}
 #logs li:first-child{padding-top:0;margin-top :1px}
 #logs ul{margin-left:-5px;margin-bottom:-3px;padding-left:0;padding-right:0;width:calc(100% + 10px);margin-right:-20px}
-#logs li{padding:0 2px 4px 22px;width:100%;width:calc(100% - 24px);border-top:1px solid var(--border_softer);border-bottom:1px solid var(--border_softer);background:transparent;opacity:.85;animation:ease logupdate 1s}
+#logs li{padding:0 2px 4px 22px;width:100%;width:calc(100% - 24px);border-top:var(--border_softer);border-bottom:var(--border_softer);background:transparent;opacity:.85;animation:ease logupdate 1s}
 #logs li:first-child,#logs li:first-child:hover{border-top:none}
 #logs li:nth-child(n+2){margin-top:-1px}
-#logs li:hover{position:relative;z-index:10;border-top:1px solid var(--border_soft);border-bottom:1px solid var(--border_soft);background:var(--row_hover);opacity:1;transition:ease all .15s}
+#logs li:hover{position:relative;z-index:10;border-top:var(--border_soft);border-bottom:var(--border_soft);background:var(--row_hover);opacity:1;transition:ease all .15s}
 #logs li:last-child{border-bottom:none}
 #logs li span{margin:0 -2px;min-width:50px;display:inline-block;line-height:1.1;text-align:center;vertical-align:middle;border-radius:2px;opacity:.7}
 #criticallogs tr:first-child{display:none}
@@ -1595,17 +1595,17 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 .revision,.sha256,.unsignedmod{user-select:all}
 .subheading.routerfiles{background:url(images/favicon.svg) no-repeat right 5px center/16px,var(--subheading);background-blend-mode:luminosity,normal}
 .subheading.pluginfiles{background:var(--plugin) no-repeat right 5px center/16px,var(--subheading);background-blend-mode:luminosity,normal}
-.subheading.pluginfiles{border-top:1px solid var(--border_soft)}
+.subheading.pluginfiles{border-top:var(--border_soft)}
 .unsignedmod{display:inline-block;padding:1px 2px;word-break:break-all;user-select:all}
 .unsignedmod:empty{display:none}
 #jardump{padding:0;overflow-x:auto;overflow-y:hidden;min-width:570px}
 #jardump table{border-left:none;border-right:none;margin-top:-1px;margin-bottom:-1px;font-size:8pt}
 #jardump th{padding:5.5px 5px;font-size:9pt;text-align:center;border-left:none;border-right:none}
 #jardump th:first-child{text-align:left}
-#jardump td,#config_logging tr{border-top:1px solid var(--border_softer)}
+#jardump td,#config_logging tr{border-top:var(--border_softer)}
 #jardump td{vertical-align:top}
 #jardump td:nth-child(2){font-style:italic}
-#jardump td{border-left:1px solid var(--border_soft);vertical-align:middle;text-align:center}
+#jardump td{border-left:var(--border_soft);vertical-align:middle;text-align:center}
 #jardump td:first-child,#jardump td:last-child{text-align:left}
 #jardump td:first-child{padding-left:24px;background:var(--package) no-repeat left 5px center/14px;border-left:none;transition:ease padding .05s}
 #jardump td:nth-child(2){text-align:right}
@@ -1622,13 +1622,13 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 
 .optionlist,.optionsingle,#reseedssl,#updatehelper.optionlist:hover,#updateProxyHostPort.optionlist:hover{vertical-align:middle}
 .optionlist{columns:500px auto}
-.optionlist,.optionsingle,#reseedssl{padding:1px 2px;border:1px solid var(--border_soft);box-shadow:inset 0 0 0 2px var(--bg);background:var(--bg);column-gap:1px;transition:ease box-shadow .2s}
+.optionlist,.optionsingle,#reseedssl{padding:1px 2px;border:var(--border_soft);box-shadow:inset 0 0 0 2px var(--bg);background:var(--bg);column-gap:1px;transition:ease box-shadow .2s}
 .optionlist:hover,.optionsingle:hover,.optiontextarea:hover{border:var(--border);box-shadow:var(--highlight_hover);transition:ease box-shadow .5s,ease background .2s .01s;background:var(--row_hover)}
 .optionlist label,.optionlist .nowrap{min-width:300px}
 .optiontextarea,#reseedconfig .optiontextarea{box-shadow:inset 0 0 0 2px var(--bg);background:#f2f2ff}
 .options input[type=checkbox],.suboption .optbox{margin:0 3px 0 0}
 th.options{padding:8px 5px 8px 10px;font-size:9pt}
-b.suboption{margin:0;padding:5px 10px;position:relative;z-index:10;display:inline-block;text-shadow:0 1px 1px var(--bg);border-radius:3px 3px 0 0;border:1px solid var(--border_soft);border-bottom:none;box-shadow:var(--highlight);background:var(--header)}
+b.suboption{margin:0;padding:5px 10px;position:relative;z-index:10;display:inline-block;text-shadow:0 1px 1px var(--bg);border-radius:3px 3px 0 0;border:var(--border_soft);border-bottom:none;box-shadow:var(--highlight);background:var(--header)}
 .suboption label{font-weight:700}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after,#bandwidthconfig .optionsingle::after,.optionlist label::before,#netconfig label::before,#externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#reseed_urlselection label::before,#reseedproxytype label::before,#graphs .nowrap::before{content:"";display:inline-block;vertical-align:middle}
 #updateProxyHostPort.optionlist{columns:500px 2}
@@ -1811,21 +1811,21 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #ntcpconnections td:nth-last-child(2),#udpconnections td:last-child,#profiles td:last-child{border-right:var(--border)}
 #udpconnections .tablefooter td,#ntcpconnections .tablefooter td{padding-left:5px;padding-right:5px}
 #ntcpconnections td span:empty{display:none}
-#ntcpconnections tr:nth-last-child(n+2) td,#udpconnections tr:nth-last-child(n+2) td,#profilelist td,#profile_defs td,#floodfills td,#tunnelPeerCount td{border-right:1px solid var(--border_softer)}
+#ntcpconnections tr:nth-last-child(n+2) td,#udpconnections tr:nth-last-child(n+2) td,#profilelist td,#profile_defs td,#floodfills td,#tunnelPeerCount td{border-right:var(--border_softer)}
 #ntcpconnections tr:nth-last-child(n+2) td::after,#udpconnections tr:nth-last-child(n+2) td::after,#profilelist td::after,#profile_defs td::after,#floodfills td::after{content:"";position:absolute;top:-1px;right:-1px;height:1px;width:1px;display:inline-block;background:var(--border_color)}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before,#ntcpconnections td.queue:empty::before{content:""}
 #udpcon,#ntcpcon{margin-bottom:-1px}
 #udpcon{margin-top:9px}
 #udpconnections th{padding-top:3px;vertical-align:top;background:var(--bg)}
 #peerdefs{padding:5px;line-height:1.4}
-#peerdefs tr{border-top:1px solid var(--border_softer)}
+#peerdefs tr{border-top:var(--border_softer)}
 #peerdefs td{padding:4px}
 #peerdefs img{font-size:0}
 #peerdefs ul{margin:0;padding:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
 #peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;line-height:1.6;border:1px solid #bbd;box-shadow:var(--highlight),0 0 1px var(--bg4);background:rgba(250,250,255,.5)}
 #peer_thresholds h3,#profiles .widescroll + .tabletitle{margin-top:13px}
 #transportSummary th{font-size:85%}
-#transportSummary td{text-align:center;padding:8px;font-style:normal;border:1px solid var(--border_softer);background:#fff}
+#transportSummary td{text-align:center;padding:8px;font-style:normal;border:var(--border_softer);background:#fff}
 #transportSummary th:first-child,#transportSummary td:first-child{border-left:1px solid var(--border_color)}
 #transportSummary th:last-child,#transportSummary td:last-child{border-right:1px solid var(--border_color)}
 #transportSummary tr:not(.tablefooter):hover td{background:#ffd}
@@ -1843,9 +1843,9 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #routerinfo p{padding:0;margin:-5px -5px 0;border:none;box-shadow:0 0 1px #ccf;filter:none}
 #routerinfo table{margin:0}
 #routerinfo a{display:inline-block;white-space:nowrap;margin:0 5px 0 0;font-size:90%}
-#routerinfo td{padding:8px 4px;width:25%;border-bottom:1px solid var(--border_softer)}
+#routerinfo td{padding:8px 4px;width:25%;border-bottom:var(--border_softer)}
 #routerinfo td:first-child,#routerinfo td:nth-child(3){text-align:right;white-space:nowrap}
-#routerinfo td:nth-child(2):not([colspan]){white-space:nowrap;border-right:1px solid var(--border_softer)}
+#routerinfo td:nth-child(2):not([colspan]){white-space:nowrap;border-right:var(--border_softer)}
 #routerinformation td{padding:8px 4px}
 #routerinformation td:first-child{padding-left:12px;width:1%;min-width:80px;max-width:80px;white-space:nowrap}
 #upnpstatus{margin:15px 0 6px}
@@ -1974,23 +1974,31 @@ h3 + .statusnotes{margin-top:-1px}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs h3 a::after{margin-top:2px;padding:1px;width:16px;height:16px;float:right;background:var(--settings2) no-repeat center center/16px;content:""}
 #tunnels h3 a[href^="/configtunnels#"]:hover::after,#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,#logs h3 a:hover::after{background:var(--settings_hover) no-repeat center center/18px}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
-#tunnels th{font-size:90%}
+#tunnels th,#tunnels tfoot td{font-size:90%}
+#tunnels td{border:var(--border_soft)}
+#tunnels td:first-child{border-left:var(--border)}
+#tunnels td:last-child{border-right:var(--border)}
 #tunnels td > *{vertical-align:middle}
 #tunnels .routerid,.tunnel_local{min-width:64px;display:inline-block;box-shadow:inset var(--box_border_badge),inset 0 0 0 2px var(--bg);background:var(--th)}
 #tunnels .routerid{padding:2px 0;contain:paint}
 #tunnel_defs td:nth-child(even),#tunnel_defs td:first-child{width:1%}
 #tunnel_defs tr:first-child td{border-top:var(--border)}
 #tunnels h3 a img{margin:3px 3px 0 0}
-#tunnels .tunnel_display .cells:first-child{width:64px}
+#tunnels .tunnel_display td:first-child{width:64px}
 #refreshPage{cursor:pointer}
+.routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
+#tunnels .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;box-shadow:0 0 0 1px #bbc}
+#tunnels .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:""}
+#tunnels .peerFlag img{margin:0;padding:1px;width:24px;height:18px;box-shadow:var(--highlight)}
+.rlookup{padding:0 2px 2px;display:inline-block;font-style:italic}
 
 /* transit summary */
 #tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
 #tunnels #transitSummary th{position:relative}
 #tunnels #transitSummary td{padding:3px 6px}
-#tunnels #transitSummary span,#tunnels #transitSummary a{display:inline-block}
+#tunnels #transitSummary span:not([hidden]),#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}
-#tunnels #transitSummary td:nth-child(n+2) span,#tunnels #transitSummary td:nth-child(n+2) b{min-width:28px;display:inline-block}
+#tunnels #transitSummary td:nth-child(n+2) span:not([hidden]),#tunnels #transitSummary td:nth-child(n+2) b{min-width:28px;display:inline-block}
 #tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
 #tunnels #tunnelPeerCount td.cells.rdns a::before {margin-top:-2.5px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center / 10px;content:""}
 
@@ -2011,21 +2019,17 @@ h3 + .statusnotes{margin-top:-1px}
 #tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;line-height:1;vertical-align:text-bottom}
 #tunnels img[src$="bound.png"]{opacity:0}
 #tunnels #peercount{padding-left:30px;background:var(--hardhat) no-repeat 8px 6px/18px,linear-gradient(180deg,var(--bg)50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8) 25%)}
-#tunnelPeerCount .cells{white-space:nowrap;width:auto;max-width:0;min-width:0}
-#tunnelPeerCount .cells.bar,#tunnelPeerCount th.bar,#tunnelPeerCount td:nth-child(n+2),#tunnelPeerCount th:nth-child(n+2){padding-left:8px;padding-right:8px;width:10%;white-space:nowrap}
 #tunnelPeerCount tr:not(:last-child) td:first-child{width:1%;min-width:200px;white-space:nowrap;background:var(--th);box-sizing:border-box}
 #tunnelPeerCount td:first-child span{border:none;box-shadow:none;background:none}
 #tunnelPeerCount td:first-child > *{vertical-align:middle;line-height:1.2}
-#tunnels #tunnelPeerCount th:nth-child(3),#tunnels #tunnelPeerCount td:nth-child(3){width:auto;white-space:normal;word-break:break-all}
-#tunnelPeerCount .routerid{padding:0 4px 0 2px}
-#tunnelPeerCount tr:not(:last-child) td{padding:3px}
-#tunnelPeerCount td:first-child span{margin:0 1px;vertical-align:middle}
+#tunnelPeerCount td:first-child span:not([hidden]){margin:0 1px;vertical-align:middle}
 #tunnelPeerCount td{text-align:center}
 #tunnelPeerCount .tunnel_cap{padding:1px 2px 0}
 #tunnelPeerCount .version{padding-bottom:0}
 #tunnelPeerCount .configpeer{margin:0 0 0 3px;display:inline-block;vertical-align:middle}
 #tunnelPeerCount tr:not(:last-child):hover{background:var(--row_hover)}
 #peerdefs li{line-height:1.6}
+#tunnels [hidden],#tunnels .hideme, #tunnels .cc{display:none}
 
 /* events */
 #events td{line-height:1.4}
@@ -2178,7 +2182,7 @@ div[id^="config"] .tab a{padding-right:13px}
 #searchbar button{height:25px}
 #sybilanalysis{margin:-3px 0 0}
 #sybilnav{margin:5px -6px 8px}
-table[id*="connections"] td,#floodfills td,#profilelist td,#jobstats td,#tunnels td{padding:3px;border-right:1px solid var(--border_soft)}
+table[id*="connections"] td,#floodfills td,#profilelist td,#jobstats td,#tunnels td{padding:3px;border-right:var(--border_soft)}
 #totaljobstats{margin-top:11px}
 #tunnelPeerCount td:nth-child(3),#tunnelPeerCount td:nth-child(3) a{line-height:1.1;font-size:90%}
 #tunnels .cells:first-child{width:1%;max-width:48px;min-width:48px}
@@ -2236,7 +2240,7 @@ a.graphstat{margin-right:2px;font-size:90%}
 .statsName i{display:inline-block}
 #stats .statsName{margin:0 6px 10px 0;padding:10px 10px 0;width:calc(100% - 22px);min-width:540px;display:inline-block;border:var(--border);box-shadow:var(--highlight);background:var(--th)}
 #stats ul.statlist{margin-top:10px;padding-bottom:0;width:100%;border:none;background:none}
-.statsViewGraphs{margin:4px 0;padding:1px 8px 2px;width:calc(100% - 46px);display:inline-block;border-top:1px solid var(--border_soft);border-bottom:1px solid var(--border_soft)}
+.statsViewGraphs{margin:4px 0;padding:1px 8px 2px;width:calc(100% - 46px);display:inline-block;border-top:var(--border_soft);border-bottom:var(--border_soft)}
 }
 
 @media screen and (min-width:1500px){
