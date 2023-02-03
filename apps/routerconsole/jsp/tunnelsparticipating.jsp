@@ -13,10 +13,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("participating tunnels")%>
-<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
+<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
 <body id="routertunnels">
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
@@ -35,50 +32,62 @@
     tunnelParticipatingHelper.storeWriter(out);
 %>
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.dotsep.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" type=module>
   import {onVisible} from "/js/onVisible.js";
   var main = document.getElementById("tunnels");
-  var tunnels = document.getElementById("tunnels_part");
-  var tunnels = document.getElementById("tunnels_part");
+  var peers = document.getElementById("transitPeers");
+  var tunnels = document.getElementById("allTransit");
   var refresh = document.getElementById("refreshPage");
-  var xhrtunnels = new XMLHttpRequest();
   var visible = document.visibilityState;
+  var xhrtunnels = new XMLHttpRequest();
   if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
-
   function initRefresh() {
-    var timerId = setInterval(updateTunnels, 60000););
+    if (refreshId) {
+      clearInterval(refreshId);
+    }
+    var refreshId = setInterval(updateTunnels, 60000);
+    if (tunnels && sorter === null) {
+      var sorter = new Tablesort((tunnels), {descending: true});
+      removeHref();
+    }
     updateTunnels();
   }
-
   function removeHref() {
     if (refresh) {refresh.removeAttribute("href");}
   }
-
   function updateTunnels() {
-    xhrtunnels.open('GET', '/tunnelsparticipating?' + new Date().getTime(), true);
+    xhrtunnels.open('GET', '/tunnelsparticipating?t=' + new Date().getTime(), true);
     xhrtunnels.responseType = "document";
     xhrtunnels.onreadystatechange = function () {
       if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
-        var tunnelsResponse = xhrtunnels.responseXML.getElementById("tunnels_part");
         var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
-        if (tunnels && tunnelsResponse && tunnels !== tunnelsResponse) {
-          tunnels.innerHTML = tunnelsResponse.innerHTML;
-          sorter.refresh();
+        var peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
+        if (peersResponse) {
+          if (peers !== peersResponse) {
+            peers.innerHTML = peersResponse.innerHTML;
+            sorter.refresh();
+            removeHref();
+          }
         } else if (!tunnels) {
           main.innerHTML = mainResponse.innerHTML;
         }
       }
     }
-    if (tunnels) {sorter.refresh();}
-    removeHref();
+    if (sorter) {sorter.refresh();}
     xhrtunnels.send();
   }
   if (refresh) {
     refresh.addEventListener("click", updateTunnels);
     refresh.addEventListener("mouseover", removeHref);
   }
-  window.addEventListener("DOMContentLoaded", progressx.hide());
-  onVisible(main, () => {initRefresh();});
+  window.addEventListener("DOMContentLoaded", progressx.hide(), true);
+  document.addEventListener("DOMContentLoaded", initRefresh(), true);
+  onVisible(main, () => {updateTunnels();});
+  if (visible === "hidden") {clearInterval(refreshId);}
 </script>
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>

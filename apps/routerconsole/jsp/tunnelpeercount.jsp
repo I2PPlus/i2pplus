@@ -13,10 +13,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("tunnel peer count")%>
-<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
+<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
 <body id="routertunnels">
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
@@ -34,45 +31,61 @@
 <% tunnelPeerCountHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount" />
 </div>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" type=module>
+  import {onVisible} from "/js/onVisible.js";
   var main = document.getElementById("tunnels");
+  var peers = document.getElementById("allPeers");
   var tunnels = document.getElementById("tunnelPeerCount");
   var refresh = document.getElementById("refreshPage");
   var xhrtunnels = new XMLHttpRequest();
   var visible = document.visibilityState;
   if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
-
+  function initRefresh() {
+    if (refreshId) {
+      clearInterval(refreshId);
+    }
+    var refreshId = setInterval(updateTunnels, 60000);
+    if (tunnels && sorter === null) {
+      var sorter = new Tablesort((tunnels), {descending: true});
+      removeHref();
+    }
+    updateTunnels();
+  }
   function removeHref() {
     if (refresh) {refresh.removeAttribute("href");}
   }
-
   function updateTunnels() {
-    xhrtunnels.open('GET', '/tunnelspeercount?' + new Date().getTime(), true);
+    xhrtunnels.open('GET', '/tunnelpeercount?t=' + new Date().getTime(), true);
     xhrtunnels.responseType = "document";
     xhrtunnels.onreadystatechange = function () {
       if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
-        var tunnelsResponse = xhrtunnels.responseXML.getElementById("tunnelPeerCount");
         var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
-        if (tunnels && tunnelsResponse && tunnels !== tunnelsResponse) {
-          tunnels.innerHTML = tunnelsResponse.innerHTML;
-          sorter.refresh();
+        var peersResponse = xhrtunnels.responseXML.getElementById("allPeers");
+        if (peersResponse) {
+          if (peers !== peersResponse) {
+            peers.innerHTML = peersResponse.innerHTML;
+            sorter.refresh();
+            removeHref();
+          }
         } else if (!tunnels) {
           main.innerHTML = mainResponse.innerHTML;
         }
       }
     }
-    if (tunnels) {sorter.refresh();}
-    removeHref();
-    if (visible === "visible") {
-      xhrtunnels.send();
-    }
+    if (sorter) {sorter.refresh();}
+    xhrtunnels.send();
   }
   if (refresh) {
     refresh.addEventListener("click", updateTunnels);
     refresh.addEventListener("mouseover", removeHref);
   }
-  setInterval(updateTunnels, 60000);
-  window.addEventListener("DOMContentLoaded", progressx.hide());
+  onVisible(main, () => {updateTunnels();});
+  if (visible === "hidden") {clearInterval(refreshId);}
+  window.addEventListener("DOMContentLoaded", progressx.hide(), true);
+  document.addEventListener("DOMContentLoaded", initRefresh(), true);
 </script>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
 </body>

@@ -13,6 +13,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("Transit Tunnels Summary")%>
+<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
 <body id="routertunnels">
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
@@ -33,41 +34,52 @@
 <jsp:getProperty name="transitSummaryHelper" property="transitSummary" />
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
-<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.dotsep.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce="<%=cspNonce%>" type=module>
+  import {onVisible} from "/js/onVisible.js";
   var main = document.getElementById("tunnels");
   var peers = document.getElementById("transitPeers");
   var summary = document.getElementById("transitSummary");
-  var visibility = document.visibilityState;
+  var visible = document.visibilityState;
   var xhrtunnels = new XMLHttpRequest();
   if (summary) {var sorter = new Tablesort((summary), {descending: true});}
-
-  setInterval(function () {
-    if (visibility === "visible") {
-      xhrtunnels.open('GET', '/tunnelsparticipatingsummary?' + new Date().getTime(), true);
-      xhrtunnels.responseType = "document";
-      xhrtunnels.onreadystatechange = function () {
-        if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
-          var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
-          var peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
-          if ((peers && peersResponse && peers !== peersResponse) || peers && peersResponse) {
+  function initRefresh() {
+    if (refreshId) {
+      clearInterval(refreshId);
+    }
+    var refreshId = setInterval(updateTunnels, 15000);
+    if (summary && sorter === null) {
+      var sorter = new Tablesort((summary), {descending: true});
+    }
+    updateTunnels();
+  }
+  function updateTunnels() {
+    xhrtunnels.open('GET', '/tunnelsparticipatingsummary?t=' + new Date().getTime(), true);
+    xhrtunnels.responseType = "document";
+    xhrtunnels.onreadystatechange = function () {
+      if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
+        var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
+        var peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
+        if (peersResponse) {
+          if (peers !== peersResponse) {
             peers.innerHTML = peersResponse.innerHTML;
             sorter.refresh();
-          } else if ((mainResponse && (main !== mainResponse)) || peersReponse !== null && !peers) {
-            main.innerHTML = mainResponse.innerHTML;
           }
+        } else if (!summary) {
+          main.innerHTML = mainResponse.innerHTML;
         }
       }
-      if (summary) {sorter.refresh();}
-      xhrtunnels.send();
     }
-  }, 15000);
-
-  window.addEventListener("DOMContentLoaded", progressx.hide());
+    if (sorter) {sorter.refresh();}
+    xhrtunnels.send();
+  }
+  onVisible(main, () => {updateTunnels();});
+  if (visible === "hidden") {clearInterval(refreshId);}
+  window.addEventListener("DOMContentLoaded", progressx.hide(), true);
+  document.addEventListener("DOMContentLoaded", initRefresh(), true);
 </script>
 </body>
 </html>

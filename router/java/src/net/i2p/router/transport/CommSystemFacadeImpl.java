@@ -525,7 +525,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     public static String getDomain(String hostname) throws IOException {
         String[] domainArray = hostname.split("\\.");
-        if (hostname.endsWith(".uk") || hostname.endsWith(".com.au") || hostname.contains("ip-")) {
+        if (domainArray.length >= 3 && hostname.endsWith(".uk") ||
+            hostname.endsWith(".au") || hostname.endsWith(".nz") ||
+            hostname.contains(".co.") || hostname.contains(".ne.") ||
+            hostname.contains(".com.") || hostname.contains(".net.") ||
+            hostname.contains(".org.") || hostname.contains(".gov.")) {
             return domainArray[domainArray.length - 3] + "." +
                    domainArray[domainArray.length - 2] + "." +
                    domainArray[domainArray.length - 1];
