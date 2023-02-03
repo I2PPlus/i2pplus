@@ -62,7 +62,7 @@
         if (graphcss)
           graphcss.remove();
         var s = document.createElement("style");
-        s.type="text/css";
+        s.type=text/css;
         s.setAttribute("id", "graphcss");
 <%
     if (graphHelper.getGraphHiDpi()) {

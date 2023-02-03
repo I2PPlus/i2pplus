@@ -40,7 +40,7 @@
 <div class="main" id="tunnelmgr">
 <style>iframe{width:1px;min-width:100%;opacity:0}</style>
 <noscript>
-<style type="text/css">iframe{display:none}</style>
+<style type=text/css>iframe{display:none}</style>
 <p class="infohelp" id="jsRequired" style="margin: 10px;">Javascript is required to view <a href="/i2ptunnel/" target="_blank" rel="noreferrer">the Tunnel Manager</a> in embedded mode.</p>
 </noscript>
 <iframe src="/i2ptunnel/" title="I2P+ <%=intl._t("Tunnel Manager")%>" frameborder="0" border="0" width="100%" scrolling="no" name="i2ptunnelframe" id="i2ptunnelframe" allowtransparency="true">
@@ -64,7 +64,7 @@
   window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
 </div>
-<style type="text/css">iframe{opacity:1}#tunnelmgr::before{width:100%;animation:fade .3s linear .7s both}</style>
+<style type=text/css>iframe{opacity:1}#tunnelmgr::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html>
 <%

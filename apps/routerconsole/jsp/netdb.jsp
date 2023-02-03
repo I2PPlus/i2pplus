@@ -13,9 +13,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("network database")%>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
-<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
+<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
@@ -105,6 +103,8 @@
 <jsp:getProperty name="formhandler" property="netDbSummary" />
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var countries = document.getElementById("netdbcountrylist");
   if (countries) {new Tablesort(countries, {descending: true});}

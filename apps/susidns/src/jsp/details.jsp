@@ -34,14 +34,14 @@
 <head>
 <meta charset=utf-8>
 <title>${book.book} <%=intl._t("addressbook")%> - susidns</title>
-<link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script charset=utf-8 src="/js/textareaResize.js" type=text/javascript></script>
 <%
     String query = request.getQueryString();
 %>
-<style type="text/css">body{display:none;pointer-events:none}</style>
+<style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
 <body id="dtls">
 <div class="page">
@@ -201,6 +201,6 @@
 </div><%-- book --%>
 </div><%-- page --%>
 <span data-iframe-height></span>
-<style type="text/css">body{display:block;pointer-events:auto}</style>
+<style type=text/css>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

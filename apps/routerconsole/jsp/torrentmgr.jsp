@@ -24,7 +24,7 @@
 <div class="main" id="torrents">
 <style>iframe{width:1px;min-width:100%;opacity:0}</style>
 <noscript>
-<style type="text/css">iframe {display: none}</style>
+<style type=text/css>iframe {display: none}</style>
 <p class="infohelp" id="jsRequired" style="margin: 10px;">Javascript is required to view <a href="/i2psnark" target="_blank" rel="noreferrer">I2PSnark</a> in embedded mode.</p>
 </noscript>
 <iframe src="/i2psnark/configure" title="I2P+ <%=intl._t("Torrent Manager")%>" frameborder="0" border="0" width="100%" scrolling="no" name="i2psnarkframe" id="i2psnarkframe" allowtransparency="true" allow="fullscreen" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
@@ -48,6 +48,6 @@
   window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
 </div>
-<style type="text/css">iframe{opacity:1}#torrents::before{width:100%;animation:fade .3s linear .7s both}</style>
+<style type=text/css>iframe{opacity:1}#torrents::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html>

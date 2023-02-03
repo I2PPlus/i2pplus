@@ -92,7 +92,7 @@ function setupFrame() {
 }
 </script>
 <style>iframe {width: 1px; min-width: 100%;}</style>
-<noscript><style type="text/css">iframe {width: 100%; height: 100%;}</style></noscript>
+<noscript><style type=text/css>iframe {width: 100%; height: 100%;}</style></noscript>
 <iframe src="<%=url%>" title="<%=appname%>" width="100%" frameborder="0" border="0" scrolling="no" name="<%=appname%>_frame" id="<%=appname%>_frame" onload="setupFrame();" allowtransparency="true"></iframe>
 <script nonce="<%=cspNonce%>" type=text/javascript>
 var isOldIE = (navigator.userAgent.indexOf("MSIE") !== -1); // Detect IE10 and below

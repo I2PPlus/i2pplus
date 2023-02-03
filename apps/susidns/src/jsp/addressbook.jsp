@@ -58,8 +58,8 @@
 <title>${book.book} <%=intl._t("address book")%> - susidns</title>
 <link rel=preload href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=preload href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
-<link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script charset=utf-8 src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <script charset=utf-8 src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
@@ -74,7 +74,7 @@
     // Messages will be displayed below.
     String formMessages = book.getMessages();
 %>
-<style type="text/css">body{display:none;pointer-events:none}</style>
+<style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
 <body id="bk">
 <div<% if (book.getBook().equals("published")) { %> id="published"<% } %> class="page">
@@ -504,7 +504,7 @@
 %>
 <c:if test="${book.isEmpty}"></div></c:if>
 <span data-iframe-height></span>
-<style type="text/css">body{display:block;pointer-events:auto}</style>
+<style type=text/css>body{display:block;pointer-events:auto}</style>
 </div>
 <!--
 <script charset=utf-8 src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>

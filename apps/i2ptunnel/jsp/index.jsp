@@ -13,13 +13,13 @@
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
 <link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel=preload as=script> 
-<link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
-<link href="<%=indexBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<link href="<%=indexBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<link href="<%=indexBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
+<link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css> 
+<link href="<%=indexBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=indexBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=indexBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css> 
 <link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.svg">
-<style type="text/css">body{display:none;pointer-events:none}</style>
+<style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
 <body id="tunnelListPage">
 <div id="page">
@@ -542,7 +542,7 @@ ElGamal-2048
 </tr>
 </table>
 </div>
-<noscript><style type="text/css">.script{display:none}.tunnelInfo{display:table-row!important}</style></noscript>
+<noscript><style type=text/css>.script{display:none}.tunnelInfo{display:table-row!important}</style></noscript>
 <%
 
   }  // isInitialized()
@@ -557,7 +557,7 @@ ElGamal-2048
 <script charset=utf-8 src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
-<noscript><style type="text/css">.script{display:none!important}#screenlog_buttons{display:table-row!important}</style></noscript>
-<style type="text/css">body{display:block;pointer-events:auto}</style>
+<noscript><style type=text/css>.script{display:none!important}#screenlog_buttons{display:table-row!important}</style></noscript>
+<style type=text/css>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

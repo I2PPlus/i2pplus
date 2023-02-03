@@ -37,10 +37,10 @@
 <head>
 <meta charset=utf-8>
 <title><%=intl._t("configuration")%> - susidns</title>
-<link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<style type="text/css">body{display:none;pointer-events:none}</style>
+<style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
 <body id="cfg">
 <div class="page">
@@ -96,6 +96,6 @@
 </div>
 </div>
 <span data-iframe-height></span>
-<style type="text/css">body{display:block;pointer-events:auto}</style>
+<style type=text/css>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

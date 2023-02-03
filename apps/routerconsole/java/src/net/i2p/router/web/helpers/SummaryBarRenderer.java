@@ -1169,9 +1169,9 @@ class SummaryBarRenderer {
        }
        buf.append("\">").append(totalTunnels);
        if (_helper.getTunnelBuildSuccess() > 0) {
-           buf.append(" / ").append(_helper.getTunnelBuildSuccess()).append("%</span>");
+           buf.append(" / ").append(_helper.getTunnelBuildSuccess()).append("%");
        }
-       buf.append("</a><input type=checkbox id=toggle_sb_tunnels class=\"toggleSection script\" checked hidden>" +
+       buf.append("</span></a><input type=checkbox id=toggle_sb_tunnels class=\"toggleSection script\" checked hidden>" +
                   "</h3>\n<hr class=b>\n" + "<table id=sb_tunnels>\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
             buf.append("<tr title=\"")

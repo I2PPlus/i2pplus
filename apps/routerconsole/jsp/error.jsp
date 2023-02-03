@@ -34,7 +34,7 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
-<link type="text/css" rel="stylesheet" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
+<link type=text/css rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
 <%=intl.title("Page Not Found")%>
 <script nonce="<%=cspNonce%>" type=text/javascript>if (window.location !== window.top.location) {window.top.location = window.location;}</script>
 </head>

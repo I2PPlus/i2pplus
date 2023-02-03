@@ -18,7 +18,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("Debug")%>
-<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
+<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>

@@ -41,7 +41,7 @@
 <div class="main" id="webmail">
 <style>iframe{width:1px;min-width:100%;opacity:0}</style>
 <noscript>
-<style type="text/css">iframe {display: none}</style>
+<style type=text/css>iframe {display: none}</style>
 <p class="infohelp" id="jsRequired" style="margin: 10px;">Javascript is required to view <a href="/susimail/" target="_blank" rel="noreferrer">the webmail client</a> in embedded mode.</p>
 </noscript>
 <iframe src="/susimail/" title="I2P+ <%=intl._t("webmail")%>" width="100%" frameborder="0" border="0" scrolling="no" name="susimailframe" id="susimailframe" allowtransparency="true">
@@ -65,7 +65,7 @@
   window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
 </div>
-<style type="text/css">iframe{opacity:1}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
+<style type=text/css>iframe{opacity:1}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html>
 <%

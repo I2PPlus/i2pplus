@@ -13,7 +13,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("config UI")%>
-<style type="text/css">input.default {width: 1px; height: 1px; visibility: hidden;}</style>
+<style type=text/css>input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>

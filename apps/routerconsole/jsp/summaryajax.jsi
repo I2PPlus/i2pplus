@@ -9,16 +9,18 @@
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   var refreshInterval = refresh * 1000;
   var sb = document.getElementById("sidebar");
-
+  var visible = document.visibilityState;
   function initRefresh() {
     var timerId = setInterval(refreshSidebar, refreshInterval);
     stickySidebar();
   }
-
   onVisible(sb, () => {initRefresh();});
   document.addEventListener("DOMContentLoaded", sectionToggler);
   window.addEventListener("DOMContentLoaded", stickySidebar);
   window.addEventListener("resize", stickySidebar);
+  if (visible === "hidden") {
+    clearInterval(timerId);
+  }
 </script>
 <%
     } else {

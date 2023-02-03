@@ -13,13 +13,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("peer profiles")%>
-
-<!-- tablesort.js https://github.com/tristen/tablesort/ -->
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
-<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
-<!-- end tablesort.js -->
+<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
@@ -56,13 +50,14 @@
 <jsp:getProperty name="profilesHelper" property="summary" />
 </div>
 </div>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var ff = document.getElementById("floodfills");
-  if (ff) {
-    new Tablesort(ff);
-  }
+  if (ff) {new Tablesort(ff);}
 </script>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   document.addEventListener("DOMContentLoaded", function() {
     setInterval(function() {
