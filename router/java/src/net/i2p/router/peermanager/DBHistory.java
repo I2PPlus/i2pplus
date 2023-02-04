@@ -317,7 +317,6 @@ public class DBHistory {
             _invalidReplyRate.load(props, "dbHistory.invalidReplyRate", true);
         } catch (IllegalArgumentException iae) {
             _log.warn("Db History Invalid Reply rate is corrupt", iae);
-            createRates(_statGroup);
         }
     }
 
