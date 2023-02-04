@@ -54,7 +54,14 @@
     if (summary && sorter === null) {
       var sorter = new Tablesort((summary), {descending: true});
     }
+    addSortListeners();
     updateTunnels();
+  }
+  function addSortListeners() {
+    if (summary) {
+      summary.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.7);}, true);
+      summary.addEventListener('afterSort', function() {progressx.hide();}, true);
+    }
   }
   function updateTunnels() {
     xhrtunnels.open('GET', '/tunnelsparticipatingsummary?t=' + new Date().getTime(), true);
@@ -64,11 +71,12 @@
         var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
         var peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
         if (peersResponse) {
-          if (peers !== peersResponse) {
+        addSortListeners();
+          if (peers && peers !== peersResponse) {
             peers.innerHTML = peersResponse.innerHTML;
             sorter.refresh();
           }
-        } else if (!summary) {
+        } else if (!summary || !peersReponse) {
           main.innerHTML = mainResponse.innerHTML;
         }
       }

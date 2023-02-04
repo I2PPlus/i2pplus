@@ -46,18 +46,23 @@
   var xhrtunnels = new XMLHttpRequest();
   if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
   function initRefresh() {
-    if (refreshId) {
-      clearInterval(refreshId);
-    }
+    if (refreshId) {clearInterval(refreshId);}
     var refreshId = setInterval(updateTunnels, 60000);
     if (tunnels && sorter === null) {
       var sorter = new Tablesort((tunnels), {descending: true});
       removeHref();
     }
+    addSortListeners();
     updateTunnels();
   }
   function removeHref() {
     if (refresh) {refresh.removeAttribute("href");}
+  }
+  function addSortListeners() {
+    if (tunnels) {
+      tunnels.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.7);}, true);
+      tunnels.addEventListener('afterSort', function() {progressx.hide();}, true);
+    }
   }
   function updateTunnels() {
     xhrtunnels.open('GET', '/tunnelsparticipating?t=' + new Date().getTime(), true);
@@ -67,12 +72,13 @@
         var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
         var peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
         if (peersResponse) {
-          if (peers !== peersResponse) {
+          addSortListeners();
+          if (peers && peers !== peersResponse) {
             peers.innerHTML = peersResponse.innerHTML;
             sorter.refresh();
             removeHref();
           }
-        } else if (!tunnels) {
+        } else if (!tunnels || !peersReponse) {
           main.innerHTML = mainResponse.innerHTML;
         }
       }
@@ -81,13 +87,13 @@
     xhrtunnels.send();
   }
   if (refresh) {
-    refresh.addEventListener("click", updateTunnels);
+    refresh.addEventListener("click", function() {progressx.show();progressx.progress(0.7);updateTunnels();progressx.hide();});
     refresh.addEventListener("mouseover", removeHref);
   }
-  window.addEventListener("DOMContentLoaded", progressx.hide(), true);
-  document.addEventListener("DOMContentLoaded", initRefresh(), true);
   onVisible(main, () => {updateTunnels();});
   if (visible === "hidden") {clearInterval(refreshId);}
+  window.addEventListener("DOMContentLoaded", progressx.hide(), true);
+  document.addEventListener("DOMContentLoaded", initRefresh(), true);
 </script>
 </div>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>

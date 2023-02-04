@@ -440,128 +440,132 @@ class TunnelRenderer {
 
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
 
-        out.write("<h3 class=tabletitle id=peercount>" + _t("Tunnel Count By Peer") +
-                  "&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelpeercount\">" + _t("Refresh") + "</a></h3>\n");
-        out.write("<table id=tunnelPeerCount data-sortable>");
-        out.write("<thead>\n<tr>" +
-                  "<th id=country data-sortable>" + _t("Country") + "</th>" +
-                  "<th id=router data-sortable data-sort-method=natural>" + _t("Router") + "</th>" +
-                  "<th id=version data-sortable data-sort-method=dotsep>" + _t("Version") + "</th>" +
-                  "<th id=tier data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
-                  "<th id=address title=\"Primary IP address\">Address</th>");
-        if (enableReverseLookups()) {
-            out.write("<th id=domain data-sortable>" + _t("Domain") + "</th>");
-        }
-        out.write("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sortable data-sort-method=number>" +
-                  _t("Local") + "</th>");
-        if (!participating.isEmpty()) {
-            out.write("<th class=tcount colspan=2 data-sortable data-sort-method=number>" + _t("Transit") + "</th>");
-        }
-        out.write("<th id=edit data-sort-method=none>" + _t("Edit") + "</th>");
-        out.write("</tr>\n</thead>\n<tbody id=allPeers>\n");
-        for (Hash h : peerList) {
-            char cap = getCapacity(h);
-            RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
-            String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
-            String v = info != null ? info.getOption("router.version") : null;
-            String truncHash = h.toBase64().substring(0,4);
-            String rl = ip != null ? getCanonicalHostName(ip) : null;
-            out.write("<tr class=lazy><td>");
-            out.write(peerFlag(h));
-            out.write("</td><td>");
-            out.write("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
-            out.write(truncHash);
-            out.write("</td><td>");
-            //out.write(netDbLink(h));
-            if (v != null)
-                out.write("<span class=version title=\"" + _t("Show all routers with this version in the NetDb") +
-                          "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
-                          "</a></span>");
-            out.write("</td><td>");
-            out.write("<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
-            out.write("</td><td><span class=ipaddress>");
-            if (info != null && ip != null) {
-                if (!ip.toString().equals("null")) {
-                    out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() +
-                              "+dns\" target=_blank title=\"" + _t("Lookup address on gwhois.org") +
-                              "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
-                } else {
-                    out.write("&ndash;");
-                }
-            } else {
-                out.write("&ndash;");
-            }
-            out.write("</span>");
+        if (!participating.isEmpty() || tunnelCount > 0) {
+            out.write("<h3 class=tabletitle id=peercount>" + _t("Tunnel Count By Peer") +
+                      "&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelpeercount\">" + _t("Refresh") + "</a></h3>\n");
+            out.write("<table id=tunnelPeerCount data-sortable>");
+            out.write("<thead>\n<tr>" +
+                      "<th id=country data-sortable>" + _t("Country") + "</th>" +
+                      "<th id=router data-sortable data-sort-method=natural>" + _t("Router") + "</th>" +
+                      "<th id=version data-sortable data-sort-method=dotsep>" + _t("Version") + "</th>" +
+                      "<th id=tier data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
+                      "<th id=address title=\"Primary IP address\">Address</th>");
             if (enableReverseLookups()) {
+                out.write("<th id=domain data-sortable>" + _t("Domain") + "</th>");
+            }
+            out.write("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sortable data-sort-method=number data-sort-column-key=localCount>" +
+                      _t("Local") + "</th>");
+            if (!participating.isEmpty()) {
+                out.write("<th class=tcount colspan=2 data-sortable data-sort-method=number data-sort-column-key=transitCount>" + _t("Transit") + "</th>");
+            }
+            out.write("<th id=edit data-sort-method=none>" + _t("Edit") + "</th>");
+            out.write("</tr>\n</thead>\n<tbody id=allPeers>\n");
+            for (Hash h : peerList) {
+                char cap = getCapacity(h);
+                RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
+                String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
+                String v = info != null ? info.getOption("router.version") : null;
+                String truncHash = h.toBase64().substring(0,4);
+                String rl = ip != null ? getCanonicalHostName(ip) : null;
+                out.write("<tr class=lazy><td>");
+                out.write(peerFlag(h));
                 out.write("</td><td>");
-                if (rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
-                    out.write("<span class=rlookup title=\"");
-                    out.write(rl);
-                    out.write("\">");
-                    if (!ip.toString().equals(rl)) {
-                        out.write(CommSystemFacadeImpl.getDomain(rl));
+                out.write("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
+                out.write(truncHash);
+                out.write("</td><td>");
+                //out.write(netDbLink(h));
+                if (v != null)
+                    out.write("<span class=version title=\"" + _t("Show all routers with this version in the NetDb") +
+                              "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
+                              "</a></span>");
+                out.write("</td><td>");
+                out.write("<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+                out.write("</td><td><span class=ipaddress>");
+                if (info != null && ip != null) {
+                    if (!ip.toString().equals("null")) {
+                        out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() +
+                                  "+dns\" target=_blank title=\"" + _t("Lookup address on gwhois.org") +
+                                  "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
+                    } else {
+                        out.write("&ndash;");
                     }
                 } else {
-                    out.write("<span hidden>");
                     out.write("&ndash;");
                 }
                 out.write("</span>");
-            }
-            out.write("</td><td class=tcount>");
-            if (lc.count(h) > 0) {
-                out.write("<span>" + lc.count(h) + "</span>");
-            } else {
-                out.write("<span hidden>0</span>");
-            }
-            out.write("</td><td class=bar>");
-            if (lc.count(h) > 0) {
-                out.write("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
-                out.write((lc.count(h) * 100) / tunnelCount);
-                out.write("%\"><span class=percentBarText>");
-                out.write(fmt.format((lc.count(h) * 100) / tunnelCount).replace(".00", ""));
-                out.write("%</span></span></span>");
-            } else {
-                out.write("<span hidden>&ndash;</span>");
-            }
-            if (!participating.isEmpty()) {
+                if (enableReverseLookups()) {
+                    out.write("</td><td>");
+                    if (rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
+                        out.write("<span class=rlookup title=\"");
+                        out.write(rl);
+                        out.write("\">");
+                        if (!ip.toString().equals(rl)) {
+                            out.write(CommSystemFacadeImpl.getDomain(rl));
+                        }
+                    } else {
+                        out.write("<span hidden>");
+                        out.write("&ndash;");
+                    }
+                    out.write("</span>");
+                }
                 out.write("</td><td class=tcount>");
-                if (pc.count(h) > 0) {
-                    out.write("<span>" + pc.count(h) + "</span>");
+                if (lc.count(h) > 0) {
+                    out.write("<span>" + lc.count(h) + "</span>");
                 } else {
                     out.write("<span hidden>0</span>");
                 }
-                out.write("</td><td class=bar>");
-                if (pc.count(h) > 0) {
+                out.write("</td><td class=bar data-sort-column-key=localCount>");
+                if (lc.count(h) > 0) {
                     out.write("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
-                    out.write((pc.count(h) * 100) / partCount);
+                    out.write((lc.count(h) * 100) / tunnelCount);
                     out.write("%\"><span class=percentBarText>");
-                    out.write(fmt.format((pc.count(h) * 100) / partCount).replace(".00", ""));
+                    out.write(fmt.format((lc.count(h) * 100) / tunnelCount).replace(".00", ""));
                     out.write("%</span></span></span>");
                 } else {
-                   out.write("<span hidden>&ndash;</span>");
+                    out.write("<span hidden>&ndash;</span>");
                 }
-                out.write("</td>");
-            } else {
-                out.write("</td>");
+                if (!participating.isEmpty()) {
+                    out.write("</td><td class=tcount data-sort-column-key=transitCount>");
+                    if (pc.count(h) > 0) {
+                        out.write("<span>" + pc.count(h) + "</span>");
+                    } else {
+                        out.write("<span hidden>0</span>");
+                    }
+                    out.write("</td><td class=bar>");
+                    if (pc.count(h) > 0) {
+                        out.write("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
+                        out.write((pc.count(h) * 100) / partCount);
+                        out.write("%\"><span class=percentBarText>");
+                        out.write(fmt.format((pc.count(h) * 100) / partCount).replace(".00", ""));
+                        out.write("%</span></span></span>");
+                    } else {
+                       out.write("<span hidden>&ndash;</span>");
+                    }
+                    out.write("</td>");
+                } else {
+                    out.write("</td>");
+                }
+                out.write("<td>");
+                if (info != null && info.getHash() != null) {
+                    out.write("<a class=configpeer href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\">" +
+                              _t("Edit") + "</a>");
+                }
+                out.write("</td></tr>\n");
             }
-            out.write("<td>");
-            if (info != null && info.getHash() != null) {
-                out.write("<a class=configpeer href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\">" +
-                          _t("Edit") + "</a>");
+            out.write("</tbody>\n<tfoot><tr class=tablefooter data-sort-method=none>" +
+                      "<td colspan=4><b>" + peerCount + ' ' + _t("unique peers") + "</b></td>" +
+                      "<td></td>");
+            if (enableReverseLookups()) {
+                out.write("<td></td>");
             }
-            out.write("</td></tr>\n");
+            out.write("<td colspan=2><b>" + tunnelCount + ' ' + _t("local") + "</b>");
+            if (!participating.isEmpty()) {
+                out.write("<td colspan=2><b>" + partCount + ' ' + _t("transit") + "</b>");
+            }
+            out.write("</td><td></td></tr></tfoot>\n</table>\n");
+        } else {
+                out.write("<p class=infohelp>" + _t("No local or transit tunnels currently active."));
         }
-        out.write("</tbody>\n<tfoot><tr class=tablefooter data-sort-method=none>" +
-                  "<td colspan=4><b>" + peerCount + ' ' + _t("unique peers") + "</b></td>" +
-                  "<td></td>");
-        if (enableReverseLookups()) {
-            out.write("<td></td>");
-        }
-        out.write("<td colspan=2><b>" + tunnelCount + ' ' + _t("local") + "</b>");
-        if (!participating.isEmpty()) {
-            out.write("<td colspan=2><b>" + partCount + ' ' + _t("transit") + "</b>");
-        }
-        out.write("</td><td></td></tr></tfoot>\n</table>\n");
     }
 
     public void renderGuide(Writer out) throws IOException {

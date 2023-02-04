@@ -52,10 +52,17 @@
       var sorter = new Tablesort((tunnels), {descending: true});
       removeHref();
     }
+    addSortListeners();
     updateTunnels();
   }
   function removeHref() {
     if (refresh) {refresh.removeAttribute("href");}
+  }
+  function addSortListeners() {
+    if (tunnels) {
+      tunnels.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.7);}, true);
+      tunnels.addEventListener('afterSort', function() {progressx.hide();}, true);
+    }
   }
   function updateTunnels() {
     xhrtunnels.open('GET', '/tunnelpeercount?t=' + new Date().getTime(), true);
@@ -65,12 +72,13 @@
         var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
         var peersResponse = xhrtunnels.responseXML.getElementById("allPeers");
         if (peersResponse) {
-          if (peers !== peersResponse) {
+          addSortListeners();
+          if (peers && peers !== peersResponse) {
             peers.innerHTML = peersResponse.innerHTML;
             sorter.refresh();
             removeHref();
           }
-        } else if (!tunnels) {
+        } else if (!tunnels || !peersReponse) {
           main.innerHTML = mainResponse.innerHTML;
         }
       }
@@ -79,7 +87,7 @@
     xhrtunnels.send();
   }
   if (refresh) {
-    refresh.addEventListener("click", updateTunnels);
+    refresh.addEventListener("click", function() {progressx.show();progressx.progress(0.7);updateTunnels();progressx.hide();});
     refresh.addEventListener("mouseover", removeHref);
   }
   onVisible(main, () => {updateTunnels();});
