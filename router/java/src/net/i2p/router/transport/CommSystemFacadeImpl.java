@@ -728,6 +728,84 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return buf.toString();
     }
 
+    /** Provide a consistent "look" for displaying router IDs in the console */
+    /* I2P+ WIP replacement */
+/*
+    @Override
+    public String renderPeerHTML(Hash peer) {
+        StringBuilder buf = new StringBuilder(128);
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+        String c = getCountry(peer);
+        String h = peer.toBase64();
+        if (ri != null) {
+            String caps = ri.getCapabilities();
+            String v = ri.getVersion();
+            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
+            buf.append("<table class=rid><td class=riflag>");
+            if (ri != null && c != null) {
+                String countryName = getCountryName(c);
+                if (countryName.length() > 2)
+                    countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
+                buf.append("<a href=\"/netdb?c=" + c + "\"><img width=20 height=15 alt=\"")
+                   .append(c.toUpperCase(Locale.US)).append("\" title=\"");
+                buf.append(countryName).append(" &bullet; ");
+                if (ri != null && ip != null)
+                    buf.append(ip);
+                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a></td>");
+            } else {
+                buf.append("<img class=unknownflag width=20 height=15 alt=\"??\"" +
+                           " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append(" &bullet; ");
+                if (ri != null && ip != null)
+                    buf.append(ip);
+                buf.append("\"></td> ");
+            }
+            buf.append("<td class=\"bwcap");
+            if (caps.contains("f"))
+                buf.append(" ff");
+            buf.append("\">");
+            buf.append(getCapacity(peer));
+            buf.append("</td><td class=hash>");
+            buf.append("<a title=\"");
+            if (ri != null) {
+                if (caps.contains("f"))
+                    buf.append("Floodfill &bullet;");
+                if (v != null)
+                    buf.append(' ' + v);
+                buf.append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">");
+            }
+            buf.append(h.substring(0,4));
+            if (ri != null)
+                buf.append("</a>");
+            buf.append("</td></table>");
+        } else {
+            buf.append("<table class=rid><td class=riflag>")
+               .append("<img class=unknownflag width=20 height=15 alt=\"??\"" +
+                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"))
+               .append("\"></td><td class=bwcap>?</td><td class=hash>");
+           if (h != null)
+               buf.append(h.substring(0,4));
+           else
+               buf.append("????");
+           buf.append("</td></table> ");
+        }
+        return buf.toString();
+    }
+*/
+
+    /** @return cap char or '?' */
+    private char getCapacity(Hash peer) {
+        RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
+        if (info != null) {
+            String caps = info.getCapabilities();
+            for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
+                char c = RouterInfo.BW_CAPABILITY_CHARS.charAt(i);
+                if (caps.indexOf(c) >= 0)
+                    return c;
+            }
+        }
+        return '?';
+    }
+
     /** Render a peer's country flag
      * @since 0.9.58+
      */
