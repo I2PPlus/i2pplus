@@ -5,8 +5,8 @@ function onVisible(element, callback) {
         callback(element);
         observer.disconnect();
       } else {
-        if (timerId !== null) {clearInterval(timerId);}
-        if (refreshId !== null) {clearInterval(refreshId);}
+        if (typeof timerId !== "null" && typeof timerId !== "undefined") {clearInterval(timerId);}
+        if (typeof refreshId !== "null" && typeof refreshId !== "undefined") {clearInterval(refreshId);}
       }
     });
   }).observe(element);
