@@ -15,7 +15,7 @@
 <%=intl.title("participating tunnels")%>
 <link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
-<body id="routertunnels">
+<body id="transit">
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Participating Tunnels")%></h1>
