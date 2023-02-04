@@ -3161,7 +3161,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             return addr;
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Wanted to rebuild my SSU address, but couldn't specify either the direct or indirect info (needs introducers? "
+                _log.warn("Wanted to rebuild our SSU address, but couldn't specify either the direct or indirect info (needs introducers? "
                            + introducersRequired +
                            " IPv6? " + isIPv6 + ')');
             _needsRebuild = true;
@@ -4142,7 +4142,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
      *  Is IPv4 Symmetric NATted?
      *  @since 0.9.57
      */
-    boolean isSymNatted() { 
+    boolean isSymNatted() {
         return STATUS_IPV4_SYMNAT.contains(getReachabilityStatus());
     }
 
