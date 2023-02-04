@@ -12,40 +12,55 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
-<%=intl.title("job queue")%>
+<%=intl.title("job queue statistics")%>
 </head>
-<body id="routerjobs">
+<body id=routerjobs>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %><h1 class="sched"><%=intl._t("Job Queue")%></h1>
-<div class=main id="jobs">
+<div class=main id=jobs>
+<div class="confignav">
+<span class="tab2" title="<%=intl._t("Job statistics for this session")%>"><%=intl._t("Job Stats")%></span>
+<span class="tab" title="<%=intl._t("Active and scheduled jobs")%>"><a href="/jobqueue"><%=intl._t("Job Queue")%></a></span>
+</div>
 <jsp:useBean class="net.i2p.router.web.helpers.JobQueueHelper" id="jobQueueHelper" scope="request" />
 <jsp:setProperty name="jobQueueHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% jobQueueHelper.storeWriter(out); %>
-<jsp:getProperty name="jobQueueHelper" property="jobQueueSummary" />
+<jsp:getProperty name="jobQueueHelper" property="jobQueueStats" />
 </div>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.dotsep.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
+  var stats = document.getElementById("jobstats");
+  var tbody = document.getElementById("statCount");
+  var tfoot = document.getElementById("statTotals");
+  var sorter = new Tablesort((stats), {descending: true});
+  progressx.hide();
   var visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {
-      progressx.show();
-      progressx.progress(0.5);
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/jobs?' + new Date().getTime(), true);
+      xhr.open('GET', '/jobs?t=' + new Date().getTime(), true);
       xhr.responseType = "document";
       xhr.onreadystatechange = function () {
         if (xhr.readyState==4 && xhr.status==200) {
-          var jobs = document.getElementById("jobs");
-          var jobsResponse = xhr.responseXML.getElementById("jobs");
-          var jobsParent = jobs.parentNode;
-            if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML))
-              jobsParent.replaceChild(jobsResponse, jobs);
+          var tbodyResponse = xhr.responseXML.getElementById("statCount");
+          var tfootResponse = xhr.responseXML.getElementById("statTotals");
+          if (tbody.innerHTML !== tbodyResponse.innerHTML) {
+            tbody.innerHTML = tbodyResponse.innerHTML;
+            tfoot.innerHTML = tfootResponse.innerHTML;
+            sorter.refresh();
+          }
         }
       }
-      window.addEventListener("DOMContentLoaded", progressx.hide());
+      progressx.hide();
+      sorter.refresh();
       xhr.send();
-    }, 15000);
+    }, 10000);
   }
-  window.addEventListener("DOMContentLoaded", progressx.hide());
+  window.addEventListener("DOMContentLoaded", progressx.hide(), true);
+  stats.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
+  stats.addEventListener('afterSort', function() {progressx.hide();}, true);
 </script>
 </body>
 </html>

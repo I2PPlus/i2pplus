@@ -39,6 +39,22 @@ public class JobQueueHelper extends HelperBase {
         }
     }
 
+    public String getJobQueueStats() {
+        try {
+            if (_out != null) {
+                renderJobStatsHTML(_out);
+                return "";
+            } else {
+                StringWriter sw = new StringWriter(32*1024);
+                renderJobStatsHTML(sw);
+                return sw.toString();
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return "";
+        }
+    }
+
     /**
      *  Moved from JobQueue
      *  @since 0.8.9
@@ -139,6 +155,12 @@ public class JobQueueHelper extends HelperBase {
         getJobCounts(buf, counter);
         out.write(buf.toString());
         buf.setLength(0);
+        //getJobStats(buf);
+        out.write(buf.toString());
+    }
+
+    private void renderJobStatsHTML(Writer out) throws IOException {
+        StringBuilder buf = new StringBuilder(32*1024);
         getJobStats(buf);
         out.write(buf.toString());
     }
@@ -170,24 +192,22 @@ public class JobQueueHelper extends HelperBase {
      */
     private void getJobStats(StringBuilder buf) {
         buf.append("<div class=\"widescroll\">")
-           .append("<h3 id=\"totaljobstats\">")
-           .append(_t("Total Job Statistics"))
-           .append("</h3>\n");
-        buf.append("<table id=\"jobstats\">\n<tr>\n" +
+           .append("<h3 id=\"totaljobstats\">").append(_t("Router Job Statistics")).append("</h3>\n");
+        buf.append("<table id=\"jobstats\" data-sortable>\n<thead><tr data-sort-method=thead>" +
                    "<th>").append(_t("Job")).append("</th>" +
-                   "<th>").append(_t("Runs")).append("</th>" +
-                   "<th>").append(_t("Dropped")).append("</th>" +
-                   "<th>").append(_t("Time")).append("</th>" +
-                   "<th><i>").append(_t("Avg")).append("</i></th>" +
-                   "<th><i>").append(_t("Max")).append("</i></th>" +
-                   "<th><i>").append(_t("Min")).append("</i></th>");
+                   "<th data-sort-method=number>").append(_t("Runs")).append("</th>" +
+                   "<th data-sort-method=number>").append(_t("Dropped")).append("</th>" +
+                   "<th data-sort-method=number>").append(_t("Time")).append("</th>" +
+                   "<th data-sort-method=number><i>").append(_t("Avg")).append("</i></th>" +
+                   "<th data-sort-method=number><i>").append(_t("Max")).append("</i></th>" +
+                   "<th data-sort-method=number><i>").append(_t("Min")).append("</i></th>");
             if (isAdvanced()) {
-                buf.append("<th>").append(_t("Pending")).append("</th>" +
-                           "<th><i>").append(_t("Avg")).append("</i></th>" +
-                           "<th><i>").append(_t("Max")).append("</i></th>" +
-                           "<th><i>").append(_t("Min")).append("</i></th>");
+                buf.append("<th data-sort-method=number>").append(_t("Pending")).append("</th>" +
+                           "<th data-sort-method=number><i>").append(_t("Avg")).append("</i></th>" +
+                           "<th data-sort-method=number><i>").append(_t("Max")).append("</i></th>" +
+                           "<th data-sort-method=number><i>").append(_t("Min")).append("</i></th>");
             }
-        buf.append("\n</tr>\n");
+        buf.append("</tr></thead>\n<tbody id=statCount>\n");
 
         long totRuns = 0;
         long totDropped = 0;
@@ -242,7 +262,7 @@ public class JobQueueHelper extends HelperBase {
                 avgPendingTime = totPendingTime / totRuns;
         }
 
-        buf.append("<tr class=tablefooter>");
+        buf.append("</tbody>\n<tfoot id=statTotals><tr class=tablefooter>");
         buf.append("<td><b>").append(_t("Summary")).append("</b></td>");
         buf.append("<td>").append(totRuns).append("</td>");
         buf.append("<td>").append(totDropped).append("</td>");
@@ -256,7 +276,7 @@ public class JobQueueHelper extends HelperBase {
             buf.append("<td>").append(DataHelper.formatDuration2(maxPendingTime)).append("</td>");
             buf.append("<td>").append(DataHelper.formatDuration2(minPendingTime)).append("</td>");
         }
-        buf.append("</tr></table>\n");
+        buf.append("</tr></tfoot>\n</table>\n");
         buf.append("</div>\n");
     }
 

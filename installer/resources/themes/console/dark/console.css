@@ -506,23 +506,6 @@ textarea[readonly]:focus{font-weight:400;box-shadow:var(--highlight)}
 input[type=submit],input[type=reset],select,button{font-size:8.5pt}
 input[type=submit],input[type=reset],input[type=file]::file-selector-button,button{margin:5px}
 input[type=file]::file-selector-button{font-size:8.5pt}
-.joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0;}
-.joblog h3{margin-top:10px}
-.joblog br{margin-bottom:5px}
-.joblog ol li{padding-bottom:5px;width:calc(100% - 45px);min-width:360px;display:inline-block;text-align:left;list-style-position:inside;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
-.joblog ol li:last-child{border:none;text-align:left}
-.joblog ol:empty{display:none}
-.joblog ol li:first-child{margin-top:2px}
-.joblog li:last-child{padding-bottom:10px}
-.joblog ul li li li{margin-bottom:10px}
-.joblog ul li li:last-child{margin-bottom:-15px}
-.joblog form:first-child{margin-top:10px}
-.joblog table{margin-top:15px;margin-left:0;margin-bottom:15px}
-.joblog table td:first-child{font-weight:700}
-.joblog p{line-height:1.4}
-.joblog th:first-child{padding-left:6px;text-align:left}
-#jobs .jobqueue{padding:5px 12px 0 0;display:inline-block;columns:4 400px;column-gap:4px}
-#jobs .jobqueue:first-of-type{padding-bottom:4px}
 
 /* routerid */
 .routerid,.tunnel_local,#tunnels .tunnel_cap,.version,#netdbtiers a,.routerHash{border:1px solid #030}
@@ -575,41 +558,63 @@ form[action="updategraphs"]{margin:-11px -11px -18px;border:var(--border);border
 #graphs .nowrap{text-align:left;line-height:3}
 
 /* jobs */
-.jobcount{font-weight:400;font-size:85%}
-#jobs h2{margin:-16px 0 -15px;display:inline-block;border-radius:0}
+.joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0;}
+.joblog h3{margin-top:10px}
+.joblog br{margin-bottom:5px}
+.joblog ol li{padding-bottom:5px;width:calc(100% - 45px);min-width:360px;display:inline-block;text-align:left;list-style-position:inside;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.joblog ol li:last-child{border:none;text-align:left}
+.joblog ol:empty{display:none}
+.joblog ol li:first-child{margin-top:2px}
+.joblog li:last-child{padding-bottom:10px}
+.joblog ul li li li{margin-bottom:10px}
+.joblog ul li li:last-child{margin-bottom:-15px}
+.joblog form:first-child{margin-top:10px}
+.joblog table{margin-top:15px;margin-left:0;margin-bottom:15px}
+.joblog table td:first-child{font-weight:700}
+.joblog p{line-height:1.4}
+.joblog th:first-child{padding-left:6px;text-align:left}
+#jobs .jobqueue{padding:5px 12px 5px 0;display:inline-block;columns:4 400px;column-gap:4px}
+#jobs .jobqueue:first-of-type{padding-bottom:4px}
+
 h3[id*="job"]{margin:12px 0 10px 0;padding:8px 10px;letter-spacing:.08em;text-transform:uppercase;border:var(--border);border-radius:0}
-#jobs #jobrunners{display:none}
-#jobs #finishedjobs{margin-top:-5px}
-#jobs h3 + ol + h3{margin-top:10px}
-#jobs .jobqueue{margin-bottom:5px;margin-top:-11px;width:calc(100% - 14px);display:block;border:var(--border);background:#000800}
-#jobs .jobqueue li:last-child{margin-bottom:5px}
 h3[id*="jobs"]{clear:both;margin-top:25px}
-#schedjobs{width:100%;margin:10px 0 0}
-#finishedjobs + ol li,#scheduledjobs + ol li,#activejobs + ol li,#readyjobs + ol li{list-style:none}
 #activejobs + ol li::before,#scheduledjobs + ol li::before,#readyjobs + ol li::before,#finishedjobs + ol li::before,#schedjobs li::before{margin:0 6px 0 2px;width:16px;height:16px;display:inline-block;vertical-align:text-top;background:var(--clock) var(--center)/16px;content:""}
 #activejobs + ol li::before{background:var(--start) var(--center)}
+#finishedjobs{margin-top:-5px}
 #finishedjobs + ol li::before{background:var(--yes) var(--center)/12px}
-#readyjobs + ol li::before{color:#dd3}
-#scheduledjobs + ol li::before,#scheduledjobs + ol li::before{color:#773;opacity:.8}
-#schedjobs ul{columns:250px auto;margin:0 8px 0 0;column-gap:0}
-#schedjobs li:first-child{margin-top:0;padding-top:0}
-#schedjobs li{width:calc(100% - 12px);margin:0 4px}
-#schedjobs tr:hover td{background:#000800}
-#jobstats{margin-bottom:10px}
-#jobstats tr:nth-last-child(n+2){border-top:var(--border_softer)}
-#jobstats th,#jobstats td{text-align:right;padding-right:12px}
-#jobstats td{padding-top:6px;padding-bottom:6px;border-bottom:none}
-#jobstats tr:last-child td{border-top:var(--border);background:var(--th)}
-#jobstats tr:nth-last-child(n+2) td:nth-last-child(n+2){border-right:var(--border_softer)}
-#jobstats tr:nth-last-child(n+2) td:nth-child(odd){background:rgba(255,255,255,.01)}
-#jobstats tr:last-child{font-weight:700}
-#schedjobs th:first-child,#jobstats th:first-child,#jobstats td:first-child{padding-left:10px;text-align:left;font-weight:700}
-#schedjobs td:first-child{padding:3px 0}
-#jobstats + hr{display:none}
-#totaljobstats{margin-bottom:-2px;margin-top:10px}
-#jobs ol{column-gap:4px}
-#jobs li,#jobs li:first-child{margin:0 4px;padding:8px 6px;width:calc(100% - 8px);list-style:none;box-shadow:var(--bevel),inset 0 0 0 3px #000;background:linear-gradient(180deg,#000b00,#000600)}
+#finishedjobs + ol li,#scheduledjobs + ol li,#activejobs + ol li,#readyjobs + ol li{list-style:none}
 #finishedjobs ol + #scheduledjobs + ol{margin-bottom:-1px}
+#jobs h2{margin:-16px 0 -15px;display:inline-block;border-radius:0}
+#jobs h3 + ol + h3{margin-top:10px}
+#jobs ol{column-gap:4px}
+#jobs .jobqueue{margin-bottom:5px;margin-top:-11px;width:calc(100% - 14px);display:block;border:var(--border);background:#000800}
+#jobs #jobrunners{display:none}
+#jobs li,#jobs li:first-child{margin:0 4px;padding:8px 6px;width:calc(100% - 8px);list-style:none;box-shadow:var(--bevel),inset 0 0 0 3px #000;background:linear-gradient(180deg,#000b00,#000600)}
+#readyjobs + ol li::before{color:#dd3}
+.jobcount{font-weight:400;font-size:85%}
+
+/* queue totals */
+#schedjobs{width:100%;margin:10px 0}
+#schedjobs ul{columns:250px auto;margin:0 8px 0 0;column-gap:0}
+#schedjobs li{width:calc(100% - 12px);margin:0 4px}
+#schedjobs td:first-child{padding:3px 0}
+#schedjobs th:first-child,#jobstats th:first-child,#jobstats td:first-child{padding-left:10px;text-align:left;font-weight:700}
+#schedjobs tr:hover td{background:#000800}
+#scheduledjobs + ol li::before,#scheduledjobs + ol li::before{color:#773;opacity:.8}
+#jobs #scheduledjobs + ol, #jobs ol{padding-bottom:5px}
+#totaljobstats{margin-bottom:-2px;margin-top:10px}
+
+/* job queue stats */
+#jobstats + hr{display:none}
+#jobstats{margin-bottom:10px}
+#jobstats tbody td:nth-child(odd){background:rgba(255,255,255,.01)}
+#jobstats tbody td:nth-last-child(n+2){border-right:var(--border_softer)}
+#jobstats tbody tr{border-top:var(--border_softer)}
+#jobstats td{padding-top:6px;padding-bottom:6px;border-bottom:none}
+#jobstats thead th{font-size:90%}
+#jobstats thead th,#jobstats tfoot td{font-weight:700;background:var(--th)}
+#jobstats tfoot td{border-top:var(--border)}
+#jobstats th,#jobstats td{text-align:right;padding-right:12px}
 
 /* stats */
 form#statnav{padding:10px 10px 10px 15px;border:var(--border)}
@@ -2729,7 +2734,7 @@ th{font-size:8pt}
 
 @media screen and (min-width:1200px){
 .tab2{margin-bottom:-1px;padding:5px 12px 6px}
-#jobstats tr:nth-last-child(n+2) td:first-child{padding-left:28px;background:var(--yes) no-repeat 8px center;background-size:12px}
+#jobstats tbody td:first-child{padding-left:28px;background:var(--yes) no-repeat 8px center;background-size:12px}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:1px solid #020}
 #terms p{break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
 #terms p:first-child{margin-top:0}
