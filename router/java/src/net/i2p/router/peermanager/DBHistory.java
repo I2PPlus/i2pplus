@@ -40,8 +40,10 @@ public class DBHistory {
         _log = context.logManager().getLog(DBHistory.class);
         _statGroup = statGroup;
         //_lastLookupReceived = -1;
-        _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup", statGroup, new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer gives us a bad RI?", statGroup, new long[] { 30*60*1000l });
+        _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup",
+                                         statGroup, new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer gives us a bad RI?",
+                                         statGroup, new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
     }
 
     /** how many times we have sent them a db lookup and received the value back from them
