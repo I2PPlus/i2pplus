@@ -16,7 +16,7 @@
 <link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
 <body id="routertunnels">
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Transit Tunnels Summary")%></h1>
 <div class="main" id="tunnels">
@@ -59,7 +59,7 @@
   }
   function addSortListeners() {
     if (summary) {
-      summary.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.7);}, true);
+      summary.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       summary.addEventListener('afterSort', function() {progressx.hide();}, true);
     }
   }

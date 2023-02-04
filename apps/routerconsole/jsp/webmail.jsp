@@ -35,7 +35,7 @@
 <%=intl.title("webmail")%>
 </head>
 <body class="embed">
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="mail"><%=intl._t("Webmail")%> <a href="/susimail/" target="_blank" title="<%=intl._t("Open in new tab")%>"><span id="newtab"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class="main" id="webmail">

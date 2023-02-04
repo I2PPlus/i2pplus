@@ -14,7 +14,7 @@
 <%=intl.title("config peers")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf"><%=intl._t("Peer Manager")%></h1>
 <div class="main" id="config_peers">
@@ -44,7 +44,7 @@
  %>
  <form action="configpeer" method="POST">
  <input type=hidden name="nonce" value="<%=pageNonce%>" >
- <h3 class="tabletitle"><%=intl._t("Manual Peer Controls")%></h3>
+ <h3 class=tabletitle><%=intl._t("Manual Peer Controls")%></h3>
  <table id="configpeer" class="configtable">
  <tr><td colspan="2"><b><%=intl._t("Router Hash")%>:</b> <input type=text size="44" name="peer" value="<%=peer%>" /></td></tr>
  <tr><th colspan="2"><%=intl._t("Manually Ban / Unban a Peer")%></th></tr>
@@ -53,7 +53,7 @@
 <%
     if (peerHash == null || !isBanned) {
 %>
-<input type=submit name="action" class="delete" value="<%=intl._t("Ban peer until restart")%>" />
+<input type=submit name="action" class=delete value="<%=intl._t("Ban peer until restart")%>" />
 <%
     }
     if (peerHash == null || isBanned) {
@@ -86,7 +86,7 @@
 <jsp:setProperty name="profilesHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% profilesHelper.storeWriter(out); %>
 <jsp:getProperty name="profilesHelper" property="banlistSummary" />
-<h3 class="tabletitle"><%=intl._t("Banned IPs")%></h3>
+<h3 class=tabletitle><%=intl._t("Banned IPs")%></h3>
 <jsp:getProperty name="peerhelper" property="blocklistSummary" />
 </div>
 <script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>

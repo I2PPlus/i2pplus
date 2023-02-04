@@ -21,7 +21,7 @@
 <link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf adv debug">Debug</h1>
 <div class="main" id="debug">

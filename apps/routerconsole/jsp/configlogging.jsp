@@ -17,7 +17,7 @@
 <body>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigLoggingHelper" id="logginghelper" scope="request" />
 <jsp:setProperty name="logginghelper" property="contextId" value="<%=i2pcontextId%>" />
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf"><%=intl._t("Logging")%></h1>
 <div class="main" id="config_logging">
@@ -27,7 +27,7 @@
 <form action="" method="POST">
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="action" value="blah" >
-<h3 class="tabletitle"><%=intl._t("Configure I2P Logging Options")%>&nbsp;<span class="h3navlinks" style="float: right;"><a title="<%=intl._t("View Router Logs")%>" href="/logs"><%=intl._t("View Logs")%></a></span></h3>
+<h3 class=tabletitle><%=intl._t("Configure I2P Logging Options")%>&nbsp;<span class="h3navlinks" style="float: right;"><a title="<%=intl._t("View Router Logs")%>" href="/logs"><%=intl._t("View Logs")%></a></span></h3>
 <table id="loggingoptions" class="configtable">
 <tr>
 <td align="right"><b><%=intl._t("Log file")%>:</b></td>

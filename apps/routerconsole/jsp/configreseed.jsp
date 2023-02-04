@@ -14,7 +14,7 @@
 <%=intl.title("config reseeding")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigReseedHelper" id="reseedHelper" scope="request" />
 <jsp:setProperty name="reseedHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -31,7 +31,7 @@
 <% }  // !isAdvanced %>
 <form action="" method="POST">
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
-<h3 class="tabletitle" id="reseedsetup"><%=intl._t("Reseeding Configuration")%>&nbsp;<span class="h3navlinks"><a title="<%=intl._t("Help with reseeding")%>" href="/help/reseed">[<%=intl._t("Reseeding Help")%>]</a></span></h3>
+<h3 class=tabletitle id="reseedsetup"><%=intl._t("Reseeding Configuration")%>&nbsp;<span class="h3navlinks"><a title="<%=intl._t("Help with reseeding")%>" href="/help/reseed">[<%=intl._t("Reseeding Help")%>]</a></span></h3>
 <table id="reseedconfig" class="configtable" border="0" cellspacing="5">
 <!--
 <tr>
@@ -187,7 +187,7 @@
 </tr>
 </table>
 </form>
-<h3 class="tabletitle"><%=intl._t("Manual Reseed")%></h3>
+<h3 class=tabletitle><%=intl._t("Manual Reseed")%></h3>
 <table id="manualreseed">
 <tr>
 <td class="infohelp">

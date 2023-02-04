@@ -17,7 +17,7 @@
 <script charset=utf-8 src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
 <jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -30,7 +30,7 @@
 %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
-<div class="configure">
+<div class=configure>
 <h3 id="pluginmanage"><%=intl._t("Plugin Installation")%>&nbsp;
 <span class="h3navlinks">
 <a href="configclients" title="<%=intl._t("Client Configuration")%>">Clients</a>&nbsp;

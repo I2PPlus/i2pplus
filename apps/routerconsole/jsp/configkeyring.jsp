@@ -15,7 +15,7 @@
 <%=intl.title("config keyring")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf"><%=intl._t("Keyring Manager")%></h1>
 <div class="main" id="config_keyring">
@@ -30,7 +30,7 @@
 <form action="" method="POST">
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="keyringhelper" property="summary" />
-<h3 class="tabletitle"><%=intl._t("Manual Keyring Addition")%></h3>
+<h3 class=tabletitle><%=intl._t("Manual Keyring Addition")%></h3>
 <table id="addkeyring" class="configtable">
 <tr>
 <td class="infohelp" colspan="2">

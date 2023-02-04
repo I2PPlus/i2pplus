@@ -15,7 +15,7 @@
 <%@include file="summaryajax.jsi" %>
 </head>
 <body class="<%=lang%>">
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 
 <%

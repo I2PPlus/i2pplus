@@ -25,7 +25,7 @@
 <meta http-equiv="Refresh" content= "0;URL=/graphs">
 </head>
 <body id="updategraphs">
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="perf"><%=intl._t("Performance Graphs")%></h1>
 <div class="main" id="graphs">

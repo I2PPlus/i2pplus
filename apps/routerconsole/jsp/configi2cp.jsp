@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
@@ -28,7 +28,7 @@
 
  <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
-<div class="configure">
+<div class=configure>
 <p class="infowarn">
 <b><%=intl._t("The default settings will work for most people.")%></b>&nbsp;
 <%=intl._t("Any changes made here must also be configured in the external client.")%>&nbsp;

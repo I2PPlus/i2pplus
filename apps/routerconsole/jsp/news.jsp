@@ -14,7 +14,7 @@
 <%=intl.title("News")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="newspage"><%=intl._t("Latest News")%></h1>
 <div class="main" id="news">

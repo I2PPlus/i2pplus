@@ -15,7 +15,7 @@
 <%=intl.title("config update")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf"><%=intl._t("Router Updates")%></h1>
 <div class="main" id="config_update">
@@ -34,7 +34,7 @@
 <%
     if (updatehelper.canInstall()) {
 %>
-<h3 class="tabletitle"><%=intl._t("I2P &amp; News Updates")%></h3>
+<h3 class=tabletitle><%=intl._t("I2P &amp; News Updates")%></h3>
 <table id="i2pupdates" class="configtable" border="0" cellspacing="5">
 <%
     } else {

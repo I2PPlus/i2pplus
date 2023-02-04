@@ -14,7 +14,7 @@
 <%=intl.title("config router family")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHelper" id="familyHelper" scope="request" />
 <jsp:setProperty name="familyHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -114,7 +114,7 @@
 <tr><th colspan="2"><%=intl._t("Leave Router Family")%></th></tr>
 <tr><td><%=intl._t("No longer be a member of the family {0}.", '"' + family + '"')%></td>
 <td class="optionsave">
-<input type=submit name="action" class="delete" value="<%=intl._t("Leave Family")%>" />
+<input type=submit name="action" class=delete value="<%=intl._t("Leave Family")%>" />
 </td>
 </tr>
 </table>

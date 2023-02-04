@@ -15,7 +15,7 @@
 <%=intl.title("configure bandwidth")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigNetHelper" id="nethelper" scope="request" />
 <jsp:setProperty name="nethelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -28,7 +28,7 @@
 <input type=hidden name="nonce" value="<%=pageNonce%>">
 <input type=hidden name="action" value="blah">
 <input type=hidden name="ratesOnly" value="1">
-<h3 id="bwlimiter" class="tabletitle"><%=intl._t("Bandwidth Limiter")%>&nbsp;<span class="h3navlinks" title="<%=intl._t("Advanced Network Configuration")%>"><a href="confignet"><%=intl._t("Advanced Network Configuration")%></a></span></h3>
+<h3 id="bwlimiter" class=tabletitle><%=intl._t("Bandwidth Limiter")%>&nbsp;<span class="h3navlinks" title="<%=intl._t("Advanced Network Configuration")%>"><a href="confignet"><%=intl._t("Advanced Network Configuration")%></a></span></h3>
 <table id="bandwidthconfig" class="configtable">
 <tr>
 <td class="infohelp" colspan="2">

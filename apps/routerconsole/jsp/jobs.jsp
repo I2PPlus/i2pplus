@@ -15,7 +15,7 @@
 <%=intl.title("job queue")%>
 </head>
 <body id="routerjobs">
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %><h1 class="sched"><%=intl._t("Job Queue")%></h1>
 <div class="main" id="jobs">
 <jsp:useBean class="net.i2p.router.web.helpers.JobQueueHelper" id="jobQueueHelper" scope="request" />

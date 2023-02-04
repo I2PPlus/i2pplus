@@ -16,7 +16,7 @@
 <style type='text/css'>input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf"><%=intl._t("Customize Sidebar")%></h1>
 <div class="main" id="config_summarybar">
@@ -28,7 +28,7 @@
 %>
 <jsp:useBean class="net.i2p.router.web.helpers.SummaryHelper" id="summaryhelper" scope="request" />
 <jsp:setProperty name="summaryhelper" property="contextId" value="<%=i2pcontextId%>" />
-<h3 class="tabletitle"><%=intl._t("Refresh Interval")%></h3>
+<h3 class=tabletitle><%=intl._t("Refresh Interval")%></h3>
 <form action="" method="POST">
 <table class="configtable" id="refreshsidebar">
 <tr>
@@ -58,7 +58,7 @@
 </tr>
 </table>
 </form>
-<h3 class="tabletitle"><%=intl._t("Customize Sidebar")%></h3>
+<h3 class=tabletitle><%=intl._t("Customize Sidebar")%></h3>
 <form action="" method="POST">
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="group" value="2">

@@ -442,7 +442,7 @@
 <div id="buttons">
 <p class="buttons">
 <input class="cancel" type=reset value="<%=intl._t("Cancel")%>">
-<input class="delete" type=submit name="action" value="<%=intl._t("Delete Selected")%>">
+<input class=delete type=submit name="action" value="<%=intl._t("Delete Selected")%>">
 </p>
 </div>
 </c:if>

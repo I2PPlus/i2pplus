@@ -16,7 +16,7 @@
 <link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
 </head>
 <body id="routertunnels">
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Participating Tunnels")%></h1>
 <div class="main" id="tunnels">
@@ -60,7 +60,7 @@
   }
   function addSortListeners() {
     if (tunnels) {
-      tunnels.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.7);}, true);
+      tunnels.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       tunnels.addEventListener('afterSort', function() {progressx.hide();}, true);
     }
   }
@@ -87,7 +87,7 @@
     xhrtunnels.send();
   }
   if (refresh) {
-    refresh.addEventListener("click", function() {progressx.show();progressx.progress(0.7);updateTunnels();progressx.hide();});
+    refresh.addEventListener("click", function() {progressx.show();progressx.progress(0.5);updateTunnels();progressx.hide();});
     refresh.addEventListener("mouseover", removeHref);
   }
   onVisible(main, () => {updateTunnels();});

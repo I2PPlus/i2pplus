@@ -15,7 +15,7 @@
 <%=intl.title("config advanced")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHelper" id="advancedhelper" scope="request" />
 <jsp:setProperty name="advancedhelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -24,9 +24,9 @@
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
-<div class="configure">
+<div class=configure>
 <div class="wideload">
-<h3 id="ffconf" class="tabletitle"><%=intl._t("Floodfill Configuration")%></h3>
+<h3 id="ffconf" class=tabletitle><%=intl._t("Floodfill Configuration")%></h3>
 <form action="" method="POST">
 <table id="floodfillconfig" class="configtable">
 <tr>
@@ -63,7 +63,7 @@
 </tr>
 </table>
 </form>
-<h3 id="advancedconfig" class="tabletitle"><%=intl._t("Advanced I2P Configuration")%>&nbsp;<span class="h3navlinks"><a title="Help with additional configuration settings" href="/help/advancedsettings">[Additional Options]</a></span></h3>
+<h3 id="advancedconfig" class=tabletitle><%=intl._t("Advanced I2P Configuration")%>&nbsp;<span class="h3navlinks"><a title="Help with additional configuration settings" href="/help/advancedsettings">[Additional Options]</a></span></h3>
 <%
     String advConfig = advancedhelper.getSettings();
     if (advancedhelper.isAdvanced()) {

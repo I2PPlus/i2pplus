@@ -100,8 +100,8 @@
         }
         (function loop() {
           if (progressx.progress("+.1") >= 1) {
-            canvas.style.opacity -= 0.05
-            if (canvas.style.opacity <= 0.05) {
+            canvas.style.opacity -= 0.25
+            if (canvas.style.opacity <= 0.25) {
               canvas.style.display = "none"
               fadeTimerId = null
               return

@@ -16,7 +16,7 @@
 <style type=text/css>input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -60,7 +60,7 @@
   boolean pwEnabled = net.i2p.I2PAppContext.getGlobalContext().getBooleanProperty("routerconsole.auth.enable");
   if (pwEnabled) {
 %>
-<input type=submit name="action" class="delete" value="<%=intl._t("Delete selected")%>" >
+<input type=submit name="action" class=delete value="<%=intl._t("Delete selected")%>" >
 <%
   }
 %>

@@ -170,7 +170,7 @@
 <input type=hidden name="end" value="99">
 <input type=hidden name="checked" value="<%=detail%>">
 <input type=hidden name="destination" value="<%=addr.getDestination()%>">
-<input class="delete" type=submit name="action" value="<%=intl._t("Delete Entry")%>" >
+<input class=delete type=submit name="action" value="<%=intl._t("Delete Entry")%>" >
 </p>
 </form>
 </div><%-- buttons --%>
