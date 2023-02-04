@@ -18,8 +18,8 @@ public class DBHistory {
     private final RouterContext _context;
     //private long _successfulLookups;
     //private long _failedLookups;
-    private RateStat _failedLookupRate;
-    private RateStat _invalidReplyRate;
+    private final RateStat _failedLookupRate;
+    private final RateStat _invalidReplyRate;
     //private long _lookupReplyNew;
     //private long _lookupReplyOld;
     //private long _lookupReplyDuplicate;
@@ -40,7 +40,8 @@ public class DBHistory {
         _log = context.logManager().getLog(DBHistory.class);
         _statGroup = statGroup;
         //_lastLookupReceived = -1;
-        createRates(statGroup);
+        _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup", statGroup, new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer gives us a bad RI?", statGroup, new long[] { 30*60*1000l });
     }
 
     /** how many times we have sent them a db lookup and received the value back from them
@@ -315,17 +316,9 @@ public class DBHistory {
         try {
             _invalidReplyRate.load(props, "dbHistory.invalidReplyRate", true);
         } catch (IllegalArgumentException iae) {
-            _log.warn("Db History Invalid Reply rate is corrupt -> resetting...", iae);
+            _log.warn("Db History Invalid Reply rate is corrupt", iae);
             createRates(_statGroup);
         }
-    }
-
-    private synchronized void createRates(String statGroup) {
-        if (_failedLookupRate == null)
-            _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup", statGroup, new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        if (_invalidReplyRate == null)
-//            _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer gives us an invalid peer", statGroup, new long[] { 30*60*1000l });
-            _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer gives us an invalid peer", statGroup, new long[] { 60*60*1000l });
     }
 
     private final static long getLong(Properties props, String key) {
