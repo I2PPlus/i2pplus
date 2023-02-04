@@ -441,7 +441,7 @@
 <c:if test="${book.validBook}">
 <div id="buttons">
 <p class="buttons">
-<input class="cancel" type=reset value="<%=intl._t("Cancel")%>">
+<input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <input class=delete type=submit name="action" value="<%=intl._t("Delete Selected")%>">
 </p>
 </div>
@@ -467,7 +467,7 @@
 <tr><td><b><%=intl._t("B64 or B32")%></b></td><td><input type=text name="destination" value="${book.destination}" size="50" required placeholder="<%=intl._t("Full destination or b32 address")%>"></td></tr>
 </table>
 <p class="buttons">
-<input class="cancel" type=reset value="<%=intl._t("Cancel")%>">
+<input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <c:if test="${book.notEmpty}">
 <input class="accept scrollToNav" type=submit name="action" value="<%=intl._t("Replace")%>">
 <%
@@ -494,7 +494,7 @@
 <h3><%=intl._t("Import from hosts.txt file")%></h3>
 <table><tr><td><b><%=intl._t("Select file")%></b></td><td><input name="file" type="file" accept=".txt" value=""></td></tr></table>
 <p class="buttons">
-<input class="cancel" type=reset value="<%=intl._t("Cancel")%>">
+<input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <input class="download scrollToNav" type=submit name="action" value="<%=intl._t("Import")%>">
 </p>
 </div>

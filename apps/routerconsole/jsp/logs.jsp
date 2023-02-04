@@ -18,7 +18,7 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="log"><%=intl._t("Logs")%></h1>
-<div class="main" id="logs">
+<div class=main id="logs">
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>" />
 <%
@@ -26,7 +26,7 @@
 %>
 <table id="bugreports">
 <tbody>
-<tr><td class="infohelp">
+<tr><td class=infohelp>
 <%=intl._t("Please include your I2P version and running environment information in bug reports")%>.
 <%=intl._t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report.")%>
 <%=intl._t("Please report bugs on {0} or {1}.", "<a href=\"http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues\">git.idk.i2p</a>", "<a href=\"https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues\">i2pgit.org</a>")%>

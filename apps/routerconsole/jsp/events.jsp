@@ -28,9 +28,9 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="log"><%=intl._t("Event Log")%></h1>
-<div class="main" id="events">
+<div class=main id="events">
  <div class="eventspanel">
- <div class="widepanel">
+ <div class=widepanel>
  <jsp:getProperty name="eventHelper" property="allMessages" />
  <jsp:getProperty name="eventHelper" property="form" />
  <jsp:getProperty name="eventHelper" property="events" />

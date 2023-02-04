@@ -416,7 +416,7 @@
 <tr>
 <td>
 <span class="tag"><%=intl._t("Port")%>:</span>
-<input type=text size="6" maxlength="5" id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=(!"null".equals(request.getParameter("targetPort")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort")) : "" ) %>" class="freetext" />
+<input type=text size="6" maxlength=5 id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=(!"null".equals(request.getParameter("targetPort")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort")) : "" ) %>" class="freetext" />
 </td>
 </tr>
 <%
@@ -440,7 +440,7 @@
 <tr>
 <td>
 <span class="tag"><%=intl._t("Port")%>:</span>
-<input type=text size="6" maxlength="5" id="port" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=(!"null".equals(request.getParameter("port")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("port")) : "" ) %>" class="freetext" />
+<input type=text size="6" maxlength=5 id="port" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=(!"null".equals(request.getParameter("port")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("port")) : "" ) %>" class="freetext" />
 </td>
 </tr>
 <%
@@ -638,7 +638,7 @@ No
 </td>
 </tr>
 <tr>
-<td class="infohelp">
+<td class=infohelp>
 <p>
 <%=intl._t("Alongside these basic settings, there are a number of advanced options for tunnel configuration.")%>
 <%=intl._t("The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page.")%>

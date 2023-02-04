@@ -29,7 +29,7 @@
     String firstVersion = ctx.getProperty("router.firstVersion");
 %>
 
-<div class="main" id="sitemap">
+<div class=main id="sitemap">
 
 <div id="searchbar">
 <jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />

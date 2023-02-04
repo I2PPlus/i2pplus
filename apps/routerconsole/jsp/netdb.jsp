@@ -93,7 +93,7 @@
         }
     }
 %>
-<div class="main" id="netdb">
+<div class=main id="netdb">
 <%
     formhandler.storeWriter(out);
     if (allowIFrame)

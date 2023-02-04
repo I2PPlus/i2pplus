@@ -17,8 +17,8 @@
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="conf"><%=intl._t("Router Updates")%></h1>
-<div class="main" id="config_update">
+<h1 class=conf><%=intl._t("Router Updates")%></h1>
+<div class=main id="config_update">
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
@@ -35,12 +35,12 @@
     if (updatehelper.canInstall()) {
 %>
 <h3 class=tabletitle><%=intl._t("I2P &amp; News Updates")%></h3>
-<table id="i2pupdates" class="configtable" border="0" cellspacing="5">
+<table id="i2pupdates" class=configtable border="0" cellspacing="5">
 <%
     } else {
 %>
 <h3><%=intl._t("News Updates")%></h3>
-<table id="i2pupdates" class="configtable" border="0" cellspacing="5">
+<table id="i2pupdates" class=configtable border="0" cellspacing="5">
 <tr>
 <td align="right">
 <b><%=intl._t("News Updates")%>:</b>
@@ -50,7 +50,7 @@
 %>
 <tr>
 <td id="updateHelper">
-<div class="optionlist">
+<div class=optionlist>
 <%
     if (updatehelper.canInstall()) {
 %>
@@ -69,7 +69,7 @@
 </td>
 </tr>
 <tr>
-<td class="optionsave">
+<td class=optionsave>
 <%
     if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %>
 <i><%=intl._t("Update In Progress")%></i><br>
@@ -88,7 +88,7 @@
 %>
 <tr>
 <td>
-<b class="suboption" title="<%=intl._t("In order to maintain anonymity, it is recommended to update using the I2P http proxy. If the news or I2P update is hosted on I2P, using the proxy will be necessary.")%>">
+<b class=suboption title="<%=intl._t("In order to maintain anonymity, it is recommended to update using the I2P http proxy. If the news or I2P update is hosted on I2P, using the proxy will be necessary.")%>">
 <jsp:getProperty name="updatehelper" property="newsThroughProxy" />
 <label for="newsThroughProxy">
 <%=intl._t("Fetch news using I2P http proxy")%>
@@ -98,7 +98,7 @@
 <%=intl._t("Update I2P using I2P http proxy")%>
 </label>
 </b>
-<div class="optionlist" id="updateProxyHostPort">
+<div class=optionlist id="updateProxyHostPort">
 <span class="nowrap">
 <b><%=intl._t("I2P proxy host")%>:</b>
 <input type=text size="10" name="proxyHost" value="<jsp:getProperty name="updatehelper" property="proxyHost" />" />
@@ -149,7 +149,7 @@
 </tr>
 <tr>
 <td>
-<b id="devSU3build" class="suboption">
+<b id="devSU3build" class=suboption>
 <jsp:getProperty name="updatehelper" property="updateDevSU3" />
 <label for="updateDevSU3">
 <%=intl._t("Update with signed development builds")%>
@@ -164,11 +164,11 @@
 </td>
 </tr>
 <tr>
-<td class="infohelp"><%=intl._t("To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>")%></td>
+<td class=infohelp><%=intl._t("To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>")%></td>
 </tr>
 <tr>
 <td>
-<b id="unsignedbuild" class="suboption">
+<b id="unsignedbuild" class=suboption>
 <jsp:getProperty name="updatehelper" property="updateUnsigned" />
 <label for="updateUnsigned">
 <%=intl._t("Update with unsigned development builds")%>
@@ -186,14 +186,14 @@
     } else {
 %>
 <tr>
-<td class="infohelp"><b><%=intl._t("Updates will be dispatched via your package manager.")%></b></td>
+<td class=infohelp><b><%=intl._t("Updates will be dispatched via your package manager.")%></b></td>
 </tr>
 <%
     }   // if canInstall
 %>
-<tr class="tablefooter"><td class="optionsave">
-<input type=reset class="cancel" value="<%=intl._t("Cancel")%>" >
-<input type=submit name="action" class="accept" value="<%=intl._t("Save")%>" >
+<tr class="tablefooter"><td class=optionsave>
+<input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
+<input type=submit name="action" class=accept value="<%=intl._t("Save")%>" >
 </td>
 </tr>
 </table>

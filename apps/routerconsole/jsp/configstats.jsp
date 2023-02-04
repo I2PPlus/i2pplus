@@ -17,8 +17,8 @@
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="conf"><%=intl._t("Stats Collection &amp; Graphing")%></h1>
-<div class="main" id="config_stats">
+<h1 class=conf><%=intl._t("Stats Collection &amp; Graphing")%></h1>
+<div class=main id="config_stats">
 <%@include file="confignav.jsi" %>
 
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigStatsHandler" id="formhandler" scope="request" />
@@ -30,11 +30,11 @@
 <input type=hidden name="action" value="foo" >
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <h3 class=tabletitle><%=intl._t("Configure I2P Stat Collection")%></h3>
-<table id="statconfig" class="configtable">
-<tr><td class="infohelp" id="enablefullstats" colspan="2"><%=intl._t("A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>.")%></td></tr>
+<table id="statconfig" class=configtable>
+<tr><td class=infohelp id="enablefullstats" colspan="2"><%=intl._t("A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>.")%></td></tr>
 <tr id="enablefull"><td><label><input type=checkbox class="optbox slider" id="enableFull" name="isFull" value=true <%
  if (statshelper.getIsFull()) { %>checked="checked" <% } %> > <b><%=intl._t("Enable full stats?").replace(" stats?", " stat collection")%></b>
- (<%=intl._t("change requires restart to take effect").replace("change requires restart to take effect", "restart required") %>)</label></td><td class="right"><input type=submit name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>"></td></tr>
+ (<%=intl._t("change requires restart to take effect").replace("change requires restart to take effect", "restart required") %>)</label></td><td class="right"><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
 <h3 class=tabletitle id="graphchoice"><%=intl._t("Select Stats for Graphing")%></h3>
 <table id="configstats">
@@ -68,9 +68,9 @@
     }
 %>
 </td></tr>
-<tr class="tablefooter"><td colspan="2" align="right" class="optionsave">
-<input type=reset class="cancel" value="<%=intl._t("Cancel")%>">
-<input type=submit name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>">
+<tr class="tablefooter"><td colspan="2" align="right" class=optionsave>
+<input type=reset class=cancel value="<%=intl._t("Cancel")%>">
+<input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>">
 </td></tr>
 </table>
 </form>

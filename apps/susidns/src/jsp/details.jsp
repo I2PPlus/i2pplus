@@ -148,7 +148,7 @@
 <tr class="list${book.trClass}" id="hostNotes">
 <td><%=intl._t("Notes")%></td>
 <td><textarea name="nofilter_notes" rows="3" style="height:6em" cols="70" placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
-<input class="accept" type=submit name="action" value="<%=intl._t("Save Notes")%>"></td>
+<input class=accept type=submit name="action" value="<%=intl._t("Save Notes")%>"></td>
 </tr>
 <%
                 }  // showNotes

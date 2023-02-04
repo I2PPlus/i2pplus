@@ -44,7 +44,7 @@
     }
 %>
 <h1 class="perf"><%=intl._t("Performance Graph")%></h1>
-<div class="main" id="graph_single">
+<div class=main id="graph_single">
  <jsp:getProperty name="graphHelper" property="singleStat" />
 </div>
 <script nonce="<%=cspNonce%>" type=text/javascript>

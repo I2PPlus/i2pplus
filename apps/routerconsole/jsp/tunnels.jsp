@@ -18,7 +18,7 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Local Tunnels")%></h1>
-<div class="main" id="tunnels">
+<div class=main id="tunnels">
 <div class="confignav">
 <span class="tab2" title="Locally hosted tunnels (exploratory and client)">Local</span>
 <span class="tab"><a href="/tunnelsparticipating"><%=intl._t("Transit")%></a></span>

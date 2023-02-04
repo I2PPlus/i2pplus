@@ -19,7 +19,7 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Tunnel Count by Peer")%></h1>
-<div class="main" id="tunnels">
+<div class=main id="tunnels">
 <div class="confignav">
 <span class="tab" title="Locally hosted tunnels (exploratory and client)"><a href="/tunnels">Local</a></span>
 <span class="tab"><a href="/tunnelsparticipating"><%=intl._t("Transit")%></a></span>

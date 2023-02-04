@@ -24,7 +24,7 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf adv debug">Debug</h1>
-<div class="main" id="debug">
+<div class=main id="debug">
 <div class="confignav">
 <span class="tab"><a href="/debug">Port Mapper</a></span>
 <span class="tab"><a href="/debug?d=1">App Manager</a></span>

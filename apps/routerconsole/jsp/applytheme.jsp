@@ -22,10 +22,10 @@
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
 <jsp:setProperty name="uihelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
-<h1 class="conf"><%=uihelper._t("User Interface Configuration")%></h1>
-<div class="main" id="config_ui">
+<h1 class=conf><%=uihelper._t("User Interface Configuration")%></h1>
+<div class=main id="config_ui">
 <%@include file="confignav.jsi" %>
-<p class="infohelp">Applying Console theme preferences&hellip; You should be returned to the <a href="/configui"><%=uihelper._t("User Interface Configuration")%></a> shortly.</a></p>
+<p class=infohelp>Applying Console theme preferences&hellip; You should be returned to the <a href="/configui"><%=uihelper._t("User Interface Configuration")%></a> shortly.</a></p>
 <div style="display: none;">
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>

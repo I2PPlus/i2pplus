@@ -41,7 +41,7 @@
 <%
     }
 %>
-<div class="main" id="profiles"><div class="wideload">
+<div class=main id="profiles"><div class=wideload>
 <%
     profilesHelper.storeWriter(out);
     if (allowIFrame)

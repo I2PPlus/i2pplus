@@ -494,7 +494,7 @@
 <input type=hidden name="type" value="<%=tunnelType%>" />
 <input type=submit class="default" name="action" value="Save changes" />
 <table>
-<!--<tr><td colspan="4" class="infohelp"><%=intl._t("Experts only!")%></td></tr>-->
+<!--<tr><td colspan="4" class=infohelp><%=intl._t("Experts only!")%></td></tr>-->
 <%
       if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) {
 %>
@@ -503,16 +503,16 @@
        }
        if (b64 == null || b64.length() < 516) {
 %>
-<tr><td class="infohelp"><%=intl._t("Local destination is not available. Start the tunnel.")%></td></tr>
+<tr><td class=infohelp><%=intl._t("Local destination is not available. Start the tunnel.")%></td></tr>
 <%
        } else if (name == null || name.equals("") || name.contains(" ") || !name.endsWith(".i2p")) {
            if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) {
 %>
-<tr><td class="infohelp"><%=intl._t("To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'")%></td></tr>
+<tr><td class=infohelp><%=intl._t("To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'")%></td></tr>
 <%
            } else {
 %>
-<tr><td class="infohelp"><%=intl._t("To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'")%></td></tr>
+<tr><td class=infohelp><%=intl._t("To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'")%></td></tr>
 <%
            }
        } else {
@@ -570,11 +570,11 @@
 %>
 <%--
 <tr><th colspan="4"><%=intl._t("Add Port Routing")%></th></tr>
-<tr><td><input type=text size="6" maxlength="5" id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
+<tr><td><input type=text size="6" maxlength=5 id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
 <td><input type=text size="20" id="websiteName" name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class="freetext" /></td>
 <td><input value="1" type=checkbox name="useSSL" class="optbox slider" /></td>
 <td><input type=text size="20" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" /> :
-<input type=text size="6" maxlength="5" id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
+<input type=text size="6" maxlength=5 id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
 </td></tr>
 --%>
 <tr><th><%=intl._t("Server")%></th><th colspan="2"><%=intl._t("Configuration")%></th><th><!--<%=intl._t("SSL Activation")%>--></th></tr>

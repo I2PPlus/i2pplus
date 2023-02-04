@@ -19,18 +19,18 @@
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHelper" id="advancedhelper" scope="request" />
 <jsp:setProperty name="advancedhelper" property="contextId" value="<%=i2pcontextId%>" />
-<h1 class="conf"><%=intl._t("Advanced Configuration")%></h1>
-<div class="main" id="config_advanced">
+<h1 class=conf><%=intl._t("Advanced Configuration")%></h1>
+<div class=main id="config_advanced">
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
 <div class=configure>
-<div class="wideload">
+<div class=wideload>
 <h3 id="ffconf" class=tabletitle><%=intl._t("Floodfill Configuration")%></h3>
 <form action="" method="POST">
-<table id="floodfillconfig" class="configtable">
+<table id="floodfillconfig" class=configtable>
 <tr>
-<td class="infohelp">
+<td class=infohelp>
 <%=intl._t("Floodfill participation helps the network, but may use more of your computer's resources.")%>
 <%
     if (advancedhelper.isFloodfill()) {
@@ -57,13 +57,13 @@
 </td>
 </tr>
 <tr>
-<td class="optionsave" align="right">
-<input type=submit name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>" >
+<td class=optionsave align="right">
+<input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>" >
 </td>
 </tr>
 </table>
 </form>
-<h3 id="advancedconfig" class=tabletitle><%=intl._t("Advanced I2P Configuration")%>&nbsp;<span class="h3navlinks"><a title="Help with additional configuration settings" href="/help/advancedsettings">[Additional Options]</a></span></h3>
+<h3 id="advancedconfig" class=tabletitle><%=intl._t("Advanced I2P Configuration")%>&nbsp;<span class=h3navlinks><a title="Help with additional configuration settings" href="/help/advancedsettings">[Additional Options]</a></span></h3>
 <%
     String advConfig = advancedhelper.getSettings();
     if (advancedhelper.isAdvanced()) {
@@ -75,12 +75,12 @@
 <%
     }  // isAdvanced
 %>
-<table class="configtable" id="advconf">
+<table class=configtable id="advconf">
 <%
     if (advancedhelper.isAdvanced()) {
 %>
 <tr>
-<td class="infohelp">
+<td class=infohelp>
 <b><%=intl._t("NOTE")%>:</b> <%=intl._t("Some changes may require a restart to take effect.")%>
 </td>
 </tr>
@@ -104,9 +104,9 @@
     if (advancedhelper.isAdvanced()) {
 %>
 <tr>
-<td class="optionsave" align="right">
-<input type=reset class="cancel" value="<%=intl._t("Cancel")%>" >
-<input type=submit name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>" >
+<td class=optionsave align="right">
+<input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
+<input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>" >
 </td>
 </tr>
 <%

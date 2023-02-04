@@ -59,7 +59,7 @@
    }  // shouldShowNews()
 %>
 
-<div class="main" id="home">
+<div class=main id="home">
 <jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request" />
 <jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />

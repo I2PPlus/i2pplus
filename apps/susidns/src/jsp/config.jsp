@@ -67,7 +67,7 @@
 </div>
 <div id="buttons">
 <input class="reload" type=submit name="action" value="<%=intl._t("Reload")%>" >
-<input class="accept" type=submit name="action" value="<%=intl._t("Save")%>" >
+<input class=accept type=submit name="action" value="<%=intl._t("Save")%>" >
 </div>
 </form>
 <div class="help" id="helpconfig">

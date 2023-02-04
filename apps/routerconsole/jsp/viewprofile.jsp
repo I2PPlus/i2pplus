@@ -18,7 +18,7 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Peer Profile")%></h1>
-<div class="main" id="view_profile">
+<div class=main id="view_profile">
 <%
     String peerB64 = request.getParameter("peer");
     if (peerB64 == null || peerB64.length() <= 0 ||

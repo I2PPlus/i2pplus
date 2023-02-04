@@ -98,7 +98,7 @@
 <h3>Setup Wizard</h3>
 <hr>
 <form action="" method="POST">
-<input type=submit class="cancel" name="skip" value="<%=intl._t("Skip Setup")%>">
+<input type=submit class=cancel name="skip" value="<%=intl._t("Skip Setup")%>">
 </form>
 </div>
 </div>
@@ -114,7 +114,7 @@
 <%
     }
 %>
-<div class="main" id="setupwizard">
+<div class=main id="setupwizard">
 <div id="wizard">
 <jsp:useBean class="net.i2p.router.web.helpers.WizardHandler" id="formhandler" scope="request" />
 <%
@@ -134,7 +134,7 @@
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
 <%-- needed for CSS: --%><div id="config_ui">
 <%-- needed for lang setting in css.jsi: --%><input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
-<p class="infohelp" id="flags">
+<p class=infohelp id="flags">
 <%=intl._t("Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>.")%>
 </p>
 <h3 id="langheading"><%=uihelper._t("Router Console &amp; WebApps Display Language")%></h3>
@@ -145,7 +145,7 @@
     } else if (ipg == 2) {
         // Overview of bandwidth test
 %>
-<p class="infohelp" id="bandwidth">
+<p class=infohelp id="bandwidth">
 <%=intl._t("Your I2P+ router by default contributes to the network by routing internal, end-to-end encrypted traffic for other routers, known as <i>participation</i>. Bandwidth participation improves the anonymity level of all users on the network and maximizes your download speed.")%>&nbsp;<wbr><%=intl._t("For the best experience, it's recommended to configure your bandwidth settings to match the values provided by your ISP. If you are unsure of your bandwidth, you can run a test to determine your download and upload speeds.")%>
 </p>
 <h3><%=intl._t("Bandwidth Test")%></h3>
@@ -165,11 +165,11 @@
     } else if (ipg == 3) {
         // Bandwidth test in progress (w/ AJAX)
 %>
-<p class="infohelp" id="bandwidth"><%=intl._t("The bandwidth test is now running and will take around 60 seconds to complete, after which you should be forwarded to the results page.")%></p>
+<p class=infohelp id="bandwidth"><%=intl._t("The bandwidth test is now running and will take around 60 seconds to complete, after which you should be forwarded to the results page.")%></p>
 <div id="bandwidthTestRunning"><%=intl._t("Bandwidth Test in progress")%>...</div>
 <noscript>
 <div id="xhr">
-<p class="infohelp" id="bandwidth">
+<p class=infohelp id="bandwidth">
 <%=intl._t("Javascript is disabled - wait 60 seconds for the bandwidth test to complete and then click Next")%>
 </p>
 </div>
@@ -188,7 +188,7 @@
             // don't display this if we skipped the test
 %>
 <h3><%=intl._t("Bandwidth Test Results")%></h3>
-<table class="configtable">
+<table class=configtable>
 <%
             if (!wizhelper.isNDTComplete()) {
 %>
@@ -237,9 +237,9 @@
         } // skipbw
 %>
 <h3><%=intl._t("Bandwidth Configuration")%></h3>
-<table id="bandwidthconfig" class="configtable">
+<table id="bandwidthconfig" class=configtable>
 <tr>
-<td class="infohelp" colspan="2">
+<td class=infohelp colspan="2">
 <%=intl._t("I2P will work best if you configure your rates to match the speed of your internet connection.").replace("I2P", "I2P+")%>
 &nbsp;<wbr><%=intl._t("Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed).")%>
 &nbsp;<wbr><%=intl._t("The maximum data transfer values indicate the theoretical maximum, and in practice will normally be much lower.")%>
@@ -250,7 +250,7 @@
 <td>
 <div class="optionsingle bw_in">
 <span class="bw_title"><%=intl._t("Download Speed")%></span>
-<input style="text-align: right; width: 5em" name="inboundrate" type=text size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />">
+<input style="text-align: right; width: 5em" name="inboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />">
 <%=intl._t("KBps In")%>
 </div>
 </td>
@@ -260,7 +260,7 @@
 <%--
 <!-- let's keep this simple...
 bursting up to
-<input name="inboundburstrate" type=text size="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />"> KBps for
+<input name="inboundburstrate" type=text size=5 value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />"> KBps for
 <jsp:getProperty name="nethelper" property="inboundBurstFactorBox" /><br>
 -->
 --%>
@@ -270,7 +270,7 @@ bursting up to
 <td>
 <div class="optionsingle bw_out">
 <span class="bw_title"><%=intl._t("Upload Speed")%></span>
-<input style="text-align: right; width: 5em" name="outboundrate" type=text size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />">
+<input style="text-align: right; width: 5em" name="outboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />">
 <%=intl._t("KBps Out")%>
 </div>
 </td>
@@ -299,7 +299,7 @@ A negative rate sets the default.</i><br>
 </td>
 </tr>
 <tr>
-<td class="infohelp" colspan="2">
+<td class=infohelp colspan="2">
 <% int share = Math.round(nethelper.getShareBandwidth() * 1.024f);
     if (share < 12) {
         out.print("<b>");
@@ -323,7 +323,7 @@ A negative rate sets the default.</i><br>
     } else if (ipg == 5) {
         // Browser setup
 %>
-<p class="infohelp" id="webbrowser"><%=intl._t("I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network.")%></p>
+<p class=infohelp id="webbrowser"><%=intl._t("I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network.")%></p>
 <h3><%=intl._t("Browser Setup")%></h3>
 <p><%=intl._t("In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>.")%></p>
 <%
@@ -331,7 +331,7 @@ A negative rate sets the default.</i><br>
         // Done
 %>
 <h3><%=intl._t("Welcome to I2P!").replace("I2P", "I2P+")%></h3>
-<p class="infohelp">
+<p class=infohelp>
 <%=intl._t("When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient.").replace("I2P", "I2P+")%>
 </p>
 <p>
@@ -345,9 +345,9 @@ A negative rate sets the default.</i><br>
     }
 %>
 <div class="wizardbuttons">
-<table class="configtable">
+<table class=configtable>
 <tr>
-<td class="optionsave">
+<td class=optionsave>
 <%
     if (ipg != 1) {
 %>
@@ -359,11 +359,11 @@ A negative rate sets the default.</i><br>
 <%
         if (ipg == 2) {
 %>
-<input type=submit class="cancel" name="skipbw" value="<%=intl._t("Skip Bandwidth Test")%>">
+<input type=submit class=cancel name="skipbw" value="<%=intl._t("Skip Bandwidth Test")%>">
 <%
         } else if (ipg == 3) {
 %>
-<input type=submit class="cancel" name="cancelbw" value="<%=intl._t("Cancel Bandwidth Test")%>">
+<input type=submit class=cancel name="cancelbw" value="<%=intl._t("Cancel Bandwidth Test")%>">
 <%
         }
 %>
@@ -371,7 +371,7 @@ A negative rate sets the default.</i><br>
 <%
     } else {
 %>
-<input type=submit class="accept" name="done" value="<%=intl._t("Finished")%>">
+<input type=submit class=accept name="done" value="<%=intl._t("Finished")%>">
 <%
     }
 %>

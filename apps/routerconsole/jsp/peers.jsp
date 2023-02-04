@@ -38,7 +38,7 @@
 <%
     }
 %>
-<div class="main" id="peers">
+<div class=main id="peers">
 <%
     peerHelper.storeWriter(out);
     if (allowIFrame)

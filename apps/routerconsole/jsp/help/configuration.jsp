@@ -16,7 +16,7 @@
 <body>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Configuration Help")%></h1>
-<div class="main" id="help">
+<div class=main id="help">
 <div class="confignav">
 <span class="tab2"><%=intl._t("Configuration")%></span>
 <span class="tab"><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>

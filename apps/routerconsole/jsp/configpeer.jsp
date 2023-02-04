@@ -16,8 +16,8 @@
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="conf"><%=intl._t("Peer Manager")%></h1>
-<div class="main" id="config_peers">
+<h1 class=conf><%=intl._t("Peer Manager")%></h1>
+<div class=main id="config_peers">
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigPeerHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
@@ -45,11 +45,11 @@
  <form action="configpeer" method="POST">
  <input type=hidden name="nonce" value="<%=pageNonce%>" >
  <h3 class=tabletitle><%=intl._t("Manual Peer Controls")%></h3>
- <table id="configpeer" class="configtable">
+ <table id="configpeer" class=configtable>
  <tr><td colspan="2"><b><%=intl._t("Router Hash")%>:</b> <input type=text size="44" name="peer" value="<%=peer%>" /></td></tr>
  <tr><th colspan="2"><%=intl._t("Manually Ban / Unban a Peer")%></th></tr>
- <tr><td class="infohelp" colspan="2"><%=intl._t("Banning will prevent the participation of this peer in tunnels you create.")%></td></tr>
- <tr><td class="optionsave" colspan="2">
+ <tr><td class=infohelp colspan="2"><%=intl._t("Banning will prevent the participation of this peer in tunnels you create.")%></td></tr>
+ <tr><td class=optionsave colspan="2">
 <%
     if (peerHash == null || !isBanned) {
 %>
@@ -58,14 +58,14 @@
     }
     if (peerHash == null || isBanned) {
 %>
-<input type=submit name="action" class="accept" value="<%=intl._t("Unban peer")%>" />
+<input type=submit name="action" class=accept value="<%=intl._t("Unban peer")%>" />
 <%
     }
 %>
 </td>
 </tr>
 <tr><th colspan="2"><%=intl._t("Adjust Profile Bonuses")%></th></tr>
-<tr><td class="infohelp" colspan="2"><%=intl._t("Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels.")%></td></tr>
+<tr><td class=infohelp colspan="2"><%=intl._t("Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels.")%></td></tr>
 <tr>
  <% long speed = 0; long capacity = 0;
     if (! "".equals(peer)) {
@@ -77,7 +77,7 @@
 <b><%=intl._t("Capacity")%>:</b>
 <input type=text size="8" name="capacity" value="<%=capacity%>" />
 </td>
-<td class="optionsave"><input type=submit name="action" class="add" value="<%=intl._t("Adjust peer bonuses")%>" /></td>
+<td class=optionsave><input type=submit name="action" class=add value="<%=intl._t("Adjust peer bonuses")%>" /></td>
 </tr>
 </table>
 </form>

@@ -22,8 +22,8 @@
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
 <jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>" />
-<h1 class="conf"><%=intl._t("Plugins")%></h1>
-<div class="main" id="config_plugins">
+<h1 class=conf><%=intl._t("Plugins")%></h1>
+<div class=main id="config_plugins">
 <%@include file="confignav.jsi" %>
 <%
    if (clientshelper.showPlugins()) {
@@ -32,21 +32,21 @@
 <%@include file="formhandler.jsi" %>
 <div class=configure>
 <h3 id="pluginmanage"><%=intl._t("Plugin Installation")%>&nbsp;
-<span class="h3navlinks">
+<span class=h3navlinks>
 <a href="configclients" title="<%=intl._t("Client Configuration")%>">Clients</a>&nbsp;
 <a href="configwebapps" title="<%=intl._t("WebApp Configuration")%>">WebApps</a>
 </span>
 </h3>
 <form action="configplugins" method="POST">
-<table id="plugininstall" class="configtable">
+<table id="plugininstall" class=configtable>
 <tr>
-<td class="infohelp" colspan="2">
+<td class=infohelp colspan="2">
 <%=intl._t("For available plugins, visit {0}.", "<a href=\"http://stats.i2p/i2p/plugins/\" target=\"_blank\">zzz's plugin page</a>")%>
 </td>
 </tr>
 <tr>
 <td colspan="2">
-<b class="suboption"><%=intl._t("Enter xpi2p or su3 plugin URL")%></b><br>
+<b class=suboption><%=intl._t("Enter xpi2p or su3 plugin URL")%></b><br>
 <div class="optionsingle" id="installPluginUrl">
 <%
        if (clientshelper.isPluginInstallEnabled()) {
@@ -63,7 +63,7 @@
 </td>
 <td align="right">
 <input type=submit name="action" class="default hideme" value="<%=intl._t("Install Plugin")%>" />
-<input type=submit class="cancel" name="foo" value="<%=intl._t("Cancel")%>" />
+<input type=submit class=cancel name="foo" value="<%=intl._t("Cancel")%>" />
 <input type=submit name="action" class="download" value="<%=intl._t("Install Plugin")%>" />
 </td>
 </tr>
@@ -74,10 +74,10 @@
 </table>
 </form>
 <form action="configplugins" method="POST" enctype="multipart/form-data" accept-charset=utf-8>
-<table id="plugininstall2" class="configtable">
+<table id="plugininstall2" class=configtable>
 <tr>
 <td colspan="2">
-<b class="suboption"><%=intl._t("Select xpi2p or su3 file")%></b><br>
+<b class=suboption><%=intl._t("Select xpi2p or su3 file")%></b><br>
 <div class="optionsingle" id="installPluginFile">
 <table>
 <tr id="file">
@@ -117,13 +117,13 @@
 <input type=submit name="action" class="reload" value="<%=intl._t("Update All Installed Plugins")%>" />
 </p>
 </form>
-<div class="wideload">
+<div class=wideload>
 <form action="" method="POST">
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="clientshelper" property="form3" />
-<div class="formaction" id="pluginconfigactions">
-<input type=submit class="cancel" name="foo" value="<%=intl._t("Cancel")%>" />
-<input type=submit name="action" class="accept" value="<%=intl._t("Save Plugin Configuration")%>" />
+<div class=formaction id="pluginconfigactions">
+<input type=submit class=cancel name="foo" value="<%=intl._t("Cancel")%>" />
+<input type=submit name="action" class=accept value="<%=intl._t("Save Plugin Configuration")%>" />
 </div>
 </form>
 </div>

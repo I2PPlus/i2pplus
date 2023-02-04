@@ -17,12 +17,12 @@
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %><h1 class="conf adv"><%=intl._t("Certificates")%></h1>
-<div class="main" id="certs">
+<div class=main id="certs">
 <jsp:useBean class="net.i2p.router.web.helpers.CertHelper" id="certhelper" scope="request" />
 <jsp:setProperty name="certhelper" property="contextId" value="<%=i2pcontextId%>" />
 <% certhelper.storeWriter(out); %>
 <jsp:getProperty name="certhelper" property="summary" />
-<span id="end"></span>
+<span id=end></span>
 </div>
 <script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>

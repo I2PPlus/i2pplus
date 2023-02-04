@@ -16,7 +16,7 @@
 <body>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Legal &amp; Licensing")%></h1>
-<div class="main" id="help">
+<div class=main id="help">
 <div class="confignav">
 <span class="tab"><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
 <span class="tab"><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>

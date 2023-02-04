@@ -16,7 +16,7 @@
 <body>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Help &amp; Support")%></h1>
-<div class="main" id="help">
+<div class=main id="help">
 <ul id="helptoc">
 <li id="help_configadv"><a href="advancedsettings"><b><%=intl._t("Advanced Settings")%></b></a><br><%=intl._t("Advanced configuration settings")%></li>
 <li id="help_changelog"><a href="changelog"><b><%=intl._t("Change Log")%></b></a><br><%=intl._t("Recent code changes to I2P+")%></li>

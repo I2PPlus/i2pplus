@@ -19,16 +19,16 @@
 <jsp:setProperty name="logginghelper" property="contextId" value="<%=i2pcontextId%>" />
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="conf"><%=intl._t("Logging")%></h1>
-<div class="main" id="config_logging">
+<h1 class=conf><%=intl._t("Logging")%></h1>
+<div class=main id="config_logging">
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigLoggingHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
 <form action="" method="POST">
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="action" value="blah" >
-<h3 class=tabletitle><%=intl._t("Configure I2P Logging Options")%>&nbsp;<span class="h3navlinks" style="float: right;"><a title="<%=intl._t("View Router Logs")%>" href="/logs"><%=intl._t("View Logs")%></a></span></h3>
-<table id="loggingoptions" class="configtable">
+<h3 class=tabletitle><%=intl._t("Configure I2P Logging Options")%>&nbsp;<span class=h3navlinks style="float: right;"><a title="<%=intl._t("View Router Logs")%>" href="/logs"><%=intl._t("View Logs")%></a></span></h3>
+<table id="loggingoptions" class=configtable>
 <tr>
 <td align="right"><b><%=intl._t("Log file")%>:</b></td>
 <td><input type=text name="logfilename" size="40" disabled="disabled" title="<%=intl._t("Edit {0} to change", "logger.config")%>" value="<jsp:getProperty name="logginghelper" property="logFilePattern" />" ></td>
@@ -74,9 +74,9 @@
 <td colspan="2"><jsp:getProperty name="logginghelper" property="newClassBox" /></td>
 </tr>
 <tr>
-<td class="optionsave" colspan="3">
-<input type=reset class="cancel" value="<%=intl._t("Cancel")%>" >
-<input type=submit name="shouldsave" class="accept" value="<%=intl._t("Save changes")%>" >
+<td class=optionsave colspan="3">
+<input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
+<input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>" >
 </td>
 </tr>
 </table>

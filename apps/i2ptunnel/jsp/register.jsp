@@ -72,14 +72,14 @@
     String curEncryptMode = editBean.getEncryptMode(curTunnel);
     if (!"0".equals(curEncryptMode)) {
 %>
-<table id="regDisabled"><tr><td class="infohelp">
+<table id="regDisabled"><tr><td class=infohelp>
 <%=intl._t("This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled.")%>
 </td></tr>
 <%
     } else if (!"new".equals(tunnelType)) {
 %>
 <table>
-<tr><td class="infohelp"><%=intl._t("Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site")%></td></tr>
+<tr><td class=infohelp><%=intl._t("Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site")%></td></tr>
 <tr><td><b><%=intl._t("Tunnel name")%>:</b> <%=editBean.getTunnelName(curTunnel)%></td></tr>
 <%
       if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) {
@@ -105,26 +105,26 @@
 <%
        if (b64 == null || b64.length() < 516) {
 %>
-<tr><td class="infohelp"><%=intl._t("Local destination is not available. Start the tunnel.")%></td></tr><%
+<tr><td class=infohelp><%=intl._t("Local destination is not available. Start the tunnel.")%></td></tr><%
        } else if (name == null || name.equals("") || name.contains(" ") || !name.endsWith(".i2p")) {
            if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) {
 %>
-<tr><td class="infohelp"><%=intl._t("To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'")%></td></tr>
+<tr><td class=infohelp><%=intl._t("To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'")%></td></tr>
 <%
            } else {
 %>
-<tr><td class="infohelp"><%=intl._t("To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'")%></td></tr>
+<tr><td class=infohelp><%=intl._t("To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'")%></td></tr>
 <%
            }
        } else {
            SigningPrivateKey spk = editBean.getSigningPrivateKey(curTunnel);
            if (spk == null) {
 %>
-<tr><td class="infohelp"><%=intl._t("Destination signing key is not available. Start the tunnel.")%></td></tr>
+<tr><td class=infohelp><%=intl._t("Destination signing key is not available. Start the tunnel.")%></td></tr>
 <%
            } else if (spk.isOffline()) {
 %>
-<tr><td class="infohelp"><%=intl._t("Destination signing key is offline. Use CLI tools on the offline machine.")%></td></tr>
+<tr><td class=infohelp><%=intl._t("Destination signing key is offline. Use CLI tools on the offline machine.")%></td></tr>
 <%
            } else {
                valid = true;
@@ -175,11 +175,11 @@
                    he.sign(spk);
 %>
 <tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
-<tr><td class="infohelp"><%=intl._t("This will change the name from {0} to {1}, using the same destination", oldname, name)%></td></tr>
+<tr><td class=infohelp><%=intl._t("This will change the name from {0} to {1}, using the same destination", oldname, name)%></td></tr>
 <%
                } else {
 %>
-<tr><td class="infohelp"><%=intl._t("This tunnel must be configured with the new host name.")%>&nbsp;<%=intl._t("Enter old hostname below.")%></td></tr>
+<tr><td class=infohelp><%=intl._t("This tunnel must be configured with the new host name.")%>&nbsp;<%=intl._t("Enter old hostname below.")%></td></tr>
 <%
                }
                props.remove(HostTxtEntry.PROP_SIG);
@@ -192,11 +192,11 @@
                    he.sign(spk);
 %>
 <tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
-<tr><td class="infohelp"><%=intl._t("This will add an alias {0} for {1}, using the same destination", name, oldname)%></td></tr>
+<tr><td class=infohelp><%=intl._t("This will add an alias {0} for {1}, using the same destination", name, oldname)%></td></tr>
 <%
                } else {
 %>
-<tr><td class="infohelp"><%=intl._t("This tunnel must be configured with the new host name.")%>&nbsp;<%=intl._t("Enter old hostname below.")%></td></tr>
+<tr><td class=infohelp><%=intl._t("This tunnel must be configured with the new host name.")%>&nbsp;<%=intl._t("Enter old hostname below.")%></td></tr>
 <%
                }
                props.remove(HostTxtEntry.PROP_SIG);
@@ -211,11 +211,11 @@
                    he.sign(spk);
 %>
 <tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
-<tr><td class="infohelp"><%=intl._t("This will change the destination for {0}", name)%></td></tr>
+<tr><td class=infohelp><%=intl._t("This will change the destination for {0}", name)%></td></tr>
 <%
                } else {
 %>
-<tr><td class="infohelp"><%=intl._t("This tunnel must be configured with the new destination.")%>&nbsp;<%=intl._t("Enter old destination below.")%></td></tr>
+<tr><td class=infohelp><%=intl._t("This tunnel must be configured with the new destination.")%>&nbsp;<%=intl._t("Enter old destination below.")%></td></tr>
 <%
                }
                props.remove(HostTxtEntry.PROP_SIG);
@@ -230,7 +230,7 @@
                    he.sign(spk);
 %>
 <tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
-<tr><td class="infohelp"><%=intl._t("This will add an alternate destination for {0}", name)%></td></tr>
+<tr><td class=infohelp><%=intl._t("This will add an alternate destination for {0}", name)%></td></tr>
 <%
                } else {
                    // If set, use the configured alternate destination as the new alias destination,
@@ -258,11 +258,11 @@
                        he2.sign(spk3);
 %>
 <tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he2.write(out); %></div></td></tr>
-<tr><td class="infohelp"><%=intl._t("This will add an alternate destination for {0}", name)%></td></tr>
+<tr><td class=infohelp><%=intl._t("This will add an alternate destination for {0}", name)%></td></tr>
 <%
                    } else {
 %>
-<tr><td class="infohelp"><%=intl._t("This tunnel must be configured with the new destination.")%>&nbsp;<%=intl._t("Enter old destination below.")%></td></tr>
+<tr><td class=infohelp><%=intl._t("This tunnel must be configured with the new destination.")%>&nbsp;<%=intl._t("Enter old destination below.")%></td></tr>
 <%
                    }  // spk3
                }  // spk2
@@ -279,11 +279,11 @@
                    he.sign(spk);
 %>
 <tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
-<tr><td class="infohelp"><%=intl._t("This will add a subdomain {0} of {1}, with a different destination", name, oldname)%></td></tr>
+<tr><td class=infohelp><%=intl._t("This will add a subdomain {0} of {1}, with a different destination", name, oldname)%></td></tr>
 <%
                } else {
 %>
-<tr><td class="infohelp"><%=intl._t("This tunnel must be configured with the new subdomain and destination.")%>&nbsp;<%=intl._t("Enter higher-level domain and destination below.")%></td></tr>
+<tr><td class=infohelp><%=intl._t("This tunnel must be configured with the new subdomain and destination.")%>&nbsp;<%=intl._t("Enter higher-level domain and destination below.")%></td></tr>
 <%
                }
            }  // spk != null
@@ -297,7 +297,7 @@
     if (valid) {
 %>
 <tr><th><%=intl._t("Specify old name and destination")%></th></tr>
-<tr><td class="infohelp"><%=intl._t("This is only required for advanced authentication.")%>&nbsp;<%=intl._t("See above for required items.")%></td></tr>
+<tr><td class=infohelp><%=intl._t("This is only required for advanced authentication.")%>&nbsp;<%=intl._t("See above for required items.")%></td></tr>
 <%
                String oldname = wrequest.getParameter("oldname");
                if (oldname == null) oldname = "";
