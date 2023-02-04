@@ -4,8 +4,9 @@ function onVisible(element, callback) {
       if (entry.intersectionRatio > 0) {
         callback(element);
         observer.disconnect();
-      } else if (timerId !== null) {
-        clearInterval(timerId);
+      } else {
+        if (timerId !== null) {clearInterval(timerId);}
+        if (refreshId !== null) {clearInterval(refreshId);}
       }
     });
   }).observe(element);
