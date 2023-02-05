@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -268,6 +269,11 @@ class FloodfillPeerSelector extends PeerSelector {
             MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2);
             boolean sameIP = false;
             boolean noSSU = false;
+            String caps = "unknown";
+            if (info != null) {
+                caps = DataHelper.stripHTML(info.getCapabilities()).toUpperCase();
+            }
+            boolean isUnreachable = info != null && caps.contains("U");
             for (String ip : entryIPs) {
                 if (!maskedIPs.add(ip))
                     sameIP = true;
@@ -303,11 +309,15 @@ class FloodfillPeerSelector extends PeerSelector {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill Sort: Bad country [" + entry.toBase64().substring(0,6) + "]");
-            } else if (info != null && info.getBandwidthTier().equals("L") || info.getBandwidthTier().equals("M") ||
-                       info.getBandwidthTier().equals("N")) {
+            } else if (info != null && (info.getBandwidthTier().equals("L") || info.getBandwidthTier().equals("M") ||
+                       info.getBandwidthTier().equals("N"))) {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill Sort: Slow [" + entry.toBase64().substring(0,6) + "]");
+            } else if (info != null && isUnreachable) {
+                badff.add(entry);
+                if (_log.shouldDebug())
+                    _log.debug("Floodfill Sort: Unreachable [" + entry.toBase64().substring(0,6) + "]");
             } else {
                 PeerProfile prof = _context.profileOrganizer().getProfile(entry);
                 double maxGoodRespTime = MAX_GOOD_RESP_TIME;
