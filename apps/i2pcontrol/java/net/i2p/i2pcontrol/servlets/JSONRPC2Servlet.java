@@ -163,10 +163,10 @@ public class JSONRPC2Servlet extends HttpServlet {
             if (_secMan.isDefaultPasswordValid()) {
                 out.println("<p>The current API password is the default, \"" + _secMan.DEFAULT_AUTH_PASSWORD + "\". You should change it.</p>");
             } else {
-                out.println("<p><span class=\"prompt\">Current API password:</span> <input name=\"password\" type=\"password\"></p>");
+                out.println("<p><span class=\"prompt\">Current API password:</span> <input name=\"password\" type=password></p>");
             }
-            out.println("<p><span class=\"prompt\">New API password:</span> <input name=\"password2\" type=\"password\" placeholder=\"new password\">&nbsp;" +
-                        "<input name=\"password3\" type=\"password\" placeholder=\"confirm new password\">" + "</p>\n" +
+            out.println("<p><span class=\"prompt\">New API password:</span> <input name=\"password2\" type=password placeholder=\"new password\">&nbsp;" +
+                        "<input name=\"password3\" type=password placeholder=\"confirm new password\">" + "</p>\n" +
                         "<p id=\"password\"><input name=\"save\" type=submit value=\"Change API Password\"></p>\n" +
                         "<hr><p class=infohelp>If you forget the API password, stop I2PControl, delete the config file and restart I2PControl.\n" +
                         "<br><b>Location:</b> <code>" + _conf.getConfFile() + "</code></p>\n</form>");

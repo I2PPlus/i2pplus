@@ -2960,19 +2960,19 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<hr>\n<table border=0><tr><td>");
         out.write(_t("From URL"));
-        out.write(":<td><input type=text name=\"nofilter_newURL\" size=\"85\" value=\"" + newURL + "\" spellcheck=\"false\"");
+        out.write(":<td><input type=text name=\"nofilter_newURL\" size=\"85\" value=\"" + newURL + "\" spellcheck=false");
         out.write(" title=\"");
         out.write(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"));
         out.write("\" required>\n");
         // not supporting from file at the moment, since the file name passed isn't always absolute (so it may not resolve)
-        //out.write("From file: <input type=\"file\" name=\"newFile\" size=\"50\" value=\"" + newFile + "\" /><br>");
+        //out.write("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>");
         out.write("<input type=submit class=\"add\" value=\"");
         out.write(_t("Add torrent"));
         out.write("\" name=\"foo\" ><br>\n" +
                   "<tr><td>");
 
         out.write(_t("Data dir"));
-        out.write(":<td><input type=text name=\"nofilter_newDir\" size=\"85\" value=\"" + _manager.getDataDir().getAbsolutePath() + "\" spellcheck=\"false\"");
+        out.write(":<td><input type=text name=\"nofilter_newDir\" size=\"85\" value=\"" + _manager.getDataDir().getAbsolutePath() + "\" spellcheck=false");
         out.write(" title=\"");
         out.write(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()));
         out.write("\"></td></tr>\n");
@@ -2989,11 +2989,11 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<label id=\"tab_newtorrent\" class=\"toggleview\" for=\"toggle_createtorrent\"><span class=\"tab_label\">");
         out.write(_t("Create Torrent"));
         out.write("</span></label><hr>\n<table border=0><tr><td>");
-        //out.write("From file: <input type=\"file\" name=\"newFile\" size=\"50\" value=\"" + newFile + "\" /><br>\n");
+        //out.write("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
         out.write(_t("Data to seed"));
         out.write(":</td><td>"
                   + "<input type=text name=\"nofilter_baseFile\" size=\"85\" value=\""
-                  + "\" spellcheck=\"false\" title=\"");
+                  + "\" spellcheck=false title=\"");
         out.write(_t("File or directory to seed (full path or within the directory {0} )",
                     _manager.getDataDir().getAbsolutePath() + File.separatorChar));
         out.write("\" required> <input type=submit class=\"create\" value=\"");
@@ -3169,7 +3169,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label><b>");
         out.write(_t("Page size"));
-        out.write("</b> <input type=text name=\"pageSize\" size=\"5\" maxlength=\"4\" pattern=\"[0-9]{0,4}\" class=\"r numeric\""
+        out.write("</b> <input type=text name=\"pageSize\" size=5 maxlength=\"4\" pattern=\"[0-9]{0,4}\" class=\"r numeric\""
                   + " title=\"");
         out.write(_t("Maximum number of torrents to display per page"));
         out.write("\" value=\"" + _manager.getPageSize() + "\" > ");
@@ -3279,7 +3279,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption id=\"configureAuthor\"><label><b>");
         out.write(_t("Comment Author"));
-        out.write("</b> <input type=text name=\"nofilter_commentsName\" spellcheck=\"false\" value=\""
+        out.write("</b> <input type=text name=\"nofilter_commentsName\" spellcheck=false value=\""
                   + DataHelper.escapeHTML(_manager.util().getCommentsName()) + "\" size=\"15\" maxlength=\"16\" title=\"");
         out.write(_t("Set the author name for your comments and ratings"));
         out.write("\" ></label></span>\n");
@@ -3295,7 +3295,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<span class=configOption><label><b>");
         out.write(_t("Up bandwidth limit"));
         out.write("</b> <input type=text name=\"upBW\" class=\"r numeric\" value=\""
-                  + _manager.util().getMaxUpBW() + "\" size=\"5\" maxlength=\"5\" pattern=\"[0-9]{1,5}\""
+                  + _manager.util().getMaxUpBW() + "\" size=5 maxlength=\"5\" pattern=\"[0-9]{1,5}\""
                   + " title=\"");
         out.write(_t("Maximum bandwidth allocated for uploading"));
         out.write("\"> KBps</label> <span id=\"bwHoverHelp\">");
@@ -3315,7 +3315,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<span class=configOption><label><b>");
         out.write(_t("Total uploader limit"));
         out.write("</b> <input type=text name=\"upLimit\" class=\"r numeric\" value=\""
-                  + _manager.util().getMaxUploaders() + "\" size=\"5\" maxlength=\"3\" pattern=\"[0-9]{1,3}\""
+                  + _manager.util().getMaxUploaders() + "\" size=5 maxlength=\"3\" pattern=\"[0-9]{1,3}\""
                   + " title=\"");
         out.write(_t("Maximum number of peers to upload to"));
         out.write("\" > ");
@@ -3349,7 +3349,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (_context.isRouterContext()) {
             out.write("<br>\n<span class=configOption><label><b>");
             out.write(_t("Startup delay"));
-            out.write("</b> <input type=text name=\"startupDelay\" size=\"5\" maxlength=\"4\" pattern=\"[0-9]{1,4}\" class=\"r numeric\""
+            out.write("</b> <input type=text name=\"startupDelay\" size=5 maxlength=\"4\" pattern=\"[0-9]{1,4}\" class=\"r numeric\""
                       + " title=\"");
             out.write(_t("How long before auto-started torrents are loaded when I2PSnark starts"));
             out.write("\" value=\"" + _manager.util().getStartupDelay() + "\" > ");
@@ -3381,13 +3381,13 @@ public class I2PSnarkServlet extends BasicServlet {
         //          "<tr><td>");
         //out.write(_t("Open tracker announce URLs"));
         //out.write(": <td><input type=text name=\"openTrackers\" value=\""
-        //          + openTrackers + "\" size=\"50\" ><br>\n");
+        //          + openTrackers + "\" size=50 ><br>\n");
 
         //out.write("\n");
         //out.write("EepProxy host: <input type=text name=\"eepHost\" value=\""
         //          + _manager.util().getEepProxyHost() + "\" size=\"15\" /> ");
         //out.write("port: <input type=text name=\"eepPort\" value=\""
-        //          + _manager.util().getEepProxyPort() + "\" size=\"5\" maxlength=\"5\" /><br>\n");
+        //          + _manager.util().getEepProxyPort() + "\" size=5 maxlength=\"5\" /><br>\n");
 
 // data storage
 
@@ -3399,7 +3399,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(_t("Data directory"));
         out.write("</b> <input type=text name=\"nofilter_dataDir\" size=\"60\"" + " title=\"");
         out.write(_t("Directory where torrents and downloaded/shared files are stored"));
-        out.write("\" value=\"" + DataHelper.escapeHTML(dataDir) + "\" spellcheck=\"false\"></label></span><br>\n");
+        out.write("\" value=\"" + DataHelper.escapeHTML(dataDir) + "\" spellcheck=false></label></span><br>\n");
 
         out.write("<span class=configOption><label for=\"filesPublic\"><b>");
         out.write(_t("Files readable by all"));
@@ -3410,9 +3410,9 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"maxFiles\"><b>");
         out.write(_t("Max files per torrent"));
-        out.write("</b> <input type=text name=\"maxFiles\" size=\"5\" maxlength=\"5\" pattern=\"[0-9]{1,5}\" class=\"r numeric\"" + " title=\"");
+        out.write("</b> <input type=text name=\"maxFiles\" size=5 maxlength=\"5\" pattern=\"[0-9]{1,5}\" class=\"r numeric\"" + " title=\"");
         out.write(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"));
-        out.write("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=\"false\" disabled></label></span><br>\n");
+        out.write("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=false disabled></label></span><br>\n");
         out.write("</div></td></tr>\n");
 
 // i2cp/tunnel configuration
@@ -3443,12 +3443,12 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<span class=configOption><label><b>");
             out.write(_t("I2CP host"));
             out.write("</b> <input type=text name=\"i2cpHost\" value=\""
-                      + _manager.util().getI2CPHost() + "\" size=\"5\" ></label></span><br>\n");
+                      + _manager.util().getI2CPHost() + "\" size=5 ></label></span><br>\n");
 
             out.write("<span class=configOption><label><b>");
             out.write(_t("I2CP port"));
             out.write("</b> <input type=text name=\"i2cpPort\" value=\"" +
-                      + _manager.util().getI2CPPort() + "\" class=\"numeric\" size=\"5\" maxlength=\"5\" pattern=\"[0-9]{1,5}\" ></label></span><br>\n");
+                      + _manager.util().getI2CPPort() + "\" class=\"numeric\" size=5 maxlength=\"5\" pattern=\"[0-9]{1,5}\" ></label></span><br>\n");
         }
 
         options.remove(I2PSnarkUtil.PROP_MAX_BW);
@@ -3553,12 +3553,12 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n")  // spacer
            .append("<tr id=\"addtracker\"><td><b>")
            .append(_t("Add")).append(":</b></td>" +
-                   "<td><input type=text class=\"trackername\" name=\"tname\" spellcheck=\"false\"></td>" +
-                   "<td><input type=text class=\"trackerhome\" name=\"thurl\" spellcheck=\"false\"></td>" +
+                   "<td><input type=text class=\"trackername\" name=\"tname\" spellcheck=false></td>" +
+                   "<td><input type=text class=\"trackerhome\" name=\"thurl\" spellcheck=false></td>" +
                    "<td><input type=radio class=optbox value=\"0\" name=\"add_tracker_type\" checked=checked></td>" +
                    "<td><input type=radio class=optbox value=\"1\" name=\"add_tracker_type\"></td>" +
                    "<td><input type=radio class=optbox value=\"2\" name=\"add_tracker_type\"></td>" +
-                   "<td><input type=text class=\"trackerannounce\" name=\"taurl\" spellcheck=\"false\"></td></tr>\n" +
+                   "<td><input type=text class=\"trackerannounce\" name=\"taurl\" spellcheck=false></td></tr>\n" +
                    "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
                    "<tr><td colspan=7>\n" +
                    "<input type=submit name=\"taction\" class=\"default\" value=\"").append(_t("Add tracker")).append("\">\n" +

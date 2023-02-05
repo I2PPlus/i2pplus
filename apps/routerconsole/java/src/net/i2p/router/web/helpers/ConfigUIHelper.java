@@ -249,7 +249,7 @@ public class ConfigUIHelper extends HelperBase {
         buf.append("<tr><td id=\"pw_adduser\" colspan=3>" +
                    "<b>" + _t("Username") + ":</b> " + "<input type=text name=\"name\" title=\"" +
                    _t("Please supply a username") + "\"><b>" + _t("Password") + ":</b> " +
-                   "<input type=\"password\" size=\"40\" name=\"nofilter_pw\" title=\"" +
+                   "<input type=password size=\"40\" name=\"nofilter_pw\" title=\"" +
                    _t("Please supply a password") + "\">" + "</td></tr>\n</table>\n");
         return buf.toString();
     }

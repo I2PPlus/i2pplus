@@ -265,7 +265,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (!props.isEmpty()) {
             buf.append("<tr><td><b>" + _t("Inbound options") + ":</b></td>\n" +
                        "<td colspan=2><input name=\"").append(index);
-            buf.append(".inboundOptions\" type=text size=\"32\" disabled=disabled " +
+            buf.append(".inboundOptions\" type=text size=32 disabled=disabled " +
                        "value=\"");
             for (String prop : props.stringPropertyNames()) {
                 String val = props.getProperty(prop);
@@ -277,7 +277,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (!props.isEmpty()) {
             buf.append("<tr><td><b>" + _t("Outbound options") + ":</b></td>\n" +
                        "<td colspan=2><input name=\"").append(index);
-            buf.append(".outboundOptions\" type=text size=\"32\" disabled=disabled " +
+            buf.append(".outboundOptions\" type=text size=32 disabled=disabled " +
                        "value=\"");
             for (String prop : props.stringPropertyNames()) {
                 String val = props.getProperty(prop);

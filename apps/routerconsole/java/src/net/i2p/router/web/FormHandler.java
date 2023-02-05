@@ -190,7 +190,7 @@ public abstract class FormHandler {
 //        buf.append("<div class=\"messages\" id=\"messages\" onclick=\"this.remove()\">");
         buf.append("<div class=\"messages\" id=\"messages\">");
         if (!_errors.isEmpty()) {
-            buf.append("<div class=\"error\">");
+            buf.append("<div class=error>");
             buf.append(render(_errors));
             buf.append("</div>");
         }

@@ -446,7 +446,7 @@ public class GraphHelper extends FormHandler {
             _out.write(_t("Graph size") + ":</b>&nbsp; <input size=\"4\" style=text-align:right type=text name=\"width\" value=\"" + _width + "\">" +
                        _t("pixels wide") + "&nbsp;&nbsp;&nbsp;<input size=\"4\" style=text-align:right type=text name=\"height\" value=\"" + _height + "\">" +
                        _t("pixels high") + "</span><br>\n<span class=nowrap>\n<b>");
-            _out.write(_t("Display period") + ":</b> <input size=\"5\" style=text-align:right type=text name=\"periodCount\" value=\"" + _periodCount + "\">" +
+            _out.write(_t("Display period") + ":</b> <input size=5 style=text-align:right type=text name=\"periodCount\" value=\"" + _periodCount + "\">" +
                        _t("minutes") + "</span><br>\n<span class=nowrap>\n<b>");
             _out.write(_t("Refresh delay") + ":</b> <select name=\"refreshDelay\">");
             for (int i = 0; i < times.length; i++) {

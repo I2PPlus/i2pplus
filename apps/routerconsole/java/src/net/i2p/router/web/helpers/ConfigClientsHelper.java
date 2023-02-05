@@ -437,7 +437,7 @@ public class ConfigClientsHelper extends HelperBase {
         }
         buf.append("</td>\n<td class=left>");
         if (edit && !ro) {
-            buf.append("<input type=text size=\"80\" spellcheck=\"false\" name=\"nofilter_desc").append(index).append("\" value=\"");
+            buf.append("<input type=text size=80 spellcheck=false name=\"nofilter_desc").append(index).append("\" value=\"");
             buf.append(escapedDesc);
             buf.append("\" >");
         } else {
