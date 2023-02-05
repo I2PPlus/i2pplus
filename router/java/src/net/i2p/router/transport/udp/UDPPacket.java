@@ -424,27 +424,30 @@ class UDPPacket implements CDPQEntry {
                 return "RELEASED PACKET";
         }
         StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* Address: ");
-        buf.append(Addresses.toString(_packet.getAddress().getAddress(), _packet.getPort()));
-        buf.append("\n* Size: ");
-        buf.append(_packet.getLength());
-        buf.append(" bytes");
-        //buf.append(" id=").append(System.identityHashCode(this));
-        buf.append("; Priority: ").append(_priority);
-        if (_messageType >= 0)
-            buf.append("; Message Type: ").append(_messageType);
-        if (_markedType >= 0)
-            buf.append("; Mark Type: ").append(_markedType);
-        if (_fragmentCount > 0)
-            buf.append("; Fragment Count: ").append(_fragmentCount);
-
-        if (_enqueueTime > 0)
-            buf.append("; sinceEnqueued: ").append(_context.clock().now() - _enqueueTime);
-        if (_receivedTime > 0)
-            buf.append("; sinceReceived: ").append(_context.clock().now() - _receivedTime);
-        //buf.append(" beforeReceiveFragments=").append((_beforeReceiveFragments > 0 ? _context.clock().now()-_beforeReceiveFragments : -1));
-        //buf.append(" sinceHandled=").append((_afterHandlingTime > 0 ? _context.clock().now()-_afterHandlingTime : -1));
-        //buf.append("\ndata=").append(Base64.encode(_packet.getData(), _packet.getOffset(), _packet.getLength()));
+        if (_packet.getAddress().getAddress() != null) {
+            buf.append("\n* Address: ");
+            buf.append(Addresses.toString(_packet.getAddress().getAddress(), _packet.getPort()));
+            buf.append("\n* Size: ");
+            buf.append(_packet.getLength());
+            buf.append(" bytes");
+            //buf.append(" id=").append(System.identityHashCode(this));
+            buf.append("; Priority: ").append(_priority);
+            if (_messageType >= 0)
+                buf.append("; Message Type: ").append(_messageType);
+            if (_markedType >= 0)
+                buf.append("; Mark Type: ").append(_markedType);
+            if (_fragmentCount > 0)
+                buf.append("; Fragment Count: ").append(_fragmentCount);
+            if (_enqueueTime > 0)
+                buf.append("; sinceEnqueued: ").append(_context.clock().now() - _enqueueTime);
+            if (_receivedTime > 0)
+                buf.append("; sinceReceived: ").append(_context.clock().now() - _receivedTime);
+            //buf.append(" beforeReceiveFragments=").append((_beforeReceiveFragments > 0 ? _context.clock().now()-_beforeReceiveFragments : -1));
+            //buf.append(" sinceHandled=").append((_afterHandlingTime > 0 ? _context.clock().now()-_afterHandlingTime : -1));
+            //buf.append("\ndata=").append(Base64.encode(_packet.getData(), _packet.getOffset(), _packet.getLength()));
+        } else {
+            buf.append("\n* No address for packet - Router restarting?");
+        }
         return buf.toString();
     }
 
