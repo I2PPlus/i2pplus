@@ -2144,20 +2144,22 @@ h2#jobrunners{margin-top:0;display:none}
 #jobrunners ~ ol > li:last-child{margin-bottom:0}
 h3[id*="job"]{border:var(--border_inner);padding:8px 10px;margin:12px 0 10px 0;border-radius:0;text-transform:uppercase;text-shadow:0 0 2px #010011;letter-spacing:.08em}
 h3[id*="jobs"]{margin-top:25px;clear:both}
-#schedjobs{margin:-6px 0 0;width:100%}
+#schedjobs{margin:-6px 0 10px;width:100%}
 #jobstats{margin-bottom:10px}
 #jobstats th,#jobstats td{padding:3px 8px;text-align:right}
 #jobstats th{padding:5px 8px;font-size:90%}
 #schedjobs th:first-child,#schedjobs td:first-child,#jobstats th:first-child,#jobstats td:first-child{margin-bottom:15px;padding-left:8px;text-align:left;font-weight:700}
 #schedjobs td:first-child{padding:5px 8px 3px}
-#jobstats tr:last-child td{font-size:105%;font-weight:700;border-top:3px solid #1e1c4a !important;background:#002}
+#jobstats tfoot td{font-size:105%;font-weight:700;border-top:3px solid #1e1c4a !important;background:#002}
 #schedjobs tr,#schedjobs tr:hover,#schedjobs tr,#schedjobs tr:hover td{background:#010008}
 #jobstats + hr{display:none}
-#totaljobstats{margin-bottom:-2px;margin-top:10px}
+#routerjobs .widescroll{margin-top:-6px}
+#totaljobstats{margin-bottom:-2px;margin-top:0}
 #activejobs + ol{padding-bottom:5px}
 #finishedjobs + ol li,#scheduledjobs + ol li,#activejobs + ol li,#readyjobs + ol li,#schedjobs li{margin:3px 2px;padding:8px 3px 8px 24px;width:calc(100% - 32px);list-style:none;font-size:95%;border:1px solid #1e1c4a;box-shadow:var(--highlight),inset 0 0 2px 1px #225}
 #activejobs + ol li,#scheduledjobs + ol li,#readyjobs + ol li,#finishedjobs + ol li,#schedjobs li{padding-left:24px;background-image:var(--clock);background-repeat:no-repeat;background-position:5px center;background-size:14px}
 #activejobs + ol li{background-image:var(--start);background-size:12px}
+#routerjobqueue .joblog{margin-top:-5px}
 #finishedjobs + ol li{background-image:var(--yes);background-size:12px;background-position:6px center}
 
 /* events */
@@ -2643,8 +2645,8 @@ h3.tabletitle a,#version.tabletitle a{padding-left:18px}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:var(--border_inner)}
 #terms p{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 #terms p:first-child{margin-top:0}
-#jobstats td:first-child,#jobstats tr:nth-last-child(n+2):hover td:first-child{padding:6px 0 6px 26px;background-image:var(--yes);background-position:7px center;background-repeat:no-repeat;background-size:12px}
-#jobstats tr:last-child td:first-child{padding-left:8px;background-image:none}
+#jobstats tbody td:first-child,#jobstats tbody tr:hover td:first-child{padding:6px 0 6px 26px;background-image:var(--yes);background-position:7px center;background-repeat:no-repeat;background-size:12px}
+#jobstats tfoot tr td:first-child{padding-left:8px;background-image:none}
 }
 
 @media screen and (min-width:1400px){

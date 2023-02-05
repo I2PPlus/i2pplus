@@ -924,9 +924,8 @@ h3 + .statusnotes{margin-top:2px}
 .joblog + .widescroll > #totaljobstats{margin-top:2px}
 .jobcount{margin-right:10px;padding:2px 10px 2px 16px;white-space:nowrap;background:var(--timer) no-repeat left center/12px}
 #jobrunners{margin-top:-1px;padding:7px 6px 7px 8px;display:inline-block;width:auto;position:absolute;top:0;left:15px;font-size:12.5pt}
-#jobs h2 + h3{margin-top:48px}
 #jobs h3{margin-bottom:-2px;border-width:1px;border-radius:0;filter:none}
-#jobs h3:first-child{margin-top:15px}
+#jobs h3:first-child{margin-top:10px}
 #jobs ol{margin-top:1px;padding:4px 2px;border:1px solid var(--border_inner);box-shadow:var(--highlight);background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px),#fff;columns:440px auto;column-gap:0;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 #jobs ol.jobqueue:last-of-type{padding-bottom:4px}
 #jobs ol:empty{display:none}
@@ -940,7 +939,7 @@ h3#readyjobs + ol li::before{color:#dd3}
 h3#finishedjobs + ol li{background:var(--yes) no-repeat 6px center/12px}
 h3#activejobs + ol li::before{background:var(--start) no-repeat 6px center/12px}
 h3#scheduledjobs + ol li::before{background:var(--timer) no-repeat 6px center/12px}
-#schedjobs{margin:15px 0 -2px;width:100%}
+#schedjobs{margin:12px 0 5px;width:100%}
 #jobs li{font-size:90%}
 #jobs #schedjobs th{text-align:left}
 #schedjobs td,#jobs #schedjobs tr:hover td{padding:2px 4px;font-weight:400;color:var(--ink);background:#fcfcff}
@@ -950,6 +949,13 @@ h3#scheduledjobs + ol li::before{background:var(--timer) no-repeat 6px center/12
 #jobstats{margin-top:1px}
 #jobs #jobstats th,#jobs #jobstats td{font-size:8.5pt}
 #jobs #jobstats th:nth-child(n+2),#jobs #jobstats td:nth-child(n+2){text-align:right;padding-right:.5%}
+
+/* jobs */
+#schedjobs th:last-child{text-align:center}
+#schedjobs td:first-child{font-weight:700;color:var(--ink_light)}
+#jobstats th:nth-child(n+2){text-align:right}
+#jobstats tr:last-child{font-weight:700}
+#jobstats tr:last-child td{padding:5px;color:var(--ink_light)}
 
 /* /stats */
 .joblog{border:none;margin-top:5px}
@@ -1632,14 +1638,6 @@ p#gatherstats{margin:11px 0 12px}
 #stats .toggle_input{position:absolute;opacity:0;width:0;height:0;top:-99999px;left:-99999px}
 .statsViewGraphs{margin:4px 0 5px;width:100%;display:inline-block;font-size:90%}
 .statvalue{padding:0 2px 0 0;color:var(--ink_light);font-weight:700;font-style:italic}
-
-/* jobs */
-table#schedjobs{margin-top:-11px}
-#schedjobs th:last-child{text-align:center}
-#schedjobs td:first-child{font-weight:700;color:var(--ink_light)}
-#jobstats th:nth-child(n+2){text-align:right}
-#jobstats tr:last-child{font-weight:700}
-#jobstats tr:last-child td{padding:5px;color:var(--ink_light)}
 
 /* debug */
 #debug{background:#fafaff}

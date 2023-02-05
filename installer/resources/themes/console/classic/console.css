@@ -5,10 +5,10 @@
 @import url(global.css);
 
 :root{
-  --bgpos_info:no-repeat 15px center/28px;
-  --grid:repeating-linear-gradient(90deg,rgba(0,0,0,0) 15px,rgba(120,120,255,.5) 16px,rgba(0,0,0,0) 16px,rgba(0,0,0,0) 30px),repeating-linear-gradient(to top,rgba(0,0,0,0) 11px,rgba(120,120,255,.5) 12px,rgba(255,255,255,0) 12px,rgba(255,255,255,0) 24px);
-  --pre:repeating-linear-gradient(180deg,#7878ff33,#d2d2ff66 1px,#d2d2ff66 19px,#7878ff33 19px,#f0f0ff66 20px,#f0f0ff66 40px);
-  --updating:repeating-linear-gradient(135deg,rgba(238,238,255,.7) 1px,rgba(238,238,255,.7) 5px,rgba(221,221,255,.7) 6px,rgba(221,221,255,.7) 11px);
+--bgpos_info:no-repeat 15px center/28px;
+--grid:repeating-linear-gradient(90deg,rgba(0,0,0,0) 15px,rgba(120,120,255,.5) 16px,rgba(0,0,0,0) 16px,rgba(0,0,0,0) 30px),repeating-linear-gradient(to top,rgba(0,0,0,0) 11px,rgba(120,120,255,.5) 12px,rgba(255,255,255,0) 12px,rgba(255,255,255,0) 24px);
+--pre:repeating-linear-gradient(180deg,#7878ff33,#d2d2ff66 1px,#d2d2ff66 19px,#7878ff33 19px,#f0f0ff66 20px,#f0f0ff66 40px);
+--updating:repeating-linear-gradient(135deg,rgba(238,238,255,.7) 1px,rgba(238,238,255,.7) 5px,rgba(221,221,255,.7) 6px,rgba(221,221,255,.7) 11px);
 }
 
 body{margin:3px;padding:0;text-align:left;line-height:1.3;font-size:10pt;background:var(--bg_doc);background-attachment:fixed}
@@ -983,7 +983,7 @@ html[lang="es"] .sitemapLink,html[lang="es"] .sitemapLabel{width:160px}
 .joblog h3,#stats .joblog h3{margin:10px 0 20px 0}
 .joblog h3:first-child{margin:-10px 0 15px 0}
 .joblog hr{margin:15px 0 15px}
-h2#jobrunners{margin-top:-10px}
+h2#jobrunners{display:none}
 .joblog ol{margin-bottom:5px;margin-top:-21px;padding:15px 50px;border:var(--border);background:var(--bg3);column-count:2;column-width:400px;column-gap:100px;column-rule:1px dotted var(--border_soft)}
 .joblog ol:empty + h3{margin-top:-10px}
 .joblog ol:empty{display:none}
@@ -991,6 +991,7 @@ h2#jobrunners{margin-top:-10px}
 .joblog ol li:first-child{padding-top:5px}
 .joblog ol li:last-child{border:none}
 .jobcount::before{margin-left:0}
+#finishedjobs{margin-top:15px}
 #finishedjobs + ol li,#scheduledjobs + ol li,#activejobs + ol li,#readyjobs + ol li{width:100%;list-style:none}
 #activejobs + ol li::before,#scheduledjobs + ol li::before,#readyjobs + ol li::before,#finishedjobs + ol li::before,.jobcount::before{margin:0 8px 0 -24px;width:12px;height:12px;display:inline-block;background:var(--timer) no-repeat center center/12px;content:""}
 #activejobs + ol li::before{margin-right:6px;margin-left:-20px;height:0;width:0;border:5px solid #f00;border-color:transparent transparent transparent #373;background:none}
@@ -1000,9 +1001,12 @@ h2#jobrunners{margin-top:-10px}
 #readyjobs + ol li::before{color:#dd3}
 #totaljobstats{margin:8px 0 -1px}
 #jobstats th:first-child,#jobstats td:first-child{padding-left:10px;text-align:left}
-#jobstats th{text-align:right;font-size:90%}
-#jobstats .tablefooter td{font-size:9pt}
-#schedjobs{margin:-11px 0 0;width:100%}
+#jobstats thead th{font-size:90%}
+#jobstats th:nth-child(n+2){text-align:right}
+#jobstats tbody td{border:var(--border)}
+#jobstats td:nth-child(n+2){text-align:right}
+#jobstats tfoot td{border-left:none;border-right:none}
+#schedjobs{margin:-11px 0 5px;width:100%}
 #schedjobs th,#schedjobs td{padding:3px 10px}
 #schedjobs th:first-child{text-align:left}
 #schedjobs td:first-child{font-weight:700}
@@ -2211,7 +2215,7 @@ table[id*="connections"] td,#floodfills td,#profilelist td,#jobstats td,#tunnels
 
 @media screen and (min-width:1200px){
 .cells tt,#profilelist tt{margin-left:2px}
-#jobstats td:first-child,#jobstats tr:hover td:first-child{padding:6px 0 6px 26px;background:var(--yes) no-repeat 8px center/12px}
+#jobstats tr:not(last-child): td:first-child,#jobstats tr:not(last-child):hover td:first-child{padding:6px 0 6px 26px;background:var(--yes) no-repeat 8px center/12px}
 #peers .confignav + #udp,#peers .confignav + #ntcp{margin-top:15px}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:var(--border_color)}
 #terms p{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
