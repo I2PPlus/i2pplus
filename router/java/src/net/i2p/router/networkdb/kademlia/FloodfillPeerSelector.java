@@ -272,15 +272,17 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (!maskedIPs.add(ip))
                     sameIP = true;
             }
-            for (RouterAddress ra : info.getAddresses()) {
-                if (ra.getTransportStyle().equals("SSU") ||
-                    ra.getTransportStyle().equals("SSU2")) {
-                   noSSU = false;
-                   break;
+            if (info != null) {
+                for (RouterAddress ra : info.getAddresses()) {
+                    if (ra.getTransportStyle().equals("SSU") ||
+                        ra.getTransportStyle().equals("SSU2")) {
+                       noSSU = false;
+                       break;
+                    }
+                    if (!ra.getTransportStyle().equals("SSU") &&
+                        !ra.getTransportStyle().equals("SSU2"))
+                        noSSU = true;
                 }
-                if (!ra.getTransportStyle().equals("SSU") &&
-                    !ra.getTransportStyle().equals("SSU2"))
-                    noSSU = true;
             }
             if (noSSU) {
                 if (_log.shouldDebug())
