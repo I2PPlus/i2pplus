@@ -150,7 +150,7 @@ public abstract class CommSystemFacade implements Service {
         return Collections.emptyMap();
     }
 
-    public String renderPeerHTML(Hash peer) {
+    public String renderPeerHTML(Hash peer, boolean extended) {
         return peer.toBase64().substring(0, 4);
     }
 
