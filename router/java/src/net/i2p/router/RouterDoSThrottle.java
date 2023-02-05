@@ -39,7 +39,7 @@ class RouterDoSThrottle extends RouterThrottleImpl {
             int cnt = _currentLookupCount.incrementAndGet();
             if (cnt >= LOOKUP_THROTTLE_MAX) {
                 _context.statManager().addRateData("router.throttleNetDbDoS", cnt);
-                _context.banlist().banlistRouter(key, "Excessive NetDB lookups", null, null, now + 15*60*1000);
+                _context.banlist().banlistRouter(key, " <b>➜</b> Excessive NetDb lookups", null, null, now + 15*60*1000);
                 if (_log.shouldWarn())
                     _log.warn("Temp banning [" + key.toBase64().substring(0,6) + "] for 15m for excessive NetDB lookups " +
                               "(Limit (over 10m period): " + LOOKUP_THROTTLE_MAX + " -> Requests: " + cnt + ")");

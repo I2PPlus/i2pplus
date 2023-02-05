@@ -71,6 +71,7 @@
 --shadow_input:inset 1px 1px 2px rgba(0,0,0,.15);
 --shadow_input_focus:var(--highlight),inset 3px 3px 3px rgba(24,24,64,.2);
 --shadow_inset:inset 2px 2px 4px rgba(204,204,240,.6);
+--soft:#cfd2e2;
 --subheading:linear-gradient(90deg,var(--bg),var(--bg3));
 --th:linear-gradient(180deg,#fff,#fafbff);
 --visited:#6b6b94;
