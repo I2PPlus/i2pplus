@@ -420,7 +420,7 @@ public class PeerHelper extends HelperBase {
 
         if (!peers.isEmpty()) {
             buf.append("<tr class=tablefooter><td class=peer><b>")
-               .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers() - inactive));
+               .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
             buf.append("</b></td>" +
