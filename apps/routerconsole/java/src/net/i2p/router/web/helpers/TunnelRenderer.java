@@ -232,7 +232,7 @@ class TunnelRenderer {
                     }
                     if (from != null)
                         out.write("<td><span class=tunnel_peer>" + netDbLink(from) +
-                                  "</span>&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(from) + "</b></td>");
+                                  "</span>");//&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(from) + "</b></td>");
                     else
                         out.write("<td><span hidden>&ndash;</span></td>");
                     long send = cfg.getSendTunnelId();
@@ -245,7 +245,7 @@ class TunnelRenderer {
                     }
                     if (to != null)
                         out.write("<td><span class=tunnel_peer>" + netDbLink(to) +
-                                  "</span>&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(to) + "</b></td>");
+                                  "</span>");//&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(to) + "</b></td>");
                     else
                         out.write("<td><span hidden>&ndash;</span></td>");
                     out.write("</tr>\n");
@@ -680,17 +680,17 @@ class TunnelRenderer {
         // links are set to float:right in CSS so they will be displayed in reverse order
         if (or.getSummaryListener() != null) {
             out.write("<a href=\"graph?stat=" + orname + ".300000&amp;w=600&amp;h=200\">" +
-                      "<img src=\"/themes/console/images/outbound.svg\" alt=\"" + tgd + "\" title=\"" + tgd + "\"></a>");
+                      "<img src=/themes/console/images/outbound.svg alt=\"" + tgd + "\" title=\"" + tgd + "\"></a>");
         } else {
             out.write("<a href=\"configstats#" + orname + "\">" +
-                      "<img src=\"/themes/console/images/outbound.svg\" alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
+                      "<img src=/themes/console/images/outbound.svg alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
         }
         if (ir.getSummaryListener() != null) {
             out.write("<a href=\"graph?stat=" + irname + ".300000&amp;w=600&amp;h=200\">" +
-                      "<img src=\"/themes/console/images/inbound.svg\" alt=\"" + tgd + "\" title=\"" + tgd + "\"></a> ");
+                      "<img src=/themes/console/images/inbound.svg alt=\"" + tgd + "\" title=\"" + tgd + "\"></a> ");
         } else {
             out.write("<a href=\"configstats#" + irname + "\">" +
-                      "<img src=\"/themes/console/images/inbound.svg\" alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
+                      "<img src=/themes/console/images/inbound.svg alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
         }
     }
 
@@ -746,10 +746,10 @@ class TunnelRenderer {
             boolean isInbound = info.isInbound();
             if (isInbound)
                 out.write("<tr><td><span class=inbound title=\"" + tib +
-                          "\"><img src=\"/themes/console/images/inbound.svg\" alt=\"" + tib + "\"></span></td>");
+                          "\"><img src=/themes/console/images/inbound.svg alt=\"" + tib + "\"></span></td>");
             else
                 out.write("<tr><td><span class=outbound title=\"" + tob +
-                          "\"><img src=\"/themes/console/images/outbound.svg\" alt=\"" + tob + "\"></span></td>");
+                          "\"><img src=/themes/console/images/outbound.svg alt=\"" + tob + "\"></span></td>");
             out.write("<td>" + DataHelper.formatDuration2(timeLeft) + "</td>\n");
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
             out.write("<td class=\"cells datatransfer\">");
@@ -771,8 +771,8 @@ class TunnelRenderer {
                     }
                     // Add empty content placeholders to force alignment.
                     out.write(" <td><span class=\"tunnel_peer tunnel_local\" title=\"" +
-                              _t("Locally hosted tunnel") + "\">" + _t("Local") + "</span>&nbsp;" +
-                              "<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+                              _t("Locally hosted tunnel") + "\">" + _t("Local") + "</span>");//&nbsp;" +
+                              //"<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
                     if (debug) {
                         out.write("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
                                   (id == null ? "" : "" + id) + "</span>");
@@ -780,7 +780,7 @@ class TunnelRenderer {
                     out.write("</td>");
                 } else {
                     out.write(" <td><span class=tunnel_peer>" + netDbLink(peer) +
-                              "</span>&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+                              "</span>");//&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
                     if (debug) {
                         out.write("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
                                   (id == null ? "" : " " + id) + "</span>");
@@ -906,7 +906,7 @@ class TunnelRenderer {
     }
 
     private String netDbLink(Hash peer) {
-        return _context.commSystem().renderPeerHTML(peer);
+        return _context.commSystem().renderPeerHTML(peer, true);
     }
 
     private String peerFlag(Hash peer) {

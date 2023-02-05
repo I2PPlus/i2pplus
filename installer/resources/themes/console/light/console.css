@@ -349,7 +349,7 @@ h3:active .badge{display:none}
 .main hr,hr{color:#7e7fb9;background:#7e7fb9;height:1px;border:0 solid var(--border_inner);margin:10px 0}
 .main .tunneldisplay tr:last-child td,.main #tunnelpeercount tr:nth-last-child(2) td,.main #udpconnections tr:nth-last-child(2) td,.main #ntcpconnections tr:nth-last-child(2) td{border-bottom:1px solid var(--border_inner)}
 .pending:nth-of-type(2)::before{content:"\2022\2008\2008"}
-#help td:first-child,#tunnels td:first-child,#peers #ntcpconnections td:first-child{border-left:1px solid var(--border_inner)}
+#help td:first-child,#tunnels td:first-child,#peers #ntcpconnections td:not(.rif):first-child{border-left:1px solid var(--border_inner)}
 #lookupCondensed{display:none}
 #profiles th::after{display:none}
 #reseed_urlselection.optionsingle,#reseedproxytype,#config_reseed .optionlist:hover,#graphs .optionlist:hover,#config_network .optionlist:hover,#config_i2cp .optionlist:hover{background:#fff}
@@ -999,10 +999,10 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 h3#ntcpcon,h3#udpcon{margin-bottom:-2px;text-transform:capitalize;letter-spacing:0;word-spacing:0;border-width:1px;border-radius:0;filter:none}
 h3#udpcon{margin-top:7px}
 #udpconnections{margin-bottom:0}
-#udpconnections tr,#udpconnections td:first-child{border-left:1px solid var(--border_inner)}
+#udpconnections tr,#udpconnections td:not(.rif):first-child{border-left:1px solid var(--border_inner)}
 .reachability{margin:4px 4px 0;float:right;font-size:70%;color:#4f4f5f}
 #ntcpconnections th,#udpconnections th,#ntcpconnections td,#udpconnections td{white-space:nowrap;text-align:center}
-#ntcpconnections td:first-child,#udpconnections td:first-child{padding:2px 3px;width:1%}
+#ntcpconnections td:not(.rif):first-child,#udpconnections td:not(.rif):first-child{padding:2px 3px;width:1%}
 #udpconnections td:nth-last-child(4) .right,#udpconnections td:nth-last-child(3) .right,#udpconnections td:nth-last-child(2) .right{width:auto;min-width:30px}
 #udpconnections td:last-child .right,#udpconnections td:last-child .left{width:auto;min-width:36px}
 #ntcpconnections td span:empty{display:none}
@@ -1015,7 +1015,7 @@ h3#udpcon{margin-top:7px}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
 #peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;border:1px solid #bbd;box-shadow:var(--highlight),inset 0 0 2px 1px #ddf,0 0 1px #ddf;background:rgba(248,248,255,.6);-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 #peers td.direction i{margin:3px -3px -4px;width:100%;display:inline-block;text-align:center;font-style:normal;font-size:90%;color:#412;border-top:1px solid #ddf;border-radius:2px}
-#ntcpconnections td:first-child,#udpconnections td:first-child{min-width:58px}
+#ntcpconnections td:not(.rif):first-child,#udpconnections td:not(.rif):first-child{min-width:58px}
 #peer_thresholds{position:absolute;top:10px;width:100%}
 #thresholds tr:hover td,#leasesetdebug tr:hover td,tr:hover .cells{box-shadow:inset 0 0 0 1px #ffe;transition:ease all .05s}
 #transportSummary td{text-align:center;padding:8px;font-style:normal}
@@ -1043,11 +1043,11 @@ h3#udpcon{margin-top:7px}
 .tunneldisplay td:nth-child(3){white-space:nowrap}
 .tunnel_cap{min-width:24px;padding:1px 4px;display:inline-block;margin:1px 2px;text-align:center;vertical-align:middle}
 .tunnel_cap:empty::after{content:"?"}
-.tunnel_id{margin:0 3px;padding:1px 4px 1px 2px;min-width:109px;display:inline-block;box-sizing:border-box;vertical-align:middle;text-align:center}
+.tunnel_id{margin:0 3px;padding:2px 4px 2px 2px;min-width:109px;display:inline-block;box-sizing:border-box;vertical-align:middle;text-align:center}
 .tunnel_id:empty{text-align:center}
 .tunnel_id:empty::after{content:"n/a";display:inline-block}
-.tunnel_peer,.tunnel_local{margin:0;padding:2px 0;display:inline-block;width:77px;vertical-align:middle;text-align:center;box-sizing:border-box}
-.tunnel_local{padding:3px 0 2px;text-align:center;text-transform:lowercase;font-size:8pt;border-radius:2px}
+.tunnel_peer,.tunnel_local{margin:0;padding:2px 0;display:inline-block;vertical-align:middle;text-align:center;box-sizing:border-box}
+.tunnel_local{padding:2px 0;line-height:1.35;text-align:center;text-transform:lowercase;font-size:8pt;border-radius:2px}
 .tunnel_peer:empty{vertical-align:top}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
 #tunnels h3 a:not(.lsview){margin:-7px -5px -7px 0;border-bottom:1px solid var(--border_inner)}
@@ -1443,9 +1443,8 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .netdb_leases li b:first-child{margin:0;padding:0;min-width:60px;display:inline-block;text-align:right}
 .netdb_leases li b.leaseNumber{margin-right:-6px;min-width:22px;text-align:center}
 .netdb_gateway{margin-left:-3px;margin-right:-3px}
-.netdb_tunnel{margin-left:4px;margin-right:-4px;padding:0 4px;display:inline-block;border:1px solid #bbd;border-radius:2px;background:var(--row)}
+.netdb_tunnel{margin:0 -4px;display:inline-block}
 .netdb_leases .tunnel_id{min-width:74px}
-.netdb_leases .tunnel_peer{min-width:64px}
 .netdb_leases .tunnel_peer tt,.netdb_leases .tunnel_peer a{letter-spacing:.1em;margin:0;padding:0}
 .main li .netdb_expiry{font-weight:400;text-transform:lowercase;font-style:italic}
 img.unknownflag{opacity:.8}
@@ -2688,3 +2687,13 @@ th code{font-size:9pt}
 #searchbar input,#searchbar select{height:30px}
 #searchbar button{height:29px;border-bottom:var(--border_input)}
 }
+
+.tunnel_local{width:101px;box-sizing:border-box}
+.tunnel_peer{display:inline-block;line-height:1.35;vertical-align:middle}
+.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge)}
+.rid{width:unset}
+.rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em}
+.rif,.rif img{line-height:0;font-size:0}
+.rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
+.rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
+.rid .rbw{padding-left:4px;min-width:20px;text-align:center;line-height:1;font-weight:900}

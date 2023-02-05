@@ -87,7 +87,7 @@ class ProfileOrganizerRenderer {
                 buf.append("<a href=\"/profiles\">").append(ngettext("Hiding {0} standard profile.", "Hiding {0} standard profiles.", standard)).append("</a>\n");
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
 
-            buf.append("<div class=\"widescroll\" id=\"peerprofiles\">\n<table id=\"profilelist\">\n");
+            buf.append("<div class=widescroll id=\"peerprofiles\">\n<table id=\"profilelist\">\n");
             buf.append("<thead>\n<tr>");
             buf.append("<th>").append(_t("Peer")).append("</th>");
             buf.append("<th>").append(_t("Caps")).append("</th>");
@@ -130,7 +130,7 @@ class ProfileOrganizerRenderer {
                 prevTier = tier;
 
                 buf.append("<tr class=lazy><td nowrap>");
-                buf.append(_context.commSystem().renderPeerHTML(peer));
+                buf.append(_context.commSystem().renderPeerHTML(peer, false));
                 // debug
                 //if(prof.getIsExpandedDB())
                 //   buf.append(" ** ");
@@ -324,8 +324,8 @@ class ProfileOrganizerRenderer {
 
         } else {
 
-            buf.append("<div class=\"widescroll\" id=\"ff\">\n<table id=\"floodfills\" data-sortable>\n");
-            buf.append("<thead>\n<tr class=\"smallhead\">");
+            buf.append("<div class=widescroll id=\"ff\">\n<table id=\"floodfills\" data-sortable>\n");
+            buf.append("<thead>\n<tr class=smallhead>");
             buf.append("<th>").append(_t("Peer")).append("</th>");
             buf.append("<th>").append(_t("Caps")).append("</th>");
             buf.append("<th>").append(_t("Integ. Value")).append("</th>");
@@ -348,7 +348,7 @@ class ProfileOrganizerRenderer {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
                 buf.append("<tr class=lazy><td nowrap>");
-                buf.append(_context.commSystem().renderPeerHTML(peer));
+                buf.append(_context.commSystem().renderPeerHTML(peer, false));
                 buf.append("</td>");
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
                 if (info != null) {

@@ -896,7 +896,7 @@ class NetDbRenderer {
                     if (debug)
                         buf.append(":");
                     buf.append("</b> <span class=\"tunnel_peer\" title=\"Gateway\">");
-                    buf.append(_context.commSystem().renderPeerHTML(lease.getGateway()));
+                    buf.append(_context.commSystem().renderPeerHTML(lease.getGateway(), false));
                     buf.append("</span> ");
                     if (!isMeta && debug) {
                         buf.append("<span class=\"netdb_tunnel\" title=\"Tunnel ID\">").append(" <span class=\"tunnel_id\">")

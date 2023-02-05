@@ -65,11 +65,11 @@ ul{margin:0;padding:0}
 .main#home{padding-bottom:3px}
 .main ul{list-style-type:square}
 .main li{text-align:left;margin:2px 0 2px 30px;padding:2px 20px 2px 0;word-wrap:break-word}
-.main:not(#home):not(#sitemap) td{border-top:var(--border_soft);border-right:var(--border_soft)}
-.main:not(#home):not(#sitemap) td:first-child{border-left:var(--border_inner)}
-.main:not(#home):not(#sitemap) td:last-child{border-right:var(--border_inner)}
-.main:not(#home):not(#sitemap) tr:first-child td{border-top:var(--border_inner)}
-.main:not(#home):not(#sitemap) tr:last-child td{border-bottom:var(--border_inner)}
+.main:not(#home):not(#sitemap):not(.rid) td{border-top:var(--border_soft);border-right:var(--border_soft)}
+.main:not(#home):not(#sitemap):not(.rid) td:first-child{border-left:var(--border_inner)}
+.main:not(#home):not(#sitemap):not(.rid) td:last-child{border-right:var(--border_inner)}
+.main:not(#home):not(#sitemap):not(.rid) tr:first-child td{border-top:var(--border_inner)}
+.main:not(#home):not(#sitemap):not(.rid) tr:last-child td{border-bottom:var(--border_inner)}
 .main tr:nth-child(even),#netdbversions tr:nth-child(even),#netdbtransports tr:nth-child(even),#netdbcountrylist tr:nth-child(even),#netdbtiers tr:nth-child(even),#pluginconfig table tr:nth-child(even){vertical-align:middle;background:var(--row)}
 .main tr:nth-child(odd),#netdbversions tr:nth-child(odd),#netdbtransports tr:nth-child(odd),#netdbcountrylist tr:nth-child(odd),#netdbtiers tr:nth-child(odd),#pluginconfig tr{vertical-align:middle;background:var(--row)}
 .nowrap{white-space:nowrap}
@@ -914,7 +914,7 @@ input[type="hidden"] + p + p{border:var(--border_inner);padding:10px;margin-top:
 #config_tunnels input[type=text][disabled]{width:calc(100% - 15px)}
 #config_tunnels select[disabled]{opacity:.7;pointer-events:none}
 #refreshPage{cursor:pointer}
-#tunnels td{text-align:center}
+#tunnels td:not(.rif):not(.rih):not(.rbw){text-align:center}
 
 /* transit summary */
 #tunnels #transitSummary th{position:relative}
@@ -1390,7 +1390,7 @@ a[href^="/profiles"] ~ table > tbody > tr > th:first-child{text-align:center}
 h3[id$="con"]{margin-bottom:-2px;padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;border:var(--border_inner);border-radius:0}
 h3[id="udpcon"]{width:auto}
 #ntcpconnections tr,#udpconnections tr,#tunnels tr,#profiles tr{box-shadow:none}
-#ntcpconnections td,#udpconnections td,#tunnels td,#profiles td{box-shadow:var(--highlight),inset 0 0 2px 0 #26235c}
+#ntcpconnections td,#udpconnections td,#tunnels td:not(.rif):not(.rih):not(.rbw),#profiles td{box-shadow:var(--highlight),inset 0 0 2px 0 #26235c}
 #ntcpconnections tr:hover td,#udpconnections tr:hover td,#tunnels tr:hover td,#profiles tr:hover td{box-shadow:none}
 #udpconnections{margin-bottom:10px;overflow-x:auto}
 #udpconnections i{line-height:1.5;letter-spacing:.1em;font-weight:700;font-size:90%}
@@ -1570,10 +1570,11 @@ img + tt{letter-spacing:.15em}
 .tunnel_cap{padding:2px 3px;color:var(--ink)}
 .tunnel_cap:empty{border:none}
 .tunnel_cap:empty::after{content:"?"}
-.tunnel_id{margin-left:6px;padding-left:13px;min-width:78px;display:inline-block;text-align:center;background:var(--hardhat) no-repeat left center/12px}
-.tunnel_local,span.b32,.routerid{margin-right:2px;padding:2px;min-width:64px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
+.tunnel_id{margin-left:6px;padding-left:13px;min-width:78px;display:inline-block;vertical-align:middle;text-align:center;background:var(--hardhat) no-repeat left center/12px}
+.tunnel_local,span.b32,.routerid{margin:0 3px;padding:2px;min-width:64px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
 span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 .tunnel_local{padding:2px;font-size:80%;text-transform:lowercase}
+.tunnel_peer{margin:0 3px}
 .tunnel_peer img,.routerid img{margin:2px 4px -2px 2px;display:inline-block}
 .tunnel_peer tt{margin-left:2px;display:inline-block}
 #tunnel_defs{margin-top:-1px;margin-bottom:10px}
@@ -1591,12 +1592,12 @@ span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 #tunnels #exploratory{padding-left:34px;background:var(--globe) no-repeat 8px center/19px,var(--title)}
 #tunnels #participating{padding-left:34px;background:var(--share) no-repeat 8px center/19px,var(--title)}
 #tunnels th{padding:7px 2px 8px;font-size:90%}
-#tunnels td{padding:5px 2px}
+#tunnels td:not(.rif):not(.rih):not(.rbw){padding:5px 2px}
 #tunnels .tunneldisplay .cells:nth-child(3){white-space:nowrap}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
 #tunnels img{font-size:0}
 .tunneldisplay .cells{padding-top:6px;padding-bottom:6px}
-.tunnel_peer{margin-left:5px}
+.tunnel_peer{display:inline-block;vertical-align:middle}
 #exploratorytunnels{margin-top:15px}
 .statusnotes{margin:-2px 0 5px 0;padding:10px;font-size:9pt;font-style:italic;text-align:center;border:var(--border_inner);box-shadow:var(--bevel);background:var(--notes)}
 h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
@@ -1621,7 +1622,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peers .infohelp{margin:14px 0 1px}
 #peers .routerid{margin:0;padding-right:4px}
 #peers .spacer{display:none}
-#peers table:last-child{margin-bottom:10px}
+#peers table:not(.rid):last-child{margin-bottom:10px}
 #peers td.direction i{margin:3px -3px -1px;width:100%;display:inline-block;text-align:center;font-size:90%;font-style:normal;color:#990;border-top:var(--border_inner);border-radius:2px}
 #peers td img{font-size:0}
 #peers .widescroll + h3{margin-top:1px}
@@ -2568,7 +2569,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #peers #transportSummary .ipv6{display:table-cell}
 #peers .routerid{padding-right:5px}
 #tunnels .flag{margin-left:3px}
-#tunnels th,#tunnels td{padding-left:2px;padding-right:2px}
+#tunnels th,#tunnels td:not(.rif):not(.rih):not(.rbw){padding-left:2px;padding-right:2px}
 #tunnels .routerid,.tunnel_peer{margin-right:1px;min-width:58px}
 .tunnel_cap{margin:2px -1px}
 #tunnels .cells{padding-left:2px;padding-right:2px}
@@ -2821,3 +2822,15 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #searchbar input,#searchbar select{height:30px}
 #searchbar button{height:29px;border-bottom:var(--border)}
 }
+
+.tunnel_local{min-width:101px;box-sizing:border-box}
+.tunnel_peer{display:inline-block;vertical-align:middle}
+.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_badge)!important;background:var(--badge)}
+.rid{width:unset}
+.rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em}
+.rid .rif{background:#181537}
+.rif,.rif img{line-height:0;font-size:0}
+.rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
+.rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
+.rid .rbw{padding-left:4px;min-width:20px;text-align:center;line-height:1;font-weight:900}
+
