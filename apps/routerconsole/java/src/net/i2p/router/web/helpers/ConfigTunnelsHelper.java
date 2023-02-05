@@ -157,8 +157,8 @@ public class ConfigTunnelsHelper extends HelperBase {
                        _t("PERFORMANCE WARNING - Settings include high tunnel quantities.") +
                        "</font></th></tr>\n");
 
-        buf.append("<tr><th></th><th class=\"inbound\">" + _t("Inbound") + "</th><th class=\"outbound\">" +
-                   _t("Outbound") + "</th><th class=\"spacer\"></th>\n</tr>\n");
+        buf.append("<tr><th></th><th class=inbound>" + _t("Inbound") + "</th><th class=outbound>" +
+                   _t("Outbound") + "</th><th class=spacer></th>\n</tr>\n");
 
         // tunnel depth
         int maxLength = advanced ? MAX_ADVANCED_LENGTH : MAX_LENGTH;
@@ -182,7 +182,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (now > maxLength)
             renderOptions(buf, now, now, now, "", HOP);
         buf.append("</select></td>\n");
-        buf.append("<td class=\"spacer\"></td>\n</tr>\n");
+        buf.append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel depth variance
         if (advanced) {
@@ -208,7 +208,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             else if (now < MIN_NEG_VARIANCE)
                 renderOptions(buf, now, now, now, "+/- 0", HOP);
             buf.append("</select></td>\n");
-            buf.append("<td class=\"spacer\"></td>\n</tr>\n");
+            buf.append("<td class=spacer></td>\n</tr>\n");
         }
         // tunnel quantity
         int maxQuantity = advanced ? MAX_ADVANCED_QUANTITY : MAX_QUANTITY;
@@ -235,7 +235,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (now > maxQuantity)
             renderOptions(buf, now, now, now, "", TUNNEL);
         buf.append("</select></td>\n");
-        buf.append("<td class=\"spacer\"></td>\n</tr>\n");
+        buf.append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel backup quantity
         if (advanced) {
@@ -254,7 +254,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             if (now > maxBQuantity)
                 renderOptions(buf, now, now, now, "", TUNNEL);
             buf.append("</select></td>\n");
-            buf.append("<td class=\"spacer\"></td>\n</tr>\n");
+            buf.append("<td class=spacer></td>\n</tr>\n");
         }
 
         // custom options
@@ -271,7 +271,7 @@ public class ConfigTunnelsHelper extends HelperBase {
                 String val = props.getProperty(prop);
                 buf.append(prop).append('=').append(val).append(' ');
             }
-            buf.append("\"></td>\n<td class=\"spacer\"></td>\n</tr>\n");
+            buf.append("\"></td>\n<td class=spacer></td>\n</tr>\n");
         }
         props = out.getUnknownOptions();
         if (!props.isEmpty()) {
@@ -283,7 +283,7 @@ public class ConfigTunnelsHelper extends HelperBase {
                 String val = props.getProperty(prop);
                 buf.append(prop).append('=').append(val).append(' ');
             }
-            buf.append("\"></td>\n<td class=\"spacer\"></td>\n</tr>\n");
+            buf.append("\"></td>\n<td class=spacer></td>\n</tr>\n");
         }
     }
 

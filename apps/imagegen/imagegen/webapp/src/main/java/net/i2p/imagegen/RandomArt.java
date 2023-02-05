@@ -247,7 +247,7 @@ public class RandomArt {
                 if (html && idx != 0)
                     retval.append("<span style=\"color: #").append(getColor(base, color[x][y] & 0xff)).append("\">");
                 else if (html)
-                    retval.append("<span class=\"spacer\">");
+                    retval.append("<span class=spacer>");
                 retval.append(augmentation_string.charAt(idx));
                 if (html)
                     retval.append("</span>");

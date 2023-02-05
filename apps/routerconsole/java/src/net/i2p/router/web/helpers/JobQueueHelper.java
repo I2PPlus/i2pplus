@@ -191,7 +191,7 @@ public class JobQueueHelper extends HelperBase {
      *  @since 0.8.9
      */
     private void getJobStats(StringBuilder buf) {
-        buf.append("<div class=\"widescroll\">")
+        buf.append("<div class=widescroll>")
            .append("<h3 id=\"totaljobstats\">").append(_t("Job Statistics (excluding single-shot jobs)")).append("</h3>\n");
         buf.append("<table id=\"jobstats\" data-sortable>\n<thead><tr data-sort-method=thead>" +
                    "<th>").append(_t("Job")).append("</th>" +
@@ -224,9 +224,15 @@ public class JobQueueHelper extends HelperBase {
         Collections.sort(tstats, new JobStatsComparator());
 
         for (JobStats stats : tstats) {
+            totDropped += stats.getDropped();
+            totExecTime += stats.getTotalTime();
+            totPendingTime += stats.getTotalPendingTime();
             totRuns += stats.getRuns();
+
             if (stats.getRuns() < 2) {
                 totRuns -=1;
+                totExecTime -= stats.getTotalTime();
+                totPendingTime -= stats.getTotalPendingTime();
                 continue;
             }
             if (stats.getName().contains("(disabled)")) {
@@ -250,13 +256,10 @@ public class JobQueueHelper extends HelperBase {
                 buf.append("<td>").append(DataHelper.formatDuration2(stats.getMinPendingTime())).append("</td>");
             }
             buf.append("</tr>\n");
-            totDropped += stats.getDropped();
-            totExecTime += stats.getTotalTime();
             if (stats.getMaxTime() > maxExecTime)
                 maxExecTime = stats.getMaxTime();
             if ( (minExecTime < 0) || (minExecTime > stats.getMinTime()) )
                 minExecTime = stats.getMinTime();
-            totPendingTime += stats.getTotalPendingTime();
             if (stats.getMaxPendingTime() > maxPendingTime)
                 maxPendingTime = stats.getMaxPendingTime();
             if ( (minPendingTime < 0) || (minPendingTime > stats.getMinPendingTime()) )

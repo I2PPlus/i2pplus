@@ -340,23 +340,28 @@ public class PeerHelper extends HelperBase {
         out.write(buf.toString());
         buf.setLength(0);
         long now = _context.clock().now();
+        int inactive = 0;
         for (NTCPConnection con : peers) {
             // exclude older peers
-            if (con.getTimeSinceReceive(now) > 60*1000 || con.getTimeSinceSend(now) > 60*1000)
+            if (con.getTimeSinceReceive(now) > 60*1000 || con.getTimeSinceSend(now) > 60*1000) {
+                inactive += 1;
                 continue;
+            }
             buf.append("<tr class=lazy><td class=\"cells peer\" nowrap>");
-            buf.append(_context.commSystem().renderPeerHTML(con.getRemotePeer().calculateHash()));
+            buf.append(_context.commSystem().renderPeerHTML(con.getRemotePeer().calculateHash(), false));
+/*
             buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(con.getRemoteIP()))
                .append("\" target=_blank title=\"").append(_t("Lookup remote address")).append(' ')
                .append(Addresses.toString(con.getRemoteIP(), con.getChannel().socket().getPort())).append(' ')
                .append(_t("on")).append(" gwhois.org").append("\">")
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
+*/
             buf.append("</td><td class=\"cells direction\">");
             if (con.isInbound())
-                buf.append("<span class=inbound><img src=\"/themes/console/images/inbound.svg\" alt=\"Inbound\" title=\"")
+                buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"")
                    .append(_t("Inbound")).append("\"/></span>");
             else
-                buf.append("<span class=outbound><img src=\"/themes/console/images/outbound.svg\" alt=\"Outbound\" title=\"")
+                buf.append("<span class=outbound><img src=/themes/console/images/outbound.svg alt=Outbound title=\"")
                    .append(_t("Outbound")).append("\"/></span>");
             buf.append("</td><td class=\"cells ipv6\">");
             if (con.isIPv6())
@@ -371,7 +376,7 @@ public class PeerHelper extends HelperBase {
             String tx = formatRate(bpsSend/1000).replace(".00", "");
             if (con.getRecvRate() >= 0.01 || con.getSendRate() >= 0.01) {
                 buf.append("<span class=right>");
-            if (con.getTimeSinceReceive(now) < 2*60*1000) {
+            if (con.getTimeSinceReceive(now) <= 60*1000) {
                     float r = con.getRecvRate();
                     buf.append(rx);
                     bpsRecv += r;
@@ -379,7 +384,7 @@ public class PeerHelper extends HelperBase {
                     buf.append("0");
                 }
                 buf.append("</span>").append(THINSP).append("<span class=left>");
-            if (con.getTimeSinceSend(now) < 2*60*1000) {
+            if (con.getTimeSinceSend(now) <= 60*1000) {
                     float r = con.getSendRate();
                     buf.append(tx);
                     bpsSend += r;
@@ -418,9 +423,12 @@ public class PeerHelper extends HelperBase {
                .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
-            buf.append("</b></td><td class=direction>&nbsp;</td><td class=\"ipv6\">&nbsp;</td>" +
-                       "<td class=idle>&nbsp;</td><td class=inout nowrap>" +
-                       "<span class=right><b>").append(rx).append("</b></span>").append(THINSP).append("<span class=left><b>").append(tx).append("</b></span></td>" +
+            buf.append("</b></td>" +
+                       "<td class=direction>&nbsp;</td>" +
+                       "<td class=ipv6>&nbsp;</td>" +
+                       "<td class=idle>&nbsp;</td>" +
+                       "<td class=inout nowrap><span class=right><b>").append(rx).append("</b></span>")
+               .append(THINSP).append("<span class=left><b>").append(tx).append("</b></span></td>" +
                        "<td class=uptime><span><b>").append(DataHelper.formatDuration2(totalUptime/peers.size())).append("</b></span></td>" +
                        "<td class=skew><span><b>").append(DataHelper.formatDuration2(offsetTotal*1000/peers.size())).append("</b></span></td>" +
                        "<td class=tx><span><b>").append(totalSend).append("</b></span></td>" +
@@ -494,78 +502,78 @@ public class PeerHelper extends HelperBase {
         int numRTTPeers = 0;
 
         StringBuilder buf = new StringBuilder(4*1024);
-        buf.append("<div id=\"udp\">\n")
-           .append("<h3 id=\"udpcon\" title=\"").append(_t("Current / maximum permitted")).append("\">")
+        buf.append("<div id=udp>\n")
+           .append("<h3 id=udpcon title=\"").append(_t("Current / maximum permitted")).append("\">")
            .append(_t("UDP connections")).append(":&nbsp; ").append(ut.countActivePeers())
            .append(" / ").append(ut.getMaxConnections());
         final boolean isAdvanced = isAdvanced();
         if (isAdvanced()) {
-            buf.append("&nbsp;<span class=\"reachability\">").append(_t("Status")).append(": ")
+            buf.append("&nbsp;<span class=reachability>").append(_t("Status")).append(": ")
                .append(ut.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>");
         }
         buf.append("<label class=script hidden><input name=autorefresh id=autorefresh type=checkbox class=\"optbox slider\" checked=checked>")
            .append(_t("Auto-refresh")).append("</label></h3>\n")
-           .append("<div class=\"widescroll\">\n<table id=\"udpconnections\" ");
+           .append("<div class=widescroll>\n<table id=\"udpconnections\" ");
         if (isAdvanced()) {
             buf.append("class=\"advancedview\"");
         }
         buf.append(">\n");
         if(peers.size() != 0) {
-            buf.append("<tr class=\"smallhead\"><th class=\"peer\" nowrap>").append(_t("Peer")).append("<br>");
+            buf.append("<tr class=smallhead><th class=peer nowrap>").append(_t("Peer")).append("<br>");
             if (sortFlags != FLAG_ALPHA)
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by peer hash"), FLAG_ALPHA);
-            buf.append("</th><th class=\"direction\" nowrap title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir"))
-               .append("</th><th class=\"ipv6\" nowrap>").append(_t("IPv6"))
-               .append("</th><th class=\"ssuversion\" nowrap>").append(_t("Version"))
-               .append("</th><th class=\"idle\" nowrap title=\"").append(_t("Peer inactivity")).append("\">").append(_t("Idle")).append("<br>");
+            buf.append("</th><th class=direction nowrap title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir"))
+               .append("</th><th class=ipv6 nowrap>").append(_t("IPv6"))
+               .append("</th><th class=ssuversion nowrap>").append(_t("Version"))
+               .append("</th><th class=idle nowrap title=\"").append(_t("Peer inactivity")).append("\">").append(_t("Idle")).append("<br>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by idle inbound"), FLAG_IDLE_IN);
-            buf.append("<span style=\"vertical-align: bottom;\"> / </span>");
+            buf.append("<span style=vertical-align:bottom> / </span>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by idle outbound"), FLAG_IDLE_OUT);
             buf.append("</th>");
-            buf.append("<th class=\"inout\" nowrap title=\"").append(_t("Average inbound/outbound rate (KBps)")).append("\">").append(_t("In/Out")).append("<br>");
+            buf.append("<th class=inout nowrap title=\"").append(_t("Average inbound/outbound rate (KBps)")).append("\">").append(_t("In/Out")).append("<br>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by inbound rate"), FLAG_RATE_IN);
-            buf.append("<span style=\"vertical-align: bottom;\"> / </span>");
+            buf.append("<span style=vertical-align:bottom> / </span>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by outbound rate"), FLAG_RATE_OUT);
             buf.append("</th>\n");
-            buf.append("<th class=\"uptime\" nowrap title=\"").append(_t("Duration of connection to peer")).append("\">")
-               .append("<span class=\"peersort\">").append(_t("Up")).append("<br>");
+            buf.append("<th class=uptime nowrap title=\"").append(_t("Duration of connection to peer")).append("\">")
+               .append("<span class=peersort>").append(_t("Up")).append("<br>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by connection uptime"), FLAG_UPTIME);
-            buf.append("</span></th><th class=\"skew\" nowrap title=\"").append(_t("Peer's clockskew relative to our clock")).append("\">")
-               .append("<span class=\"peersort\">").append(_t("Skew")).append("<br>");
+            buf.append("</span></th><th class=skew nowrap title=\"").append(_t("Peer's clockskew relative to our clock")).append("\">")
+               .append("<span class=peersort>").append(_t("Skew")).append("<br>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by clock skew"), FLAG_SKEW);
             buf.append("</span></th>\n");
-            buf.append("<th class=\"tx\" nowrap title=\"").append(_t("Messages sent")).append("\">")
-               .append("<span class=\"peersort\">").append(_t("TX")).append("<br>");
+            buf.append("<th class=tx nowrap title=\"").append(_t("Messages sent")).append("\">")
+               .append("<span class=peersort>").append(_t("TX")).append("<br>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by packets sent"), FLAG_SEND);
-            buf.append("</span></th><th class=\"rx\" nowrap title=\"").append(_t("Messages received")).append("\">")
-               .append("<span class=\"peersort\">").append(_t("RX")).append("<br>");
+            buf.append("</span></th><th class=rx nowrap title=\"").append(_t("Messages received")).append("\">")
+               .append("<span class=peersort>").append(_t("RX")).append("<br>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by packets received"), FLAG_RECV);
             buf.append("</span></th>\n");
-            buf.append("<th class=\"duptx\" nowrap title=\"").append(_t("Retransmitted packets")).append("\">")
-               .append("<span class=\"peersort\">").append(_t("Dup TX")).append("<br>");
+            buf.append("<th class=duptx nowrap title=\"").append(_t("Retransmitted packets")).append("\">")
+               .append("<span class=peersort>").append(_t("Dup TX")).append("<br>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by packets retransmitted"), FLAG_RESEND);
-            buf.append("</span></th><th class=\"duprx\" nowrap title=\"").append(_t("Received duplicate packets")).append("\">")
-               .append("<span class=\"peersort\">").append(_t("Dup RX")).append("<br>");
+            buf.append("</span></th><th class=duprx nowrap title=\"").append(_t("Received duplicate packets")).append("\">")
+               .append("<span class=peersort>").append(_t("Dup RX")).append("<br>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by packets received more than once"), FLAG_DUP);
             buf.append("</span></th>");
             if (!isAdvanced()) {
-                buf.append("<th class=\"spacer\">&nbsp;</th>");
+                buf.append("<th class=spacer>&nbsp;</th>");
             }
             if (isAdvanced()) {
-                buf.append("<th class=\"cwnd\" nowrap title=\"").append(_t("Congestion window")).append("\">CWND<br>");
+                buf.append("<th class=cwnd nowrap title=\"").append(_t("Congestion window")).append("\">CWND<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by congestion window"), FLAG_CWND);
-                buf.append("</th><th class=\"sst\" nowrap title=\"").append(_t("Slow start threshold")).append("\">")
-                   .append("<span class=\"peersort\">SST<br>");
+                buf.append("</th><th class=sst nowrap title=\"").append(_t("Slow start threshold")).append("\">")
+                   .append("<span class=peersort>SST<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by slow start threshold"), FLAG_SSTHRESH);
                 buf.append("</span></th>\n");
-                buf.append("<th class=\"rtt\" nowrap title=\"").append(_t("Round trip time")).append("\">")
-                   .append("<span class=\"peersort\">RTT<br>");
+                buf.append("<th class=rtt nowrap title=\"").append(_t("Round trip time")).append("\">")
+                   .append("<span class=peersort>RTT<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by round trip time"), FLAG_RTT);
-                buf.append("</span></th><th class=\"rto\" nowrap title=\"").append(_t("Retransmission timeout")).append("\">")
-                   .append("<span class=\"peersort\">RTO<br>");
+                buf.append("</span></th><th class=rto nowrap title=\"").append(_t("Retransmission timeout")).append("\">")
+                   .append("<span class=peersort>RTO<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by retransmission timeout"), FLAG_RTO);
                 buf.append("</span></th>\n");
-                buf.append("<th class=\"mtu\" nowrap title=\"").append(_t("Maximum transmission unit")).append("\">MTU<br>");
+                buf.append("<th class=mtu nowrap title=\"").append(_t("Maximum transmission unit")).append("\">MTU<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by outbound maximum transmit unit"), FLAG_MTU);
                 buf.append("</th>");
             }
@@ -575,26 +583,29 @@ public class PeerHelper extends HelperBase {
         buf.setLength(0);
         long now = _context.clock().now();
         for (PeerState peer : peers) {
-            if (now-peer.getLastReceiveTime() > 60*1000)
+            if (now-peer.getLastReceiveTime() > 60*1000) {
                 continue; // don't include old peers
+            }
             buf.append("<tr class=lazy><td class=\"cells peer\" nowrap>");
-            buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer()));
+            buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), false));
+/*
             buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(peer.getRemoteIP()))
                .append("\" target=_blank title=\"").append(_t("Lookup remote address")).append(' ')
                .append(Addresses.toString(peer.getRemoteIP(), peer.getRemotePort()))
                .append(' ').append(_t("on")).append(" gwhois.org").append("\">")
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
+*/
             buf.append("</td><td class=\"cells direction\" nowrap>");
             if (peer.isInbound())
-                buf.append("<span class=\"inbound\"><img src=\"/themes/console/images/inbound.svg\" alt=\"Inbound\" title=\"").append(_t("Inbound"));
+                buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"").append(_t("Inbound"));
             else
-                buf.append("<span class=\"outbound\"><img src=\"/themes/console/images/outbound.svg\" alt=\"Outbound\" title=\"").append(_t("Outbound"));
+                buf.append("<span class=outbound><img src=/themes/console/images/outbound.svg alt=Outbound title=\"").append(_t("Outbound"));
             buf.append("\"></span>");
             if (peer.getWeRelayToThemAs() > 0)
-                buf.append("&nbsp;&nbsp;<span class=\"inbound small\"><img src=\"/themes/console/images/outbound.svg\" height=\"8\" width=\"8\" alt=\"^\" title=\"")
+                buf.append("&nbsp;&nbsp;<span class=\"inbound small\"><img src=/themes/console/images/outbound.svg width=8 height=8 alt=\"^\" title=\"")
                     .append(_t("We offered to introduce them")).append("\">");
             if (peer.getTheyRelayToUsAs() > 0)
-                buf.append("&nbsp;&nbsp;<span class=\"outbound small\"><img src=\"/themes/console/images/inbound.svg\" height=\"8\" width=\"8\" alt=\"V\" title=\"")
+                buf.append("&nbsp;&nbsp;<span class=\"outbound small\"><img src=/themes/console/images/inbound.svg width=8 height=8 alt=\"V\" title=\"")
                    .append(_t("They offered to introduce us")).append("\">");
             if (peer.getWeRelayToThemAs() > 0 || peer.getTheyRelayToUsAs() > 0)
                 buf.append("</span>");
@@ -738,40 +749,41 @@ public class PeerHelper extends HelperBase {
         }
 
         if (numPeers > 0) {
-            buf.append("<tr class=tablefooter><td class=\"peer\"><b>")
+            buf.append("<tfoot><tr class=tablefooter><td class=peer><b>")
                .append(ngettext("{0} peer", "{0} peers", ut.countActivePeers()))
-               .append("</b></td><td class=\"direction\">&nbsp;</td><td class=\"ipv6\">&nbsp;</td><td class=\"ssuversion\">&nbsp;</td><td class=\"idle\">&nbsp;</td>" +
-                       "<td class=\"inout\" nowrap><span class=right><b>");
+               .append("</b></td><td class=direction>&nbsp;</td><td class=ipv6>&nbsp;</td>" +
+                       "<td class=ssuversion>&nbsp;</td><td class=idle>&nbsp;</td>" +
+                       "<td class=inout nowrap><span class=right><b>");
             String bwin = formatKBps(bpsIn).replace(".00", "");
             String bwout = formatKBps(bpsOut).replace(".00", "");
             buf.append(bwin).append("</b></span>").append(THINSP);
             buf.append("<span class=left><b>").append(bwout);
             long x = uptimeMsTotal/numPeers;
             buf.append("</b></span></td>" +
-                       "<td class=\"uptime\"><b>").append(DataHelper.formatDuration2(x));
+                       "<td class=uptime><b>").append(DataHelper.formatDuration2(x));
             x = offsetTotal/numPeers;
-            buf.append("</b></td><td class=\"skew\"><b>").append(DataHelper.formatDuration2(x)).append("</b></td>\n");
-            buf.append("<td class=\"tx\"><b>");
-            buf.append(sendTotal).append("</b></td><td class=\"rx\"><b>").append(recvTotal).append("</b></td>\n" +
-                       "<td class=\"duptx\"><b>").append(resentTotal);
-            buf.append("</b></td><td class=\"duprx\"><b>").append(dupRecvTotal).append("</b></td>");
+            buf.append("</b></td><td class=skew><b>").append(DataHelper.formatDuration2(x)).append("</b></td>\n");
+            buf.append("<td class=tx><b>");
+            buf.append(sendTotal).append("</b></td><td class=rx><b>").append(recvTotal).append("</b></td>\n" +
+                       "<td class=duptx><b>").append(resentTotal);
+            buf.append("</b></td><td class=duprx><b>").append(dupRecvTotal).append("</b></td>");
             if (!isAdvanced()) {
-                buf.append("<td class=\"spacer\">&nbsp;</td>");
+                buf.append("<td class=spacer>&nbsp;</td>");
             }
             if (isAdvanced()) {
-                buf.append("<td class=\"cwnd\"><b>");
+                buf.append("<td class=cwnd><b>");
                 buf.append(cwinTotal/(numPeers*1024) + "K");
-                buf.append("</b></td><td class=\"sst\">&nbsp;</td>\n" +
-                           "<td class=\"rtt\"><b>");
+                buf.append("</b></td><td class=sst>&nbsp;</td>\n" +
+                           "<td class=rtt><b>");
                 if (numRTTPeers > 0)
                     buf.append(DataHelper.formatDuration2(rttTotal/numRTTPeers));
                 else
                     buf.append("n/a");
-                buf.append("</b></td><td class=\"rto\"><b>");
+                buf.append("</b></td><td class=rto><b>");
                 buf.append(DataHelper.formatDuration2(rtoTotal/numPeers));
-                buf.append("</b></td><td class=\"mtu\"><b>").append(ut.getMTU(false)).append("</b></td>");
+                buf.append("</b></td><td class=mtu><b>").append(ut.getMTU(false)).append("</b></td>");
             }
-            buf.append("</tr>\n");
+            buf.append("</tr></tfoot>\n");
         }  // numPeers > 0
         buf.append("</table>\n</div>\n</div>\n");
         out.write(buf.toString());
@@ -784,18 +796,18 @@ public class PeerHelper extends HelperBase {
     private final String getTransportsLegend() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<h3 class=tabletitle>").append(_t("Definitions")).append("</h3>")
-           .append("<table id=\"peerdefs\">\n<tr><td>\n")
+           .append("<table id=peerdefs>\n<tr><td>\n")
            .append("<ul><li><b id=\"def.peer\">").append(_t("Peer")).append(":</b> ")
            .append(_t("Remote peer, identified by truncated router hash")).append("</li>\n")
            .append("<li><b id=\"def.dir\">").append(_t("Dir"))
            .append(" (").append(_t("Direction")).append("):</b><br>")
-           .append("<span class=\"peer_arrow outbound\"><img alt=\"Outbound\" src=\"/themes/console/images/outbound.svg\"></span> ")
+           .append("<span class=\"peer_arrow outbound\"><img alt=Outbound src=/themes/console/images/outbound.svg></span> ")
            .append(_t("Outbound connection")).append("<br>\n")
-           .append("<span class=\"peer_arrow outbound small\"><img src=\"/themes/console/images/inbound.svg\" alt=\"V\" height=\"8\" width=\"8\"></span> ")
+           .append("<span class=\"peer_arrow outbound small\"><img src=/themes/console/images/inbound.svg alt=\"V\" width=8 height=8></span> ")
            .append(_t("They offered to introduce us (help peers traverse our firewall)")).append("<br>\n")
-           .append("<span class=\"peer_arrow inbound\"><img alt=\"Inbound\" src=\"/themes/console/images/inbound.svg\"></span> ")
+           .append("<span class=\"peer_arrow inbound\"><img alt=Inbound src=/themes/console/images/inbound.svg></span> ")
            .append(_t("Inbound connection")).append("<br>\n")
-           .append("<span class=\"peer_arrow inbound small\"><img src=\"/themes/console/images/outbound.svg\" alt=\"^\" height=\"8\" width=\"8\"></span> ")
+           .append("<span class=\"peer_arrow inbound small\"><img src=/themes/console/images/outbound.svg alt=\"^\" width=8 height=8></span> ")
            .append(_t("We offered to introduce them (help peers traverse their firewall)")).append("</li>\n")
            .append("<li><b id=\"def.idle\">").append(_t("Idle")).append(":</b> ")
            .append(_t("How long since a packet has been received / sent")).append("</li>")

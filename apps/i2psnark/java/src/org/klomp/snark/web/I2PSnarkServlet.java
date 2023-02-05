@@ -3467,14 +3467,14 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("</div>\n</td></tr>\n");
 
-        out.write("<tr class=\"spacer\"><td></td></tr>\n");  // spacer
+        out.write("<tr class=spacer><td></td></tr>\n");  // spacer
 
 // save config
 
         out.write("<tr><td><input type=submit class=\"accept\" value=\"");
         out.write(_t("Save configuration"));
         out.write("\" name=\"foo\" ></td></tr>\n" +
-                  "<tr class=\"spacer\"><td>&nbsp;</td></tr>\n" +  // spacer
+                  "<tr class=spacer><td>&nbsp;</td></tr>\n" +  // spacer
                   "</table></div></div></form>");
     }
 
@@ -3550,7 +3550,7 @@ public class I2PSnarkServlet extends BasicServlet {
                        "</td><td>").append(urlify(announceURL, 64))
                .append("</td></tr>\n");
         }
-        buf.append("<tr class=\"spacer\"><td colspan=7>&nbsp;</td></tr>\n")  // spacer
+        buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n")  // spacer
            .append("<tr id=\"addtracker\"><td><b>")
            .append(_t("Add")).append(":</b></td>" +
                    "<td><input type=text class=\"trackername\" name=\"tname\" spellcheck=\"false\"></td>" +
@@ -3559,7 +3559,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    "<td><input type=radio class=optbox value=\"1\" name=\"add_tracker_type\"></td>" +
                    "<td><input type=radio class=optbox value=\"2\" name=\"add_tracker_type\"></td>" +
                    "<td><input type=text class=\"trackerannounce\" name=\"taurl\" spellcheck=\"false\"></td></tr>\n" +
-                   "<tr class=\"spacer\"><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
+                   "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
                    "<tr><td colspan=7>\n" +
                    "<input type=submit name=\"taction\" class=\"default\" value=\"").append(_t("Add tracker")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=\"delete\" value=\"").append(_t("Delete selected")).append("\">\n" +
@@ -3568,7 +3568,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    // "<input type=reset class=\"cancel\" value=\"").append(_t("Cancel")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=reload value=\"").append(_t("Restore defaults")).append("\">\n" +
                    "</td></tr>" +
-                   "<tr class=\"spacer\"><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
+                   "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
                    "</table>\n</div>\n</div></form>\n");
         out.write(buf.toString());
     }

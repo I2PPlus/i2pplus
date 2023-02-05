@@ -3248,7 +3248,7 @@ public class WebMail extends HttpServlet
         String curSort = folder.getCurrentSortBy();
         SortOrder curOrder = folder.getCurrentSortingDirection();
         out.println("</div><table id=\"mailbox\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\">\n" +
-                    "<tr class=\"spacer\"><td colspan=7><hr></td></tr>\n<tr>\n" +
+                    "<tr class=spacer><td colspan=7><hr></td></tr>\n<tr>\n" +
                     "<th class=\"mailListDate left\">" + sortHeader(SORT_DATE, _t("Date"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
                     "<th class=\"mailListSender left\">" + sortHeader(SORT_SENDER, showToColumn ? _t("To") : _t("From"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
                     "<th class=\"mailListAttachment center\"></th>\n" +
@@ -3605,7 +3605,7 @@ public class WebMail extends HttpServlet
                       "<td class=left>" + subj + "<span id=\"toggleHeaders\" class=script style=\"float: right;\">" +
                       "<a href=\"#\" class=\"script fakebutton\" id=\"expand\">Show Headers</a> " +
                       "<a href=\"#\" class=\"script fakebutton\" id=\"collapse\" style=\"display: none;\">Hide Headers</a></span></td></tr>\n" +
-                      "<tr><td colspan=2 class=\"spacer\"><hr></td></tr>\n" +
+                      "<tr><td colspan=2 class=spacer><hr></td></tr>\n" +
                       "</table>\n</td>\n</tr>\n");
 
             if (mail.hasPart()) {
