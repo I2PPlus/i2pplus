@@ -192,7 +192,7 @@ public class JobQueueHelper extends HelperBase {
      */
     private void getJobStats(StringBuilder buf) {
         buf.append("<div class=\"widescroll\">")
-           .append("<h3 id=\"totaljobstats\">").append(_t("Router Job Statistics")).append("</h3>\n");
+           .append("<h3 id=\"totaljobstats\">").append(_t("Job Statistics (excluding single-shot jobs)")).append("</h3>\n");
         buf.append("<table id=\"jobstats\" data-sortable>\n<thead><tr data-sort-method=thead>" +
                    "<th>").append(_t("Job")).append("</th>" +
                    "<th data-sort-method=number>").append(_t("Runs")).append("</th>" +
@@ -224,6 +224,15 @@ public class JobQueueHelper extends HelperBase {
         Collections.sort(tstats, new JobStatsComparator());
 
         for (JobStats stats : tstats) {
+            totRuns += stats.getRuns();
+            if (stats.getRuns() < 2) {
+                totRuns -=1;
+                continue;
+            }
+            if (stats.getName().contains("(disabled)")) {
+                totRuns -=1;
+                continue;
+            }
             buf.append("<tr>");
             // TODO: Add tooltip with simpleName to job name
             //buf.append("<td><b title=\"").append(getClass().getSimpleName()).append("\">").append(stats.getName()).append("</b></td>");
@@ -241,7 +250,6 @@ public class JobQueueHelper extends HelperBase {
                 buf.append("<td>").append(DataHelper.formatDuration2(stats.getMinPendingTime())).append("</td>");
             }
             buf.append("</tr>\n");
-            totRuns += stats.getRuns();
             totDropped += stats.getDropped();
             totExecTime += stats.getTotalTime();
             if (stats.getMaxTime() > maxExecTime)

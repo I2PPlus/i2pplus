@@ -17,7 +17,7 @@
 </head>
 <body id=routerjobs>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
-<%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue")%></h1>
+<%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue Stats")%></h1>
 <div class=main id=jobs>
 <div class=confignav>
 <span class=tab2 title="<%=intl._t("Job statistics for this session")%>"><%=intl._t("Job Stats")%></span>
