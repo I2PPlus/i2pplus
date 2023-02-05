@@ -348,7 +348,7 @@ public class PeerHelper extends HelperBase {
                 continue;
             }
             buf.append("<tr class=lazy><td class=\"cells peer\" nowrap>");
-            buf.append(_context.commSystem().renderPeerHTML(con.getRemotePeer().calculateHash(), false));
+            buf.append(_context.commSystem().renderPeerHTML(con.getRemotePeer().calculateHash(), true));
 /*
             buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(con.getRemoteIP()))
                .append("\" target=_blank title=\"").append(_t("Lookup remote address")).append(' ')
@@ -420,7 +420,7 @@ public class PeerHelper extends HelperBase {
 
         if (!peers.isEmpty()) {
             buf.append("<tr class=tablefooter><td class=peer><b>")
-               .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()));
+               .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers() - inactive));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
             buf.append("</b></td>" +
@@ -587,7 +587,7 @@ public class PeerHelper extends HelperBase {
                 continue; // don't include old peers
             }
             buf.append("<tr class=lazy><td class=\"cells peer\" nowrap>");
-            buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), false));
+            buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), true));
 /*
             buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(peer.getRemoteIP()))
                .append("\" target=_blank title=\"").append(_t("Lookup remote address")).append(' ')

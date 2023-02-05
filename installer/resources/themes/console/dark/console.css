@@ -788,30 +788,28 @@ h3[id="udpcon"]{width:auto}
 .profilegroup::before{width:20px;height:16px;display:inline-block;vertical-align:middle;content:""}
 #profilelist{margin-top:1px}
 #profilelist th{font-size:90%}
-#profilelist th:first-child,#profilelist th:nth-last-child(2),#profilelist td:first-child,#profilelist td:nth-last-child(2){white-space:nowrap;text-align:center}
-#profilelist th,#profilelist td{padding-left:8px;padding-right:8px;;text-align:right}
-#profilelist th:first-child,#profilelist th:nth-child(2),#profilelist th:nth-child(3),#profilelist th:nth-child(4),#profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3),#profilelist td:nth-child(4){width:1%;white-space:nowrap;text-align:center}
+#profilelist th:first-child,#profilelist th:nth-last-child(2),#profilelist td:not(.rif):first-child,#profilelist td:nth-last-child(2){white-space:nowrap;text-align:center}
+#profilelist th:first-child,#profilelist th:nth-child(2),#profilelist th:nth-child(3),#profilelist th:nth-child(4),#profilelist td:not(.rif):first-child,#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(3),#profilelist td:nth-child(4){width:1%;white-space:nowrap;text-align:center}
 #profilelist th:nth-child(4),#profilelist td:nth-child(4){width:15%}
 #profilelist th:nth-child(5),#profilelist td:nth-child(5){width:40%;text-align:center}
 #profilelist th:nth-child(5),#profilelist td:nth-child(5){width:10%;min-width:56px;white-space:nowrap}
 #profilelist .tier,#profilelist .reachable,#profilelist .unreachable,#profilelist .ff{margin-top:-6px;margin-bottom:-6px;padding-top:2px;padding-bottom:1px}
 #profilelist tr:hover,#floodfills tr:hover{background:#030}
 #profilelist tr:hover td,#floodfills tr:hover td{color:var(--ink)}
-#profilelist td:nth-child(2),#profilelist th:nth-child(2){text-align:left}
+#profilelist td:not(.rih):nth-child(2),#profilelist th:nth-child(2){text-align:left}
 #profilelist td:nth-child(3){letter-spacing:.1em}
 #profilelist th:last-child{text-align:left;font-size:0}
-#profilelist td:first-child{min-width:68px}
-#profilelist td:nth-child(2){text-align:left}
+#profilelist td:not(.rih):nth-child(2){text-align:left}
 #profilelist td:nth-child(5) span{width:56px;height:16px;display:inline-block;font-size:0}
-#profilelist td{padding:2px 1px;color:#bb7}
-#profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3){padding:2px 1px}
-#profilelist td:nth-child(2),#profilelist td:nth-child(7),#floodfills td:last-child{width:1%;white-space:nowrap}
-#profilelist td:nth-child(2) span{margin-left:1px;margin-right:3px}
-#profilelist td:nth-child(2) span:first-child{margin-left:1px}
-#profilelist td:nth-child(2) span:last-child{margin-right:1px}
-#profilelist td:nth-child(2) i{width:100%;display:inline-block;text-align:center}
+#profilelist td:not(.rif):not(.rih):not(.rbw){padding:3px;color:#bb7}
+#profilelist td:not(.rif):first-child,#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(3){padding:2px 1px}
+#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(7),#floodfills td:last-child{width:1%;white-space:nowrap}
+#profilelist td:not(.rih):nth-child(2) span{margin-left:1px;margin-right:3px}
+#profilelist td:not(.rih):nth-child(2) span:first-child{margin-left:1px}
+#profilelist td:not(.rih):nth-child(2) span:last-child{margin-right:1px}
+#profilelist td:not(.rih):nth-child(2) i{width:100%;display:inline-block;text-align:center}
 #floodfills td:nth-child(3),#profilelist th:nth-last-child(3),#profilelist td:nth-last-child(3),#profilelist th:nth-last-child(4),#profilelist th:nth-last-child(5),#profilelist th:nth-last-child(6),#profilelist td:nth-last-child(4),#profilelist td:nth-last-child(5),#profilelist td:nth-last-child(6){text-align:center}
-#profilelist td:last-child{width:1%;white-space:nowrap;text-align:center}
+#profilelist td:not(.rih):not(.rbw):last-child{width:1%;white-space:nowrap;text-align:center}
 #profilelist td:nth-last-child(5) span{min-width:40px}
 #profilelist td[colspan="10"],#profilelist td[colspan="10"]:hover{padding:1px;border:var(--border);border-top:1px solid #000;border-bottom:1px solid #000;background:#040}
 #profilelist a[href^="viewprofile"]{margin-bottom:2px;display:inline-block}
@@ -2635,8 +2633,8 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #profiles #thresholds + h3{margin-top:-5px}
 #profilelist{margin-top:-1px}
 #profilelist th,#profilelist td:nth-child(4),#profilelist td:nth-child(5){font-size:85%}
-#profilelist td:last-child img{margin:4px}
-#profilelist td:nth-child(2),#profilelist td:nth-child(3){padding-left:3px;padding-right:3px}
+#profilelist td:not(.rih):not(.rbw):last-child img{margin:4px}
+#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(3){padding-left:3px;padding-right:3px}
 #profilelist td:nth-child(5){white-space:normal}
 #profiles #ff{margin:-18px -6px -9px}
 }
