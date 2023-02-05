@@ -2834,5 +2834,5 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{padding-left:4px;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .rid .rbw.isff{box-shadow:var(--highlight),0 0 2px 1px rgba(255,96,0,.9) inset}
-#banlist li .rid{margin-right:5px;margin-left:-3px;float:left}
+#banlist li .rid{margin:1px 5px -1px -2px;float:left}
 
