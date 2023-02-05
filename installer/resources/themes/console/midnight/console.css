@@ -2833,4 +2833,5 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{padding-left:4px;min-width:20px;text-align:center;line-height:1;font-weight:900}
+.rid .rbw.isff{box-shadow:var(--highlight),0 0 2px 1px rgba(255,96,0,.9) inset}
 

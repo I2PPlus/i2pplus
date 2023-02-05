@@ -2327,7 +2327,6 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 @media screen and (min-width:1600px){#sb_localtunnels td:first-child{width:20px}}
 @media screen and (min-width:1634px){.leasesets_container{margin-bottom:2px} th code{font-size:9pt}}
 
-
 .tunnel_local{width:101px;box-sizing:border-box}
 .tunnel_peer{display:inline-block;line-height:1.35;vertical-align:middle}
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge)}
@@ -2337,3 +2336,4 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 .rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{padding-left:4px;min-width:20px;text-align:center;line-height:1;font-weight:900}
+.rid .rbw.isff{box-shadow:var(--highlight),0 0 2px 1px rgba(255,96,0,.9) inset}
