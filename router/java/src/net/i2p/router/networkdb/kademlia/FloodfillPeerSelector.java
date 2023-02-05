@@ -197,7 +197,8 @@ class FloodfillPeerSelector extends PeerSelector {
     // before we can do this. Old profiles get deleted.
     //private static final long HEARD_AGE = 48*60*60*1000L;
     //private static final long HEARD_AGE = 60*60*1000L;
-    private static final long HEARD_AGE = 3*60*60*1000L;
+//    private static final long HEARD_AGE = 3*60*60*1000L;
+    private static final long HEARD_AGE = 8*60*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
 
     /**
@@ -266,11 +267,29 @@ class FloodfillPeerSelector extends PeerSelector {
             RouterInfo info = _context.netDb().lookupRouterInfoLocally(entry);
             MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2);
             boolean sameIP = false;
+            boolean noSSU = false;
             for (String ip : entryIPs) {
                 if (!maskedIPs.add(ip))
                     sameIP = true;
             }
-            if (sameIP) {
+            for (RouterAddress ra : info.getAddresses()) {
+                if (ra.getTransportStyle().equals("SSU") ||
+                    ra.getTransportStyle().equals("SSU2")) {
+                   noSSU = false;
+                   break;
+                }
+                if (!ra.getTransportStyle().equals("SSU") &&
+                    !ra.getTransportStyle().equals("SSU2"))
+                    noSSU = true;
+            }
+            if (noSSU) {
+                if (_log.shouldDebug())
+                    _log.debug("Floodfill Sort: No SSU transport [" + entry.toBase64().substring(0,6) + "]");
+                badff.add(entry);
+                _context.banlist().banlistRouter(key, "<b>➜</b> Suspicious NTCP-only floodfill", null, null, now + 8*60*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning floodfill [" + key.toBase64().substring(0,6) + "] for 8h -> No SSU transport enabled");
+            } else if (sameIP) {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill Sort: Same /16, family, or port [" + entry.toBase64().substring(0,6) + "]");
@@ -282,7 +301,8 @@ class FloodfillPeerSelector extends PeerSelector {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill Sort: Bad country [" + entry.toBase64().substring(0,6) + "]");
-            } else if (info != null && info.getBandwidthTier().equals("L")) {
+            } else if (info != null && info.getBandwidthTier().equals("L") || info.getBandwidthTier().equals("M") ||
+                       info.getBandwidthTier().equals("N")) {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill Sort: Slow [" + entry.toBase64().substring(0,6) + "]");
