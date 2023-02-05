@@ -515,7 +515,7 @@ div[id^="config"] .tab a{padding-right:18px}
 /* profiles */
 a.viewfullentry,#profilelist td:last-child a,a[href^="/viewprofile"],.profiledump::after{font-size:0}
 a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
-.tunnel_cap,.tier,#capabilities_key b,#netdbtiers td a{margin:1px 2px 0;padding:1px 2px;min-width:14px;display:inline-block;text-align:center;text-shadow:0 1px 1px var(--bg);box-shadow:var(--highlight),0 0 0 1px var(--border_soft);background:var(--badge)}
+.tunnel_cap,.tier,#capabilities_key b,#netdbtiers td a{margin:1px 2px 0;padding:1px 2px;min-width:14px;display:inline-block;text-align:center;text-shadow:0 1px 1px var(--bg);box-shadow:var(--highlight),0 0 0 1px var(--soft);background:var(--badge)}
 .version,.tier,.reachable,.unreachable,.ff{margin:1px 3px;padding:1px 4px;display:inline-block;min-width:12px;text-align:center}
 .ff,.reachable,.unreachable,.hidden,.ssutesting,.ssuintro,.tier,.tunnel_cap,#capabilities_key b{box-shadow:var(--box_border_badge),var(--highlight)}
 .ff{background:linear-gradient(180deg,#fff,#fdb)}
@@ -700,7 +700,7 @@ pre#activetransports{margin:-11px 0 0;padding:15px 15px 0;width:calc(100% - 32px
 #pluginconfig table{margin:3px;width:calc(100% - 5px)}
 #pluginconfig tr td{background:var(--bg)}
 #pluginconfig button,#webappconfig button,#clientconfig button{margin:3px}
-#pluginconfig td:first-child label{margin-left:6px;padding:2px 5px 2px 21px;min-width:100px;display:inline-block;text-align:left;border-radius:2px 15px 15px 2px;box-shadow:0 0 0 1px var(--border_soft);background:var(--plugin) no-repeat 4px center/14px,var(--btn);background-blend-mode:luminosity}
+#pluginconfig td:first-child label{margin-left:6px;padding:2px 5px 2px 21px;min-width:100px;display:inline-block;text-align:left;border-radius:2px 15px 15px 2px;box-shadow:0 0 0 1px var(--soft);background:var(--plugin) no-repeat 4px center/14px,var(--btn);background-blend-mode:luminosity}
 #pluginmanage{margin-top:15px}
 #pluginmanage + p{padding:5px 0 0}
 #i2pupdates input[type=text],#i2pupdates select{margin-left:10px;min-width:200px}
@@ -821,7 +821,7 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 #profiles #banlist{margin-bottom:6px}
 #config_peers #banlist{margin-bottom:11px}
 #banlist + h3.tabletitle{margin-top:9px}
-#banlist li{margin-bottom:5px;padding:5px 7px 5px;width:calc(100% - 9px);position:relative;display:table;line-height:1.5;list-style:none;box-shadow:0 0 0 1px var(--border_soft),0 0 1px 1px #ddd;background:#f9f9ff}
+#banlist li{margin-bottom:5px;padding:5px 7px 5px;width:calc(100% - 9px);position:relative;display:table;line-height:1.5;list-style:none;box-shadow:0 0 0 1px var(--soft),0 0 1px 1px #ddd;background:#f9f9ff}
 #banlist li img{margin-right:3px}
 #banlist li:first-child{margin-top:0}
 #banlist li a[href^="configpeer"]{padding:2px 0 1px 2px;position:absolute;top:0;right:0;line-height:0;border-left:var(--border_soft);border-bottom:var(--border_soft);filter:none}
@@ -2337,3 +2337,4 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{padding-left:4px;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .rid .rbw.isff{box-shadow:var(--highlight),0 0 2px 1px rgba(255,96,0,.9) inset}
+#banlist li .rid{margin-right:5px;margin-left:-3px;float:left}
