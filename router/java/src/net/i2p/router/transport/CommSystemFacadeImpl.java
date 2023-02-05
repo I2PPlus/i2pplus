@@ -765,31 +765,35 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         StringBuilder buf = new StringBuilder(128);
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
         String c = getCountry(peer);
+        String countryName = getCountryName(c);
+        String h = peer.toBase64();
         if (c == null) {
             c = "a0";
         }
-        String h = peer.toBase64();
+        if (countryName.length() > 2) {
+            countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
+        }
+        buf.append("<span class=peerFlag ");
         if (ri != null) {
             // add a hidden span to facilitate sorting
-            buf.append("<span class=peerFlag><span class=cc hidden>");
-            if (c != "a0" || c != null) {
-                String countryName = getCountryName(c);
-                buf.append(c.toUpperCase(Locale.US)).append("</span>");
-                if (countryName.length() > 2)
-                    countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-                buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=18 alt=\"")
-                   .append(c.toUpperCase(Locale.US)).append("\" title=\"");
-                buf.append(countryName);
-                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
+            if (c != "a0" && c != null) {
+                buf.append("title=\"").append(countryName).append("\">");
             } else {
-                buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"" +
-                           " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append("\">");
+                buf.append("title=unknown>");
+            }
+            buf.append("<span class=cc hidden>").append(c.toUpperCase(Locale.US)).append("</span>");
+            if (c != "a0" && c != null) {
+                buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=18 alt=\"")
+                   .append(c.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
+            } else {
+                buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"")
+                   .append(" src=\"/flags.jsp?c=a0\" title=").append(_t("unknown")).append(">");
             }
             buf.append("</span>");
         } else {
             buf.append("<span class=peerFlag><span class=cc hidden>A0</span>" +
                        "<img class=unknownflag width=24 height=18 alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append("\"></span>");
+                       " src=\"/flags.jsp?c=a0\" title=").append(_t("unknown")).append("></span>");
         }
         return buf.toString();
     }
