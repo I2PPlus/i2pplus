@@ -13,7 +13,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("network database")%>
-<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
+<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
@@ -49,46 +49,46 @@
     String r = request.getParameter("r");
     if (f == null && l == null && ls == null && r == null) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%></h1>
 <%
     } else if (f != null) {
         if (f.equals("1") || f.equals("2")) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("All Routers")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("All Routers")%></h1>
 <%
         } else if (f.equals("3")) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("Sybil Analysis")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("Sybil Analysis")%></h1>
 <%
         } else if (f.equals("4")) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("Advanced Lookup")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("Advanced Lookup")%></h1>
 <%
         }
     } else if (f == null) {
         if (r != null && r.equals(".")) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("Local Router")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("Local Router")%></h1>
 <%
         } else if (r != null) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("Router Lookup")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("Router Lookup")%></h1>
 <%
         } else if (r == null && ls != null) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("LeaseSet Lookup")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("LeaseSet Lookup")%></h1>
 <%
         } else if (r == null && ls == null && l != null) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("LeaseSets")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("LeaseSets")%></h1>
 <%
         } else if (r == null && ls == null && l == null && c != null) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%> &ndash; <%=intl._t("Routers")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("Routers")%></h1>
 <%
         } else {
 %>
-<h1 class="netwrk"><%=intl._t("Network Database")%></h1>
+<h1 class=netwrk><%=intl._t("Network Database")%></h1>
 <%
         }
     }

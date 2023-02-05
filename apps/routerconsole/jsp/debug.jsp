@@ -18,20 +18,20 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("Debug")%>
-<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
+<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf adv debug">Debug</h1>
 <div class=main id="debug">
-<div class="confignav">
-<span class="tab"><a href="/debug">Port Mapper</a></span>
-<span class="tab"><a href="/debug?d=1">App Manager</a></span>
-<span class="tab"><a href="/debug?d=2">Update Manager</a></span>
-<span class="tab"><a href="/debug?d=3">Router Session Key Manager</a></span>
-<span class="tab"><a href="/debug?d=4">Client Session Key Managers</a></span>
-<span class="tab"><a href="/debug?d=5">Router DHT</a></span>
+<div class=confignav>
+<span class=tab><a href="/debug">Port Mapper</a></span>
+<span class=tab><a href="/debug?d=1">App Manager</a></span>
+<span class=tab><a href="/debug?d=2">Update Manager</a></span>
+<span class=tab><a href="/debug?d=3">Router Session Key Manager</a></span>
+<span class=tab><a href="/debug?d=4">Client Session Key Managers</a></span>
+<span class=tab><a href="/debug?d=5">Router DHT</a></span>
 </div>
 
 <%

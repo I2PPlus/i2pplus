@@ -26,15 +26,15 @@
     String req = request.getParameter("transport");
     if (req == null) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Peers")%></h1>
+<h1 class=netwrk><%=intl._t("Network Peers")%></h1>
 <%
     } else if (req.equals("ntcp")) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Peers")%> &ndash; NTCP</h1>
+<h1 class=netwrk><%=intl._t("Network Peers")%> &ndash; NTCP</h1>
 <%
     } else if (req.equals("ssu")) {
 %>
-<h1 class="netwrk"><%=intl._t("Network Peers")%> &ndash; SSU</h1>
+<h1 class=netwrk><%=intl._t("Network Peers")%> &ndash; SSU</h1>
 <%
     }
 %>

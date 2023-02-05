@@ -22,7 +22,7 @@
     eventHelper.storeMethod(request.getMethod());
 %>
 
-<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
+<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>

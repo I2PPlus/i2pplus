@@ -14,16 +14,16 @@
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("local tunnels")%>
 </head>
-<body id="routertunnels">
+<body id=routertunnels>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="netwrk"><%=intl._t("Local Tunnels")%></h1>
-<div class=main id="tunnels">
-<div class="confignav">
-<span class="tab2" title="Locally hosted tunnels (exploratory and client)">Local</span>
-<span class="tab"><a href="/tunnelsparticipating"><%=intl._t("Transit")%></a></span>
-<span class="tab" title="Top 50 transit tunnel peers"><a href="/tunnelsparticipatingsummary"><%=intl._t("Transit Count by Peer")%></a></span>
-<span class="tab"><a href="/tunnelpeercount">Tunnel Count by Peer</a></span>
+<h1 class=netwrk><%=intl._t("Local Tunnels")%></h1>
+<div class=main id=tunnels>
+<div class=confignav>
+<span class=tab2 title="Locally hosted tunnels (exploratory and client)">Local</span>
+<span class=tab><a href="/tunnelsparticipating"><%=intl._t("Transit")%></a></span>
+<span class=tab title="Top 50 transit tunnel peers"><a href="/tunnelsparticipatingsummary"><%=intl._t("Transit Count by Peer")%></a></span>
+<span class=tab><a href="/tunnelpeercount">Tunnel Count by Peer</a></span>
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelHelper" id="tunnelHelper" scope="request" />
 <jsp:setProperty name="tunnelHelper" property="contextId" value="<%=i2pcontextId%>" />

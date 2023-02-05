@@ -13,14 +13,15 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("job queue statistics")%>
+<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body id=routerjobs>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
-<%@include file="summary.jsi" %><h1 class="sched"><%=intl._t("Job Queue")%></h1>
+<%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue")%></h1>
 <div class=main id=jobs>
-<div class="confignav">
-<span class="tab2" title="<%=intl._t("Job statistics for this session")%>"><%=intl._t("Job Stats")%></span>
-<span class="tab" title="<%=intl._t("Active and scheduled jobs")%>"><a href="/jobqueue"><%=intl._t("Job Queue")%></a></span>
+<div class=confignav>
+<span class=tab2 title="<%=intl._t("Job statistics for this session")%>"><%=intl._t("Job Stats")%></span>
+<span class=tab title="<%=intl._t("Active and scheduled jobs")%>"><a href="/jobqueue"><%=intl._t("Job Queue")%></a></span>
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.JobQueueHelper" id="jobQueueHelper" scope="request" />
 <jsp:setProperty name="jobQueueHelper" property="contextId" value="<%=i2pcontextId%>" />

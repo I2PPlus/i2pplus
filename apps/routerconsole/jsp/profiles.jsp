@@ -13,7 +13,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("peer profiles")%>
-<link href="/themes/console/tablesort.css" rel=stylesheet type=text/css>
+<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
@@ -25,19 +25,19 @@
     String req = request.getParameter("f");
     if (req == null) {
 %>
-<h1 class="netwrk"><%=intl._t("Peer Profiles")%></h1>
+<h1 class=netwrk><%=intl._t("Peer Profiles")%></h1>
 <%
     } else if (req.equals("3")) {
 %>
-<h1 class="netwrk"><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Banned Peers")%></h1>
+<h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Banned Peers")%></h1>
 <%
     } else if (req.equals("2")) {
 %>
-<h1 class="netwrk"><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Floodfills")%></h1>
+<h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Floodfills")%></h1>
 <%
     } else if (req.equals("1")) {
 %>
-<h1 class="netwrk"><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Fast / High Capacity")%></h1>
+<h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Fast / High Capacity")%></h1>
 <%
     }
 %>
