@@ -161,13 +161,13 @@ class TunnelRenderer {
                               "<th data-sortable>" + _t("Role") + "</th>" +
                               "<th data-sortable");
                     if (!bySpeed) {
-                        out.write(" aria-sort=descending");
+                        out.write(" data-sort-default");
                     }
                     out.write(">" + _t("Expiry") + "</th>" +
                               "<th title=\"" + _t("Data transferred") + "\" data-sortable data-sort-method=dotsep>" + _t("Data") + "</th>" +
                               "<th data-sortable");
                     if (bySpeed) {
-                        out.write(" aria-sort=descending");
+                        out.write(" data-sort-default");
                     }
                     out.write(">" + _t("Speed") + "</th>" +
                               "<th data-sortable>");
@@ -319,7 +319,7 @@ class TunnelRenderer {
             }
 
             // sort and output
-            out.write("<h3 class=tabletitle>Transit Tunnel Count by Peer</h3>\n");
+            out.write("<h3 class=tabletitle>Transit Tunnels by Peer (Top 50)</h3>\n");
             out.write("<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n" +
                       "<thead><tr data-sort-method=none>" +
                       "<th id=country data-sortable>" + _t("Country") + "</th>" +
@@ -458,7 +458,7 @@ class TunnelRenderer {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
 
         if (!participating.isEmpty() || tunnelCount > 0) {
-            out.write("<h3 class=tabletitle id=peercount>" + _t("Tunnel Count By Peer") +
+            out.write("<h3 class=tabletitle id=peercount>" + _t("All Tunnels by Peer") +
                       "&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelpeercount\">" + _t("Refresh") + "</a></h3>\n");
             out.write("<table id=tunnelPeerCount data-sortable>");
             out.write("<thead>\n<tr>" +
