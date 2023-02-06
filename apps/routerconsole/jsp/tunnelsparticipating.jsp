@@ -46,6 +46,18 @@
   var visible = document.visibilityState;
   var xhrtunnels = new XMLHttpRequest();
   if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
+  function updateNotes() {
+    var notes = document.querySelectorAll(".statusnotes");
+    if (notes[0] !== null) {
+      var notesResponse = xhrtunnels.responseXML.querySelectorAll(".statusnotes");
+      var i;
+      for (i = 0; i < notes.length; i++) {
+        if (notesResponse[i] !== null) {
+          notes[i].innerHTML = notesResponse[i].innerHTML;
+        }
+      }
+    }
+  }
   function initRefresh() {
     if (refreshId) {clearInterval(refreshId);}
     var refreshId = setInterval(updateTunnels, 60000);
@@ -76,6 +88,7 @@
           addSortListeners();
           if (peers && peers !== peersResponse) {
             peers.innerHTML = peersResponse.innerHTML;
+            updateNotes();
             sorter.refresh();
             removeHref();
           }
