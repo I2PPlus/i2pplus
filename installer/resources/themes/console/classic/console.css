@@ -2337,4 +2337,6 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{padding-left:4px;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .rid .rbw.isff{box-shadow:var(--highlight),0 0 2px 1px rgba(255,96,0,.9) inset}
+.rid .rbw.isU{box-shadow:var(--highlight), 0 0 1px 1px rgba(255,0,0,.9) inset}
+.rid .rbw.isff.isU{box-shadow:var(--highlight), 0 0 1px 1px rgba(255,0,0,.9) inset;background:linear-gradient(135deg,rgba(255,96,0,.3) 50%,rgba(128,0,0,.3) 50%)}
 #banlist li .rid{margin-right:5px;margin-left:-3px;float:left}
