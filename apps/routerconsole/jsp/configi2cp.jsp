@@ -99,7 +99,7 @@
 <span class="nowrap"><b><%=intl._t("Username")%>:</b>
 <input name="user" type=text value="" /></span><br>
 <span class="nowrap"><b><%=intl._t("Password")%>:</b>
-<input name="nofilter_pw" type="password" value="" /></span>
+<input name="nofilter_pw" type=password value="" /></span>
 </div>
 </td>
 </tr>
@@ -108,7 +108,7 @@
 %>
 <tr>
 <td class=optionsave align="right">
-<input type=submit class="default" name="action" value="<%=intl._t("Save Interface Configuration")%>" />
+<input type=submit class=default name="action" value="<%=intl._t("Save Interface Configuration")%>" />
 <input type=submit class=cancel name="foo" value="<%=intl._t("Cancel")%>" />
 <input type=submit class=accept name="action" value="<%=intl._t("Save Interface Configuration")%>" />
 </td>

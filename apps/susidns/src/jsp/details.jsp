@@ -95,22 +95,22 @@
 <table class="book" id="host_details" cellspacing="0" cellpadding="5">
 <tr>
 <td><%=intl._t("Hostname")%></td>
-<td><a href="http://<%=addr.getName()%>/" target="_blank" rel="noreferrer"><%=addr.getDisplayName()%></a>
-&nbsp;<b><%=intl._t("Book")%></b>&nbsp;<%=intl._t(book.getBook())%>&nbsp;<b><%=intl._t("Address Helper")%></b>&nbsp;<a href="http://<%=addr.getName()%>/?i2paddresshelper=<%=addr.getDestination()%>" target="_blank" rel="noreferrer"><%=intl._t("link")%></a></td>
+<td><a href="http://<%=addr.getName()%>/" target=_blank rel=noreferrer><%=addr.getDisplayName()%></a>
+&nbsp;<b><%=intl._t("Book")%></b>&nbsp;<%=intl._t(book.getBook())%>&nbsp;<b><%=intl._t("Address Helper")%></b>&nbsp;<a href="http://<%=addr.getName()%>/?i2paddresshelper=<%=addr.getDestination()%>" target=_blank rel=noreferrer><%=intl._t("link")%></a></td>
 </tr>
 <tr>
 <%
                 if (addr.isIDN()) {
 %>
 <td><%=intl._t("Encoded Name")%></td>
-<td><a href="http://<%=addr.getName()%>/" target="_blank" rel="noreferrer"><%=addr.getName()%></a></td>
+<td><a href="http://<%=addr.getName()%>/" target=_blank rel=noreferrer><%=addr.getName()%></a></td>
 </tr>
 <tr>
 <%
                 }
 %>
 <td><%=intl._t("Base 32 Address")%></td>
-<td><a href="http://<%=b32%>/" target="_blank" rel="noreferrer"><%=b32%></a></td>
+<td><a href="http://<%=b32%>/" target=_blank rel=noreferrer><%=b32%></a></td>
 </tr>
 <tr>
 <td><%=intl._t("Base 64 Hash")%></td>
@@ -163,7 +163,7 @@
 %>
 <div id="buttons">
 <form method="POST" action="addressbook">
-<p class="buttons">
+<p class=buttons>
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=nonce%>">
 <input type=hidden name="begin" value="0">
@@ -185,7 +185,7 @@
 <td><img src="/imagegen/qr?s=256&amp;t=<%=addr.getName()%>&amp;c=http%3a%2f%2f<%=addr.getName()%>%2f%3fi2paddresshelper%3d<%=addr.getDestination()%>"></td>
 </tr>
 <tr>
-<td colspan="2"><a class="fakebutton" href="/imagegen" title="<%=intl._t("Create your own identification images")%>" target="_blank" rel="noreferrer"><%=intl._t("Launch Image Generator")%></a></td>
+<td colspan=2><a class="fakebutton" href="/imagegen" title="<%=intl._t("Create your own identification images")%>" target=_blank rel=noreferrer><%=intl._t("Launch Image Generator")%></a></td>
 </tr>
 </table>
 </div><%-- visualid --%>

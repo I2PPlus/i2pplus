@@ -31,7 +31,7 @@
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <h3 class=tabletitle><%=intl._t("Configure I2P Stat Collection")%></h3>
 <table id="statconfig" class=configtable>
-<tr><td class=infohelp id="enablefullstats" colspan="2"><%=intl._t("A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>.")%></td></tr>
+<tr><td class=infohelp id="enablefullstats" colspan=2><%=intl._t("A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>.")%></td></tr>
 <tr id="enablefull"><td><label><input type=checkbox class="optbox slider" id="enableFull" name="isFull" value=true <%
  if (statshelper.getIsFull()) { %>checked="checked" <% } %> > <b><%=intl._t("Enable full stats?").replace(" stats?", " stat collection")%></b>
  (<%=intl._t("change requires restart to take effect").replace("change requires restart to take effect", "restart required") %>)</label></td><td class="right"><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
@@ -42,8 +42,8 @@
     while (statshelper.hasMoreStats()) {
         while (statshelper.groupRequired()) {
 %>
-<tr><th align="left" colspan="2" id=<%=statshelper.getCurrentGroupName().replace(" ", "_").replace("[", "").replace("]", "")%>><b><%=statshelper.getCurrentGroupName()%></b></th></tr>
-<tr class="graphableStat"><td colspan="2">
+<tr><th align="left" colspan=2 id=<%=statshelper.getCurrentGroupName().replace(" ", "_").replace("[", "").replace("]", "")%>><b><%=statshelper.getCurrentGroupName()%></b></th></tr>
+<tr class="graphableStat"><td colspan=2>
 <%
         } // end iterating over required groups for the current stat
         if (statshelper.getCurrentCanBeGraphed() && !statshelper.getCurrentGraphName().contains("Ping")) {
@@ -68,7 +68,7 @@
     }
 %>
 </td></tr>
-<tr class="tablefooter"><td colspan="2" align="right" class=optionsave>
+<tr class="tablefooter"><td colspan=2 align="right" class=optionsave>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>">
 </td></tr>

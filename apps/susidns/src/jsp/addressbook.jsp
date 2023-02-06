@@ -88,7 +88,7 @@
 <a id="overview" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
-<form action="export" id="exportlist" method="GET" target="_blank" hidden></form>
+<form action="export" id="exportlist" method="GET" target=_blank hidden></form>
 <div class="headline" id="addressbook">
 <h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>${book.loadBookMessages}<c:if test="${book.isEmpty}">&nbsp;<span class="results">(<%=intl._t("No entries")%>)</span></c:if>
 <c:if test="${book.isEmpty}"><span id="export"><input form="exportlist" type=submit class="export" id="exporthosts" <c:if test="${book.isEmpty}">disabled</c:if>></span></c:if>
@@ -122,7 +122,7 @@
 </h3>
 </div>
 <% /* need this whether book is empty or not to display the form messages */ %>
-<div id="messages">${book.messages}
+<div id=messages>${book.messages}
 <%
    if (importMessages != null) {
 %>
@@ -141,11 +141,11 @@
 <%
     if (book.getSearch() == null) {
 %>
-<input class="search" type=text name="search" value="" size="20">
+<input class="search" type=text name="search" value="" size=20>
 <%
     } else {
 %>
-<input class="search" type=text name="search" value="${book.search}" size="20">
+<input class="search" type=text name="search" value="${book.search}" size=20>
 <%
     }
 %>
@@ -423,9 +423,9 @@
         }
 %>
 </td>
-<td class="names"><a href="http://${addr.name}/" target="_blank">${addr.displayName}</a></td>
-<td class="b32link"><span class="addrhlpr"><a href="http://${addr.b32}/" target="_blank" rel="noreferrer" title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
-<td class="helper"><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target="_blank" rel="noreferrer" title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
+<td class="names"><a href="http://${addr.name}/" target=_blank>${addr.displayName}</a></td>
+<td class="b32link"><span class="addrhlpr"><a href="http://${addr.b32}/" target=_blank rel=noreferrer title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
+<td class="helper"><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target=_blank rel=noreferrer title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
 <td class="destinations"><div class="destaddress resetScrollLeft" name="dest_${addr.name}" width="200px" tabindex="0">${addr.destination}</div></td>
 <c:if test="${book.validBook}"><td class="checkbox"><input type=checkbox class=optbox name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td></c:if>
 </tr>
@@ -440,7 +440,7 @@
 %>
 <c:if test="${book.validBook}">
 <div id="buttons">
-<p class="buttons">
+<p class=buttons>
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <input class=delete type=submit name="action" value="<%=intl._t("Delete Selected")%>">
 </p>
@@ -466,7 +466,7 @@
 <tr><td><b><%=intl._t("Hostname")%></b></td><td><input type=text name="hostname" value="${book.hostname}" size="30" required placeholder="<%=intl._t("e.g. newdomain.i2p")%>"></td></tr>
 <tr><td><b><%=intl._t("B64 or B32")%></b></td><td><input type=text name="destination" value="${book.destination}" size="50" required placeholder="<%=intl._t("Full destination or b32 address")%>"></td></tr>
 </table>
-<p class="buttons">
+<p class=buttons>
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <c:if test="${book.notEmpty}">
 <input class="accept scrollToNav" type=submit name="action" value="<%=intl._t("Replace")%>">
@@ -493,7 +493,7 @@
 <div id="import">
 <h3><%=intl._t("Import from hosts.txt file")%></h3>
 <table><tr><td><b><%=intl._t("Select file")%></b></td><td><input name="file" type="file" accept=".txt" value=""></td></tr></table>
-<p class="buttons">
+<p class=buttons>
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <input class="download scrollToNav" type=submit name="action" value="<%=intl._t("Import")%>">
 </p>

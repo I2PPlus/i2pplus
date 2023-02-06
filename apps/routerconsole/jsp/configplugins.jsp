@@ -40,12 +40,12 @@
 <form action="configplugins" method="POST">
 <table id="plugininstall" class=configtable>
 <tr>
-<td class=infohelp colspan="2">
-<%=intl._t("For available plugins, visit {0}.", "<a href=\"http://stats.i2p/i2p/plugins/\" target=\"_blank\">zzz's plugin page</a>")%>
+<td class=infohelp colspan=2>
+<%=intl._t("For available plugins, visit {0}.", "<a href=\"http://stats.i2p/i2p/plugins/\" target=_blank>zzz's plugin page</a>")%>
 </td>
 </tr>
 <tr>
-<td colspan="2">
+<td colspan=2>
 <b class=suboption><%=intl._t("Enter xpi2p or su3 plugin URL")%></b><br>
 <div class="optionsingle" id="installPluginUrl">
 <%
@@ -76,7 +76,7 @@
 <form action="configplugins" method="POST" enctype="multipart/form-data" accept-charset=utf-8>
 <table id="plugininstall2" class=configtable>
 <tr>
-<td colspan="2">
+<td colspan=2>
 <b class=suboption><%=intl._t("Select xpi2p or su3 file")%></b><br>
 <div class="optionsingle" id="installPluginFile">
 <table>

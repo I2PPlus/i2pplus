@@ -59,7 +59,7 @@
 <h4><%=intl._t("File location")%>: <span class="storage">${cfg.fileName}</span></h4>
 </div>
 <script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
-<div id="messages">${cfg.messages}</div>
+<div id=messages>${cfg.messages}</div>
 <form method="POST" action="config#navi">
 <div id="config">
 <input type=hidden name="serial" value="${cfg.serial}" >

@@ -46,10 +46,10 @@
  <input type=hidden name="nonce" value="<%=pageNonce%>" >
  <h3 class=tabletitle><%=intl._t("Manual Peer Controls")%></h3>
  <table id="configpeer" class=configtable>
- <tr><td colspan="2"><b><%=intl._t("Router Hash")%>:</b> <input type=text size="44" name="peer" value="<%=peer%>" /></td></tr>
- <tr><th colspan="2"><%=intl._t("Manually Ban / Unban a Peer")%></th></tr>
- <tr><td class=infohelp colspan="2"><%=intl._t("Banning will prevent the participation of this peer in tunnels you create.")%></td></tr>
- <tr><td class=optionsave colspan="2">
+ <tr><td colspan=2><b><%=intl._t("Router Hash")%>:</b> <input type=text size="44" name="peer" value="<%=peer%>" /></td></tr>
+ <tr><th colspan=2><%=intl._t("Manually Ban / Unban a Peer")%></th></tr>
+ <tr><td class=infohelp colspan=2><%=intl._t("Banning will prevent the participation of this peer in tunnels you create.")%></td></tr>
+ <tr><td class=optionsave colspan=2>
 <%
     if (peerHash == null || !isBanned) {
 %>
@@ -64,8 +64,8 @@
 %>
 </td>
 </tr>
-<tr><th colspan="2"><%=intl._t("Adjust Profile Bonuses")%></th></tr>
-<tr><td class=infohelp colspan="2"><%=intl._t("Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels.")%></td></tr>
+<tr><th colspan=2><%=intl._t("Adjust Profile Bonuses")%></th></tr>
+<tr><td class=infohelp colspan=2><%=intl._t("Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels.")%></td></tr>
 <tr>
  <% long speed = 0; long capacity = 0;
     if (! "".equals(peer)) {

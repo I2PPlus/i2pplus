@@ -28,7 +28,7 @@
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("Registration Helper")%></title>
 <meta charset=utf-8>
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
+<link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
@@ -41,7 +41,7 @@
   if (editBean.isInitialized()) {
 %>
 <form method="post" enctype="multipart/form-data" action="register" accept-charset=utf-8>
-<div class="panel" id="registration">
+<div class=panel id="registration">
 <%
     String tunnelTypeName;
     String tunnelType;
@@ -67,7 +67,7 @@
 <input type=hidden name="tunnel" value="<%=curTunnel%>" />
 <input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
 <input type=hidden name="type" value="<%=tunnelType%>" />
-<input type=submit class="default" name="action" value="Save changes" />
+<input type=submit class=default name="action" value="Save changes" />
 <%
     String curEncryptMode = editBean.getEncryptMode(curTunnel);
     if (!"0".equals(curEncryptMode)) {
@@ -97,7 +97,7 @@
 </tr>
 <tr>
 <td>
-<textarea rows="1" style="height: 3em;" cols="60" readonly="readonly" id="localDestination" title="Read Only: Local Destination (if known)" wrap="off" spellcheck="false"><%=editBean.getDestinationBase64(curTunnel)%></textarea>
+<textarea rows="1" style="height: 3em;" cols=60 readonly=readonly id="localDestination" title="Read Only: Local Destination (if known)" wrap="off" spellcheck="false"><%=editBean.getDestinationBase64(curTunnel)%></textarea>
 </td>
 </tr>
 -->
@@ -291,7 +291,7 @@
     }  // !"new".equals(tunnelType)
     if (!valid && curTunnel >= 0) {
 %>
-<tr><td class="buttons"><a href="edit?tunnel=<%=curTunnel%>" class="control"><%=intl._t("Return to Tunnel Configuration")%></a></td></tr>
+<tr><td class=buttons><a href="edit?tunnel=<%=curTunnel%>" class=control><%=intl._t("Return to Tunnel Configuration")%></a></td></tr>
 <%
     }
     if (valid) {
@@ -304,10 +304,10 @@
 %>
 <tr><td><b><%=intl._t("Old / parent hostname ")%>:</b><input type=text size="30" maxlength="50" name="oldname" id="oldName" value="<%=oldname%>" class="freetext" placeholder="old hostname or parent domain for sub-domain registration" /></td></tr>
 <tr><td><b><%=intl._t("Private key file for old destination / sub-domain parent")%>:</b><input type="file" name="olddestfile" id="oldDestFile" value="" /></td></tr>
-<tr><td class="buttons">
+<tr><td class=buttons>
 <input type=hidden value=true name="removeConfirm" />
-<a class="control" href="list"><%=intl._t("Cancel")%></a>
-<button id="controlSave" class="control" type=submit name="action" value="authenticate"  title="<%=intl._t("Generate Authentication")%>"><%=intl._t("Generate")%></button>
+<a class=control href="list"><%=intl._t("Cancel")%></a>
+<button id="controlSave" class=control type=submit name="action" value="authenticate"  title="<%=intl._t("Generate Authentication")%>"><%=intl._t("Generate")%></button>
 </td>
 </tr>
 <%
@@ -319,7 +319,7 @@
 <%
   } else {
 %>
-<div id="notReady"><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
+<div id=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   setInterval(function() {
     var xhr = new XMLHttpRequest();

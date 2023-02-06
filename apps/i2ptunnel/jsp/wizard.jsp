@@ -45,9 +45,9 @@
 <head>
 <title><%=intl._t("I2P Tunnel Manager - Tunnel Creation Wizard")%></title>
 <meta charset=utf-8>
-<link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
+<link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
+<link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
@@ -57,7 +57,7 @@
 </head>
 <body id="tunnelWizardPage">
 <form method="post" action="<%=(curPage == 7 ? "list" : "wizard") %>">
-<div id="wizardPanel" class="panel">
+<div id="wizardPanel" class=panel>
 <%
                 if (curPage == 1) {
 %>
@@ -392,7 +392,7 @@
 <tr>
 <td>
 <span class="tag"><%=intl._t("Host")%>:</span>
-<input type=text size="20" id="targetHost" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" placeholder="127.0.0.1" value="<%=(!"null".equals(request.getParameter("targetHost")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost")) : "127.0.0.1" ) %>" class="freetext" />
+<input type=text size=20 id="targetHost" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" placeholder="127.0.0.1" value="<%=(!"null".equals(request.getParameter("targetHost")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost")) : "127.0.0.1" ) %>" class="freetext" />
 </td>
 </tr>
 <%
@@ -416,7 +416,7 @@
 <tr>
 <td>
 <span class="tag"><%=intl._t("Port")%>:</span>
-<input type=text size="6" maxlength=5 id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=(!"null".equals(request.getParameter("targetPort")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort")) : "" ) %>" class="freetext" />
+<input type=text size=6 maxlength=5 id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=(!"null".equals(request.getParameter("targetPort")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort")) : "" ) %>" class="freetext" />
 </td>
 </tr>
 <%
@@ -440,7 +440,7 @@
 <tr>
 <td>
 <span class="tag"><%=intl._t("Port")%>:</span>
-<input type=text size="6" maxlength=5 id="port" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=(!"null".equals(request.getParameter("port")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("port")) : "" ) %>" class="freetext" />
+<input type=text size=6 maxlength=5 id="port" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=(!"null".equals(request.getParameter("port")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("port")) : "" ) %>" class="freetext" />
 </td>
 </tr>
 <%
@@ -668,27 +668,27 @@ No
           /* End page 7 */
 %>
 <tr>
-<td class="buttons">
-<a class="control" title="<%=intl._t("Cancel the wizard and return to Tunnel Manager home page")%>" href="list"><%=intl._t("Cancel")%></a>
+<td class=buttons>
+<a class=control title="<%=intl._t("Cancel the wizard and return to Tunnel Manager home page")%>" href="list"><%=intl._t("Cancel")%></a>
 <%
           if (curPage != 1 && curPage != 7) {
 %>
-<button id="controlPrevious" class="control" type=submit name="action" value="Previous page" title="<%=intl._t("Return to previous page")%>"><%=intl._t("Previous")%></button>
+<button id="controlPrevious" class=control type=submit name="action" value="Previous page" title="<%=intl._t("Return to previous page")%>"><%=intl._t("Previous")%></button>
 <%
           }
 %>
 <%
           if (curPage == 7) {
 %>
-<button id="controlSave" class="control" type=submit name="action" value="Save changes" title="<%=intl._t("Save tunnel configuration")%>"><%=intl._t("Save Tunnel")%></button>
+<button id="controlSave" class=control type=submit name="action" value="Save changes" title="<%=intl._t("Save tunnel configuration")%>"><%=intl._t("Save Tunnel")%></button>
 <%
           } else if (curPage == 6) {
 %>
-<button id="controlFinish" class="control" type=submit name="action" value="Next page" title="<%=intl._t("Finish Wizard and review tunnel settings")%>"><%=intl._t("Finish")%></button>
+<button id="controlFinish" class=control type=submit name="action" value="Next page" title="<%=intl._t("Finish Wizard and review tunnel settings")%>"><%=intl._t("Finish")%></button>
 <%
           } else {
 %>
-<button id="controlNext" class="control" type=submit name="action" value="Next page" title="<%=intl._t("Advance to next page")%>"><%=intl._t("Next")%></button>
+<button id="controlNext" class=control type=submit name="action" value="Next page" title="<%=intl._t("Advance to next page")%>"><%=intl._t("Next")%></button>
 <%
           }
 %>

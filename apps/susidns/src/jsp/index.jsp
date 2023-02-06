@@ -59,7 +59,7 @@
 <%=intl._t("The addressbook application is part of your I2P installation.")%>&nbsp;<wbr>
 <%=intl._t("It regularly updates your hosts.txt file from distributed sources or \"subscriptions\".")%>&nbsp;<wbr>
 <%=intl._t("Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file.")%>&nbsp;<wbr>
-<%=intl._t("For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=\"_blank\">the overview</a>.")%>
+<%=intl._t("For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>.")%>
 </p>
 <h3><%=intl._t("How does the addressbook application work?")%></h3>
 <p>

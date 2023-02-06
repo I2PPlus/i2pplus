@@ -33,7 +33,7 @@
 <h3 class=tabletitle><%=intl._t("Manual Keyring Addition")%></h3>
 <table id="addkeyring" class=configtable>
 <tr>
-<td class=infohelp colspan="2">
+<td class=infohelp colspan=2>
 <%=intl._t("Enter keys for encrypted remote destinations here.")%>&nbsp;
 <%
     net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();
@@ -74,10 +74,10 @@
 </tr>
 <tr>
 <td align="right"><b><%=intl._t("Optional lookup password")%>:</b></td>
-<td><input type="password" name="nofilter_blindedPassword" title="<%=intl._t("Set password required to access this service")%>" class="freetext password" /></td>
+<td><input type=password name="nofilter_blindedPassword" title="<%=intl._t("Set password required to access this service")%>" class="freetext password" /></td>
 </tr>
 <tr>
-<td align="right" colspan="2" class=optionsave>
+<td align="right" colspan=2 class=optionsave>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
 <input type=submit name="action" class=add value="<%=intl._t("Add key")%>" >
 </td>

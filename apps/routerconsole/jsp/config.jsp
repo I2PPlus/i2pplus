@@ -31,7 +31,7 @@
 <h3 id="bwlimiter" class=tabletitle><%=intl._t("Bandwidth Limiter")%>&nbsp;<span class=h3navlinks title="<%=intl._t("Advanced Network Configuration")%>"><a href="confignet"><%=intl._t("Advanced Network Configuration")%></a></span></h3>
 <table id="bandwidthconfig" class=configtable>
 <tr>
-<td class=infohelp colspan="2">
+<td class=infohelp colspan=2>
 <%=intl._t("I2P will work best if you configure your rates to match the speed of your internet connection.").replace("I2P", "I2P+")%>
 <% if (!nethelper.isAdvanced()) { %>
 &nbsp;<%=intl._t("Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed).")%>
@@ -93,7 +93,7 @@ A negative rate sets the default.</i><br>
 </td>
 </tr>
 <tr>
-<td class=infohelp colspan="2">
+<td class=infohelp colspan=2>
 <%
     int share = Math.round(nethelper.getShareBandwidth() * 1.024f);
     String shareMegabits = nethelper.getShareRateMegabits();
@@ -117,7 +117,7 @@ A negative rate sets the default.</i><br>
 </td>
 </tr>
 <tr>
-<td class=optionsave colspan="2">
+<td class=optionsave colspan=2>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit class=accept name="save" value="<%=intl._t("Save changes")%>">
 </td>

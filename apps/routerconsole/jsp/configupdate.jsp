@@ -115,7 +115,7 @@
 <div class="optionsingle">
 <span class="nowrap">
 <b><%=intl._t("News URL")%>:</b>
-<input type=text size="60" name="newsURL" <% if (!updatehelper.isAdvanced()) { %>readonly="readonly"<% } %> value="<jsp:getProperty name="updatehelper" property="newsURL" />">
+<input type=text size="60" name="newsURL" <% if (!updatehelper.isAdvanced()) { %>readonly=readonly<% } %> value="<jsp:getProperty name="updatehelper" property="newsURL" />">
 </span>
 </div>
 </td>
@@ -128,7 +128,7 @@
 <div class="optionsingle optiontextarea">
 <span class="nowrap">
 <b><%=intl._t("Update URLs")%>:</b>
-<textarea cols="60" rows="6" name="updateURL" wrap="off" spellcheck="false">
+<textarea cols=60 rows="6" name="updateURL" wrap="off" spellcheck="false">
 <jsp:getProperty name="updatehelper" property="updateURL" />
 </textarea>
 </span>
@@ -140,7 +140,7 @@
 <div class="optionsingle optiontextarea">
 <span class="nowrap">
 <b><%=intl._t("Trusted keys")%>:</b>
-<textarea cols="60" rows="6" name="trustedKeys" wrap="off" spellcheck="false">
+<textarea cols=60 rows="6" name="trustedKeys" wrap="off" spellcheck="false">
 <jsp:getProperty name="updatehelper" property="trustedKeys" />
 </textarea>
 </span>

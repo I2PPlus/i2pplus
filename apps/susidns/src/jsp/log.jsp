@@ -59,7 +59,7 @@
 <h4><%=intl._t("File location")%>: <span class="storage">${log.logName}</span></h4>
 </div>
 <script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
-<div id="messages">${log.messages}</div>
+<div id=messages>${log.messages}</div>
 <div id="config">
 <pre>${log.logged}</pre>
 </div>

@@ -158,8 +158,8 @@
 <%=intl._t("If you do not wish to run the M-Lab bandwidth test, you may skip it by clicking the button below.")%>
 </p>
 <p>
-<a href="https://www.measurementlab.net/privacy/" target="_blank" rel="noreferrer"><%=intl._t("M-Lab Privacy Policy")%></a>
-<br><a href="https://github.com/m-lab/mlab-ns/blob/master/MLAB-NS_PRIVACY_POLICY.md" target="_blank" rel="noreferrer"><%=intl._t("M-Lab Name Server Privacy Policy")%></a>
+<a href="https://www.measurementlab.net/privacy/" target=_blank rel=noreferrer><%=intl._t("M-Lab Privacy Policy")%></a>
+<br><a href="https://github.com/m-lab/mlab-ns/blob/master/MLAB-NS_PRIVACY_POLICY.md" target=_blank rel=noreferrer><%=intl._t("M-Lab Name Server Privacy Policy")%></a>
 </p>
 <%
     } else if (ipg == 3) {
@@ -239,7 +239,7 @@
 <h3><%=intl._t("Bandwidth Configuration")%></h3>
 <table id="bandwidthconfig" class=configtable>
 <tr>
-<td class=infohelp colspan="2">
+<td class=infohelp colspan=2>
 <%=intl._t("I2P will work best if you configure your rates to match the speed of your internet connection.").replace("I2P", "I2P+")%>
 &nbsp;<wbr><%=intl._t("Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed).")%>
 &nbsp;<wbr><%=intl._t("The maximum data transfer values indicate the theoretical maximum, and in practice will normally be much lower.")%>
@@ -299,7 +299,7 @@ A negative rate sets the default.</i><br>
 </td>
 </tr>
 <tr>
-<td class=infohelp colspan="2">
+<td class=infohelp colspan=2>
 <% int share = Math.round(nethelper.getShareBandwidth() * 1.024f);
     if (share < 12) {
         out.print("<b>");

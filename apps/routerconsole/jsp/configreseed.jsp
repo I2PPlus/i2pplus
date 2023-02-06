@@ -35,7 +35,7 @@
 <table id="reseedconfig" class=configtable border="0" cellspacing="5">
 <!--
 <tr>
-<td class=infohelp colspan="2">
+<td class=infohelp colspan=2>
 <%=intl._t("The default settings will work for most people.")%>&nbsp;
 <%=intl._t("Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed.")%>
 </td>
@@ -43,10 +43,10 @@
 -->
 <% if (reseedHelper.isAdvanced()) { %>
 <tr>
-<td colspan="2">
+<td colspan=2>
 <b class=suboption><%=intl._t("Reseed URLs")%></b><br>
 <div class="optionsingle optiontextarea">
-<textarea wrap="off" name="reseedURL" cols="60" rows="7" spellcheck="false">
+<textarea wrap="off" name="reseedURL" cols=60 rows="7" spellcheck="false">
 <jsp:getProperty name="reseedHelper" property="reseedURL" />
 </textarea>
 </div>
@@ -55,7 +55,7 @@
 </tr>
 <% if (reseedHelper.shouldShowSelect()) { %>
 <tr>
-<td colspan="2">
+<td colspan=2>
 <b class=suboption>
 <%=intl._t("Reseed URL Selection")%>
 </b><br>
@@ -72,7 +72,7 @@
 <% } // shouldShowSelect %>
 <% if (reseedHelper.shouldShowHTTPSProxy()) { %>
 <tr>
-<td colspan="2">
+<td colspan=2>
 <b class=suboption>
 <% if (reseedHelper.shouldShowHTTPProxy()) { %>
 <%=intl._t("Use Proxy for HTTPS Reseed Hosts")%>
@@ -102,11 +102,11 @@
 <!--
 <span class="nowrap">
 <b><%=intl._t("Host")%>:</b>
-<input name="shost" type=text property="shost" readonly="readonly" />
+<input name="shost" type=text property="shost" readonly=readonly />
 </span><br>
 <span class="nowrap">
 <b><%=intl._t("Port")%>:</b>
-<input name="sport" type=text size=5 maxlength=5 property="sport" readonly="readonly" />
+<input name="sport" type=text size=5 maxlength=5 property="sport" readonly=readonly />
 </span>
 -->
 <% } else { %>
@@ -125,7 +125,7 @@
 </tr>
 <!-- SSL auth not fully implemented, not necessary?
 <tr>
-<td colspan="2">
+<td colspan=2>
 <b class=suboption>
 <!-- SSL auth not implemented
 <label for ="useproxyauthssl">
@@ -140,7 +140,7 @@
 </span><br>
 <span class="nowrap">
 <b><%=intl._t("Password")%>:</b>
-<input name="nofilter_spassword" type="password" value="<jsp:getProperty name="reseedHelper" property="nofilter_spassword" />" >
+<input name="nofilter_spassword" type=password value="<jsp:getProperty name="reseedHelper" property="nofilter_spassword" />" >
 </span>
 </div>
 </td>
@@ -149,7 +149,7 @@
 <% } // shouldShowHTTPSProxy %>
 <% if (reseedHelper.shouldShowHTTPProxy()) { %>
 <tr>
-<td colspan="2">
+<td colspan=2>
 <b class=suboption>
 <label for="enableproxy"><input type=checkbox class=optbox name="enable" id="enableproxy" value=true <jsp:getProperty name="reseedHelper" property="enable" /> >
 <%=intl._t("Use HTTP Proxy for HTTP Reseed Hosts")%></label>
@@ -171,14 +171,14 @@
 </span><br>
 <span class="nowrap">
 <b><%=intl._t("Password")%>:</b>
-<input name="nofilter_password" type="password" value="<jsp:getProperty name="reseedHelper" property="nofilter_password" />" >
+<input name="nofilter_password" type=password value="<jsp:getProperty name="reseedHelper" property="nofilter_password" />" >
 </span>
 </div>
 </td>
 </tr>
 <% } // shouldShowHTTPProxy %>
 <tr>
-<td class=optionsave colspan="2">
+<td class=optionsave colspan=2>
 <input type=submit name="action" class="reload" value="<%=intl._t("Reset URL list")%>" />
 <input type=submit class=cancel name="foo" value="<%=intl._t("Cancel")%>" />
 <input type=submit name="action" class=accept value="<%=intl._t("Save changes")%>" />

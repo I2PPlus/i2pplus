@@ -97,7 +97,7 @@
 %>
 <tr>
 <td class="tabletextarea">
-<textarea id="advancedsettings" rows="32" cols="60" name="nofilter_config" wrap="off" spellcheck="false" <% if (!advancedhelper.isAdvanced()) { %>readonly="readonly"<% } %>><%=advConfig%></textarea>
+<textarea id="advancedsettings" rows="32" cols=60 name="nofilter_config" wrap="off" spellcheck="false" <% if (!advancedhelper.isAdvanced()) { %>readonly=readonly<% } %>><%=advConfig%></textarea>
 </td>
 </tr>
 <%

@@ -33,7 +33,7 @@
 <h3><%=intl._t("Profile for peer")%>: <a href="/netdb?r=<%=peerB64%>" title="<%=intl._t("NetDb entry")%>"><%=peerB64%></a>&nbsp;&nbsp;
 <a class="configpeer" href="/configpeer?peer=<%=peerB64%>" title="<%=intl._t("Configure peer")%>" style="float: right;">
 <%=intl._t("Edit")%></a>&nbsp;&nbsp;
-<a class="viewprofile" href="/dumpprofile?peer=<%=peerB64%>" target="_blank" rel="noreferrer" title="<%=intl._t("View profile in text format")%>" style="float: right;">
+<a class="viewprofile" href="/dumpprofile?peer=<%=peerB64%>" target=_blank rel=noreferrer title="<%=intl._t("View profile in text format")%>" style="float: right;">
 <%=intl._t("View Raw Profile")%></a>&nbsp;&nbsp;
 <%
         net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();

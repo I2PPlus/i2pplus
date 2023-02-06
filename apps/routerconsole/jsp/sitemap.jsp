@@ -34,7 +34,7 @@
 <div id="searchbar">
 <jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />
 <jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
-<form action="/search.jsp" target="_blank" rel="noreferrer" method="POST">
+<form action="/search.jsp" target=_blank rel=noreferrer method="POST">
 <table>
 <tr><td><span><jsp:getProperty name="searchhelper" property="selector" /><input size="40" type=text class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /><button type=submit value="search" class="search"><%=intl._t("Search")%></button></span></td></tr>
 </table>
@@ -52,7 +52,7 @@
 </span>
 </a>
 
-<a href="/imagegen" target="_blank">
+<a href="/imagegen" target=_blank>
 <span class="sitemapLink extlink" title="<%=intl._t("Identification Image Generator")%>">
 <img src="/themes/console/images/imagegen.png">
 <span class="sitemapLabel"><%=intl._t("Imagegen")%></span>
@@ -64,7 +64,7 @@
 %>
 
 <% if (!embedApps) { %>
-<a href="/torrents" target="_blank" rel="noreferrer">
+<a href="/torrents" target=_blank rel=noreferrer>
 <span class="sitemapLink extlink" title="<%=intl._t("Create and download torrents")%>">
 <% } else { %>
 <a href="/torrents">
@@ -83,7 +83,7 @@
 </a>
 
 <% if (!embedApps) { %>
-<a href="/webmail" target="_blank" rel="noreferrer">
+<a href="/webmail" target=_blank rel=noreferrer>
 <span class="sitemapLink extlink" title="<%=intl._t("Webmail client")%>">
 <% } else { %>
 <a href="/webmail">
@@ -94,7 +94,7 @@
 </span>
 </a>
 
-<a href="http://127.0.0.1:7658/" target="_blank" rel="noreferrer">
+<a href="http://127.0.0.1:7658/" target=_blank rel=noreferrer>
 <span class="sitemapLink extlink" title="<%=intl._t("Local webserver for hosting content on the I2P network")%>">
 <img src="/themes/console/images/webserver.svg">
 <span class="sitemapLabel"><%=intl._t("Web Server")%></span>

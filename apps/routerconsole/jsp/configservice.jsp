@@ -76,7 +76,7 @@
 <h3 class="ptitle" id="servicedebug"><%=intl._t("Debugging")%></h3>
 <p class=infohelp>
 <% if (net.i2p.util.SystemVersion.hasWrapper()) { %>
-<%=intl._t("To assist in debugging I2P, it may be helpful to generate a thread dump which will be written to the {0}wrapper log{1}.", " <a href=\"/wrapper.log\" target=\"_blank\">", "</a>").replace("I2P", "I2P+")%>
+<%=intl._t("To assist in debugging I2P, it may be helpful to generate a thread dump which will be written to the {0}wrapper log{1}.", " <a href=\"/wrapper.log\" target=_blank>", "</a>").replace("I2P", "I2P+")%>
 <% } else { %>
 <%=intl._t("If I2P appears to be using too much ram, you can force the router to run the garbage collection routine to free up memory.").replace("I2P", "I2P+")%>
 <% } %>

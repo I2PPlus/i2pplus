@@ -58,7 +58,7 @@
 <h4><%=intl._t("File location")%>: <span class="storage">${subs.fileName}</span></h4>
 </div>
 <script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
-<div id="messages">${subs.messages}</div>
+<div id=messages>${subs.messages}</div>
 <form method="POST" action="subscriptions#navi">
 <div id="content">
 <input type=hidden name="serial" value="${subs.serial}" >

@@ -26,9 +26,9 @@
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("SSL Helper")%></title>
 <meta charset=utf-8>
-<link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
+<link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
+<link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
@@ -473,12 +473,12 @@
                 }
             }
 %>
-<div class="panel" id="messages">
+<div class=panel id=messages>
 <h2><%=intl._t("Status Messages")%></h2>
-<table id="statusMessagesTable">
+<table id=statusMessagesTable>
 <tr>
 <td id="tunnelMessages">
-<textarea id="statusMessages" rows="4" cols="60" readonly="readonly"><%=msgs%></textarea>
+<textarea id="statusMessages" rows=4 cols=60 readonly=readonly><%=msgs%></textarea>
 </td>
 </tr>
 </table>
@@ -486,19 +486,19 @@
 <%
         } // action != null
 %>
-<div class="panel" id="ssl">
+<div class=panel id="ssl">
 <h2><%=intl._t("SSL Wizard")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2>
 <form method="post" action="ssl" accept-charset=utf-8>
 <input type=hidden name="tunnel" value="<%=curTunnel%>" />
 <input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
 <input type=hidden name="type" value="<%=tunnelType%>" />
-<input type=submit class="default" name="action" value="Save changes" />
+<input type=submit class=default name="action" value="Save changes" />
 <table>
-<!--<tr><td colspan="4" class=infohelp><%=intl._t("Experts only!")%></td></tr>-->
+<!--<tr><td colspan=4 class=infohelp><%=intl._t("Experts only!")%></td></tr>-->
 <%
       if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) {
 %>
-<tr><td colspan="4"><b><%=intl._t("Hostname")%>:</b> <%=editBean.getSpoofedHost(curTunnel)%></td></tr>
+<tr><td colspan=4><b><%=intl._t("Hostname")%>:</b> <%=editBean.getSpoofedHost(curTunnel)%></td></tr>
 <%
        }
        if (b64 == null || b64.length() < 516) {
@@ -518,7 +518,7 @@
        } else {
            valid = true;
 %>
-<tr><td colspan="4"><b><%=intl._t("Base32")%>:</b> <%=b32%></td></tr>
+<tr><td colspan=4><b><%=intl._t("Base32")%>:</b> <%=b32%></td></tr>
 <%
     if (altb32 != null && altb32.length() > 0) {
 %>
@@ -527,10 +527,10 @@
     }  // altb32
     final String CHECK = "&nbsp;&nbsp;&#x2714;";
 %>
-<!--<tr><th colspan="4"><%=intl._t("Incoming I2P Port Routing")%></th></tr>-->
-<tr><th colspan="2"><%=intl._t("Virtual Host")%></th><!--<th><%=intl._t("Via SSL?")%></th>--><th><%=intl._t("Points at")%></th><th><%=intl._t("Preview")%></th></tr>
+<!--<tr><th colspan=4><%=intl._t("Incoming I2P Port Routing")%></th></tr>-->
+<tr><th colspan=2><%=intl._t("Virtual Host")%></th><!--<th><%=intl._t("Via SSL?")%></th>--><th><%=intl._t("Points at")%></th><th><%=intl._t("Preview")%></th></tr>
 <!-- TODO: check if tunnel is running, else display "No preview" text -->
-<tr><td colspan="2">http://<%=name%></td><!--<td><%=sslToTarget%></td>--><td><%=targetLink%></td><td><a class="control" title="<%=intl._t("Test HTTP server through I2P")%>" target="_blank" rel="noreferrer" href="http://<%=b32%>/"><%=intl._t("Preview")%></a></td></tr>
+<tr><td colspan=2>http://<%=name%></td><!--<td><%=sslToTarget%></td>--><td><%=targetLink%></td><td><a class=control title="<%=intl._t("Test HTTP server through I2P")%>" target=_blank rel=noreferrer href="http://<%=b32%>/"><%=intl._t("Preview")%></a></td></tr>
 <%
     // output vhost and targets
     for (Integer port : ports) {
@@ -552,32 +552,32 @@
             if (shouldLinkify) {
                 String url = "://" + tgt + "\">" + tgt + "</a>";
                 if (ssl)
-                    tgt = "<a target=\"_blank\" href=\"https" + url;
+                    tgt = "<a target=_blank href=\"https" + url;
                 else
-                    tgt = "<a target=\"_blank\" href=\"http" + url;
+                    tgt = "<a target=_blank href=\"http" + url;
             }
         } else {
             tgt = targetLink;
         }
         String portTgt = sslPort ? "https" : "http";
 %>
-<!--<tr><td><a target="_blank" rel="noreferrer" href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=port%></a></td><td><%=spoof%></td><td><%=ssl%></td><td><%=tgt%></td></tr>-->
+<!--<tr><td><a target=_blank rel=noreferrer href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=port%></a></td><td><%=spoof%></td><td><%=ssl%></td><td><%=tgt%></td></tr>-->
 <!--TODO: logic to determine if destination is available-->
-<tr><td colspan="2">https://<%=spoof%></td><!--<td><%=ssl%></td>--><td><%=tgt%></td><td>
-<a class="control" title="<%=intl._t("Test HTTPS server through I2P")%>" target="_blank" rel="noreferrer" href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=intl._t("Preview")%></a></td></tr>
+<tr><td colspan=2>https://<%=spoof%></td><!--<td><%=ssl%></td>--><td><%=tgt%></td><td>
+<a class=control title="<%=intl._t("Test HTTPS server through I2P")%>" target=_blank rel=noreferrer href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=intl._t("Preview")%></a></td></tr>
 <%
     }
 %>
 <%--
-<tr><th colspan="4"><%=intl._t("Add Port Routing")%></th></tr>
-<tr><td><input type=text size="6" maxlength=5 id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
-<td><input type=text size="20" id="websiteName" name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class="freetext" /></td>
+<tr><th colspan=4><%=intl._t("Add Port Routing")%></th></tr>
+<tr><td><input type=text size=6 maxlength=5 id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
+<td><input type=text size=20 id="websiteName" name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class="freetext" /></td>
 <td><input value="1" type=checkbox name="useSSL" class="optbox slider" /></td>
-<td><input type=text size="20" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" /> :
-<input type=text size="6" maxlength=5 id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
+<td><input type=text size=20 name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" /> :
+<input type=text size=6 maxlength=5 id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
 </td></tr>
 --%>
-<tr><th><%=intl._t("Server")%></th><th colspan="2"><%=intl._t("Configuration")%></th><th><!--<%=intl._t("SSL Activation")%>--></th></tr>
+<tr><th><%=intl._t("Server")%></th><th colspan=2><%=intl._t("Configuration")%></th><th><!--<%=intl._t("SSL Activation")%>--></th></tr>
 <%
     // Now try to find the Jetty server in clients.config
     File configDir = ctx.getConfigDir();
@@ -742,7 +742,7 @@
             // now start the output for this client
 
 %>
-<tr><td><%=DataHelper.escapeHTML(clName)%></td><td colspan="2">
+<tr><td><%=DataHelper.escapeHTML(clName)%></td><td colspan=2>
 <%
             for (String arg : argList) {
 %>
@@ -757,22 +757,22 @@
             if (!jettySSLFileExists) {
 %>
 </td><td></td></tr>
-<tr class="configerror"><td colspan="4">Cannot configure, Jetty SSL configuration file does not exist: <code><%=jettySSLFile.toString()%></code></td></tr>
+<tr class="configerror"><td colspan=4>Cannot configure, Jetty SSL configuration file does not exist: <code><%=jettySSLFile.toString()%></code></td></tr>
 <%
             } else if (!jettySSLFileValid) {
 %>
 </td><td></td></tr>
-<tr class="configerror"><td colspan="4">Cannot configure, Jetty SSL configuration file is too old or invalid: <code><%=jettySSLFile.toString()%></code></td></tr>
+<tr class="configerror"><td colspan=4>Cannot configure, Jetty SSL configuration file is too old or invalid: <code><%=jettySSLFile.toString()%></code></td></tr>
 <%
                 if (error.length() > 0) {
 %>
 </td></tr>
-<tr class="configerror"><td colspan="4"><%=error%></td></tr>
+<tr class="configerror"><td colspan=4><%=error%></td></tr>
 <%
                 }
             } else {
 %>
-<tr style="display: none;" hidden="hidden"><td colspan="4">
+<tr style=display:none hidden="hidden"><td colspan=4>
 <input type=hidden name="clientAppNumber" value="<%=i%>" />
 <input type=hidden name="clientConfigFile" value="<%=clientsConfig.getName()%>" />
 <input type=hidden name="isSSLEnabled" value="<%=isEnabled%>" />
@@ -793,26 +793,26 @@
 <%
                 if (isEnabled && !isPWDefault) {
 %>
-<tr><td class="buttons" colspan="4">
-<button id="controlSave" class="control" type=submit name="action" value="Disable"><%=intl._t("Disable SSL")%></button></td></tr>
+<tr><td class=buttons colspan=4>
+<button id="controlSave" class=control type=submit name="action" value="Disable"><%=intl._t("Disable SSL")%></button></td></tr>
 <%
                 } else if (!isPWDefault) {
 %>
-<tr><td class="buttons" colspan="4">
-<button id="controlSave" class="control" type=submit name="action" value="Enable"><%=intl._t("Enable SSL")%></button></td></tr>
+<tr><td class=buttons colspan=4>
+<button id="controlSave" class=control type=submit name="action" value="Enable"><%=intl._t("Enable SSL")%></button></td></tr>
 <%
                 } else {
 %>
-<tr><td class="buttons" colspan="4"><b><%=intl._t("New Certificate Password")%>:</b>
-<input type="password" name="nofilter_keyPassword" title="<%=intl._t("Password (required to encrypt the certificate)")%>" value="" class="freetext password" placeholder="<%=intl._t("required")%>" />
+<tr><td class=buttons colspan=4><b><%=intl._t("New Certificate Password")%>:</b>
+<input type=password name="nofilter_keyPassword" title="<%=intl._t("Password (required to encrypt the certificate)")%>" value="" class="freetext password" placeholder="<%=intl._t("required")%>" />
 <%
                     if (isEnabled) {
 %>
-<button id="controlSave" class="control" type=submit name="action" value="Generate"><%=intl._t("Generate new SSL certificate")%></button>
+<button id="controlSave" class=control type=submit name="action" value="Generate"><%=intl._t("Generate new SSL certificate")%></button>
 <%
                     } else {
 %>
-<button id="controlSave" class="control" type=submit name="action" value="Generate"><%=intl._t("Generate SSL certificate and enable")%></button>
+<button id="controlSave" class=control type=submit name="action" value="Generate"><%=intl._t("Generate SSL certificate and enable")%></button>
 <%
                     }
                 }
@@ -824,12 +824,12 @@
         }  // while (for each client or client file)
         if (!foundClientConfig) {
 %>
-<tr class="configerror"><td colspan="4"><%=intl._t("Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel", "<a href=\"/configclients\">", "</a>")%><br><%=intl._t("Support for non-Jetty servers will be added in a future release")%></td></tr>
+<tr class="configerror"><td colspan=4><%=intl._t("Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel", "<a href=\"/configclients\">", "</a>")%><br><%=intl._t("Support for non-Jetty servers will be added in a future release")%></td></tr>
 <%
         }
     } catch (IOException ioe) { ioe.printStackTrace(); }
 %>
-<tr><td colspan="4" class="buttons"><a class="control" href="list"><%=intl._t("Return to Tunnel Manager Index")%></a></td></tr>
+<tr><td colspan=4 class=buttons><a class=control href="list"><%=intl._t("Return to Tunnel Manager Index")%></a></td></tr>
 </table>
 </form>
 <%
@@ -838,7 +838,7 @@
     if (!valid && curTunnel >= 0) {
 %>
 <table>
-<tr><td class="buttons"><a class="control" href="edit?tunnel=<%=curTunnel%>"><%=intl._t("Return to Tunnel Editor")%></a></td></tr>
+<tr><td class=buttons><a class=control href="edit?tunnel=<%=curTunnel%>"><%=intl._t("Return to Tunnel Editor")%></a></td></tr>
 </table>
 <%
     }  // !valid
@@ -847,7 +847,7 @@
 <%
   } else {
 %>
-<div id="notReady"><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
+<div id=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   setInterval(function() {
     var xhr = new XMLHttpRequest();

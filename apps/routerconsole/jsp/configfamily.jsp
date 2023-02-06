@@ -37,10 +37,10 @@
 <form action="" method="POST" enctype="multipart/form-data" accept-charset=utf-8>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table class=configtable id="joinfamily">
-<tr><th colspan="2"><%=intl._t("Join Existing Router Family")%></th></tr>
-<tr><td colspan="2" class="infohelp joinfamily"><%=intl._t("Import the secret family key that you exported from an existing router in the family.")%></td></tr>
+<tr><th colspan=2><%=intl._t("Join Existing Router Family")%></th></tr>
+<tr><td colspan=2 class="infohelp joinfamily"><%=intl._t("Import the secret family key that you exported from an existing router in the family.")%></td></tr>
 <tr>
-<td colspan="2"><b class=suboption><%=intl._t("Select secret key file")%></b><br>
+<td colspan=2><b class=suboption><%=intl._t("Select secret key file")%></b><br>
 <div class="optionsingle">
 <table>
 <tr>
@@ -60,11 +60,11 @@
 <form action="" method="POST">
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table class=configtable id="newfamily">
-<tr><th colspan="2"><%=intl._t("Create New Router Family")%></th></tr>
-<tr><td colspan="2" class="infohelp newfamily"><%=intl._t("You may create a new router family here. Once you have created the family, you may export the family key file and share with other routers in your nominated family.")%>&nbsp;
+<tr><th colspan=2><%=intl._t("Create New Router Family")%></th></tr>
+<tr><td colspan=2 class="infohelp newfamily"><%=intl._t("You may create a new router family here. Once you have created the family, you may export the family key file and share with other routers in your nominated family.")%>&nbsp;
 <b><%=intl._t("Note: To avoid deanonymization, do not name your family with personally-attributable information e.g. your IRC nickname; your family name is associated with your router's IP address.")%></b></td></tr>
 <tr>
-<td colspan="2"><b class=suboption><%=intl._t("Enter new family name")%></b><br>
+<td colspan=2><b class=suboption><%=intl._t("Enter new family name")%></b><br>
 <div class="optionsingle"  id="createNewFamily">
 <table>
 <tr>
@@ -111,7 +111,7 @@
 <form action="" method="POST">
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table class=configtable id="leavefamily">
-<tr><th colspan="2"><%=intl._t("Leave Router Family")%></th></tr>
+<tr><th colspan=2><%=intl._t("Leave Router Family")%></th></tr>
 <tr><td><%=intl._t("No longer be a member of the family {0}.", '"' + family + '"')%></td>
 <td class=optionsave>
 <input type=submit name="action" class=delete value="<%=intl._t("Leave Family")%>" />

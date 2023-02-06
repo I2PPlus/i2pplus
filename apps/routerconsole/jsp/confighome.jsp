@@ -30,7 +30,7 @@
 <input type=hidden name="group" value="3">
 <jsp:getProperty name="homehelper" property="configSearch" />
 <div class=formaction id="homesearch">
-<input type=submit name="action" class="default" value="<%=intl._t("Add item")%>" >
+<input type=submit name="action" class=default value="<%=intl._t("Add item")%>" >
 <input type=submit name="action" class=delete value="<%=intl._t("Delete selected")%>" >
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
 <input type=submit name="action" class="reload" value="<%=intl._t("Restore defaults")%>" >
@@ -43,7 +43,7 @@
 <input type=hidden name="group" value="2">
 <jsp:getProperty name="homehelper" property="configServices" />
 <div class=formaction id="homeapps">
-<input type=submit name="action" class="default" value="<%=intl._t("Add item")%>" >
+<input type=submit name="action" class=default value="<%=intl._t("Add item")%>" >
 <input type=submit name="action" class=delete value="<%=intl._t("Delete selected")%>" >
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
 <input type=submit name="action" class="reload" value="<%=intl._t("Restore defaults")%>" >
@@ -56,7 +56,7 @@
 <input type=hidden name="group" value="1">
 <jsp:getProperty name="homehelper" property="configFavorites" />
 <div class=formaction id="homesites">
-<input type=submit name="action" class="default" value="<%=intl._t("Add item")%>" >
+<input type=submit name="action" class=default value="<%=intl._t("Add item")%>" >
 <input type=submit name="action" class=delete value="<%=intl._t("Delete selected")%>" >
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
 <input type=submit name="action" class="reload" value="<%=intl._t("Restore defaults")%>" >

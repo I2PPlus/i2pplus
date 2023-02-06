@@ -36,12 +36,12 @@
 </tr>
 <tr>
 <td align="right"><b><%=intl._t("Log record format")%>:</b></td>
-<td><input type=text name="logformat" size="20" value="<jsp:getProperty name="logginghelper" property="recordPattern" />" ></td>
+<td><input type=text name="logformat" size=20 value="<jsp:getProperty name="logginghelper" property="recordPattern" />" ></td>
 <td><%=intl._t("(use 'd' = date, 'c' = class, 't' = thread, 'p' = priority, 'm' = message)")%></td>
 </tr>
 <tr>
 <td align="right"><b><%=intl._t("Log date format")%>:</b></td>
-<td><input type=text name="logdateformat" size="20" value="<jsp:getProperty name="logginghelper" property="datePattern" />" ></td>
+<td><input type=text name="logdateformat" size=20 value="<jsp:getProperty name="logginghelper" property="datePattern" />" ></td>
 <td><%=intl._t("('MM' = month, 'dd' = day, 'HH' = hour, 'mm' = minute, 'ss' = second, 'SSS' = millisecond)")%></td>
 </tr>
 <tr>
@@ -67,14 +67,14 @@
 </tr>
 <tr>
 <td align="right"><b><%=intl._t("Log level overrides")%>:</b></td>
-<td colspan="2"><jsp:getProperty name="logginghelper" property="logLevelTable" /></td>
+<td colspan=2><jsp:getProperty name="logginghelper" property="logLevelTable" /></td>
 </tr>
 <tr>
 <td align="right"><b><%=intl._t("New override")%>:</b></td>
-<td colspan="2"><jsp:getProperty name="logginghelper" property="newClassBox" /></td>
+<td colspan=2><jsp:getProperty name="logginghelper" property="newClassBox" /></td>
 </tr>
 <tr>
-<td class=optionsave colspan="3">
+<td class=optionsave colspan=3>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
 <input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>" >
 </td>
