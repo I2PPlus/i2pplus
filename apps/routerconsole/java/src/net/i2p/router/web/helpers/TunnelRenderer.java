@@ -564,7 +564,7 @@ class TunnelRenderer {
             }
             out.write("</td><td></td></tr></tfoot>\n</table>\n");
         } else {
-                out.write("<p class=infohelp>" + _t("No local or transit tunnels currently active."));
+            out.write("<p class=infohelp>" + _t("No local or transit tunnels currently active."));
         }
     }
 
@@ -603,6 +603,7 @@ class TunnelRenderer {
 //             return (l.getProcessedMessagesCount() - r.getProcessedMessagesCount());
              long le = l.getExpiration();
              long re = r.getExpiration();
+             }
              if (le < 0)
                  le = 0;
              if (re < 0)
