@@ -173,9 +173,9 @@ public class PeerProfile {
      */
     public boolean getIsActive() {
 //        return getIsActive(5*60*1000, _context.clock().now());
-        return getIsActive(1*60*1000, _context.clock().now());
+        return getIsActive(60*1000, _context.clock().now());
     }
-    
+
     /**
      * Is this peer active at the moment (sending/receiving messages within the last
      * 5 minutes)
@@ -184,7 +184,7 @@ public class PeerProfile {
      */
     public boolean getIsActive(long now) {
 //        return getIsActive(5*60*1000, now);
-        return getIsActive(1*60*1000, now);
+        return getIsActive(60*1000, now);
     }
 
     /** @since 0.8.11 */
