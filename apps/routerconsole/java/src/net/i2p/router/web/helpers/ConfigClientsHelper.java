@@ -290,7 +290,7 @@ public class ConfigClientsHelper extends HelperBase {
                 if (appProps.isEmpty())
                     continue;
                 StringBuilder desc = new StringBuilder(256);
-                desc.append("\n<table border=\"0\">\n")
+                desc.append("\n<table border=0>\n")
                     .append("<tr><td class=right><b>").append(_t("Version")).append("</b></td><td class=left>").append(stripHTML(appProps, "version"));
                 String s = stripHTML(appProps, "date");
                 if (s != null) {

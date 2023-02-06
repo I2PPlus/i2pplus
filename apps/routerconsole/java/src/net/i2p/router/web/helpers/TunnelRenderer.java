@@ -330,7 +330,7 @@ class TunnelRenderer {
             if (enableReverseLookups()) {
                 out.write("<th id=domain data-sortable>" + _t("Domain") + "</th>");
             }
-            out.write("<th class=tcount data-sortable data-sort-method=number>" + _t("Tunnels") + "</th>" +
+            out.write("<th class=tcount data-sortable data-sort-method=number data-sort-default>" + _t("Tunnels") + "</th>" +
                       "<th id=data data-sortable data-sort-method=dotsep>" + _t("Data") + "</th>" +
                       //"<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
                       "<th id=edit data-sort-method=none>" + _t("Edit") + "</th>" +
@@ -632,14 +632,13 @@ class TunnelRenderer {
         }
     }
 
+    /** @since 0.9.35 */
     private static class TunnelComparatorBySpeed implements Comparator<HopConfig>, Serializable {
          public int compare(HopConfig l, HopConfig r) {
              return (r.getProcessedMessagesCount() - l.getProcessedMessagesCount());
         }
     }
 
-
-    /** @since 0.9.35 */
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {
          public int compare(TunnelInfo l, TunnelInfo r) {
              long le = l.getExpiration();

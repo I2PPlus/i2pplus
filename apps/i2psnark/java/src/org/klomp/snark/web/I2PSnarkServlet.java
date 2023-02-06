@@ -403,15 +403,15 @@ public class I2PSnarkServlet extends BasicServlet {
         if (noCollapse || !collapsePanels) {
             out.write(HEADER_A + _themePath + HEADER_C + "\n");
         }
-        out.write("</head>\n" + "<body style=display:none;pointer-events:none id=\"snarkxhr\" class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
-        out.write("<iframe name=\"processForm\" id=\"processForm\" hidden></iframe>\n");
+        out.write("</head>\n" + "<body style=display:none;pointer-events:none id=snarkxhr class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
+        out.write("<iframe name=\"processForm\" id=processForm hidden></iframe>\n");
         List<Tracker> sortedTrackers = null;
 /*
         long now = System.currentTimeMillis();
         String time = String.valueOf(now);
 */
         if (isConfigure) {
-            out.write("<div id=\"navbar\">\n<a href=\"" + _contextPath + "/\" title=\"");
+            out.write("<div id=navbar>\n<a href=\"" + _contextPath + "/\" title=\"");
             out.write(_t("Torrents"));
             out.write("\" class=\"snarkNav nav_main\">");
             if (_contextName.equals(DEFAULT_NAME))
@@ -420,7 +420,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write(_contextName);
             out.write("</a>\n");
         } else {
-            out.write("<div id=\"navbar\">\n<a href=\"" + _contextPath + '/' + peerString + "\" title=\"");
+            out.write("<div id=navbar>\n<a href=\"" + _contextPath + '/' + peerString + "\" title=\"");
             out.write(_t("Refresh page"));
             out.write("\" class=\"snarkNav nav_main\">");
             if (_contextName.equals(DEFAULT_NAME))
@@ -463,13 +463,13 @@ public class I2PSnarkServlet extends BasicServlet {
         String newURL = req.getParameter("newURL");
         if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET"))
             _manager.addMessage(_t("Click \"Add torrent\" button to fetch torrent"));
-        out.write("<div class=\"page\">\n<div id=\"mainsection\" class=\"mainsection\">\n");
+        out.write("<div class=page>\n<div id=mainsection class=mainsection>\n");
 
         writeMessages(out, isConfigure, peerString);
 
         if (isConfigure) {
             // end of mainsection div
-            out.write("<div class=\"logshim\"></div>\n</div>\n");
+            out.write("<div class=logshim></div>\n</div>\n");
             writeConfigForm(out, req);
             writeTrackerForm(out, req);
 //            out.write("<script charset=utf-8 src=\".resources/js/previewTheme.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
@@ -481,7 +481,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean pageOne = writeTorrents(out, req, canWrite);
             // end of mainsection div
             if (pageOne) {
-                out.write("</div>\n<div id=\"lowersection\">\n");
+                out.write("</div>\n<div id=lowersection>\n");
                 if (canWrite) {
                     writeAddForm(out, req);
                     writeSeedForm(out, req, sortedTrackers);
@@ -489,7 +489,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 writeConfigLink(out);
                 // end of lowersection div
             } else {
-                out.write("</div>\n<div id=\"lowersection\">\n");
+                out.write("</div>\n<div id=lowersection>\n");
                 boolean enableAddCreate = _manager.util().enableAddCreate();
                 if (canWrite && enableAddCreate) {
                     writeAddForm(out, req);
@@ -543,13 +543,13 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
-            out.write("<div id=\"screenlog\" class=\"");
+            out.write("<div id=screenlog class=\"");
             if (isConfigure)
                 out.write(" configpage");
             if (!_manager.util().connected())
                 out.write(" init");
              out.write("\" tabindex=\"0\">\n" +
-                      "<a id=\"closelog\" href=\"" + _contextPath + '/');
+                      "<a id=closelog href=\"" + _contextPath + '/');
             if (isConfigure)
                 out.write("configure");
             if (peerString.length() > 0)
@@ -621,9 +621,9 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showStatusFilter = _manager.util().showStatusFilter();
         if (isForm) {
             if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected())
-              out.write("<form id=\"torrentlist\" class=\"filterbarActive\" action=\"_post\" method=\"POST\" target=\"processForm\">\n");
+              out.write("<form id=torrentlist class=filterbarActive action=\"_post\" method=POST target=processForm>\n");
             else
-              out.write("<form id=\"torrentlist\" action=\"_post\" method=\"POST\" target=\"processForm\">\n");
+              out.write("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
             if (showStatusFilter) {
                 // selective display of torrents based on status
                 // this should probably be done via a query string, but for now prototyping in js
@@ -685,11 +685,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // move pagenav here so we can align it nicely without resorting to hacks
         if (isForm && total > 0 && (start > 0 || total > pageSize)) {
-            out.write("<div class=\"pagenavcontrols\" id=\"pagenavtop\">");
+            out.write("<div class=pagenavcontrols id=pagenavtop>");
             writePageNav(out, req, start, pageSize, total, noThinsp);
             out.write("</div>");
         } else if (isForm && showStatusFilter && total > pageSize) {
-            out.write("<div class=\"pagenavcontrols\" id=\"pagenavtop\" hidden>");
+            out.write("<div class=pagenavcontrols id=pagenavtop hidden>");
             writePageNav(out, req, start, pageSize, total, noThinsp);
             out.write("</div>");
         }
@@ -846,7 +846,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</a></span>");
         }
         out.write("</th>\n");
-        out.write("<th class=\"RateDown\" align=right>");
+        out.write("<th class=RateDown align=right>");
         // FIXME only show icon when total down rate > 0
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isDownloading = false;
@@ -914,7 +914,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showSort)
             out.write("</a></span>");
         out.write("</th>\n");
-        out.write("<th class=\"RateUp\" align=right>");
+        out.write("<th class=RateUp align=right>");
         // FIXME only show icon when total up rate > 0 or no choked peers
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isUploading = false;
@@ -981,7 +981,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         if (total == 0) {
-            out.write("<tr id=\"noload\" class=\"noneLoaded\"><td colspan=11><i>");
+            out.write("<tr id=noload class=noneLoaded><td colspan=11><i>");
             synchronized(this) {
                 File dd = _resourceBase;
                 if (!dd.exists() && !dd.mkdirs()) {
@@ -1002,18 +1002,18 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting() || !_manager.util().connected())
                 out.write("\" class=\"initializing");
-            out.write("\">\n<tr>\n<th id=\"torrentTotals\" align=left colspan=11></th></tr></tfoot>");
+            out.write("\">\n<tr>\n<th id=torrentTotals align=left colspan=11></th></tr></tfoot>");
         } else /** if (snarks.size() > 1) */ {
 
             // Add a pagenav to bottom of table if we have 50+ torrents per page
             // TODO: disable on pages where torrents is < 50 e.g. last page
             if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
-                out.write("<tr id=\"pagenavbottom\"><td colspan=11><div class=\"pagenavcontrols\">");
+                out.write("<tr id=pagenavbottom><td colspan=11><div class=pagenavcontrols>");
                 writePageNav(out, req, start, pageSize, total, noThinsp);
                 out.write("</div></td></tr>\n</tbody>\n");
             }
-            out.write("<tfoot id=\"snarkFoot\">\n<tr class=volatile>\n<th id=\"torrentTotals\" align=left colspan=5>");
-            out.write("<span id=\"totals\"><span class=\"canhide\">");
+            out.write("<tfoot id=snarkFoot>\n<tr class=volatile>\n<th id=torrentTotals align=left colspan=5>");
+            out.write("<span id=totals><span class=canhide>");
             out.write(_t("Totals"));
             out.write(":&nbsp;</span>");
             out.write(ngettext("1 torrent", "{0} torrents", total));
@@ -1038,7 +1038,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String ibtunnels = _manager.util().getI2CPOptions().get("inbound.quantity");
             String obtunnels = _manager.util().getI2CPOptions().get("outbound.quantity");
             if (_manager.util().connected()) {
-                out.write("<span class=\"canhide\" title=\"" + _t("Configured maximum (actual usage may be less)") +
+                out.write("<span class=canhide title=\"" + _t("Configured maximum (actual usage may be less)") +
                           "\"> &bullet; " + _t("Tunnels") + ": ");
                 out.write(ibtunnels);
                 out.write(" in / ");
@@ -1101,7 +1101,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(formatSize(stats[0]).replaceAll("iB", ""));
                 }
                 out.write("</th>\n");
-                out.write("<th class=\"RateDown\" title=\"");
+                out.write("<th class=RateDown title=\"");
                 out.write(_t("Total download speed") + "\">");
                 if (stats[2] > 0) {
                     out.write(formatSize(stats[2]).replaceAll("iB", "") + "/s");
@@ -1113,7 +1113,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(formatSize(stats[1]).replaceAll("iB", ""));
                 }
                 out.write("</th>\n");
-                out.write("<th class=\"RateUp\" align=right title=\"");
+                out.write("<th class=RateUp align=right title=\"");
                 out.write(_t("Total upload speed") + "\">");
                 boolean isUploading = false;
                 int end = Math.min(start + pageSize, snarks.size());
@@ -1129,11 +1129,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</th>\n");
                 out.write("<th class=torrentAction>");
                 if (dht != null && (!"2".equals(peerParam))) {
-                    out.write("<a id=\"debugMode\" href=\"?p=2\" title=\"");
+                    out.write("<a id=debugMode href=\"?p=2\" title=\"");
                     out.write(_t("Enable Debug Mode") + "\">");
                     out.write(_t("Debug Mode") + "</a>");
                 } else if (dht != null) {
-                    out.write("<a id=\"debugMode\" href=\"?p\" title=\"");
+                    out.write("<a id=debugMode href=\"?p\" title=\"");
                     out.write(_t("Disable Debug Mode") + "\">");
                     out.write(_t("Normal Mode") + "</a>");
                 }
@@ -1144,7 +1144,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("\n</tr>\n");
 
                 if (showDebug) {
-                    out.write("<tr id=\"dhtDebug\">\n");
+                    out.write("<tr id=dhtDebug>\n");
                     out.write("<th colspan=12>\n<span class=volatile>");
                     if (dht != null) {
                         out.write(dht.renderStatusHTML());
@@ -2946,7 +2946,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<div id=\"add\" class=\"snarkNewTorrent\">\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form id=\"addForm\" action=\"_post\" method=\"POST\" target=\"processForm\">\n");
+        out.write("<form id=\"addForm\" action=\"_post\" method=POST target=\"processForm\">\n");
         out.write("<div class=\"sectionPanel\" id=\"addSection\">\n");
         writeHiddenInputs(out, req, "Add");
         out.write("<input hidden class=\"toggle_input\" id=\"toggle_addtorrent\" type=checkbox");
@@ -2983,7 +2983,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
         out.write("<div class=\"sectionPanel\" id=\"createSection\">\n<div>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form id=\"createForm\" action=\"_post\" method=\"POST\" target=\"processForm\">\n");
+        out.write("<form id=\"createForm\" action=\"_post\" method=POST target=\"processForm\">\n");
         writeHiddenInputs(out, req, "Create");
         out.write("<input hidden class=\"toggle_input\" id=\"toggle_createtorrent\" type=checkbox>" +
                   "<label id=\"tab_newtorrent\" class=\"toggleview\" for=\"toggle_createtorrent\"><span class=\"tab_label\">");
@@ -3094,7 +3094,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
 // configuration
 
-        out.write("<form action=\"" + _contextPath + "/configure#navbar\" method=\"POST\">\n" +
+        out.write("<form action=\"" + _contextPath + "/configure#navbar\" method=POST>\n" +
                   "<div class=\"configPanel lang_" + lang + "\"><div class=snarkConfig>\n");
         writeHiddenInputs(out, req, "Save");
         out.write("<span class=\"configTitle\">");
@@ -3481,7 +3481,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /** @since 0.9 */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<form action=\"" + _contextPath + "/configure#navbar\" method=\"POST\">\n" +
+        buf.append("<form action=\"" + _contextPath + "/configure#navbar\" method=POST>\n" +
                    "<div class=\"configPanel\" id=\"trackers\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(buf, req, "Save2");
         buf.append("<span class=\"configTitle\">");
@@ -3730,7 +3730,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=stylesheet type=text/css>";
     private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=stylesheet type=text/css>";
     private static final String HEADER_Z = "override.css\" rel=stylesheet type=text/css>";
-    private static final String TABLE_HEADER = "<table border=0 id=\"torrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
+    private static final String TABLE_HEADER = "<table border=0 id=\"torrents\" width=100% >\n" + "<thead id=\"snarkHead\">\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
                                          "<script charset=utf-8 type=text/javascript src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
@@ -3891,7 +3891,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</a>\n</div>\n");
 
         if (parent)  // always true
-            buf.append("<div class=\"page\" id=\"dirlist\">\n");
+            buf.append("<div class=page id=\"dirlist\">\n");
         // for stop/start/check
 /*
         final boolean er = isTopLevel && snark != null && _manager.util().ratingsEnabled();
@@ -3902,7 +3902,7 @@ public class I2PSnarkServlet extends BasicServlet {
         final boolean esc = ec && _manager.getSavedCommentsEnabled(snark); // per-torrent setting
         final boolean includeForm = showStopStart || showPriority || er || ec;
         if (includeForm) {
-            buf.append("<form action=\"").append(base).append("\" method=\"POST\">\n");
+            buf.append("<form action=\"").append(base).append("\" method=POST>\n");
             buf.append("<input type=hidden name=\"nonce\" value=\"").append(_nonce).append("\" >\n");
             if (sortParam != null) {
                 buf.append("<input type=hidden name=\"sort\" value=\"")

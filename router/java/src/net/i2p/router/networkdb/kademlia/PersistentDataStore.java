@@ -345,7 +345,6 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing unreachable RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                         dbFile.delete();
-
                     } else if (ri != null && isOld) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (older than " + MIN_VERSION + ")");

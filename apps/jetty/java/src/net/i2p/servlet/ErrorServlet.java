@@ -146,7 +146,7 @@ public class ErrorServlet extends HttpServlet {
         out.print("<div class=\"logo\">");
         out.print("<a href=\"/\" title=\"" + _t("Router Console") + "\"><img src=\"" + themePath +
                   "/images/i2plogo.png\" alt=\"" + _t("I2P Router Console").replace("I2P", "I2P+") +
-                  "\" border=\"0\"></a>\n<hr>\n");
+                  "\" border=0></a>\n<hr>\n");
         out.print("<a href=\"/config\">" + _t("Configuration") + "</a> <a href=\"/help\">" + _t("Help") + "</a>");
         out.print("</div>\n");
         out.print("<div class=\"warning\" id=\"warning\">\n");

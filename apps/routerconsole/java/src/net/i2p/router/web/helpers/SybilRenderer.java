@@ -266,7 +266,7 @@ public class SybilRenderer {
             out.write(_t("No stored analysis"));
             out.write("</b></i></div>");
         } else {
-            buf.append("\n<form action=\"netdb\" method=\"POST\">\n" +
+            buf.append("\n<form action=\"netdb\" method=POST>\n" +
                        "<input type=hidden name=\"f\" value=\"3\">\n" +
                        "<input type=hidden name=\"m\" value=\"12\">\n" +
                        "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n<b>")
@@ -293,7 +293,7 @@ public class SybilRenderer {
      *  @since 0.9.38
      */
     private static void renderRunForm(Writer out, StringBuilder buf, String nonce) throws IOException {
-        buf.append("<form class=\"sybilScan\" action=\"netdb\" method=\"POST\">\n" +
+        buf.append("<form class=\"sybilScan\" action=\"netdb\" method=POST>\n" +
                    "<input type=hidden name=\"f\" value=\"3\">\n" +
                    "<input type=hidden name=\"m\" value=\"13\">\n" +
                    "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
@@ -301,7 +301,7 @@ public class SybilRenderer {
            .append(_x("Run analysis on Floodfills only"))
            .append(":</b></td><td><input type=submit name=\"action\" class=\"go\" value=\"Start Scan\" /> "+
                    "</td></tr>\n</table>\n</form>\n<hr>\n");
-        buf.append("<form class=\"sybilScan\" action=\"netdb\" method=\"POST\">\n" +
+        buf.append("<form class=\"sybilScan\" action=\"netdb\" method=POST>\n" +
                    "<input type=hidden name=\"f\" value=\"3\">\n" +
                    "<input type=hidden name=\"m\" value=\"16\">\n" +
                    "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
@@ -317,7 +317,7 @@ public class SybilRenderer {
      */
     private void renderBackgroundForm(Writer out, StringBuilder buf, String nonce) throws IOException {
         long freq = _context.getProperty(Analysis.PROP_FREQUENCY, Analysis.DEFAULT_FREQUENCY);
-        buf.append("<form action=\"netdb\" method=\"POST\">\n" +
+        buf.append("<form action=\"netdb\" method=POST>\n" +
                    "<input type=hidden name=\"f\" value=\"3\">\n" +
                    "<input type=hidden name=\"m\" value=\"15\">\n" +
                    "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n<p class=\"sybilinfo\"><b>")

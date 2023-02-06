@@ -159,7 +159,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("<p><b>Version:</b> " + I2PControlVersion.VERSION + "<br>");
         out.println("<b>Status:</b> Running</p>");
        if ("/password".equals(httpServletRequest.getServletPath())) {
-            out.println("<hr>\n<form method=\"POST\" action=\"password\">\n");
+            out.println("<hr>\n<form method=POST action=\"password\">\n");
             if (_secMan.isDefaultPasswordValid()) {
                 out.println("<p>The current API password is the default, \"" + _secMan.DEFAULT_AUTH_PASSWORD + "\". You should change it.</p>");
             } else {

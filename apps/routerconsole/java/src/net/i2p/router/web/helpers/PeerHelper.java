@@ -323,7 +323,7 @@ public class PeerHelper extends HelperBase {
            .append(nt.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>")
            .append("<label class=script hidden><input name=autorefresh id=autorefresh type=checkbox class=\"optbox slider\" checked=checked>")
            .append(_t("Auto-refresh")).append("</label></h3>\n")
-           .append("<div class=widescroll>\n<table id=ntcpconnections>\n");
+           .append("<div class=widescroll>\n<table id=ntcpconnections class=cells>\n");
         if (peers.size() != 0) {
             buf.append("<tr><th class=peer>").append(_t("Peer")).append("</th>" +
                        "<th class=direction title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir")).append("</th>" +
@@ -347,7 +347,7 @@ public class PeerHelper extends HelperBase {
                 inactive += 1;
                 continue;
             }
-            buf.append("<tr class=lazy><td class=\"cells peer\" nowrap>");
+            buf.append("<tr class=lazy><td class=peer nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(con.getRemotePeer().calculateHash(), true));
 /*
             buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(con.getRemoteIP()))
@@ -356,22 +356,22 @@ public class PeerHelper extends HelperBase {
                .append(_t("on")).append(" gwhois.org").append("\">")
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
 */
-            buf.append("</td><td class=\"cells direction\">");
+            buf.append("</td><td class=direction>");
             if (con.isInbound())
                 buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"")
                    .append(_t("Inbound")).append("\"/></span>");
             else
                 buf.append("<span class=outbound><img src=/themes/console/images/outbound.svg alt=Outbound title=\"")
                    .append(_t("Outbound")).append("\"/></span>");
-            buf.append("</td><td class=\"cells ipv6\">");
+            buf.append("</td><td class=ipv6>");
             if (con.isIPv6())
                 buf.append("<span class=isIPv6>&#x2713;</span>");
             else
                 buf.append("");
-            buf.append("</td><td class=\"cells idle\"><span class=right>");
+            buf.append("</td><td class=idle><span class=right>");
             buf.append(DataHelper.formatDuration2(con.getTimeSinceReceive(now)));
             buf.append("</span>").append(THINSP).append("<span class=left>").append(DataHelper.formatDuration2(con.getTimeSinceSend(now)));
-            buf.append("</span></td><td class=\"cells inout\">");
+            buf.append("</span></td><td class=inout>");
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
             if (con.getRecvRate() >= 0.01 || con.getSendRate() >= 0.01) {
@@ -394,22 +394,22 @@ public class PeerHelper extends HelperBase {
             buf.append("</span>");
             }
             //buf.append(" K/s");
-            buf.append("</td><td class=\"cells uptime\"><span>").append(DataHelper.formatDuration2(con.getUptime())).append("</span>");
+            buf.append("</td><td class=uptime><span>").append(DataHelper.formatDuration2(con.getUptime())).append("</span>");
             totalUptime += con.getUptime();
             offsetTotal = offsetTotal + con.getClockSkew();
-            buf.append("</td><td class=\"cells skew\">");
+            buf.append("</td><td class=skew>");
             if (con.getClockSkew() > 0) {
                 buf.append("<span>").append(DataHelper.formatDuration2(1000 * con.getClockSkew())).append("</span>");
             }
             buf.append("</td>");
-            buf.append("<td class=\"cells tx\"><span>").append(con.getMessagesSent());
+            buf.append("<td class=tx><span>").append(con.getMessagesSent());
             totalSend += con.getMessagesSent();
-            buf.append("</span></td><td class=\"cells rx\"><span>").append(con.getMessagesReceived()).append("</span></td>");
+            buf.append("</span></td><td class=rx><span>").append(con.getMessagesReceived()).append("</span></td>");
             totalRecv += con.getMessagesReceived();
             long outQueue = con.getOutboundQueueSize();
-            buf.append("<td class=\"cells queue\">");
+            buf.append("<td class=queue>");
             if (outQueue > 0) {
-                buf.append("<span>").append(outQueue).append("</span>");
+                buf.append("<span class=qmsg title=\"Queued messages: ").append(outQueue).append("\">").append(outQueue).append("</span>");
             }
             if (con.isBacklogged())
                 buf.append("&nbsp;<span class=backlogged title=\"").append(_t("Connection is backlogged")).append("\">!!</span>");
@@ -517,7 +517,7 @@ public class PeerHelper extends HelperBase {
         if (isAdvanced()) {
             buf.append("class=\"advancedview\"");
         }
-        buf.append(">\n");
+        buf.append(" class=cells>\n");
         if(peers.size() != 0) {
             buf.append("<tr class=smallhead><th class=peer nowrap>").append(_t("Peer")).append("<br>");
             if (sortFlags != FLAG_ALPHA)
@@ -586,7 +586,7 @@ public class PeerHelper extends HelperBase {
             if (now-peer.getLastReceiveTime() > 60*1000) {
                 continue; // don't include old peers
             }
-            buf.append("<tr class=lazy><td class=\"cells peer\" nowrap>");
+            buf.append("<tr class=lazy><td class=peer nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), true));
 /*
             buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(peer.getRemoteIP()))
@@ -595,7 +595,7 @@ public class PeerHelper extends HelperBase {
                .append(' ').append(_t("on")).append(" gwhois.org").append("\">")
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
 */
-            buf.append("</td><td class=\"cells direction\" nowrap>");
+            buf.append("</td><td class=direction nowrap>");
             if (peer.isInbound())
                 buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"").append(_t("Inbound"));
             else
@@ -629,17 +629,17 @@ public class PeerHelper extends HelperBase {
                 }
             }
             buf.append("</td>");
-            buf.append("<td class=\"cells ipv6\">");
+            buf.append("<td class=ipv6>");
             if (peer.isIPv6())
                 buf.append("&#x2713;");
             else
                 buf.append("");
             buf.append("</td>");
-            buf.append("<td class=\"cells ssuversion\">").append(peer.getVersion()).append("</td>");
+            buf.append("<td class=ssuversion>").append(peer.getVersion()).append("</td>");
 
             long idleIn = Math.max(now-peer.getLastReceiveTime(), 0);
             long idleOut = Math.max(now-peer.getLastSendTime(), 0);
-            buf.append("<td class=\"cells idle\"><span class=right>");
+            buf.append("<td class=idle><span class=right>");
             buf.append(DataHelper.formatDuration2(idleIn));
             buf.append("</span>").append(THINSP);
             buf.append("<span class=left>").append(DataHelper.formatDuration2(idleOut));
@@ -647,7 +647,7 @@ public class PeerHelper extends HelperBase {
 
             int recvBps = peer.getReceiveBps(now);
             int sendBps = peer.getSendBps(now);
-            buf.append("<td class=\"cells inout\" nowrap>");
+            buf.append("<td class=inout nowrap>");
             String rx = formatKBps(recvBps).replace(".00", "");
             String tx = formatKBps(sendBps).replace(".00", "");
             if (recvBps > 0 || sendBps > 0) {
@@ -658,11 +658,11 @@ public class PeerHelper extends HelperBase {
             buf.append("</td>");
 
             long uptime = now - peer.getKeyEstablishedTime();
-            buf.append("<td class=\"cells uptime\">");
+            buf.append("<td class=uptime>");
             buf.append(DataHelper.formatDuration2(uptime));
             buf.append("</td>");
 
-            buf.append("<td class=\"cells skew\">");
+            buf.append("<td class=skew>");
             long skew = peer.getClockSkew();
             buf.append(DataHelper.formatDuration2(skew));
             buf.append("</td>");
@@ -670,60 +670,60 @@ public class PeerHelper extends HelperBase {
             offsetTotal = offsetTotal + skew;
             long sent = peer.getMessagesSent();
             long recv = peer.getMessagesReceived();
-            buf.append("<td class=\"cells tx\"><span class=right>");
+            buf.append("<td class=tx><span class=right>");
             buf.append(sent);
             buf.append("</span></td>");
 
-            buf.append("<td class=\"cells rx\"><span class=right>");
+            buf.append("<td class=rx><span class=right>");
             buf.append(recv);
             buf.append("</span></td>");
             long resent = peer.getPacketsRetransmitted();
             long dupRecv = peer.getPacketsReceivedDuplicate();
-            buf.append("<td class=\"cells duptx\">");
+            buf.append("<td class=duptx>");
             if (resent > 0) {
                 buf.append("<span class=right>").append(resent).append("</span>"); // + "/" + peer.getPacketsPeriodRetransmitted() + "/" + sent);
             }
             buf.append("</td>");
 
-            buf.append("<td class=\"cells duprx\">");
+            buf.append("<td class=duprx>");
             if (dupRecv > 0) {
                 buf.append("<span class=right>").append(dupRecv).append("</span>"); //formatPct(recvDupPct));
             }
             buf.append("</td>");
             if (!isAdvanced()) {
-                buf.append("<td class=\"cells spacer\">&nbsp;</td>");
+                buf.append("<td class=spacer>&nbsp;</td>");
             }
 
             long sendWindow = peer.getSendWindowBytes();
             int rtt = peer.getRTT();
             int rto = peer.getRTO();
             if (isAdvanced()) {
-                buf.append("<td class=\"cells cwnd\"><span class=right>");
+                buf.append("<td class=cwnd><span class=right>");
                 buf.append(sendWindow/1024);
                 buf.append("K");
                 buf.append("</span>").append(THINSP).append("<span class=right>").append(peer.getConcurrentSends());
                 buf.append("</span>").append(THINSP).append("<span class=right>").append(peer.getConcurrentSendWindow());
                 buf.append("</span>").append(THINSP).append("<span class=left>").append(peer.getConsecutiveSendRejections()).append("</span>");
                 if (peer.isBacklogged())
-                    buf.append("<br><span class=\"peerBacklogged\">").append(_t("backlogged")).append("</span>");
+                    buf.append("<br><span class=peerBacklogged>").append(_t("backlogged")).append("</span>");
                 buf.append("</td>");
 
-                buf.append("<td class=\"cells sst\">");
+                buf.append("<td class=sst>");
                 buf.append(peer.getSlowStartThreshold()/1024);
                 buf.append("K</td>");
 
-                buf.append("<td class=\"cells rtt\">");
+                buf.append("<td class=rtt>");
                 if (rtt > 0)
                     buf.append(DataHelper.formatDuration2(rtt));
                 else
                     buf.append("n/a");
                 buf.append("</td>");
 
-                buf.append("<td class=\"cells rto\">");
+                buf.append("<td class=rto>");
                 buf.append(DataHelper.formatDuration2(rto));
                 buf.append("</td>");
 
-                buf.append("<td class=\"cells mtu\"><span class=right>");
+                buf.append("<td class=mtu><span class=right>");
                 buf.append(peer.getMTU()).append("</span>").append(THINSP);
                 buf.append("<span class=left>").append(peer.getReceiveMTU());
                 buf.append("</span></td>");

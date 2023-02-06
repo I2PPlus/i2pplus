@@ -438,19 +438,19 @@ public class WebMail extends HttpServlet
         buf.append(label).append("&nbsp;&nbsp;");
         // UP is reverse sort (descending). DOWN is normal sort (ascending).
         if (name.equals(currentName) && currentOrder == SortOrder.UP) {
-            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/up.svg\" border=\"0\" alt=\"^\">\n");
+            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/up.svg\" border=0 alt=\"^\">\n");
         } else {
             buf.append("<a class=\"sort\" href=\"").append(myself).append("?page=").append(page).append("&amp;sort=-")
                            .append(name).append("&amp;folder=").append(folder).append("\">");
-            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("../../images/up.svg\" border=\"0\" alt=\"^\">");
+            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("../../images/up.svg\" border=0 alt=\"^\">");
             buf.append("</a>\n");
         }
         if (name.equals(currentName) && currentOrder == SortOrder.DOWN) {
-            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/down.svg\" border=\"0\" alt=\"v\">");
+            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/down.svg\" border=0 alt=\"v\">");
         } else {
             buf.append("<a class=\"sort\" href=\"").append(myself).append("?page=").append(page).append("&amp;sort=")
                            .append(name).append("&amp;folder=").append(folder).append("\">");
-            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("../../images/down.svg\" border=\"0\" alt=\"v\">");
+            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("../../images/down.svg\" border=0 alt=\"v\">");
             buf.append("</a>");
         }
         return buf.toString();
@@ -2363,7 +2363,7 @@ public class WebMail extends HttpServlet
                 out.println(
                     // TODO we don't need the form below
                     "<div class=\"page\">\n<span class=\"header\"></span>\n" +
-                    "<form method=\"POST\" enctype=\"multipart/form-data\" action=\"" + myself + "\" accept-charset=utf-8>\n" +
+                    "<form method=POST enctype=\"multipart/form-data\" action=\"" + myself + "\" accept-charset=utf-8>\n" +
                     "<input type=hidden name=\"" + SUSI_NONCE + "\" value=\"" + nonce + "\">\n" +
                     // we use this to know if the user thought he was logged in at the time
                     "<input type=hidden name=\"" + DEBUG_STATE + "\" value=\"" + state + "\">");
@@ -3074,7 +3074,7 @@ public class WebMail extends HttpServlet
         }
 
         out.println("<div id=\"composemail\">" +
-                        "<table id=\"newmail\" cellspacing=0 cellpadding=2 width=\"100%\">\n" +
+                        "<table id=\"newmail\" cellspacing=0 cellpadding=2 width=100%>\n" +
                         "<tr><td colspan=2><hr></td></tr>\n" +
                         "<tr><td class=right>" + _t("From") + "</td>" +
                         "<td><input type=text size=80 name=\"" +
@@ -3129,7 +3129,7 @@ public class WebMail extends HttpServlet
 
         out.println("<div id=\"dologin\">" +
                         "<h1>" + _t("I2PMail Login") + "</h1>" +
-                        "<table cellspacing=\"3\" cellpadding=\"5\" width=\"100%\">\n" +
+                        "<table cellspacing=\"3\" cellpadding=\"5\" width=100%>\n" +
                         // current postman hq length limits 16/12, new postman version 32/32
                         "<tr>" +
                         "<td width=\"30%\" class=right>" + _t("User") + "</td>" +
@@ -3247,7 +3247,7 @@ public class WebMail extends HttpServlet
 
         String curSort = folder.getCurrentSortBy();
         SortOrder curOrder = folder.getCurrentSortingDirection();
-        out.println("</div><table id=mailbox cellspacing=0 cellpadding=2 width=\"100%\">\n" +
+        out.println("</div><table id=mailbox cellspacing=0 cellpadding=2 width=100%>\n" +
                     "<tr class=spacer><td colspan=7><hr></td></tr>\n<tr>\n" +
                     "<th class=\"mailListDate left\">" + sortHeader(SORT_DATE, _t("Date"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
                     "<th class=\"mailListSender left\">" + sortHeader(SORT_SENDER, showToColumn ? _t("To") : _t("From"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
@@ -3431,7 +3431,7 @@ public class WebMail extends HttpServlet
         out.println(button(SWITCH_TO, _t("Change to Folder") + ':'));
         showFolderSelect(out, folderName, false);
         out.println("</div>");
-        out.println("<div class=pagenavcontainer><table class=pagenav width=\"100%\">\n" +
+        out.println("<div class=pagenavcontainer><table class=pagenav width=100%>\n" +
                         "<tr class=pagenavcontrols>\n<td>");
         if (pages > 1) {
             if (outputHidden)
