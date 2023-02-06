@@ -892,7 +892,10 @@ public class GeoIP {
      * @return untranslated name or null
      */
     public String fullName(String code) {
-        return _codeToName.get(code);
+        if (code != null && code != "a0")
+            return _codeToName.get(code);
+        else
+            return null;
     }
 
     /**

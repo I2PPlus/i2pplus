@@ -718,8 +718,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append("</td><td class=\"rbw");
                 if (caps.contains("f"))
                     buf.append(" isff");
+                if (caps.contains("U"))
+                    buf.append(" isU");
                 buf.append("\"><a href=\"/netdb?caps=");
                 buf.append(getCapacity(peer));
+                if (caps.contains("f"))
+                    buf.append("f");
+                if (caps.contains("U"))
+                    buf.append("U"); 
                 buf.append("\" title=\"");
                 buf.append(_t("Show all routers with this capability in the NetDb"));
                 buf.append("\">");
@@ -767,16 +773,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         String c = getCountry(peer);
         String countryName = getCountryName(c);
         String h = peer.toBase64();
-        if (c == null) {
+        if (c != null) {
+            if (countryName.length() > 2) {
+                countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
+            }
+        } else {
             c = "a0";
-        }
-        if (countryName.length() > 2) {
-            countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
         }
         buf.append("<span class=peerFlag ");
         if (ri != null) {
             // add a hidden span to facilitate sorting
-            if (c != "a0" && c != null) {
+            if (c != "a0" && c != null && countryName.length() > 2) {
                 buf.append("title=\"").append(countryName).append("\">");
             } else {
                 buf.append("title=unknown>");
