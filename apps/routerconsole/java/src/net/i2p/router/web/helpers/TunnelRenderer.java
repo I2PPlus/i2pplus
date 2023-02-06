@@ -46,7 +46,7 @@ import net.i2p.util.ObjectCounterUnsafe;
 class TunnelRenderer {
     private final RouterContext _context;
 
-    private int DISPLAY_LIMIT = 500;
+    private int DISPLAY_LIMIT = 200;
     private final DecimalFormat fmt = new DecimalFormat("#0.00");
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
@@ -142,12 +142,15 @@ class TunnelRenderer {
         }
     }
 
-    public void renderParticipating(Writer out) throws IOException {
+    public void renderParticipating(Writer out, boolean bySpeed) throws IOException {
         boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty()) {
             out.write("<h3 class=tabletitle id=participating>");
-            out.write(_t("Active Transit Tunnels"));
+            if (bySpeed)
+                out.write(_t("Fastest Active Transit Tunnels"));
+            else
+                out.write(_t("Most Recent Active Transit Tunnels"));
             out.write("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelsparticipating\">" +
                       _t("Refresh") + "</a></h3>\n");
             int bwShare = getShareBandwidth();
@@ -156,9 +159,17 @@ class TunnelRenderer {
                     out.write("<table id=allTransit class=\"tunneldisplay tunnels_participating\" data-sortable>\n" +
                               "<thead><tr data-sort-method=thead>" +
                               "<th data-sortable>" + _t("Role") + "</th>" +
-                              "<th data-sortable>" + _t("Expiry") + "</th>" +
+                              "<th data-sortable");
+                    if (!bySpeed) {
+                        out.write(" aria-sort=descending");
+                    }
+                    out.write(">" + _t("Expiry") + "</th>" +
                               "<th title=\"" + _t("Data transferred") + "\" data-sortable data-sort-method=dotsep>" + _t("Data") + "</th>" +
-                              "<th data-sortable>" + _t("Speed") + "</th>" +
+                              "<th data-sortable");
+                    if (bySpeed) {
+                        out.write(" aria-sort=descending");
+                    }
+                    out.write(">" + _t("Speed") + "</th>" +
                               "<th data-sortable>");
                     if (debug)
                         out.write(_t("Receive on") + "</th>" + "<th data-sortable data-sort-method=number>");
@@ -180,7 +191,11 @@ class TunnelRenderer {
                         inactive++;
                         continue;
                     }
-                    DataHelper.sort(participating, new TunnelComparator());
+                    if (bySpeed) {
+                        DataHelper.sort(participating, new TunnelComparatorBySpeed());
+                    } else {
+                        DataHelper.sort(participating, new TunnelComparator());
+                    }
                     Hash to = cfg.getSendTo();
                     Hash from = cfg.getReceiveFrom();
                     // everything that isn't 'recent' is already in the tunnel.participatingMessageCount stat
@@ -252,8 +267,10 @@ class TunnelRenderer {
                 }
                 out.write("</tbody>\n</table>\n");
                 if (displayed > DISPLAY_LIMIT) {
-//                    out.write("<div class=statusnotes><b>" + _t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT)  + "</b></div>\n");
-                    out.write("<div class=statusnotes><b>" + _t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT)  + "</b></div>\n");
+                    if (bySpeed)
+                        out.write("<div class=statusnotes><b>" + _t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT)  + "</b></div>\n");
+                    else
+                        out.write("<div class=statusnotes><b>" + _t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT)  + "</b></div>\n");
                 } else if (displayed >= 2) {
                     out.write("<div class=statusnotes><b>" + _t("Active")  + ":</b>&nbsp" + displayed);
                     if (inactive > 0) {
@@ -267,13 +284,13 @@ class TunnelRenderer {
                 out.write("<div class=statusnotes><b>" + _t("Lifetime bandwidth usage") + ":</b>&nbsp;" +
                           DataHelper.formatSize2(processed*1024, true).replace("i", "") + "B</div>\n");
             } else { // bwShare < 12K/s
-                out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Not enough shared bandwidth to build participating tunnels.") +
+                out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Not enough shared bandwidth to build transit tunnels.") +
                           "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
             }
         } else if (_context.router().isHidden()) {
-            out.write("<p class=infohelp>" + _t("Router is currently operating in Hidden Mode which prevents participating tunnels from being built.") + "</p>");
+            out.write("<p class=infohelp>" + _t("Router is currently operating in Hidden Mode which prevents transit tunnels from being built.") + "</p>");
         } else {
-            out.write("<p class=infohelp>" + _t("No participating tunnels currently active.") + "</p>");
+            out.write("<p class=infohelp>" + _t("No transit tunnels currently active.") + "</p>");
         }
     }
 
@@ -417,9 +434,9 @@ class TunnelRenderer {
             }
             out.write("</tbody>\n</table>\n");
         } else if (_context.router().isHidden()) {
-                out.write("<p class=infohelp>" + _t("Router is currently operating in Hidden Mode which prevents participating tunnels from being built."));
+                out.write("<p class=infohelp>" + _t("Router is currently operating in Hidden Mode which prevents transit tunnels from being built."));
         } else {
-                out.write("<p class=infohelp>" + _t("No participating tunnels currently active."));
+                out.write("<p class=infohelp>" + _t("No transit tunnels currently active."));
         }
     }
 
@@ -603,7 +620,6 @@ class TunnelRenderer {
 //             return (l.getProcessedMessagesCount() - r.getProcessedMessagesCount());
              long le = l.getExpiration();
              long re = r.getExpiration();
-             }
              if (le < 0)
                  le = 0;
              if (re < 0)
@@ -615,6 +631,13 @@ class TunnelRenderer {
              return 0;
         }
     }
+
+    private static class TunnelComparatorBySpeed implements Comparator<HopConfig>, Serializable {
+         public int compare(HopConfig l, HopConfig r) {
+             return (r.getProcessedMessagesCount() - l.getProcessedMessagesCount());
+        }
+    }
+
 
     /** @since 0.9.35 */
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {

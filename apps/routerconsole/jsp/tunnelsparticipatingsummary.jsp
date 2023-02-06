@@ -12,19 +12,20 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
-<%=intl.title("Transit Tunnels Summary")%>
+<%=intl.title("Transit Tunnels by Peer")%>
 <link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body id="transitbypeer">
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class=netwrk><%=intl._t("Transit Tunnels Summary")%></h1>
+<h1 class=netwrk><%=intl._t("Transit Tunnels by Peer")%></h1>
 <div class=main id=tunnels>
 <div class=confignav>
 <span class=tab title="<%=intl._t("Locally hosted tunnels (exploratory and client)")%>"><a href="/tunnels">Local</a></span>
-<span class=tab><a href="/tunnelsparticipating"><%=intl._t("Transit")%></a></span>
-<span class=tab2 title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><%=intl._t("Transit Count by Peer")%></span>
-<span class=tab><a href="/tunnelpeercount"><%=intl._t("Tunnel Count by Peer")%></a></span>
+<span class=tab><a href="/tunnelsparticipating"><%=intl._t("Transit")%> (<%=intl._t("Most Recent")%>)</a></span>
+<span class=tab><a href="/tunnelsparticipatingfastest"><%=intl._t("Transit")%>  (<%=intl._t("Fastest")%>)</a></span>
+<span class=tab2 title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><%=intl._t("Transit by Peer")%></span>
+<span class=tab><a href="/tunnelpeercount"><%=intl._t("All Tunnels by Peer")%></a></span>
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TransitSummaryHelper" id="transitSummaryHelper" scope="request" />
 <jsp:setProperty name="transitSummaryHelper" property="contextId" value="<%=i2pcontextId%>" />
