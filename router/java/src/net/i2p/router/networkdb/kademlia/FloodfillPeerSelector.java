@@ -314,7 +314,7 @@ class FloodfillPeerSelector extends PeerSelector {
                        info.getBandwidthTier().equals("N"))) {
                 badff.add(entry);
                 if (_log.shouldDebug())
-                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is slow (K, L or M tier)");
+                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is slow (L, M or N tier)");
             } else if (info != null && isUnreachable) {
                 badff.add(entry);
                 if (_log.shouldDebug())
