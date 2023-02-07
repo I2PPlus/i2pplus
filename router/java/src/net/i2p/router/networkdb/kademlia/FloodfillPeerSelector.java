@@ -194,13 +194,13 @@ class FloodfillPeerSelector extends PeerSelector {
     private static final int NO_FAIL_LOOKUP_OK = 75*1000;
     private static final int NO_FAIL_LOOKUP_GOOD = NO_FAIL_LOOKUP_OK * 3;
 //    private static final int MAX_GOOD_RESP_TIME = 3500;
-    private static final int MAX_GOOD_RESP_TIME = 2500;
+    private static final int MAX_GOOD_RESP_TIME = 3000;
     // TODO we need better tracking of floodfill first-heard-about times
     // before we can do this. Old profiles get deleted.
     //private static final long HEARD_AGE = 48*60*60*1000L;
     //private static final long HEARD_AGE = 60*60*1000L;
 //    private static final long HEARD_AGE = 3*60*60*1000L;
-    private static final long HEARD_AGE = 8*60*60*1000L;
+    private static final long HEARD_AGE = 4*60*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
 
     /**
@@ -255,7 +255,7 @@ class FloodfillPeerSelector extends PeerSelector {
 
         // 5 == FNDF.MAX_TO_FLOOD + 1
 //        int limit = Math.max(5, howMany + 2);
-        int limit = Math.max(128, howMany + 2);
+        int limit = Math.max(72, howMany + 2);
         limit = Math.min(limit, sorted.size());
         MaskedIPSet maskedIPs = new MaskedIPSet(limit * 3);
         // split sorted list into 3 sorted lists
