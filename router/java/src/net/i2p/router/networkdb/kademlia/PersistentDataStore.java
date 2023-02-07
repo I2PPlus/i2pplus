@@ -603,11 +603,15 @@ public class PersistentDataStore extends TransientDataStore {
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
                     boolean isFF = false;
                     boolean noSSU = true;
+                    boolean isSalt = false;
                     String caps = "unknown";
                     if (ri != null) {
                         caps = ri.getCapabilities().toUpperCase();
                         if (caps.contains("F")) {
                             isFF = true;
+                        }
+                        if (caps.contains("SALT")) {
+                            isSalt = true;
                         }
                         for (RouterAddress ra : ri.getAddresses()) {
                             if (ra.getTransportStyle().equals("SSU") ||
@@ -618,6 +622,7 @@ public class PersistentDataStore extends TransientDataStore {
                         }
                     }
                     boolean isBadFF = isFF && noSSU;
+                    long now = _context.clock().now();
 
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
@@ -630,6 +635,16 @@ public class PersistentDataStore extends TransientDataStore {
                         corrupt = true;
                         if (_log.shouldInfo())
                             _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
+                        if (_log.shouldWarn())
+                            _log.warn("Banning: [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] for 8h -> Floodfill with SSU disabled");
+                            _context.banlist().banlistRouter(_key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 8*60*60*1000);
+                    } else if (isSalt) {
+                        corrupt = true;
+                        if (_log.shouldInfo())
+                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> RouterInfo has bogus 'salt' cap");
+                        if (_log.shouldWarn())
+                            _log.warn("Banning: [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] for 8h -> RouterInfo has bogus 'salt' cap");
+                            _context.banlist().banlistRouter(_key, "<b>➜</b> RouterInfo has bogus 'salt' cap", null, null, now + 8*60*60*1000);
                     } else if (!ri.getIdentity().calculateHash().equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
@@ -637,6 +652,8 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] does not match [" +
                                       _key.toBase64().substring(0,6) + "] from " + _routerFile);
+                            _log.warn("Banning: [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] for 1h -> Corrupt RouterInfo");
+                            _context.banlist().banlistRouter(_key, "<b>➜</b> Corrupt RouterInfo", null, null, now + 60*60*1000);
                         _routerFile.delete();
                     } else if (ri.getPublished() <= _knownDate) {
                         // Don't store but don't delete
