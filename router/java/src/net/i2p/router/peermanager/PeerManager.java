@@ -56,13 +56,13 @@ class PeerManager {
      *  Rate contained in the profile, as the Rates must be coalesced.
      */
 //    static final long REORGANIZE_TIME_LONG = 351*1000;
-    static final long REORGANIZE_TIME_LONG = 180*1000;
+    static final long REORGANIZE_TIME_LONG = 300*1000;
     /** After first two hours of uptime ~= 246 */
     static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / (REORGANIZE_TIME_LONG * 2));
 //    private static final long STORE_TIME = 19*60*60*1000;
-    private static final long STORE_TIME = 60*60*1000;
+    private static final long STORE_TIME = 15*60*1000;
 //    private static final long EXPIRE_AGE = 3*24*60*60*1000;
-    private static final long EXPIRE_AGE = 7*24*60*60*1000;
+    private static final long EXPIRE_AGE = 2*7*24*60*60*1000;
 
     public static final String TRACKED_CAPS = "" +
         FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL +
