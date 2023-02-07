@@ -668,8 +668,7 @@ class SearchJob extends JobImpl {
      * substantially.
      *
      */
-//    private static final int MAX_LEASE_RESEND = 10;
-    private static final int MAX_LEASE_RESEND = 6;
+    private static final int MAX_LEASE_RESEND = 10;
 
     /**
      * Should we republish a routerInfo received?  Probably not worthwhile, since
