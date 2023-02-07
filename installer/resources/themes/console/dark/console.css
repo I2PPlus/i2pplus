@@ -715,12 +715,12 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .peeripv6:empty{padding:0;width:0}
 .cwnd .left,.cwnd .right{width:auto}
 .peer_arrow{vertical-align:middle}
-.cells.ipv6{width:1%;max-width:24px}
-.cells.direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
+td.ipv6{width:1%;max-width:24px}
+td.direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
 .queue span,.duptx span,.duprx span{min-width:0}
 #peers .peer{width:1%;white-space:nowrap}
-#peers .cells,#tunnels .cells,#profilelist td:not(.separator),#transportSummary tr:not(.tablefooter) td{box-shadow:var(--highlight);border-right:var(--border_softer)}
-tr:hover .cells,#profiles tr:hover td{box-shadow:none}
+#peers .cells td,#tunnels .cells,#profilelist td:not(.separator),#transportSummary tr:not(.tablefooter) td{box-shadow:var(--highlight);border-right:var(--border_softer)}
+.cells tr:hover td,#profiles tr:hover td{box-shadow:none}
 #peers .rx .right,#peers .tx .right{width:1%;min-width:30px}
 #peers .spacer{display:none}
 #peers tr,#peers th:first-child,#peers td:first-child,#profiles tr,#profiles th:first-child,#profiles td:first-child{border-left:var(--border)}
@@ -841,7 +841,7 @@ h3[id="udpcon"]{width:auto}
 #floodfills .percentBarText{color:#fff;text-shadow:var(--textshadow);display:none}
 #floodfills td:empty,#tunnels .cells:empty{text-align:center;vertical-align:middle}
 #floodfills td:empty::before,#ntcpconnections td:not(:last-child):empty::before,#udpconnections td:not(:last-child):empty::before,#profilelist td:empty::before,#tunnels .cells:empty::after{width:100%;display:inline-block;text-align:center;content:"\2013";opacity:.8}
-#peers .cells.ipv6:empty::before{content:none}
+#peers td.ipv6:empty::before{content:none}
 #floodfills td:nth-child(3) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(7) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:right}
 #profilelist td:nth-last-child(5) span{min-width:44px}
 #profilelist td:nth-last-child(5) span.nospeed{text-align:center}
@@ -984,7 +984,7 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 .tunneldisplay .routerid,.tunnel_local{margin-right:2px;margin-left:0;min-width:64px}
 #refreshPage{cursor:pointer}
 
-#tunnels .tunnels_participating td.cells:first-child{font-size:0}
+#tunnels .tunnels_participating .cells:first-child{font-size:0}
 .ibgw::after,.obep::after,.ptcp::after{width:26px;height:26px;display:inline-block;background:var(--ibgw) var(--center);content:""}
 .obep::after{background:var(--obep) var(--center)/26px}
 .ptcp::after{background:var(--ptcp) var(--center)/26px}
@@ -2605,7 +2605,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 .revision,.sha256{display:inline-block;max-width:100px;overflow:hidden;text-overflow:ellipsis}
 .statlist{padding:10px;columns:auto 520px;column-gap:10px;text-align:center}
 .revision:hover,.sha256:hover{overflow:auto;text-overflow:clip}
-#peers .cells,#peers .cells[class]{min-width:0}
+#peers .cells td,#peers td[class]{min-width:0}
 }
 
 @media screen and (min-width:1280px){
