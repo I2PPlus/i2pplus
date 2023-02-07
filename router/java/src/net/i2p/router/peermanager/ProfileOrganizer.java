@@ -734,7 +734,7 @@ public class ProfileOrganizer {
     public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
             List<Hash> connected = _context.commSystem().getEstablished();
-            if (connected.isEmpty())
+            if (connected.isEmpty() || connected == null)
                 return;
             getReadLock();
             try {
@@ -762,7 +762,7 @@ public class ProfileOrganizer {
     private void selectActiveNotFailingPeers2(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
             List<Hash> connected = _context.commSystem().getEstablished();
-            if (!connected.isEmpty()) {
+            if (connected != null && !connected.isEmpty()) {
                 getReadLock();
                 try {
                     locked_selectActive(connected, howMany, exclude, matches, mask, ipSet);
@@ -1449,7 +1449,7 @@ public class ProfileOrganizer {
                 matches.add(peer);
         }
     }
-    
+
     /**
      * Does the peer's IP address NOT match the IP address of any peer already in the set,
      * on any transport, within a given mask?

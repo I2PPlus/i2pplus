@@ -240,17 +240,16 @@ class ProfileOrganizerRenderer {
                         else
                             buf.append(" (");
                         buf.append(bonus).append(')');
-                    } else {
-                        buf.append("<span hidden>0</span>").append(NA);
                     }
                     buf.append("</span>");
                 } else {
+                    buf.append("<span hidden>0</span>");
                     buf.append("<span class=\"");
                     if (bonus == 9999999)
                         buf.append("testOK ");
                     else if (capBonus == -30)
                         buf.append("testFail ");
-                    buf.append("nospeed\">‒</span>");
+                    buf.append("nospeed\">&ensp;</span>");
                 }
                 buf.append("</td>");
 
