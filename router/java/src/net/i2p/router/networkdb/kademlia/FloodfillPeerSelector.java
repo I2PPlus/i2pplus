@@ -199,8 +199,7 @@ class FloodfillPeerSelector extends PeerSelector {
     // before we can do this. Old profiles get deleted.
     //private static final long HEARD_AGE = 48*60*60*1000L;
     //private static final long HEARD_AGE = 60*60*1000L;
-//    private static final long HEARD_AGE = 3*60*60*1000L;
-    private static final long HEARD_AGE = 12*60*60*1000L;
+    private static final long HEARD_AGE = 3*60*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
 
     /**
@@ -337,7 +336,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (prof != null) {
                     if (enforceHeard && prof.getFirstHeardAbout() > now - HEARD_AGE) {
                         if (_log.shouldDebug())
-                            _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is too new (less than 12h old)");
+                            _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is too new (less than 3h old)");
                         badff.add(entry);
                     } else if (prof.getDBHistory() != null) {
                         if (prof.getDbResponseTime().getRate(60*60*1000L).getAvgOrLifetimeAvg() < maxGoodRespTime
