@@ -194,13 +194,13 @@ class FloodfillPeerSelector extends PeerSelector {
     private static final int NO_FAIL_LOOKUP_OK = 75*1000;
     private static final int NO_FAIL_LOOKUP_GOOD = NO_FAIL_LOOKUP_OK * 3;
 //    private static final int MAX_GOOD_RESP_TIME = 3500;
-    private static final int MAX_GOOD_RESP_TIME = 3000;
+    private static final int MAX_GOOD_RESP_TIME = 2000;
     // TODO we need better tracking of floodfill first-heard-about times
     // before we can do this. Old profiles get deleted.
     //private static final long HEARD_AGE = 48*60*60*1000L;
     //private static final long HEARD_AGE = 60*60*1000L;
 //    private static final long HEARD_AGE = 3*60*60*1000L;
-    private static final long HEARD_AGE = 4*60*60*1000L;
+    private static final long HEARD_AGE = 12*60*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
 
     /**
@@ -276,6 +276,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 caps = DataHelper.stripHTML(info.getCapabilities()).toUpperCase();
             }
             boolean isUnreachable = caps != "unknown" && caps.contains("U");
+            boolean hasSalt = caps != "unknown" && caps.contains("SALT");
             for (String ip : entryIPs) {
                 if (!maskedIPs.add(ip))
                     sameIP = true;
@@ -300,13 +301,17 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is unreachable");
                 _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 8*60*60*1000);
+            } else if (info != null && hasSalt) {
+                badff.add(entry);
+                if (_log.shouldDebug())
+                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: RouterInfo has bogus 'salt' cap");
+                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill has bogus 'salt' cap", null, null, now + 8*60*60*1000);
                 if (_log.shouldWarn())
                     _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 8h -> Unreachable/firewalled");
             } else if (sameIP) {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Same /16, family, or port");
-//            } else if (info != null && now - info.getPublished() > 3*60*60*1000) {
             } else if (info != null && now - info.getPublished() > 2*60*60*1000) {
                 badff.add(entry);
                 if (_log.shouldDebug())
@@ -332,7 +337,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (prof != null) {
                     if (enforceHeard && prof.getFirstHeardAbout() > now - HEARD_AGE) {
                         if (_log.shouldDebug())
-                            _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is too new (less than 8h old)");
+                            _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is too new (less than 12h old)");
                         badff.add(entry);
                     } else if (prof.getDBHistory() != null) {
                         if (prof.getDbResponseTime().getRate(60*60*1000L).getAvgOrLifetimeAvg() < maxGoodRespTime
@@ -430,7 +435,8 @@ class FloodfillPeerSelector extends PeerSelector {
             _wanted = wanted;
         }
 
-        private static final int EXTRA_MATCHES = 100;
+//        private static final int EXTRA_MATCHES = 100;
+        private static final int EXTRA_MATCHES = 128;
         public void add(Hash entry) {
             //if (_context.profileOrganizer().isFailing(entry))
             //    return;
@@ -502,7 +508,7 @@ class FloodfillPeerSelector extends PeerSelector {
                     if (prof != null && now - prof.getLastSendFailed() < 60*60*1000) {
                         badff.add(entry);
                         if (_log.shouldDebug())
-                            _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> Recent failed send (last hour)");
+                            _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> Poor send success rate for the last hour");
                     } else if (preferConnected && !_context.commSystem().isEstablished(entry)) {
                         unconnectedff.add(entry);
                         if (_log.shouldDebug())
