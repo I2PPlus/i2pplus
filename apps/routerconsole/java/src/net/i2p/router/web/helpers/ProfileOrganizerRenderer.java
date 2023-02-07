@@ -79,7 +79,7 @@ class ProfileOrganizerRenderer {
         StringBuilder buf = new StringBuilder(16*1024);
 
         if (mode < 2) {
-            buf.append("<p id=\"profiles_overview\" class=infohelp>");
+            buf.append("<p id=profiles_overview class=infohelp>");
             buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size()).replace(".", " (active in the last minute).")).append('\n');
             if (older > 0)
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
@@ -87,7 +87,7 @@ class ProfileOrganizerRenderer {
                 buf.append("<a href=\"/profiles\">").append(ngettext("Hiding {0} standard profile.", "Hiding {0} standard profiles.", standard)).append("</a>\n");
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
 
-            buf.append("<div class=widescroll id=\"peerprofiles\">\n<table id=\"profilelist\">\n");
+            buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist>\n");
             buf.append("<thead>\n<tr>");
             buf.append("<th>").append(_t("Peer")).append("</th>");
             buf.append("<th>").append(_t("Caps")).append("</th>");
@@ -240,6 +240,8 @@ class ProfileOrganizerRenderer {
                         else
                             buf.append(" (");
                         buf.append(bonus).append(')');
+                    } else {
+                        buf.append("<span hidden>0</span>").append(NA);
                     }
                     buf.append("</span>");
                 } else {
@@ -328,20 +330,21 @@ class ProfileOrganizerRenderer {
             buf.append("<thead>\n<tr class=smallhead>");
             buf.append("<th>").append(_t("Peer")).append("</th>");
             buf.append("<th>").append(_t("Caps")).append("</th>");
-            buf.append("<th>").append(_t("Integ. Value")).append("</th>");
+//            buf.append("<th>").append(_t("Integ. Value")).append("</th>");
+            buf.append("<th>").append(_t("First Heard About")).append("</th>");
             buf.append("<th>").append(_t("Last Heard About")).append("</th>");
             buf.append("<th>").append(_t("Last Heard From")).append("</th>");
             buf.append("<th>").append(_t("Last Good Send")).append("</th>");
             buf.append("<th>").append(_t("Last Bad Send")).append("</th>");
 //            buf.append("<th>").append(_t("10m Resp. Time")).append("</th>");
             buf.append("<th>").append(_t("1h Resp. Time")).append("</th>");
-            buf.append("<th>").append(_t("1d Resp. Time")).append("</th>");
+//            buf.append("<th>").append(_t("1d Resp. Time")).append("</th>");
             buf.append("<th>").append(_t("Last Good Lookup")).append("</th>");
             buf.append("<th>").append(_t("Last Bad Lookup")).append("</th>");
             buf.append("<th>").append(_t("Last Good Store")).append("</th>");
             buf.append("<th>").append(_t("Last Bad Store")).append("</th>");
             buf.append("<th>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>");
-            buf.append("<th>").append(_t("1d Fail Rate").replace("Rate","")).append("</th>");
+//            buf.append("<th>").append(_t("1d Fail Rate").replace("Rate","")).append("</th>");
             buf.append("</tr>\n</thead>\n");
             RateAverages ra = RateAverages.getTemp();
             for (PeerProfile prof : order) {
@@ -376,32 +379,49 @@ class ProfileOrganizerRenderer {
                     buf.append("<td>&nbsp;</td>");
                 }
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
+/*
                 buf.append("<td>");
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
+                } else {
+                    buf.append("<span hidden>0</span>").append(NA);
                 }
                 buf.append("</td>");
-                buf.append("<td>").append(formatInterval(now, prof.getLastHeardAbout())).append("</td>");
-                buf.append("<td>").append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
-                buf.append("<td>").append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
-                buf.append("<td>").append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
-//                buf.append("<td>").append(avg(prof, 10*60*1000l, ra)).append("</td>");
-                buf.append("<td>").append(avg(prof, 60*60*1000l, ra)).append("</td>");
-                buf.append("<td>").append(avg(prof, 24*60*60*1000l, ra)).append("</td>");
+*/
+                buf.append("<td><span hidden>").append(prof.getFirstHeardAbout()).append(".</span>")
+                   .append(formatInterval(now, prof.getFirstHeardAbout())).append("</td>");
+                buf.append("<td><span hidden>").append(prof.getLastHeardAbout()).append(".</span>")
+                   .append(formatInterval(now, prof.getLastHeardAbout())).append("</td>");
+                buf.append("<td><span hidden>").append(prof.getLastHeardFrom()).append(".</span>")
+                    .append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
+                buf.append("<td><span hidden>").append(prof.getLastSendSuccessful()).append(".</span>")
+                   .append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
+                buf.append("<td><span hidden>").append(prof.getLastSendFailed()).append(".</span>")
+                   .append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
+//                buf.append("<td><span hidden>").append(avg(prof, 10*60*1000l, ra)).append(".</span>")
+//                     .append(avg(prof, 10*60*1000l, ra)).append("</td>");
+                buf.append("<td><span hidden>").append(prof.getLastHeardAbout()).append(".</span>")
+                   .append(avg(prof, 60*60*1000l, ra)).append("</td>");
+//                buf.append("<td><span hidden>").append(prof.getLastHeardAbout()).append(".</span>")\n").append(avg(prof, 24*60*60*1000l, ra)).append("</td>");
                 if (dbh != null) {
-                    buf.append("<td>").append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
-                    buf.append("<td>").append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
-                    buf.append("<td>").append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
-                    buf.append("<td>").append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>");
+                    buf.append("<td><span hidden>").append(dbh.getLastLookupSuccessful()).append(".</span>")
+                       .append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
+                    buf.append("<td><span hidden>").append(dbh.getLastLookupFailed()).append(".</span>")
+                       .append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
+                    buf.append("<td><span hidden>").append(dbh.getLastStoreSuccessful()).append(".</span>")
+                       .append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
+                    buf.append("<td><span hidden>").append(dbh.getLastStoreFailed()).append(".</span>")
+                       .append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>");
                     String hourfail = davg(dbh, 60*60*1000l, ra);
                     String dayfail = davg(dbh, 24*60*60*1000l, ra);
                     buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" +
                                hourfail + "\"><span class=percentBarText>").append(hourfail).append("</span></span></span>").append("</td>");
-                    buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" +
-                               dayfail + "\"><span class=percentBarText>").append(dayfail).append("</span></span></span>").append("</td>");
+//                    buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" +
+//                               dayfail + "\"><span class=percentBarText>").append(dayfail).append("</span></span></span>").append("</td>");
                 } else {
-                    for (int i = 0; i < 6; i++)
-                        buf.append("<td>").append(_t(NA));
+//                    for (int i = 0; i < 6; i++)
+                    for (int i = 0; i < 5; i++)
+                        buf.append("<td><span hidden>0.</span>").append(NA);
                 }
                 buf.append("</tr>\n");
             }
@@ -539,7 +559,7 @@ class ProfileOrganizerRenderer {
 
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00");
     private final static String num(double num) { synchronized (_fmt) { return _fmt.format(num); } }
-    private final static String NA = "";
+    private final static String NA = "&ensp;";
 
     private String avg (PeerProfile prof, long rate, RateAverages ra) {
             RateStat rs = prof.getDbResponseTime();
