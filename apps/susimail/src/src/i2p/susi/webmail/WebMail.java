@@ -3046,7 +3046,7 @@ public class WebMail extends HttpServlet
                     sessionObject.attachments.clear();
                 }
                 // needed when processing the CANCEL button
-                out.println("<input type=hidden name=\"" + DRAFT_EXISTS + "\" value=\"1\">");
+                out.println("<input type=hidden name=\"" + DRAFT_EXISTS + "\" value=1>");
             }
 
         boolean fixed = Boolean.parseBoolean(Config.getProperty(CONFIG_SENDER_FIXED, "true"));
@@ -3107,7 +3107,7 @@ public class WebMail extends HttpServlet
                     out.println("<tr><td>&nbsp;</td>");
                 }
                 out.print("<td id=attachedfile class=left><label><input type=checkbox class=optbox name=\"check" +
-                                attachment.hashCode() + "\" value=\"1\">&nbsp;" + quoteHTML(attachment.getFileName()) + "</label></td>" +
+                                attachment.hashCode() + "\" value=1>&nbsp;" + quoteHTML(attachment.getFileName()) + "</label></td>" +
                                 "</tr>\n");
             }
             // TODO disable in JS if none selected
@@ -3375,7 +3375,7 @@ public class WebMail extends HttpServlet
                         .replace("&#8239;B", " <span class=\"listSizeUnit\">B") : "<span class=\"unknown\" title=\"" +
                         _t("Message body not downloaded") + "\">???"));
             out.println("</span></span></td>\n" +
-                        "<td class=mailListDelete><input type=checkbox class=\"optbox delete1\" name=\"check" + b64UIDL + "\" value=\"1\"" +
+                        "<td class=mailListDelete><input type=checkbox class=\"optbox delete1\" name=\"check" + b64UIDL + "\" value=1" +
                         " " + (idChecked ? "checked" : "") + ">" + "</td>\n" +
                         "</tr>\n");
             bg = 1 - bg;

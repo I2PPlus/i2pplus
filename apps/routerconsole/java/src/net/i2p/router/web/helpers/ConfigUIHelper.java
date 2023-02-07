@@ -47,7 +47,7 @@ public class ConfigUIHelper extends HelperBase {
                    "<label><input type=checkbox class=\"optbox slider\" name=\"universalTheming\" ");
         if (universalTheming)
             buf.append(CHECKED);
-        buf.append("value=\"1\">")
+        buf.append("value=1>")
            .append(_t("Set theme universally across all apps"))
            .append("</label><br>\n");
         return buf.toString();
@@ -59,7 +59,7 @@ public class ConfigUIHelper extends HelperBase {
         buf.append("<label><input type=checkbox class=\"optbox slider\" name=\"forceMobileConsole\" ");
         if (forceMobileConsole)
             buf.append(CHECKED);
-        buf.append("value=\"1\">")
+        buf.append("value=1>")
            .append(_t("Force the mobile console to be used"))
            .append("</label><br>\n");
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
@@ -68,7 +68,7 @@ public class ConfigUIHelper extends HelperBase {
            .append("\"><input type=checkbox class=\"optbox slider\" name=\"embedApps\" ");
         if (embedApps)
             buf.append(CHECKED);
-        buf.append("value=\"1\">")
+        buf.append("value=1>")
            .append(_t("Embed I2PSnark and I2PMail in the console"))
            .append("</label></div>\n");
         return buf.toString();

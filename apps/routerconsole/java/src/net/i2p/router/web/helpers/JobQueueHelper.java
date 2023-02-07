@@ -198,14 +198,14 @@ public class JobQueueHelper extends HelperBase {
                    "<th data-sort-method=number>").append(_t("Runs")).append("</th>" +
                    "<th data-sort-method=number>").append(_t("Dropped")).append("</th>" +
                    "<th data-sort-method=number>").append(_t("Time")).append("</th>" +
-                   "<th data-sort-method=number><i>").append(_t("Avg")).append("</i></th>" +
-                   "<th data-sort-method=number><i>").append(_t("Max")).append("</i></th>" +
-                   "<th data-sort-method=number><i>").append(_t("Min")).append("</i></th>");
+                   "<th data-sort-method=number>").append(_t("Avg")).append("</th>" +
+                   "<th data-sort-method=number>").append(_t("Max")).append("</th>" +
+                   "<th data-sort-method=number>").append(_t("Min")).append("</th>");
             if (isAdvanced()) {
                 buf.append("<th data-sort-method=number>").append(_t("Pending")).append("</th>" +
-                           "<th data-sort-method=number><i>").append(_t("Avg")).append("</i></th>" +
-                           "<th data-sort-method=number><i>").append(_t("Max")).append("</i></th>" +
-                           "<th data-sort-method=number><i>").append(_t("Min")).append("</i></th>");
+                           "<th data-sort-method=number>").append(_t("Avg")).append("</th>" +
+                           "<th data-sort-method=number>").append(_t("Max")).append("</th>" +
+                           "<th data-sort-method=number>").append(_t("Min")).append("</th>");
             }
         buf.append("</tr></thead>\n<tbody id=statCount>\n");
 

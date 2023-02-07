@@ -1498,7 +1498,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
         // FIXME wasn't escaped
         String label = _t("Save & continue").replace("&", "&amp;");
-        out.write("</p>\n<div class=formaction><button type=submit class=\"accept\" name=\"router\" value=\"router\">" +
+        out.write("</p>\n<div class=formaction><button type=submit class=accept name=\"router\" value=\"router\">" +
                   label + "</button></div>\n</div>\n");
 
         if (_context.namingService().getName().equals("BlockfileNamingService")) {
@@ -1507,12 +1507,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             out.write("<hr>\n<div class=\"option\">\n<h4>" + _t("Save {0} to master addressbook and continue to website", idn) + "</h4>\n<p>" +
                       _t("This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main " +
                       "router address book, but don't mind publishing.") +
-                      "</p>\n<div class=formaction><button type=submit class=\"accept\" name=\"master\" value=\"master\">" +
+                      "</p>\n<div class=formaction><button type=submit class=accept name=\"master\" value=\"master\">" +
                       label + "</button></div>\n</div>\n");
 
             out.write("<hr>\n<div class=\"option\"><h4>" + _t("Save {0} to private addressbook and continue to website", idn) + "</h4>\n<p>" +
                       _t("This address will be saved to your Private addressbook, ensuring it is never published.") +
-                      "</p>\n<div class=formaction><button type=submit class=\"accept\" name=\"private\" value=\"private\">" +
+                      "</p>\n<div class=formaction><button type=submit class=accept name=\"private\" value=\"private\">" +
                       label + "</button></div>\n</div>\n");
 
         }
@@ -1561,10 +1561,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                       "<p><b>PSK:</b> " + _t("Enter PSK encryption key") + ":</p>\n" +
                       "<input type=text size=\"55\" name=\"privkey\" value=\"\">\n" +
                       "<p><b>DH:</b> " + _t("Generate new DH encryption key") + ":</p>\n" +
-                      "<div class=\"formaction_xx\">" + "<button type=submit class=\"accept\" name=\"action\" value=\"newdh\">" +
+                      "<div class=\"formaction_xx\">" + "<button type=submit class=accept name=action value=\"newdh\">" +
                       label + "</button>\n</div>\n");
                       //"<p>" + _t("Generate new PSK encryption key") +
-                      //"<button type=submit class=\"accept\" name=\"action\" value=\"newpsk\">" + label + "</button>\n");
+                      //"<button type=submit class=accept name=action value=\"newpsk\">" + label + "</button>\n");
         }
         if (code == LookupResult.RESULT_SECRET_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
             out.write("<h4>" + _t("Lookup password") + "</h4>\n" +
@@ -1574,7 +1574,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
         // FIXME wasn't escaped
         String label = _t("Save & continue").replace("&", "&amp;");
-        out.write("<div class=formaction>\n" + "<button type=submit class=\"accept\" name=\"action\" value=\"save\">" +
+        out.write("<div class=formaction>\n" + "<button type=submit class=accept name=action value=Save>" +
                   label + "</button>\n" + "</div>\n</form>\n</div>\n");
         writeFooter(out);
     }

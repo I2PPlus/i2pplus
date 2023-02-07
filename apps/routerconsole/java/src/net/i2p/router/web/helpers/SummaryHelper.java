@@ -478,7 +478,7 @@ public class SummaryHelper extends HelperBase {
         // long free = Runtime.getRuntime().freeMemory()/1024/1024;
         // return integerFormatter.format(used) + "MB (" + usedPc + "%)";
         // return integerFormatter.format(used) + "MB / " + free + " MB";
-        return "<div class=\"percentBarOuter volatile\" id=\"sb_memoryBar\"><div class=percentBarText>RAM: " +
+        return "<div class=\"percentBarOuter volatile\" id=sb_memoryBar><div class=percentBarText>RAM: " +
                integerFormatter.format(used) + " / " + total + " M" +
                "</div><div class=percentBarInner style=\"width: " + integerFormatter.format(usedPc) +
                "%;\"></div></div>";
@@ -807,20 +807,20 @@ public class SummaryHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(512);
         boolean link = isI2PTunnelRunning();
-        buf.append("<h3 id=\"sb_localTunnelsHeading\"");
+        buf.append("<h3 id=sb_localTunnelsHeading");
         if (!link)
             buf.append(" class=unregistered");
         buf.append("><a href=\"/i2ptunnelmgr\" target=_top title=\"")
            .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
            .append("\">")
            .append(_t("Service Tunnels"))
-           .append(" <span id=\"tunnelCount\" class=badge title=\"").append(_t("How many local service tunnels we're running"))
+           .append(" <span id=tunnelCount class=badge title=\"").append(_t("How many local service tunnels we're running"))
            .append("\">").append("</span>")
            .append("</a>");
         buf.append("<input type=checkbox id=toggle_sb_localtunnels class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
             DataHelper.sort(clients, new AlphaComparator());
-            buf.append("<table id=\"sb_localtunnels\" class=volatile>");
+            buf.append("<table id=sb_localtunnels class=volatile>");
 
             for (Destination client : clients) {
                 String name = getName(client);
@@ -836,19 +836,19 @@ public class SummaryHelper extends HelperBase {
                     buf.append("class=tunnelServer ");
                 else if (isPing)
                     buf.append("class=ping ");
-                buf.append("align=right><img src=\"/themes/console/images/");
+                buf.append("align=right><img src=/themes/console/images/");
                 if (isSnark) {
-                    buf.append("snark.svg\" alt=I2PSnark title=\"").append(_t("Torrents"));
+                    buf.append("snark.svg alt=I2PSnark title=\"").append(_t("Torrents"));
                 } else if (server) {
-                    buf.append("server.svg\" alt=Server title=\"").append(_t("Server"));
+                    buf.append("server.svg alt=Server title=\"").append(_t("Server"));
                     if (!isAdvanced()) {
                         buf.append(" (").append(_t("service may be available to peers")).append(")");
                      }
                 } else {
                     if (isPing)
-                        buf.append("ping.svg\" alt=Client title=\"").append(_t("Client"));
+                        buf.append("ping.svg alt=Client title=\"").append(_t("Client"));
                     else
-                        buf.append("client.svg\" alt=Client title=\"").append(_t("Client"));
+                        buf.append("client.svg alt=Client title=\"").append(_t("Client"));
                     if (!isAdvanced()) {
                         buf.append(" (").append(_t("service is only available locally")).append(")");
                     }
@@ -868,18 +868,18 @@ public class SummaryHelper extends HelperBase {
 //                    if ((timeToExpire < 0) || !ls.isCurrent(0)) {
                     if (timeToExpire < 0) {
                         // red light
-                        buf.append("<td class=tunnelRebuilding><img src=\"/themes/console/images/local_down.png\" alt=\"")
+                        buf.append("<td class=tunnelRebuilding><img src=/themes/console/images/local_down.png alt=\"")
                            .append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired")).append(" ")
                            .append(DataHelper.formatDuration2(0 - timeToExpire));
                         buf.append(" ").append(_t("ago")).append(". ").append(_t("Rebuilding")).append("&hellip;\" width=16 height=16></td></tr>\n");
                     } else {
                         // green light
-                        buf.append("<td class=tunnelReady><img src=\"/themes/console/images/local_up.png\" alt=Ready title=\"")
+                        buf.append("<td class=tunnelReady><img src=/themes/console/images/local_up.png alt=Ready title=\"")
                            .append(_t("Ready")).append("\" width=16 height=16></td></tr>\n");
                     }
                 } else {
                     // yellow light
-                    buf.append("<td class=tunnelBuilding><img src=\"/themes/console/images/local_inprogress.png\" alt=\"")
+                    buf.append("<td class=tunnelBuilding><img src=/themes/console/images/local_inprogress.png alt=\"")
                        .append(_t("Building")).append("&hellip;\" title=\"").append(_t("Building tunnels"))
                        .append("&hellip;\" width=16 height=16></td></tr>\n");
                 }
@@ -890,10 +890,10 @@ public class SummaryHelper extends HelperBase {
                .append(_t("none")).append("</i></center></td></tr>\n</table>\n");
         }
         buf.append("<table id=localtunnelSummary hidden>\n<tr id=localtunnelsActive>\n<td>")
-           .append("<span id=snarkCount class=\"count_0\">0 x <img src=\"/themes/console/images/snark.svg\"></span>")
-           .append("<span id=serverCount class=\"count_0\">0 x <img src=\"/themes/console/images/server.svg\"></span>")
-           .append("<span id=clientCount class=\"count_0\">0 x <img src=\"/themes/console/images/client.svg\"></span>")
-           .append("<span id=pingCount class=\"count_0\">0 x <img src=\"/themes/console/images/ping.svg\"></span>")
+           .append("<span id=snarkCount class=\"count_0\">0 x <img src=/themes/console/images/snark.svg></span>")
+           .append("<span id=serverCount class=\"count_0\">0 x <img src=/themes/console/images/server.svg></span>")
+           .append("<span id=clientCount class=\"count_0\">0 x <img src=/themes/console/images/client.svg></span>")
+           .append("<span id=pingCount class=\"count_0\">0 x <img src=/themes/console/images/ping.svg></span>")
            .append("</td>\n</tr>\n</table>\n");
         return buf.toString();
     }
@@ -1277,9 +1277,9 @@ public class SummaryHelper extends HelperBase {
                    .append("<input type=hidden name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
 /*
                 if (avail) {
-                    buf.append("<span id=\"updateAvailable\" class=volatile>").append(_t("Release update available")).append("<br><i>")
+                    buf.append("<span id=updateAvailable class=volatile>").append(_t("Release update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getUpdateVersion())
-                       .append("</i></span><br><button type=submit id=\"sb_downloadReleaseUpdate\" class=download name=updateAction value=\"signed\" >")
+                       .append("</i></span><br><button type=submit id=sb_downloadReleaseUpdate class=download name=updateAction value=\"signed\" >")
                        // Note to translators: parameter is a version, e.g. "0.8.4"
 //                       .append(_t("Download {0} Update", getUpdateVersion()))
                        .append(_t("Download I2P Update"))
@@ -1343,7 +1343,7 @@ public class SummaryHelper extends HelperBase {
                .append("</a></span></h4>");
         } else {
             // Hide warn but retain h4 so ajax refresh picks it up
-            buf.append("<h4 id=\"sb_warning\" class=\"volatile hide\" hidden></h4>");
+            buf.append("<h4 id=sb_warning class=\"volatile hide\" hidden></h4>");
         }
 
         if (DeadlockDetector.isDeadlocked()) {
@@ -1512,7 +1512,7 @@ public class SummaryHelper extends HelperBase {
                .append(i)
                .append("\">");
             if (i > 0) {
-                buf.append("<button type=submit class=\"buttonTop\" name=\"action\" value=\"move_")
+                buf.append("<button type=submit class=buttonTop name=action value=\"move_")
                    .append(i)
                    .append("_top\"><img alt=\"")
                    .append(_t("Top"))
@@ -1522,7 +1522,7 @@ public class SummaryHelper extends HelperBase {
                    .append("\" title=\"")
                    .append(_t("Move to top"))
                    .append("\"/></button>");
-                buf.append("<button type=submit class=\"buttonUp\" name=\"action\" value=\"move_")
+                buf.append("<button type=submit class=buttonUp name=action value=\"move_")
                    .append(i)
                    .append("_up\"><img alt=\"")
                    .append(_t("Up"))
@@ -1535,7 +1535,7 @@ public class SummaryHelper extends HelperBase {
             }
             buf.append("</td><td>");
             if (i < sections.size() - 1) {
-                buf.append("<button type=submit class=\"buttonDown\" name=\"action\" value=\"move_")
+                buf.append("<button type=submit class=buttonDown name=action value=\"move_")
                    .append(i)
                    .append("_down\"><img alt=\"")
                    .append(_t("Down"))
@@ -1545,7 +1545,7 @@ public class SummaryHelper extends HelperBase {
                    .append("\" title=\"")
                    .append(_t("Move down"))
                    .append("\"/></button>");
-                buf.append("<button type=submit class=\"buttonBottom\" name=\"action\" value=\"move_")
+                buf.append("<button type=submit class=buttonBottom name=action value=\"move_")
                    .append(i)
                    .append("_bottom\"><img alt=\"")
                    .append(_t("Bottom"))
@@ -1559,7 +1559,7 @@ public class SummaryHelper extends HelperBase {
             buf.append("</td></tr>\n");
         }
         buf.append("<tr><td>" +
-                   "<input type=submit name=\"action\" class=\"delete\" value=\"")
+                   "<input type=submit name=action class=\"delete\" value=\"")
            .append(_t("Delete selected"))
            .append("\"></td><td>")
            .append("<select name=\"name\">\n" +
@@ -1579,7 +1579,7 @@ public class SummaryHelper extends HelperBase {
            .append(sections.size())
            .append("\"></td>" +
                    "<td colspan=2>" +
-                   "<input type=submit name=\"action\" class=\"add\" value=\"")
+                   "<input type=submit name=action class=\"add\" value=\"")
            .append(_t("Add item"))
            .append("\"></td></tr>")
            .append("</table>\n");

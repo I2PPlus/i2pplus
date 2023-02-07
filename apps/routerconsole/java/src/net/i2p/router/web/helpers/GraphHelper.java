@@ -439,7 +439,7 @@ public class GraphHelper extends FormHandler {
         try {
             _out.write("<br><h3 id=graphdisplay tabindex=0>" + _t("Configure Graph Display") + " <a href=\"configstats\">" + _t("Select Stats") + "</a></h3>");
             _out.write("<form action=\"/updategraphs\" method=POST>\n" +
-                       "<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=\"action\" value=\"save\">\n" +
+                       "<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=action value=Save>\n" +
                        "<input type=hidden name=\"nonce\" value=\"" + nonce + "\" >\n");
             _out.write("<span class=nowrap title=\"" +
                        _t("Note: Dimensions are for graph only (excludes title, labels and legend).") +"\"><b>");
@@ -482,7 +482,7 @@ public class GraphHelper extends FormHandler {
             if (persistent)
                 _out.write(HelperBase.CHECKED);
             _out.write(">" + _t("Store graph data on disk") + "</label></span>\n</div>\n</td></tr>\n</table>\n" +
-                       "<hr>\n<div class=formaction id=graphing><input type=submit class=\"accept\" value=\"" +
+                       "<hr>\n<div class=formaction id=graphing><input type=submit class=accept value=\"" +
                        _t("Save settings and redraw graphs") + "\"></div>\n</form>\n");
         } catch (IOException ioe) {
             ioe.printStackTrace();

@@ -468,8 +468,8 @@ public class NetDbHelper extends FormHandler {
                    "</select></td></tr>\n" +
                    "<tr><td colspan=4 class=\"subheading\"><b>Add Sybil analysis (must pick one above)</b></td></tr>\n" +
                    "<tr id=\"sybilSearch\"><td><b>Sybil close to</b></td><td colspan=3><input type=text name=\"sybil2\" title=\"Router hash, destination hash, b32, or from address book\">&nbsp;" +
-                   "<label for=\"closetorouter\"><b>or Sybil close to this router</b></label><input type=checkbox class=optbox value=\"1\" name=\"sybil\" id=\"closetorouter\"></td></tr>\n" +
-                   "<tr><td colspan=4 class=\"optionsave\"><button type=submit class=\"search\" value=\"Lookup\">Lookup</button></td></tr>\n" +
+                   "<label for=\"closetorouter\"><b>or Sybil close to this router</b></label><input type=checkbox class=optbox value=1 name=\"sybil\" id=\"closetorouter\"></td></tr>\n" +
+                   "<tr><td colspan=4 class=optionsave><button type=submit class=\"search\" value=\"Lookup\">Lookup</button></td></tr>\n" +
                    "</table>\n</form>\n");
     }
 }

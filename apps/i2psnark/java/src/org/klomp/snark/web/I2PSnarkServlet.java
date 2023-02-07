@@ -1251,7 +1251,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(DataHelper.stripHTML(soParam)).append("\" >\n");
         }
         if (action != null) {
-            buf.append("<input type=hidden name=\"action\" value=\"")
+            buf.append("<input type=hidden name=action value=\"")
                .append(action).append("\" >\n");
         } else {
             // for buttons, keep the search term
@@ -3471,7 +3471,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
 // save config
 
-        out.write("<tr><td><input type=submit class=\"accept\" value=\"");
+        out.write("<tr><td><input type=submit class=accept value=\"");
         out.write(_t("Save configuration"));
         out.write("\" name=\"foo\" ></td></tr>\n" +
                   "<tr class=spacer><td>&nbsp;</td></tr>\n" +  // spacer
@@ -3527,7 +3527,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else if (isKnownOpen)
                 buf.append(" disabled=disabled");
             buf.append(">" +
-                       "</td><td><input type=radio class=optbox value=\"1\" tabindex=\"-1\" name=\"ttype_")
+                       "</td><td><input type=radio class=optbox value=1 tabindex=\"-1\" name=\"ttype_")
                .append(announceURL).append("\"");
             if (isOpen)
                 buf.append(" checked=checked");
@@ -3536,7 +3536,7 @@ public class I2PSnarkServlet extends BasicServlet {
                      t.announceURL.equals("http://torrfreedom.i2p/announce.php"))
                 buf.append(" disabled=disabled");
             buf.append(">" +
-                       "</td><td><input type=radio class=optbox value=\"2\" tabindex=\"-1\" name=\"ttype_")
+                       "</td><td><input type=radio class=optbox value=2 tabindex=\"-1\" name=\"ttype_")
                .append(announceURL).append("\"");
             if (isPrivate) {
                 buf.append(" checked=checked");
@@ -3556,15 +3556,15 @@ public class I2PSnarkServlet extends BasicServlet {
                    "<td><input type=text class=\"trackername\" name=\"tname\" spellcheck=false></td>" +
                    "<td><input type=text class=\"trackerhome\" name=\"thurl\" spellcheck=false></td>" +
                    "<td><input type=radio class=optbox value=\"0\" name=\"add_tracker_type\" checked=checked></td>" +
-                   "<td><input type=radio class=optbox value=\"1\" name=\"add_tracker_type\"></td>" +
-                   "<td><input type=radio class=optbox value=\"2\" name=\"add_tracker_type\"></td>" +
+                   "<td><input type=radio class=optbox value=1 name=\"add_tracker_type\"></td>" +
+                   "<td><input type=radio class=optbox value=2 name=\"add_tracker_type\"></td>" +
                    "<td><input type=text class=\"trackerannounce\" name=\"taurl\" spellcheck=false></td></tr>\n" +
                    "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
                    "<tr><td colspan=7>\n" +
                    "<input type=submit name=\"taction\" class=\"default\" value=\"").append(_t("Add tracker")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=\"delete\" value=\"").append(_t("Delete selected")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=\"add\" value=\"").append(_t("Add tracker")).append("\">\n" +
-                   "<input type=submit name=\"taction\" class=\"accept\" value=\"").append(_t("Save tracker configuration")).append("\">\n" +
+                   "<input type=submit name=\"taction\" class=accept value=\"").append(_t("Save tracker configuration")).append("\">\n" +
                    // "<input type=reset class=\"cancel\" value=\"").append(_t("Cancel")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=reload value=\"").append(_t("Restore defaults")).append("\">\n" +
                    "</td></tr>" +
@@ -4295,7 +4295,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append(">" +
                                "<input type=submit name=\"setInOrderEnabled\" value=\"");
                     buf.append(_t("Save Preference"));
-                    buf.append("\" class=\"accept\"></span>");
+                    buf.append("\" class=accept></span>");
                 }
 **/
                 buf.append("</td></tr>\n");
@@ -4691,7 +4691,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if ((!complete) && (!fai.isDirectory)) {
                     if (!inOrder) {
                     buf.append("<label class=\"priorityHigh\" title=\"").append(_t("Download file at high priority")).append("\">" +
-                               "\n<input type=radio class=\"prihigh optbox\" value=\"5\" name=\"pri.").append(fileIndex).append("\" ");
+                               "\n<input type=radio class=\"prihigh optbox\" value=5 name=\"pri.").append(fileIndex).append("\" ");
                     if (priority > 0)
                         buf.append("checked=checked");
                     buf.append('>')
@@ -5021,7 +5021,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (ec) {
                 buf.append("<input type=submit name=\"setCommentsEnabled\" value=\"");
                 buf.append(_t("Save Preference"));
-                buf.append("\" class=\"accept\">");
+                buf.append("\" class=accept>");
             }
             buf.append("</span></th></tr>\n");
 
@@ -5061,7 +5061,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append(_t("Rate Torrent"));
                 else
                     buf.append(_t("Add Comment"));
-                buf.append("\" class=\"accept\"></td>\n");
+                buf.append("\" class=accept></td>\n");
                 buf.append("</tr>\n");
             }
 
@@ -5663,7 +5663,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<tfoot><tr><td colspan=4>")
                .append("<input type=submit name=\"editTorrent\" value=\"")
                .append(_t("Save Changes"))
-               .append("\" class=\"accept\"></td></tr></tfoot>\n")
+               .append("\" class=accept></td></tr></tfoot>\n")
                .append("</table>\n</div>\n");
         }
     }

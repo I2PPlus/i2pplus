@@ -107,7 +107,7 @@ public class ConfigRestartBean {
            .append("<form id=\"sb_routerControl\" class=\"volatile collapse\" action=\"").append(url).append("\" method=POST target=\"processSidebarForm\">\n")
            .append("<input type=hidden name=\"consoleNonce\" value=\"").append(nonce).append("\" >\n");
         for (int i = 0; i < s.length; i+= 3) {
-            buf.append("<button type=submit name=\"action\" value=\"")
+            buf.append("<button type=submit name=action value=\"")
                .append(s[i]).append("\" class=\"")
                .append(s[i+1]).append("\" title=\"")
                .append(_t(s[i+2], ctx)).append("\" >")
