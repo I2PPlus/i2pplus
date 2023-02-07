@@ -14,6 +14,7 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.Job;
@@ -669,8 +670,25 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         boolean uninteresting = info != null && !isHidden && (VersionComparator.comp(v, MIN_VERSION) < 0 && !fast) &&
                                 _context.netDb().getKnownRouters() > 2000 && !isUs;
+        boolean isFF = false;
+        boolean noSSU = true;
+        String caps = "unknown";
+        if (info != null) {
+            caps = info.getCapabilities().toUpperCase();
+            if (caps.contains("F")) {
+                isFF = true;
+            }
+            for (RouterAddress ra : info.getAddresses()) {
+                if (ra.getTransportStyle().equals("SSU") ||
+                    ra.getTransportStyle().equals("SSU2")) {
+                    noSSU = false;
+                    break;
+                }
+            }
+        }
+        boolean isBadFF = isFF && noSSU;
         if ((_floodfillEnabled && !forceExplore) || _context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH ||
-            _context.banlist().isBanlistedForever(peer) || uninteresting) {
+            _context.banlist().isBanlistedForever(peer) || _context.banlist().isBanlisted(peer) || uninteresting || isBadFF) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at
             // once, and then firing off 3000 netDb lookup tasks)
             // Also don't queue a search if we have plenty of routerinfos
@@ -682,6 +700,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
                 } else if (uninteresting) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
+                } else if (isBadFF) {
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
 //                    new DropLookupFailedJob(_context, peer, info);
 //                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
 //                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");

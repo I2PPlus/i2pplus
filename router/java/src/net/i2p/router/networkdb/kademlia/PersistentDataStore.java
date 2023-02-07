@@ -31,6 +31,7 @@ import net.i2p.data.Base64;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
@@ -176,7 +177,7 @@ public class PersistentDataStore extends TransientDataStore {
      *  they just back up in the queue hogging memory.
      */
 //    private static final int WRITE_LIMIT = 5000;
-    private static final int WRITE_LIMIT = 2000;
+    private static final int WRITE_LIMIT = 3000;
 //    private static final long WRITE_DELAY = 10*60*1000;
     private static final long WRITE_DELAY = 90*1000;
 
@@ -310,11 +311,26 @@ public class PersistentDataStore extends TransientDataStore {
             String MIN_VERSION = "0.9.57";
             String v = MIN_VERSION;
             boolean unreachable = false;
+            boolean isFF = false;
+            boolean noSSU = true;
+            boolean isBadFF = isFF && noSSU;
+            boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+            String caps = "unknown";
             if (ri != null) {
                 v = ri.getVersion();
                 unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+                caps = ri.getCapabilities().toUpperCase();
+                if (caps.contains("F")) {
+                    isFF = true;
+                }
+                for (RouterAddress ra : ri.getAddresses()) {
+                    if (ra.getTransportStyle().equals("SSU") ||
+                        ra.getTransportStyle().equals("SSU2")) {
+                        noSSU = false;
+                        break;
+                    }
+                }
             }
-            boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
             String filename = null;
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
                 filename = getRouterInfoName(key);
@@ -325,7 +341,7 @@ public class PersistentDataStore extends TransientDataStore {
             long dataPublishDate = getPublishDate(data);
 //            if (dbFile.lastModified() < dataPublishDate) {
 //            if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
-            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld) || isUs) {
+            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld && !isBadFF) || isUs) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -333,7 +349,7 @@ public class PersistentDataStore extends TransientDataStore {
                     data.writeBytes(fos);
                     fos.close();
                     dbFile.setLastModified(dataPublishDate);
-                    if (_log.shouldDebug() && ri != null && !unreachable && !isOld)
+                    if (_log.shouldDebug() && ri != null && !unreachable && !isOld && !isBadFF)
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
@@ -343,16 +359,20 @@ public class PersistentDataStore extends TransientDataStore {
                 if (ri != null && !isUs) {
                     if (unreachable) {
                         if (_log.shouldDebug())
-                            _log.debug("Not writing unreachable RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
                         dbFile.delete();
-                    } else if (ri != null && isOld) {
+                    } else if (isBadFF) {
                         if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (older than " + MIN_VERSION + ")");
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
+                        dbFile.delete();
+                    } else if (isOld) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
                         dbFile.delete();
                     } else {
                         // we've already written the file, no need to waste our time
                         if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (already up to date)");
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Local copy is newer");
                     }
                 }
             }
@@ -581,6 +601,24 @@ public class PersistentDataStore extends TransientDataStore {
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
+                    boolean isFF = false;
+                    boolean noSSU = true;
+                    String caps = "unknown";
+                    if (ri != null) {
+                        caps = ri.getCapabilities().toUpperCase();
+                        if (caps.contains("F")) {
+                            isFF = true;
+                        }
+                        for (RouterAddress ra : ri.getAddresses()) {
+                            if (ra.getTransportStyle().equals("SSU") ||
+                                ra.getTransportStyle().equals("SSU2")) {
+                                noSSU = false;
+                                break;
+                            }
+                        }
+                    }
+                    boolean isBadFF = isFF && noSSU;
+
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldError())
@@ -588,6 +626,10 @@ public class PersistentDataStore extends TransientDataStore {
                                        + ri.getIdentity().calculateHash().toBase64().substring(0,6)
                                        + "] is from a different network");
                         _routerFile.delete();
+                    } else if (isBadFF) {
+                        corrupt = true;
+                        if (_log.shouldInfo())
+                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
                     } else if (!ri.getIdentity().calculateHash().equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
