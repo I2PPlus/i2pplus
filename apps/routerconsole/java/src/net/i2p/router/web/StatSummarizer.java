@@ -215,8 +215,8 @@ public class StatSummarizer implements Runnable, ClientApp {
                                                    ",router.cpuLoad.60000" +
                                                    ",router.memoryUsed.60000" +
                                                    ",tunnel.participatingTunnels.60000" +
-                                                   ",tunnel.tunnelBuildSuccessAvg.60000";
-//                                                 ",tunnel.testSuccessTime.60000" +
+                                                   ",tunnel.tunnelBuildSuccessAvg.60000" +
+                                                   ",tunnel.testSuccessTime.60000";
 //                                                 ",udp.outboundActiveCount.60000" +
 //                                                 ",udp.receivePacketSize.60000" +
 //                                                 ",udp.receivePacketSkew.60000" +
