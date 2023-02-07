@@ -255,7 +255,7 @@ class FloodfillPeerSelector extends PeerSelector {
 
         // 5 == FNDF.MAX_TO_FLOOD + 1
 //        int limit = Math.max(5, howMany + 2);
-        int limit = Math.max(16, howMany + 2);
+        int limit = Math.max(128, howMany + 2);
         limit = Math.min(limit, sorted.size());
         MaskedIPSet maskedIPs = new MaskedIPSet(limit * 3);
         // split sorted list into 3 sorted lists
