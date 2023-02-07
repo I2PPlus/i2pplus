@@ -2340,3 +2340,4 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 .rid .rbw.isU{box-shadow:var(--highlight), 0 0 1px 1px rgba(255,0,0,.9) inset}
 .rid .rbw.isff.isU{box-shadow:var(--highlight), 0 0 1px 1px rgba(255,0,0,.9) inset;background:linear-gradient(135deg,rgba(255,96,0,.3) 50%,rgba(128,0,0,.3) 50%)}
 #banlist li .rid{margin-right:5px;margin-left:-3px;float:left}
+#profiles span[hidden]{display:none!important}
