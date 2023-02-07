@@ -926,7 +926,8 @@ class SummaryBarRenderer {
                    "<tr title=\"")
            .append(_t("The number of peers available for network database inquiries"))
            .append("\">" +
-                   "<td><a href=\"/netdb?caps=f\"><b>")
+                   //"<td><a href=\"/netdb?caps=f\"><b>")
+                   "<td><a href=\"/profiles?f=2\"><b>")
            .append(_t("Floodfill"))
            .append("</b></a></td><td class=digits><span>")
            .append(_helper.getWellIntegratedPeers())
@@ -962,7 +963,8 @@ class SummaryBarRenderer {
 
         buf.append("<table id=sb_peers_condensed hidden>\n")
            .append("<tr><td>")
-           .append("<a class=sb_icon id=floodfill href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
+           //.append("<a class=sb_icon id=floodfill href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
+           .append("<a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"").append(_t("Floodfill"))
            .append("\"><span><span class=badge>").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
            .append("<a class=sb_icon id=fast href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
            .append("\"><span><span class=badge>").append(_helper.getFastPeers()).append("</span></span></a>\n")
@@ -1058,7 +1060,8 @@ class SummaryBarRenderer {
 
         buf.append("<table id=sb_peers_condensed hidden>\n")
            .append("<tr><td>")
-           .append("<a class=sb_icon id=floodfill href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
+           //.append("<a class=sb_icon id=floodfill href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
+           .append("<a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"").append(_t("Floodfill"))
            .append("\"><span><span class=badge>").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
            .append("<a class=sb_icon id=fast href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
            .append("\"><span><span class=badge>").append(_helper.getFastPeers()).append("</span></span></a>\n")
