@@ -244,16 +244,18 @@ public class JobQueueHelper extends HelperBase {
             //buf.append("<td><b title=\"").append(getClass().getSimpleName()).append("\">").append(stats.getName()).append("</b></td>");
             buf.append("<td><b>").append(stats.getName()).append("</b></td>");
             buf.append("<td>").append(stats.getRuns()).append("</td>");
-            buf.append("<td>").append(stats.getDropped()).append("</td>");
-            buf.append("<td><span hidden>").append(stats.getTotalTime()).append("</span>").append(DataHelper.formatDuration2(stats.getTotalTime())).append("</td>");
-            buf.append("<td><span hidden>").append(stats.getAvgTime()).append("</span>").append(DataHelper.formatDuration2(stats.getAvgTime())).append("</td>");
-            buf.append("<td><span hidden>").append(stats.getMaxTime()).append("</span>").append(DataHelper.formatDuration2(stats.getMaxTime())).append("</td>");
-            buf.append("<td><span hidden>").append(stats.getMinTime()).append("</span>").append(DataHelper.formatDuration2(stats.getMinTime())).append("</td>");
+            if (totDropped > 0) {
+                buf.append("<td>").append(stats.getDropped()).append("</td>");
+            }
+            buf.append("<td><span hidden>").append(stats.getTotalTime()).append(".</span>").append(DataHelper.formatDuration2(stats.getTotalTime())).append("</td>");
+            buf.append("<td><span hidden>").append(stats.getAvgTime()).append(".</span>").append(DataHelper.formatDuration2(stats.getAvgTime())).append("</td>");
+            buf.append("<td><span hidden>").append(stats.getMaxTime()).append(".</span>").append(DataHelper.formatDuration2(stats.getMaxTime())).append("</td>");
+            buf.append("<td><span hidden>").append(stats.getMinTime()).append(".</span>").append(DataHelper.formatDuration2(stats.getMinTime())).append("</td>");
             if (isAdvanced()) {
-                buf.append("<td><span hidden>").append(stats.getTotalPendingTime()).append("</span>").append(DataHelper.formatDuration2(stats.getTotalPendingTime())).append("</td>");
-                buf.append("<td><span hidden>").append(stats.getAvgPendingTime()).append("</span>").append(DataHelper.formatDuration2(stats.getAvgPendingTime())).append("</td>");
-                buf.append("<td><span hidden>").append(stats.getMaxPendingTime()).append("</span>").append(DataHelper.formatDuration2(stats.getMaxPendingTime())).append("</td>");
-                buf.append("<td><span hidden>").append(stats.getMinPendingTime()).append("</span>").append(DataHelper.formatDuration2(stats.getMinPendingTime())).append("</td>");
+                buf.append("<td><span hidden>").append(stats.getTotalPendingTime()).append(".</span>").append(DataHelper.formatDuration2(stats.getTotalPendingTime())).append("</td>");
+                buf.append("<td><span hidden>").append(stats.getAvgPendingTime()).append(".</span>").append(DataHelper.formatDuration2(stats.getAvgPendingTime())).append("</td>");
+                buf.append("<td><span hidden>").append(stats.getMaxPendingTime()).append(".</span>").append(DataHelper.formatDuration2(stats.getMaxPendingTime())).append("</td>");
+                buf.append("<td><span hidden>").append(stats.getMinPendingTime()).append(".</span>").append(DataHelper.formatDuration2(stats.getMinPendingTime())).append("</td>");
             }
             buf.append("</tr>\n");
             if (stats.getMaxTime() > maxExecTime)
@@ -276,7 +278,9 @@ public class JobQueueHelper extends HelperBase {
         buf.append("</tbody>\n<tfoot id=statTotals><tr class=tablefooter>");
         buf.append("<td><b>").append(_t("Summary")).append("</b></td>");
         buf.append("<td>").append(totRuns).append("</td>");
-        buf.append("<td>").append(totDropped).append("</td>");
+        if (totDropped > 0) {
+            buf.append("<td>").append(totDropped).append("</td>");
+        }
         buf.append("<td>").append(DataHelper.formatDuration2(totExecTime)).append("</td>");
         buf.append("<td>").append(DataHelper.formatDuration2(avgExecTime)).append("</td>");
         buf.append("<td>").append(DataHelper.formatDuration2(maxExecTime)).append("</td>");
