@@ -646,7 +646,7 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 .smallhead th a:hover{text-decoration:none}
 .smallhead th a img:hover{filter:drop-shadow(0 0 1px var(--hover))}
 .mediumtags{font-size:9pt}
-.cells{text-align:center}
+.cells, .cells td{text-align:center}
 .tablefooter,.tablefooter td,#jobstats tr:last-child td{padding:10px;line-height:1.1;border-top:var(--border_inner);border-bottom:var(--border_inner);border-right:none;box-shadow:none;background:none}
 .tablefooter,.tablefooter:hover td{background:linear-gradient(180deg,#010014,#010010 50%,#010010 100%)}
 .formaction{margin-bottom:-5px;padding:7px 5px;text-align:right}
@@ -1605,7 +1605,7 @@ h3.tabletitle + .statusnotes,table.tunneldisplay{margin-top:-1px}
 .statusnotes:last-of-type{margin-bottom:10px}
 
 /* peers */
-.cells.mtu{white-space:nowrap}
+.cells .mtu{white-space:nowrap}
 .peer_arrow{margin-right:3px;width:18px;display:inline-block;text-align:center}
 .peeripv6:empty{padding:0;width:0}
 .peersort{text-align:center;display:inline-block}
@@ -1614,7 +1614,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .tx .right,.rx .right,.duptx .right,.duprx .right,.cwnd .left,.cwnd .right{width:auto}
 #peers .routerid,#profiles .routerid{padding:3px 2px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:2px;background:var(--element)}
 #peers .routerid img,#profiles .routerid img{margin-right:0}
-#peers .cells{box-shadow:none}
+#peers .cells td{box-shadow:none}
 #peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle}
 #peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
 #peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}

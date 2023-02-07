@@ -1790,9 +1790,9 @@ span.right,span.left{margin:0 1px;display:inline-block;width:40%}
 .cwnd .left,.cwnd .right{width:auto}
 .peer_arrow{margin-right:3px;width:18px;display:inline-block;text-align:center}
 .smallhead th,#ntcpconnections th{font-size:8pt}
-.cells.peer{padding:5px;text-align:center}
-.cells.direction{white-space:nowrap}
-.cells.mtu{white-space:nowrap}
+.cells td.peer{padding:5px;text-align:center}
+.cells td.direction{white-space:nowrap}
+.cells td.mtu{white-space:nowrap}
 .reachability{float:right;font-size:85%}
 #peers p.infohelp{margin:14px 0}
 #peers .widescroll + .tabletitle{margin-top:9px}
@@ -2121,7 +2121,7 @@ iframe{height:0}
 #peers #ntcpconnections th.queue::after{width:16px;height:16px;display:inline-block;background:var(--err) no-repeat center center/16px;content:""}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
 #peers #transportSummary .ipv6{display:table-cell}
-.cells.peer,.cells.direction{min-width:0} .cells.idle,.cells.inout{min-width:90px}
+.cells td.peer,.cells td.direction{min-width:0} .cells td.idle,.cells td.inout{min-width:90px}
 }
 
 @media screen and (max-width:1200px){

@@ -355,14 +355,14 @@ h3:active .badge{display:none}
 #reseed_urlselection.optionsingle,#reseedproxytype,#config_reseed .optionlist:hover,#graphs .optionlist:hover,#config_network .optionlist:hover,#config_i2cp .optionlist:hover{background:#fff}
 #resetreseed{padding:5px 0;border:none;background:none}
 td.tabletextarea{padding:0;background:#fafaff}
-#tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,#profilelist td:not(:first-child),#profile_defs td:not(:first-child),#floodfills td:not(:first-child),#debug td:not(:first-child),#jardump td:not(:first-child),#jobstats td:not(:first-child),#eventlog td:not(:first-child),#webappconfig td:not(:first-child),#tunnelconfig td:not(:first-child),#sidebarconf td:not(:first-child),#configstats td:not(:first-child),#loggingoptions td:not(:first-child),#addkeyring td:not(:first-child),.homelinkedit td:not(:first-child),#clientconfig td:not(:first-child),.netdbentry td:not(:first-child),#netdblookup td:not(:first-child),#peerdefs td:not(:first-child),#help td:not(.infohelp):not(.infowarn),#pluginconfig td:not(:first-child),#thresholds td:not(:first-child),#leasesetdebug td:not(:first-child),#enviro td:not(:first-child),#routerinformation td:not(:first-child),#udpconnections td:nth-child(n+2){border-left:var(--border_soft)}
+#tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,.cells td,#profilelist td:not(:first-child),#profile_defs td:not(:first-child),#floodfills td:not(:first-child),#debug td:not(:first-child),#jardump td:not(:first-child),#jobstats td:not(:first-child),#eventlog td:not(:first-child),#webappconfig td:not(:first-child),#tunnelconfig td:not(:first-child),#sidebarconf td:not(:first-child),#configstats td:not(:first-child),#loggingoptions td:not(:first-child),#addkeyring td:not(:first-child),.homelinkedit td:not(:first-child),#clientconfig td:not(:first-child),.netdbentry td:not(:first-child),#netdblookup td:not(:first-child),#peerdefs td:not(:first-child),#help td:not(.infohelp):not(.infowarn),#pluginconfig td:not(:first-child),#thresholds td:not(:first-child),#leasesetdebug td:not(:first-child),#enviro td:not(:first-child),#routerinformation td:not(:first-child),#udpconnections td:nth-child(n+2){border-left:var(--border_soft)}
 #tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,#profilelist td,#profile_defs td,#floodfills td,#debug td,#jardump td,#jobstats td,#eventlog td,#webappconfig td,#tunnelconfig td,#sidebarconf td,#configstats td,#loggingoptions td,#addkeyring td,.homelinkedit td,#clientconfig td,.netdbentry td,#netdblookup td,#peerdefs td,#help td:not(.infohelp):not(.infowarn),#pluginconfig td,#thresholds td,#leasesetdebug td,#enviro td,#routerinformation td{box-shadow:var(--highlight);background:rgba(240,240,255,.4)}
 #tunnels .configpeer img,#profiles .configpeer img,#peers .configpeer img{opacity:0}
 #tunnels h3 a[href^="/configtunnels#"]:active,#logs a.configure:active::after,#logs a.delete:active::after{background-size:12px}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs a.delete::after,#logs a.configure::after{margin-top:2px;margin-bottom:-1px;width:16px;height:16px;float:right;background:var(--settings) no-repeat center center/16px;content:""}
 #tunnels h3 a[href^="/configtunnels#"]:hover::after,#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,#logs a.delete::after,#logs a.configure:hover::after{background:var(--settings_hover) no-repeat center center/16px}
 #tunnels h3 a[href^="/configtunnels#"]:hover,#logs a.configure:hover::after{background:var(--settings_hover) no-repeat center center/16px}
-#tunnels tr:hover .cells,#tunnel_defs tr:hover td,tr:hover .cells,#profilelist tr:hover td,#profile_defs tr:hover td,#floodfills tr:hover td,#debug tr:hover td,#jardump tr:hover td,#jobstats tr:hover td,#eventlog tr:hover td,#webappconfig tr:hover td,#tunnelconfig tr:hover td,#sidebarconf tr:hover td,#configstats tr:hover td,#loggingoptions tr:hover td,#addkeyring tr:hover td,.homelinkedit tr:hover td,#clientconfig tr:hover td,.netdbentry tr:hover td,#netdblookup tr:hover td,#peerdefs tr:hover td,#help tr:hover td:not(.infohelp):not(.infowarn)
+#tunnels tr:hover .cells,#tunnel_defs tr:hover td,tr:hover .cells,.cells tr:hover td,#profilelist tr:hover td,#profile_defs tr:hover td,#floodfills tr:hover td,#debug tr:hover td,#jardump tr:hover td,#jobstats tr:hover td,#eventlog tr:hover td,#webappconfig tr:hover td,#tunnelconfig tr:hover td,#sidebarconf tr:hover td,#configstats tr:hover td,#loggingoptions tr:hover td,#addkeyring tr:hover td,.homelinkedit tr:hover td,#clientconfig tr:hover td,.netdbentry tr:hover td,#netdblookup tr:hover td,#peerdefs tr:hover td,#help tr:hover td:not(.infohelp):not(.infowarn)
 #udpconnections{margin-bottom:4px}
 #warning2{background:linear-gradient(180deg,rgba(248,248,255,.5),rgba(240,240,255,.5)),url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom/auto 160px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px) #f8f8ff}
 span#newtab{float:right;letter-spacing:0;text-align:right;font-size:8pt}
@@ -970,7 +970,7 @@ h3#scheduledjobs + ol li::before{background:var(--timer) no-repeat 6px center/12
 
 .smallhead th,#ntcpconnections th,#transportSummary th{font-size:8pt}
 .mediumtags{font-weight:700}
-.cells{padding-top:4px;padding-bottom:4px;border-left:var(--border_soft);border-top:var(--border_soft);border-bottom:var(--border_soft)}
+.cells, .cells td{padding-top:4px;padding-bottom:4px;border-left:var(--border_soft);border-top:var(--border_soft);border-bottom:var(--border_soft)}
 .tablefooter{background:#f8f8ff}
 .tablefooter tr,.tablefooter td{padding:8px 2px;line-height:1.1;font-size:9pt;border-top:1px solid var(--border_inner);border-bottom:1px solid var(--border_inner);background:#f8f8ff}
 .formaction{margin-top:-15px;padding:5px;text-align:right;border:1px solid var(--border_inner);background:#fafaff}
@@ -989,8 +989,8 @@ table#addkeyring tr:last-child td{padding:5px;border-top:1px solid var(--border_
 .confignav + #udp > h3#udpcon{margin-top:15px}
 span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .peersort{text-align:center;display:inline-block}
-.cells.ipv6{width:1%;max-width:24px}
-.cells.direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
+.cells .ipv6{width:1%;max-width:24px}
+.cells .direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
 .cwnd .left,.cwnd .right{width:auto}
 #peers p.infohelp{margin-top:14px}
 #peers .infohelp code{font-size:9pt}
@@ -1017,7 +1017,7 @@ h3#udpcon{margin-top:7px}
 #peers td.direction i{margin:3px -3px -4px;width:100%;display:inline-block;text-align:center;font-style:normal;font-size:90%;color:#412;border-top:1px solid #ddf;border-radius:2px}
 #ntcpconnections td:not(.rif):first-child,#udpconnections td:not(.rif):first-child{min-width:58px}
 #peer_thresholds{position:absolute;top:10px;width:100%}
-#thresholds tr:hover td,#leasesetdebug tr:hover td,tr:hover .cells{box-shadow:inset 0 0 0 1px #ffe;transition:ease all .05s}
+#thresholds tr:hover td,#leasesetdebug tr:hover td,tr:hover .cells, .cells tr:hover td{box-shadow:inset 0 0 0 1px #ffe;transition:ease all .05s}
 #transportSummary td{text-align:center;padding:8px;font-style:normal}
 #transportSummary tr:hover{background:#ffd}
 #peers .tablefooter td{font-weight:700;background:var(--th)}
@@ -2474,7 +2474,7 @@ h4 span[style="float:right;"] .unbold{max-width:300px}
 }
 
 @media screen and (max-width:1000px){
-.cells{padding:3px 2px}
+.cells, .cells td{padding:3px 2px}
 .cells tt,#profilelist tt{margin-left:2px;margin-right:2px}
 .encDests code{max-width:60px}
 .encKey{font-size:80%}
@@ -2669,7 +2669,7 @@ h3#pconfig,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
 #tunnelPeerCount .flag img{margin:2px 1px 0 -2px;border:none}
 #tunnelPeerCount .flag{width:19px}
 #tunnels .tunnel_peer tt{margin-left:3px;margin-top:-2px;display:inline-block}
-#udpconnections .cells{border-left:none;border-right:none}
+#udpconnections .cells td{border-left:none;border-right:none}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
 #xhr > hr + #sb_shortgeneral{margin-top:-7px}
 #webappconfiguration a,#config_plugins .h3navlinks a{margin-top:-8px;padding:12px 8px 8px}
