@@ -594,6 +594,7 @@ public class PersistentDataStore extends TransientDataStore {
                     ri.readBytes(fis, true);  // true = verify sig on read
                     String v = ri.getVersion();
                     String MIN_VERSION = "0.9.57";
+                    String truncHash = "";
                     Hash us = _context.routerHash();
                     boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());
                     boolean isOldVersion = ri != null && VersionComparator.comp(v, MIN_VERSION) < 0;
@@ -606,6 +607,7 @@ public class PersistentDataStore extends TransientDataStore {
                     boolean isSalt = false;
                     String caps = "unknown";
                     if (ri != null) {
+                        truncHash = ri.getIdentity().calculateHash().toBase64().substring(0,6);
                         caps = ri.getCapabilities().toUpperCase();
                         if (caps.contains("F")) {
                             isFF = true;
@@ -627,32 +629,29 @@ public class PersistentDataStore extends TransientDataStore {
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldError())
-                            _log.error("Router ["
-                                       + ri.getIdentity().calculateHash().toBase64().substring(0,6)
-                                       + "] is from a different network");
+                            _log.error("Router [" + truncHash + "] is from a different network");
                         _routerFile.delete();
                     } else if (isBadFF) {
                         corrupt = true;
                         if (_log.shouldInfo())
-                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
+                            _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> Floodfill with SSU disabled");
                         if (_log.shouldWarn())
-                            _log.warn("Banning: [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] for 8h -> Floodfill with SSU disabled");
+                            _log.warn("Banning: [" + truncHash + "] for 8h -> Floodfill with SSU disabled");
                             _context.banlist().banlistRouter(_key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 8*60*60*1000);
                     } else if (isSalt) {
                         corrupt = true;
                         if (_log.shouldInfo())
-                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> RouterInfo has bogus 'salt' cap");
+                            _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> RouterInfo has bogus 'salt' cap");
                         if (_log.shouldWarn())
-                            _log.warn("Banning: [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] for 8h -> RouterInfo has bogus 'salt' cap");
+                            _log.warn("Banning: [" + truncHash + "] for 8h -> RouterInfo has bogus 'salt' cap");
                             _context.banlist().banlistRouter(_key, "<b>➜</b> RouterInfo has bogus 'salt' cap", null, null, now + 8*60*60*1000);
                     } else if (!ri.getIdentity().calculateHash().equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
                         corrupt = true;
                         if (_log.shouldWarn())
-                            _log.warn("RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] does not match [" +
-                                      _key.toBase64().substring(0,6) + "] from " + _routerFile);
-                            _log.warn("Banning: [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] for 1h -> Corrupt RouterInfo");
+                            _log.warn("RouterInfo [" + truncHash + "] does not match [" + _key.toBase64().substring(0,6) + "] from " + _routerFile);
+                            _log.warn("Banning: [" + truncHash + "] for 1h -> Corrupt RouterInfo");
                             _context.banlist().banlistRouter(_key, "<b>➜</b> Corrupt RouterInfo", null, null, now + 60*60*1000);
                         _routerFile.delete();
                     } else if (ri.getPublished() <= _knownDate) {
@@ -664,16 +663,16 @@ public class PersistentDataStore extends TransientDataStore {
                         corrupt = true;
                         if (_log.shouldInfo()) {
                             if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty())
-                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> Unreachable");
+                                _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> Unreachable");
                             else if (isSlow)
-                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> K, L or M tier");
+                                _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> K, L or M tier");
                             else if (isOldVersion)
-                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
+                                _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> Older than " + MIN_VERSION);
                         }
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;
                         if (_log.shouldWarn())
-                            _log.warn(ri.getHash() + " is blocklisted");
+                            _log.warn("Not writing RouterInfo [" + truncHash + "] to disk -> Blocklisted");
                     } else {
                         try {
                             // persist = false so we don't write what we just read
@@ -685,7 +684,7 @@ public class PersistentDataStore extends TransientDataStore {
                         } catch (IllegalArgumentException iae) {
                             corrupt = true;
                             if (_log.shouldInfo())
-                                _log.info("Rejected locally loaded RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "]\n* " + iae.getMessage());
+                                _log.info("Rejected locally loaded RouterInfo [" + truncHash + "]\n* " + iae.getMessage());
                         }
                     }
                 } catch (DataFormatException dfe) {
