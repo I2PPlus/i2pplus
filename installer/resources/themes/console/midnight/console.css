@@ -1366,14 +1366,6 @@ a[href^="configpeer?peer"]:hover::after{background:var(--edit_hover) no-repeat c
 #capabilities_key b{text-transform:none}
 #profile_defs + hr{display:none}
 #profiles_overview{margin-top:-4px}
-#floodfills{margin:0 0 10px}
-#floodfills + hr{display:none}
-#floodfills th,#floodfills td{text-align:right}
-#floodfills th{white-space:normal;text-align:center}
-#floodfills td{padding:3px}
-#floodfills th:first-child,#floodfills td:first-child{padding:0;width:52px;white-space:nowrap;text-align:center}
-#floodfills td:first-child{padding-left:4px;padding-right:5px;text-align:right}
- #floodfills td:nth-child(odd){background:rgba(0,0,0,.3)}
 #profilelist td:first-child > *,#floodfills td:first-child > *,#udpconnections td:first-child > *,#ntcpconnections td:first-child > *{vertical-align:middle}
 #viewprofile{margin-bottom:8px}
 #viewprofile pre{margin-bottom:0;white-space:pre-wrap}
@@ -1406,6 +1398,65 @@ h3[id="udpcon"]{width:auto}
 #udpconnections tr.tablefooter td{color:var(--ink)}
 #udpconnections tr.tablefooter:hover td{border-top:var(--border_inner)}
 #udpconnections tr.tablefooter td:first-child{padding-left:9px}
+
+.ff,#profiles .ff{background:linear-gradient(180deg,#421,#310)}
+.hidden,#profiles .hidden{color:#777;background:linear-gradient(180deg,#333,#222)}
+.hide,.hideme,#netdb .hide{display:none}
+.reachable,#profiles .reachable{background:linear-gradient(180deg,#131,#121)}
+.ssuintro,#profiles .ssuintro{background:linear-gradient(180deg,#313,#212)}
+.ssutesting,#profiles .ssutesting{background:linear-gradient(180deg,#331,#221)}
+#peerprofiles.widescroll{position:relative;padding-top:102px;margin-top:0}
+#peer_thresholds{position:absolute;top:5px;width:100%}
+#profile_defs table{border:none}
+#profile_defs td:nth-child(2)::first-letter{text-transform:uppercase}
+#profile_defs tr:first-child td{border-top:none}
+.profilegroup{margin:2px 0 2px 10px;display:inline-block}
+#profilelist td:nth-child(2) i{display:inline-block;width:100%;text-align:center}
+#profilelist td:nth-child(2){text-align:left}
+#profilelist td:nth-child(2){white-space:nowrap;width:1%}
+#profilelist td:nth-child(3) i{letter-spacing:0}
+#profilelist td:nth-last-child(5) span{min-width:40px}
+#profilelist td{padding:4px}
+#profilelist th:first-child,#profilelist th:nth-child(2),#profilelist th:nth-child(3),#profilelist th:nth-child(4),#profilelist th:nth-child(7),#profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3),#profilelist td:nth-child(4),#profilelist td:nth-child(7){width:1%;white-space:nowrap;text-align:center}
+#profilelist th:nth-child(5),#profilelist td:nth-child(5){text-align:center}
+#profilelist th,#profilelist td{padding-left:8px;padding-right:8px}
+#profiles_overview{margin-bottom:0}
+#profiles .widescroll{margin:-4px auto -2px}
+#thresholds{margin-bottom:15px}
+.unreachable,#profiles .unreachable{background:linear-gradient(180deg,#300,#200)}
+#view_profile h3 a{letter-spacing:0;font-size:90%;text-transform:none}
+#view_profile h3{margin-bottom:-2px;padding-top:14px;position:relative;vertical-align:middle;border-width:1px;border-radius:0}
+#view_profile .identicon{margin:0;position:absolute;top:1px;right:1px;width:auto;height:calc(100% - 2px);opacity:.7}
+#viewprofile pre{margin:0;padding:20px 20px 0;line-height:20px;background:repeating-linear-gradient(180deg,rgba(0,0,48,.2),rgba(0,0,48,.2) 20px,rgba(0,0,96,.2) 20px,rgba(0,0,96,.2) 40px);width:calc(100% - 44px);text-shadow:0 1px 1px #000;border-left:5px solid #1a1840}
+#view_profile .profiledump img,#view_profile .configpeer img{opacity:0;margin:0;padding:0}
+#view_profile .profiledump,#view_profile .configpeer{padding:6px;font-size:0}
+#viewprofile span{margin:-26px -1px -1px 0;padding:5px;float:right;border:var(--border_inner);background:#000}
+#viewprofile td{padding:0}
+#viewprofile tr{background:none}
+#view_profile .viewprofile{margin-right:6px}
+#view_profile .viewprofile,#view_profile .configpeer{margin:-4px 48px 4px 0}
+
+/* floodfills */
+#floodfills{margin:0 0 10px}
+#floodfills + hr{display:none}
+#floodfills th,#floodfills td{padding:4px 3px;text-align:center}
+#floodfills th{white-space:normal;font-size:90%}
+#floodfills td{padding:3px;text-align:center}
+#floodfills:not(.rid) td:nth-child(2){width:6%;min-width:64px}
+#floodfills:not(.rid) td:nth-child(odd){background:rgba(0,0,0,.3)}
+
+#floodfills .percentBarInner{width:inherit;display:inline-block;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#700 25px,#800 40px,#900 50px)}
+#floodfills .percentBarInner[style="width:0%"]{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#070,#080)}
+#floodfills .percentBarOuter{text-align:left;background:#000;border:var(--border_inner);opacity:.9;height:16px}
+#floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText{box-sizing:border-box;float:none}
+#floodfills .percentBarOuter,#floodfills .percentBarText{margin:0 2px;width:calc(100% - 6px);display:inline-block}
+#floodfills .percentBarText{color:#fff;text-shadow:0 1px 1px #000;display:none}
+#floodfills td:nth-child(2){white-space:nowrap;padding-left:3px;padding-right:3px}
+#floodfills td:nth-child(3),#profilelist th:nth-last-child(3),#profilelist td:nth-last-child(3),#profilelist th:nth-last-child(4),#profilelist th:nth-last-child(5),#profilelist th:nth-last-child(6),#profilelist td:nth-last-child(4),#profilelist td:nth-last-child(5),#profilelist td:nth-last-child(6){text-align:center}
+#floodfills td:nth-child(3) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span,#profilelist td:nth-last-child(2) span{display:inline-block;text-align:right;min-width:20px}
+#floodfills td:nth-last-child(2){text-align:center}
+#floodfills td:empty{text-align:center}
+#floodfills td:empty::before,#ntcpconnections td:empty::before,#udpconnections td:empty::before,#profilelist td:empty::before{content:"‒";display:inline-block;opacity:.8;width:100%;text-align:center}
 
 /* home */
 #home .welcome h2{margin-top:12px}
@@ -1861,67 +1912,12 @@ h3.sybils + div,h3.sybils + a[name] + table{margin-top:-1px}
 #stats ul ul{box-shadow:none;background:none}
 #wrapperlogs pre{max-height:500px;resize:none}
 
-#profilelist td:nth-child(3) i{letter-spacing:0}
 #schedjobs ul{margin:0 -5px;columns:350px auto;column-gap:0}
 #skm_dest{white-space:nowrap;font-size:smaller;text-transform:none;letter-spacing:0}
 #stats form > *{vertical-align:middle}
 #tunnelconfig th img{font-size:0}
 #tunnelconfig th{text-align:left}
 #url td:first-child{padding:15px 25px 15px 55px;border-right:none;background:var(--link) no-repeat 15px center/28px}
-
-/* profiles */
-
-.ff,#profiles .ff{background:linear-gradient(180deg,#421,#310)}
-.hidden,#profiles .hidden{color:#777;background:linear-gradient(180deg,#333,#222)}
-.hide,.hideme,#netdb .hide{display:none}
-.reachable,#profiles .reachable{background:linear-gradient(180deg,#131,#121)}
-.ssuintro,#profiles .ssuintro{background:linear-gradient(180deg,#313,#212)}
-.ssutesting,#profiles .ssutesting{background:linear-gradient(180deg,#331,#221)}
-.unreachable,#profiles .unreachable{background:linear-gradient(180deg,#300,#200)}
-#floodfills .percentBarInner{width:inherit;display:inline-block;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#700 25px,#800 40px,#900 50px)}
-#floodfills .percentBarInner[style="width:0%"]{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#070,#080)}
-#floodfills .percentBarOuter{text-align:left;background:#000;border:var(--border_inner);opacity:.9;height:16px}
-#floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText{box-sizing:border-box;float:none}
-#floodfills .percentBarOuter,#floodfills .percentBarText{margin:0 2px;width:50px;display:inline-block}
-#floodfills .percentBarText{color:#fff;text-shadow:0 1px 1px #000;display:none}
-#floodfills th{padding:5px 3px;font-size:90%}
-#floodfills td{padding:3px;text-align:center}
-#floodfills td:nth-child(2){white-space:nowrap;padding-left:3px;padding-right:3px}
-#floodfills td:nth-child(3),#profilelist th:nth-last-child(3),#profilelist td:nth-last-child(3),#profilelist th:nth-last-child(4),#profilelist th:nth-last-child(5),#profilelist th:nth-last-child(6),#profilelist td:nth-last-child(4),#profilelist td:nth-last-child(5),#profilelist td:nth-last-child(6){text-align:center}
-#floodfills td:nth-child(3) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span,#profilelist td:nth-last-child(2) span{display:inline-block;text-align:right;min-width:20px}
-#floodfills td:nth-last-child(2){text-align:center}
-#floodfills td:empty{text-align:center}
-#floodfills td:empty::before,#ntcpconnections td:empty::before,#udpconnections td:empty::before,#profilelist td:empty::before{content:"‒";display:inline-block;opacity:.8;width:100%;text-align:center}
-#peerprofiles.widescroll{position:relative;padding-top:102px;margin-top:0}
-#peer_thresholds{position:absolute;top:5px;width:100%}
-#profile_defs table{border:none}
-#profile_defs tr:first-child td{border-top:none}
-#profile_defs td:nth-child(2)::first-letter{text-transform:uppercase}
-
-.profilegroup{margin:2px 0 2px 10px;display:inline-block}
-#profilelist th,#profilelist td{padding-left:8px;padding-right:8px}
-#profilelist th:nth-child(5),#profilelist td:nth-child(5){text-align:center}
-#profilelist th:first-child,#profilelist th:nth-child(2),#profilelist th:nth-child(3),#profilelist th:nth-child(4),#profilelist th:nth-child(7),#profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3),#profilelist td:nth-child(4),#profilelist td:nth-child(7){width:1%;white-space:nowrap;text-align:center}
-#profilelist td{padding:4px}
-#profilelist td:nth-child(2),#floodfills td:last-child{white-space:nowrap;width:1%}
-#profilelist td:nth-child(2){text-align:left}
-#profilelist td:nth-child(2) i{display:inline-block;width:100%;text-align:center}
-#profilelist td:nth-last-child(5) span{min-width:40px}
-#profiles_overview{margin-bottom:0}
-#profiles .widescroll{margin:-4px auto -2px}
-#thresholds{margin-bottom:15px}
-
-#view_profile h3{margin-bottom:-2px;padding-top:14px;position:relative;vertical-align:middle;border-width:1px;border-radius:0}
-#view_profile h3 a{letter-spacing:0;font-size:90%;text-transform:none}
-#view_profile .identicon{margin:0;position:absolute;top:1px;right:1px;width:auto;height:calc(100% - 2px);opacity:.7}
-#viewprofile pre{margin:0;padding:20px 20px 0;line-height:20px;background:repeating-linear-gradient(180deg,rgba(0,0,48,.2),rgba(0,0,48,.2) 20px,rgba(0,0,96,.2) 20px,rgba(0,0,96,.2) 40px);width:calc(100% - 44px);text-shadow:0 1px 1px #000;border-left:5px solid #1a1840}
-#view_profile .profiledump img,#view_profile .configpeer img{opacity:0;margin:0;padding:0}
-#view_profile .profiledump,#view_profile .configpeer{padding:6px;font-size:0}
-#viewprofile span{margin:-26px -1px -1px 0;padding:5px;float:right;border:var(--border_inner);background:#000}
-#viewprofile tr{background:none}
-#viewprofile td{padding:0}
-#view_profile .viewprofile,#view_profile .configpeer{margin:-4px 48px 4px 0}
-#view_profile .viewprofile{margin-right:6px}
 
 /* embedded */
 html,body{height:100%}
@@ -2639,7 +2635,6 @@ td.optionsave,#i2pupdates td:first-child{width:30%;white-space:normal}
 @media screen and (min-width:1200px){
 h3.tabletitle a,#version.tabletitle a{padding-left:18px}
 #thresholds th,#thresholds td{width:33%}
-#floodfills td:last-child{padding-right:5px}
 .topness,#newsStatus,#newsDisplay{font-size:9pt}
 .news hr{margin-bottom:5px}
 #help h3,#faq h3{font-size:10.5pt}

@@ -1174,7 +1174,7 @@ h3#udpcon{margin-top:7px}
 .obep::after{background:var(--obep) no-repeat center center}
 .ptcp::after{background:var(--ptcp) no-repeat center center}
 
-#floodfills .percentBarOuter,#floodfills .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarText{width:50px}
+#tunnels .percentBarOuter,#tunnels .percentBarText{width:50px}
 #floodfills .percentBarOuter,#tunnels .percentBarOuter{margin:0;height:16px;position:relative;text-align:left;border:1px solid #ccccf0;box-shadow:var(--highlight);background:#eef;opacity:.9}
 #floodfills .percentBarInner,#tunnels .percentBarInner{width:inherit;display:inline-block;vertical-align:top;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#900 25px,#a00 40px,#b00 50px)}
 #floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;vertical-align:middle;box-sizing:border-box;float:none}
@@ -1206,7 +1206,7 @@ h3#udpcon{margin-top:7px}
 #floodfills td:nth-child(3) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;text-align:right}
 .reachable{min-width:20px}
 
-#profilelist{margin-bottom:10px}
+#profilelist{margin-bottom:15px}
 #profilelist th,#profilelist td,#floodfills th,#floodfills td{text-align:center}
 #profilelist tr:first-child td,#profile_defs tr:first-child td{border-top:var(--border_inner)}
 #profilelist td:last-child{padding-right:5px;width:1%;white-space:nowrap;text-align:center}
@@ -1215,7 +1215,6 @@ h3#udpcon{margin-top:7px}
 #profilelist th:nth-child(5),#profilelist td:nth-child(5){width:10%;min-width:56px;white-space:nowrap}
 #profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3),#profilelist td:nth-child(7){width:1%;white-space:nowrap}
 #profilelist td:nth-child(2){text-align:left}
-#profilelist td:nth-child(2){width:1%;white-space:nowrap}
 #profilelist td:nth-child(2) i{display:inline-block;width:100%;text-align:center}
 #profilelist td:nth-child(3) i{width:100%;display:inline-block;text-align:center;letter-spacing:0}
 #profilelist td:nth-last-child(2) span,#profilelist td:nth-last-child(3) span{min-width:28px;display:inline-block}
@@ -1237,10 +1236,11 @@ h3#udpcon{margin-top:7px}
 #floodfills .tier,#floodfills .ff,#floodfills .ssuintro,#floodfills .unreachable,#floodfills .reachable,#floodfills .hidden{margin:0 2px}
 #floodfills{margin-top:8px;margin-bottom:15px}
 #floodfills th{border-right:1px solid var(--border_inner);box-shadow:var(--highlight),inset 0 0 1px 1px #ddf}
-#floodfills td{border-left:0 solid transparent;border-right:0 solid transparent}
-#floodfills td:first-child,#floodfills td:nth-child(2){padding-left:3px;padding-right:3px;width:1%;white-space:nowrap}
-#floodfills td:first-child{border-left:1px solid #7789bf}
-#floodfills td:last-child{border-right:1px solid #7789bf}
+#floodfills:not(rid) td:first-child{padding-left:3px;padding-right:3px;width:1%;white-space:nowrap}
+#floodfills:not(.rid) td:first-child{border-left:1px solid #7789bf}
+#floodfills:not(.rid) td:last-child{border-right:1px solid #7789bf}
+#floodfills:not(.rid) td:not(.rih):nth-child(2){width:6%;min-width:64px}
+#floodfills .percentBarOuter,#floodfills .percentBarText{width:calc(100% - 8px)}
 #floodfills .percentBarInner[style="width:0%"]{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#090,#0b0)}
 #floodfills .percentBarText{color:#fff;text-shadow:0 1px 1px #000;display:none}
 
