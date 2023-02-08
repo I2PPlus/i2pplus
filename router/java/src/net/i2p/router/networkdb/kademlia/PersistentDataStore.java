@@ -67,6 +67,7 @@ public class PersistentDataStore extends TransientDataStore {
     private static final String PROP_FLAT = "router.networkDatabase.flat";
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
+    private static final int MAX_ROUTERS_INIT = SystemVersion.isSlow() ? 2000 : 5000;
 
     /**
      *  @param dbDir relative path
@@ -494,9 +495,16 @@ public class PersistentDataStore extends TransientDataStore {
                 Collections.shuffle(toRead, _context.random());
                 int i = 0;
                 for (File file : toRead) {
+                    // Take the first 4000 good ones, delete the rest
+                    if (i >= MAX_ROUTERS_INIT && !_initialized) {
+                        file.delete();
+                        continue;
+                    }
                     Hash key = getRouterInfoHash(file.getName());
                     if (key != null) {
-                        (new ReadRouterJob(file, key)).runJob();
+                        ReadRouterJob rrj = new ReadRouterJob(file, key);
+                        if (!rrj.read())
+                            continue;
                         if (i++ == 150 && SystemVersion.isSlow() && !_initialized) {
                             // Can take 2 minutes to load them all on Android,
                             // after we have already built expl. tunnels.
@@ -581,7 +589,15 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         public void runJob() {
-            if (!shouldRead()) return;
+            read();
+        }
+
+        /**
+         *  @return success
+         *  @since 0.9.58
+         */
+        public boolean read() {
+            if (!shouldRead()) return false;
             if (_log.shouldDebug())
                 _log.debug("Reading " + _routerFile);
 
@@ -703,11 +719,8 @@ public class PersistentDataStore extends TransientDataStore {
                 } finally {
                     if (fis != null) try { fis.close(); } catch (IOException ioe) {}
                 }
-                if (corrupt) {
-                    _routerFile.delete();
-//                    if (_log.shouldDebug())
-//                        _log.debug("Confirming " + _routerFile.getName() + " is deleted from disk...");
-                }
+                if (corrupt) _routerFile.delete();
+                return !corrupt;
         }
     }
 
