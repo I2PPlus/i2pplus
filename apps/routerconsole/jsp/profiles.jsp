@@ -56,48 +56,89 @@
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var ff = document.getElementById("floodfills");
-  if (ff) {new Tablesort(ff);}
-</script>
-<script nonce="<%=cspNonce%>" type=text/javascript>
-  document.addEventListener("DOMContentLoaded", function() {
-    setInterval(function() {
-      progressx.show();
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = "document";
-      var plist = document.getElementById("profilelist");
-      var pcontainer = document.getElementById("peerprofiles");
-      var uri = (window.location.pathname + window.location.search).substring(1);
-      if (!uri.includes("f=2") && !uri.includes("f=3")) {
-        if (uri.includes("?"))
-          xhr.open('GET', uri + '&t=' + new Date().getTime(), true);
-        else
-          xhr.open('GET', uri + '?t=' + new Date().getTime(), true);
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState==4 && xhr.status==200) {
-            var info = document.getElementById("profiles_overview");
-            if (info) {
-              var infoResponse = xhr.responseXML.getElementById("profiles_overview");
-                info.innerHTML = infoResponse.innerHTML;
-            }
-            if (plist) {
-              var plistResponse = xhr.responseXML.getElementById("profilelist");
-                plist.outerHTML = plistResponse.outerHTML;
-                lazyload();
-            }
-            var thresholds = document.getElementById("thresholds");
-            if (thresholds) {
-              var thresholdsResponse = xhr.responseXML.getElementById("thresholds");
-                thresholds.innerHTML = thresholdsResponse.innerHTML;
-            }
+  var ffprofiles = document.getElementById("ffProfiles");
+  var info = document.getElementById("profiles_overview");
+  var main = document.getElementById("profiles");
+  var pbody = document.getElementById("pbody");
+  var plist = document.getElementById("profilelist");
+  var thresholds = document.getElementById("thresholds");
+  var refreshProfilesId = setInterval(refreshProfiles, 15000);
+  var uri = window.location.search.substring(1) !== null ? window.location.pathname + "?" + window.location.search.substring(1) : window.location.pathname;
+  var sorterFF = null;
+  var sorterP = null;
+  var xhrprofiles = new XMLHttpRequest();
+  function initRefresh() {
+    addSortListeners();
+    refreshProfiles();
+  }
+  function addSortListeners() {
+    if (ff && sorterFF === null) {
+      sorterFF = new Tablesort((ff), {descending: true});
+      ff.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
+      ff.addEventListener('afterSort', function() {progressx.hide();}, true);
+    } else if (plist && sorterP === null) {
+      sorterP = new Tablesort((plist), {descending: true});
+      plist.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
+      plist.addEventListener('afterSort', function() {progressx.hide();}, true);
+    }
+  }
+  function refreshProfiles() {
+    if (uri.includes("?") && !uri.includes("f=3")) {
+      xhrprofiles.open('GET', uri + '&t=' + new Date().getTime(), true);
+    } else if (!uri.includes("f=3")) {
+      xhrprofiles.open('GET', uri + '?t=' + new Date().getTime(), true);
+    }
+    xhrprofiles.responseType = "document";
+    xhrprofiles.onreadystatechange = function () {
+      if (xhrprofiles.readyState === 4 && xhrprofiles.status === 200 && !uri.includes("f=3")) {
+        progressx.show();
+        if (info) {
+          var infoResponse = xhrprofiles.responseXML.getElementById("profiles_overview");
+          info.innerHTML = infoResponse.innerHTML;
+        }
+        if (plist) {
+          addSortListeners();
+          if (pbody) {
+            var pbodyResponse = xhrprofiles.responseXML.getElementById("pbody");
+            pbody.innerHTML = pbody.innerHTML;
+            sorterP.refresh();
+            lazyload();
+          } else {
+            var plistResponse = xhrprofiles.responseXML.getElementById("profilelist");
+            plist.innerHTML = plistResponse.innerHTML;
           }
         }
+        if (thresholds) {
+          var thresholdsResponse = xhrprofiles.responseXML.getElementById("thresholds");
+          thresholds.innerHTML = thresholdsResponse.innerHTML;
+        }
+        if (ff) {
+          addSortListeners();
+          if (ffprofiles) {
+            var ffprofilesResponse = xhrprofiles.responseXML.getElementById("ffProfiles");
+            ffprofiles.innerHTML = ffprofilesResponse.innerHTML;
+            sorterFF.refresh();
+            lazyload();
+          } else {
+            var ffResponse = xhrprofiles.responseXML.getElementById("floodfills");
+            ff.innerHTML = ffResponse.innerHTML;
+          }
+        }
+        progressx.hide();
       }
-      window.addEventListener("DOMContentLoaded", progressx.hide());
-      pcontainer.addEventListener("mouseover", lazyload());
-      xhr.send();
-    }, 15000);
-  }, true);
+    }
+    if (ff || plist) {
+      addSortListeners();
+    }
+    if (!uri.includes("f=3")) {
+      xhrprofiles.send();
+    }
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    lazyload();
+    initRefresh();
+    progressx.hide();
+  });
 </script>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

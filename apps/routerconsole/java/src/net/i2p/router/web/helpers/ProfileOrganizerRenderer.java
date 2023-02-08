@@ -87,19 +87,20 @@ class ProfileOrganizerRenderer {
                 buf.append("<a href=\"/profiles\">").append(ngettext("Hiding {0} standard profile.", "Hiding {0} standard profiles.", standard)).append("</a>\n");
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
 
-            buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist>\n");
-            buf.append("<thead>\n<tr>");
-            buf.append("<th>").append(_t("Peer")).append("</th>");
-            buf.append("<th>").append(_t("Caps")).append("</th>");
-            buf.append("<th>").append(_t("Version")).append("</th>");
-            buf.append("<th>").append(_t("Status")).append("</th>");
-            buf.append("<th>").append(_t("Groups")).append("</th>");
-            buf.append("<th>").append(_t("Speed")).append("</th>");
-            buf.append("<th>").append(_t("Low Latency")).append("</th>");
-            buf.append("<th>").append(_t("Capacity")).append("</th>");
-            buf.append("<th>").append(_t("Integration")).append("</th>");
-            buf.append("<th>").append(_t("View/Edit")).append("</th>");
-            buf.append("</tr>\n</thead>\n");
+            buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist>\n")
+               .append("<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup char=&nbsp; charoff=1 /><colgroup/><colgroup/><colgroup/><colgroup/>")
+               .append("<thead>\n<tr>")
+               .append("<th>").append(_t("Peer")).append("</th>")
+               .append("<th>").append(_t("Caps")).append("</th>")
+               .append("<th>").append(_t("Version")).append("</th>")
+               .append("<th>").append(_t("Status")).append("</th>")
+               .append("<th>").append(_t("Groups")).append("</th>")
+               .append("<th>").append(_t("Speed")).append("</th>")
+               .append("<th>").append(_t("Low Latency")).append("</th>")
+               .append("<th>").append(_t("Capacity")).append("</th>")
+               .append("<th>").append(_t("Integration")).append("</th>")
+               .append("<th>").append(_t("View/Edit")).append("</th>")
+               .append("</tr>\n</thead>\n<tbody id=pbody>\n");
             int prevTier = 1;
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
@@ -115,12 +116,11 @@ class ProfileOrganizerRenderer {
                 } else {
                     tier = 3;
                 }
-
                 if (_organizer.isWellIntegrated(peer)) {
                     isIntegrated = true;
                     integrated++;
                 }
-
+/*
                 if (tier != prevTier) {
                     buf.append("<tr");
                     if (tier == 2)
@@ -128,7 +128,7 @@ class ProfileOrganizerRenderer {
                     buf.append("><td colspan=10 class=separator><hr></td></tr>\n");
                 }
                 prevTier = tier;
-
+*/
                 buf.append("<tr class=lazy><td nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer, false));
                 // debug
@@ -165,10 +165,14 @@ class ProfileOrganizerRenderer {
                 buf.append("</td>");
                 buf.append("<td>");
                 String v = info != null ? info.getOption("router.version") : null;
-                if (v != null)
+                if (v != null) {
                     buf.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
-                       .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">").append(DataHelper.stripHTML(v));
-                buf.append("</a></span></td>");
+                       .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">").append(DataHelper.stripHTML(v))
+                       .append("</a></span>");
+                } else {
+                    buf.append("<span>&ensp;</span>");
+                }
+                buf.append("</td>");
                 buf.append("<td>");
                 boolean ok = true;
                 if (_context.banlist().isBanlisted(peer)) {
@@ -201,8 +205,9 @@ class ProfileOrganizerRenderer {
                     if (total / fails <= 10) {  // hide if < 10%
                         buf.append(" &bullet; ").append(fails).append('/').append(total).append(' ').append(_t("Test Fails"));
                     }
+                } else {
+                    buf.append("<span>&ensp;</span>");
                 }
-
                 buf.append("</td>");
                 buf.append("<td>");
                 buf.append("<span class=\"");
@@ -252,15 +257,14 @@ class ProfileOrganizerRenderer {
                     buf.append("nospeed\">&ensp;</span>");
                 }
                 buf.append("</td>");
-
                 buf.append("<td>");
-
                 if (bonus >= 9999999)
                     buf.append("<span class=lowlatency>✔</span>");
                 else if (capBonus == -30)
                     buf.append("<span class=highlatency>✖</span>");
+                else
+                    buf.append("<span>&ensp;</span>");
                 buf.append("</td>");
-
                 buf.append("<td><span>").append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
                 if (capBonus != 0 && capBonus != -30) {
                     if (capBonus > 0)
@@ -268,6 +272,8 @@ class ProfileOrganizerRenderer {
                     else
                         buf.append(" (");
                     buf.append(capBonus).append(')');
+                } else {
+                    buf.append("&ensp;");
                 }
                 buf.append("</span>");
                 buf.append("</td><td>");
@@ -275,6 +281,8 @@ class ProfileOrganizerRenderer {
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
+                } else {
+                    buf.append("<span>&ensp;</span>");
                 }
                 buf.append("</td><td nowrap class=viewedit>");
                 buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
@@ -286,7 +294,7 @@ class ProfileOrganizerRenderer {
                 out.write(buf.toString());
                 buf.setLength(0);
             }
-            buf.append("</table>\n");
+            buf.append("</tbody>\n</table>\n");
 
             buf.append("<div id=peer_thresholds>\n<h3 class=tabletitle>").append(_t("Thresholds")).append("</h3>\n")
                .append("<table id=thresholds>\n")
@@ -314,44 +322,52 @@ class ProfileOrganizerRenderer {
                 buf.append(_t("peer"));
             else
                 buf.append(_t("peers"));
-            buf.append("</th></tr></thead>\n<tbody>\n<tr><td>")
+            buf.append("</th></tr></thead>\n")
+               .append("<tbody>\n<tr><td>")
                .append(ngettext("{0} fast peer", "{0} fast peers", fast))
                .append("</td><td>")
                .append(ngettext("{0} high capacity peer", "{0} high capacity peers", reliable))
                .append("</td><td>")
                .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
-               .append("</td></tr>\n</tbody>\n</table>\n</div>\n"); // thresholds
+               .append("</td></tr>\n")
+               .append("</tbody>\n</table>\n</div>\n"); // thresholds
             buf.append("</div>\n");
-
         } else {
-
-            buf.append("<div class=widescroll id=\"ff\">\n<table id=\"floodfills\" data-sortable>\n");
-            buf.append("<thead>\n<tr class=smallhead>");
-            buf.append("<th>").append(_t("Peer")).append("</th>");
-            buf.append("<th>").append(_t("Caps")).append("</th>");
-//            buf.append("<th>").append(_t("Integ. Value")).append("</th>");
-            buf.append("<th>").append(_t("First Heard About")).append("</th>");
-            buf.append("<th>").append(_t("Last Heard About")).append("</th>");
-            buf.append("<th>").append(_t("Last Heard From")).append("</th>");
-            buf.append("<th>").append(_t("Last Good Send")).append("</th>");
-            buf.append("<th>").append(_t("Last Bad Send")).append("</th>");
-//            buf.append("<th>").append(_t("10m Resp. Time")).append("</th>");
-            buf.append("<th>").append(_t("1h Resp. Time")).append("</th>");
-//            buf.append("<th>").append(_t("1d Resp. Time")).append("</th>");
-            buf.append("<th>").append(_t("Last Good Lookup")).append("</th>");
-            buf.append("<th>").append(_t("Last Bad Lookup")).append("</th>");
-            buf.append("<th>").append(_t("Last Good Store")).append("</th>");
-            buf.append("<th>").append(_t("Last Bad Store")).append("</th>");
-            buf.append("<th>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>");
-//            buf.append("<th>").append(_t("1d Fail Rate").replace("Rate","")).append("</th>");
-            buf.append("</tr>\n</thead>\n");
+            buf.append("<div class=widescroll id=\"ff\">\n")
+               .append("<table id=floodfills data-sortable>\n")
+               .append("<colgroup/><colgroup/><colgroup/><colgroup char=&nbsp; charoff=1 /><colgroup char=&nbsp; charoff=1 />" +
+                       "<colgroup class=good char=&nbsp; charoff=1 /><colgroup class=good char=&nbsp; charoff=1 /><colgroup class=good char=&nbsp; charoff=1 />" +
+                       "<colgroup class=bad char=&nbsp; charoff=1 /><colgroup class=bad char=&nbsp; charoff=1 /><colgroup class=bad char=&nbsp; charoff=1 />")
+               .append("<thead class=smallhead><tr>")
+               .append("<th>").append(_t("Peer")).append("</th>")
+//               .append("<th>").append(_t("Caps")).append("</th>")
+               .append("<th>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
+               .append("<th>").append(_t("1h Resp. Time")).append("</th>")
+//               .append("<th>").append(_t("Integ. Value")).append("</th>")
+//               .append("<th>").append(_t("Last Heard About")).append("</th>")
+               .append("<th>").append(_t("First Heard About")).append("</th>")
+               .append("<th>").append(_t("Last Heard From")).append("</th>")
+               .append("<th>").append(_t("Last Good Lookup")).append("</th>")
+               .append("<th>").append(_t("Last Good Send")).append("</th>")
+               .append("<th>").append(_t("Last Good Store")).append("</th>")
+               .append("<th>").append(_t("Last Bad Lookup")).append("</th>")
+               .append("<th>").append(_t("Last Bad Send")).append("</th>")
+//               .append("<th>").append(_t("10m Resp. Time")).append("</th>")
+//               .append("<th>").append(_t("1d Resp. Time")).append("</th>")
+               .append("<th>").append(_t("Last Bad Store")).append("</th>")
+//               .append("<th>").append(_t("1d Fail Rate").replace("Rate","")).append("</th>")
+               .append("</tr></thead>\n<tbody id=ffProfiles>\n");
             RateAverages ra = RateAverages.getTemp();
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
+                if (dbh == null) {
+                    continue;
+                }
                 buf.append("<tr class=lazy><td nowrap>");
-                buf.append(_context.commSystem().renderPeerHTML(peer, false));
+                buf.append(_context.commSystem().renderPeerHTML(peer, true));
                 buf.append("</td>");
+/*
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
                 if (info != null) {
                     // remove superfluous O class from P + X, remove F class (everyone's a ff), add spans
@@ -377,6 +393,7 @@ class ProfileOrganizerRenderer {
                 } else {
                     buf.append("<td>&nbsp;</td>");
                 }
+*/
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
 /*
                 buf.append("<td>");
@@ -386,49 +403,50 @@ class ProfileOrganizerRenderer {
                     buf.append("<span hidden>0</span>").append(NA);
                 }
                 buf.append("</td>");
-*/
                 buf.append("<td><span hidden>").append(prof.getFirstHeardAbout()).append(".</span>")
                    .append(formatInterval(now, prof.getFirstHeardAbout())).append("</td>");
+
+*/
+                String hourfail = davg(dbh, 60*60*1000l, ra);
+                String dayfail = davg(dbh, 24*60*60*1000l, ra);
+                buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" + hourfail + "\">" +
+                           "<span class=percentBarText>").append(hourfail).append("</span></span></span>").append("</td>");
+                buf.append("<td><span hidden>").append(avg(prof, 60*60*1000l, ra)).append(".</span>")
+                   .append(avg(prof, 60*60*1000l, ra)).append("</td>");
                 buf.append("<td><span hidden>").append(prof.getLastHeardAbout()).append(".</span>")
                    .append(formatInterval(now, prof.getLastHeardAbout())).append("</td>");
                 buf.append("<td><span hidden>").append(prof.getLastHeardFrom()).append(".</span>")
                     .append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
+                buf.append("<td><span hidden>").append(dbh.getLastLookupSuccessful()).append(".</span>")
+                   .append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
                 buf.append("<td><span hidden>").append(prof.getLastSendSuccessful()).append(".</span>")
                    .append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
+                buf.append("<td><span hidden>").append(dbh.getLastStoreSuccessful()).append(".</span>")
+                   .append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
+                buf.append("<td><span hidden>").append(dbh.getLastLookupFailed()).append(".</span>")
+                   .append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
                 buf.append("<td><span hidden>").append(prof.getLastSendFailed()).append(".</span>")
                    .append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
 //                buf.append("<td><span hidden>").append(avg(prof, 10*60*1000l, ra)).append(".</span>")
 //                     .append(avg(prof, 10*60*1000l, ra)).append("</td>");
-                buf.append("<td><span hidden>").append(prof.getLastHeardAbout()).append(".</span>")
-                   .append(avg(prof, 60*60*1000l, ra)).append("</td>");
 //                buf.append("<td><span hidden>").append(prof.getLastHeardAbout()).append(".</span>")\n").append(avg(prof, 24*60*60*1000l, ra)).append("</td>");
-                if (dbh != null) {
-                    buf.append("<td><span hidden>").append(dbh.getLastLookupSuccessful()).append(".</span>")
-                       .append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
-                    buf.append("<td><span hidden>").append(dbh.getLastLookupFailed()).append(".</span>")
-                       .append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
-                    buf.append("<td><span hidden>").append(dbh.getLastStoreSuccessful()).append(".</span>")
-                       .append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
+//                if (dbh != null) {
                     buf.append("<td><span hidden>").append(dbh.getLastStoreFailed()).append(".</span>")
                        .append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>");
-                    String hourfail = davg(dbh, 60*60*1000l, ra);
-                    String dayfail = davg(dbh, 24*60*60*1000l, ra);
-                    buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" +
-                               hourfail + "\"><span class=percentBarText>").append(hourfail).append("</span></span></span>").append("</td>");
 //                    buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" +
 //                               dayfail + "\"><span class=percentBarText>").append(dayfail).append("</span></span></span>").append("</td>");
-                } else {
+//                } else {
 //                    for (int i = 0; i < 6; i++)
-                    for (int i = 0; i < 5; i++)
-                        buf.append("<td><span hidden>0.</span>").append(NA);
-                }
+//                    for (int i = 0; i < 5; i++)
+//                        buf.append("<td><span hidden>0.</span>").append(NA);
+//                }
                 buf.append("</tr>\n");
             }
-            buf.append("</table>\n");
+            buf.append("</tbody>\n</table>\n");
             buf.append("</div>\n");
         }
 
-        if (mode < 2) {
+        if (mode == 0) {
             buf.append("<h3 class=tabletitle>").append(_t("Definitions")).append("</h3>\n")
                .append("<table id=profile_defs>\n<tbody>\n");
             buf.append("<tr><td><b>")
