@@ -1543,7 +1543,7 @@ public class ProfileOrganizer {
             return false; // never select a banlisted peer
         }
 
-        RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
 //        String caps = DataHelper.stripHTML(info.getCapabilities());
         if (null != info) {
             String tier = DataHelper.stripHTML(info.getBandwidthTier());
