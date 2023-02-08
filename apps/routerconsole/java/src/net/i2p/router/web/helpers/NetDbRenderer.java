@@ -8,7 +8,6 @@ package net.i2p.router.web.helpers;
  *
  */
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -41,6 +40,7 @@ import net.i2p.data.LeaseSet2;
 import net.i2p.data.PublicKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.JobImpl;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
@@ -134,7 +134,7 @@ class NetDbRenderer {
             byte[] h = Base64.decode(routerPrefix);
             if (h != null && h.length == Hash.HASH_LENGTH) {
                 Hash hash = new Hash(h);
-                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
+                RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash);
                 boolean banned = false;
                 if (ri == null) {
                     banned = _context.banlist().isBanlisted(hash);
@@ -146,7 +146,7 @@ class NetDbRenderer {
                         synchronized(lw) {
                             try { lw.wait(9*1000); } catch (InterruptedException ie) {}
                         }
-                        ri = _context.netDb().lookupRouterInfoLocally(hash);
+                        ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash);
                     }
                 }
                 if (ri != null) {
@@ -593,11 +593,12 @@ class NetDbRenderer {
         buf.append("<tr>\n<th colspan=4>Leaseset Summary&nbsp;<span id=leasesetTotal>[Total: ")
            .append(leases.size()).append("]</span></th>\n</tr>\n");
         if (debug) {
+            RouterKeyGenerator gen = _context.routerKeyGenerator();
             buf.append("<tr>\n<td><b>Published (RAP) Leasesets:</b></td>\n<td colspan=3>").append(netdb.getKnownLeaseSets()).append("</td>\n</tr>\n")
-               .append("<tr>\n<td><b>Mod Data:</b></td>\n<td>").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData())).append("</td>\n")
-               .append("<td><b>Last Changed:</b></td>\n<td>").append(new Date(_context.routerKeyGenerator().getLastChanged())).append("</td>\n</tr>\n")
-               .append("<tr>\n<td><b>Next Mod Data:</b></td>\n<td>").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData())).append("</td>\n")
-               .append("<td><b>Change in:</b></td>\n<td>").append(DataHelper.formatDuration(_context.routerKeyGenerator().getTimeTillMidnight())).append("</td>\n</tr>\n");
+               .append("<tr>\n<td><b>Mod Data:</b></td>\n<td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>\n")
+               .append("<td><b>Last Changed:</b></td>\n<td>").append(new Date(gen.getLastChanged())).append("</td>\n</tr>\n")
+               .append("<tr>\n<td><b>Next Mod Data:</b></td>\n<td>").append(DataHelper.getUTF8(gen.getNextModData())).append("</td>\n")
+               .append("<td><b>Change in:</b></td>\n<td>").append(DataHelper.formatDuration(gen.getTimeTillMidnight())).append("</td>\n</tr>\n");
         }
         int ff = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
         buf.append("</table>\n");
@@ -1330,6 +1331,20 @@ class NetDbRenderer {
             buf.append("<td><b>").append(_t("Published")).append("</td>\n<td>:</b> in ")
                .append(DataHelper.formatDuration2(0-age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
         }
+
+/***
+        boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
+        if (debug) {
+            buf.append("</td></tr>\n<tr><td><b>Routing Key:</b></td><td colspan=\"2\">").append(info.getRoutingKey().toBase64());
+            buf.append("</td></tr>");
+            byte[] padding = info.getIdentity().getPadding();
+            if (padding != null && padding.length >= 64) {
+                if (DataHelper.eq(padding, 0, padding, 32, 32))
+                    buf.append("</td></tr><tr><td><b>Compressible:</b></td><td colspan=\"2\">true");
+            }
+        }
+***/
+
         if (family != null) {
             FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
             buf.append("<span class=\"netdb_family\"><b>").append(_t("Family"))

@@ -56,7 +56,7 @@ class ProfileOrganizerRenderer {
             if (prof == null)
                 continue;
             if (mode == 2) {
-                RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
+                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
                 if (info != null && info.getCapabilities().indexOf('f') >= 0 && prof.getLastHeardFrom() <= hideBefore && prof.getLastHeardFrom() > 0)
                     order.add(prof);
                 continue;
@@ -134,7 +134,7 @@ class ProfileOrganizerRenderer {
                 // debug
                 //if(prof.getIsExpandedDB())
                 //   buf.append(" ** ");
-                RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
+                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
                 if (info != null) {
                     // prevent HTML injection in the caps and version
                     // remove superfluous O class from P + X, add spans, trail ff, add links to netdb search + tooltip
@@ -368,7 +368,7 @@ class ProfileOrganizerRenderer {
                 buf.append(_context.commSystem().renderPeerHTML(peer, true));
                 buf.append("</td>");
 /*
-                RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
+                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
                 if (info != null) {
                     // remove superfluous O class from P + X, remove F class (everyone's a ff), add spans
                     String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
