@@ -88,7 +88,7 @@ class ProfileOrganizerRenderer {
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
 
             buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist>\n")
-               .append("<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup char=&nbsp; charoff=1 /><colgroup/><colgroup/><colgroup/><colgroup/>")
+               .append("<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup char=\" \" charoff=1 /><colgroup/><colgroup/><colgroup/><colgroup/>")
                .append("<thead>\n<tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("Caps")).append("</th>")
@@ -335,9 +335,9 @@ class ProfileOrganizerRenderer {
         } else {
             buf.append("<div class=widescroll id=\"ff\">\n")
                .append("<table id=floodfills data-sortable>\n")
-               .append("<colgroup/><colgroup/><colgroup/><colgroup char=&nbsp; charoff=1 /><colgroup char=&nbsp; charoff=1 />" +
-                       "<colgroup class=good char=&nbsp; charoff=1 /><colgroup class=good char=&nbsp; charoff=1 /><colgroup class=good char=&nbsp; charoff=1 />" +
-                       "<colgroup class=bad char=&nbsp; charoff=1 /><colgroup class=bad char=&nbsp; charoff=1 /><colgroup class=bad char=&nbsp; charoff=1 />")
+               .append("<colgroup/><colgroup/><colgroup/><colgroup char=\" \" charoff=1 /><colgroup char=\" \" charoff=1 />" +
+                       "<colgroup class=good char=\" \" charoff=1 /><colgroup class=good char=\" \" charoff=1 /><colgroup class=good char=\" \" charoff=1 />" +
+                       "<colgroup class=bad char=\" \" charoff=1 /><colgroup class=bad char=\" \" charoff=1 /><colgroup class=bad char=\" \" charoff=1 />")
                .append("<thead class=smallhead><tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
 //               .append("<th>").append(_t("Caps")).append("</th>")
@@ -412,7 +412,12 @@ class ProfileOrganizerRenderer {
                 buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" + hourfail + "\">" +
                            "<span class=percentBarText>").append(hourfail).append("</span></span></span>").append("</td>");
                 buf.append("<td><span hidden>").append(avg(prof, 60*60*1000l, ra)).append(".</span>")
-                   .append(avg(prof, 60*60*1000l, ra)).append("</td>");
+                if (avg(prof, 60*60*1000l, ra) > 2000) {
+                    buf.append("<span class=poor>").append(avg(prof, 60*60*1000l, ra)).append("</span>");
+                } else {
+                    buf.append(avg(prof, 60*60*1000l, ra));
+                }
+                buf.append("</td>");
                 buf.append("<td><span hidden>").append(prof.getLastHeardAbout()).append(".</span>")
                    .append(formatInterval(now, prof.getLastHeardAbout())).append("</td>");
                 buf.append("<td><span hidden>").append(prof.getLastHeardFrom()).append(".</span>")
