@@ -666,7 +666,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                             continue;
                     }
                     // We will ban and throw below after checking s
-                    mismatchMessage = "IP mismatch actual IP " + Addresses.toString(realIP) + " in RI: ";
+                    mismatchMessage = "IP address mismatch -> Actual IP: " + Addresses.toString(realIP) + "; RI publishes: ";
                 }
             }
         }
@@ -695,7 +695,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         // s is verified, we may now ban the hash
         if (mismatchMessage != null) {
-            _context.banlist().banlistRouter(h, "IP mismatch", null, null, _context.clock().now() + 2*60*60*1000);
+            _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo", null, null, _context.clock().now() + 3*60*60*1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             throw new DataFormatException(mismatchMessage + ri);
         }

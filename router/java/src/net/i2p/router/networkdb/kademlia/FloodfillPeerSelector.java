@@ -292,21 +292,23 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router has SSU transport disabled");
                 badff.add(entry);
-                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 8*60*60*1000);
+                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 3*60*60*1000);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 8h -> No SSU transport enabled");
+                    _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 3h -> No SSU transport enabled");
             } else if (info != null && isUnreachable) {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is unreachable");
-                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 8*60*60*1000);
+                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 3*60*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 3h -> Unreachable/firewalled");
             } else if (info != null && hasSalt) {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: RouterInfo has bogus 'salt' cap");
-                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill has bogus 'salt' cap", null, null, now + 8*60*60*1000);
+                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill has bogus 'salt' cap", null, null, now + 3*60*60*1000);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 8h -> Unreachable/firewalled");
+                    _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 3h -> RouterInfo has 'salt' cap");
             } else if (sameIP) {
                 badff.add(entry);
                 if (_log.shouldDebug())
