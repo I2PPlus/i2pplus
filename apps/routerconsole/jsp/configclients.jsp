@@ -61,19 +61,19 @@
       }
 %>
 <div class=wideload>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="clientshelper" property="form1" />
 <div class=formaction id=clientsconfig>
-<input type=submit class=cancel name="foo" value="<%=intl._t("Cancel")%>" />
+<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
 <%
       if (clientshelper.isClientChangeEnabled() && request.getParameter("edit") == null) {
 %>
-<input type=submit name="edit" class=add value="<%=intl._t("Add Client")%>" />
+<input type=submit name=edit class=add value="<%=intl._t("Add Client")%>" />
 <%
       }
 %>
-<input type=submit class=accept name="action" value="<%=intl._t("Save Client Configuration")%>" />
+<input type=submit class=accept name=action value="<%=intl._t("Save Client Configuration")%>" />
 </div>
 </form>
 </div>

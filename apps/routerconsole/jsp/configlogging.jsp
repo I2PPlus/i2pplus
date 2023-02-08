@@ -24,9 +24,9 @@
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigLoggingHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
-<input type=hidden name="action" value="blah" >
+<input type=hidden name=action value="blah" >
 <h3 class=tabletitle><%=intl._t("Configure I2P Logging Options")%>&nbsp;<span class=h3navlinks style="float: right;"><a title="<%=intl._t("View Router Logs")%>" href="/logs"><%=intl._t("View Logs")%></a></span></h3>
 <table id="loggingoptions" class=configtable>
 <tr>

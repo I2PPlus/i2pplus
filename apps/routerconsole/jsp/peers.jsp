@@ -53,10 +53,11 @@ document.addEventListener("DOMContentLoaded", function() {
     progressx.show();
     var uri = (window.location.pathname + window.location.search).substring(1);
     var xhr = new XMLHttpRequest();
-    if (uri.includes("?transport"))
+    if (uri.includes("?transport")) {
       xhr.open('GET', uri + '&t=' + new Date().getTime(), true);
-    else
-      xhr.open('GET', '/peers?' + new Date().getTime(), true);
+    } else {
+      xhr.open('GET', '/peers?t=' + new Date().getTime(), true);
+    }
     xhr.responseType = "document";
     var udp = document.getElementById("udp");
     var ntcp = document.getElementById("ntcp");
@@ -66,22 +67,16 @@ document.addEventListener("DOMContentLoaded", function() {
       if (xhr.readyState==4 && xhr.status==200 && autorefresh.checked) {
         if (udp) {
           var udpResponse = xhr.responseXML.getElementById("udp");
-          //var udpParent = udp.parentNode;
           if (!Object.is(udp.innerHTML, udpResponse.innerHTML))
-            //udpParent.replaceChild(udpResponse, udp);
             udp.innerHTML = udpResponse.innerHTML;
         } else if (ntcp) {
           var ntcpResponse = xhr.responseXML.getElementById("ntcp");
-          //var ntcpParent = ntcp.parentNode;
           if (!Object.is(ntcp.innerHTML, ntcpResponse.innerHTML))
             ntcp.innerHTML = ntcpResponse.innerHTML;
-            //ntcpParent.replaceChild(ntcpResponse, ntcp);
         } else if (summary) {
           var summaryResponse = xhr.responseXML.getElementById("transportSummary");
-          //var summaryParent = summary.parentNode;
           if (!Object.is(summary.innerHTML, summaryResponse.innerHTML))
             summary.innerHTML = summaryResponse.innerHTML;
-            //summaryParent.replaceChild(summaryResponse, summary);
         }
       }
     }
@@ -93,7 +88,8 @@ document.addEventListener("DOMContentLoaded", function() {
     xhr.send();
   }, 15000);
 }, true);
+window.addEventListener("DOMContentLoaded", progressx.hide());
+window.addEventListener("pageshow", lazyload());
 </script>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());window.addEventListener("pageshow", lazyload());</script>
 </body>
 </html>

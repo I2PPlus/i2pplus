@@ -51,7 +51,7 @@ if (__invalid) {
 } else {
     if (editBean.isInitialized()) {
 %>
-<form method="post" action="list">
+<form method=POST action="list">
 <div class=panel>
 <%
         if (__isClient) {

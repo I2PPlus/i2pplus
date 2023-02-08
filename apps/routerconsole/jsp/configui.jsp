@@ -26,10 +26,10 @@
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
 <h3 id="themeheading"><%=uihelper._t("Router Console Theme")%></h3>
-<form action="/applytheme" method="POST">
+<form action="/applytheme" method=POST>
 <input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>" >
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
-<input type=hidden name="action" value="blah" >
+<input type=hidden name=action value="blah" >
 <div id ="themesettings">
 <%
  String userAgent = request.getHeader("User-Agent");
@@ -51,28 +51,28 @@
 </div>
 </form>
 <h3 id="passwordheading"><%=uihelper._t("Router Console Password")%></h3>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="uihelper" property="passwordForm" />
 <div class=formaction id="submitconsolepass">
-<input type=submit name="action" class=default value="<%=intl._t("Add user")%>" >
+<input type=submit name=action class=default value="<%=intl._t("Add user")%>" >
 <%
   boolean pwEnabled = net.i2p.I2PAppContext.getGlobalContext().getBooleanProperty("routerconsole.auth.enable");
   if (pwEnabled) {
 %>
-<input type=submit name="action" class=delete value="<%=intl._t("Delete selected")%>" >
+<input type=submit name=action class=delete value="<%=intl._t("Delete selected")%>" >
 <%
   }
 %>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
-<input type=submit name="action" class=add value="<%=intl._t("Add user")%>" >
+<input type=submit name=action class=add value="<%=intl._t("Add user")%>" >
 </div>
 </form>
 <h3 id="langheading"><%=uihelper._t("Router Console Language")%></h3>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>" >
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
-<input type=hidden name="action" value="blah" >
+<input type=hidden name=action value="blah" >
 <div id="langsettings">
 <jsp:getProperty name="uihelper" property="langSettings" />
 <p id="helptranslate">

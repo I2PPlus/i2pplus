@@ -27,7 +27,7 @@
 <p id="keyringhelp" class=infohelp>
 <%=intl._t("The router keyring is used to decrypt encrypted LeaseSets.")%>&nbsp;
 <%=intl._t("The keyring may contain keys for local or remote encrypted destinations.")%></p>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="keyringhelper" property="summary" />
 <h3 class=tabletitle><%=intl._t("Manual Keyring Addition")%></h3>
@@ -79,7 +79,7 @@
 <tr>
 <td align="right" colspan=2 class=optionsave>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
-<input type=submit name="action" class=add value="<%=intl._t("Add key")%>" >
+<input type=submit name=action class=add value="<%=intl._t("Add key")%>" >
 </td>
 </tr>
 </table>

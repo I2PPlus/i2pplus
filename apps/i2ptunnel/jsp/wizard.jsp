@@ -56,7 +56,7 @@
 <style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
 <body id="tunnelWizardPage">
-<form method="post" action="<%=(curPage == 7 ? "list" : "wizard") %>">
+<form method=POST action="<%=(curPage == 7 ? "list" : "wizard") %>">
 <div id="wizardPanel" class=panel>
 <%
                 if (curPage == 1) {
@@ -673,22 +673,22 @@ No
 <%
           if (curPage != 1 && curPage != 7) {
 %>
-<button id="controlPrevious" class=control type=submit name="action" value="Previous page" title="<%=intl._t("Return to previous page")%>"><%=intl._t("Previous")%></button>
+<button id="controlPrevious" class=control type=submit name=action value="Previous page" title="<%=intl._t("Return to previous page")%>"><%=intl._t("Previous")%></button>
 <%
           }
 %>
 <%
           if (curPage == 7) {
 %>
-<button id="controlSave" class=control type=submit name="action" value="Save changes" title="<%=intl._t("Save tunnel configuration")%>"><%=intl._t("Save Tunnel")%></button>
+<button id="controlSave" class=control type=submit name=action value="Save changes" title="<%=intl._t("Save tunnel configuration")%>"><%=intl._t("Save Tunnel")%></button>
 <%
           } else if (curPage == 6) {
 %>
-<button id="controlFinish" class=control type=submit name="action" value="Next page" title="<%=intl._t("Finish Wizard and review tunnel settings")%>"><%=intl._t("Finish")%></button>
+<button id="controlFinish" class=control type=submit name=action value="Next page" title="<%=intl._t("Finish Wizard and review tunnel settings")%>"><%=intl._t("Finish")%></button>
 <%
           } else {
 %>
-<button id="controlNext" class=control type=submit name="action" value="Next page" title="<%=intl._t("Advance to next page")%>"><%=intl._t("Next")%></button>
+<button id="controlNext" class=control type=submit name=action value="Next page" title="<%=intl._t("Advance to next page")%>"><%=intl._t("Next")%></button>
 <%
           }
 %>

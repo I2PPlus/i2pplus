@@ -73,7 +73,7 @@
 <%
     if (graphHelper.getRefreshValue() > 0) {
 %>
-  function updateGraphs(timestamp) {
+  function updateGraphs() {
     progressx.show();
     var graphs = document.getElementById("allgraphs");
     var nographs = document.getElementById("nographs");

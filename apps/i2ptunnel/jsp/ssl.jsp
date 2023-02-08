@@ -488,11 +488,11 @@
 %>
 <div class=panel id="ssl">
 <h2><%=intl._t("SSL Wizard")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2>
-<form method="post" action="ssl" accept-charset=utf-8>
+<form method=POST action="ssl" accept-charset=utf-8>
 <input type=hidden name="tunnel" value="<%=curTunnel%>" />
 <input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
 <input type=hidden name="type" value="<%=tunnelType%>" />
-<input type=submit class=default name="action" value="Save changes" />
+<input type=submit class=default name=action value="Save changes" />
 <table>
 <!--<tr><td colspan=4 class=infohelp><%=intl._t("Experts only!")%></td></tr>-->
 <%
@@ -794,12 +794,12 @@
                 if (isEnabled && !isPWDefault) {
 %>
 <tr><td class=buttons colspan=4>
-<button id="controlSave" class=control type=submit name="action" value="Disable"><%=intl._t("Disable SSL")%></button></td></tr>
+<button id="controlSave" class=control type=submit name=action value="Disable"><%=intl._t("Disable SSL")%></button></td></tr>
 <%
                 } else if (!isPWDefault) {
 %>
 <tr><td class=buttons colspan=4>
-<button id="controlSave" class=control type=submit name="action" value="Enable"><%=intl._t("Enable SSL")%></button></td></tr>
+<button id="controlSave" class=control type=submit name=action value="Enable"><%=intl._t("Enable SSL")%></button></td></tr>
 <%
                 } else {
 %>
@@ -808,11 +808,11 @@
 <%
                     if (isEnabled) {
 %>
-<button id="controlSave" class=control type=submit name="action" value="Generate"><%=intl._t("Generate new SSL certificate")%></button>
+<button id="controlSave" class=control type=submit name=action value="Generate"><%=intl._t("Generate new SSL certificate")%></button>
 <%
                     } else {
 %>
-<button id="controlSave" class=control type=submit name="action" value="Generate"><%=intl._t("Generate SSL certificate and enable")%></button>
+<button id="controlSave" class=control type=submit name=action value="Generate"><%=intl._t("Generate SSL certificate and enable")%></button>
 <%
                     }
                 }

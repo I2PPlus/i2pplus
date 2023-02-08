@@ -97,7 +97,7 @@
 <hr>
 <h3>Setup Wizard</h3>
 <hr>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=submit class=cancel name="skip" value="<%=intl._t("Skip Setup")%>">
 </form>
 </div>
@@ -122,9 +122,9 @@
     formhandler.setWizardHelper(wizhelper);
 %>
 <%@include file="formhandler.jsi" %>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>">
-<input type=hidden name="action" value="blah" >
+<input type=hidden name=action value="blah" >
 <input type=hidden name="page" value="<%=(ipg + 1)%>">
 <%
     if (ipg == 1) {

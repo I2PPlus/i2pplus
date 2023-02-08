@@ -29,7 +29,7 @@
 <%=intl._t("To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>.")%>
 </p>
 <% }  // !isAdvanced %>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <h3 class=tabletitle id="reseedsetup"><%=intl._t("Reseeding Configuration")%>&nbsp;<span class=h3navlinks><a title="<%=intl._t("Help with reseeding")%>" href="/help/reseed">[<%=intl._t("Reseeding Help")%>]</a></span></h3>
 <table id="reseedconfig" class=configtable border="0" cellspacing="5">
@@ -179,10 +179,10 @@
 <% } // shouldShowHTTPProxy %>
 <tr>
 <td class=optionsave colspan=2>
-<input type=submit name="action" class="reload" value="<%=intl._t("Reset URL list")%>" />
-<input type=submit class=cancel name="foo" value="<%=intl._t("Cancel")%>" />
-<input type=submit name="action" class=accept value="<%=intl._t("Save changes")%>" />
-<input type=submit name="action" class="download" value="<%=intl._t("Reseed now")%>" />
+<input type=submit name=action class="reload" value="<%=intl._t("Reset URL list")%>" />
+<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
+<input type=submit name=action class=accept value="<%=intl._t("Save changes")%>" />
+<input type=submit name=action class="download" value="<%=intl._t("Reseed now")%>" />
 </td>
 </tr>
 </table>
@@ -199,7 +199,7 @@
 <td>
 <b class=suboption><%=intl._t("Enter zip or su3 URL")%></b>
 <div class="optionsingle" id="reseedurl">
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table>
 <tr>
@@ -211,7 +211,7 @@
 <input name="url" type=text size="60" value="" title="<%=intl._t("Please supply a valid reseed URL")%>" />
 </td>
 <td>
-<input type=submit name="action" class="download" value="<%=intl._t("Reseed from URL")%>" />
+<input type=submit name=action class="download" value="<%=intl._t("Reseed from URL")%>" />
 </td>
 </tr>
 </table>
@@ -223,7 +223,7 @@
 <td>
 <b class=suboption><%=intl._t("Select zip or su3 file")%></b>
 <div class="optionsingle" id="reseedzip">
-<form action="" method="POST" enctype="multipart/form-data" accept-charset=utf-8>
+<form action="" method=POST enctype="multipart/form-data" accept-charset=utf-8>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table>
 <tr id="file">
@@ -242,7 +242,7 @@
 %>
 </td>
 <td>
-<input type=submit name="action" class="download" value="<%=intl._t("Reseed from file")%>" />
+<input type=submit name=action class="download" value="<%=intl._t("Reseed from file")%>" />
 </td>
 </tr>
 </table>
@@ -264,7 +264,7 @@
 </p>
 </td>
 <td>
-<input type=submit name="action" class="go" value="<%=intl._t("Create reseed file")%>" />
+<input type=submit name=action class="go" value="<%=intl._t("Create reseed file")%>" />
 </td>
 </tr>
 </table>

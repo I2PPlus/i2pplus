@@ -51,9 +51,9 @@
 <%  // } %>
 <% } %>
  </p>
-<form action="" method="POST">
+<form action="" method=POST>
  <input type=hidden name="nonce" value="<%=pageNonce%>" >
- <input type=hidden name="action" value="blah" >
+ <input type=hidden name=action value="blah" >
  <jsp:getProperty name="tunnelshelper" property="form" />
  <hr><div class=formaction id="tunnelconfigsave">
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >

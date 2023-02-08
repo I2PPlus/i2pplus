@@ -36,11 +36,13 @@
   var tbody = document.getElementById("statCount");
   var tfoot = document.getElementById("statTotals");
   var sorter = new Tablesort((stats), {descending: true});
+  var toggle = document.getElementById("toggle");
+  var columns = document.querySelector("#jobstats th:nth-child(n+6),#jobstats td:nth-child(n+6)");
+  var xhr = new XMLHttpRequest();
   progressx.hide();
   var visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {
-      var xhr = new XMLHttpRequest();
       xhr.open('GET', '/jobs?t=' + new Date().getTime(), true);
       xhr.responseType = "document";
       xhr.onreadystatechange = function () {
@@ -56,12 +58,37 @@
       }
       progressx.hide();
       sorter.refresh();
+      toggle.addEventListener("click", toggleColumns(), true);
       xhr.send();
     }, 10000);
   }
+/*
+  function checkToggle() {
+    if (localStorage["jobstats"] !== null) {
+     toggle.checked = true;
+     columns.hidden = "";
+
+    }
+  }
+  function toggleColumns() {
+    if (toggle.checked = true) {
+      toggle.checked = false;
+      //columns.hidden = true;
+      document.head.insertAdjacentHTML("beforeend", "<style id=extend type=text/css>#jobstats th:nth-child(n+6),#jobstats td:nth-child(n+6){display:none!important}<style>");
+      localStorage.removeItem("jobstats");
+    } else {
+      toggle.checked = true;
+      //columns.hidden = "";
+      document.getElementById("extend").remove();
+      localStorage["jobstats"] = "extended";
+    }
+  }
+  toggle.addEventListener("click", toggleColumns(), true);
+  document.addEventListener("DOMContentLoaded", checkToggle(), true);
+*/
   window.addEventListener("DOMContentLoaded", progressx.hide(), true);
-  stats.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
-  stats.addEventListener('afterSort', function() {progressx.hide();}, true);
+  stats.addEventListener("beforeSort", function() {progressx.show();progressx.progress(0.5);}, true);
+  stats.addEventListener("afterSort", function() {progressx.hide();}, true);
 </script>
 </body>
 </html>

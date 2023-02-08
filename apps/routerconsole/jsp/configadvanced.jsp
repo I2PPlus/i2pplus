@@ -27,7 +27,7 @@
 <div class=configure>
 <div class=wideload>
 <h3 id="ffconf" class=tabletitle><%=intl._t("Floodfill Configuration")%></h3>
-<form action="" method="POST">
+<form action="" method=POST>
 <table id="floodfillconfig" class=configtable>
 <tr>
 <td class=infohelp>
@@ -46,7 +46,7 @@
 <tr>
 <td>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
-<input type=hidden name="action" value="ff" >
+<input type=hidden name=action value="ff" >
 <b><%=intl._t("Enrollment")%>:</b>
 <label><input type=radio class=optbox name="ff" value="auto" <%=advancedhelper.getFFChecked(2) %> >
 <%=intl._t("Automatic")%></label>&nbsp;
@@ -68,9 +68,9 @@
     String advConfig = advancedhelper.getSettings();
     if (advancedhelper.isAdvanced()) {
 %>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
-<input type=hidden name="action" value="blah" >
+<input type=hidden name=action value="blah" >
 <input type=hidden name="nofilter_oldConfig" value="<%=advConfig%>" >
 <%
     }  // isAdvanced

@@ -40,7 +40,7 @@
 <%
   if (editBean.isInitialized()) {
 %>
-<form method="post" enctype="multipart/form-data" action="register" accept-charset=utf-8>
+<form method=POST enctype="multipart/form-data" action="register" accept-charset=utf-8>
 <div class=panel id="registration">
 <%
     String tunnelTypeName;
@@ -67,7 +67,7 @@
 <input type=hidden name="tunnel" value="<%=curTunnel%>" />
 <input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
 <input type=hidden name="type" value="<%=tunnelType%>" />
-<input type=submit class=default name="action" value="Save changes" />
+<input type=submit class=default name=action value="Save changes" />
 <%
     String curEncryptMode = editBean.getEncryptMode(curTunnel);
     if (!"0".equals(curEncryptMode)) {
@@ -307,7 +307,7 @@
 <tr><td class=buttons>
 <input type=hidden value=true name="removeConfirm" />
 <a class=control href="list"><%=intl._t("Cancel")%></a>
-<button id="controlSave" class=control type=submit name="action" value="authenticate"  title="<%=intl._t("Generate Authentication")%>"><%=intl._t("Generate")%></button>
+<button id="controlSave" class=control type=submit name=action value="authenticate"  title="<%=intl._t("Generate Authentication")%>"><%=intl._t("Generate")%></button>
 </td>
 </tr>
 <%

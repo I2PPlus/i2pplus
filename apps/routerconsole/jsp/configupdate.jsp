@@ -27,10 +27,10 @@
 <div class="messages">
 <jsp:getProperty name="updatehelper" property="newsStatus" />
 </div>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <% /* set hidden default */ %>
-<input type=submit name="action" value="" style="display:none" >
+<input type=submit name=action value="" style="display:none" >
 <%
     if (updatehelper.canInstall()) {
 %>
@@ -76,7 +76,7 @@
 <%
     } else {
 %>
-<input type=submit name="action" class="check" value="<%=intl._t("Check for updates")%>" />
+<input type=submit name=action class="check" value="<%=intl._t("Check for updates")%>" />
 <%
     }
 %>
@@ -193,7 +193,7 @@
 %>
 <tr class="tablefooter"><td class=optionsave>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
-<input type=submit name="action" class=accept value="<%=intl._t("Save")%>" >
+<input type=submit name=action class=accept value="<%=intl._t("Save")%>" >
 </td>
 </tr>
 </table>

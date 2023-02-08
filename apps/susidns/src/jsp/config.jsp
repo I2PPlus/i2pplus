@@ -60,14 +60,14 @@
 </div>
 <script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <div id=messages>${cfg.messages}</div>
-<form method="POST" action="config#navi">
+<form method=POST action="config#navi">
 <div id="config">
 <input type=hidden name="serial" value="${cfg.serial}" >
 <textarea name="config" rows="10" cols="80" spellcheck="false">${cfg.config}</textarea>
 </div>
 <div id="buttons">
-<input class="reload" type=submit name="action" value="<%=intl._t("Reload")%>" >
-<input class=accept type=submit name="action" value="<%=intl._t("Save")%>" >
+<input class="reload" type=submit name=action value="<%=intl._t("Reload")%>" >
+<input class=accept type=submit name=action value="<%=intl._t("Save")%>" >
 </div>
 </form>
 <div class="help" id="helpconfig">

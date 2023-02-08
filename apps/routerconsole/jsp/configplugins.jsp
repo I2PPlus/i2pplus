@@ -37,7 +37,7 @@
 <a href="configwebapps" title="<%=intl._t("WebApp Configuration")%>">WebApps</a>
 </span>
 </h3>
-<form action="configplugins" method="POST">
+<form action="configplugins" method=POST>
 <table id="plugininstall" class=configtable>
 <tr>
 <td class=infohelp colspan=2>
@@ -62,9 +62,9 @@
 <input type=text size="60" name="pluginURL" required title="<%=intl._t("To install a plugin, enter the download URL:")%>" >
 </td>
 <td align="right">
-<input type=submit name="action" class="default hideme" value="<%=intl._t("Install Plugin")%>" />
-<input type=submit class=cancel name="foo" value="<%=intl._t("Cancel")%>" />
-<input type=submit name="action" class="download" value="<%=intl._t("Install Plugin")%>" />
+<input type=submit name=action class="default hideme" value="<%=intl._t("Install Plugin")%>" />
+<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
+<input type=submit name=action class="download" value="<%=intl._t("Install Plugin")%>" />
 </td>
 </tr>
 </table>
@@ -73,7 +73,7 @@
 </tr>
 </table>
 </form>
-<form action="configplugins" method="POST" enctype="multipart/form-data" accept-charset=utf-8>
+<form action="configplugins" method=POST enctype="multipart/form-data" accept-charset=utf-8>
 <table id="plugininstall2" class=configtable>
 <tr>
 <td colspan=2>
@@ -97,7 +97,7 @@
 %>
 </td>
 <td align="right">
-<input type=submit name="action" class="download" title="<%=intl._t("Please supply a valid plugin file")%>" value="<%=intl._t("Install Plugin from File")%>" />
+<input type=submit name=action class="download" title="<%=intl._t("Please supply a valid plugin file")%>" value="<%=intl._t("Install Plugin from File")%>" />
 </td>
 </tr>
 </table>
@@ -110,20 +110,20 @@
        if (clientshelper.isPluginUpdateEnabled()) {
 %>
 <h3 id="pconfig"><%=intl._t("Plugin Manager")%></h3>
-<form action="configplugins" method="POST">
+<form action="configplugins" method=POST>
 <p id="pluginconfigtext">
 <%=intl._t("The plugins listed below are started by the webConsole client.")%>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
-<input type=submit name="action" class="reload" value="<%=intl._t("Update All Installed Plugins")%>" />
+<input type=submit name=action class="reload" value="<%=intl._t("Update All Installed Plugins")%>" />
 </p>
 </form>
 <div class=wideload>
-<form action="" method="POST">
+<form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="clientshelper" property="form3" />
 <div class=formaction id="pluginconfigactions">
-<input type=submit class=cancel name="foo" value="<%=intl._t("Cancel")%>" />
-<input type=submit name="action" class=accept value="<%=intl._t("Save Plugin Configuration")%>" />
+<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
+<input type=submit name=action class=accept value="<%=intl._t("Save Plugin Configuration")%>" />
 </div>
 </form>
 </div>

@@ -42,7 +42,7 @@
         }
     }
  %>
- <form action="configpeer" method="POST">
+ <form action="configpeer" method=POST>
  <input type=hidden name="nonce" value="<%=pageNonce%>" >
  <h3 class=tabletitle><%=intl._t("Manual Peer Controls")%></h3>
  <table id="configpeer" class=configtable>
@@ -53,12 +53,12 @@
 <%
     if (peerHash == null || !isBanned) {
 %>
-<input type=submit name="action" class=delete value="<%=intl._t("Ban peer until restart")%>" />
+<input type=submit name=action class=delete value="<%=intl._t("Ban peer until restart")%>" />
 <%
     }
     if (peerHash == null || isBanned) {
 %>
-<input type=submit name="action" class=accept value="<%=intl._t("Unban peer")%>" />
+<input type=submit name=action class=accept value="<%=intl._t("Unban peer")%>" />
 <%
     }
 %>
@@ -77,7 +77,7 @@
 <b><%=intl._t("Capacity")%>:</b>
 <input type=text size="8" name="capacity" value="<%=capacity%>" />
 </td>
-<td class=optionsave><input type=submit name="action" class=add value="<%=intl._t("Adjust peer bonuses")%>" /></td>
+<td class=optionsave><input type=submit name=action class=add value="<%=intl._t("Adjust peer bonuses")%>" /></td>
 </tr>
 </table>
 </form>

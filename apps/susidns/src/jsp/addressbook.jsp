@@ -391,12 +391,12 @@
     String susiNonce = book.getSerial(); // have to only do this once per page
 %>
 <c:if test="${book.notEmpty}">
-<form method="POST" action="addressbook">
+<form method=POST action="addressbook">
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
 <input type=hidden name="end" value="99">
-<input type=hidden name="action" value="<%=intl._t("Delete Selected")%>">
+<input type=hidden name=action value="<%=intl._t("Delete Selected")%>">
 <div id="book">
 <table class="book" id="host_list" cellspacing="0" cellpadding="5">
 <tr class="head">
@@ -442,7 +442,7 @@
 <div id="buttons">
 <p class=buttons>
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
-<input class=delete type=submit name="action" value="<%=intl._t("Delete Selected")%>">
+<input class=delete type=submit name=action value="<%=intl._t("Delete Selected")%>">
 </p>
 </div>
 </c:if>
@@ -455,7 +455,7 @@
     /* book.notEmpty */
 %>
 <c:if test="${book.isEmpty}"></h3></div><div id="empty"></div></c:if>
-<form method="POST" action="addressbook?book=${book.book}">
+<form method=POST action="addressbook?book=${book.book}">
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
@@ -469,23 +469,23 @@
 <p class=buttons>
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <c:if test="${book.notEmpty}">
-<input class="accept scrollToNav" type=submit name="action" value="<%=intl._t("Replace")%>">
+<input class="accept scrollToNav" type=submit name=action value="<%=intl._t("Replace")%>">
 <%
     if (!book.getBook().equals("published")) {
 %>
-<input class="add scrollToNav" type=submit name="action" value="<%=intl._t("Add Alternate")%>">
+<input class="add scrollToNav" type=submit name=action value="<%=intl._t("Add Alternate")%>">
 <%
     }
 %>
 </c:if><% /* book.notEmpty */ %>
-<input class="add scrollToNav" type=submit name="action" value="<%=intl._t("Add")%>">
+<input class="add scrollToNav" type=submit name=action value="<%=intl._t("Add")%>">
 </p>
 </div>
 </form>
 <%
     if (!book.getBook().equals("published")) {
 %>
-<form method="POST" action="addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset=utf-8>
+<form method=POST action="addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset=utf-8>
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
@@ -495,7 +495,7 @@
 <table><tr><td><b><%=intl._t("Select file")%></b></td><td><input name="file" type="file" accept=".txt" value=""></td></tr></table>
 <p class=buttons>
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
-<input class="download scrollToNav" type=submit name="action" value="<%=intl._t("Import")%>">
+<input class="download scrollToNav" type=submit name=action value="<%=intl._t("Import")%>">
 </p>
 </div>
 </form>

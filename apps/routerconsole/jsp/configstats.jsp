@@ -26,8 +26,8 @@
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigStatsHelper" id="statshelper" scope="request" />
 <jsp:setProperty name="statshelper" property="contextId" value="<%=i2pcontextId%>" />
 <div class=configure>
-<form id="statsForm" name="statsForm" action="" method="POST">
-<input type=hidden name="action" value="foo" >
+<form id="statsForm" name="statsForm" action="" method=POST>
+<input type=hidden name=action value="foo" >
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <h3 class=tabletitle><%=intl._t("Configure I2P Stat Collection")%></h3>
 <table id="statconfig" class=configtable>

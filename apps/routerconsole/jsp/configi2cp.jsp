@@ -35,7 +35,7 @@
 <%=intl._t("Many clients do not support SSL or authorization.")%>&nbsp;
 <%=intl._t("All changes require restart to take effect.")%>
 </p>
-<form action="configi2cp" method="POST">
+<form action="configi2cp" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table class=configtable id="externali2cp">
 <tr>
@@ -108,9 +108,9 @@
 %>
 <tr>
 <td class=optionsave align="right">
-<input type=submit class=default name="action" value="<%=intl._t("Save Interface Configuration")%>" />
-<input type=submit class=cancel name="foo" value="<%=intl._t("Cancel")%>" />
-<input type=submit class=accept name="action" value="<%=intl._t("Save Interface Configuration")%>" />
+<input type=submit class=default name=action value="<%=intl._t("Save Interface Configuration")%>" />
+<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
+<input type=submit class=accept name=action value="<%=intl._t("Save Interface Configuration")%>" />
 </td>
 </tr>
 </table>
