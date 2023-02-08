@@ -217,11 +217,16 @@ public class InternalServerSocket extends ServerSocket {
      *  @since 0.9.33
      */
     public static void renderStatusHTML(Writer out) throws IOException {
-        out.write("<h2 id=\"debug_sockets\">Internal Server Sockets</h2>\n<table id=\"sockets\"><tr><th>Port</th></tr>\n");
+        out.write("<h2 id=\"debug_sockets\">Internal Server Sockets</h2>\n<table id=\"sockets\">\n");
         List<Integer> ports = new ArrayList<Integer>(_sockets.keySet());
-        Collections.sort(ports);
-        for (Integer i : ports) {
-            out.write("<tr><td>" + i + "</td></tr>\n");
+        if (!ports.isEmpty()) {
+            out.write("<tr><th>Port\n");
+            Collections.sort(ports);
+            for (Integer i : ports) {
+                out.write("<tr><td>" + i + '\n');
+            }
+        } else {
+            out.write("<tr><td><i>none</i>\n");
         }
         out.write("</table>\n");
     }
