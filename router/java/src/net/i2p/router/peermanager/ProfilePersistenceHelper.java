@@ -60,7 +60,7 @@ class ProfilePersistenceHelper {
      *
      */
 //    private static final long EXPIRE_AGE = 15*24*60*60*1000;
-    private static final long EXPIRE_AGE = 3*24*60*60*1000; // 3 days
+    private static final long EXPIRE_AGE = 7*24*60*60*1000; // 1 week
 
     private final File _profileDir;
     private Hash _us;
@@ -304,12 +304,14 @@ class ProfilePersistenceHelper {
                 continue;
             if (f.lastModified() < cutoff) {
                 i++;
+                //_log.warn("Not deleting " + f + " (debugging active)");
                 f.delete();
             }
         }
         if (_log.shouldWarn())
             if (i > 0)
                 _log.warn("Deleted " + i + " stale peer profiles");
+                //_log.warn("Would have deleted " + i + " stale peer profiles");
     }
 
     private boolean isExpired(long lastSentToSuccessfully) {
@@ -465,7 +467,7 @@ class ProfilePersistenceHelper {
         if (min > 0 && min < Long.MAX_VALUE && (fha <= 0 || min < fha)) {
             p.setFirstHeardAbout(min);
             if (_log.shouldDebug())
-                _log.debug("Fixed up the FirstHeardAbout time for [" + p.getPeer().toBase64().substring(0,6) + "] to " + (new Date(min)));
+                _log.debug("Fixed FirstHeardAbout time for [" + p.getPeer().toBase64().substring(0,6) + "] to " + (new Date(min)));
         }
     }
 
