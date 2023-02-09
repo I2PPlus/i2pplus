@@ -225,8 +225,8 @@ public class ProfileOrganizer {
         }
 
         RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
-        String bw = "K";
-        String cap = "";
+        String bw = null;
+        String cap = null;
         String version = "0.8";
         boolean noSSU = true;
         boolean hasSalt = false;
@@ -248,9 +248,10 @@ public class ProfileOrganizer {
         }
         PeerProfile prof = getProfile(peer);
 
-        if (peerInfo != null && (cap != null && !reachable) || cap == null || (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+        if ((peerInfo != null && cap != null) && !reachable && bw != null &&
+            (bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
             if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or Unreachable");
             return null;
         }
 
@@ -294,7 +295,7 @@ public class ProfileOrganizer {
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
             int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
             int minFast = _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
-            if (peerInfo != null && cap != null && reachable && (!bw.equals("K") || !bw.equals("L") || !bw.equals("M"))) {
+            if (peerInfo != null && cap != null && reachable && (!bw.equals("K") || !bw.equals("L") || !bw.equals("M") || !bw.equals("N"))) {
                 if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
                     countHighCapacityPeers() < getMaximumHighCapPeers())
                     _highCapacityPeers.put(peer, rv);
@@ -326,13 +327,19 @@ public class ProfileOrganizer {
         boolean hasSalt = false;
         boolean isFF = false;
         boolean reachable = true;
+        RouterInfo us = _context.netDb().lookupRouterInfoLocally(_context.routerHash());
+        boolean isUs = us != null && us.equals(_context.routerHash());
+        PeerProfile prof = getProfile(peer);
+
         if (peerInfo != null) {
             bw = peerInfo.getBandwidthTier();
             cap = peerInfo.getCapabilities();
             version = peerInfo.getVersion();
-            reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
-            isFF = cap.contains("f");
-            hasSalt = cap != null && cap != "" && cap.contains("salt");
+            if (cap != null && cap != "" && !isUs) {
+                reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+                isFF = cap.contains("f");
+                hasSalt = cap.contains("salt");
+            }
             for (RouterAddress ra : peerInfo.getAddresses()) {
                 if (ra.getTransportStyle().equals("SSU") ||
                     ra.getTransportStyle().equals("SSU2"))
@@ -340,46 +347,39 @@ public class ProfileOrganizer {
                     break;
             }
         }
-        PeerProfile prof = getProfile(peer);
+
+        boolean isSlow = (cap != null && cap != "") && bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N") || !reachable;
 
         if (peer != null && peer.equals(_us)) {
             if (_log.shouldDebug())
                 _log.debug("Added our own profile to Profile Manager");
             return null;
-        }
-
-        if (peerInfo != null && (cap != null && !reachable) || cap == null || (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+        } else if (peer != null && isSlow) {
             if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or Unreachable");
             return null;
-        }
-
-        if (peerInfo != null && hasSalt) {
+        } else if (peer != null && hasSalt) {
             if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Invalid caps 'salt' in RouterInfo");
             return null;
-        }
-
-        if (peerInfo != null && (isFF && noSSU)) {
+        } else if (peer != null && isFF && noSSU) {
             if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
             return null;
-        }
-
-        if (VersionComparator.comp(version, "0.9.57") < 0) {
+        } else if (peer != null && VersionComparator.comp(version, "0.9.57") < 0) {
             if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.57");
            return null;
+        } else {
+            if (_log.shouldInfo())
+                _log.info("New profile created for [" + peer.toBase64().substring(0,6) + "]");
         }
-
-        if (_log.shouldDebug())
-            _log.debug("New profile created for [" + peer.toBase64().substring(0,6) + "]");
 
         PeerProfile old = getProfile(peer);
         profile.coalesceStats();
-        if (!getWriteLock())
-            return old;
+        if (!getWriteLock()) {return old;}
         try {
+            //if (prof != null) {
             // Don't do this, as it may substantially exceed
             // the high cap and fast limits in-between reorganizations.
             // just add to the not-failing tier, and maybe the high cap tier,
@@ -392,15 +392,23 @@ public class ProfileOrganizer {
             if (old == null)
                 _notFailingPeersList.add(peer);
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
-            if (peerInfo != null && (cap != null && !reachable) || cap == null || (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+            if (prof != null && (isSlow || (isFF && noSSU) || hasSalt || (isFF && !reachable))) {
                 prof.setCapacityBonus(-30);
                 _highCapacityPeers.remove(peer, profile);
-                if (_log.shouldInfo())
-                    _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> K, L, M or Unreachable");
+                if (_log.shouldInfo()) {
+                    if (isFF && !reachable)
+                        _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Unreachable/firewalled Floodfill");
+                    else if (hasSalt)
+                        _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Invalid caps 'salt' in RouterInfo");
+                    else if (isFF && noSSU)
+                        _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Floodfill with SSU disabled ");
+                    else if (isSlow)
+                        _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> K, L, M, N or Unreachable");
+                }
             }
             if (_thresholdCapacityValue <= profile.getCapacityValue() && isSelectable(peer) &&
                 _highCapacityPeers.size() < getMaximumHighCapPeers()) {
-                    if (peerInfo != null && cap != null && reachable && !bw.equals("K") && !bw.equals("L") && !bw.equals("M"))
+                    if (peerInfo != null && cap != null && reachable && !isSlow && !hasSalt && !(isFF && noSSU))
                         _highCapacityPeers.put(peer, profile);
             }
             _strictCapacityOrder.add(profile);
@@ -425,7 +433,8 @@ public class ProfileOrganizer {
 
     public int countActivePeers() {
         int activePeers = 0;
-        long hideBefore = _context.clock().now() - 5*60*1000;
+        //long hideBefore = _context.clock().now() - 5*60*1000;
+        long hideBefore = _context.clock().now() - 60*1000;
 
         getReadLock();
         try {
@@ -828,7 +837,8 @@ public class ProfileOrganizer {
         }
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
-                _log.debug("Need " + howMany + "  active, not failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable failing peers");
+                _log.debug("Need " + howMany + "  active, not failing peers for tunnel build; " + matches.size() +
+                           " found - selecting remainder from most reliable failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldDebug())
