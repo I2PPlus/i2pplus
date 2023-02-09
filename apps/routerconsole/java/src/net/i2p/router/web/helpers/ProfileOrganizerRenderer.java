@@ -88,7 +88,7 @@ class ProfileOrganizerRenderer {
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
 
             buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist>\n")
-               .append("<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/>")
+               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
                .append("<thead>\n<tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("Caps")).append("</th>")
@@ -338,12 +338,13 @@ class ProfileOrganizerRenderer {
         } else {
             buf.append("<div class=widescroll id=\"ff\">\n")
                .append("<table id=floodfills data-sortable>\n")
-               .append("<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/>" +
-                       "<colgroup class=good/><colgroup class=good/><colgroup class=good/>" +
-                       "<colgroup class=bad/><colgroup class=bad/><colgroup class=bad/><colgroup class=bad/>")
+               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>" +
+                       "<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>" +
+                       "<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
                .append("<thead class=smallhead><tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
 //               .append("<th>").append(_t("Caps")).append("</th>")
+               //.append("<th>").append(_t("1/24h Fail Rate").replace("Rate","")).append("</th>")
                .append("<th>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
                .append("<th>").append(_t("1h Resp. Time")).append("</th>")
 //               .append("<th>").append(_t("Integ. Value")).append("</th>")
@@ -412,14 +413,13 @@ class ProfileOrganizerRenderer {
                 String hourfail = davg(dbh, 60*60*1000l, ra);
                 String dayfail = davg(dbh, 24*60*60*1000l, ra);
                 buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" + hourfail + "\">" +
-                           "<span class=percentBarText>").append(hourfail).append("</span></span></span>").append("</td>");
-                buf.append("<td><span hidden>[").append(avg(prof, 60*60*1000l, ra)).append("]</span>");
+                           "<span class=percentBarText>" + hourfail + "</span></span></span>");
+                buf.append("</td>");
 /*
-                if (response > 2000) {
-                    buf.append("<span class=poor>").append(avg(prof, 60*60*1000l, ra)).append("</span>");
-                } else {
-                }
+                           "<br><span class=percentBarOuter><span class=percentBarInner style=\"width:" + dayfail + "\">" +
+                           "<span class=percentBarText>" + dayfail + "</span></span></span></td>");
 */
+                buf.append("<td><span hidden>[").append(avg(prof, 60*60*1000l, ra)).append("]</span>");
                 buf.append(avg(prof, 60*60*1000l, ra));
                 buf.append("</td>");
                 buf.append("<td><span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
