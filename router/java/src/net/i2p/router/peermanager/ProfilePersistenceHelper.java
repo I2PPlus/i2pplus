@@ -60,7 +60,7 @@ class ProfilePersistenceHelper {
      *
      */
 //    private static final long EXPIRE_AGE = 15*24*60*60*1000;
-    private static final long EXPIRE_AGE = 7*24*60*60*1000; // 1 week
+    private static final long EXPIRE_AGE = 3*24*60*60*1000; // 3 days
 
     private final File _profileDir;
     private Hash _us;
@@ -332,9 +332,9 @@ class ProfilePersistenceHelper {
 
             long lastSentToSuccessfully = getLong(props, "lastSentToSuccessfully");
             RouterInfo info = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
-            String caps = "unknown";
+            String caps = "";
             if (info != null)
-                caps = DataHelper.stripHTML(info.getCapabilities()).toUpperCase();
+                caps = DataHelper.stripHTML(info.getCapabilities());
 
             if (isExpired(lastSentToSuccessfully)) {
                 if (_log.shouldDebug())
