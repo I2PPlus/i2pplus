@@ -228,16 +228,41 @@ public class ProfileOrganizer {
         String bw = "K";
         String cap = "";
         String version = "0.8";
+        boolean noSSU = true;
+        boolean hasSalt = false;
+        boolean isFF = false;
+        boolean reachable = true;
         if (peerInfo != null) {
             bw = peerInfo.getBandwidthTier();
             cap = peerInfo.getCapabilities();
             version = peerInfo.getVersion();
+            reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+            isFF = cap.contains("f");
+            hasSalt = cap != null && cap != "" && cap.contains("salt");
+            for (RouterAddress ra : peerInfo.getAddresses()) {
+                if (ra.getTransportStyle().equals("SSU") ||
+                    ra.getTransportStyle().equals("SSU2"))
+                    noSSU = false;
+                    break;
+            }
         }
         PeerProfile prof = getProfile(peer);
-        boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+
         if (peerInfo != null && (cap != null && !reachable) || cap == null || (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
             if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
+            return null;
+        }
+
+        if (peerInfo != null && hasSalt) {
+            if (_log.shouldInfo())
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Invalid caps 'salt' in RouterInfo");
+            return null;
+        }
+
+        if (peerInfo != null && (isFF && noSSU)) {
+            if (_log.shouldInfo())
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
             return null;
         }
 
@@ -296,12 +321,26 @@ public class ProfileOrganizer {
         RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
         String bw = "K";
         String cap = "";
+        String version = "0.8";
+        boolean noSSU = true;
+        boolean hasSalt = false;
+        boolean isFF = false;
+        boolean reachable = true;
         if (peerInfo != null) {
             bw = peerInfo.getBandwidthTier();
             cap = peerInfo.getCapabilities();
+            version = peerInfo.getVersion();
+            reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+            isFF = cap.contains("f");
+            hasSalt = cap != null && cap != "" && cap.contains("salt");
+            for (RouterAddress ra : peerInfo.getAddresses()) {
+                if (ra.getTransportStyle().equals("SSU") ||
+                    ra.getTransportStyle().equals("SSU2"))
+                    noSSU = false;
+                    break;
+            }
         }
         PeerProfile prof = getProfile(peer);
-        boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
 
         if (peer != null && peer.equals(_us)) {
             if (_log.shouldDebug())
@@ -313,6 +352,24 @@ public class ProfileOrganizer {
             if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
             return null;
+        }
+
+        if (peerInfo != null && hasSalt) {
+            if (_log.shouldInfo())
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Invalid caps 'salt' in RouterInfo");
+            return null;
+        }
+
+        if (peerInfo != null && (isFF && noSSU)) {
+            if (_log.shouldInfo())
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
+            return null;
+        }
+
+        if (VersionComparator.comp(version, "0.9.57") < 0) {
+            if (_log.shouldInfo())
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.57");
+           return null;
         }
 
         if (_log.shouldDebug())
@@ -460,7 +517,7 @@ public class ProfileOrganizer {
      *
      */
 //    private final static int MAX_BAD_REPLIES_PER_HOUR = 5;
-    private final static int MAX_BAD_REPLIES_PER_HOUR = 32; // increase value to factor in old peers marked as invalid
+    private final static int MAX_BAD_REPLIES_PER_HOUR = 8; // increase value to factor in old peers marked as invalid
 
     /**
      * Does the given peer send us bad replies - either invalid store messages
@@ -882,9 +939,9 @@ public class ProfileOrganizer {
     }
 
 //    private static final long MIN_EXPIRE_TIME = 60*60*1000;
-    private static final long MIN_EXPIRE_TIME = 24*60*60*1000;
+    private static final long MIN_EXPIRE_TIME = 3*24*60*60*1000;
 //    private static final long MAX_EXPIRE_TIME = 6*60*60*1000;
-    private static final long MAX_EXPIRE_TIME = 3*24*60*60*1000;
+    private static final long MAX_EXPIRE_TIME = 4*7*24*60*60*1000;
 //    private static final long ADJUST_EXPIRE_TIME = 60*1000;
     private static final long ADJUST_EXPIRE_TIME = 3*60*1000;
     private static final int ENOUGH_PROFILES = 2000;
