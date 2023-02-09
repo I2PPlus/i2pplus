@@ -691,7 +691,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         boolean isBadFF = isFF && noSSU;
         if ((_floodfillEnabled && !forceExplore) || _context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH ||
-            _context.banlist().isBanlistedForever(peer) || _context.banlist().isBanlisted(peer) || uninteresting || isBadFF) {
+            _context.banlist().isBanlistedForever(peer) || _context.banlist().isBanlisted(peer) || uninteresting ||
+            isBadFF || _context.router().gracefulShutdownInProgress()) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at
             // once, and then firing off 3000 netDb lookup tasks)
             // Also don't queue a search if we have plenty of routerinfos
