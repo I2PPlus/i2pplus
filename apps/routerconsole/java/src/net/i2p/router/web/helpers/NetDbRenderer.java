@@ -1048,7 +1048,7 @@ class NetDbRenderer {
 
         if (!showStats) {
             // the summary table
-            buf.append("<table id=netdboverview border=0 cellspacing=30 width=100%>\n<tr>\n<th colspan=3>")
+            buf.append("<table id=netdboverview width=100%>\n<tr>\n<th colspan=3>")
                .append(_t("Network Database Router Statistics"))
                .append("</th></tr>\n<tr>\n<td style=vertical-align:top>");
             // versions table
@@ -1125,11 +1125,11 @@ class NetDbRenderer {
             if (!countryList.isEmpty()) {
                 Collections.sort(countryList, new CountryComparator());
                 buf.append("<table id=netdbcountrylist data-sortable>\n");
-                buf.append("<thead>\n<tr>\n<th data-sort-default>" + _t("Country") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
+                buf.append("<thead>\n<tr>\n<th>" + _t("Country") + "</th><th data-sort-default>" + _t("Count") + "</th></tr>\n</thead>\n");
                 for (String country : countryList) {
                     int num = countries.count(country);
                     buf.append("<tr>\n<td><a href=\"/netdb?c=").append(country).append("\">");
-                    buf.append("<img style=vertical-align:middle width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"");
+                    buf.append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"");
                     buf.append(" src=\"/flags.jsp?c=").append(country).append("\">");
                     buf.append(getTranslatedCountry(country));
                     buf.append("</a></td>\n<td>").append(num).append("</td>\n</tr>\n");
@@ -1326,24 +1326,24 @@ class NetDbRenderer {
                        .append(rdns).append("</span></span>&nbsp;&nbsp;");
                 }
             }
+/*
+            boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
+            if (debug) {
+                buf.append("<span class=netdb_info><b>").append(_t("Routing Key")).append(":</b> ")
+                   .append("<span class=rkey>").append(info.getRoutingKey().toBase64()).append("</span>&nbsp;&nbsp;");
+                byte[] padding = info.getIdentity().getPadding();
+                if (padding != null && padding.length >= 64) {
+                    if (DataHelper.eq(padding, 0, padding, 32, 32))
+                        buf.append("<b>Compressible:</b> true");
+                }
+                buf.append("</span>\n");
+            }
+*/
          } else {
             // shouldn't happen
             buf.append("<td><b>").append(_t("Published")).append("</td>\n<td>:</b> in ")
                .append(DataHelper.formatDuration2(0-age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
         }
-
-/***
-        boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
-        if (debug) {
-            buf.append("</td></tr>\n<tr><td><b>Routing Key:</b></td><td colspan=\"2\">").append(info.getRoutingKey().toBase64());
-            buf.append("</td></tr>");
-            byte[] padding = info.getIdentity().getPadding();
-            if (padding != null && padding.length >= 64) {
-                if (DataHelper.eq(padding, 0, padding, 32, 32))
-                    buf.append("</td></tr><tr><td><b>Compressible:</b></td><td colspan=\"2\">true");
-            }
-        }
-***/
 
         if (family != null) {
             FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
