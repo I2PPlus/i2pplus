@@ -8,6 +8,7 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
+import java.util.Map;
 import java.util.Set;
 
 import net.i2p.data.DatabaseEntry;
@@ -75,12 +76,9 @@ class ExpireRoutersJob extends JobImpl {
      * @return number removed
      */
     private int expireKeys() {
-        Set<Hash> keys = _facade.getAllRouters();
-        keys.remove(getContext().routerHash());
-        int count = keys.size();
-        if (count < 150)
-        // Don't expire if router is disconnected, lagged, or has high message delay
-//        if (count < 150 || getContext().commSystem().getStatus() == Status.DISCONNECTED ||
+        // go through the database directly for efficiency
+        Set<Map.Entry<Hash, DatabaseEntry>> entries = _facade.getDataStore().getMapEntries();
+        int count = entries.size();
         if (count < 500 || getContext().commSystem().getStatus() == Status.DISCONNECTED ||
                                  (getContext().jobQueue().getMaxLag() > 150) ||
                                  (getContext().throttle().getMessageDelay() > 1000))
@@ -88,18 +86,24 @@ class ExpireRoutersJob extends JobImpl {
         RouterKeyGenerator gen = getContext().routerKeyGenerator();
         long now = getContext().clock().now();
         long cutoff = now - 30*60*1000;
+        Hash us = getContext().routerHash();
         boolean isFF = _facade.floodfillEnabled();
-        byte[] ourRKey = isFF ? getContext().routerHash().getData() : null;
+        byte[] ourRKey = isFF ? us.getData() : null;
         int pdrop = Math.max(10, Math.min(50, (100 * count / LIMIT_ROUTERS) - 100));
         int removed = 0;
         if (_log.shouldLog(Log.INFO))
             _log.info("Expiring routers, count = " + count + " drop probability " + (count > LIMIT_ROUTERS ? pdrop : 0) + '%');
-        for (Hash key : keys) {
+        for (Map.Entry<Hash, DatabaseEntry> entry : entries) {
+            DatabaseEntry e = entry.getValue();
+            if (e.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) {
+                count--;
+                continue;
+            }
+            Hash key = entry.getKey();
+            if (key.equals(us))
+                continue;
             // Don't expire anybody we are connected to
             if (getContext().commSystem().isEstablished(key))
-                continue;
-            DatabaseEntry e = _facade.lookupLocallyWithoutValidation(key);
-            if (e == null)
                 continue;
             if (count > LIMIT_ROUTERS) {
                 // aggressive drop strategy
