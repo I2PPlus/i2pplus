@@ -16,8 +16,8 @@ import net.i2p.util.Log;
 public class DBHistory {
     private final Log _log;
     private final RouterContext _context;
-    //private long _successfulLookups;
-    //private long _failedLookups;
+    private long _successfulLookups;
+    private long _failedLookups;
     private final RateStat _failedLookupRate;
     private final RateStat _invalidReplyRate;
     //private long _lookupReplyNew;
@@ -48,11 +48,11 @@ public class DBHistory {
 
     /** how many times we have sent them a db lookup and received the value back from them
      */
-    //public long getSuccessfulLookups() { return _successfulLookups; }
+    public long getSuccessfulLookups() { return _successfulLookups; }
 
     /** how many times we have sent them a db lookup and not received the value or a lookup reply
      */
-    //public long getFailedLookups() { return _failedLookups; }
+    public long getFailedLookups() { return _failedLookups; }
 
     /** how many peers that we have never seen before did lookups provide us with?
      */
@@ -125,7 +125,7 @@ public class DBHistory {
      *
      */
     public void lookupSuccessful() {
-        //_successfulLookups++;
+        _successfulLookups++;
         _failedLookupRate.addData(0);
         _context.statManager().addRateData("peer.failedLookupRate", 0);
         _lastLookupSuccessful = _context.clock().now();
@@ -135,7 +135,7 @@ public class DBHistory {
      * Note that the peer failed to respond to the db lookup in any way
      */
     public void lookupFailed() {
-        //_failedLookups++;
+        _failedLookups++;
         _failedLookupRate.addData(1);
         _context.statManager().addRateData("peer.failedLookupRate", 1);
         _lastLookupFailed = _context.clock().now();
@@ -219,8 +219,6 @@ public class DBHistory {
             _unpromptedDbStoreOld++;
     }
 
-    //public void setSuccessfulLookups(long num) { _successfulLookups = num; }
-    //public void setFailedLookups(long num) { _failedLookups = num; }
     //public void setLookupReplyNew(long num) { _lookupReplyNew = num; }
     //public void setLookupReplyOld(long num) { _lookupReplyOld = num; }
     //public void setLookupReplyInvalid(long num) { _lookupReplyInvalid = num; }
@@ -228,6 +226,8 @@ public class DBHistory {
     //public void setLookupsReceived(long num) { _lookupsReceived = num; }
     //public void setAvgDelayBetweenLookupsReceived(long ms) { _avgDelayBetweenLookupsReceived = ms; }
     //public void setLastLookupReceived(long when) { _lastLookupReceived = when; }
+    public void setSuccessfulLookups(long num) { _successfulLookups = num; }
+    public void setFailedLookups(long num) { _failedLookups = num; }
     public void setUnpromptedDbStoreNew(long num) { _unpromptedDbStoreNew = num; }
     public void setUnpromptedDbStoreOld(long num) { _unpromptedDbStoreOld = num; }
 
@@ -261,22 +261,23 @@ public class DBHistory {
             buf.append("# NetDb History").append(NL);
             buf.append(HR).append(NL);
         }
-        //add(buf, "successfulLookups", _successfulLookups, "How many times have they successfully given us what we wanted when looking for it?");
-        //add(buf, "failedLookups", _failedLookups, "How many times have we sent them a db lookup and they didn't reply?");
-        //add(buf, "lookupsReceived", _lookupsReceived, "How many lookups have they sent us?");
+        add(buf, addComments, "lastLookupFailed", _lastLookupFailed, "Time of last failed lookup from peer (ms since the epoch)");
+        add(buf, addComments, "lastLookupSuccessful", _lastLookupSuccessful, "Time of last successful lookup from peer (ms since the epoch)");
+        add(buf, addComments, "lastStoreFailed", _lastStoreFailed, "Time of last failed store to peer (ms since the epoch)");
+        add(buf, addComments, "lastStoreSuccessful", _lastStoreSuccessful, "Time of last successful store to peer (ms since the epoch)");
+        add(buf, addComments, "unpromptedDbStoreNew", _unpromptedDbStoreNew, "Number of times peer sent us something unrequested and not seen before");
+        add(buf, addComments, "unpromptedDbStoreOld", _unpromptedDbStoreOld, "Number of times peer sent us something unrequested but seen before");
+        add(buf, addComments, "failedLookups", _failedLookups, "Number of times peer never responded to a lookup request");
+        add(buf, addComments, "successfulLookups", _successfulLookups, "Number of times peer sent a valid response to a lookup request");
+        //add(buf, "avgDelayBetweenLookupsReceived", _avgDelayBetweenLookupsReceived, "How long is it typically between each db lookup they send us?  (in milliseconds)");
+        //add(buf, "lastLookupReceived", _lastLookupReceived, "When was the last time they send us a lookup?  (milliseconds since the epoch)");
         //add(buf, "lookupReplyDuplicate", _lookupReplyDuplicate, "How many of their reply values to our lookups were something we asked them not to send us?");
         //add(buf, "lookupReplyInvalid", _lookupReplyInvalid, "How many of their reply values to our lookups were invalid (expired, forged, corrupted)?");
         //add(buf, "lookupReplyNew", _lookupReplyNew, "How many of their reply values to our lookups were brand new to us?");
         //add(buf, "lookupReplyOld", _lookupReplyOld, "How many of their reply values to our lookups were something we had seen before?");
-        add(buf, addComments, "unpromptedDbStoreNew", _unpromptedDbStoreNew, "Number of times peer sent us something unrequested and not seen before");
-        add(buf, addComments, "unpromptedDbStoreOld", _unpromptedDbStoreOld, "Number of times peer sent us something unrequested but seen before");
-        //add(buf, "lastLookupReceived", _lastLookupReceived, "When was the last time they send us a lookup?  (milliseconds since the epoch)");
-        //add(buf, "avgDelayBetweenLookupsReceived", _avgDelayBetweenLookupsReceived, "How long is it typically between each db lookup they send us?  (in milliseconds)");
+        //add(buf, "lookupsReceived", _lookupsReceived, "How many lookups have they sent us?");
         // following 4 weren't persisted until 0.9.24
-        add(buf, addComments, "lastLookupSuccessful", _lastLookupSuccessful, "Time of last successful lookup from peer (ms since the epoch)");
-        add(buf, addComments, "lastLookupFailed", _lastLookupFailed, "Time of last failed lookup from peer (ms since the epoch)");
-        add(buf, addComments, "lastStoreSuccessful", _lastStoreSuccessful, "Time of last successful store to peer (ms since the epoch)");
-        add(buf, addComments, "lastStoreFailed", _lastStoreFailed, "Time of last failed store to peer (ms since the epoch)");
+
         out.write(buf.toString().getBytes("UTF-8"));
         _failedLookupRate.store(out, "dbHistory.failedLookupRate", addComments);
         _invalidReplyRate.store(out, "dbHistory.invalidReplyRate", addComments);
@@ -292,22 +293,22 @@ public class DBHistory {
 
 
     public void load(Properties props) {
-        //_successfulLookups = getLong(props, "dbHistory.successfulLookups");
-        //_failedLookups = getLong(props, "dbHistory.failedLookups");
-        //_lookupsReceived = getLong(props, "dbHistory.lookupsReceived");
-        //_lookupReplyDuplicate = getLong(props, "dbHistory.lookupReplyDuplicate");
-        //_lookupReplyInvalid = getLong(props, "dbHistory.lookupReplyInvalid");
-        //_lookupReplyNew = getLong(props, "dbHistory.lookupReplyNew");
-        //_lookupReplyOld = getLong(props, "dbHistory.lookupReplyOld");
+        _failedLookups = getLong(props, "dbHistory.failedLookups");
         _unpromptedDbStoreNew = getLong(props, "dbHistory.unpromptedDbStoreNew");
         _unpromptedDbStoreOld = getLong(props, "dbHistory.unpromptedDbStoreOld");
-        //_lastLookupReceived = getLong(props, "dbHistory.lastLookupReceived");
-        //_avgDelayBetweenLookupsReceived = getLong(props, "dbHistory.avgDelayBetweenLookupsReceived");
         // following 4 weren't persisted until 0.9.24
         _lastLookupSuccessful = getLong(props, "dbHistory.lastLookupSuccessful");
         _lastLookupFailed = getLong(props, "dbHistory.lastLookupFailed");
         _lastStoreSuccessful = getLong(props, "dbHistory.lastStoreSuccessful");
         _lastStoreFailed = getLong(props, "dbHistory.lastStoreFailed");
+        _successfulLookups = getLong(props, "dbHistory.successfulLookups");
+        //_lookupsReceived = getLong(props, "dbHistory.lookupsReceived");
+        //_lookupReplyDuplicate = getLong(props, "dbHistory.lookupReplyDuplicate");
+        //_lookupReplyInvalid = getLong(props, "dbHistory.lookupReplyInvalid");
+        //_lookupReplyNew = getLong(props, "dbHistory.lookupReplyNew");
+        //_lookupReplyOld = getLong(props, "dbHistory.lookupReplyOld");
+        //_lastLookupReceived = getLong(props, "dbHistory.lastLookupReceived");
+        //_avgDelayBetweenLookupsReceived = getLong(props, "dbHistory.avgDelayBetweenLookupsReceived");
         try {
             _failedLookupRate.load(props, "dbHistory.failedLookupRate", true);
             _log.debug("Loading dbHistory.failedLookupRate");

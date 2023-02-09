@@ -88,7 +88,7 @@ class ProfileOrganizerRenderer {
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
 
             buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist>\n")
-               .append("<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup char=\" \" charoff=1 /><colgroup/><colgroup/><colgroup/><colgroup/>")
+               .append("<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/>")
                .append("<thead>\n<tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("Caps")).append("</th>")
@@ -99,6 +99,7 @@ class ProfileOrganizerRenderer {
                .append("<th>").append(_t("Low Latency")).append("</th>")
                .append("<th>").append(_t("Capacity")).append("</th>")
                .append("<th>").append(_t("Integration")).append("</th>")
+               .append("<th>").append(_t("First Heard About")).append("</th>")
                .append("<th>").append(_t("View/Edit")).append("</th>")
                .append("</tr>\n</thead>\n<tbody id=pbody>\n");
             int prevTier = 1;
@@ -277,13 +278,15 @@ class ProfileOrganizerRenderer {
                 }
                 buf.append("</span>");
                 buf.append("</td><td>");
-
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
                 } else {
                     buf.append("<span>&ensp;</span>");
                 }
+                buf.append("</td><td>");
+                buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
+                   .append(formatInterval(now, prof.getFirstHeardAbout()));
                 buf.append("</td><td nowrap class=viewedit>");
                 buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
                    .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
@@ -335,9 +338,9 @@ class ProfileOrganizerRenderer {
         } else {
             buf.append("<div class=widescroll id=\"ff\">\n")
                .append("<table id=floodfills data-sortable>\n")
-               .append("<colgroup/><colgroup/><colgroup/><colgroup char=\" \" charoff=1 /><colgroup char=\" \" charoff=1 />" +
-                       "<colgroup class=good char=\" \" charoff=1 /><colgroup class=good char=\" \" charoff=1 /><colgroup class=good char=\" \" charoff=1 />" +
-                       "<colgroup class=bad char=\" \" charoff=1 /><colgroup class=bad char=\" \" charoff=1 /><colgroup class=bad char=\" \" charoff=1 />")
+               .append("<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/>" +
+                       "<colgroup class=good/><colgroup class=good/><colgroup class=good/>" +
+                       "<colgroup class=bad/><colgroup class=bad/><colgroup class=bad/><colgroup class=bad/>")
                .append("<thead class=smallhead><tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
 //               .append("<th>").append(_t("Caps")).append("</th>")
@@ -355,6 +358,7 @@ class ProfileOrganizerRenderer {
 //               .append("<th>").append(_t("10m Resp. Time")).append("</th>")
 //               .append("<th>").append(_t("1d Resp. Time")).append("</th>")
                .append("<th>").append(_t("Last Bad Store")).append("</th>")
+               .append("<th>").append(_t("Bad Lookups")).append("</th>")
 //               .append("<th>").append(_t("1d Fail Rate").replace("Rate","")).append("</th>")
                .append("</tr></thead>\n<tbody id=ffProfiles>\n");
             RateAverages ra = RateAverages.getTemp();
@@ -403,15 +407,13 @@ class ProfileOrganizerRenderer {
                     buf.append("<span hidden>0</span>").append(NA);
                 }
                 buf.append("</td>");
-                buf.append("<td><span hidden>").append(prof.getFirstHeardAbout()).append(".</span>")
-                   .append(formatInterval(now, prof.getFirstHeardAbout())).append("</td>");
 
 */
                 String hourfail = davg(dbh, 60*60*1000l, ra);
                 String dayfail = davg(dbh, 24*60*60*1000l, ra);
                 buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" + hourfail + "\">" +
                            "<span class=percentBarText>").append(hourfail).append("</span></span></span>").append("</td>");
-                buf.append("<td><span hidden>").append(avg(prof, 60*60*1000l, ra)).append(".</span>");
+                buf.append("<td><span hidden>[").append(avg(prof, 60*60*1000l, ra)).append("]</span>");
 /*
                 if (response > 2000) {
                     buf.append("<span class=poor>").append(avg(prof, 60*60*1000l, ra)).append("</span>");
@@ -420,25 +422,27 @@ class ProfileOrganizerRenderer {
 */
                 buf.append(avg(prof, 60*60*1000l, ra));
                 buf.append("</td>");
-                buf.append("<td><span hidden>").append(prof.getLastHeardAbout()).append(".</span>")
-                   .append(formatInterval(now, prof.getLastHeardAbout())).append("</td>");
-                buf.append("<td><span hidden>").append(prof.getLastHeardFrom()).append(".</span>")
+                buf.append("<td><span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
+                   .append(formatInterval(now, prof.getFirstHeardAbout())).append("</td>");
+//                buf.append("<td><span hidden>[").append(prof.getLastHeardAbout()).append("]</span>")
+//                   .append(formatInterval(now, prof.getLastHeardAbout())).append("</td>");
+                buf.append("<td><span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
                     .append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
-                buf.append("<td><span hidden>").append(dbh.getLastLookupSuccessful()).append(".</span>")
+                buf.append("<td><span hidden>[").append(dbh.getLastLookupSuccessful()).append("]</span>")
                    .append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
-                buf.append("<td><span hidden>").append(prof.getLastSendSuccessful()).append(".</span>")
+                buf.append("<td><span hidden>[").append(prof.getLastSendSuccessful()).append("]</span>")
                    .append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
-                buf.append("<td><span hidden>").append(dbh.getLastStoreSuccessful()).append(".</span>")
+                buf.append("<td><span hidden>[").append(dbh.getLastStoreSuccessful()).append("]</span>")
                    .append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
-                buf.append("<td><span hidden>").append(dbh.getLastLookupFailed()).append(".</span>")
+                buf.append("<td><span hidden>[").append(dbh.getLastLookupFailed()).append("]</span>")
                    .append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
-                buf.append("<td><span hidden>").append(prof.getLastSendFailed()).append(".</span>")
+                buf.append("<td><span hidden>[").append(prof.getLastSendFailed()).append("]</span>")
                    .append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
-//                buf.append("<td><span hidden>").append(avg(prof, 10*60*1000l, ra)).append(".</span>")
+//                buf.append("<td><span hidden>[").append(avg(prof, 10*60*1000l, ra)).append("]</span>")
 //                     .append(avg(prof, 10*60*1000l, ra)).append("</td>");
-//                buf.append("<td><span hidden>").append(prof.getLastHeardAbout()).append(".</span>")\n").append(avg(prof, 24*60*60*1000l, ra)).append("</td>");
+//                buf.append("<td><span hidden>[").append(prof.getLastHeardAbout()).append("]</span>")\n").append(avg(prof, 24*60*60*1000l, ra)).append("</td>");
 //                if (dbh != null) {
-                    buf.append("<td><span hidden>").append(dbh.getLastStoreFailed()).append(".</span>")
+                    buf.append("<td><span hidden>[").append(dbh.getLastStoreFailed()).append("]</span>")
                        .append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>");
 //                    buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" +
 //                               dayfail + "\"><span class=percentBarText>").append(dayfail).append("</span></span></span>").append("</td>");
@@ -447,6 +451,8 @@ class ProfileOrganizerRenderer {
 //                    for (int i = 0; i < 5; i++)
 //                        buf.append("<td><span hidden>0.</span>").append(NA);
 //                }
+                buf.append("<td><span hidden>[").append(dbh.getFailedLookups()).append("]</span>")
+                   .append(dbh.getFailedLookups()).append("</td>");
                 buf.append("</tr>\n");
             }
             buf.append("</tbody>\n</table>\n");
