@@ -311,19 +311,25 @@ public class PersistentDataStore extends TransientDataStore {
         try {
             String MIN_VERSION = "0.9.57";
             String v = MIN_VERSION;
+            String bw = "K";
             boolean unreachable = false;
             boolean isFF = false;
             boolean noSSU = true;
+            boolean hasSalt = false;
             boolean isBadFF = isFF && noSSU;
             boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
             String caps = "unknown";
             if (ri != null) {
                 v = ri.getVersion();
                 unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-                caps = ri.getCapabilities().toUpperCase();
-                if (caps.contains("F")) {
+                caps = ri.getCapabilities();
+                if (caps.contains("f")) {
                     isFF = true;
                 }
+                if (caps.contains("salt")) {
+                    hasSalt = true;
+                }
+                bw = ri.getBandwidthTier();
                 for (RouterAddress ra : ri.getAddresses()) {
                     if (ra.getTransportStyle().equals("SSU") ||
                         ra.getTransportStyle().equals("SSU2")) {
@@ -332,7 +338,10 @@ public class PersistentDataStore extends TransientDataStore {
                     }
                 }
             }
+
+            boolean isSlow = (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N");
             String filename = null;
+
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
                 filename = getRouterInfoName(key);
             else
@@ -362,6 +371,13 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
                         dbFile.delete();
+                    } else if (isSlow) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
+                        dbFile.delete();
+                    } else if (hasSalt) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Invalid 'salt' caps");
                     } else if (isBadFF) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
@@ -624,11 +640,11 @@ public class PersistentDataStore extends TransientDataStore {
                     String caps = "unknown";
                     if (ri != null) {
                         truncHash = ri.getIdentity().calculateHash().toBase64().substring(0,6);
-                        caps = ri.getCapabilities().toUpperCase();
-                        if (caps.contains("F")) {
+                        caps = ri.getCapabilities();
+                        if (caps.contains("f")) {
                             isFF = true;
                         }
-                        if (caps.contains("SALT")) {
+                        if (caps.contains("salt")) {
                             isSalt = true;
                         }
                         for (RouterAddress ra : ri.getAddresses()) {
