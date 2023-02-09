@@ -2883,7 +2883,7 @@ span#newtab{margin-top:4px}
 .tunnel_peer{display:inline-block;vertical-align:middle}
 .rid{width:unset}
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_soft)!important;background:var(--badge)}
-.rid td,tr:hover .rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight),0 0 2px 1px rgba(16,48,16,.8) inset}
+.rid td,tr:hover .rid td,#floodfills tr:hover .rid td {line-height:1;font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight),0 0 2px 1px rgba(16,48,16,.8) inset}
 .rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%)}
 .rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
