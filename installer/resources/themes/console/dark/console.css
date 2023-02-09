@@ -798,6 +798,7 @@ h3[id="udpcon"]{width:auto}
 #profilelist td:not(.rih):nth-child(2),#profilelist th:nth-child(2){text-align:left}
 #profilelist td:nth-child(3){letter-spacing:.1em}
 #profilelist th:last-child{text-align:left;font-size:0}
+#profilelist td{text-align:center}
 #profilelist td:not(.rih):nth-child(2){text-align:left}
 #profilelist td:nth-child(5) span{width:56px;height:16px;display:inline-block;font-size:0}
 #profilelist td:not(.rif):not(.rih):not(.rbw){padding:3px;color:#bb7}
@@ -881,13 +882,13 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #floodfills th{padding:6px 4px;white-space:normal;text-align:center}
 #floodfills td:not(.rid td){padding:4px;vertical-align:middle;white-space:nowrap;color:#bb7}
 #floodfills td:first-child,#floodfills td:not(.rid td):nth-child(2){padding:4px 3px;width:1%;white-space:nowrap}
-#floodfills td:not(.rid td):nth-child(2){width:6%;min-width:64px}
+#floodfills td:not(.rid td):nth-child(2){width:6%;min-width:64px;max-width:112px}
 #floodfills td:not(:last-child){border-right:var(--border_softer)}
 #floodfills td:nth-child(n+3){text-align:center}
 #floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;box-sizing:border-box;float:none}
 #floodfills .percentBarOuter,#tunnels .percentBarOuter{height:16px;overflow:hidden}
 #floodfills .percentBarOuter,#floodfills .percentBarText{margin:0 2px;width:calc(100% - 8px);vertical-align:middle}
-#floodfills .percentBarOuter{text-align:left;border:var(--border_soft);background:#000;opacity:.9}
+#floodfills .percentBarOuter{height:10px;text-align:left;border:var(--border_soft);background:#000;opacity:.9}
 #floodfills tr:hover .percentBarOuter,#floodfills tr:hover .percentBarInner{border-color:#252}
 #floodfills .percentBarInner{width:inherit;display:inline-block;background:linear-gradient(180deg,#700 50%,#500)}
 #floodfills .percentBarInner[style="width:0%"]{width:100%!important;background:linear-gradient(180deg,#362 50%,#141)}
@@ -897,8 +898,12 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #viewprofile td{padding:0}
 #viewprofile pre{margin:0 0 -3px;padding-bottom:21px;white-space:pre-wrap}
 #profiles #profilelist .separator td{padding:1px}
-#floodfills .good{background:rgba(0,255,0,.025)}
-#floodfills .bad{background:rgba(255,0,0,.1)}
+#floodfills .bad{background:rgba(72,0,0,.4)}
+#floodfills td:nth-child(8){border-right:1px solid #400}
+#floodfills td:nth-child(n+9){color:#f11!important;border:1px solid #400}
+#floodfills td:last-child{border-right:var(--border)}
+#floodfills tr:last-child td{border-bottom:var(--border)}
+#floodfills tr:hover td:nth-child(n+9){background:#500;color:#fff!important}
 #floodfills .poor{color:#900}
 
 /* events */
@@ -1060,7 +1065,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels #tunnelPeerCount td.tcount{padding:3px 0 3px 4px;text-align:right;border-right:none}
 #tunnels #tunnelPeerCount td.bar{border-left:none}
 /* netdb */
-#netdb #netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}
+#netdb #netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;vertical-align:middle;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}
 #netdb #netdbcountrylist a:hover img{box-shadow:var(--outline),0 0 0 2px var(--hover);transform:scale(1.1)}
 #netdb #netdbcountrylist a{padding:2px 0;width:100%;display:inline-block}
 #netdboverview{margin-bottom:10px}
