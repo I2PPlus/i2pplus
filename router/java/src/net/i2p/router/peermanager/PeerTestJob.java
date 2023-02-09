@@ -173,17 +173,21 @@ class PeerTestJob extends JobImpl {
         for (Hash peer : peerHashes) {
             RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(peer);
             PeerProfile prof = getContext().profileOrganizer().getProfile(peer);
-            String cap = "";
+            String cap = null;
+            String bw = "";
+            String version = "";
+            boolean reachable = false;
             if (peerInfo != null) {
-                cap = peerInfo.getCapabilities();
+              bw = peerInfo.getBandwidthTier();
+              cap = peerInfo.getCapabilities();
+              version = peerInfo.getVersion();
+              reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             }
-            boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
-            String bw = peerInfo.getBandwidthTier();
-            String version = peerInfo.getVersion();
             if (peerInfo != null && prof != null && cap != null && reachable && VersionComparator.comp(version, "0.9.57") >= 0 &&
                 (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
-            } else if (peerInfo != null && prof != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
+            } else if (peerInfo != null && prof != null && cap != null &&
+                (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
                 prof.setCapacityBonus(-30);
                 if (_log.shouldInfo())
                     _log.info("[" + peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30 and skipping test -> K, L, M, N or unreachable");
