@@ -409,10 +409,11 @@ class ProfileOrganizerRenderer {
 */
                 String hourfail = davg(dbh, 60*60*1000l, ra);
                 String dayfail = davg(dbh, 24*60*60*1000l, ra);
+                int response = (int) Integer.valueOf(avg(prof, 60*60*1000l, ra));
                 buf.append("<td><span class=percentBarOuter><span class=percentBarInner style=\"width:" + hourfail + "\">" +
                            "<span class=percentBarText>").append(hourfail).append("</span></span></span>").append("</td>");
-                buf.append("<td><span hidden>").append(avg(prof, 60*60*1000l, ra)).append(".</span>")
-                if (avg(prof, 60*60*1000l, ra) > 2000) {
+                buf.append("<td><span hidden>").append(avg(prof, 60*60*1000l, ra)).append(".</span>");
+                if (response > 2000) {
                     buf.append("<span class=poor>").append(avg(prof, 60*60*1000l, ra)).append("</span>");
                 } else {
                     buf.append(avg(prof, 60*60*1000l, ra));
