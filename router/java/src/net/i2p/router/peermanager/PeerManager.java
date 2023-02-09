@@ -58,7 +58,8 @@ class PeerManager {
 //    static final long REORGANIZE_TIME_LONG = 351*1000;
     static final long REORGANIZE_TIME_LONG = 300*1000;
     /** After first two hours of uptime ~= 246 */
-    static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / (REORGANIZE_TIME_LONG * 2));
+//    static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / (REORGANIZE_TIME_LONG * 2));
+    static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / (REORGANIZE_TIME_LONG / 2));
 //    private static final long STORE_TIME = 19*60*60*1000;
     private static final long STORE_TIME = 15*60*1000;
 //    private static final long EXPIRE_AGE = 3*24*60*60*1000;
@@ -138,11 +139,13 @@ class PeerManager {
             } else if (start - _lastStore > STORE_TIME) {
                 _lastStore = start;
                 try {
-                    _log.info("Started writing peer profiles to disk");
+                    _log.info("Started writing peer profiles to disk...");
                     storeProfiles();
-                    _persistenceHelper.deleteOldProfiles(EXPIRE_AGE);
+                    if (shouldDecay)
+                        _persistenceHelper.deleteOldProfiles(EXPIRE_AGE);
                     // TODO: Add total time taken and number of profiles written
-                    _log.info("Finished writing peer profiles to disk");
+                    long finished = System.currentTimeMillis();
+                    _log.info("Finished writing peer profiles to disk, took " + (finished - start) + "ms");
                 } catch (Throwable t) {
                     _log.log(Log.CRIT, "Error storing profiles", t);
                 }
@@ -163,8 +166,10 @@ class PeerManager {
         if (_context.commSystem().isDummy())
             return;
         // lock in case shutdown bumps into periodic store
-        if (!_storeLock.compareAndSet(false, true))
+        if (!_storeLock.compareAndSet(false, true)) {
+            _log.error("Cannot write profiles to disk, storelock is enabled...");
             return;
+        }
         try {
             Set<Hash> peers = selectPeers();
             for (Hash peer : peers) {
