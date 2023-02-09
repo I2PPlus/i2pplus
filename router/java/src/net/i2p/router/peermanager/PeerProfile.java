@@ -106,7 +106,7 @@ public class PeerProfile {
 
     private long _lastCoalesceDate = System.currentTimeMillis();
 
-    private static final long[] RATES = { 60*1000l, 60*60*1000l, 24*60*60*1000 };
+    private static final long[] RATES = { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000 };
 
     /**
      *  Countries with more than about a 2% share of the netdb.
@@ -173,8 +173,8 @@ public class PeerProfile {
      * 1 minute)
      */
     public boolean getIsActive() {
-//        return getIsActive(5*60*1000, _context.clock().now());
-        return getIsActive(60*1000, _context.clock().now());
+        return getIsActive(5*60*1000, _context.clock().now());
+        //return getIsActive(60*1000, _context.clock().now());
     }
 
     /**
@@ -184,8 +184,8 @@ public class PeerProfile {
      * @since 0.9.58
      */
     public boolean getIsActive(long now) {
-//        return getIsActive(5*60*1000, now);
-        return getIsActive(60*1000, now);
+        return getIsActive(5*60*1000, now);
+        //return getIsActive(60*1000, now);
     }
 
     /** @since 0.8.11 */
@@ -506,11 +506,10 @@ public class PeerProfile {
                 StringBuilder buf = new StringBuilder(128);
                 buf.append("1 minute throughput for [");
                 buf.append(_peer.toBase64().substring(0,6));
-                buf.append("] updated after ").append(size).append(" bytes sent: [");
+                buf.append("] updated after ").append(size).append(" bytes sent \n* Measured: ");
                 for (int i = 0; i < THROUGHPUT_COUNT; i++)
-                    buf.append(_peakTunnel1mThroughput[i]).append(", ");
-                buf.append("]");
-                _log.debug(buf.toString().replace(", ]", "]"));
+                    buf.append(_peakTunnel1mThroughput[i]).append(" ");
+                _log.debug(buf.toString());
             }
         }
     }
