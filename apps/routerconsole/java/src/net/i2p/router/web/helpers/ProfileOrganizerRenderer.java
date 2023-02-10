@@ -46,7 +46,7 @@ class ProfileOrganizerRenderer {
         boolean ffmode = local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
-        long hideBefore = ffmode ? now - 60*1000 : now - 60*60*1000;
+        long hideBefore = ffmode ? now - 60*1000 : now - 90*60*1000;
 
         Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new HashComparator() : new ProfileComparator());
         int older = 0;
@@ -57,7 +57,13 @@ class ProfileOrganizerRenderer {
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             if (prof == null)
                 continue;
-            if (prof.getLastSendSuccessful() <= hideBefore) {
+            if (mode == 2) {
+                if (info != null && info.getCapabilities().indexOf('f') >= 0)
+                    order.add(prof);
+                continue;
+            }
+//            if (prof.getLastSendSuccessful() <= hideBefore) {
+            if (prof.getLastHeardFrom() <= hideBefore) {
                 older++;
                 continue;
             }
@@ -288,10 +294,10 @@ class ProfileOrganizerRenderer {
             }
             buf.append("</tbody>\n</table>\n");
 
-            buf.append("<div id=peer_thresholds>\n<h3 class=tabletitle>").append(_t("Thresholds")).append("</h3>\n")
-               .append("<table id=thresholds>\n")
-               .append("<thead><tr><th><b>")
-               .append(_t("Speed")).append(": </b>");
+            buf.append("<div id=peer_thresholds>\n" +
+                       "<h3 class=tabletitle>" + _t("Thresholds") + "</h3>\n" +
+                       "<table id=thresholds>\n" +
+                       "<thead><tr><th><b>" + _t("Speed") + ": </b>");
             String spd = (num(_organizer.getSpeedThreshold()).replace(",",""));
             String speedApprox = spd.substring(0, spd.indexOf("."));
             int speed = Integer.parseInt(speedApprox);
@@ -324,7 +330,9 @@ class ProfileOrganizerRenderer {
                .append("</td></tr>\n")
                .append("</tbody>\n</table>\n</div>\n"); // thresholds
             buf.append("</div>\n");
+
         } else {
+
             buf.append("<div class=widescroll id=\"ff\">\n")
                .append("<table id=floodfills data-sortable>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>" +
@@ -353,47 +361,50 @@ class ProfileOrganizerRenderer {
                 boolean isUnreachable = info != null ? info.getCapabilities().indexOf('U') >= 0 : false;
                 boolean isFF = info != null ? info.getCapabilities().indexOf('f') >= 0 : false;
                 boolean hasSalt = info != null ? info.getCapabilities().contains("salt") : false;
-                if (dbh == null || !isFF || isUnreachable || isBanned || hasSalt &&
-                    prof.getLastHeardFrom() >= hideBefore && prof.getLastHeardFrom() <= 0) {
+                if (dbh == null) {
                     continue;
                 } else {
                     order.add(prof);
                 }
-                buf.append("<tr class=lazy><td nowrap>");
-                buf.append(_context.commSystem().renderPeerHTML(peer, true));
-                buf.append("</td>");
-                String integration = num(prof.getIntegrationValue()).replace(".00", "");
-                String hourfail = davg(dbh, 60*60*1000l, ra);
-                String dayfail = davg(dbh, 24*60*60*1000l, ra);
-                buf.append("<td><span class=\"percentBarOuter");
-                if (hourfail.equals("0%")) {
-                    buf.append(" nofail");
-                }
-                buf.append("\"><span class=percentBarInner style=\"width:" + hourfail + "\">" +
-                           "<span class=percentBarText>" + hourfail + "</span></span></span>");
-                buf.append("</td>");
-                buf.append("<td><span hidden>[").append(avg(prof, 60*60*1000l, ra)).append("]</span>");
-                buf.append(avg(prof, 60*60*1000l, ra));
-                buf.append("</td>");
-                buf.append("<td><span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
-                   .append(formatInterval(now, prof.getFirstHeardAbout())).append("</td>");
-                buf.append("<td><span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
-                    .append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
-                buf.append("<td><span hidden>[").append(dbh.getLastLookupSuccessful()).append("]</span>")
-                   .append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
-                buf.append("<td><span hidden>[").append(prof.getLastSendSuccessful()).append("]</span>")
-                   .append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
-                buf.append("<td><span hidden>[").append(dbh.getLastStoreSuccessful()).append("]</span>")
-                   .append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
-                buf.append("<td><span hidden>[").append(dbh.getLastLookupFailed()).append("]</span>")
-                   .append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
-                buf.append("<td><span hidden>[").append(prof.getLastSendFailed()).append("]</span>")
-                   .append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
+                if (dbh != null && isFF && !isUnreachable && !isBanned) {
+                    buf.append("<tr class=lazy><td nowrap>");
+                    buf.append(_context.commSystem().renderPeerHTML(peer, true));
+                    buf.append("</td>");
+                    String integration = num(prof.getIntegrationValue()).replace(".00", "");
+                    String hourfail = davg(dbh, 60*60*1000l, ra);
+                    String dayfail = davg(dbh, 24*60*60*1000l, ra);
+                    buf.append("<td><span class=\"percentBarOuter");
+                    if (hourfail.equals("0%")) {
+                        buf.append(" nofail");
+                    }
+                    buf.append("\"><span class=percentBarInner style=\"width:" + hourfail + "\">" +
+                               "<span class=percentBarText>" + hourfail + "</span></span></span>");
+                    buf.append("</td>");
+                    buf.append("<td><span hidden>[").append(avg(prof, 60*60*1000l, ra)).append("]</span>");
+                    buf.append(avg(prof, 60*60*1000l, ra));
+                    buf.append("</td>");
+                    now = _context.clock().now();
+                    long heard = prof.getFirstHeardAbout();
+                    buf.append("<td><span hidden>[").append(heard).append("]</span>")
+                       .append(formatInterval(now, heard)).append("</td>");
+                    buf.append("<td><span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
+                       .append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
+                    buf.append("<td><span hidden>[").append(dbh.getLastLookupSuccessful()).append("]</span>")
+                       .append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
+                    buf.append("<td><span hidden>[").append(prof.getLastSendSuccessful()).append("]</span>")
+                       .append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
+                    buf.append("<td><span hidden>[").append(dbh.getLastStoreSuccessful()).append("]</span>")
+                       .append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
+                    buf.append("<td><span hidden>[").append(dbh.getLastLookupFailed()).append("]</span>")
+                       .append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
+                    buf.append("<td><span hidden>[").append(prof.getLastSendFailed()).append("]</span>")
+                       .append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
                     buf.append("<td><span hidden>[").append(dbh.getLastStoreFailed()).append("]</span>")
                        .append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>");
-                buf.append("<td><span hidden>[").append(dbh.getFailedLookups()).append("]</span>")
-                   .append(dbh.getFailedLookups()).append("</td>");
-                buf.append("</tr>\n");
+                    buf.append("<td><span hidden>[").append(dbh.getFailedLookups()).append("]</span>")
+                       .append(dbh.getFailedLookups()).append("</td>");
+                    buf.append("</tr>\n");
+                }
             }
             buf.append("</tbody>\n</table>\n");
             buf.append("</div>\n");
