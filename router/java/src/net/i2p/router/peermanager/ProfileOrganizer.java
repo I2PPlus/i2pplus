@@ -954,7 +954,7 @@ public class ProfileOrganizer {
     private static final long MAX_EXPIRE_TIME = 4*7*24*60*60*1000;
 //    private static final long ADJUST_EXPIRE_TIME = 60*1000;
     private static final long ADJUST_EXPIRE_TIME = 3*60*1000;
-    private static final int ENOUGH_PROFILES = 2000;
+    private static final int ENOUGH_PROFILES = 2500;
     private long _currentExpireTime = MAX_EXPIRE_TIME;
 
     /**
