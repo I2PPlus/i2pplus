@@ -82,7 +82,7 @@ public class PeerProfile {
 
     /** keep track of the fastest 3 throughputs */
 //    private static final int THROUGHPUT_COUNT = 3;
-    private static final int THROUGHPUT_COUNT = 20;
+    private static final int THROUGHPUT_COUNT = 12;
     /**
      * fastest 1 minute throughput, in bytes per minute, ordered with fastest
      * first.  this is not synchronized, as we don't *need* perfection, and we only
