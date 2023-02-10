@@ -305,13 +305,13 @@ class ProfilePersistenceHelper {
             if (f.lastModified() < cutoff) {
                 i++;
                 //_log.warn("Not deleting " + f + " (debugging active)");
-                f.delete();
+                //f.delete();
             }
         }
         if (_log.shouldWarn())
             if (i > 0)
-                _log.warn("Deleted " + i + " stale peer profiles");
-                //_log.warn("Would have deleted " + i + " stale peer profiles");
+                //_log.warn("Deleted " + i + " stale peer profiles");
+                _log.warn("Not deleting " + i + " (stale?) peer profiles - will expire when read at startup");
     }
 
     private boolean isExpired(long lastSentToSuccessfully) {
