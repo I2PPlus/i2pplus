@@ -56,8 +56,13 @@ class ProfileOrganizerRenderer {
             if (prof == null)
                 continue;
             if (mode == 2) {
+                // TODO: only increase timespan for floodfill display if we're not a ff
+                hideBefore = now - 3*60*1000;
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-                if (info != null && info.getCapabilities().indexOf('f') >= 0 && prof.getLastHeardFrom() <= hideBefore && prof.getLastHeardFrom() > 0)
+                if (info != null && info.getCapabilities().indexOf('f') >= 0 &&
+                    info.getCapabilities().indexOf('U') < 0 && !_context.banlist().isBanlisted(peer) &&
+                    !info.getCapabilities().contains("salt") &&
+                    prof.getLastHeardFrom() <= hideBefore && prof.getLastHeardFrom() > 0)
                     order.add(prof);
                 continue;
             }
@@ -88,7 +93,9 @@ class ProfileOrganizerRenderer {
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
 
             buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist>\n")
-               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
+               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup>" +
+                       "</colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>" +
+                       "<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
                .append("<thead>\n<tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("Caps")).append("</th>")
