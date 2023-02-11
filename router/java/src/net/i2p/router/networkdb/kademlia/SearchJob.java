@@ -208,7 +208,7 @@ class SearchJob extends JobImpl {
     }
 
 //    private static int MAX_PEERS_QUERIED = 40;
-    private static int MAX_PEERS_QUERIED = 32;
+    private static int MAX_PEERS_QUERIED = 80;
 
     /**
      * Send the next search, or stop if its completed
