@@ -65,7 +65,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
 //    private static final int FLOOD_TIMEOUT = 30*1000;
     private static final int FLOOD_TIMEOUT = 90*1000;
-    private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
+    static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;
     private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 2 : 3;
@@ -101,10 +101,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.jobQueue().addJob(_ffMonitor);
         _lookupThrottler = new LookupThrottler();
 
-        // refresh old routers
-        Job rrj = new RefreshRoutersJob(_context, this);
-        rrj.getTiming().setStartAfter(_context.clock().now() + 5*60*1000);
-        _context.jobQueue().addJob(rrj);
+        boolean isFF = _context.getBooleanProperty(FloodfillMonitorJob.PROP_FLOODFILL_PARTICIPANT);
+        long down = _context.router().getEstimatedDowntime();
+        if (!_context.commSystem().isDummy() &&
+            (down == 0 || (!isFF && down > 30*60*1000) || (isFF && down > 24*60*60*1000))) {
+            // refresh old routers
+            Job rrj = new RefreshRoutersJob(_context, this);
+            rrj.getTiming().setStartAfter(_context.clock().now() + 5*60*1000);
+            _context.jobQueue().addJob(rrj);
+        }
     }
 
     @Override
