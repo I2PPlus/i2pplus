@@ -46,11 +46,12 @@ class ProfileOrganizerRenderer {
         boolean ffmode = local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
-        long hideBefore = ffmode ? now - 60*1000 : now - 90*60*1000;
+        long hideBefore = ffmode ? now - 60*1000 : now - 3*60*1000;
 
         Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new HashComparator() : new ProfileComparator());
         int older = 0;
         int standard = 0;
+        int ff = 0;
         for (Hash peer : peers) {
             if (_organizer.getUs().equals(peer)) continue;
             PeerProfile prof = _organizer.getProfileNonblocking(peer);
@@ -59,7 +60,9 @@ class ProfileOrganizerRenderer {
                 continue;
             if (mode == 2) {
                 if (info != null && info.getCapabilities().indexOf('f') >= 0)
+                    hideBefore = ffmode ? now - 60*1000 : now - 15*60*1000;
                     order.add(prof);
+                    ff++;
                 continue;
             }
 //            if (prof.getLastSendSuccessful() <= hideBefore) {
@@ -82,7 +85,13 @@ class ProfileOrganizerRenderer {
 
         if (mode < 2) {
             buf.append("<p id=profiles_overview class=infohelp>");
-            buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size()).replace(".", " (active in the last minute).")).append('\n');
+            if (ffmode) {
+                buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.",
+                                    order.size()).replace(".", " (active in the last minute).")).append('\n');
+            } else {
+                buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.",
+                                    order.size()).replace(".", " (active in the last 3 minutes).")).append('\n');
+            }
             if (older > 0)
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
             if (standard > 0)
@@ -280,6 +289,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<span>&ensp;</span>");
                 }
                 buf.append("</td><td>");
+                now = _context.clock().now();
                 buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
                    .append(formatInterval(now, prof.getFirstHeardAbout()));
                 buf.append("</td><td nowrap class=viewedit>");
@@ -361,12 +371,16 @@ class ProfileOrganizerRenderer {
                 boolean isUnreachable = info != null ? info.getCapabilities().indexOf('U') >= 0 : false;
                 boolean isFF = info != null ? info.getCapabilities().indexOf('f') >= 0 : false;
                 boolean hasSalt = info != null ? info.getCapabilities().contains("salt") : false;
+                int displayed = 0;
+                boolean isResponding = prof.getDbResponseTime() != null;
+                boolean goodSend = prof.getLastSendSuccessful() > 0 && isResponding;
                 if (dbh == null) {
                     continue;
                 } else {
                     order.add(prof);
                 }
-                if (dbh != null && isFF && !isUnreachable && !isBanned) {
+                if (dbh != null && isFF && !isUnreachable && !isBanned && goodSend) {
+                    displayed++;
                     buf.append("<tr class=lazy><td nowrap>");
                     buf.append(_context.commSystem().renderPeerHTML(peer, true));
                     buf.append("</td>");
