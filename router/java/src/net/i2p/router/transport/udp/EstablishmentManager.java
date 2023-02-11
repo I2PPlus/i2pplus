@@ -2400,9 +2400,13 @@ class EstablishmentManager {
                   case IB_STATE_CONFIRMED_COMPLETELY:
                     RouterIdentity remote = inboundState.getConfirmedIdentity();
                     if (remote != null) {
-                        if (_context.banlist().isBanlistedForever(remote.calculateHash())) {
-                            if (_log.shouldWarn())
-                                _log.warn("Dropping Inbound connection from permanently banlisted peer: " + remote.calculateHash());
+                        if (_context.banlist().isBanlistedForever(remote.calculateHash()) ||
+                            _context.banlist().isBanlisted(remote.calculateHash())) {
+                            if (_log.shouldWarn()) {
+                                _log.warn("Dropping Inbound connection from " +
+                                (_context.banlist().isBanlistedForever(remote.calculateHash()) ? "permanently" : "") +
+                                " banlisted peer: " + remote.calculateHash());
+                            }
                             // So next time we will not accept the con, rather than doing the whole handshake
                             _context.blocklist().add(inboundState.getSentIP());
                             inboundState.fail();
