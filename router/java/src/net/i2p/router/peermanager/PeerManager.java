@@ -305,28 +305,29 @@ class PeerManager {
         caps = caps.toLowerCase(Locale.US);
 
         String oldCaps = _capabilitiesByPeer.put(peer, caps);
-        if (caps.equals(oldCaps))
+        if (caps.equals(oldCaps)) {
             return;
-
-            if (oldCaps != null) {
-                for (int i = 0; i < oldCaps.length(); i++) {
-                    char c = oldCaps.charAt(i);
-                    if (caps.indexOf(c) < 0) {
-                        Set<Hash> peers = locked_getPeers(c);
-                        if (peers != null)
-                            peers.remove(peer);
-                    }
-                }
-            }
-
-                for (int i = 0; i < caps.length(); i++) {
-                    char c = caps.charAt(i);
-                    if ( (oldCaps != null) && (oldCaps.indexOf(c) >= 0) )
-                        continue;
+        }
+        if (oldCaps != null) {
+            for (int i = 0; i < oldCaps.length(); i++) {
+                char c = oldCaps.charAt(i);
+                if (caps.indexOf(c) < 0) {
                     Set<Hash> peers = locked_getPeers(c);
                     if (peers != null)
-                        peers.add(peer);
+                        peers.remove(peer);
                 }
+            }
+        }
+        for (int i = 0; i < caps.length(); i++) {
+            char c = caps.charAt(i);
+            if ((oldCaps != null) && (oldCaps.indexOf(c) >= 0)) {
+                continue;
+            }
+            Set<Hash> peers = locked_getPeers(c);
+            if (peers != null) {
+                peers.add(peer);
+            }
+        }
     }
 
     /** locking no longer req'd */
@@ -336,18 +337,20 @@ class PeerManager {
     }
 
     public void removeCapabilities(Hash peer) {
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Removing capabilities from [" + peer.toBase64().substring(0,6) + "]");
+        }
 
-            String oldCaps = _capabilitiesByPeer.remove(peer);
-            if (oldCaps != null) {
-                for (int i = 0; i < oldCaps.length(); i++) {
-                    char c = oldCaps.charAt(i);
-                    Set<Hash> peers = locked_getPeers(c);
-                    if (peers != null)
-                        peers.remove(peer);
+        String oldCaps = _capabilitiesByPeer.remove(peer);
+        if (oldCaps != null) {
+            for (int i = 0; i < oldCaps.length(); i++) {
+                char c = oldCaps.charAt(i);
+                Set<Hash> peers = locked_getPeers(c);
+                if (peers != null) {
+                    peers.remove(peer);
                 }
             }
+        }
     }
 
 /*******
@@ -369,10 +372,10 @@ class PeerManager {
      *  @return non-null unmodifiable set
      */
     public Set<Hash> getPeersByCapability(char capability) {
-            Set<Hash> peers = locked_getPeers(capability);
-            if (peers != null)
-                return Collections.unmodifiableSet(peers);
-            return Collections.emptySet();
+        Set<Hash> peers = locked_getPeers(capability);
+        if (peers != null)
+            return Collections.unmodifiableSet(peers);
+        return Collections.emptySet();
     }
 
     /**
@@ -381,9 +384,9 @@ class PeerManager {
      *  @since 0.9.45
      */
     public int countPeersByCapability(char capability) {
-            Set<Hash> peers = locked_getPeers(capability);
-            if (peers != null)
-                return peers.size();
-            return 0;
+        Set<Hash> peers = locked_getPeers(capability);
+        if (peers != null)
+            return peers.size();
+        return 0;
     }
 }
