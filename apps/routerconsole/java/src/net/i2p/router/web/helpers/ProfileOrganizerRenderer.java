@@ -60,17 +60,17 @@ class ProfileOrganizerRenderer {
                 continue;
             if (mode == 2) {
                 if (info != null && info.getCapabilities().indexOf('f') >= 0)
-                    hideBefore = ffmode ? now - 60*1000 : now - 20*60*1000;
+                    hideBefore = ffmode ? now - 60*1000 : now - 30*60*1000;
                     order.add(prof);
                     ff++;
                 continue;
             }
 //            if (prof.getLastSendSuccessful() <= hideBefore) {
-            if (prof.getLastHeardFrom() <= hideBefore) {
+            if (mode < 2 && prof.getLastHeardFrom() <= hideBefore) {
                 older++;
                 continue;
             }
-            if ((!full) && !_organizer.isHighCapacity(peer)) {
+            if (mode < 2 && !full && !_organizer.isHighCapacity(peer)) {
                 standard++;
                 continue;
             }
@@ -427,7 +427,7 @@ class ProfileOrganizerRenderer {
             buf.append("</tbody>\n</table>\n");
             buf.append("</div>\n");
         }
-        if (mode == 0) {
+        if (mode == 0 && !isAdvanced) {
             buf.append("<h3 class=tabletitle>").append(_t("Definitions")).append("</h3>\n")
                .append("<table id=profile_defs>\n<tbody>\n");
             buf.append("<tr><td><b>")
@@ -544,7 +544,6 @@ class ProfileOrganizerRenderer {
         public int compare(PeerProfile left, PeerProfile right) {
             return DataHelper.compareTo(left.getPeer().getData(), right.getPeer().getData());
         }
-
     }
 
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00");
