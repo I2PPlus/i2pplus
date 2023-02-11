@@ -60,7 +60,7 @@ class ProfileOrganizerRenderer {
                 continue;
             if (mode == 2) {
                 if (info != null && info.getCapabilities().indexOf('f') >= 0)
-                    hideBefore = ffmode ? now - 60*1000 : now - 15*60*1000;
+                    hideBefore = ffmode ? now - 60*1000 : now - 20*60*1000;
                     order.add(prof);
                     ff++;
                 continue;
@@ -346,7 +346,7 @@ class ProfileOrganizerRenderer {
             buf.append("<div class=widescroll id=\"ff\">\n")
                .append("<table id=floodfills data-sortable>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>" +
-                       "<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>" +
+                       "<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>" +
                        "<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
                .append("<thead class=smallhead><tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
@@ -354,13 +354,14 @@ class ProfileOrganizerRenderer {
                .append("<th>").append(_t("1h Resp. Time")).append("</th>")
                .append("<th>").append(_t("First Heard About")).append("</th>")
                .append("<th>").append(_t("Last Heard From")).append("</th>")
+               .append("<th>").append(_t("Good Lookups")).append("</th>")
                .append("<th>").append(_t("Last Good Lookup")).append("</th>")
                .append("<th>").append(_t("Last Good Send")).append("</th>")
                .append("<th>").append(_t("Last Good Store")).append("</th>")
+               .append("<th>").append(_t("Bad Lookups")).append("</th>")
                .append("<th>").append(_t("Last Bad Lookup")).append("</th>")
                .append("<th>").append(_t("Last Bad Send")).append("</th>")
                .append("<th>").append(_t("Last Bad Store")).append("</th>")
-               .append("<th>").append(_t("Bad Lookups")).append("</th>")
                .append("</tr></thead>\n<tbody id=ffProfiles>\n");
             RateAverages ra = RateAverages.getTemp();
             for (PeerProfile prof : order) {
@@ -373,13 +374,14 @@ class ProfileOrganizerRenderer {
                 boolean hasSalt = info != null ? info.getCapabilities().contains("salt") : false;
                 int displayed = 0;
                 boolean isResponding = prof.getDbResponseTime() != null;
-                boolean goodSend = prof.getLastSendSuccessful() > 0 && isResponding;
+                boolean isGood = prof.getLastSendSuccessful() > 0 && isResponding &&
+                                 (dbh != null && dbh.getLastStoreSuccessful() > 0 || dbh.getLastLookupSuccessful() > 0);
                 if (dbh == null) {
                     continue;
                 } else {
                     order.add(prof);
                 }
-                if (dbh != null && isFF && !isUnreachable && !isBanned && goodSend) {
+                if (dbh != null && isFF && !isUnreachable && !isBanned && isGood) {
                     displayed++;
                     buf.append("<tr class=lazy><td nowrap>");
                     buf.append(_context.commSystem().renderPeerHTML(peer, true));
@@ -403,20 +405,22 @@ class ProfileOrganizerRenderer {
                        .append(formatInterval(now, heard)).append("</td>");
                     buf.append("<td><span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
                        .append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
+                    buf.append("<td><span hidden>[").append(dbh.getSuccessfulLookups()).append("]</span>")
+                       .append(dbh.getSuccessfulLookups()).append("</td>");
                     buf.append("<td><span hidden>[").append(dbh.getLastLookupSuccessful()).append("]</span>")
                        .append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
                     buf.append("<td><span hidden>[").append(prof.getLastSendSuccessful()).append("]</span>")
                        .append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
                     buf.append("<td><span hidden>[").append(dbh.getLastStoreSuccessful()).append("]</span>")
                        .append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
+                    buf.append("<td><span hidden>[").append(dbh.getFailedLookups()).append("]</span>")
+                       .append(dbh.getFailedLookups()).append("</td>");
                     buf.append("<td><span hidden>[").append(dbh.getLastLookupFailed()).append("]</span>")
                        .append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
                     buf.append("<td><span hidden>[").append(prof.getLastSendFailed()).append("]</span>")
                        .append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
                     buf.append("<td><span hidden>[").append(dbh.getLastStoreFailed()).append("]</span>")
                        .append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>");
-                    buf.append("<td><span hidden>[").append(dbh.getFailedLookups()).append("]</span>")
-                       .append(dbh.getFailedLookups()).append("</td>");
                     buf.append("</tr>\n");
                 }
             }
