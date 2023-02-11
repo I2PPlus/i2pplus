@@ -976,7 +976,8 @@ public class ProfileOrganizer {
         // null for main()
         Router r = _context.router();
         long uptime = (r != null) ? r.getUptime() : 0L;
-        long expireOlderThan = -1;
+//        long expireOlderThan = -1;
+        long expireOlderThan = 7*24*60*60*1000;
         if (uptime > 60*60*1000) {
             // dynamically adjust expire time to control memory usage
             if (countNotFailingPeers() > ENOUGH_PROFILES)
@@ -1017,7 +1018,7 @@ public class ProfileOrganizer {
             long sortStart = System.currentTimeMillis();
             for (Iterator<PeerProfile> iter = _strictCapacityOrder.iterator(); iter.hasNext(); ) {
                 PeerProfile prof = iter.next();
-                if ( (expireOlderThan > 0) && (prof.getLastSendSuccessful() <= expireOlderThan) ) {
+                if ((expireOlderThan > 0) && (prof.getLastSendSuccessful() <= expireOlderThan)) {
                     expiredCount++;
                     continue; // drop, but no need to delete, since we don't periodically reread
                     // TODO maybe we should delete files, otherwise they are only deleted at restart

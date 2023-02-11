@@ -240,7 +240,7 @@ class ProfilePersistenceHelper {
         long start = _context.clock().now();
         List<File> files = selectFiles();
         Set<PeerProfile> profiles = new HashSet<PeerProfile>(files.size());
-        for (File f :  files) {
+        for (File f : files) {
             PeerProfile profile = readProfile(f);
             if (profile != null)
                 profiles.add(profile);
