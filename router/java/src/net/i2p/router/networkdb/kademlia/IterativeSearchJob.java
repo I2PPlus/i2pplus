@@ -86,10 +86,10 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final Set<Hash> _skippedPeers;
 
 //    private static final int MAX_NON_FF = 3;
-    private static final int MAX_NON_FF = 4;
+    private static final int MAX_NON_FF = 6;
     /** Max number of peers to query */
 //    private static final int TOTAL_SEARCH_LIMIT = 5;
-    private static final int TOTAL_SEARCH_LIMIT = 8;
+    private static final int TOTAL_SEARCH_LIMIT = 16;
     /** Max number of peers to query if we are ff */
 //    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 2;
     private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = SystemVersion.isSlow() ? 2 : 3;
