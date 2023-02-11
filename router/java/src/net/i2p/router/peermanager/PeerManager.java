@@ -141,8 +141,12 @@ class PeerManager {
                 try {
                     _log.info("Started writing peer profiles to disk...");
                     storeProfiles();
+/*
+                    // I2P+ -> this is currently problematic so we'll let profiles
+                    // expire at router startup
                     if (shouldDecay)
                         _persistenceHelper.deleteOldProfiles(EXPIRE_AGE);
+*/
                     // TODO: Add total time taken and number of profiles written
                     long finished = System.currentTimeMillis();
                     _log.info("Finished writing peer profiles to disk, took " + (finished - start) + "ms");
