@@ -973,7 +973,7 @@ form[action="events"]>.formaction{margin-bottom:-11px;margin-right:-21px;margin-
 .unreachable,#capabilities_key a .unreachable{background:linear-gradient(180deg,#500,#100)}
 .ff,#capabilities_key a .ff{background:linear-gradient(180deg,#730,#310)}
 .tunnel_cap:empty::after{content:"?"}
-.tunnel_id{margin:1px 2px 1px 5px;padding:2px;min-width:78px;display:inline-block;line-height:1.2;color:#bb7;text-shadow:var(--textshadow);text-align:center}
+.tunnel_id{margin:1px 2px 1px 5px;padding:4px 2px;min-width:78px;display:inline-block;line-height:1.25;color:#bb7;text-shadow:var(--textshadow);text-align:right}
 .tunnel_id:empty{opacity:0}
 #tunnels td:not(.rif):not(.rih):not(.rbw)>*{vertical-align:middle}
 .tunnel_peer{min-width:56px;display:inline-block;text-align:right}
@@ -2657,15 +2657,15 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 .tab2{padding:4px 12px 5px}
 .tab a{padding:2px 14px 5px}
 #participatingtunnels .statusnotes:last-of-type{margin-bottom:6px}
-#tunnels .tunneldisplay .cells{padding-left:2px;padding-right:2px}
-#tunnels .tunneldisplay .cells .tunnel_id{display:none}
-#tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local{padding:4px}
+#tunnels .tunneldisplay td{padding-left:2px;padding-right:2px}
+#tunnels .tunneldisplay .tunnel_id{display:none}
+#tunnels .tunneldisplay .tunnel_peer.tunnel_local{padding:4px}
 #allTransit td{white-space:nowrap}
 #tunnel_defs{margin-bottom:5px}
 #tunnels .tunnel_cap{margin:0;padding:3px 2px 2px;line-height:1.2}
 .tunnel_local{width:64px;line-height:1.08;box-sizing:border-box}
 #tunnels .routerid,.tunnel_local{margin-right:0}
-#peers .widescroll td.cells{font-size:8pt}
+#peers .widescroll .cells{font-size:8pt}
 #help h3,#faq h3{font-size:10pt}
 #clientconf code{display:inline-block;white-space:nowrap}
 #peers .idle,#peers .inout{min-width:104px}
@@ -2804,7 +2804,7 @@ input[type=text],input[type=password]{padding:7px 9px}
 .tunneldisplay .tunnel_peer.tunnel_local{margin:0 0 0 -1px;min-width:77px}
 .tunneldisplay .tunnel_peer + b.tunnel_cap{margin:0 -1px}
 .tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap{margin-left:1px}
-.tunnel_id{margin:0 5px;padding:2px 4px 2px 6px;min-width:96px;display:inline-block;vertical-align:middle;text-align:left;border:1px solid #030;box-shadow:var(--highlight_badge);background:var(--badge)}
+.tunnel_id{margin:0 5px;padding:2px 6px;min-width:96px;display:inline-block;vertical-align:middle;border:1px solid #030;box-shadow:var(--highlight_badge);background:var(--badge)}
 .tunnel_id:not(:empty){background:var(--hardhat) no-repeat 5px center/14px,var(--badge)}
 .tunnel_id:not(:empty)::before{width:16px;height:14px;display:inline-block;vertical-align:middle;content:""}
 .tunnel_peer img,.routerid img{margin-bottom:-1px}
@@ -2888,12 +2888,14 @@ span#newtab{margin-top:4px}
 @media screen and (min-width:1800px){#help .confignav{margin-left:-11px;margin-right:-11px;display:flex;justify-content:center;border-left:none;border-right:none} #help .tab,#help .tab2{margin-left:0;margin-right:0;flex-grow:1} .linkcontainer .applink:last-of-type{margin-bottom:9px}}
 @media screen and (min-width:1840px){div[id^="config_"] .confignav{padding:4px 4px 5px 3px;display:flex;flex-direction:row;flex-wrap:wrap;align-content:space-evenly;justify-content:center} div[id^="config_"] .tab,div[id^="config_"] .tab2{margin:0 -1px -1px 0;min-width:70px;white-space:nowrap;flex:auto;flex-basis:content;flex-grow:.06} div[id^="config_"] .tab2:first-child{border-left:none} div[id^="config_"] .confignav{padding:0} div[id^="config_"] .tab,div[id^="config_"] .tab2{margin-top:-1px} div[id^="config_"] .tab:first-child{margin-left:-1px}}
 
+
+.tunnel_local,.tunnel_id,.rid td{box-shadow:var(--highlight),0 0 1px 1px rgba(16,48,16,.8) inset}
 .tunnel_local{width:101px;box-sizing:border-box}
 .tunnel_peer{display:inline-block;vertical-align:middle}
 .rid{width:unset;box-shadow:0 0 0 1px #000}
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_soft)!important;background:var(--badge)}
-.rid td,tr:hover .rid td,#floodfills tr:hover .rid td {line-height:1;font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight),0 0 2px 1px rgba(16,48,16,.8) inset}
-.rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
+.rid td,tr:hover .rid td,#floodfills tr:hover .rid td {line-height:1;font-family:var(--monospaced);letter-spacing:.1em}
+.rid .rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%)}
 .rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
 .rbw.isff.isU{linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
