@@ -2890,7 +2890,7 @@ span#newtab{margin-top:4px}
 
 
 .tunnel_local,.tunnel_id,.rid td{box-shadow:var(--highlight),0 0 1px 1px rgba(16,48,16,.8) inset}
-.tunnel_local{width:101px;box-sizing:border-box}
+.tunnel_local{width:98px;box-sizing:border-box}
 .tunnel_peer{display:inline-block;vertical-align:middle}
 .rid{width:unset;box-shadow:0 0 0 1px #000}
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_soft)!important;background:var(--badge)}
@@ -2900,6 +2900,7 @@ span#newtab{margin-top:4px}
 .rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
 .rbw.isff.isU{linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
 .rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
+#floodfills .rif img{box-shadow:0 0 0 1px rgba(0,0,0,.3)}
 .rif,.rif img{line-height:0;font-size:0}
 .rid .rih{padding:2px 6px;vertical-align:middle;font-family:var(--monospaced);font-size:9pt}
 .rih a{;text-shadow:1px 1px 1px rgba(0,0,0,.8)}
