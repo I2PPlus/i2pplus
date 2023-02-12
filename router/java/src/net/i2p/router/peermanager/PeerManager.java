@@ -61,7 +61,7 @@ class PeerManager {
 //    static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / (REORGANIZE_TIME_LONG * 2));
     static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / (REORGANIZE_TIME_LONG / 2));
 //    private static final long STORE_TIME = 19*60*60*1000;
-    private static final long STORE_TIME = 15*60*1000;
+    private static final long STORE_TIME = 16*60*60*1000;
 //    private static final long EXPIRE_AGE = 3*24*60*60*1000;
     private static final long EXPIRE_AGE = 4*7*24*60*60*1000;
 
