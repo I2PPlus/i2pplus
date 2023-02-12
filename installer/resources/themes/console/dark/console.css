@@ -11,9 +11,6 @@ html{background:var(--bodybg),#000800}
 body{margin:5px 0 0 0;padding:0;text-align:center;font:8.5pt/1.3 var(--bodyfont);background:none}
 .main{scrollbar-color:rgba(16,48,16,.4) rgba(0,0,0,0)}
 .sb,#sb_wrap,h1{contain:layout}
-a:link tt,a:visited tt{color:var(--a)}
-a:hover tt{color:var(--hover)}
-a:active tt{color:var(--active)}
 .clearer{margin-bottom:-16px;height:0;line-height:0;clear:left}
 code{text-align:left;font:9pt var(--monospaced);color:#dd0}
 .footnote,.topness,.footnote hr{display:none}
@@ -40,7 +37,6 @@ ol{padding:1px 0 0 20px;display:inline}
 pre{width:98%}
 #sb_logo,#sidebar h3,#clock,form,.confignav,*::before,*::after,h1,h2,h3,#applinks,#sitelinks,#sb_internals,#sb_services,#sb_advanced,.applink,.sitemapLink,#sitemapcontainer,.langselect,.themechoice{user-select:none}
 table{margin:1px 0;padding:1px;width:100%;font-size:9pt;border:var(--border);border-collapse:collapse}
-table tt{color:#990;font-size:8.5pt}
 table hr{margin:0 0;padding:0 0;height:1px;display:none;color:var(--a);border:none;background:#252}
 td{padding:4px 6px;vertical-align:middle;border-top:var(--border_softer)}
 tr:first-child td{border-top:var(--border)}
@@ -51,7 +47,6 @@ th[aria-sort]{font-style:italic}
 th.options{padding:8px 5px 8px 10px;font-size:9pt}
 tr{vertical-align:middle;contain:layout}
 tr:nth-child(even),tr:nth-child(odd){background:var(--row)}
-tt{font:bold 8.5pt var(--monospaced);color:#ff0}
 ul{margin:0;padding:0}
 .unbold{font-weight:400}
 .underline{margin:0 0 10px 0;padding:5px 0 5px 0;border-bottom:1px solid var(--ink)}
@@ -507,18 +502,8 @@ input[type=submit],input[type=reset],input[type=file]::file-selector-button,butt
 input[type=file]::file-selector-button{font-size:8.5pt}
 
 /* routerid */
-.routerid,.tunnel_local,#tunnels .tunnel_cap,.version,#netdbtiers a,.routerHash{border:1px solid #030}
+.tunnel_local,#tunnels .tunnel_cap,.version,#netdbtiers a,.routerHash{border:1px solid #030}
 .buckets br + br{line-height:5px}
-.Lease .flag{padding:2px 4px 2px 2px}
-.leaseNumber+.tunnel_peer .routerid{margin-right:-2px}
-.routerid .flag a{margin-top:2.5px;display:inline-block}
-.routerid .flag img{margin:-3px 0 1px;padding:0;width:16px;height:12px;display:inline-block;border:1px solid #000}
-.routerid .flag,#peers .routerid .flag{padding:3px 4px 2px 2px;border-right:1px solid #030}
-.routerid img{margin:1px 0 -1px}
-.routerid{margin:0;padding:1px 2px;min-width:64px;display:inline-block;vertical-align:middle;overflow:hidden;text-align:center;box-shadow:var(--outline);background:var(--badge)}
-.routerid tt{color:#aa0;user-select:all}
-.routerid tt{margin-left:2px;letter-spacing:.2em}
-.routerid tt,.routerid tt a{display:inline-block}
 .tunnel_cap:empty{box-shadow:none}
 
 /* graphs */
@@ -741,7 +726,6 @@ td.direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
 h3[id$="con"]{margin-bottom:-2px;border-radius:0;padding:8px 10px;font-size:10pt;word-spacing:.1em;letter-spacing:.08em;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%);border:var(--border)}
 h3[id="udpcon"]{width:auto}
 #ntcp+#udp{margin-top:-12px}
-#peers #udpconnections .routerid{margin:2px 0;min-width:70px}
 #udpconnections td:nth-child(2) img,#ntcpconnections td:nth-child(2) img{padding:0}
 #ntcpconnections .cells td:last-child{font-weight:700}
 #ntcpconnections{overflow-x:scroll}
@@ -821,7 +805,6 @@ h3[id="udpcon"]{width:auto}
 #profilelist .highcap.integrated{background:var(--highcap) no-repeat calc(50% - 10px) center,var(--integrated) no-repeat calc(50% + 10px) center}
 #profilelist .standard{background:var(--standard) var(--center)}
 #profilelist .standard.integrated{background:var(--standard) no-repeat calc(50% - 10px) center,var(--integrated) no-repeat calc(50% + 10px) center}
-#profilelist .routerid{margin-left:1px;margin-right:1px}
 #profilelist .version{line-height:1.3}
 #profilelist .viewprofile,#profilelist .configpeer{margin:1px}
 #profilelist .viewedit{padding:1px}
@@ -961,7 +944,6 @@ form[action="events"]>.formaction{margin-bottom:-11px;margin-right:-21px;margin-
 #tunnels h3 a[href^="/configtunnels#"]:active::after,#tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,#logs a.configure:active::after,#applinks a:active::after,#sitelinks a:active::after{opacity:.7;transform:rotate(90deg);transition:linear transform .2s}
 #tunnelPeerCount .configpeer img{padding:3px}
 #tunnels h3 .refreshpage,#tunnels h3 .refreshpage img{margin:-7px 1px -7px 0;padding:8px 0 9px;border:none}
-.routerid tt{letter-spacing:.1em}
 .tunnel_cap,.tier,.ff,.unreachable,.reachable,#capabilities_key b{margin:1px 2px;padding:3px 2px;display:inline-block;min-width:20px;color:#bb7;text-shadow:var(--textshadow);text-align:center;border:1px solid #030;box-shadow:var(--outline);background:var(--badge)}
 .tunnel_cap,.tier,.reachable,.ff{box-shadow:var(--highlight_badge)}
 #tunnels .tunnel_cap{padding:3px 2px;border-radius:0}
@@ -977,8 +959,6 @@ form[action="events"]>.formaction{margin-bottom:-11px;margin-right:-21px;margin-
 .tunnel_id:empty{opacity:0}
 #tunnels td:not(.rif):not(.rih):not(.rbw)>*{vertical-align:middle}
 .tunnel_peer{min-width:56px;display:inline-block;text-align:right}
-.tunnel_peer img{margin-right:2px}
-.tunnel_peer tt{margin-left:0}
 .tunnel_local{margin-left:-4px;margin-right:4px;padding:2px 0 2px;line-height:1.35;font-size:8pt;text-transform:lowercase;text-align:center;box-shadow:var(--outline);background:var(--badge)}
 .tunnel_peer:empty{vertical-align:top}
 #tunnel_defs{margin-top:-1px;margin-bottom:10px}
@@ -993,9 +973,8 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .statusnotes{margin:-2px 0 5px 0;padding:10px 7px;font-style:italic;font-size:105%;text-align:center;border:var(--border);background:#000800}
 .statusnotes+.statusnotes{margin-top:-6px}
 .statusnotes:last-child{margin-bottom:10px}
-.tunneldisplay .routerid{box-sizing:border-box}
-.tunneldisplay .routerid,.tunnel_cap{box-shadow:var(--outline)}
-.tunneldisplay .routerid,.tunnel_local{margin-right:2px;margin-left:0;min-width:64px}
+.tunnel_cap{box-shadow:var(--outline)}
+.tunnel_local{margin-right:2px;margin-left:0;min-width:64px}
 #refreshPage{cursor:pointer}
 
 #tunnels .tunnels_participating .cells:first-child{font-size:0}
@@ -1086,7 +1065,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #netdbtransports th:first-child,#netdbcountrylist th:first-child,#netdbtiers th:first-child{text-align:left}
 #netdbtransports th,#netdbtransports td,#netdbtiers th,#netdbtiers td{padding-left:10px;padding-right:10px;line-height:1}
 #netdboverview #netdbtransports th{border-top:var(--border_softer)}
-#netdboverview th[colspan="3"]{position:static;font-size:12pt;background:var(--h1);background-size:2px,100% 4px,100%,175px}
+#netdboverview th[colspan="3"]{padding:12px;position:static;text-transform:uppercase;letter-spacing:.08em;font-size:12pt;background:var(--h1);background-size:2px,100% 4px,100%,175px}
 #netdboverview th[role="columnheader"]:not([data-sort-method="none"])::after {top:38%}
 #netdboverview td{padding:0}
 #netdboverview td:nth-child(2){border-left:var(--border_softer);border-right:var(--border_softer)}
@@ -1233,9 +1212,8 @@ img.unknownflag{opacity:.8}
 .netdb_info{margin-right:1px}
 .netdb_leases{columns:auto 108px;column-gap:4px}
 .netdb_leases li{margin:1px 4px 1px 0;padding:1px 5px 1px 0;display:inline-block;white-space:nowrap;list-style:none}
-.netdb_leases .routerid,.netdb_leases .tunnel_id{vertical-align:middle;border-radius:2px}
-.netdb_leases .routerid{margin:0 0 0 3px;padding-top:1px;padding-bottom:1px;display:inline-block;line-height:1.3;border:1px solid #030;box-shadow:var(--outline)}
-.netdb_leases .tunnel_id{margin:0 2px 0 -1px;min-width:92px;line-height:1.22;text-align:center}
+.netdb_leases .tunnel_id{vertical-align:middle}
+.netdb_leases .tunnel_id{margin:0 2px 0 -1px;min-width:100px;line-height:1.22;text-align:center}
 .netdb_leases li b:first-child{margin:0;padding:0;min-width:60px;display:inline-block;text-align:right}
 .netdb_leases li b.leaseNumber::after{width:0;height:0;position:absolute;right:-10px;bottom:calc(50% - 5px);border-color:transparent transparent transparent #020;border-style:solid;border-width:5px;content:""}
 .netdb_leases li b.leaseNumber{margin-right:0;padding:1px 0 0;min-width:22px;position:relative;vertical-align:middle;text-align:center;text-shadow:var(--textshadow);background:#020;border-radius:2px 0 0 2px;filter:drop-shadow(0 0 1px #000)}
@@ -1245,7 +1223,6 @@ img.unknownflag{opacity:.8}
 .netdb_leases .tunnel_peer tt,.netdb_leases .tunnel_peer tt{font-size:8.5pt;font-weight:700}
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink)}
 .netdb_tunnel{margin:0 5px 0 -1px;padding:1px 4px;display:inline-block;border:1px solid #030;border-radius:2px;box-shadow:var(--outline);background:#020}
-.routerid tt{min-width:40px;display:inline-block;line-height:1.5;font-weight:700}
 th code{user-select:all}
 #netdb code{font-weight:400}
 #netdb .netdb_transport{margin-right:4px;width:48px;display:inline-block;text-align:center;color:var(--ink)}
@@ -1400,12 +1377,6 @@ th code{user-select:all}
 #profiles #banlist{margin:3px -8px -1px;padding:5px 0;border:none}
 #banlist li,#banlist li:first-child{margin:4px 8px;padding:6px 8px 6px 10px;width:calc(100% - 16px);min-height:48px;display:inline-block;position:relative;list-style:none;text-shadow:var(--textshadow);border:1px solid #121;box-shadow:0 0 2px 2px rgba(0,0,0,.8),var(--bevel),inset 0 0 0 3px #000;background:linear-gradient(180deg,#000b00,#000600);box-sizing:border-box;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 #banlist li::first-line{color:#bb8}
-#banlist .routerid,#banlist .routerid .flag{padding:0;vertical-align:middle;border:none}
-#banlist .routerid{margin:-1px 1px 1px 0}
-#banlist li .routerid{background:none}
-#banlist li tt,#banlist li tt a{line-height:1.3;text-shadow:var(--textshadow);vertical-align:middle;user-select:all}
-#banlist li tt a{margin-left:-4px}
-#banlist li .routerid img{margin:0 2px 0 0}
 #banlist li:last-child{margin-bottom:0}
 #banlist li hr{margin:2px 0 2px -1px;background:linear-gradient(90deg,#121 75%,rgba(0,0,0,0));opacity:.75}
 #banlist+hr{display:none}
@@ -2576,7 +2547,6 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #netdboverview th[colspan="3"]{font-size:11pt}
 #news li::before{height:8px;background-size:7px}
 #passwordheading{margin-top:12px}
-#peers .routerid .flag img,#profiles .routerid .flag img{margin:0 0 -2px}
 #pluginconfig{margin-top:-13px}
 #pluginconfigtext{margin-bottom:10px}
 #pluginconfigtext input{margin:-5px -6px 0 0}
@@ -2604,8 +2574,6 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #sitelinks a::after{margin-top:-1px}
 #sitemap .applink img{padding-left:62px;padding-right:62px}
 #sitemapcontainer{padding:0}
-#tunnels .routerid tt{height:18px;line-height:18px}
-#tunnels .routerid+.tunnel_cap{margin-left:-2px}
 #tunnels .tunnel_cap{height:15px;line-height:15px}
 #tunnels .tunnel_local+.tunnel_cap{margin-left:2px}
 #view_profile .identicon{top:1px;right:1px}
@@ -2664,7 +2632,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #tunnel_defs{margin-bottom:5px}
 #tunnels .tunnel_cap{margin:0;padding:3px 2px 2px;line-height:1.2}
 .tunnel_local{width:64px;line-height:1.08;box-sizing:border-box}
-#tunnels .routerid,.tunnel_local{margin-right:0}
+.tunnel_local{margin-right:0}
 #peers .widescroll .cells{font-size:8pt}
 #help h3,#faq h3{font-size:10pt}
 #clientconf code{display:inline-block;white-space:nowrap}
@@ -2709,11 +2677,11 @@ h4 span[style="float:right;"] .unbold{max-width:300px}
 
 @media screen and (max-width:1000px){
 #sb_wrap{position:absolute}
-#tunnels .tunneldisplay td:nth-child(n+2) span,#tunnels .tunneldisplay .cells tt{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2;border:none;box-shadow:none;background:none}
-#tunnels .tunneldisplay .cells span.inbound,#tunnels .tunneldisplay .cells span.outbound{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2}
+#tunnels .tunneldisplay td:nth-child(n+2) span,#tunnels .tunneldisplay tt{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2;border:none;box-shadow:none;background:none}
+#tunnels .tunneldisplay span.inbound,#tunnels .tunneldisplay span.outbound{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2}
 span.inbound,span.outbound{background-size:12px}
-#tunnels .tunneldisplay .cells .tunnel_cap{min-width:14px;text-align:center}
-#tunnels .tunneldisplay .cells .routerid,#tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local{width:74px;box-sizing:border-box}
+#tunnels .tunneldisplay .tunnel_cap{min-width:14px;text-align:center}
+#tunnels .tunneldisplay .tunnel_peer.tunnel_local{width:74px;box-sizing:border-box}
 #netdblookup input[type=text]{min-width:0}
 #netdblookup td:nth-child(even){width:auto}
 table:not(:first-of-type).netdbentry th:first-child,table:not(:first-of-type).netdbentry td:first-child{padding:0;font-size:0}
@@ -2736,10 +2704,6 @@ table:not(:first-of-type).netdbentry th:first-child,table:not(:first-of-type).ne
 #ntcpconnections td:last-child{width:24px;white-space:nowrap}
 th{font-size:8pt}
 .tunneldisplay .cells{padding:4px 2px}
-}
-
-@media screen and (min-width:1000px) and (max-width:1499px){
-#tunnels .routerid .flag img{margin:0 0 -2px}
 }
 
 @media screen and (min-width:1200px){
@@ -2807,7 +2771,6 @@ input[type=text],input[type=password]{padding:7px 9px}
 .tunnel_id{margin:0 5px;padding:2px 6px;min-width:96px;display:inline-block;vertical-align:middle;border:1px solid #030;box-shadow:var(--highlight_badge);background:var(--badge)}
 .tunnel_id:not(:empty){background:var(--hardhat) no-repeat 5px center/14px,var(--badge)}
 .tunnel_id:not(:empty)::before{width:16px;height:14px;display:inline-block;vertical-align:middle;content:""}
-.tunnel_peer img,.routerid img{margin-bottom:-1px}
 .tunnelBuildStatus::before{margin:0 1px 0 -8px}
 .warning h3{font-size:11.5pt}
 #help h2{font-size:14pt}
@@ -2851,13 +2814,10 @@ h4#updateplugins{margin-top:-15px}
 #minigraphcontainer{margin-top:-40px;margin-left:1px;width:258px;height:39px;background-size:250px 40px}
 #minigraph{margin-top:-16px;width:254px;height:43px}
 #netconfig label::before,#externali2cp td label::before,#externali2cp .nowrap::before,#reseedconfig .nowrap::before{min-height:50px}
-#netdb .netdb_leases .flag img{margin:1px -3px -4px}
 #participating a::after,#peercount a::after{margin:-8px 0 -13px -12px;padding:9px 6px 9px 0}
 #pconfig{margin-bottom:-15px}
 #peerprofiles.widescroll{margin-top:-12px;padding-top:116px}
 #peers .cells:nth-child(n+2){padding-left:15px;padding-right:15px}
-#netdb .flag img,#peers .routerid .flag img{margin:-3px -3px -1px;width:20px;height:15px}
-#peers .routerid .flag img{margin:-3px -1px 1px}
 #pluginconfigtext + form>input{margin-top:3px}
 #reseedconfig input[type=text],#reseedconfig input[type=password]{width:250px}
 #sb_graphcontainer{height:54px}
