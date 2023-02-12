@@ -43,7 +43,8 @@ public class ProfileManagerImpl implements ProfileManager {
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     public void messageFailed(Hash peer, String transport) {
-        PeerProfile data = getProfileNonblocking(peer);
+        // do not create profile if it didn't exist
+        PeerProfile data = _context.profileOrganizer().getProfileNonblocking(peer);
         if (data == null) return;
         data.setLastSendFailed(_context.clock().now());
     }
@@ -53,7 +54,8 @@ public class ProfileManagerImpl implements ProfileManager {
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     public void messageFailed(Hash peer) {
-        PeerProfile data = getProfileNonblocking(peer);
+        // do not create profile if it didn't exist
+        PeerProfile data = _context.profileOrganizer().getProfileNonblocking(peer);
         if (data == null) return;
         data.setLastSendFailed(_context.clock().now());
     }
@@ -61,7 +63,9 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Note that there was some sort of communication error talking with the peer
      *
+     * @deprecated unused
      */
+    @Deprecated
     public void commErrorOccurred(Hash peer) {
         if (_log.shouldInfo())
             _log.info("Comm error occurred for peer " + peer.toBase64(), new Exception("Comm error"));
@@ -199,7 +203,8 @@ public class ProfileManagerImpl implements ProfileManager {
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     public void dbLookupFailed(Hash peer) {
-        PeerProfile data = getProfileNonblocking(peer);
+        // do not create profile if it didn't exist
+        PeerProfile data = _context.profileOrganizer().getProfileNonblocking(peer);
         if (data == null) return;
         if (!data.getIsExpandedDB())
             data.expandDBProfile();
