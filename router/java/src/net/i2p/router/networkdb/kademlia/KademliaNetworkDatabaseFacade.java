@@ -1373,25 +1373,25 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         if (uptime > 10*60*1000 && existing > 500 && isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 8)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and was published over 1h ago");
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and published over 1h ago");
             return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 1h ago";
         } else if (isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 4)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and was published over 2h ago");
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and published over 2h ago");
             return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 2h ago";
         }
 //        if (upLongEnough && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED) && !isUs) {
             if (routerInfo.getAddresses().isEmpty()) {
                 if (_log.shouldWarn())
-                    _log.warn("Dropping RouterInfo [" + riHash + "] -> No addresses and was published over 54m ago");
+                    _log.warn("Dropping RouterInfo [" + riHash + "] -> No addresses and published over 54m ago");
                 return "RouterInfo [" + routerId + "] has no addresses and was published over 54m ago";
             }
             // This should cover the introducers case below too
             // And even better, catches the case where the router is unreachable but knows no introducers
             if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || routerInfo.getAddresses().isEmpty()) {
                 if (_log.shouldWarn())
-                    _log.warn("Dropping RouterInfo [" + riHash + "] -> Unreachable and was published over 54m ago");
+                    _log.warn("Dropping RouterInfo [" + riHash + "] -> Unreachable and published over 54m ago");
                 return "RouterInfo [" + routerId + "] is unreachable and was published over 54m ago";
             }
             // Just check all the addresses, faster than getting just the SSU ones

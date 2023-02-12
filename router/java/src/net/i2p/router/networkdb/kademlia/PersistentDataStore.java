@@ -624,6 +624,7 @@ public class PersistentDataStore extends TransientDataStore {
                     fis = new BufferedInputStream(fis);
                     RouterInfo ri = new RouterInfo();
                     ri.readBytes(fis, true);  // true = verify sig on read
+                    Hash h = ri.getIdentity().calculateHash();
                     String v = ri.getVersion();
                     String MIN_VERSION = "0.9.57";
                     String truncHash = "";
@@ -639,7 +640,7 @@ public class PersistentDataStore extends TransientDataStore {
                     boolean isSalt = false;
                     String caps = "unknown";
                     if (ri != null) {
-                        truncHash = ri.getIdentity().calculateHash().toBase64().substring(0,6);
+                        truncHash = h.toBase64().substring(0,6);
                         caps = ri.getCapabilities();
                         if (caps.contains("f")) {
                             isFF = true;
@@ -677,7 +678,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("Banning: [" + truncHash + "] for 8h -> RouterInfo has bogus 'salt' cap");
                             _context.banlist().banlistRouter(_key, "<b>➜</b> RouterInfo has bogus 'salt' cap", null, null, now + 8*60*60*1000);
-                    } else if (!ri.getIdentity().calculateHash().equals(_key)) {
+                    } else if (!h.equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
                         corrupt = true;
