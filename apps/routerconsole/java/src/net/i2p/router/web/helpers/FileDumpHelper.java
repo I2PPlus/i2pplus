@@ -126,14 +126,14 @@ public class FileDumpHelper extends HelperBase {
         if (hash != null) {
             byte[] hh = new byte[16];
             System.arraycopy(hash, 0, hh, 0, 16);
-            buf.append("<span class=\"sha256\"><tt>");
+            buf.append("<span class=\"sha256\"><code>");
             String p1 = DataHelper.toHexString(hh);
             for (int i = p1.length(); i < 32; i++) {
                 buf.append('0');
             }
-            buf.append(p1).append("</tt><br>");
+            buf.append(p1).append("</code><br>");
             System.arraycopy(hash, 16, hh, 0, 16);
-            buf.append("<tt>").append(DataHelper.toHexString(hh)).append("</tt></span>");
+            buf.append("<code>").append(DataHelper.toHexString(hh)).append("</code></span>");
         }
         Attributes att = attributes(f);
         if (att == null)
@@ -155,7 +155,7 @@ public class FileDumpHelper extends HelperBase {
                     buf.append(LINK);
             buf.append(s).append("\">");
             }
-            buf.append("<span class=\"revision\"><tt>").append(s.substring(0, 8)).append("</tt></span>");
+            buf.append("<span class=\"revision\"><code>").append(s.substring(0, 8)).append("</code></span>");
             if (linkrev)
                 buf.append("</a>");
         }

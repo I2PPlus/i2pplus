@@ -1147,7 +1147,7 @@ public class SybilRenderer {
         Hash prev = null;
         for (Hash h : sybils) {
             String hh = h.toBase64();
-            out.write("<tr><td><a href=\"#" + hh.substring(0, 6) + "\"><tt>" + hh + "</tt></a><td>");
+            out.write("<tr><td><a href=\"#" + hh.substring(0, 6) + "\"><code>" + hh + "</code></a><td>");
             if (prev != null) {
                 BigInteger dist = HashDistance.getDistance(prev, h);
                 writeDistance(out, fmt, dist);
@@ -1182,7 +1182,7 @@ public class SybilRenderer {
             for (int j = 0; j < limit; j++) {
                 Hash h = sybils.get(j);
                 String hh = h.toBase64();
-                out.write("<tr><td><a href=\"#" + hh.substring(0, 6) + "\"><tt>" + hh + "</tt></a><td>");
+                out.write("<tr><td><a href=\"#" + hh.substring(0, 6) + "\"><code>" + hh + "</code></a><td>");
                 BigInteger dist = HashDistance.getDistance(rkey, h);
                 writeDistance(out, fmt, dist);
                 out.write("<td>");
