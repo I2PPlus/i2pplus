@@ -188,15 +188,16 @@ class FloodfillPeerSelector extends PeerSelector {
     }
 
     /** .5 * PublishLocalRouterInfoJob.PUBLISH_DELAY */
-    //private static final int NO_FAIL_STORE_OK = 10*60*1000;
+//    private static final int NO_FAIL_STORE_OK = 10*60*1000;
     private static final int NO_FAIL_STORE_OK = 5*60*1000;
-    private static final int NO_FAIL_STORE_GOOD = NO_FAIL_STORE_OK * 2;
+//    private static final int NO_FAIL_STORE_GOOD = NO_FAIL_STORE_OK * 2;
+    private static final int NO_FAIL_STORE_GOOD = NO_FAIL_STORE_OK * 3;
     /** this must be longer than the max streaming timeout (60s) */
     //private static final int NO_FAIL_LOOKUP_OK = 75*1000;
-    private static final int NO_FAIL_LOOKUP_OK = 60*1000;
+    private static final int NO_FAIL_LOOKUP_OK = 70*1000;
     private static final int NO_FAIL_LOOKUP_GOOD = NO_FAIL_LOOKUP_OK * 3;
 //    private static final int MAX_GOOD_RESP_TIME = 3500;
-    private static final int MAX_GOOD_RESP_TIME = 2000;
+    private static final int MAX_GOOD_RESP_TIME = 1500;
     // TODO we need better tracking of floodfill first-heard-about times
     // before we can do this. Old profiles get deleted.
     //private static final long HEARD_AGE = 48*60*60*1000L;
@@ -438,7 +439,7 @@ class FloodfillPeerSelector extends PeerSelector {
         }
 
 //        private static final int EXTRA_MATCHES = 100;
-        private static final int EXTRA_MATCHES = 128;
+        private static final int EXTRA_MATCHES = 192;
         public void add(Hash entry) {
             //if (_context.profileOrganizer().isFailing(entry))
             //    return;
@@ -499,18 +500,17 @@ class FloodfillPeerSelector extends PeerSelector {
             for (Iterator<Hash> iter = new RandomIterator<Hash>(_floodfillMatches); (found < howMany) && iter.hasNext(); ) {
                 Hash entry = iter.next();
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
-//                if (info != null && now - info.getPublished() > 3*60*60*1000) {
-                if (info != null && now - info.getPublished() > 90*60*1000) {
+                if (info != null && now - info.getPublished() > 3*60*60*1000) {
                     badff.add(entry);
                     if (_log.shouldDebug())
-                        _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> RouterInfo published over 90m ago");
+                        _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> RouterInfo published over 3h ago");
                 } else {
                     PeerProfile prof = _context.profileOrganizer().getProfile(entry);
 //                    if (prof != null && now - prof.getLastSendFailed() < 30*60*1000) {
                     if (prof != null && now - prof.getLastSendFailed() < 15*60*1000) {
                         badff.add(entry);
                         if (_log.shouldDebug())
-                            _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> Poor send success rate for the 15m");
+                            _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> Poor send success rate for the last 15m");
                     } else if (preferConnected && !_context.commSystem().isEstablished(entry)) {
                         unconnectedff.add(entry);
                         if (_log.shouldDebug())
