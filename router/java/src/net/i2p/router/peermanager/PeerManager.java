@@ -138,6 +138,7 @@ class PeerManager {
                 try {
                     _log.info("Started writing peer profiles to disk...");
                     storeProfiles();
+                    long finished = System.currentTimeMillis();
 /*
                     if (shouldDecay) {
                         int count = _persistenceHelper.deleteOldProfiles(EXPIRE_AGE);
@@ -171,6 +172,7 @@ class PeerManager {
         if (!_storeLock.compareAndSet(false, true)) {
             _log.error("Cannot write profiles to disk, storelock is enabled...");
             return;
+        }
         int i = 0;
         int total;
         try {
