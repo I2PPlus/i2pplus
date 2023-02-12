@@ -1228,9 +1228,9 @@ class SummaryBarRenderer {
                 buf.append("<tr title=\"")
                    .append(_t("Combined utility and service tunnel build success (averaged over 10 minute intervals)"))
                    .append("\">" +
-                           "<td><b>")
+                           "<td><a href=\"/graph?stat=tunnel.tunnelBuildSuccessAvg.60000&c=1440&w=1000&h=280\"><b>")
                    .append(_t("Build Success"))
-                  .append("</b></td><td class=digits><span>")
+                  .append("</b></a></td><td class=digits><span>")
                   .append(_helper.getTunnelBuildSuccess())
                   .append("%</span></td></tr>\n");
             }
