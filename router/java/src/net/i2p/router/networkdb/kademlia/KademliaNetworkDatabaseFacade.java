@@ -1345,19 +1345,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (_log.shouldWarn()) {
                 _log.warn("Dropping RouterInfo [" + riHash + "] -> Invalid publication date " +
                           "\n* Published: " + new Date(routerInfo.getPublished()));
-                _log.warn("Banning [" + riHash + "] for 1h -> RouterInfo from the future!");
+                _log.warn("Banning [" + riHash + "] for 4h -> RouterInfo from the future!");
             }
             _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
-                                             new Date(routerInfo.getPublished()) + ")", null, null, 60*60*1000);
+                                             new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
             return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " in the future";
         }
         if (noSSU && isFF && !isUs) {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping RouterInfo [" + riHash + "] -> Floodfill with SSU disabled");
-                _log.warn("Banning [" + riHash + "] for 8h -> Floodfill with SSU disabled");
+                _log.warn("Banning [" + riHash + "] for 4h -> Floodfill with SSU disabled");
             }
             _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> Floodfill with SSU disabled",
-                                             null, null, 8*60*60*1000);
+                                             null, null, 4*60*60*1000);
             return "Router [" + routerId + "] Floodfill with SSU disabled";
         }
         if (minVersionAllowed != null) {

@@ -234,7 +234,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (!floodfillEnabled())
             return false;
         Hash h = ds.getHash();
-        if (_context.banlist().isBanlistedForever(h) || _context.banlist().isBanlisted(h))
+        if (_context.banlist().isBanlistedForever(h) || _context.banlist().isBanlistedHostile(h))
             return false;
         if (shouldThrottleFlood(h)) {
             _context.statManager().addRateData("netDb.floodThrottled", 1);
