@@ -9,25 +9,24 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
-
-import net.i2p.data.router.RouterAddress;
-import net.i2p.data.router.RouterInfo;
+import net.i2p.util.SystemVersion;
 
 /**
  *  Write profiles to disk at shutdown,
@@ -52,15 +51,8 @@ class ProfilePersistenceHelper {
     private static final int MIN_NAME_LENGTH = PREFIX.length() + 44 + OLD_SUFFIX.length();
     private static final String DIR_PREFIX = "p";
     private static final String B64 = Base64.ALPHABET_I2P;
-
-    /**
-     * If we haven't been able to get a message through to the peer in this much time,
-     * drop the profile.  They may reappear, but if they do, their config may
-     * have changed (etc).
-     *
-     */
-//    private static final long EXPIRE_AGE = 15*24*60*60*1000;
-    private static final long EXPIRE_AGE = 7*24*60*60*1000; // 1 week
+    // Max to read in at startup
+    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 4000;
 
     private final File _profileDir;
     private Hash _us;
@@ -83,25 +75,21 @@ class ProfilePersistenceHelper {
 
     /**
      * write out the data from the profile to the file
+     * @return success
      */
-    public void writeProfile(PeerProfile profile) {
-        if (isExpired(profile.getLastSendSuccessful()))
-            return;
-
+    public boolean writeProfile(PeerProfile profile) {
         File f = pickFile(profile);
-        long before = _context.clock().now();
         OutputStream fos = null;
         try {
             fos = new BufferedOutputStream(new GZIPOutputStream(new SecureFileOutputStream(f)));
             writeProfile(profile, fos, false);
         } catch (IOException ioe) {
             _log.error("Error writing profile to " + f);
+            return false;
         } finally {
             if (fos != null) try { fos.close(); } catch (IOException ioe) {}
         }
-        long delay = _context.clock().now() - before;
-        if (_log.shouldDebug())
-            _log.debug("Writing " + f.getName() + " took " + delay + "ms");
+        return true;
     }
 
     /**
@@ -236,18 +224,29 @@ class ProfilePersistenceHelper {
             buf.append(name).append('=').append(val).append(NL);
     }
 
-    public Set<PeerProfile> readProfiles() {
-        long start = _context.clock().now();
+    public List<PeerProfile> readProfiles() {
+        long start = System.currentTimeMillis();
+        long down = _context.router().getEstimatedDowntime();
+        long cutoff = down < 15*24*60*60*1000L ? start - down - 24*60*60*1000 : start;
         List<File> files = selectFiles();
-        Set<PeerProfile> profiles = new HashSet<PeerProfile>(files.size());
-        for (File f : files) {
-            PeerProfile profile = readProfile(f);
-            if (profile != null)
+        if (files.size() > LIMIT_PROFILES)
+            Collections.shuffle(files, _context.random());
+        List<PeerProfile> profiles = new ArrayList<PeerProfile>(Math.min(LIMIT_PROFILES, files.size()));
+        int count = 0;
+        for (File f :  files) {
+            if (count >= LIMIT_PROFILES) {
+                f.delete();
+                continue;
+            }
+            PeerProfile profile = readProfile(f, cutoff);
+            if (profile != null) {
                 profiles.add(profile);
+                count++;
+            }
         }
-        long duration = _context.clock().now() - start;
+        long duration = System.currentTimeMillis() - start;
         if (_log.shouldInfo())
-            _log.info("Loaded " + profiles.size() + " profiles in " + duration + "ms");
+            _log.info("Loaded " + count + " profiles in " + duration + "ms");
         return profiles;
     }
 
@@ -293,9 +292,10 @@ class ProfilePersistenceHelper {
 
     /**
      *  Delete profile files with timestamps older than 'age' ago
+     *  @return number deleted
      *  @since 0.9.28
      */
-    public void deleteOldProfiles(long age) {
+    public int deleteOldProfiles(long age) {
         long cutoff = System.currentTimeMillis() - age;
         List<File> files = selectFiles();
         int i = 0;
@@ -308,19 +308,24 @@ class ProfilePersistenceHelper {
                 //f.delete();
             }
         }
-        if (_log.shouldWarn())
-            if (i > 0)
+        if (_log.shouldWarn()) {
+            if (i > 0) {
                 //_log.warn("Deleted " + i + " stale peer profiles");
                 _log.warn("Not deleting " + i + " (stale?) peer profiles - will expire when read at startup");
+            }
+        }             
+        return i;
     }
 
-    private boolean isExpired(long lastSentToSuccessfully) {
-        long timeSince = _context.clock().now() - lastSentToSuccessfully;
-        return (timeSince > EXPIRE_AGE);
-    }
-
+    /**
+     *  @param cutoff delete and return null if older than this (absolute time)
+     */
     @SuppressWarnings("deprecation")
-    public PeerProfile readProfile(File file) {
+    public PeerProfile readProfile(File file, long cutoff) {
+        if (file.lastModified() < cutoff) {
+            file.delete();
+            return null;
+    }
         Hash peer = getHash(file.getName());
         try {
             if (peer == null) {
@@ -338,7 +343,7 @@ class ProfilePersistenceHelper {
             if (info != null)
                 caps = DataHelper.stripHTML(info.getCapabilities());
 
-            if (isExpired(lastSentToSuccessfully)) {
+            if (lastSentToSuccessfully <= cutoff) {
                 if (_log.shouldDebug())
                     _log.debug("Dropping stale profile: " + file.getName());
                 file.delete();
