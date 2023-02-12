@@ -192,34 +192,16 @@ public class IterativeSearchJob extends FloodSearchJob {
         } else {
             _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
         }
-/*
-            if (ri != null) {
-                String v = ri.getVersion();
-                boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
-                                        VersionComparator.comp(v, MIN_VERSION) < 0) && known > 1500;
-                                        // && ctx.router().getUptime() > 15*60*1000 && !isHidden;
-                if (uninteresting) {
-                    _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME / 3 * 2);
-                    totalSearchLimit = Math.max(totalSearchLimit - 1, 3);
-                }
-            if (known < 1500 || isHidden) {
-                totalSearchLimit += 2;
-            } else {
-                _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
-            }
-*/
         if (ctx.getProperty("netdb.maxConcurrent") != null) {
             _maxConcurrent = Integer.valueOf(ctx.getProperty("netdb.maxConcurrent"));
-        } else if (isLease && cpuLoad < 90 && cpuLoadAvg < 90 && lag < 50) {
+        } else if (isLease && cpuLoad < 80 && cpuLoadAvg < 80 && lag < 50) {
             ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 2));
         } else if ((known < 1000 && ctx.router().getUptime() < 30*60*1000 || isHidden) && !isSlow &&
                    !isSingleCore && (cpuLoad < 80 && cpuLoadAvg < 80)) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 2);
-        } else if (known > 1000 || ctx.router().getUptime() > 30*60*1000) {
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", 1);
+        } else if (known > 1000 || ctx.router().getUptime() > 30*60*1000 &&
+                   cpuLoad < 80 && cpuLoadAvg < 80 && lag < 50) {
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", 2);
         } else if ((cpuLoad > 90 && cpuLoadAvg > 90) || isSlow || isSingleCore) {
             _maxConcurrent = 1;
         } else {
@@ -239,16 +221,18 @@ public class IterativeSearchJob extends FloodSearchJob {
 /*
         String MIN_VERSION = "0.9.57";
         boolean isHidden = getContext().router().isHidden();
-        RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
-        if (ri != null) {
+        RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
+        RouterInfo isUs = _facade.lookupRouterInfoLocally(getContext().routerHash());
+        if (ri != null && ri != isUs) {
             String v = ri.getVersion();
-            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-            ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-            ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-            ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
-            (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
-            !isHidden && getContext().netDb().getKnownRouters() > 1500;
-            //&& getContext().router().getUptime() > 15*60*1000 && !isHidden;
+            String caps = ri.getCapabilities();
+            boolean uninteresting = (caps != null && caps.contains("salt") ||
+                                     caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                     caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                     caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                     caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
+                                     (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
+                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;
             if (uninteresting) {
                 if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
