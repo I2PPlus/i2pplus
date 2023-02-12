@@ -218,7 +218,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
 
-/*
+
         String MIN_VERSION = "0.9.57";
         boolean isHidden = getContext().router().isHidden();
         RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
@@ -229,8 +229,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             boolean uninteresting = (caps != null && caps.contains("salt") ||
                                      caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                      caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                     caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                     caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
+                                     //caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                     //caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
                                      (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
                                      !isHidden && getContext().netDb().getKnownRouters() > 1000;
             if (uninteresting) {
@@ -239,7 +239,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 return;
             }
         }
-*/
+
         // pick some floodfill peers and send out the searches
         List<Hash> floodfillPeers;
         KBucketSet<Hash> ks = _facade.getKBuckets();
