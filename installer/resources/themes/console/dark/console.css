@@ -2108,8 +2108,9 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #jardump a[href^="https://gitlab.com/i2pplus"]{margin-left:-4px;padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
 #jardump font[color="red"]{color:#d00}
 .revision,.sha256,.unsignedmod{display:inline-block;user-select:all}
+.sha256 code{letter-spacing:-.03em;font-size:90%}
 .unsignedmod::selection{background:#b00;color:#fff}
-.revision tt::selection,.sha256 tt::selection,#help code::selection,#configinfo th::selection,#console code::selection{background:#bb0;color:#000}
+.revision code::selection,.sha256 code::selection,#help code::selection,#configinfo th::selection,#console code::selection{background:#bb0;color:#000}
 .revision br::selection,.sha256 br::selection{background:transparent}
 .unsignedmod{margin:0;padding:2px 4px 2px 4px}
 #jardump hr{margin:1px 0;width:100%;height:1px;background:#131;display:block}
@@ -2847,7 +2848,6 @@ span#newtab{margin-top:4px}
 @media screen and (min-width:1634px){.leasesets_container{margin-bottom:8px} th code{font-size:9pt}}
 @media screen and (min-width:1800px){#help .confignav{margin-left:-11px;margin-right:-11px;display:flex;justify-content:center;border-left:none;border-right:none} #help .tab,#help .tab2{margin-left:0;margin-right:0;flex-grow:1} .linkcontainer .applink:last-of-type{margin-bottom:9px}}
 @media screen and (min-width:1840px){div[id^="config_"] .confignav{padding:4px 4px 5px 3px;display:flex;flex-direction:row;flex-wrap:wrap;align-content:space-evenly;justify-content:center} div[id^="config_"] .tab,div[id^="config_"] .tab2{margin:0 -1px -1px 0;min-width:70px;white-space:nowrap;flex:auto;flex-basis:content;flex-grow:.06} div[id^="config_"] .tab2:first-child{border-left:none} div[id^="config_"] .confignav{padding:0} div[id^="config_"] .tab,div[id^="config_"] .tab2{margin-top:-1px} div[id^="config_"] .tab:first-child{margin-left:-1px}}
-
 
 .tunnel_local,.tunnel_id,.rid td{box-shadow:var(--highlight),0 0 1px 1px rgba(16,48,16,.8) inset}
 .tunnel_local{width:98px;box-sizing:border-box}
