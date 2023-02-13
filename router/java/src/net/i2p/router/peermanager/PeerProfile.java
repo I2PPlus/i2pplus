@@ -380,8 +380,9 @@ public class PeerProfile {
     public float getIntegrationValue() { return _integrationValue; }
     /**
      * is this peer actively failing (aka not worth touching)?
-     * deprecated - unused - always false
+     * @deprecated - unused - always false
      */
+    @Deprecated
     public boolean getIsFailing() { return false; }
 
     /**
@@ -700,7 +701,11 @@ public class PeerProfile {
     private float calculateSpeed() { return (float) SpeedCalculator.calc(this); }
     private float calculateCapacity() { return (float) CapacityCalculator.calc(this); }
     private float calculateIntegration() { return (float) IntegrationCalculator.calc(this); }
-    /** deprecated - unused - always false */
+
+    /**
+     * @deprecated - unused - always false
+     */
+    @Deprecated
     void setIsFailing(boolean val) {}
 
     /**

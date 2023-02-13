@@ -57,8 +57,6 @@ public class ProfileOrganizer {
     private final Map<Hash, PeerProfile> _notFailingPeers;
     /** H(routerIdnetity), containing elements in _notFailingPeers */
     private final List<Hash> _notFailingPeersList;
-    /** TO BE REMOVED H(routerIdentity) to PeerProfile for all peers that ARE failing horribly (but that we haven't dropped reference to yet) */
-    private final Map<Hash, PeerProfile> _failingPeers;
     /** who are we? */
     private Hash _us;
     private final ProfilePersistenceHelper _persistenceHelper;
@@ -115,7 +113,6 @@ public class ProfileOrganizer {
         _wellIntegratedPeers = new HashMap<Hash, PeerProfile>(128);
         _notFailingPeers = new HashMap<Hash, PeerProfile>(256);
         _notFailingPeersList = new ArrayList<Hash>(256);
-        _failingPeers = new HashMap<Hash, PeerProfile>(16);
         _strictCapacityOrder = new TreeSet<PeerProfile>(_comp);
         _persistenceHelper = new ProfilePersistenceHelper(_context);
 
@@ -429,7 +426,8 @@ public class ProfileOrganizer {
     @Deprecated
     public int countWellIntegratedPeers() { return count(_wellIntegratedPeers); }
     public int countNotFailingPeers() { return count(_notFailingPeers); }
-    public int countFailingPeers() { return count(_failingPeers); }
+    @Deprecated
+    public int countFailingPeers() { return 0; }
 
     public int countActivePeers() {
         int activePeers = 0;
@@ -438,12 +436,6 @@ public class ProfileOrganizer {
 
         getReadLock();
         try {
-            for (PeerProfile profile : _failingPeers.values()) {
-                if (profile.getLastSendSuccessful() >= hideBefore)
-                    activePeers++;
-                else if (profile.getLastHeardFrom() >= hideBefore)
-                    activePeers++;
-            }
             for (PeerProfile profile : _notFailingPeers.values()) {
                 if (profile.getLastSendSuccessful() >= hideBefore)
                     activePeers++;
@@ -498,7 +490,9 @@ public class ProfileOrganizer {
 
     /**
      *  Deprecated for now, always false
+     *  @deprecated unused
      */
+    @Deprecated
     public boolean isFailing(Hash peer) {
         // Always false so skip the lock
         //return isX(_failingPeers, peer);
@@ -510,7 +504,6 @@ public class ProfileOrganizer {
         if (!getWriteLock())
             return;
         try {
-            _failingPeers.clear();
             _fastPeers.clear();
             _highCapacityPeers.clear();
             _notFailingPeers.clear();
@@ -925,12 +918,10 @@ public class ProfileOrganizer {
     /**
      * I'm not quite sure why you'd want this... (other than for failover from the better results)
      *
+     * @deprecated unused
      */
+    @Deprecated
     private void selectFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
-        getReadLock();
-        try {
-            locked_selectPeers(_failingPeers, howMany, exclude, matches);
-        } finally { releaseReadLock(); }
         return;
     }
 
@@ -941,8 +932,7 @@ public class ProfileOrganizer {
     public Set<Hash> selectAllPeers() {
         getReadLock();
         try {
-            Set<Hash> allPeers = new HashSet<Hash>(_failingPeers.size() + _notFailingPeers.size() + _highCapacityPeers.size() + _fastPeers.size());
-            allPeers.addAll(_failingPeers.keySet());
+            Set<Hash> allPeers = new HashSet<Hash>(_notFailingPeers.size() + _highCapacityPeers.size() + _fastPeers.size());
             allPeers.addAll(_notFailingPeers.keySet());
             allPeers.addAll(_highCapacityPeers.keySet());
             allPeers.addAll(_fastPeers.keySet());
@@ -1036,7 +1026,6 @@ public class ProfileOrganizer {
             locked_calculateThresholds(allPeers);
             thresholdTime = System.currentTimeMillis()-thresholdStart;
 
-            _failingPeers.clear();
             _fastPeers.clear();
             _highCapacityPeers.clear();
             _notFailingPeers.clear();
@@ -1049,7 +1038,6 @@ public class ProfileOrganizer {
                 locked_placeProfile(profile);
             }
 
-            locked_unfailAsNecessary();
             locked_demoteHighCapAsNecessary();
             locked_promoteFastAsNecessary();
             locked_demoteFastAsNecessary();
@@ -1101,7 +1089,7 @@ public class ProfileOrganizer {
                 _log.info("Need to explicitly promote " + numToPromote + " peers to Fast group");
             long now = _context.clock().now();
             for (PeerProfile cur : _strictCapacityOrder) {
-                if ( (!_fastPeers.containsKey(cur.getPeer())) && (!cur.getIsFailing()) ) {
+                if (!_fastPeers.containsKey(cur.getPeer())) {
                     if (!isSelectable(cur.getPeer())) {
                         // skip peers we don't have in the netDb
                         // if (_log.shouldInfo())
@@ -1179,45 +1167,6 @@ public class ProfileOrganizer {
         }
     }
 
-    /** how many not failing/active peers must we have? */
-    private final static int MIN_NOT_FAILING_ACTIVE = 50;
-
-    /**
-     * I'm not sure how much I dislike the following - if there aren't enough
-     * active and not-failing peers, pick the most reliable active peers and
-     * override their 'failing' flag, resorting them into the not-failing buckets
-     *
-     */
-    private void locked_unfailAsNecessary() {
-        int notFailingActive = 0;
-        long now = _context.clock().now();
-        for (PeerProfile peer : _notFailingPeers.values()) {
-            if (peer.getIsActive(now))
-                notFailingActive++;
-            if (notFailingActive >= MIN_NOT_FAILING_ACTIVE) {
-                // we've got enough, no need to try further
-                return;
-            }
-        }
-
-        // we don't have enough, let's unfail our best ones remaining
-        int needToUnfail = MIN_NOT_FAILING_ACTIVE - notFailingActive;
-        if (needToUnfail > 0) {
-            int unfailed = 0;
-            for (PeerProfile best : _strictCapacityOrder) {
-                if ( (best.getIsActive(now)) && (best.getIsFailing()) ) {
-                    if (_log.shouldWarn())
-                        _log.warn("All peers are marked as failing; overriding the Failing flag for [" +
-                                  best.getPeer().toBase64().substring(0,6) + "]");
-                    best.setIsFailing(false);
-                    locked_placeProfile(best);
-                    unfailed++;
-                }
-                if (unfailed >= needToUnfail)
-                    break;
-            }
-        }
-    }
 
     ////////
     // no more public stuff below
@@ -1262,7 +1211,7 @@ public class ProfileOrganizer {
             }
 
             // only take into account active peers that aren't failing
-            if (profile.getIsFailing() || (!profile.getIsActive(now)))
+            if (!profile.getIsActive(now))
                 continue;
 
             // don't bother trying to make sense of things below the baseline
@@ -1430,9 +1379,6 @@ public class ProfileOrganizer {
     /** called after locking the reorganizeLock */
     private PeerProfile locked_getProfile(Hash peer) {
         PeerProfile cur = _notFailingPeers.get(peer);
-        if (cur != null)
-            return cur;
-        cur = _failingPeers.get(peer);
         return cur;
     }
 
@@ -1502,8 +1448,6 @@ public class ProfileOrganizer {
             if (matches.contains(peer))
                 continue;
             if (_us.equals(peer))
-                continue;
-            if (_failingPeers.containsKey(peer))
                 continue;
             // we assume if connected, it's fine, don't look in _notFailingPeers
             boolean ok = isSelectable(peer);
@@ -1656,57 +1600,49 @@ public class ProfileOrganizer {
     private void locked_placeProfile(PeerProfile profile) {
         Hash peer = profile.getPeer();
         int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
-        if (profile.getIsFailing()) {
-            if (!shouldDrop(profile))
-                _failingPeers.put(peer, profile);
-            _fastPeers.remove(peer);
-            _highCapacityPeers.remove(peer);
-            _wellIntegratedPeers.remove(peer);
-            _notFailingPeers.remove(peer);
-            _notFailingPeersList.remove(peer);
-        } else {
-            _failingPeers.remove(peer);
-            _fastPeers.remove(peer);
-            _highCapacityPeers.remove(peer);
-            _wellIntegratedPeers.remove(peer);
-
-            _notFailingPeers.put(peer, profile);
-            _notFailingPeersList.add(peer);
-            // if not selectable for a tunnel (banlisted for example),
-            // don't allow them in the high-cap pool, what would the point of that be?
-            if (_thresholdCapacityValue <= profile.getCapacityValue() &&
-                isSelectable(peer) &&
-                // null for tests
-                (_context.commSystem() == null || !_context.commSystem().isInStrictCountry(peer))) {
-                _highCapacityPeers.put(peer, profile);
-                if (_log.shouldDebug())
-                    _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to High Capacity group");
-                if (_thresholdSpeedValue <= profile.getSpeedValue()) {
-                    if (!profile.getIsActive()) {
-                        if (_log.shouldDebug())
-                            _log.debug("Not promoting  [" + peer.toBase64().substring(0,6) + "] to Fast group (inactive)");
-                    } else {
-                        _fastPeers.put(peer, profile);
-                        if (_log.shouldDebug())
-                            _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to Fast group");
-                    }
+        _fastPeers.remove(peer);
+        _highCapacityPeers.remove(peer);
+        _wellIntegratedPeers.remove(peer);
+        _notFailingPeers.put(peer, profile);
+        _notFailingPeersList.add(peer);
+        // if not selectable for a tunnel (banlisted for example),
+        // don't allow them in the high-cap pool, what would the point of that be?
+        if (_thresholdCapacityValue <= profile.getCapacityValue() &&
+            isSelectable(peer) &&
+            // null for tests
+            (_context.commSystem() == null ||
+            !_context.commSystem().isInStrictCountry(peer))) {
+            _highCapacityPeers.put(peer, profile);
+            if (_log.shouldDebug())
+                _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to High Capacity group");
+            if (_thresholdSpeedValue <= profile.getSpeedValue()) {
+                if (!profile.getIsActive()) {
+                    if (_log.shouldDebug())
+                        _log.debug("Not promoting  [" + peer.toBase64().substring(0,6) + "] to Fast group (inactive)");
+                } else {
+                    _fastPeers.put(peer, profile);
+                    if (_log.shouldDebug())
+                        _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to Fast group");
                 }
+            }
 
-            } else if (countHighCapacityPeers() < minHighCap && isSelectable(peer) && !_context.commSystem().isInStrictCountry(peer)) {
-                _highCapacityPeers.put(peer, profile);
-                // not high capacity, but not failing (yet)
-            }
-            // We aren't using the well-integrated list yet...
-            // But by observation, the floodfill peers are often not in the
-            // high-capacity group, so let's not require a peer to be high-capactiy
-            // to call him well-integrated.
-            // This could be used later to see if a floodfill peer is for real.
-            if (_thresholdIntegrationValue <= profile.getIntegrationValue()) {
-                _wellIntegratedPeers.put(peer, profile);
-                if (_log.shouldDebug())
-                    _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to Integrated group");
-            }
+        } else if (countHighCapacityPeers() < minHighCap &&
+                   isSelectable(peer) &&
+                   !_context.commSystem().isInStrictCountry(peer)) {
+            _highCapacityPeers.put(peer, profile);
+            // not high capacity, but not failing (yet)
         }
+        // We aren't using the well-integrated list yet...
+        // But by observation, the floodfill peers are often not in the
+        // high-capacity group, so let's not require a peer to be high-capactiy
+        // to call him well-integrated.
+        // This could be used later to see if a floodfill peer is for real.
+        if (_thresholdIntegrationValue <= profile.getIntegrationValue()) {
+            _wellIntegratedPeers.put(peer, profile);
+            if (_log.shouldDebug())
+                _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to Integrated group");
+        }
+
     }
 
     /**
@@ -1824,8 +1760,7 @@ public class ProfileOrganizer {
                            + " Speed:\t" + fmt.format(profile.getSpeedValue())
                            + " Capacity:\t" + fmt.format(profile.getCapacityValue())
                            + " Integration:\t" + fmt.format(profile.getIntegrationValue())
-                           + " Active?\t" + profile.getIsActive(now)
-                           + " Failing?\t" + profile.getIsFailing());
+                           + " Active?\t" + profile.getIsActive(now));
             } else {
                 System.out.println("Peer " + peer.toBase64().substring(0,4)
                            + " [" + (organizer.isFast(peer) ? "F+R " :
@@ -1834,8 +1769,7 @@ public class ProfileOrganizer {
                            + " Speed:\t" + fmt.format(profile.getSpeedValue())
                            + " Capacity:\t" + fmt.format(profile.getCapacityValue())
                            + " Integration:\t" + fmt.format(profile.getIntegrationValue())
-                           + " Active?\t" + profile.getIsActive(now)
-                           + " Failing?\t" + profile.getIsFailing());
+                           + " Active?\t" + profile.getIsActive(now));
             }
         }
 
