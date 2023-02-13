@@ -248,29 +248,29 @@ public class ProfileOrganizer {
         }
         PeerProfile prof = getProfile(peer);
 
-        if ((peerInfo != null && cap != null) && !reachable && bw != null &&
-            (bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
-            if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or Unreachable");
-            return null;
-        }
+        if (peerInfo != null) {
+            if (cap != null && (!reachable || (bw != null &&
+                (bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))))) {
+                if (_log.shouldInfo())
+                    _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or Unreachable");
+                return null;
+            }
+            if (hasSalt) {
+                if (_log.shouldInfo())
+                    _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Invalid caps 'salt' in RouterInfo");
+                return null;
+            }
+            if (isFF && noSSU) {
+                if (_log.shouldInfo())
+                    _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
+                return null;
+            }
 
-        if (peerInfo != null && hasSalt) {
-            if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Invalid caps 'salt' in RouterInfo");
-            return null;
-        }
-
-        if (peerInfo != null && (isFF && noSSU)) {
-            if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
-            return null;
-        }
-
-        if (VersionComparator.comp(version, "0.9.57") < 0) {
-            if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.57");
-           return null;
+            if (VersionComparator.comp(version, "0.9.57") < 0) {
+                if (_log.shouldInfo())
+                    _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.57");
+               return null;
+            }
         }
 
         if (!tryReadLock())
