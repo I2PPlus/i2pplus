@@ -349,7 +349,7 @@ class PeerTestJob extends JobImpl {
                                                   " - avg response is over twice timeout value");
                                 } catch (NumberFormatException nfe) {}
                             } else if ((prof.getCapacityBonus() == -30 || prof.getSpeedBonus() < 9999999) && cap != null && reachable &&
-                                       testAvg < (timeout * 2) && (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
+                                       testAvg < (timeout * 2) && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                                 try {
                                     if (prof.getCapacityBonus() == -30) {
                                         prof.setCapacityBonus(0);
@@ -421,30 +421,35 @@ class PeerTestJob extends JobImpl {
                     boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
                     String bw = peerInfo.getBandwidthTier();
                     PeerProfile prof = getContext().profileOrganizer().getProfile(h);
-                    if (cap != null && reachable && (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
+                    if (cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                         prof.setSpeedBonus(9999999);
                         if (_log.shouldInfo())
-                            _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Setting speed bonus to 9999999");
+                            _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+                                      "] Setting speed bonus to 9999999 for fast tier router");
                     }
-                    if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable && (!bw.equals("L"))) {
+                    if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable &&
+                        (!bw.equals("L") || !bw.equals("M"))) {
                         try {
                             prof.setCapacityBonus(0);
                             if (_log.shouldInfo())
-                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Resetting capacity bonus to 0");
+                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+                                          "] Resetting capacity bonus to 0");
                         } catch (NumberFormatException nfe) {}
                         return;
-                    } else if (prof != null && cap != null && (bw.equals("L"))) {
+                    } else if (prof != null && cap != null && (!reachable || bw.equals("L") || (bw.equals("M")))) {
                         try {
                             prof.setCapacityBonus(-30);
                             if (_log.shouldInfo())
-                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Setting capacity bonus to -30 for L tier router");
+                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+                                          "] Setting capacity bonus to -30 for L or M tier or unreachable router");
                         } catch (NumberFormatException nfe) {}
                         return;
                     } else if (prof != null && cap == null) {
                         try {
                             prof.setCapacityBonus(-30);
                             if (_log.shouldInfo())
-                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Setting capacity bonus to -30 for unknown class router");
+                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+                                          "] Setting capacity bonus to -30 for unknown class router");
                         } catch (NumberFormatException nfe) {}
                         return;
                     }
@@ -500,12 +505,13 @@ class PeerTestJob extends JobImpl {
                     String cap = peerInfo.getCapabilities();
                     boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
                     String bw = peerInfo.getBandwidthTier();
-                    if (prof != null && cap != null) {
+                    if (prof != null && cap != null && (!reachable || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
                         try {
                             prof.setCapacityBonus(-30);
                             prof.setSpeedBonus(0);
                             if (_log.shouldInfo())
-                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Setting capacity bonus to -30 and speed bonus to 0");
+                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+                                          "] Setting capacity bonus to -30 and speed bonus to 0 for slow or unreachable peer");
                         } catch (NumberFormatException nfe) {}
                         return;
                     }
