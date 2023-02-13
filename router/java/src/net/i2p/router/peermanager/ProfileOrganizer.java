@@ -453,16 +453,6 @@ public class ProfileOrganizer {
 
         getReadLock();
         try {
-            for (PeerProfile profile : _failingPeers.values()) {
-                if (profile.getIsActive(60*60*1000))
-                    activePeers++;
-                else if (profile.getLastSendSuccessful() >= hideBefore)
-                    activePeers++;
-                else if (profile.getLastSendFailed() >= hideBefore)
-                    activePeers++;
-                else if (profile.getLastHeardFrom() >= hideBefore)
-                    activePeers++;
-            }
             for (PeerProfile profile : _notFailingPeers.values()) {
                 if (profile.getIsActive(60*60*1000))
                     activePeers++;
@@ -1652,12 +1642,7 @@ public class ProfileOrganizer {
      * without ejecting any of them, but anyway, this is how we'd do it.  Most likely.
      *
      */
-    private boolean shouldDrop(PeerProfile profile) {
-        if (profile.getIsFailing())
-            return true;
-        else
-            return false;
-    }
+    private boolean shouldDrop(PeerProfile profile) { return false; }
 
     /**
      * Defines the minimum number of 'fast' peers that the organizer should select.  If
