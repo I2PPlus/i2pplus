@@ -24,15 +24,22 @@ class CapacityCalculator {
 
     // total of all possible bonuses should be less than 4, since
     // crappy peers start at 1 and the base is 5.
-    private static final double BONUS_NEW = 0.85;
+//    private static final double BONUS_NEW = 0.85;
+    private static final double BONUS_NEW = 0;
     private static final double BONUS_ESTABLISHED = 0.65;
     private static final double BONUS_SAME_COUNTRY = 0;
     private static final double BONUS_XOR = .25;
-    private static final double PENALTY_UNREACHABLE = 2;
-    private static final double PENALTY_NO_RI = 2;
-    private static final double PENALTY_L_CAP = 1;
-    private static final double PENALTY_NO_R_CAP = 1;
-    private static final double PENALTY_U_CAP = 2;
+    private static final double PENALTY_NEW = 1;
+//    private static final double PENALTY_UNREACHABLE = 2;
+    private static final double PENALTY_UNREACHABLE = 3;
+//    private static final double PENALTY_NO_RI = 2;
+    private static final double PENALTY_NO_RI = 4;
+//    private static final double PENALTY_L_CAP = 1;
+    private static final double PENALTY_L_CAP = 3;
+//    private static final double PENALTY_NO_R_CAP = 1;
+    private static final double PENALTY_NO_R_CAP = 2;
+//    private static final double PENALTY_U_CAP = 2;
+    private static final double PENALTY_U_CAP = 3;
     private static final double PENALTY_LAST_SEND_FAIL = 4;
     private static final double PENALTY_RECENT_SEND_FAIL = 4;
     private static final double BONUS_LAST_SEND_SUCCESS = 1;
@@ -69,16 +76,17 @@ class CapacityCalculator {
                     // never happens
                     capacity10m /= 4;
                 }
-        
-                capacity = capacity10m * 0.4 + 
-                           capacity60m * 0.5 + 
+
+                capacity = capacity10m * 0.4 +
+                           capacity60m * 0.5 +
                            capacity1d  * 0.1;
             }
         }
 
         // boost new profiles
         if (now - profile.getFirstHeardAbout() < 45*60*1000)
-            capacity += BONUS_NEW;
+//            capacity += BONUS_NEW;
+            capacity -= PENALTY_NEW;
         // boost connected peers
         if (profile.isEstablished())
             capacity += BONUS_ESTABLISHED;
