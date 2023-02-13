@@ -1041,14 +1041,6 @@ class SummaryBarRenderer {
            .append("</span></td></tr>\n" +
                    "<tr class=separator><td colspan=2><hr></td></tr>" +
                    "<tr title=\"")
-           .append(_t("The number of peers failing network tests"))
-           .append("\">" +
-                   "<td><a href=\"/profiles\"><b>")
-           .append(_t("Failing"))
-           .append("</b></a></td><td class=digits><span>")
-           .append(_helper.getFailingPeers())
-           .append("</span></td></tr>\n" +
-                   "<tr title=\"")
            .append(_t("The number of banned peers"))
            .append("\">" +
                    "<td><a href=\"/profiles?f=3\"><b>")
