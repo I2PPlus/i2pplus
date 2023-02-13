@@ -117,6 +117,7 @@ class ProfileOrganizerRenderer {
             int prevTier = 1;
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
+
                 int tier = 0;
                 boolean isIntegrated = false;
                 if (_organizer.isFast(peer)) {
@@ -129,6 +130,7 @@ class ProfileOrganizerRenderer {
                 } else {
                     tier = 3;
                 }
+
                 if (_organizer.isWellIntegrated(peer)) {
                     isIntegrated = true;
                     integrated++;
@@ -181,10 +183,6 @@ class ProfileOrganizerRenderer {
                 boolean ok = true;
                 if (_context.banlist().isBanlisted(peer)) {
                     buf.append(_t("Banned"));
-                    ok = false;
-                }
-                if (prof.getIsFailing()) {
-                    buf.append(" &bullet; ").append(_t("Failing"));
                     ok = false;
                 }
                 if (_context.commSystem().wasUnreachable(peer)) {
@@ -515,20 +513,11 @@ class ProfileOrganizerRenderer {
                 } else {
                     return -1;
                 }
-            } else if (_context.profileOrganizer().isFailing(left.getPeer())) {
-                if (_context.profileOrganizer().isFailing(right.getPeer())) {
-                    return super.compare(left, right);
-                } else {
-                    return 1;
-                }
             } else {
-                // left is not failing
                 if (_context.profileOrganizer().isFast(right.getPeer())) {
                     return 1;
                 } else if (_context.profileOrganizer().isHighCapacity(right.getPeer())) {
                     return 1;
-                } else if (_context.profileOrganizer().isFailing(right.getPeer())) {
-                    return -1;
                 } else {
                     return super.compare(left, right);
                 }
