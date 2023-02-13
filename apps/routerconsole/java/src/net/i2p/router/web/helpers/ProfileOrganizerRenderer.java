@@ -308,7 +308,7 @@ class ProfileOrganizerRenderer {
                        "<h3 class=tabletitle>" + _t("Thresholds") + "</h3>\n" +
                        "<table id=thresholds>\n" +
                        "<thead><tr><th><b>" + _t("Speed") + ": </b>");
-            String spd = (num(_organizer.getSpeedThreshold()).replace(",",""));
+            String spd = num(Math.max(1, _organizer.getSpeedThreshold()));
             String speedApprox = spd.substring(0, spd.indexOf("."));
             int speed = Integer.parseInt(speedApprox);
             if (speed < -10240)
@@ -323,9 +323,11 @@ class ProfileOrganizerRenderer {
             }
             buf.append("ps</th><th><b>")
                .append(_t("Capacity")).append(": </b>");
-            String capThresh = num(Math.round(_organizer.getCapacityThreshold())).replace(".00", "");
+
+            String capThresh = num(Math.max(1, _organizer.getCapacityThreshold())).replace(".00", "");
+            String integThresh = num(Math.max(1, _organizer.getIntegrationThreshold())).replace(".00", "");
             buf.append(capThresh).append(' ').append(_t("tunnels per hour")).append("</th><th><b>")
-               .append(_t("Integration")).append(": </b>").append(capThresh).append(' ');
+               .append(_t("Integration")).append(": </b>").append(integThresh).append(' ');
             if (capThresh.equals("1"))
                 buf.append(_t("peer"));
             else
