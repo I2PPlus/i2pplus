@@ -2,9 +2,8 @@
 /* Selective refresh torrents and other volatile elements in the I2PSnark UI */
 /* License: AGPL3 or later */
 
-import {initFilterBar, checkFilterBar, refreshFilters} from "/i2psnark/.resources/js/torrentDisplay.js";
-import {onVisible} from "/i2psnark/.resources/js/onVisible.js";
-//import {initFilterBar, checkFilterBar, refreshFilters} from "/themes/js/torrentDisplay.js"; // debugging
+import {initFilterBar, checkFilterBar, refreshFilters} from "./torrentDisplay.js";
+import {onVisible} from "./onVisible.js";
 
 function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");

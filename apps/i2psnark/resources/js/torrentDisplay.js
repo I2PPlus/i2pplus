@@ -2,7 +2,7 @@
 /* Setup torrent display buttons so we can show/hide snarks based on status */
 /* License: AGPL3 or later */
 
-import {onVisible} from "/i2psnark/.resources/js/onVisible.js";
+import {onVisible} from "./onVisible.js";
 
 function initFilterBar() {
 
