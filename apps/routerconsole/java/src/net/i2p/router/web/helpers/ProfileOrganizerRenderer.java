@@ -46,7 +46,7 @@ class ProfileOrganizerRenderer {
         boolean ffmode = local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
-        long hideBefore = ffmode ? now - 60*1000 : now - 3*60*1000;
+        long hideBefore = ffmode ? now - 60*1000 : !ffmode && mode == 2 ? 15*60*1000 : now - 3*60*1000;
 
         Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new HashComparator() : new ProfileComparator());
         int older = 0;
@@ -58,9 +58,8 @@ class ProfileOrganizerRenderer {
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             if (prof == null)
                 continue;
-            if (mode == 2) {
+            if (mode == 2 && prof.getLastHeardFrom() <= hideBefore) {
                 if (info != null && info.getCapabilities().indexOf('f') >= 0)
-                    hideBefore = ffmode ? now - 60*1000 : now - 30*60*1000;
                     order.add(prof);
                     ff++;
                 continue;
