@@ -292,7 +292,8 @@ public class ProfileOrganizer {
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
             int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
             int minFast = _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
-            if (peerInfo != null && cap != null && reachable && (!bw.equals("K") || !bw.equals("L") || !bw.equals("M") || !bw.equals("N"))) {
+            if (peerInfo != null && cap != null && reachable && (!bw.equals("K") ||
+                !bw.equals("L") || !bw.equals("M") || !bw.equals("N"))) {
                 if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
                     countHighCapacityPeers() < getMaximumHighCapPeers())
                     _highCapacityPeers.put(peer, rv);
@@ -345,7 +346,8 @@ public class ProfileOrganizer {
             }
         }
 
-        boolean isSlow = (cap != null && cap != "") && bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N") || !reachable;
+        boolean isSlow = (cap != null && cap != "") && bw.equals("K") ||
+                          bw.equals("L") || bw.equals("M") || bw.equals("N") || !reachable;
 
         if (peer != null && peer.equals(_us)) {
             if (_log.shouldDebug())
