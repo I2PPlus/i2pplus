@@ -82,7 +82,7 @@ public class PeerProfile {
 
     /** keep track of the fastest 3 throughputs */
 //    private static final int THROUGHPUT_COUNT = 3;
-    private static final int THROUGHPUT_COUNT = 12;
+    private static final int THROUGHPUT_COUNT = 8;
     /**
      * fastest 1 minute throughput, in bytes per minute, ordered with fastest
      * first.  this is not synchronized, as we don't *need* perfection, and we only
@@ -102,11 +102,11 @@ public class PeerProfile {
     // x**4 = .5; x = 4th root of .5,  x = .5**(1/4), x ~= 0.84
     private static final float DEGRADE_FACTOR = (float) Math.pow(TOTAL_DEGRADE_PER_DAY, 1.0d / DEGRADES_PER_DAY);
     //static { System.out.println("Degrade factor is " + DEGRADE_FACTOR); }
-    static final boolean ENABLE_TUNNEL_TEST_RESPONSE_TIME = false;
+    static final boolean ENABLE_TUNNEL_TEST_RESPONSE_TIME = true;
 
     private long _lastCoalesceDate = System.currentTimeMillis();
 
-    private static final long[] RATES = { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000 };
+    private static final long[] RATES = { 60*1000l, 5*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000 };
 
     /**
      *  Countries with more than about a 2% share of the netdb.
@@ -173,8 +173,8 @@ public class PeerProfile {
      * 1 minute)
      */
     public boolean getIsActive() {
-        return getIsActive(5*60*1000, _context.clock().now());
-        //return getIsActive(60*1000, _context.clock().now());
+        //return getIsActive(5*60*1000, _context.clock().now());
+        return getIsActive(60*1000, _context.clock().now());
     }
 
     /**
@@ -184,8 +184,8 @@ public class PeerProfile {
      * @since 0.9.58
      */
     public boolean getIsActive(long now) {
-        return getIsActive(5*60*1000, now);
-        //return getIsActive(60*1000, now);
+        //return getIsActive(5*60*1000, now);
+        return getIsActive(60*1000, now);
     }
 
     /** @since 0.8.11 */
@@ -389,21 +389,20 @@ public class PeerProfile {
      *  @deprecated unused
      *  @return 0 always
      */
-    @Deprecated
+    //@Deprecated
     public float getTunnelTestTimeAverage() { return _tunnelTestResponseTimeAvg; }
 
     /**
      *  @deprecated unused
      */
-    @Deprecated
+    //@Deprecated
     void setTunnelTestTimeAverage(float avg) { /* _tunnelTestResponseTimeAvg = avg; */ }
 
     /**
      *  @deprecated unused
      */
-    @Deprecated
+    //@Deprecated
     void updateTunnelTestTimeAverage(long ms) {
-/*
         if (_tunnelTestResponseTimeAvg <= 0)
             _tunnelTestResponseTimeAvg = 30*1000; // should we instead start at $ms?
 
@@ -416,7 +415,6 @@ public class PeerProfile {
         if (_log.shouldInfo())
             _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
-*/
     }
 
     public float getPeerTestTimeAverage() { return _peerTestResponseTimeAvg; }
@@ -424,7 +422,8 @@ public class PeerProfile {
 
     void updatePeerTestTimeAverage(long ms) {
         if (_peerTestResponseTimeAvg <= 0)
-            _peerTestResponseTimeAvg = 10*1000; // default timeout * 2
+//            _peerTestResponseTimeAvg = 10*1000; // default timeout * 2
+            _peerTestResponseTimeAvg = 1500; // default timeout * 2
         else
              _peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;
         if (_log.shouldInfo())
@@ -663,10 +662,10 @@ public class PeerProfile {
         _tunnelCreateResponseTime.coalesceStats();
         if (_tunnelTestResponseTime != null)
             _tunnelTestResponseTime.coalesceStats();
-/*
+
         if (_peerTestResponseTime != null)
           _peerTestResponseTime.coalesceStats();
-*/
+
         _tunnelHistory.coalesceStats();
         if (_expandedDB) {
             _dbIntroduction.coalesceStats();
