@@ -316,18 +316,19 @@ class PeerTestJob extends JobImpl {
                         String bw = peerInfo.getBandwidthTier();
                         int timeout = getTestTimeout();
                         float testAvg = prof.getPeerTestTimeAverage();
-                        if (prof != null && cap != null && reachable && (bw.equals("L"))) {
+                        if (prof != null && cap != null && (bw.equals("L") || bw.equals("M") || bw.equals("N") || !reachable)) {
                             try {
                                 prof.setCapacityBonus(-30);
                                 if (_log.shouldInfo())
-                                    _log.info("[" + _peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30 for L tier router");
+                                    _log.info("[" + _peer.toBase64().substring(0,6) +
+                                              "] Setting capacity bonus to -30 for L, M, N or unreachable router");
                             } catch (NumberFormatException nfe) {}
                         } else if (timeLeft < 0) {
                             if (_log.shouldInfo())
                                 _log.info("[" + _peer.toBase64().substring(0,6) + "] Test reply took too long: " +
                                           (0-timeLeft) + "ms too slow");
-                            getContext().statManager().addRateData("peer.testTooSlow", 0-timeLeft);
-                            if (_peer != null && cap != null && reachable &&
+                            getContext().statManager().addRateData("peer.testTooSlow", 0 - timeLeft);
+                            if (_peer != null && cap != null &&
                                 (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                                 try {
                                     prof.setCapacityBonus(-30);
