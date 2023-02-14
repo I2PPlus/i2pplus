@@ -41,10 +41,12 @@ function updateLog() {
   function reload() {
     xhrLog.onreadystatechange = function () {
       if (xhrLog.readyState == 4 && xhrLog.status == 200) {
-        if (xhrLog.responseXML.querySelectorAll("#screenlog li.msg")[0] !== null) {
-          var newLogEntry = xhrLog.responseXML.querySelectorAll("#screenlog li.msg")[0].innerHTML.substring(21);
-          if (messages) {
-            console.log(newLogEntry);
+        if (messages !== null) {
+          if (xhrLog.responseXML.querySelectorAll("#screenlog li.msg")[0] !== null) {
+            var newLogEntry = xhrLog.responseXML.querySelectorAll("#screenlog li.msg")[0].innerHTML.substring(21);
+            if (messages) {
+              console.log(newLogEntry);
+            }
           }
           if (!addNotify.hidden)
             addNotify.innerHTML = "<table><tr><td>" + newLogEntry + "</td></tr></table>";

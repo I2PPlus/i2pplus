@@ -26,7 +26,6 @@ function initFilterBar() {
   var peerinfo = document.querySelectorAll(".peerinfo");
   var seeding = document.querySelectorAll(".seeding");
   var stopped = document.querySelectorAll(".stopped");
-  var storage = window.localStorage.getItem("filter");
   var tfoot = document.getElementById("snarkFoot");
   var badge = document.getElementById("filtercount");
   var badges = document.querySelectorAll("#filtercount.badge");
@@ -39,7 +38,12 @@ function initFilterBar() {
   var filtered = document.querySelectorAll(".filtered");
   var pagenav = document.getElementById("pagenavtop");
   var query = window.location.search;
-  var storage = localStorage.getItem("filter");
+  var path = window.location.pathname;
+  var storageFilter = "filter";
+  if (!path.endsWith("i2psnark/")) {
+    storageFilter = "filter_" + path.replace("/", "");
+  }
+  var storage = window.localStorage.getItem(storageFilter);
 
   checkIfActive();
 
@@ -59,7 +63,7 @@ function initFilterBar() {
   function clean() {
     var cssfilter = document.getElementById("cssfilter");
     checkIfActive();
-    if (cssfilter) {cssfilter.remove();}
+    if (cssfilter.innerText !== null) {cssfilter.innerText = "";}
     if (badge !== null) {badge.innerHTML = "";}
     allOdd.forEach((element) => {element.classList.remove("filtered");});
     allEven.forEach((element) => {element.classList.remove("filtered");});
@@ -84,8 +88,10 @@ function initFilterBar() {
   }
 
   function injectCSS() {
-    var stylesheet = "<style type=text/css id=cssfilter>" + rules + "</style>";
-    document.head.innerHTML += stylesheet;
+//    var stylesheet = "<style type=text/css id=cssfilter>" + rules + "</style>";
+//    document.head.innerHTML += stylesheet;
+    var stylesheet = document.getElementById("cssfilter");
+    stylesheet.innerText = rules;
   }
 
   function showAll() {
@@ -96,7 +102,7 @@ function initFilterBar() {
       pagenav.style.display = "";
     }
     var query = window.location.search;
-    window.localStorage.removeItem("filter");
+    window.localStorage.removeItem(storageFilter);
     btnAll.checked = true;
     btnAll.style.pointerEvents = "none";
   }
@@ -107,7 +113,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnActive.checked = true;
-    window.localStorage.setItem("filter", btnActive.id);
+    window.localStorage.setItem(storageFilter, btnActive.id);
     active.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -118,7 +124,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnInactive.checked = true;
-    window.localStorage.setItem("filter", btnInactive.id);
+    window.localStorage.setItem(storageFilter, btnInactive.id);
     inactive.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -129,7 +135,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnDownloading.checked = true;
-    window.localStorage.setItem("filter", btnDownloading.id);
+    window.localStorage.setItem(storageFilter, btnDownloading.id);
     downloading.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -140,7 +146,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnSeeding.checked = true;
-    window.localStorage.setItem("filter", btnSeeding.id);
+    window.localStorage.setItem(storageFilter, btnSeeding.id);
     seeding.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -151,7 +157,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnComplete.checked = true;
-    window.localStorage.setItem("filter", btnComplete.id);
+    window.localStorage.setItem(storageFilter, btnComplete.id);
     complete.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -162,7 +168,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnIncomplete.checked = true;
-    window.localStorage.setItem("filter", btnIncomplete.id);
+    window.localStorage.setItem(storageFilter, btnIncomplete.id);
     incomplete.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -173,7 +179,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnStopped.checked = true;
-    window.localStorage.setItem("filter", btnStopped.id);
+    window.localStorage.setItem(storageFilter, btnStopped.id);
     stopped.forEach((element) => {element.classList.add("filtered");});
     var count = filtered.length;
     showBadge();
@@ -194,7 +200,7 @@ function initFilterBar() {
      btnComplete.addEventListener("click", () => {onClick();showComplete();});
      btnIncomplete.addEventListener("click", () => {onClick();showIncomplete();});
      btnStopped.addEventListener("click", () => {onClick();showStopped();});
-     switch (window.localStorage.getItem("filter")) {
+     switch (window.localStorage.getItem(storageFilter)) {
        case "all":
          btnAll.checked = true;
          showAll();
@@ -261,7 +267,12 @@ function checkFilterBar() {
 
 function checkPagenav() {
   var pagenav = document.getElementById("pagenavtop");
-  var storage = window.localStorage.getItem("filter");
+  var path = window.location.pathname;
+  var storageFilter = "filter";
+  if (!path.endsWith("i2psnark/")) {
+    storageFilter = "filter_" + path.replace("/", "");
+  }
+  var storage = window.localStorage.getItem(storageFilter);
   if (pagenav !== null) {
     if (storage !== null) {
       pagenav.style.display = "none";
@@ -281,8 +292,13 @@ function refreshFilters() {
   var headers = new Headers();
   var pagenav = document.getElementById("pagenavtop");
   var pagesize = headers.get("X-Snark-Pagesize");
+  var path = window.location.pathname;
   var query = window.location.search;
-  var storage = window.localStorage.getItem("filter");
+  var storageFilter = "filter";
+  if (!path.endsWith("i2psnark/")) {
+    storageFilter = "filter_" + path.replace("/", "");
+  }
+  var storage = window.localStorage.getItem(storageFilter);
   var url = ".ajax/xhr1.html";
   if (xhrsnark.status !== null) {xhrsnark.abort();}
   if (xhrfilter.status !== null) {xhrfilter.abort();}

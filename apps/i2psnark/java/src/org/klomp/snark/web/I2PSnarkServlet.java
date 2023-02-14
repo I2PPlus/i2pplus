@@ -403,8 +403,10 @@ public class I2PSnarkServlet extends BasicServlet {
         if (noCollapse || !collapsePanels) {
             out.write(HEADER_A + _themePath + HEADER_C + "\n");
         }
+        // add placeholder for filterbar css
+        out.write("<style id=cssfilter type=text/css></style>\n");
         out.write("</head>\n" + "<body style=display:none;pointer-events:none id=snarkxhr class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
-        out.write("<iframe name=\"processForm\" id=processForm hidden></iframe>\n");
+        out.write("<iframe name=processForm id=processForm hidden></iframe>\n");
         List<Tracker> sortedTrackers = null;
 /*
         long now = System.currentTimeMillis();
@@ -455,7 +457,8 @@ public class I2PSnarkServlet extends BasicServlet {
             String s = req.getParameter("s");
             if (s != null)
                 out.write(" value=\"" + DataHelper.escapeHTML(s) + '"');
-            out.write("><a href=/i2psnark title=\"");
+            //out.write("><a href=/i2psnark title=\"");
+            out.write("><a href=" + _contextPath + " title=\"");
             out.write(_t("Clear search"));
             out.write("\" hidden>x</a></span><input type=submit value=\"Search\">\n</form>\n");
         }
@@ -514,7 +517,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String pageSize = String.valueOf(_manager.getPageSize());
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
-        resp.setHeader("Accept-Ranges", "none");
+        resp.setHeader("Accept-Ranges", "bytes");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
         resp.setHeader("Permissions-Policy", "fullscreen=(self)");
@@ -529,10 +532,10 @@ public class I2PSnarkServlet extends BasicServlet {
         String pageSize = String.valueOf(_manager.getPageSize());
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
-        resp.setHeader("Accept-Ranges", "none");
+        resp.setHeader("Accept-Ranges", "bytes");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=60");
         //resp.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self';");
-        resp.setHeader("Content-Security-Policy", "default-src 'none'");
+        resp.setHeader("Content-Security-Policy", "default-src 'none'; base-uri 'self'");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
@@ -573,7 +576,8 @@ public class I2PSnarkServlet extends BasicServlet {
             // FIXME only show once
             if (!_manager.util().connected()) {
                 out.write("<noscript>\n<li class=\"noscriptWarning\">" +
-                          _t("Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.",
+                          _t("Warning! Javascript is disabled in your browser. " +
+                          "If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.",
                           "<a href=\"configure\">" + _t("page refresh") + "</a>"));
                 out.write("</li>\n</noscript>\n");
             }
