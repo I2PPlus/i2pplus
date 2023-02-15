@@ -3071,7 +3071,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (debug && _context.isRouterContext()) {
             out.write("<script charset=utf-8 src=\"/themes/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
         } else {
-            out.write("<script charset=utf-8 src=\".resources/js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
+            out.write("<script charset=utf-8 src=\"" + _contextPath + WARBASE + "js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
         }
     }
 
@@ -3114,7 +3114,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("&nbsp;&nbsp;<a href=\"/torrentmgr\" target=_top class=script id=embed>");
             out.write(_t("Switch to Embedded Mode"));
             out.write("</a>");
-            out.write("<a href=\"/i2psnark/configure\" target=_top class=script id=fullscreen>");
+            out.write("<a href=\"" + _contextPath + "/configure\" target=_top class=script id=fullscreen>");
             out.write(_t("Switch to Fullscreen Mode"));
             out.write("</a>");
         }
