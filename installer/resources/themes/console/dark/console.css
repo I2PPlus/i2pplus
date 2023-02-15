@@ -703,9 +703,9 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 td.ipv6{width:1%;max-width:24px}
 td.direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
 .queue span,.duptx span,.duprx span{min-width:0}
-#peers .peer{width:1%;white-space:nowrap}
-#peers .cells td,#tunnels .cells,#profilelist td:not(.separator),#transportSummary tr:not(.tablefooter) td{box-shadow:var(--highlight);border-right:var(--border_softer)}
-.cells tr:hover td,#profiles tr:hover td{box-shadow:none}
+#peers .peer{padding:5px;width:1%;white-space:nowrap}
+#peers .cells tbody td,#tunnels .cells,#profilelist td:not(.separator),#transportSummary tr:not(.tablefooter) td{box-shadow:var(--highlight);border-right:var(--border_softer)}
+.cells tbody tr:hover td,#profiles tbody tr:hover td{box-shadow:none}
 #peers .rx .right,#peers .tx .right{width:1%;min-width:30px}
 #peers .spacer{display:none}
 #peers tr,#peers th:first-child,#peers td:first-child,#profiles tr,#profiles th:first-child,#profiles td:first-child{border-left:var(--border)}
@@ -740,15 +740,17 @@ h3[id="udpcon"]{width:auto}
 #udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tr:hover,#tunnels tr:hover{background:#020}
 #udpconnections tr:hover td,#ntcpconnections tr:hover td,.tunneldisplay tr:hover td{color:var(--ink)}
 #udpconnections th{padding:5px 2px;vertical-align:top;text-align:center}
-#udpconnections td:nth-child(n+13),#udpconnections .tablefooter td:nth-child(n+10){padding-right:1%}
-#ntcpconnections td:not(.rif):not(.rih):not(.rbw),#udpconnections td:not(.rif):not(.rih):not(.rbw){border-right:var(--border_softer)}
-#udpconnections td:not(.rif):not(.rih):not(.rbw):last-child,#ntcpconnections td:not(.rif):not(.rih):not(.rbw):last-child{border-right:var(--border)}
-#udpconnections td:not(.rif):not(rih):first-child{width:1%;padding:2px 4px;white-space:nowrap}
-#udpconnections .tablefooter td,#ntcpconnections .tablefooter td,#transportSummary .tablefooter td{padding:7px 5px;color:var(--ink);text-align:center;font-weight:700}
+#udpconnections td:nth-child(n+13){padding-right:1%}
+#ntcpconnections tbody td:not(.rif):not(.rih):not(.rbw),#udpconnections tbody td:not(.rif):not(.rih):not(.rbw){border-right:var(--border_softer)}
+#udpconnections tbody td:not(.rif):not(.rih):not(.rbw):last-child,#ntcpconnections td:not(.rif):not(.rih):not(.rbw):last-child{border-right:var(--border)}
+#udpconnections td:not(.rif):not(rih):first-child{width:1%;padding:5px;white-space:nowrap}
+#udpconnections tfoot td:not(last-child),#ntcpconnections tfoot td:not(last-child){border-right:none}
 #udpconnections .tablefooter:hover td{border-top:var(--border)}
 #transportSummary th,#transportSummary td,#transportSummary .tablefooter td{padding:8px;width:14%}
 #transportSummary th:first-child,#transportSummary td:first-child,#transportSummary .tablefooter td:first-child{width:30%}
-#peers .tablefooter{background:var(--th)}
+#peers tfoot{background:var(--th)}
+#peers tfoot td,#ntcpconnections tfoot td,#transportSummary .tablefooter td{padding:7px 5px;color:var(--ink);text-align:center;font-weight:700}
+#peers tfoot td:not(first-child),#ntcpconnections tfoot td:not(first-child){border-left:none}
 #peerdefs{margin-bottom:11px}
 #peerdefs td{padding:4px;line-height:1.4;background:repeating-linear-gradient(180deg,#000,#000 1px,#000800 2px,#000800 3px)}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}

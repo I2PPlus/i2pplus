@@ -176,7 +176,7 @@ public class PeerHelper extends HelperBase {
         buf.append("<h3 id=transports>").append(_t("Peer Connections"))
            .append("<label class=script hidden><input name=autorefresh id=autorefresh type=checkbox class=\"optbox slider\" checked=checked>")
            .append(_t("Auto-refresh")).append("</label></h3>\n")
-           .append("<table id=\"transportSummary\">\n<tr>")
+           .append("<table id=\"transportSummary\">\n<thead><tr>")
            .append("<th>").append(_t("Transport")).append("</th>")
            .append("<th title=\"").append(_t("Active in the last minute")).append("\">").append(_t("Count")).append("</th>");
         if (showIPv4) {
@@ -187,7 +187,7 @@ public class PeerHelper extends HelperBase {
             buf.append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
                .append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
         }
-        buf.append("</tr>\n");
+        buf.append("</tr></thead>\n<tbody>\n");
         boolean warnInbound = !_context.router().isHidden() && _context.router().getUptime() > 15*60*1000;
         int[] totals = new int[5];
         int rows = 0;
@@ -230,9 +230,10 @@ public class PeerHelper extends HelperBase {
                 }
                 buf.append("</td></tr>\n");
             }
+            buf.append("</tbody>\n");
         }
         if (rows > 1) {
-            buf.append("<tr class=tablefooter><td><b>").append(_t("Total")).append("</b>");
+            buf.append("<tfoot><tr class=tablefooter><td><b>").append(_t("Total")).append("</b>");
             for (int i = 0; i < 5; i++) {
                 if (!showIPv4 && i > 0 && i < 3)
                     continue;
@@ -246,7 +247,7 @@ public class PeerHelper extends HelperBase {
                         }
                         buf.append(">").append(cnt);
             }
-            buf.append("</td></tr>\n");
+            buf.append("</td></tr></tfoot>\n");
         }
         buf.append("</table>\n");
         out.write(buf.toString());
@@ -323,9 +324,9 @@ public class PeerHelper extends HelperBase {
            .append(nt.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>")
            .append("<label class=script hidden><input name=autorefresh id=autorefresh type=checkbox class=\"optbox slider\" checked=checked>")
            .append(_t("Auto-refresh")).append("</label></h3>\n")
-           .append("<div class=widescroll>\n<table id=ntcpconnections class=cells>\n");
+           .append("<div class=widescroll>\n<table id=ntcpconnections class=cells data-sortable>\n");
         if (peers.size() != 0) {
-            buf.append("<tr><th class=peer>").append(_t("Peer")).append("</th>" +
+            buf.append("<thead><tr><th class=peer>").append(_t("Peer")).append("</th>" +
                        "<th class=direction title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir")).append("</th>" +
                        "<th class=ipv6>").append(_t("IPv6")).append("</th>" +
                        "<th class=idle title=\"").append(_t("Peer inactivity")).append("\">").append(_t("Idle")).append("</th>" +
@@ -335,7 +336,7 @@ public class PeerHelper extends HelperBase {
                        "<th class=tx title=\"").append(_t("Messages sent")).append("\">").append(_t("TX")).append("</th>" +
                        "<th class=rx title=\"").append(_t("Messages received")).append("\">").append(_t("RX")).append("</th>" +
                        "<th class=queue title=\"").append(_t("Queued messages to send to peer")).append("\">").append(_t("Out Queue")).append("</th>" +
-                       "</tr>\n");
+                       "</tr></thead>\n<tbody id=peersNTCP>\n");
         }
         out.write(buf.toString());
         buf.setLength(0);
@@ -417,9 +418,10 @@ public class PeerHelper extends HelperBase {
             out.write(buf.toString());
             buf.setLength(0);
         }
+        buf.append("</tbody>");
 
         if (!peers.isEmpty()) {
-            buf.append("<tr class=tablefooter><td class=peer><b>")
+            buf.append("<tfoot><tr class=tablefooter><td class=peer><b>")
                .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
@@ -435,7 +437,7 @@ public class PeerHelper extends HelperBase {
                        "<td class=rx><span><b>").append(totalRecv).append("</b></span></td>" +
                        "<td>&nbsp;</td></tr>\n");
         }
-        buf.append("</table>\n</div></div>\n");
+        buf.append("</tfoot></table>\n</div></div>\n");
         out.write(buf.toString());
         buf.setLength(0);
     }
@@ -517,9 +519,9 @@ public class PeerHelper extends HelperBase {
         if (isAdvanced()) {
             buf.append("class=\"advancedview\"");
         }
-        buf.append(" class=cells>\n");
+        buf.append(" class=cells data-sortable>\n");
         if(peers.size() != 0) {
-            buf.append("<tr class=smallhead><th class=peer nowrap>").append(_t("Peer")).append("<br>");
+            buf.append("<thead><tr class=smallhead><th class=peer nowrap>").append(_t("Peer")).append("<br>");
             if (sortFlags != FLAG_ALPHA)
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by peer hash"), FLAG_ALPHA);
             buf.append("</th><th class=direction nowrap title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir"))
@@ -577,7 +579,7 @@ public class PeerHelper extends HelperBase {
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by outbound maximum transmit unit"), FLAG_MTU);
                 buf.append("</th>");
             }
-            buf.append("</tr>\n");
+            buf.append("</tr></thead>\n<tbody id=peersSSU>\n");
         }
         out.write(buf.toString());
         buf.setLength(0);
@@ -747,6 +749,7 @@ public class PeerHelper extends HelperBase {
             dupRecvTotal += dupRecv;
             numPeers++;
         }
+        buf.append("</tbody>\n");
 
         if (numPeers > 0) {
             buf.append("<tfoot><tr class=tablefooter><td class=peer><b>")

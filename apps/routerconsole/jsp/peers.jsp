@@ -13,6 +13,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("peer connections")%>
+<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
@@ -46,50 +47,106 @@
 %>
 <jsp:getProperty name="peerHelper" property="peerSummary" />
 </div>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
-document.addEventListener("DOMContentLoaded", function() {
-  setInterval(function() {
-    progressx.show();
-    var uri = (window.location.pathname + window.location.search).substring(1);
-    var xhr = new XMLHttpRequest();
-    if (uri.includes("?transport")) {
-      xhr.open('GET', uri + '&t=' + new Date().getTime(), true);
-    } else {
-      xhr.open('GET', '/peers?t=' + new Date().getTime(), true);
+  var autorefresh = document.getElementById("autorefresh");
+  var ntcpConn = document.getElementById("ntcpconnections");
+  var peersNTCP = document.getElementById("peersNTCP");
+  var peersSSU = document.getElementById("peersSSU");
+  var refreshPeersId = setInterval(refreshPeers, 15000);
+  var sorterNTCP;
+  var sorterSSU;
+  var ssuConn = document.getElementById("udpconnections");
+  var summary = document.getElementById("transportSummary");
+  var url = document.location;
+  var path = location.pathname;
+  var query = location.search;
+  var queryParams = new URL(url.href).searchParams;
+  var xhrPeers = new XMLHttpRequest();
+
+  function initRefresh() {
+    addSortListeners();
+    refreshPeers();
+  }
+
+  function addSortListeners() {
+    if (ntcpConn && !sorterNTCP) {
+      var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
+      ntcpConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
+      ntcpConn.addEventListener('afterSort', function() {progressx.hide();}, true);
+    } else if (ssuConn && !sorterSSU) {
+      var sorterSSU = new Tablesort((ssuConn), {descending: true});
+      ssuConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
+      ssuConn.addEventListener('afterSort', function() {progressx.hide();}, true);
     }
-    xhr.responseType = "document";
-    var udp = document.getElementById("udp");
-    var ntcp = document.getElementById("ntcp");
-    var summary = document.getElementById("transportSummary");
-    var autorefresh = document.getElementById("autorefresh");
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200 && autorefresh.checked) {
-        if (udp) {
-          var udpResponse = xhr.responseXML.getElementById("udp");
-          if (!Object.is(udp.innerHTML, udpResponse.innerHTML))
-            udp.innerHTML = udpResponse.innerHTML;
-        } else if (ntcp) {
-          var ntcpResponse = xhr.responseXML.getElementById("ntcp");
-          if (!Object.is(ntcp.innerHTML, ntcpResponse.innerHTML))
-            ntcp.innerHTML = ntcpResponse.innerHTML;
+  }
+
+  function refreshPeers() {
+    var now = new Date().getTime();
+    if (queryParams.has("transport")) {
+      xhrPeers.open("GET", path + query + "&t=" + now, true);
+    } else {
+      xhrPeers.open("GET", "/peers?t=" + now, true);
+    }
+    xhrPeers.responseType = "document";
+    xhrPeers.onreadystatechange = function () {
+      if (xhrPeers.readyState === 4 && xhrPeers.status === 200 && autorefresh.checked) {
+        addSortListeners();
+        if (ssuConn) {
+          if (peersSSU) {
+            var peersSSUResponse = xhrPeers.responseXML.getElementById("peersSSU");
+            if (peersSSUResponse !== null && peersSSU.innerHTML !== peersSSUResponse.innerHTML) {
+              peersSSU.innerHTML = peersSSUResponse.innerHTML;
+              if (!sorterSSU) {
+                var sorterSSU = new Tablesort((ssuConn), {descending: true});
+              }
+              sorterSSU.refresh();
+              lazyload();
+            }
+          } else {
+            var udpResponse = xhrPeers.responseXML.getElementById("udp");
+            if (!Object.is(udp.innerHTML, udpResponse.innerHTML)) {
+              udp.innerHTML = udpResponse.innerHTML;
+            }
+          }
+        } else if (ntcpConn) {
+          if (peersNTCP) {
+            var peersNTCPResponse = xhrPeers.responseXML.getElementById("peersNTCP");
+            if (peersNTCPResponse !== null && peersNTCP.innerHTML !== peersNTCPResponse.innerHTML) {
+              peersNTCP.innerHTML = peersNTCPResponse.innerHTML;
+              if (!sorterNTCP) {
+                var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
+              }
+              sorterNTCP.refresh();
+              lazyload();
+            }
+          } else {
+            var ntcpResponse = xhrPeers.responseXML.getElementById("ntcp");
+            if (!Object.is(ntcp.innerHTML, ntcpResponse.innerHTML)) {
+              ntcp.innerHTML = ntcpResponse.innerHTML;
+            }
+          }
         } else if (summary) {
-          var summaryResponse = xhr.responseXML.getElementById("transportSummary");
-          if (!Object.is(summary.innerHTML, summaryResponse.innerHTML))
+          var summaryResponse = xhrPeers.responseXML.getElementById("transportSummary");
+          if (!Object.is(summary.innerHTML, summaryResponse.innerHTML)) {
             summary.innerHTML = summaryResponse.innerHTML;
+          }
         }
       }
     }
-    window.addEventListener("DOMContentLoaded", progressx.hide());
-    if (ntcp != null)
-        ntcp.addEventListener("mouseover", lazyload());
-    if (udp != null)
-        udp.addEventListener("mouseover", lazyload());
-    xhr.send();
-  }, 15000);
-}, true);
-window.addEventListener("DOMContentLoaded", progressx.hide());
-window.addEventListener("pageshow", lazyload());
+    xhrPeers.send();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    lazyload();
+    initRefresh();
+    progressx.hide();
+    if (ntcpConn !== null) {ntcpConn.addEventListener("mouseover", lazyload());}
+    if (ssuConn !== null) {ssuConn.addEventListener("mouseover", lazyload());}
+  });
 </script>
 </body>
 </html>

@@ -28,6 +28,9 @@ ul{margin:20px 0;padding:0}
 table{margin:1px 0 5px;width:100%;font-size:9pt;border:1px solid var(--border_inner);border-collapse:collapse;background:#fafaff}
 table hr{padding:0;color:#adadeb;background:#adadeb;border:0 solid #afafcf;margin:0;height:1px;display:none}
 th{padding:6px 5px;color:var(--ink_light);text-align:left;font-size:9pt;line-height:1.1;border-bottom:1px solid var(--border_inner);border-top:1px solid var(--border_inner);vertical-align:middle;background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
+thead{border: 1px solid var(--border_inner)}
+th:first-child{border-left:var(--border_inner)}
+th:last-child{border-right:var(--border_inner)}
 th code{font-weight:700;margin-left:3px}
 tr{vertical-align:middle;contain:layout}
 tr:nth-child(even),pre#activetransports,#debug .sentTags:hover td,#debug .expiry:hover td{background:var(--bg),var(--row)}
@@ -347,7 +350,7 @@ h3:active .badge{display:none}
 .main,.sb,.logo,.news#news{background:#f8f8ff var(--bg) repeat}
 .main{margin:-12px 0 4px 214px;padding:0 15px 10px;width:auto;min-width:546px;text-align:left;color:var(--ink);border:1px solid var(--border);border-radius:0 0 2px 2px;box-shadow:var(--bevel)}
 .main hr,hr{color:#7e7fb9;background:#7e7fb9;height:1px;border:0 solid var(--border_inner);margin:10px 0}
-.main .tunneldisplay tr:last-child td,.main #tunnelpeercount tr:nth-last-child(2) td,.main #udpconnections tr:nth-last-child(2) td,.main #ntcpconnections tr:nth-last-child(2) td{border-bottom:1px solid var(--border_inner)}
+.main .tunneldisplay tr:last-child td,td{border-bottom:1px solid var(--border_soft)}
 .pending:nth-of-type(2)::before{content:"\2022\2008\2008"}
 #help td:first-child,#tunnels td:first-child,#peers #ntcpconnections td:not(.rif):first-child{border-left:1px solid var(--border_inner)}
 #lookupCondensed{display:none}
@@ -355,8 +358,8 @@ h3:active .badge{display:none}
 #reseed_urlselection.optionsingle,#reseedproxytype,#config_reseed .optionlist:hover,#graphs .optionlist:hover,#config_network .optionlist:hover,#config_i2cp .optionlist:hover{background:#fff}
 #resetreseed{padding:5px 0;border:none;background:none}
 td.tabletextarea{padding:0;background:#fafaff}
-#tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,.cells td,#profilelist td:not(:first-child),#profile_defs td:not(:first-child),#floodfills td:not(:first-child),#debug td:not(:first-child),#jardump td:not(:first-child),#jobstats td:not(:first-child),#eventlog td:not(:first-child),#webappconfig td:not(:first-child),#tunnelconfig td:not(:first-child),#sidebarconf td:not(:first-child),#configstats td:not(:first-child),#loggingoptions td:not(:first-child),#addkeyring td:not(:first-child),.homelinkedit td:not(:first-child),#clientconfig td:not(:first-child),.netdbentry td:not(:first-child),#netdblookup td:not(:first-child),#peerdefs td:not(:first-child),#help td:not(.infohelp):not(.infowarn),#pluginconfig td:not(:first-child),#thresholds td:not(:first-child),#leasesetdebug td:not(:first-child),#enviro td:not(:first-child),#routerinformation td:not(:first-child),#udpconnections td:nth-child(n+2){border-left:var(--border_soft)}
-#tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,#profilelist td,#profile_defs td,#floodfills td,#debug td,#jardump td,#jobstats td,#eventlog td,#webappconfig td,#tunnelconfig td,#sidebarconf td,#configstats td,#loggingoptions td,#addkeyring td,.homelinkedit td,#clientconfig td,.netdbentry td,#netdblookup td,#peerdefs td,#help td:not(.infohelp):not(.infowarn),#pluginconfig td,#thresholds td,#leasesetdebug td,#enviro td,#routerinformation td{box-shadow:var(--highlight);background:rgba(240,240,255,.4)}
+#tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,.cells td,#profilelist tbody td:not(:first-child),#profile_defs td:not(:first-child),#floodfills td:not(:first-child),#debug td:not(:first-child),#jardump td:not(:first-child),#jobstats td:not(:first-child),#eventlog td:not(:first-child),#webappconfig td:not(:first-child),#tunnelconfig td:not(:first-child),#sidebarconf td:not(:first-child),#configstats td:not(:first-child),#loggingoptions td:not(:first-child),#addkeyring td:not(:first-child),.homelinkedit td:not(:first-child),#clientconfig td:not(:first-child),.netdbentry td:not(:first-child),#netdblookup td:not(:first-child),#peerdefs td:not(:first-child),#help td:not(.infohelp):not(.infowarn),#pluginconfig td:not(:first-child),#thresholds td:not(:first-child),#leasesetdebug td:not(:first-child),#enviro td:not(:first-child),#routerinformation td:not(:first-child),#udpconnections tbody td:nth-child(n+2){border-left:var(--border_soft)}
+#tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,#profilelist tbody td,#profile_defs td,#floodfills tbody td,#debug td,#jardump td,#jobstats td,#eventlog td,#webappconfig td,#tunnelconfig td,#sidebarconf td,#configstats td,#loggingoptions td,#addkeyring td,.homelinkedit td,#clientconfig td,.netdbentry td,#netdblookup td,#peerdefs td,#help td:not(.infohelp):not(.infowarn),#pluginconfig td,#thresholds td,#leasesetdebug td,#enviro td,#routerinformation td{box-shadow:var(--highlight);background:rgba(240,240,255,.4)}
 #tunnels .configpeer img,#profiles .configpeer img,#peers .configpeer img{opacity:0}
 #tunnels h3 a[href^="/configtunnels#"]:active,#logs a.configure:active::after,#logs a.delete:active::after{background-size:12px}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs a.delete::after,#logs a.configure::after{margin-top:2px;margin-bottom:-1px;width:16px;height:16px;float:right;background:var(--settings) no-repeat center center/16px;content:""}
@@ -600,7 +603,7 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 .main[id^="config_"] th{font-size:9.5pt}
 .main[id^="config_"] .th_title,#configstats th,#config_family th{font-size:11pt}
 .main[id^="config_"] th:first-child{padding-left:10px}
-div[id^="config"] tr:last-child td,#events tr:last-child td,#profiles tr:last-child td,#peers tr:last-child td,#tunnels tr:last-child td,td.tabletextarea,.configtable tr:nth-last-child(2) td,#consolepass tr:first-child td,td.infohelp,#updatehelper,#i2pupdates tr:first-child td,#i2pupdates tr:nth-child(2) td{border-bottom:1px solid var(--border_inner)}
+div[id^="config"] tr:last-child td,#events tr:last-child td,#profiles tr:last-child td,#tunnels tr:last-child td,td.tabletextarea,.configtable tr:nth-last-child(2) td,#consolepass tr:first-child td,td.infohelp,#updatehelper,#i2pupdates tr:first-child td,#i2pupdates tr:nth-child(2) td{border-bottom:1px solid var(--border_inner)}
 .th_title,#consolepass tr:first-child td,td.infohelp,#i2pupdates tr:nth-child(2) td,#updatehelper{border-top:1px solid var(--border_inner)}
 #tunnelconfig tr:last-child,#webappconfig tr:last-child{background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px)}
 #clientconfig td:first-child label{display:inline-block;vertical-align:middle}
@@ -973,6 +976,8 @@ h3#scheduledjobs + ol li::before{background:var(--timer) no-repeat 6px center/12
 .cells, .cells td{padding-top:4px;padding-bottom:4px;border-left:var(--border_soft);border-top:var(--border_soft);border-bottom:var(--border_soft)}
 .tablefooter{background:#f8f8ff}
 .tablefooter tr,.tablefooter td{padding:8px 2px;line-height:1.1;font-size:9pt;border-top:1px solid var(--border_inner);border-bottom:1px solid var(--border_inner);background:#f8f8ff}
+tfoot td:not(:first-child),#peers tfoot td:not(:first-child){border-left:none;box-shadow:none}
+tfoot td:not(:last-child),#peers tfoot td:not(:last-child){border-right:none;box-shadow:none}
 .formaction{margin-top:-15px;padding:5px;text-align:right;border:1px solid var(--border_inner);background:#fafaff}
 .footnote,.footnote hr{display:none}
 .topness{margin-top:0;margin-right:5px;margin-bottom:5px;font-size:8pt;text-align:right}
