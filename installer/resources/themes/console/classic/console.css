@@ -26,11 +26,10 @@ i{padding-right:1px}
 .links li b:first-of-type{color:#1f7096}
 p{padding:5px 20px 0 20px;text-align:justify}
 pre{margin:0 20px;padding-top:10px;width:95%;overflow:auto;font-size:8.5pt}
+thead,tfoot{border:var(--border)}
 tr,h3,h4,.routerid,.flag{contain:paint}
 th,td{position:relative}
-tr:hover th{color:var(--ink)}
-tt,code,.bucket{color:var(--code)}
-tt,pre,code,.bucket,#logs li,#servicelogs li{font:8.5pt var(--monospaced)}
+tr:hover th{color:var(--ink)}code,.bucket{color:var(--code)}pre,code,.bucket,#logs li,#servicelogs li{font:8.5pt var(--monospaced)}
 .refresh{margin-top:10px;margin-bottom:10px;padding:2px 0}
 .refreshpage{margin:0 0 -2px;padding:2px;width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--refresh) no-repeat center center/16px}
 .refreshpage:hover,.refreshpage:focus{background:var(--refresh_hover) no-repeat center center/16px}
@@ -1817,11 +1816,13 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #ntcpconnections td:nth-child(4),#ntcpconnections td:nth-child(5),#udpconnections td:nth-child(4),#udpconnections td:nth-child(5),#udpconnections td:nth-child(8),#udpconnections td:nth-child(12){white-space:nowrap}
 #ntcpconnections td:nth-child(n+6) span,#ntcpconnections .tablefooter td:nth-child(n+5) span{ min-width:40px;display:inline-block}
 #ntcpconnections td:nth-last-child(2),#udpconnections td:last-child,#profiles td:last-child{border-right:var(--border)}
-#udpconnections .tablefooter td,#ntcpconnections .tablefooter td{padding-left:5px;padding-right:5px}
+#udpconnections tfoot td,#ntcpconnections tfoot td{padding-left:5px;padding-right:5px}
 #ntcpconnections td span:empty{display:none}
-#ntcpconnections tr:nth-last-child(n+2) td:not(:last-child),#udpconnections tr:nth-last-child(n+2) td:not(:last-child),#profilelist td:not(:last-child),#profile_defs td:not(:last-child),#floodfills td:not(.rif):not(.rih):not(.ribw):not(:last-child),#tunnelPeerCount td:not(:last-child){border-right:var(--border_softer)}
-#ntcpconnections tr:nth-last-child(n+2) td::after,#udpconnections tr:nth-last-child(n+2) td::after,#profilelist td:not(.rif):not(.rih)::after,#profile_defs td::after,#floodfills td:not(.rif):not(.rih):not(.ribw)::after{content:"";position:absolute;top:-1px;right:-1px;height:1px;width:1px;display:inline-block;background:var(--border_color)}
+#ntcpconnections tbody td:not(:last-child),#udpconnections tbody td:not(:last-child),#profilelist td:not(:last-child),#profile_defs td:not(:last-child),#floodfills td:not(.rif):not(.rih):not(.ribw):not(:last-child),#tunnelPeerCount td:not(:last-child){border-right:var(--border_softer)}
+#ntcpconnections tbody td::after,#udpconnections tbody td::after,#profilelist td:not(.rif):not(.rih)::after,#profile_defs td::after,#floodfills td:not(.rif):not(.rih):not(.ribw)::after{content:"";position:absolute;top:-1px;right:-1px;height:1px;width:1px;display:inline-block;background:var(--border_color)}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before,#ntcpconnections td.queue:empty::before{content:""}
+#peers #ntcpconnections th:first-child,#ntcpconnections td:first-child{border-left:var(--border)}
+#peers #ntcpconnections th:last-child,#ntcpconnections td:last-child{border-right:var(--border)}
 #udpcon,#ntcpcon{margin-bottom:-1px}
 #udpcon{margin-top:9px}
 #udpconnections th{padding-top:3px;vertical-align:top;background:var(--bg)}

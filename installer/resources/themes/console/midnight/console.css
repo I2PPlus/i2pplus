@@ -1703,10 +1703,10 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .sortup,.sortdown,.sortupactive,.sortdownactive{margin:4px 1px 0;padding:1px 0;width:16px;height:12px;display:inline-block;vertical-align:middle;text-align:center;border:1px solid #117;border:var(--border_inner);border-radius:1px;background-size:10px auto,100%}
 .sortup,.sortdown{box-shadow:var(--highlight);opacity:.5}
 .sortup img,.sortdown img,.sortupactive img,.sortdownactive img{margin:0;padding:0;opacity:0;width:16px;height:14px;vertical-align:middle;text-align:center}
-.sortup{background:var(--mv_up) no-repeat center center/16px 14px,linear-gradient(180deg,#004,#000)}
-.sortdown{background:var(--mv_down) no-repeat center center/16px 14px,linear-gradient(180deg,#004,#000)}
-.sortup:hover{border:1px solid var(--hover);background:var(--mv_up_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
-.sortdown:hover{border:1px solid var(--hover);background:var(--mv_down_hover) no-repeat center center,linear-gradient(180deg,#000,#004);opacity:1}
+.sortup{background:var(--mv_up) no-repeat center center/10px 8px,linear-gradient(180deg,#004,#000)}
+.sortdown{background:var(--mv_down) no-repeat center center/10px 8px,linear-gradient(180deg,#004,#000)}
+.sortup:hover{border:1px solid var(--hover);background:var(--mv_up_hover) no-repeat center center/10px 8px,linear-gradient(180deg,#000,#004);opacity:1}
+.sortdown:hover{border:1px solid var(--hover);background:var(--mv_down_hover) no-repeat center center/10px 8px,linear-gradient(180deg,#000,#004);opacity:1}
 .sortup a:focus,.sortdown a:focus{margin-top:-1px;height:14px;width:16px;display:inline-block;border-radius:1px;background:rgba(237,207,255,.2)}
 .sortupactive,.sortdownactive{border:1px solid #005;box-shadow:inset 2px 2px 1px #000;opacity:1}
 .sortupactive{background:var(--mv_up_hover) no-repeat center center,#005}

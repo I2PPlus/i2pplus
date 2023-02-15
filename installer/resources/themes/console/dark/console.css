@@ -685,13 +685,13 @@ form[action="events"]{background:#000}
 .sortup img,.sortdown img,.sortupactive img,.sortdownactive img{margin:0;padding:0;opacity:0;width:16px;height:14px;vertical-align:middle;text-align:center}
 .sortup:hover,.sortdown:hover{opacity:.9;transition:ease all .3s}
 .sortupactive,.sortdownactive{box-shadow:var(--highlight),inset 2px 2px 2px rgba(0,0,0,.5);opacity:1}
-.sortup{background:var(--mv_up) var(--center),var(--btn)}
-.sortup:hover{border:1px solid var(--hover);background:#000 var(--mv_up_hover) var(--center)}
+.sortup{background:var(--mv_up) var(--center)/10px 8px,var(--btn)}
+.sortup:hover{border:1px solid var(--hover);background:#000 var(--mv_up_hover) var(--center)/10px 8px}
 .sortup a:focus,.sortdown a:focus{margin-top:-1px;width:16px;height:14px;display:inline-block}
-.sortupactive{background:#f60 var(--mv_up_active) var(--center)}
-.sortdown{background:var(--mv_down) var(--center),var(--btn)}
-.sortdown:hover{border:1px solid var(--hover);background:#000 var(--mv_down_hover) var(--center)}
-.sortdownactive{background:#f60 var(--mv_down_active) var(--center)}
+.sortupactive{background:#f60 var(--mv_up_active) var(--center)/10px 8px}
+.sortdown{background:var(--mv_down) var(--center)/10px 8px,var(--btn)}
+.sortdown:hover{border:1px solid var(--hover);background:#000 var(--mv_down_hover) var(--center)/10px 8px}
+.sortdownactive{background:#f60 var(--mv_down_active) var(--center)/10px 8px}
 .backlogged{line-height:0}
 pre#activetransports{margin:0 20px 0 0;padding:15px 5px 5px 15px;width:calc(100% - 42px);border:var(--border);background:#000}
 a[name="chelp"]:hover,a[name="help"]:hover,a[name="chelp"]:active,a[name="help"]:active{color:var(--ink);text-decoration:none;text-shadow:none}
