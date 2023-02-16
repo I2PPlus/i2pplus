@@ -37,6 +37,10 @@
 %>
 <h1 class=netwrk><%=intl._t("Network Peers")%> &ndash; SSU</h1>
 <%
+    } else if (req.equals("ssudebug")) {
+%>
+<h1 class=netwrk><%=intl._t("Network Peers")%> &ndash; SSU (<%=intl._t("Advanced")%>)</h1>
+<%
     }
 %>
 <div class=main id="peers">

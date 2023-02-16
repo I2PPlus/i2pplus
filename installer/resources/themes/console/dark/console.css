@@ -764,6 +764,7 @@ h3[id="udpcon"]{width:auto}
 #transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
+#peers #udpconnections:not(.advancedview) td:nth-last-child(2){border-right:var(--border)}
 
 /* profiles */
 .profilegroup{margin:3px 0 3px 10px;display:inline-block}
