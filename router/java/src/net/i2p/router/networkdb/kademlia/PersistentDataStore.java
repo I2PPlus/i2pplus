@@ -301,10 +301,9 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     private void write(Hash key, DatabaseEntry data) {
-        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(key);
+        RouterInfo ri = (RouterInfo) data;
         boolean isHidden = _context.router().isHidden();
-        RouterInfo us = _context.netDb().lookupRouterInfoLocally(_context.routerHash());
-        boolean isUs = us != null && us.equals(_context.routerHash());
+        boolean isUs = key.equals(_context.routerHash());
         OutputStream fos = null;
         File dbFile = null;
 
