@@ -733,7 +733,7 @@ h3[id="udpcon"]{width:auto}
 #udpconnections td,#ntcpconnections td,.tunneldisplay td{color:#bb7}
 #ntcpconnections td span:empty{display:none}
 #ntcpconnections td:nth-child(4),#ntcpconnections td:nth-child(5),#udpconnections td:nth-child(4),#udpconnections td:nth-child(5),#udpconnections td:nth-child(8),#udpconnections td:nth-child(12){white-space:nowrap}
-#ntcpconnections td:nth-child(n+6) span,#ntcpconnections .tablefooter td:nth-child(n+6) span{min-width:40px;display:inline-block;text-align:right}
+#ntcpconnections td:nth-child(n+7) span,#ntcpconnections tfoot td:nth-child(n+7) span{min-width:40px;display:inline-block;text-align:right}
 #udpconnections table{overflow-x:auto}
 #udpconnections table i{font-weight:700;line-height:1.5;letter-spacing:.1em}
 #udpconnections tr a img{margin-top:3px}
@@ -764,7 +764,7 @@ h3[id="udpcon"]{width:auto}
 #transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
-#peers #udpconnections:not(.advancedview) td:nth-last-child(2){border-right:var(--border)}
+#peers #udpconnections:not(.advancedview) td:not(.rif):not(.rih):not(.rbw):nth-last-child(2){border-right:var(--border)}
 #peers .caps{width:1%;white-space:nowrap;text-align:center}
 
 /* profiles */
@@ -2859,7 +2859,7 @@ span#newtab{margin-top:4px}
 .tunnel_peer{display:inline-block;vertical-align:middle}
 .rid,.ric{width:unset;box-shadow:0 0 0 1px #000}
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_soft)!important;background:var(--badge)}
-.rid td,tr:hover .rid td,#floodfills tr:hover .rid td {line-height:1;font-family:var(--monospaced);letter-spacing:.1em}
+.rid td,tr:hover .rid td,#floodfills tr:hover .rid td {font-family:var(--monospaced);letter-spacing:.1em}
 .rid .rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%)}
 .rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
