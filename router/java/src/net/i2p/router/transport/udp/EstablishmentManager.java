@@ -656,18 +656,18 @@ class EstablishmentManager {
 
         boolean isNew = false;
 
-            if (state == null)
-                state = _inboundStates.get(from);
-            if (state == null) {
-                if (_context.blocklist().isBlocklisted(fromIP)) {
-                    if (_log.shouldInfo())
-                        _log.info("Received SessionRequest from blocklisted IP: " + from);
-                    _context.statManager().addRateData("udp.establishBadIP", 1);
-                    return; // drop the packet
-                }
-                if (!_context.commSystem().isExemptIncoming(Addresses.toString(fromIP))) {
+        if (state == null)
+            state = _inboundStates.get(from);
+        if (state == null) {
+            if (_context.blocklist().isBlocklisted(fromIP)) {
+                if (_log.shouldInfo())
+                    _log.info("Received SessionRequest from blocklisted IP: " + from);
+                _context.statManager().addRateData("udp.establishBadIP", 1);
+                return; // drop the packet
+            }
+            if (!_context.commSystem().isExemptIncoming(Addresses.toString(fromIP))) {
                 if (!shouldAllowInboundEstablishment()) {
-                    if (_log.shouldWarn()) {
+                    if (_log.shouldWarn())
                         _log.warn("Dropping InboundEstablish -> Increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                     _context.statManager().addRateData("udp.establishDropped", 1);
                     return; // drop the packet
