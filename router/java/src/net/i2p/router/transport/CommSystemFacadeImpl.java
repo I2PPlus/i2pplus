@@ -725,7 +725,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (caps.contains("f"))
                     buf.append("f");
                 if (caps.contains("U"))
-                    buf.append("U"); 
+                    buf.append("U");
                 buf.append("\" title=\"");
                 buf.append(_t("Show all routers with this capability in the NetDb"));
                 buf.append("\">");
@@ -746,6 +746,43 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
            }
         }
         buf.append("</td></tr></table>");
+        return buf.toString();
+    }
+
+    /** Render peer's caps
+     * @since 0.9.58+
+     */
+    @Override
+    public String renderPeerCaps(Hash peer) {
+        StringBuilder buf = new StringBuilder(128);
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+        String c = getCountry(peer);
+        String h = peer.toBase64();
+        buf.append("<table class=\"rid ric\"><tr>");
+        if (ri != null) {
+            String caps = ri.getCapabilities();
+            String v = ri.getVersion();
+            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
+            buf.append("<td class=\"rbw");
+                if (caps.contains("f"))
+                    buf.append(" isff");
+                if (caps.contains("U"))
+                    buf.append(" isU");
+                buf.append("\"><a href=\"/netdb?caps=");
+                buf.append(getCapacity(peer));
+                if (caps.contains("f"))
+                    buf.append("f");
+                if (caps.contains("U"))
+                    buf.append("U");
+                buf.append("\" title=\"");
+                buf.append(_t("Show all routers with this capability in the NetDb"));
+                buf.append("\">");
+                buf.append(getCapacity(peer));
+                buf.append("</a>");
+        } else {
+            buf.append("<td class=rbw>?");
+        }
+        buf.append("</td></tr></table>\n");
         return buf.toString();
     }
 
