@@ -48,6 +48,7 @@ import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.router.util.DecayingHashSet;
 import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
 import net.i2p.util.HexDump;
@@ -255,6 +256,7 @@ class EstablishmentManager {
         _context.statManager().createRateStat("udp.dupDHX", "Session request replay (duplicate X)", "Transport [UDP]", UDPTransport.RATES);
         if (_enableSSU2)
             _context.statManager().createRequiredRateStat("udp.inboundTokenLifetime", "SSU2 token lifetime (ms)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.inboundConn", "Inbound UDP Connection", "udp", new long[] { 60*1000L } );
     }
 
     public synchronized void startup() {
@@ -583,11 +585,58 @@ class EstablishmentManager {
 
     /**
      * Should we allow another inbound establishment?
-     * Used to throttle outbound hole punches.
+     *
      * @since 0.9.2
      */
     public boolean shouldAllowInboundEstablishment() {
-        return _inboundStates.size() < getMaxInboundEstablishers();
+        if (_inboundStates.size() >= getMaxInboundEstablishers())
+            return false;
+        RateStat rs = _context.statManager().getRate("udp.inboundConn");
+        if (rs == null)
+            return true;
+        Rate r = rs.getRate(60*1000);
+        if (r == null)
+            return true;
+        int last;
+        long periodStart;
+        RateAverages ra = RateAverages.getTemp();
+        synchronized(r) {
+            last = (int) r.getLastEventCount();
+            periodStart = r.getLastCoalesceDate();
+            r.computeAverages(ra, true);
+        }
+        // compare incoming conns per ms, min of 1 per second or 60/minute
+        if (last < 15)
+            last = 15;
+        int total = (int) ra.getTotalEventCount();
+        int current = total - last;
+        if (current <= 0)
+            return true;
+        // getLastEventCount() is normalized to the rate, so we use the canonical period
+        int lastPeriod = 60*1000;
+        double avg = ra.getAverage();
+        int currentTime = (int) (_context.clock().now() - periodStart);
+        if (currentTime <= 5*1000)
+            return true;
+        // compare incoming conns per ms
+        // both of these are scaled by actual period in coalesce
+        float lastRate = last / (float) lastPeriod;
+        float currentRate = (float) (current / (double) currentTime);
+        float factor = _transport.haveCapacity(95) ? 1.05f : 0.95f;
+        float minThresh = factor * lastRate;
+        if (currentRate > minThresh) {
+            // chance in 128
+            // max out at about 25% over the last rate
+            int probAccept = Math.max(1, ((int) (4 * 128 * currentRate / minThresh)) - 512);
+            if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
+                if (_log.shouldWarn())
+                    _log.warn("Probabalistic drop incoming (p=" + probAccept  +
+                              "/128 last rate " + last + "/min current rate " +
+                              (int) (currentRate * 60*1000));
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -598,7 +647,8 @@ class EstablishmentManager {
      * @param state as looked up in PacketHandler, but probably null unless retransmitted
      */
     void receiveSessionRequest(RemoteHostId from, InboundEstablishState state, UDPPacketReader reader) {
-        if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(from.getIP())) {
+        byte[] fromIP = from.getIP();
+        if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
             if (_log.shouldInfo())
                 _log.info("Received invalid SessionRequest from: " + from);
             return;
@@ -609,30 +659,20 @@ class EstablishmentManager {
             if (state == null)
                 state = _inboundStates.get(from);
             if (state == null) {
-                // TODO this is insufficient to prevent DoSing, especially if
-                // IP spoofing is used. For further study.
+                if (_context.blocklist().isBlocklisted(fromIP)) {
+                    if (_log.shouldInfo())
+                        _log.info("Received SessionRequest from blocklisted IP: " + from);
+                    _context.statManager().addRateData("udp.establishBadIP", 1);
+                    return; // drop the packet
+                }
+                if (!_context.commSystem().isExemptIncoming(Addresses.toString(fromIP))) {
                 if (!shouldAllowInboundEstablishment()) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Dropping InboundEstablish -> increase " + PROP_MAX_CONCURRENT_ESTABLISH);
-                        if (_log.shouldDebug()) {
-                            StringBuilder buf = new StringBuilder(4096);
-                            buf.append("Active: ").append(_inboundStates.size()).append('\n');
-                            for (InboundEstablishState ies : _inboundStates.values()) {
-                                 buf.append(ies.toString()).append('\n');
-                            }
-                            _log.debug(buf.toString());
-                        }
-                    }
+                        _log.warn("Dropping InboundEstablish -> Increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                     _context.statManager().addRateData("udp.establishDropped", 1);
                     return; // drop the packet
                 }
 
-                if (_context.blocklist().isBlocklisted(from.getIP())) {
-                    if (_log.shouldInfo())
-                        _log.info("Received SessionRequest from blocklisted IP address: " + from);
-                    _context.statManager().addRateData("udp.establishBadIP", 1);
-                    return; // drop the packet
-                }
                 synchronized (_inboundBans) {
                     Long exp = _inboundBans.get(from);
                     if (exp != null) {
@@ -648,7 +688,7 @@ class EstablishmentManager {
                 }
                 if (!_transport.allowConnection())
                     return; // drop the packet
-                byte[] fromIP = from.getIP();
+                }
                 state = new InboundEstablishState(_context, fromIP, from.getPort(),
                                                   _transport.getExternalPort(fromIP.length == 16),
                                                   _transport.getDHBuilder(),
@@ -660,6 +700,8 @@ class EstablishmentManager {
                     _context.statManager().addRateData("udp.dupDHX", 1);
                     return; // drop the packet
                 }
+
+                _context.statManager().addRateData("udp.inboundConn", 1);
 
                 InboundEstablishState oldState = _inboundStates.putIfAbsent(from, state);
                 isNew = oldState == null;
@@ -701,50 +743,53 @@ class EstablishmentManager {
      * @since 0.9.54
      */
     void receiveSessionOrTokenRequest(RemoteHostId from, InboundEstablishState2 state, UDPPacket packet) {
-        if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(from.getIP())) {
+        byte[] fromIP = from.getIP();
+        if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
             if (_log.shouldWarn())
                 _log.warn("[SSU2] Received session request from invalid address/port: " + from);
             return;
         }
         boolean isNew = false;
         if (state == null) {
-            // TODO this is insufficient to prevent DoSing, especially if
-            // IP spoofing is used. For further study.
-            if (!shouldAllowInboundEstablishment()) {
-                if (_log.shouldWarn())
-                    _log.warn("[SSU2] Dropping inbound establish, increase " + PROP_MAX_CONCURRENT_ESTABLISH);
-                _context.statManager().addRateData("udp.establishDropped", 1);
-                sendTerminationPacket(from, packet, REASON_LIMITS);
-                return;
-            }
-            if (_context.blocklist().isBlocklisted(from.getIP())) {
+            if (_context.blocklist().isBlocklisted(fromIP)) {
                 if (_log.shouldInfo())
-                    _log.info("[SSU2] Received SessionRequest from blocklisted IP: " + from);
+                    _log.info("Received SessionRequest from blocklisted IP: " + from);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 if (!_context.commSystem().isInStrictCountry())
                     sendTerminationPacket(from, packet, REASON_BANNED);
                 // else drop the packet
                 return;
             }
-            synchronized (_inboundBans) {
-                Long exp = _inboundBans.get(from);
-                if (exp != null) {
-                    if (exp.longValue() >= _context.clock().now()) {
-                        // this is common, finally get a packet after the IES2 timeout
-                        if (_log.shouldInfo())
-                            _log.info("[SSU2] Received SessionRequest from temporarily banned peer: " + from);
-                         _context.statManager().addRateData("udp.establishBadIP", 1);
-                         // use this code for a temp ban
-                         sendTerminationPacket(from, packet, REASON_MSG1);
-                         return;
-                    }
-                    // expired
-                    _inboundBans.remove(from);
+            if (!_context.commSystem().isExemptIncoming(Addresses.toString(fromIP))) {
+                // TODO this is insufficient to prevent DoSing, especially if
+                // IP spoofing is used. For further study.
+                if (!shouldAllowInboundEstablishment()) {
+                    if (_log.shouldWarn())
+                        _log.warn("[SSU2] Dropping inbound establish, increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                    _context.statManager().addRateData("udp.establishDropped", 1);
+                    sendTerminationPacket(from, packet, REASON_LIMITS);
+                    return;
                 }
-            }
-            if (!_transport.allowConnection()) {
-                sendTerminationPacket(from, packet, REASON_LIMITS);
-                return;
+                synchronized (_inboundBans) {
+                    Long exp = _inboundBans.get(from);
+                    if (exp != null) {
+                        if (exp.longValue() >= _context.clock().now()) {
+                            // this is common, finally get a packet after the IES2 timeout
+                            if (_log.shouldInfo())
+                                _log.info("[SSU2] Received SessionRequest from temporarily banned peer: " + from);
+                             _context.statManager().addRateData("udp.establishBadIP", 1);
+                             // use this code for a temp ban
+                             sendTerminationPacket(from, packet, REASON_MSG1);
+                             return;
+                        }
+                        // expired
+                        _inboundBans.remove(from);
+                    }
+                }
+                if (!_transport.allowConnection()) {
+                    sendTerminationPacket(from, packet, REASON_LIMITS);
+                    return;
+                }
             }
             try {
                 state = new InboundEstablishState2(_context, _transport, packet);
@@ -756,6 +801,8 @@ class EstablishmentManager {
                 _context.statManager().addRateData("udp.establishDropped", 1);
                 return;
             }
+
+            _context.statManager().addRateData("udp.inboundConn", 1);
 
           /****
             // A token request or session request with a bad token is

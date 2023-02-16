@@ -723,6 +723,7 @@ public class Blocklist {
      *
      * @param ip IPv4 or IPv6
      * @param source for logging only, may be null
+     * @return true if added
      * @since 0.9.57
      */
     public void add(byte ip[], String source) {
@@ -739,6 +740,8 @@ public class Blocklist {
                 }
             }
             rv = add(toInt(ip));
+            if (rv)
+                _context.commSystem().removeExemption(Addresses.toString(ip));
         } else if (ip.length == 16) {
             if (!_haveIPv6)
                 return;
@@ -753,6 +756,8 @@ public class Blocklist {
                 }
             }
             rv = add(new BigInteger(1, ip));
+            if (rv)
+                _context.commSystem().removeExemption(Addresses.toCanonicalString(ip));
         } else {
             return;
         }
