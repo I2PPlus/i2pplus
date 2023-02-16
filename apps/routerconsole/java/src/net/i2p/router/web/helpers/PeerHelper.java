@@ -42,8 +42,8 @@ public class PeerHelper extends HelperBase {
     private static final String titles[] = {
                                             _x("Summary"),
                                              "NTCP",
-                                             "SSU",
-                                             "SSU (Advanced)"
+                                             "SSU"
+                                             //"SSU (Advanced)"
                                            };
 
     private static final String links[] = {
@@ -340,7 +340,7 @@ public class PeerHelper extends HelperBase {
            .append("<div class=widescroll>\n<table id=ntcpconnections class=cells data-sortable>\n");
         if (peers.size() != 0) {
             buf.append("<thead><tr><th class=peer>").append(_t("Peer")).append("</th>" +
-                       "<th class=bwtier title=\"").append(_t("Caps")).append("\">").append(_t("Tier")).append("</th>" +
+                       "<th class=caps title=\"").append(_t("Peer capabilities")).append("\">").append(_t("Caps")).append("</th>" +
                        "<th class=direction title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir")).append("</th>" +
                        "<th class=ipv6>").append(_t("IPv6")).append("</th>" +
                        "<th class=idle title=\"").append(_t("Peer inactivity")).append("\">").append(_t("Idle")).append("</th>" +
@@ -372,30 +372,8 @@ public class PeerHelper extends HelperBase {
                .append(_t("on")).append(" gwhois.org").append("\">")
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
 */
-            buf.append("</td><td class=bwtier>");
-            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
-            String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
-            String caps = DataHelper.stripHTML(info.getCapabilities())
-                .replace("XO", "X")
-                .replace("PO", "P")
-                .replace("fR", "Rf")
-                .replace("fU", "Uf")
-                .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
-                .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
-                .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
-                .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
-                .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
-                .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
-                .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
-                .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
-                .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
-                .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
-                .replace("\"><span", tooltip);
-            if (info != null) {
-                buf.append(caps);
-            } else {
-                buf.append("<span class=tier>?</span>");
-            }
+            buf.append("</td><td class=caps>");
+            buf.append(_context.commSystem().renderPeerCaps(h));
             buf.append("</td><td class=direction>");
             if (con.isInbound())
                 buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"")
@@ -460,12 +438,11 @@ public class PeerHelper extends HelperBase {
         buf.append("</tbody>");
 
         if (!peers.isEmpty()) {
-            buf.append("<tfoot><tr class=tablefooter><td class=peer><b>")
+            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=2><b>")
                .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
             buf.append("</b></td>" +
-                       "<td class=bwtier>&nbsp;</td>" +
                        "<td class=direction>&nbsp;</td>" +
                        "<td class=ipv6>&nbsp;</td>" +
                        "<td class=idle>&nbsp;</td>" +
@@ -547,9 +524,13 @@ public class PeerHelper extends HelperBase {
         buf.append("<div id=udp>\n")
            .append("<h3 id=udpcon title=\"").append(_t("Current / maximum permitted")).append("\">")
            .append(_t("UDP connections")).append(":&nbsp; ").append(ut.countActivePeers())
-           .append(" / ").append(ut.getMaxConnections())
-           .append("&nbsp;<span class=reachability>").append(_t("Status")).append(": ")
-           .append(ut.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>");
+           .append(" / ").append(ut.getMaxConnections());
+        if (debugmode) {
+            buf.append("&nbsp;<span class=reachability>").append(_t("Status")).append(": ")
+               .append(ut.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>");
+        } else {
+            buf.append("&nbsp;<span id=ssuadv><a href=\"/peers?transport=ssudebug\">[").append(_t("Advanced View")).append("]</a></span>");
+        }
         buf.append("<label class=script hidden><input name=autorefresh id=autorefresh type=checkbox class=\"optbox slider\" checked=checked>")
            .append(_t("Auto-refresh")).append("</label></h3>\n")
            .append("<div class=widescroll>\n<table id=\"udpconnections\" ");
@@ -564,6 +545,7 @@ public class PeerHelper extends HelperBase {
             if (sortFlags != FLAG_ALPHA)
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by peer hash"), FLAG_ALPHA);
             }
+            buf.append("</th><th class=caps>").append(_t("Caps"));
             buf.append("</th><th class=direction nowrap title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir"));
             if (debugmode) {
                 buf.append("</th><th class=ipv6 nowrap>").append(_t("IPv6"))
@@ -657,7 +639,7 @@ public class PeerHelper extends HelperBase {
                 continue; // don't include old peers
             }
             buf.append("<tr class=lazy><td class=peer nowrap>");
-            buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), true));
+            buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), false));
 /*
             buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(peer.getRemoteIP()))
                .append("\" target=_blank title=\"").append(_t("Lookup remote address")).append(' ')
@@ -665,6 +647,8 @@ public class PeerHelper extends HelperBase {
                .append(' ').append(_t("on")).append(" gwhois.org").append("\">")
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
 */
+            Hash h = peer.getRemotePeer().calculateHash();
+            buf.append("</td><td class=caps>").append(_context.commSystem().renderPeerCaps(peer.getRemotePeer()));
             buf.append("</td><td class=direction nowrap>");
             if (peer.isInbound())
                 buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"").append(_t("Inbound"));
@@ -822,7 +806,7 @@ public class PeerHelper extends HelperBase {
         buf.append("</tbody>\n");
 
         if (numPeers > 0) {
-            buf.append("<tfoot><tr class=tablefooter><td class=peer><b>")
+            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=2><b>")
                .append(ngettext("{0} peer", "{0} peers", ut.countActivePeers()))
                .append("</b></td><td class=direction>&nbsp;</td>");
             if (debugmode) {

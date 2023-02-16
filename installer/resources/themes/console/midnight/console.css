@@ -1693,7 +1693,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #transportSummary th.out span{background:var(--out) no-repeat center center/12px}
 #transports .script,#ntcpcon .script,#udpcon .script{margin:-4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
-#transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
+#transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
 

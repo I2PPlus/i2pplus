@@ -63,8 +63,6 @@
   var peersNTCP = document.getElementById("peersNTCP");
   var peersSSU = document.getElementById("peersSSU");
   var refreshPeersId = setInterval(refreshPeers, 15000);
-  var sorterNTCP;
-  var sorterSSU;
   var ssuConn = document.getElementById("udpconnections");
   var ssuH3 = document.getElementById("udpcon");
   var ssuTfoot = document.querySelector("#udpconnections tfoot");
@@ -81,12 +79,16 @@
   }
 
   function addSortListeners() {
-    if (ntcpConn && !sorterNTCP) {
-      var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
+    if (ntcpConn) {
+      if (sorterNTCP === null) {
+        var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
+      }
       ntcpConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       ntcpConn.addEventListener('afterSort', function() {progressx.hide();}, true);
-    } else if (ssuConn && !sorterSSU) {
-      var sorterSSU = new Tablesort((ssuConn), {descending: true});
+    } else if (ssuConn) {
+      if (sorterSSU === null) {
+        var sorterSSU = new Tablesort((ssuConn), {descending: true});
+      }
       ssuConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       ssuConn.addEventListener('afterSort', function() {progressx.hide();}, true);
     }
@@ -102,9 +104,9 @@
     xhrPeers.responseType = "document";
     xhrPeers.onreadystatechange = function () {
       if (xhrPeers.readyState === 4 && xhrPeers.status === 200 && autorefresh.checked) {
-        addSortListeners();
         if (ssuConn) {
           if (peersSSU) {
+            addSortListeners();
             var peersSSUResponse = xhrPeers.responseXML.getElementById("peersSSU");
             var ssuH3Response = xhrPeers.responseXML.getElementById("udpcon");
             var ssuTfootResponse = xhrPeers.responseXML.querySelector("#udpconnections tfoot");
@@ -112,11 +114,10 @@
               ssuH3.innerHTML = ssuH3Response.innerHTML;
               peersSSU.innerHTML = peersSSUResponse.innerHTML;
               ssuTfoot.innerHTML = ssuTfootResponse.innerHTML;
-              if (!sorterSSU) {
+              //if (sorterSSU === null) {
                 var sorterSSU = new Tablesort((ssuConn), {descending: true});
-              }
+              //}
               sorterSSU.refresh();
-              lazyload();
             }
           } else {
             var udpResponse = xhrPeers.responseXML.getElementById("udp");
@@ -126,6 +127,7 @@
           }
         } else if (ntcpConn) {
           if (peersNTCP) {
+            addSortListeners();
             var peersNTCPResponse = xhrPeers.responseXML.getElementById("peersNTCP");
             var ntcpH3Response = xhrPeers.responseXML.getElementById("ntcpcon");
             var ntcpTfootResponse = xhrPeers.responseXML.querySelector("#ntcpconnections tfoot");
@@ -133,11 +135,10 @@
               ntcpH3.innerHTML = ntcpH3Response.innerHTML;
               peersNTCP.innerHTML = peersNTCPResponse.innerHTML;
               ntcpTfoot.innerHTML = ntcpTfootResponse.innerHTML;
-              if (!sorterNTCP) {
+              //if (sorterNTCP === null) {
                 var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
-              }
+              //}
               sorterNTCP.refresh();
-              lazyload();
             }
           } else {
             var ntcpResponse = xhrPeers.responseXML.getElementById("ntcp");
@@ -153,6 +154,10 @@
         }
       }
     }
+    if (peersNTCP || peersSSU) {
+      addSortListeners();
+    }
+    lazyload();
     xhrPeers.send();
   }
 

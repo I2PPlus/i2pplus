@@ -726,8 +726,8 @@ td.direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
 h3[id$="con"]{margin-bottom:-2px;border-radius:0;padding:8px 10px;font-size:10pt;word-spacing:.1em;letter-spacing:.08em;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%);border:var(--border)}
 h3[id="udpcon"]{width:auto}
 #ntcp+#udp{margin-top:-12px}
-#udpconnections td:nth-child(2) img,#ntcpconnections td:nth-child(2) img{padding:0}
-#ntcpconnections .cells td:last-child{font-weight:700}
+/*#udpconnections td:nth-child(2) img,#ntcpconnections td:nth-child(2) img{padding:0}*/
+#ntcpconnections td:last-child{font-weight:700}
 #ntcpconnections{overflow-x:scroll}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before{content:""}
 #udpconnections td,#ntcpconnections td,.tunneldisplay td{color:#bb7}
@@ -740,10 +740,10 @@ h3[id="udpcon"]{width:auto}
 #udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tr:hover,#tunnels tr:hover{background:#020}
 #udpconnections tr:hover td,#ntcpconnections tr:hover td,.tunneldisplay tr:hover td{color:var(--ink)}
 #udpconnections th{padding:5px 2px;vertical-align:top;text-align:center}
-#udpconnections td:nth-child(n+13){padding-right:1%}
+/*#udpconnections td:nth-child(n+13){padding-right:1%}*/
 #ntcpconnections tbody td:not(.rif):not(.rih):not(.rbw),#udpconnections tbody td:not(.rif):not(.rih):not(.rbw){border-right:var(--border_softer)}
 #udpconnections tbody td:not(.rif):not(.rih):not(.rbw):last-child,#ntcpconnections td:not(.rif):not(.rih):not(.rbw):last-child{border-right:var(--border)}
-#udpconnections td:not(.rif):not(rih):first-child{width:1%;padding:5px;white-space:nowrap}
+#udpconnections td:not(.rif):not(rih):not(.rbw):first-child{width:1%;padding:5px;white-space:nowrap}
 #udpconnections tfoot td:not(last-child),#ntcpconnections tfoot td:not(last-child){border-right:none}
 #udpconnections .tablefooter:hover td{border-top:var(--border)}
 #transportSummary th,#transportSummary td,#transportSummary .tablefooter td{padding:8px;width:14%}
@@ -761,10 +761,11 @@ h3[id="udpcon"]{width:auto}
 #transportSummary th.out span{background:var(--out) no-repeat center center/12px}
 #transports .script,#ntcpcon .script,#udpcon .script{margin:-4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
-#transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
+#transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
 #peers #udpconnections:not(.advancedview) td:nth-last-child(2){border-right:var(--border)}
+#peers .caps{width:1%;white-space:nowrap;text-align:center}
 
 /* profiles */
 .profilegroup{margin:3px 0 3px 10px;display:inline-block}
@@ -2856,7 +2857,7 @@ span#newtab{margin-top:4px}
 .tunnel_local,.tunnel_id,.rid td{box-shadow:var(--highlight),0 0 1px 1px rgba(16,48,16,.8) inset}
 .tunnel_local{width:98px;box-sizing:border-box}
 .tunnel_peer{display:inline-block;vertical-align:middle}
-.rid{width:unset;box-shadow:0 0 0 1px #000}
+.rid,.ric{width:unset;box-shadow:0 0 0 1px #000}
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_soft)!important;background:var(--badge)}
 .rid td,tr:hover .rid td,#floodfills tr:hover .rid td {line-height:1;font-family:var(--monospaced);letter-spacing:.1em}
 .rid .rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
@@ -2868,6 +2869,7 @@ span#newtab{margin-top:4px}
 .rif,.rif img{line-height:0;font-size:0}
 .rid .rih{padding:2px 6px;vertical-align:middle;font-family:var(--monospaced);font-size:9pt}
 .rih a{;text-shadow:1px 1px 1px rgba(0,0,0,.8)}
+.ric .rbw{line-height:16px}
 #banlist li .rid{margin-right:5px;margin-left:-4px;float:left}
 #profiles span[hidden]{display:none!important}
 #jobs label{float:right;display:inline-block!important}

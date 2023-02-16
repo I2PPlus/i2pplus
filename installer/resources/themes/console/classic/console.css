@@ -1847,7 +1847,7 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #transports{margin-bottom:-2px}
 #transports .script,#ntcpcon .script,#udpcon .script{margin:-3px 0 -4px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
-#transports:hover span,#ntcpcon:hover span,#udpcon:hover span{display:none}
+#transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
 
