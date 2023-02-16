@@ -1838,8 +1838,8 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #transportSummary th:first-child,#transportSummary td:first-child{border-left:var(--border)}
 #transportSummary th:last-child,#transportSummary td:last-child{border-right:var(--border)}
 #transportSummary tr:not(.tablefooter):hover td{background:#ffd}
-#peers .tablefooter td{font-weight:700;border-top:1px solid var(--border_color);border-bottom:var(--border);background:var(--th)}
-#peers .tablefooter td {border-left:none;border-right:none}
+#peers tfoot td{font-weight:700;border-top:1px solid var(--border_color);border-bottom:var(--border);background:var(--th)}
+#peers tfoot td {border-left:none;border-right:none}
 #peers td:first-child{border-left:var(--border)}
 #peers td:last-child{border-right:var(--border)}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center/12px}
@@ -1850,6 +1850,9 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
+#peers .caps{width:1%}
+#ssuadv{margin-left:5px;letter-spacing:0;text-transform:none;font-size:80%}
+#peers #udpconnections:not(advancedview) td:nth-last-child(2){border-right:var(--border)}
 
 /* routerinfo */
 #routerinfo p{padding:0;margin:-5px -5px 0;border:none;box-shadow:0 0 1px #ccf;filter:none}
@@ -2336,13 +2339,15 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 .tunnel_peer{display:inline-block;line-height:1.35;vertical-align:middle}
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge)}
 .rid{width:unset}
-.rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em}
+.rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight)}
 .rif,.rif img{line-height:0;font-size:0}
 .rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{padding-left:4px;min-width:20px;text-align:center;line-height:1;font-weight:900}
-.rid .rbw.isff{box-shadow:var(--highlight),0 0 2px 1px rgba(255,96,0,.9) inset}
-.rid .rbw.isU{box-shadow:var(--highlight), 0 0 1px 1px rgba(255,0,0,.9) inset}
-.rid .rbw.isff.isU{box-shadow:var(--highlight), 0 0 1px 1px rgba(255,0,0,.9) inset;background:linear-gradient(135deg,rgba(255,96,0,.3) 50%,rgba(128,0,0,.3) 50%)}
+.rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
+.rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isff.isU{linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.ric{background:var(--badge)}
+.ric .rbw{line-height:16px}
 #banlist li .rid{margin-right:5px;margin-left:-3px;float:left}
 #profiles span[hidden]{display:none!important}
