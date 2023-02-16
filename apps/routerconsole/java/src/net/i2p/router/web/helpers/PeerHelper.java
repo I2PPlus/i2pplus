@@ -525,12 +525,11 @@ public class PeerHelper extends HelperBase {
            .append("<h3 id=udpcon title=\"").append(_t("Current / maximum permitted")).append("\">")
            .append(_t("UDP connections")).append(":&nbsp; ").append(ut.countActivePeers())
            .append(" / ").append(ut.getMaxConnections());
-        if (debugmode) {
-            buf.append("&nbsp;<span class=reachability>").append(_t("Status")).append(": ")
-               .append(ut.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>");
-        } else {
+        if (!debugmode) {
             buf.append("&nbsp;<span id=ssuadv><a href=\"/peers?transport=ssudebug\">[").append(_t("Advanced View")).append("]</a></span>");
         }
+        buf.append("&nbsp;<span class=reachability>").append(_t("Status")).append(": ")
+           .append(ut.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>");
         buf.append("<label class=script hidden><input name=autorefresh id=autorefresh type=checkbox class=\"optbox slider\" checked=checked>")
            .append(_t("Auto-refresh")).append("</label></h3>\n")
            .append("<div class=widescroll>\n<table id=\"udpconnections\" ");
