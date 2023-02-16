@@ -77,7 +77,6 @@
     addSortListeners();
     refreshPeers();
   }
-
   function addSortListeners() {
     if (ntcpConn) {
       if (sorterNTCP === null) {
@@ -93,7 +92,6 @@
       ssuConn.addEventListener('afterSort', function() {progressx.hide();}, true);
     }
   }
-
   function refreshPeers() {
     var now = new Date().getTime();
     if (queryParams.has("transport")) {
