@@ -16,7 +16,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.router.transport.TransportUtil;
@@ -338,6 +340,7 @@ public class PeerHelper extends HelperBase {
            .append("<div class=widescroll>\n<table id=ntcpconnections class=cells data-sortable>\n");
         if (peers.size() != 0) {
             buf.append("<thead><tr><th class=peer>").append(_t("Peer")).append("</th>" +
+                       "<th class=bwtier title=\"").append(_t("Caps")).append("\">").append(_t("Tier")).append("</th>" +
                        "<th class=direction title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir")).append("</th>" +
                        "<th class=ipv6>").append(_t("IPv6")).append("</th>" +
                        "<th class=idle title=\"").append(_t("Peer inactivity")).append("\">").append(_t("Idle")).append("</th>" +
@@ -360,7 +363,8 @@ public class PeerHelper extends HelperBase {
                 continue;
             }
             buf.append("<tr class=lazy><td class=peer nowrap>");
-            buf.append(_context.commSystem().renderPeerHTML(con.getRemotePeer().calculateHash(), true));
+            Hash h = con.getRemotePeer().calculateHash();
+            buf.append(_context.commSystem().renderPeerHTML(h, false));
 /*
             buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(con.getRemoteIP()))
                .append("\" target=_blank title=\"").append(_t("Lookup remote address")).append(' ')
@@ -368,6 +372,30 @@ public class PeerHelper extends HelperBase {
                .append(_t("on")).append(" gwhois.org").append("\">")
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
 */
+            buf.append("</td><td class=bwtier>");
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
+            String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
+            String caps = DataHelper.stripHTML(info.getCapabilities())
+                .replace("XO", "X")
+                .replace("PO", "P")
+                .replace("fR", "Rf")
+                .replace("fU", "Uf")
+                .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
+                .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
+                .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
+                .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
+                .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
+                .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
+                .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
+                .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
+                .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
+                .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
+                .replace("\"><span", tooltip);
+            if (info != null) {
+                buf.append(caps);
+            } else {
+                buf.append("<span class=tier>?</span>");
+            }
             buf.append("</td><td class=direction>");
             if (con.isInbound())
                 buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"")
@@ -437,6 +465,7 @@ public class PeerHelper extends HelperBase {
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
             buf.append("</b></td>" +
+                       "<td class=bwtier>&nbsp;</td>" +
                        "<td class=direction>&nbsp;</td>" +
                        "<td class=ipv6>&nbsp;</td>" +
                        "<td class=idle>&nbsp;</td>" +
