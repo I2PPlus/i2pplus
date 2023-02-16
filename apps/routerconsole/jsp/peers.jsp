@@ -58,12 +58,16 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var autorefresh = document.getElementById("autorefresh");
   var ntcpConn = document.getElementById("ntcpconnections");
+  var ntcpH3 = document.getElementById("ntcpcon");
+  var ntcpTfoot = document.querySelector("#ntcpconnections tfoot");
   var peersNTCP = document.getElementById("peersNTCP");
   var peersSSU = document.getElementById("peersSSU");
   var refreshPeersId = setInterval(refreshPeers, 15000);
   var sorterNTCP;
   var sorterSSU;
   var ssuConn = document.getElementById("udpconnections");
+  var ssuH3 = document.getElementById("udpcon");
+  var ssuTfoot = document.querySelector("#udpconnections tfoot");
   var summary = document.getElementById("transportSummary");
   var url = document.location;
   var path = location.pathname;
@@ -102,8 +106,12 @@
         if (ssuConn) {
           if (peersSSU) {
             var peersSSUResponse = xhrPeers.responseXML.getElementById("peersSSU");
+            var ssuH3Response = xhrPeers.responseXML.getElementById("udpcon");
+            var ssuTfootResponse = xhrPeers.responseXML.querySelector("#udpconnections tfoot");
             if (peersSSUResponse !== null && peersSSU.innerHTML !== peersSSUResponse.innerHTML) {
+              ssuH3.innerHTML = ssuH3Response.innerHTML;
               peersSSU.innerHTML = peersSSUResponse.innerHTML;
+              ssuTfoot.innerHTML = ssuTfootResponse.innerHTML;
               if (!sorterSSU) {
                 var sorterSSU = new Tablesort((ssuConn), {descending: true});
               }
@@ -119,8 +127,12 @@
         } else if (ntcpConn) {
           if (peersNTCP) {
             var peersNTCPResponse = xhrPeers.responseXML.getElementById("peersNTCP");
+            var ntcpH3Response = xhrPeers.responseXML.getElementById("ntcpcon");
+            var ntcpTfootResponse = xhrPeers.responseXML.querySelector("#ntcpconnections tfoot");
             if (peersNTCPResponse !== null && peersNTCP.innerHTML !== peersNTCPResponse.innerHTML) {
+              ntcpH3.innerHTML = ntcpH3Response.innerHTML;
               peersNTCP.innerHTML = peersNTCPResponse.innerHTML;
+              ntcpTfoot.innerHTML = ntcpTfootResponse.innerHTML;
               if (!sorterNTCP) {
                 var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
               }
