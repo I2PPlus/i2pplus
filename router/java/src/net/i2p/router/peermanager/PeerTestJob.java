@@ -309,7 +309,7 @@ class PeerTestJob extends JobImpl {
                     long timeLeft = _expiration - getContext().clock().now();
                     PeerProfile prof = getContext().profileOrganizer().getProfile(_peer);
                     RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(_peer);
-                    if (peerInfo != null) {
+                    if (peerInfo != null && prof != null) {
                         int speedBonus = prof.getSpeedBonus();
                         String cap = peerInfo.getCapabilities();
                         boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
