@@ -84,14 +84,15 @@ public class StatisticsManager {
 //            _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0) {
         int rnd = Math.max(_context.random().nextInt(60), _context.random().nextInt(30) + 30) *
                   Math.max(_context.random().nextInt(8), _context.random().nextInt(3) + 1) * 2 * 60;
-        if (_context.getBooleanProperty(PROP_PUBLISH_RANKINGS) && _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0 &&
+        if (_context.getBooleanProperty(PROP_PUBLISH_RANKINGS) &&
+            _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0 &&
             _context.router().getUptime() > Math.max(240*60*1000, rnd)) {
             int partTunnels = _context.tunnelManager().getParticipatingCount();
             int spoofed = partTunnels;
             if (partTunnels > 4000) {
-                if (partTunnels > 8000)
-                    spoofed = (partTunnels / 3) - _context.random().nextInt(50);
-                else if (partTunnels > 4000)
+                if (partTunnels > 10000)
+                    spoofed = (partTunnels / 3*2) - _context.random().nextInt(50);
+                else if (partTunnels > 6000)
                     spoofed = (partTunnels / 2) + _context.random().nextInt(50);
                 stats.setProperty("tunnels.participatingTunnels", String.valueOf(spoofed));
             } else {
@@ -99,24 +100,28 @@ public class StatisticsManager {
             }
             long rate = 60*60*1000;
             includeTunnelRates("Exploratory", stats, rate);
-            if (caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
-                int ri = _context.router().getUptime() > 30*60*1000 ?
-                         _context.netDb().getKnownRouters() :
-                         3000 + _context.random().nextInt(1000);   // so it isn't obvious we restarted
-                if (ri > 12000) {
-                    ri /= 3;
-                    ri -= _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
-                } else if (ri > 5000) {
-                    ri /= 2;
-                    ri += _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
-                }
-                stats.setProperty("netdb.knownRouters", String.valueOf(ri));
-                int ls = _context.router().getUptime() > 30*60*1000 ?
-                         _context.netDb().getKnownLeaseSets() :
-                         30 + _context.random().nextInt(40);   // so it isn't obvious we restarted
-                stats.setProperty("netdb.knownLeaseSets", String.valueOf(ls));
-            }
         }
+
+        if (caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0 &&
+            !_context.getBooleanPropertyDefaultTrue("router.hideFloodfillParticipant")) {
+            int ri = _context.router().getUptime() > 30*60*1000 ?
+                     _context.netDb().getKnownRouters() :
+                     3000 + _context.random().nextInt(1000);   // so it isn't obvious we restarted
+            // hide our real number of known peers to avoid broadcasting that we're running I2P+
+            if (ri > 12000) {
+                ri /= 3;
+                ri -= _context.random().nextInt(50);
+            } else if (ri > 8000) {
+                ri /= 3*2;
+                ri += _context.random().nextInt(50);
+            }
+            stats.setProperty("netdb.knownRouters", String.valueOf(ri));
+            int ls = _context.router().getUptime() > 30*60*1000 ?
+                     _context.netDb().getKnownLeaseSets() :
+                     30 + _context.random().nextInt(40);   // so it isn't obvious we restarted
+            stats.setProperty("netdb.knownLeaseSets", String.valueOf(ls));
+        }
+
         String family = _context.getProperty(FamilyKeyCrypto.PROP_FAMILY_NAME);
         if (family != null) {
             String sig = null;
