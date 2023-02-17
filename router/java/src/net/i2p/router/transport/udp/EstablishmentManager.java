@@ -630,8 +630,8 @@ class EstablishmentManager {
             int probAccept = Math.max(1, ((int) (4 * 128 * currentRate / minThresh)) - 512);
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
                 if (_log.shouldWarn())
-                    _log.warn("Probabalistic drop incoming (p=" + probAccept  +
-                              "/128 last rate " + last + "/min current rate " +
+                    _log.warn("Probabalistically dropping incoming connection (p=" + probAccept  +
+                              "/128) -> Last rate was: " + last + "/min, current rate is: " +
                               (int) (currentRate * 60*1000));
                 return false;
             }
