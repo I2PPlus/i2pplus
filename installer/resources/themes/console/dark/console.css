@@ -766,6 +766,7 @@ h3[id="udpcon"]{width:auto}
 #peers .tab,#peers .tab2{min-width:96px}
 #peers #udpconnections:not(.advancedview) td:not(.rif):not(.rih):not(.rbw):nth-last-child(2){border-right:var(--border)}
 #peers .caps{width:1%;white-space:nowrap;text-align:center}
+#peers th.caps{padding-left:0;text-align:left}
 
 /* profiles */
 .profilegroup{margin:3px 0 3px 10px;display:inline-block}
