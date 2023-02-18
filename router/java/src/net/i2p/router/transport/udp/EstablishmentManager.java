@@ -631,9 +631,8 @@ class EstablishmentManager {
             int percent = probAccept / 128 * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
                 if (_log.shouldWarn())
-                    _log.warn("Dropping incoming UDP connection (" + percent + "% probability)" +
-                              " -> Last rate was: " + last + "/min, current is: " +
-                              (int) (currentRate * 60*1000));
+                    _log.warn("Dropping incoming TCP connection (" + (percent >= 1 ? percent : "1") + "% chance)" +
+                              " -> Previous/current connections per minute: " + last + " / " + (int) (currentRate * 60*1000));
                 return false;
             }
         }
@@ -766,7 +765,7 @@ class EstablishmentManager {
                 // IP spoofing is used. For further study.
                 if (!shouldAllowInboundEstablishment()) {
                     if (_log.shouldWarn())
-                        _log.warn("[SSU2] Dropping Inbound establish connection attempt from " + fromIP);
+                        _log.warn("[SSU2] Dropping InboundEstablish from: " + Addresses.toString(fromIP));
                     _context.statManager().addRateData("udp.establishDropped", 1);
                     sendTerminationPacket(from, packet, REASON_LIMITS);
                     return;

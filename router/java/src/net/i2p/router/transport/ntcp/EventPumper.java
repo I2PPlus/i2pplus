@@ -116,9 +116,9 @@ class EventPumper implements Runnable {
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
 
 //    private static final int MIN_MINB = 4;
-    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : 16;
+    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 16 : 32;
 //    private static final int MAX_MINB = 12;
-    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : 128;
+    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 128 : 256;
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {
@@ -139,9 +139,9 @@ class EventPumper implements Runnable {
         _transport = transport;
         _expireIdleWriteTime = MAX_EXPIRE_IDLE_TIME;
         _blockedIPs = new ObjectCounter<String>();
-        _context.statManager().createRateStat("ntcp.pumperKeySetSize", "Number of NTCP pumper KeySetSize events", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
+        _context.statManager().createRateStat("ntcp.pumperKeySetSize", "Number of NTCP Pumper KeySetSize events", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
         //_context.statManager().createRateStat("ntcp.pumperKeysPerLoop", "", "Transport [NTCP]", new long[] {10*60*1000} );
-        _context.statManager().createRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP pumper loops/s", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
+        _context.statManager().createRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP Pumper loops/s", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
         _context.statManager().createRateStat("ntcp.zeroRead", "Number of NTCP zero length read events", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
         _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
         _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Number of NTCP Inbound empty message drop events", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
@@ -151,11 +151,11 @@ class EventPumper implements Runnable {
 
     public synchronized void startPumping() {
         if (_log.shouldInfo())
-            _log.info("Starting NTCP pumper...");
+            _log.info("Starting NTCP Pumper...");
         try {
             _selector = Selector.open();
             _alive = true;
-            I2PThread t = new I2PThread(this, "NTCPPumper", true);
+            I2PThread t = new I2PThread(this, "NTCP Pumper", true);
             t.setPriority(I2PThread.MAX_PRIORITY);
             t.start();
         } catch (IOException ioe) {
@@ -390,13 +390,13 @@ class EventPumper implements Runnable {
                     lastBlockedIPClear = now;
                 }
             } catch (RuntimeException re) {
-                _log.error("Error in the event pumper", re);
+                _log.error("Error in EventPumper", re);
             }
         }
         try {
             if (_selector.isOpen()) {
                 if (_log.shouldDebug())
-                    _log.debug("Closing down the event pumper with selection keys remaining");
+                    _log.debug("Closing down EventPumper with selection keys remaining");
                 Set<SelectionKey> keys = _selector.keys();
                 for (SelectionKey key : keys) {
                     try {
@@ -411,16 +411,16 @@ class EventPumper implements Runnable {
                             key.cancel();
                         }
                     } catch (IOException ke) {
-                        _log.error("Error closing key " + key + " on pumper shutdown", ke);
+                        _log.error("Error closing key " + key + " on EventPumper shutdown", ke);
                     }
                 }
                 _selector.close();
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Closing down the event pumper with no selection keys remaining");
+                    _log.debug("Closing down EventPumper with no selection keys remaining...");
             }
         } catch (IOException e) {
-            _log.error("Error closing keys on pumper shutdown", e);
+            _log.error("Error closing keys on EventPumper shutdown", e);
         }
         _wantsConRegister.clear();
         _wantsRead.clear();
@@ -619,9 +619,8 @@ class EventPumper implements Runnable {
             int percent = probAccept / 128 * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
                 if (_log.shouldWarn())
-                    _log.warn("Dropping incoming TCP connection (" + percent + "% probability)" +
-                              " -> Last rate was: " + last + "/min, current is: " +
-                              (int) (currentRate * 60*1000));
+                    _log.warn("Dropping incoming TCP connection (" + (percent >= 1 ? percent : "1") + "% chance)" +
+                              " -> Previous/current connections per minute: " + last + " / " + (int) (currentRate * 60*1000));
                 return false;
             }
         }
