@@ -44,7 +44,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             cur++;
         }
 
-        buf.append("<table id=\"tunnelconfig\" class=\"configtable\">\n");
+        buf.append("<table id=tunnelconfig class=configtable>\n");
         TunnelPoolSettings exploratoryIn = mgr.getInboundSettings();
         TunnelPoolSettings exploratoryOut = mgr.getOutboundSettings();
 

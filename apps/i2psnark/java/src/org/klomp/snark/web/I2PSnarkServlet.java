@@ -3566,10 +3566,10 @@ public class I2PSnarkServlet extends BasicServlet {
                    "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
                    "<tr><td colspan=7>\n" +
                    "<input type=submit name=\"taction\" class=\"default\" value=\"").append(_t("Add tracker")).append("\">\n" +
-                   "<input type=submit name=\"taction\" class=\"delete\" value=\"").append(_t("Delete selected")).append("\">\n" +
+                   "<input type=submit name=\"taction\" class=delete value=\"").append(_t("Delete selected")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=\"add\" value=\"").append(_t("Add tracker")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=accept value=\"").append(_t("Save tracker configuration")).append("\">\n" +
-                   // "<input type=reset class=\"cancel\" value=\"").append(_t("Cancel")).append("\">\n" +
+                   // "<input type=reset class=cancel value=\"").append(_t("Cancel")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=reload value=\"").append(_t("Restore defaults")).append("\">\n" +
                    "</td></tr>" +
                    "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
@@ -5157,7 +5157,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<tr id=\"commentDeleteAction\"><td colspan=4 class=\"commentAction\" align=right>")
                        .append("<input type=submit name=\"deleteComments\" value=\"");
                     buf.append(_t("Delete Selected"));
-                    buf.append("\" class=\"delete\"></td></tr>\n");
+                    buf.append("\" class=delete></td></tr>\n");
                 }
                 buf.append("</table>\n");
             } else if (esc) {

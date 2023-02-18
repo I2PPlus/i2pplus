@@ -1548,7 +1548,7 @@ public class SummaryHelper extends HelperBase {
             buf.append("</td></tr>\n");
         }
         buf.append("<tr><td>" +
-                   "<input type=submit name=action class=\"delete\" value=\"")
+                   "<input type=submit name=action class=delete value=\"")
            .append(_t("Delete selected"))
            .append("\"></td><td>")
            .append("<select name=\"name\">\n" +
