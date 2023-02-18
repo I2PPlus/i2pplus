@@ -518,7 +518,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private class QueueAll implements SimpleTimer.TimedEvent {
         public void timeReached() {
             for (Hash h : _context.netDb().getAllRouters()) {
-                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+//                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+                RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
                 if (ri == null)
                     continue;
                 byte[] ip = getIP(ri);
@@ -665,7 +666,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         byte[] ip = TransportImpl.getIP(peer);
         if (ip != null)
             return _geoIP.get(ip);
-        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+//        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         if (ri == null)
             return null;
         ip = getValidIP(ri);
@@ -738,7 +740,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String renderPeerHTML(Hash peer, boolean extended) {
         StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+//        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
         if (ri != null) {
@@ -816,7 +819,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String renderPeerCaps(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
         buf.append("<table class=\"rid ric\"><tr>");
@@ -824,7 +827,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             String caps = ri.getCapabilities();
             String v = ri.getVersion();
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-            buf.append("<td class=\"rbw");
+            buf.append("<td class=\"rbw ").append(getCapacity(peer));
                 if (caps.contains("f"))
                     buf.append(" isff");
                 if (caps.contains("U"))
@@ -849,7 +852,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /** @return cap char or '?' */
     private char getCapacity(Hash peer) {
-        RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         if (info != null) {
             String caps = info.getCapabilities();
             for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
@@ -867,7 +870,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String countryName = getCountryName(c);
         String h = peer.toBase64();
