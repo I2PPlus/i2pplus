@@ -241,8 +241,8 @@ public class PeerHelper extends HelperBase {
                 }
                 buf.append("</td></tr>\n");
             }
-            buf.append("</tbody>\n");
         }
+        buf.append("</tbody>\n");
         if (rows > 1) {
             buf.append("<tfoot><tr class=tablefooter><td><b>").append(_t("Total")).append("</b>");
             for (int i = 0; i < 5; i++) {

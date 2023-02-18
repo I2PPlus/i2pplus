@@ -73,26 +73,30 @@
   var queryParams = new URL(url.href).searchParams;
   var xhrPeers = new XMLHttpRequest();
 
+  if (peersNTCP && typeof sorterNTCP === "undefined") {
+    var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
+  }
+  if (peersSSU && typeof sorterSSU === "undefined") {
+    var sorterSSU = new Tablesort((ssuConn), {descending: true});
+  }
+
   function initRefresh() {
     addSortListeners();
     refreshPeers();
     lazyload();
   }
+
   function addSortListeners() {
-    if (ntcpConn !== null) {
-      //if (sorterNTCP === null) {
-        var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
-      //}
+    if (ntcpConn) {
       ntcpConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       ntcpConn.addEventListener('afterSort', function() {progressx.hide();}, true);
-    } else if (ssuConn !== null) {
-      //if (sorterSSU === null) {
-        var sorterSSU = new Tablesort((ssuConn), {descending: true});
-      //}
+    }
+    if (ssuConn) {
       ssuConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       ssuConn.addEventListener('afterSort', function() {progressx.hide();}, true);
     }
   }
+
   function refreshPeers() {
     var now = new Date().getTime();
     if (queryParams.has("transport")) {
@@ -105,10 +109,6 @@
       if (xhrPeers.readyState === 4 && xhrPeers.status === 200 && autorefresh.checked) {
         if (ssuConn) {
           if (peersSSU) {
-            addSortListeners();
-            //if (sorterSSU === null) {
-            //  var sorterSSU = new Tablesort((ssuConn), {descending: true});
-            //}
             var peersSSUResponse = xhrPeers.responseXML.getElementById("peersSSU");
             var ssuH3Response = xhrPeers.responseXML.getElementById("udpcon");
             var ssuTfootResponse = xhrPeers.responseXML.querySelector("#udpconnections tfoot");
@@ -126,10 +126,6 @@
           }
         } else if (ntcpConn) {
           if (peersNTCP) {
-            addSortListeners();
-            //if (sorterNTCP === null) {
-            //  var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
-            //}
             var peersNTCPResponse = xhrPeers.responseXML.getElementById("peersNTCP");
             var ntcpH3Response = xhrPeers.responseXML.getElementById("ntcpcon");
             var ntcpTfootResponse = xhrPeers.responseXML.querySelector("#ntcpconnections tfoot");
@@ -155,23 +151,18 @@
     }
     if (ntcpConn || ssuConn) {
       addSortListeners();
-    lazyload();
-    xhrPeers.send();
-      if (ntcpConn) {
-        var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
-        sorterNTCP.refresh();
-      } else if (ssuConn) {
-       var sorterSSU = new Tablesort((ssuConn), {descending: true});
-       sorterSSU.refresh();
-      }
+      if (peersNTCP) {sorterNTCP.refresh();}
+      if (peersSSU) {sorterSSU.refresh();}
     }
+    progressx.hide();
+    xhrPeers.send();
   }
 
   progressx.hide();
   document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
-    if (ntcpConn !== null) {ntcpConn.addEventListener("mouseover", lazyload());}
-    if (ssuConn !== null) {ssuConn.addEventListener("mouseover", lazyload());}
+    if (peersNTCP !== null) {ntcpConn.addEventListener("mouseover", lazyload());}
+    if (peersSSU !== null) {ssuConn.addEventListener("mouseover", lazyload());}
   });
 </script>
 </body>
