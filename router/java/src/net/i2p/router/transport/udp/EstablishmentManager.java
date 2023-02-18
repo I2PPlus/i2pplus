@@ -628,10 +628,11 @@ class EstablishmentManager {
             // chance in 128
             // max out at about 25% over the last rate
             int probAccept = Math.max(1, ((int) (4 * 128 * currentRate / minThresh)) - 512);
-            int percent = probAccept / 128 * 100;
+            int percent = probAccept > 128 ? 100 : (probAccept / 128) * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
                 if (_log.shouldWarn())
                     _log.warn("Dropping incoming TCP connection (" + (percent >= 1 ? percent : "1") + "% chance)" +
+                    //_log.warn("Dropping incoming TCP connection (" + probAccept + "/128 chance)" +
                               " -> Previous/current connections per minute: " + last + " / " + (int) (currentRate * 60*1000));
                 return false;
             }
