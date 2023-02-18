@@ -188,7 +188,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         byte[] ip = _con.getRemoteIP();
         if (_context.banlist().isBanlistedForever(aliceHash) || _context.banlist().isBanlistedHostile(aliceHash)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping inbound connection from + " + (_context.banlist().isBanlistedForever(aliceHash) ?
+                _log.warn("Dropping inbound connection from " + (_context.banlist().isBanlistedForever(aliceHash) ?
                           "permanently" : "") + " banlisted peer at " + Addresses.toString(ip) +
                           " [" + aliceHash.toBase64().substring(0,6) + "]");
             // So next time we will not accept the con from this IP,
