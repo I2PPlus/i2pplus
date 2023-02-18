@@ -326,7 +326,7 @@ public class PeerProfile {
      *  @deprecated unused
      *  @return null always
      */
-    @Deprecated
+    //@Deprecated
     public RateStat getTunnelTestResponseTime() { return _tunnelTestResponseTime; }
 
     /** how long it takes for a peer to respond to a direct test (ms) */
@@ -396,13 +396,14 @@ public class PeerProfile {
      *  @deprecated unused
      */
     //@Deprecated
-    void setTunnelTestTimeAverage(float avg) { /* _tunnelTestResponseTimeAvg = avg; */ }
+    void setTunnelTestTimeAverage(float avg) { _tunnelTestResponseTimeAvg = avg; }
 
     /**
      *  @deprecated unused
      */
     //@Deprecated
     void updateTunnelTestTimeAverage(long ms) {
+
         if (_tunnelTestResponseTimeAvg <= 0)
             _tunnelTestResponseTimeAvg = 30*1000; // should we instead start at $ms?
 
