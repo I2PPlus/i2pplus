@@ -469,12 +469,12 @@ class SummaryRenderer {
                 }
             }
             if (!hideLegend) {
-                Variable var = new Variable.MAX();
-                def.datasource("max", plotName, var);
-                def.gprint("max", " " + _t("Max") + ": %.2f%S");
                 var = new Variable.MIN();
                 def.datasource("min", plotName, var);
                 def.gprint("min", " " + _t("Min") + ": %.2f%S");
+                Variable var = new Variable.MAX();
+                def.datasource("max", plotName, var);
+                def.gprint("max", " " + _t("Max") + ": %.2f%S");
                 var = new Variable.AVERAGE();
                 def.datasource("avg", plotName, var);
                 def.gprint("avg", " " + _t("Avg") + ": %.2f%s");
