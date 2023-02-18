@@ -766,7 +766,7 @@ class EstablishmentManager {
                 // IP spoofing is used. For further study.
                 if (!shouldAllowInboundEstablishment()) {
                     if (_log.shouldWarn())
-                        _log.warn("[SSU2] Dropping inbound establish, increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                        _log.warn("[SSU2] Dropping Inbound establish connection attempt from " + fromIP);
                     _context.statManager().addRateData("udp.establishDropped", 1);
                     sendTerminationPacket(from, packet, REASON_LIMITS);
                     return;
