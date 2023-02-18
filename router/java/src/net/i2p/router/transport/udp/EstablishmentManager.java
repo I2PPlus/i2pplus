@@ -624,7 +624,7 @@ class EstablishmentManager {
         float currentRate = (float) (current / (double) currentTime);
         float factor = _transport.haveCapacity(95) ? 1.05f : 0.95f;
         float minThresh = factor * lastRate;
-        if (currentRate > minThresh) {
+        if (currentRate > minThresh * 5 / 3) {
             // chance in 128
             // max out at about 25% over the last rate
             int probAccept = Math.max(1, ((int) (4 * 128 * currentRate / minThresh)) - 512);

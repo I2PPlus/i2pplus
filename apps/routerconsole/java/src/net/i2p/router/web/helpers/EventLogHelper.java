@@ -100,8 +100,8 @@ public class EventLogHelper extends FormHandler {
         String nonce = CSSHelper.getNonce();
         try {
             _out.write("<br><h3 id=\"displayevents\">" + _t("Display Events") + "</h3>");
-            _out.write("<form action=\"events\" method=POST>\n" +
-                       "<input type=hidden name=action value=Save>\n" +
+            _out.write("<form action=\"events\" method=\"post\">\n" +
+                       "<input type=hidden name=\"action\" value=\"Save\">\n" +
                        "<input type=hidden name=\"nonce\" value=\"" + nonce + "\" >\n<b>");
             _out.write(_t("Events since") + ":</b> <select name=\"from\">");
             for (int i = 0; i < _times.length; i++) {
