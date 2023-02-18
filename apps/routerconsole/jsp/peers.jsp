@@ -97,6 +97,39 @@
     }
   }
 
+  function countTiers() {
+    if (ssuTfoot || ntcpTfoot) {
+      var tierL = document.querySelectorAll(".rbw.L");
+      var tierM = document.querySelectorAll(".rbw.M");
+      var tierN = document.querySelectorAll(".rbw.N");
+      var tierO = document.querySelectorAll(".rbw.O");
+      var tierP = document.querySelectorAll(".rbw.P");
+      var tierX = document.querySelectorAll(".rbw.X");
+      var isFF = document.querySelectorAll(".isff");
+      var isU = document.querySelectorAll(".isU");
+      var countL = tierL !== null ? tierL.length : "0";
+      var countM = tierM !== null ? tierM.length : "0";
+      var countN = tierN !== null ? tierN.length : "0";
+      var countO = tierO !== null ? tierO.length : "0";
+      var countP = tierP !== null ? tierP.length : "0";
+      var countX = tierX !== null ? tierX.length : "0";
+      var countFF = isFF !== null ? isFF.length : "0";
+      var countU = isU !== null ? isU.length : "0";
+      var peerFoot = document.querySelector("tfoot .peer");
+      var pCount = document.getElementById("peerCounter");
+      var counter = "&nbsp;&nbsp;" +
+                    (countL > 0 ? "<span><b>L</b> " + countL + "</span>&nbsp;&nbsp;" : "") +
+                    (countM > 0 ? "<span><b>M</b> " + countM + "</span>&nbsp;&nbsp;" : "") +
+                    (countN > 0 ? "<span><b>N</b> " + countN + "</span>&nbsp;&nbsp;" : "") +
+                    (countO > 0 ? "<span><b>O</b> " + countO + "</span>&nbsp;&nbsp;" : "") +
+                    (countP > 0 ? "<span><b>P</b> " + countP + "</span>&nbsp;&nbsp;" : "") +
+                    (countX > 0 ? "<span><b>X</b> " + countX + "</span>&nbsp;&nbsp;" : "") +
+                    (countU > 0 ? "<span><b id=u>U</b> " + countU + "</span>&nbsp;&nbsp;" : "") +
+                    (countFF > 0 ? "<span><b id=ff>F</b> " + countFF + "</span>" : "");
+      pCount.innerHTML = counter;
+    }
+  }
+
   function refreshPeers() {
     var now = new Date().getTime();
     if (queryParams.has("transport")) {
@@ -115,7 +148,10 @@
             if (peersSSUResponse !== null && peersSSU.innerHTML !== peersSSUResponse.innerHTML) {
               ssuH3.innerHTML = ssuH3Response.innerHTML;
               peersSSU.innerHTML = peersSSUResponse.innerHTML;
-              ssuTfoot.innerHTML = ssuTfootResponse.innerHTML;
+              if (ssuTfoot !== null) {
+                ssuTfoot.innerHTML = ssuTfootResponse.innerHTML;
+                countTiers();
+              }
               sorterSSU.refresh();
             }
           } else {
@@ -132,7 +168,10 @@
             if (peersNTCPResponse !== null && peersNTCP.innerHTML !== peersNTCPResponse.innerHTML) {
               ntcpH3.innerHTML = ntcpH3Response.innerHTML;
               peersNTCP.innerHTML = peersNTCPResponse.innerHTML;
-              ntcpTfoot.innerHTML = ntcpTfootResponse.innerHTML;
+              if (ntcpTfoot !== null) {
+                ntcpTfoot.innerHTML = ntcpTfootResponse.innerHTML;
+                countTiers();
+              }
               sorterNTCP.refresh();
             }
           } else {
@@ -159,6 +198,7 @@
   }
 
   progressx.hide();
+  xhrPeers.addEventListener("load", countTiers(), true);
   document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
     if (peersNTCP !== null) {ntcpConn.addEventListener("mouseover", lazyload());}

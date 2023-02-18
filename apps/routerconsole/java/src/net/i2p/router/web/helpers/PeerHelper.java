@@ -321,11 +321,13 @@ public class PeerHelper extends HelperBase {
         long totalUptime = 0;
         long totalSend = 0;
         long totalRecv = 0;
+        int notEstablished = 0;
 
         for (Iterator<NTCPConnection> iter = peers.iterator(); iter.hasNext(); ) {
              // outbound conns get put in the map before they are established
              if (!iter.next().isEstablished())
                  iter.remove();
+                 notEstablished++;
         }
 
         StringBuilder buf = new StringBuilder(4*1024);
@@ -438,14 +440,14 @@ public class PeerHelper extends HelperBase {
         buf.append("</tbody>");
 
         if (!peers.isEmpty()) {
-            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=2><b>")
+            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=5><b>")
                .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
-            buf.append("</b></td>" +
-                       "<td class=direction>&nbsp;</td>" +
-                       "<td class=ipv6>&nbsp;</td>" +
-                       "<td class=idle>&nbsp;</td>" +
+            buf.append("</b><span id=peerCounter></span></td>" +
+                       //"<td class=direction>&nbsp;</td>" +
+                       //"<td class=ipv6>&nbsp;</td>" +
+                       //"<td class=idle>&nbsp;</td>" +
                        "<td class=inout nowrap><span class=right><b>").append(rx).append("</b></span>")
                .append(THINSP).append("<span class=left><b>").append(tx).append("</b></span></td>" +
                        "<td class=uptime><span><b>").append(DataHelper.formatDuration2(totalUptime/peers.size())).append("</b></span></td>" +
@@ -805,13 +807,21 @@ public class PeerHelper extends HelperBase {
         buf.append("</tbody>\n");
 
         if (numPeers > 0) {
-            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=2><b>")
-               .append(ngettext("{0} peer", "{0} peers", ut.countActivePeers()))
-               .append("</b></td><td class=direction>&nbsp;</td>");
+            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=");
             if (debugmode) {
-                buf.append("<td class=ipv6>&nbsp;</td><td class=ssuversion>&nbsp;</td>");
+                buf.append("6");
+            } else {
+                buf.append("4");
             }
-            buf.append("<td class=idle>&nbsp;</td><td class=inout nowrap><span class=right><b>");
+            buf.append("><b>")
+               .append(ngettext("{0} peer", "{0} peers", ut.countActivePeers()))
+               .append("</b><span id=peerCounter hidden></span></td>");
+            //bug.append("<td class=direction>&nbsp;</td>");
+            //if (debugmode) {
+            //    buf.append("<td class=ipv6>&nbsp;</td><td class=ssuversion>&nbsp;</td>");
+            //}
+            //buf.append("<td class=idle>&nbsp;</td>");
+            buf.append("<td class=inout nowrap><span class=right><b>");
             String bwin = formatKBps(bpsIn).replace(".00", "");
             String bwout = formatKBps(bpsOut).replace(".00", "");
             buf.append(bwin).append("</b></span>").append(THINSP);
