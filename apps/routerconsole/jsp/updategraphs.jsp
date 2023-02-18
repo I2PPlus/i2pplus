@@ -21,11 +21,9 @@
     graphHelper.storeWriter(out);
     graphHelper.storeMethod(request.getMethod());
 %>
-<script charset=utf-8 src="/js/ajax.js" type=text/javascript></script>
 <meta http-equiv="Refresh" content= "0;URL=/graphs">
 </head>
 <body id="updategraphs">
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="perf"><%=intl._t("Performance Graphs")%></h1>
 <div class=main id="graphs">
@@ -33,6 +31,5 @@
 <jsp:getProperty name="graphHelper" property="allMessages" />
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

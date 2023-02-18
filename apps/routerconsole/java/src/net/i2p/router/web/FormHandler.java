@@ -186,9 +186,8 @@ public abstract class FormHandler {
         if (_errors.isEmpty() && _notices.isEmpty())
             return "";
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<script charset=utf-8 src=\"/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>\" type=text/javascript></script>");
-//        buf.append("<div class=\"messages\" id=\"messages\" onclick=\"this.remove()\">");
-        buf.append("<div class=\"messages\" id=\"messages\">");
+        buf.append("<script charset=utf-8  nonce=\"<%=cspNonce%>\" src=\"/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>\" type=text/javascript></script>");
+        buf.append("<div class=messages id=messages>");
         if (!_errors.isEmpty()) {
             buf.append("<div class=error>");
             buf.append(render(_errors));

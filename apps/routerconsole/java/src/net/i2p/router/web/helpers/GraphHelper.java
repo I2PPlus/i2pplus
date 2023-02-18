@@ -499,12 +499,12 @@ public class GraphHelper extends FormHandler {
         if (StatSummarizer.isDisabled(_context)) {
             addFormError("Either the router hasn't initialized yet, or graph generation is not supported with this JVM or OS.");
             addFormNotice("JVM: " + System.getProperty("java.vendor") + ' ' +
-                         System.getProperty("java.version") + " (" +
-                         System.getProperty("java.runtime.name") + ' ' +
-                         System.getProperty("java.runtime.version") + ')');
-            addFormNotice("OS: " + System.getProperty("os.name") + ' ' +
-                           System.getProperty("os.arch") + ' ' +
-                           System.getProperty("os.version"));
+                                    System.getProperty("java.version") + " (" +
+                                    System.getProperty("java.runtime.name") + ' ' +
+                                    System.getProperty("java.runtime.version") + ')');
+            addFormNotice("OS: " +  System.getProperty("os.name") + ' ' +
+                                    System.getProperty("os.arch") + ' ' +
+                                    System.getProperty("os.version"));
             if (!SystemVersion.isMac() && !SystemVersion.isWindows())
                 addFormNotice("Installing the fonts-open-sans package and then restarting I2P+ may resolve the issue.");
             addFormNotice("Check logs for more information.");
@@ -522,7 +522,7 @@ public class GraphHelper extends FormHandler {
      */
     @Override
     protected void processForm() {
-        if ("save".equals(_action))
+        if ("Save".equals(_action))
             saveSettings();
     }
 
