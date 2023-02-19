@@ -1815,7 +1815,7 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #ntcpconnections th:nth-child(n+2),#ntcpconnections td,#udpconnections th:nth-child(n+2),#udpconnections td{text-align:center}
 #ntcpconnections td:nth-child(4),#ntcpconnections td:nth-child(5),#udpconnections td:nth-child(4),#udpconnections td:nth-child(5),#udpconnections td:nth-child(8),#udpconnections td:nth-child(12){white-space:nowrap}
 #ntcpconnections td:nth-child(n+6) span,#ntcpconnections .tablefooter td:nth-child(n+5) span{ min-width:40px;display:inline-block}
-#ntcpconnections td:nth-last-child(2),#udpconnections td:last-child,#profiles td:last-child{border-right:var(--border)}
+#profiles td:last-child{border-right:var(--border)}
 #udpconnections tfoot td,#ntcpconnections tfoot td{padding-left:5px;padding-right:5px}
 #ntcpconnections td span:empty{display:none}
 #ntcpconnections tbody td:not(:last-child),#udpconnections tbody td:not(:last-child),#profilelist td:not(:last-child),#profile_defs td:not(:last-child),#floodfills td:not(.rif):not(.rih):not(.ribw):not(:last-child),#tunnelPeerCount td:not(:last-child){border-right:var(--border_softer)}
@@ -2351,3 +2351,10 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 .ric .rbw{line-height:16px}
 #banlist li .rid{margin-right:5px;margin-left:-3px;float:left}
 #profiles span[hidden]{display:none!important}
+#peerCounter{display:inline-block;vertical-align:middle;font-weight:400}
+#peerCounter b{margin:0 1px 0 4px;padding:2px;min-width:18px;display:inline-block;line-height:1;text-align:center!important;border:var(--border_soft);box-shadow:var(--highlight);background:var(--badge)}
+#peerCounter b#ff{background:linear-gradient(135deg,rgba(0,0,0,0)82%,rgba(192,80,0,.8)82%),var(--badge)}
+#peerCounter b#u{background:linear-gradient(45deg,rgba(0,0,0,0)82%,rgba(192,0,0,.8)82%),var(--badge)}
+#peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
+#peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
+#peers .edit a{margin:2px;vertical-align:middle}

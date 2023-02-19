@@ -352,6 +352,7 @@ public class PeerHelper extends HelperBase {
                        "<th class=tx title=\"").append(_t("Messages sent")).append("\">").append(_t("TX")).append("</th>" +
                        "<th class=rx title=\"").append(_t("Messages received")).append("\">").append(_t("RX")).append("</th>" +
                        "<th class=queue title=\"").append(_t("Queued messages to send to peer")).append("\">").append(_t("Out Queue")).append("</th>" +
+                       "<th class=edit></th>" +
                        "</tr></thead>\n<tbody id=peersNTCP>\n");
         }
         out.write(buf.toString());
@@ -431,8 +432,13 @@ public class PeerHelper extends HelperBase {
             if (outQueue > 0) {
                 buf.append("<span class=qmsg title=\"Queued messages: ").append(outQueue).append("\">").append(outQueue).append("</span>");
             }
-            if (con.isBacklogged())
+            if (con.isBacklogged()) {
                 buf.append("&nbsp;<span class=backlogged title=\"").append(_t("Connection is backlogged")).append("\">!!</span>");
+            }
+            buf.append("<td class=edit><a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
+               .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>")
+               .append("<a class=configpeer href=\"/configpeer?peer=").append(h.toBase64()).append("\" title=\"").append(_t("Configure peer"))
+               .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a></td>");
             buf.append("</td></tr>\n");
             out.write(buf.toString());
             buf.setLength(0);
@@ -454,7 +460,7 @@ public class PeerHelper extends HelperBase {
                        "<td class=skew><span><b>").append(DataHelper.formatDuration2(offsetTotal*1000/peers.size())).append("</b></span></td>" +
                        "<td class=tx><span><b>").append(totalSend).append("</b></span></td>" +
                        "<td class=rx><span><b>").append(totalRecv).append("</b></span></td>" +
-                       "<td>&nbsp;</td></tr>\n");
+                       "<td>&nbsp;</td><td class=edit>&nbsp;</td></tr>\n");
         }
         buf.append("</tfoot></table>\n</div></div>\n");
         out.write(buf.toString());
@@ -630,6 +636,7 @@ public class PeerHelper extends HelperBase {
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by outbound maximum transmit unit"), FLAG_MTU);
                 buf.append("</th>");
             }
+            buf.append("<th class=edit data-sort-method=none></th>");
             buf.append("</tr></thead>\n<tbody id=peersSSU>\n");
         }
         out.write(buf.toString());
@@ -785,6 +792,10 @@ public class PeerHelper extends HelperBase {
                 buf.append("<span class=left>").append(peer.getReceiveMTU());
                 buf.append("</span></td>");
             }
+            buf.append("<td class=edit><a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
+               .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>")
+               .append("<a class=configpeer href=\"/configpeer?peer=").append(h.toBase64()).append("\" title=\"").append(_t("Configure peer"))
+               .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a></td>");
 
             buf.append("</tr>\n");
             out.write(buf.toString());
@@ -851,6 +862,7 @@ public class PeerHelper extends HelperBase {
                 buf.append(DataHelper.formatDuration2(rtoTotal/numPeers));
                 buf.append("</b></td><td class=mtu><b>").append(ut.getMTU(false)).append("</b></td>");
             }
+            buf.append("<td class=edit></td>");
             buf.append("</tr></tfoot>\n");
         }  // numPeers > 0
         buf.append("</table>\n</div>\n</div>\n");

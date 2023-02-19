@@ -77,9 +77,9 @@ ul{margin:0;padding:0}
 .underline{margin:0 0 10px;padding:5px 0;border-bottom:1px solid #efeeff}
 .viewedit br{display:none}
 .viewedit .configpeer:hover,.viewedit .configpeer:focus{background:var(--edit_hover) no-repeat center center/12px,var(--element)}
-.viewprofile{background:var(--eye) no-repeat center center/12px,var(--element)}
 .viewprofile,.configpeer,.familysearch{margin:1px 2px;padding:4px;width:12px;height:12px;vertical-align:middle;display:inline-block;line-height:0;font-size:0;border:var(--border_badge);box-shadow:var(--highlight);background:var(--element)}
 .configpeer{background:var(--edit) no-repeat center center/12px,var(--element)}
+.viewprofile{background:var(--eye) no-repeat center center/12px,var(--element)}
 .viewprofile:hover,.familysearch:hover,.configpeer:hover,.viewprofile:focus,.familysearch:focus,.configpeer:focus{border:1px solid var(--a)}
 .viewprofile:hover,.viewprofile:focus{background:var(--eye_hover) no-repeat center center/12px,var(--element)}
 .wideload{margin:0}
@@ -2832,3 +2832,10 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .ric .rbw{line-height:17px;box-shadow:var(--highlight)}
 #banlist li .rid{margin:1px 5px -1px -2px;float:left}
 #profiles span[hidden]{display:none!important}
+#peerCounter{display:inline-block;vertical-align:middle;font-weight:400}
+#peerCounter b{margin:0 1px 0 4px;padding:2px;min-width:18px;display:inline-block;line-height:1;text-align:center!important;border:var(--border_soft);box-shadow:var(--highlight);background:var(--badge)}
+#peerCounter b#ff{background:linear-gradient(135deg,rgba(0,0,0,0)82%,rgba(192,80,0,.8)82%),var(--badge)}
+#peerCounter b#u{background:linear-gradient(45deg,rgba(0,0,0,0)82%,rgba(192,0,0,.8)82%),var(--badge)}
+#peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
+#peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
+#peers .edit a{margin:2px;vertical-align:middle}
