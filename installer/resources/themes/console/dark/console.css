@@ -2883,6 +2883,6 @@ span#newtab{margin-top:4px}
 #topCount td{padding:4px 2px 2px 6px;min-width:32px;position:relative;line-height:1;border:var(--border_soft);text-align:left;box-shadow:var(--highlight);background:var(--badge)}
 #topCount td span{padding:2px 4px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(0,0,0,.3)}
 #topCount td#ff{background:linear-gradient(135deg,rgba(0,0,0,0)88%,rgba(192,80,0,.8)88%),var(--badge)}
-#topCount td#u{background:linear-gradient(45deg,rgba(0,0,0,0)88%,rgba(234,0,0,.)88%),var(--badge)}
+#topCount td#u{background:linear-gradient(45deg,rgba(0,0,0,0)88%,rgba(234,0,0,.9)88%),var(--badge)}
 #peers .reachability{display:none}
 #peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
