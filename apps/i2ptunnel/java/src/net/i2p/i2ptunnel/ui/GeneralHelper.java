@@ -353,8 +353,7 @@ public class GeneralHelper {
                     to = new File(context.getConfigDir(), name);
                 boolean success = FileUtil.rename(pkf, to);
                 if (success)
-                    msgs.add("Private key file " + pkf.getAbsolutePath() +
-                             " renamed to " + to.getAbsolutePath());
+                    msgs.add("Private key file " + pkf.getAbsolutePath() + " renamed to " + to.getAbsolutePath());
             }
         }
         return msgs;
@@ -887,7 +886,7 @@ public class GeneralHelper {
     }
 
     public boolean getNewDest(int tunnel) {
-        return getBooleanProperty(tunnel, "i2cp.newDestOnResume") &&
+        return getBooleanProperty(tunnel, "i2cp.newDestOnResume", true) &&
                getBooleanProperty(tunnel, "i2cp.closeOnIdle") &&
                !getBooleanProperty(tunnel, "persistentClientKey");
     }
