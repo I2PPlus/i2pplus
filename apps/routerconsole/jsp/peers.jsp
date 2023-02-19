@@ -62,7 +62,7 @@
   var ntcpTfoot = document.querySelector("#ntcpconnections tfoot");
   var peersNTCP = document.getElementById("peersNTCP");
   var peersSSU = document.getElementById("peersSSU");
-  var refreshPeersId = setInterval(refreshPeers, 15000);
+  var refreshPeersId = setInterval(refreshPeers, 30000);
   var ssuConn = document.getElementById("udpconnections");
   var ssuH3 = document.getElementById("udpcon");
   var ssuTfoot = document.querySelector("#udpconnections tfoot");
@@ -117,16 +117,19 @@
       var countU = isU !== null ? isU.length : "0";
       var peerFoot = document.querySelector("tfoot .peer");
       var pCount = document.getElementById("peerCounter");
-      var counter = "&nbsp;&nbsp;" +
-                    (countL > 0 ? "<span><b>L</b> " + countL + "</span>&nbsp;&nbsp;" : "") +
-                    (countM > 0 ? "<span><b>M</b> " + countM + "</span>&nbsp;&nbsp;" : "") +
-                    (countN > 0 ? "<span><b>N</b> " + countN + "</span>&nbsp;&nbsp;" : "") +
-                    (countO > 0 ? "<span><b>O</b> " + countO + "</span>&nbsp;&nbsp;" : "") +
-                    (countP > 0 ? "<span><b>P</b> " + countP + "</span>&nbsp;&nbsp;" : "") +
-                    (countX > 0 ? "<span><b>X</b> " + countX + "</span>&nbsp;&nbsp;" : "") +
-                    (countU > 0 ? "<span><b id=u>U</b> " + countU + "</span>&nbsp;&nbsp;" : "") +
-                    (countFF > 0 ? "<span><b id=ff>F</b> " + countFF + "</span>" : "");
-      pCount.innerHTML = counter;
+      var topCount = document.getElementById("topCount");
+      var counter = "<table><tr>" +
+                    (countL > 0 ? "<td class=rbw>L<span> " + countL + "</span></td>" : "") +
+                    (countM > 0 ? "<td class=rbw>M<span> " + countM + "</span></td>" : "") +
+                    (countN > 0 ? "<td class=rbw>N<span> " + countN + "</span></td>" : "") +
+                    (countO > 0 ? "<td class=rbw>O<span> " + countO + "</span></td>" : "") +
+                    (countP > 0 ? "<td class=rbw>P<span> " + countP + "</span></td>" : "") +
+                    (countX > 0 ? "<td class=rbw>X<span> " + countX + "</span></td>" : "") +
+                    (countU > 0 ? "<td class=rbw id=u>U<span> " + countU + "</span></td>" : "") +
+                    (countFF > 0 ? "<td class=rbw id=ff>F<span> " + countFF + "</span></td>" : "") +
+                    "</tr></table>";
+      topCount.innerHTML = counter;
+      //pCount.innerHTML = counter;
     }
   }
 

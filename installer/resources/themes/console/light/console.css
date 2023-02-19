@@ -2710,11 +2710,16 @@ th code{font-size:9pt}
 .ric .rbw{line-height:16px}
 #banlist li .rid{margin-right:5px;margin-left:-2px;float:left}
 #profiles span[hidden]{display:none!important}
-#peerCounter{display:inline-block;vertical-align:middle;font-weight:400}
-#peerCounter b{margin:0 1px 0 4px;padding:2px;min-width:18px;display:inline-block;line-height:1;text-align:center!important;border:var(--border_soft);box-shadow:var(--highlight);background:var(--badge)}
-#peerCounter b#ff{background:linear-gradient(135deg,rgba(0,0,0,0)82%,rgba(192,80,0,.8)82%),var(--badge)}
-#peerCounter b#u{background:linear-gradient(45deg,rgba(0,0,0,0)82%,rgba(192,0,0,.8)82%),var(--badge)}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
 #peers .edit a{margin:2px;vertical-align:middle}
-
+#topCount{display:inline-block;position:absolute;right:3px;top:3px}
+#topCount table, #topCount td{line-height:1}
+#topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;;border:none}
+#topCount td{position:relative;min-width:20px;line-height:1;padding:4px 0 4px 6px;border:var(--border_soft);text-align:left;box-shadow:var(--highlight);background:var(--badge)}
+#topCount td span{display:inline-block;position:absolute;right:2px;top:2px;font-size:85%;font-weight:400}
+#topCount td#ff{background:linear-gradient(135deg,rgba(0,0,0,0)82%,rgba(192,80,0,.8)82%),var(--badge)}
+#topCount td#u{background:linear-gradient(45deg,rgba(0,0,0,0)82%,rgba(192,0,0,.8)82%),var(--badge)}
+#peers .reachability{display:none}
+#peers #ntcpcon,#peers #udpcon{position:relative}
+#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
