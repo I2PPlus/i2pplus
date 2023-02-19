@@ -4,17 +4,17 @@
 
 "use strict";
 
-const addNotify = document.getElementById("addNotify");
-const addTorrent = document.getElementById("addForm");
-const alertCss = document.querySelector("#snarkAlert");
-const createNotify = document.getElementById("createNotify");
-const createTorrent = document.getElementById("createForm");
-const inputAddFile = document.querySelector("input[name='nofilter_newURL']");
-const inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
-const messages = document.getElementById("screenlog");
-const processForm = document.querySelector("iframe");
+var addNotify = document.getElementById("addNotify");
+var addTorrent = document.getElementById("addForm");
+var alertCss = document.querySelector("#snarkAlert");
+var createNotify = document.getElementById("createNotify");
+var createTorrent = document.getElementById("createForm");
+var inputAddFile = document.querySelector("input[name='nofilter_newURL']");
+var inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
+var messages = document.getElementById("screenlog");
+var processForm = document.querySelector("iframe");
 var url = ".ajax/xhr1.html";
-const xhrLog = new XMLHttpRequest();
+var xhrLog = new XMLHttpRequest();
 
 function updateUrl() {
   var filterbar = document.getElementById("torrentDisplay");
@@ -41,14 +41,18 @@ function updateLog() {
   function reload() {
     xhrLog.onreadystatechange = function () {
       if (xhrLog.readyState == 4 && xhrLog.status == 200) {
-        var newLogEntry = xhrLog.responseXML.querySelectorAll("#screenlog li.msg")[0].innerHTML.substring(21);
-        if (messages) {
-          console.log(newLogEntry);
+        if (messages !== null) {
+          if (xhrLog.responseXML.querySelectorAll("#screenlog li.msg")[0] !== null) {
+            var newLogEntry = xhrLog.responseXML.querySelectorAll("#screenlog li.msg")[0].innerHTML.substring(21);
+            if (messages) {
+              console.log(newLogEntry);
+            }
+          }
+          if (!addNotify.hidden)
+            addNotify.innerHTML = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
+            if (!createNotify.hidden)
+            createNotify.innerHTML = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
         }
-        if (!addNotify.hidden)
-        addNotify.innerHTML = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
-        if (!createNotify.hidden)
-        createNotify.innerHTML = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
       }
     };
     xhrLog.send();

@@ -10,6 +10,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%@include file="csp-unsafe.jsi" %>
 <%=intl.title("graphs")%>
  <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
@@ -27,7 +28,7 @@
 %>
 </head>
 <body id="perfgraphs">
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <%
     // needs to be after the summary bar is rendered, so
@@ -43,10 +44,10 @@
     }
 %>
 <h1 class="perf"><%=intl._t("Performance Graph")%></h1>
-<div class="main" id="graph_single">
+<div class=main id="graph_single">
  <jsp:getProperty name="graphHelper" property="singleStat" />
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" type=text/javascript>
   var main = document.getElementById("perfgraphs");
   var graph = document.getElementById("single");
   var graphImage = document.getElementById("graphSingle");
@@ -61,7 +62,7 @@
         if (graphcss)
           graphcss.remove();
         var s = document.createElement("style");
-        s.type="text/css";
+        s.type=text/css;
         s.setAttribute("id", "graphcss");
 <%
     if (graphHelper.getGraphHiDpi()) {
@@ -119,13 +120,12 @@ if (graph && visibility == "visible") {
         graphImage.addEventListener("load", initCss());
       }
     }
-    window.addEventListener("pageshow", progressx.hide());
+    window.addEventListener("DOMContentLoaded", progressx.hide());
     xhrgraph.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 }
 <%  } %>
 </script>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

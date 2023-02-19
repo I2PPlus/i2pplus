@@ -34,12 +34,12 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title><%=intl._t("subscriptions")%> - susidns</title>
-<link rel="stylesheet" type="text/css" href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel="stylesheet" type="text/css" href="<%=subs.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<style type="text/css">body{display:none;pointer-events:none}</style>
+<link rel=stylesheet type=text/css href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=subs.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
 <body id="sbs">
 <div class="page">
@@ -57,17 +57,17 @@
 <h3><%=intl._t("Subscriptions")%>&nbsp;&nbsp;<span><a href="log.jsp">View Log</a></span></h3>
 <h4><%=intl._t("File location")%>: <span class="storage">${subs.fileName}</span></h4>
 </div>
-<script charset="utf-8" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<div id="messages">${subs.messages}</div>
-<form method="POST" action="subscriptions#navi">
+<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
+<div id=messages>${subs.messages}</div>
+<form method=POST action="subscriptions#navi">
 <div id="content">
-<input type="hidden" name="serial" value="${subs.serial}" >
+<input type=hidden name="serial" value="${subs.serial}" >
 <textarea name="content" rows="10" cols="80">${subs.content}</textarea>
 </div>
 <div id="buttons">
-<input class="update" style="float: left;" type="submit" name="action" value="<%=intl._t("Update")%>" >
-<!--<input class="reload" type="submit" name="action" value="<%=intl._t("Reload")%>" >-->
-<input class="accept" type="submit" name="action" value="<%=intl._t("Save")%>" >
+<input class="update" style="float: left;" type=submit name=action value="<%=intl._t("Update")%>" >
+<!--<input class="reload" type=submit name=action value="<%=intl._t("Reload")%>" >-->
+<input class=accept type=submit name=action value="<%=intl._t("Save")%>" >
 </div>
 </form>
 <div class="help" id="helpsubs">
@@ -80,6 +80,6 @@
 </div>
 </div>
 <span data-iframe-height></span>
-<style type="text/css">body{display:block;pointer-events:auto}</style>
+<style type=text/css>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

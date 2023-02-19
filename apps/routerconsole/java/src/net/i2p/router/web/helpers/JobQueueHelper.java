@@ -39,6 +39,22 @@ public class JobQueueHelper extends HelperBase {
         }
     }
 
+    public String getJobQueueStats() {
+        try {
+            if (_out != null) {
+                renderJobStatsHTML(_out);
+                return "";
+            } else {
+                StringWriter sw = new StringWriter(32*1024);
+                renderJobStatsHTML(sw);
+                return sw.toString();
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return "";
+        }
+    }
+
     /**
      *  Moved from JobQueue
      *  @since 0.8.9
@@ -63,7 +79,7 @@ public class JobQueueHelper extends HelperBase {
         if ((activeJobs.size() != 0) && (isAdvanced())) {
             buf.append("<h3 id=\"activejobs\">")
                .append(_t("Active jobs")).append(": ").append(activeJobs.size())
-               .append("</h3>\n<ol class=\"jobqueue\">\n");
+               .append("</h3>\n<ol class=jobqueue>\n");
             for (int i = 0; i < activeJobs.size(); i++) {
                 Job j = activeJobs.get(i);
                 buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ");
@@ -75,7 +91,7 @@ public class JobQueueHelper extends HelperBase {
         if ((justFinishedJobs.size() != 0) && (isAdvanced())) {
             buf.append("<h3 id=\"finishedjobs\">")
                .append(_t("Just finished jobs")).append(": ").append(justFinishedJobs.size())
-               .append("</h3>\n<ol class=\"jobqueue\">\n");
+               .append("</h3>\n<ol class=jobqueue>\n");
             for (int i = 0; i < justFinishedJobs.size(); i++) {
                 Job j = justFinishedJobs.get(i);
                 buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ");
@@ -88,7 +104,7 @@ public class JobQueueHelper extends HelperBase {
         if ((readyJobs.size() != 0) && (isAdvanced())) {
             buf.append("<h3 id=\"readyjobs\">")
                .append(_t("Ready/waiting jobs")).append(": ").append(readyJobs.size())
-               .append("</h3>\n<ol class=\"jobqueue\">\n");
+               .append("</h3>\n<ol class=jobqueue>\n");
             ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
             for (int i = 0; i < readyJobs.size(); i++) {
                 Job j = readyJobs.get(i);
@@ -109,7 +125,7 @@ public class JobQueueHelper extends HelperBase {
 
         buf.append("<h3 id=\"scheduledjobs\">")
            .append(_t("Scheduled jobs")).append(": ").append(timedJobs.size())
-           .append("</h3>\n<ol class=\"jobqueue\">\n");
+           .append("</h3>\n<ol class=jobqueue>\n");
 
         ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
         getJobCounts(buf, counter);
@@ -129,9 +145,9 @@ public class JobQueueHelper extends HelperBase {
                        j.getName() + "</b> &#10140; ", "<i>" + DataHelper.formatDuration2(time) + "</i>"));
             // debug, don't bother translating
             if (time < 0)
-                buf.append(" [DELAYED]");
+                buf.append(" <span class=delayed>[DELAYED]</span>");
             if (time < prev)
-                buf.append(" [OUT OF ORDER]");
+                buf.append(" <span class=outOfOrder>[OUT OF ORDER]</span>");
             prev = time;
             buf.append("</li>\n");
         }
@@ -139,6 +155,12 @@ public class JobQueueHelper extends HelperBase {
         getJobCounts(buf, counter);
         out.write(buf.toString());
         buf.setLength(0);
+        //getJobStats(buf);
+        out.write(buf.toString());
+    }
+
+    private void renderJobStatsHTML(Writer out) throws IOException {
+        StringBuilder buf = new StringBuilder(32*1024);
         getJobStats(buf);
         out.write(buf.toString());
     }
@@ -149,7 +171,7 @@ public class JobQueueHelper extends HelperBase {
         if (names.size() < 4)
             return;
 
-        buf.append("<table id=\"schedjobs\">\n");
+        buf.append("<table id=schedjobs>\n");
         buf.append("<thead><tr><th>").append(_t("Queue Totals")).append("</th></tr></thead>\n");
             Collections.sort(names, new JobCountComparator(counter));
             buf.append("<tr><td>\n<ul>\n");
@@ -169,25 +191,31 @@ public class JobQueueHelper extends HelperBase {
      *  @since 0.8.9
      */
     private void getJobStats(StringBuilder buf) {
-        buf.append("<div class=\"widescroll\">")
-           .append("<h3 id=\"totaljobstats\">")
-           .append(_t("Total Job Statistics"))
+        buf.append("<div class=widescroll>")
+           .append("<h3 id=totaljobstats>").append(_t("Job Statistics (excluding single-shot jobs)"))
+//           .append("<label class=script hidden><input name=toggle id=toggle type=checkbox class=\"optbox slider\" checked=\"\">")
+//           .append(_t("Extended view")).append("</label>")
            .append("</h3>\n");
-        buf.append("<table id=\"jobstats\">\n<tr>\n" +
+        buf.append("<table id=jobstats data-sortable>\n" +
+                   "<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/>");
+        if (isAdvanced()) {
+            buf.append("<colgroup/><colgroup/><colgroup/><colgroup/>\n");
+        }
+        buf.append("<thead><tr data-sort-method=thead>" +
                    "<th>").append(_t("Job")).append("</th>" +
-                   "<th>").append(_t("Runs")).append("</th>" +
-                   "<th>").append(_t("Dropped")).append("</th>" +
-                   "<th>").append(_t("Time")).append("</th>" +
-                   "<th><i>").append(_t("Avg")).append("</i></th>" +
-                   "<th><i>").append(_t("Max")).append("</i></th>" +
-                   "<th><i>").append(_t("Min")).append("</i></th>");
+                   "<th data-sort-method=number>").append(_t("Runs")).append("</th>" +
+                   "<th data-sort-method=number>").append(_t("Dropped")).append("</th>" +
+                   "<th data-sort-method=number>").append(_t("Time")).append("</th>" +
+                   "<th data-sort-method=number>").append(_t("Avg")).append("</th>" +
+                   "<th data-sort-method=number>").append(_t("Max")).append("</th>" +
+                   "<th data-sort-method=number>").append(_t("Min")).append("</th>");
             if (isAdvanced()) {
-                buf.append("<th>").append(_t("Pending")).append("</th>" +
-                           "<th><i>").append(_t("Avg")).append("</i></th>" +
-                           "<th><i>").append(_t("Max")).append("</i></th>" +
-                           "<th><i>").append(_t("Min")).append("</i></th>");
+                buf.append("<th data-sort-method=number>").append(_t("Pending")).append("</th>" +
+                           "<th data-sort-method=number>").append(_t("Avg")).append("</th>" +
+                           "<th data-sort-method=number>").append(_t("Max")).append("</th>" +
+                           "<th data-sort-method=number>").append(_t("Min")).append("</th>");
             }
-        buf.append("\n</tr>\n");
+        buf.append("</tr></thead>\n<tbody id=statCount>\n");
 
         long totRuns = 0;
         long totDropped = 0;
@@ -204,31 +232,42 @@ public class JobQueueHelper extends HelperBase {
         Collections.sort(tstats, new JobStatsComparator());
 
         for (JobStats stats : tstats) {
+            totDropped += stats.getDropped();
+            totExecTime += stats.getTotalTime();
+            totPendingTime += stats.getTotalPendingTime();
+            totRuns += stats.getRuns();
+
+            if (stats.getRuns() < 2) {
+                totRuns -=1;
+                totExecTime -= stats.getTotalTime();
+                totPendingTime -= stats.getTotalPendingTime();
+                continue;
+            }
+            if (stats.getName().contains("(disabled)")) {
+                totRuns -=1;
+                continue;
+            }
             buf.append("<tr>");
             // TODO: Add tooltip with simpleName to job name
             //buf.append("<td><b title=\"").append(getClass().getSimpleName()).append("\">").append(stats.getName()).append("</b></td>");
             buf.append("<td><b>").append(stats.getName()).append("</b></td>");
             buf.append("<td>").append(stats.getRuns()).append("</td>");
             buf.append("<td>").append(stats.getDropped()).append("</td>");
-            buf.append("<td>").append(DataHelper.formatDuration2(stats.getTotalTime())).append("</td>");
-            buf.append("<td>").append(DataHelper.formatDuration2(stats.getAvgTime())).append("</td>");
-            buf.append("<td>").append(DataHelper.formatDuration2(stats.getMaxTime())).append("</td>");
-            buf.append("<td>").append(DataHelper.formatDuration2(stats.getMinTime())).append("</td>");
+            buf.append("<td><span hidden>[").append(stats.getTotalTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getTotalTime())).append("</td>");
+            buf.append("<td><span hidden>[").append(stats.getAvgTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getAvgTime())).append("</td>");
+            buf.append("<td><span hidden>[").append(stats.getMaxTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getMaxTime())).append("</td>");
+            buf.append("<td><span hidden>[").append(stats.getMinTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getMinTime())).append("</td>");
             if (isAdvanced()) {
-                buf.append("<td>").append(DataHelper.formatDuration2(stats.getTotalPendingTime())).append("</td>");
-                buf.append("<td>").append(DataHelper.formatDuration2(stats.getAvgPendingTime())).append("</td>");
-                buf.append("<td>").append(DataHelper.formatDuration2(stats.getMaxPendingTime())).append("</td>");
-                buf.append("<td>").append(DataHelper.formatDuration2(stats.getMinPendingTime())).append("</td>");
+                buf.append("<td><span hidden>[").append(stats.getTotalPendingTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getTotalPendingTime())).append("</td>");
+                buf.append("<td><span hidden>[").append(stats.getAvgPendingTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getAvgPendingTime())).append("</td>");
+                buf.append("<td><span hidden>[").append(stats.getMaxPendingTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getMaxPendingTime())).append("</td>");
+                buf.append("<td><span hidden>[").append(stats.getMinPendingTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getMinPendingTime())).append("</td>");
             }
             buf.append("</tr>\n");
-            totRuns += stats.getRuns();
-            totDropped += stats.getDropped();
-            totExecTime += stats.getTotalTime();
             if (stats.getMaxTime() > maxExecTime)
                 maxExecTime = stats.getMaxTime();
             if ( (minExecTime < 0) || (minExecTime > stats.getMinTime()) )
                 minExecTime = stats.getMinTime();
-            totPendingTime += stats.getTotalPendingTime();
             if (stats.getMaxPendingTime() > maxPendingTime)
                 maxPendingTime = stats.getMaxPendingTime();
             if ( (minPendingTime < 0) || (minPendingTime > stats.getMinPendingTime()) )
@@ -242,7 +281,7 @@ public class JobQueueHelper extends HelperBase {
                 avgPendingTime = totPendingTime / totRuns;
         }
 
-        buf.append("<tr class=\"tablefooter\">");
+        buf.append("</tbody>\n<tfoot id=statTotals><tr class=tablefooter>");
         buf.append("<td><b>").append(_t("Summary")).append("</b></td>");
         buf.append("<td>").append(totRuns).append("</td>");
         buf.append("<td>").append(totDropped).append("</td>");
@@ -256,7 +295,7 @@ public class JobQueueHelper extends HelperBase {
             buf.append("<td>").append(DataHelper.formatDuration2(maxPendingTime)).append("</td>");
             buf.append("<td>").append(DataHelper.formatDuration2(minPendingTime)).append("</td>");
         }
-        buf.append("</tr></table>\n");
+        buf.append("</tr></tfoot>\n</table>\n");
         buf.append("</div>\n");
     }
 

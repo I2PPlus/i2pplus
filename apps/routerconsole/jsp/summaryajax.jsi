@@ -1,20 +1,24 @@
 <%
     if (!intl.getDisableRefresh()) {
 %>
-
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
+  import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
+  import {stickySidebar} from "/js/stickySidebar.js";
+  import {onVisible} from "/js/onVisible.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   var refreshInterval = refresh * 1000;
-  var timerId = setInterval(updateSidebar, refreshInterval);
-  function updateSidebar() {
-    if (document.visible = true) {
-      refreshSidebar();
-    } else {
-     cancelRefresh();
-    }
+  var sb = document.getElementById("sidebar");
+  var visible = document.visibilityState;
+  function initRefresh() {
+    var timerId = setInterval(refreshSidebar, refreshInterval);
+    stickySidebar();
   }
-  function cancelRefresh() {
+  onVisible(sb, () => {initRefresh();});
+  document.addEventListener("DOMContentLoaded", sectionToggler);
+  window.addEventListener("DOMContentLoaded", stickySidebar);
+  window.addEventListener("resize", stickySidebar);
+  if (visible === "hidden") {
     clearInterval(timerId);
   }
 </script>
@@ -23,7 +27,12 @@
 %>
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
+  import {sectionToggler} from "/js/sectionToggle.js";
+  import {stickySidebar} from "/js/stickySidebar.js";
   refreshSidebar();
+  document.addEventListener("DOMContentLoaded", sectionToggler);
+  window.addEventListener("DOMContentLoaded", stickySidebar);
+  window.addEventListener("resize", stickySidebar);
 </script>
 <%
     }

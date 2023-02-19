@@ -31,6 +31,7 @@ import net.i2p.data.Base64;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
@@ -66,6 +67,7 @@ public class PersistentDataStore extends TransientDataStore {
     private static final String PROP_FLAT = "router.networkDatabase.flat";
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
+    private static final int MAX_ROUTERS_INIT = SystemVersion.isSlow() ? 2000 : 5000;
 
     /**
      *  @param dbDir relative path
@@ -176,7 +178,7 @@ public class PersistentDataStore extends TransientDataStore {
      *  they just back up in the queue hogging memory.
      */
 //    private static final int WRITE_LIMIT = 5000;
-    private static final int WRITE_LIMIT = 500;
+    private static final int WRITE_LIMIT = 3000;
 //    private static final long WRITE_DELAY = 10*60*1000;
     private static final long WRITE_DELAY = 90*1000;
 
@@ -299,23 +301,46 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     private void write(Hash key, DatabaseEntry data) {
-        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(key);
+        RouterInfo ri = (RouterInfo) data;
         boolean isHidden = _context.router().isHidden();
-        RouterInfo us = _context.netDb().lookupRouterInfoLocally(_context.routerHash());
-        boolean isUs = us.equals(ri.getIdentity().getHash());
+        boolean isUs = key.equals(_context.routerHash());
         OutputStream fos = null;
         File dbFile = null;
 
         try {
             String MIN_VERSION = "0.9.57";
             String v = MIN_VERSION;
+            String bw = "K";
             boolean unreachable = false;
+            boolean isFF = false;
+            boolean noSSU = true;
+            boolean hasSalt = false;
+            boolean isBadFF = isFF && noSSU;
+            boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+            String caps = "unknown";
             if (ri != null) {
                 v = ri.getVersion();
                 unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+                caps = ri.getCapabilities();
+                if (caps.contains("f")) {
+                    isFF = true;
+                }
+                if (caps.contains("salt")) {
+                    hasSalt = true;
+                }
+                bw = ri.getBandwidthTier();
+                for (RouterAddress ra : ri.getAddresses()) {
+                    if (ra.getTransportStyle().equals("SSU") ||
+                        ra.getTransportStyle().equals("SSU2")) {
+                        noSSU = false;
+                        break;
+                    }
+                }
             }
-            boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+
+            boolean isSlow = (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N");
             String filename = null;
+
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
                 filename = getRouterInfoName(key);
             else
@@ -325,7 +350,7 @@ public class PersistentDataStore extends TransientDataStore {
             long dataPublishDate = getPublishDate(data);
 //            if (dbFile.lastModified() < dataPublishDate) {
 //            if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
-            if (dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld) {
+            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld && !isBadFF) || isUs) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -333,27 +358,37 @@ public class PersistentDataStore extends TransientDataStore {
                     data.writeBytes(fos);
                     fos.close();
                     dbFile.setLastModified(dataPublishDate);
-                    if (_log.shouldDebug() && ri != null && !unreachable && !isOld)
+                    if (_log.shouldDebug() && ri != null && !unreachable && !isOld && !isBadFF)
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
                     dbFile.delete();
                 }
             } else {
-                if (ri != null) {
+                if (ri != null && !isUs) {
                     if (unreachable) {
                         if (_log.shouldDebug())
-                            _log.debug("Not writing unreachable RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
                         dbFile.delete();
-
-                    } else if (ri != null && isOld) {
+                    } else if (isSlow) {
                         if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (older than " + MIN_VERSION + ")");
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
+                        dbFile.delete();
+                    } else if (hasSalt) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Invalid 'salt' caps");
+                    } else if (isBadFF) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
+                        dbFile.delete();
+                    } else if (isOld) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
                         dbFile.delete();
                     } else {
                         // we've already written the file, no need to waste our time
                         if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (already up to date)");
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Local copy is newer");
                     }
                 }
             }
@@ -475,9 +510,16 @@ public class PersistentDataStore extends TransientDataStore {
                 Collections.shuffle(toRead, _context.random());
                 int i = 0;
                 for (File file : toRead) {
+                    // Take the first 4000 good ones, delete the rest
+                    if (i >= MAX_ROUTERS_INIT && !_initialized) {
+                        file.delete();
+                        continue;
+                    }
                     Hash key = getRouterInfoHash(file.getName());
                     if (key != null) {
-                        (new ReadRouterJob(file, key)).runJob();
+                        ReadRouterJob rrj = new ReadRouterJob(file, key);
+                        if (!rrj.read())
+                            continue;
                         if (i++ == 150 && SystemVersion.isSlow() && !_initialized) {
                             // Can take 2 minutes to load them all on Android,
                             // after we have already built expl. tunnels.
@@ -562,7 +604,15 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         public void runJob() {
-            if (!shouldRead()) return;
+            read();
+        }
+
+        /**
+         *  @return success
+         *  @since 0.9.58
+         */
+        public boolean read() {
+            if (!shouldRead()) return false;
             if (_log.shouldDebug())
                 _log.debug("Reading " + _routerFile);
 
@@ -573,51 +623,88 @@ public class PersistentDataStore extends TransientDataStore {
                     fis = new BufferedInputStream(fis);
                     RouterInfo ri = new RouterInfo();
                     ri.readBytes(fis, true);  // true = verify sig on read
+                    Hash h = ri.getIdentity().calculateHash();
                     String v = ri.getVersion();
                     String MIN_VERSION = "0.9.57";
+                    String truncHash = "";
+                    Hash us = _context.routerHash();
+                    boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());
+                    boolean isOldVersion = ri != null && VersionComparator.comp(v, MIN_VERSION) < 0;
+                    boolean isSlow = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
+                    boolean isFF = false;
+                    boolean noSSU = true;
+                    boolean isSalt = false;
+                    String caps = "unknown";
+                    if (ri != null) {
+                        truncHash = h.toBase64().substring(0,6);
+                        caps = ri.getCapabilities();
+                        if (caps.contains("f")) {
+                            isFF = true;
+                        }
+                        if (caps.contains("salt")) {
+                            isSalt = true;
+                        }
+                        for (RouterAddress ra : ri.getAddresses()) {
+                            if (ra.getTransportStyle().equals("SSU") ||
+                                ra.getTransportStyle().equals("SSU2")) {
+                                noSSU = false;
+                                break;
+                            }
+                        }
+                    }
+                    boolean isBadFF = isFF && noSSU;
+                    long now = _context.clock().now();
+
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldError())
-                            _log.error("Router ["
-                                       + ri.getIdentity().calculateHash().toBase64().substring(0,6)
-                                       + "] is from a different network");
+                            _log.error("Router [" + truncHash + "] is from a different network");
                         _routerFile.delete();
-                    } else if (!ri.getIdentity().calculateHash().equals(_key)) {
+                    } else if (isBadFF) {
+                        corrupt = true;
+                        if (_log.shouldInfo())
+                            _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> Floodfill with SSU disabled");
+                        if (_log.shouldWarn())
+                            _log.warn("Banning: [" + truncHash + "] for 8h -> Floodfill with SSU disabled");
+                            _context.banlist().banlistRouter(_key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 8*60*60*1000);
+                    } else if (isSalt) {
+                        corrupt = true;
+                        if (_log.shouldInfo())
+                            _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> RouterInfo has bogus 'salt' cap");
+                        if (_log.shouldWarn())
+                            _log.warn("Banning: [" + truncHash + "] for 8h -> RouterInfo has bogus 'salt' cap");
+                            _context.banlist().banlistRouter(_key, "<b>➜</b> RouterInfo has bogus 'salt' cap", null, null, now + 8*60*60*1000);
+                    } else if (!h.equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
                         corrupt = true;
                         if (_log.shouldWarn())
-                            _log.warn("RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] does not match [" +
-                                      _key.toBase64().substring(0,6) + "] from " + _routerFile);
+                            _log.warn("RouterInfo [" + truncHash + "] does not match [" + _key.toBase64().substring(0,6) + "] from " + _routerFile);
+                            _log.warn("Banning: [" + truncHash + "] for 1h -> Corrupt RouterInfo");
+                            _context.banlist().banlistRouter(_key, "<b>➜</b> Corrupt RouterInfo", null, null, now + 60*60*1000);
                         _routerFile.delete();
                     } else if (ri.getPublished() <= _knownDate) {
                         // Don't store but don't delete
                         if (_log.shouldInfo())
                             _log.info("Skipping since NetDb copy is newer than " + _routerFile);
-                    } else if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                               ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                               ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                               ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) {
-                        // don't store unreachable or K,L,M tier peers & delete any existing ri files
+                    } else if (isSlow || isOldVersion) {
+                        // don't store unreachable, K,L,M tier or older peers & delete any existing ri files
                         corrupt = true;
                         if (_log.shouldInfo()) {
                             if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty())
-                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> Unreachable");
-                            else
-                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> K, L or M tier");
-                        _routerFile.delete();
+                                _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> Unreachable");
+                            else if (isSlow)
+                                _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> K, L or M tier");
+                            else if (isOldVersion)
+                                _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> Older than " + MIN_VERSION);
                         }
-                    } else if (VersionComparator.comp(v, MIN_VERSION) < 0) {
-                        // don't store routerinfos for routers older than 0.9.48
-                        corrupt = true;
-                        if (_log.shouldInfo())
-                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
-                        _routerFile.delete();
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;
                         if (_log.shouldWarn())
-                            _log.warn(ri.getHash() + " is blocklisted");
-                        _routerFile.delete();
+                            _log.warn("Not writing RouterInfo [" + truncHash + "] to disk -> Blocklisted");
                     } else {
                         try {
                             // persist = false so we don't write what we just read
@@ -628,35 +715,28 @@ public class PersistentDataStore extends TransientDataStore {
                             getContext().profileManager().heardAbout(ri.getIdentity().getHash(), ri.getPublished());
                         } catch (IllegalArgumentException iae) {
                             corrupt = true;
-                            _routerFile.delete();
                             if (_log.shouldInfo())
-                                _log.info("Rejected locally loaded RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "]\n* " + iae.getMessage());
+                                _log.info("Rejected locally loaded RouterInfo [" + truncHash + "]\n* " + iae.getMessage());
                         }
                     }
                 } catch (DataFormatException dfe) {
                     corrupt = true;
-                    _routerFile.delete();
                     if (_log.shouldInfo())
                         _log.info("Deleted " + _routerFile.getName() + " -> File is corrupt \n* " + dfe.getMessage());
                 } catch (IOException ioe) {
                     corrupt = true;
-                    _routerFile.delete();
                     if (_log.shouldInfo())
-                        _log.info("Deleted " + _routerFile.getName() + " -> Unable to read router reference \n* " + ioe.getMessage());
+                        _log.info("Deleted " + _routerFile.getName() + " -> Unable to read Router reference \n* " + ioe.getMessage());
                 } catch (RuntimeException e) {
                     // key certificate problems, etc., don't let one bad RI kill the whole thing
                     corrupt = true;
-                    _routerFile.delete();
                     if (_log.shouldInfo())
-                        _log.info("Deleted " + _routerFile.getName() + " -> Unable to read router reference \n* " + e.getMessage());
+                        _log.info("Deleted " + _routerFile.getName() + " -> Unable to read Router reference \n* " + e.getMessage());
                 } finally {
                     if (fis != null) try { fis.close(); } catch (IOException ioe) {}
                 }
-                if (corrupt) {
-                    _routerFile.delete();
-//                    if (_log.shouldDebug())
-//                        _log.debug("Confirming " + _routerFile.getName() + " is deleted from disk...");
-                }
+                if (corrupt) _routerFile.delete();
+                return !corrupt;
         }
     }
 

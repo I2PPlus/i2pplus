@@ -52,10 +52,11 @@ class FloodfillVerifyStoreJob extends JobImpl {
     private static final int START_DELAY = 18*1000;
     private static final int START_DELAY_RAND = 9*1000;
 //    private static final int VERIFY_TIMEOUT = 20*1000;
-    private static final int VERIFY_TIMEOUT = 30*1000;
+    private static final int VERIFY_TIMEOUT = 15*1000;
 //    private static final int MAX_PEERS_TO_TRY = 4;
-    private static final int MAX_PEERS_TO_TRY = 8;
+    private static final int MAX_PEERS_TO_TRY = 16;
     private static final int IP_CLOSE_BYTES = 3;
+    private static final long[] RATES = { 60*1000, 60*60*1000l, 24*60*60*1000l };
 
     /**
      *  Delay a few seconds, then start the verify
@@ -92,9 +93,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
         }
         // wait some time before trying to verify the store
         getTiming().setStartAfter(ctx.clock().now() + START_DELAY + ctx.random().nextInt(START_DELAY_RAND));
-        getContext().statManager().createRateStat("netDb.floodfillVerifyOK", "Time taken for successful floodfill verify", "NetworkDatabase", new long[] { 60*1000, 60*60*1000 });
-        getContext().statManager().createRateStat("netDb.floodfillVerifyFail", "Time taken for failed floodfill verify", "NetworkDatabase", new long[] { 60*1000, 60*60*1000 });
-        getContext().statManager().createRateStat("netDb.floodfillVerifyTimeout", "Time taken for floodfill verify timeout", "NetworkDatabase", new long[] { 60*1000, 60*60*1000 });
+        getContext().statManager().createRateStat("netDb.floodfillVerifyOK", "Time for successful floodfill verify (ms)", "NetworkDatabase", RATES);
+        getContext().statManager().createRateStat("netDb.floodfillVerifyFail", "Time for failed floodfill verify (ms)", "NetworkDatabase", RATES);
+        getContext().statManager().createRateStat("netDb.floodfillVerifyTimeout", "Time for floodfill verify timeout (ms)", "NetworkDatabase", RATES);
     }
 
     public String getName() { return "Verify NetDb Store"; }

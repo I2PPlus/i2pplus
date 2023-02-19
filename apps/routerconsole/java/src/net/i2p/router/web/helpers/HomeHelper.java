@@ -415,7 +415,7 @@ public class HomeHelper extends HelperBase {
                 if (url == null)
                     continue;
                 else
-                    url = app.url + "\" target=\"_blank\" class=\"extlink";
+                    url = app.url + "\" target=_blank class=\"extlink";
             // embed plugins in the console
             } else if ((app.url.contains("bote") && !app.url.contains(".i2p") && (embedApps))) {
                 url = "/embed?url=/i2pbote&amp;name=BoteMail";
@@ -428,7 +428,7 @@ public class HomeHelper extends HelperBase {
             } else if ((!embedApps && (app.url.contains("webmail") || app.url.contains("torrents") || app.url.contains("outproxy")
                     || app.url.contains("bote") || app.url.contains("orchid") || app.url.contains("BwSchedule")))
                     || app.url.contains(".i2p") || app.url.contains("history.txt")) {
-                url = app.url + "\" target=\"_blank\" class=\"extlink";
+                url = app.url + "\" target=_blank class=\"extlink";
             } else {
                 url = app.url;
                 // check for disabled webapps and other things
@@ -477,7 +477,7 @@ public class HomeHelper extends HelperBase {
 
     private String renderConfig(Collection<App> apps) {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<table class=\"homelinkedit\"><tr><th class=\"center\" title=\"")
+        buf.append("<table class=\"homelinkedit\"><tr><th class=center title=\"")
            .append(_t("Mark for deletion"))
            .append("\">")
            .append(_t("Remove"))
@@ -488,7 +488,7 @@ public class HomeHelper extends HelperBase {
            .append("</th></tr>\n");
         for (App app : apps) {
             String url = DataHelper.escapeHTML(app.url);
-            buf.append("<tr><td class=\"center\"><input type=\"checkbox\" class=\"optbox\" name=\"delete_")
+            buf.append("<tr><td class=center><input type=checkbox class=optbox name=\"delete_")
                .append(app.name)
                .append("\" id=\"");
             if (url.contains("%s"))
@@ -517,10 +517,10 @@ public class HomeHelper extends HelperBase {
                 buf.append(urltext);
             buf.append("</a></td></tr>\n");
         }
-        buf.append("<tr class=\"addnew\"><td colspan=\"2\"><b>")
+        buf.append("<tr class=\"addnew\"><td colspan=2><b>")
            .append(_t("Add")).append(":</b>" +
-                   "</td><td><input type=\"text\" name=\"nofilter_name\"></td>" +
-                   "<td><input type=\"text\" size=\"40\" name=\"nofilter_url\"></td></tr>");
+                   "</td><td><input type=text name=\"nofilter_name\"></td>" +
+                   "<td><input type=text size=\"40\" name=\"nofilter_url\"></td></tr>");
         buf.append("</table>\n");
         return buf.toString();
     }

@@ -11,29 +11,30 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("local tunnels")%>
 </head>
-<body id="routertunnels">
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<body id=routertunnels>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="netwrk"><%=intl._t("Local Tunnels")%></h1>
-<div class="main" id="tunnels">
-<div class="confignav">
-<span class="tab2" title="Locally hosted tunnels (exploratory and client)">Local</span>
-<span class="tab"><a href="/tunnelsparticipating">Participating</a></span>
-<span class="tab"><a href="/tunnelpeercount">Tunnel Count by Peer</a></span>
+<h1 class=netwrk><%=intl._t("Local Tunnels")%></h1>
+<div class=main id=tunnels>
+<div class=confignav>
+<span class=tab2 title="Locally hosted tunnels (exploratory and client)">Local</span>
+<span class=tab><a href="/tunnelsparticipating"><%=intl._t("Transit")%> (<%=intl._t("Most Recent")%>)</a></span>
+<span class=tab><a href="/tunnelsparticipatingfastest"><%=intl._t("Transit")%>  (<%=intl._t("Fastest")%>)</a></span>
+<span class=tab title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><a href="/tunnelsparticipatingsummary"><%=intl._t("Transit by Peer")%></a></span>
+<span class=tab><a href="/tunnelpeercount">Tunnel Count by Peer</a></span>
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelHelper" id="tunnelHelper" scope="request" />
 <jsp:setProperty name="tunnelHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% tunnelHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary" />
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" type=text/javascript>
   var visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {
-      progressx.show();
-      progressx.progress(0.5);
       var xhr = new XMLHttpRequest();
       xhr.open('GET', '/tunnels?' + new Date().getTime(), true);
       xhr.responseType = "document";
@@ -46,12 +47,10 @@
               tunnelsParent.replaceChild(tunnelsResponse, tunnels);
         }
       }
-      window.addEventListener("pageshow", progressx.hide());
       xhr.send();
     }, 15000);
   }
 </script>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

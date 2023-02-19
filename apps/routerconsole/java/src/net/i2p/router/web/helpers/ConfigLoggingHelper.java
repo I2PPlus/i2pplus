@@ -53,7 +53,7 @@ public class ConfigLoggingHelper extends HelperBase {
             sortedLogs.add(prefix);
         }
 
-        buf.append("<textarea name=\"levels\" rows=\"4\" cols=\"60\" wrap=\"off\" spellcheck=\"false\">");
+        buf.append("<textarea name=\"levels\" rows=\"4\" cols=\"60\" wrap=\"off\" spellcheck=false>");
         for (String prefix : sortedLogs) {
             String level = limits.getProperty(prefix);
             buf.append(prefix).append('=').append(level).append('\n');
@@ -137,7 +137,7 @@ public class ConfigLoggingHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(65536);
         buf.append("<select name=\"newlogclass\">\n" +
-                   "<option value=\"\" selected=\"selected\">")
+                   "<option value=\"\" selected=selected>")
            .append(_t("Select a class to add"))
            .append("</option>\n");
 

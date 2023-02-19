@@ -70,7 +70,7 @@ public class ProfilesHelper extends HelperBase {
         try {
             BanlistRenderer rend = new BanlistRenderer(_context);
             StringBuilder buf = new StringBuilder(1024);
-            buf.append("<p class=\"infohelp\" id=\"bannedpeercount\">").append(_t("Total number of banned peers")).append(": ")
+            buf.append("<p class=infohelp id=\"bannedpeercount\">").append(_t("Total number of banned peers")).append(": ")
                .append(_context.banlist().getRouterCount()).append("</p>");
             _out.write(buf.toString());
             rend.renderStatusHTML(_out);

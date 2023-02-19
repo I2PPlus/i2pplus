@@ -1,8 +1,10 @@
-/* SectionToggler by dr|z3d */
+/* I2P+ SectionToggler by dr|z3d */
 /* License: AGPLv3 or later */
 
 function sectionToggler() {
 
+  var jobBadge = document.querySelector("#sidebar h3 a[href=\"/jobs\"] .badge");
+  var tunnelsBadge = document.querySelector("#sidebar h3 a[href=\"/tunnels\"] .badge");
   var localtunnelSummary = document.getElementById("localtunnelSummary");
   var sb_advanced = document.getElementById("sb_advanced");
   var sb_advancedgeneral = document.getElementById("sb_advancedgeneral");
@@ -270,7 +272,9 @@ function sectionToggler() {
       sb_queue.hidden = true;
       document.querySelector("#sb_queue + hr").hidden = true;
       document.getElementById("toggle_sb_queue").checked = false;
-      document.querySelector("#sidebar h3 a[href=\"/jobs\"] .badge").hidden = null;
+      if (jobBadge) {
+        jobBadge.hidden = null;
+      }
       localStorage["section_queue"] = "hide";
     }
   }
@@ -280,7 +284,9 @@ function sectionToggler() {
       sb_queue.hidden = null;
       document.querySelector("#sb_queue + hr").hidden = null;
       document.getElementById("toggle_sb_queue").checked = true;
-      document.querySelector("#sidebar h3 a[href=\"/jobs\"] .badge").hidden = true;
+      if (jobBadge) {
+        jobBadge.hidden = true;
+      }
       localStorage.removeItem("section_queue");
     }
   }
@@ -298,8 +304,10 @@ function sectionToggler() {
       sb_tunnels.hidden = true;
       sb_tunnels_condensed.hidden = null;
       document.getElementById("toggle_sb_tunnels").checked = null;
-      document.querySelector("#sidebar h3 a[href=\"/tunnels\"] .badge").hidden = null;
       localStorage["section_tunnels"] = "hide";
+      if (tunnelsBadge) {
+        tunnelsBadge.hidden = null;
+      }
     }
   }
 
@@ -308,8 +316,10 @@ function sectionToggler() {
       sb_tunnels.hidden = null;
       sb_tunnels_condensed.hidden = true;
       document.getElementById("toggle_sb_tunnels").checked = true;
-      document.querySelector("#sidebar h3 a[href=\"/tunnels\"] .badge").hidden = true;
       localStorage.removeItem("section_tunnels");
+      if (tunnelsBadge) {
+        tunnelsBadge.hidden = true;
+      }
     }
   }
 
@@ -401,14 +411,14 @@ function sectionToggler() {
   }
 
   function show_localtunnels() {
+    if (localtunnelSummary !== null) {
+      localtunnelSummary.hidden = true;
+    }
     if (sb_localtunnels !== null) {
       sb_localtunnels.hidden = null;
-      if (localtunnelSummary !== null) {
-        localtunnelSummary.hidden = true;
-      }
-      document.getElementById("toggle_sb_localtunnels").checked = true;
-      localStorage.removeItem("section_localtunnels");
     }
+    document.getElementById("toggle_sb_localtunnels").checked = true;
+    localStorage.removeItem("section_localtunnels");
   }
 
   function checkToggleStatus() {
@@ -447,25 +457,16 @@ function sectionToggler() {
 }
 
 function countTunnels() {
-  var doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
+  var tunnMan = document.getElementById("sb_localTunnelsHeading");
   var tunnelCount = document.querySelectorAll("img[src*=\"images/local_\"]");
-  var tunnMan = document.querySelector("#sidebar h3 a[href=\"/i2ptunnelmgr\"]");
-  if (tunnelCount !== null) {
+  var tunnelsBadge = document.getElementById("tunnelCount");
+
+  if (tunnMan && tunnelCount !== null) {
     var tunnelCountLength = tunnelCount.length;
-    if (tunnMan !== null && tunnMan.innerHTML.indexOf(tunnelCountLength) === -1) {
-      if (tunnelCountLength !== null && tunnelCountLength > 0) {
-        var displayCount = " <span id=\"tunnelCount\">" + tunnelCountLength + "</span>";
-        tunnMan.innerHTML += displayCount;
-        var badgeCount = document.getElementById("tunnelCount").innerHTML;
-        var tunnelsBadge = document.getElementById("tunnelCount");
-        if (badgeCount !== tunnelCountLength) {
-          badgeCount = tunnelCountLength;
-          tunnelsBadge.outerHTML = displayCount;
-        }
-      }
-      if (doubleCount) {
-        doubleCount.remove();
-      }
+    if (tunnelCountLength > 0 && tunnelsBadge.innerHTML !== tunnelCountLength) {
+        tunnelsBadge.innerHTML = tunnelCountLength;
+    } else {
+      tunnelsBadge.innerHTML = "";
     }
   }
 }
@@ -473,19 +474,15 @@ function countTunnels() {
 function countNewsItems() {
   if (document.getElementById("sb_newsheadings") !== null) {
     var doubleCount = document.querySelector("#newsCount + #newsCount");
-    var newsH3 = document.querySelector("#sidebar h3 a[href=\"/news\"]");
+    var newsBadge = document.getElementById("newsCount");
     var newsItemsLength = document.querySelectorAll("#sb_newsheadings table tr").length;
-    if (newsH3.innerHTML.indexOf(newsItemsLength) === -1) {
-      if (newsItemsLength > 0) {
-        var displayCount = " <span id=\"newsCount\">" + newsItemsLength + "</span>";
-        newsH3.innerHTML += displayCount;
-        var newsBadge = document.getElementById("newsCount");
-        var newsCount = document.getElementById("newsCount").innerHTML;
-        if (newsCount !== newsItemsLength) {
-          newsCount = newsItemsLength;
-          newsBadge.outerHTML = displayCount;
-        }
+    if (newsItemsLength > 0) {
+      newsBadge.hidden = null;
+      if (newsBadge.innerHTML !== newsItemsLength) {
+        newsBadge.innerHTML = newsItemsLength;
       }
+    } else {
+      newsBadge.hidden = false;
     }
     if (doubleCount) {
       doubleCount.remove();

@@ -65,21 +65,21 @@ public class FileDumpHelper extends HelperBase {
 
         // our jars
         File dir = _context.getLibDir();
-        buf.append("<tr><th class=\"subheading routerfiles\" colspan=\"9\"><b>Router Jar Files:</b> <code>");
+        buf.append("<tr><th class=\"subheading routerfiles\" colspan=9><b>Router Jar Files:</b> <code>");
         buf.append(dir.getAbsolutePath());
         buf.append("</code></th></tr>\n");
         dumpDir(buf, dir, ".jar", true);
 
         // our wars
         dir = new File(_context.getBaseDir(), "webapps");
-        buf.append("<tr><th class=\"subheading routerfiles\" colspan=\"9\"><b>Router War Files:</b> <code>");
+        buf.append("<tr><th class=\"subheading routerfiles\" colspan=9><b>Router War Files:</b> <code>");
         buf.append(dir.getAbsolutePath());
         buf.append("</code></th></tr>\n");
         dumpDir(buf, dir, ".war", true);
 
         // plugins
         File pluginDir = new File(_context.getConfigDir(), PluginStarter.PLUGIN_DIR);
-        buf.append("<tr><th class=\"subheading pluginfiles\" colspan=\"9\"><b>I2P Plugins:</b> <code>");
+        buf.append("<tr><th class=\"subheading pluginfiles\" colspan=9><b>I2P Plugins:</b> <code>");
         buf.append(pluginDir.getAbsolutePath());
         buf.append("</code></th></tr>");
         File[] files = pluginDir.listFiles();
@@ -87,7 +87,7 @@ public class FileDumpHelper extends HelperBase {
             Arrays.sort(files);
             for (int i = 0; i < files.length; i++) {
                 dir = new File(files[i], "lib");
-                buf.append("<tr><th class=\"subheading pluginfiles\" colspan=\"9\"><b>Plugin File Location:</b> <code>");
+                buf.append("<tr><th class=\"subheading pluginfiles\" colspan=9><b>Plugin File Location:</b> <code>");
                 buf.append(dir.getAbsolutePath());
                 buf.append("</code></th></tr>");
                 dumpDir(buf, dir, ".jar", false);
@@ -118,22 +118,22 @@ public class FileDumpHelper extends HelperBase {
         if (mod > 0)
             buf.append((new Date(mod)).toString().replace(" GMT", ""));
         else
-            buf.append("<font color=\"red\">Not found</font>");
+            buf.append("<font color=red>Not found</font>");
         buf.append("</td><td>");
         if (mod > 0 && !FileUtil.verifyZip(f))
-            buf.append("<font color=\"red\">CORRUPT</font><br>");
+            buf.append("<font color=red>CORRUPT</font><br>");
         byte[] hash = sha256(f);
         if (hash != null) {
             byte[] hh = new byte[16];
             System.arraycopy(hash, 0, hh, 0, 16);
-            buf.append("<span class=\"sha256\"><tt>");
+            buf.append("<span class=\"sha256\"><code>");
             String p1 = DataHelper.toHexString(hh);
             for (int i = p1.length(); i < 32; i++) {
                 buf.append('0');
             }
-            buf.append(p1).append("</tt><br>");
+            buf.append(p1).append("</code><br>");
             System.arraycopy(hash, 16, hh, 0, 16);
-            buf.append("<tt>").append(DataHelper.toHexString(hh)).append("</tt></span>");
+            buf.append("<code>").append(DataHelper.toHexString(hh)).append("</code></span>");
         }
         Attributes att = attributes(f);
         if (att == null)
@@ -148,14 +148,14 @@ public class FileDumpHelper extends HelperBase {
             if (iv != null)
                 buf.append("<br>");
             if (linkrev) {
-                buf.append("<a target=\"_blank\" rel=\"noreferrer\" href=\"");
+                buf.append("<a target=_blank rel=\"noreferrer\" href=\"");
                 if (builder.equals("zzz"))
                     buf.append(UPSTREAMLINK);
                 else
                     buf.append(LINK);
             buf.append(s).append("\">");
             }
-            buf.append("<span class=\"revision\"><tt>").append(s.substring(0, 8)).append("</tt></span>");
+            buf.append("<span class=\"revision\"><code>").append(s.substring(0, 8)).append("</code></span>");
             if (linkrev)
                 buf.append("</a>");
         }
@@ -182,8 +182,8 @@ public class FileDumpHelper extends HelperBase {
         s = getAtt(att, "Workspace-Changes");
         if (s != null && s != "") {
             // Encase each mod in a span so we can single click select individual mods
-            buf.append("<font color=\"red\"><span class=\"unsignedmod\">")
-               .append(s.replace(",", "</span></font><hr><font color=\"red\"><span class=\"unsignedmod\">"))
+            buf.append("<font color=red><span class=\"unsignedmod\">")
+               .append(s.replace(",", "</span></font><hr><font color=red><span class=\"unsignedmod\">"))
                .append("</span></font>");
         }
         buf.append("</td></tr>\n");

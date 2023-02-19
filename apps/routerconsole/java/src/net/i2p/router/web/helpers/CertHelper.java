@@ -29,7 +29,7 @@ public class CertHelper extends HelperBase {
         File dir = new File(_context.getConfigDir(), DIR);
         File configPath = _context.getConfigDir();
         try {
-            _out.write("<p class=\"infohelp\">");
+            _out.write("<p class=infohelp>");
             _out.write(_t("Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, " +
                           "or provide proof of ownership of a router family."));
             _out.write("</p><h3>");
@@ -123,11 +123,11 @@ public class CertHelper extends HelperBase {
             _out.write("</h4>");
             String cert = FileUtil.readTextFile(file.toString(), -1, true);
             if (cert != null) {
-                _out.write("\n<textarea readonly=\"readonly\">\n");
+                _out.write("\n<textarea readonly=readonly>\n");
                 _out.write(cert);
                 _out.write("</textarea>\n");
             } else {
-                _out.write("\n<textarea readonly=\"readonly\">\n");
+                _out.write("\n<textarea readonly=readonly>\n");
                 _out.write("Error: Failed to read certificate.");
                 _out.write("</textarea>\n");
             }
@@ -140,7 +140,7 @@ public class CertHelper extends HelperBase {
             _out.write("<h4>");
             _out.write(_t("Router Console"));
             _out.write("</h4>");
-            _out.write("<p class=\"infohelp\">");
+            _out.write("<p class=infohelp>");
             _out.write(_t("To enable SSL access for the Router Console, see the commented <code>clients.config</code> file " +
                           "located in your I2P application directory for more information. You will need to edit the " +
                           "RouterConsoleRunner config file located in the directory: ").replace("I2P", "I2P+"));

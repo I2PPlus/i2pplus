@@ -183,6 +183,7 @@ public class TunnelPool {
     private TunnelInfo selectTunnel(boolean allowRecurseOnFail) {
         boolean avoidZeroHop = !_settings.getAllowZeroHop();
 
+        long now = _context.clock().now();
         synchronized (_tunnels) {
             if (_tunnels.isEmpty()) {
                 if (_log.shouldWarn())
@@ -198,7 +199,7 @@ public class TunnelPool {
                         if (_lastSelectedIdx >= _tunnels.size())
                             _lastSelectedIdx = 0;
                         TunnelInfo info = _tunnels.get(_lastSelectedIdx);
-                        if ( (info.getLength() > 1) && (info.getExpiration() > _context.clock().now()) ) {
+                        if (info.getLength() > 1 && info.getExpiration() > now) {
                             // avoid outbound tunnels where the 1st hop is backlogged
                             if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
                                 return info;
@@ -217,7 +218,7 @@ public class TunnelPool {
                 // ok, either we are ok using zero hop tunnels, or only fallback tunnels remain.  pick 'em randomly
                 for (int i = 0; i < _tunnels.size(); i++) {
                     TunnelInfo info = _tunnels.get(i);
-                    if (info.getExpiration() > _context.clock().now()) {
+                    if (info.getExpiration() > now) {
                         // avoid outbound tunnels where the 1st hop is backlogged
                         if (_settings.isInbound() || info.getLength() <= 1 ||
                             !_context.commSystem().isBacklogged(info.getPeer(1))) {
@@ -259,12 +260,13 @@ public class TunnelPool {
     TunnelInfo selectTunnel(Hash closestTo) {
         boolean avoidZeroHop = !_settings.getAllowZeroHop();
         TunnelInfo rv = null;
+        long now = _context.clock().now();
         synchronized (_tunnels) {
             if (!_tunnels.isEmpty()) {
                 if (_tunnels.size() > 1)
                     Collections.sort(_tunnels, new TunnelInfoComparator(closestTo, avoidZeroHop));
                 for (TunnelInfo info : _tunnels) {
-                    if (info.getExpiration() > _context.clock().now()) {
+                    if (info.getExpiration() > now) {
                         rv = info;
                         break;
                     }
@@ -371,7 +373,8 @@ public class TunnelPool {
             return rv;
         }
         // TODO high-bw non-ff also
-        if (((_context.netDb().floodfillEnabled() && _context.router().getUptime() > 5*60*1000) || SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 4) {
+        if (((_context.netDb().floodfillEnabled() && _context.router().getUptime() > 5*60*1000) ||
+            SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 4) {
             rv += 2;
        // Since we're running RefreshRouters on a repeat cycle (I2P+) let's keep a couple of extras available
        } else if (_settings.isExploratory() && rv < 2 && _context.router().getUptime() > 10*60*1000) {

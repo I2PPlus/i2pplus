@@ -11,9 +11,10 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("graphs")%>
- <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
- <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
+<jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */ %>
  <jsp:setProperty name="graphHelper" property="*" />
 <%
@@ -27,11 +28,11 @@
 %>
 </head>
 <body id="perfgraphs">
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="perf"><%=intl._t("Performance Graphs")%></h1>
-<div class="main" id="graphs">
-<div class="widepanel">
+<div class=main id="graphs">
+<div class=widepanel>
 <jsp:getProperty name="graphHelper" property="allMessages" />
 <div class="graphspanel" id="allgraphs">
 <jsp:getProperty name="graphHelper" property="images" />
@@ -39,9 +40,10 @@
 <jsp:getProperty name="graphHelper" property="form" />
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">
+<script nonce="<%=cspNonce%>" type=text/javascript>
   var main = document.getElementById("perfgraphs");
   var graph = document.getElementsByClassName("statimage")[0];
+  var visibility = document.visibilityState;
   function injectCss() {
     graph.addEventListener("load", function() {
       var graphWidth = graph.width;
@@ -71,7 +73,7 @@
 <%
     if (graphHelper.getRefreshValue() > 0) {
 %>
-  function updateGraphs(timestamp) {
+  function updateGraphs() {
     progressx.show();
     var graphs = document.getElementById("allgraphs");
     var nographs = document.getElementById("nographs");
@@ -95,23 +97,21 @@
           }
       }
     }
-    window.addEventListener("pageshow", progressx.hide());
+    window.addEventListener("DOMContentLoaded", progressx.hide());
     graph.addEventListener("load", initCss());
-    xhrgraphs.send();
+    if (visibility === "visible") {
+      xhrgraphs.send();
+    } else if (xhrgraphs.status !== null) {
+      xhrgraphs.abort();
+    }
   }
-
-  var visibility = document.visibilityState;
-  if (visibility == "visible") {
-    setTimeout(function refresh() {
-      window.requestAnimationFrame(updateGraphs);
-      setTimeout(refresh, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
-    }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
-  }
+  var refresh = <% out.print(graphHelper.getRefreshValue()); %>;
+  var refreshInterval = refresh * 1000;
+  var timerId = setInterval(updateGraphs, refreshInterval);
 <%
     }
 %>
-  window.addEventListener("pageshow", progressx.hide());
+  window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>

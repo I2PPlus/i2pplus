@@ -33,12 +33,13 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<link type="text/css" rel="stylesheet" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
+<%@include file="summaryajax.jsi" %>
+<link type=text/css rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
 <%=intl.title("Page Not Found")%>
-<script nonce="<%=cspNonce%>" type="text/javascript">if (window.location !== window.top.location) {window.top.location = window.location;}</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>if (window.location !== window.top.location) {window.top.location = window.location;}</script>
 </head>
 <body id="console_404">
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="err"><%=ERROR_CODE%>&nbsp;<%=ERROR_MESSAGE%></h1>
 <div class="sorry console" id="warning">
@@ -46,7 +47,6 @@
 <hr>
 <%=intl._t("Error 404")%>: <%=ERROR_URI%>&nbsp;<%=intl._t("not found")%>.
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

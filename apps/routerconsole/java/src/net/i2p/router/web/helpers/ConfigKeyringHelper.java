@@ -41,9 +41,9 @@ public class ConfigKeyringHelper extends HelperBase {
         buf.append("<h3>").append(_t("Remote encrypted destinations")).append("</h3>");
         boolean rv2 = render(buf, false);
         if (rv1 || rv2) {
-            buf.append("\n<table id=\"keyringbuttons\" class=\"configtable\"><tr><td class=\"optionsave\">" +
-                       "<input type=\"reset\" class=\"cancel\" value=\"").append(_t("Cancel")).append("\">" +
-                       "<input type=\"submit\" name=\"action\" class=\"delete\" value=\"").append(_t("Delete key")).append("\">" +
+            buf.append("\n<table id=keyringbuttons class=configtable><tr><td class=optionsave>" +
+                       "<input type=\"reset\" class=cancel value=\"").append(_t("Cancel")).append("\">" +
+                       "<input type=submit name=action class=delete value=\"").append(_t("Delete key")).append("\">" +
                        "</td></tr></table>");
         }
         out.write(buf.toString());
@@ -102,11 +102,11 @@ public class ConfigKeyringHelper extends HelperBase {
             if (!local)
                 buf.append(_t("Encrypted")).append(" (AES)");
             SessionKey sk = e.getValue();
-            buf.append("</td><td class=\"encKey\"><code>");
+            buf.append("</td><td class=encKey><code>");
             buf.append(sk.toBase64());
             buf.append("</code></td><td>");
             if (!local)
-                buf.append("</td><td></td><td></td><td><input value=\"").append(b32).append("\" type=\"checkbox\" name=\"revokeClient\" class=\"optbox\"/>");
+                buf.append("</td><td></td><td></td><td><input value=\"").append(b32).append("\" type=checkbox name=\"revokeClient\" class=optbox/>");
             buf.append("</td></tr>");
             rv = true;
         }
@@ -148,7 +148,7 @@ public class ConfigKeyringHelper extends HelperBase {
                         s = _t("Blinded");
                 }
                 buf.append(s);
-                buf.append("</td><td class=\"encKey\"><code>");
+                buf.append("</td><td class=encKey><code>");
                 if (pk != null) {
                     // display pubkey for DH for sharing with server
                     if (type == BlindData.AUTH_DH)
@@ -156,27 +156,27 @@ public class ConfigKeyringHelper extends HelperBase {
                     else
                         buf.append(pk.toBase64());
                 }
-                buf.append("</code></td><td class=\"password\">");
+                buf.append("</code></td><td class=password>");
                 if (secret != null)
                     buf.append(secret);
-                buf.append("</td><td class=\"created\">");
+                buf.append("</td><td class=created>");
                 long t = bd.getDate();
                 if (t > 0)
                     buf.append(DataHelper.formatDate(t));
-                buf.append("</td><td class=\"expires\">");
+                buf.append("</td><td class=expires>");
                 t = bd.getExpiration();
                 if (t > 0)
                     buf.append(DataHelper.formatDate(t));
-                buf.append("</td><td class=\"revoke\">");
+                buf.append("</td><td class=revoke>");
                 if (!local)
-                    buf.append("<input value=\"").append(b32).append("\" type=\"checkbox\" name=\"revokeClient\" class=\"optbox\"/>");
+                    buf.append("<input value=\"").append(b32).append("\" type=checkbox name=\"revokeClient\" class=optbox/>");
                 buf.append("</td></tr>");
                 rv = true;
             }
         }
         if (!rv) {
 //            buf.append("<tr><td colspan=\"").append(local ? '3' : '8').append("\"><i>")
-            buf.append("<tr><td colspan=\"8\"><i>")
+            buf.append("<tr><td colspan=8><i>")
                .append(_t("none")).append("</i></td></tr>");
         }
         buf.append("\n</table>\n");

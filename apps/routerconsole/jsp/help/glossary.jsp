@@ -16,21 +16,21 @@
 <body>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Glossary")%></h1>
-<div class="main" id="help">
-<div class="confignav">
-<span class="tab"><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
-<span class="tab"><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
-<span class="tab"><a href="/help/ui"><%=intl._t("User Interface")%></a></span>
-<span class="tab"><a href="/help/reseed"><%=intl._t("Reseeding")%></a></span>
-<span class="tab"><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
-<span class="tab"><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
-<span class="tab"><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
-<span class="tab"><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
-<span class="tab"><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
-<span class="tab"><a href="/help/troubleshoot"><%=intl._t("Troubleshoot")%></a></span>
-<span class="tab2"><%=intl._t("Glossary")%></span>
-<span class="tab"><a href="/help/legal"><%=intl._t("Legal")%></a></span>
-<span class="tab"><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
+<div class=main id="help">
+<div class=confignav>
+<span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
+<span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
+<span class=tab><a href="/help/ui"><%=intl._t("User Interface")%></a></span>
+<span class=tab><a href="/help/reseed"><%=intl._t("Reseeding")%></a></span>
+<span class=tab><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
+<span class=tab><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
+<span class=tab><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
+<span class=tab><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
+<span class=tab><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
+<span class=tab><a href="/help/troubleshoot"><%=intl._t("Troubleshoot")%></a></span>
+<span class=tab2><%=intl._t("Glossary")%></span>
+<span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
+<span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
 <div id="glossary">
 <h2><%=intl._t("I2P Terminology")%></h2>
@@ -171,7 +171,7 @@
 </div>
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

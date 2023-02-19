@@ -62,7 +62,7 @@ class BanlistRenderer {
             long expires = entry.expireOn-_context.clock().now();
             if (expires <= 0)
                 continue;
-            buf.append("<li>").append(_context.commSystem().renderPeerHTML(key));
+            buf.append("<li>").append(_context.commSystem().renderPeerHTML(key, false));
             buf.append(' ').append("<span class=\"banreason\">");
             String expireString = DataHelper.formatDuration2(expires);
             if (key.equals(Hash.FAKE_HASH))

@@ -8,9 +8,9 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
@@ -42,7 +42,7 @@ class ExpireLeasesJob extends JobImpl {
     public String getName() { return "Expire Leases"; }
 
     public void runJob() {
-        Set<Hash> toExpire = selectKeysToExpire();
+        List<Hash> toExpire = selectKeysToExpire();
         if (!toExpire.isEmpty()) {
         StringBuilder buf = new StringBuilder(16);
         buf.append("Leases to expire: ");
@@ -66,8 +66,8 @@ class ExpireLeasesJob extends JobImpl {
      * don't have any leases that haven't yet passed, even with the CLOCK_FUDGE_FACTOR)
      *
      */
-    private Set<Hash> selectKeysToExpire() {
-        Set<Hash> toExpire = new HashSet<Hash>(128);
+    private List<Hash> selectKeysToExpire() {
+        List<Hash> toExpire = new ArrayList<Hash>(128);
         for (Map.Entry<Hash, DatabaseEntry> entry : _facade.getDataStore().getMapEntries()) {
             DatabaseEntry obj = entry.getValue();
             if (obj.isLeaseSet()) {

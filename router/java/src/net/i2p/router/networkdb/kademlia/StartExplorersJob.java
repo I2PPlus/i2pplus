@@ -59,7 +59,7 @@ class StartExplorersJob extends JobImpl {
     private static final int LOW_ROUTERS = 2000;
     /** explore slowly if we have more than this many routers */
 //    private static final int MAX_ROUTERS = 2 * LOW_ROUTERS;
-    private static final int MAX_ROUTERS = 5000;
+    private static final int MAX_ROUTERS = 3000;
 //    private static final int MIN_FFS = 50;
     private static final int MIN_FFS = 200;
     static final int LOW_FFS = 2 * MIN_FFS;
@@ -80,7 +80,7 @@ class StartExplorersJob extends JobImpl {
     public void runJob() {
         boolean forceExplore = getContext().getBooleanProperty(PROP_FORCE_EXPLORE);
         boolean isFF = _facade.floodfillEnabled();
-        boolean isCpuHighLoad = SystemVersion.getCPULoad() > 80;
+        boolean isCpuHighLoad = SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90;
         if (!isFF || forceExplore) {
             if (!(getContext().jobQueue().getMaxLag() > MAX_LAG ||
                   getContext().throttle().getMessageDelay() > MAX_MSG_DELAY ||
@@ -103,7 +103,7 @@ class StartExplorersJob extends JobImpl {
                         num += 2;
                     if (getContext().jobQueue().getMaxLag() > 250 || getContext().throttle().getMessageDelay() > 500)
                         num = 2;
-                    if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 1000)
+                    if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 1000 || isCpuHighLoad)
                         num = 1;
                 } else {
                     num = Integer.valueOf(exploreBuckets);

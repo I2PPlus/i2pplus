@@ -16,28 +16,28 @@
 <body>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("Advanced Configuration Help")%></h1>
-<div class="main" id="help">
-<div class="confignav">
-<span class="tab"><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
-<span class="tab2"><%=intl._t("Advanced Settings")%></span>
-<span class="tab"><a href="/help/ui"><%=intl._t("User Interface")%></a></span>
-<span class="tab"><a href="/help/reseed"><%=intl._t("Reseeding")%></a></span>
-<span class="tab"><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
-<span class="tab"><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
-<span class="tab"><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
-<span class="tab"><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
-<span class="tab"><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
-<span class="tab"><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
-<span class="tab"><a href="/help/troubleshoot"><%=intl._t("Troubleshoot")%></a></span>
-<span class="tab"><a href="/help/glossary"><%=intl._t("Glossary")%></a></span>
-<span class="tab"><a href="/help/legal"><%=intl._t("Legal")%></a></span>
-<span class="tab"><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
+<div class=main id="help">
+<div class=confignav>
+<span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
+<span class=tab2><%=intl._t("Advanced Settings")%></span>
+<span class=tab><a href="/help/ui"><%=intl._t("User Interface")%></a></span>
+<span class=tab><a href="/help/reseed"><%=intl._t("Reseeding")%></a></span>
+<span class=tab><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
+<span class=tab><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
+<span class=tab><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
+<span class=tab><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
+<span class=tab><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
+<span class=tab><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
+<span class=tab><a href="/help/troubleshoot"><%=intl._t("Troubleshoot")%></a></span>
+<span class=tab><a href="/help/glossary"><%=intl._t("Glossary")%></a></span>
+<span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
+<span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
 
 <div id="advancedsettings">
 <h2><%=intl._t("Advanced Router Configuration")%></h2>
 
-<p class="infohelp"><%=intl._t("The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>.")%></p>
+<p class=infohelp><%=intl._t("The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>.")%></p>
 
 <table id="configinfo">
 
@@ -236,7 +236,7 @@
 
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

@@ -35,6 +35,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.networkdb.kademlia.PersistentDataStore;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  *  Run once or twice at startup by StartupJob,
@@ -45,7 +46,7 @@ class LoadRouterInfoJob extends JobImpl {
     private RouterInfo _us;
     private static final AtomicBoolean _keyLengthChecked = new AtomicBoolean();
     // 1 chance in this many to rekey if the defaults changed
-    private static final int REKEY_PROBABILITY = 2;
+    private static final int REKEY_PROBABILITY = 1;
 
     public LoadRouterInfoJob(RouterContext ctx) {
         super(ctx);

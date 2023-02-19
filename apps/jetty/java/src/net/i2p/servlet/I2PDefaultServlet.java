@@ -199,7 +199,7 @@ public class I2PDefaultServlet extends DefaultServlet
         String decodedBase = URIUtil.decodePath(base);
         String title =       "Directory: " + deTag(decodedBase);
         String pwd =         "Directory: <a href=\"" + deTag(decodedBase) + "\">" + deTag(decodedBase) + "</a>";
-        String inlineCSS =   "<style type=\"text/css\">\n" +
+        String inlineCSS =   "<style type=text/css>\n" +
                              "#dirlist {margin: 2.5%; padding: 0; font-family: Open Sans, Ubuntu, SegoeUI, sans-serif; " +
                              "font-size: 11pt; color: #333; border: 1px solid #ddd; background: #999}\n" +
                              "table {border-collapse: collapse}\n" +
@@ -224,10 +224,10 @@ public class I2PDefaultServlet extends DefaultServlet
         StringBuilder buf=new StringBuilder(4096);
         buf.append("<!DOCTYPE HTML>\n<html>\n<head>\n<title>");
         buf.append(title);
-        buf.append("</title>\n<meta charset=\"utf-8\">\n");
-//        buf.append("<link href=\"jetty-dir.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
+        buf.append("</title>\n<meta charset=utf-8>\n");
+//        buf.append("<link href=\"jetty-dir.css\" rel=stylesheet type=text/css/>\n");
         buf.append(inlineCSS);
-        buf.append("<link href=\"/.resources/jetty-dir.css\" rel=\"stylesheet\" type=\"text/css\"/>\n")
+        buf.append("<link href=\"/.resources/jetty-dir.css\" rel=stylesheet type=text/css/>\n")
            .append("</head>\n<body id=\"dirlist\">\n<h1>").append(pwd).append("</h1>\n")
            .append(tableHeader);
         if (parent) {

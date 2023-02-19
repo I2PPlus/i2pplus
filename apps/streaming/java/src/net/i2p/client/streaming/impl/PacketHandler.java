@@ -292,7 +292,7 @@ class PacketHandler {
                 if (_manager.answerPings())
                     receivePing(null, packet);
                 else if (_log.shouldWarn())
-                    _log.warn("Dropping ECHO packet [" + packet + "] on UNKNOWN connection");
+                    _log.warn("Dropping ECHO packet on UNKNOWN connection -> " + packet);
             } else if (packet.getReceiveStreamId() > 0) {
                 receivePong(packet);
             } else {
@@ -303,13 +303,13 @@ class PacketHandler {
         } else {
             // this happens a lot
             if (_log.shouldInfo() && !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
-                _log.info("Packet [" + packet + "] received on an UNKNOWN stream (and not an ECHO or SYN)");
+                _log.info("Packet received on an UNKNOWN stream (and not an ECHO or SYN) -> " + packet);
             if (sendId <= 0) {
                 Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
                 if (con != null) {
                     if ( (con.getHighestAckedThrough() <= 5) && (packet.getSequenceNum() <= 5) ) {
                         if (_log.shouldInfo())
-                            _log.info("Received additional packet [" + packet + "] without SendStreamID after the SYN \n* " + con);
+                            _log.info("Received additional packet without SendStreamID after the SYN -> " + packet + "\n* " + con);
                     } else {
                         if (_log.shouldWarn())
                             _log.warn("hrmph, received while ACK of SYN was in flight\n* " + con + ": " + packet + " ACKed: " + con.getAckedPackets());

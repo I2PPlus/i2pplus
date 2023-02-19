@@ -35,12 +35,12 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title><%=intl._t("configuration")%> - susidns</title>
-<link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<style type="text/css">body{display:none;pointer-events:none}</style>
+<link rel=stylesheet type=text/css href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
 <body id="cfg">
 <div class="page">
@@ -58,16 +58,16 @@
 <h3><%=intl._t("Configuration")%></h3>
 <h4><%=intl._t("File location")%>: <span class="storage">${cfg.fileName}</span></h4>
 </div>
-<script charset="utf-8" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<div id="messages">${cfg.messages}</div>
-<form method="POST" action="config#navi">
+<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
+<div id=messages>${cfg.messages}</div>
+<form method=POST action="config#navi">
 <div id="config">
-<input type="hidden" name="serial" value="${cfg.serial}" >
+<input type=hidden name="serial" value="${cfg.serial}" >
 <textarea name="config" rows="10" cols="80" spellcheck="false">${cfg.config}</textarea>
 </div>
 <div id="buttons">
-<input class="reload" type="submit" name="action" value="<%=intl._t("Reload")%>" >
-<input class="accept" type="submit" name="action" value="<%=intl._t("Save")%>" >
+<input class="reload" type=submit name=action value="<%=intl._t("Reload")%>" >
+<input class=accept type=submit name=action value="<%=intl._t("Save")%>" >
 </div>
 </form>
 <div class="help" id="helpconfig">
@@ -96,6 +96,6 @@
 </div>
 </div>
 <span data-iframe-height></span>
-<style type="text/css">body{display:block;pointer-events:auto}</style>
+<style type=text/css>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

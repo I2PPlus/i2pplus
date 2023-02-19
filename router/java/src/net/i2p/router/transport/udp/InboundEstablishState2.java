@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -247,6 +248,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         boolean isIPv6 = _aliceIP.length == 16;
         List<RouterAddress> addrs = _transport.getTargetAddresses(ri);
         RouterAddress ra = null;
+        String mismatchMessage = null;
         for (RouterAddress addr : addrs) {
             // skip SSU 1 address w/o "s"
             if (addrs.size() > 1 && addr.getTransportStyle().equals("SSU") && addr.getOption("s") == null)
@@ -265,6 +267,20 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     continue;
             }
             ra = addr;
+            byte[] infoIP = ra.getIP();
+            if (infoIP != null && infoIP.length == _aliceIP.length) {
+                if (isIPv6) {
+                    if ((((int) infoIP[0]) & 0xfe) == 0x02)
+                        continue; // ygg
+                    if (DataHelper.eq(_aliceIP, 0, infoIP, 0, 8))
+                        continue;
+                } else {
+                    if (DataHelper.eq(_aliceIP, infoIP))
+                        continue;
+                }
+                // We will ban and throw below after checking signature
+                mismatchMessage = "IP mismatch actual IP " + Addresses.toString(_aliceIP) + " in RI: ";
+            }
             break;
         }
 
@@ -309,6 +325,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (ri.verifySignature())
                _context.blocklist().add(_aliceIP);
             throw new RIException("SSU2 network ID mismatch", REASON_NETID);
+        }
+
+        if (mismatchMessage != null) {
+            _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (SSU2)",
+                                             null, null, _context.clock().now() + 2*60*60*1000);
+            if (ri.verifySignature())
+                _context.blocklist().add(_aliceIP);
+            throw new RIException(mismatchMessage + ri, REASON_BANNED);
         }
 
         if (!"2".equals(ra.getOption("v")))
@@ -829,6 +853,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                        "\nGenerated header key 2 for A->B:  " + Base64.encode(h_ab) +
                        "\nGenerated header key 2 for B->A:  " + Base64.encode(h_ba));
        ****/
+        Arrays.fill(ckd, (byte) 0);
+        Arrays.fill(k_ab, (byte) 0);
+        Arrays.fill(k_ba, (byte) 0);
+        Arrays.fill(d_ab, (byte) 0);
+        Arrays.fill(d_ba, (byte) 0);
         _handshakeState.destroy();
         if (_createdSentCount == 1)
             _rtt = (int) ( _context.clock().now() - _lastSend );

@@ -148,7 +148,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final static long ROUTER_INFO_EXPIRATION = 24*60*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_MIN = 90*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_SHORT = 75*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_SHORT = 15*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 4*60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
@@ -278,16 +278,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     public synchronized void shutdown() {
         _initialized = false;
+        if (!_context.commSystem().isDummy() &&
+            _context.router().getUptime() > ROUTER_INFO_EXPIRATION_FLOODFILL + 10*60*1000 + 60*1000) {
+            // expire inline before saving RIs in _ds.stop()
+            Job erj = new ExpireRoutersJob(_context, this);
+            erj.runJob();
+        }
         if (_kb != null)
             _kb.clear();
-        // don't null out _kb, it can cause NPEs in concurrent operations
-        //_kb = null;
         if (_ds != null)
             _ds.stop();
-        // don't null out _ds, it can cause NPEs in concurrent operations
-        //_ds = null;
-        _exploreKeys.clear(); // hope this doesn't cause an explosion, it shouldn't.
-        // _exploreKeys = null;
+        _exploreKeys.clear();
         if (_negativeCache != null)
             _negativeCache.clear();
         _blindCache.shutdown();
@@ -345,8 +346,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         } catch (IOException ioe) {
             throw new RuntimeException("Unable to initialize NetDb storage", ioe);
         }
-        //_ds = new TransientDataStore();
-//        _exploreKeys = new HashSet(64);
         _dbDir = dbDir;
         _negativeCache = new NegativeLookupCache(_context);
         _blindCache.startup();
@@ -358,16 +357,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         // expire old leases
         Job elj = new ExpireLeasesJob(_context, this);
-//        elj.getTiming().setStartAfter(_context.clock().now() + 2*60*1000);
-        elj.getTiming().setStartAfter(_context.clock().now() + 90*1000);
+        long now = _context.clock().now();
+        elj.getTiming().setStartAfter(now + 11*60*1000);
         _context.jobQueue().addJob(elj);
 
         //// expire some routers
         // Don't run until after RefreshRoutersJob has run, and after validate() will return invalid for old routers.
         if (!_context.commSystem().isDummy()) {
             Job erj = new ExpireRoutersJob(_context, this);
-//             erj.getTiming().setStartAfter(_context.clock().now() + 2*60*60*1000);
-             erj.getTiming().setStartAfter(_context.clock().now() + 30*60*1000);
+            boolean isFF = _context.getBooleanProperty(FloodfillMonitorJob.PROP_FLOODFILL_PARTICIPANT);
+            long down = _context.router().getEstimatedDowntime();
+            long delay = (down == 0 || (!isFF && down > 30*60*1000) || (isFF && down > 24*60*60*1000)) ?
+                         ROUTER_INFO_EXPIRATION_FLOODFILL + 10*60*1000 :
+                         10*60*1000;
+            erj.getTiming().setStartAfter(now + delay);
             _context.jobQueue().addJob(erj);
         }
 
@@ -386,7 +389,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // We're trying to minimize the ff connections to lessen the load on the
             // floodfills, and in any case let's try to build some real expl. tunnels first.
             // No rush, it only runs every 30m.
-            _exploreJob.getTiming().setStartAfter(_context.clock().now() + EXPLORE_JOB_DELAY);
+            _exploreJob.getTiming().setStartAfter(now + EXPLORE_JOB_DELAY);
             _context.jobQueue().addJob(_exploreJob);
         } else {
             _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
@@ -771,15 +774,28 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.57";
+            boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
             Hash us = _context.routerHash();
             boolean isUs = us.equals(ri.getIdentity().getHash());
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
-                                     VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                     _context.router().getUptime() > 15*60*1000 &&
-                                     _context.netDb().getKnownRouters() > 2000 && !isUs;
+                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) &&
+                                     isOld && _context.router().getUptime() > 15*60*1000 &&
+                                     _context.netDb().getKnownRouters() > 1500 && !isUs;
+            boolean isFF = false;
+            String caps = ri.getCapabilities().toUpperCase();
+            if (caps.contains("F")) {
+                isFF = true;
+            }
+            boolean noSSU = true;
+            for (RouterAddress ra : ri.getAddresses()) {
+                if (ra.getTransportStyle().equals("SSU") ||
+                    ra.getTransportStyle().equals("SSU2")) {
+                    noSSU = false;
+                    break;
+                }
+            }
 
             if (uninteresting && !isHidden) {
                 if (_log.shouldInfo())
@@ -787,23 +803,29 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _ds.remove(key);
                 _kb.remove(key);
             }
-        } else if (key != null && _context.banlist().isBanlistedForever(key)) {
-            if (_log.shouldInfo())
-                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted");
-            _ds.remove(key);
-            _kb.remove(key);
-        } else if (key != null && isNegativeCached(key)) {
-            if (_log.shouldInfo())
-                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
-            _ds.remove(key);
-            _kb.remove(key);
-            if (onFailedLookupJob != null)
-                _context.jobQueue().addJob(onFailedLookupJob);
-        } else {
-            search(key, onFindJob, onFailedLookupJob, timeoutMs, false);
+            if (noSSU && isFF && !isUs) {
+                if (_log.shouldInfo())
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
+                _ds.remove(key);
+                _kb.remove(key);
+            }
+            if (key != null && _context.banlist().isBanlistedForever(key)) {
+                if (_log.shouldInfo())
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted");
+                _ds.remove(key);
+                _kb.remove(key);
+            } else if (key != null && isNegativeCached(key)) {
+                if (_log.shouldInfo())
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
+                _ds.remove(key);
+                _kb.remove(key);
+                if (onFailedLookupJob != null)
+                    _context.jobQueue().addJob(onFailedLookupJob);
+            } else {
+                search(key, onFindJob, onFailedLookupJob, timeoutMs, false);
+            }
         }
     }
-
     /**
      * This will return immediately with the result or null.
      * However, this may still fire off a lookup if the RI is present but expired (and will return null).
@@ -1246,7 +1268,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String validateUptime = _context.getProperty("router.validateRoutersAfter");
         Hash us = _context.routerHash();
         boolean isUs = us.equals(routerInfo.getIdentity().getHash());
-        boolean upLongEnough = _context.router().getUptime() > 60*60*1000;
+        long uptime = _context.router().getUptime();
+        boolean upLongEnough = uptime > 20*60*1000;
         boolean dontFail = _context.router().getUptime() < DONT_FAIL_PERIOD;
         if (validateUptime != null)
             upLongEnough = _context.router().getUptime() > Integer.valueOf(validateUptime)*60*1000;
@@ -1261,6 +1284,30 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         int existing = _kb.size();
         String expireRI = _context.getProperty("router.expireRouterInfo");
         String routerId = "";
+        String v = routerInfo.getVersion();
+        String minRouterVersion = "0.9.20";
+        String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
+        boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                                routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                                routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
+        boolean isUnreachable = routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isFF = false;
+        boolean noSSU = true;
+        if (routerInfo != null) {
+            String caps = routerInfo.getCapabilities().toUpperCase();
+            if (caps.contains("F")) {
+                isFF = true;
+            }
+        }
+        if (routerInfo != null) {
+            for (RouterAddress ra : routerInfo.getAddresses()) {
+                if (ra.getTransportStyle().equals("SSU") ||
+                    ra.getTransportStyle().equals("SSU2")) {
+                    noSSU = false;
+                    break;
+                }
+            }
+        }
         if (routerInfo != null)
             routerId = routerInfo.toBase64().substring(0,6);
         if (expireRI != null)
@@ -1273,9 +1320,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                           ROUTER_INFO_EXPIRATION_MIN +
                                           ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
 */
-        adjustedExpiration = existing > 2000 ? ROUTER_INFO_EXPIRATION / 3 :
-                             existing > 1500 ? ROUTER_INFO_EXPIRATION / 2 :
-                             existing > 1000 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
+        adjustedExpiration = existing > 4000 ? ROUTER_INFO_EXPIRATION / 3 :
+                             existing > 3000 ? ROUTER_INFO_EXPIRATION / 2 :
+                             existing > 2000 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
                              ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !isUs && !routerInfo.isCurrent(adjustedExpiration)) {
@@ -1296,38 +1343,70 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR && !isUs) {
             long age = routerInfo.getPublished() - now;
             if (_log.shouldWarn()) {
-                _log.warn("Dropping RouterInfo [" + riHash + "] -> Invalid publication date \n* Published: " + new Date(routerInfo.getPublished()));
-                //_log.warn("Banning [" + riHash + "] for 15m -> RouterInfo from the future!");
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> Invalid publication date " +
+                          "\n* Published: " + new Date(routerInfo.getPublished()));
+                _log.warn("Banning [" + riHash + "] for 4h -> RouterInfo from the future!");
             }
-            //_context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
-            //                                 new Date(routerInfo.getPublished()) + ")", null, null, 15*60*1000);
+            _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
+                                             new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
             return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " in the future";
+        }
+        if (noSSU && isFF && !isUs) {
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> Floodfill with SSU disabled");
+                _log.warn("Banning [" + riHash + "] for 4h -> Floodfill with SSU disabled");
+            }
+            _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> Floodfill with SSU disabled",
+                                             null, null, 4*60*60*1000);
+            return "Router [" + routerId + "] Floodfill with SSU disabled";
+        }
+        if (minVersionAllowed != null) {
+            if (VersionComparator.comp(v, minVersionAllowed) < 0) {
+                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> Router too old (" + v + ")");
+                return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
+            }
+        } else {
+            if (VersionComparator.comp(v, minRouterVersion) < 0) {
+                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> Router too old (" + v + ")");
+                return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
+            }
+        }
+        if (uptime > 10*60*1000 && existing > 500 && isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 8)) {
+            if (_log.shouldWarn())
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and published over 1h ago");
+            return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 1h ago";
+        } else if (isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 4)) {
+            if (_log.shouldWarn())
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and published over 2h ago");
+            return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 2h ago";
         }
 //        if (upLongEnough && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED) && !isUs) {
-            if (routerInfo.getAddresses().isEmpty())
+            if (routerInfo.getAddresses().isEmpty()) {
+                if (_log.shouldWarn())
+                    _log.warn("Dropping RouterInfo [" + riHash + "] -> No addresses and published over 54m ago");
                 return "RouterInfo [" + routerId + "] has no addresses and was published over 54m ago";
+            }
             // This should cover the introducers case below too
             // And even better, catches the case where the router is unreachable but knows no introducers
-            if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || routerInfo.getAddresses().isEmpty())
+            if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || routerInfo.getAddresses().isEmpty()) {
+                if (_log.shouldWarn())
+                    _log.warn("Dropping RouterInfo [" + riHash + "] -> Unreachable and published over 54m ago");
                 return "RouterInfo [" + routerId + "] is unreachable and was published over 54m ago";
+            }
             // Just check all the addresses, faster than getting just the SSU ones
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 // Introducers change often, introducee will ping introducer for 2 hours
-                if (ra.getOption("itag0") != null)
+                if (ra.getOption("itag0") != null) {
+                    if (_log.shouldWarn())
+                        _log.warn("Dropping RouterInfo [" + riHash + "] -> SSU Introducers and was published over 54m ago");
                     return "RouterInfo [" + routerId + "] has SSU Introducers and was published over 54m ago";
+                }
             }
         }
-
-        if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 &&
-            routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION_SHORT && !isUs)
-                return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 75m ago";
-
         if (expireRI != null && !isUs) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
-            long age = now - routerInfo.getPublished();
+                long age = now - routerInfo.getPublished();
                 return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
             }
         } else {
@@ -1339,25 +1418,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null && !isUs) {
-                    return "Router [" + routerId + "] is SSU only without introducers and was published over 75m ago";
+                    return "Router [" + routerId + "] is SSU only without introducers and was published over 15m ago";
                 } else {
-                    if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 && !isUs)
-                    return "Router [" + routerId + "] is unreachable on any transport and was published over 75m ago";
+                    if (isUnreachable && !isUs)
+                    return "Router [" + routerId + "] is unreachable on any transport and was published over 15m ago";
                 }
-            }
-        }
-        String v = routerInfo.getVersion();
-        String minRouterVersion = "0.9.20";
-        String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
-        if (minVersionAllowed != null) {
-            if (VersionComparator.comp(v, minVersionAllowed) < 0) {
-                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router too old (" + v + ")");
-                return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
-            }
-        } else {
-            if (VersionComparator.comp(v, minRouterVersion) < 0) {
-                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router too old (" + v + ")");
-                return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
             }
         }
         return null;
@@ -1467,7 +1532,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         SigType type = kc.getSigType();
                         if (type == null || !type.isAvailable()) {
                             String stype = (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
-                            _context.banlist().banlistRouterForever(h, " <b>➜</b> " + "Unsupported signature type " + stype);
+                            _context.banlist().banlistRouterForever(h, " <b>➜</b> " + "Unsupported Signature type " + stype);
                             if (_log.shouldWarn())
                                 _log.warn("Unsupported Signature type (" + stype + ") for ["
                                           + h.toBase64().substring(0,6) + "] - banned until restart");

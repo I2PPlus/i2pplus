@@ -10,19 +10,19 @@
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
 <html id="tman">
 <head>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
-<link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel="preload" as="script"> 
-<link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
-<link href="<%=indexBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<link href="<%=indexBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<link href="<%=indexBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
-<link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.svg">
-<style type="text/css">body{display:none;pointer-events:none}</style>
+<link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel=preload as=script> 
+<link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css> 
+<link href="<%=indexBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=indexBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=indexBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css> 
+<link rel=icon href="<%=indexBean.getTheme()%>images/favicon.svg">
+<style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
 <body id="tunnelListPage">
-<div id="page">
+<div id=page>
 <%
   boolean isInitialized = indexBean.isInitialized();
   String nextNonce = isInitialized ? net.i2p.i2ptunnel.web.IndexBean.getNextNonce() : null;
@@ -32,8 +32,8 @@
   String msgs = indexBean.getMessages();
   if (msgs.length() > 0) {
 %>
-<div class="panel" id="messages">
-<h2 id="screenlog"><%=intl._t("Status Messages")%>
+<div class=panel id=messages>
+<h2 id=screenlog><%=intl._t("Status Messages")%>
 <%
       if (isInitialized) {
 %>
@@ -44,15 +44,15 @@
       }  // isInitialized
 %>
 </h2>
-<table id="statusMessagesTable">
+<table id=statusMessagesTable>
 <tr>
 <td id="tunnelMessages">
-<textarea id="statusMessages" rows="4" cols="60" readonly>
+<textarea id="statusMessages" rows=4 cols=60 readonly>
 <%=msgs%></textarea>
 </td>
 </tr>
 <tr id="screenlog_buttons" hidden>
-<td class="buttons">
+<td class=buttons>
 <a class="control refresh iconize" href="list"><%=intl._t("Refresh")%></a>
 <%
       if (isInitialized) {
@@ -69,11 +69,11 @@
   }  // !msgs.isEmpty()
   if (isInitialized) {
 %>
-<div class="panel" id="globalTunnelControl">
+<div class=panel id="globalTunnelControl">
 <h2><%=intl._t("Global Tunnel Control")%>&nbsp;<button id="toggleInfo" class="script" style="float: right"><img src="/themes/console/dark/images/expand_hover.svg" title="Show Tunnel Info"/></button></h2>
 <table>
 <tr>
-<td class="buttons">
+<td class=buttons>
 <a class="control wizard iconize" href="wizard"><%=intl._t("Tunnel Wizard")%></a>
 <a class="control stopall iconize" href="list?nonce=<%=nextNonce%>&amp;action=Stop%20all"><%=intl._t("Stop All")%></a>
 <a class="control startall iconize" href="list?nonce=<%=nextNonce%>&amp;action=Start%20all"><%=intl._t("Start All")%></a>
@@ -86,7 +86,7 @@
 </tr>
 </table>
 </div>
-<div class="panel" id="servers">
+<div class=panel id="servers">
 <h2><%=intl._t("I2P Server Tunnels").replace("I2P ", "")%></h2>
 <table id="serverTunnels">
 <tr>
@@ -121,9 +121,9 @@
 <%
             if (indexBean.isServerTargetLinkValid(curServer)) {
                 if (indexBean.isSSLEnabled(curServer)) { %>
-<a href="https://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTPS server, bypassing I2P")%>" target="_blank" rel="noreferrer"><%=indexBean.getServerTarget(curServer)%> SSL</a>
+<a href="https://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTPS server, bypassing I2P")%>" target=_blank rel=noreferrer><%=indexBean.getServerTarget(curServer)%> SSL</a>
 <%              } else { %>
-<a href="http://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTP server, bypassing I2P")%>" target="_blank" rel="noreferrer"><%=indexBean.getServerTarget(curServer)%></a>
+<a href="http://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTP server, bypassing I2P")%>" target=_blank rel=noreferrer><%=indexBean.getServerTarget(curServer)%></a>
 <%
                 }
             } else {
@@ -141,7 +141,7 @@ SSL
 <%
             if (("httpserver".equals(indexBean.getInternalType(curServer)) || ("httpbidirserver".equals(indexBean.getInternalType(curServer)))) && indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
 %>
-<a class="control preview iconize" title="<%=intl._t("Test HTTP server through I2P")%>" href="http://<%=indexBean.getDestHashBase32(curServer)%>" target="_blank" rel="noreferrer"><%=intl._t("Preview")%></a>
+<a class="control preview iconize" title="<%=intl._t("Test HTTP server through I2P")%>" href="http://<%=indexBean.getDestHashBase32(curServer)%>" target=_blank rel=noreferrer><%=intl._t("Preview")%></a>
 <%
             } else if (indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
 %>
@@ -186,7 +186,7 @@ SSL
 </td>
 </tr>
 <tr class="tunnelInfo" style="display:none">
-<td class="tunnelDestination" colspan="2">
+<td class="tunnelDestination" colspan=2>
 <span class="tunnelDestinationLabel">
 <%
             String name = indexBean.getSpoofedHost(curServer);
@@ -208,7 +208,7 @@ SSL
             }
 %>
 </td>
-<td class="tunnelSig" colspan="4">
+<td class="tunnelSig" colspan=4>
 <span class="tunnelDestinationLabel"><b><%=intl._t("Signature")%>:</b></span>
 <%
             String tunnelType = editBean.getInternalType(curServer);
@@ -250,7 +250,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
             if (encName != null && encName.length() > 0) {
 %>
 <tr class="tunnelInfo" style="display:none">
-<td class="tunnelDestinationEncrypted" colspan="2">
+<td class="tunnelDestinationEncrypted" colspan=2>
 <span class="tunnelDestinationLabel"><b><%=intl._t("Encrypted")%>:</b></span>
 <span class="selectAll"><%=encName%></span>
 </td>
@@ -258,7 +258,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
             } else if (hasHostname) {
 %>
 <tr class="tunnelInfo" style="display:none">
-<td class="tunnelDestinationEncrypted" colspan="2">
+<td class="tunnelDestinationEncrypted" colspan=2>
 <span class="tunnelDestinationLabel"><b><%=intl._t("Destination")%>:</b></span>
 <span class="selectAll"><%=indexBean.getDestHashBase32(curServer)%></span>
 </td>
@@ -266,7 +266,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
             } else if (altDest != null && !altDest.equals("")) {
 %>
 <tr class="tunnelInfo" style="display:none">
-<td class="tunnelDestinationEncrypted" colspan="2">
+<td class="tunnelDestinationEncrypted" colspan=2>
 <span class="tunnelDestinationLabel"><b><%=intl._t("Alt Destination")%>:</b></span>
 <span class="selectAll"><%=altDestB32%></span>
 </td>
@@ -274,11 +274,11 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
             } else {
 %>
 <tr class="tunnelInfo" style="display:none">
-<td class="tunnelDestinationEncrypted empty" colspan="2"></td>
+<td class="tunnelDestinationEncrypted empty" colspan=2></td>
 <%
             }
 %>
-<td class="tunnelEncryption" colspan="4">
+<td class="tunnelEncryption" colspan=4>
 <span class="tunnelDestinationLabel"><b><%=intl._t("Encryption")%>:</b></span>
 <%
             boolean has0 = editBean.hasEncType(curServer, 0);
@@ -303,7 +303,7 @@ ElGamal-2048
         } // for loop
 %>
 <tr>
-<td class="newTunnel" colspan="6">
+<td class="newTunnel" colspan=6>
 <form id="addNewServerTunnelForm" action="edit">
 <b><%=intl._t("New server tunnel")%>:</b>&nbsp;
 <select name="type">
@@ -313,13 +313,13 @@ ElGamal-2048
 <option value="ircserver">IRC</option>
 <option value="streamrserver">Streamr</option>
 </select>
-<input class="control create iconize" type="submit" value="<%=intl._t("Create")%>" />
+<input class="control create iconize" type=submit value="<%=intl._t("Create")%>" />
 </form>
 </td>
 </tr>
 </table>
 </div>
-<div class="panel" id="clients">
+<div class=panel id="clients">
 <h2><%=intl._t("I2P Client Tunnels").replace("I2P ", "")%></h2>
 <table id="clientTunnels">
 <tr>
@@ -419,7 +419,7 @@ ElGamal-2048
 </td>
 </tr>
 <tr class="tunnelInfo" style="display:none">
-<td class="tunnelDestination" colspan="2">
+<td class="tunnelDestination" colspan=2>
 <span class="tunnelDestinationLabel">
 <%
                String cdest = indexBean.getClientDestination(curClient);
@@ -457,7 +457,7 @@ ElGamal-2048
                }
 %>
 </td>
-<td class="tunnelSig" colspan="4">
+<td class="tunnelSig" colspan=4>
 <span class="tunnelDestinationLabel"><b><%=intl._t("Signature")%>:</b></span>
 <%
                String tunnelType = editBean.getInternalType(curClient);
@@ -487,7 +487,7 @@ ECDSA-P256
                if ((cdest.contains(".i2p") && !cdest.contains(".b32") || cdest.length() > 70) && clientB32.length() > 0) {
 %>
 <tr class="tunnelInfo" style="display:none">
-<td class="tunnelDestinationEncrypted" colspan="2">
+<td class="tunnelDestinationEncrypted" colspan=2>
 <span class="tunnelDestinationLabel"><b>B32:</b></span>
 <span class="selectAll"><%=clientB32%></span>
 </td>
@@ -495,11 +495,11 @@ ECDSA-P256
                } else {
 %>
 <tr class="tunnelInfo" style="display:none">
-<td class="empty" colspan="2"></td>
+<td class="empty" colspan=2></td>
 <%
                }
 %>
-<td class="tunnelEncryption" colspan="4">
+<td class="tunnelEncryption" colspan=4>
 <span class="tunnelDestinationLabel"><b><%=intl._t("Encryption")%>:</b></span>
 <%
                boolean has0 = editBean.hasEncType(curClient, 0);
@@ -524,7 +524,7 @@ ElGamal-2048
 </td>
 </tr>
 <tr>
-<td class="newTunnel" colspan="6">
+<td class="newTunnel" colspan=6>
 <form id="addNewClientTunnelForm" action="edit">
 <b><%=intl._t("New client tunnel")%>:</b>&nbsp;
 <select name="type">
@@ -536,28 +536,28 @@ ElGamal-2048
 <option value="connectclient">CONNECT</option>
 <option value="streamrclient">Streamr</option>
 </select>
-<input class="control create iconize" type="submit" value="<%=intl._t("Create")%>" />
+<input class="control create iconize" type=submit value="<%=intl._t("Create")%>" />
 </form>
 </td>
 </tr>
 </table>
 </div>
-<noscript><style type="text/css">.script{display:none}.tunnelInfo{display:table-row!important}</style></noscript>
+<noscript><style type=text/css>.script{display:none}.tunnelInfo{display:table-row!important}</style></noscript>
 <%
 
   }  // isInitialized()
 
   if (!indexBean.isInitialized()) {
 %>
-<div id="notReady"><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
+<div id=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
 <%
   }  // !isInitialized()
 %>
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset="utf-8" src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
-<noscript><style type="text/css">.script{display:none!important}#screenlog_buttons{display:table-row!important}</style></noscript>
-<style type="text/css">body{display:block;pointer-events:auto}</style>
+<noscript><style type=text/css>.script{display:none!important}#screenlog_buttons{display:table-row!important}</style></noscript>
+<style type=text/css>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

@@ -591,7 +591,7 @@ class PluginUpdateRunner extends UpdateRunner {
                         String linkURL = PluginStarter.stripHTML(props, "consoleLinkURL");
                         String link;
                         if (linkName != null && linkURL != null)
-                            link = "<a target=\"_blank\" href=\"" + linkURL + "\"/>" + linkName + ' ' + version + "</a>";
+                            link = "<a target=_blank href=\"" + linkURL + "\"/>" + linkName + ' ' + version + "</a>";
                         else
                             link = appName + ' ' + version;
                         statusDone("<b>" + _t("Plugin {0} installed and started", link) + "</b>");

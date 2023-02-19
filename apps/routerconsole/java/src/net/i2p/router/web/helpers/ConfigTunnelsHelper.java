@@ -25,7 +25,7 @@ public class ConfigTunnelsHelper extends HelperBase {
     public String getForm() {
         StringBuilder buf = new StringBuilder(1024);
         // HTML: <input> cannot be inside a <table>
-        buf.append("<input type=\"hidden\" name=\"pool.0\" value=\"exploratory\" >\n");
+        buf.append("<input type=hidden name=\"pool.0\" value=\"exploratory\" >\n");
         int cur = 1;
         Set<Destination> clients = _context.clientManager().listClients();
         TunnelManagerFacade mgr = _context.tunnelManager();
@@ -39,12 +39,12 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (sorted.size() > 1)
             DataHelper.sort(sorted, new TPComparator());
         for (TunnelPoolSettings in : sorted) {
-            buf.append("<input type=\"hidden\" name=\"pool.").append(cur).append("\" value=\"");
+            buf.append("<input type=hidden name=\"pool.").append(cur).append("\" value=\"");
             buf.append(in.getDestination().toBase64()).append("\" >\n");
             cur++;
         }
 
-        buf.append("<table id=\"tunnelconfig\" class=\"configtable\">\n");
+        buf.append("<table id=tunnelconfig class=configtable>\n");
         TunnelPoolSettings exploratoryIn = mgr.getInboundSettings();
         TunnelPoolSettings exploratoryOut = mgr.getOutboundSettings();
 
@@ -116,25 +116,25 @@ public class ConfigTunnelsHelper extends HelperBase {
 
         boolean advanced = isAdvanced();
 
-        buf.append("<tr><th colspan=\"4\" class=\"th_title\"><a name=\"").append(prefix).append("\">");
+        buf.append("<tr><th colspan=4 class=\"th_title\"><a name=\"").append(prefix).append("\">");
         buf.append(name).append("</a></th></tr>\n");
         if (in.getLength() <= 0 ||
             in.getLength() + in.getLengthVariance() <= 0 ||
             out.getLength() <= 0 ||
             out.getLength() + out.getLengthVariance() <= 0) {
-            buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+            buf.append("<tr><th colspan=4><font color=\"#900\">" +
                        _t("ANONYMITY WARNING - Settings include 0-hop tunnels.") +
                        "</font></th></tr>\n");
             if (TransportUtil.getIPv6Config(_context, "SSU") == TransportUtil.IPv6Config.IPV6_ONLY) {
                 // rare, don't bother translating
-                buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+                buf.append("<tr><th colspan=4><font color=\"#900\">" +
                            _t("WARNING - 0-hop tunnels not recommended for IPv6-only routers.") +
                            "</font></th></tr>\n");
             }
             if ((in.getLength() <= 0 || in.getLength() + in.getLengthVariance() <= 0) &&
                 _context.router().isHidden()) {
                 // rare, don't bother translating
-                buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+                buf.append("<tr><th colspan=4><font color=\"#900\">" +
                            _t("WARNING - Inbound 0-hop tunnels not recommended for hidden routers.") +
                            "</font></th></tr>\n");
             }
@@ -142,23 +142,23 @@ public class ConfigTunnelsHelper extends HelperBase {
             in.getLength() + in.getLengthVariance() <= 1 ||
             out.getLength() <= 1 ||
             out.getLength() + out.getLengthVariance() <= 1) {
-            buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+            buf.append("<tr><th colspan=4><font color=\"#900\">" +
                        _t("ANONYMITY WARNING - Settings include 1-hop tunnels.") +
                        "</font></th></tr>\n");
         }
         if (in.getLength() + Math.abs(in.getLengthVariance()) >= WARN_LENGTH ||
             out.getLength() + Math.abs(out.getLengthVariance()) >= WARN_LENGTH)
-            buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+            buf.append("<tr><th colspan=4><font color=\"#900\">" +
                        _t("PERFORMANCE WARNING - Settings include very long tunnels.") +
                        "</font></th></tr>\n");
         if (in.getTotalQuantity() >= WARN_QUANTITY ||
             out.getTotalQuantity() >= WARN_QUANTITY)
-            buf.append("<tr><th colspan=\"4\"><font color=\"#900\">" +
+            buf.append("<tr><th colspan=4><font color=\"#900\">" +
                        _t("PERFORMANCE WARNING - Settings include high tunnel quantities.") +
                        "</font></th></tr>\n");
 
-        buf.append("<tr><th></th><th class=\"inbound\">" + _t("Inbound") + "</th><th class=\"outbound\">" +
-                   _t("Outbound") + "</th><th class=\"spacer\"></th>\n</tr>\n");
+        buf.append("<tr><th></th><th class=inbound>" + _t("Inbound") + "</th><th class=outbound>" +
+                   _t("Outbound") + "</th><th class=spacer></th>\n</tr>\n");
 
         // tunnel depth
         int maxLength = advanced ? MAX_ADVANCED_LENGTH : MAX_LENGTH;
@@ -182,7 +182,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (now > maxLength)
             renderOptions(buf, now, now, now, "", HOP);
         buf.append("</select></td>\n");
-        buf.append("<td class=\"spacer\"></td>\n</tr>\n");
+        buf.append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel depth variance
         if (advanced) {
@@ -208,7 +208,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             else if (now < MIN_NEG_VARIANCE)
                 renderOptions(buf, now, now, now, "+/- 0", HOP);
             buf.append("</select></td>\n");
-            buf.append("<td class=\"spacer\"></td>\n</tr>\n");
+            buf.append("<td class=spacer></td>\n</tr>\n");
         }
         // tunnel quantity
         int maxQuantity = advanced ? MAX_ADVANCED_QUANTITY : MAX_QUANTITY;
@@ -235,7 +235,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (now > maxQuantity)
             renderOptions(buf, now, now, now, "", TUNNEL);
         buf.append("</select></td>\n");
-        buf.append("<td class=\"spacer\"></td>\n</tr>\n");
+        buf.append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel backup quantity
         if (advanced) {
@@ -254,7 +254,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             if (now > maxBQuantity)
                 renderOptions(buf, now, now, now, "", TUNNEL);
             buf.append("</select></td>\n");
-            buf.append("<td class=\"spacer\"></td>\n</tr>\n");
+            buf.append("<td class=spacer></td>\n</tr>\n");
         }
 
         // custom options
@@ -264,26 +264,26 @@ public class ConfigTunnelsHelper extends HelperBase {
         Properties props = in.getUnknownOptions();
         if (!props.isEmpty()) {
             buf.append("<tr><td><b>" + _t("Inbound options") + ":</b></td>\n" +
-                       "<td colspan=\"2\"><input name=\"").append(index);
-            buf.append(".inboundOptions\" type=\"text\" size=\"32\" disabled=\"disabled\" " +
+                       "<td colspan=2><input name=\"").append(index);
+            buf.append(".inboundOptions\" type=text size=32 disabled=disabled " +
                        "value=\"");
             for (String prop : props.stringPropertyNames()) {
                 String val = props.getProperty(prop);
                 buf.append(prop).append('=').append(val).append(' ');
             }
-            buf.append("\"></td>\n<td class=\"spacer\"></td>\n</tr>\n");
+            buf.append("\"></td>\n<td class=spacer></td>\n</tr>\n");
         }
         props = out.getUnknownOptions();
         if (!props.isEmpty()) {
             buf.append("<tr><td><b>" + _t("Outbound options") + ":</b></td>\n" +
-                       "<td colspan=\"2\"><input name=\"").append(index);
-            buf.append(".outboundOptions\" type=\"text\" size=\"32\" disabled=\"disabled\" " +
+                       "<td colspan=2><input name=\"").append(index);
+            buf.append(".outboundOptions\" type=text size=32 disabled=disabled " +
                        "value=\"");
             for (String prop : props.stringPropertyNames()) {
                 String val = props.getProperty(prop);
                 buf.append(prop).append('=').append(val).append(' ');
             }
-            buf.append("\"></td>\n<td class=\"spacer\"></td>\n</tr>\n");
+            buf.append("\"></td>\n<td class=spacer></td>\n</tr>\n");
         }
     }
 

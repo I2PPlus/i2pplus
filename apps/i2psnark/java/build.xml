@@ -126,6 +126,7 @@
         <copy todir="build/resources/.resources" >
             <fileset dir="../resources/" />
         </copy>
+        <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/resources/.resources/js" />
         <!-- mime.properties must be in with the classes -->
         <copy file="../mime.properties" todir="build/obj/org/klomp/snark/web" />
         <war destfile="../i2psnark.war" webxml="../web.xml" >
@@ -366,7 +367,8 @@
         </replace>
 
         <mkdir dir="build/standalone-resources/.resources/js" />
-        <copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-resources/.resources/js" />
+        <!--<copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-resources/.resources/js" />-->
+        <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-resources/.resources/js" />
 <!--
         <copy file="../resources/js/previewTheme.js" todir="build/standalone-resources/.resources/js" />
         <replace dir="build/standalone-resources/.resources/js"

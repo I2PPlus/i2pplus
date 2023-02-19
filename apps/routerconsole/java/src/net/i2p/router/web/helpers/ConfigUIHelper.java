@@ -33,7 +33,7 @@ public class ConfigUIHelper extends HelperBase {
         Set<String> themes = themeSet();
         for (String theme : themes) {
             buf.append("<label for=\"").append(theme).append("\"><div class=\"themechoice\" style=\"display: inline-block; text-align: center;\">" +
-                       "<input type=\"radio\" class=\"optbox\" name=\"theme\" ");
+                       "<input type=radio class=optbox name=\"theme\" ");
             if (theme.equals(current))
                 buf.append(CHECKED);
             buf.append("value=\"").append(theme).append("\" id=\"").append(theme).append("\">" +
@@ -44,10 +44,10 @@ public class ConfigUIHelper extends HelperBase {
         }
         boolean universalTheming = _context.getBooleanProperty(CSSHelper.PROP_UNIVERSAL_THEMING);
         buf.append("</div><div id=\"themeoptions\">" +
-                   "<label><input type=\"checkbox\" class=\"optbox slider\" name=\"universalTheming\" ");
+                   "<label><input type=checkbox class=\"optbox slider\" name=\"universalTheming\" ");
         if (universalTheming)
             buf.append(CHECKED);
-        buf.append("value=\"1\">")
+        buf.append("value=1>")
            .append(_t("Set theme universally across all apps"))
            .append("</label><br>\n");
         return buf.toString();
@@ -56,19 +56,19 @@ public class ConfigUIHelper extends HelperBase {
     public String getForceMobileConsole() {
         StringBuilder buf = new StringBuilder(256);
         boolean forceMobileConsole = _context.getBooleanProperty(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
-        buf.append("<label><input type=\"checkbox\" class=\"optbox slider\" name=\"forceMobileConsole\" ");
+        buf.append("<label><input type=checkbox class=\"optbox slider\" name=\"forceMobileConsole\" ");
         if (forceMobileConsole)
             buf.append(CHECKED);
-        buf.append("value=\"1\">")
+        buf.append("value=1>")
            .append(_t("Force the mobile console to be used"))
            .append("</label><br>\n");
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         buf.append("<label title=\"")
            .append(_t("Enabling the Universal Theming option is recommended when embedding these applications"))
-           .append("\"><input type=\"checkbox\" class=\"optbox slider\" name=\"embedApps\" ");
+           .append("\"><input type=checkbox class=\"optbox slider\" name=\"embedApps\" ");
         if (embedApps)
             buf.append(CHECKED);
-        buf.append("value=\"1\">")
+        buf.append("value=1>")
            .append(_t("Embed I2PSnark and I2PMail in the console"))
            .append("</label></div>\n");
         return buf.toString();
@@ -199,7 +199,7 @@ public class ConfigUIHelper extends HelperBase {
                 continue;
             // we use "lang" so it is set automagically in CSSHelper
             buf.append("<label for=\"").append(lang).append("\"><div class=\"langselect\">")
-               .append("<input type=\"radio\" class=\"optbox\" name=\"lang\" ");
+               .append("<input type=radio class=optbox name=\"lang\" ");
             if (lang.equals(current))
                 buf.append(CHECKED);
             buf.append("value=\"").append(lang).append("\" id=\"").append(lang).append("\">")
@@ -229,27 +229,27 @@ public class ConfigUIHelper extends HelperBase {
         Properties config = net.i2p.I2PAppContext.getGlobalContext().getProperties();
         // only show delete user button if user(s) configured
         if (!config.toString().contains("routerconsole.auth.i2prouter"))
-            buf.append("<style type=\"text/css\">#consolepass .delete {display: none !important;)</style>\n");
+            buf.append("<style type=text/css>#consolepass .delete {display: none !important;)</style>\n");
         buf.append("<table id=\"consolepass\">\n");
         if (userpw.isEmpty()) {
-            buf.append("<tr><td class=\"infohelp\" colspan=\"3\">" +
+            buf.append("<tr><td class=infohelp colspan=3>" +
                        _t("Add a user and password to enable.") + "&nbsp;" +
                        _t("Note: If you forget your password, removing the configuration entry in your router.config file will clear it (restart required).") +
                        "</td></tr>\n");
         } else {
-            buf.append("<tr><td class=\"infohelp\" colspan=\"3\">" +
+            buf.append("<tr><td class=infohelp colspan=3>" +
                        _t("Router console password is enabled.") +
                        "</td></tr>\n");
             buf.append("<tr><th title=\"" + _t("Mark for deletion") + "\">" + _t("Remove") + "</th><th>" + _t("Username") + "</th><th>&nbsp;</th></tr>\n");
             for (String name : userpw.keySet()) {
-                buf.append("<tr><td><input type=\"checkbox\" class=\"optbox\" id=\"" + name + "\" name=\"delete_" + name + "\"></td>" +
-                           "<td colspan=\"2\"><label for=\"" + name + "\">" + name + "</label></td></tr>\n");
+                buf.append("<tr><td><input type=checkbox class=optbox id=\"" + name + "\" name=\"delete_" + name + "\"></td>" +
+                           "<td colspan=2><label for=\"" + name + "\">" + name + "</label></td></tr>\n");
             }
         }
-        buf.append("<tr><td id=\"pw_adduser\" colspan=\"3\">" +
-                   "<b>" + _t("Username") + ":</b> " + "<input type=\"text\" name=\"name\" title=\"" +
+        buf.append("<tr><td id=\"pw_adduser\" colspan=3>" +
+                   "<b>" + _t("Username") + ":</b> " + "<input type=text name=\"name\" title=\"" +
                    _t("Please supply a username") + "\"><b>" + _t("Password") + ":</b> " +
-                   "<input type=\"password\" size=\"40\" name=\"nofilter_pw\" title=\"" +
+                   "<input type=password size=\"40\" name=\"nofilter_pw\" title=\"" +
                    _t("Please supply a password") + "\">" + "</td></tr>\n</table>\n");
         return buf.toString();
     }

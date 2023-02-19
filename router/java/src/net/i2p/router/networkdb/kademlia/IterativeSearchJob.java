@@ -86,10 +86,10 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final Set<Hash> _skippedPeers;
 
 //    private static final int MAX_NON_FF = 3;
-    private static final int MAX_NON_FF = 4;
+    private static final int MAX_NON_FF = 6;
     /** Max number of peers to query */
 //    private static final int TOTAL_SEARCH_LIMIT = 5;
-    private static final int TOTAL_SEARCH_LIMIT = 8;
+    private static final int TOTAL_SEARCH_LIMIT = 16;
     /** Max number of peers to query if we are ff */
 //    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 2;
     private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = SystemVersion.isSlow() ? 2 : 3;
@@ -118,7 +118,8 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  For now, we don't do concurrent, but we keep SINGLE_SEARCH_TIME very short,
      *  so we have effective concurrency in that we fail a search quickly.
      */
-    private final int _maxConcurrent;
+//    private final int _maxConcurrent;
+    private int _maxConcurrent;
     /**
      * The default _maxConcurrent
      */
@@ -164,6 +165,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         int cpuLoad = SystemVersion.getCPULoad();
         int cpuLoadAvg = SystemVersion.getCPULoadAvg();
         int sysLoad = SystemVersion.getSystemLoad();
+        long lag = ctx.jobQueue().getMaxLag();
         _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
@@ -177,8 +179,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
          //_maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
-         _maxConcurrent = ctx.router().getUptime() > 30*60*1000 ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
-                                                                  ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
+         _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
+                          ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
         if (fromLocalDest != null && !isLease && _log.shouldLog(Log.WARN))
             _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
         // all createRateStat in FNDF
@@ -189,44 +191,22 @@ public class IterativeSearchJob extends FloodSearchJob {
             totalSearchLimit += 2;
         } else {
             _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
-/*
-            if (ri != null) {
-                String v = ri.getVersion();
-                boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
-                                        VersionComparator.comp(v, MIN_VERSION) < 0) && known > 1500;
-                                        // && ctx.router().getUptime() > 15*60*1000 && !isHidden;
-                if (uninteresting) {
-                    _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME / 3 * 2);
-                    totalSearchLimit = Math.max(totalSearchLimit - 1, 3);
-                }
-            if (known < 1500 || isHidden) {
-                totalSearchLimit += 2;
-            } else {
-                _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
-            }
-*/
         }
-
-/*
-
         if (ctx.getProperty("netdb.maxConcurrent") != null) {
             _maxConcurrent = Integer.valueOf(ctx.getProperty("netdb.maxConcurrent"));
-        } else if (cpuLoad < 80 && sysLoad < 80 && !isSingleCore && !isSlow) {
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 4));
-        } else if ((known < 1000 || ctx.router().getUptime() < 30*60*1000 || isHidden) && !isSlow &&
-                   !isSingleCore && cpuLoad < 80 && cpuLoadAvg < 80) {
+        } else if (isLease && cpuLoad < 80 && cpuLoadAvg < 80 && lag < 50) {
+            ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 2));
+        } else if ((known < 1000 && ctx.router().getUptime() < 30*60*1000 || isHidden) && !isSlow &&
+                   !isSingleCore && (cpuLoad < 80 && cpuLoadAvg < 80)) {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 2);
-        } else if (known > 1500 && ctx.router().getUptime() > 30*60*1000 && !isHidden && !isSlow && !isSingleCore) {
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", 1);
-        } else if (cpuLoad > 80 && cpuLoadAvg > 80 || isSlow || isSingleCore) {
-          _maxConcurrent = 1;
+        } else if (known > 1000 || ctx.router().getUptime() > 30*60*1000 &&
+                   cpuLoad < 80 && cpuLoadAvg < 80 && lag < 50) {
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", 2);
+        } else if ((cpuLoad > 90 && cpuLoadAvg > 90) || isSlow || isSingleCore) {
+            _maxConcurrent = 1;
         } else {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.max(MAX_CONCURRENT, 1));
         }
-*/
     }
 
     @Override
@@ -238,26 +218,28 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
 
-/*
+
         String MIN_VERSION = "0.9.57";
         boolean isHidden = getContext().router().isHidden();
-        RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
-        if (ri != null) {
+        RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
+        RouterInfo isUs = _facade.lookupRouterInfoLocally(getContext().routerHash());
+        if (ri != null && ri != isUs) {
             String v = ri.getVersion();
-            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-            ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-            ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-            ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
-            (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
-            !isHidden && getContext().netDb().getKnownRouters() > 1500;
-            //&& getContext().router().getUptime() > 15*60*1000 && !isHidden;
+            String caps = ri.getCapabilities();
+            boolean uninteresting = (caps != null && caps.contains("salt") ||
+                                     caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                     caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                     //caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                     //caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
+                                     (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
+                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;
             if (uninteresting) {
                 if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
                 return;
             }
         }
-*/
+
         // pick some floodfill peers and send out the searches
         List<Hash> floodfillPeers;
         KBucketSet<Hash> ks = _facade.getKBuckets();

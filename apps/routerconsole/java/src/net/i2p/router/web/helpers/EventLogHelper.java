@@ -100,9 +100,9 @@ public class EventLogHelper extends FormHandler {
         String nonce = CSSHelper.getNonce();
         try {
             _out.write("<br><h3 id=\"displayevents\">" + _t("Display Events") + "</h3>");
-            _out.write("<form action=\"events\" method=\"POST\">\n" +
-                       "<input type=\"hidden\" name=\"action\" value=\"save\">\n" +
-                       "<input type=\"hidden\" name=\"nonce\" value=\"" + nonce + "\" >\n<b>");
+            _out.write("<form action=\"events\" method=\"post\">\n" +
+                       "<input type=hidden name=\"action\" value=\"Save\">\n" +
+                       "<input type=hidden name=\"nonce\" value=\"" + nonce + "\" >\n<b>");
             _out.write(_t("Events since") + ":</b> <select name=\"from\">");
             for (int i = 0; i < _times.length; i++) {
                 writeOption(_times[i]);
@@ -119,7 +119,7 @@ public class EventLogHelper extends FormHandler {
                 writeOption(e.getKey(), e.getValue());
             }
             _out.write("</select>" +
-                       "&nbsp;<input type=\"submit\" class=\"accept\" value=\"" + _t("Filter events") + "\"></form>");
+                       "&nbsp;<input type=submit class=accept value=\"" + _t("Filter events") + "\"></form>");
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -170,12 +170,12 @@ public class EventLogHelper extends FormHandler {
         if (events.isEmpty()) {
             if (isAll) {
                 if (_age == 0)
-                    return ("<table id=\"eventlog\">\n<tr><td class=\"infohelp\">") + _t("No events found") + ("</td></tr></table>");
+                    return ("<table id=\"eventlog\">\n<tr><td class=infohelp>") + _t("No events found") + ("</td></tr></table>");
                 return ("<table id=\"eventlog\"><tr><td>") + _t("No events found in previous {0}", DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
             }
             if (_age == 0)
-                return ("<table id=\"eventlog\" data-sortable>\n<tr><td  class=\"infohelp\">") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>\n");
-            return ("<table id=\"eventlog\">\n<tr><td class=\"infohelp\">") +
+                return ("<table id=\"eventlog\" data-sortable>\n<tr><td  class=infohelp>") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>\n");
+            return ("<table id=\"eventlog\">\n<tr><td class=infohelp>") +
                     _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
         }
         StringBuilder buf = new StringBuilder(2048);

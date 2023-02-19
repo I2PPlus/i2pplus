@@ -17,6 +17,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <title>Sidebar - I2P+</title>
 <%
     // try hard to avoid an error page in the iframe after shutdown
@@ -61,8 +62,8 @@
     }
 %>
 </head>
-<body style="margin: 0;">
-<div class="sb" id="sidebar">
+<body style=margin:0>
+<div class=sb id=sidebar>
 <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
 <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
 <%
@@ -73,6 +74,7 @@
 <%@include file="summarynoframe.jsi" %>
 <%
     // d and shutdownSoon defined above
+/**
     if (!shutdownSoon) {
         out.print("<hr>\n<div class=\"refresh\">\n<form action=\"summaryframe.jsp\" method=\"POST\">\n");
         if (intl.getDisableRefresh()) {
@@ -94,9 +96,8 @@
         }
         out.print("</button>\n</form>\n</div>\n");
     }
+**/
 %>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>

@@ -82,7 +82,7 @@ public class LogsHelper extends HelperBase {
     public String getLogs() {
         String str = formatMessages(_context.logManager().getBuffer().getMostRecentMessages());
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
-        return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=\"_blank\">" +
+        return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=_blank>" +
                 DataHelper.escapeHTML(_context.logManager().currentFile()) + "</a></p>" + str;
     }
 
@@ -197,7 +197,7 @@ public class LogsHelper extends HelperBase {
             obuf.append("<p>").append(_t("File not found")).append(": <b><code>").append(loc).append("</code></b></p>");
             toSkip = -1;
         } else {
-            obuf.append("<p>").append(_t("File location")).append(": <a href=\"/wrapper.log\" target=\"_blank\">").append(loc).append("</a>")
+            obuf.append("<p>").append(_t("File location")).append(": <a href=\"/wrapper.log\" target=_blank>").append(loc).append("</a>")
                 .append("</p></td></tr>\n<tr><td>");
             if (str.length() > 0) {
                 str = str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
@@ -241,7 +241,7 @@ public class LogsHelper extends HelperBase {
             String date = FileDumpHelper.getAtt(att, "Build-Date");
             String by = FileDumpHelper.getAtt(att, "Built-By");
             if (rev != null && by.contains("|z3d")) {
-                return "<a id=\"revision\" target=\"_blank\" rel=\"noreferrer\" href=\"https://gitlab.com/i2pplus/I2P.Plus/-/tree/" +
+                return "<a id=\"revision\" target=_blank rel=\"noreferrer\" href=\"https://gitlab.com/i2pplus/I2P.Plus/-/tree/" +
                         rev + "\">" + rev + "</a> (Build date: " + date + ")";
             } else {
                 return rev + " (Build date: " + date + ")";

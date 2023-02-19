@@ -92,7 +92,7 @@ public class GeoIP {
     private static final String DEBIAN_GEOIPV6_FILE = "/usr/share/GeoIP/GeoIPv6.dat";
     private static final boolean DISABLE_DEBIAN = false;
     private static final boolean ENABLE_DEBIAN = !DISABLE_DEBIAN && !(SystemVersion.isWindows() || SystemVersion.isAndroid());
-    private static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
+    public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     /** maxmind API */
     private static final String UNKNOWN_COUNTRY_CODE = "--";
     /** db-ip.com https://db-ip.com/faq.php */
@@ -892,7 +892,10 @@ public class GeoIP {
      * @return untranslated name or null
      */
     public String fullName(String code) {
-        return _codeToName.get(code);
+        if (code != null && code != "a0")
+            return _codeToName.get(code);
+        else
+            return null;
     }
 
     /**

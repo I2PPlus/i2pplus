@@ -435,7 +435,7 @@ public class ConfigClientsHandler extends FormHandler {
                             addFormNoticeNoEscape(_t("WebApp") + " <a href=\"/embed?url=/imagegen&name=" + _t("Identification Image Generator") +
                             "\">" + _t(app) + "</a> " + _t("started") + '.');
                         } else {
-                            addFormNoticeNoEscape(_t("WebApp") + " <a href=\"/" + app + "/\" target=\"_blank\">" + _t(app) + "</a> " + _t("started") + '.');
+                            addFormNoticeNoEscape(_t("WebApp") + " <a href=\"/" + app + "/\" target=_blank>" + _t(app) + "</a> " + _t("started") + '.');
                         }
                     } catch (Throwable e) {
                         addFormError(_t("Failed to start") + ' ' + _t(app) + ": " + e);

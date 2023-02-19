@@ -10,13 +10,14 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("News")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="newspage"><%=intl._t("Latest News")%></h1>
-<div class="main" id="news">
+<div class=main id="news">
 <jsp:useBean class="net.i2p.router.web.NewsFeedHelper" id="feedHelper" scope="request" />
 <jsp:setProperty name="feedHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% feedHelper.setLimit(0); %>
@@ -24,8 +25,7 @@
 <jsp:getProperty name="feedHelper" property="entries" />
 </div>
 </div>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

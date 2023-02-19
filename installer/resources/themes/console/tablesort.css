@@ -1,34 +1,36 @@
 th[role=columnheader]:not([data-sort-method="none"]){
-   cursor:pointer;
+  cursor:pointer;
+}
+
+th[role=columnheader]:hover{
+  color:var(--hover);
 }
 
 th[role=columnheader]:not([data-sort-method="none"])::after{
-   position:absolute;
-   top:35%;
-   right:4px;
-   border-width:4px 4px 0;
-   border-style:solid;
-   border-color:#404040 transparent;
-   visibility:hidden;
-   opacity:0;
-   content:"";
-   -ms-user-select:none;
-   -webkit-user-select:none;
-   -moz-user-select:none;
-   user-select:none;
+  position:absolute;
+  top:35%;
+  right:4px;
+  border-width:3px 3px 0;
+  border-style:solid;
+  border-color:var(--ink) transparent;
+  visibility:hidden;
+  opacity:0;
+  content:"";
+  user-select:none;
 }
 
 th[aria-sort=ascending]:not([data-sort-method="none"])::after{
-   border-top:none;
-   border-width:0 4px 4px;
+  border-top:none;
+  border-width:0 3px 3px;
 }
 
 th[aria-sort]:not([data-sort-method="none"])::after{
-   visibility:visible;
-   opacity:.7;
+  visibility:visible;
+  opacity:.7;
 }
 
 th[role=columnheader]:not([data-sort-method="none"]):hover::after{
-   visibility:visible;
-   opacity:1;
+  border-color:var(--hover) transparent;
+  visibility:visible;
+  opacity:1;
 }

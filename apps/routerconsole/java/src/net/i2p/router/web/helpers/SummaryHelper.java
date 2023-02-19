@@ -341,7 +341,7 @@ public class SummaryHelper extends HelperBase {
         // Warn based on actual skew from peers, not update status, so if we successfully offset
         // the clock, we don't complain.
         //if (!_context.clock().getUpdatedSuccessfully())
-        long skew = _context.commSystem().getFramedAveragePeerClockSkew(33);
+        long skew = _context.commSystem().getFramedAveragePeerClockSkew(10);
         // Display the actual skew, not the offset
         if (Math.abs(skew) > 30*1000)
             return new NetworkStateMessage(NetworkState.CLOCKSKEW, _t("Clock Skew of {0}", DataHelper.formatDuration2(Math.abs(skew))));
@@ -478,9 +478,9 @@ public class SummaryHelper extends HelperBase {
         // long free = Runtime.getRuntime().freeMemory()/1024/1024;
         // return integerFormatter.format(used) + "MB (" + usedPc + "%)";
         // return integerFormatter.format(used) + "MB / " + free + " MB";
-        return "<div class=\"percentBarOuter volatile\" id=\"sb_memoryBar\"><div class=\"percentBarText\">RAM: " +
+        return "<div class=\"percentBarOuter volatile\" id=sb_memoryBar><div class=percentBarText>RAM: " +
                integerFormatter.format(used) + " / " + total + " M" +
-               "</div><div class=\"percentBarInner\" style=\"width: " + integerFormatter.format(usedPc) +
+               "</div><div class=percentBarInner style=\"width: " + integerFormatter.format(usedPc) +
                "%;\"></div></div>";
     }
 
@@ -533,9 +533,9 @@ public class SummaryHelper extends HelperBase {
         }
         int load = Math.toIntExact(loadAvg);
 */
-        return "<div class=\"percentBarOuter volatile\" id=\"sb_CPUBar\"><div class=\"percentBarText\">CPU: " +
+        return "<div class=\"percentBarOuter volatile\" id=sb_CPUBar><div class=percentBarText>CPU: " +
                getCPULoadAvg() + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
-               "</div><div class=\"percentBarInner\" style=\"width:" + getCPULoadAvg() +
+               "</div><div class=percentBarInner style=\"width:" + getCPULoadAvg() +
                "%\"></div></div>";
     }
 
@@ -631,17 +631,6 @@ public class SummaryHelper extends HelperBase {
             return 0;
         //return _context.profileOrganizer().countWellIntegratedPeers();
         return _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
-    }
-
-    /**
-     * How many peers the router ranks as failing.
-     * @since 0.9.32 uncommented
-     */
-    public int getFailingPeers() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.profileOrganizer().countFailingPeers();
     }
 
     /**
@@ -807,18 +796,20 @@ public class SummaryHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(512);
         boolean link = isI2PTunnelRunning();
-        buf.append("<h3 id=\"sb_localTunnelsHeading\"");
+        buf.append("<h3 id=sb_localTunnelsHeading");
         if (!link)
-            buf.append(" class=\"unregistered\"");
-        buf.append("><a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
+            buf.append(" class=unregistered");
+        buf.append("><a href=\"/i2ptunnelmgr\" target=_top title=\"")
            .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
            .append("\">")
            .append(_t("Service Tunnels"))
+           .append(" <span id=tunnelCount class=badge title=\"").append(_t("How many local service tunnels we're running"))
+           .append("\">").append("</span>")
            .append("</a>");
-        buf.append("<input type=\"checkbox\" id=\"toggle_sb_localtunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
+        buf.append("<input type=checkbox id=toggle_sb_localtunnels class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
             DataHelper.sort(clients, new AlphaComparator());
-            buf.append("<table id=\"sb_localtunnels\" class=\"volatile\">");
+            buf.append("<table id=sb_localtunnels class=volatile>");
 
             for (Destination client : clients) {
                 String name = getName(client);
@@ -829,31 +820,31 @@ public class SummaryHelper extends HelperBase {
 
                 buf.append("<tr><td ");
                 if (isSnark)
-                    buf.append("class=\"tunnelI2PSnark\" ");
+                    buf.append("class=tunnelI2PSnark ");
                 else if (server)
-                    buf.append("class=\"tunnelServer\" ");
+                    buf.append("class=tunnelServer ");
                 else if (isPing)
-                    buf.append("class=\"ping\" ");
-                buf.append("align=\"right\"><img src=\"/themes/console/images/");
+                    buf.append("class=ping ");
+                buf.append("align=right><img src=/themes/console/images/");
                 if (isSnark) {
-                    buf.append("snark.svg\" alt=\"I2PSnark\" title=\"").append(_t("Torrents"));
+                    buf.append("snark.svg alt=I2PSnark title=\"").append(_t("Torrents"));
                 } else if (server) {
-                    buf.append("server.svg\" alt=\"Server\" title=\"").append(_t("Server"));
+                    buf.append("server.svg alt=Server title=\"").append(_t("Server"));
                     if (!isAdvanced()) {
                         buf.append(" (").append(_t("service may be available to peers")).append(")");
                      }
                 } else {
                     if (isPing)
-                        buf.append("ping.svg\" alt=\"Client\" title=\"").append(_t("Client"));
+                        buf.append("ping.svg alt=Client title=\"").append(_t("Client"));
                     else
-                        buf.append("client.svg\" alt=\"Client\" title=\"").append(_t("Client"));
+                        buf.append("client.svg alt=Client title=\"").append(_t("Client"));
                     if (!isAdvanced()) {
                         buf.append(" (").append(_t("service is only available locally")).append(")");
                     }
                 }
-                buf.append("\" width=\"16\" height=\"16\">");
+                buf.append("\" width=16 height=16>");
                 buf.append("</td><td><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
-                buf.append("\" target=\"_top\" title=\"").append(_t("Show tunnels")).append("\">");
+                buf.append("\" target=_top title=\"").append(_t("Show tunnels")).append("\">");
                 // Increase permitted max length of tunnel name & handle overflow with css
                 if (name.length() <= 32)
                     buf.append(DataHelper.escapeHTML(name));
@@ -866,32 +857,32 @@ public class SummaryHelper extends HelperBase {
 //                    if ((timeToExpire < 0) || !ls.isCurrent(0)) {
                     if (timeToExpire < 0) {
                         // red light
-                        buf.append("<td class=\"tunnelRebuilding\"><img src=\"/themes/console/images/local_down.png\" alt=\"")
+                        buf.append("<td class=tunnelRebuilding><img src=/themes/console/images/local_down.png alt=\"")
                            .append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired")).append(" ")
                            .append(DataHelper.formatDuration2(0 - timeToExpire));
-                        buf.append(" ").append(_t("ago")).append(". ").append(_t("Rebuilding")).append("&hellip;\" width=\"16\" height=\"16\"></td></tr>\n");
+                        buf.append(" ").append(_t("ago")).append(". ").append(_t("Rebuilding")).append("&hellip;\" width=16 height=16></td></tr>\n");
                     } else {
                         // green light
-                        buf.append("<td class=\"tunnelReady\"><img src=\"/themes/console/images/local_up.png\" alt=\"Ready\" title=\"")
-                           .append(_t("Ready")).append("\" width=\"16\" height=\"16\"></td></tr>\n");
+                        buf.append("<td class=tunnelReady><img src=/themes/console/images/local_up.png alt=Ready title=\"")
+                           .append(_t("Ready")).append("\" width=16 height=16></td></tr>\n");
                     }
                 } else {
                     // yellow light
-                    buf.append("<td class=\"tunnelBuilding\"><img src=\"/themes/console/images/local_inprogress.png\" alt=\"")
+                    buf.append("<td class=tunnelBuilding><img src=/themes/console/images/local_inprogress.png alt=\"")
                        .append(_t("Building")).append("&hellip;\" title=\"").append(_t("Building tunnels"))
-                       .append("&hellip;\" width=\"16\" height=\"16\"></td></tr>\n");
+                       .append("&hellip;\" width=16 height=16></td></tr>\n");
                 }
             }
             buf.append("</table>");
         } else {
-            buf.append("<table id=\"sb_localtunnels\" class=\"volatile\">\n<tr><td colspan=\"3\"><center><i>")
+            buf.append("<table id=sb_localtunnels class=volatile>\n<tr><td colspan=3><center><i>")
                .append(_t("none")).append("</i></center></td></tr>\n</table>\n");
         }
-        buf.append("<table id=\"localtunnelSummary\" hidden>\n<tr id=\"localtunnelsActive\">\n<td>")
-           .append("<span id=\"snarkCount\" class=\"count_0\">0 x <img src=\"/themes/console/images/snark.svg\"></span>")
-           .append("<span id=\"serverCount\" class=\"count_0\">0 x <img src=\"/themes/console/images/server.svg\"></span>")
-           .append("<span id=\"clientCount\" class=\"count_0\">0 x <img src=\"/themes/console/images/client.svg\"></span>")
-           .append("<span id=\"pingCount\" class=\"count_0\">0 x <img src=\"/themes/console/images/ping.svg\"></span>")
+        buf.append("<table id=localtunnelSummary hidden>\n<tr id=localtunnelsActive>\n<td>")
+           .append("<span id=snarkCount class=\"count_0\">0 x <img src=/themes/console/images/snark.svg></span>")
+           .append("<span id=serverCount class=\"count_0\">0 x <img src=/themes/console/images/server.svg></span>")
+           .append("<span id=clientCount class=\"count_0\">0 x <img src=/themes/console/images/client.svg></span>")
+           .append("<span id=pingCount class=\"count_0\">0 x <img src=/themes/console/images/ping.svg></span>")
            .append("</td>\n</tr>\n</table>\n");
         return buf.toString();
     }
@@ -1196,7 +1187,7 @@ public class SummaryHelper extends HelperBase {
             else
                 needSpace = true;
             if (!_context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress()) {
-                buf.append("<h4 id=\"restartRequired\" class=\"sb_info sb_update volatile\" title=\"");
+                buf.append("<h4 id=restartRequired class=\"sb_info sb_update volatile\" title=\"");
                 if (_context.hasWrapper() || NewsHelper.isExternalRestartPending())
                     buf.append(_t("Click Restart to install").replace("Click ", ""));
                 else
@@ -1212,7 +1203,7 @@ public class SummaryHelper extends HelperBase {
                    !NewsHelper.isUpdateInProgress() &&
                    (_context.getProperty("router.updatePolicy") != null &&
                    !_context.getProperty("router.updatePolicy").equals("install"))) {
-            buf.append("<h4 id=\"shutdownInProgress\" class=\"sb_info sb_update volatile\"><b>")
+            buf.append("<h4 id=shutdownInProgress class=\"sb_info sb_update volatile\"><b>")
                .append(_t("Updating after restart")).append("&hellip;</b></h4>");
         }
         boolean avail = updateAvailable();
@@ -1271,13 +1262,13 @@ public class SummaryHelper extends HelperBase {
                     System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
                 System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce+"");
                 String uri = getRequestURI();
-                buf.append("<form id=\"sb_updateform\" action=\"").append(uri).append("\" method=\"POST\" class=\"volatile\" target=\"processSidebarForm\">\n")
-                   .append("<input type=\"hidden\" name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
+                buf.append("<form id=sb_updateform action=\"").append(uri).append("\" method=POST class=volatile target=processSidebarForm>\n")
+                   .append("<input type=hidden name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
 /*
                 if (avail) {
-                    buf.append("<span id=\"updateAvailable\" class=\"volatile\">").append(_t("Release update available")).append("<br><i>")
+                    buf.append("<span id=updateAvailable class=volatile>").append(_t("Release update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getUpdateVersion())
-                       .append("</i></span><br><button type=\"submit\" id=\"sb_downloadReleaseUpdate\" class=\"download\" name=\"updateAction\" value=\"signed\" >")
+                       .append("</i></span><br><button type=submit id=sb_downloadReleaseUpdate class=download name=updateAction value=\"signed\" >")
                        // Note to translators: parameter is a version, e.g. "0.8.4"
 //                       .append(_t("Download {0} Update", getUpdateVersion()))
                        .append(_t("Download I2P Update"))
@@ -1285,9 +1276,9 @@ public class SummaryHelper extends HelperBase {
                 }
 */
                 if (devSU3Avail) {
-                    buf.append("<span id=\"updateAvailable\" class=\"volatile\">").append(_t("Signed development update available")).append("<br><i>")
+                    buf.append("<span id=updateAvailable class=volatile>").append(_t("Signed development update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getDevSU3UpdateVersion())
-                       .append("</i></span><br><button type=\"submit\" id=\"sb_downloadSignedDevUpdate\" class=\"download\" name=\"updateAction\" value=\"DevSU3\" >")
+                       .append("</i></span><br><button type=submit id=sb_downloadSignedDevUpdate class=download name=updateAction value=\"DevSU3\" >")
                        // Note to translators: parameter is a router version, e.g. "0.9.19-16"
                        // <br> is optional, to help the browser make the lines even in the button
                        // If the translation is shorter than the English, you should probably not include <br>
@@ -1297,13 +1288,13 @@ public class SummaryHelper extends HelperBase {
                 }
 
                 if (unsignedAvail) {
-                    buf.append("<span id=\"updateAvailable\" class=\"volatile\">");
+                    buf.append("<span id=updateAvailable class=volatile>");
                     if (source.contains("skank"))
                         buf.append(_t("Unsigned update available").replace("update", "I2P+ update"));
                     else
                         buf.append(_t("Unsigned update available").replace("update", "I2P update"));
                     buf.append("<br><i>").append(getUnsignedUpdateVersion())
-                       .append("</i></span><br><button type=\"submit\" id=\"sb_downloadUnsignedDevUpdate\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >");
+                       .append("</i></span><br><button type=submit id=sb_downloadUnsignedDevUpdate class=download name=updateAction value=\"Unsigned\" >");
                        // Note to translators: parameter is a date and time, e.g. "02-Mar 20:34 UTC"
                        // <br> is optional, to help the browser make the lines even in the button
                        // If the translation is shorter than the English, you should probably not include <br>
@@ -1334,18 +1325,18 @@ public class SummaryHelper extends HelperBase {
     public String getFirewallAndReseedStatus() {
         StringBuilder buf = new StringBuilder(256);
         if (showFirewallWarning()) {
-            buf.append("<h4 id=\"sb_warning\" class=\"volatile\"><span><a href=\"/help#configurationhelp\" target=\"_top\" title=\"")
+            buf.append("<h4 id=sb_warning class=volatile><span><a href=\"/help#configurationhelp\" target=_top title=\"")
                .append(_t("Help with firewall configuration"))
                .append("\">")
                .append(_t("Check network connection and NAT/firewall!"))
                .append("</a></span></h4>");
         } else {
             // Hide warn but retain h4 so ajax refresh picks it up
-            buf.append("<h4 id=\"sb_warning\" class=\"volatile hide\" hidden></h4>");
+            buf.append("<h4 id=sb_warning class=\"volatile hide\" hidden></h4>");
         }
 
         if (DeadlockDetector.isDeadlocked()) {
-            buf.append("<div class=\"sb_notice\"><b>")
+            buf.append("<div class=sb_notice><b>")
                .append(_t("Deadlock detected"))
                .append(" - <a href=\"/logs\">")
                .append(_t("Please report"))
@@ -1357,16 +1348,16 @@ public class SummaryHelper extends HelperBase {
         String status = checker.getStatus();
         if (status.length() > 0) {
             // Show status message even if not running, timer in ReseedChecker should remove after 20 minutes
-            buf.append("<div class=\"sb_notice volatile\" id=\"sb_notice\"><i>").append(status).append("</i></div>");
+            buf.append("<div class=\"sb_notice volatile\" id=sb_notice><i>").append(status).append("</i></div>");
         } else {
             // Hide status message but retain div so ajax refresh picks it up
-            buf.append("<div class=\"sb_notice volatile hide\" id=\"sb_notice\" hidden></div>");
+            buf.append("<div class=\"sb_notice volatile hide\" id=sb_notice hidden></div>");
         }
         if (!checker.inProgress()) {
             // If a new reseed isn't running, and the last reseed had errors, show error message
             String reseedErrorMessage = checker.getError();
             if (reseedErrorMessage.length() > 0) {
-                buf.append("<div class=\"sb_notice volatile\" id=\"sb_notice\"><i>").append(reseedErrorMessage).append("</i></div>");
+                buf.append("<div class=\"sb_notice volatile\" id=sb_notice><i>").append(reseedErrorMessage).append("</i></div>");
             }
             // If showing the reseed link is allowed
             if (allowReseed()) {
@@ -1376,10 +1367,10 @@ public class SummaryHelper extends HelperBase {
                 if (prev != null) System.setProperty("net.i2p.router.web.ReseedHandler.noncePrev", prev);
                 System.setProperty("net.i2p.router.web.ReseedHandler.nonce", nonce+"");
                 String uri = getRequestURI();
-                buf.append("<p class=\"volatile\"><form action=\"").append(uri).append("\" method=\"POST\">\n");
-                buf.append("<input type=\"hidden\" name=\"reseedNonce\" value=\"").append(nonce).append("\" >\n");
-                buf.append("<button type=\"submit\" title=\"").append(_t("Attempt to download router reference files (if automatic reseed has failed)"));
-                buf.append("\" id=\"sb_manualReseed\" class=\"reload\" value=\"Reseed\" >").append(_t("Reseed")).append("</button></form></p>\n");
+                buf.append("<p class=volatile><form action=\"").append(uri).append("\" method=POST>\n");
+                buf.append("<input type=hidden name=\"reseedNonce\" value=\"").append(nonce).append("\" >\n");
+                buf.append("<button type=submit title=\"").append(_t("Attempt to download router reference files (if automatic reseed has failed)"));
+                buf.append("\" id=sb_manualReseed class=reload value=\"Reseed\" >").append(_t("Reseed")).append("</button></form></p>\n");
             }
         }
         if (buf.length() <= 0)
@@ -1484,11 +1475,11 @@ public class SummaryHelper extends HelperBase {
         String imgPath = CSSHelper.BASE_THEME_PATH + theme + "/images/";
 
         StringBuilder buf = new StringBuilder(2048);
-        buf.append("<table id=\"sidebarconf\"><tr><th title=\"Mark section for removal from the sidebar\">")
+        buf.append("<table id=sidebarconf><tr><th title=\"Mark section for removal from the sidebar\">")
            .append(_t("Remove"))
            .append("</th><th>")
            .append(_t("Name"))
-           .append("</th><th colspan=\"2\">")
+           .append("</th><th colspan=2>")
            .append(_t("Order"))
            .append("</th></tr>\n");
         for (String section : sections) {
@@ -1496,7 +1487,7 @@ public class SummaryHelper extends HelperBase {
             String name = sectionNames.get(section);
             if (name == null)
                 continue;
-            buf.append("<tr><td><input type=\"checkbox\" class=\"optbox\" id=\"")
+            buf.append("<tr><td><input type=checkbox class=optbox id=\"")
                .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
                .append("\" name=\"delete_")
                .append(i)
@@ -1504,13 +1495,13 @@ public class SummaryHelper extends HelperBase {
                .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
                .append("\">")
                .append(_t(name))
-               .append("</label></td><td><input type=\"hidden\" name=\"order_")
+               .append("</label></td><td><input type=hidden name=\"order_")
                .append(i).append('_').append(section)
                .append("\" value=\"")
                .append(i)
                .append("\">");
             if (i > 0) {
-                buf.append("<button type=\"submit\" class=\"buttonTop\" name=\"action\" value=\"move_")
+                buf.append("<button type=submit class=buttonTop name=action value=\"move_")
                    .append(i)
                    .append("_top\"><img alt=\"")
                    .append(_t("Top"))
@@ -1520,7 +1511,7 @@ public class SummaryHelper extends HelperBase {
                    .append("\" title=\"")
                    .append(_t("Move to top"))
                    .append("\"/></button>");
-                buf.append("<button type=\"submit\" class=\"buttonUp\" name=\"action\" value=\"move_")
+                buf.append("<button type=submit class=buttonUp name=action value=\"move_")
                    .append(i)
                    .append("_up\"><img alt=\"")
                    .append(_t("Up"))
@@ -1533,7 +1524,7 @@ public class SummaryHelper extends HelperBase {
             }
             buf.append("</td><td>");
             if (i < sections.size() - 1) {
-                buf.append("<button type=\"submit\" class=\"buttonDown\" name=\"action\" value=\"move_")
+                buf.append("<button type=submit class=buttonDown name=action value=\"move_")
                    .append(i)
                    .append("_down\"><img alt=\"")
                    .append(_t("Down"))
@@ -1543,7 +1534,7 @@ public class SummaryHelper extends HelperBase {
                    .append("\" title=\"")
                    .append(_t("Move down"))
                    .append("\"/></button>");
-                buf.append("<button type=\"submit\" class=\"buttonBottom\" name=\"action\" value=\"move_")
+                buf.append("<button type=submit class=buttonBottom name=action value=\"move_")
                    .append(i)
                    .append("_bottom\"><img alt=\"")
                    .append(_t("Bottom"))
@@ -1557,11 +1548,11 @@ public class SummaryHelper extends HelperBase {
             buf.append("</td></tr>\n");
         }
         buf.append("<tr><td>" +
-                   "<input type=\"submit\" name=\"action\" class=\"delete\" value=\"")
+                   "<input type=submit name=action class=delete value=\"")
            .append(_t("Delete selected"))
            .append("\"></td><td>")
            .append("<select name=\"name\">\n" +
-                   "<option value=\"\" selected=\"selected\">")
+                   "<option value=\"\" selected=selected>")
            .append(_t("Select a section to add"))
            .append("</option>\n");
 
@@ -1573,11 +1564,11 @@ public class SummaryHelper extends HelperBase {
         }
 
         buf.append("</select>\n" +
-                   "<input type=\"hidden\" name=\"order\" value=\"")
+                   "<input type=hidden name=\"order\" value=\"")
            .append(sections.size())
            .append("\"></td>" +
-                   "<td colspan=\"2\">" +
-                   "<input type=\"submit\" name=\"action\" class=\"add\" value=\"")
+                   "<td colspan=2>" +
+                   "<input type=submit name=action class=\"add\" value=\"")
            .append(_t("Add item"))
            .append("\"></td></tr>")
            .append("</table>\n");

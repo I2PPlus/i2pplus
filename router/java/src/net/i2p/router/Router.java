@@ -58,6 +58,8 @@ import net.i2p.router.transport.UPnPScannerCallback;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.util.EventLog;
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
 import net.i2p.util.ByteCache;
@@ -936,6 +938,7 @@ public class Router implements RouterClock.ClockShiftListener {
             _context.commSystem().initGeoIP();
 
             if (!SystemVersion.isSlow() &&
+                !_context.getBooleanProperty("i2np.allowLocal") &&
                 _context.getProperty(Analysis.PROP_FREQUENCY, Analysis.DEFAULT_FREQUENCY) > 0) {
                 // registers and starts itself
                 Analysis.getInstance(_context);
@@ -1185,7 +1188,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
         // if prop set to true, don't tell people we are ff even if we are
         if (_context.netDb().floodfillEnabled() &&
-            !_context.getBooleanProperty("router.hideFloodfillParticipant"))
+            !_context.getBooleanPropertyDefaultTrue("router.hideFloodfillParticipant"))
             rv.append(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
 
         if(_context.getBooleanProperty(PROP_HIDDEN))
@@ -1193,8 +1196,8 @@ public class Router implements RouterClock.ClockShiftListener {
 
         if (hidden || _context.getBooleanProperty(PROP_FORCE_UNREACHABLE)) {
             rv.append(CAPABILITY_UNREACHABLE);
-            if (CONGESTION_CAPS)
-                rv.append(CAPABILITY_NO_TUNNELS);
+            //if (CONGESTION_CAPS)
+            //    rv.append(CAPABILITY_NO_TUNNELS);
             return rv.toString();
         }
         switch (_context.commSystem().getStatus()) {
@@ -1239,7 +1242,40 @@ public class Router implements RouterClock.ClockShiftListener {
             } else if (numTunnels > 8 * maxTunnels / 10) {
                 cong = CAPABILITY_CONGESTION_MODERATE;
             } else {
-                // TODO
+                // this is a greatly simplified version of RouterThrottleImpl.acceptTunnelRequest()
+                long lag = _context.jobQueue().getMaxLag();
+                if (lag > 300 && getUptime() > 10*60*1000) {
+                    if (lag > 500)
+                        cong = CAPABILITY_CONGESTION_SEVERE;
+                    else
+                        cong = CAPABILITY_CONGESTION_MODERATE;
+                } else {
+                    double bwLim = getSharePercentage() * 1024 *
+                                   Math.min(_context.bandwidthLimiter().getInboundKBytesPerSecond(),
+                                            _context.bandwidthLimiter().getOutboundKBytesPerSecond());
+                    if (bwLim < 4*1024) {
+                        cong = CAPABILITY_NO_TUNNELS;
+                    } else {
+                        RateStat rs = _context.statManager().getRate("tunnel.participatingMessageCountAvgPerTunnel");
+                        double messagesPerTunnel = 0;
+                        if (rs != null) {
+                            Rate r = rs.getRate(20*60*1000);
+                            if (r != null) {
+                                RateAverages ra = RateAverages.getTemp();
+                                messagesPerTunnel = r.computeAverages(ra, true).getAverage();
+                            }
+                        }
+                        if (messagesPerTunnel < RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE)
+                            messagesPerTunnel = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE;
+                        double bpsAllocated = messagesPerTunnel * numTunnels * 1024 / (10 * 60);
+                        if (_log.shouldInfo())
+                            _log.info("bps allocated: " + bpsAllocated + " bw limit: " + bwLim);
+                        if (bpsAllocated > 0.9 * bwLim)
+                            cong = CAPABILITY_CONGESTION_SEVERE;
+                        else if (bpsAllocated > 0.8 * bwLim)
+                            cong = CAPABILITY_CONGESTION_MODERATE;
+                    }
+                }
             }
         }
         if (cong != 0) {
@@ -1566,7 +1602,8 @@ public class Router implements RouterClock.ClockShiftListener {
         if (waitForClients) {
             // Give time for the disconnect messages to get to them
             // so they can shut down correctly before the JVM goes away
-            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+//            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
             if (_log.shouldWarn())
                 _log.warn("Done waiting for clients to disconnect");
         }

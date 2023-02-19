@@ -11,14 +11,15 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("router information")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="nfo"><%=intl._t("Router Summary")%></h1>
-<div class="main" id="routerinformation">
-<h3 class="tabletitle" id="version"><%=intl._t("I2P Version and Running Environment")%><span class="h3navlinks" style="float:right"><a title="View Router Logs" href="/logs">View Logs</a></span></h3>
+<div class=main id="routerinformation">
+<h3 class=tabletitle id="version"><%=intl._t("I2P Version and Running Environment")%><span class=h3navlinks style="float:right"><a title="View Router Logs" href="/logs">View Logs</a></span></h3>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
 <table id="enviro">
@@ -50,10 +51,9 @@
 <jsp:useBean class="net.i2p.router.web.helpers.InfoHelper" id="infohelper" scope="request" />
 <jsp:setProperty name="infohelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
 <% infohelper.storeWriter(out); %>
-<h3 class="tabletitle"><%=intl._t("Router Information")%></h3>
+<h3 class=tabletitle><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console" />
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

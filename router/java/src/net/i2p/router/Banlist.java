@@ -331,6 +331,16 @@ public class Banlist {
         }
     }
 
+    /** @since 0.9.58+ */
+    public boolean isBanlistedHostile(Hash peer) {
+        if (peer != null) {
+            Entry entry = _entries.get(peer);
+            return entry != null && entry.expireOn >= _context.clock().now() + 60*60*1000L;
+        } else {
+            return false;
+        }
+    }
+
     /** @deprecated moved to router console */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {

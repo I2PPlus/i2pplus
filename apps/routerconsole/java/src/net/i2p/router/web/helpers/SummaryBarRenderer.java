@@ -161,19 +161,19 @@ class SummaryBarRenderer {
 
     public String renderHelpAndFAQHTML() {
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3 id=\"helpfaq\"><a href=\"/help/\" target=\"_top\" title=\"")
+        buf.append("<h3 id=helpfaq><a href=\"/help/\" target=_top title=\"")
            .append(_t("I2P Router Help &amp; FAQ"))
            .append("\">")
            .append(_t("Help &amp; FAQ"))
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_help\" class=\"toggleSection script\" checked hidden></h3><hr class=\"b\">\n" +
-                   "<table id=\"sb_help\">\n<tr><td>");
+           .append("</a><input type=checkbox id=toggle_sb_help class=\"toggleSection script\" checked hidden></h3><hr class=b>\n" +
+                   "<table id=sb_help>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
         StringBuilder rbuf = new StringBuilder(128);
 
         String tx = _t("Advanced Settings");
-        rbuf.append("<a href=\"/help/advancedsettings\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/advancedsettings\" target=_top title=\"")
             .append(_t("A guide to some of the less-used configuration settings"))
             .append("\">")
             .append(nbsp(tx))
@@ -182,7 +182,7 @@ class SummaryBarRenderer {
 
         tx = _t("Changelog");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/changelog\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/changelog\" target=_top title=\"")
             .append(_t("Recent development changes to the router"))
             .append("\">")
             .append(nbsp(tx))
@@ -191,7 +191,7 @@ class SummaryBarRenderer {
 
         tx = _t("Configuration");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/configuration\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/configuration\" target=_top title=\"")
             .append(_t("An introduction to configuring your router"))
             .append("\">")
             .append(nbsp(tx))
@@ -200,7 +200,7 @@ class SummaryBarRenderer {
 
         tx = _t("FAQ");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/faq\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/faq\" target=_top title=\"")
             .append(_t("A shortened version of the official Frequently Asked Questions"))
             .append("\">")
             .append(nbsp(tx))
@@ -209,7 +209,7 @@ class SummaryBarRenderer {
 
         tx = _t("New Users");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/newusers\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/newusers\" target=_top title=\"")
             .append(_t("A gentle introduction to I2P"))
             .append("\">")
             .append(nbsp(tx))
@@ -218,7 +218,7 @@ class SummaryBarRenderer {
 
         tx = _t("Reseeding");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/reseed\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/reseed\" target=_top title=\"")
             .append(_t("A guide to reseeding the router"))
             .append("\">")
             .append(nbsp(tx))
@@ -227,7 +227,7 @@ class SummaryBarRenderer {
 
         tx = _t("Troubleshoot");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/troubleshoot\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/troubleshoot\" target=_top title=\"")
             .append(_t("Troubleshooting &amp; Further Assistance"))
             .append("\">")
             .append(nbsp(tx))
@@ -236,7 +236,7 @@ class SummaryBarRenderer {
 
         tx = _t("UI");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/ui\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/ui\" target=_top title=\"")
             .append(_t("Information about the sidebar and network status messages"))
             .append("\">")
             .append(nbsp(tx))
@@ -245,7 +245,7 @@ class SummaryBarRenderer {
 
         tx = _t("Webhosting");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/webhosting\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/webhosting\" target=_top title=\"")
             .append(_t("An introduction to hosting websites on the I2P network"))
             .append("\">")
             .append(nbsp(tx))
@@ -268,7 +268,7 @@ class SummaryBarRenderer {
         PortMapper pm = _context.portMapper();
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
             String tx = _t("Addressbook");
-            rbuf.append("<a href=\"/dns\" target=\"_top\" title=\"")
+            rbuf.append("<a href=\"/dns\" target=_top title=\"")
                 .append(_t("Manage your I2P hosts file here (I2P domain name resolution)"))
                 .append("\">")
                 .append(nbsp(tx))
@@ -283,9 +283,9 @@ class SummaryBarRenderer {
             rbuf.setLength(0);
             rbuf.append("<a href=\"/webmail\" ");
             if (embedApps) {
-                rbuf.append("target=\"_top\" ");
+                rbuf.append("target=_top ");
             } else {
-                rbuf.append("target=\"_blank\" ");
+                rbuf.append("target=_blank ");
             }
             rbuf.append("title=\"")
                 .append(_t("Anonymous webmail client"))
@@ -300,7 +300,7 @@ class SummaryBarRenderer {
         if (pm.isRegistered(PortMapper.SVC_JSONRPC)) {
             String tx = _t("I2PControl");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/jsonrpc/\" target=\"_blank\" title=\"")
+            rbuf.append("<a href=\"/jsonrpc/\" target=_blank title=\"")
                 .append(_t("RPC Service"))
                 .append("\">")
                 .append(nbsp(tx))
@@ -315,9 +315,9 @@ class SummaryBarRenderer {
             rbuf.setLength(0);
             rbuf.append("<a href=\"/torrents\" ");
             if (embedApps) {
-                rbuf.append("target=\"_top\" ");
+                rbuf.append("target=_top ");
             } else {
-                rbuf.append("target=\"_blank\" ");
+                rbuf.append("target=_blank ");
             }
             rbuf.append("title=\"")
                 .append(_t("Built-in anonymous BitTorrent Client"))
@@ -332,7 +332,7 @@ class SummaryBarRenderer {
         if (_helper.isI2PTunnelRunning()) {
             String tx = _t("Tunnel Manager");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/i2ptunnelmgr\" target=\"_top\" title=\"")
+            rbuf.append("<a href=\"/i2ptunnelmgr\" target=_top title=\"")
                 .append(_t("Manage I2P client and server tunnels to access or provide network services"))
                 .append("\">")
                 .append(nbsp(tx))
@@ -355,7 +355,7 @@ class SummaryBarRenderer {
                 rbuf.setLength(0);
                 rbuf.append("<a href=\"")
                     .append(url)
-                    .append("\" target=\"_blank\" title=\"")
+                    .append("\" target=_blank title=\"")
                     .append(txtt)
                     .append("\">")
                     .append(nbsp(txp))
@@ -371,12 +371,12 @@ class SummaryBarRenderer {
             svcs.putAll(apps);
         if (!svcs.isEmpty()) {
             StringBuilder buf = new StringBuilder(128 * svcs.size());
-            buf.append("<h3><a href=\"/configwebapps\" target=\"_top\" title=\"")
+            buf.append("<h3><a href=\"/configwebapps\" target=_top title=\"")
                .append(_t("Configure startup of clients and webapps (services); manually start dormant services"))
                .append("\">")
                .append(_t("Services"))
-               .append("</a><input type=\"checkbox\" id=\"toggle_sb_services\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n")
-               .append("<table id=\"sb_services\" class=\"collapse\">\n<tr>\n<td>");
+               .append("</a><input type=checkbox id=toggle_sb_services class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
+               .append("<table id=sb_services class=collapse>\n<tr>\n<td>");
             for (String row : svcs.values()) {
                 buf.append(row);
             }
@@ -424,7 +424,7 @@ class SummaryBarRenderer {
         DateFormat dfmt = new SimpleDateFormat(FORMAT, Locale.UK);
         TimeZone utc = TimeZone.getTimeZone("GMT");
         dfmt.setTimeZone(utc);
-        buf.append("<div id=\"clock\" class=\"volatile\">")
+        buf.append("<div id=clock class=volatile>")
            .append(dfmt.format(new Date()))
            .append("</div>");
         return buf.toString();
@@ -432,19 +432,19 @@ class SummaryBarRenderer {
 
     public String renderI2PInternalsHTML() {
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/sitemap\" target=\"_top\" title=\"")
+        buf.append("<h3><a href=\"/sitemap\" target=_top title=\"")
            .append(_t("I2P Router Sitemap"))
            .append("\">")
            .append(_t("Internals"))
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_internals\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_internals\" class=\"collapse\">\n<tr>\n<td>\n");
+           .append("</a><input type=checkbox id=toggle_sb_internals class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
+                   "<table id=sb_internals class=collapse>\n<tr>\n<td>\n");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
         StringBuilder rbuf = new StringBuilder(128);
 
         String tx = _t("Certs");
-        rbuf.append("<a target=\"_top\" title=\"")
+        rbuf.append("<a target=_top title=\"")
             .append(_t("Review active encryption certificates used in console"))
             .append("\" href=\"/certs\">")
             .append(nbsp(tx))
@@ -456,7 +456,7 @@ class SummaryBarRenderer {
         tx = _t("Events");
         rbuf.setLength(0);
         // 7 days
-        rbuf.append("<a href=\"/events?from=604800\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/events?from=604800\" target=_top title=\"")
             .append(_t("View historical log of router events"))
             .append("\">")
             .append(nbsp(tx))
@@ -468,7 +468,7 @@ class SummaryBarRenderer {
         if (!StatSummarizer.isDisabled(_context)) {
             tx = _t("Graphs");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/graphs\" target=\"_top\" title=\"")
+            rbuf.append("<a href=\"/graphs\" target=_top title=\"")
                 .append(_t("Graph router performance"))
                 .append("\">")
                 .append(nbsp(tx))
@@ -480,7 +480,7 @@ class SummaryBarRenderer {
 
         tx = _t("Help");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/help/\" target=_top title=\"")
             .append(_t("Router Help and FAQ"))
             .append("\">")
             .append(nbsp(tx))
@@ -491,7 +491,7 @@ class SummaryBarRenderer {
 
         tx = _t("Info");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/info\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/info\" target=_top title=\"")
             .append(_t("Router information including transport addresses and UPnP scan"))
             .append("\">")
             .append(nbsp(tx))
@@ -502,7 +502,7 @@ class SummaryBarRenderer {
 
         tx = _t("Jobs");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/jobs\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/jobs\" target=_top title=\"")
             .append(_t("Show the router's workload, and how it's performing"))
             .append("\">")
             .append(nbsp(tx))
@@ -513,7 +513,7 @@ class SummaryBarRenderer {
 
         tx = _t("Logs");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/logs\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/logs\" target=_top title=\"")
             .append(_t("Health Report"))
             .append("\">")
             .append(nbsp(tx))
@@ -524,7 +524,7 @@ class SummaryBarRenderer {
 
         tx = _t("NetDb");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/netdb\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/netdb\" target=_top title=\"")
             .append(_t("Show list of all known I2P routers"))
             .append("\">")
             .append(nbsp(tx))
@@ -535,7 +535,7 @@ class SummaryBarRenderer {
 
         tx = _t("Peers");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/peers\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/peers\" target=_top title=\"")
             .append(_t("Show all current peer connections"))
             .append("\">")
             .append(nbsp(tx))
@@ -546,7 +546,7 @@ class SummaryBarRenderer {
 
         tx = _t("Profiles");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/profiles?f=1\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/profiles?f=1\" target=_top title=\"")
             .append(_t("Show recent peer performance profiles"))
             .append("\">")
             .append(nbsp(tx))
@@ -557,7 +557,7 @@ class SummaryBarRenderer {
 
         tx = _t("Tunnels");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/tunnels\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/tunnels\" target=_top title=\"")
             .append(_t("View existing tunnels and tunnel build status"))
             .append("\">")
             .append(nbsp(tx))
@@ -576,13 +576,13 @@ class SummaryBarRenderer {
     public String renderAdvancedHTML() {
         StringBuilder buf = new StringBuilder(512);
 
-        buf.append("<h3 id=\"advanced\"><a title=\"")
+        buf.append("<h3 id=advanced><a title=\"")
            .append(_t("Advanced Configuration"))
-           .append("\" href=\"/configadvanced\" target=\"_top\">")
+           .append("\" href=\"/configadvanced\" target=_top>")
            .append(_t("Advanced"))
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_advanced\" class=\"toggleSection script\" checked hidden></h3>\n")
+           .append("</a><input type=checkbox id=toggle_sb_advanced class=\"toggleSection script\" checked hidden></h3>\n")
 
-           .append("<hr class=\"b\">\n<table id=\"sb_advanced\" class=\"collapse\">\n<tr><td>");
+           .append("<hr class=b>\n<table id=sb_advanced class=collapse>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
@@ -593,7 +593,7 @@ class SummaryBarRenderer {
             String tx = _t("API");
             rbuf.append("<a title=\"")
                 .append(_t("Documentation for the I2P API"))
-                .append("\" href=\"/javadoc/index.html\" target=\"_blank\">")
+                .append("\" href=\"/javadoc/index.html\" target=_blank>")
                 .append(nbsp(tx))
                 .append("</a>\n")
                 .append("<a class=sb_icon target=_top href=/javadoc/index.html title=\"").append(tx)
@@ -605,7 +605,7 @@ class SummaryBarRenderer {
         rbuf.setLength(0);
         rbuf.append("<a title=\"")
             .append(_t("View router debug information"))
-            .append("\" href=\"/debug\" target=\"_top\">")
+            .append("\" href=\"/debug\" target=_top>")
             .append(nbsp(tx))
             .append("</a>\n")
             .append("<a class=sb_icon target=_top href=/debug title=\"").append(tx)
@@ -616,7 +616,7 @@ class SummaryBarRenderer {
         rbuf.setLength(0);
         rbuf.append("<a title=\"")
             .append(_t("Review extended info about installed .jar and .war files"))
-            .append("\" href=\"/jars\" target=\"_top\">")
+            .append("\" href=\"/jars\" target=_top>")
             .append(nbsp(tx))
             .append("</a>\n")
             .append("<a class=sb_icon target=_top href=/jars title=\"").append(tx)
@@ -627,7 +627,7 @@ class SummaryBarRenderer {
         rbuf.setLength(0);
         rbuf.append("<a title=\"")
             .append(_t("Network database search tool"))
-            .append("\" href=\"/netdb?f=4\" target=\"_top\">")
+            .append("\" href=\"/netdb?f=4\" target=_top>")
             .append(nbsp(tx))
             .append("</a>\n")
             .append("<a class=sb_icon target=_top href=\"/netdb?f=4\" title=\"").append(tx)
@@ -636,7 +636,7 @@ class SummaryBarRenderer {
 
         tx = _t("Stats");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/stats\" target=\"_top\" title=\"")
+        rbuf.append("<a href=\"/stats\" target=_top title=\"")
             .append(_t("Textual router performance statistics"))
             .append("\">")
             .append(nbsp(tx))
@@ -649,7 +649,7 @@ class SummaryBarRenderer {
         rbuf.setLength(0);
         rbuf.append("<a title=\"")
             .append(_t("Review possible sybils in network database"))
-            .append("\" href=\"/netdb?f=3\" target=\"_top\">")
+            .append("\" href=\"/netdb?f=3\" target=_top>")
             .append(nbsp(tx))
             .append("</a>\n")
             .append("<a class=sb_icon target=_top href=\"/netdb?f=3\" title=\"").append(tx)
@@ -666,27 +666,27 @@ class SummaryBarRenderer {
     public String renderRouterInfoHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/info\" target=\"_top\" title=\"")
+        buf.append("<h3><a href=\"/info\" target=_top title=\"")
            .append(_t("Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. ", _helper.getIdent()))
            .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
            .append("\">")
            .append(_t("Router Info"))
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("How long we've been running for this session"))
+           .append(" <span class=badge hidden title=\"").append(_t("How long we've been running for this session"))
            .append("\">").append(_t("Up")).append(" ").append(_helper.getUptime()).append("</span>")
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_general\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=checkbox id=toggle_sb_general class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
 /*
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("The version of the I2P software we are running"))
+           .append(" <span class=badge hidden title=\"").append(_t("The version of the I2P software we are running"))
            .append("\">").append(_helper.getVersion()).append("</span>")
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_general\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=checkbox id=toggle_sb_general class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
 */
-                   "<table id=\"sb_general\" class=\"volatile\">" +
+                   "<table id=sb_general class=volatile>" +
                    "<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">" +
                    "<td><a href=\"/configupdate\"><b>")
            .append(_t("Version"))
            .append("</b></a></td>" +
-                   "<td class=\"digits\"><span>")
+                   "<td class=digits><span>")
            .append(_helper.getVersion())
            .append("</span></td></tr>\n" +
 
@@ -696,7 +696,7 @@ class SummaryBarRenderer {
                    "<td><b>")
            .append(_t("Uptime"))
            .append("</b></td>" +
-                   "<td class=\"digits\"><span>")
+                   "<td class=digits><span>")
            .append(_helper.getUptime())
            .append("</span></td></tr>\n</table>\n");
         return buf.toString();
@@ -705,14 +705,14 @@ class SummaryBarRenderer {
     public String renderShortRouterInfoHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<table id=\"sb_shortgeneral\" class=\"volatile\">" +
+        buf.append("<table id=sb_shortgeneral class=volatile>" +
                    "<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">" +
                    "<td><a href=\"/configupdate\"><b>")
            .append(_t("Version"))
            .append("</b></a></td>" +
-                   "<td class=\"digits\"><span>")
+                   "<td class=digits><span>")
            .append(_helper.getVersion())
            .append("</span></td></tr>\n" +
 
@@ -722,7 +722,7 @@ class SummaryBarRenderer {
                    "<td><b>")
            .append(_t("Uptime"))
            .append("</b></td>" +
-                   "<td class=\"digits\"><span>")
+                   "<td class=digits><span>")
            .append(_helper.getUptime())
            .append("</span></td></tr></table>\n");
         return buf.toString();
@@ -732,23 +732,23 @@ class SummaryBarRenderer {
     public String renderAdvancedRouterInfoHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/info\" target=\"_top\" title=\"")
+        buf.append("<h3><a href=\"/info\" target=_top title=\"")
            .append(_t("Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. ", _helper.getIdent()))
            .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
            .append("\">")
            .append(_t("Router Info"))
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("How long we've been running for this session"))
+           .append(" <span class=badge hidden title=\"").append(_t("How long we've been running for this session"))
            .append("\">").append(_t("Up")).append(" ").append(_helper.getUptime()).append("</span>")
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_advancedgeneral\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
+           .append("</a><input type=checkbox id=toggle_sb_advancedgeneral class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
 
-                   "<table id=\"sb_advancedgeneral\" class=\"volatile\">\n" +
+                   "<table id=sb_advancedgeneral class=volatile>\n" +
                    "<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">" +
                    "<td><a href=\"/configupdate\"><b>")
            .append(_t("Version"))
            .append("</b></a></td>" +
-                   "<td class=\"digits\"><span>")
+                   "<td class=digits><span>")
            .append(_helper.getVersion())
            .append("</span></td></tr>\n" +
 
@@ -758,7 +758,7 @@ class SummaryBarRenderer {
                    "<td><b>")
            .append(_t("Uptime"))
            .append("</b></td>" +
-                   "<td class=\"digits\"><span>")
+                   "<td class=digits><span>")
            .append(_helper.getUptime())
            .append("</span></td></tr>\n");
 
@@ -787,7 +787,7 @@ class SummaryBarRenderer {
                           "<td><b>")
                   .append(_t("Memory"))
                   .append("</b></td>" +
-                          "<td class=\"digits\"><span>")
+                          "<td class=digits><span>")
                   .append(_helper.getMemory().replace("iB", ""))
                   .append("</span></td></tr>\n");
            }
@@ -811,7 +811,7 @@ class SummaryBarRenderer {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
         SummaryHelper.NetworkStateMessage reachability = _helper.getReachability();
-        buf.append("<h4 id=\"sb_status\"><span class=\"sb_netstatus volatile ");
+        buf.append("<h4 id=sb_status><span class=\"sb_netstatus volatile ");
         switch (reachability.getState()) {
             case VMCOMM:
                 buf.append("vmcomm");
@@ -844,10 +844,10 @@ class SummaryBarRenderer {
            .append(reachability.getMessage())
            .append("</span></h4>\n");
         if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
-            buf.append("<hr>\n<h4><span class=\"warn\"><a href=\"http://trac.i2p2.i2p/wiki/Crypto/ECDSA");
+            buf.append("<hr>\n<h4><span class=warn><a href=\"http://trac.i2p2.i2p/wiki/Crypto/ECDSA");
             if ("ru".equals(Messages.getLanguage(_context)))
                 buf.append("-ru");
-            buf.append("\" target=\"_top\" title=\"")
+            buf.append("\" target=_top title=\"")
                .append(_t("See more information on the wiki"))
                .append("\">")
                .append(_t("Warning: ECDSA is not available. Update your Java or OS"))
@@ -862,14 +862,14 @@ class SummaryBarRenderer {
 //        if ("".equals(updateStatus)) return "";
         StringBuilder buf = new StringBuilder(512);
         if (_helper == null || "".equals(updateStatus)) {
-            buf.append("<div id=\"sb_updatesection\" class=\"hide volatile\" hidden></div>\n");
+            buf.append("<div id=sb_updatesection class=\"hide volatile\" hidden></div>\n");
         } else {
-            buf.append("<div id=\"sb_updatesection\" class=\"volatile collapse\">\n")
-               .append("<h3><a href=\"/configupdate\" target=\"_top\" title=\"")
+            buf.append("<div id=sb_updatesection class=\"volatile collapse\">\n")
+               .append("<h3><a href=\"/configupdate\" target=_top title=\"")
                .append(_t("Configure I2P Updates"))
                .append("\">")
                .append(_t("Update Status"))
-               .append("</a><input type=\"checkbox\" id=\"toggle_sb_updatesection\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n")
+               .append("</a><input type=checkbox id=toggle_sb_updatesection class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
                .append(updateStatus)
                .append("\n</div>\n");
         }
@@ -885,13 +885,13 @@ class SummaryBarRenderer {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
         int active = _helper.getActivePeers();
-        buf.append("<h3><a href=\"/peers\" target=\"_top\" title=\"")
+        buf.append("<h3><a href=\"/peers\" target=_top title=\"")
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_peers\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_peers\">\n" +
+           .append(" <span class=badge hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
+           .append("</a><input type=checkbox id=toggle_sb_peers class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
+                   "<table id=sb_peers>\n" +
                    "<tr title=\"");
         if (isAdvanced())
             buf.append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"));
@@ -901,7 +901,7 @@ class SummaryBarRenderer {
         buf.append("\">" +
                    "<td><a href=\"/peers\"><b>")
            .append(_t("Active"))
-           .append("</b></a></td><td class=\"digits\"><span>");
+           .append("</b></a></td><td class=digits><span>");
         buf.append(active);
         if (isAdvanced()) {
             buf.append(SummaryHelper.THINSP).append(Math.max(active, _helper.getActiveProfiles()));
@@ -912,7 +912,7 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><a href=\"/profiles?f=1#profilelist\"><b>")
            .append(_t("Fast"))
-           .append("</b></a></td><td class=\"digits\"><span>")
+           .append("</b></a></td><td class=digits><span>")
            .append(_helper.getFastPeers())
            .append("</span></td></tr>\n" +
                    "<tr title=\"")
@@ -920,15 +920,16 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><a href=\"/profiles?f=1#highcap_peers\"><b>")
            .append(_t("High capacity"))
-           .append("</b></a></td><td class=\"digits\"><span>")
+           .append("</b></a></td><td class=digits><span>")
            .append(_helper.getHighCapacityPeers())
            .append("</span></td></tr>\n" +
                    "<tr title=\"")
            .append(_t("The number of peers available for network database inquiries"))
            .append("\">" +
-                   "<td><a href=\"/netdb?caps=f\"><b>")
+                   //"<td><a href=\"/netdb?caps=f\"><b>")
+                   "<td><a href=\"/profiles?f=2\"><b>")
            .append(_t("Floodfill"))
-           .append("</b></a></td><td class=\"digits\"><span>")
+           .append("</b></a></td><td class=digits><span>")
            .append(_helper.getWellIntegratedPeers())
            .append("</span></td></tr>\n" +
                    "<tr title=\"")
@@ -936,7 +937,7 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><a href=\"/netdb?caps=U\"><b>")
            .append(_t("Unreachable"))
-           .append("</b></a></td><td class=\"digits\"><span>")
+           .append("</b></a></td><td class=digits><span>")
            .append(_helper.getUnreachablePeers())
            .append("</span></td></tr>\n");
        if (_helper.getBanlistedPeers() > 1) {
@@ -945,7 +946,7 @@ class SummaryBarRenderer {
                .append("\">" +
                        "<td><a href=\"/profiles?f=3\"><b>")
                .append(_t("Banned"))
-               .append("</b></a></td><td class=\"digits\"><span>")
+               .append("</b></a></td><td class=digits><span>")
                .append(_helper.getBanlistedPeers())
                .append("</span></td></tr>\n");
        }
@@ -955,21 +956,22 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><a href=\"/netdb\"><b>")
            .append(_t("Known"))
-           .append("</b></a></td><td class=\"digits\"><span>")
+           .append("</b></a></td><td class=digits><span>")
            .append(_helper.getAllPeers())
            .append("</span></td></tr>\n" +
                    "</table>\n");
 
-        buf.append("<table id=\"sb_peers_condensed\" hidden>\n")
+        buf.append("<table id=sb_peers_condensed hidden>\n")
            .append("<tr><td>")
-           .append("<a class=\"sb_icon\" id=\"floodfill\" href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
-           .append("\"><span><span class=\"badge\">").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
-           .append("<a class=\"sb_icon\" id=\"fast\" href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
-           .append("\"><span><span class=\"badge\">").append(_helper.getFastPeers()).append("</span></span></a>\n")
-           .append("<a class=\"sb_icon\" id=\"firewalled\" href=\"/netdb?caps=U\" title=\"").append(_t("Unreachable"))
-           .append("\"><span><span class=\"badge\">").append(_helper.getUnreachablePeers()).append("</span></span></a>\n")
-           .append("<a class=\"sb_icon\" id=\"banned\" href=\"/profiles?f=3\" title=\"").append(_t("Banned"))
-           .append("\"><span><span class=\"badge\">").append(_helper.getBanlistedPeers()).append("</span></span></a>\n")
+           //.append("<a class=sb_icon id=floodfill href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
+           .append("<a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"").append(_t("Floodfill"))
+           .append("\"><span><span class=badge>").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
+           .append("<a class=sb_icon id=fast href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
+           .append("\"><span><span class=badge>").append(_helper.getFastPeers()).append("</span></span></a>\n")
+           .append("<a class=sb_icon id=firewalled href=\"/netdb?caps=U\" title=\"").append(_t("Unreachable"))
+           .append("\"><span><span class=badge>").append(_helper.getUnreachablePeers()).append("</span></span></a>\n")
+           .append("<a class=sb_icon id=banned href=\"/profiles?f=3\" title=\"").append(_t("Banned"))
+           .append("\"><span><span class=badge>").append(_helper.getBanlistedPeers()).append("</span></span></a>\n")
            .append("</td></tr>\n</table>\n");
 
         return buf.toString();
@@ -980,19 +982,19 @@ class SummaryBarRenderer {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
         int active = _helper.getActivePeers();
-        buf.append("<h3><a href=\"/peers\" target=\"_top\" title=\"")
+        buf.append("<h3><a href=\"/peers\" target=_top title=\"")
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_peersadvanced\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_peersadvanced\">\n" +
+           .append(" <span class=badge hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
+           .append("</a><input type=checkbox id=toggle_sb_peersadvanced class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
+                   "<table id=sb_peersadvanced>\n" +
                    "<tr title=\"")
            .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"))
            .append("\">" +
                    "<td><b>")
            .append(_t("Active"))
-           .append("</b></td><td class=\"digits\"><span>");
+           .append("</b></td><td class=digits><span>");
         buf.append(active)
            .append(SummaryHelper.THINSP)
            .append(Math.max(active, _helper.getActiveProfiles()))
@@ -1002,7 +1004,7 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><b>")
            .append(_t("Fast"))
-           .append("</b></td><td class=\"digits\"><span>")
+           .append("</b></td><td class=digits><span>")
            .append(_helper.getFastPeers())
            .append("</span></td></tr>\n" +
                    "<tr title=\"")
@@ -1010,7 +1012,7 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><b>")
            .append(_t("High capacity"))
-           .append("</b></td><td class=\"digits\"><span>")
+           .append("</b></td><td class=digits><span>")
            .append(_helper.getHighCapacityPeers())
            .append("</span></td></tr>\n" +
                    "<tr title=\"")
@@ -1018,7 +1020,7 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><b>")
            .append(_t("Integrated"))
-           .append("</b></td><td class=\"digits\"><span>")
+           .append("</b></td><td class=digits><span>")
            .append(_helper.getWellIntegratedPeers())
            .append("</span></td></tr>\n" +
                    "<tr title=\"")
@@ -1026,7 +1028,7 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><b>")
            .append(_t("Unreachable"))
-           .append("</b></td><td class=\"digits\"><span>")
+           .append("</b></td><td class=digits><span>")
            .append(_helper.getUnreachablePeers())
            .append("</span></td></tr>\n" +
                    "<tr title=\"")
@@ -1034,38 +1036,31 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><a href=\"/netdb\"><b>")
            .append(_t("Known"))
-           .append("</b></a></td><td class=\"digits\"><span>")
+           .append("</b></a></td><td class=digits><span>")
            .append(_helper.getAllPeers())
            .append("</span></td></tr>\n" +
-                   "<tr class=\"separator\"><td colspan=\"2\"><hr></td></tr>" +
-                   "<tr title=\"")
-           .append(_t("The number of peers failing network tests"))
-           .append("\">" +
-                   "<td><a href=\"/profiles\"><b>")
-           .append(_t("Failing"))
-           .append("</b></a></td><td class=\"digits\"><span>")
-           .append(_helper.getFailingPeers())
-           .append("</span></td></tr>\n" +
+                   "<tr class=separator><td colspan=2><hr></td></tr>" +
                    "<tr title=\"")
            .append(_t("The number of banned peers"))
            .append("\">" +
                    "<td><a href=\"/profiles?f=3\"><b>")
            .append(_t("Banned"))
-           .append("</b></a></td><td class=\"digits\"><span>")
+           .append("</b></a></td><td class=digits><span>")
            .append(_helper.getBanlistedPeers())
            .append("</span></td></tr>\n" +
                    "</table>\n");
 
-        buf.append("<table id=\"sb_peers_condensed\" hidden>\n")
+        buf.append("<table id=sb_peers_condensed hidden>\n")
            .append("<tr><td>")
-           .append("<a class=\"sb_icon\" id=\"floodfill\" href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
-           .append("\"><span><span class=\"badge\">").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
-           .append("<a class=\"sb_icon\" id=\"fast\" href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
-           .append("\"><span><span class=\"badge\">").append(_helper.getFastPeers()).append("</span></span></a>\n")
-           .append("<a class=\"sb_icon\" id=\"firewalled\" href=\"/netdb?caps=U\" title=\"").append(_t("Unreachable"))
-           .append("\"><span><span class=\"badge\">").append(_helper.getUnreachablePeers()).append("</span></span></a>\n")
-           .append("<a class=\"sb_icon\" id=\"banned\" href=\"/profiles?f=3\" title=\"").append(_t("Banned"))
-           .append("\"><span><span class=\"badge\">").append(_helper.getBanlistedPeers()).append("</span></span></a>\n")
+           //.append("<a class=sb_icon id=floodfill href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
+           .append("<a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"").append(_t("Floodfill"))
+           .append("\"><span><span class=badge>").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
+           .append("<a class=sb_icon id=fast href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
+           .append("\"><span><span class=badge>").append(_helper.getFastPeers()).append("</span></span></a>\n")
+           .append("<a class=sb_icon id=firewalled href=\"/netdb?caps=U\" title=\"").append(_t("Unreachable"))
+           .append("\"><span><span class=badge>").append(_helper.getUnreachablePeers()).append("</span></span></a>\n")
+           .append("<a class=sb_icon id=banned href=\"/profiles?f=3\" title=\"").append(_t("Banned"))
+           .append("\"><span><span class=badge>").append(_helper.getBanlistedPeers()).append("</span></span></a>\n")
            .append("</td></tr>\n</table>\n");
 
         return buf.toString();
@@ -1081,20 +1076,20 @@ class SummaryBarRenderer {
         StringBuilder buf = new StringBuilder(512);
         buf.append("<h3><a href=\"/config\" title=\"")
            .append(_t("Configure router bandwidth allocation"))
-           .append("\" target=\"_top\">")
+           .append("\" target=_top>")
            .append(_t("Bandwidth in/out"))
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_bandwidth\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">" +
-                   "<table id=\"sb_bandwidth\">\n" +
+           .append("</a><input type=checkbox id=toggle_sb_bandwidth class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>" +
+                   "<table id=sb_bandwidth>\n" +
                    "<tr><td><b>")
            .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", _t("Current")))  // lie and say 3 sec since 1 sec would appear as 1000 ms
-           .append("</b></td><td class=\"digits\"><span>")
+           .append("</b></td><td class=digits><span>")
            .append(_helper.getSecondKBps())
            .append("Bps</span></td></tr>\n");
 
         if (_context.router().getUptime() > 6*60*1000) {
             buf.append("<tr><td><b>")
            .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))   // 5 min
-           .append("</b></td><td class=\"digits\"><span>")
+           .append("</b></td><td class=digits><span>")
            .append(_helper.getFiveMinuteKBps())
            .append("Bps</span></td></tr>\n");
         }
@@ -1102,14 +1097,14 @@ class SummaryBarRenderer {
         if (_context.router().getUptime() > 2*60*1000) {
             buf.append("<tr><td><b>")
            .append(_t("Total").replace("Total", _t("Lifetime")))
-           .append("</b></td><td class=\"digits\"><span>")
+           .append("</b></td><td class=digits><span>")
            .append(_helper.getLifetimeKBps())
            .append("Bps</span></td></tr>\n");
         }
 
         buf.append("<tr><td><b>")
            .append(_t("Used").replace("Used", "Transferred"))
-           .append("</b></td><td class=\"digits\"><span>")
+           .append("</b></td><td class=digits><span>")
            .append(_helper.getInboundTransferred().replace("KiB", "K").replace("MiB", "M").replace("GiB", "G")
                                                   .replace("TiB", "T").replace("PiB", "P").replace("EiB", "E")
                                                   .replace("ZiB", "Z").replace("YiB", "Y"))
@@ -1133,18 +1128,18 @@ class SummaryBarRenderer {
           refreshPeriod = Integer.parseInt(r);
         } catch (NumberFormatException nfe) {}
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<div id=\"sb_graphcontainer\" class=\"collapse\" title=\"")
+        buf.append("<div id=sb_graphcontainer class=collapse title=\"")
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
-           .append("\">\n<span id=\"sb_graphstats\" class=\"volatile\">")
+           .append("\">\n<span id=sb_graphstats class=volatile>")
            .append(_helper.getSecondKBps())
            .append("Bps</span>\n")
            .append("<a href=\"/graphs\">\n")
-           .append("<canvas id=\"minigraph\" width=\"245\" height=\"50\">\n")
-           .append("<div id=\"minigraphcontainer\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("<canvas id=minigraph width=245 height=50>\n")
+           .append("<div id=minigraphcontainer style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div>")
            .append("</canvas>\n")
-           .append("<noscript><div id=\"minigraphcontainer\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("<noscript><div id=minigraphcontainer style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div></noscript>")
            .append("</a>\n</div>\n");
@@ -1159,21 +1154,27 @@ class SummaryBarRenderer {
         int totalTunnels =_helper.getInboundTunnels() + _helper.getOutboundTunnels() + _helper.getInboundClientTunnels() +
                           _helper.getOutboundClientTunnels() + partTunnels;
         RouterInfo ri = _context.router().getRouterInfo();
-        buf.append("<h3><a href=\"/tunnels\" target=\"_top\" title=\"")
+        buf.append("<h3><a href=\"/tunnels\" target=_top title=\"")
            .append(_t("View existing tunnels and tunnel build status"))
            .append("\">")
            .append(_t("Tunnels"))
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("Total number of tunnels in use")).append("\">")
-           .append(totalTunnels).append("</span>")
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_tunnels\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_tunnels\">\n");
+           .append(" <span class=badge hidden title=\"").append(_t("Total number of tunnels in use"));
+       if (_helper.getTunnelBuildSuccess() > 0) {
+           buf.append(" / ").append(_t("Average tunnel build success for last 10m interval"));
+       }
+       buf.append("\">").append(totalTunnels);
+       if (_helper.getTunnelBuildSuccess() > 0) {
+           buf.append(" / ").append(_helper.getTunnelBuildSuccess()).append("%");
+       }
+       buf.append("</span></a><input type=checkbox id=toggle_sb_tunnels class=\"toggleSection script\" checked hidden>" +
+                  "</h3>\n<hr class=b>\n" + "<table id=sb_tunnels>\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
             buf.append("<tr title=\"")
                .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
                .append("\">" +
                        "<td><a href=\"/tunnels#client_tunnels\"><b>")
                .append(_t("Client").replace("Client", "Service"))
-               .append("</b></a></td><td class=\"digits\"><span>")
+               .append("</b></a></td><td class=digits><span>")
                .append(_helper.getInboundClientTunnels()).append(" / ").append(_helper.getOutboundClientTunnels())
                .append("</span></td></tr>\n");
         }
@@ -1183,7 +1184,7 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><a href=\"/tunnels#exploratory\"><b>")
            .append(_t("Exploratory").replace("Exploratory", "Utility"))
-           .append("</b></a></td><td class=\"digits\"><span>")
+           .append("</b></a></td><td class=digits><span>")
            .append(_helper.getInboundTunnels()).append(" / ").append(_helper.getOutboundTunnels())
            .append("</span></td></tr>\n");
 
@@ -1195,7 +1196,7 @@ class SummaryBarRenderer {
                    .append("\">" +
                            "<td><a href=\"/tunnelsparticipating\"><b>")
                    .append(_t("Participating").replace("Participating","Transit"))
-                   .append("</b></a></td><td class=\"digits\"><span>")
+                   .append("</b></a></td><td class=digits><span>")
                    .append(partTunnels).append(" / ").append(maxTunnels)
                    .append("</span></td></tr>\n");
             }
@@ -1204,7 +1205,7 @@ class SummaryBarRenderer {
                .append("\">" +
                        "<td><a href=\"/tunnelpeercount\"><b>")
                .append(_t("Total"))
-               .append("</b></a></td><td class=\"digits\"><span>")
+               .append("</b></a></td><td class=digits><span>")
                .append(totalTunnels)
                .append("</span></td></tr>\n");
             buf.append("<tr title=\"")
@@ -1212,16 +1213,16 @@ class SummaryBarRenderer {
                .append("\">" +
                        "<td><b>")
                .append(_t("Concurrency"))
-               .append("</b></td><td class=\"digits\"><span>")
+               .append("</b></td><td class=digits><span>")
                .append(_helper.getConcurrency())
                .append("</span></td></tr>\n");
             if (_helper.getTunnelBuildSuccess() > 0) {
                 buf.append("<tr title=\"")
                    .append(_t("Combined utility and service tunnel build success (averaged over 10 minute intervals)"))
                    .append("\">" +
-                           "<td><b>")
+                           "<td><a href=\"/graph?stat=tunnel.tunnelBuildSuccessAvg.60000&c=1440&w=1000&h=280\"><b>")
                    .append(_t("Build Success"))
-                  .append("</b></td><td class=\"digits\"><span>")
+                  .append("</b></a></td><td class=digits><span>")
                   .append(_helper.getTunnelBuildSuccess())
                   .append("%</span></td></tr>\n");
             }
@@ -1233,25 +1234,25 @@ class SummaryBarRenderer {
                    .append("\">" +
                            "<td><b>")
                    .append(_t("Share ratio"))
-                   .append("</b></td><td class=\"digits\"><span>")
+                   .append("</b></td><td class=digits><span>")
                    .append(_helper.getShareRatio())
                    .append("</span></td></tr>\n");
             }
 
             buf.append("</table>\n");
 
-            buf.append("<table id=\"sb_tunnels_condensed\" hidden>\n")
+            buf.append("<table id=sb_tunnels_condensed hidden>\n")
                .append("<tr><td>")
-               .append("<a class=\"sb_icon\" id=\"service\" href=\"/tunnels#client_tunnels\" title=\"").append(_t("Service")).append(' ').append(_t("tunnels"))
-               .append("\"><span><span class=\"badge\">").append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
+               .append("<a class=sb_icon id=service href=\"/tunnels#client_tunnels\" title=\"").append(_t("Service")).append(' ').append(_t("tunnels"))
+               .append("\"><span><span class=badge>").append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
                .append("</span></span></a>\n")
-               .append("<a class=\"sb_icon\" id=\"transit\" href=\"/tunnelsparticipating\" title=\"").append(_t("Transit")).append(' ').append(_t("tunnels"))
-               .append("\"><span><span class=\"badge\">").append(partTunnels).append("</span></span></a>\n")
-               .append("<a class=\"sb_icon\" id=\"utility\" href=\"/tunnels#exploratory\" title=\"").append(_t("Utility")).append(' ').append(_t("tunnels"))
-               .append("\"><span><span class=\"badge\">").append(_helper.getInboundTunnels() + _helper.getOutboundTunnels())
+               .append("<a class=sb_icon id=transit href=\"/tunnelsparticipating\" title=\"").append(_t("Transit")).append(' ').append(_t("tunnels"))
+               .append("\"><span><span class=badge>").append(partTunnels).append("</span></span></a>\n")
+               .append("<a class=sb_icon id=utility href=\"/tunnels#exploratory\" title=\"").append(_t("Utility")).append(' ').append(_t("tunnels"))
+               .append("\"><span><span class=badge>").append(_helper.getInboundTunnels() + _helper.getOutboundTunnels())
                .append("</span></span></a>\n")
-               .append("<a class=\"sb_icon\" id=\"tcount\" href=\"/tunnelpeercount\" title=\"").append(_t("Tunnel Count by Peer"))
-               .append("\"><span><span class=\"badge\">").append(totalTunnels).append("</span></span></a>\n")
+               .append("<a class=sb_icon id=tcount href=\"/tunnelpeercount\" title=\"").append(_t("Tunnel Count by Peer"))
+               .append("\"><span><span class=badge>").append(totalTunnels).append("</span></span></a>\n")
                .append("</td></tr>\n</table>\n");
 
         return buf.toString();
@@ -1259,34 +1260,31 @@ class SummaryBarRenderer {
 
     public String renderCongestionHTML() {
         if (_helper == null) return "";
+        long maxLag = _context.jobQueue().getMaxLag();
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/jobs\" target=\"_top\" title=\"")
+        buf.append("<h3><a href=\"/jobs\" target=_top title=\"")
            .append(_t("What's in the router's job queue?"))
            .append("\">")
-           .append(_t("Congestion"))
-           .append(" <span class=\"badge\" hidden title=\"").append(_t("Job lag")).append("\">");
-        if (_context.router().getUptime() < 60*1000) {
-           buf.append("-");
-        } else {
+           .append(_t("Congestion"));
+        if (_context.router().getUptime() > 2*60*1000) {
+           buf.append(" <span class=badge hidden title=\"").append(_t("Job lag")).append("\">");
            buf.append(_helper.getJobLag());
+           buf.append("</span>");
         }
-        long maxLag = _context.jobQueue().getMaxLag();
-        buf.append("</span>")
-           .append("</a><input type=\"checkbox\" id=\"toggle_sb_queue\" class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_queue\">\n" +
+        buf.append("</a><input type=checkbox id=toggle_sb_queue class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
+                   "<table id=sb_queue>\n" +
                    "<tr title=\"");
         if (isAdvanced() && maxLag != 0)
             buf.append(_t("Average job delay / maximum delay"));
         else
-//            buf.append(_t("Indicates router performance"));
             buf.append(_t("Average delay before scheduled jobs are run"));
         buf.append("\">" +
                    "<td><b>")
            .append(_t("Job lag"))
-           .append("</b></td><td class=\"digits\">");
+           .append("</b></td><td class=digits>");
         int maxLagBeforeDrop = SystemVersion.isSlow() ? 400 : 300;
         if (maxLag > maxLagBeforeDrop) {
-            buf.append("<span class=\"warntext\">");
+            buf.append("<span class=warntext>");
         } else {
             buf.append("<span>");
         }
@@ -1298,9 +1296,9 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><b>")
            .append(_t("Message delay"))
-           .append("</b></td><td class=\"digits\">");
+           .append("</b></td><td class=digits>");
         if (_context.throttle().getMessageDelay() > 2000) {
-            buf.append("<span class=\"warntext\">").append(_helper.getMessageDelay()).append("</span>");
+            buf.append("<span class=warntext>").append(_helper.getMessageDelay()).append("</span>");
         } else {
             buf.append("<span>").append(_helper.getMessageDelay()).append("</span>");
         }
@@ -1312,7 +1310,7 @@ class SummaryBarRenderer {
                .append("\">" +
                        "<td><a href=\"/profiles\"><b>")
                .append(_t("Peer test average"))
-               .append("</b></a></td><td class=\"digits\"><span>")
+               .append("</b></a></td><td class=digits><span>")
                .append(_helper.getAvgPeerTestTimeGood()).append(" / " )
                .append(_helper.getAvgPeerTestTime());
             if (_helper.getAvgPeerTestTime() > 0)
@@ -1326,7 +1324,7 @@ class SummaryBarRenderer {
                .append("\">" +
                        "<td><b>")
                .append(_t("Tunnel lag"))
-               .append("</b></td><td class=\"digits\"><span>")
+               .append("</b></td><td class=digits><span>")
                .append(_helper.getTunnelLag())
                .append("</span></td></tr>\n");
         }
@@ -1337,7 +1335,7 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td><b>")
            .append(_t("Backlog"))
-           .append("</b></td><td class=\"digits\"><span class=\"warntext\">")
+           .append("</b></td><td class=digits><span class=warntext>")
            .append(_helper.getInboundBacklog())
            .append("</span></td></tr>\n");
         }
@@ -1348,7 +1346,7 @@ class SummaryBarRenderer {
     public String renderTunnelStatusHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(50);
-        buf.append("<h4 id=\"sb_tunnelstatus\" class=\"volatile collapse\"><span class=\"tunnelBuildStatus");
+        buf.append("<h4 id=sb_tunnelstatus class=\"volatile collapse\"><span class=\"tunnelBuildStatus");
         if (_t(_helper.getTunnelStatus()).contains(("Starting up")))
             buf.append(" starting\" title=\"").append(_t("No participating tunnels requests are accepted for the first 10 minutes while router stabilizes"));
         if (_t(_helper.getTunnelStatus()).contains(("Shutting down")))
@@ -1416,8 +1414,9 @@ class SummaryBarRenderer {
                         // Set up title and pre-headings stuff.
                         buf.append("<h3 id=sb_newsH3><a href=\"/news\">")
                            .append(_t("News &amp; Updates"))
-                           .append("</a><input type=\"checkbox\" id=\"toggle_sb_newsheadings\" class=\"toggleSection script\" checked hidden></h3><hr class=\"b\">")
-                           .append("<div id=\"sb_newsheadings\">\n<table>\n");
+                           .append(" <span id=newsCount class=badge hidden></span>")
+                           .append("</a><input type=checkbox id=toggle_sb_newsheadings class=\"toggleSection script\" checked hidden></h3><hr class=b>")
+                           .append("<div id=sb_newsheadings>\n<table>\n");
                     }
                     buf.append("<tr><td><a href=\"/?news=1&amp;consoleNonce=")
                        .append(consoleNonce)

@@ -1426,6 +1426,7 @@ public class NTCPConnection implements Closeable {
      * @since 0.9.36
      */
     synchronized void failInboundEstablishment(CipherState sender, byte[] sip_ba, int reason) {
+        byte[] ip = getRemoteIP();
         _sender = sender;
         _sendSipk1 = fromLong8LE(sip_ba, 0);
         _sendSipk2 = fromLong8LE(sip_ba, 8);
@@ -1437,6 +1438,7 @@ public class NTCPConnection implements Closeable {
         _nextInfoTime = Long.MAX_VALUE;
         _paddingConfig = OUR_PADDING;
         sendTermination(reason, 0);
+        _transport.getPumper().blockIP(ip);
     }
 
     /**
@@ -1676,8 +1678,19 @@ public class NTCPConnection implements Closeable {
             if (_log.shouldDebug())
                 _log.debug("Received updated RouterInfo");
             _messagesRead.incrementAndGet();
+            Hash h = ri.getHash();
+            Hash ph = _remotePeer.calculateHash();
+            if (!h.equals(ph)) {
+                if (h.equals(_context.routerHash()))
+                    return;
+                // make a fake DBSM message and send it to the InNetMessagePool
+                DatabaseStoreMessage dbsm = new DatabaseStoreMessage(_context);
+                dbsm.setEntry(ri);
+                dbsm.setMessageExpiration(_context.clock().now() + 10*1000);
+                _transport.messageReceived(dbsm, null, ph, 0, 1000); // fake size
+                return;
+            }
             try {
-                Hash h = ri.getHash();
                 if (h.equals(_context.routerHash()))
                     return;
                 RouterInfo old = _context.netDb().store(h, ri);
@@ -1736,6 +1749,8 @@ public class NTCPConnection implements Closeable {
                           "\n* Total received: " + lastReceived + " on " + NTCPConnection.this);
             // close() calls destroy() sets _terminated
             close();
+            if (reason == REASON_BANNED && _remotePeer != null)
+                _context.banlist().banlistRouter(_remotePeer.calculateHash(), "They banned us", null, null, _context.clock().now() + 2*60*60*1000);
         }
 
         public void gotUnknown(int type, int len) {

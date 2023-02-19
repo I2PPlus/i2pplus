@@ -325,7 +325,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         String durl = url.length() <= 28 ? DataHelper.escapeHTML(url) :
                                            DataHelper.escapeHTML(url.substring(0, 25)) + "&hellip;";
         // TODO urlEncode instead
-        return "<a target=\"_blank\" href=\"" + DataHelper.escapeHTML(url) + "\"/>" + durl + "</a>";
+        return "<a target=_blank href=\"" + DataHelper.escapeHTML(url) + "\"/>" + durl + "</a>";
     }
 
     private void updateStatus(String s) {

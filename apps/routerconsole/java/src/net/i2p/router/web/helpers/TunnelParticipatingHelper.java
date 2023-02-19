@@ -14,11 +14,11 @@ public class TunnelParticipatingHelper extends HelperBase {
         TunnelRenderer renderer = new TunnelRenderer(_context);
         try {
             if (_out != null) {
-                renderer.renderParticipating(_out);
+                renderer.renderParticipating(_out, false);
                 return "";
             } else {
                 StringWriter sw = new StringWriter(32*1024);
-                renderer.renderParticipating(sw);
+                renderer.renderParticipating(sw, false);
                 return sw.toString();
             }
         } catch (IOException ioe) {

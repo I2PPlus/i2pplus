@@ -738,21 +738,21 @@ class ClientManager {
             buf.append("<b>*</b> ").append(dest.calculateHash().toBase64().substring(0,6)).append("<br>\n");
             LeaseSet ls = runner.getLeaseSet();
             if (ls == null) {
-                buf.append("<font color=\"red\"><i>No lease</i></font><br>\n");
+                buf.append("<font color=red><i>No lease</i></font><br>\n");
             } else {
                 long leaseAge = ls.getEarliestLeaseDate() - _ctx.clock().now();
                 if (leaseAge <= 0) {
-                    buf.append("<font color=\"red\"><i>Lease expired ");
+                    buf.append("<font color=red><i>Lease expired ");
                     buf.append(DataHelper.formatDuration(0-leaseAge)).append(" ago</i></font><br>\n");
                 } else {
                     int count = ls.getLeaseCount();
                     if (count <= 0) {
-                        buf.append("<font color=\"red\"><i>No tunnels</i></font><br>\n");
+                        buf.append("<font color=red><i>No tunnels</i></font><br>\n");
                     } else {
                         TunnelId id = ls.getLease(0).getTunnelId();
                         TunnelInfo info = _ctx.tunnelManager().getTunnelInfo(id);
                         if (info == null) {
-                            buf.append("<font color=\"red\"><i>Failed tunnels</i></font><br>\n");
+                            buf.append("<font color=red><i>Failed tunnels</i></font><br>\n");
                         } else {
                             buf.append(count).append(" x ");
                             buf.append(info.getLength() - 1).append(" hop tunnel");

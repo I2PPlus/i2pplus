@@ -541,7 +541,7 @@ public class EditBean extends IndexBean {
         for (int i = 1; i <= maxQuantity; i++) {
              buf.append("<option value=\"").append(i).append('"');
              if (i == tunnelQuantity)
-                 buf.append(" selected=\"selected\"");
+                 buf.append(" selected=selected");
              buf.append('>');
              if (mode == 1)
                  buf.append(ngettext("{0} inbound tunnel", "{0} inbound tunnels", i));

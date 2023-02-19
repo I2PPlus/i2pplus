@@ -11,13 +11,14 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("Peer Profile")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="netwrk"><%=intl._t("Peer Profile")%></h1>
-<div class="main" id="view_profile">
+<h1 class=netwrk><%=intl._t("Peer Profile")%></h1>
+<div class=main id="view_profile">
 <%
     String peerB64 = request.getParameter("peer");
     if (peerB64 == null || peerB64.length() <= 0 ||
@@ -32,7 +33,7 @@
 <h3><%=intl._t("Profile for peer")%>: <a href="/netdb?r=<%=peerB64%>" title="<%=intl._t("NetDb entry")%>"><%=peerB64%></a>&nbsp;&nbsp;
 <a class="configpeer" href="/configpeer?peer=<%=peerB64%>" title="<%=intl._t("Configure peer")%>" style="float: right;">
 <%=intl._t("Edit")%></a>&nbsp;&nbsp;
-<a class="viewprofile" href="/dumpprofile?peer=<%=peerB64%>" target="_blank" rel="noreferrer" title="<%=intl._t("View profile in text format")%>" style="float: right;">
+<a class="viewprofile" href="/dumpprofile?peer=<%=peerB64%>" target=_blank rel=noreferrer title="<%=intl._t("View profile in text format")%>" style="float: right;">
 <%=intl._t("View Raw Profile")%></a>&nbsp;&nbsp;
 <%
         net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();
@@ -58,7 +59,6 @@
     }
 %>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

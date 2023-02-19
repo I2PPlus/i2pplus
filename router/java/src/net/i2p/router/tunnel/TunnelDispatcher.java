@@ -129,7 +129,7 @@ public class TunnelDispatcher implements Service {
         // count for console
         ctx.statManager().createRequiredRateStat("tunnel.participatingMessageCount", "Total 1KB participating messages", "Tunnels [Participating]", RATES);
         // estimate for RouterThrottleImpl
-        ctx.statManager().createRequiredRateStat("tunnel.participatingMessageCountAvgPerTunnel", "Estimated participating messages per tunnel lifetime", "Tunnels [Participating]", new long[] { 60*1000l });
+        ctx.statManager().createRequiredRateStat("tunnel.participatingMessageCountAvgPerTunnel", "Estimated participating messages per tunnel lifetime", "Tunnels [Participating]", new long[] { 60*1000l, 20*60*1000 });
         ctx.statManager().createRateStat("tunnel.ownedMessageCount", "Messages sent through a tunnel we created", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.failedCompletelyMessages", "Messages sent through a prematurely failed tunnel", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.failedPartially", "Messages sent through a partially failed tunnel", "Tunnels", RATES);
@@ -891,7 +891,7 @@ public class TunnelDispatcher implements Service {
             long now = getContext().clock().now() + LEAVE_BATCH_TIME; // leave all expiring in next 10 sec
             long nextTime = now + 10*60*1000;
             while ((cur = _configs.peek()) != null) {
-                long exp = cur.getExpiration() + (2 * Router.CLOCK_FUDGE_FACTOR) + LEAVE_BATCH_TIME;
+                long exp = cur.getExpiration() + (3 * Router.CLOCK_FUDGE_FACTOR / 2) + LEAVE_BATCH_TIME;
                 if (exp < now) {
                     _configs.poll();
                     if (_log.shouldInfo())

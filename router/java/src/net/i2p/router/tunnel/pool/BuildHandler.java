@@ -82,9 +82,9 @@ class BuildHandler implements Runnable {
     /** TODO these may be too high, review and adjust */
 //    private static final int MIN_QUEUE = 18;
 //    private static final int MAX_QUEUE = 192;
-    private static final int MIN_QUEUE = SystemVersion.isSlow() ? 16 : 32;
-    private static final int MAX_QUEUE = SystemVersion.isSlow() ? 128
-                                         : (SystemVersion.getCores() < 4 || SystemVersion.getMaxMemory() < 512*1024*1024) ? 256
+    private static final int MIN_QUEUE = SystemVersion.isSlow() ? 32 : 64;
+    private static final int MAX_QUEUE = SystemVersion.isSlow() ? 160
+                                         : (SystemVersion.getCores() < 4 || SystemVersion.getMaxMemory() < 512*1024*1024) ? 192
                                          : (SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() > 2048*1024*1024) ? 512
                                          : 384;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
@@ -96,11 +96,11 @@ class BuildHandler implements Runnable {
     /** limits on concurrent next-hop RI lookup */
 //    private static final int MIN_LOOKUP_LIMIT = 10;
 //    private static final int MAX_LOOKUP_LIMIT = 100;
-    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 32 : 64;
-    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 128 : 256;
+    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 8 : 16;
+    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 80 : 128;
     /** limit lookups to this % of current participating tunnels */
 //    private static final int PERCENT_LOOKUP_LIMIT = 3;
-    private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 2 : 3;
+    private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 2 : 5;
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
      *  participating via OnFailedSendJob.
@@ -117,7 +117,7 @@ class BuildHandler implements Runnable {
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
 
 //    private static final long JOB_LAG_LIMIT_TUNNEL = 350;
-    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 400 : 300;
+    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 400 : 250;
 
 //    private static final long[] RATES = { 60*1000, 60*60*1000l };
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000 };
@@ -309,16 +309,16 @@ class BuildHandler implements Runnable {
                 _context.statManager().addRateData("router.throttleTunnelCause", lag);
                 return;
             }
-/*
-            if (highLoad && maxTunnels > 0 && _isRunning && !_manager.isShutdown()) {
+
+            if (highLoad && maxTunnels > 0) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Dropping tunnel request due to high system load");
-                    _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: High system load").replace("requests: ", "requests:<br>"));
+                    _log.warn("Dropping tunnel request due to high CPU load");
+                    _context.throttle().setTunnelStatus(_x("Dropping tunnel requests:<br>High CPU load"));
                 }
-                //_context.statManager().addRateData("router.throttleTunnelCause", lag);
+                _context.statManager().addRateData("router.throttleTunnelCause", lag);
                 return;
             }
-*/
+
             handleRequest(state, now);
 
         //int remaining = _inboundBuildMessages.size();
@@ -351,7 +351,7 @@ class BuildHandler implements Runnable {
         long requestedOn = cfg.getExpiration() - 10*60*1000;
         long rtt = _context.clock().now() - requestedOn;
         if (_log.shouldInfo())
-            _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt + "ms, delayed " + delay + "ms waiting for config -> " + cfg);
+            _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt + "ms, delayed " + delay + "ms waiting for config \n* " + cfg);
 
         List<Integer> order = cfg.getReplyOrder();
         int statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);
@@ -382,14 +382,27 @@ class BuildHandler implements Runnable {
                     String bwTier = "Unknown";
                     if (ri != null) {
                         bwTier = ri.getBandwidthTier(); // Returns "Unknown" if none recognized
-                    } else if (_log.shouldWarn()) {
-                        _log.warn("Temp banning [" + peer.toBase64().substring(0,6) + "] -> No RouterInfo");
-                        if (peer != null) {
-                            String reason = " <b>➜</b> No RouterInfo";
+                        if (bwTier == "Unknown") {
+                            if (_log.shouldWarn())
+                                _log.warn("Temp banning [" + peer.toBase64().substring(0,6) + "] for 30m -> No bandwidth tier in RouterInfo");
+                            String reason = " <b>➜</b> No Bandwidth Tier";
                             _context.commSystem().mayDisconnect(peer);
-                            _context.banlist().banlistRouter(peer, reason, null, null, 15*60*1000);
+                            _context.banlist().banlistRouter(peer, reason, null, null, 30*60*1000);
                         }
                     }
+/*
+                     else {
+                        if (peer != null) {
+                            if (_log.shouldWarn())
+                                _log.warn("Temp banning [" + peer.toBase64().substring(0,6) + "] for 30m -> No RouterInfo");
+                            String reason = " <b>➜</b> No RouterInfo";
+                            _context.commSystem().mayDisconnect(peer);
+                            _context.banlist().banlistRouter(peer, reason, null, null, 30*60*1000);
+                            }
+                        }
+                    }
+*/
+
                     // Record that a peer of the given tier agreed or rejected
                     if (howBad == 0) {
                         _context.statManager().addRateData("tunnel.tierAgree" + bwTier, 1);
@@ -582,8 +595,8 @@ class BuildHandler implements Runnable {
                                               new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
             } else {
                 _currentLookups.decrementAndGet();
-                if (_log.shouldWarn())
-                    _log.warn("Dropping next hop lookup (Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%) " +
+                if (_log.shouldInfo())
+                    _log.info("Dropping next hop lookup (Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%) " +
                     "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
                 _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                 if (from != null)

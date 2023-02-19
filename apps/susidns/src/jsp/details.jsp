@@ -32,16 +32,16 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title>${book.book} <%=intl._t("addressbook")%> - susidns</title>
-<link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
-<script charset="utf-8" type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset="utf-8" src="/js/textareaResize.js" type="text/javascript"></script>
+<link rel=stylesheet type=text/css href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 src="/js/textareaResize.js" type=text/javascript></script>
 <%
     String query = request.getQueryString();
 %>
-<style type="text/css">body{display:none;pointer-events:none}</style>
+<style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
 <body id="dtls">
 <div class="page">
@@ -84,33 +84,33 @@
 <%
                 if (showNotes) {
 %>
-<form method="POST" action="details">
-<input type="hidden" name="book" value="${book.book}">
-<input type="hidden" name="serial" value="<%=nonce%>">
-<input type="hidden" name="h" value="<%=detail%>">
-<input type="hidden" name="destination" value="<%=addr.getDestination()%>">
+<form method=POST action="details">
+<input type=hidden name="book" value="${book.book}">
+<input type=hidden name="serial" value="<%=nonce%>">
+<input type=hidden name="h" value="<%=detail%>">
+<input type=hidden name="destination" value="<%=addr.getDestination()%>">
 <%
                 }  // showNotes
 %>
 <table class="book" id="host_details" cellspacing="0" cellpadding="5">
 <tr>
 <td><%=intl._t("Hostname")%></td>
-<td><a href="http://<%=addr.getName()%>/" target="_blank" rel="noreferrer"><%=addr.getDisplayName()%></a>
-&nbsp;<b><%=intl._t("Book")%></b>&nbsp;<%=intl._t(book.getBook())%>&nbsp;<b><%=intl._t("Address Helper")%></b>&nbsp;<a href="http://<%=addr.getName()%>/?i2paddresshelper=<%=addr.getDestination()%>" target="_blank" rel="noreferrer"><%=intl._t("link")%></a></td>
+<td><a href="http://<%=addr.getName()%>/" target=_blank rel=noreferrer><%=addr.getDisplayName()%></a>
+&nbsp;<b><%=intl._t("Book")%></b>&nbsp;<%=intl._t(book.getBook())%>&nbsp;<b><%=intl._t("Address Helper")%></b>&nbsp;<a href="http://<%=addr.getName()%>/?i2paddresshelper=<%=addr.getDestination()%>" target=_blank rel=noreferrer><%=intl._t("link")%></a></td>
 </tr>
 <tr>
 <%
                 if (addr.isIDN()) {
 %>
 <td><%=intl._t("Encoded Name")%></td>
-<td><a href="http://<%=addr.getName()%>/" target="_blank" rel="noreferrer"><%=addr.getName()%></a></td>
+<td><a href="http://<%=addr.getName()%>/" target=_blank rel=noreferrer><%=addr.getName()%></a></td>
 </tr>
 <tr>
 <%
                 }
 %>
 <td><%=intl._t("Base 32 Address")%></td>
-<td><a href="http://<%=b32%>/" target="_blank" rel="noreferrer"><%=b32%></a></td>
+<td><a href="http://<%=b32%>/" target=_blank rel=noreferrer><%=b32%></a></td>
 </tr>
 <tr>
 <td><%=intl._t("Base 64 Hash")%></td>
@@ -148,7 +148,7 @@
 <tr class="list${book.trClass}" id="hostNotes">
 <td><%=intl._t("Notes")%></td>
 <td><textarea name="nofilter_notes" rows="3" style="height:6em" cols="70" placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
-<input class="accept" type="submit" name="action" value="<%=intl._t("Save Notes")%>"></td>
+<input class=accept type=submit name=action value="<%=intl._t("Save Notes")%>"></td>
 </tr>
 <%
                 }  // showNotes
@@ -162,15 +162,15 @@
                 }  // showNotes
 %>
 <div id="buttons">
-<form method="POST" action="addressbook">
-<p class="buttons">
-<input type="hidden" name="book" value="${book.book}">
-<input type="hidden" name="serial" value="<%=nonce%>">
-<input type="hidden" name="begin" value="0">
-<input type="hidden" name="end" value="99">
-<input type="hidden" name="checked" value="<%=detail%>">
-<input type="hidden" name="destination" value="<%=addr.getDestination()%>">
-<input class="delete" type="submit" name="action" value="<%=intl._t("Delete Entry")%>" >
+<form method=POST action="addressbook">
+<p class=buttons>
+<input type=hidden name="book" value="${book.book}">
+<input type=hidden name="serial" value="<%=nonce%>">
+<input type=hidden name="begin" value="0">
+<input type=hidden name="end" value="99">
+<input type=hidden name="checked" value="<%=detail%>">
+<input type=hidden name="destination" value="<%=addr.getDestination()%>">
+<input class=delete type=submit name=action value="<%=intl._t("Delete Entry")%>" >
 </p>
 </form>
 </div><%-- buttons --%>
@@ -185,7 +185,7 @@
 <td><img src="/imagegen/qr?s=256&amp;t=<%=addr.getName()%>&amp;c=http%3a%2f%2f<%=addr.getName()%>%2f%3fi2paddresshelper%3d<%=addr.getDestination()%>"></td>
 </tr>
 <tr>
-<td colspan="2"><a class="fakebutton" href="/imagegen" title="<%=intl._t("Create your own identification images")%>" target="_blank" rel="noreferrer"><%=intl._t("Launch Image Generator")%></a></td>
+<td colspan=2><a class="fakebutton" href="/imagegen" title="<%=intl._t("Create your own identification images")%>" target=_blank rel=noreferrer><%=intl._t("Launch Image Generator")%></a></td>
 </tr>
 </table>
 </div><%-- visualid --%>
@@ -201,6 +201,6 @@
 </div><%-- book --%>
 </div><%-- page --%>
 <span data-iframe-height></span>
-<style type="text/css">body{display:block;pointer-events:auto}</style>
+<style type=text/css>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

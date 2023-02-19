@@ -11,7 +11,6 @@ package net.i2p.router.transport;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
-import java.util.Set;
 
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
@@ -168,11 +167,12 @@ public interface Transport {
      * @return may or may not be modifiable; check implementation
      * @since 0.9.34
      */
-    public Set<Hash> getEstablished();
+    public List<Hash> getEstablished();
 
     public int countPeers();
     public int countActivePeers();
     public int countActiveSendPeers();
+
     /**
      * @return 8 bytes:
      *         version 1 ipv4 in/out, ipv6 in/out
@@ -180,6 +180,7 @@ public interface Transport {
      * @since 0.9.57
      */
     public int[] getPeerCounts();
+
     public boolean haveCapacity();
     public boolean haveCapacity(int pct);
 

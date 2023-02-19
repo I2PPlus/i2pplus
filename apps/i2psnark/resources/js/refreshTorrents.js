@@ -2,8 +2,8 @@
 /* Selective refresh torrents and other volatile elements in the I2PSnark UI */
 /* License: AGPL3 or later */
 
-import {initFilterBar, checkFilterBar, refreshFilters} from "/i2psnark/.resources/js/torrentDisplay.js";
-//import {initFilterBar, checkFilterBar, refreshFilters} from "/themes/js/torrentDisplay.js"; // debugging
+import {initFilterBar, checkFilterBar, refreshFilters} from "./torrentDisplay.js";
+import {onVisible} from "./onVisible.js";
 
 function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");
@@ -69,8 +69,10 @@ function refreshTorrents() {
   if (debug) {debug.addEventListener("mouseover", setLinks, false);}
 
   if (filterbar && storage !== null && visible !== "hidden") {
-    if (xhrsnark.status !== null) {xhrsnark.abort();}
-    checkFilterBar();
+    onVisible(filterbar, () => {
+      if (xhrsnark.status !== null) {xhrsnark.abort();}
+      checkFilterBar();
+    });
   } else if ((torrents || noload || down) && visible !== "hidden") {
     if (xhrfilter.status !== null) {xhrfilter.abort();}
     xhrsnark.open("GET", url);

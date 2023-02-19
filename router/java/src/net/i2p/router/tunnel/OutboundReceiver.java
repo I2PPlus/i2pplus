@@ -96,8 +96,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         public void runJob() {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getPeer(1));
             if (_log.shouldDebug())
-                _log.debug("Lookup of " + _config.getPeer(1)
-                           + " successful? " + (ri != null));
+                _log.debug("Lookup of " + _config.getPeer(1) + " successful? " + (ri != null));
             int stat;
             if (ri != null) {
                 _nextHopCache = ri;
@@ -144,8 +143,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
 
         public void runJob() {
             if (_log.shouldWarn())
-                _log.warn("Send to " + _config.getPeer(1)
-                           + " failed for " + _config);
+                _log.warn("Send to " + _config.getPeer(1) + " failed for " + _config);
             _config.tunnelFailedFirstHop();
         }
     }

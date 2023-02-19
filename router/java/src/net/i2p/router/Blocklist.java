@@ -32,6 +32,8 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+import net.i2p.router.transport.GeoIP;
+import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.update.UpdateManager;
 import net.i2p.update.UpdateType;
@@ -85,6 +87,7 @@ public class Blocklist {
     private Entry _wrapSave;
     private final Set<Hash> _inProcess = new HashSet<Hash>(4);
     private final File _blocklistFeedFile;
+    private final boolean _haveIPv6;
     private boolean _started;
     // temp
     private final Map<Hash, String> _peerBlocklist = new HashMap<Hash, String>(4);
@@ -102,11 +105,11 @@ public class Blocklist {
      *  Note that it's impossible to prevent clogging up
      *  the tables by a determined attacker, esp. on IPv6
      */
-    private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 512 : 8192;
+    private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
     private static final int MAX_IPV6_SINGLES = SystemVersion.isSlow() ? 256 : 4096;
 
     private final Map<Integer, Object> _singleIPBlocklist = new LHMCache<Integer, Object>(MAX_IPV4_SINGLES);
-    private final Map<BigInteger, Object> _singleIPv6Blocklist = new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES);
+    private final Map<BigInteger, Object> _singleIPv6Blocklist;
 
     private static final Object DUMMY = Integer.valueOf(0);
 
@@ -129,6 +132,9 @@ public class Blocklist {
         _context = context;
         _log = context.logManager().getLog(Blocklist.class);
         _blocklistFeedFile = new File(context.getConfigDir(), BLOCKLIST_FEED_FILE);
+        _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
+                    Addresses.isConnectedIPv6();
+        _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES) : null;
     }
 
     /** only for testing with main() */
@@ -136,6 +142,9 @@ public class Blocklist {
         _context = null;
         _log = new Log(Blocklist.class);
         _blocklistFeedFile = new File(BLOCKLIST_FEED_FILE);
+        _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
+                    Addresses.isConnectedIPv6();
+        _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES) : null;
     }
 
     /**
@@ -163,8 +172,11 @@ public class Blocklist {
             files.add(new BLFile(blFile, ID_LOCAL));
         }
         files.add(new BLFile(_blocklistFeedFile, ID_FEED));
-        blFile = new File(_context.getConfigDir(), BLOCKLIST_COUNTRY_FILE);
-        files.add(new BLFile(blFile, ID_COUNTRY));
+        if (_context.router().isHidden() ||
+            _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY)) {
+            blFile = new File(_context.getConfigDir(), BLOCKLIST_COUNTRY_FILE);
+            files.add(new BLFile(blFile, ID_COUNTRY));
+        }
         // user specified
         String file = _context.getProperty(PROP_BLOCKLIST_FILE);
         if (file != null && !file.equals(BLOCKLIST_FILE_DEFAULT)) {
@@ -400,15 +412,15 @@ public class Blocklist {
                 }
                 byte[] ip1 = e.ip1;
                 if (ip1.length == 4) {
-                    if (isFeedFile) {
-                        // temporary
-                        add(ip1, source);
-                        feedcount++;
-                    } else {
+                    //if (isFeedFile) {
+                    //    // temporary
+                    //    add(ip1, source);
+                    //    feedcount++;
+                    //} else {
                         byte[] ip2 = e.ip2;
                         store(ip1, ip2, blocklist, count++);
                         ipcount += 1 + toInt(ip2) - toInt(ip1); // includes dups, oh well
-                    }
+                    //}
                 } else {
                     // IPv6
                     add(ip1, source);
@@ -441,7 +453,8 @@ public class Blocklist {
             _log.info("Stats for " + blFile);
             _log.info("Removed " + badcount + " bad entries and comment lines");
             _log.info("Read " + read + " valid entries from the blocklist " + blFile);
-            _log.info("Blocking " + (isFeedFile ? feedcount : ipcount) + " IPs and " + peercount + " hashes");
+            //_log.info("Blocking " + (isFeedFile ? feedcount : ipcount) + " IPs and " + peercount + " hashes");
+            _log.info("Blocking " + ipcount + " IPs and " + peercount + " hashes");
             _log.info("Blocklist processing finished, time: " + (_context.clock().now() - start));
         }
         return count;
@@ -668,6 +681,8 @@ public class Blocklist {
      * @param ip IPv4 or IPv6
      */
     public void add(String ip) {
+        if (!_haveIPv6 && ip.indexOf(':') >= 0)
+            return;
         byte[] pib = Addresses.getIPOnly(ip);
         if (pib == null) return;
         add(pib, null);
@@ -683,6 +698,8 @@ public class Blocklist {
      * @since 0.9.57
      */
     public void add(String ip, String source) {
+        if (!_haveIPv6 && ip.indexOf(':') >= 0)
+            return;
         byte[] pib = Addresses.getIPOnly(ip);
         if (pib == null) return;
         add(pib, source);
@@ -722,7 +739,11 @@ public class Blocklist {
                 }
             }
             rv = add(toInt(ip));
+            if (rv)
+                _context.commSystem().removeExemption(Addresses.toString(ip));
         } else if (ip.length == 16) {
+            if (!_haveIPv6)
+                return;
             // don't ever block ourselves
             String us = _context.getProperty(UDPTransport.PROP_IPV6);
             if (us != null) {
@@ -734,6 +755,8 @@ public class Blocklist {
                 }
             }
             rv = add(new BigInteger(1, ip));
+            if (rv)
+                _context.commSystem().removeExemption(Addresses.toCanonicalString(ip));
         } else {
             return;
         }
@@ -755,10 +778,13 @@ public class Blocklist {
      * @since 0.9.28
      */
     public void remove(byte ip[]) {
-        if (ip.length == 4)
+        if (ip.length == 4) {
             remove(toInt(ip));
-        else if (ip.length == 16)
+        } else if (ip.length == 16) {
+            if (!_haveIPv6)
+                return;
             remove(new BigInteger(1, ip));
+        }
     }
 
     /**
@@ -836,12 +862,14 @@ public class Blocklist {
      * Will not contain duplicates.
      * @since 0.9.29
      */
-    private static List<byte[]> getAddresses(RouterInfo pinfo) {
+    private List<byte[]> getAddresses(RouterInfo pinfo) {
         List<byte[]> rv = new ArrayList<byte[]>(4);
         // for each peer address
         for (RouterAddress pa : pinfo.getAddresses()) {
             byte[] pib = pa.getIP();
             if (pib == null) continue;
+            if (!_haveIPv6 && pib.length == 16)
+                continue;
             // O(n**2)
             boolean dup = false;
             for (int i = 0; i < rv.size(); i++) {
@@ -902,6 +930,8 @@ public class Blocklist {
      * @param ip IPv4 or IPv6
      */
     public boolean isBlocklisted(String ip) {
+        if (!_haveIPv6 && ip.indexOf(':') >= 0)
+            return false;
         byte[] pib = Addresses.getIPOnly(ip);
         if (pib == null) return false;
         return isBlocklisted(pib);
@@ -915,8 +945,11 @@ public class Blocklist {
     public boolean isBlocklisted(byte ip[]) {
         if (ip.length == 4)
             return isBlocklisted(toInt(ip));
-        if (ip.length == 16)
+        if (ip.length == 16) {
+            if (!_haveIPv6)
+                return false;
             return isOnSingleList(new BigInteger(1, ip));
+        }
         return false;
     }
 
@@ -1095,6 +1128,9 @@ public class Blocklist {
      *
      */
     private void banlist(Hash peer, byte[] ip) {
+        // Don't bother unless we have IPv6
+        if (!_haveIPv6 && ip.length == 16)
+            return;
         // Temporary reason, until the job finishes
         String sip = Addresses.toString(ip);
         String reason = " <b>➜</b> " + _x("Blocklist") + ": " + sip;
@@ -1241,6 +1277,8 @@ public class Blocklist {
      *  @since 0.9.48
      */
     public List<BigInteger> getTransientIPv6Blocks() {
+        if (!_haveIPv6)
+            return Collections.<BigInteger>emptyList();
         synchronized(_singleIPv6Blocklist) {
             return new ArrayList<BigInteger>(_singleIPv6Blocklist.keySet());
         }

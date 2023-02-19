@@ -1,3 +1,4 @@
+<%@page trimDirectiveWhitespaces="true"%>
 <%
     /*
      *  Does the standard setup for all form handlers, then
@@ -30,7 +31,6 @@
         // nonce1 will be null, removed in setAttibute below
     }
 
-
     String contentType = request.getContentType();
     if (contentType != null && contentType.toLowerCase(java.util.Locale.US).startsWith( "multipart/form-data")) {
         // For multipart/form-data, we must decode things enough to get the action and nonce
@@ -50,10 +50,13 @@
         // Put all the params in the map, some handlers use this instead of individual setters
         // We also call all of the setters below.
         formhandler.setSettings(request.getParameterMap());
-%><jsp:setProperty name="formhandler" property="*" /><%
+%>
+<jsp:setProperty name="formhandler" property="*" />
+<%
     }
-%><jsp:getProperty name="formhandler" property="allMessages" /><%
-
+%>
+<jsp:getProperty name="formhandler" property="allMessages" />
+<%
     // Only call this once per page, do not getProperty("newNonce") elsewhere,
     // use the variable instead.
     // This shuffles down the nonces, so it must be after getAllMessages() above,
@@ -64,5 +67,4 @@
         session.setAttribute(nonceAttr2, nonce1);
         session.setAttribute(nonceAttr1, pageNonce);
     } catch (IllegalStateException ise) {}
-
 %>

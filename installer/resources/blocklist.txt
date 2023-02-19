@@ -129,6 +129,10 @@ Sybil:66.42.58.61
 Sybil:95.47.57.0/24
 Sybil:95.85.100.0/22
 Sybil:95.85.104.0/22
+​31173/Mullvad VPN:185.209.196.0/24
+31173/Mullvad VPN:185.213.155.0/24
+Russian Sybil:37.228.88.0-37.228.93.255
+Connection Abuse:92.124.128.0-92.124.143.255
 #
 # IPv6
 #
@@ -171,6 +175,8 @@ Excessive introducers:U07yx0dTFWMX8oJbzjocDM8qSIIKvFCm-IXcNx89gQQ=
 Excessive introducers:UmwTBVrrW6E-tICIipnJc5eQihZJxXr6gBKkewRmIz0=
 Excessive introducers:ukOJh6Tvh457poK1qhu5NC5q~3LQvv4gJ88OVAX3l~4=
 Excessive introducers:ZtSmZQeuuzQYVV8QXlDedB721xoN7BfS8jHNB7FgW8w=
+Tunnel Abuse:5MAAvwKgnG7hYbi93q0Luro~-AyIjO5xvUbABc2T3IU=
+Tunnel Abuse:cfhT8b5PNxSIFhmg-6ZvP78W5eD9jtGBLjM~oIRRqoE=
 Tunnel Abuse:CyLg6w8lypk1gnAX-CdG8O4NCR86hq8ifge6QKXAoJg=
 Tunnel Abuse:DtQsGzkbeR3nilr6ZvywR2O7-f0XaaV~YfHXohqwjgI=
 Tunnel Abuse:JbifzqZZqeTXtxK6KDqNUPWaW-phKqeS~tfJT82SIYI=

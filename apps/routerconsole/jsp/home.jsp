@@ -11,22 +11,23 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <%=intl.title("home")%>
 </head>
 <body id="homepage">
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
 %>
- <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
- <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
+<jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
 <%
     java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml");
 %>
- <jsp:setProperty name="newshelper" property="page" value="<%=fpath.getAbsolutePath()%>" />
- <jsp:setProperty name="newshelper" property="maxLines" value="300" />
- <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request" />
- <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:setProperty name="newshelper" property="page" value="<%=fpath.getAbsolutePath()%>" />
+<jsp:setProperty name="newshelper" property="maxLines" value="300" />
+<jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request" />
+<jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>" />
 <div id="sb_wrap" style="width: 200px; float: left; margin-right: 20px;">
 <div class="sb" id="sidebar">
 <div id="sb_logo" style="height: 36px;">
@@ -58,16 +59,16 @@
    }  // shouldShowNews()
 %>
 
-<div class="main" id="home">
+<div class=main id="home">
 <jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request" />
 <jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />
 <jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
 <div id="homepanel">
 <div id="searchbar">
-<form action="/search.jsp" target="_blank" rel="noreferrer" method="POST">
+<form action="/search.jsp" target=_blank rel=noreferrer method=POST>
 <table>
-<tr><td><span><jsp:getProperty name="searchhelper" property="selector" /><input size="40" type="text" class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /><button type="submit" value="search" class="search"><%=intl._t("Search")%></button></span></td></tr>
+<tr><td><span><jsp:getProperty name="searchhelper" property="selector" /><input size="40" type=text class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /><button type=submit value="search" class="search"><%=intl._t("Search")%></button></span></td></tr>
 </table>
 </form>
 </div>
@@ -104,7 +105,6 @@
 </div>
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

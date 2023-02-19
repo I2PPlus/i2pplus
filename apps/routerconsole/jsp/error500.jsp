@@ -33,7 +33,8 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<link type="text/css" rel="stylesheet" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
+<%@include file="summaryajax.jsi" %>
+<link type=text/css rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
 <%=intl.title("Internal Error")%>
 </head>
 <body id="error500">
@@ -97,7 +98,6 @@
 <b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></p>
 <p><%=intl._t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report.")%></p>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
-<%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

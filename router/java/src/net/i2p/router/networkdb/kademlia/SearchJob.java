@@ -208,7 +208,7 @@ class SearchJob extends JobImpl {
     }
 
 //    private static int MAX_PEERS_QUERIED = 40;
-    private static int MAX_PEERS_QUERIED = 32;
+    private static int MAX_PEERS_QUERIED = 64;
 
     /**
      * Send the next search, or stop if its completed
@@ -668,8 +668,7 @@ class SearchJob extends JobImpl {
      * substantially.
      *
      */
-//    private static final int MAX_LEASE_RESEND = 10;
-    private static final int MAX_LEASE_RESEND = 6;
+    private static final int MAX_LEASE_RESEND = 10;
 
     /**
      * Should we republish a routerInfo received?  Probably not worthwhile, since

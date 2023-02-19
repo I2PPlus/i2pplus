@@ -186,17 +186,20 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private boolean verifyInbound(Hash aliceHash) {
         // get inet-addr
         byte[] ip = _con.getRemoteIP();
-        if (_context.banlist().isBanlistedForever(aliceHash)) {
+        if (_context.banlist().isBanlistedForever(aliceHash) || _context.banlist().isBanlistedHostile(aliceHash)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping inbound connection from permanently banlisted peer at " + Addresses.toString(ip) + " [" + aliceHash.toBase64().substring(0,6) + "]");
+                _log.warn("Dropping inbound connection from " + (_context.banlist().isBanlistedForever(aliceHash) ?
+                          "permanently" : "") + " banlisted peer at " + Addresses.toString(ip) +
+                          " [" + aliceHash.toBase64().substring(0,6) + "]");
             // So next time we will not accept the con from this IP,
             // rather than doing the whole handshake
             if(ip != null)
                _context.blocklist().add(ip);
             if (getVersion() < 2)
-                fail("Banlisting incompatible router [" + aliceHash.toBase64().substring(0,6) + "] -> No NTCP2 support");
+                fail("Banlisting incompatible Router [" + aliceHash.toBase64().substring(0,6) + "] -> No NTCP2 support");
             else if (_log.shouldWarn())
-                _log.warn("Peer is banlisted forever [" + aliceHash.toBase64().substring(0,6) + "]");
+                _log.warn("Peer is banlisted " + (_context.banlist().isBanlistedForever(aliceHash) ? "forever" : "") +
+                          " [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             return false;
         }
@@ -342,11 +345,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     changeState(State.IB_NTCP2_READ_RANDOM);
                 } else {
                     // got all we need, fail now
-                    fail("\n* Bad message #1: X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
+                    fail("\n* BAD message #1: X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
                 }
                 return;
             } catch (RuntimeException re) {
-                fail("\n* Bad message #1: X = " + Base64.encode(_X, 0, KEY_SIZE), re);
+                fail("\n* BAD message #1: X = " + Base64.encode(_X, 0, KEY_SIZE), re);
                 return;
             }
             if (_log.shouldDebug())
@@ -390,7 +393,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 //return;
             }
             if (_msg3p2len < MSG3P2_MIN || _msg3p2len > MSG3P2_MAX) {
-                fail("BAD msg3p2 (length: " + _msg3p2len + " bytes)");
+                fail("BAD message #3 part 2 (length: " + _msg3p2len + " bytes)");
                 return;
             }
             if (_padlen1 <= 0) {
@@ -596,7 +599,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (_msg3p2FailReason >= 0) {
             if (_log.shouldWarn())
-                _log.warn("Failed message #3 part 2 (Code: " + _msg3p2FailReason + ") for " + this);
+                _log.warn("Failed message #3 part 2 (Code: " + _msg3p2FailReason + ") \n* For: " + this);
             _con.failInboundEstablishment(sender, sip_ba, _msg3p2FailReason);
             changeState(State.CORRUPT);
         } else {
@@ -643,15 +646,32 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             throw new DataFormatException("No NTCP in RouterInfo: " + ri);
         }
         String s = null;
+        String mismatchMessage = null;
+        byte[] realIP = _con.getRemoteIP();
         for (RouterAddress addr : addrs) {
             String v = addr.getOption("v");
             if (v == null ||
                 (!v.equals(NTCPTransport.NTCP2_VERSION) && !v.startsWith(NTCPTransport.NTCP2_VERSION_ALT))) {
                  continue;
             }
-            s = addr.getOption("s");
-            if (s != null)
-                break;
+            if (s == null)
+                s = addr.getOption("s");
+            if (realIP != null) {
+                byte[] infoIP = addr.getIP();
+                if (infoIP != null && infoIP.length == realIP.length) {
+                    if (infoIP.length == 16) {
+                        if ((((int) infoIP[0]) & 0xfe) == 0x02)
+                            continue; // ygg
+                        if (DataHelper.eq(realIP, 0, infoIP, 0, 8))
+                            continue;
+                    } else {
+                        if (DataHelper.eq(realIP, infoIP))
+                            continue;
+                    }
+                    // We will ban and throw below after checking s
+                    mismatchMessage = "IP address mismatch -> Actual IP: " + Addresses.toString(realIP) + "; RI publishes: ";
+                }
+            }
         }
         if (s == null) {
             _msg3p2FailReason = NTCPConnection.REASON_S_MISMATCH;
@@ -675,6 +695,15 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         boolean ok = verifyInbound(h);
         if (!ok)
             throw new DataFormatException("NTCP2 verifyInbound() fail");
+
+        // s is verified, we may now ban the hash
+        if (mismatchMessage != null) {
+            _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (NTCP)",
+                                             null, null, _context.clock().now() + 4*60*60*1000);
+            _msg3p2FailReason = NTCPConnection.REASON_BANNED;
+            throw new DataFormatException(mismatchMessage + ri);
+        }
+
         try {
             RouterInfo old = _context.netDb().store(h, ri);
             if (flood && !ri.equals(old)) {

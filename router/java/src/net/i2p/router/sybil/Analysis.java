@@ -40,6 +40,7 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
+import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SystemVersion;
@@ -50,7 +51,7 @@ import net.i2p.util.Translate;
  *  @since 0.9.38 split out from SybilRenderer
  *
  */
-public class Analysis extends JobImpl implements RouterApp {
+public class Analysis extends JobImpl implements RouterApp, Runnable {
 
     private final RouterContext _context;
     private final Log _log;
@@ -115,7 +116,8 @@ public class Analysis extends JobImpl implements RouterApp {
     public static final long SHORT_REMOVE_TIME = 2*24*60*60*1000L;
     public static final long DEFAULT_FREQUENCY = 24*60*60*1000L;
     public static final float MIN_BLOCK_POINTS = 12.01f;
-
+    private static final byte[] IPV6_LOCALHOST = new byte[16];
+    static { IPV6_LOCALHOST[15] = 1; }
 
     /** Get via getInstance() */
     private Analysis(RouterContext ctx, ClientAppManager mgr, String[] args) {
@@ -182,6 +184,16 @@ public class Analysis extends JobImpl implements RouterApp {
     /////// begin Job methods
 
     public void runJob() {
+        Thread t = new I2PAppThread(this, getDisplayName());
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.start();
+        schedule();
+    }
+
+    /**
+     *  @since 0.9.58
+     */
+    public void run() {
         long now = _context.clock().now();
         _log.info("Running Sybil analysis...");
         Map<Hash, Points> points = backgroundAnalysis(_context.getBooleanProperty(PROP_NONFF));
@@ -195,7 +207,6 @@ public class Analysis extends JobImpl implements RouterApp {
                 _log.error("Failed to store Sybil analysis", ioe);
             }
         }
-        schedule();
     }
 
     /////// end Job methods
@@ -393,8 +404,12 @@ public class Analysis extends JobImpl implements RouterApp {
         calculateIPGroups48(ris, points);
 
         // Pairwise distance analysis
-        List<Pair> pairs = new ArrayList<Pair>(PAIRMAX);
-        calculatePairDistance(ris, points, pairs);
+        // O(n**2)
+        long sz = ris.size();
+        if (sz * sz < SystemVersion.getMaxMemory() / 10) {
+            List<Pair> pairs = new ArrayList<Pair>(PAIRMAX);
+            calculatePairDistance(ris, points, pairs);
+        }
 
         // Distance to our router analysis
         // closest to our routing key today
@@ -573,7 +588,9 @@ public class Analysis extends JobImpl implements RouterApp {
         for (RouterAddress ra : ri.getAddresses()) {
             byte[] rv = ra.getIP();
             if (rv != null && rv.length == 16)
-                return rv;
+                // i2pd
+                if (!DataHelper.eq(rv, IPV6_LOCALHOST))
+                    return rv;
         }
         return null;
     }

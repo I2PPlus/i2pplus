@@ -3,10 +3,10 @@ package net.i2p.router.dummy;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
@@ -41,15 +41,15 @@ public class VMCommSystem extends CommSystemFacade {
         _context = context;
         _log = context.logManager().getLog(VMCommSystem.class);
         _context.statManager().createFrequencyStat("transport.sendMessageFailureFrequency", "How often do we fail to send messages?", "Transport", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", new long[] { 60*1000l });
+        _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", new long[] { 60*1000l });
         _context.statManager().createRateStat("transport.sendMessageSmall", "How many messages under 1KB are sent?", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("transport.receiveMessageSmall", "How many messages under 1KB are received?", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("transport.sendMessageMedium", "How many messages between 1KB and 4KB are sent?", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("transport.receiveMessageMedium", "How many messages between 1KB and 4KB are received?", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("transport.sendMessageLarge", "How many messages over 4KB are sent?", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("transport.receiveMessageLarge", "How many messages over 4KB are received?", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", new long[] { 60*1000l });
         // we do NOT start the thread, all keys will be generated inline
         _xdhThread = new X25519KeyFactory(context);
     }
@@ -67,10 +67,10 @@ public class VMCommSystem extends CommSystemFacade {
 
     public boolean isEstablished(Hash peer) { return _commSystemFacades.containsKey(peer); }
 
-    public Set<Hash> getEstablished() {
-        Set<Hash> rv;
+    public List<Hash> getEstablished() {
+        List<Hash> rv;
         synchronized (_commSystemFacades) {
-            rv = new HashSet<Hash>(_commSystemFacades.keySet());
+            rv = new ArrayList<Hash>(_commSystemFacades.keySet());
         }
         Hash us = _context.routerHash();
         if (us != null)

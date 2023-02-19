@@ -16,23 +16,23 @@
 <body>
 <%@include file="../summary.jsi" %>
 <h1 class="hlp"><%=intl._t("User Interface Help")%></h1>
-<div class="main" id="help">
-<div class="confignav">
-<span class="tab"><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
-<span class="tab"><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
-<span class="tab2"><%=intl._t("User Interface")%></span>
-<span class="tab"><a href="/help/reseed"><%=intl._t("Reseeding")%></a></span>
-<span class="tab"><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
-<span class="tab"><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
-<span class="tab"><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
-<span class="tab"><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
-<span class="tab"><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
-<span class="tab"><a href="/help/troubleshoot"><%=intl._t("Troubleshoot")%></a></span>
-<span class="tab"><a href="/help/glossary"><%=intl._t("Glossary")%></a></span>
-<span class="tab"><a href="/help/legal"><%=intl._t("Legal")%></a></span>
-<span class="tab"><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
+<div class=main id="help">
+<div class=confignav>
+<span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
+<span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
+<span class=tab2><%=intl._t("User Interface")%></span>
+<span class=tab><a href="/help/reseed"><%=intl._t("Reseeding")%></a></span>
+<span class=tab><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
+<span class=tab><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
+<span class=tab><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
+<span class=tab><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
+<span class=tab><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
+<span class=tab><a href="/help/troubleshoot"><%=intl._t("Troubleshoot")%></a></span>
+<span class=tab><a href="/help/glossary"><%=intl._t("Glossary")%></a></span>
+<span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
+<span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
-<p class="infohelp" id="tooltips"><%=intl._t("Note: Many of the labels and options in the console have tooltips that indicate purpose or explain the meaning. Hover over the label or option to activate the tooltip.")%></p>
+<p class=infohelp id="tooltips"><%=intl._t("Note: Many of the labels and options in the console have tooltips that indicate purpose or explain the meaning. Hover over the label or option to activate the tooltip.")%></p>
 <div id="themeoverride">
 <h2><%=intl._t("Theme Overrides")%> (I2P+)</h2>
 <p><%=intl._t("I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R).")%></p>
@@ -143,7 +143,7 @@
 <%=intl._t("If I2P cannot connect to the internet, a reading of 0ms may be indicated.")%></p>
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

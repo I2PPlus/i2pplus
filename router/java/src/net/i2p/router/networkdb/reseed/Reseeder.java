@@ -116,18 +116,20 @@ public class Reseeder {
         //
         // https url:port, ending with "/"                    certificates/reseed/                 certificates/ssl/                 notes
         // ----------------------------------                 ---------------------------------    ------------------------------    --------------------------
+        "https://lapras.bungee.systems/"            + ',' +   // su3-root_at_bungee.systems.crt    CA
         "https://www2.mk16.de/"                     + ',' +   // i2p-reseed_at_mk16.de.crt         CA
         "https://reseed-fr.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
         "https://reseed-pl.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
         "https://reseed.diva.exchange/"             + ',' +   // reseed_at_diva.exchange.crt       CA
         "https://reseed.i2pgit.org/"                + ',' +   // hankhill19580_at_gmail.com.crt    CA                                Java 8+
-        "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
         "https://i2pseed.creativecowpat.net:8443/"  + ',' +   // creativecowpat_at_mail.i2p.crt    i2pseed.creativecowpat.net.crt    Java 7+
         "https://reseed.onion.im/"                  + ',' +   // lazygravy_at_mail.i2p             CA                                Java 8+
         "https://reseed.memcpy.io/"                 + ',' +   // hottuna_at_mail.i2p.crt           CA                                SNI required
         "https://banana.incognet.io/"               + ',' +   // rambler_at_mail.i2p.crt           CA
         "https://coconut.incognet.io/"              + ',' +   // rambler_at_mail.i2p.crt           CA
         "https://reseed2.i2p.net/";                           // echelon3_at_mail.i2p.crt          CA
+
+        //"https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
 
     private static final String SU3_FILENAME = "i2pseeds.su3";
 
@@ -238,8 +240,7 @@ public class Reseeder {
             if (errors <= 0) {
                 _checker.setStatus(_t("Imported {0} router infos.", fetched));
             } else {
-                _checker.setStatus(
-                    _t("Imported {0} router infos ({1} errors).", fetched, errors));
+                _checker.setStatus(_t("Imported {0} router infos ({1} errors).", fetched, errors));
             }
             System.err.println("Reseed got " + fetched + " router infos from file with " + errors + " errors");
             if (fetched > 0)
@@ -402,7 +403,7 @@ public class Reseeder {
                 String notify = old.replaceAll("\\(.*\\)", "").replace(" \\.", ""); // remove dupe error msgs
                 _checker.setError(_t("{0}Reseed{1} failed:", "<a href=\"/configreseed\">", "</a>") + ' '  + notify + " <br>" +
                                   _t("For assistance, see the {0}",
-                                    "<a target=\"_top\" href=\"/help/reseed\">" + _t("reseed help") + "</a>"));
+                                    "<a target=_top href=\"/help/reseed\">" + _t("reseed help") + "</a>"));
                 _checker.setStatus("");
             }
             _isRunning = false;
@@ -841,12 +842,10 @@ public class Reseeder {
                     contentRaw.delete();
             }
             if (errors <= 0) {
-                _checker.setStatus(
-                    _t("Acquired {0} router infos from reseed hosts", fetched));
-                } else {
-                _checker.setStatus(
-                    _t("Acquired {0} router infos from reseed hosts ({1} errors)", fetched, errors));
-                }
+                _checker.setStatus(_t("Acquired {0} router infos from reseed hosts", fetched));
+            } else {
+                _checker.setStatus(_t("Acquired {0} router infos from reseed hosts ({1} errors)", fetched, errors));
+            }
             System.err.println("Reseed got " + fetched + " router infos " + getDisplayString(seedURL) + " with " + errors + " errors");
             return fetched;
         }
@@ -1245,15 +1244,103 @@ public class Reseeder {
         return Translate.getString(n, s, p, _context, BUNDLE_NAME);
     }
 
-/******
-    public static void main(String args[]) {
-        if ( (args != null) && (args.length == 1) && (!Boolean.parseBoolean(args[0])) ) {
-            System.out.println("Not reseeding, as requested");
-            return; // not reseeding on request
+    /**
+     *  @since 0.9.58
+     */
+    public static void main(String args[]) throws Exception {
+        if (args.length == 1 && args[0].equals("help")) {
+            System.out.println("Usage: reseeder [https://hostname/ ...]");
+            System.exit(1);
         }
-        System.out.println("Reseeding");
-        Reseeder reseedHandler = new Reseeder();
-        reseedHandler.requestReseed();
+        File f = new File("certificates");
+        if (!f.exists()) {
+            System.out.println("Must be run from $I2P or have symlink to $I2P/certificates in this directory");
+            System.exit(1);
+        }
+        String[] urls = (args.length > 0) ? args : DataHelper.split(DEFAULT_SSL_SEED_URL, ",");
+        int pass = 0, fail = 0;
+        SSLEepGet.SSLState sslState = null;
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        System.out.println("Initiating reseed hosts test...\n");
+        for (String url : urls) {
+            url += SU3_FILENAME + NETID_PARAM + '2';
+            URI uri = new URI(url);
+            String host = uri.getHost();
+            System.out.println("Host:     " + host);
+            File su3 = new File(host + ".su3");
+            su3.delete();
+            try {
+                SSLEepGet get;
+                if (sslState == null) {
+                    get = new SSLEepGet(ctx, su3.getPath(), url);
+                    sslState = get.getSSLState();
+                } else {
+                    get = new SSLEepGet(ctx, su3.getPath(), url, sslState);
+                }
+                if (get.fetch()) {
+                    int rc = get.getStatusCode();
+                    if (rc == 200) {
+                        SU3File su3f = new SU3File(su3);
+                        File zip = new File(host + ".zip");
+                        zip.delete();
+                        su3f.verifyAndMigrate(zip);
+                        SU3File.main(new String[] {"showversion", su3.getPath()});
+                        String version = su3f.getVersionString();
+                        long ver = Long.parseLong(version.trim()) * 1000;
+                        long cutoff = System.currentTimeMillis() - MAX_FILE_AGE / 4;
+                        if (ver < cutoff)
+                            throw new IOException("su3 file too old");
+                        java.util.zip.ZipFile zipf = new java.util.zip.ZipFile(zip);
+                        java.util.Enumeration<? extends java.util.zip.ZipEntry> entries = zipf.entries();
+                        int ri = 0, old = 0;
+                        while (entries.hasMoreElements()) {
+                            java.util.zip.ZipEntry entry = (java.util.zip.ZipEntry) entries.nextElement();
+                            net.i2p.data.router.RouterInfo r = new net.i2p.data.router.RouterInfo();
+                            InputStream in = zipf.getInputStream(entry);
+                            r.readBytes(in);
+                            in.close();
+                            if (r.getPublished() > cutoff)
+                                ri++;
+                            else
+                                old++;
+                        }
+                        zipf.close();
+                        if (old > 0) {
+                            System.out.println("Failure:  " + old + " old RouterInfos returned");
+                            fail++;
+                        } else if (ri >= 50) {
+                            System.out.println("Success:  " + ri + " RouterInfos returned");
+                            pass++;
+                        } else {
+                            System.out.println("Failure:  only " + ri + " RouterInfos returned (less than 50)");
+                            fail++;
+                        }
+                    } else {
+                        System.out.println("Failure:  Status code " + rc);
+                        su3.delete();
+                        fail++;
+                    }
+                } else {
+                    int rc = get.getStatusCode();
+                    System.out.println("Failure:  Status code " + rc);
+                    su3.delete();
+                    fail++;
+                }
+            } catch (Exception ioe) {
+                System.out.println("Failure:  " + ioe.getMessage() + "\n");
+                //ioe.printStackTrace();
+                if (su3.exists()) {
+                    try {
+                        SU3File.main(new String[] {"showversion", su3.getPath()});
+                    } catch (Exception e) {}
+                    su3.delete();
+                }
+                fail++;
+            }
+            System.out.println();
+        }
+        System.out.println("Test complete: " + (pass + fail) + " reseed hosts tested - " + pass + " passed, " + fail + " failed");
+        if (fail > 0)
+            System.exit(1);
     }
-******/
 }

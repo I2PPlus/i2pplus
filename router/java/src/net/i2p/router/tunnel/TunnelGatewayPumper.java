@@ -10,6 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
+import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 
@@ -23,6 +24,7 @@ import net.i2p.util.SystemVersion;
  */
 class TunnelGatewayPumper implements Runnable {
     private final RouterContext _context;
+    private final Log _log;
     private final Set<PumpedTunnelGateway> _wantsPumping;
     private final Set<PumpedTunnelGateway> _backlogged;
     private final List<Thread> _threads;
@@ -31,7 +33,7 @@ class TunnelGatewayPumper implements Runnable {
 //    private static final int MAX_PUMPERS = 4;
     private static final int MAX_PUMPERS = SystemVersion.isSlow() || (SystemVersion.getCores() <= 4 &&
                                            SystemVersion.getMaxMemory() < 384*1024*1024) ? 2 :
-                                           SystemVersion.getMaxMemory() < 1024*1024*1024 ? 3 : 6;
+                                           SystemVersion.getMaxMemory() < 1024*1024*1024 ? 3 : Math.max(6, SystemVersion.getCores() / 2);
     private final int _pumpers;
 
     /**
@@ -39,13 +41,14 @@ class TunnelGatewayPumper implements Runnable {
      *  See additional comments in PTG.
      */
 //    private static final long REQUEUE_TIME = 50;
-    private static final long REQUEUE_TIME = SystemVersion.isSlow() || (SystemVersion.getCores() <= 4 &&
-                                             SystemVersion.getMaxMemory() < 512*1024*1024) ? 50 :
-                                             SystemVersion.getCPULoad() < 80 ? 15 : 30;
+    private static final long REQUEUE_TIME = SystemVersion.isSlow() ? 50 :
+                                             SystemVersion.getCores() < 4 && SystemVersion.getMaxMemory() < 512*1024*1024 ? 40 :
+                                             SystemVersion.getMaxMemory() > 1024*1024*1024 && SystemVersion.getCores() > 4 ? 15 : 30;
 
     /** Creates a new instance of TunnelGatewayPumper */
     public TunnelGatewayPumper(RouterContext ctx) {
         _context = ctx;
+        _log = ctx.logManager().getLog(TunnelGatewayPumper.class);
 //        _wantsPumping = new LinkedHashSet<PumpedTunnelGateway>(16);
 //        _backlogged = new HashSet<PumpedTunnelGateway>(16);
         _wantsPumping = new LinkedHashSet<PumpedTunnelGateway>(1024);
@@ -73,10 +76,17 @@ class TunnelGatewayPumper implements Runnable {
             PumpedTunnelGateway poison = new PoisonPTG(_context);
             wantsPumping(poison);
         }
+        long adjusted = (SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90) ? REQUEUE_TIME * 3 / 2 : REQUEUE_TIME;
+        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() >= 95) {
+            adjusted =  REQUEUE_TIME * 2;
+        }
+        if (_log.shouldWarn() && adjusted != REQUEUE_TIME) {
+            _log.warn("Router JVM under sustained high CPU load, increasing pump interval from " + REQUEUE_TIME + " to " + adjusted + "ms");
+        }
         for (int i = 1; i <= 5 && !_wantsPumping.isEmpty(); i++) {
             try {
 //                Thread.sleep(i * 50);
-                Thread.sleep(i * REQUEUE_TIME);
+                Thread.sleep(i * adjusted);
             } catch (InterruptedException ie) {}
         }
         for (Thread t : _threads) {

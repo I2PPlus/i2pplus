@@ -799,7 +799,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             totalSets += sets.size();
             buf.append("<tr><td><b>From public key:</b> ").append(toString(skey)).append("</td>" +
                        "<td><b>Sets:</b> ").append(sets.size()).append("</td></tr>\n" +
-                       "<tr class=\"expiry\">\n<td colspan=\"2\">\n<ul>\n");
+                       "<tr class=\"expiry\">\n<td colspan=2>\n<ul>\n");
             for (RatchetTagSet ts : sets) {
                 synchronized(ts) {
                     int size = ts.size();
@@ -825,7 +825,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             out.write(buf.toString());
             buf.setLength(0);
         }
-        buf.append("<tr><th colspan=\"2\">Total inbound tags: ").append(total).append(" (")
+        buf.append("<tr><th colspan=2>Total inbound tags: ").append(total).append(" (")
            .append(DataHelper.formatSize2(8 * total)).append("B); sets: ").append(totalSets)
            .append("; sessions: ").append(inboundSets.size())
            .append("</th></tr>\n" +
@@ -850,7 +850,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 buf.append("<b>Session key:</b> ").append(sk.toBase64()).append("/n");
             buf.append("</div>\n</td>\n" +
                        "<td><b>Sets:</b> ").append(sets.size()).append("</td>\n</tr>\n" +
-                       "<tr>\n<td colspan=\"2\">\n<ul>\n");
+                       "<tr>\n<td colspan=2>\n<ul>\n");
             for (RatchetTagSet ts : sets) {
                 synchronized(ts) {
                     long expires = ts.getExpiration() - now;
@@ -879,7 +879,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             out.write(buf.toString());
             buf.setLength(0);
         }
-        buf.append("<tr><th colspan=\"2\">Total sets: ").append(totalSets)
+        buf.append("<tr><th colspan=2>Total sets: ").append(totalSets)
            .append("; sessions: ").append(outbound.size())
            .append("</th></tr>\n</table>\n");
 

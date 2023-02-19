@@ -795,7 +795,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             totalSets += sets.size();
             buf.append("\n<tr class=\"skm_key\">\n<td><b>Session key:</b> ").append(skey.toBase64()).append("</td>" +
                        "<td><b>Sets:</b> ").append(sets.size()).append("</td>\n</tr>" +
-                       "\n<tr class=\"expiry\">\n<td colspan=\"2\">\n<ul>");
+                       "\n<tr class=\"expiry\">\n<td colspan=2>\n<ul>");
             for (TagSet ts : sets) {
                 int size = ts.getTags().size();
                 total += size;
@@ -811,7 +811,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             out.write(buf.toString());
             buf.setLength(0);
         }
-        buf.append("<tr>\n<th colspan=\"2\">Total inbound tags: ").append(total).append(" (")
+        buf.append("<tr>\n<th colspan=2>Total inbound tags: ").append(total).append(" (")
            .append(DataHelper.formatSize2(32*total)).append("B); sets: ").append(totalSets)
            .append("; sessions: ").append(inboundSets.size())
            .append("</th>\n</tr>\n" +
@@ -833,7 +833,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                        "<b>Ack Received?</b> ").append(sess.getAckReceived()).append("&nbsp;&nbsp;&nbsp;" +
                        "<b>Last Used:</b> ").append(DataHelper.formatDuration2(now - sess.getLastUsedDate())).append(" ago\n</div>\n</td>" +
                        "<td><b>Sets:</b> ").append(sess.getTagSets().size()).append("</td></tr>\n" +
-                       "<tr class=\"sentTags\">\n<td colspan=\"2\">\n<ul>");
+                       "<tr class=\"sentTags\">\n<td colspan=2>\n<ul>");
             for (Iterator<TagSet> siter = sets.iterator(); siter.hasNext();) {
                 TagSet ts = siter.next();
                 int size = ts.getTags().size();
@@ -846,7 +846,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             out.write(buf.toString());
             buf.setLength(0);
         }
-        buf.append("<tr>\n<th colspan=\"2\">Total Outbound tags: ").append(total).append(" (")
+        buf.append("<tr>\n<th colspan=2>Total Outbound tags: ").append(total).append(" (")
            .append(DataHelper.formatSize2(32*total)).append("B); sets: ").append(totalSets)
            .append("; sessions: ").append(outbound.size())
            .append("</th>\n</tr>\n</table>\n");

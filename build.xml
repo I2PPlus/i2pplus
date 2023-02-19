@@ -1933,7 +1933,7 @@
     <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepProxyDocs, prepCertificates, prep-script-translation, truncatehistory">
         <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
         <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
-        <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
+        <!--<copy file="build/imagegen.war" todir="pkg-temp/webapps/" />-->
         <copy file="build/pack200.jar" todir="pkg-temp/lib" />
         <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
         <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
@@ -1942,8 +1942,8 @@
         <copy file="installer/resources/i2ping" todir="pkg-temp/" />
         <copy file="installer/resources/eepget" todir="pkg-temp/" />
         <copy file="installer/resources/eephead" todir="pkg-temp/" />
-        <copy file="installer/resources/graceful_update" todir="pkg-temp/" />
-        <copy file="installer/resources/fixperms2.bat" todir="pkg-temp/scripts/" />
+        <!--<copy file="installer/resources/graceful_update" todir="pkg-temp/" />-->
+        <!--<copy file="installer/resources/fixperms2.bat" todir="pkg-temp/scripts/" />-->
     </target>
 
 

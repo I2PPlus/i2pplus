@@ -200,8 +200,8 @@ public class InfoHelper extends HelperBase {
                 buf.append(_t("Active"));
             else
                 buf.append(_t("Inactive"));
-            Boolean hiddenFF = _context.getBooleanProperty("router.hideFloodfillParticipant");
-            if (hiddenFF != null && hiddenFF)
+            Boolean hiddenFF = _context.getBooleanPropertyDefaultTrue("router.hideFloodfillParticipant");
+            if (hiddenFF)
                 buf.append(" (" + _t("unpublished") + ")");
             buf.append("&ensp;<a href=\"/configadvanced\">" + _t("Configure") + "</a></td></tr>\n");
         }
@@ -225,8 +225,8 @@ public class InfoHelper extends HelperBase {
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>" + _t("Installed") + ":</b></td><td>" + installDate + " (" + firstVersion() + ")" +
-                       " &ensp;<span class=\"nowrap\"><b>" + _t("Location") + ":</b> " + appDir.toString() + "</span>" +
-                       " &ensp;<span class=\"nowrap\"><b>" + _t("Config Dir") + ":</b> " + configDir + "</span></td></tr>\n");
+                       " &ensp;<span class=nowrap><b>" + _t("Location") + ":</b> " + appDir.toString() + "</span>" +
+                       " &ensp;<span class=nowrap><b>" + _t("Config Dir") + ":</b> " + configDir + "</span></td></tr>\n");
             buf.append("<tr><td><b>" + _t("Updated") + ":</b></td><td>" + lastUpdate);
             if (updatePolicy() != null)
                 buf.append(" &ensp;<b>" + _t("Update Policy") + ":</b> " + updatePolicy());
