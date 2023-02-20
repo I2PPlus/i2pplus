@@ -1046,7 +1046,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .rlookup{padding:0 2px 2px;display:inline-block;font-style:italic}
 #tunnels span[hidden] {display:none}
 #tunnels #transitSummary .peerFlag,#tunnels #tunnelPeerCount .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;box-shadow:0 0 0 1px #131;background:#151}
-#tunnels #transitSummary .peerFlag::before,#tunnels #tunnelPeerCount .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:""}
+#tunnels #transitSummary .peerFlag::before,#tunnels #tunnelPeerCount .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:"";pointer-events:none}
 #tunnels #transitSummary .peerFlag img,#tunnels #tunnelPeerCount .peerFlag img{margin:0;padding:1px;width:24px;height:18px;box-shadow:var(--highlight)}
 #tunnels .percentBarOuter{position:relative}
 #tunnels .percentBarText{position:absolute;top:0:left:0;bottom:0;right:0;width:100%;height:unset;font-size:80%}
