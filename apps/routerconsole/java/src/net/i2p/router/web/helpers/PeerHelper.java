@@ -17,6 +17,8 @@ import java.util.TreeSet;
 
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.transport.Transport;
@@ -436,9 +438,15 @@ public class PeerHelper extends HelperBase {
             if (con.isBacklogged()) {
                 buf.append("&nbsp;<span class=backlogged title=\"").append(_t("Connection is backlogged")).append("\">!!</span>");
             }
-            buf.append("<td class=edit><a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
-               .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>")
-               .append("<a class=configpeer href=\"/configpeer?peer=").append(h.toBase64()).append("\" title=\"").append(_t("Configure peer"))
+            buf.append("<td class=edit>");
+/*
+            PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
+            if (prof != null && prof.getIsExpandedDB()) {
+                buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"")
+                   .append(_t("View profile")).append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
+            }
+*/
+            buf.append("<a class=configpeer href=\"/configpeer?peer=").append(h.toBase64()).append("\" title=\"").append(_t("Configure peer"))
                .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a></td>");
             buf.append("</td></tr>\n");
             out.write(buf.toString());
@@ -794,9 +802,12 @@ public class PeerHelper extends HelperBase {
                 buf.append("<span class=left>").append(peer.getReceiveMTU());
                 buf.append("</span></td>");
             }
-            buf.append("<td class=edit><a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
+            buf.append("<td class=edit>");
+/*
+            <a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
                .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>")
-               .append("<a class=configpeer href=\"/configpeer?peer=").append(h.toBase64()).append("\" title=\"").append(_t("Configure peer"))
+*/
+            buf.append("<a class=configpeer href=\"/configpeer?peer=").append(h.toBase64()).append("\" title=\"").append(_t("Configure peer"))
                .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a></td>");
 
             buf.append("</tr>\n");
