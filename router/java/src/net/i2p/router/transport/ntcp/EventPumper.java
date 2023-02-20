@@ -547,6 +547,9 @@ class EventPumper implements Runnable {
                     if (_log.shouldWarn())
                        _log.warn("Blocking accept of IP address: " + ba + " (Count: " + count + ")");
                     _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
+                    if (count >= 30 && _log.shouldWarn()) {
+                        _log.warn("WARNING! IP Address [" + ba + "] is making excessive inbound NTCP connection attempts (Count: " + count + ")");
+                    }
                     try { chan.close(); } catch (IOException ioe) { }
                     return;
                 }
