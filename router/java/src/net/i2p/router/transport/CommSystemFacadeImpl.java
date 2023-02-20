@@ -755,15 +755,20 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
                 buf.append("<a href=\"/netdb?c=" + c + "\"><img width=20 height=15 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" title=\"");
-                buf.append(countryName).append(" &bullet; ");
-                if (ri != null && ip != null)
-                    buf.append(getCanonicalHostName(ip));
+                buf.append(countryName);
+                if (ri != null && ip != null) {
+                    if (enableReverseLookups()) {
+                        buf.append(" &bullet; ").append(getCanonicalHostName(ip));
+                    } else if (ip != null) {
+                        buf.append(" &bullet; ").append(ip);
+                    }
+                }
                 buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a></td>");
             } else {
                 buf.append("<img width=20 height=15 alt=\"??\"" +
-                           " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append(" &bullet; ");
+                           " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
                 if (ri != null && ip != null)
-                    buf.append(ip);
+                    buf.append(" &bullet; ").append(ip);
                 buf.append("\"></td> ");
             }
             buf.append("<td class=rih>");
@@ -797,14 +802,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append("</a>");
             }
         } else {
-            buf.append("<table class=rid><tr><td class=rif>")
-               .append("<img width=20 height=15 alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"))
-               .append("\"></td><td class=rih>");
-           if (h != null)
-               buf.append(h.substring(0,4));
-           else
-               buf.append("????");
+            buf.append("<table class=rid><tr><td class=rif>");
+            buf.append(renderPeerFlag(peer));
             if (extended) {
                buf.append("</td><td class=rbw>?");
            }
@@ -881,15 +880,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } else {
             c = "a0";
         }
-        buf.append("<span class=peerFlag ");
+        // add a hidden span to facilitate sorting
+        buf.append("<span class=cc hidden>").append(c.toUpperCase(Locale.US)).append("</span>");
+        buf.append("<span class=peerFlag title=\"");
         if (ri != null) {
-            // add a hidden span to facilitate sorting
+            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
             if (c != "a0" && c != null && countryName.length() > 2) {
-                buf.append("title=\"").append(countryName).append("\">");
+                buf.append(countryName);
+                if (ri != null && ip != null)
+                    buf.append(" &bullet; ").append(ip);
             } else {
-                buf.append("title=unknown>");
+                buf.append("unknown");
             }
-            buf.append("<span class=cc hidden>").append(c.toUpperCase(Locale.US)).append("</span>");
+            buf.append("\">");
             if (c != "a0" && c != null) {
                 buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=18 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
@@ -899,10 +902,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
             buf.append("</span>");
         } else {
-            buf.append("<span class=peerFlag><span class=cc hidden>A0</span>" +
-                       "<img class=unknownflag width=24 height=18 alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\" title=").append(_t("unknown")).append("></span>");
+            buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"" +
+                       " src=\"/flags.jsp?c=a0\" title=").append(_t("unknown")).append(">");
         }
+        buf.append("</span>");
         return buf.toString();
     }
 
