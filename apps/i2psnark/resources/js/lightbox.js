@@ -937,3 +937,5 @@ function Lightbox() {
     }
   };
 }
+
+export {Lightbox};
