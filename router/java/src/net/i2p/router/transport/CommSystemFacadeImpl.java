@@ -756,10 +756,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append("<a href=\"/netdb?c=" + c + "\"><img width=20 height=15 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" title=\"");
                 buf.append(countryName);
-                if (ri != null && ip != null) {
+                if (ip != null) {
                     if (enableReverseLookups()) {
                         buf.append(" &bullet; ").append(getCanonicalHostName(ip));
-                    } else if (ip != null) {
+                    } else {
                         buf.append(" &bullet; ").append(ip);
                     }
                 }
@@ -769,15 +769,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                            " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
                 if (ri != null && ip != null)
                     buf.append(" &bullet; ").append(ip);
-                buf.append("\"></td> ");
+                buf.append("\">");
             }
-            buf.append("<td class=rih>");
-            buf.append("<a title=\"");
+            buf.append("</td><td class=rih>");
             if (ri != null) {
-                if (caps.contains("f"))
-                    buf.append("Floodfill &bullet;");
+                buf.append("<a title=\"");
+                if (caps.contains("f") && !extended)
+                    buf.append(_t("Floodfill"));
                 if (v != null)
-                    buf.append(' ' + v);
+                    if (!extended)
+                    buf.append(" &bullet; ");
+                buf.append(v);
                 buf.append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">");
             }
             buf.append(h.substring(0,4));
@@ -804,6 +806,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } else {
             buf.append("<table class=rid><tr><td class=rif>");
             buf.append(renderPeerFlag(peer));
+            buf.append("</td><td class=rih>");
+            buf.append(h.substring(0,4));
             if (extended) {
                buf.append("</td><td class=rbw>?");
            }
