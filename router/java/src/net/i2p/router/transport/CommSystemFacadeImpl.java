@@ -890,7 +890,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ri != null && ip != null)
                     buf.append(" &bullet; ").append(ip);
             } else {
-                buf.append("unknown");
+                buf.append(_t("unknown"));
             }
             buf.append("\">");
             if (c != "a0" && c != null) {
@@ -898,12 +898,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                    .append(c.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
             } else {
                 buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"")
-                   .append(" src=\"/flags.jsp?c=a0\" title=").append(_t("unknown")).append(">");
+                   .append(" src=\"/flags.jsp?c=a0\">");
             }
             buf.append("</span>");
         } else {
-            buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\" title=").append(_t("unknown")).append(">");
+            buf.append(_t("unknown")).append("\"><img class=unknownflag width=24 height=18 alt=\"??\"" +
+                       " src=\"/flags.jsp?c=a0\">");
         }
         buf.append("</span>");
         return buf.toString();
