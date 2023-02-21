@@ -786,22 +786,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             if (ri != null)
                 buf.append("</a>");
             if (extended) {
-                buf.append("</td><td class=\"rbw");
-                if (caps.contains("f"))
-                    buf.append(" isff");
-                if (caps.contains("U"))
-                    buf.append(" isU");
-                buf.append("\"><a href=\"/netdb?caps=");
-                buf.append(getCapacity(peer));
-                if (caps.contains("f"))
-                    buf.append("f");
-                if (caps.contains("U"))
-                    buf.append("U");
-                buf.append("\" title=\"");
-                buf.append(_t("Show all routers with this capability in the NetDb"));
-                buf.append("\">");
-                buf.append(getCapacity(peer));
-                buf.append("</a>");
+                buf.append("</td>").append(renderPeerCaps(peer, true));
             }
         } else {
             buf.append("<table class=rid><tr><td class=rif>");
@@ -809,10 +794,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             buf.append("</td><td class=rih>");
             buf.append(h.substring(0,4));
             if (extended) {
-               buf.append("</td><td class=rbw>?");
+               buf.append("</td><td class=rbw>?</td>");
            }
         }
-        buf.append("</td></tr></table>");
+        buf.append("</tr></table>");
         return buf.toString();
     }
 
@@ -820,12 +805,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.58+
      */
     @Override
-    public String renderPeerCaps(Hash peer) {
+    public String renderPeerCaps(Hash peer, boolean inline) {
         StringBuilder buf = new StringBuilder(128);
         RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
-        buf.append("<table class=\"rid ric\"><tr>");
+        if (!inline) {
+            buf.append("<table class=\"rid ric\"><tr>");
+        }
         if (ri != null) {
             String caps = ri.getCapabilities();
             String v = ri.getVersion();
@@ -849,7 +836,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } else {
             buf.append("<td class=rbw>?");
         }
-        buf.append("</td></tr></table>\n");
+        buf.append("</td>");
+        if (!inline) {
+            buf.append("</tr></table>\n");
+        }
         return buf.toString();
     }
 
