@@ -142,35 +142,11 @@ class ProfileOrganizerRenderer {
                 //if(prof.getIsExpandedDB())
                 //   buf.append(" ** ");
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-                if (info != null) {
-                    // prevent HTML injection in the caps and version
-                    // remove superfluous O class from P + X, add spans, trail ff, add links to netdb search + tooltip
-                    String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
-                    String caps = DataHelper.stripHTML(info.getCapabilities())
-                        .replace("XO", "X")
-                        .replace("PO", "P")
-                        .replace("fR", "Rf")
-                        .replace("fU", "Uf")
-                        .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
-                        .replace("B", "<a href=\"/netdb?caps=B\"><span class=testing>B</span></a>")
-                        .replace("C", "<a href=\"/netdb?caps=C\"><span class=ssuintro>C</span></a>")
-                        .replace("H", "<a href=\"/netdb?caps=H\"><span class=hidden>H</span></a>")
-                        .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
-                        .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
-                        .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
-                        .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
-                        .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
-                        .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
-                        .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
-                        .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
-                        .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
-                        .replace("\"><span", tooltip);
-                    buf.append("<td>").append(caps);
-                } else {
-                    buf.append("<td><i>").append(_t("unknown")).append("</i>");
-                }
-                buf.append("</td>");
                 buf.append("<td>");
+                if (info != null) {
+                    buf.append(_context.commSystem().renderPeerCaps(peer, false));
+                }
+                buf.append("</td><td>");
                 String v = info != null ? info.getOption("router.version") : null;
                 if (v != null) {
                     buf.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
@@ -254,9 +230,9 @@ class ProfileOrganizerRenderer {
                 } else {
                     buf.append("<span hidden>0</span>");
                     buf.append("<span class=\"");
-                    if (bonus == 9999999)
+                    if (bonus >= 9999999)
                         buf.append("testOK ");
-                    else if (capBonus == -30)
+                    else if (capBonus <= -30)
                         buf.append("testFail ");
                     buf.append("nospeed\">&ensp;</span>");
                 }
@@ -276,8 +252,9 @@ class ProfileOrganizerRenderer {
                     buf.append("<span hidden>0</span>");
                 buf.append("</td>");
 */
-                buf.append("<td><span>").append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
+                buf.append("<td><span>");
                 if (capBonus != 0 && capBonus != -30) {
+                    buf.append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
                     if (capBonus > 0)
                         buf.append(" (+");
                     else
