@@ -143,12 +143,12 @@ class PacketHandler {
                 if (con.getOptions().getAnswerPings())
                     receivePing(con, packet);
                 else if (_log.shouldWarn())
-                    _log.warn("Dropping ECHO packet [" + packet + "] on existing connection");
+                    _log.warn("Dropping ECHO packet " + packet + " on existing connection");
             } else if (packet.getReceiveStreamId() > 0) {
                 receivePong(packet);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("ECHO packet [" + packet + "] received with no StreamIDs");
+                    _log.warn("ECHO packet " + packet + " received with no StreamIDs");
             }
             packet.releasePayload();
             return;
@@ -215,7 +215,7 @@ class PacketHandler {
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     if (_log.shouldWarn())
-                        _log.warn("Received a SYN packet [" + packet + "] with the wrong IDs, sending reset");
+                        _log.warn("Received a SYN packet " + packet + " with the wrong IDs, sending reset");
                     sendReset(packet);
                     packet.releasePayload();
                 } else {
@@ -257,7 +257,7 @@ class PacketHandler {
         _cache.release(ba);
         if (!ok) {
             if (_log.shouldWarn())
-                _log.warn("Can't send reset after receiving spoofed packet [" + packet + "]");
+                _log.warn("Can't send reset after receiving spoofed packet " + packet);
             return;
         }
         sendResetUnverified(packet);
@@ -297,7 +297,7 @@ class PacketHandler {
                 receivePong(packet);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("ECHO packet [" + packet + "] received with no StreamIDs");
+                    _log.warn("ECHO packet " + packet + " received with no StreamIDs");
             }
             packet.releasePayload();
         } else {
@@ -322,7 +322,7 @@ class PacketHandler {
                 // if it has a send ID, it's almost certainly for a recently removed connection.
                 if (_log.shouldWarn()) {
                     boolean recent = _manager.wasRecentlyClosed(packet.getSendStreamId());
-                    _log.warn("Dropping packet [" + packet + "] with Send ID but no connection found -> Recently disconnected? " + recent);
+                    _log.warn("Dropping packet " + packet + " with Send ID but no connection found -> Recently disconnected? " + recent);
                 }
                 // don't bother sending reset
                 // TODO send reset if recent && has data?
@@ -348,7 +348,7 @@ class PacketHandler {
                 // Then ConnectionHandler.accept() will check the connection list
                 // and call receivePacket() above instead of receiveConnection().
                 if (_log.shouldWarn()) {
-                    _log.warn("Packet [" + packet + "] belongs to no other connections, putting on the SYN queue");
+                    _log.warn("Packet " + packet + " belongs to no other connections, putting on the SYN queue");
                 }
                 if (_log.shouldDebug()) {
                     StringBuilder buf = new StringBuilder(128);
