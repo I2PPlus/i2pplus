@@ -379,7 +379,7 @@ public class PeerHelper extends HelperBase {
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
 */
             buf.append("</td><td class=caps>");
-            buf.append(_context.commSystem().renderPeerCaps(h));
+            buf.append(_context.commSystem().renderPeerCaps(h, false));
             buf.append("</td><td class=direction>");
             if (con.isInbound())
                 buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"")
@@ -666,7 +666,7 @@ public class PeerHelper extends HelperBase {
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
 */
             Hash h = peer.getRemotePeer().calculateHash();
-            buf.append("</td><td class=caps>").append(_context.commSystem().renderPeerCaps(peer.getRemotePeer()));
+            buf.append("</td><td class=caps>").append(_context.commSystem().renderPeerCaps(peer.getRemotePeer(), false));
             buf.append("</td><td class=direction nowrap>");
             if (peer.isInbound())
                 buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"").append(_t("Inbound"));
