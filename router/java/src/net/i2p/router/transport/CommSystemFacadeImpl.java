@@ -763,7 +763,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                         buf.append(" &bullet; ").append(ip);
                     }
                 }
-                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a></td>");
+                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
             } else {
                 buf.append("<img width=20 height=15 alt=\"??\"" +
                            " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
