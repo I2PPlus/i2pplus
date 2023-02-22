@@ -1218,11 +1218,8 @@ h3#udpcon{margin-top:7px}
 #profilelist td:last-child{padding-right:5px;width:1%;white-space:nowrap;text-align:center}
 #profilelist th{white-space:nowrap}
 #profilelist th:nth-child(4),#profilelist td:nth-child(4){width:15%}
-#profilelist th:nth-child(5),#profilelist td:nth-child(5){width:10%;min-width:56px;white-space:nowrap}
-#profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3),#profilelist td:nth-child(7){width:1%;white-space:nowrap}
-#profilelist td:nth-child(2){text-align:left}
-#profilelist td:nth-child(2) i{display:inline-block;width:100%;text-align:center}
-#profilelist td:nth-child(3) i{width:100%;display:inline-block;text-align:center;letter-spacing:0}
+#profilelist th.groups,#profilelist td.groups{width:10%;min-width:56px;white-space:nowrap}
+#profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3){width:1%;white-space:nowrap}
 #profilelist td:nth-last-child(2) span,#profilelist td:nth-last-child(3) span{min-width:28px;display:inline-block}
 #profilelist td:nth-child(6) span,#profilelist td:nth-child(9) span{min-width:48px;display:inline-block;text-align:right}
 #profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span{min-width:40px}
