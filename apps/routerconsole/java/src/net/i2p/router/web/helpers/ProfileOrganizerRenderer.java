@@ -177,7 +177,7 @@ class ProfileOrganizerRenderer {
                     buf.append("</td><td>");
                     String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                     String rl = ip != null ? getCanonicalHostName(ip) : null;
-                    if (rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
+                    if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span class=rlookup title=\"").append(rl).append("\">");
                         buf.append(CommSystemFacadeImpl.getDomain(rl));
                     } else {
