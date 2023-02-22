@@ -766,7 +766,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     public String toString() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=\"debug_container buckets\">");
-        buf.append("<div id=\"bucketSet\"><b>Bucket Set rooted on:</b> <code>").append(_us.toString())
+        buf.append("<div id=bucketSet><b>Bucket Set rooted on:</b> <code>").append(_us.toString())
            .append("</code> <br>")
            .append("<b>Totals:</b> ").append(size())
            .append(" keys in ").append(_buckets.size()).append(" buckets")
@@ -777,10 +777,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
             int len = _buckets.size();
             for (int i = 0; i < len; i++) {
                 KBucket<T> b = _buckets.get(i);
-                buf.append("<div class=\"bucketCount\"><b>Bucket ").append(i + 1).append("/").append(len).append(":</b> ");
+                buf.append("<div class=bucketCount><b>Bucket ").append(i + 1).append("/").append(len).append(":</b> ");
                 buf.append(b.toString()
-                   .replace(" : [", "</div><div class=\"bucketsContainer\"><span class=\"bucket\">")
-                   .replace(", ", " </span><span class=\"bucket\">")
+                   .replace(" : [", "</div><div class=bucketsContainer><span class=bucket>")
+                   .replace(", ", " </span><span class=bucket>")
                    .replace("]", "</span></div>"));
                 buf.append("<br>\n");
             }

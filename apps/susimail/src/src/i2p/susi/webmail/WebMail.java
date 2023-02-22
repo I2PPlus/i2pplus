@@ -2355,14 +2355,14 @@ public class WebMail extends HttpServlet
                 out.println("<style type=text/css>body{display:none;pointer-events:none}</style>\n");
                 out.println("</head>\n");
                 if (state == State.LIST)
-                    out.print("<body id=\"main\">\n");
+                    out.print("<body id=main>\n");
                 else
                     out.print("<body>\n");
                 String nonce = state == State.AUTH ? LOGIN_NONCE : Long.toString(ctx.random().nextLong());
                 sessionObject.addNonce(nonce);
                 out.println(
                     // TODO we don't need the form below
-                    "<div class=\"page\">\n<span class=\"header\"></span>\n" +
+                    "<div class=page>\n<span class=header></span>\n" +
                     "<form method=POST enctype=\"multipart/form-data\" action=\"" + myself + "\" accept-charset=utf-8>\n" +
                     "<input type=hidden name=\"" + SUSI_NONCE + "\" value=\"" + nonce + "\">\n" +
                     // we use this to know if the user thought he was logged in at the time
@@ -2421,7 +2421,7 @@ public class WebMail extends HttpServlet
                     }
                 }
                 if (showRefresh || sessionObject.error.length() > 0 || sessionObject.info.length() > 0) {
-                    out.println("<div id=\"notify\" class=\"notifications ");
+                    out.println("<div id=notify class=\"notifications ");
                     if (sessionObject.newMails > 0)
                         out.print("newmail ");
                     else if (sessionObject.error.length() > 0)
@@ -2475,7 +2475,7 @@ public class WebMail extends HttpServlet
                 }
                 out.println("</form>\n</div>\n<span data-iframe-height></span>\n");
                 if (sessionObject.isFetching)
-                    out.println("<script id=\"autorefresh\" type=module src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>");
+                    out.println("<script id=autorefresh type=module src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>");
                 out.println("<style type=text/css>body{display:block;pointer-events:auto}</style>\n");
                 out.println("</body>\n</html>");
                 out.flush();
@@ -3073,8 +3073,8 @@ public class WebMail extends HttpServlet
             }
         }
 
-        out.println("<div id=\"composemail\">" +
-                        "<table id=\"newmail\" cellspacing=0 cellpadding=2 width=100%>\n" +
+        out.println("<div id=composemail>" +
+                        "<table id=newmail cellspacing=0 cellpadding=2 width=100%>\n" +
                         "<tr><td colspan=2><hr></td></tr>\n" +
                         "<tr><td class=right>" + _t("From") + "</td>" +
                         "<td><input type=text size=80 name=\"" +
@@ -3091,8 +3091,8 @@ public class WebMail extends HttpServlet
                         "<tr><td></td><td><textarea cols=\"" + Config.getProperty(CONFIG_COMPOSER_COLS, 80) + "\" rows=\"" +
                         Config.getProperty(CONFIG_COMPOSER_ROWS, 10)+ "\" name=\"" + NEW_TEXT + "\">" + text + "</textarea></td></tr>" +
                         "<tr class=\"bottombuttons spacer\"><td colspan=7><hr></td></tr>\n" +
-                        "<tr class=\"bottombuttons\" id=addattachment><td class=right>" + _t("Add Attachment") + "</td>" +
-                        "<td class=left><input type=file size=\"50%\" name=\"" + NEW_FILENAME + "\" value=\"\">&nbsp;");
+                        "<tr class=bottombuttons id=addattachment><td class=right>" + _t("Add Attachment") + "</td>" +
+                        "<td class=left><input type=file size=50% name=\"" + NEW_FILENAME + "\" value=\"\">&nbsp;");
                         // TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
             out.print(button(NEW_UPLOAD, _t("Add attachment")));
             out.print("</td></tr>");
@@ -3127,18 +3127,18 @@ public class WebMail extends HttpServlet
         String pop3 = Config.getProperty(CONFIG_PORTS_POP3, Integer.toString(DEFAULT_POP3PORT));
         String smtp = Config.getProperty(CONFIG_PORTS_SMTP, Integer.toString(DEFAULT_SMTPPORT));
 
-        out.println("<div id=\"dologin\">" +
+        out.println("<div id=dologin>" +
                         "<h1>" + _t("I2PMail Login") + "</h1>" +
-                        "<table cellspacing=\"3\" cellpadding=\"5\" width=100%>\n" +
+                        "<table cellspacing=3 cellpadding=5 width=100%>\n" +
                         // current postman hq length limits 16/12, new postman version 32/32
                         "<tr>" +
-                        "<td width=\"30%\" class=right>" + _t("User") + "</td>" +
-                        "<td width=\"40%\" class=left><input type=text required placeholder=\"" + _t("Username") +
+                        "<td width=30% class=right>" + _t("User") + "</td>" +
+                        "<td width=40% class=left><input type=text required placeholder=\"" + _t("Username") +
                         "\" size=32 autocomplete=\"username\" name=\"" + USER + "\" value=\"" + "\"> @mail.i2p</td>" +
                         "</tr>\n" +
                         "<tr>" +
-                        "<td width=\"30%\" class=right>" + _t("Password") + "</td>" +
-                        "<td width=\"40%\" class=left><input type=password id=\"password\" required placeholder=\"" + _t("Password") +
+                        "<td width=30% class=right>" + _t("Password") + "</td>" +
+                        "<td width=40% class=left><input type=password id=password required placeholder=\"" + _t("Password") +
                         "\" size=32 autocomplete=\"current-password\" name=\"pass\" value=\"" + "\">\n<button type=\"button\" class=script id=toggle" +
                         " title=\"" + _t("Toggle password visibility") + "\">Show password</button></td>" +
                         "</tr>\n");
@@ -3146,18 +3146,18 @@ public class WebMail extends HttpServlet
         if (!fixed) {
         //if (true) {
             out.println("<tr>" +
-                            "<td width=\"30%\">" + _t("Host") + "</td>" +
-                            "<td width=\"40%\"><input type=text size=32 name=\"" + HOST +"\" value=\"" +
+                            "<td width=30%>" + _t("Host") + "</td>" +
+                            "<td width=40%><input type=text size=32 name=\"" + HOST +"\" value=\"" +
                             quoteHTML(host) + "\"" + (fixed ? " disabled" : "") + "></td>" +
                             "</tr>\n" +
                             "<tr>" +
-                            "<td width=\"30%\">" + _t("POP3 Port") + "</td>" +
-                            "<td width=\"40%\"><input type=text style=text-align:right size=5 name=\"" + POP3 +"\" value=\"" +
+                            "<td width=30%>" + _t("POP3 Port") + "</td>" +
+                            "<td width=40%><input type=text style=text-align:right size=5 name=\"" + POP3 +"\" value=\"" +
                             quoteHTML(pop3) + "\"" + (fixed ? " disabled" : "") + "></td>" +
                             "</tr>\n" +
                             "<tr>" +
-                            "<td width=\"30%\">" + _t("SMTP Port") + "</td>" +
-                            "<td width=\"40%\"><input type=text style=text-align:right size=5 name=\"" + SMTP +"\" value=\"" +
+                            "<td width=30%>" + _t("SMTP Port") + "</td>" +
+                            "<td width=40%><input type=text style=text-align:right size=5 name=\"" + SMTP +"\" value=\"" +
                             quoteHTML(smtp) + "\"" + (fixed ? " disabled" : "") + "></td>" +
                             "</tr>\n");
         }
@@ -3166,7 +3166,7 @@ public class WebMail extends HttpServlet
             "<tr>" +
             "<td colspan=2>" +
             button(LOGIN, _t("Login")) + spacer + button(OFFLINE, _t("Read Mail Offline")) + spacer +
-            "<a href=\"/susimail/?configure\" id=\"settings\" class=\"fakebutton\">" + _t("Settings") + "</a>" +
+            "<a href=\"/susimail/?configure\" id=settings class=fakebutton>" + _t("Settings") + "</a>" +
             "</td>" +
             "</tr>\n" +
             "<tr>" +
@@ -3660,8 +3660,8 @@ public class WebMail extends HttpServlet
             sz = Config.getProperty(Folder.PAGESIZE, Folder.DEFAULT_PAGESIZE);
         out.print("<div class=topbuttons id=pagesize><b>");
         out.print(_t("Folder Page Size") + ":</b>&nbsp;<input type=text name=\"" + PAGESIZE +
-                    "\" size=\"4\" value=\"" +  sz + "\">&nbsp;" + button(SETPAGESIZE, _t("Set")) + "</div>\n");
-        out.print("<h3 id=\"config\">");
+                    "\" size=4 value=\"" +  sz + "\">&nbsp;" + button(SETPAGESIZE, _t("Set")) + "</div>\n");
+        out.print("<h3 id=config>");
         out.print(_t("Advanced Configuration"));
         Properties config = Config.getProperties();
         out.print("</h3>\n<textarea cols=80 rows=\"" + Math.max(8, config.size() + 2) + "\" spellcheck=false name=\"" + CONFIG_TEXT + "\">\n");
@@ -3671,7 +3671,7 @@ public class WebMail extends HttpServlet
             out.println(quoteHTML(e.getValue().toString()));
         }
         out.print("\n</textarea>\n");
-        out.print("<div id=\"prefsave\">");
+        out.print("<div id=prefsave>");
         out.print(button(CANCEL, _t("Cancel")));
         out.print(button(SAVE, _t("Save Configuration")));
         if (folder != null)

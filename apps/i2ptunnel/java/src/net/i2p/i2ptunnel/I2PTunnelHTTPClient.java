@@ -775,7 +775,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                         Hash h2 = ConvertToHash.getHash(ahelperKey);
                                         if (h1 != null && h2 != null) {
                                             String conURL = _context.portMapper().getConsoleURL();
-                                            out.write(("\n<table id=\"destConflict\"><tr><th align=center>" +
+                                            out.write(("\n<table id=destConflict><tr><th align=center>" +
                                                        "<a href=\"" + trustedURL + "\">").getBytes("UTF-8"));
                                             out.write(_t("Destination for {0} in addressbook", requestURI.getHost()).getBytes("UTF-8"));
                                             out.write(("</a></th>\n<th align=center>" +
@@ -788,13 +788,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                                        "<img src=\"" +
                                                        conURL + "imagegen/id?s=160&amp;c=" +
                                                        h1.toBase64().replace("=", "%3d") +
-                                                      "\" width=\"160\" height=\"160\"></a>\n" +
+                                                      "\" width=160 height=160></a>\n" +
                                                       "</td>\n<td align=center>" +
                                                        "<a href=\"" + conflictURL + "\">" +
                                                        "<img src=\"" +
                                                        conURL + "imagegen/id?s=160&amp;c=" +
                                                        h2.toBase64().replace("=", "%3d") +
-                                                       "\" width=\"160\" height=\"160\"></a>\n" +
+                                                       "\" width=160 height=160></a>\n" +
                                                        "</td></tr>").getBytes("UTF-8"));
                                             }
                                             out.write("</table>".getBytes("UTF-8"));
@@ -1468,7 +1468,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         Writer out = new BufferedWriter(new OutputStreamWriter(outs, "UTF-8"));
         String header = getErrorPage("ahelper-new", ERR_AHELPER_NEW);
         out.write(header);
-        out.write("<table id=\"proxyNewHost\">\n<tr><td align=right>" + _t("Host") +
+        out.write("<table id=proxyNewHost>\n<tr><td align=right>" + _t("Host") +
                 "</td><td>" + idn + "</td></tr>\n");
         try {
             String b32 = Base32.encode(SHA256Generator.getInstance().calculateHash(Base64.decode(ahelperKey)).getData());
@@ -1476,11 +1476,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                       "<td><a href=\"http://" + b32 + ".b32.i2p/\">" + b32 + ".b32.i2p</a></td></tr>");
         } catch(Exception e) {}
 
-        out.write("<tr><td align=right>" + _t("Destination") + "</td><td><span id=\"b64\" style=\"user-select:all\">" + ahelperKey +
+        out.write("<tr><td align=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + ahelperKey +
                   "</span></td></tr>\n</table>\n" + "<hr>\n" +
 
                   // FIXME if there is a query remaining it is lost
-                  "<form method=\"GET\" action=\"" + targetRequest + "\">\n<hr>\n<div class=\"option\">" +
+                  "<form method=\"GET\" action=\"" + targetRequest + "\">\n<hr>\n<div class=option>" +
                   "<h4>" + _t("Continue to {0} without saving", idn) + "</h4>\n<p>" +
                   _t("You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router.") +
                   "</p>\n<div class=formaction><button type=submit class=\"go\">" + _t("Continue without saving") + "</button></div>" + "\n</div>\n</form>\n" +
@@ -1490,7 +1490,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                   "<input type=hidden name=\"dest\" value=\"" + ahelperKey + "\">\n" +
                   "<input type=hidden name=\"nonce\" value=\"" + _proxyNonce + "\">\n" +
 
-                  "<hr>\n<div class=\"option\">\n<h4>" + _t("Save {0} to router address book and continue to website", destination) + "</h4>\n<p>" +
+                  "<hr>\n<div class=option>\n<h4>" + _t("Save {0} to router address book and continue to website", destination) + "</h4>\n<p>" +
                   _t("This address will be saved to your Router addressbook where your subscription-based addresses are stored."));
 
         if (_context.namingService().getName().equals("BlockfileNamingService")) {
@@ -1504,13 +1504,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if (_context.namingService().getName().equals("BlockfileNamingService")) {
             // only blockfile supports multiple books
 
-            out.write("<hr>\n<div class=\"option\">\n<h4>" + _t("Save {0} to master addressbook and continue to website", idn) + "</h4>\n<p>" +
+            out.write("<hr>\n<div class=option>\n<h4>" + _t("Save {0} to master addressbook and continue to website", idn) + "</h4>\n<p>" +
                       _t("This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main " +
                       "router address book, but don't mind publishing.") +
                       "</p>\n<div class=formaction><button type=submit class=accept name=\"master\" value=\"master\">" +
                       label + "</button></div>\n</div>\n");
 
-            out.write("<hr>\n<div class=\"option\"><h4>" + _t("Save {0} to private addressbook and continue to website", idn) + "</h4>\n<p>" +
+            out.write("<hr>\n<div class=option><h4>" + _t("Save {0} to private addressbook and continue to website", idn) + "</h4>\n<p>" +
                       _t("This address will be saved to your Private addressbook, ensuring it is never published.") +
                       "</p>\n<div class=formaction><button type=submit class=accept name=\"private\" value=\"private\">" +
                       label + "</button></div>\n</div>\n");
@@ -1559,7 +1559,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                       "or generate a DH encryption key and send that to the server operator.") +
                       ' ' + _t("Ask the server operator for help.") + "</p>\n" +
                       "<p><b>PSK:</b> " + _t("Enter PSK encryption key") + ":</p>\n" +
-                      "<input type=text size=\"55\" name=\"privkey\" value=\"\">\n" +
+                      "<input type=text size=55 name=\"privkey\" value=\"\">\n" +
                       "<p><b>DH:</b> " + _t("Generate new DH encryption key") + ":</p>\n" +
                       "<div class=\"formaction_xx\">" + "<button type=submit class=accept name=action value=\"newdh\">" +
                       label + "</button>\n</div>\n");

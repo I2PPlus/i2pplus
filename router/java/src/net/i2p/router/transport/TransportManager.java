@@ -1052,7 +1052,7 @@ public class TransportManager implements TransportEventListener {
         } else if (_upnpManager != null) {
             out.write(_upnpManager.renderStatusHTML());
         } else {
-            out.write("<span id=\"upnp\"><p class=infohelp id=\"upnpstatus\">" + _t("UPnP is not enabled")
+            out.write("<span id=upnp><p class=infohelp id=upnpstatus>" + _t("UPnP is not enabled")
                       .replace("not enabled", "not enabled on this router. To enable UPnP, see the <a href=\"/confignet#ipv4config\">network configuration page</a>.") +
                       "</p></span>\n");
         }

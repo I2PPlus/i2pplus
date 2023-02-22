@@ -372,8 +372,8 @@ public class PortMapper {
      */
     public void renderStatusHTML(Writer out) throws IOException {
         List<String> services = new ArrayList<String>(_dir.keySet());
-        out.write("<h2 id=\"debug_portmapper\">Port Mapper</h2>\n" +
-                  "<table id=\"portmapper\">\n<thead>\n<tr><th>Service</th><th>Host</th><th>Port</th></tr>\n</thead>\n");
+        out.write("<h2 id=debug_portmapper>Port Mapper</h2>\n" +
+                  "<table id=portmapper>\n<thead>\n<tr><th>Service</th><th>Host</th><th>Port</th></tr>\n</thead>\n");
         Collections.sort(services, Collator.getInstance());
         for (String s : services) {
             InetSocketAddress ia = _dir.get(s);
