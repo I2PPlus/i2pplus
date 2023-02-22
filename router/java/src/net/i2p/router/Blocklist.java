@@ -93,9 +93,11 @@ public class Blocklist {
     private final Map<Hash, String> _peerBlocklist = new HashMap<Hash, String>(4);
 
     private static final String PROP_BLOCKLIST_ENABLED = "router.blocklist.enable";
+    private static final String PROP_BLOCKLIST_TOR_ENABLED = "router.blocklistTor.enable";
     private static final String PROP_BLOCKLIST_DETAIL = "router.blocklist.detail";
     private static final String PROP_BLOCKLIST_FILE = "router.blocklist.file";
     public static final String BLOCKLIST_FILE_DEFAULT = "blocklist.txt";
+    public static final String BLOCKLIST_FILE_TOR_EXITS = "blocklist_tor.txt";
     private static final String BLOCKLIST_FEED_FILE = "docs/feed/blocklist/blocklist.txt";
     /** @since 0.9.48 */
     public static final String BLOCKLIST_COUNTRY_FILE = "blocklist-country.txt";
@@ -150,6 +152,7 @@ public class Blocklist {
     /**
      *  Loads the following files in-order:
      *  $I2P/blocklist.txt
+     *  $I2P/blocklist_tor.txt
      *  ~/.i2p/blocklist.txt
      *  ~/.i2p/docs/feed/blocklist/blocklist.txt
      *  ~/.i2p/blocklist-countries.txt
@@ -166,6 +169,10 @@ public class Blocklist {
         // install dir
         File blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_DEFAULT);
         files.add(new BLFile(blFile, ID_SYSTEM));
+        if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_TOR_ENABLED)) {
+            blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_TOR_EXITS);
+            files.add(new BLFile(blFile, ID_SYSTEM));
+        }
         // config dir
         if (!_context.getConfigDir().equals(_context.getBaseDir())) {
             blFile = new File(_context.getConfigDir(), BLOCKLIST_FILE_DEFAULT);
