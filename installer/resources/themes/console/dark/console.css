@@ -41,7 +41,7 @@ table hr{margin:0 0;padding:0 0;height:1px;display:none;color:var(--a);border:no
 td{padding:4px 6px;vertical-align:middle;border-top:var(--border_softer)}
 tr:first-child td{border-top:var(--border)}
 .applink td:first-child{border:none}
-td img{padding:0 1px 0 2px}
+/*td img{padding:0 1px 0 2px}*/
 th{padding:7px 5px;position:relative;line-height:1.1;text-align:center;font-size:90%;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 th[aria-sort]{font-style:italic}
 th.options{padding:8px 5px 8px 10px;font-size:9pt}
@@ -718,15 +718,16 @@ td.direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
 #peers .confignav+h3{margin-top:12px}
 #peers h3:nth-child(n+2){margin-top:2px}
 #ntcpconnections+h3+#udpconnections,#ntcpconnections,#udpconnections{margin-bottom:10px}
-#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle}
+#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle;font-size:0}
 #peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
 #peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}
 #peers img[src$="bound.svg"],#profiles img[src$="bound.svg"],#tunnels img[src$="bound.svg"]{opacity:0}
 #peers table:not(.rid){margin-bottom:9px}
+#peers .whois,#peers .whois img{margin:0;display:inline-block;vertical-align:middle}
+#peers .whois::after{display:none}
 h3[id$="con"]{margin-bottom:-2px;border-radius:0;padding:8px 10px;font-size:10pt;word-spacing:.1em;letter-spacing:.08em;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%);border:var(--border)}
 h3[id="udpcon"]{width:auto}
 #ntcp+#udp{margin-top:-12px}
-/*#udpconnections td:nth-child(2) img,#ntcpconnections td:nth-child(2) img{padding:0}*/
 #ntcpconnections td:last-child{font-weight:700}
 #ntcpconnections{overflow-x:scroll}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before{content:""}
@@ -736,11 +737,9 @@ h3[id="udpcon"]{width:auto}
 #ntcpconnections td:nth-child(n+7) span,#ntcpconnections tfoot td:nth-child(n+7) span{min-width:40px;display:inline-block;text-align:right}
 #udpconnections table{overflow-x:auto}
 #udpconnections table i{font-weight:700;line-height:1.5;letter-spacing:.1em}
-#udpconnections tr a img{margin-top:3px}
 #udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tr:hover,#tunnels tr:hover{background:#020}
 #udpconnections tr:hover td,#ntcpconnections tr:hover td,.tunneldisplay tr:hover td{color:var(--ink)}
 #udpconnections th{padding:5px 2px;vertical-align:top;text-align:center}
-/*#udpconnections td:nth-child(n+13){padding-right:1%}*/
 #ntcpconnections tbody td:not(.rif):not(.rih):not(.rbw),#udpconnections tbody td:not(.rif):not(.rih):not(.rbw){border-right:var(--border_softer)}
 #udpconnections tbody td:not(.rif):not(.rih):not(.rbw):last-child,#ntcpconnections td:not(.rif):not(.rih):not(.rbw):last-child{border-right:var(--border)}
 #udpconnections td:not(.rif):not(rih):not(.rbw):first-child{width:1%;padding:5px;white-space:nowrap}
@@ -764,7 +763,6 @@ h3[id="udpcon"]{width:auto}
 #transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
-#peers #udpconnections:not(.advancedview) td:not(.rif):not(.rih):not(.rbw):nth-last-child(2){border-right:var(--border)}
 #peers .caps{width:1%;white-space:nowrap;text-align:center}
 #peers th.caps{padding-left:0;text-align:left}
 

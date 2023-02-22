@@ -346,6 +346,7 @@ public class PeerHelper extends HelperBase {
         if (peers.size() != 0) {
             buf.append("<thead><tr><th class=peer>").append(_t("Peer")).append("</th>" +
                        "<th class=caps title=\"").append(_t("Peer capabilities")).append("\">").append(_t("Caps")).append("</th>" +
+                       "<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>" +
                        "<th class=direction title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir")).append("</th>" +
                        "<th class=ipv6>").append(_t("IPv6")).append("</th>" +
                        "<th class=idle title=\"").append(_t("Peer inactivity")).append("\">").append(_t("Idle")).append("</th>" +
@@ -371,15 +372,14 @@ public class PeerHelper extends HelperBase {
             buf.append("<tr class=lazy><td class=peer>");
             Hash h = con.getRemotePeer().calculateHash();
             buf.append(_context.commSystem().renderPeerHTML(h, false));
-/*
-            buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(con.getRemoteIP()))
-               .append("\" target=_blank title=\"").append(_t("Lookup remote address")).append(' ')
-               .append(Addresses.toString(con.getRemoteIP(), con.getChannel().socket().getPort())).append(' ')
-               .append(_t("on")).append(" gwhois.org").append("\">")
-               .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
-*/
             buf.append("</td><td class=caps>");
             buf.append(_context.commSystem().renderPeerCaps(h, false));
+            buf.append("</td><td class=lookup>");
+            buf.append("<a class=whois href=\"https://gwhois.org/").append(Addresses.toString(con.getRemoteIP()))
+               .append("\" target=_blank title=\"").append(_t("Lookup")).append(' ')
+               .append(Addresses.toString(con.getRemoteIP(), con.getChannel().socket().getPort())).append(' ')
+               .append(_t("on")).append(" gwhois.org").append("\">")
+               .append("<img src=/themes/console/images/search.svg width=16 height=16>").append("</a>");
             buf.append("</td><td class=direction>");
             if (con.isInbound())
                 buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"")
@@ -455,11 +455,12 @@ public class PeerHelper extends HelperBase {
         buf.append("</tbody>");
 
         if (!peers.isEmpty()) {
-            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=5><b>")
+            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=6><b>")
                .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
-            buf.append("</b><span id=peerCounter></span></td>" +
+            buf.append("</b></td>" +
+                       //"<td class=lookup>&nbsp;</td>" +
                        //"<td class=direction>&nbsp;</td>" +
                        //"<td class=ipv6>&nbsp;</td>" +
                        //"<td class=idle>&nbsp;</td>" +
@@ -563,6 +564,7 @@ public class PeerHelper extends HelperBase {
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by peer hash"), FLAG_ALPHA);
             }
             buf.append("</th><th class=caps>").append(_t("Caps"));
+            buf.append("</th><th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois"));
             buf.append("</th><th class=direction title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir"));
             if (debugmode) {
                 buf.append("</th><th class=ipv6>").append(_t("IPv6"))
@@ -625,9 +627,6 @@ public class PeerHelper extends HelperBase {
                 buf.append("</span>");
             }
             buf.append("</th>");
-            if (!debugmode) {
-                buf.append("<th class=spacer>&nbsp;</th>");
-            }
             if (debugmode) {
                 buf.append("<th class=cwnd title=\"").append(_t("Congestion window")).append("\">CWND<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by congestion window"), FLAG_CWND);
@@ -660,13 +659,19 @@ public class PeerHelper extends HelperBase {
             buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), false));
 /*
             buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(peer.getRemoteIP()))
-               .append("\" target=_blank title=\"").append(_t("Lookup remote address")).append(' ')
+               .append("\" target=_blank title=\"").append(_t("Lookup")).append(' ')
                .append(Addresses.toString(peer.getRemoteIP(), peer.getRemotePort()))
                .append(' ').append(_t("on")).append(" gwhois.org").append("\">")
                .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
 */
             Hash h = peer.getRemotePeer().calculateHash();
             buf.append("</td><td class=caps>").append(_context.commSystem().renderPeerCaps(peer.getRemotePeer(), false));
+            buf.append("</td><td class=lookup>");
+            buf.append("<a class=whois href=\"https://gwhois.org/").append(Addresses.toString(peer.getRemoteIP()))
+               .append("\" target=_blank title=\"").append(_t("Lookup")).append(' ')
+               .append(Addresses.toString(peer.getRemoteIP(), peer.getRemotePort())).append(' ')
+               .append(_t("on")).append(" gwhois.org").append("\">")
+               .append("<img src=/themes/console/images/search.svg width=16 height=16>").append("</a>");
             buf.append("</td><td class=direction nowrap>");
             if (peer.isInbound())
                 buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"").append(_t("Inbound"));
@@ -764,9 +769,6 @@ public class PeerHelper extends HelperBase {
                 buf.append("<span class=right>").append(dupRecv).append("</span>"); //formatPct(recvDupPct));
             }
             buf.append("</td>");
-            if (!debugmode) {
-                buf.append("<td class=spacer>&nbsp;</td>");
-            }
 
             long sendWindow = peer.getSendWindowBytes();
             int rtt = peer.getRTT();
@@ -833,13 +835,13 @@ public class PeerHelper extends HelperBase {
         if (numPeers > 0) {
             buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=");
             if (debugmode) {
-                buf.append("6");
+                buf.append("7");
             } else {
-                buf.append("4");
+                buf.append("5");
             }
             buf.append("><b>")
                .append(ngettext("{0} peer", "{0} peers", ut.countActivePeers()))
-               .append("</b><span id=peerCounter hidden></span></td>");
+               .append("</b></td>");
             //bug.append("<td class=direction>&nbsp;</td>");
             //if (debugmode) {
             //    buf.append("<td class=ipv6>&nbsp;</td><td class=ssuversion>&nbsp;</td>");
@@ -859,9 +861,6 @@ public class PeerHelper extends HelperBase {
             buf.append(sendTotal).append("</b></td><td class=rx><b>").append(recvTotal).append("</b></td>\n" +
                        "<td class=duptx><b>").append(resentTotal);
             buf.append("</b></td><td class=duprx><b>").append(dupRecvTotal).append("</b></td>");
-            if (!debugmode) {
-                buf.append("<td class=spacer>&nbsp;</td>");
-            }
             if (debugmode) {
                 buf.append("<td class=cwnd><b>");
                 buf.append(cwinTotal/(numPeers*1024) + "K");

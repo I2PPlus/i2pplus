@@ -997,6 +997,8 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .cells .ipv6{width:1%;max-width:24px}
 .cells .direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
 .cwnd .left,.cwnd .right{width:auto}
+.lookup{width:1%}
+.lookup a{line-height:0}
 #peers p.infohelp{margin-top:14px}
 #peers .infohelp code{font-size:9pt}
 #peers .tabletitle{margin-top:12px}
@@ -2709,7 +2711,7 @@ th code{font-size:9pt}
 #profiles span[hidden]{display:none!important}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
-#peers .edit a{margin:2px;vertical-align:middle}
+#peers .edit a{margin:0;vertical-align:middle}
 #topCount{display:inline-block;position:absolute;right:3px;top:3px}
 #topCount table, #topCount td{line-height:1}
 #topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;;border:none}

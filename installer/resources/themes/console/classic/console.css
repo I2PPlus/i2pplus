@@ -1848,7 +1848,6 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #peers .tab,#peers .tab2{min-width:96px}
 #peers .caps{width:1%}
 #ssuadv{margin-left:5px;letter-spacing:0;text-transform:none;font-size:80%}
-#peers #udpconnections:not(advancedview) td:nth-last-child(2){border-right:var(--border)}
 
 /* routerinfo */
 #routerinfo p{padding:0;margin:-5px -5px 0;border:none;box-shadow:0 0 1px #ccf;filter:none}

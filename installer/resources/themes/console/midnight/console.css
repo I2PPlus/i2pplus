@@ -1649,22 +1649,21 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .tx .right,.rx .right,.duptx .right,.duprx .right,.cwnd .left,.cwnd .right{width:auto}
 #peers .routerid,#profiles .routerid{padding:3px 2px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:2px;background:var(--element)}
 #peers .routerid img,#profiles .routerid img{margin-right:0}
-#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle}
+#peers img,#peers a[href^="https://gwhois"]{margin:0;padding:0;display:inline-block;vertical-align:middle;font-size:0}
 #peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
 #peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}
-#peers img[src$="bound.svg"],#profiles img[src$="bound.svg"],#tunnels img[src$="bound.svg"]{opacity:0}
+#peers img[src$="bound.svg"],#profiles img[src$="bound.svg"],#tunnels img[src$="bound.svg"]{opacity:0;font-size:0}
 #peers .infohelp{margin:14px 0 1px}
-#peers .routerid{margin:0;padding-right:4px}
-#peers .spacer{display:none}
 #peers table:not(.rid):last-child{margin-bottom:10px}
 #peers td.direction i{margin:3px -3px -1px;width:100%;display:inline-block;text-align:center;font-size:90%;font-style:normal;color:#990;border-top:var(--border_inner);border-radius:2px}
 #peers td img{font-size:0}
+#peers .whois::after{display:none}
+#peers .configpeer{margin:0}
 #peers .widescroll + h3{margin-top:1px}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before{content:none}
 #ntcpconnections td:nth-child(n+7) span,#ntcpconnections .tablefooter td:nth-child(n+6) span{min-width:40px;display:inline-block}
 #ntcpconnections td span:empty{display:none}
 #ntcpconnections th,#udpconnections th{padding-top:6px;text-align:center}
-/*#udpconnections th:nth-child(n+13),#udpconnections .tablefooter th:nth-child(n+10),#udpconnections td:nth-child(n+13),#udpconnections .tablefooter td:nth-child(n+10){padding-right:1%}*/
 #udpconnections th,#udpconnections td,#ntcpconnections th,#ntcpconnections td{text-align:center}
 #peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;border:var(--border_badge);box-shadow:var(--highlight),inset 0 0 1px 2px #003,0 0 0 3px #000;background:linear-gradient(135deg,#001 5%,#000020 15%,#001);-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 #peerdefs{line-height:1.5}
