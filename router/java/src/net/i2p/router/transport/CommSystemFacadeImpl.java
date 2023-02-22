@@ -756,7 +756,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append("<a href=\"/netdb?c=" + c + "\"><img width=20 height=15 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" title=\"");
                 buf.append(countryName);
-                if (ip != null) {
+                if (ip != null && ip != "null") {
                     if (enableReverseLookups()) {
                         buf.append(" &bullet; ").append(getCanonicalHostName(ip));
                     } else {
