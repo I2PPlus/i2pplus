@@ -109,8 +109,13 @@ class ProfileOrganizerRenderer {
                .append("<th>").append(_t("Groups")).append("</th>")
                .append("<th>").append(_t("Speed")).append("</th>")
                .append("<th>").append(_t("Low Latency")).append("</th>")
-               //.append("<th>").append(_t("Test Avg")).append("</th>")
+               //.append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
+               //.append(_t("Test Avg (ms)")).append("</th>")
                .append("<th>").append(_t("Capacity")).append("</th>")
+               .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
+               .append("\">").append(_t("Accepted")).append("</th>")
+               .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
+               .append("\">").append(_t("Rejected")).append("</th>")
                .append("<th>").append(_t("Integration")).append("</th>")
                .append("<th>").append(_t("First Heard About")).append("</th>")
                .append("<th>").append(_t("View/Edit")).append("</th>")
@@ -244,15 +249,15 @@ class ProfileOrganizerRenderer {
                     buf.append("<span class=highlatency>✖</span>");
                 else
                     buf.append("<span>&ensp;</span>");
-                buf.append("</td>");
 /*
-                if (prof.getPeerTestTimeAverage() >= 10)
-                    buf.append("<td>").append(prof.getPeerTestTimeAverage()).toString().replace("0 ", "<span hidden>0</span>");
-                else
-                    buf.append("<span hidden>0</span>");
-                buf.append("</td>");
+                buf.append("</td><td>");
+                if (prof.getPeerTestTimeAverage() > 0)
+                    buf.append(Math.round(prof.getPeerTestTimeAverage()));
+                else {
+                    buf.append("&ensp;");
+                }
 */
-                buf.append("<td><span>");
+                buf.append("</td><td><span>");
                 if (capBonus != 0 && capBonus != -30) {
                     buf.append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
                     if (capBonus > 0)
@@ -265,6 +270,18 @@ class ProfileOrganizerRenderer {
                 }
                 buf.append("</span>");
                 buf.append("</td><td>");
+                int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
+                int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
+                if (agreed > 0)
+                    buf.append(agreed);
+                else
+                    buf.append("<span hidden>0</span>");
+                buf.append("</td><td>");
+                if (rejected > 0)
+                    buf.append(rejected);
+                else
+                    buf.append("<span hidden>0</span>");
+                buf.append("</td><td>");
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
@@ -273,11 +290,18 @@ class ProfileOrganizerRenderer {
                 }
                 buf.append("</td><td>");
                 now = _context.clock().now();
-                buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
-                   .append(formatInterval(now, prof.getFirstHeardAbout()));
+                if (prof.getFirstHeardAbout() > 0) {
+                    buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
+                       .append(formatInterval(now, prof.getFirstHeardAbout()));
+                } else {
+                    buf.append("<span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
+                       .append(formatInterval(now, prof.getLastHeardFrom()));
+                }
                 buf.append("</td><td nowrap class=viewedit>");
-                buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
-                   .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
+                if (prof != null) {
+                    buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
+                       .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
+                }
                 buf.append("<br><a class=configpeer href=\"/configpeer?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("Configure peer"))
                    .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>");
                 buf.append("</td></tr>\n");
