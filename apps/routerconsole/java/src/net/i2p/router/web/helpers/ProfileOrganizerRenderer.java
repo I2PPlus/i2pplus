@@ -3,6 +3,7 @@ package net.i2p.router.web.helpers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.net.InetAddress;
 import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.Set;
@@ -11,17 +12,21 @@ import java.util.TreeSet;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.Router;
-import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.ProfileOrganizer;
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import static net.i2p.router.web.helpers.TunnelRenderer.range;
+
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
+
+import net.i2p.util.Addresses;
 
 /**
  * Helper class to refactor the HTML rendering from out of the ProfileOrganizer
@@ -34,6 +39,11 @@ class ProfileOrganizerRenderer {
     public ProfileOrganizerRenderer(ProfileOrganizer organizer, RouterContext context) {
         _context = context;
         _organizer = organizer;
+    }
+
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    public boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
     }
 
     /**
@@ -104,11 +114,14 @@ class ProfileOrganizerRenderer {
                .append("<thead>\n<tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("Caps")).append("</th>")
-               .append("<th>").append(_t("Version")).append("</th>")
-               .append("<th>").append(_t("Status")).append("</th>")
-               .append("<th>").append(_t("Groups")).append("</th>")
+               .append("<th>").append(_t("Version")).append("</th>");
+            if (enableReverseLookups()) {
+                buf.append("<th>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
+            }
+            buf.append("<th>").append(_t("Status")).append("</th>")
+               .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th>").append(_t("Speed")).append("</th>")
-               .append("<th>").append(_t("Low Latency")).append("</th>")
+               .append("<th class=latency>").append(_t("Low Latency")).append("</th>")
                //.append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
                //.append(_t("Test Avg (ms)")).append("</th>")
                .append("<th>").append(_t("Capacity")).append("</th>")
@@ -160,8 +173,19 @@ class ProfileOrganizerRenderer {
                 } else {
                     buf.append("<span>&ensp;</span>");
                 }
-                buf.append("</td>");
-                buf.append("<td>");
+                if (enableReverseLookups()) {
+                    buf.append("</td><td>");
+                    String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
+                    String rl = ip != null ? getCanonicalHostName(ip) : null;
+                    if (rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
+                        buf.append("<span class=rlookup title=\"").append(rl).append("\">");
+                        buf.append(CommSystemFacadeImpl.getDomain(rl));
+                    } else {
+                        buf.append("<span>").append(ip);
+                    }
+                    buf.append("</span>");
+                }
+                buf.append("</td><td>");
                 boolean ok = true;
                 if (_context.banlist().isBanlisted(peer)) {
                     buf.append(_t("Banned"));
@@ -194,7 +218,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<span>&ensp;</span>");
                 }
                 buf.append("</td>");
-                buf.append("<td>");
+                buf.append("<td class=groups>");
                 buf.append("<span class=\"");
                 if (isIntegrated) buf.append("integrated ");
                 switch (tier) {
@@ -242,7 +266,7 @@ class ProfileOrganizerRenderer {
                     buf.append("nospeed\">&ensp;</span>");
                 }
                 buf.append("</td>");
-                buf.append("<td>");
+                buf.append("<td class=latency>");
                 if (bonus >= 9999999)
                     buf.append("<span class=lowlatency>✔</span>");
                 else if (capBonus == -30)
@@ -599,6 +623,15 @@ class ProfileOrganizerRenderer {
     /** translate (ngettext) @since 0.8.5 */
     public String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p, _context);
+    }
+
+    /** @since 0.9.58+ */
+    public String getCanonicalHostName(String hostName) {
+        try {
+            return InetAddress.getByName(hostName).getCanonicalHostName();
+        } catch(IOException exception) {
+            return hostName;
+        }
     }
 
 }

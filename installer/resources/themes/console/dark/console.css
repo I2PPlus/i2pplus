@@ -790,7 +790,8 @@ h3[id="udpcon"]{width:auto}
 #profilelist td:nth-child(3){letter-spacing:.1em}
 #profilelist th:last-child{text-align:left;font-size:0}
 #profilelist td:not(.rih):nth-child(2){text-align:left}
-#profilelist td:nth-child(5) span{width:56px;height:16px;display:inline-block;vertical-align:middle;font-size:0}
+#profilelist td.groups{word-break:break-all}
+#profilelist td.groups span{width:56px;height:16px;display:inline-block;vertical-align:middle;font-size:0}
 #profilelist td:not(.rif):not(.rih):not(.rbw){padding:3px;color:#bb7}
 #profilelist td:not(.rif):first-child,#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(3){padding:2px 1px}
 #profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(7){width:1%;white-space:nowrap}
@@ -817,7 +818,7 @@ h3[id="udpcon"]{width:auto}
 #floodfills td:empty::before,#ntcpconnections td:not(:last-child):empty::before,#udpconnections td:not(:last-child):empty::before,#profilelist td:empty::before,#tunnels .cells:empty::after{width:100%;display:inline-block;text-align:center;content:"\2013";opacity:.8}
 #peers td.ipv6:empty::before{content:none}
 #profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:right}
-#profilelist td:nth-child(7) span{width:unset;min-width:unset;text-align:center}
+#profilelist td:nth-child(7){width:unset;min-width:unset;text-align:center}
 #profilelist .lowlatency,#profilelist .highlatency{width:12px;min-width:0;display:inline-block;text-align:center;color:#373}
 #profilelist .highlatency{color:#900}
 #profilelist .nospeed{text-align:center}

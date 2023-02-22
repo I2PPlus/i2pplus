@@ -582,10 +582,8 @@ a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #profilelist td[colspan="10"]::after{display:none;content:none}
 #profilelist td[colspan="10"] hr{display:none}
 #profilelist td:not(.rif):first-child,#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(3){width:1%;white-space:nowrap}
-#profilelist th:nth-child(5),#profilelist td:nth-child(5){min-width:56px;white-space:nowrap}
-#profilelist td:nth-child(6) span,#profilelist td:nth-child(8) span,#profilelist td:nth-child(9) span{display:inline-block;min-width:60px;text-align:right}
-#profilelist td:nth-child(8) span,#profilelist td:nth-child(9) span{min-width:40px;display:inline-block;text-align:right}
-#profilelist td:nth-child(9) span{min-width:30px}
+#profilelist th.groups,#profilelist td.groups{min-width:56px;white-space:nowrap}
+#profilelist .latency{width:unset;min-width:unset;text-align:center}
 #profilelist td:not(.rih):not(.rbw):last-child a::after,a[href^="/viewprofile"]::after,a[href^="/configpeer?"]::after,.profiledump::after{margin:0 2px;padding:2px;height:14px;width:14px;display:inline-block;vertical-align:middle;border:1px solid #bbd;border-radius:2px;background:var(--bg) var(--eye) no-repeat center center/12px;content:""}
 #profilelist td:last-child .viewprofile:hover::after,.viewprofile:hover::after,.profiledump:hover::after{background:var(--bg) var(--eye_hover) no-repeat center center/12px}
 #profilelist td:last-child img,a[href^="/configpeer?"] img,a[href^="/viewprofile"] img,.profiledump img{display:none}
