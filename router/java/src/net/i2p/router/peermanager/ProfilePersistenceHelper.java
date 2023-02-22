@@ -187,8 +187,9 @@ class ProfilePersistenceHelper {
             //profile.getSendSuccessSize().store(out, "sendSuccessSize");
             profile.getTunnelCreateResponseTime().store(out, "tunnelCreateResponseTime", addComments);
             if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
-            profile.getTunnelTestResponseTime().store(out, "tunnelTestResponseTime", addComments);
-//            profile.getPeerTestResponseTime().store(out, "peerTestResponseTime", addComments);
+                profile.getTunnelTestResponseTime().store(out, "tunnelTestResponseTime", addComments);
+            if (profile.getPeerTestResponseTime() != null)
+                profile.getPeerTestResponseTime().store(out, "peerTestResponseTime", addComments);
         }
 
         if (profile.getIsExpandedDB()) {
@@ -313,7 +314,7 @@ class ProfilePersistenceHelper {
                 //_log.warn("Deleted " + i + " stale peer profiles");
                 _log.warn("Not deleting " + i + " (stale?) peer profiles - will expire when read at startup");
             }
-        }             
+        }
         return i;
     }
 
