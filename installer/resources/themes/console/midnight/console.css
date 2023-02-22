@@ -1332,99 +1332,85 @@ color:var(--ink)}
 #logs li font[color="#000099"]::before,.log_info{background:var(--ink)}
 
 /* profiles */
-#profilelist tr:hover td,#floodfills tr:hover td{color:var(--ink)}
-#profilelist th,#profilelist td{text-align:right}
-#profilelist th{font-size:90%}
-#profilelist td:nth-child(2),#profilelist th:nth-child(2){text-align:left}
-#profilelist td:first-child{width:1%;text-align:right}
-#profilelist td:first-child{text-align:center}
-#profilelist td:first-child,#profilelist th:first-child,#profilelist td:nth-last-child(2),#profilelist th:nth-last-child(2){white-space:nowrap;text-align:center}
-#profilelist td:nth-child(3){letter-spacing:.1em}
-#profilelist th:last-child{text-align:center;padding-right:8px}
-#profilelist td:last-child{text-align:center;width:1%;white-space:nowrap}
-#profilelist .nospeed{text-align:center}
-#profilelist .lowlatency,#profilelist .highlatency{width:12px;min-width:0;color:#373}
-#profilelist .highlatency{color:#900}
-a[href^="configpeer?peer"]{font-size:0;filter:drop-shadow(0 0 1px #777)}
 a[href^="configpeer?peer"]::after{vertical-align:middle;margin:1px 2px 1px 4px;line-height:0;background:var(--edit) no-repeat center center;background-size:16px;height:20px;width:18px;display:inline-block;content:""}
+a[href^="configpeer?peer"]{font-size:0;filter:drop-shadow(0 0 1px #777)}
 a[href^="configpeer?peer"]:hover::after{background:var(--edit_hover) no-repeat center center;background-size:16px}
-#profile_defs,#thresholds{margin-top:-1px;margin-bottom:10px}
-#profile_defs td,#thresholds td{padding:5px}
-#profile_defs td:first-child{padding:5px 5px 5px 10px;width:1%;white-space:nowrap;text-align:right}
-#profile_defs td:last-child{white-space:normal;line-height:1.2}
-#profile_defs tr:hover td{background:none}
-#profilelist .separator,#profilelist .separator:hover{padding:0;border:var(--border_inner)}
-#thresholds th,#thresholds td{text-align:center}
-#capabilities_key td{padding:0}
-#capabilities_key table{margin:0;border:none}
-#capabilities_key table td{padding:3px 5px}
-#capabilities_key table td:nth-child(odd){width:1%}
-#capabilities_key b,#netdbtiers td b{padding:1px 2px;display:inline-block;min-width:16px;text-align:center;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
-#capabilities_key td:last-child{border-right:none}
-#capabilities_key td[colspan="5"]{text-align:left}
-#profile_defs b{text-transform:capitalize}
-#capabilities_key b{text-transform:none}
-#profile_defs + hr{display:none}
-#profiles_overview{margin-top:-4px}
-#profilelist td:first-child > *,#floodfills td:first-child > *,#udpconnections td:first-child > *,#ntcpconnections td:first-child > *{vertical-align:middle}
-#viewprofile{margin-bottom:8px}
-#viewprofile pre{margin-bottom:0;white-space:pre-wrap}
-#banlist{margin-bottom:10px;border:var(--border_inner)}
-#banlist li{min-height:46px}
-#banlist li:last-child{margin-bottom:0}
-#banlist li hr{margin:2px 0 2px -1px;background:linear-gradient(90deg,#26235c 75%,rgba(0,0,0,0));opacity:.75}
-#banlist + hr{display:none}
-#profiles #banlist{margin:-5px 0 8px -3px;padding:0;border:none}
-a[href^="/profiles"] ~ table > tbody > tr > th{text-align:right}
-a[href^="/profiles"] ~ table > tbody > tr > th:nth-last-child(2){text-align:center}
-a[href^="/profiles"] ~ table > tbody > tr > th:nth-child(2){text-align:center}
 a[href^="/profiles"] ~ table > tbody > tr > th:first-child{text-align:center}
+a[href^="/profiles"] ~ table > tbody > tr > th:nth-child(2){text-align:center}
+a[href^="/profiles"] ~ table > tbody > tr > th:nth-last-child(2){text-align:center}
+a[href^="/profiles"] ~ table > tbody > tr > th{text-align:right}
+.ff,#profiles .ff{background:linear-gradient(180deg,#421,#310)}
 h3[id$="con"]{margin:-5px 0 -2px;padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;border:var(--border_inner);border-radius:0}
 h3[id="udpcon"]{width:auto}
-#ntcpconnections tr,#udpconnections tr,#tunnels tr,#profiles tr{box-shadow:none}
-#ntcpconnections td,#udpconnections td,#tunnels td:not(.rif):not(.rih):not(.rbw),#profiles td{box-shadow:var(--highlight),inset 0 0 2px 0 #26235c}
-#ntcpconnections tr:hover td:not(.rif):not(.rih):not(.rbw),#udpconnections tr:hover td:not(.rif):not(.rih):not(.rbw),#tunnels tr:hover td,#profiles tr:hover td{box-shadow:none}
-#udpconnections{margin-bottom:10px;overflow-x:auto}
-#udpconnections i{line-height:1.5;letter-spacing:.1em;font-weight:700;font-size:90%}
-#udpconnections tr:hover,#ntcpconnections tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#jardump tr:hover,#sidebarconf tr:hover,#webappconfig tr:hover td,.tunneldisplay tr:hover td,#profilelist tr:hover,#floodfills tr:hover,.eventspanel tr:hover,#profiles tr:hover td{background:#202;color:#eff1ff}
-#ntcpconnections{overflow-x:scroll}
-#udpconnections td:not(.rif):not(.rbw):not(.rih):first-child,#ntcpconnections td:not(.rif):not(.rbw):not(.rih):first-child{padding:4px;width:1%;white-space:nowrap}
-#udpconnections tr:hover td:not(.rif):not(.rbw):not(.rih),#ntcpconnections tr:hover td:not(.rif):not(.rbw):not(.rih):{color:var(--ink)}
-#ntcpconnections td.queue:empty::before{content:""}
-#udpconnections tfoot td{color:var(--ink)}
-#udpconnections tfoot:hover td{border-top:var(--border_inner)}
-#udpconnections tfoot td:first-child{padding-left:9px}
-#peers .caps{width:1%}
-
-.ff,#profiles .ff{background:linear-gradient(180deg,#421,#310)}
 .hidden,#profiles .hidden{color:#777;background:linear-gradient(180deg,#333,#222)}
 .hide,.hideme,#netdb .hide{display:none}
+.profilegroup{margin:2px 0 2px 10px;display:inline-block}
 .reachable,#profiles .reachable{background:linear-gradient(180deg,#131,#121)}
 .ssuintro,#profiles .ssuintro{background:linear-gradient(180deg,#313,#212)}
 .ssutesting,#profiles .ssutesting{background:linear-gradient(180deg,#331,#221)}
+#banlist + hr{display:none}
+#banlist li hr{margin:2px 0 2px -1px;background:linear-gradient(90deg,#26235c 75%,rgba(0,0,0,0));opacity:.75}
+#banlist li:last-child{margin-bottom:0}
+#banlist li{min-height:46px}
+#banlist{margin-bottom:10px;border:var(--border_inner)}
+#capabilities_key b,#netdbtiers td b{padding:1px 2px;display:inline-block;min-width:16px;text-align:center;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
+#capabilities_key b{text-transform:none}
+#capabilities_key table{margin:0;border:none}
+#capabilities_key table td:nth-child(odd){width:1%}
+#capabilities_key table td{padding:3px 5px}
+#capabilities_key td[colspan="5"]{text-align:left}
+#capabilities_key td:last-child{border-right:none}
+#capabilities_key td{padding:0}
+#ntcpconnections{overflow-x:scroll}
+#ntcpconnections td.queue:empty::before{content:""}
+#ntcpconnections td,#udpconnections td,#tunnels td:not(.rif):not(.rih):not(.rbw),#profiles td{box-shadow:var(--highlight),inset 0 0 2px 0 #26235c}
+#ntcpconnections tr:hover td:not(.rif):not(.rih):not(.rbw),#udpconnections tr:hover td:not(.rif):not(.rih):not(.rbw),#tunnels tr:hover td,#profiles tr:hover td{box-shadow:none}
+#ntcpconnections tr,#udpconnections tr,#tunnels tr,#profiles tr{box-shadow:none}
 #peerprofiles.widescroll{position:relative;padding-top:102px;margin-top:0}
+#peers .caps{width:1%}
 #peer_thresholds{position:absolute;top:5px;width:100%}
+#profile_defs b{text-transform:capitalize}
+#profile_defs + hr{display:none}
 #profile_defs table{border:none}
+#profile_defs td:first-child{padding:5px 5px 5px 10px;width:1%;white-space:nowrap;text-align:right}
+#profile_defs td:last-child{white-space:normal;line-height:1.2}
 #profile_defs td:nth-child(2)::first-letter{text-transform:uppercase}
+#profile_defs td,#thresholds td{padding:5px}
+#profile_defs,#thresholds{margin-top:-1px;margin-bottom:10px}
 #profile_defs tr:first-child td{border-top:none}
-.profilegroup{margin:2px 0 2px 10px;display:inline-block}
-#profilelist td:nth-child(2) i{display:inline-block;width:100%;text-align:center}
-#profilelist td:nth-child(2){text-align:left}
-#profilelist td:nth-child(2){white-space:nowrap;width:1%}
-#profilelist td:nth-child(3) i{letter-spacing:0}
-#profilelist td:nth-last-child(5) span{min-width:40px}
-#profilelist td{padding:4px}
-#profilelist th:first-child,#profilelist th:nth-child(2),#profilelist th:nth-child(3),#profilelist th:nth-child(4),#profilelist th:nth-child(7),#profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3),#profilelist td:nth-child(4),#profilelist td:nth-child(7){width:1%;white-space:nowrap;text-align:center}
-#profilelist th:nth-child(5),#profilelist td:nth-child(5){text-align:center}
-#profilelist th,#profilelist td{padding-left:8px;padding-right:8px}
+#profile_defs tr:hover td{background:none}
+#profilelist .highlatency{color:#900}
+#profilelist .lowlatency,#profilelist .highlatency{width:12px;min-width:0;color:#373}
+#profilelist .nospeed{text-align:center}
+#profilelist .separator,#profilelist .separator:hover{padding:0;border:var(--border_inner)}
+#profilelist td:first-child > *,#floodfills td:first-child > *,#udpconnections td:first-child > *,#ntcpconnections td:first-child > *{vertical-align:middle}
+#profilelist td:first-child,#profilelist th:first-child,#profilelist td:nth-last-child(2),#profilelist th:nth-last-child(2){white-space:nowrap;text-align:center}
+#profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3){width:1%;white-space:nowrap}
+#profilelist td:last-child{text-align:center;width:1%;white-space:nowrap}
+#profilelist th,#profilelist td:not(.rif):not(.rih):not(.rbw){padding 4px 8px;text-align:center}
+#profilelist th{font-size:90%}
+#profilelist tr:hover td,#floodfills tr:hover td{color:var(--ink)}
+#profiles #banlist{margin:-5px 0 8px -3px;padding:0;border:none}
 #profiles_overview{margin-bottom:0}
+#profiles_overview{margin-top:-4px}
 #profiles .widescroll{margin:-4px auto -2px}
 #thresholds{margin-bottom:15px}
+#thresholds th,#thresholds td{text-align:center}
+#udpconnections i{line-height:1.5;letter-spacing:.1em;font-weight:700;font-size:90%}
+#udpconnections{margin-bottom:10px;overflow-x:auto}
+#udpconnections td:not(.rif):not(.rbw):not(.rih):first-child,#ntcpconnections td:not(.rif):not(.rbw):not(.rih):first-child{padding:4px;width:1%;white-space:nowrap}
+#udpconnections tfoot:hover td{border-top:var(--border_inner)}
+#udpconnections tfoot td{color:var(--ink)}
+#udpconnections tfoot td:first-child{padding-left:9px}
+#udpconnections tr:hover,#ntcpconnections tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#jardump tr:hover,#sidebarconf tr:hover,#webappconfig tr:hover td,.tunneldisplay tr:hover td,#profilelist tr:hover,#floodfills tr:hover,.eventspanel tr:hover,#profiles tr:hover td{background:#202;color:#eff1ff}
+#udpconnections tr:hover td:not(.rif):not(.rbw):not(.rih),#ntcpconnections tr:hover td:not(.rif):not(.rbw):not(.rih):{color:var(--ink)}
 .unreachable,#profiles .unreachable{background:linear-gradient(180deg,#300,#200)}
 #view_profile h3 a{letter-spacing:0;font-size:90%;text-transform:none}
 #view_profile h3{margin-bottom:-2px;padding-top:14px;position:relative;vertical-align:middle;border-width:1px;border-radius:0}
 #view_profile .identicon{margin:0;position:absolute;top:1px;right:1px;width:auto;height:calc(100% - 2px);opacity:.7}
+#viewprofile{margin-bottom:8px}
 #viewprofile pre{margin:0;padding:20px 20px 0;line-height:20px;background:repeating-linear-gradient(180deg,rgba(0,0,48,.2),rgba(0,0,48,.2) 20px,rgba(0,0,96,.2) 20px,rgba(0,0,96,.2) 40px);width:calc(100% - 44px);text-shadow:0 1px 1px #000;border-left:5px solid #1a1840}
+#viewprofile pre{margin-bottom:0;white-space:pre-wrap}
 #view_profile .profiledump img,#view_profile .configpeer img{opacity:0;margin:0;padding:0}
 #view_profile .profiledump,#view_profile .configpeer{padding:6px;font-size:0}
 #viewprofile span{margin:-26px -1px -1px 0;padding:5px;float:right;border:var(--border_inner);background:#000}
