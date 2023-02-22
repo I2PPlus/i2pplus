@@ -345,7 +345,7 @@ div[id^="config_"].main{padding-bottom:14px}
 #newspage .newsentry:last-child{margin-bottom:-4px}
 #news ul{margin:10px 15px 15px;padding:12px 15px;list-style:none;border-radius:4px;box-shadow:var(--bevel_hard),var(--highlight_badge);background:var(--msg)}
 #news li{margin:3px 0 3px 15px;padding:5px;vertical-align:middle;word-wrap:break-word;text-align:justify;text-transform:capitalize;color:var(--a)}
-#news li::before{width:20px;height:10px;display:inline-block;list-style:none;background:var(--tunn_active) no-repeat left center/8px;content:"";}
+#news li::before{width:20px;height:10px;display:inline-block;list-style:none;background:var(--tunn_active) no-repeat left center/8px;content:""}
 #news .newsentry h4{margin:5px 0 10px;padding:0;text-transform:capitalize;font-size:10pt;border-bottom:var(--dotted);opacity:1}
 #news p,#newscontent p{margin:0 15px;font-size:9pt}
 #news p:nth-child(n+2),#newscontent p:nth-child(n+2){margin-top:8px}
@@ -542,7 +542,7 @@ form[action="updategraphs"]{margin:-11px -11px -18px;border:var(--border);border
 #graphs .nowrap{text-align:left;line-height:3}
 
 /* jobs */
-.joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0;}
+.joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0}
 .joblog h3{margin-top:10px}
 .joblog br{margin-bottom:5px}
 .joblog ol li{padding-bottom:5px;width:calc(100% - 45px);min-width:360px;display:inline-block;text-align:left;list-style-position:inside;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
@@ -790,7 +790,7 @@ h3[id="udpcon"]{width:auto}
 #profilelist td:nth-child(3){letter-spacing:.1em}
 #profilelist th:last-child{text-align:left;font-size:0}
 #profilelist td:not(.rih):nth-child(2){text-align:left}
-#profilelist td:nth-child(5) span{width:56px;height:16px;display:inline-block;font-size:0}
+#profilelist td:nth-child(5) span{width:56px;height:16px;display:inline-block;vertical-align:middle;font-size:0}
 #profilelist td:not(.rif):not(.rih):not(.rbw){padding:3px;color:#bb7}
 #profilelist td:not(.rif):first-child,#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(3){padding:2px 1px}
 #profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(7){width:1%;white-space:nowrap}
@@ -800,7 +800,6 @@ h3[id="udpcon"]{width:auto}
 #profilelist td:not(.rih):nth-child(2) i{width:100%;display:inline-block;text-align:center}
 #profilelist td:nth-child(n+3){text-align:center}
 #profilelist td:not(.rih):not(.rbw):last-child{width:1%;white-space:nowrap;text-align:center}
-#profilelist td:nth-last-child(5) span{min-width:40px}
 #profilelist .separator td,#profilelist.separator td:hover{padding:1px;border:var(--border);border-top:1px solid #000;border-bottom:1px solid #000;background:#040}
 #profilelist a[href^="viewprofile"]{margin-bottom:2px;display:inline-block}
 #profilelist .bytes{opacity:.7}
@@ -817,7 +816,8 @@ h3[id="udpcon"]{width:auto}
 #profilelist .nospeed{text-align:center}
 #floodfills td:empty::before,#ntcpconnections td:not(:last-child):empty::before,#udpconnections td:not(:last-child):empty::before,#profilelist td:empty::before,#tunnels .cells:empty::after{width:100%;display:inline-block;text-align:center;content:"\2013";opacity:.8}
 #peers td.ipv6:empty::before{content:none}
-#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(7) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:right}
+#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:right}
+#profilelist td:nth-child(7) span{width:unset;min-width:unset;text-align:center}
 #profilelist .lowlatency,#profilelist .highlatency{width:12px;min-width:0;display:inline-block;text-align:center;color:#373}
 #profilelist .highlatency{color:#900}
 #profilelist .nospeed{text-align:center}
