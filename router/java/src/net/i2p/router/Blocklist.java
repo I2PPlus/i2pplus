@@ -125,6 +125,7 @@ public class Blocklist {
     private static final String ID_COUNTRY = "country";
     private static final String ID_USER = "user";
     public static final String ID_SYBIL = "sybil";
+    public static final String ID_TOR = "tor";
 
 
     /**
