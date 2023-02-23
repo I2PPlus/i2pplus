@@ -145,7 +145,7 @@ class EventPumper implements Runnable {
         _context.statManager().createRateStat("ntcp.zeroRead", "Number of NTCP zero length read events", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
         _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
         _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Number of NTCP Inbound empty message drop events", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
-        _context.statManager().createRequiredRateStat("ntcp.inboundConn", "Inbound NTCP Connection", "ntcp", new long[] { 60*1000L } );
+        _context.statManager().createRequiredRateStat("ntcp.inboundConn", "Inbound NTCP Connection", "Transport [NTCP]", new long[] { 60*1000L } );
         _nodelay = ctx.getBooleanPropertyDefaultTrue(PROP_NODELAY);
     }
 
@@ -547,6 +547,9 @@ class EventPumper implements Runnable {
                     if (_log.shouldWarn())
                        _log.warn("Blocking accept of IP address: " + ba + " (Count: " + count + ")");
                     _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
+                    if (count >= 30 && _log.shouldWarn()) {
+                        _log.warn("WARNING! IP Address [" + ba + "] is making excessive inbound NTCP connection attempts (Count: " + count + ")");
+                    }
                     try { chan.close(); } catch (IOException ioe) { }
                     return;
                 }

@@ -151,11 +151,11 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("<html>\n<head>\n");
         out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
         out.println("<title>I2PControl - I2P+</title>");
-        out.println("<link rel=\"icon\" href=\"/themes/console/midnight/images/favicon.svg\">");
+        out.println("<link rel=icon href=\"/themes/console/midnight/images/favicon.svg\">");
         out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=stylesheet type=text/css>");
         out.println("</head>\n<body>");
         out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
-                    "<img src=\"/themes/console/images/configure.svg\" height=\"16\" width=\"16\"></a></h1>");
+                    "<img src=\"/themes/console/images/configure.svg\" height=16 width=16></a></h1>");
         out.println("<p><b>Version:</b> " + I2PControlVersion.VERSION + "<br>");
         out.println("<b>Status:</b> Running</p>");
        if ("/password".equals(httpServletRequest.getServletPath())) {
@@ -163,15 +163,15 @@ public class JSONRPC2Servlet extends HttpServlet {
             if (_secMan.isDefaultPasswordValid()) {
                 out.println("<p>The current API password is the default, \"" + _secMan.DEFAULT_AUTH_PASSWORD + "\". You should change it.</p>");
             } else {
-                out.println("<p><span class=\"prompt\">Current API password:</span> <input name=\"password\" type=password></p>");
+                out.println("<p><span class=prompt>Current API password:</span> <input name=\"password\" type=password></p>");
             }
-            out.println("<p><span class=\"prompt\">New API password:</span> <input name=\"password2\" type=password placeholder=\"new password\">&nbsp;" +
+            out.println("<p><span class=prompt>New API password:</span> <input name=\"password2\" type=password placeholder=\"new password\">&nbsp;" +
                         "<input name=\"password3\" type=password placeholder=\"confirm new password\">" + "</p>\n" +
-                        "<p id=\"password\"><input name=\"save\" type=submit value=\"Change API Password\"></p>\n" +
+                        "<p id=password><input name=\"save\" type=submit value=\"Change API Password\"></p>\n" +
                         "<hr><p class=infohelp>If you forget the API password, stop I2PControl, delete the config file and restart I2PControl.\n" +
                         "<br><b>Location:</b> <code>" + _conf.getConfFile() + "</code></p>\n</form>");
         } else {
-            out.println("<hr><p id=\"password\"><a href=\"password\">Change API Password</a></p>");
+            out.println("<hr><p id=password><a href=\"password\">Change API Password</a></p>");
         }
         out.println("</body>\n</html>");
         out.close();
@@ -206,7 +206,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("<html>\n<head>");
         out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
         out.println("<title>I2PControl - I2P+</title>");
-        out.println("<link rel=\"icon\" href=\"/themes/console/midnight/images/favicon.svg\">");
+        out.println("<link rel=icon href=\"/themes/console/midnight/images/favicon.svg\">");
         out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=stylesheet type=text/css>");
         out.println("</head>\n<body>");
         out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
@@ -227,7 +227,7 @@ public class JSONRPC2Servlet extends HttpServlet {
                 out.println("<p>Incorrect old password, not changed</p>");
             }
         }
-        out.println("<hr>\n<p id=\"password\"><a href=\"password\">Change API Password</a></p>");
+        out.println("<hr>\n<p id=password><a href=\"password\">Change API Password</a></p>");
         out.println("</body>\n</html>");
     }
 

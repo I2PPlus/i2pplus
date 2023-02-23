@@ -755,61 +755,49 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
                 buf.append("<a href=\"/netdb?c=" + c + "\"><img width=20 height=15 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" title=\"");
-                buf.append(countryName).append(" &bullet; ");
-                if (ri != null && ip != null)
-                    buf.append(getCanonicalHostName(ip));
-                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a></td>");
+                buf.append(countryName);
+                if (ip != null && ip != "null") {
+                    if (enableReverseLookups()) {
+                        buf.append(" &bullet; ").append(getCanonicalHostName(ip));
+                    } else {
+                        buf.append(" &bullet; ").append(ip);
+                    }
+                }
+                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
             } else {
                 buf.append("<img width=20 height=15 alt=\"??\"" +
-                           " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append(" &bullet; ");
+                           " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
                 if (ri != null && ip != null)
-                    buf.append(ip);
-                buf.append("\"></td> ");
+                    buf.append(" &bullet; ").append(ip);
+                buf.append("\">");
             }
-            buf.append("<td class=rih>");
-            buf.append("<a title=\"");
+            buf.append("</td><td class=rih>");
             if (ri != null) {
-                if (caps.contains("f"))
-                    buf.append("Floodfill &bullet;");
+                buf.append("<a title=\"");
+                if (caps.contains("f") && !extended)
+                    buf.append(_t("Floodfill"));
                 if (v != null)
-                    buf.append(' ' + v);
+                    if (!extended)
+                    buf.append(" &bullet; ");
+                buf.append(v);
                 buf.append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">");
             }
             buf.append(h.substring(0,4));
             if (ri != null)
                 buf.append("</a>");
             if (extended) {
-                buf.append("</td><td class=\"rbw");
-                if (caps.contains("f"))
-                    buf.append(" isff");
-                if (caps.contains("U"))
-                    buf.append(" isU");
-                buf.append("\"><a href=\"/netdb?caps=");
-                buf.append(getCapacity(peer));
-                if (caps.contains("f"))
-                    buf.append("f");
-                if (caps.contains("U"))
-                    buf.append("U");
-                buf.append("\" title=\"");
-                buf.append(_t("Show all routers with this capability in the NetDb"));
-                buf.append("\">");
-                buf.append(getCapacity(peer));
-                buf.append("</a>");
+                buf.append("</td>").append(renderPeerCaps(peer, true));
             }
         } else {
-            buf.append("<table class=rid><tr><td class=rif>")
-               .append("<img width=20 height=15 alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"))
-               .append("\"></td><td class=rih>");
-           if (h != null)
-               buf.append(h.substring(0,4));
-           else
-               buf.append("????");
+            buf.append("<table class=rid><tr><td class=rif>");
+            buf.append(renderPeerFlag(peer));
+            buf.append("</td><td class=rih>");
+            buf.append(h.substring(0,4));
             if (extended) {
-               buf.append("</td><td class=rbw>?");
+               buf.append("</td><td class=rbw>?</td>");
            }
         }
-        buf.append("</td></tr></table>");
+        buf.append("</tr></table>");
         return buf.toString();
     }
 
@@ -817,12 +805,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.58+
      */
     @Override
-    public String renderPeerCaps(Hash peer) {
+    public String renderPeerCaps(Hash peer, boolean inline) {
         StringBuilder buf = new StringBuilder(128);
         RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
-        buf.append("<table class=\"rid ric\"><tr>");
+        if (!inline) {
+            buf.append("<table class=\"rid ric\"><tr>");
+        }
         if (ri != null) {
             String caps = ri.getCapabilities();
             String v = ri.getVersion();
@@ -846,7 +836,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } else {
             buf.append("<td class=rbw>?");
         }
-        buf.append("</td></tr></table>\n");
+        buf.append("</td>");
+        if (!inline) {
+            buf.append("</tr></table>\n");
+        }
         return buf.toString();
     }
 
@@ -881,28 +874,32 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } else {
             c = "a0";
         }
-        buf.append("<span class=peerFlag ");
+        // add a hidden span to facilitate sorting
+        buf.append("<span class=cc hidden>").append(c.toUpperCase(Locale.US)).append("</span>");
+        buf.append("<span class=peerFlag title=\"");
         if (ri != null) {
-            // add a hidden span to facilitate sorting
+            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
             if (c != "a0" && c != null && countryName.length() > 2) {
-                buf.append("title=\"").append(countryName).append("\">");
+                buf.append(countryName);
+                if (ri != null && ip != null)
+                    buf.append(" &bullet; ").append(ip);
             } else {
-                buf.append("title=unknown>");
+                buf.append(_t("unknown"));
             }
-            buf.append("<span class=cc hidden>").append(c.toUpperCase(Locale.US)).append("</span>");
+            buf.append("\">");
             if (c != "a0" && c != null) {
                 buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=18 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
             } else {
                 buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"")
-                   .append(" src=\"/flags.jsp?c=a0\" title=").append(_t("unknown")).append(">");
+                   .append(" src=\"/flags.jsp?c=a0\">");
             }
             buf.append("</span>");
         } else {
-            buf.append("<span class=peerFlag><span class=cc hidden>A0</span>" +
-                       "<img class=unknownflag width=24 height=18 alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\" title=").append(_t("unknown")).append("></span>");
+            buf.append(_t("unknown")).append("\"><img class=unknownflag width=24 height=18 alt=\"??\"" +
+                       " src=\"/flags.jsp?c=a0\">");
         }
+        buf.append("</span>");
         return buf.toString();
     }
 

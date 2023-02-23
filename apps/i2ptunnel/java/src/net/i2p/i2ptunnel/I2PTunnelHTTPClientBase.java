@@ -988,7 +988,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             errMessage = errMessage.replace("<a href=\"\">", "<a href=\"" + uri + "\">");
             errMessage = errMessage.replace("Could not find the following", "Could not establish a connection to the following");
             out.write(errMessage);
-            out.write("<a id=\"proxyrequest\" href=\"");
+            out.write("<a id=proxyrequest href=\"");
             out.write(uri);
             out.write("\">");
             // Long URLs are handled in CSS
@@ -999,12 +999,12 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     wwwProxy = "No Outproxy configured";
                 else if (wwwProxy.length() > 30)
                     wwwProxy = wwwProxy.substring(0,29) + "&hellip;";
-                out.write("<hr><span id=\"outproxy\"><b>");
+                out.write("<hr><span id=outproxy><b>");
                 out.write(_t("HTTP Outproxy"));
-                out.write(":</b> <span id=\"outproxydest\">" + wwwProxy + "</span></span><br><br>");
+                out.write(":</b> <span id=outproxydest>" + wwwProxy + "</span></span><br><br>");
             }
             if (extraMessage != null) {
-                out.write("<br><b id=\"extraMsg\">" + DataHelper.escapeHTML(extraMessage) + "</b><br><br>");
+                out.write("<br><b id=extraMsg>" + DataHelper.escapeHTML(extraMessage) + "</b><br><br>");
             }
             if (jumpServers != null && jumpServers.length() > 0) {
                 boolean first = true;
@@ -1041,7 +1041,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
                     if (first) {
                         first = false;
-                        out.write("<br><br>\n<div id=\"jumplinks\">\n<h4>");
+                        out.write("<br><br>\n<div id=jumplinks>\n<h4>");
                         out.write(_t("Click a link below for an address helper from a jump service"));
                         out.write("</h4>\n");
                     } else {

@@ -62,6 +62,9 @@
 <tr><th>router.blocklist.enable={true|false}</th></tr>
 <tr><td><%=intl._t("This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]")%></td></tr>
 
+<tr><th>router.blocklistTor.enable={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]")%></td></tr>
+
 <tr><th>router.blocklist.file={/path/to/additional_blocklist.txt}</th></tr>
 <tr><td><%=intl._t("This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]")%></td></tr>
 

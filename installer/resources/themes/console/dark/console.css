@@ -41,7 +41,7 @@ table hr{margin:0 0;padding:0 0;height:1px;display:none;color:var(--a);border:no
 td{padding:4px 6px;vertical-align:middle;border-top:var(--border_softer)}
 tr:first-child td{border-top:var(--border)}
 .applink td:first-child{border:none}
-td img{padding:0 1px 0 2px}
+/*td img{padding:0 1px 0 2px}*/
 th{padding:7px 5px;position:relative;line-height:1.1;text-align:center;font-size:90%;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 th[aria-sort]{font-style:italic}
 th.options{padding:8px 5px 8px 10px;font-size:9pt}
@@ -160,7 +160,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_newsheadings tr:last-child td{border-bottom:none}
 
 /* mini sidebar graph */
-#sb_graphcontainer{margin:-6px 0 -8px;padding:0 1px 1px;width:calc(100% - 3px);height:44px;position:relative;z-index:10;overflow:hidden;box-shadow:var(--outline),inset 0 0 0 1px #131,inset 0 0 0 2px #000,inset 0 0 3px 1px #040;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 15px,rgba(64,160,64,.3) 16px,rgba(0,0,0,0) 16px,rgba(0,0,0,0) 31px),repeating-linear-gradient(to top,rgba(0,0,0,0),rgba(48,152,48,.2),rgba(0,0,0,0) 1px,rgba(0,0,0,0) 14px)}
+#sb_graphcontainer{margin:-6px 0 -8px;padding:0 1px 1px;width:calc(100% - 3px);height:44px;position:relative;z-index:10;overflow:hidden;box-shadow:var(--outline),inset 0 0 0 1px #131,inset 0 0 0 2px #000,inset 0 0 3px 1px #040;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 15px,rgba(64,160,64,.3) 16px,rgba(0,0,0,0) 16px,rgba(0,0,0,0) 31px),repeating-linear-gradient(to top,rgba(0,0,0,0),rgba(48,152,48,.2),rgba(0,0,0,0) 1px,rgba(0,0,0,0) 14px);contain:paint}
 #sb_graphcontainer::after{width:calc(100% - 4px);display:inline-block;position:absolute;top:2px;right:2px;bottom:2px;left:2px;z-index:10;box-shadow:var(--outline),var(--bevel_hard),inset 0 0 0 2px #242;background:var(--graphoverlay);content:"";pointer-events:none}
 #sb_graphcontainer:hover a{cursor:zoom-in}
 #sb_graphstats{margin-top:4px;padding:2px 8px;display:inline-block;position:relative;z-index:1000;font-size:110%;font-weight:700;color:#393;text-shadow:0 0 1px #000;border:1px solid #252;border-top:none;border-radius:0 0 2px 2px;box-shadow:0 0 0 1px rgba(0,0,0,.7) inset,0 0 3px rgba(0,0,0,.5) inset;background:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.7),rgba(0,0,0,.5));opacity:0;transition:ease opacity .3s;pointer-events:none}
@@ -345,7 +345,7 @@ div[id^="config_"].main{padding-bottom:14px}
 #newspage .newsentry:last-child{margin-bottom:-4px}
 #news ul{margin:10px 15px 15px;padding:12px 15px;list-style:none;border-radius:4px;box-shadow:var(--bevel_hard),var(--highlight_badge);background:var(--msg)}
 #news li{margin:3px 0 3px 15px;padding:5px;vertical-align:middle;word-wrap:break-word;text-align:justify;text-transform:capitalize;color:var(--a)}
-#news li::before{width:20px;height:10px;display:inline-block;list-style:none;background:var(--tunn_active) no-repeat left center/8px;content:"";}
+#news li::before{width:20px;height:10px;display:inline-block;list-style:none;background:var(--tunn_active) no-repeat left center/8px;content:""}
 #news .newsentry h4{margin:5px 0 10px;padding:0;text-transform:capitalize;font-size:10pt;border-bottom:var(--dotted);opacity:1}
 #news p,#newscontent p{margin:0 15px;font-size:9pt}
 #news p:nth-child(n+2),#newscontent p:nth-child(n+2){margin-top:8px}
@@ -542,7 +542,7 @@ form[action="updategraphs"]{margin:-11px -11px -18px;border:var(--border);border
 #graphs .nowrap{text-align:left;line-height:3}
 
 /* jobs */
-.joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0;}
+.joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0}
 .joblog h3{margin-top:10px}
 .joblog br{margin-bottom:5px}
 .joblog ol li{padding-bottom:5px;width:calc(100% - 45px);min-width:360px;display:inline-block;text-align:left;list-style-position:inside;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
@@ -718,15 +718,16 @@ td.direction{width:1%;min-width:60px;max-width:60px;white-space:nowrap}
 #peers .confignav+h3{margin-top:12px}
 #peers h3:nth-child(n+2){margin-top:2px}
 #ntcpconnections+h3+#udpconnections,#ntcpconnections,#udpconnections{margin-bottom:10px}
-#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle}
+#peers img,#peers a[href^="https://gwhois"]{display:inline-block;vertical-align:middle;font-size:0}
 #peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
 #peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}
 #peers img[src$="bound.svg"],#profiles img[src$="bound.svg"],#tunnels img[src$="bound.svg"]{opacity:0}
 #peers table:not(.rid){margin-bottom:9px}
+#peers .whois,#peers .whois img{margin:0;display:inline-block;vertical-align:middle}
+#peers .whois::after{display:none}
 h3[id$="con"]{margin-bottom:-2px;border-radius:0;padding:8px 10px;font-size:10pt;word-spacing:.1em;letter-spacing:.08em;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%);border:var(--border)}
 h3[id="udpcon"]{width:auto}
 #ntcp+#udp{margin-top:-12px}
-/*#udpconnections td:nth-child(2) img,#ntcpconnections td:nth-child(2) img{padding:0}*/
 #ntcpconnections td:last-child{font-weight:700}
 #ntcpconnections{overflow-x:scroll}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before{content:""}
@@ -736,11 +737,9 @@ h3[id="udpcon"]{width:auto}
 #ntcpconnections td:nth-child(n+7) span,#ntcpconnections tfoot td:nth-child(n+7) span{min-width:40px;display:inline-block;text-align:right}
 #udpconnections table{overflow-x:auto}
 #udpconnections table i{font-weight:700;line-height:1.5;letter-spacing:.1em}
-#udpconnections tr a img{margin-top:3px}
 #udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tr:hover,#tunnels tr:hover{background:#020}
 #udpconnections tr:hover td,#ntcpconnections tr:hover td,.tunneldisplay tr:hover td{color:var(--ink)}
 #udpconnections th{padding:5px 2px;vertical-align:top;text-align:center}
-/*#udpconnections td:nth-child(n+13){padding-right:1%}*/
 #ntcpconnections tbody td:not(.rif):not(.rih):not(.rbw),#udpconnections tbody td:not(.rif):not(.rih):not(.rbw){border-right:var(--border_softer)}
 #udpconnections tbody td:not(.rif):not(.rih):not(.rbw):last-child,#ntcpconnections td:not(.rif):not(.rih):not(.rbw):last-child{border-right:var(--border)}
 #udpconnections td:not(.rif):not(rih):not(.rbw):first-child{width:1%;padding:5px;white-space:nowrap}
@@ -764,7 +763,6 @@ h3[id="udpcon"]{width:auto}
 #transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
-#peers #udpconnections:not(.advancedview) td:not(.rif):not(.rih):not(.rbw):nth-last-child(2){border-right:var(--border)}
 #peers .caps{width:1%;white-space:nowrap;text-align:center}
 #peers th.caps{padding-left:0;text-align:left}
 
@@ -790,7 +788,8 @@ h3[id="udpcon"]{width:auto}
 #profilelist td:nth-child(3){letter-spacing:.1em}
 #profilelist th:last-child{text-align:left;font-size:0}
 #profilelist td:not(.rih):nth-child(2){text-align:left}
-#profilelist td:nth-child(5) span{width:56px;height:16px;display:inline-block;font-size:0}
+#profilelist td.groups{word-break:break-all}
+#profilelist td.groups span{width:56px;height:16px;display:inline-block;vertical-align:middle;font-size:0}
 #profilelist td:not(.rif):not(.rih):not(.rbw){padding:3px;color:#bb7}
 #profilelist td:not(.rif):first-child,#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(3){padding:2px 1px}
 #profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(7){width:1%;white-space:nowrap}
@@ -800,7 +799,6 @@ h3[id="udpcon"]{width:auto}
 #profilelist td:not(.rih):nth-child(2) i{width:100%;display:inline-block;text-align:center}
 #profilelist td:nth-child(n+3){text-align:center}
 #profilelist td:not(.rih):not(.rbw):last-child{width:1%;white-space:nowrap;text-align:center}
-#profilelist td:nth-last-child(5) span{min-width:40px}
 #profilelist .separator td,#profilelist.separator td:hover{padding:1px;border:var(--border);border-top:1px solid #000;border-bottom:1px solid #000;background:#040}
 #profilelist a[href^="viewprofile"]{margin-bottom:2px;display:inline-block}
 #profilelist .bytes{opacity:.7}
@@ -817,7 +815,8 @@ h3[id="udpcon"]{width:auto}
 #profilelist .nospeed{text-align:center}
 #floodfills td:empty::before,#ntcpconnections td:not(:last-child):empty::before,#udpconnections td:not(:last-child):empty::before,#profilelist td:empty::before,#tunnels .cells:empty::after{width:100%;display:inline-block;text-align:center;content:"\2013";opacity:.8}
 #peers td.ipv6:empty::before{content:none}
-#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(7) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:right}
+#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:right}
+#profilelist td:nth-child(7){width:unset;min-width:unset;text-align:center}
 #profilelist .lowlatency,#profilelist .highlatency{width:12px;min-width:0;display:inline-block;text-align:center;color:#373}
 #profilelist .highlatency{color:#900}
 #profilelist .nospeed{text-align:center}
@@ -1046,7 +1045,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .rlookup{padding:0 2px 2px;display:inline-block;font-style:italic}
 #tunnels span[hidden] {display:none}
 #tunnels #transitSummary .peerFlag,#tunnels #tunnelPeerCount .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;box-shadow:0 0 0 1px #131;background:#151}
-#tunnels #transitSummary .peerFlag::before,#tunnels #tunnelPeerCount .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:""}
+#tunnels #transitSummary .peerFlag::before,#tunnels #tunnelPeerCount .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:"";pointer-events:none}
 #tunnels #transitSummary .peerFlag img,#tunnels #tunnelPeerCount .peerFlag img{margin:0;padding:1px;width:24px;height:18px;box-shadow:var(--highlight)}
 #tunnels .percentBarOuter{position:relative}
 #tunnels .percentBarText{position:absolute;top:0:left:0;bottom:0;right:0;width:100%;height:unset;font-size:80%}
@@ -2881,7 +2880,7 @@ span#newtab{margin-top:4px}
 #topCount table, #topCount td{line-height:1}
 #topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;;border:none}
 #topCount td{padding:4px 2px 2px 6px;min-width:32px;position:relative;line-height:1;border:var(--border_soft);text-align:left;box-shadow:var(--highlight);background:var(--badge)}
-#topCount td span{padding:2px 4px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(0,0,0,.3)}
+#topCount td span{padding:1px 3px 1px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(0,0,0,.3)}
 #topCount td#ff{background:linear-gradient(135deg,rgba(0,0,0,0)88%,rgba(192,80,0,.8)88%),var(--badge)}
 #topCount td#u{background:linear-gradient(45deg,rgba(0,0,0,0)88%,rgba(234,0,0,.9)88%),var(--badge)}
 #peers .reachability{display:none}

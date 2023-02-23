@@ -781,8 +781,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) &&
-                                     isOld && _context.router().getUptime() > 15*60*1000 &&
-                                     _context.netDb().getKnownRouters() > 1500 && !isUs;
+                                     isOld && (_context.router().getUptime() > 15*60*1000 ||
+                                     _context.netDb().getKnownRouters() > 1500) && !isUs;
             boolean isFF = false;
             String caps = ri.getCapabilities().toUpperCase();
             if (caps.contains("F")) {
@@ -802,16 +802,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Uninteresting");
                 _ds.remove(key);
                 _kb.remove(key);
-            }
-            if (noSSU && isFF && !isUs) {
+            } else if (noSSU && isFF && !isUs) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
                 _ds.remove(key);
                 _kb.remove(key);
-            }
-            if (key != null && _context.banlist().isBanlistedForever(key)) {
+            } else if (key != null && _context.banlist().isBanlistedForever(key)) {
                 if (_log.shouldInfo())
-                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted");
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Permanently blocklisted");
+                _ds.remove(key);
+                _kb.remove(key);
+            } else if (key != null && _context.banlist().isBanlistedHostile(key)) {
+                if (_log.shouldInfo())
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted (tagged as hostile)");
                 _ds.remove(key);
                 _kb.remove(key);
             } else if (key != null && isNegativeCached(key)) {
@@ -1359,6 +1362,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> Floodfill with SSU disabled",
                                              null, null, 4*60*60*1000);
             return "Router [" + routerId + "] Floodfill with SSU disabled";
+        } else if (noSSU && !isUs) {
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping RouterInfo [" + riHash + "] -> Router with SSU disabled");
+                _log.warn("Banning [" + riHash + "] for 4h -> Router with SSU disabled");
+            }
+            _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> Router with SSU disabled",
+                                             null, null, 4*60*60*1000);
+            return "Router [" + routerId + "] Router with SSU disabled";
         }
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {

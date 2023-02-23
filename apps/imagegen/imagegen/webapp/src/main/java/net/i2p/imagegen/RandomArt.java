@@ -216,16 +216,16 @@ public class RandomArt {
                 cbase[i] = (byte) ((dgst_raw[i] & 0xff) * 5 / 8);
             }
             base = DataHelper.fromLong(cbase, 0, clen);
-            retval.append("<div id=\"container\" style=\"color:#").append(getColor(base, 0)).append("\"><pre>\n");
+            retval.append("<div id=container style=\"color:#").append(getColor(base, 0)).append("\"><pre>\n");
         }
         if (prefix_len > 0 && !html)
             retval.append(String.format("%s" + BOX_TL + BOX_TOP + BOX_TOP + "[%4s%s ]", prefix, key_type, size_txt));
         else if (prefix_len > 0)
-            retval.append(String.format("%s" + BOX_TL + BOX_TOP + BOX_TOP + "<span id=\"title\">[%4s%s ]</span>", prefix, key_type, size_txt));
+            retval.append(String.format("%s" + BOX_TL + BOX_TOP + BOX_TOP + "<span id=title>[%4s%s ]</span>", prefix, key_type, size_txt));
         else if (!html)
             retval.append(String.format("" + BOX_TL + BOX_TOP + BOX_TOP + "[%4s%s ]", key_type, size_txt));
         else
-            retval.append(String.format("" + BOX_TL + BOX_TOP + BOX_TOP + "<span id=\"title\">[%4s%s ]</span>", key_type, size_txt));
+            retval.append(String.format("" + BOX_TL + BOX_TOP + BOX_TOP + "<span id=title>[%4s%s ]</span>", key_type, size_txt));
         /* output upper border */
         for (int i = 0; i < FLDSIZE_X - Math.max(key_type.length(), 4) - 9; i++)
         retval.append(BOX_TOP);

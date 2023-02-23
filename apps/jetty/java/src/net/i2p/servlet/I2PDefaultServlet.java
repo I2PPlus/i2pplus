@@ -228,12 +228,12 @@ public class I2PDefaultServlet extends DefaultServlet
 //        buf.append("<link href=\"jetty-dir.css\" rel=stylesheet type=text/css/>\n");
         buf.append(inlineCSS);
         buf.append("<link href=\"/.resources/jetty-dir.css\" rel=stylesheet type=text/css/>\n")
-           .append("</head>\n<body id=\"dirlist\">\n<h1>").append(pwd).append("</h1>\n")
+           .append("</head>\n<body id=dirlist>\n<h1>").append(pwd).append("</h1>\n")
            .append(tableHeader);
         if (parent) {
             buf.append("<tr><td class=\"name\"><a href=\"");
             buf.append(URIUtil.addPaths(base,"../"));
-            buf.append("\">Parent Directory</a></td><td class=\"lastmodified\"></td><td class=\"size\"></td></tr>\n");
+            buf.append("\">Parent Directory</a></td><td class=lastmodified></td><td class=size></td></tr>\n");
         }
 
         String encodedBase = hrefEncodeURI(base);
@@ -278,9 +278,9 @@ public class I2PDefaultServlet extends DefaultServlet
 
                 buf.append("\">");
                 buf.append(deTag(ls[i]));
-                buf.append("</a></td><td width=1% nowrap class=\"lastmodified\">");
+                buf.append("</a></td><td width=1% nowrap class=lastmodified>");
                 buf.append(dfmt.format(new Date(item.lastModified())));
-                buf.append("</td><td width=1% align=right class=\"size\">");
+                buf.append("</td><td width=1% align=right class=size>");
                 if (!isDir)
                     buf.append(item.length());
                 buf.append("</td></tr>\n");

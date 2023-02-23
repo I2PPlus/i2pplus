@@ -3,6 +3,7 @@ package net.i2p.router.web.helpers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.net.InetAddress;
 import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.Set;
@@ -11,17 +12,21 @@ import java.util.TreeSet;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.Router;
-import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.ProfileOrganizer;
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import static net.i2p.router.web.helpers.TunnelRenderer.range;
+
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
+
+import net.i2p.util.Addresses;
 
 /**
  * Helper class to refactor the HTML rendering from out of the ProfileOrganizer
@@ -34,6 +39,11 @@ class ProfileOrganizerRenderer {
     public ProfileOrganizerRenderer(ProfileOrganizer organizer, RouterContext context) {
         _context = context;
         _organizer = organizer;
+    }
+
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    public boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
     }
 
     /**
@@ -80,7 +90,8 @@ class ProfileOrganizerRenderer {
         int reliable = 0;
         int integrated = 0;
         boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
-        StringBuilder buf = new StringBuilder(16*1024);
+//        StringBuilder buf = new StringBuilder(16*1024);
+        StringBuilder buf = new StringBuilder(32*1024);
 
         if (mode < 2) {
             buf.append("<p id=profiles_overview class=infohelp>");
@@ -104,13 +115,21 @@ class ProfileOrganizerRenderer {
                .append("<thead>\n<tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("Caps")).append("</th>")
-               .append("<th>").append(_t("Version")).append("</th>")
-               .append("<th>").append(_t("Status")).append("</th>")
-               .append("<th>").append(_t("Groups")).append("</th>")
+               .append("<th>").append(_t("Version")).append("</th>");
+            if (enableReverseLookups()) {
+                buf.append("<th>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
+            }
+            buf.append("<th>").append(_t("Status")).append("</th>")
+               .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th>").append(_t("Speed")).append("</th>")
-               .append("<th>").append(_t("Low Latency")).append("</th>")
-               //.append("<th>").append(_t("Test Avg")).append("</th>")
+               .append("<th class=latency>").append(_t("Low Latency")).append("</th>")
+               //.append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
+               //.append(_t("Test Avg (ms)")).append("</th>")
                .append("<th>").append(_t("Capacity")).append("</th>")
+               .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
+               .append("\">").append(_t("Accepted")).append("</th>")
+               .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
+               .append("\">").append(_t("Rejected")).append("</th>")
                .append("<th>").append(_t("Integration")).append("</th>")
                .append("<th>").append(_t("First Heard About")).append("</th>")
                .append("<th>").append(_t("View/Edit")).append("</th>")
@@ -142,35 +161,11 @@ class ProfileOrganizerRenderer {
                 //if(prof.getIsExpandedDB())
                 //   buf.append(" ** ");
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-                if (info != null) {
-                    // prevent HTML injection in the caps and version
-                    // remove superfluous O class from P + X, add spans, trail ff, add links to netdb search + tooltip
-                    String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
-                    String caps = DataHelper.stripHTML(info.getCapabilities())
-                        .replace("XO", "X")
-                        .replace("PO", "P")
-                        .replace("fR", "Rf")
-                        .replace("fU", "Uf")
-                        .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
-                        .replace("B", "<a href=\"/netdb?caps=B\"><span class=testing>B</span></a>")
-                        .replace("C", "<a href=\"/netdb?caps=C\"><span class=ssuintro>C</span></a>")
-                        .replace("H", "<a href=\"/netdb?caps=H\"><span class=hidden>H</span></a>")
-                        .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
-                        .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
-                        .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
-                        .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
-                        .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
-                        .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
-                        .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
-                        .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
-                        .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
-                        .replace("\"><span", tooltip);
-                    buf.append("<td>").append(caps);
-                } else {
-                    buf.append("<td><i>").append(_t("unknown")).append("</i>");
-                }
-                buf.append("</td>");
                 buf.append("<td>");
+                if (info != null) {
+                    buf.append(_context.commSystem().renderPeerCaps(peer, false));
+                }
+                buf.append("</td><td>");
                 String v = info != null ? info.getOption("router.version") : null;
                 if (v != null) {
                     buf.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
@@ -179,8 +174,20 @@ class ProfileOrganizerRenderer {
                 } else {
                     buf.append("<span>&ensp;</span>");
                 }
-                buf.append("</td>");
-                buf.append("<td>");
+                if (enableReverseLookups()) {
+                    buf.append("</td><td>");
+
+                    String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
+                    String rl = ip != null ? getCanonicalHostName(ip) : null;
+                    if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
+                        buf.append("<span class=rlookup title=\"").append(rl).append("\">");
+                        buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")));
+                    } else {
+                        buf.append("<span>").append(ip.replace("null", "unknown"));
+                    }
+                    buf.append("</span>");
+                }
+                buf.append("</td><td>");
                 boolean ok = true;
                 if (_context.banlist().isBanlisted(peer)) {
                     buf.append(_t("Banned"));
@@ -213,7 +220,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<span>&ensp;</span>");
                 }
                 buf.append("</td>");
-                buf.append("<td>");
+                buf.append("<td class=groups>");
                 buf.append("<span class=\"");
                 if (isIntegrated) buf.append("integrated ");
                 switch (tier) {
@@ -254,30 +261,31 @@ class ProfileOrganizerRenderer {
                 } else {
                     buf.append("<span hidden>0</span>");
                     buf.append("<span class=\"");
-                    if (bonus == 9999999)
+                    if (bonus >= 9999999)
                         buf.append("testOK ");
-                    else if (capBonus == -30)
+                    else if (capBonus <= -30)
                         buf.append("testFail ");
                     buf.append("nospeed\">&ensp;</span>");
                 }
                 buf.append("</td>");
-                buf.append("<td>");
+                buf.append("<td class=latency>");
                 if (bonus >= 9999999)
                     buf.append("<span class=lowlatency>✔</span>");
                 else if (capBonus == -30)
                     buf.append("<span class=highlatency>✖</span>");
                 else
                     buf.append("<span>&ensp;</span>");
-                buf.append("</td>");
 /*
-                if (prof.getPeerTestTimeAverage() >= 10)
-                    buf.append("<td>").append(prof.getPeerTestTimeAverage()).toString().replace("0 ", "<span hidden>0</span>");
-                else
-                    buf.append("<span hidden>0</span>");
-                buf.append("</td>");
+                buf.append("</td><td>");
+                if (prof.getPeerTestTimeAverage() > 0)
+                    buf.append(Math.round(prof.getPeerTestTimeAverage()));
+                else {
+                    buf.append("&ensp;");
+                }
 */
-                buf.append("<td><span>").append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
+                buf.append("</td><td><span>");
                 if (capBonus != 0 && capBonus != -30) {
+                    buf.append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
                     if (capBonus > 0)
                         buf.append(" (+");
                     else
@@ -288,6 +296,18 @@ class ProfileOrganizerRenderer {
                 }
                 buf.append("</span>");
                 buf.append("</td><td>");
+                int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
+                int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
+                if (agreed > 0)
+                    buf.append(agreed);
+                else
+                    buf.append("<span hidden>0</span>");
+                buf.append("</td><td>");
+                if (rejected > 0)
+                    buf.append(rejected);
+                else
+                    buf.append("<span hidden>0</span>");
+                buf.append("</td><td>");
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
@@ -296,11 +316,18 @@ class ProfileOrganizerRenderer {
                 }
                 buf.append("</td><td>");
                 now = _context.clock().now();
-                buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
-                   .append(formatInterval(now, prof.getFirstHeardAbout()));
+                if (prof.getFirstHeardAbout() > 0) {
+                    buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
+                       .append(formatInterval(now, prof.getFirstHeardAbout()));
+                } else {
+                    buf.append("<span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
+                       .append(formatInterval(now, prof.getLastHeardFrom()));
+                }
                 buf.append("</td><td nowrap class=viewedit>");
-                buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
-                   .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
+                if (prof != null) {
+                    buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
+                       .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
+                }
                 buf.append("<br><a class=configpeer href=\"/configpeer?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("Configure peer"))
                    .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>");
                 buf.append("</td></tr>\n");
@@ -598,6 +625,15 @@ class ProfileOrganizerRenderer {
     /** translate (ngettext) @since 0.8.5 */
     public String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p, _context);
+    }
+
+    /** @since 0.9.58+ */
+    public String getCanonicalHostName(String hostName) {
+        try {
+            return InetAddress.getByName(hostName).getCanonicalHostName();
+        } catch(IOException exception) {
+            return hostName;
+        }
     }
 
 }

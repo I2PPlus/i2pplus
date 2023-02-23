@@ -255,8 +255,8 @@ class EstablishmentManager {
         //_context.statManager().createRateStat("udp.queueAllowTotalLifetime", "When a peer is retransmitting and we probabalistically allow a new message, what is the sum of the pending message lifetimes? (period is the new message's lifetime)?", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.dupDHX", "Session request replay (duplicate X)", "Transport [UDP]", UDPTransport.RATES);
         if (_enableSSU2)
-            _context.statManager().createRequiredRateStat("udp.inboundTokenLifetime", "SSU2 token lifetime (ms)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRequiredRateStat("udp.inboundConn", "Inbound UDP Connection", "udp", new long[] { 60*1000L } );
+            _context.statManager().createRequiredRateStat("udp.inboundTokenLifetime", "SSU2 Token lifetime (ms)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.inboundConn", "Inbound UDP Connection", "Transport [UDP]", new long[] { 60*1000L } );
     }
 
     public synchronized void startup() {
@@ -1902,7 +1902,7 @@ class EstablishmentManager {
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _context.banlist().banlistRouter(charlieHash, " <b>➜</b> Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                _context.banlist().banlistRouter(charlieHash, " <b>➜</b> Bad Introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                 charlie.fail();
                 return;
             }
@@ -2149,7 +2149,7 @@ class EstablishmentManager {
                 if (_log.shouldWarn())
                     _log.warn("BAD IP address length " + iplen + " from " + state);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad Introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                 state.fail();
                 return;
             }
@@ -2165,7 +2165,7 @@ class EstablishmentManager {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("BAD HolePunch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad Introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                 state.fail();
                 return;
             }
@@ -2179,7 +2179,7 @@ class EstablishmentManager {
                               "; Received from: " + id);
                 if (!TransportUtil.isValidPort(fromPort)) {
                     _context.statManager().addRateData("udp.relayBadIP", 1);
-                    _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                    _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad Introduction data", null, null, _context.clock().now() + 6*60*60*1000);
                     state.fail();
                     return;
                 }

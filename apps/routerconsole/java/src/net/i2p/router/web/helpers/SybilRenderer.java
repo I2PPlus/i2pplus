@@ -147,13 +147,13 @@ public class SybilRenderer {
         }
 
         StringBuilder buf = new StringBuilder(4*1024);
-        buf.append("<div id=\"sybilnav\">\n<ul>\n" +
-                   "<li id=\"reviewStored\"><a href=\"netdb?f=3\">" + _t("Review stored analysis") + "</a></li>\n" +
-                   "<li id=\"runNew\"><a href=\"netdb?f=3&amp;m=14\">" + _t("Run new analysis") + "</a></li>\n" +
-                   "<li id=\"configurePeriodic\"><a href=\"netdb?f=3&amp;m=15\">" + _t("Configure periodic analysis") + "</a></li>\n" +
-                   "<li id=\"banlisted\"><a href=\"/profiles?f=3\">" + _t("Review current bans") + "</a></li>\n" +
-                   "<li id=\"floodfillSummary\"><a href=\"netdb?f=3&amp;m=1\">" + _t("Floodfill Summary") + "</a></li>\n" +
-                   "<li id=\"sameFamily\"><a href=\"netdb?f=3&amp;m=2\">" + _t("Same Family") + "</a></li>\n" +
+        buf.append("<div id=sybilnav>\n<ul>\n" +
+                   "<li id=reviewStored><a href=\"netdb?f=3\">" + _t("Review stored analysis") + "</a></li>\n" +
+                   "<li id=runNew><a href=\"netdb?f=3&amp;m=14\">" + _t("Run new analysis") + "</a></li>\n" +
+                   "<li id=configurePeriodic><a href=\"netdb?f=3&amp;m=15\">" + _t("Configure periodic analysis") + "</a></li>\n" +
+                   "<li id=banlisted><a href=\"/profiles?f=3\">" + _t("Review current bans") + "</a></li>\n" +
+                   "<li id=floodfillSummary><a href=\"netdb?f=3&amp;m=1\">" + _t("Floodfill Summary") + "</a></li>\n" +
+                   "<li id=sameFamily><a href=\"netdb?f=3&amp;m=2\">" + _t("Same Family") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=3\">" + _t("IP close to us") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
@@ -234,14 +234,14 @@ public class SybilRenderer {
             renderThreatsHTML(out, buf, now, points);
         } else if (mode == 14) {
             // show run form
-            out.write("<div class=infohelp id=\"sybilanalysis\">\n");
+            out.write("<div class=infohelp id=sybilanalysis>\n");
             renderRunForm(out, buf, nonce);
             out.write("</div>\n");
         } else if (mode == 15) {
             // show background form
             renderBackgroundForm(out, buf, nonce);
         } else {
-            out.write("<div class=infohelp id=\"sybilanalysis\">\n<b><i>");
+            out.write("<div class=infohelp id=sybilanalysis>\n<b><i>");
             out.write("Unknown mode " + mode);
             out.write("</i></b></div>\n");
         }
@@ -260,7 +260,7 @@ public class SybilRenderer {
                    "Possible \"threats\" are summarized, however these are unlikely to be real threats. " +
                    "If you see anything you would like to discuss with the devs, contact us on IRC #i2p-dev."));
         out.write("</b></p>\n");
-        out.write("<div class=infohelp id=\"sybilanalysis\">\n");
+        out.write("<div class=infohelp id=sybilanalysis>\n");
         if (dates.isEmpty()) {
             out.write("<b><i>");
             out.write(_t("No stored analysis"));
@@ -268,7 +268,7 @@ public class SybilRenderer {
         } else {
             buf.append("\n<form action=\"netdb\" method=POST>\n" +
                        "<input type=hidden name=\"f\" value=3>\n" +
-                       "<input type=hidden name=\"m\" value=\"12\">\n" +
+                       "<input type=hidden name=\"m\" value=12>\n" +
                        "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n<b>")
                .append(_t("Select stored analysis")).append(":</b> \n" +
                        "<select name=\"date\">\n");
@@ -293,9 +293,9 @@ public class SybilRenderer {
      *  @since 0.9.38
      */
     private static void renderRunForm(Writer out, StringBuilder buf, String nonce) throws IOException {
-        buf.append("<form class=\"sybilScan\" action=\"netdb\" method=POST>\n" +
+        buf.append("<form class=sybilScan action=\"netdb\" method=POST>\n" +
                    "<input type=hidden name=\"f\" value=3>\n" +
-                   "<input type=hidden name=\"m\" value=\"13\">\n" +
+                   "<input type=hidden name=\"m\" value=13>\n" +
                    "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
                    "<table>\n<tr><td><b>")
            .append(_x("Run analysis on Floodfills only"))
@@ -475,7 +475,7 @@ public class SybilRenderer {
      */
     private void renderCloseSummary(Writer out, StringBuilder buf, Analysis analysis, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         // Distance to our router analysis
-        buf.append("<h3 id=\"ritoday\" class=sybils>").append(_t("Closest Floodfills to Our Routing Key (Where we Store our RI)")).append("</h3>\n");
+        buf.append("<h3 id=ritoday class=sybils>").append(_t("Closest Floodfills to Our Routing Key (Where we Store our RI)")).append("</h3>\n");
         buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil\">See all</a></p>\n");
         Hash ourRKey = _context.router().getRouterInfo().getRoutingKey();
         analysis.calculateRouterInfo(ourRKey, "our rkey", ris, points);
@@ -489,7 +489,7 @@ public class SybilRenderer {
         // Distance to our router analysis
         RouterKeyGenerator rkgen = _context.routerKeyGenerator();
         Hash nkey = rkgen.getNextRoutingKey(us);
-        buf.append("<h3 id=\"ritmrw\" class=sybils>").append(_t("Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)")).append("</h3>\n");
+        buf.append("<h3 id=ritmrw class=sybils>").append(_t("Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)")).append("</h3>\n");
         buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil\">See all</a></p>\n");
         analysis.calculateRouterInfo(nkey, "our rkey (tomorrow)", ris, points);
         renderRouterInfoHTML(out, buf, nkey, avgMinDist, ris);
@@ -499,7 +499,7 @@ public class SybilRenderer {
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderDHTSummary(Writer out, StringBuilder buf, Analysis analysis, Hash us, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
-        buf.append("<h3 id=\"dht\" class=sybils>").append(_t("Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)")).append("</h3>\n");
+        buf.append("<h3 id=dht class=sybils>").append(_t("Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)")).append("</h3>\n");
         analysis.calculateRouterInfo(us, "our router", ris, points);
         renderRouterInfoHTML(out, buf, us, avgMinDist, ris);
     }
@@ -510,7 +510,7 @@ public class SybilRenderer {
     private void renderDestSummary(Writer out, StringBuilder buf, Analysis analysis, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         // Distance to our published destinations analysis
         RouterKeyGenerator rkgen = _context.routerKeyGenerator();
-        buf.append("<h3 id=\"dest\" class=sybils>").append(_t("Floodfills Close to Our Destinations")).append("</h3>\n");
+        buf.append("<h3 id=dest class=sybils>").append(_t("Floodfills Close to Our Destinations")).append("</h3>\n");
         Map<Hash, TunnelPool> clientInboundPools = _context.tunnelManager().getInboundClientPools();
         List<Hash> destinations = new ArrayList<Hash>(clientInboundPools.keySet());
         for (Iterator<Hash> iter = destinations.iterator(); iter.hasNext(); ) {

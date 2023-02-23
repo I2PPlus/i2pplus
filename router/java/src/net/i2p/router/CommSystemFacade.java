@@ -158,7 +158,7 @@ public abstract class CommSystemFacade implements Service {
         return peer.toBase64().substring(0, 4);
     }
 
-    public String renderPeerCaps(Hash peer) {
+    public String renderPeerCaps(Hash peer, boolean inline) {
         return peer.toBase64().substring(0, 4);
     }
 

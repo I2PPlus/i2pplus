@@ -160,7 +160,7 @@ class BuildHandler implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.dropLoadBacklog", "Pending request count when dropped", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.dropLoadProactive", "Delay estimate when dropped (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.dropLoadProactiveAbort", "Allowed requests during load", "Tunnels [Participating]", RATES);
-        //_context.statManager().createRateStat("tunnel.handleRemaining", "How many pending inbound requests were left on the queue after one pass?", "Tunnels [Participating]", RATES);
+        //_context.statManager().createRateStat("tunnel.handleRemaining", "Remaining queued inbound requests after one pass", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.buildReplyTooSlow", "Received a tunnel build reply after timeout", "Tunnels", RATES);
 
         _context.statManager().createRateStat("tunnel.receiveRejectionProbabalistic", "Received tunnel build rejection probabalistically", "Tunnels [Participating]", RATES);
@@ -351,7 +351,8 @@ class BuildHandler implements Runnable {
         long requestedOn = cfg.getExpiration() - 10*60*1000;
         long rtt = _context.clock().now() - requestedOn;
         if (_log.shouldInfo())
-            _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt + "ms, delayed " + delay + "ms waiting for config \n* " + cfg);
+            _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt +
+                      "ms, delayed " + delay + "ms waiting for config \n* " + cfg);
 
         List<Integer> order = cfg.getReplyOrder();
         int statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);
@@ -384,10 +385,10 @@ class BuildHandler implements Runnable {
                         bwTier = ri.getBandwidthTier(); // Returns "Unknown" if none recognized
                         if (bwTier == "Unknown") {
                             if (_log.shouldWarn())
-                                _log.warn("Temp banning [" + peer.toBase64().substring(0,6) + "] for 30m -> No bandwidth tier in RouterInfo");
-                            String reason = " <b>➜</b> No Bandwidth Tier";
+                                _log.warn("Temp banning [" + peer.toBase64().substring(0,6) + "] for 4h -> No bandwidth tier in RouterInfo");
+                            String reason = " <b>➜</b> No Bandwidth Tier in RouterInfo";
                             _context.commSystem().mayDisconnect(peer);
-                            _context.banlist().banlistRouter(peer, reason, null, null, 30*60*1000);
+                            _context.banlist().banlistRouter(peer, reason, null, null, 4*60*60*1000);
                         }
                     }
 /*

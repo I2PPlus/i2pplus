@@ -139,17 +139,17 @@ public class ErrorServlet extends HttpServlet {
         out.print("<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=stylesheet type=text/css>\n");
         out.print("<link href=\"" + themePath + PROXY_CSS + "\" rel=stylesheet type=text/css>\n");
         if (_icoPath != null)
-            out.print("<link rel=\"icon\" href=\"" + _icoPath + "\">\n");
+            out.print("<link rel=icon href=\"" + _icoPath + "\">\n");
         out.print("<script type=text/javascript>if (window.location !== window.top.location) {window.top.location = window.location;}</script>\n"); // breakout of iframe
         out.print("<script charset=utf-8 type=text/javascript src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n"); // or ensure embedded correctly elsewise
-        out.print("</head>\n<body id=\"servletError\">\n");
-        out.print("<div class=\"logo\">");
+        out.print("</head>\n<body id=servletError>\n");
+        out.print("<div class=logo>");
         out.print("<a href=\"/\" title=\"" + _t("Router Console") + "\"><img src=\"" + themePath +
                   "/images/i2plogo.png\" alt=\"" + _t("I2P Router Console").replace("I2P", "I2P+") +
                   "\" border=0></a>\n<hr>\n");
         out.print("<a href=\"/config\">" + _t("Configuration") + "</a> <a href=\"/help\">" + _t("Help") + "</a>");
         out.print("</div>\n");
-        out.print("<div class=\"warning\" id=\"warning\">\n");
+        out.print("<div class=warning id=warning>\n");
         out.print("<h3>" + _w(_webappName) + ": ");
         if (errorCode == 404)
             out.print(_t("Page Not Found").replace("Page", "Resource"));
@@ -198,9 +198,9 @@ public class ErrorServlet extends HttpServlet {
                            "<a href=\"https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues\">i2pgit.org</a>"));
             out.print(".</p>");
             out.println("<p>" + _t("Please include this information in bug reports") + ":</p>\n");
-            out.print("</div>\n<div class=\"sorry\" id=\"warning2\">\n<h3>");
+            out.print("</div>\n<div class=sorry id=warning2>\n<h3>");
             out.print(_t("Error Details"));
-            out.print("</h3>\n<div id=\"stacktrace\">\n<p>");
+            out.print("</h3>\n<div id=stacktrace>\n<p>");
             out.print(_t("Error {0}", errorCode) + ": " + errorURI + "&nbsp;" + errorMsg);
             out.print("</p>\n<p>");
             if (errorCause != null) {
@@ -215,7 +215,7 @@ public class ErrorServlet extends HttpServlet {
             }
             out.print("</p>\n</div>\n<h3>");
             out.print(_t("I2P Version and Running Environment"));
-            out.print("</h3>\n<p id=\"sysinfo\">");
+            out.print("</h3>\n<p id=sysinfo>");
             // router puts its version here
             String version = System.getProperty("router.version", CoreVersion.VERSION);
             out.println("<b>I2P version:</b> " + version + "<br>");

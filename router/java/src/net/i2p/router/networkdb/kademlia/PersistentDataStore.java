@@ -178,9 +178,9 @@ public class PersistentDataStore extends TransientDataStore {
      *  they just back up in the queue hogging memory.
      */
 //    private static final int WRITE_LIMIT = 5000;
-    private static final int WRITE_LIMIT = 3000;
 //    private static final long WRITE_DELAY = 10*60*1000;
-    private static final long WRITE_DELAY = 90*1000;
+    private static final int WRITE_LIMIT = 6000;
+    private static final long WRITE_DELAY = 5*60*1000;
 
     /*
      * Queue up writes, write unlimited files every 10 minutes.
@@ -338,7 +338,8 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             }
 
-            boolean isSlow = (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N");
+            boolean isSlow = (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
+                              bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt;
             String filename = null;
 
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
@@ -350,7 +351,7 @@ public class PersistentDataStore extends TransientDataStore {
             long dataPublishDate = getPublishDate(data);
 //            if (dbFile.lastModified() < dataPublishDate) {
 //            if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
-            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld && !isBadFF) || isUs) {
+            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld && !isBadFF && !noSSU) || isUs) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -358,7 +359,7 @@ public class PersistentDataStore extends TransientDataStore {
                     data.writeBytes(fos);
                     fos.close();
                     dbFile.setLastModified(dataPublishDate);
-                    if (_log.shouldDebug() && ri != null && !unreachable && !isOld && !isBadFF)
+                    if (_log.shouldDebug() && ri != null && !unreachable && !isOld && !isBadFF && !noSSU)
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
