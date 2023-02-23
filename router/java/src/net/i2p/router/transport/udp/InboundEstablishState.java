@@ -313,7 +313,7 @@ class InboundEstablishState {
             buf.append(" Bob: ").append(Addresses.toString(_bobIP, _bobPort));
             buf.append(" RelayTag: ").append(_sentRelayTag);
             buf.append(" SignedOn: ").append(_sentSignedOnTime);
-            buf.append(" signature: ").append(Base64.encode(_sentSignature.getData()));
+            buf.append(" Signature: ").append(Base64.encode(_sentSignature.getData()));
             _log.debug(buf.toString());
         }
     }
@@ -392,10 +392,10 @@ class InboundEstablishState {
                     conf.readFinalSignature(_receivedSignature, 0, sigLen);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Unsupported sig type from: " + toString());
+                        _log.warn("Unsupported Signature type from: " + toString());
                     // _x() in UDPTransport
                     _context.banlist().banlistRouterForever(_receivedUnconfirmedIdentity.calculateHash(),
-                                                            " <b>➜</b> " + "Unsupported signature type");
+                                                            " <b>➜</b> " + "Unsupported Signature type");
                     fail();
                 }
                 Hash h = _receivedUnconfirmedIdentity.calculateHash();
