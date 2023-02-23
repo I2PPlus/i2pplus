@@ -16,7 +16,8 @@
     String now = String.valueOf(net.i2p.I2PAppContext.getGlobalContext().clock().now());
     if (!testIFrame || !embedApp) {
         response.setStatus(307);
-        response.setHeader("Location", "/i2psnark/?t=" + now);
+        //response.setHeader("Location", "/i2psnark/?t=" + now);
+        response.setHeader("Location", "/i2psnark/");
         // force commitment
         response.getOutputStream().close();
         return;
