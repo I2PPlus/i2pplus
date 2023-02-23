@@ -657,13 +657,6 @@ public class PeerHelper extends HelperBase {
             }
             buf.append("<tr class=lazy><td class=peer nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), false));
-/*
-            buf.append(' ').append("<a href=\"https://gwhois.org/").append(Addresses.toString(peer.getRemoteIP()))
-               .append("\" target=_blank title=\"").append(_t("Lookup")).append(' ')
-               .append(Addresses.toString(peer.getRemoteIP(), peer.getRemotePort()))
-               .append(' ').append(_t("on")).append(" gwhois.org").append("\">")
-               .append("<img src=\"/themes/console/images/search.svg\" width=16 height=16>").append("</a>");
-*/
             Hash h = peer.getRemotePeer().calculateHash();
             buf.append("</td><td class=caps>").append(_context.commSystem().renderPeerCaps(peer.getRemotePeer(), false));
             buf.append("</td><td class=lookup>");
@@ -806,13 +799,16 @@ public class PeerHelper extends HelperBase {
             }
             buf.append("<td class=edit>");
 /*
-            <a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
-               .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>")
+            PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
+            if (prof != null && prof.getIsExpandedDB()) {
+                buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
+                   .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
+            }
 */
             buf.append("<a class=configpeer href=\"/configpeer?peer=").append(h.toBase64()).append("\" title=\"").append(_t("Configure peer"))
-               .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a></td>");
+               .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>");
 
-            buf.append("</tr>\n");
+            buf.append("</td></tr>\n");
             out.write(buf.toString());
             buf.setLength(0);
             bpsIn += recvBps;
