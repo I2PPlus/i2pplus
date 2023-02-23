@@ -90,7 +90,8 @@ class ProfileOrganizerRenderer {
         int reliable = 0;
         int integrated = 0;
         boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
-        StringBuilder buf = new StringBuilder(16*1024);
+//        StringBuilder buf = new StringBuilder(16*1024);
+        StringBuilder buf = new StringBuilder(32*1024);
 
         if (mode < 2) {
             buf.append("<p id=profiles_overview class=infohelp>");
@@ -175,13 +176,14 @@ class ProfileOrganizerRenderer {
                 }
                 if (enableReverseLookups()) {
                     buf.append("</td><td>");
+
                     String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                     String rl = ip != null ? getCanonicalHostName(ip) : null;
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span class=rlookup title=\"").append(rl).append("\">");
-                        buf.append(CommSystemFacadeImpl.getDomain(rl));
+                        buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")));
                     } else {
-                        buf.append("<span>").append(ip);
+                        buf.append("<span>").append(ip.replace("null", "unknown"));
                     }
                     buf.append("</span>");
                 }
