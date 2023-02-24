@@ -1989,8 +1989,7 @@ h3 + .statusnotes{margin-top:-1px}
 #tunnels td:first-child{border-left:var(--border)}
 #tunnels td:last-child{border-right:var(--border)}
 #tunnels td > *{vertical-align:middle}
-#tunnels .routerid,.tunnel_local{display:inline-block;box-shadow:inset var(--box_border_badge),inset 0 0 0 2px var(--bg);background:var(--th)}
-#tunnels .routerid{padding:2px 0;contain:paint}
+.tunnel_local{display:inline-block;box-shadow:inset var(--box_border_badge),inset 0 0 0 2px var(--bg);background:var(--th)}
 #tunnel_defs td:nth-child(even),#tunnel_defs td:first-child{width:1%}
 #tunnel_defs tr:first-child td{border-top:var(--border)}
 #tunnels h3 a img{margin:3px 3px 0 0}
@@ -2004,13 +2003,10 @@ h3 + .statusnotes{margin-top:-1px}
 #tunnels td:last-child .tunnel_peer:not(.tunnel_local){margin-left:-10px}
 
 /* transit summary */
-#tunnels #transitSummary th,#tunnels #transitSummary td{width:auto;max-width:unset;vertical-align:middle;white-space:nowrap}
 #tunnels #transitSummary th{position:relative}
-#tunnels #transitSummary td{padding:3px 6px}
+#tunnels #transitSummary td:not(.rih):not(.rbw){padding:3px 6px}
 #tunnels #transitSummary span:not([hidden]),#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}
-#tunnels #transitSummary td:nth-child(n+2) span:not([hidden]),#tunnels #transitSummary td:nth-child(n+2) b{min-width:28px;display:inline-block}
-#tunnels #transitSummary td:first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
 #tunnels #tunnelPeerCount td.cells.rdns a::before {margin-top:-2.5px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center / 10px;content:""}
 .rdns{max-width:unset}
 
@@ -2031,17 +2027,18 @@ h3 + .statusnotes{margin-top:-1px}
 #tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;line-height:1;vertical-align:text-bottom}
 #tunnels img[src$="bound.png"]{opacity:0}
 #tunnels #peercount{padding-left:30px;background:var(--hardhat) no-repeat 8px 6px/18px,linear-gradient(180deg,var(--bg)50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8) 25%)}
-#tunnelPeerCount tr:not(:last-child) td:first-child{width:1%;min-width:200px;white-space:nowrap;background:var(--th);box-sizing:border-box}
-#tunnelPeerCount td:first-child span{border:none;box-shadow:none;background:none}
-#tunnelPeerCount td:first-child > *{vertical-align:middle;line-height:1.2}
-#tunnelPeerCount td:first-child span:not([hidden]){margin:0 1px;vertical-align:middle}
 #tunnelPeerCount td{text-align:center}
-#tunnelPeerCount .tunnel_cap{padding:1px 2px 0}
-#tunnelPeerCount .version{padding-bottom:0}
 #tunnelPeerCount .configpeer{margin:0 0 0 3px;display:inline-block;vertical-align:middle}
 #tunnelPeerCount tr:not(:last-child):hover{background:var(--row_hover)}
 #peerdefs li{line-height:1.6}
 #tunnels [hidden],#tunnels .hideme, #tunnels .cc{display:none}
+#tunnels #country{width:1%;white-space:nowrap}
+.routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
+#tunnelPeerCount .version,#tunnelPeerCount .routerHash{vertical-align:middle;line-height:1.3}
+#tunnelPeerCount th:first-child::before,#transitSummary th:first-child::before{width:12px;height:10px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center/10px;content:""}
+#tunnelPeerCount th:first-child,#transitSummary th:first-child{font-size:0}
+#tunnels #tunnelPeerCount td.bar{width:8%;min-width:76px}
+#country,#router,th#version,#tier,#edit,#data,.tcount{width:2%;white-space:nowrap}
 
 /* events */
 #events td{line-height:1.4}
@@ -2338,7 +2335,7 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 .rif,.rif img{line-height:0;font-size:0}
 .rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
-.rid .rbw{padding-left:4px;min-width:20px;text-align:center;line-height:1;font-weight:900}
+.rid .rbw{min-width:20px;text-align:center;line-height:1;font-weight:900}
 .rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
 .rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
 .rbw.isff.isU{linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
