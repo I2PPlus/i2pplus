@@ -542,7 +542,7 @@ class TunnelRenderer {
                 out.write("</td><td class=bar data-sort-column-key=localCount>");
                 if (lc.count(h) > 0) {
                     out.write("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
-                    out.write((lc.count(h) * 100) / tunnelCount);
+                    out.write(fmt.format((lc.count(h) * 100) / tunnelCount).replace(".00", ""));
                     out.write("%\"><span class=percentBarText>");
                     out.write(fmt.format((lc.count(h) * 100) / tunnelCount).replace(".00", ""));
                     out.write("%</span></span></span>");
@@ -559,7 +559,7 @@ class TunnelRenderer {
                     out.write("</td><td class=bar>");
                     if (pc.count(h) > 0) {
                         out.write("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
-                        out.write((pc.count(h) * 100) / partCount);
+                        out.write(fmt.format((pc.count(h) * 100) / partCount).replace(".00", ""));
                         out.write("%\"><span class=percentBarText>");
                         out.write(fmt.format((pc.count(h) * 100) / partCount).replace(".00", ""));
                         out.write("%</span></span></span>");
