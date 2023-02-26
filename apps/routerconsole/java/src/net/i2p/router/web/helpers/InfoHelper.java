@@ -200,7 +200,7 @@ public class InfoHelper extends HelperBase {
                 buf.append(_t("Active"));
             else
                 buf.append(_t("Inactive"));
-            Boolean hiddenFF = _context.getBooleanPropertyDefaultTrue("router.hideFloodfillParticipant");
+            Boolean hiddenFF = _context.getBooleanProperty("router.hideFloodfillParticipant");
             if (hiddenFF)
                 buf.append(" (" + _t("unpublished") + ")");
             buf.append("&ensp;<a href=\"/configadvanced\">" + _t("Configure") + "</a></td></tr>\n");
