@@ -9,6 +9,7 @@ import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Try sending a search to some floodfill peers, but if we don't get a successful
@@ -92,7 +93,7 @@ abstract class FloodSearchJob extends JobImpl {
     public long getExpiration() { return _expiration; }
 
 //    protected static final int CONCURRENT_SEARCHES = 2;
-    protected static final int CONCURRENT_SEARCHES = 3;
+    protected static final int CONCURRENT_SEARCHES = SystemVersion.isSlow() ? 3 : 5;
     private static final int FLOOD_SEARCH_TIME_FACTOR = 2;
     /**
      *  Deprecated, unused, see FOSJ override

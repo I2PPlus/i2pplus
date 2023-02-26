@@ -86,13 +86,13 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final Set<Hash> _skippedPeers;
 
 //    private static final int MAX_NON_FF = 3;
-    private static final int MAX_NON_FF = 6;
+    private static final int MAX_NON_FF = SystemVersion.isSlow() ? 6 : 8;
     /** Max number of peers to query */
 //    private static final int TOTAL_SEARCH_LIMIT = 5;
-    private static final int TOTAL_SEARCH_LIMIT = 16;
+    private static final int TOTAL_SEARCH_LIMIT = SystemVersion.isSlow() ? 16 : 24;
     /** Max number of peers to query if we are ff */
 //    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 2;
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = SystemVersion.isSlow() ? 2 : 3;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = SystemVersion.isSlow() ? 2 : 4;
     /** Extra peers to get from peer selector, as we may discard some before querying */
 //    private static final int EXTRA_PEERS = 1;
     private static final int EXTRA_PEERS = 2;
@@ -124,7 +124,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default _maxConcurrent
      */
 //    private static final int MAX_CONCURRENT = 1;
-    private static final int MAX_CONCURRENT = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 1 : 2;
+    private static final int MAX_CONCURRENT = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 1 : 3;
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
@@ -201,7 +201,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 2);
         } else if (known > 1000 || ctx.router().getUptime() > 30*60*1000 &&
                    cpuLoad < 80 && cpuLoadAvg < 80 && lag < 50) {
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", 2);
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
         } else if ((cpuLoad > 90 && cpuLoadAvg > 90) || isSlow || isSingleCore) {
             _maxConcurrent = 1;
         } else {
