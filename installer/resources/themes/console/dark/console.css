@@ -941,7 +941,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .tier,a .tier,#capabilities_key b{background:linear-gradient(180deg,#397,#021)}
 .tunnel_cap{box-shadow:var(--outline)}
 .tunnel_cap:empty::after{content:"?"}
-.tunnel_cap,.tier,.ff,.unreachable,.reachable,#capabilities_key b{margin:1px 2px;padding:3px 2px;display:inline-block;min-width:20px;color:#bb7;text-shadow:var(--textshadow);text-align:center;border:1px solid #030;box-shadow:var(--outline);background:var(--badge)}
+.tunnel_cap,.tier,.ff,.unreachable,.reachable,#capabilities_key b{margin:1px 2px;padding:3px 2px;display:inline-block;min-width:20px;color:#bb7;text-shadow:var(--textshadow);text-align:center;border:1px solid #030;box-shadow:var(--outline)}
 .tunnel_cap,.tier,.reachable,.ff{box-shadow:var(--highlight_badge)}
 .tunnel_id:empty{opacity:0}
 .tunnel_id{margin:1px 2px 1px 5px;padding:4px 2px;min-width:78px;display:inline-block;line-height:1.25;color:#bb7;text-shadow:var(--textshadow);text-align:right}
