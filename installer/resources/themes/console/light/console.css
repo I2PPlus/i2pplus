@@ -2663,6 +2663,7 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0 0 2px}
 #sb_services{width:242px}
+#sb_updatesection.collapsed > h3.collapsed{margin-bottom:-7px}
 #schedjobs li{min-width:280px}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
@@ -2672,6 +2673,7 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #sidebar hr[hidden] ~ h3{margin-top:-12px}
 #sidebar hr[hidden] ~ h4{margin-bottom:-4px}
 #sidebar hr[hidden] ~ #sb_advanced:not([hidden]) ~ h3{margin-top:-9px}
+#homepage #sb_memoryBar + hr{margin-top:5px}
 #sidebar{margin-bottom:5px;width:228px}
 #sidebar .reload,#sidebar .stop{margin:0 3px -5px;padding-top:6px;padding-bottom:6px;min-width:110px}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
