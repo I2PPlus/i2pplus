@@ -340,7 +340,7 @@ class TunnelRenderer {
             for (Hash h : sort) {
                 DISPLAY_LIMIT = 50;
                 int count = counts.count(h);
-                char cap = getCapacity(h);
+                //char cap = getCapacity(h);
                 HopConfig cfg = participating.get(count);
                 int lifetime = count > 0 ? (int) ((_context.clock().now() - cfg.getCreation()) / 1000) : 1;
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
@@ -372,9 +372,13 @@ class TunnelRenderer {
                 } else {
                     out.write("<span class=version\">???</span>");
                 }
-                out.write("</td><td><b class=tunnel_cap title=\"" + _t("Bandwidth tier") +
-                          "\">" + getCapacity(h) + "</b></td>");
-                out.write("<td><span class=ipaddress>");
+                out.write("</td><td>");
+                if (info != null) {
+                    out.write(_context.commSystem().renderPeerCaps(h, false));
+                } else {
+                    out.write("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");
+                }
+                out.write("</td><td><span class=ipaddress>");
                 if (info != null && ip != null) {
                     if (!ip.toString().equals("null")) {
                         out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" +
@@ -478,7 +482,7 @@ class TunnelRenderer {
             out.write("<th id=edit data-sort-method=none>" + _t("Edit") + "</th>");
             out.write("</tr>\n</thead>\n<tbody id=allPeers>\n");
             for (Hash h : peerList) {
-                char cap = getCapacity(h);
+                //char cap = getCapacity(h);
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
                 String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                 String v = info != null ? info.getOption("router.version") : null;
@@ -496,7 +500,11 @@ class TunnelRenderer {
                               "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
                               "</a></span>");
                 out.write("</td><td>");
-                out.write("<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+                if (info != null) {
+                    out.write(_context.commSystem().renderPeerCaps(h, false));
+                } else {
+                    out.write("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");
+                }
                 out.write("</td><td><span class=ipaddress>");
                 if (info != null && ip != null) {
                     if (!ip.toString().equals("null")) {
@@ -534,7 +542,7 @@ class TunnelRenderer {
                 out.write("</td><td class=bar data-sort-column-key=localCount>");
                 if (lc.count(h) > 0) {
                     out.write("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
-                    out.write((lc.count(h) * 100) / tunnelCount);
+                    out.write(fmt.format((lc.count(h) * 100) / tunnelCount).replace(".00", ""));
                     out.write("%\"><span class=percentBarText>");
                     out.write(fmt.format((lc.count(h) * 100) / tunnelCount).replace(".00", ""));
                     out.write("%</span></span></span>");
@@ -551,7 +559,7 @@ class TunnelRenderer {
                     out.write("</td><td class=bar>");
                     if (pc.count(h) > 0) {
                         out.write("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
-                        out.write((pc.count(h) * 100) / partCount);
+                        out.write(fmt.format((pc.count(h) * 100) / partCount).replace(".00", ""));
                         out.write("%\"><span class=percentBarText>");
                         out.write(fmt.format((pc.count(h) * 100) / partCount).replace(".00", ""));
                         out.write("%</span></span></span>");

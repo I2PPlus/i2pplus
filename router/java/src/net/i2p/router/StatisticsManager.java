@@ -37,7 +37,8 @@ public class StatisticsManager {
     public final static String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
     //private static final String PROP_CONTACT_NAME = "netdb.contact";
     /** enhance anonymity by only including build stats one out of this many times */
-    private static final int RANDOM_INCLUDE_STATS = 16384;
+//    private static final int RANDOM_INCLUDE_STATS = 16;
+    private static final int RANDOM_INCLUDE_STATS = 1024;
     //// remove after release ////
     private static final boolean SIMPLE_STATS = CoreVersion.PUBLISHED_VERSION.equals("0.9.58");
 
@@ -78,43 +79,21 @@ public class StatisticsManager {
         stats.setProperty("router.version", CoreVersion.PUBLISHED_VERSION);
         stats.setProperty(RouterInfo.PROP_NETWORK_ID, _networkID);
         String caps = _context.router().getCapabilities();
+        boolean isFF = caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
         stats.setProperty(RouterInfo.PROP_CAPABILITIES, caps);
 
-//        if (_context.getBooleanPropertyDefaultTrue(PROP_PUBLISH_RANKINGS) &&
-//            _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0) {
-        int rnd = Math.max(_context.random().nextInt(60), _context.random().nextInt(30) + 30) *
-                  Math.max(_context.random().nextInt(8), _context.random().nextInt(3) + 1) * 2 * 60;
-        if (_context.getBooleanProperty(PROP_PUBLISH_RANKINGS) &&
+        if (_context.getBooleanPropertyDefaultTrue(PROP_PUBLISH_RANKINGS) &&
             _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0 &&
-            _context.router().getUptime() > Math.max(240*60*1000, rnd)) {
-            int partTunnels = _context.tunnelManager().getParticipatingCount();
-            int spoofed = partTunnels;
-            if (partTunnels > 4000) {
-                if (partTunnels > 10000)
-                    spoofed = (partTunnels / 3*2) - _context.random().nextInt(50);
-                else if (partTunnels > 6000)
-                    spoofed = (partTunnels / 2) + _context.random().nextInt(50);
-                stats.setProperty("tunnels.participatingTunnels", String.valueOf(spoofed));
-            } else {
-                includeRate("tunnel.participatingTunnels", stats, new long[] { 60*60*1000 }, true);
-            }
+            _context.router().getUptime() > 62*60*1000) {
+            includeRate("tunnel.participatingTunnels", stats, new long[] { 60*60*1000 }, true);
             long rate = 60*60*1000;
             includeTunnelRates("Exploratory", stats, rate);
         }
 
-        if (caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0 &&
-            !_context.getBooleanPropertyDefaultTrue("router.hideFloodfillParticipant")) {
+        if (isFF) {
             int ri = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownRouters() :
                      3000 + _context.random().nextInt(1000);   // so it isn't obvious we restarted
-            // hide our real number of known peers to avoid broadcasting that we're running I2P+
-            if (ri > 12000) {
-                ri /= 3;
-                ri -= _context.random().nextInt(50);
-            } else if (ri > 8000) {
-                ri /= 3*2;
-                ri += _context.random().nextInt(50);
-            }
             stats.setProperty("netdb.knownRouters", String.valueOf(ri));
             int ls = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownLeaseSets() :
@@ -153,7 +132,7 @@ public class StatisticsManager {
                     try {
                         stats.putAll(fkc.sign(family, h));
                     } catch (GeneralSecurityException gse) {
-                        _log.error("Failed to sign router family", gse);
+                        _log.error("Failed to sign Router family", gse);
                         stats.remove(FamilyKeyCrypto.OPT_KEY);
                         stats.remove(FamilyKeyCrypto.OPT_SIG);
                     }
@@ -164,15 +143,9 @@ public class StatisticsManager {
         return stats;
     }
 
-/*****
-    private void includeRate(String rateName, Properties stats, long selectedPeriods[]) {
-        includeRate(rateName, stats, selectedPeriods, false);
-    }
-*****/
-
     /**
      * @param fudgeQuantity the data being published in this stat is too sensitive to, uh
-     *                      publish, so we'll kludge the quantity (allowing the fairly safe
+     *                      publish, so we're kludge the quantity (allowing the fairly safe
      *                      publication of the average values
      */
     private void includeRate(String rateName, Properties stats, long selectedPeriods[],
@@ -298,25 +271,6 @@ public class StatisticsManager {
         buf.append(num(fudgeQuantity)).append(';');
         return buf.toString();
     }
-
-    /* report the same data for tx and rx, for enhanced anonymity */
-/*
-    private void includeAverageThroughput(Properties stats) {
-        RateStat sendRate = _context.statManager().getRate("bw.sendRate");
-        RateStat recvRate = _context.statManager().getRate("bw.recvRate");
-        if (sendRate == null || recvRate == null)
-            return;
-        Rate s = sendRate.getRate(60*60*1000);
-        Rate r = recvRate.getRate(60*60*1000);
-        if (s == null || r == null)
-            return;
-        double speed = (s.getAverageValue() + r.getAverageValue()) / 2;
-        double max = Math.max(s.getExtremeAverageValue(), r.getExtremeAverageValue());
-        String str = num(speed) + ';' + num(max) + ";0;0;";
-        stats.setProperty("stat_bandwidthSendBps.60m", str);
-        stats.setProperty("stat_bandwidthReceiveBps.60m", str);
-    }
-*/
 
     private static String getPeriod(Rate rate) { return DataHelper.formatDuration(rate.getPeriod()); }
 

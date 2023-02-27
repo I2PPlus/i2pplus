@@ -439,7 +439,7 @@ class FloodfillPeerSelector extends PeerSelector {
         }
 
 //        private static final int EXTRA_MATCHES = 100;
-        private static final int EXTRA_MATCHES = 192;
+        private static final int EXTRA_MATCHES = 256;
         public void add(Hash entry) {
             //if (_context.profileOrganizer().isFailing(entry))
             //    return;

@@ -125,6 +125,7 @@ public class Blocklist {
     private static final String ID_COUNTRY = "country";
     private static final String ID_USER = "user";
     public static final String ID_SYBIL = "sybil";
+    public static final String ID_TOR = "tor";
 
 
     /**
@@ -171,7 +172,7 @@ public class Blocklist {
         files.add(new BLFile(blFile, ID_SYSTEM));
         if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_TOR_ENABLED)) {
             blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_TOR_EXITS);
-            files.add(new BLFile(blFile, ID_SYSTEM));
+            files.add(new BLFile(blFile, ID_TOR));
         }
         // config dir
         if (!_context.getConfigDir().equals(_context.getBaseDir())) {
