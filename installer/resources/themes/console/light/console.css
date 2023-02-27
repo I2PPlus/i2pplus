@@ -2643,6 +2643,8 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #sb_localtunnels td:first-child,#sb_localtunnels tr:hover td:first-child{background-size:17px}
 #sb_logo img{margin-top:-4px;margin-left:-2px;width:240px}
 #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
+#homepage #sb_memoryBar.percentBarOuter{margin-bottom:6px}
+#homepage #sb_memoryBar + hr{margin-top:5px}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0 0 2px}
 #sb_peers[hidden] + #sb_peers_condensed, #sb_tunnels[hidden] + #sb_tunnels_condensed{width:239px}
 #sb_services{width:242px}
@@ -2655,8 +2657,8 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #sidebar hr[hidden] + div:not([hidden]),#sidebar hr[hidden] + table:not([hidden]){margin-top:-8px}
 #sidebar hr[hidden] ~ h3{margin-top:-12px}
 #sidebar hr[hidden] ~ h4{margin-bottom:-4px}
+#sidebar hr[hidden] ~ h4#sb_shutdownStatus{margin-top:-10px;margin-bottom:-9px}
 #sidebar hr[hidden] ~ #sb_advanced:not([hidden]) ~ h3{margin-top:-9px}
-#homepage #sb_memoryBar + hr{margin-top:5px}
 #sidebar{margin-bottom:5px;width:228px}
 #sidebar .reload,#sidebar .stop{margin:0 3px -5px;padding-top:6px;padding-bottom:6px;min-width:110px}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
@@ -2677,7 +2679,6 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #webappconfiguration a,#config_plugins .h3navlinks a{margin-top:-8px;padding:12px 8px 8px}
 #xhr > hr + #sb_shortgeneral{margin-top:-7px}
 }
-
 
 @media screen and (min-width:1634px){
 .leasesets_container{margin-bottom:2px}
