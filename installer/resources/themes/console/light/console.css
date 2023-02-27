@@ -151,7 +151,7 @@ a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 .percentBarText{padding:0;display:inline;width:100%;height:14px;float:left;white-space:nowrap;text-align:center;font-weight:700;color:var(--ink_light);text-shadow:0 1px 1px rgba(255,255,255,.8);opacity:0;transition:ease opacity .2s}
 .percentBarOuter:hover .percentBarText{opacity:1;transition:ease opacity .2s;pointer-events:none}
 #sb_memoryBar .percentBarInner,#sb_CPUBar .percentBarInner{background:linear-gradient(90deg,rgba(0,255,0,.05),rgba(255,255,0,.1) 160px,rgba(255,0,0,.1) 180px,rgba(255,0,0,.2)),linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7))}
-#sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0;width:70%;float:none;position:absolute;top:-18px;left:15%;right:15%;vertical-align:middle;font-size:110%;border-radius:1px;background:#eef;filter:drop-shadow(0 0 1px #eef) drop-shadow(0 0 1px #000)}
+#sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0;width:95%;float:none;position:absolute;top:-18px;left:2.5%;right:2.5%;z-index:9999;vertical-align:middle;font-size:110%;border-radius:1px;background:#eef;filter:drop-shadow(0 0 1px #eef) drop-shadow(0 0 1px #000)}
 #sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-13px;border-style:solid;border-width:8px;border-color:#eef transparent transparent transparent;content:""}
 
 /* updates download bar */
@@ -203,13 +203,13 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar #localtunnelsActive span.count_0{display:none}
 #sidebar #localtunnelsActive img{width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
 #sidebar #localtunnelSummary{margin:-12px auto -6px}
-#sidebar #sb_internals.collapsed td,#sidebar #sb_advanced.collapsed td,#sidebar #sb_services.collapsed td{padding:1px 1px 0;width:calc(100% - 1px);display:flex;align-items:flex-start;align-content:space-between}
+#sidebar #sb_internals.collapsed td,#sidebar #sb_advanced.collapsed td,#sidebar #sb_services.collapsed td{padding:1px 1px 0;width:calc(100% - 1px);display:flex;align-items:flex-start;align-content:space-between;column-gap:1px}
 #sidebar #sb_internals.collapsed a:not(.sb_icon),#sidebar #sb_advanced.collapsed a:not(.sb_icon),#sidebar #sb_services.collapsed a:not(.sb_icon){display:none}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed,#sidebar #sb_services.collapsed{display:table;width:calc(100% + 12px)}
 #sidebar #sb_internals.collapsed td::after,#sidebar #sb_advanced.collapsed td::after,#sidebar #sb_services.collapsed td::after,#sidebar #sb_peers_condensed td::after,#sidebar #sb_tunnels_condensed td::after{min-height:34px;display:inline-block;content:""}
 #sidebar #sb_services.collapsed td::after{min-height:35px}
 #sidebar #sb_internals:not(.collapsed) .sb_icon,#sidebar #sb_advanced:not(.collapsed) .sb_icon,#sidebar #sb_services:not(.collapsed) .sb_icon{display:none}
-#sidebar #sb_internals.collapsed .sb_icon,#sidebar #sb_advanced.collapsed .sb_icon,#sidebar #sb_services.collapsed .sb_icon{margin:1px 0;display:inline-block;vertical-align:middle;background:var(--badge);padding:5px;border-radius:0;box-shadow:0 0 0 1px #dfdfec inset,0 0 0 2px #fff inset;flex:auto}
+#sidebar #sb_internals.collapsed .sb_icon,#sidebar #sb_advanced.collapsed .sb_icon,#sidebar #sb_services.collapsed .sb_icon{margin:1px 0;display:inline-block;vertical-align:middle;background:var(--badge);padding:5px;border-radius:0;box-shadow:0 0 0 1px #afafcf inset,0 0 0 2px #fff inset;flex:auto}
 #sidebar #sb_internals.collapsed .sb_icon:hover,#sidebar #sb_advanced.collapsed .sb_icon:hover,#sidebar #sb_services.collapsed .sb_icon:hover,#sidebar #sb_internals.collapsed .sb_icon:focus,#sidebar #sb_advanced.collapsed .sb_icon:focus,#sidebar #sb_services.collapsed .sb_icon:focus{box-shadow:0 0 0 1px #f60 inset,0 0 0 2px #fff inset;background:var(--badge_hover)}
 #sidebar #sb_internals.collapsed .sb_icon img,#sidebar #sb_advanced.collapsed .sb_icon img,#sidebar #sb_services.collapsed .sb_icon img{margin:0;width:19px;height:19px;display:inline-block;vertical-align:middle;text-align:center;mix-blend-mode:luminosity}
 #sidebar #sb_internals.collapsed .sb_icon:hover img,#sidebar #sb_advanced.collapsed .sb_icon:hover img,#sidebar #sb_services.collapsed .sb_icon:hover img{transform:scale(1.1);mix-blend-mode:normal}
@@ -289,7 +289,7 @@ h3:active .badge{display:none}
 #sb_services a:hover::before{filter:saturate(1)}
 
 /* network status */
-.sb_netstatus,.tunnelBuildStatus{margin:-4px -1px -5px;padding:6px 3px;width:100%;display:inline-block;box-sizing:border-box;vertical-align:baseline;line-height:1.2;text-shadow:0 1px 1px #fff;border:1px solid #88f;border-radius:2px;box-shadow:var(--highlight),0 0 1px rgba(96,96,96,.5)}
+.sb_netstatus,.tunnelBuildStatus{margin:-4px -1px -5px;padding:6px 3px;width:100%;display:inline-block;box-sizing:border-box;vertical-align:baseline;line-height:1.2;text-shadow:0 1px 1px #fff;border:1px solid #88f;border-radius:0;box-shadow:var(--highlight),0 0 1px rgba(96,96,96,.5)}
 .sb_netstatus a{vertical-align:baseline}
 #sidebar .firewalled{color:#676;background:repeating-linear-gradient(135deg,rgba(220,255,220,.3) 2px,rgba(255,255,220,.3) 3px,rgba(220,255,220,.3) 5px)}
 #sidebar .error,.tunnelBuildStatus.rejecting{color:#922;box-shadow:inset 0 0 0 1px rgba(200,0,0,.5),0 0 1px rgba(96,96,96,.5);background:repeating-linear-gradient(135deg,rgba(255,100,100,.05) 2px,rgba(255,200,200,.2) 3px,rgba(255,100,100,.05) 5px)}
@@ -298,7 +298,7 @@ h3:active .badge{display:none}
 #sidebar .hidden,#sidebar .vmcomm,.tunnelBuildStatus.hidden{color:#777;background:rgba(220,220,220,.4)}
 #sidebar .vmcomm{border:var(--border_input)}
 #sidebar .running,.tunnelBuildStatus.accepting{color:#383;background:rgba(220,255,220,.15)}
-#sidebar .running,.tunnelBuildStatus.active{background:rgba(220,255,220,.15);box-shadow:inset 0 0 0 1px rgba(0,255,0,.5),0 0 1px rgba(96,96,96,.5)}
+#sidebar .running,.tunnelBuildStatus.active{border:1px solid #595;background:rgba(220,255,220,.15);box-shadow:inset 0 0 1px 0 rgba(0,255,0,.5),0 0 1px rgba(96,96,96,.5)}
 .sb_netstatus::before{margin:0 4px 0 -4px;height:18px;width:18px;vertical-align:middle;display:inline-block;content:""}
 .sb_netstatus::before{background-size:16px}
 .sb_netstatus.error::before{background:var(--net_error) no-repeat center center}
@@ -2382,7 +2382,6 @@ th.options .optbox{vertical-align:sub}
 /* responsive layout */
 @media screen and (max-width:1499px){
 body{margin:4px}
-#bwlimiter a,#i2pclientconfig a,#config_logging h3 a,#graphdisplay a,#version a,#tunnels h3 a,#advancedconfig a,#iptransport a,#reseedsetup a,#graphinfo a,#config_service h3 a,.h3navlinks a{padding-top:8px}
 .en #sitemap .applink img{padding-left:35px;padding-right:35px}
 .en .sitemapLink,.en .sitemapLabel,.en #sitemap .applink,.en #sitemap .applabel,.en #sitemap .applink table{width:120px;min-width:120px}
 .expiry ul{margin-left:-4px}
@@ -2398,6 +2397,7 @@ body{margin:4px}
 #applinks img,#sitelinks img,#sitemap h3 img{margin:-7px 0 -6px;padding:8px 0 6px 9px}
 #banlist li{padding-bottom:0}
 #banlist .routerid img{margin-right:-3px}
+#bwlimiter a,#i2pclientconfig a,#config_logging h3 a,#graphdisplay a,#version a,#tunnels h3 a,#advancedconfig a,#iptransport a,#reseedsetup a,#graphinfo a,#config_service h3 a,.h3navlinks a{padding-top:8px}
 #chooselang,#configbandwidth{margin-top:1px;margin-bottom:4px}
 #chooselang img,#configbandwidth img{margin:-9px -5px -12px 20px}
 #clock{font-size:16pt}
@@ -2409,18 +2409,23 @@ body{margin:4px}
 #graph_single #graphinfo a{margin-top:-6px}
 #help h2,#help #newuserguide h2{padding:9px 8px 7px 34px;font-size:12pt;background-size:20px,100%,100%,100%}
 #home h4 a::after{margin:-2px 10px 3px -6px}
-#logs ul li{padding-left:46px;width:calc(100% - 44px);line-height:1.4}
 #logs li font[color]::before{display:none}
 #logs li span[class]{margin:2px 2px 0 -44px;float:left}
+#logs ul li{padding-left:46px;width:calc(100% - 44px);line-height:1.4}
 #pluginconfig{margin-top:-14px}
 p#pluginconfigtext{margin-top:11px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:12px}
 #sb_internals a,#sb_advanced a #sb_help a{max-width:200px}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
 #searchbar select{padding:6px 24px 7px 8px}
+#sidebar #sb_CPUBar{margin-top:-7px}
+#sidebar #sb_internals.collapsed .sb_icon img,#sidebar #sb_advanced.collapsed .sb_icon img,#sidebar #sb_services.collapsed .sb_icon img{width:17px;height:17px}
+#sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-13px}
+#sidebar,#sb_services.collapsed{margin-bottom:-14px}
 #sitemap .applink img{padding-left:62px;padding-right:62px}
 #sitemap h3 img{margin-top:-8px;padding-right:6px}
 #tunnels .routerid img{margin:-2px 0 0 -2px}
+
 }
 
 @media screen and (max-width:1480px){
@@ -2582,56 +2587,56 @@ th.queue{white-space:nowrap}
 
 @media screen and (min-width:1500px){
 body,.main,.main td,.news p,#news p,.newscontent p,.tab,.tab2,.main li b,.themelabel,.ui_lang,#sidebar button.download,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,#configinfo th,th,.statusnotes,#help code,#help tt,.percentBarText,#sidebar .reload[value="restartImmediate"],#sidebar .cancel{font-size:10pt}
-h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-size:38px auto,4px,100%,100%,100%}
-tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help code,#help tt,#jardump td,#jardump th,#jardump tt,#jobs .jobcount,#jobs .joblog li,#jobs li b,#jobs #schedjobs td,#jobstats td:first-child,.leaseset tt,#logs li,.main[id^="config_"] .encDests th,#profilelist tt,#profilelist tt a,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,#sidebar td,.sb_notice,#sidebar .sb_update b{font-size:9pt}
-.applabel a,code,code a,pre,textarea,#logs li,.main[id^="config_"] th,#changelog pre,#news tt,#updateAvailable{font-size:9.5pt}
 button.control{padding:14px}
+form[action="configplugins"] input.reload{margin-top:1px;margin-right:4px}
+h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-size:38px auto,4px,100%,100%,100%}
+h3#bwlimiter a{margin-top:-8px}
+h3#pconfig,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
+h3.ptitle,h3#webappconfiguration,h3#i2pclientconfig,p#clientconf.infohelp,#config_stats h3{margin-bottom:-14px}
 h4#updateplugins,#news p{font-size:10pt}
-.main,#news.news,h1,.sorry{margin-left:252px}
-.percentBarOuter{width:232px}
-.percentBarText{margin-top:-1px}
+.applabel a,code,code a,pre,textarea,#logs li,.main[id^="config_"] th,#changelog pre,#news tt,#updateAvailable{font-size:9.5pt}
 .flag img{margin:0;width:20px;height:15px;display:inline-block;vertical-align:middle;border:1px solid transparent}
 .flag{margin:-1px -2px -1px -6px;padding:2px 4px;width:20px;height:17px;display:inline-block;vertical-align:middle}
+.homelinkedit th:first-child,#sidebarconf th:first-child,#consolepass th:first-child{font-size:0}
+.log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin:2px -3px -2px;min-width:40px;max-width:40px}
+.log_omitted{margin-right:1px}
+.main,#news.news,h1,.sorry{margin-left:252px}
+.newsAuthor{padding:0 0 0 14px;font-size:9.5pt;background-size:12px;background-position:left center}
+.percentBarOuter{width:232px}
+.percentBarText{margin-top:-1px}
 .routerid{vertical-align:middle;contain:paint}
-#tunnels .routerid img{margin:-2px 2px 0 0}
-.statlist li{padding:0 10px}
 .statlist li a[href^="graph"]::before,.statlist li::before{margin:0 10px -30px -17px;height:6px;width:6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}
-.statlist .noevents{margin-top:18px;margin-bottom:0}
-.statlist .noevents::before{margin:-4px 10px 0 -17px}
-.statlist .noevents::after{margin-bottom:-22px}
-.statlist .statsName > b{margin:0 0 0 3px}
+.statlist li{padding:0 10px}
 .statlist > li > ul b{margin:-5px 0 0 3px}
-.statlist .statsName::before,.statlist li br{display:none}
 .statlist li > ul li:last-child{padding-bottom:15px}
-#schedjobs li{min-width:280px}
-#jobs #jobstats th,#jobs #jobstats td{font-size:100%}
+.statlist .noevents::after{margin-bottom:-22px}
+.statlist .noevents::before{margin:-4px 10px 0 -17px}
+.statlist .noevents{margin-top:18px;margin-bottom:0}
+.statlist .statsName::before,.statlist li br{display:none}
+.statlist .statsName > b{margin:0 0 0 3px}
 .subheading b{font-size:10.5pt}
-.tab a{padding:4px 14px}
 .tab2{padding:5px 12px}
+.tab a{padding:4px 14px}
 .th_title a{font-size:11pt}
 tt{margin-left:0;margin-right:3px;letter-spacing:.1em}
+tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help code,#help tt,#jardump td,#jardump th,#jardump tt,#jobs .jobcount,#jobs .joblog li,#jobs li b,#jobs #schedjobs td,#jobstats td:first-child,.leaseset tt,#logs li,.main[id^="config_"] .encDests th,#profilelist tt,#profilelist tt a,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,#sidebar td,.sb_notice,#sidebar .sb_update b{font-size:9pt}
 #advancedconfig a,#reseedsetup a{padding-top:7px}
-h3#bwlimiter a{margin-top:-8px}
 #bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding:30px 15px 15px 80px;min-width:240px}
 #bandwidthconfig .bw_share{background-size:32px 32px;background-position:28px calc(50% + 12px)}
-#bandwidthconfig td:first-child:not(.infohelp):not(.optionsave){padding:0 80px 0 5px;background-position:right 30px center}
 #bandwidthconfig .optionsingle::after{display:none}
+#bandwidthconfig td:first-child:not(.infohelp):not(.optionsave){padding:0 80px 0 5px;background-position:right 30px center}
 #banlist .routerid{margin:0 -5px 0 -2px}
 #changelog pre{columns:570px auto;column-gap:50px}
 #config_peers #banlist .routerid{margin-left:0}
+#config_plugins .h3navlinks a[href="configclients"]{margin-right:-8px}
 #config_service h3 a{padding:6px 8px}
 #config_service h3{margin-bottom:-15px}
 #config_service h3{padding-left:12px;line-height:24px}
 #configstats td::before{min-height:24px}
 #error500 #sidebar img[src$="i2plogo.png"]{margin-top:-1px;margin-left:-3px;width:232px}
-form[action="configplugins"] input.reload{margin-top:1px;margin-right:4px}
-h3.ptitle,h3#webappconfiguration,h3#i2pclientconfig,p#clientconf.infohelp,#config_stats h3{margin-bottom:-14px}
-h3#pconfig,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
 #helptoc b{font-size:120%}
-.homelinkedit th:first-child,#sidebarconf th:first-child,#consolepass th:first-child{font-size:0}
 #iptransport a{padding-top:6px}
-.log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin:2px -3px -2px;min-width:40px;max-width:40px}
-.log_omitted{margin-right:1px}
+#jobs #jobstats th,#jobs #jobstats td{font-size:100%}
 #loggingoptions{margin-bottom:-3px}
 #logs font[color^="#"]::before{margin-right:6px;margin-left:5px;width:7px;height:7px}
 #minigraphcontainer{margin-top:-43px;margin-left:1px;width:234px;height:38px;background-size:248px 40px}
@@ -2639,16 +2644,14 @@ h3#pconfig,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
 #netconfig label::before,#externali2cp td label::before,#externali2cp .nowrap::before,#reseedconfig .nowrap::before{min-height:48px}
 #netdbcountrylist img{width:24px;height:auto}
 #netdboverview table th:last-child::after,#netdboverview table td:last-child::after{width:5px;display:inline-block;content:""}
-.newsAuthor{padding:0 0 0 14px;font-size:9.5pt;background-size:12px;background-position:left center}
 #peerprofiles.widescroll{padding-top:123px}
-#peers .routerid{padding:1px 0 1px 3px}
-#tunnelPeerCount .flag{padding:1px 2px 3px 3px}
-#peers .flag{ padding:2px 5px 5px 4px}
-#profiles .flag{padding-right:1px}
 #peers .flag img{margin:1px 3px 1px 0}
-#profiles .flag img{margin:1px 1px 1px -5px}
+#peers .flag{ padding:2px 5px 5px 4px}
+#peers .routerid{padding:1px 0 1px 3px}
 #pluginconfig td:first-child label::before{height:20px}
 #plugininstall2{margin-top:-15px}
+#profiles .flag img{margin:1px 1px 1px -5px}
+#profiles .flag{padding-right:1px}
 #sb_general,#sb_shortgeneral,#sb_advancedgeneral,#sb_bandwidth,#sb_peers,#sb_peersadvanced,#sb_tunnels,#sb_queue{margin-top:-12px;margin-bottom:-6px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:14px}
 #sb_graphcontainer:not([hidden]){height:44px}
@@ -2657,31 +2660,37 @@ h3#pconfig,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
 #sb_localtunnels a{max-width:188px}
 #sb_localtunnels td:first-child,#sb_localtunnels tr:hover td:first-child{background-size:17px}
 #sb_logo img{margin-top:-4px;margin-left:-2px;width:240px}
+#sb_memoryBar.percentBarOuter{margin-bottom:-2px}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0 0 2px}
 #sb_services{width:242px}
+#schedjobs li{min-width:280px}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
 #sidebar h3::after{min-height:19px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
 #sidebar h3 a{padding:4px 0 2px;font-size:11pt}
+#sidebar hr[hidden] + div:not([hidden]),#sidebar hr[hidden] + table:not([hidden]){margin-top:-8px}
+#sidebar hr[hidden] ~ h3{margin-top:-12px}
+#sidebar hr[hidden] ~ h4{margin-bottom:-4px}
+#sidebar hr[hidden] ~ #sb_advanced:not([hidden]) ~ h3{margin-top:-9px}
 #sidebar{margin-bottom:5px;width:228px}
 #sidebar .reload,#sidebar .stop{margin:0 3px -5px;padding-top:6px;padding-bottom:6px;min-width:110px}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
+#sidebar #sb_CPUBar.percentBarOuter{margin-top:-7px}
 #sidebar #sb_logo{margin-top:4px;height:41px !important}
 #sidebar #sb_newsheadings table{width:240px}
 #sidebar table[id^="sb_"]{width:238px}
-#sidebar hr[hidden] + div:not([hidden]),#sidebar hr[hidden] + table:not([hidden]){margin-top:-8px}
-#sidebar hr[hidden] ~ h3{margin-top:-12px}
-#sidebar hr[hidden] ~ #sb_advanced:not([hidden]) ~ h3{margin-top:-9px}
-#sidebar hr[hidden] ~ h4{margin-bottom:-4px}
+#sidebar #sb_services.collapsed{margin-bottom:-9px}
+#sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-8px}
 #sybilTask th{font-size:12pt}
 #tunnelPeerCount .flag img{margin:2px 1px 0 -2px;border:none}
+#tunnelPeerCount .flag{padding:1px 2px 3px 3px}
 #tunnelPeerCount .flag{width:19px}
+#tunnels .routerid img{margin:-2px 2px 0 0}
 #tunnels .tunnel_peer tt{margin-left:3px;margin-top:-2px;display:inline-block}
 #udpconnections .cells td{border-left:none;border-right:none}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
-#xhr > hr + #sb_shortgeneral{margin-top:-7px}
 #webappconfiguration a,#config_plugins .h3navlinks a{margin-top:-8px;padding:12px 8px 8px}
-#config_plugins .h3navlinks a[href="configclients"]{margin-right:-8px}
+#xhr > hr + #sb_shortgeneral{margin-top:-7px}
 }
 
 @media screen and (min-width:1634px){
