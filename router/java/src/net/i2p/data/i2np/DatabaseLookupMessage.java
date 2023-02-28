@@ -564,7 +564,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         else if (_ratchetReplyTag != null)
             buf.append("\n* RatchetReply Tag: ").append(_ratchetReplyTag);
         if (_dontIncludePeers != null) {
-            buf.append("\n* Don't Include Peers: ");
+            buf.append("\n* Excluded peers: ");
             buf.append(_dontIncludePeers.size());
         }
         return buf.toString();
