@@ -160,6 +160,7 @@ a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 #sb_memoryBar .percentBarInner,#sb_CPUBar .percentBarInner{background:linear-gradient(90deg,rgba(0,255,0,.05),rgba(255,255,0,.1) 160px,rgba(255,0,0,.1) 180px,rgba(255,0,0,.2)),linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7))}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0;width:95%;float:none;position:absolute;top:-18px;left:2.5%;right:2.5%;z-index:9999;vertical-align:middle;font-size:110%;border-radius:1px;background:#eef;filter:drop-shadow(0 0 1px #eef) drop-shadow(0 0 1px #000)}
 #sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-13px;border-style:solid;border-width:8px;border-color:#eef transparent transparent transparent;content:""}
+#sb_CPUBar .percentBarInner{background:linear-gradient(90deg,rgba(128,255,128,.6),rgba(255,64,255,.6) 80px,rgba(255,64,64,.6) 160px),linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7))}
 
 /* updates download bar */
 .percentBarOuter{position:relative}
@@ -197,7 +198,7 @@ input[type=checkbox].toggleSection:checked:active{box-shadow:var(--highlight),in
 input[type=checkbox].toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar .toggleSection::before,#sidebar .toggleSection::after{display:none}
-#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 1px;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
+#sidebar h3 a .badge,#tunnelCount,#newsCount{margin:0 0 2px 2px;padding:2px 5px 1px;display:inline-block;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
