@@ -141,7 +141,7 @@ function refreshTorrents() {
             var updatingResponse = xhrsnark.responseXML.getElementsByClassName("volatile");
             var u;
             for (u = 0; u < updating.length; u++) {
-              if (updating[u] !== null && updatingResponse[u] !== null) {
+              if (updating !== null && updatingResponse !== null) {
                 if (!Object.is(updating[u].innerHTML, updatingResponse[u].innerHTML)) {
                   if (updating.length === updatingResponse.length) {
                     if (torrents) {updating[u].outerHTML = updatingResponse[u].outerHTML;}

@@ -160,7 +160,7 @@ a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 #sb_memoryBar .percentBarInner,#sb_CPUBar .percentBarInner{background:linear-gradient(90deg,rgba(0,255,0,.05),rgba(255,255,0,.1) 160px,rgba(255,0,0,.1) 180px,rgba(255,0,0,.2)),linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7))}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0;width:95%;float:none;position:absolute;top:-18px;left:2.5%;right:2.5%;z-index:9999;vertical-align:middle;font-size:110%;border-radius:1px;background:#eef;filter:drop-shadow(0 0 1px #eef) drop-shadow(0 0 1px #000)}
 #sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-13px;border-style:solid;border-width:8px;border-color:#eef transparent transparent transparent;content:""}
-#sb_CPUBar .percentBarInner{background:linear-gradient(90deg,rgba(128,255,128,.6),rgba(255,255,64,.6) 80px,rgba(255,64,64,.6) 160px),linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7))}
+#sb_CPUBar .percentBarInner{background:linear-gradient(90deg,rgba(128,255,128,.4),rgba(255,255,64,.5) 90px,rgba(255,16,16,.5) 180px),linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7))}
 
 /* updates download bar */
 .percentBarOuter{position:relative}
@@ -2645,7 +2645,7 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #sb_localtunnels td:first-child,#sb_localtunnels tr:hover td:first-child{background-size:17px}
 #sb_logo img{margin-top:-4px;margin-left:-2px;width:240px}
 #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
-#homepage #sb_memoryBar.percentBarOuter{margin-bottom:6px}
+#homepage #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
 #homepage #sb_memoryBar + hr{margin-top:5px}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0 0 2px}
 #sb_peers[hidden] + #sb_peers_condensed, #sb_tunnels[hidden] + #sb_tunnels_condensed{width:239px}
