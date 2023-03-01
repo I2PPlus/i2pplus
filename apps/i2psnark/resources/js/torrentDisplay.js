@@ -88,8 +88,6 @@ function initFilterBar() {
   }
 
   function injectCSS() {
-//    var stylesheet = "<style type=text/css id=cssfilter>" + rules + "</style>";
-//    document.head.innerHTML += stylesheet;
     var stylesheet = document.getElementById("cssfilter");
     stylesheet.innerText = rules;
   }
@@ -295,13 +293,9 @@ function refreshFilters() {
   var path = window.location.pathname;
   var query = window.location.search;
   var storageFilter = "filter";
-  if (!path.endsWith("i2psnark/")) {
-    storageFilter = "filter_" + path.replace("/", "");
-  }
+  if (!path.endsWith("i2psnark/")) {storageFilter = "filter_" + path.replace("/", "");}
   var storage = window.localStorage.getItem(storageFilter);
   var url = ".ajax/xhr1.html";
-  if (xhrsnark.status !== null) {xhrsnark.abort();}
-  if (xhrfilter.status !== null) {xhrfilter.abort();}
   checkPagenav();
 
   if (query) {
@@ -323,7 +317,7 @@ function refreshFilters() {
         if (torrentsResponse !== null && torrents.innerHTML !== torrentsResponse.innerHTML) {
           torrents.outerHTML = torrentsResponse.outerHTML;
         }
-        if (pagenav && (!storage || storage === "all")) {
+        if (pagenav && !storage) {
           checkPagenav();
           var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
           if (pagenavResponse !== null) {pagenav.innerHTML = pagenavResponse.innerHTML;}

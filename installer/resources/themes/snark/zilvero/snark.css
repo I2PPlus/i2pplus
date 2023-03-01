@@ -153,7 +153,7 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay labe
 #snarkSearch{margin-left:8px;display:block;position:absolute;right:12px;top:10px}
 .iframed #snarkSearch{top:9px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:none;box-shadow:none;background:transparent}
-#snarkSearch input[type=search]{padding-right:22px;border-bottom:1px solid #ccc;opacity:1}
+#snarkSearch input[type=search]{padding-right:22px;border-bottom:1px solid #ccc;opacity:1;-webkit-appearance:none}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
 #snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.4}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}

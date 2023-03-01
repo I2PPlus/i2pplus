@@ -62,14 +62,13 @@ class IterativeLookupJob extends JobImpl {
                         invalidPeers++;
                         continue;
                     }
-                    if (getContext().banlist().isBanlistedForever(peer)) {
+                    if (getContext().banlist().isBanlistedForever(peer) || getContext().banlist().isBanlisted(peer)) {
                         oldPeers++;
                         continue;
                     }
                     RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(peer);
                     if (ri == null) {
-                        // Take it on faith that it's ff to speed things up, we don't need the RI
-                        // to query it.
+                        // Take it on faith that it's ff to speed things up, we don't need the RI to query it.
                         // Zero-hop outbound tunnel will be failed in ISJ.sendQuery()
                         _search.newPeerToTry(peer);
                         if (_search.getFromHash() == null) {
