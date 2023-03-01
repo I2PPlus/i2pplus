@@ -251,7 +251,6 @@ tr:hover .percentBarText{text-shadow:0 1px 1px #313;opacity:1}
 .ParentDir a,.snarkFileName a,.torrentName a{padding:5px 0;width:100%;display:inline-block}
 tr a,td.peerCount{-webkit-text-stroke:1px rgba(0,0,0,.3)}
 tr:hover a,tr a:hover,tr:hover td.peerCount{-webkit-text-stroke:0}
-.torrentName a{padding-top:4px}
 .magnetLabel{display:inline-block;vertical-align:middle;font-style:italic;color:#aaa;-webkit-text-stroke:1px rgba(160,160,160,.3)}
 tr:hover .torrentName a:hover,tr:hover .snarkFileName a:hover,tr:active .ParentDir a{border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.2) 70%)}
 tr:hover .torrentName a:active,tr:hover .snarkFileName a:active{padding-left:5px;box-shadow:inset 3px 3px 3px #101;background:#303}
