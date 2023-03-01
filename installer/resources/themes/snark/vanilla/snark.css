@@ -84,7 +84,7 @@ a:active,a:visited:active,th a:active,th a:visited:active,td a:active,td a:visit
 .iframed #snarkSearch{top:9px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:none;box-shadow:none;background:transparent;transform:translateY(-4px)}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
-#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding-right:22px;font-weight:600;border-bottom:1px solid #a69a93;border-radius:0;opacity:1}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding-right:22px;font-weight:600;border-bottom:1px solid #a69a93;border-radius:0;opacity:1;-webkit-appearance:none}
 #snarkSearch input[type=search]::placeholder{font-weight:500;font-style:italic;opacity:.6}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}
 #snarkSearch input[type="submit"]{width:28px;font-size:0;color:transparent;text-shadow:none;background:var(--b_search) no-repeat center right/24px;opacity:.6}

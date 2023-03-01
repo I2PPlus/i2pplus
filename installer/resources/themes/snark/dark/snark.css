@@ -64,7 +64,7 @@ tr {contain:layout}
 #snarkSearch{display:block;position:absolute;top:5px;right:10px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;color:var(--ink);border:none;box-shadow:none;background:transparent}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
-#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding:6px 22px 6px 6px;border-bottom:1px solid #131;opacity:1;transform:translateY(-10px)}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding:6px 22px 6px 6px;border-bottom:1px solid #131;opacity:1;transform:translateY(-10px);-webkit-appearance:none}
 #snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.65;color:#252}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}
 #snarkSearch input[type="submit"]{width:28px;min-width:0;color:transparent;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.4}

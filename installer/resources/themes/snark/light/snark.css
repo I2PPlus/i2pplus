@@ -68,7 +68,7 @@ button::-moz-focus-inner,input::-moz-focus-inner{outline:none;border:none}
 /* search */
 #snarkSearch{display:block;position:absolute;right:8px;top:-2px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:none;box-shadow:none;background:transparent}
-#snarkSearch input[type=search]{padding:4px 6px;font-weight:600;border-bottom:1px solid #ddf;transform:translateY(-2px)}
+#snarkSearch input[type=search]{padding:4px 6px;font-weight:600;border-bottom:1px solid #ddf;transform:translateY(-2px);-webkit-appearance:none}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
 #snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{opacity:1}
 #snarkSearch input[type=search]::placeholder{font-weight:500;font-style:italic;opacity:.5;color:var(--ink)}

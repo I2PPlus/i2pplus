@@ -120,7 +120,7 @@ a.controld{display:none}
 /* search */
 #snarkSearch{display:block;position:absolute;right:6px;top:2px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:none;box-shadow:none;background:transparent}
-#snarkSearch input[type=search]{padding:4px 6px;color:var(--ink_light);border-bottom:1px solid #ddf;transform:translateY(-2px);cursor:text}
+#snarkSearch input[type=search]{padding:4px 6px;color:var(--ink_light);border-bottom:1px solid #ddf;transform:translateY(-2px);cursor:text;-webkit-appearance:none}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
 #snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{opacity:1}
 #snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.5;color:var(--ink)}

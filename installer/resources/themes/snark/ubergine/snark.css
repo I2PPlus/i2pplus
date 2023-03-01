@@ -96,7 +96,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .iframed #snarkSearch{top:9px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:none;box-shadow:none;background:transparent}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
-#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding-right:22px;border-bottom:1px solid #303;opacity:1;transform:translateY(-4px)}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding-right:22px;border-bottom:1px solid #303;opacity:1;transform:translateY(-4px);-webkit-appearance:none}
 #snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.4}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}
 #snarkSearch input[type="submit"]{width:28px;color:transparent;background:var(--search) no-repeat bottom right/24px;opacity:.5}
