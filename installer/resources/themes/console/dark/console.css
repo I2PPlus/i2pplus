@@ -945,10 +945,9 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .tunnel_cap,.tier,.reachable,.ff{box-shadow:var(--highlight_badge)}
 .tunnel_id:empty{opacity:0}
 .tunnel_id{margin:1px 2px 1px 5px;padding:4px 2px;min-width:78px;display:inline-block;line-height:1.25;color:#bb7;text-shadow:var(--textshadow);text-align:right}
-.tunnel_local{margin-left:-4px;margin-right:4px;padding:2px 0 2px;line-height:1.35;font-size:8pt;text-transform:lowercase;text-align:center;box-shadow:var(--outline);background:var(--badge)}
-.tunnel_local{margin-right:2px;margin-left:0;min-width:64px}
 .tunnel_peer:empty{vertical-align:top}
 .tunnel_peer{min-width:56px;display:inline-block;text-align:right}
+.tunnel_local{margin-right:2px;padding:2px 0 2px;line-height:1.35;font-size:8pt;text-transform:lowercase;text-align:center;box-shadow:var(--outline);background:var(--badge)}
 .tunnels_client th:first-child::after{vertical-align:middle;line-height:0;letter-spacing:-0.25em;font-size:11pt;content:"\21E9\21E7"}
 .tunnels_client th:first-child,.tunnels_client td:first-child{width:4%}
 .tunnels_client th:nth-child(2),.tunnels_client th:nth-child(3),.tunnels_client td:nth-child(2),.tunnels_client td:nth-child(3){width:7%;white-space:nowrap}
@@ -973,7 +972,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels h3 a:not(.lsview),#logs a.configure,#logs a.delete,#applinks a,#sitelinks #eventlogLink{font-size:0}
 #tunnels h3 a:not(.lsview){margin-left:4px;border-left:var(--border)}
 #tunnels h3 a:not(.refreshpage):first-child{padding:8px 4px 14px 22px;border-left:none}
-#tunnels h3 a:not(.refreshpage) img,#tunnels h3 a:not(.refreshpage):first-child{margin:-8px 0 -8px 0;padding:11px 8px;border-left:var(--border)}
+#tunnels h3 a:not(.refreshpage) img,#tunnels h3 a:not(.refreshpage):first-child{margin:-8px 0 -8px 0;padding:9px 2px 9px 0;border-left:var(--border)}
 #tunnels h3.client{padding-left:35px;background:var(--client) no-repeat 9px center/18px,var(--title)}
 #tunnels h3+h3 a{display:none}
 #tunnels h3+h3{margin-top:-1px;display:none}
@@ -2183,7 +2182,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #bote iframe{margin:0}
 #lookupCondensed{display:none}
 .b32{margin:-2px 10px 0 0;padding:2px 5px;float:right;font-family:var(--monospaced);font-size:80%;color:#aa0;text-transform:none;box-shadow:0 0 1px 1px #010;background:rgba(0,48,0,.5)}
-h3 .b32{margin:0 -24px 0 0;display:inline-block;vertical-align:middle;border:1px solid #030;box-shadow:inset 0 0 0 1px #010}
+h3 .b32{margin:0 4px 0 0;display:inline-block;vertical-align:middle;border:1px solid #030;box-shadow:inset 0 0 0 1px #010}
 .embedlink{float:right}
 #embedurl{margin-bottom:10px;padding:10px;font-weight:700;text-align:center;border:var(--border);background:#000}
 #embedurl form{margin:0}
@@ -2771,9 +2770,7 @@ input[type=text],input[type=password]{padding:7px 9px}
 .themechoice,.langselect{width:140px}
 .tunnel_cap{padding:3px 2px 2px;min-width:18px}
 .tunneldisplay .tunnel_peer{margin:0;min-width:80px}
-.tunneldisplay .tunnel_peer.tunnel_local{margin:0 0 0 -1px;min-width:77px}
-.tunneldisplay .tunnel_peer + b.tunnel_cap{margin:0 -1px}
-.tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap{margin-left:1px}
+.tunneldisplay .tunnel_peer.tunnel_local{min-width:100px}
 .tunnel_id{margin:0 5px;padding:2px 6px;min-width:96px;display:inline-block;vertical-align:middle;border:1px solid #030;box-shadow:var(--highlight_badge);background:var(--badge)}
 .tunnel_id:not(:empty){background:var(--hardhat) no-repeat 5px center/14px,var(--badge)}
 .tunnel_id:not(:empty)::before{width:16px;height:14px;display:inline-block;vertical-align:middle;content:""}
