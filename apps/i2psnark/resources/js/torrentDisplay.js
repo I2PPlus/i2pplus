@@ -295,9 +295,7 @@ function refreshFilters() {
   var path = window.location.pathname;
   var query = window.location.search;
   var storageFilter = "filter";
-  if (!path.endsWith("i2psnark/")) {
-    storageFilter = "filter_" + path.replace("/", "");
-  }
+  if (!path.endsWith("i2psnark/")) {storageFilter = "filter_" + path.replace("/", "");}
   var storage = window.localStorage.getItem(storageFilter);
   var url = ".ajax/xhr1.html";
   if (xhrsnark.status !== null) {xhrsnark.abort();}

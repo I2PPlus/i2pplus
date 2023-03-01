@@ -68,13 +68,13 @@ function refreshTorrents() {
   if (navbar) {navbar.addEventListener("mouseover", setLinks, false);}
   if (debug) {debug.addEventListener("mouseover", setLinks, false);}
 
-  if (filterbar && storage !== null && visible !== "hidden") {
+  var filterEnabled = localStorage.hasOwnProperty("filter");
+
+  if (filterbar && filterEnabled) {
     onVisible(filterbar, () => {
-      if (xhrsnark.status !== null) {xhrsnark.abort();}
       checkFilterBar();
     });
-  } else if ((torrents || noload || down) && visible !== "hidden") {
-    if (xhrfilter.status !== null) {xhrfilter.abort();}
+  } else if ((torrents || noload || down)) {
     xhrsnark.open("GET", url);
     xhrsnark.responseType = "document";
     xhrsnark.onreadystatechange = function() {
@@ -87,10 +87,11 @@ function refreshTorrents() {
 
           if (down || noload) {
             refreshAll();
-          }
-
-          if (!down && !noload) {
-            refreshHeaderAndFooter();
+          } else {
+            if (files || torrents) {
+              refreshHeaderAndFooter();
+              updateVolatile();
+            }
           }
 
           if (info) {
@@ -113,10 +114,6 @@ function refreshTorrents() {
             }
           }
 
-          if (files || torrents) {
-            updateVolatile();
-          }
-
           if (complete) {
             var completeResponse = xhrsnark.responseXML.getElementsByClassName("completed");
             var i;
@@ -127,7 +124,8 @@ function refreshTorrents() {
             }
           }
 
-          if (document.getElementById("setPriority")) { // hide non-functional buttons until we fix folder.js script
+          // hide non-functional buttons until we fix folder.js script
+          if (document.getElementById("setPriority")) {
             var allHigh = document.getElementById("setallhigh");
             var allNorm = document.getElementById("setallnorm");
             var allSkip = document.getElementById("setallskip");
@@ -142,12 +140,11 @@ function refreshTorrents() {
             var u;
             for (u = 0; u < updating.length; u++) {
               if (updating !== null && updatingResponse !== null) {
-                if (!Object.is(updating[u].innerHTML, updatingResponse[u].innerHTML)) {
-                  if (updating.length === updatingResponse.length) {
-                    if (torrents) {updating[u].outerHTML = updatingResponse[u].outerHTML;}
-                    else {updating[u].innerHTML = updatingResponse[u].innerHTML;}
-                  } else {refreshAll();}
-                }
+                if (updating.length === updatingResponse.length) {
+                  if (updating[u].innerHTML !== updatingResponse[u].innerHTML) {
+                    updating[u].innerHTML = updatingResponse[u].innerHTML;
+                  }
+                } else {refreshAll();}
               }
             }
           }
@@ -166,7 +163,7 @@ function refreshTorrents() {
           function refreshAll() {
             if (mainsection) {
               var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
-              if (mainsectionResponse !== null && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML)) {
+              if (mainsectionResponse !== null && mainsection !== mainsectionResponse) {
                 mainsection.innerHTML = mainsectionResponse.innerHTML;
               }
               setLinks();

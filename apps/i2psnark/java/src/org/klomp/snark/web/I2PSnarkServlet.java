@@ -359,6 +359,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 debug = false;
                 if (debug && _context.isRouterContext()) {
                     out.write("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
+                    out.write("import {onVisible} from \"/themes/js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
                 } else {
                     out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                     out.write("import {onVisible} from \""  + _contextPath + WARBASE + "js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
@@ -367,12 +368,14 @@ public class I2PSnarkServlet extends BasicServlet {
                           "var main = document.getElementById(\"mainsection\");\n" +
                           "var details = document.getElementById(\"snarkInfo\");\n" +
                           "function updateIfVisible() {\n" +
-                          " var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                          "  if (!timerId) {\n" +
+                          "    var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                          "   }\n" +
                           "}\n" +
                           "if (main) {\n" +
-                          " onVisible(main, () => {updateIfVisible();});\n" +
+                          "  onVisible(main, () => {updateIfVisible();});\n" +
                           "} else if (details) {\n" +
-                          " onVisible(details, () => {updateIfVisible();});\n" +
+                          "  onVisible(details, () => {updateIfVisible();});\n" +
                           "}\n" +
                           "document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
                           "</script>\n");
@@ -3101,7 +3104,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<form action=\"" + _contextPath + "/configure#navbar\" method=POST>\n" +
                   "<div class=\"configPanel lang_" + lang + "\"><div class=snarkConfig>\n");
         writeHiddenInputs(out, req, "Save");
-        out.write("<span class=\"configTitle\">");
+        out.write("<span class=configTitle>");
         out.write(_t("Configuration"));
         out.write("</span><hr>\n" +
                   "<table border=0 id=\"configs\">\n");
@@ -3173,7 +3176,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label><b>");
         out.write(_t("Page size"));
-        out.write("</b> <input type=text name=\"pageSize\" size=5 maxlength=\"4\" pattern=\"[0-9]{0,4}\" class=\"r numeric\""
+        out.write("</b> <input type=text name=\"pageSize\" size=5 maxlength=4 pattern=\"[0-9]{0,4}\" class=\"r numeric\""
                   + " title=\"");
         out.write(_t("Maximum number of torrents to display per page"));
         out.write("\" value=\"" + _manager.getPageSize() + "\" > ");
@@ -3210,7 +3213,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"smartSort\"><b>");
         out.write(_t("Smart torrent sorting"));
-        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"smartSort\" id=\"smartSort\" value=true "
+        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"smartSort\" id=smartSort value=true "
                   + (smartSort ? "checked " : "")
                   + "title=\"");
         out.write(_t("Ignore words such as 'a' and 'the' when sorting"));
@@ -3218,7 +3221,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"collapsePanels\"><b>");
         out.write(_t("Collapsible panels"));
-        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"collapsePanels\" id=\"collapsePanels\" value=true "
+        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"collapsePanels\" id=collapsePanels value=true "
                   + (collapsePanels ? "checked " : "")
                   + "title=\"");
         if (noCollapse) {
@@ -3233,7 +3236,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"showStatusFilter\"><b>");
         out.write(_t("Torrent filter bar"));
-        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"showStatusFilter\" id=\"showStatusFilter\" value=true "
+        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"showStatusFilter\" id=showStatusFilter value=true "
                   + (showStatusFilter ? "checked " : "")
                   + "title=\"");
         out.write(_t("Show filter bar above torrents for selective display based on status"));
@@ -3242,7 +3245,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"enableLightbox\"><b>");
         out.write(_t("Enable lightbox"));
-        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"enableLightbox\" id=\"enableLightbox\" value=true "
+        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"enableLightbox\" id=enableLightbox value=true "
                   + (enableLightbox ? "checked " : "")
                   + "title=\"");
         out.write(_t("Use a lightbox to display images when thumbnails are clicked"));
@@ -3251,7 +3254,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"enableAddCreate\"><b>");
         out.write(_t("Persist Add/Create"));
-        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"enableAddCreate\" id=\"enableAddCreate\" value=true "
+        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"enableAddCreate\" id=enableAddCreate value=true "
                   + (enableAddCreate ? "checked " : "")
                   + "title=\"");
         out.write(_t("Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"));
@@ -3267,7 +3270,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"ratings\"><b>");
         out.write(_t("Enable Ratings"));
-        out.write("</b></label> <input type=checkbox class=\"optbox slider\" name=\"ratings\" id=\"ratings\" value=true "
+        out.write("</b></label> <input type=checkbox class=\"optbox slider\" name=\"ratings\" id=ratings value=true "
                   + (useRatings ? "checked " : "")
                   + "title=\"");
         out.write(_t("Show ratings on torrent pages"));
@@ -3275,16 +3278,16 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"comments\"><b>");
         out.write(_t("Enable Comments"));
-        out.write("</b></label> <input type=checkbox class=\"optbox slider\" name=\"comments\" id=\"comments\" value=true "
+        out.write("</b></label> <input type=checkbox class=\"optbox slider\" name=\"comments\" id=comments value=true "
                   + (useComments ? "checked " : "")
                   + "title=\"");
         out.write(_t("Show comments on torrent pages"));
         out.write("\" ></span><br>\n");
 
-        out.write("<span class=configOption id=\"configureAuthor\"><label><b>");
+        out.write("<span class=configOption id=configureAuthor><label><b>");
         out.write(_t("Comment Author"));
         out.write("</b> <input type=text name=\"nofilter_commentsName\" spellcheck=false value=\""
-                  + DataHelper.escapeHTML(_manager.util().getCommentsName()) + "\" size=\"15\" maxlength=\"16\" title=\"");
+                  + DataHelper.escapeHTML(_manager.util().getCommentsName()) + "\" size=15 maxlength=16 title=\"");
         out.write(_t("Set the author name for your comments and ratings"));
         out.write("\" ></label></span>\n");
 
@@ -3299,12 +3302,12 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<span class=configOption><label><b>");
         out.write(_t("Up bandwidth limit"));
         out.write("</b> <input type=text name=\"upBW\" class=\"r numeric\" value=\""
-                  + _manager.util().getMaxUpBW() + "\" size=5 maxlength=\"5\" pattern=\"[0-9]{1,5}\""
+                  + _manager.util().getMaxUpBW() + "\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\""
                   + " title=\"");
         out.write(_t("Maximum bandwidth allocated for uploading"));
-        out.write("\"> KBps</label> <span id=\"bwHoverHelp\">");
+        out.write("\"> KBps</label> <span id=bwHoverHelp>");
         out.write(toThemeSVG("details", "", ""));
-        out.write("<span id=\"bwHelp\"><i>");
+        out.write("<span id=bwHelp><i>");
         out.write(_t("Half available bandwidth recommended."));
         out.write("</i></span></span>");
         if (_context.isRouterContext()) {
@@ -3319,7 +3322,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<span class=configOption><label><b>");
         out.write(_t("Total uploader limit"));
         out.write("</b> <input type=text name=\"upLimit\" class=\"r numeric\" value=\""
-                  + _manager.util().getMaxUploaders() + "\" size=5 maxlength=\"3\" pattern=\"[0-9]{1,3}\""
+                  + _manager.util().getMaxUploaders() + "\" size=5 maxlength=3 pattern=\"[0-9]{1,3}\""
                   + " title=\"");
         out.write(_t("Maximum number of peers to upload to"));
         out.write("\" > ");
@@ -3328,7 +3331,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"useOpenTrackers\"><b>");
         out.write(_t("Use open trackers also").replace(" also", ""));
-        out.write("</b></label> <input type=checkbox class=\"optbox slider\" name=\"useOpenTrackers\" id=\"useOpenTrackers\" value=true "
+        out.write("</b></label> <input type=checkbox class=\"optbox slider\" name=\"useOpenTrackers\" id=useOpenTrackers value=true "
                   + (useOpenTrackers ? "checked " : "")
                   + "title=\"");
         out.write(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"));
@@ -3336,7 +3339,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"useDHT\"><b>");
         out.write(_t("Enable DHT"));
-        out.write("</b></label> <input type=checkbox class=\"optbox slider\" name=\"useDHT\" id=\"useDHT\" value=true "
+        out.write("</b></label> <input type=checkbox class=\"optbox slider\" name=\"useDHT\" id=useDHT value=true "
                   + (useDHT ? "checked " : "")
                   + "title=\"");
         out.write(_t("Use DHT to find additional peers"));
@@ -3344,7 +3347,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"autoStart\"><b>");
         out.write(_t("Auto start torrents"));
-        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"autoStart\" id=\"autoStart\" value=true "
+        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"autoStart\" id=autoStart value=true "
                   + (autoStart ? "checked " : "")
                   + "title=\"");
         out.write(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"));
@@ -3353,7 +3356,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (_context.isRouterContext()) {
             out.write("<br>\n<span class=configOption><label><b>");
             out.write(_t("Startup delay"));
-            out.write("</b> <input type=text name=\"startupDelay\" size=5 maxlength=\"4\" pattern=\"[0-9]{1,4}\" class=\"r numeric\""
+            out.write("</b> <input type=text name=\"startupDelay\" size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\""
                       + " title=\"");
             out.write(_t("How long before auto-started torrents are loaded when I2PSnark starts"));
             out.write("\" value=\"" + _manager.util().getStartupDelay() + "\" > ");
@@ -3407,14 +3410,14 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label for=\"filesPublic\"><b>");
         out.write(_t("Files readable by all"));
-        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"filesPublic\" id=\"filesPublic\" value=true " +
+        out.write("</b> </label><input type=checkbox class=\"optbox slider\" name=\"filesPublic\" id=filesPublic value=true " +
                   (filesPublic ? "checked " : "") + "title=\"");
         out.write(_t("Set file permissions to allow other local users to access the downloaded files"));
         out.write("\" ></span>\n");
 
         out.write("<span class=configOption><label for=\"maxFiles\"><b>");
         out.write(_t("Max files per torrent"));
-        out.write("</b> <input type=text name=\"maxFiles\" size=5 maxlength=\"5\" pattern=\"[0-9]{1,5}\" class=\"r numeric\"" + " title=\"");
+        out.write("</b> <input type=text name=\"maxFiles\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"" + " title=\"");
         out.write(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"));
         out.write("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=false disabled></label></span><br>\n");
         out.write("</div></td></tr>\n");
@@ -3447,12 +3450,12 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<span class=configOption><label><b>");
             out.write(_t("I2CP host"));
             out.write("</b> <input type=text name=\"i2cpHost\" value=\""
-                      + _manager.util().getI2CPHost() + "\" size=5 ></label></span><br>\n");
+                      + _manager.util().getI2CPHost() + "\" size=5></label></span><br>\n");
 
             out.write("<span class=configOption><label><b>");
             out.write(_t("I2CP port"));
             out.write("</b> <input type=text name=\"i2cpPort\" value=\"" +
-                      + _manager.util().getI2CPPort() + "\" class=\"numeric\" size=5 maxlength=\"5\" pattern=\"[0-9]{1,5}\" ></label></span><br>\n");
+                      + _manager.util().getI2CPPort() + "\" class=numeric size=5 maxlength=5 pattern=\"[0-9]{1,5}\" ></label></span><br>\n");
         }
 
         options.remove(I2PSnarkUtil.PROP_MAX_BW);
@@ -3488,7 +3491,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<form action=\"" + _contextPath + "/configure#navbar\" method=POST>\n" +
                    "<div class=\"configPanel\" id=\"trackers\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(buf, req, "Save2");
-        buf.append("<span class=\"configTitle\">");
+        buf.append("<span class=configTitle>");
 //        toThemeImg(buf, "config");
 //        buf.append(' ');
         buf.append(_t("Trackers"));
@@ -3555,17 +3558,17 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("</td></tr>\n");
         }
         buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n")  // spacer
-           .append("<tr id=\"addtracker\"><td><b>")
+           .append("<tr id=addtracker><td><b>")
            .append(_t("Add")).append(":</b></td>" +
-                   "<td><input type=text class=\"trackername\" name=\"tname\" spellcheck=false></td>" +
-                   "<td><input type=text class=\"trackerhome\" name=\"thurl\" spellcheck=false></td>" +
+                   "<td><input type=text class=trackername name=\"tname\" spellcheck=false></td>" +
+                   "<td><input type=text class=trackerhome name=\"thurl\" spellcheck=false></td>" +
                    "<td><input type=radio class=optbox value=\"0\" name=\"add_tracker_type\" checked=checked></td>" +
                    "<td><input type=radio class=optbox value=1 name=\"add_tracker_type\"></td>" +
                    "<td><input type=radio class=optbox value=2 name=\"add_tracker_type\"></td>" +
-                   "<td><input type=text class=\"trackerannounce\" name=\"taurl\" spellcheck=false></td></tr>\n" +
+                   "<td><input type=text class=trackerannounce name=\"taurl\" spellcheck=false></td></tr>\n" +
                    "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
                    "<tr><td colspan=7>\n" +
-                   "<input type=submit name=\"taction\" class=\"default\" value=\"").append(_t("Add tracker")).append("\">\n" +
+                   "<input type=submit name=\"taction\" class=default value=\"").append(_t("Add tracker")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=delete value=\"").append(_t("Delete selected")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=\"add\" value=\"").append(_t("Add tracker")).append("\">\n" +
                    "<input type=submit name=\"taction\" class=accept value=\"").append(_t("Save tracker configuration")).append("\">\n" +
@@ -3578,8 +3581,8 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     private void writeConfigLink(PrintWriter out) throws IOException {
-        out.write("\n<div id=\"configSection\">\n<span class=\"snarkConfig\">" +
-                  "<span id=\"tab_config\" class=\"configTitle\"><a href=\"configure\"><span class=\"tab_label\">");
+        out.write("<div id=configSection>\n<span class=snarkConfig>" +
+                  "<span id=tab_config class=configTitle><a href=\"configure\"><span class=tab_label>");
 //        out.write(toThemeImg("config"));
 //        out.write(' ');
         out.write(_t("Configuration"));
@@ -3771,9 +3774,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return String of HTML or null if postParams != null
      * @since 0.7.14
      */
-    private String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam)
-        throws IOException
-    {
+    private String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam) throws IOException {
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
@@ -4536,8 +4537,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showSaveButton = false;
         boolean rowEven = true;
         boolean inOrder = storage != null && storage.getInOrder();
-        for (Sorters.FileAndIndex fai : fileList)
-        {
+        for (Sorters.FileAndIndex fai : fileList) {
             // String encoded = encodePath(ls[i].getName());
             // bugfix for I2P - Backport from Jetty 6 (zero file lengths and last-modified times)
             // http://jira.codehaus.org/browse/JETTY-361?page=com.atlassian.jira.plugin.system.issuetabpanels%3Achangehistory-tabpanel#issue-tabs
@@ -4783,12 +4783,14 @@ public class I2PSnarkServlet extends BasicServlet {
                        "var main = document.getElementById(\"mainsection\");\n" +
                        "var details = document.getElementById(\"snarkInfo\");\n" +
                        "function updateIfVisible() {\n" +
-                       " var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                       "  if (!timerId) {\n" +
+                       "    var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                       "  }\n" +
                        "}\n" +
                        "if (main) {\n" +
-                       " onVisible(main, () => {updateIfVisible();});\n" +
+                       "  onVisible(main, () => {updateIfVisible();});\n" +
                        "} else if (details) {\n" +
-                       " onVisible(details, () => {updateIfVisible();});\n" +
+                       "  onVisible(details, () => {updateIfVisible();});\n" +
                        "}\n" +
                        "document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
                        "</script>\n");        }
