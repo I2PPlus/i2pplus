@@ -1480,12 +1480,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                   "</span></td></tr>\n</table>\n" + "<hr>\n" +
 
                   // FIXME if there is a query remaining it is lost
-                  "<form method=\"GET\" action=\"" + targetRequest + "\">\n<hr>\n<div class=option>" +
+                  "<form method=GET action=\"" + targetRequest + "\">\n<hr>\n<div class=option>" +
                   "<h4>" + _t("Continue to {0} without saving", idn) + "</h4>\n<p>" +
                   _t("You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router.") +
                   "</p>\n<div class=formaction><button type=submit class=\"go\">" + _t("Continue without saving") + "</button></div>" + "\n</div>\n</form>\n" +
 
-                  "<form method=\"GET\" action=\"http://" + LOCAL_SERVER + "/add\">\n" +
+                  "<form method=GET action=\"http://" + LOCAL_SERVER + "/add\">\n" +
                   "<input type=hidden name=\"host\" value=\"" + destination + "\">\n" +
                   "<input type=hidden name=\"dest\" value=\"" + ahelperKey + "\">\n" +
                   "<input type=hidden name=\"nonce\" value=\"" + _proxyNonce + "\">\n" +
@@ -1546,7 +1546,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         else
             msg = "lookup failure code " + code;
         out.write("<p><b>" + msg + "</b></p>");
-        out.write("<form method=\"GET\" action=\"http://" + LOCAL_SERVER + "/b32\">\n" +
+        out.write("<form method=GET action=\"http://" + LOCAL_SERVER + "/b32\">\n" +
                   "<input type=hidden name=\"host\" value=\"" + destination + "\">\n" +
                   "<input type=hidden name=\"url\" value=\"" + targetRequest + "\">\n" +
                   "<input type=hidden name=\"code\" value=\"" + code + "\">\n" +
@@ -1569,7 +1569,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if (code == LookupResult.RESULT_SECRET_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
             out.write("<h4>" + _t("Lookup password") + "</h4>\n" +
                       "<p>" + _t("You must enter the password provided by the server operator.") + "</p>\n" +
-                      "<input type=text size=\"55\" name=\"secret\" value=\"\">\n");
+                      "<input type=text size=55 name=\"secret\" value=\"\">\n");
         }
 
         // FIXME wasn't escaped

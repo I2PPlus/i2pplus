@@ -460,14 +460,14 @@ public class HomeHelper extends HelperBase {
                 url.contains("tinypng") || url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") ||
                 url.contains("w3schools"))
                 buf.append(" js");
-            buf.append("\" style=\"display: inline-block; text-align: center;\">\n" +
-                       "<div class=\"appicon\">" +
+            buf.append("\" style=display:inline-block;text-align:center>\n" +
+                       "<div class=appicon>" +
                        // usability: add tabindex -1 so we avoid 2 tabs per app
                        "<a href=\"").append(url).append("\" tabindex=\"-1\">" +
                        "<img alt=\"\" title=\"").append(app.desc).append("\" src=\"").append(app.icon)
                // don't version the icons to avoid double-caching where they're used in css
                //.append(app.icon.contains("?") ? "&amp;" : "?").append(CoreVersion.VERSION)
-               .append("\" width=\"32\" height=\"32\"></a></div>\n<table><tr><td><div class=\"applabel\"><a href=\"")
+               .append("\" width=32 height=32></a></div>\n<table><tr><td><div class=applabel><a href=\"")
                .append(url).append("\" title=\"").append(app.desc).append("\">").append(app.name)
                .append("</a></div></td></tr></table>\n</div>");
             }
@@ -477,7 +477,7 @@ public class HomeHelper extends HelperBase {
 
     private String renderConfig(Collection<App> apps) {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<table class=\"homelinkedit\"><tr><th class=center title=\"")
+        buf.append("<table class=homelinkedit><tr><th class=center title=\"")
            .append(_t("Mark for deletion"))
            .append("\">")
            .append(_t("Remove"))
@@ -496,9 +496,9 @@ public class HomeHelper extends HelperBase {
             buf.append(app.name.replace(" ", "_").replace("\'", ""))
                .append("\"></td>");
             if (app.icon != null) {
-                buf.append("<td><img width=\"20\" height=\"20\" alt=\"\" src=\"").append(app.icon).append("\">");
+                buf.append("<td><img width=20 height=20 alt=\"\" src=\"").append(app.icon).append("\">");
             } else {
-                buf.append("<td class=\"noicon\">");
+                buf.append("<td class=noicon>");
             }
             buf.append("</td><td><label for=\"");
             if (url.contains("%s"))
@@ -517,10 +517,10 @@ public class HomeHelper extends HelperBase {
                 buf.append(urltext);
             buf.append("</a></td></tr>\n");
         }
-        buf.append("<tr class=\"addnew\"><td colspan=2><b>")
+        buf.append("<tr class=addnew><td colspan=2><b>")
            .append(_t("Add")).append(":</b>" +
                    "</td><td><input type=text name=\"nofilter_name\"></td>" +
-                   "<td><input type=text size=\"40\" name=\"nofilter_url\"></td></tr>");
+                   "<td><input type=text size=40 name=\"nofilter_url\"></td></tr>");
         buf.append("</table>\n");
         return buf.toString();
     }

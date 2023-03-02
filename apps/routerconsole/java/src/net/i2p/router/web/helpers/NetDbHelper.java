@@ -406,7 +406,7 @@ public class NetDbHelper extends FormHandler {
     private void renderLookupForm() throws IOException {
         _out.write("<form action=\"/netdb\" method=POST>\n" +
                    "<input type=hidden name=\"nonce\" value=\"" + _newNonce + "\" >\n" +
-                   "<div id=\"lookupCondensed\" hidden>" +
+                   "<div id=lookupCondensed hidden>" +
                    "<select name=\"netdbLookup\">" +
                    "<option value=\"caps\" selected=selected>Capabilities</option>" +
                    "<option value=\"cost\">Cost</option>" +
@@ -421,9 +421,9 @@ public class NetDbHelper extends FormHandler {
                    "<option value=\"ssucaps\">SSU Capabilities</option>" +
                    "<option value=\"v\">Router Version</option>" +
                    "</select>" +
-                   "<input type=text size=\"30\"></div>" +
+                   "<input type=text size=30></div>" +
 
-                   "<table id=\"netdblookup\"><tr><th colspan=4>Network Database Search</th></tr>\n" +
+                   "<table id=netdblookup><tr><th colspan=4>Network Database Search</th></tr>\n" +
                    "<tr><td colspan=4 class=subheading><b>Enter one search field <i>only</i></b></td></tr>\n" +
                    "<tr><td><b>Capabilities</b></td><td><input type=text name=\"caps\" title=\"e.g. f or XOfR\"></td>\n" +
                    "<td><b>Cost</b></td><td><input type=text name=\"cost\"></td></tr>\n" +

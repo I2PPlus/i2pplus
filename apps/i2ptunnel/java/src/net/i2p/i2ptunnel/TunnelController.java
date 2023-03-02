@@ -1354,7 +1354,7 @@ public class TunnelController implements Logging {
                     buf.append("Destination hash: ").append(dest.calculateHash().toBase64()).append("<br />\n");
                     if ( ("server".equals(getType())) || ("httpserver".equals(getType())) ) {
                         buf.append("Full destination: ");
-                        buf.append("<input type=text size=\"10\" onclick=\"this.select();\" ");
+                        buf.append("<input type=text size=10 onclick=\"this.select();\" ");
                         buf.append("value=\"").append(dest.toBase64()).append("\" />\n");
                         long val = new Random().nextLong();
                         if (val < 0) val = 0 - val;

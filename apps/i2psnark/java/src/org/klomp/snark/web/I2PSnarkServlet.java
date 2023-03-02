@@ -453,8 +453,8 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</a>");
         }
         if (_manager.getTorrents().size() > 1) {
-            out.write("<form id=snarkSearch action=\"" + _contextPath + "\" method=\"GET\" hidden>\n" +
-                      "<span id=searchwrap><input type=\"search\" required name=\"s\" size=\"20\" placeholder=\"");
+            out.write("<form id=snarkSearch action=\"" + _contextPath + "\" method=GET hidden>\n" +
+                      "<span id=searchwrap><input type=search required name=\"s\" size=20 placeholder=\"");
             out.write(_t("Search torrents"));
             out.write("\"");
             String s = req.getParameter("s");
@@ -3063,7 +3063,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("></td>\n<td></td>\n<td></td>\n</tr>\n</table>\n");
         // make the user add a tracker on the config form now
         //out.write(_t("or"));
-        //out.write("&nbsp;<input type=text name=\"announceURLOther\" size=\"57\" value=\"http://\" " +
+        //out.write("&nbsp;<input type=text name=\"announceURLOther\" size=57 value=\"http://\" " +
         //          "title=\"");
         //out.write(_t("Specify custom tracker announce URL"));
         //out.write("\" > " +
@@ -3392,9 +3392,9 @@ public class I2PSnarkServlet extends BasicServlet {
 
         //out.write("\n");
         //out.write("EepProxy host: <input type=text name=\"eepHost\" value=\""
-        //          + _manager.util().getEepProxyHost() + "\" size=\"15\" /> ");
+        //          + _manager.util().getEepProxyHost() + "\" size=15 /> ");
         //out.write("port: <input type=text name=\"eepPort\" value=\""
-        //          + _manager.util().getEepProxyPort() + "\" size=5 maxlength=\"5\" /><br>\n");
+        //          + _manager.util().getEepProxyPort() + "\" size=5 maxlength=5 /><br>\n");
 
 // data storage
 
@@ -3404,7 +3404,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=configOption><label><b>");
         out.write(_t("Data directory"));
-        out.write("</b> <input type=text name=\"nofilter_dataDir\" size=\"60\"" + " title=\"");
+        out.write("</b> <input type=text name=\"nofilter_dataDir\" size=60" + " title=\"");
         out.write(_t("Directory where torrents and downloaded/shared files are stored"));
         out.write("\" value=\"" + DataHelper.escapeHTML(dataDir) + "\" spellcheck=false></label></span><br>\n");
 
@@ -3470,7 +3470,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<span class=configOption><label><b>");
         out.write(_t("I2CP options"));
         out.write("</b> <input type=text name=\"i2cpOpts\" value=\""
-                  + opts.toString() + "\" size=\"60\" ></label></span>\n");
+                  + opts.toString() + "\" size=60></label></span>\n");
 
         out.write("</div>\n</td></tr>\n");
 
