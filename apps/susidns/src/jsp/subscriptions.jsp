@@ -28,7 +28,7 @@
 <%@ page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
+<jsp:useBean id=subs class="i2p.susi.dns.SubscriptionsBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
 <jsp:setProperty name="subs" property="*" />
 <!DOCTYPE HTML>
@@ -37,45 +37,44 @@
 <meta charset=utf-8>
 <title><%=intl._t("subscriptions")%> - susidns</title>
 <link rel=stylesheet type=text/css href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel=stylesheet type=text/css href="<%=subs.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=subs.getTheme()%>override.css">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
-<body id="sbs">
-<div class="page">
-<div id="navi">
+<body id=sbs>
+<div class=page>
+<div id=navi>
 <a class="abook router" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook master" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
 <a class="abook private" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook published" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
-<a id="subs" class="selected" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="configlink" href="config"><%=intl._t("Configuration")%></a>&nbsp;
-<a id="overview" href="index"><%=intl._t("Help")%></a>
+<a id=subs class=selected href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
+<a id=configlink href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id=overview href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
-<div class="headline" id="subscriptions">
+<div class=headline id=subscriptions>
 <h3><%=intl._t("Subscriptions")%>&nbsp;&nbsp;<span><a href="log.jsp">View Log</a></span></h3>
-<h4><%=intl._t("File location")%>: <span class="storage">${subs.fileName}</span></h4>
+<h4><%=intl._t("File location")%>: <span class=storage>${subs.fileName}</span></h4>
 </div>
 <script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <div id=messages>${subs.messages}</div>
 <form method=POST action="subscriptions#navi">
-<div id="content">
+<div id=content>
 <input type=hidden name="serial" value="${subs.serial}" >
 <textarea name="content" rows="10" cols="80">${subs.content}</textarea>
 </div>
-<div id="buttons">
-<input class="update" style="float: left;" type=submit name=action value="<%=intl._t("Update")%>" >
-<!--<input class="reload" type=submit name=action value="<%=intl._t("Reload")%>" >-->
+<div id=buttons>
+<input class=update style=float:left type=submit name=action value="<%=intl._t("Update")%>" >
 <input class=accept type=submit name=action value="<%=intl._t("Save")%>" >
 </div>
 </form>
-<div class="help" id="helpsubs">
-<p class="help">
+<div class=help id=helpsubs>
+<p class=help>
 <%=intl._t("The subscription file contains a list of i2p URLs.")%>&nbsp;<wbr>
 <%=intl._t("The addressbook application regularly checks this list for new eepsites.")%>&nbsp;<wbr>
 <%=intl._t("Those URLs refer to published hosts.txt files.")%>&nbsp;<wbr>
-<a href="/help/faq#addressbooksubs" target="_top"><%=intl._t("See the FAQ for a list of subscription URLs.")%></a>
+<a href="/help/faq#addressbooksubs" target=_top><%=intl._t("See the FAQ for a list of subscription URLs.")%></a>
 </p>
 </div>
 </div>

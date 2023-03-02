@@ -68,14 +68,14 @@
 <div id=searchbar>
 <form action="/search.jsp" target=_blank rel=noreferrer method=POST>
 <table>
-<tr><td><span><jsp:getProperty name="searchhelper" property="selector" /><input size="40" type=text class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /><button type=submit value="search" class="search"><%=intl._t("Search")%></button></span></td></tr>
+<tr><td><span><jsp:getProperty name="searchhelper" property="selector" /><input size="40" type=text class=search name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /><button type=submit value="search" class=search><%=intl._t("Search")%></button></span></td></tr>
 </table>
 </form>
 </div>
 <div class=linkcontainer>
 <h4 id=applinks><%=intl._t("Applications and Configuration")%>
 <span class="headerlinks">
-<a href="/confighome#configapps" class="customizelinks" style="float: right" title="<%=intl._t("Customize links")%>"><%=intl._t("Customize links")%></a>
+<a href="/confighome#configapps" class="customizelinks" style=float:right title="<%=intl._t("Customize links")%>"><%=intl._t("Customize links")%></a>
 <%
     if (homehelper.shouldShowWelcome()) {
 %>

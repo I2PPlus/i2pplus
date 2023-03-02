@@ -254,7 +254,7 @@
 <td>
 <b class=suboption><%=intl._t("Create Reseed File")%></b>
 <div class=optionsingle id=reseedcreatefile>
-<form action="/createreseed" method="GET">
+<form action="/createreseed" method=GET>
 <table>
 <tr>
 <td>

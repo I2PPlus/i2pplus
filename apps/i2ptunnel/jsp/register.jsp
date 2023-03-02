@@ -23,7 +23,7 @@
      }
    }
 %>
-<html id="tman">
+<html id=tman>
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("Registration Helper")%></title>
 <meta charset=utf-8>
@@ -33,15 +33,15 @@
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
-<link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=editBean.getTheme()%>override.css" rel=stylesheet type=text/css>
 <style type=text/css>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
-<body id="tunnelRegistration">
+<body id=tunnelRegistration>
 <%
   if (editBean.isInitialized()) {
 %>
 <form method=POST enctype="multipart/form-data" action="register" accept-charset=utf-8>
-<div class=panel id="registration">
+<div class=panel id=registration>
 <%
     String tunnelTypeName;
     String tunnelType;
@@ -72,7 +72,7 @@
     String curEncryptMode = editBean.getEncryptMode(curTunnel);
     if (!"0".equals(curEncryptMode)) {
 %>
-<table id="regDisabled"><tr><td class=infohelp>
+<table id=regDisabled><tr><td class=infohelp>
 <%=intl._t("This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled.")%>
 </td></tr>
 <%
@@ -97,7 +97,7 @@
 </tr>
 <tr>
 <td>
-<textarea rows="1" style="height: 3em;" cols=60 readonly=readonly id="localDestination" title="Read Only: Local Destination (if known)" wrap="off" spellcheck="false"><%=editBean.getDestinationBase64(curTunnel)%></textarea>
+<textarea rows=1 style=height:3em cols=60 readonly=readonly id=localDestination title="Read Only: Local Destination (if known)" wrap=off spellcheck=false><%=editBean.getDestinationBase64(curTunnel)%></textarea>
 </td>
 </tr>
 -->
@@ -133,7 +133,7 @@
                he.sign(spk);
 %>
 <tr><th><%=intl._t("Authentication for adding host {0}", name)%></th></tr>
-<tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
+<tr><td><div class=displayText tabindex=0 title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
 </table>
 <h3><%=intl._t("Advanced authentication strings")%></h3>
 <%
@@ -143,7 +143,7 @@
 %>
 <table>
 <tr><th><%=intl._t("Authentication for removing host {0}", name)%></th></tr>
-<tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.writeRemove(out); %></div></td></tr>
+<tr><td><div class=displayText tabindex=0 title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.writeRemove(out); %></div></td></tr>
 <%
                String oldname = wrequest.getParameter("oldname");
                String olddestfile = wrequest.getFilename("olddestfile");
@@ -174,7 +174,7 @@
                    props.setProperty(HostTxtEntry.PROP_OLDNAME, oldname);
                    he.sign(spk);
 %>
-<tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
+<tr><td><div class=displayText tabindex=0 title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
 <tr><td class=infohelp><%=intl._t("This will change the name from {0} to {1}, using the same destination", oldname, name)%></td></tr>
 <%
                } else {
@@ -191,7 +191,7 @@
                    props.setProperty(HostTxtEntry.PROP_OLDNAME, oldname);
                    he.sign(spk);
 %>
-<tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
+<tr><td><div class=displayText tabindex=0 title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
 <tr><td class=infohelp><%=intl._t("This will add an alias {0} for {1}, using the same destination", name, oldname)%></td></tr>
 <%
                } else {
@@ -210,7 +210,7 @@
                    he.signInner(spk2);
                    he.sign(spk);
 %>
-<tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
+<tr><td><div class=displayText tabindex=0 title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
 <tr><td class=infohelp><%=intl._t("This will change the destination for {0}", name)%></td></tr>
 <%
                } else {
@@ -229,7 +229,7 @@
                    he.signInner(spk2);
                    he.sign(spk);
 %>
-<tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
+<tr><td><div class=displayText tabindex=0 title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
 <tr><td class=infohelp><%=intl._t("This will add an alternate destination for {0}", name)%></td></tr>
 <%
                } else {
@@ -257,7 +257,7 @@
                        he2.signInner(spk);
                        he2.sign(spk3);
 %>
-<tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he2.write(out); %></div></td></tr>
+<tr><td><div class=displayText tabindex=0 title="<%=intl._t("Copy and paste this to the registration site")%>"><% he2.write(out); %></div></td></tr>
 <tr><td class=infohelp><%=intl._t("This will add an alternate destination for {0}", name)%></td></tr>
 <%
                    } else {
@@ -278,7 +278,7 @@
                    he.signInner(spk2);
                    he.sign(spk);
 %>
-<tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
+<tr><td><div class=displayText tabindex=0 title="<%=intl._t("Copy and paste this to the registration site")%>"><% he.write(out); %></div></td></tr>
 <tr><td class=infohelp><%=intl._t("This will add a subdomain {0} of {1}, with a different destination", name, oldname)%></td></tr>
 <%
                } else {
@@ -302,12 +302,12 @@
                String oldname = wrequest.getParameter("oldname");
                if (oldname == null) oldname = "";
 %>
-<tr><td><b><%=intl._t("Old / parent hostname ")%>:</b><input type=text size="30" maxlength="50" name="oldname" id="oldName" value="<%=oldname%>" class="freetext" placeholder="old hostname or parent domain for sub-domain registration" /></td></tr>
-<tr><td><b><%=intl._t("Private key file for old destination / sub-domain parent")%>:</b><input type="file" name="olddestfile" id="oldDestFile" value="" /></td></tr>
+<tr><td><b><%=intl._t("Old / parent hostname ")%>:</b><input type=text size=30 maxlength=50 name="oldname" id=oldName value="<%=oldname%>" class=freetext placeholder="old hostname or parent domain for sub-domain registration" /></td></tr>
+<tr><td><b><%=intl._t("Private key file for old destination / sub-domain parent")%>:</b><input type="file" name="olddestfile" id=oldDestFile value="" /></td></tr>
 <tr><td class=buttons>
 <input type=hidden value=true name="removeConfirm" />
 <a class=control href="list"><%=intl._t("Cancel")%></a>
-<button id="controlSave" class=control type=submit name=action value="authenticate"  title="<%=intl._t("Generate Authentication")%>"><%=intl._t("Generate")%></button>
+<button id=controlSave class=control type=submit name=action value="authenticate"  title="<%=intl._t("Generate Authentication")%>"><%=intl._t("Generate")%></button>
 </td>
 </tr>
 <%

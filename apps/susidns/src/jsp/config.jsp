@@ -38,39 +38,39 @@
 <meta charset=utf-8>
 <title><%=intl._t("configuration")%> - susidns</title>
 <link rel=stylesheet type=text/css href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel=stylesheet type=text/css href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=base.getTheme()%>override.css">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
-<body id="cfg">
-<div class="page">
-<div id="navi">
+<body id=cfg>
+<div class=page>
+<div id=navi>
 <a class="abook router" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook master" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
 <a class="abook private" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook published" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
-<a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="configlink" class="selected" href="config"><%=intl._t("Configuration")%></a>&nbsp;
-<a id="overview" href="index"><%=intl._t("Help")%></a>
+<a id=subs href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
+<a id=configlink class=selected href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id=overview href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
-<div class="headline" id="configure">
+<div class=headline id=configure>
 <h3><%=intl._t("Configuration")%></h3>
-<h4><%=intl._t("File location")%>: <span class="storage">${cfg.fileName}</span></h4>
+<h4><%=intl._t("File location")%>: <span class=storage>${cfg.fileName}</span></h4>
 </div>
 <script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <div id=messages>${cfg.messages}</div>
 <form method=POST action="config#navi">
-<div id="config">
+<div id=config>
 <input type=hidden name="serial" value="${cfg.serial}" >
-<textarea name="config" rows="10" cols="80" spellcheck="false">${cfg.config}</textarea>
+<textarea name="config" rows=10 cols=80 spellcheck=false>${cfg.config}</textarea>
 </div>
-<div id="buttons">
+<div id=buttons>
 <input class="reload" type=submit name=action value="<%=intl._t("Reload")%>" >
 <input class=accept type=submit name=action value="<%=intl._t("Save")%>" >
 </div>
 </form>
-<div class="help" id="helpconfig">
+<div class=help id=helpconfig>
 <h3><%=intl._t("Hints")%></h3>
 <ol>
 <li><%=intl._t("File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows).")%></li>

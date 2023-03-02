@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <%
 /*
- * All links in the summary bar must have target="_top"
+ * All links in the summary bar must have target=_top
  * so they don't load in the iframe
  */
 %>

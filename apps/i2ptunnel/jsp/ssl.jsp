@@ -22,7 +22,7 @@
      }
    }
 %>
-<html id="tman">
+<html id=tman>
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("SSL Helper")%></title>
 <meta charset=utf-8>
@@ -33,10 +33,10 @@
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
-<link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=editBean.getTheme()%>override.css" rel=stylesheet type=text/css>
 <style type=text/css>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
-<body id="tunnelSSL">
+<body id=tunnelSSL>
 <%
   net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
   if (!ctx.isRouterContext()) { %>
@@ -80,9 +80,9 @@
     if (shouldLinkify) {
         String url = "://" + clientTgt + "\">" + clientTgt + "</a>";
         if (sslToTarget)
-            targetLink = "<a target=\"_top\" href=\"https" + url;
+            targetLink = "<a target=_top href=\"https" + url;
         else
-            targetLink = "<a target=\"_top\" href=\"http" + url;
+            targetLink = "<a target=_top href=\"http" + url;
     }
     net.i2p.util.PortMapper pm = ctx.portMapper();
     int jettyPort = pm.getPort(net.i2p.util.PortMapper.SVC_EEPSITE);
@@ -477,8 +477,8 @@
 <h2><%=intl._t("Status Messages")%></h2>
 <table id=statusMessagesTable>
 <tr>
-<td id="tunnelMessages">
-<textarea id="statusMessages" rows=4 cols=60 readonly=readonly><%=msgs%></textarea>
+<td id=tunnelMessages>
+<textarea id=statusMessages rows=4 cols=60 readonly=readonly><%=msgs%></textarea>
 </td>
 </tr>
 </table>
@@ -486,7 +486,7 @@
 <%
         } // action != null
 %>
-<div class=panel id="ssl">
+<div class=panel id=ssl>
 <h2><%=intl._t("SSL Wizard")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2>
 <form method=POST action="ssl" accept-charset=utf-8>
 <input type=hidden name="tunnel" value="<%=curTunnel%>" />
@@ -570,11 +570,11 @@
 %>
 <%--
 <tr><th colspan=4><%=intl._t("Add Port Routing")%></th></tr>
-<tr><td><input type=text size=6 maxlength=5 id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
-<td><input type=text size=20 id="websiteName" name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class="freetext" /></td>
+<tr><td><input type=text size=6 maxlength=5 id=i2pPort name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
+<td><input type=text size=20 id=websiteName name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class=freetext /></td>
 <td><input value="1" type=checkbox name="useSSL" class="optbox slider" /></td>
 <td><input type=text size=20 name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" /> :
-<input type=text size=6 maxlength=5 id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
+<input type=text size=6 maxlength=5 id=targetPort name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
 </td></tr>
 --%>
 <tr><th><%=intl._t("Server")%></th><th colspan=2><%=intl._t("Configuration")%></th><th><!--<%=intl._t("SSL Activation")%>--></th></tr>
@@ -794,12 +794,12 @@
                 if (isEnabled && !isPWDefault) {
 %>
 <tr><td class=buttons colspan=4>
-<button id="controlSave" class=control type=submit name=action value="Disable"><%=intl._t("Disable SSL")%></button></td></tr>
+<button id=controlSave class=control type=submit name=action value="Disable"><%=intl._t("Disable SSL")%></button></td></tr>
 <%
                 } else if (!isPWDefault) {
 %>
 <tr><td class=buttons colspan=4>
-<button id="controlSave" class=control type=submit name=action value="Enable"><%=intl._t("Enable SSL")%></button></td></tr>
+<button id=controlSave class=control type=submit name=action value="Enable"><%=intl._t("Enable SSL")%></button></td></tr>
 <%
                 } else {
 %>
@@ -808,11 +808,11 @@
 <%
                     if (isEnabled) {
 %>
-<button id="controlSave" class=control type=submit name=action value="Generate"><%=intl._t("Generate new SSL certificate")%></button>
+<button id=controlSave class=control type=submit name=action value="Generate"><%=intl._t("Generate new SSL certificate")%></button>
 <%
                     } else {
 %>
-<button id="controlSave" class=control type=submit name=action value="Generate"><%=intl._t("Generate SSL certificate and enable")%></button>
+<button id=controlSave class=control type=submit name=action value="Generate"><%=intl._t("Generate SSL certificate and enable")%></button>
 <%
                     }
                 }
@@ -824,7 +824,7 @@
         }  // while (for each client or client file)
         if (!foundClientConfig) {
 %>
-<tr class="configerror"><td colspan=4><%=intl._t("Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel", "<a href=\"/configclients\">", "</a>")%><br><%=intl._t("Support for non-Jetty servers will be added in a future release")%></td></tr>
+<tr class=configerror><td colspan=4><%=intl._t("Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel", "<a href=\"/configclients\">", "</a>")%><br><%=intl._t("Support for non-Jetty servers will be added in a future release")%></td></tr>
 <%
         }
     } catch (IOException ioe) { ioe.printStackTrace(); }

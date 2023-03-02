@@ -44,7 +44,7 @@
 <style type=text/css>iframe {display: none}</style>
 <p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="/susimail/" target=_blank rel=noreferrer>the webmail client</a> in embedded mode.</p>
 </noscript>
-<iframe src="/susimail/" title="I2P+ <%=intl._t("webmail")%>" width="100%" frameborder="0" border="0" scrolling="no" name="susimailframe" id="susimailframe" allowtransparency="true">
+<iframe src="/susimail/" title="I2P+ <%=intl._t("webmail")%>" width=100% frameborder=0 border=0 scrolling=no name="susimailframe" id=susimailframe allowtransparency=true>
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/susimail/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
@@ -67,7 +67,6 @@
 </div>
 <style type=text/css>iframe{opacity:1}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
-</html>
-<%
+</html><%
     }
 %>

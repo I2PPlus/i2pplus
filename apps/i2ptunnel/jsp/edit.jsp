@@ -25,7 +25,7 @@ if (tun != null) {
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />
 <jsp:setProperty name="indexBean" property="*" />
-<html id="tman">
+<html id=tman>
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=(__isClient ? intl._t("Edit Client Tunnel") : intl._t("Edit Server Tunnel"))%></title>
 <meta charset=utf-8>
@@ -35,14 +35,14 @@ if (tun != null) {
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
-<link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=editBean.getTheme()%>override.css" rel=stylesheet type=text/css>
 <script charset=utf-8 src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <script charset=utf-8 src="/js/selectAll.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>var deleteMessage = "<%=intl._t("Are you sure you want to delete?")%>";</script>
 <script charset=utf-8 src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <style type=text/css>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
-<body id="tunnelEditPage">
+<body id=tunnelEditPage>
 <%
 if (__invalid) {
 %>

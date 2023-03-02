@@ -25,7 +25,7 @@
 <%@page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
+<jsp:useBean id=book class="i2p.susi.dns.NamingServiceBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
 <jsp:setProperty name="book" property="*" />
 <jsp:setProperty name="book" property="resetDeletionMarks" value="1"/>
@@ -35,7 +35,7 @@
 <meta charset=utf-8>
 <title>${book.book} <%=intl._t("addressbook")%> - susidns</title>
 <link rel=stylesheet type=text/css href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel=stylesheet type=text/css href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=book.getTheme()%>override.css">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script charset=utf-8 src="/js/textareaResize.js" type=text/javascript></script>
 <%
@@ -43,16 +43,16 @@
 %>
 <style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
-<body id="dtls">
-<div class="page">
-<div id="navi">
+<body id=dtls>
+<div class=page>
+<div id=navi>
 <a class="abook router<%=(query.contains("book=router") ? " details selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook master<%=(query.contains("book=master") ? " details selected" : "")%>" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
 <a class="abook private<%=(query.contains("book=private") ? " details selected" : "")%>" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook published<%=(query.contains("book=published") ? " details selected" : "")%>" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
-<a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="configlink" href="config"><%=intl._t("Configuration")%></a>&nbsp;
-<a id="overview" href="index"><%=intl._t("Help")%></a>
+<a id=subs href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
+<a id=configlink href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id=overview href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
 <%
@@ -77,10 +77,10 @@
                 String b32 = addr.getB32();
 %>
 <jsp:setProperty name="book" property="trClass"	value="0" />
-<div class="headline">
+<div class=headline>
 <h3><%=intl._t("Details")%>: <%=addr.getName()%></h3>
 </div>
-<div id="book">
+<div id=book>
 <%
                 if (showNotes) {
 %>
@@ -92,7 +92,7 @@
 <%
                 }  // showNotes
 %>
-<table class="book" id="host_details" cellspacing="0" cellpadding="5">
+<table class=book id=host_details cellspacing=0 cellpadding=5>
 <tr>
 <td><%=intl._t("Hostname")%></td>
 <td><a href="http://<%=addr.getName()%>/" target=_blank rel=noreferrer><%=addr.getDisplayName()%></a>
@@ -132,7 +132,7 @@
                 String lastmod = addr.getModded();
                 if (lastmod.length() > 0) {
 %>
-<%=addr.getAdded()%>&nbsp;<b><%=intl._t("Last Modified")%></b>&nbsp;<span id="lastMod"><%=lastmod%></span>
+<%=addr.getAdded()%>&nbsp;<b><%=intl._t("Last Modified")%></b>&nbsp;<span id=lastMod><%=lastmod%></span>
 <%
                 }
 %>
@@ -140,14 +140,14 @@
 </tr>
 <tr>
 <td><%=intl._t("Destination")%></td>
-<td class="destinations"><div class="destaddress" tabindex="0"><%=addr.getDestination()%></div></td>
+<td class=destinations><div class=destaddress tabindex=0><%=addr.getDestination()%></div></td>
 </tr>
 <%
                 if (showNotes) {
 %>
-<tr class="list${book.trClass}" id="hostNotes">
+<tr class="list${book.trClass}" id=hostNotes>
 <td><%=intl._t("Notes")%></td>
-<td><textarea name="nofilter_notes" rows="3" style="height:6em" cols="70" placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
+<td><textarea name="nofilter_notes" rows=3 style=height:6em cols=70 placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
 <input class=accept type=submit name=action value="<%=intl._t("Save Notes")%>"></td>
 </tr>
 <%
@@ -161,7 +161,7 @@
 <%
                 }  // showNotes
 %>
-<div id="buttons">
+<div id=buttons>
 <form method=POST action="addressbook">
 <p class=buttons>
 <input type=hidden name="book" value="${book.book}">
@@ -177,15 +177,15 @@
 <%
                 if (haveImagegen) {
 %>
-<div id="visualid">
-<h3><%=intl._t("Visual Identification for")%>&nbsp;<span id="idAddress"><%=addr.getName()%></span></h3>
+<div id=visualid>
+<h3><%=intl._t("Visual Identification for")%>&nbsp;<span id=idAddress><%=addr.getName()%></span></h3>
 <table>
 <tr>
-<td><img src="/imagegen/id?s=256&amp;c=<%=addr.getB64().replace("=", "%3d")%>" width="256" height="256"></td>
+<td><img src="/imagegen/id?s=256&amp;c=<%=addr.getB64().replace("=", "%3d")%>" width=256 height=256></td>
 <td><img src="/imagegen/qr?s=256&amp;t=<%=addr.getName()%>&amp;c=http%3a%2f%2f<%=addr.getName()%>%2f%3fi2paddresshelper%3d<%=addr.getDestination()%>"></td>
 </tr>
 <tr>
-<td colspan=2><a class="fakebutton" href="/imagegen" title="<%=intl._t("Create your own identification images")%>" target=_blank rel=noreferrer><%=intl._t("Launch Image Generator")%></a></td>
+<td colspan=2><a class=fakebutton href="/imagegen" title="<%=intl._t("Create your own identification images")%>" target=_blank rel=noreferrer><%=intl._t("Launch Image Generator")%></a></td>
 </tr>
 </table>
 </div><%-- visualid --%>

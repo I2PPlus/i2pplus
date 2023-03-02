@@ -88,7 +88,7 @@
        if (keypw.length() > 0) {
            // family is active
 %>
-<form action="/exportfamily" method="GET">
+<form action="/exportfamily" method=GET>
 <table class=configtable id=exportfamily>
 <tr><th><%=intl._t("Export Family Key")%></th></tr>
 <tr><td><%=intl._t("Export the secret family key to be imported into other routers you control.")%></td></tr>

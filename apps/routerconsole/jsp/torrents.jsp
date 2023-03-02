@@ -46,7 +46,7 @@
 <style type=text/css>iframe{display:none}</style>
 <p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="/i2psnark" target=_blank rel=noreferrer>I2PSnark</a> in embedded mode.</p>
 </noscript>
-<iframe src="/i2psnark/?t=<%=now%>" title="I2P+ <%=intl._t("Torrent Manager")%>" frameborder="0" border="0" width="100%" scrolling="no" name="i2psnarkframe" id="i2psnarkframe" allowtransparency="true" allow="fullscreen" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+<iframe src="/i2psnark/?t=<%=now%>" title="I2P+ <%=intl._t("Torrent Manager")%>" frameborder=0 border=0 width=100% scrolling=no name="i2psnarkframe" id=i2psnarkframe allowtransparency=true allow=fullscreen allowfullscreen=true webkitallowfullscreen=true mozallowfullscreen=true>
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2psnark/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
@@ -69,7 +69,6 @@
 </script>
 <style type=text/css>iframe{opacity:1}#torrents::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
-</html>
-<%
+</html><%
     }
 %>
