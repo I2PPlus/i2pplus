@@ -18,20 +18,20 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Keyring Manager")%></h1>
-<div class=main id="config_keyring">
+<div class=main id=config_keyring>
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigKeyringHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigKeyringHelper" id="keyringhelper" scope="request" />
 <jsp:setProperty name="keyringhelper" property="contextId" value="<%=i2pcontextId%>" />
-<p id="keyringhelp" class=infohelp>
+<p id=keyringhelp class=infohelp>
 <%=intl._t("The router keyring is used to decrypt encrypted LeaseSets.")%>&nbsp;
 <%=intl._t("The keyring may contain keys for local or remote encrypted destinations.")%></p>
 <form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="keyringhelper" property="summary" />
 <h3 class=tabletitle><%=intl._t("Manual Keyring Addition")%></h3>
-<table id="addkeyring" class=configtable>
+<table id=addkeyring class=configtable>
 <tr>
 <td class=infohelp colspan=2>
 <%=intl._t("Enter keys for encrypted remote destinations here.")%>&nbsp;
@@ -44,13 +44,13 @@
 </td>
 </tr>
 <tr>
-<td align="right"><b><%=intl._t("Full destination, name, Base32, or hash")%>:</b></td>
-<td><input type=text name="peer" size="55"></td>
+<td align=right><b><%=intl._t("Full destination, name, Base32, or hash")%>:</b></td>
+<td><input type=text name="peer" size=55></td>
 </tr>
 <tr>
-<td align="right"><b><%=intl._t("Type")%>:</b></td>
+<td align=right><b><%=intl._t("Type")%>:</b></td>
 <td>
-<select id="encryptMode" name="encryptMode" class="selectbox">
+<select id=encryptMode name="encryptMode" class=selectbox>
 <option title="<%=intl._t("Enter key provided by server operator.")%>" value="1">
 <%=intl._t("Encrypted")%> (AES)</option>
 <option title="<%=intl._t("Prevents server discovery by floodfills")%>" value="2">
@@ -69,15 +69,15 @@
 </td>
 </tr>
 <tr>
-<td align="right"><b><%=intl._t("Encryption Key")%>:</b></td>
-<td><input type=text size="55" name="key" title="<%=intl._t("Leave blank for DH, will be generated automatically")%>"></td>
+<td align=right><b><%=intl._t("Encryption Key")%>:</b></td>
+<td><input type=text size=55 name="key" title="<%=intl._t("Leave blank for DH, will be generated automatically")%>"></td>
 </tr>
 <tr>
-<td align="right"><b><%=intl._t("Optional lookup password")%>:</b></td>
+<td align=right><b><%=intl._t("Optional lookup password")%>:</b></td>
 <td><input type=password name="nofilter_blindedPassword" title="<%=intl._t("Set password required to access this service")%>" class="freetext password" /></td>
 </tr>
 <tr>
-<td align="right" colspan=2 class=optionsave>
+<td align=right colspan=2 class=optionsave>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
 <input type=submit name=action class=add value="<%=intl._t("Add key")%>" >
 </td>

@@ -21,13 +21,13 @@
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigTunnelsHelper" id="tunnelshelper" scope="request" />
 <jsp:setProperty name="tunnelshelper" property="contextId" value="<%=i2pcontextId%>" />
 <h1 class=conf><%=intl._t("Tunnel Options")%></h1>
-<div class=main id="config_tunnels">
+<div class=main id=config_tunnels>
  <%@include file="confignav.jsi" %>
  <jsp:useBean class="net.i2p.router.web.helpers.ConfigTunnelsHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
 <% if (!tunnelshelper.isAdvanced()) { %>
 <!--
- <p id="tunnelconfig" class=infowarn>
+ <p id=tunnelconfig class=infowarn>
  <%=intl._t("The default settings work for most people.")%>&nbsp;<wbr>
  <%=intl._t("There is a fundamental tradeoff between anonymity and performance.")%>&nbsp;<wbr>
  <%=intl._t("Tunnels longer than 3 hops (for example 2 hops + 0-2 hops, 3 hops + 0-1 hops, 3 hops + 0-2 hops), or a high quantity + backup quantity, may severely reduce performance or reliability.")%>&nbsp;<wbr>
@@ -55,7 +55,7 @@
  <input type=hidden name="nonce" value="<%=pageNonce%>" >
  <input type=hidden name=action value="blah" >
  <jsp:getProperty name="tunnelshelper" property="form" />
- <hr><div class=formaction id="tunnelconfigsave">
+ <hr><div class=formaction id=tunnelconfigsave>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
 <input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>" >
 </div>

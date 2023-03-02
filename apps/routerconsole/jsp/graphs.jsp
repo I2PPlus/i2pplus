@@ -27,14 +27,14 @@
     }
 %>
 </head>
-<body id="perfgraphs">
+<body id=perfgraphs>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="perf"><%=intl._t("Performance Graphs")%></h1>
-<div class=main id="graphs">
+<h1 class=perf><%=intl._t("Performance Graphs")%></h1>
+<div class=main id=graphs>
 <div class=widepanel>
 <jsp:getProperty name="graphHelper" property="allMessages" />
-<div class="graphspanel" id="allgraphs">
+<div class=graphspanel id=allgraphs>
 <jsp:getProperty name="graphHelper" property="images" />
 </div>
 <jsp:getProperty name="graphHelper" property="form" />
@@ -91,7 +91,7 @@
           } else {
             function isDown() {
               if (!nographs)
-                graphs.innerHTML = "<span id=\'nographs\'><b>No connection to Router<\/b><\/span>";
+                graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
             }
             setTimeout(isDown, 60000);
           }

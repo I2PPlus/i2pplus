@@ -15,8 +15,8 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp"><%=intl._t("Troubleshooting")%></h1>
-<div class=main id="help">
+<h1 class=hlp><%=intl._t("Troubleshooting")%></h1>
+<div class=main id=help>
 <div class=confignav>
 <span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
 <span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
@@ -32,7 +32,7 @@
 <span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
-<div id="troubleshoot">
+<div id=troubleshoot>
 <h2><%=intl._t("Troubleshooting")%>&nbsp;I2P+</h2>
 
 <p><%=intl._t("If you're experiencing issues with running I2P+, the following information may help identify and resolve the problem:")%></p>
@@ -75,7 +75,7 @@
 <hr>
 
 <p><%=intl._t("Further assistance is available here:")%></p>
-<ul class="links" id="furtherassistance">
+<ul class=links id=furtherassistance>
 <li><a href=http://i2pforum.i2p/ target=_blank rel=noreferrer><%=intl._t("I2P Support Forum")%></a></li>
 <li><a href=http://zzz.i2p/ target=_blank rel=noreferrer><%=intl._t("I2P Developers' Forum")%></a></li>
 <li><a href=http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services target=_blank rel=noreferrer><%=intl._t("I2P Wiki")%></a></li>

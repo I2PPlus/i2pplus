@@ -93,7 +93,7 @@
         }
     }
 %>
-<div class=main id="netdb">
+<div class=main id=netdb>
 <%
     formhandler.storeWriter(out);
     if (allowIFrame)
@@ -102,9 +102,9 @@
 <%@include file="formhandler.jsi" %>
 <jsp:getProperty name="formhandler" property="netDbSummary" />
 </div>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/lazyload.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.number.js type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var countries = document.getElementById("netdbcountrylist");
   if (countries) {new Tablesort(countries, {descending: true});}

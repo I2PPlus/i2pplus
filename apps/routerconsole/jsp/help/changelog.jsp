@@ -15,8 +15,8 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp"><%=intl._t("Change Log")%></h1>
-<div class=main id="help">
+<h1 class=hlp><%=intl._t("Change Log")%></h1>
+<div class=main id=help>
 <div class=confignav>
 <span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
 <span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
@@ -32,7 +32,7 @@
 <span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
 <span class=tab2><%=intl._t("Change Log")%></span>
 </div>
-<div id="changelog">
+<div id=changelog>
 <h2><%=intl._t("Recent I2P+ Changes")%></h2>
 <jsp:useBean class="net.i2p.router.web.ContentHelper" id="contenthelper" scope="request" />
 <% java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getBaseDir(), "history.txt"); %>
@@ -40,7 +40,7 @@
 <jsp:setProperty name="contenthelper" property="maxLines" value="768" />
 <jsp:setProperty name="contenthelper" property="startAtBeginning" value="true" />
 <jsp:getProperty name="contenthelper" property="textContent" />
-<p id="fullhistory"><a href="/history.txt" target="_blank" rel="noreferrer"><%=intl._t("View the full change log")%></a></p>
+<p id=fullhistory><a href="/history.txt" target="_blank" rel="noreferrer"><%=intl._t("View the full change log")%></a></p>
 </div>
 </div>
 <script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>

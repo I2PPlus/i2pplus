@@ -9,8 +9,8 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp"><%=intl._t("Web hosting on I2P")%></h1>
-<div class=main id="help">
+<h1 class=hlp><%=intl._t("Web hosting on I2P")%></h1>
+<div class=main id=help>
 <div class=confignav>
 <span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
 <span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
@@ -26,7 +26,7 @@
 <span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
-<div id="webhosting">
+<div id=webhosting>
 
 <h2><%=intl._t("Introduction to Hosting Websites on I2P")%></h2>
 
@@ -40,8 +40,8 @@
 
 <p><%=intl._t("To disable directory listings, find the entry for <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> in the <code>base-context.xml</code> file, located in the <code>eepsite/contexts</code> folder (just above docroot folder), and change 'true' to 'false' immediately underneath. To apply the change immediately, stop and restart the <i>I2P Webserver</i> client on the <a href=/configclients>Client Configuration page</a>. You can also drop an empty <code>index.html</code> file in any exposed directory to suppress directory listings for that location.")%></p>
 
-<table id="rootdir">
-<tr><th colspan="2"><%=intl._t("Location of the I2P webserver root directory")%></th></tr>
+<table id=rootdir>
+<tr><th colspan=2><%=intl._t("Location of the I2P webserver root directory")%></th></tr>
 <tr><td>Windows</td><td><code>%APPDATA%\I2P\eepsite\docroot\</code></td></tr>
 <tr><td>Apple OS X</td><td><code>/Users/(user)/Library/Application Support/i2p</code></td></tr>
 <tr><td>Linux</td><td><code>~/.i2p/eepsite/docroot/</code> (<%=intl._t("Standard Java installation")%>)<br>
@@ -87,7 +87,7 @@
 
 <p><%=intl._t("Be aware that a poorly configured webserver or web appplication can leak information such as your real IP address or server details that may reduce your anonymity or assist a hacker. If using an alternative platform, be sure to secure it before putting it online. If in doubt, consult online guides about web server and web application hardening, for example:")%>
 
-<ul id="guides">
+<ul id=guides>
 <li><a href="https://geekflare.com/apache-web-server-hardening-security/" target=_blank rel=noreferrer class='sitelink external'><%=intl._t("Apache Web Server Security Guide")%></a></li>
 <li><a href="https://geekflare.com/nginx-webserver-security-hardening-guide/" target=_blank rel=noreferrer class='sitelink external'><%=intl._t("Nginx Web Server Security Guide")%></a></li>
 <li><a href="https://www.wordfence.com/learn/how-to-harden-wordpress-sites/" target=_blank rel=noreferrer class='sitelink external'><%=intl._t("How to Harden Your WordPress Site")%></a></li>

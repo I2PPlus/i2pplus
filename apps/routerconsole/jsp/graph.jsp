@@ -27,7 +27,7 @@
     }
 %>
 </head>
-<body id="perfgraphs">
+<body id=perfgraphs>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <%
@@ -43,8 +43,8 @@
         return;
     }
 %>
-<h1 class="perf"><%=intl._t("Performance Graph")%></h1>
-<div class=main id="graph_single">
+<h1 class=perf><%=intl._t("Performance Graph")%></h1>
+<div class=main id=graph_single>
  <jsp:getProperty name="graphHelper" property="singleStat" />
 </div>
 <script nonce="<%=cspNonce%>" type=text/javascript>

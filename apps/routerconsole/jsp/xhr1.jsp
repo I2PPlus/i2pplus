@@ -38,7 +38,7 @@
 <!DOCTYPE HTML>
 <html lang="<%=lang%>">
 <head><meta charset=utf-8></head>
-<body id="sb">
+<body id=sb>
 <%@include file="xhr1.jsi" %>
 </body>
 </html>

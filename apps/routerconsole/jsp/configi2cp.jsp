@@ -23,7 +23,7 @@
 <jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>" />
 <h1 class=conf><%=intl._t("External Client Access")%></h1>
-<div class=main id="config_i2cp">
+<div class=main id=config_i2cp>
 <%@include file="confignav.jsi" %>
 
  <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
@@ -37,7 +37,7 @@
 </p>
 <form action="configi2cp" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
-<table class=configtable id="externali2cp">
+<table class=configtable id=externali2cp>
 <tr>
 <th>
 <%=intl._t("External I2P Client Protocol (I2CP) Interface Access")%>
@@ -65,8 +65,8 @@
 %>
 <tr>
 <td>
-<div class=optionlist id="i2cp_host">
-<span class="nowrap"><b><%=intl._t("I2CP Interface")%>:</b>
+<div class=optionlist id=i2cp_host>
+<span class=nowrap><b><%=intl._t("I2CP Interface")%>:</b>
 <select name="interface">
 <%
        String[] ips = clientshelper.intfcAddresses();
@@ -83,7 +83,7 @@
 %>
 </select>
 </span><br>
-<span class="nowrap"><b><%=intl._t("I2CP Port")%>:</b><input name="port" type=text size=5 maxlength=5 value="<jsp:getProperty name="clientshelper" property="port" />" >
+<span class=nowrap><b><%=intl._t("I2CP Port")%>:</b><input name="port" type=text size=5 maxlength=5 value="<jsp:getProperty name="clientshelper" property="port" />" >
 </span>
 </div>
 </td>
@@ -95,10 +95,10 @@
 <label><input type=checkbox class=optbox name="auth" value=true <jsp:getProperty name="clientshelper" property="auth" /> >
 <%=intl._t("Require username and password")%></label>
 </b><br>
-<div class=optionlist id="i2cp_userpass">
-<span class="nowrap"><b><%=intl._t("Username")%>:</b>
+<div class=optionlist id=i2cp_userpass>
+<span class=nowrap><b><%=intl._t("Username")%>:</b>
 <input name="user" type=text value="" /></span><br>
-<span class="nowrap"><b><%=intl._t("Password")%>:</b>
+<span class=nowrap><b><%=intl._t("Password")%>:</b>
 <input name="nofilter_pw" type=password value="" /></span>
 </div>
 </td>
@@ -107,7 +107,7 @@
     } // !isDisabled
 %>
 <tr>
-<td class=optionsave align="right">
+<td class=optionsave align=right>
 <input type=submit class=default name=action value="<%=intl._t("Save Interface Configuration")%>" />
 <input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
 <input type=submit class=accept name=action value="<%=intl._t("Save Interface Configuration")%>" />

@@ -21,24 +21,24 @@
 <jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>" />
 <h1 class=conf><%=intl._t("Web Apps")%></h1>
-<div class=main id="config_webapps">
+<div class=main id=config_webapps>
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
 <div class=configure>
-<h3 id="webappconfiguration"><%=intl._t("WebApp Configuration")%>&nbsp;
+<h3 id=webappconfiguration><%=intl._t("WebApp Configuration")%>&nbsp;
 <span class=h3navlinks>
-<a href="configclients" title="<%=intl._t("Client Configuration")%>"><%=intl._t("Clients")%></a>&nbsp;
-<a href="configplugins" title="<%=intl._t("Plugin Configuration")%>"><%=intl._t("Plugins")%></a>
+<a href=configclients title="<%=intl._t("Client Configuration")%>"><%=intl._t("Clients")%></a>&nbsp;
+<a href=configplugins title="<%=intl._t("Plugin Configuration")%>"><%=intl._t("Plugins")%></a>
 </span>
 </h3>
-<p class=infohelp id="webappconfigtext">
+<p class=infohelp id=webappconfigtext>
 <%=intl._t("The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook).").replace(" They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook).", "")%>
 </p>
 <form action="configwebapps" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="clientshelper" property="form2" />
-<div class=formaction id="webappconfigactions">
+<div class=formaction id=webappconfigactions>
 <input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
 <input type=submit name=action class=accept value="<%=intl._t("Save WebApp Configuration")%>" />
 </div>

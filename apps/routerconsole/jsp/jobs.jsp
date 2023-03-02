@@ -28,9 +28,9 @@
 <% jobQueueHelper.storeWriter(out); %>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueStats" />
 </div>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.dotsep.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.dotsep.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.number.js type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var stats = document.getElementById("jobstats");
   var tbody = document.getElementById("statCount");

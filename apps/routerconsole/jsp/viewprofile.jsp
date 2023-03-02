@@ -18,7 +18,7 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Peer Profile")%></h1>
-<div class=main id="view_profile">
+<div class=main id=view_profile>
 <%
     String peerB64 = request.getParameter("peer");
     if (peerB64 == null || peerB64.length() <= 0 ||
@@ -31,20 +31,20 @@
 <jsp:setProperty name="stathelper" property="peer" value="<%=peerB64%>" />
 <% stathelper.storeWriter(out); %>
 <h3><%=intl._t("Profile for peer")%>: <a href="/netdb?r=<%=peerB64%>" title="<%=intl._t("NetDb entry")%>"><%=peerB64%></a>&nbsp;&nbsp;
-<a class="configpeer" href="/configpeer?peer=<%=peerB64%>" title="<%=intl._t("Configure peer")%>" style="float: right;">
+<a class=configpeer href="/configpeer?peer=<%=peerB64%>" title="<%=intl._t("Configure peer")%>" style=float:right>
 <%=intl._t("Edit")%></a>&nbsp;&nbsp;
-<a class="viewprofile" href="/dumpprofile?peer=<%=peerB64%>" target=_blank rel=noreferrer title="<%=intl._t("View profile in text format")%>" style="float: right;">
+<a class=viewprofile href="/dumpprofile?peer=<%=peerB64%>" target=_blank rel=noreferrer title="<%=intl._t("View profile in text format")%>" style=float:right>
 <%=intl._t("View Raw Profile")%></a>&nbsp;&nbsp;
 <%
         net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();
         if (pm.isRegistered("imagegen")) {
 %>
-<img class="identicon" src="/imagegen/id?s=41&amp;c=<%=peerB64%>" style="float: right;">
+<img class=identicon src="/imagegen/id?s=41&amp;c=<%=peerB64%>" style=float:right>
 <%
         }
 %>
 </h3>
-<table id="viewprofile">
+<table id=viewprofile>
 <tr><td><pre><jsp:getProperty name="stathelper" property="profile" /></pre>
 <%
         if (peerB64 != null || peerB64.length() > 0) {

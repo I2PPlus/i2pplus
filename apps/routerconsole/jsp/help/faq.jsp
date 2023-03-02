@@ -15,8 +15,8 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp"><%=intl._t("Frequently Asked Questions")%></h1>
-<div class=main id="help">
+<h1 class=hlp><%=intl._t("Frequently Asked Questions")%></h1>
+<div class=main id=help>
 <div class=confignav>
 <span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
 <span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
@@ -32,7 +32,7 @@
 <span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
-<div id="faq">
+<div id=faq>
 <h2><%=intl._t("Abridged I2P FAQ")%></h2>
 
 <p class=infohelp><%=intl._t("This is a shortened version of the official FAQ. For the full version, please visit <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> or <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a>.")%></p>
@@ -45,7 +45,7 @@
 
 <p><%=intl._t("If your router has 10 or more active peers, everything is fine. The router should maintain connections to a few peers at all times. The best way to stay \"better-connected\" to the network is to <a href=/config>share more bandwidth</a>.")%></p>
 
-<h3 id="addressbooksubs"><%=intl._t("I'm missing lots of hosts in my addressbook. What are some good subscription links?")%></h3>
+<h3 id=addressbooksubs><%=intl._t("I'm missing lots of hosts in my addressbook. What are some good subscription links?")%></h3>
 
 <p><%=intl._t("The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions.")%></p>
 
@@ -69,7 +69,7 @@
 
 <p><%=intl._t("Until the advent of I2P integration in <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, it wasn't possible to download torrents that weren't hosted on the I2P network. However, now that Vuze (and latterly <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) allow users to share non-I2P torrents on I2P, non-I2P torrents can be downloaded over I2P if Vuze/Bigly users have chosen to make content available to the I2P network. Popular torrents with a large number of peers are more likely to be accessible via I2P; to determine if the content is available, add the torrent link, magnet or infohash to your I2P-enabled BitTorrent client.")%></p>
 
-<h3 id="alternative_browser"><%=intl._t("How do I configure I2P to open at startup in a specific web browser?")%></h3>
+<h3 id=alternative_browser><%=intl._t("How do I configure I2P to open at startup in a specific web browser?")%></h3>
 
 <p><%=intl._t("By default, I2P will use the system configured default browser to launch at startup. If you wish to nominate an alternative browser, you will need to edit your router.config file (or the <a href=/configadvanced>Advanced Configuration page</a> if you have enabled advanced console mode) and add a new configuration line <code>routerconsole.browser=/path/to/browser</code> or <code>routerconsole.browser=\\path\\to\\browser.exe</code> if using Windows, replacing <code>\\path\\to\\browser</code> with the location of the browser you wish to use. Note: If the path to your chosen browser contains spaces, you may need to encase the path in quotes e.g. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>")%></p>
 
@@ -88,7 +88,7 @@
 <h3><%=intl._t("Where are my I2P configuration files stored?")%></h3>
 
 <p><%=intl._t("Configuration files for the router, installed plugins, and router logs are stored in the following location:")%></p>
-<ul id="faqconfigfiles">
+<ul id=faqconfigfiles>
 <li><b><%=intl._t("Windows")%>:</b> <code>%APPDATA%\I2P\</code></li>
 <li><b><%=intl._t("OS X")%>:</b> <code>/Users/<i>username</i>/Library/Application Support/i2p</code></li>
 <li><b><%=intl._t("Linux")%>:</b>
@@ -118,9 +118,9 @@
 
 <h3><%=intl._t("What ports does I2P use?")%></h3>
 
-<table id="portfaq">
-<tr><th colspan="3"><%=intl._t("LOCAL PORTS")%></th></tr>
-<tr><td colspan="3" class=infohelp><%=intl._t("These are the local I2P port mappings, listening only to local connections by default, except where noted. Unless you require access from other machines, they should only be accessible from localhost.")%></td></tr>
+<table id=portfaq>
+<tr><th colspan=3><%=intl._t("LOCAL PORTS")%></th></tr>
+<tr><td colspan=3 class=infohelp><%=intl._t("These are the local I2P port mappings, listening only to local connections by default, except where noted. Unless you require access from other machines, they should only be accessible from localhost.")%></td></tr>
 <tr><th><%=intl._t("Port")%></th><th><%=intl._t("Function")%></th><th><%=intl._t("Notes")%></th></tr>
 <tr><td>1900</td><td><%=intl._t("UPnP SSDP UDP multicast listener")%></td><td><%=intl._t("Cannot be changed. Binds to all interfaces. Can be disabled on the <a href=/confignet>Network Configuration page</a>.")%></td></tr>
 <tr><td>2827</td><td><%=intl._t("BOB bridge")%></td><td><%=intl._t("A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>bob.config</code> file. [Disabled by default]")%></td></tr>
@@ -139,13 +139,13 @@
 <tr><td>7667</td><td><%=intl._t("I2P Router Console (https://)")%></td><td><%=intl._t("Can be enabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If both http and https are enabled, automatic redirection to https is enabled by default. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access.")%></td></tr>
 <tr><td>31000</td><td><%=intl._t("Local connection to wrapper control channel port")%></td><td><%=intl._t("Outbound to 32000 only, does not listen on this port. Starts at 31000 and will increment until 31999 looking for a free port. To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>.")%></td></tr>
 <tr><td>32000</td><td><%=intl._t("Local control channel for the service wrapper")%></td><td><%=intl._t("To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>.")%></td></tr>
-<tr><th colspan="3"><%=intl._t("INTERNET FACING PORTS")%></th></tr>
-<tr><td colspan="3" class=infohelp><%=intl._t("I2P selects a random port between 9000 and 31000 to communicate with other routers when the program is run for the first time, or when your external IP address changes when running in <a href=/confignet#ipchange>Laptop Mode</a>. The <a href=/confignet#udpconfig>selected port</a> is shown on the <a href=/confignet>Network Configuration page</a>.")%></td></tr>
-<tr><td colspan="3"><%=intl._t("Outbound UDP from the <a href=/confignet#udpconfig>random port</a> noted on the Network Configuration page to arbitrary remote UDP ports, allowing replies.")%></td></tr>
-<tr><td colspan="3"><%=intl._t("Outbound TCP from random high ports to arbitrary remote TCP ports.")%></td></tr>
-<tr><td colspan="3"><%=intl._t("Inbound UDP to the <a href=/confignet#udpconfig>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended).")%></td></tr>
-<tr><td colspan="3"><%=intl._t("Inbound TCP to the <a href=/confignet#externaltcp>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended). <a href=/confignet#tcpconfig>Inbound TCP</a> may be disabled on the Network Configuration page.")%></td></tr>
-<tr><td colspan="3"><%=intl._t("Outbound UDP on port 123, allowing replies: this is necessary for I2P's internal time sync (via SNTP - querying a random SNTP host in <code>pool.ntp.org</code> or <a href=/help/advancedsettings#ntpserverconfig>another server you specify</a>).")%></td></tr>
+<tr><th colspan=3><%=intl._t("INTERNET FACING PORTS")%></th></tr>
+<tr><td colspan=3 class=infohelp><%=intl._t("I2P selects a random port between 9000 and 31000 to communicate with other routers when the program is run for the first time, or when your external IP address changes when running in <a href=/confignet#ipchange>Laptop Mode</a>. The <a href=/confignet#udpconfig>selected port</a> is shown on the <a href=/confignet>Network Configuration page</a>.")%></td></tr>
+<tr><td colspan=3><%=intl._t("Outbound UDP from the <a href=/confignet#udpconfig>random port</a> noted on the Network Configuration page to arbitrary remote UDP ports, allowing replies.")%></td></tr>
+<tr><td colspan=3><%=intl._t("Outbound TCP from random high ports to arbitrary remote TCP ports.")%></td></tr>
+<tr><td colspan=3><%=intl._t("Inbound UDP to the <a href=/confignet#udpconfig>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended).")%></td></tr>
+<tr><td colspan=3><%=intl._t("Inbound TCP to the <a href=/confignet#externaltcp>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended). <a href=/confignet#tcpconfig>Inbound TCP</a> may be disabled on the Network Configuration page.")%></td></tr>
+<tr><td colspan=3><%=intl._t("Outbound UDP on port 123, allowing replies: this is necessary for I2P's internal time sync (via SNTP - querying a random SNTP host in <code>pool.ntp.org</code> or <a href=/help/advancedsettings#ntpserverconfig>another server you specify</a>).")%></td></tr>
 </table>
 </div>
 </div>
