@@ -28,7 +28,7 @@
 <%@page pageEncoding="UTF-8"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page contentType="text/plain"%>
-<jsp:useBean id=book class="i2p.susi.dns.NamingServiceBean" scope="session" />
+<jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
 <jsp:setProperty name="book" property="*" />
 <jsp:setProperty name="book" property="resetDeletionMarks" value="1"/>
 <%

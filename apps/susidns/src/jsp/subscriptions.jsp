@@ -28,7 +28,7 @@
 <%@ page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:useBean id=subs class="i2p.susi.dns.SubscriptionsBean" scope="session" />
+<jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
 <jsp:setProperty name="subs" property="*" />
 <!DOCTYPE HTML>
