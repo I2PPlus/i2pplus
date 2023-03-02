@@ -377,7 +377,7 @@ class ProfileOrganizerRenderer {
 
         } else {
 
-            buf.append("<div class=widescroll id=\"ff\">\n")
+            buf.append("<div class=widescroll id=ff>\n")
                .append("<table id=floodfills data-sortable>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>" +
                        "<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>" +

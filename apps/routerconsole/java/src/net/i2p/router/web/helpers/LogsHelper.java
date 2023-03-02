@@ -201,9 +201,9 @@ public class LogsHelper extends HelperBase {
                 .append("</p></td></tr>\n<tr><td>");
             if (str.length() > 0) {
                 str = str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
-                obuf.append("<pre id=\"service_logs\">").append(str).append("</pre>");
+                obuf.append("<pre id=service_logs>").append(str).append("</pre>");
             } else {
-                obuf.append("<p class=\"nologs\"><i>").append(_t("No log messages")).append("</i></p>");
+                obuf.append("<p class=nologs><i>").append(_t("No log messages")).append("</i></p>");
             }
         }
         Object[] rv = new Object[3];
@@ -241,7 +241,7 @@ public class LogsHelper extends HelperBase {
             String date = FileDumpHelper.getAtt(att, "Build-Date");
             String by = FileDumpHelper.getAtt(att, "Built-By");
             if (rev != null && by.contains("|z3d")) {
-                return "<a id=\"revision\" target=_blank rel=\"noreferrer\" href=\"https://gitlab.com/i2pplus/I2P.Plus/-/tree/" +
+                return "<a id=revision target=_blank rel=\"noreferrer\" href=\"https://gitlab.com/i2pplus/I2P.Plus/-/tree/" +
                         rev + "\">" + rev + "</a> (Build date: " + date + ")";
             } else {
                 return rev + " (Build date: " + date + ")";
@@ -255,7 +255,7 @@ public class LogsHelper extends HelperBase {
     /** formats in forward order */
     private String formatMessages(List<String> msgs) {
         if (msgs.isEmpty())
-            return "</td></tr><tr><td><p class=\"nologs\"><i>" + _t("No log messages") + "</i></p>";
+            return "</td></tr><tr><td><p class=nologs><i>" + _t("No log messages") + "</i></p>";
         boolean colorize = _context.getBooleanPropertyDefaultTrue("routerconsole.logs.color");
         StringBuilder buf = new StringBuilder(16*1024);
         buf.append("</td></tr><tr><td><ul>");

@@ -63,7 +63,7 @@ class TunnelRenderer {
         TunnelManagerFacade tm = _context.tunnelManager();
         TunnelPool ei = tm.getInboundExploratoryPool();
         TunnelPool eo = tm.getOutboundExploratoryPool();
-        out.write("<h3 class=tabletitle id=\"exploratory\">" + _t("Exploratory"));
+        out.write("<h3 class=tabletitle id=exploratory>" + _t("Exploratory"));
         // links are set to float:right in CSS so they will be displayed in reverse order
         out.write(" <a href=\"/configtunnels#exploratory\" title=\"" +
                _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
@@ -71,7 +71,7 @@ class TunnelRenderer {
         out.write("</h3>\n");
         renderPool(out, ei, eo);
         // add empty span so we can link to client tunnels in the sidebar
-        out.write("<span id=\"client_tunnels\"></span>");
+        out.write("<span id=client_tunnels></span>");
 
         Map<Hash, TunnelPool> clientInboundPools = tm.getInboundClientPools();
         // display name to in pool

@@ -37,7 +37,7 @@ public class FileDumpHelper extends HelperBase {
 
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
-        buf.append("<table id=\"jarfiles\">\n<thead>\n<tr><th>File</th><th>Size</th><th>Date</th><th>SHA 256</th><th>Revision</th>" +
+        buf.append("<table id=jarfiles>\n<thead>\n<tr><th>File</th><th>Size</th><th>Date</th><th>SHA 256</th><th>Revision</th>" +
                    "<th>JDK</th><th>Built</th><th>By</th><th>Mods</th></tr>\n</thead>\n");
 
         // jars added in wrapper.config
@@ -126,7 +126,7 @@ public class FileDumpHelper extends HelperBase {
         if (hash != null) {
             byte[] hh = new byte[16];
             System.arraycopy(hash, 0, hh, 0, 16);
-            buf.append("<span class=\"sha256\"><code>");
+            buf.append("<span class=sha256><code>");
             String p1 = DataHelper.toHexString(hh);
             for (int i = p1.length(); i < 32; i++) {
                 buf.append('0');
@@ -155,7 +155,7 @@ public class FileDumpHelper extends HelperBase {
                     buf.append(LINK);
             buf.append(s).append("\">");
             }
-            buf.append("<span class=\"revision\"><code>").append(s.substring(0, 8)).append("</code></span>");
+            buf.append("<span class=revision><code>").append(s.substring(0, 8)).append("</code></span>");
             if (linkrev)
                 buf.append("</a>");
         }
@@ -183,7 +183,7 @@ public class FileDumpHelper extends HelperBase {
         if (s != null && s != "") {
             // Encase each mod in a span so we can single click select individual mods
             buf.append("<font color=red><span class=\"unsignedmod\">")
-               .append(s.replace(",", "</span></font><hr><font color=red><span class=\"unsignedmod\">"))
+               .append(s.replace(",", "</span></font><hr><font color=red><span class=unsignedmod>"))
                .append("</span></font>");
         }
         buf.append("</td></tr>\n");

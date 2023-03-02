@@ -76,12 +76,12 @@ public class ConfigNavHelper extends HelperBase {
             if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) {
                 // we are there
                 if (span)
-                    buf.append("<span class=\"tab2\">");
+                    buf.append("<span class=tab2>");
                 buf.append(tabs.get(i).title);
             } else {
                 // we are not there, make a link
                 if (span)
-                    buf.append("<span class=\"tab\">");
+                    buf.append("<span class=tab>");
                 if (page.equals("configembed"))
                     page = "embed";
                 buf.append("<a href=\"").append(page).append("\">").append(tabs.get(i).title).append("</a>");

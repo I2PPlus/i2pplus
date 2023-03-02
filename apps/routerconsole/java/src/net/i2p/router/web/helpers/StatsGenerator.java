@@ -56,8 +56,8 @@ public class StatsGenerator {
         }
         buf.append("</div>");
 
-        buf.append("<div class=\"joblog\">\n");
-        buf.append("<p id=\"gatherstats\">");
+        buf.append("<div class=joblog>\n");
+        buf.append("<p id=gatherstats>");
         buf.append(_t("Statistics gathered during this router's uptime")).append(" (");
         long uptime = _context.router().getUptime();
         buf.append(DataHelper.formatDuration2(uptime));
@@ -103,7 +103,7 @@ public class StatsGenerator {
         for (Map.Entry<String, Set<String>> entry : groups.entrySet()) {
             String group = entry.getKey();
             Set<String> stats = entry.getValue();
-            buf.append("<input name=\"statgroup\" type=radio class=\"toggle_input\" id=\"toggle_").append(group)
+            buf.append("<input name=\"statgroup\" type=radio class=toggle_input id=\"toggle_").append(group)
                .append("\"");
             if (group.equals(_t("Router")))
                 buf.append(" checked");

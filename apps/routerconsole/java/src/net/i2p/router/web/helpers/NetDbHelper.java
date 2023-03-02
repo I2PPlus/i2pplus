@@ -360,7 +360,7 @@ public class NetDbHelper extends FormHandler {
      */
     private void renderNavBar() throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<div class=\"confignav\" id=\"confignav\">");
+        buf.append("<div class=confignav id=confignav>");
         boolean span = _graphical;
         if (!span)
             buf.append("<center>");
@@ -381,12 +381,12 @@ public class NetDbHelper extends FormHandler {
             if (i == tab) {
                 // we are there
                 if (span)
-                    buf.append("<span class=\"tab2\">");
+                    buf.append("<span class=tab2>");
                 buf.append(_t(titles[i]));
             } else {
                 // we are not there, make a link
                 if (span)
-                    buf.append("<span class=\"tab\">");
+                    buf.append("<span class=tab>");
                 buf.append("<a href=\"netdb").append(links[i]).append("\">").append(_t(titles[i])).append("</a>");
             }
             if (span)
