@@ -785,7 +785,7 @@ public class FIFOBandwidthLimiter {
 /*******
         long now = now();
         StringBuilder buf = new StringBuilder(4096);
-        buf.append("<h3><b id=\"bwlim\">Limiter Status:</b></h3>").append(getStatus().toString()).append("\n");
+        buf.append("<h3><b id=bwlim>Limiter Status:</b></h3>").append(getStatus().toString()).append("\n");
         buf.append("<h3>Pending bandwidth requests:</h3><ul>");
         buf.append("<li>Inbound requests: <ol>");
         synchronized (_pendingInboundRequests) {

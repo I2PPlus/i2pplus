@@ -43,7 +43,7 @@
 <%
     }
 %>
-<div class=main id="peers">
+<div class=main id=peers>
 <%
     peerHelper.storeWriter(out);
     if (allowIFrame)
@@ -51,10 +51,10 @@
 %>
 <jsp:getProperty name="peerHelper" property="peerSummary" />
 </div>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.number.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/lazyload.js type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var autorefresh = document.getElementById("autorefresh");
   var ntcpConn = document.getElementById("ntcpconnections");

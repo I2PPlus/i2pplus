@@ -41,7 +41,7 @@
 <%
     }
 %>
-<div class=main id="profiles"><div class=wideload>
+<div class=main id=profiles><div class=wideload>
 <%
     profilesHelper.storeWriter(out);
     if (allowIFrame)
@@ -50,10 +50,10 @@
 <jsp:getProperty name="profilesHelper" property="summary" />
 </div>
 </div>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.number.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/lazyload.js type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var ff = document.getElementById("floodfills");
   var ffprofiles = document.getElementById("ffProfiles");

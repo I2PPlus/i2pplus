@@ -130,7 +130,7 @@ public class ConfigClientsHelper extends HelperBase {
     /** clients */
     public String getForm1() {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<table id=\"clientconfig\">\n" +
+        buf.append("<table id=clientconfig>\n" +
                    "<tr><th class=right>").append(_t("Client")).append("</th><th class=center>")
            .append(_t("Run at Startup?").replace("?", "")).append("</th><th class=center>")
            .append(_t("Control")).append("</th><th class=left>")
@@ -225,7 +225,7 @@ public class ConfigClientsHelper extends HelperBase {
     /** webapps */
     public String getForm2() {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<table id=\"webappconfig\">\n" +
+        buf.append("<table id=webappconfig>\n" +
                    "<tr><th class=right>").append(_t("WebApp")).append("</th><th class=center>")
            .append(_t("Run at Startup?").replace("?", "")).append("</th><th class=center>")
            .append(_t("Control")).append("</th><th class=left>")
@@ -272,7 +272,7 @@ public class ConfigClientsHelper extends HelperBase {
     /** plugins */
     public String getForm3() {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<table id=\"pluginconfig\">\n" +
+        buf.append("<table id=pluginconfig>\n" +
                    "<tr><th class=right>").append(_t("Plugin")).append("</th><th class=center>")
            .append(_t("Run at Startup?").replace("?", "")).append("</th><th class=center>")
            .append(_t("Control")).append("</th><th class=left>")

@@ -920,7 +920,7 @@ class NetDbRenderer {
             } // for each
             buf.append("</div>"); // close leaseset container
             if (debug && median != null) {
-                buf.append("<table class=leaseset id=\"leasesetsummary\">");
+                buf.append("<table class=leaseset id=leasesetsummary>");
                 buf.append("<tr><th colspan=3>").append(_t("Network Summary")).append("</th><th></th></tr>\n");
                 buf.append("<tr><td><b>").append(_t("Network Data")).append(":</b></td><td colspan=3>");
                 //buf.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
@@ -1232,14 +1232,14 @@ class NetDbRenderer {
 //           .append("<tr id=\"").append(hash.substring(0, 6)).append("\"><th>");
            .append("<tr><th>");
         if (isUs) {
-            buf.append("<b id=\"our-info\">" + _t("Our info") + ":</b></th><th><code>").append(hash)
-               .append("</code></th><th id=\"netdb_ourinfo\">");
+            buf.append("<b id=our-info>" + _t("Our info") + ":</b></th><th><code>").append(hash)
+               .append("</code></th><th id=netdb_ourinfo>");
         } else {
             buf.append("<b>" + _t("Router") + ":</b></th><th><code>").append(hash).append("</code></th><th>");
         }
         Hash h = info.getHash();
         if (_context.banlist().isBanlisted(h)) {
-            buf.append("<a class=\"banlisted\" href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
+            buf.append("<a class=banlisted href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
         }
 
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";

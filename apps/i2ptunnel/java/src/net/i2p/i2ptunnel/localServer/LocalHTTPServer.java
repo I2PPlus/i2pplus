@@ -319,17 +319,17 @@ public abstract class LocalHTTPServer {
                             buf.append(NEWKEY)
                                .append("<!DOCTYPE html>\n<html>\n<head>\n" +
                                        "<title>" + _t("Your new encryption key") + "</title>\n" + headerLinks +
-                                       "</head>\n<body>\n<div class=\"logo\">\n<a href=\"" + conURL + "\" title=\""+
+                                       "</head>\n<body>\n<div class=logo>\n<a href=\"" + conURL + "\" title=\""+
                                        _t("Router Console") + "\">" + logo + "</a><hr>\n");
                             if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
                                 out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
                             out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
                                        "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
                             buf.append("</div>" +
-                                       "<div class=\"warning\" id=\"warning\">\n" +
+                                       "<div class=warning id=warning>\n" +
                                        "<h3>")
                                .append(_t("Your new encryption key"))
-                               .append("</h3>\n<p id=\"key\">")
+                               .append("</h3>\n<p id=key>")
                                .append(key)
                                .append("</p>\n<p>")
                                .append(_t("Copy the key and send it to the server operator."))
@@ -385,13 +385,13 @@ public abstract class LocalHTTPServer {
                   "Proxy-Connection: close\r\n\r\n" +
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
-                  "<div class=\"logo\">\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
+                  "<div class=logo>\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
                   "</a><hr>\n").getBytes("UTF-8"));
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
             out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
         out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
                   "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
-        out.write(("</div>\n<div class=\"warning redirect\" id=\"warning\">\n<h3>" + _t("Redirection in progress") + "&hellip;</h3>\n<br>\n<p><b>" +
+        out.write(("</div>\n<div class=\"warning redirect\" id=warning>\n<h3>" + _t("Redirection in progress") + "&hellip;</h3>\n<br>\n<p><b>" +
                   (success ?
                            _t("Saved {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;") :
                            _t("Failed to save {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;")) +
@@ -415,13 +415,13 @@ public abstract class LocalHTTPServer {
                   "Proxy-Connection: close\r\n\r\n" +
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
-                  "<div class=\"logo\">\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
+                  "<div class=logo>\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
                   "</a><hr>\n").getBytes("UTF-8"));
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
             out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
         out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
                   "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
-        out.write(("</div>\n<div class=\"warning redirect\" id=\"warning\">\n<h3>" +
+        out.write(("</div>\n<div class=\"warning redirect\" id=warning>\n<h3>" +
                   _t("Saved the authentication for {0}, redirecting now.", idn).replace("now.", "now&hellip;") +
                   "</b></p>\n<hr>\n<p><a href=\"" + url + "\">" +
                   _t("Click here if you are not redirected automatically.") +

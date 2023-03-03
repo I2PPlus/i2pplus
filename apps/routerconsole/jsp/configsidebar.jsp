@@ -19,7 +19,7 @@
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Customize Sidebar")%></h1>
-<div class=main id="config_summarybar">
+<div class=main id=config_summarybar>
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigSummaryHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
@@ -30,7 +30,7 @@
 <jsp:setProperty name="summaryhelper" property="contextId" value="<%=i2pcontextId%>" />
 <h3 class=tabletitle><%=intl._t("Refresh Interval")%></h3>
 <form action="" method=POST>
-<table class=configtable id="refreshsidebar">
+<table class=configtable id=refreshsidebar>
 <tr>
 <td>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
@@ -42,7 +42,7 @@
     else
         rval = intl.getRefresh();
 %>
-<input type=text name="refreshInterval" maxlength="4" pattern="[0-9]{1,4}" required value="<%=rval%>">
+<input type=text name="refreshInterval" maxlength=4 pattern="[0-9]{1,4}" required value="<%=rval%>">
 <%=intl._t("seconds")%>
 <%
     if (!rval.equals("0")) {
@@ -63,9 +63,9 @@
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="group" value="2">
 <jsp:getProperty name="summaryhelper" property="configTable" />
-<div class=formaction id="sidebardefaults">
-<input type=submit class="reload" name=action value="<%=intl._t("Restore full default")%>" >
-<input type=submit class="reload" name=action value="<%=intl._t("Restore minimal default")%>" >
+<div class=formaction id=sidebardefaults>
+<input type=submit class=reload name=action value="<%=intl._t("Restore full default")%>" >
+<input type=submit class=reload name=action value="<%=intl._t("Restore minimal default")%>" >
 </div>
 </form>
 </div>

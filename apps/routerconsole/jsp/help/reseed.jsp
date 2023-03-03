@@ -15,8 +15,8 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp"><%=intl._t("Reseeding Help")%></h1>
-<div class=main id="help">
+<h1 class=hlp><%=intl._t("Reseeding Help")%></h1>
+<div class=main id=help>
 
 <div class=confignav>
 <span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
@@ -34,7 +34,7 @@
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
 
-<div id="reseedhelp">
+<div id=reseedhelp>
 <h2><%=intl._t("Reseeding Your Router")%></h2>
 
 <p><%=intl._t("Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining. The default settings will work for most people. Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed.")%></p>
@@ -57,7 +57,7 @@
 <li><%=intl._t("If you know and trust somebody that publishes reseed files, ask them for the URL. Then, click the <i>Reseed from URL</i> button on the {0} to reseed using the URL you received.", "<a href=/configreseed#reseedcreatefile>" + intl._t("Reseed Configuration page") + "</a>")%></li>
 </ol>
 
-<h3 id="manual_reseed"><%=intl._t("How do I reseed manually?")%></h3>
+<h3 id=manual_reseed><%=intl._t("How do I reseed manually?")%></h3>
 
 <p><%=intl._t("An I2P router usually only needs to be seeded once, to join the network for the first time. However, if the router is running for an extended period without network connectivity it may also need to be reseeded. Reseeding involves fetching multiple \"RouterInfo\" files (bundled into a signed zip-file) from at least two predefined server URLs picked from a volunteer-run group of clearnet HTTPS servers.")%></p>
 

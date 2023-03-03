@@ -55,8 +55,8 @@
 <%
         if (url == null) {
 %>
-<h1 class="webapp"><%=intl._t("Embed Page")%></h1>
-<div class=main id="embedpage">
+<h1 class=webapp><%=intl._t("Embed Page")%></h1>
+<div class=main id=embedpage>
 <div class=confignav>
 <span class=tab><a href="/embed?url=imagegen&amp;name=Image%20Generator">ImageGen</a></span>
 <span class=tab><a href="/embed?url=/history.txt&amp;name=Changelog">Changelog</a></span>
@@ -64,18 +64,18 @@
 <span class=tab><a href="/embed?url=/wrapper.log&amp;name=Wrapper%20Log">Wrapper Log</a></span>
 </div>
 <p class=infohelp>To embed local pages in the console, set the <code>url</code> query parameter and optional <code>name</code> parameter, e.g. <a href="http://127.0.0.1:7657/embed?url=imagegen&amp;name=image generator">http://127.0.0.1:7657/embed?url=imagegen&name=image%20generator</a>, or use the form below. Only resources served from 127.0.0.1 or the address the console is running on are supported.</p>
-<div id="embedurl">
+<div id=embedurl>
 <form action="/embed?url=" method="get">
 <input type=hidden name="norefresh">
-<label>URL: <input type=text name="url" size="30" required placeholder="URL to embed" title="Locally hosted URL or console path"></label>
-<span class="nowrap"><label>Name: <input type=text name="name" size="15" value="embedded page" title="Optional title for embedded page"></label>
+<label>URL: <input type=text name="url" size=30 required placeholder="URL to embed" title="Locally hosted URL or console path"></label>
+<span class=nowrap><label>Name: <input type=text name="name" size=15 value="embedded page" title="Optional title for embedded page"></label>
 <input type=submit value="Embed URL"></span>
 </form>
 </div>
 <%
         } else {
 %>
-<h1 class="webapp"><%=intl._t(name)%> <a href="<%=url%>" target=_blank title="<%=intl._t("Open in new tab")%>"><span id="newtab"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
+<h1 class=webapp><%=intl._t(name)%> <a href="<%=url%>" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <%
             if (url.indexOf("imagegen") >= 0 && url.indexOf("css") == -1) {
                 appname = "imagegen";
@@ -93,7 +93,7 @@ function setupFrame() {
 </script>
 <style>iframe {width: 1px; min-width: 100%;}</style>
 <noscript><style type=text/css>iframe {width: 100%; height: 100%;}</style></noscript>
-<iframe src="<%=url%>" title="<%=appname%>" width="100%" frameborder="0" border="0" scrolling="no" name="<%=appname%>_frame" id="<%=appname%>_frame" onload="setupFrame();" allowtransparency="true"></iframe>
+<iframe src="<%=url%>" title="<%=appname%>" width=100% frameborder=0 border=0 scrolling=no name="<%=appname%>_frame" id="<%=appname%>_frame" onload="setupFrame();" allowtransparency=true></iframe>
 <script nonce="<%=cspNonce%>" type=text/javascript>
 var isOldIE = (navigator.userAgent.indexOf("MSIE") !== -1); // Detect IE10 and below
 document.addEventListener('DOMContentLoaded', function(event) {
@@ -145,7 +145,7 @@ var iframes = iFrameResize({interval: 0, heightCalculationMethod: isOldIE ? 'max
 </script>
 <style>iframe {width: 1px; min-width: 100%;}</style>
 <noscript><style>iframe {width: 100%; height: 100%;}</style></noscript>
-<iframe src="<%=url%>" title="<%=appname%>" width="100%" frameborder="0" border="0" scrolling="no" name="<%=appname%>_frame" id="<%=appname%>_frame" onload="setupFrame();scrollToEnd();" allowtransparency="true"></iframe>
+<iframe src="<%=url%>" title="<%=appname%>" width=100% frameborder=0 border=0 scrolling=no name="<%=appname%>_frame" id="<%=appname%>_frame" onload="setupFrame();scrollToEnd();" allowtransparency=true></iframe>
 <script nonce="<%=cspNonce%>" type=text/javascript>iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#<%=appname%>_frame');</script>
 <%
         }
@@ -154,10 +154,9 @@ var iframes = iFrameResize({interval: 0, heightCalculationMethod: isOldIE ? 'max
     }
 %>
 </div>
-<span id="endOfPage"></span>
+<span id=endOfPage></span>
 <script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
-</html>
-<%
+</html><%
   }
 %>

@@ -217,9 +217,9 @@ public class NamingServiceBean extends AddressbookBean
         }
         if (message.length() > 0)
             if (filter != null && filter.length() > 0)
-                message = "<span id=\"filtered\">" + message; // span closed in AddressbookBean
+                message = "<span id=filtered>" + message; // span closed in AddressbookBean
             else
-                message = "<span id=\"showing\">" + message;
+                message = "<span id=showing>" + message;
         return message;
     }
 
@@ -615,7 +615,7 @@ public class NamingServiceBean extends AddressbookBean
      *  @since 0.9.40
      */
     private static String styleMessage(String message) {
-        return "<p class=\"messages\">" + message + "</p>";
+        return "<p class=messages>" + message + "</p>";
     }
 
     /**

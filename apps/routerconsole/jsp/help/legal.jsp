@@ -15,8 +15,8 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp"><%=intl._t("Legal &amp; Licensing")%></h1>
-<div class=main id="help">
+<h1 class=hlp><%=intl._t("Legal &amp; Licensing")%></h1>
+<div class=main id=help>
 <div class=confignav>
 <span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
 <span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
@@ -32,7 +32,7 @@
 <span class=tab2><%=intl._t("Legal")%></span>
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
-<div id="legal"><%@include file="../help-legal.jsi" %></div>
+<div id=legal><%@include file="../help-legal.jsi" %></div>
 </div>
 </body>
 </html>

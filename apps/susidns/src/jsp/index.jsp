@@ -37,23 +37,23 @@
 <meta charset=utf-8>
 <title><%=intl._t("Introduction")%> - SusiDNS</title>
 <link rel=stylesheet type=text/css href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<link rel=stylesheet type=text/css href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet type=text/css href="<%=base.getTheme()%>override.css">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
-<body id="ovrvw">
-<div class="page">
-<div id="navi">
+<body id=ovrvw>
+<div class=page>
+<div id=navi>
 <a class="abook router" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook master" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
 <a class="abook private" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook published" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
-<a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="configlink" href="config"><%=intl._t("Configuration")%></a>&nbsp;
-<a id="overview" class="selected" href="index"><%=intl._t("Help")%></a>
+<a id=subs href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
+<a id=configlink href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id=overview class=selected href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
-<div id="content">
+<div id=content>
 <h3><%=intl._t("What is the addressbook?")%></h3>
 <p>
 <%=intl._t("The addressbook application is part of your I2P installation.")%>&nbsp;<wbr>
@@ -72,7 +72,7 @@
 <%=intl._t("Hosts in the private address book can be accessed by you but their addresses are never distributed to others.")%>&nbsp;<wbr>
 <%=intl._t("The private address book can also be used for aliases of hosts in your other address books.")%>
 </p>
-<div class="illustrate" id="svg">
+<div class=illustrate id=svg>
 <% /* load svg via ajax (with noscript fallback) so we can style per theme */ %>
 <script nonce="<%=cspNonce%>" type=text/javascript>
 var now = Date.now();

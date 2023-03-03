@@ -37,9 +37,9 @@
 <link type=text/css rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
 <%=intl.title("Internal Error")%>
 </head>
-<body id="error500">
-<div id="sb_wrap">
-<div class="sb" id="sidebar">
+<body id=error500>
+<div id=sb_wrap>
+<div class=sb id=sidebar>
 <a href="/" title="<%=intl._t("Router Console")%>">
 <img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" border="0"></a>
 <hr>
@@ -47,23 +47,9 @@
 <a href="/help"><%=intl._t("Help")%></a>
 </div>
 </div>
-<h1 class="err"><%=intl._t("ERROR")%>&ensp;<%=ERROR_CODE%>: <%=intl._t("Internal Server Error")%><br>
-<!--<span id="errmsg"><%=ERROR_MESSAGE%></span>--></h1>
-<!--
-<div class="sorry" id="warning">
-<%=intl._t("Sorry! There has been an internal error.")%>
-<hr>
-<p>
-<% /* note to translators - both parameters are URLs */%>
-<%=intl._t("Please report bugs on {0} or {1}.",
-           "<a href=\"http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues\">git.idk.i2p</a>",
-           "<a href=\"https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues\">i2pgit.org</a>")%>
-<p><%=intl._t("Please include this information in bug reports")%>:</p>
-</div>
--->
-<div class="sorry" id="warning2">
-<!--<h3><%=intl._t("Error Details")%></h3>-->
-<div id="stacktrace">
+<h1 class=err><%=intl._t("ERROR")%>&ensp;<%=ERROR_CODE%>: <%=intl._t("Internal Server Error")%><br>
+<div class=sorry id=warning2>
+<div id=stacktrace>
 <p><%=intl._t("Error {0}", ERROR_CODE)%>: &ensp;<%=ERROR_URI%>&ensp;-&ensp;<%=ERROR_MESSAGE%></p>
 <p>
 <%
@@ -81,7 +67,7 @@
 </p>
 </div>
 <h3><%=intl._t("I2P Version and Running Environment")%></h3>
-<p id="sysinfo">
+<p id=sysinfo>
 <b>I2P version:</b>&ensp;<%=net.i2p.router.RouterVersion.FULL_VERSION%><br>
 <b>API version:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%><br>
 <b>Java version:</b>&ensp;<%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%> <%=System.getProperty("java.runtime.version")%>)<br>

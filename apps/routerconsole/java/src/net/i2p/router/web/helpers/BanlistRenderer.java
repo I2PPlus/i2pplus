@@ -54,7 +54,7 @@ class BanlistRenderer {
             return;
         }
 
-        buf.append("<ul id=\"banlist\">");
+        buf.append("<ul id=banlist>");
 
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
@@ -63,7 +63,7 @@ class BanlistRenderer {
             if (expires <= 0)
                 continue;
             buf.append("<li>").append(_context.commSystem().renderPeerHTML(key, false));
-            buf.append(' ').append("<span class=\"banreason\">");
+            buf.append(' ').append("<span class=banreason>");
             String expireString = DataHelper.formatDuration2(expires);
             if (key.equals(Hash.FAKE_HASH))
                 buf.append(_t("Permanently banned"));

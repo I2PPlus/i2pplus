@@ -68,16 +68,16 @@ public class JobQueueHelper extends HelperBase {
         int numRunners = _context.jobQueue().getJobs(readyJobs, timedJobs, activeJobs, justFinishedJobs);
 
         StringBuilder buf = new StringBuilder(32*1024);
-        buf.append("<div class=\"joblog\">");
+        buf.append("<div class=joblog>");
         if (isAdvanced()) {
-            buf.append("<h2 id=\"jobrunners\">").append(_t("Job runners"))
+            buf.append("<h2 id=jobrunners>").append(_t("Job runners"))
                .append(": ").append(numRunners).append("</h2>\n");
         }
 
         long now = _context.clock().now();
 
         if ((activeJobs.size() != 0) && (isAdvanced())) {
-            buf.append("<h3 id=\"activejobs\">")
+            buf.append("<h3 id=activejobs>")
                .append(_t("Active jobs")).append(": ").append(activeJobs.size())
                .append("</h3>\n<ol class=jobqueue>\n");
             for (int i = 0; i < activeJobs.size(); i++) {
@@ -89,7 +89,7 @@ public class JobQueueHelper extends HelperBase {
         }
 
         if ((justFinishedJobs.size() != 0) && (isAdvanced())) {
-            buf.append("<h3 id=\"finishedjobs\">")
+            buf.append("<h3 id=finishedjobs>")
                .append(_t("Just finished jobs")).append(": ").append(justFinishedJobs.size())
                .append("</h3>\n<ol class=jobqueue>\n");
             for (int i = 0; i < justFinishedJobs.size(); i++) {
@@ -102,7 +102,7 @@ public class JobQueueHelper extends HelperBase {
         }
 
         if ((readyJobs.size() != 0) && (isAdvanced())) {
-            buf.append("<h3 id=\"readyjobs\">")
+            buf.append("<h3 id=readyjobs>")
                .append(_t("Ready/waiting jobs")).append(": ").append(readyJobs.size())
                .append("</h3>\n<ol class=jobqueue>\n");
             ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
@@ -123,7 +123,7 @@ public class JobQueueHelper extends HelperBase {
             buf.setLength(0);
         }
 
-        buf.append("<h3 id=\"scheduledjobs\">")
+        buf.append("<h3 id=scheduledjobs>")
            .append(_t("Scheduled jobs")).append(": ").append(timedJobs.size())
            .append("</h3>\n<ol class=jobqueue>\n");
 
@@ -176,7 +176,7 @@ public class JobQueueHelper extends HelperBase {
             Collections.sort(names, new JobCountComparator(counter));
             buf.append("<tr><td>\n<ul>\n");
             for (String name : names) {
-                     buf.append("<li><span class=\"jobcount\"><b>").append(name).append(":</b> ")
+                     buf.append("<li><span class=jobcount><b>").append(name).append(":</b> ")
                          .append(counter.count(name)).append("</span></li>\n");
                  }
             // TODO: Add aggregate total for single jobs and total for all jobs and only display jobnames with > 1 job

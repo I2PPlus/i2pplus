@@ -167,7 +167,7 @@ public class AddressbookBean extends BaseBean {
                 try { fis.close(); } catch (IOException ioe) {}
         }
         if (message.length() > 0)
-            message = "<p id=\"filtered\">" + message + "</p>";
+            message = "<p id=filtered>" + message + "</p>";
         return message;
     }
 
@@ -181,10 +181,10 @@ public class AddressbookBean extends BaseBean {
         int resultCount = resultSize();
         if (filter != null && filter.length() > 0) {
             if (search != null && search.length() > 0) {
-                message = ngettext("Search for <span class=\"active\">" + search + "</span> with filter <span class=\"active\">" + filter + "</span> returned 1 result",
-                                   "Search for <span class=\"active\">" + search + "</span> with filter <span class=\"active\">" + filter + "</span> returned {0} results",
+                message = ngettext("Search for <span class=active>" + search + "</span> with filter <span class=active>" + filter + "</span> returned 1 result",
+                                   "Search for <span class=active>" + search + "</span> with filter <span class=active>" + filter + "</span> returned {0} results",
                                    resultCount);
-                message = "</span><span id=\"results\">" + message + "</span>";
+                message = "</span><span id=results>" + message + "</span>";
             } else {
                 message = ngettext("Filtered list contains 1 entry.",
                                    "Filtered list contains {0} entries.",
@@ -192,10 +192,10 @@ public class AddressbookBean extends BaseBean {
             }
             filterArg = "&amp;filter=" + filter;
         } else if (search != null && search.length() > 0) {
-            message = ngettext("One result for: " + "<span class=\"active\">" + search + "</span>",
-                               "{0} results for: " + "<span class=\"active\">" + search + "</span>",
+            message = ngettext("One result for: " + "<span class=active>" + search + "</span>",
+                               "{0} results for: " + "<span class=active>" + search + "</span>",
                                resultCount);
-            message = "</span><span id=\"results\">" + message + "</span>";
+            message = "</span><span id=results>" + message + "</span>";
         } else {
             if (resultCount <= 0) {
                 // covered in jsp
@@ -210,17 +210,17 @@ public class AddressbookBean extends BaseBean {
         } else if (getBeginInt() == 0 && getEndInt() == resultCount - 1) {
             message += "</span>";
         } else {
-            message += "</span><span id=\"paginate\">";
+            message += "</span><span id=paginate>";
             if (getBeginInt() > 0) {
                 int newBegin = Math.max(0, getBeginInt() - DISPLAY_SIZE);
                 int newEnd = Math.max(0, getBeginInt() - 1);
-                        message += " <span id=\"prev\"><a href=\"addressbook?book=" + getBook() + filterArg +
+                        message += " <span id=prev><a href=\"addressbook?book=" + getBook() + filterArg +
                                    "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
                                    " - "  + (newEnd+1) + "</a></span> | ";
                 } else {
-                    message += " <span id=\"prev\" class=\"inactive\"></span> | ";
+                    message += " <span id=prev class=inactive></span> | ";
                 }
-                message += " <span id=\"current\">" + (getBeginInt()+1) + " - " + (getEndInt()+1) + "</span>";
+                message += " <span id=current>" + (getBeginInt()+1) + " - " + (getEndInt()+1) + "</span>";
                 if (getEndInt() < resultCount - 1) {
                     if (getBeginInt() <= 0)
                         message += " | ";
@@ -228,11 +228,11 @@ public class AddressbookBean extends BaseBean {
                     int newEnd = Math.min(resultCount, getEndInt() + DISPLAY_SIZE);
                     if (getBeginInt() > 0)
                         message += " | ";
-                    message += "<span id=\"next\"><a href=\"addressbook?book=" + getBook() + filterArg +
+                    message += "<span id=next><a href=\"addressbook?book=" + getBook() + filterArg +
                                "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
                                " - " + (newEnd+1) + "</a></span>";
             } else {
-                message += "<span id=\"next\" class=\"inactive\"></span>";
+                message += "<span id=next class=inactive></span>";
             }
             message += "</span>"; // close #showing span in NamingServiceBean
         }
@@ -377,7 +377,7 @@ public class AddressbookBean extends BaseBean {
         action = null;
 
         if (message.length() > 0)
-            message = "<p class=\"messages\">" + message + "</p>";
+            message = "<p class=messages>" + message + "</p>";
         return message;
     }
 

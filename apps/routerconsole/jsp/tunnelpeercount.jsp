@@ -8,7 +8,7 @@
     if (ctx.getProperty("routerconsole.lang") != null)
         lang = ctx.getProperty("routerconsole.lang");
 %>
-<html lang="<%=lang%>" id="count">
+<html lang="<%=lang%>" id=count>
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
@@ -32,9 +32,9 @@
 <% tunnelPeerCountHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount" />
 </div>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.number.js type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=module>
   import {onVisible} from "/js/onVisible.js";
   var main = document.getElementById("tunnels");
@@ -96,6 +96,6 @@
   window.addEventListener("DOMContentLoaded", progressx.hide(), true);
   document.addEventListener("DOMContentLoaded", initRefresh(), true);
 </script>
-<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type=text/javascript></script>
+<script nonce="<%=cspNonce%>" src=/js/lazyload.js type=text/javascript></script>
 </body>
 </html>

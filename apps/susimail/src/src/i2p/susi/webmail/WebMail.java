@@ -402,7 +402,7 @@ public class WebMail extends HttpServlet
         //else if (name.equals(DELETE))
         //buf.append(" onclick=\"smoothScroll(document.getElementById(\'mailbox\'))\"");
         else if (name.equals(REFRESH))
-            buf.append("\" id=\"serverRefresh\"");
+            buf.append("\" id=serverRefresh");
         else
             buf.append('"');
         // These are icons only now, via the CSS, so add a tooltip
@@ -440,17 +440,17 @@ public class WebMail extends HttpServlet
         if (name.equals(currentName) && currentOrder == SortOrder.UP) {
             buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/up.svg\" border=0 alt=\"^\">\n");
         } else {
-            buf.append("<a class=\"sort\" href=\"").append(myself).append("?page=").append(page).append("&amp;sort=-")
+            buf.append("<a class=sort href=\"").append(myself).append("?page=").append(page).append("&amp;sort=-")
                            .append(name).append("&amp;folder=").append(folder).append("\">");
-            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("../../images/up.svg\" border=0 alt=\"^\">");
+            buf.append("<img class=sort src=\"").append(imgPath).append("../../images/up.svg\" border=0 alt=\"^\">");
             buf.append("</a>\n");
         }
         if (name.equals(currentName) && currentOrder == SortOrder.DOWN) {
             buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/down.svg\" border=0 alt=\"v\">");
         } else {
-            buf.append("<a class=\"sort\" href=\"").append(myself).append("?page=").append(page).append("&amp;sort=")
+            buf.append("<a class=sort href=\"").append(myself).append("?page=").append(page).append("&amp;sort=")
                            .append(name).append("&amp;folder=").append(folder).append("\">");
-            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("../../images/down.svg\" border=0 alt=\"v\">");
+            buf.append("<img class=sort src=\"").append(imgPath).append("../../images/down.svg\" border=0 alt=\"v\">");
             buf.append("</a>");
         }
         return buf.toString();

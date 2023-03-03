@@ -18,8 +18,8 @@ public class ConfigPeerHelper extends HelperBase {
     public String getBlocklistSummary() {
         StringWriter out = new StringWriter(4*1024);
         Blocklist bl = _context.blocklist();
-        out.write("<table id=\"bannedips\"><tr><td>" +
-                  "<table id=\"banneduntilrestart\"><tr><th><b>");
+        out.write("<table id=bannedips><tr><td>" +
+                  "<table id=banneduntilrestart><tr><th><b>");
         out.write(_t("IPs Banned Until Restart"));
         out.write("</b></th></tr>");
         List<Integer> singles = bl.getTransientIPv4Blocks();
@@ -27,7 +27,7 @@ public class ConfigPeerHelper extends HelperBase {
         if (!(singles.isEmpty() && s6.isEmpty())) {
             if (!singles.isEmpty()) {
                 Collections.sort(singles);
-                out.write("<tr id=\"ipv4\"><td><b>");
+                out.write("<tr id=ipv4><td><b>");
                 out.write(_t("IPv4 Addresses"));
                 out.write("</b></td></tr>");
             }
@@ -57,7 +57,7 @@ public class ConfigPeerHelper extends HelperBase {
             }
             // then IPv6
             if (!s6.isEmpty()) {
-                out.write("<tr id=\"ipv6\"><td><b>");
+                out.write("<tr id=ipv6><td><b>");
                 out.write(_t("IPv6 Addresses"));
                 out.write("</b></td></tr>");
                 Collections.sort(s6);
@@ -74,14 +74,14 @@ public class ConfigPeerHelper extends HelperBase {
         }
         out.write("</table>");
         out.write("</td><td>");
-        out.write("<table id=\"permabanned\"><tr><th colspan=3><b>");
+        out.write("<table id=permabanned><tr><th colspan=3><b>");
         out.write(_t("IPs Permanently Banned"));
         out.write("</b></th></tr>");
         int blocklistSize = bl.getBlocklistSize();
         if (blocklistSize > 0) {
-            out.write("<tr><td width=\"49%\"><b>");
+            out.write("<tr><td width=49%><b>");
             out.write(_t("From"));
-            out.write("</b></td><td></td><td width=\"49%\"><b>");
+            out.write("</b></td><td></td><td width=49%><b>");
             out.write(_t("To"));
             out.write("</b></td></tr>");
             long[] blocklist = bl.getPermanentBlocks(MAX_DISPLAY);
@@ -90,16 +90,16 @@ public class ConfigPeerHelper extends HelperBase {
                 int from = Blocklist.getFrom(blocklist[i]);
                 if (from < 0)
                     continue;
-                out.write("<tr><td width=\"49%\">");
+                out.write("<tr><td width=49%>");
                 out.write(Blocklist.toStr(from));
                 out.write("</td>");
                 int to = Blocklist.getTo(blocklist[i]);
                 if (to != from) {
-                    out.write("<td>-</td><td width=\"49%\">");
+                    out.write("<td>-</td><td width=49%>");
                     out.write(Blocklist.toStr(to));
                     out.write("</td></tr>\n");
                 } else {
-                    out.write("<td></td><td width=\"49%\">&nbsp;</td></tr>\n");
+                    out.write("<td></td><td width=49%>&nbsp;</td></tr>\n");
                 }
             }
             // then 128 - 255
@@ -107,16 +107,16 @@ public class ConfigPeerHelper extends HelperBase {
                 int from = Blocklist.getFrom(blocklist[i]);
                 if (from >= 0)
                     break;
-                out.write("<tr><td width=\"49%\">");
+                out.write("<tr><td width=49%>");
                 out.write(Blocklist.toStr(from));
                 out.write("</td>");
                 int to = Blocklist.getTo(blocklist[i]);
                 if (to != from) {
-                    out.write("<td>-</td><td width=\"49%\">");
+                    out.write("<td>-</td><td width=49%>");
                     out.write(Blocklist.toStr(to));
                     out.write("</td></tr>\n");
                 } else {
-                    out.write("<td></td><td width=\"49%\">&nbsp;</td></tr>\n");
+                    out.write("<td></td><td width=49%>&nbsp;</td></tr>\n");
                 }
             }
             if (blocklistSize > MAX_DISPLAY)

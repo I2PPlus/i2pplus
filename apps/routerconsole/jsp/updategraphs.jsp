@@ -23,10 +23,10 @@
 %>
 <meta http-equiv="Refresh" content= "0;URL=/graphs">
 </head>
-<body id="updategraphs">
+<body id=updategraphs>
 <%@include file="summary.jsi" %>
-<h1 class="perf"><%=intl._t("Performance Graphs")%></h1>
-<div class=main id="graphs">
+<h1 class=perf><%=intl._t("Performance Graphs")%></h1>
+<div class=main id=graphs>
 <div class=widepanel>
 <jsp:getProperty name="graphHelper" property="allMessages" />
 </div>

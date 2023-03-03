@@ -15,8 +15,8 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp"><%=intl._t("Advanced Configuration Help")%></h1>
-<div class=main id="help">
+<h1 class=hlp><%=intl._t("Advanced Configuration Help")%></h1>
+<div class=main id=help>
 <div class=confignav>
 <span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
 <span class=tab2><%=intl._t("Advanced Settings")%></span>
@@ -34,14 +34,14 @@
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
 
-<div id="advancedsettings">
+<div id=advancedsettings>
 <h2><%=intl._t("Advanced Router Configuration")%></h2>
 
 <p class=infohelp><%=intl._t("The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>.")%></p>
 
-<table id="configinfo">
+<table id=configinfo>
 
-<tr><th id="advancedconsole">routerconsole.advanced={true|false}</th></tr>
+<tr><th id=advancedconsole>routerconsole.advanced={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href=/netdb?f=3>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar.")%></td></tr>
 
 <tr><th>routerconsole.allowUntrustedPlugins={true|false}</th></tr>
@@ -62,7 +62,7 @@
 <tr><th>router.blocklist.enable={true|false}</th></tr>
 <tr><td><%=intl._t("This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]")%></td></tr>
 
-<tr><th>router.blocklistTor.enable={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.blocklistTor.enable={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]")%></td></tr>
 
 <tr><th>router.blocklist.file={/path/to/additional_blocklist.txt}</th></tr>
@@ -98,7 +98,7 @@
 <tr><th>router.networkDatabase.flat={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]")%></td></tr>
 
-<tr><th>router.overrideIsSlow={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.overrideIsSlow={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:")%>
 <ul>
 <li><%=intl._t("Host OS running Android")%></li>
@@ -124,7 +124,7 @@
 <tr><th>router.updateUnsignedURL={url}</th></tr>
 <tr><td><%=intl._t("This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!")%></td></tr>
 
-<tr><th>i2np.udp.disablePeerTest={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><th>i2np.udp.disablePeerTest={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]")%></td></tr>
 
 <tr><th>i2np.udp.preferred={true|false|always}</th></tr>
@@ -136,103 +136,103 @@
 <tr><th>i2p.vmCommSystem={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
 
-<tr><th>i2p.streaming.enablePongDelay={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><th>i2p.streaming.enablePongDelay={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]")%></td></tr>
 
-<tr><th>i2p.streaming.maxPongDelay={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>i2p.streaming.maxPongDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used.")%></td></tr>
 
-<tr><th>router.codelInterval={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.codelInterval={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]")%></td></tr>
 
-<tr><th>router.codelMaxQueue={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.codelMaxQueue={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]")%></td></tr>
 
-<tr><th>router.codelBacklog={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.codelBacklog={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]")%></td></tr>
 
-<tr><th>router.codelTarget={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.codelTarget={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]")%></td></tr>
 
-<tr><th>router.expireRouterInfo={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.expireRouterInfo={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]")%></td></tr>
 
-<tr><th>router.exploreBredth={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.exploreBredth={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!")%></td></tr>
 
-<tr><th>router.exploreBuckets={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.exploreBuckets={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers.")%></td></tr>
 
-<tr><th>router.explorePeersDelay={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.explorePeersDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run.")%></td></tr>
 
-<tr><th>router.exploreQueue={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.exploreQueue={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512.")%></td></tr>
 
-<tr><th>router.exploreWhenFloodfill={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.exploreWhenFloodfill={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]")%></td></tr>
 
 <tr><th>router.forceUnreachable={true|false}</th></tr>
 <tr><td><%=intl._t("This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]")%></td></tr>
 
-<tr><th>router.minVersionAllowed={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.minVersionAllowed={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]")%></td></tr>
 
-<tr><th>router.peerTestConcurrency={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.peerTestConcurrency={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]")%></td></tr>
 
-<tr><th>router.peerTestDelay={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.peerTestDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]")%></td></tr>
 
-<tr><th>router.peerTestTimeout={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.peerTestTimeout={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]")%></td></tr>
 
 <tr><th>router.publishPeerRankings={true|false}</th></tr>
 <tr><td><%=intl._t("This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]")%></td></tr>
 
-<tr><th>router.pumpInitialOutboundQueue={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.pumpInitialOutboundQueue={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting configures the initial size of the outbound message queue. [Default is 64]")%></td></tr>
 
-<tr><th>router.pumpMaxInboundQueue={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.pumpMaxInboundQueue={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting configures the maximum size of the inbound message queue. [Default is 1024]")%></td></tr>
 
-<tr><th>router.pumpMaxInboundMsgs={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.pumpMaxInboundMsgs={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]")%></td></tr>
 
-<tr><th>router.pumpMaxOutboundMsgs={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.pumpMaxOutboundMsgs={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]")%></td></tr>
 
-<tr><th>router.refreshRouterDelay={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.refreshRouterDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use.")%></td></tr>
 
-<tr><th>router.refreshSkipIfYounger={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.refreshSkipIfYounger={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in hours) allows you to manually configure how old a RouterInfo is in order for it to be checked by the Refresh Routers Job. By default, the age of a RouterInfo before a refresh is intitiated scales according to the size of the NetDb, increasing as the NetDb grows in size. A value of 0 will force the Router Refresh Job to check every router in the NetDb, regardless of age.")%></td></tr>
 
-<tr><th>router.refreshTimeout={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.refreshTimeout={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]")%></td></tr>
 
-<tr><th>router.refreshUninteresting={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.refreshUninteresting={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]")%></td></tr>
 
-<tr><th>router.validateRoutersAfter={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>router.validateRoutersAfter={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted.")%></td></tr>
 
-<tr><th>routerconsole.graphHiDpi={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><th>routerconsole.graphHiDpi={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]")%></td></tr>
 
-<tr><th>routerconsole.showPeerTestAvg={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><th>routerconsole.showPeerTestAvg={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]")%></td></tr>
 
-<tr><th>routerconsole.sitemapSites={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><th>routerconsole.sitemapSites={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]")%></td></tr>
 
-<tr id="ntpserverconfig"><th>time.sntpServerList={server1,server2}</th></tr>
+<tr id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
 <tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
 
 <tr><th>desktopgui.enabled={true|false}</th></tr>
 <tr><td><%=intl._t("If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]")%></td></tr>
 
-<tr><th>i2psnark.maxFilesPerTorrent={n} <span class="plus">I2P+</span></th></tr>
+<tr><th>i2psnark.maxFilesPerTorrent={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]")%></td></tr>
 
 </table>

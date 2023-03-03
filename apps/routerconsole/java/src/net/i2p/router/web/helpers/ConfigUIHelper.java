@@ -20,7 +20,7 @@ public class ConfigUIHelper extends HelperBase {
 
     public String getSettings() {
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<div id=\"availablethemes\">");
+        buf.append("<div id=availablethemes>");
         String current = _context.getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
         // remap deprecated themes
         if (current.equals("midnight")) {
@@ -32,18 +32,18 @@ public class ConfigUIHelper extends HelperBase {
         }
         Set<String> themes = themeSet();
         for (String theme : themes) {
-            buf.append("<label for=\"").append(theme).append("\"><div class=\"themechoice\" style=\"display: inline-block; text-align: center;\">" +
+            buf.append("<label for=\"").append(theme).append("\"><div class=themechoice style=display:inline-block;text-align:center>" +
                        "<input type=radio class=optbox name=\"theme\" ");
             if (theme.equals(current))
                 buf.append(CHECKED);
             buf.append("value=\"").append(theme).append("\" id=\"").append(theme).append("\">" +
-                       "<img height=\"48\" width=\"48\" alt=\"\" src=\"/themes/console/").append(theme).append("/images/thumbnail.png\">" +
+                       "<img height=48 width=48 alt=\"\" src=\"/themes/console/").append(theme).append("/images/thumbnail.png\">" +
                        "<br>" +
-                       "<div class=\"themelabel\" style=\"text-align: center;\">" + _t(theme) + "</div>" +
+                       "<div class=themelabel style=text-align:center>" + _t(theme) + "</div>" +
                        "</div></label>\n");
         }
         boolean universalTheming = _context.getBooleanProperty(CSSHelper.PROP_UNIVERSAL_THEMING);
-        buf.append("</div><div id=\"themeoptions\">" +
+        buf.append("</div><div id=themeoptions>" +
                    "<label><input type=checkbox class=\"optbox slider\" name=\"universalTheming\" ");
         if (universalTheming)
             buf.append(CHECKED);
@@ -198,15 +198,15 @@ public class ConfigUIHelper extends HelperBase {
             if (lang.equals("xx") && !isAdvanced())
                 continue;
             // we use "lang" so it is set automagically in CSSHelper
-            buf.append("<label for=\"").append(lang).append("\"><div class=\"langselect\">")
+            buf.append("<label for=\"").append(lang).append("\"><div class=langselect>")
                .append("<input type=radio class=optbox name=\"lang\" ");
             if (lang.equals(current))
                 buf.append(CHECKED);
             buf.append("value=\"").append(lang).append("\" id=\"").append(lang).append("\">")
 //               .append("<img height=\"48\" width=\"48\" alt=\"\" src=\"/flags.jsp?s=48&amp;c=").append(langs[i][1]).append("\">")
-               .append("<span class=\"langflag\"><img width=\"48\" height=\"36\" alt=\"\" src=\"/flags.jsp?c=")
+               .append("<span class=langflag><img width=48 height=36 alt=\"\" src=\"/flags.jsp?c=")
                .append(langs[i][1]).append("\"></span>")
-               .append("<div class=\"ui_lang\">");
+               .append("<div class=ui_lang>");
             int under = lang.indexOf('_');
             String slang = (under > 0) ? lang.substring(0, under) : lang;
             buf.append(langs[i][2]);
@@ -230,7 +230,7 @@ public class ConfigUIHelper extends HelperBase {
         // only show delete user button if user(s) configured
         if (!config.toString().contains("routerconsole.auth.i2prouter"))
             buf.append("<style type=text/css>#consolepass .delete {display: none !important;)</style>\n");
-        buf.append("<table id=\"consolepass\">\n");
+        buf.append("<table id=consolepass>\n");
         if (userpw.isEmpty()) {
             buf.append("<tr><td class=infohelp colspan=3>" +
                        _t("Add a user and password to enable.") + "&nbsp;" +
@@ -246,10 +246,10 @@ public class ConfigUIHelper extends HelperBase {
                            "<td colspan=2><label for=\"" + name + "\">" + name + "</label></td></tr>\n");
             }
         }
-        buf.append("<tr><td id=\"pw_adduser\" colspan=3>" +
+        buf.append("<tr><td id=pw_adduser colspan=3>" +
                    "<b>" + _t("Username") + ":</b> " + "<input type=text name=\"name\" title=\"" +
                    _t("Please supply a username") + "\"><b>" + _t("Password") + ":</b> " +
-                   "<input type=password size=\"40\" name=\"nofilter_pw\" title=\"" +
+                   "<input type=password size=40 name=\"nofilter_pw\" title=\"" +
                    _t("Please supply a password") + "\">" + "</td></tr>\n</table>\n");
         return buf.toString();
     }

@@ -41,7 +41,7 @@
      }
    }
 %>
-<html id="tman">
+<html id=tman>
 <head>
 <title><%=intl._t("I2P Tunnel Manager - Tunnel Creation Wizard")%></title>
 <meta charset=utf-8>
@@ -52,12 +52,12 @@
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
-<link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=editBean.getTheme()%>override.css" rel=stylesheet type=text/css>
 <style type=text/css>body{display:none;pointer-events:none}</style>
 </head>
-<body id="tunnelWizardPage">
+<body id=tunnelWizardPage>
 <form method=POST action="<%=(curPage == 7 ? "list" : "wizard") %>">
-<div id="wizardPanel" class=panel>
+<div id=wizardPanel class=panel>
 <%
                 if (curPage == 1) {
 %>
@@ -66,7 +66,7 @@
 <%
                 } else if (curPage == 2) {
 %>
-<h2><%=intl._t("Tunnel type")%>&nbsp;&nbsp;<span style="float: right;">
+<h2><%=intl._t("Tunnel type")%>&nbsp;&nbsp;<span style=float:right>
 <%
                     if (tunnelIsClient) {
 %>
@@ -82,7 +82,7 @@
 <%
                 } else if (curPage == 3) {
 %>
-<h2><%=intl._t("Tunnel name and description")%>&nbsp;&nbsp;<span style="float: right;">
+<h2><%=intl._t("Tunnel name and description")%>&nbsp;&nbsp;<span style=float:right>
 <%
                     if (tunnelIsClient) {
 %>
@@ -98,11 +98,11 @@
 <%
                 } else if (curPage == 4 && tunnelIsClient) {
 %>
-<h2><%=intl._t("Tunnel destination")%>&nbsp;&nbsp;<span style="float: right;"><%=intl._t("Client")%></span></h2>
+<h2><%=intl._t("Tunnel destination")%>&nbsp;&nbsp;<span style=float:right><%=intl._t("Client")%></span></h2>
 <%
                 } else if (curPage == 5) {
 %>
-<h2><%=intl._t("Binding address and port")%>&nbsp;&nbsp;<span style="float: right;">
+<h2><%=intl._t("Binding address and port")%>&nbsp;&nbsp;<span style=float:right>
 <%
                     if (tunnelIsClient) {
 %>
@@ -118,7 +118,7 @@
 <%
                 } else if (curPage == 6) {
 %>
-<h2><%=intl._t("Tunnel auto-start")%>&nbsp;&nbsp;<span style="float: right;">
+<h2><%=intl._t("Tunnel auto-start")%>&nbsp;&nbsp;<span style=float:right>
 <%
                     if (tunnelIsClient) {
 %>
@@ -162,11 +162,11 @@
 </td>
 </tr>
 <tr>
-<td class="options">
-<span class="multiOption" id="isServer">
-<label><input value="false" type=radio id="baseType" name="isClient" class=optbox />&nbsp;<%=intl._t("Server Tunnel")%></label>
+<td class=options>
+<span class=multiOption id=isServer>
+<label><input value=false type=radio name="isClient" class=optbox />&nbsp;<%=intl._t("Server Tunnel")%></label>
 </span>
-<span class="multiOption" id="isClient"><label><input value=true type=radio id="baseType" name="isClient" class=optbox checked="checked" />&nbsp;<%=intl._t("Client Tunnel")%></label>
+<span class=multiOption id=isClient><label><input value=true type=radio name="isClient" class=optbox checked="checked" />&nbsp;<%=intl._t("Client Tunnel")%></label>
 </span>
 </td>
 </tr>
@@ -185,8 +185,8 @@
 %>
 <tr><td><p><%=intl._t("There are several types of tunnels to choose from:")%></p></td></tr>
 <tr>
-<td id="wizardTable">
-<table id="wizardTunnelTypes">
+<td id=wizardTable>
+<table id=wizardTunnelTypes>
 <%
                 if (tunnelIsClient) {
 %>
@@ -306,14 +306,14 @@
 </tr>
 <tr>
 <td>
-<span class="tag"><%=intl._t("Name")%>:</span>
-<input type=text size="30" maxlength="50" name="name" id="name" placeholder="New Tunnel" title="<%=intl._t("Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar")%>" value="<%=(!"null".equals(request.getParameter("name")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("name")) : "" ) %>" class="freetext" />
+<span class=tag><%=intl._t("Name")%>:</span>
+<input type=text size=30 maxlength=50 name="name" id=name placeholder="New Tunnel" title="<%=intl._t("Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar")%>" value="<%=(!"null".equals(request.getParameter("name")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("name")) : "" ) %>" class=freetext />
 </td>
 </tr>
 <tr>
 <td>
-<span class="tag"><%=intl._t("Description")%>:</span>
-<input type=text size="60" maxlength="80" name="nofilter_description"  id="description" title="<%=intl._t("Description of tunnel to be displayed on Tunnel Manager home page")%>" value="<%=(!"null".equals(request.getParameter("nofilter_description")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("nofilter_description")) : "" ) %>" class="freetext" />
+<span class=tag><%=intl._t("Description")%>:</span>
+<input type=text size=60 maxlength=80 name="nofilter_description"  id=description title="<%=intl._t("Description of tunnel to be displayed on Tunnel Manager home page")%>" value="<%=(!"null".equals(request.getParameter("nofilter_description")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("nofilter_description")) : "" ) %>" class=freetext />
 </td>
 </tr>
 <%
@@ -339,8 +339,8 @@
 </tr>
 <tr>
 <td>
-<span class="tag"><%=intl._t("Outproxies")%>:</span>
-<input type=text size="30" id="proxyList" name="proxyList" title="<%=intl._t("List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)")%>" value="<%=(!"null".equals(request.getParameter("proxyList")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("proxyList")) : "" ) %>" class="freetext" />
+<span class=tag><%=intl._t("Outproxies")%>:</span>
+<input type=text size=30 id=proxyList name="proxyList" title="<%=intl._t("List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)")%>" value="<%=(!"null".equals(request.getParameter("proxyList")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("proxyList")) : "" ) %>" class=freetext />
 </td>
 </tr>
 <%
@@ -362,8 +362,8 @@
 </tr>
 <tr>
 <td>
-<span class="tag"><%=intl._t("Tunnel Destination")%>:</span>
-<input type=text size="30" id="targetDestination" name="targetDestination" title="<%=intl._t("Enter a b64 or .i2p address here")%>" value="<%=(!"null".equals(request.getParameter("targetDestination")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetDestination")) : "" ) %>" class="freetext" />
+<span class=tag><%=intl._t("Tunnel Destination")%>:</span>
+<input type=text size=30 id=targetDestination name="targetDestination" title="<%=intl._t("Enter a b64 or .i2p address here")%>" value="<%=(!"null".equals(request.getParameter("targetDestination")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetDestination")) : "" ) %>" class=freetext />
 &nbsp;(<%=intl._t("name, name:port, or destination")%>)
 </td>
 </tr>
@@ -391,8 +391,8 @@
 </tr>
 <tr>
 <td>
-<span class="tag"><%=intl._t("Host")%>:</span>
-<input type=text size=20 id="targetHost" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" placeholder="127.0.0.1" value="<%=(!"null".equals(request.getParameter("targetHost")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost")) : "127.0.0.1" ) %>" class="freetext" />
+<span class=tag><%=intl._t("Host")%>:</span>
+<input type=text size=20 id=targetHost name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" placeholder="127.0.0.1" value="<%=(!"null".equals(request.getParameter("targetHost")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost")) : "127.0.0.1" ) %>" class=freetext />
 </td>
 </tr>
 <%
@@ -415,8 +415,8 @@
 </tr>
 <tr>
 <td>
-<span class="tag"><%=intl._t("Port")%>:</span>
-<input type=text size=6 maxlength=5 id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=(!"null".equals(request.getParameter("targetPort")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort")) : "" ) %>" class="freetext" />
+<span class=tag><%=intl._t("Port")%>:</span>
+<input type=text size=6 maxlength=5 id=targetPort name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=(!"null".equals(request.getParameter("targetPort")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort")) : "" ) %>" class=freetext />
 </td>
 </tr>
 <%
@@ -439,8 +439,8 @@
 </tr>
 <tr>
 <td>
-<span class="tag"><%=intl._t("Port")%>:</span>
-<input type=text size=6 maxlength=5 id="port" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=(!"null".equals(request.getParameter("port")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("port")) : "" ) %>" class="freetext" />
+<span class=tag><%=intl._t("Port")%>:</span>
+<input type=text size=6 maxlength=5 id=port name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=(!"null".equals(request.getParameter("port")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("port")) : "" ) %>" class=freetext />
 </td>
 </tr>
 <%
@@ -468,8 +468,8 @@
 </tr>
 <tr>
 <td>
-<span class="tag"><%=intl._t("Reachable by")%>:</span>
-<select id="reachableBy" name="reachableBy" title="<%=intl._t("Listening interface (IP address) for client access (normally 127.0.0.1)")%>" class="selectbox">
+<span class=tag><%=intl._t("Reachable by")%>:</span>
+<select id=reachableBy name="reachableBy" title="<%=intl._t("Listening interface (IP address) for client access (normally 127.0.0.1)")%>" class="selectbox">
 <%
             String clientInterface = request.getParameter("reachableBy");
                 if ("null".equals(clientInterface)) {
@@ -512,7 +512,7 @@
 </td>
 </tr>
 <tr>
-<td class="options">
+<td class=options>
 <label title="<%=intl._t("Enable this option to ensure this service is available when the router starts")%>"><input value="1" type=checkbox id="startOnLoad" name="startOnLoad" <%=("1".equals(request.getParameter("startOnLoad")) ? " checked=\"checked\"" : "")%> class="optbox slider" />
             &nbsp;<%=intl._t("Automatically start tunnel when router starts")%>
 </label>
@@ -558,8 +558,8 @@
 </td>
 </tr>
 <tr>
-<td id="wizardTable">
-<table id="wizardSummary">
+<td id=wizardTable>
+<table id=wizardSummary>
 <tr><td><%=intl._t("Server or client tunnel?")%>
 </td><td>
 <%=(tunnelIsClient ? "Client" : "Server")%>
@@ -673,22 +673,22 @@ No
 <%
           if (curPage != 1 && curPage != 7) {
 %>
-<button id="controlPrevious" class=control type=submit name=action value="Previous page" title="<%=intl._t("Return to previous page")%>"><%=intl._t("Previous")%></button>
+<button id=controlPrevious class=control type=submit name=action value="Previous page" title="<%=intl._t("Return to previous page")%>"><%=intl._t("Previous")%></button>
 <%
           }
 %>
 <%
           if (curPage == 7) {
 %>
-<button id="controlSave" class=control type=submit name=action value="Save changes" title="<%=intl._t("Save tunnel configuration")%>"><%=intl._t("Save Tunnel")%></button>
+<button id=controlSave class=control type=submit name=action value="Save changes" title="<%=intl._t("Save tunnel configuration")%>"><%=intl._t("Save Tunnel")%></button>
 <%
           } else if (curPage == 6) {
 %>
-<button id="controlFinish" class=control type=submit name=action value="Next page" title="<%=intl._t("Finish Wizard and review tunnel settings")%>"><%=intl._t("Finish")%></button>
+<button id=controlFinish class=control type=submit name=action value="Next page" title="<%=intl._t("Finish Wizard and review tunnel settings")%>"><%=intl._t("Finish")%></button>
 <%
           } else {
 %>
-<button id="controlNext" class=control type=submit name=action value="Next page" title="<%=intl._t("Advance to next page")%>"><%=intl._t("Next")%></button>
+<button id=controlNext class=control type=submit name=action value="Next page" title="<%=intl._t("Advance to next page")%>"><%=intl._t("Next")%></button>
 <%
           }
 %>

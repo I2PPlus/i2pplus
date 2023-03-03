@@ -70,7 +70,7 @@
     if (ctx.getProperty("routerconsole.lang") != null)
         lang = ctx.getProperty("routerconsole.lang");
 %>
-<html lang="<%=lang%>" id="consolewizard">
+<html lang="<%=lang%>" id=consolewizard>
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("New Install Wizard")%>
@@ -81,17 +81,17 @@
 <%
     if (ipg == 3) {
 %>
-<body id="wizardpage">
+<body id=wizardpage>
 <%
     } else {
 %>
-<body id="wizardpage" class="bandwidthtester">
+<body id=wizardpage class=bandwidthtester>
 <%
     }
 %>
-<div id="sb_wrap" style="width: 200px; float: left; margin-right: 20px">
-<div class="sb" id="sidebar">
-<div id="sb_logo" style="height:36px;pointer-events:none">
+<div id=sb_wrap style=width:200px;float:left;margin-right:20px>
+<div class=sb id=sidebar>
+<div id=sb_logo style=height:36px;pointer-events:none>
 <img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" title="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" width="200">
 </div>
 <hr>
@@ -106,16 +106,16 @@
     if (ipg > 0 && ipg < 5 || ipg == LAST_PAGE) {
         // language selection
 %>
-<h1>New Install Wizard <span id="pagecount" style="float: right"><%=ipg%>/<%=LAST_PAGE%></span></h1>
+<h1>New Install Wizard <span id=pagecount style=float:right><%=ipg%>/<%=LAST_PAGE%></span></h1>
 <%
     } else {
 %>
-<h1>Unknown Wizard page <span id="pagecount" style="float: right"><%=ipg%>/<%=LAST_PAGE%></span></h1>
+<h1>Unknown Wizard page <span id=pagecount style=float:right><%=ipg%>/<%=LAST_PAGE%></span></h1>
 <%
     }
 %>
-<div class=main id="setupwizard">
-<div id="wizard">
+<div class=main id=setupwizard>
+<div id=wizard>
 <jsp:useBean class="net.i2p.router.web.helpers.WizardHandler" id="formhandler" scope="request" />
 <%
     // Bind the session-scope Helper to the request-scope Handler
@@ -132,20 +132,20 @@
 %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
-<%-- needed for CSS: --%><div id="config_ui">
+<%-- needed for CSS: --%><div id=config_ui>
 <%-- needed for lang setting in css.jsi: --%><input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
-<p class=infohelp id="flags">
+<p class=infohelp id=flags>
 <%=intl._t("Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>.")%>
 </p>
-<h3 id="langheading"><%=uihelper._t("Router Console &amp; WebApps Display Language")%></h3>
-<div id="langsettings">
+<h3 id=langheading><%=uihelper._t("Router Console &amp; WebApps Display Language")%></h3>
+<div id=langsettings>
 <jsp:getProperty name="uihelper" property="langSettings" />
 </div></div>
 <%
     } else if (ipg == 2) {
         // Overview of bandwidth test
 %>
-<p class=infohelp id="bandwidth">
+<p class=infohelp id=bandwidth>
 <%=intl._t("Your I2P+ router by default contributes to the network by routing internal, end-to-end encrypted traffic for other routers, known as <i>participation</i>. Bandwidth participation improves the anonymity level of all users on the network and maximizes your download speed.")%>&nbsp;<wbr><%=intl._t("For the best experience, it's recommended to configure your bandwidth settings to match the values provided by your ISP. If you are unsure of your bandwidth, you can run a test to determine your download and upload speeds.")%>
 </p>
 <h3><%=intl._t("Bandwidth Test")%></h3>
@@ -165,16 +165,16 @@
     } else if (ipg == 3) {
         // Bandwidth test in progress (w/ AJAX)
 %>
-<p class=infohelp id="bandwidth"><%=intl._t("The bandwidth test is now running and will take around 60 seconds to complete, after which you should be forwarded to the results page.")%></p>
-<div id="bandwidthTestRunning"><%=intl._t("Bandwidth Test in progress")%>...</div>
+<p class=infohelp id=bandwidth><%=intl._t("The bandwidth test is now running and will take around 60 seconds to complete, after which you should be forwarded to the results page.")%></p>
+<div id=bandwidthTestRunning><%=intl._t("Bandwidth Test in progress")%>...</div>
 <noscript>
-<div id="xhr">
-<p class=infohelp id="bandwidth">
+<div id=xhr>
+<p class=infohelp id=bandwidth>
 <%=intl._t("Javascript is disabled - wait 60 seconds for the bandwidth test to complete and then click Next")%>
 </p>
 </div>
 </noscript>
-<div id="xhr2">
+<div id=xhr2>
 </div>
 <%
     } else if (ipg == 4) {
@@ -195,10 +195,10 @@
 <tr><td width="20%" nowrap><b><%=intl._t("Test running?")%></b></td><td>
 <%              if (wizhelper.isNDTRunning()) {
 %>
-<span class="yes">
+<span class=yes>
 <%              } else {
 %>
-<span class="no">
+<span class=no>
 <%
                 }
 %>
@@ -209,10 +209,10 @@
 <tr><td nowrap><b><%=intl._t("Test complete?")%></b></td><td>
 <%          if (wizhelper.isNDTComplete()) {
 %>
-<span class="yes">
+<span class=yes>
 <%          } else {
 %>
-<span class="no">
+<span class=no>
 <%
             }
 %>
@@ -237,7 +237,7 @@
         } // skipbw
 %>
 <h3><%=intl._t("Bandwidth Configuration")%></h3>
-<table id="bandwidthconfig" class=configtable>
+<table id=bandwidthconfig class=configtable>
 <tr>
 <td class=infohelp colspan=2>
 <%=intl._t("I2P will work best if you configure your rates to match the speed of your internet connection.").replace("I2P", "I2P+")%>
@@ -249,8 +249,8 @@
 <tr>
 <td>
 <div class="optionsingle bw_in">
-<span class="bw_title"><%=intl._t("Download Speed")%></span>
-<input style="text-align: right; width: 5em" name="inboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />">
+<span class=bw_title><%=intl._t("Download Speed")%></span>
+<input style=text-align:right;width:5em name="inboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />">
 <%=intl._t("KBps In")%>
 </div>
 </td>
@@ -269,8 +269,8 @@ bursting up to
 <%-- display burst, set standard, handler will fix up --%>
 <td>
 <div class="optionsingle bw_out">
-<span class="bw_title"><%=intl._t("Upload Speed")%></span>
-<input style="text-align: right; width: 5em" name="outboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />">
+<span class=bw_title><%=intl._t("Upload Speed")%></span>
+<input style=text-align:right;width:5em name="outboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />">
 <%=intl._t("KBps Out")%>
 </div>
 </td>
@@ -280,7 +280,7 @@ bursting up to
 <%--
 <!-- let's keep this simple...
  bursting up to
-<input name="outboundburstrate" type=text size="2" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />"> KBps for
+<input name="outboundburstrate" type=text size=2 value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />"> KBps for
 <jsp:getProperty name="nethelper" property="outboundBurstFactorBox" /><br>
 <i>KBps = kilobytes per second = 1024 bytes per second = 8192 bits per second.<br>
 A negative rate sets the default.</i><br>
@@ -290,7 +290,7 @@ A negative rate sets the default.</i><br>
 <tr>
 <td>
 <div class="optionsingle bw_share">
-<span class="bw_title"><%=intl._t("Network Share")%></span><jsp:getProperty name="nethelper" property="sharePercentageBox" />
+<span class=bw_title><%=intl._t("Network Share")%></span><jsp:getProperty name="nethelper" property="sharePercentageBox" />
 <%=intl._t("Share")%>
 </div>
 </td>
@@ -323,7 +323,7 @@ A negative rate sets the default.</i><br>
     } else if (ipg == 5) {
         // Browser setup
 %>
-<p class=infohelp id="webbrowser"><%=intl._t("I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network.")%></p>
+<p class=infohelp id=webbrowser><%=intl._t("I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network.")%></p>
 <h3><%=intl._t("Browser Setup")%></h3>
 <p><%=intl._t("In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>.")%></p>
 <%
@@ -344,14 +344,14 @@ A negative rate sets the default.</i><br>
 <%
     }
 %>
-<div class="wizardbuttons">
+<div class=wizardbuttons>
 <table class=configtable>
 <tr>
 <td class=optionsave>
 <%
     if (ipg != 1) {
 %>
-<input type=submit class="back" name="prev" value="<%=intl._t("Previous")%>">
+<input type=submit class=back name="prev" value="<%=intl._t("Previous")%>">
 <%
     }
     if (ipg != LAST_PAGE) {
@@ -367,7 +367,7 @@ A negative rate sets the default.</i><br>
 <%
         }
 %>
-<input type=submit class="go" name="next" value="<%=intl._t("Next")%>">
+<input type=submit class=go name="next" value="<%=intl._t("Next")%>">
 <%
     } else {
 %>

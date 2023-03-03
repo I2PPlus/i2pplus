@@ -15,8 +15,8 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp"><%=intl._t("User Interface Help")%></h1>
-<div class=main id="help">
+<h1 class=hlp><%=intl._t("User Interface Help")%></h1>
+<div class=main id=help>
 <div class=confignav>
 <span class=tab><a href="/help/configuration"><%=intl._t("Configuration")%></a></span>
 <span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
@@ -32,13 +32,13 @@
 <span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
-<p class=infohelp id="tooltips"><%=intl._t("Note: Many of the labels and options in the console have tooltips that indicate purpose or explain the meaning. Hover over the label or option to activate the tooltip.")%></p>
-<div id="themeoverride">
+<p class=infohelp id=tooltips><%=intl._t("Note: Many of the labels and options in the console have tooltips that indicate purpose or explain the meaning. Hover over the label or option to activate the tooltip.")%></p>
+<div id=themeoverride>
 <h2><%=intl._t("Theme Overrides")%> (I2P+)</h2>
 <p><%=intl._t("I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R).")%></p>
 <p><%=intl._t("The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories.")%></p>
 </div>
-<div id="sidebarhelp">
+<div id=sidebarhelp>
 <h2><%=intl._t("Sidebar Information")%></h2>
 <p><%=intl._t("Many of the stats on the sidebar may be <a href='/configstats'>configured</a> to be <a href='/graphs'>graphed</a> for further analysis. You may also customize the sections that appear on the Sidebar and their positioning on the <a href='/configsidebar'>Sidebar Configuration page</a>.")%></p>
 <h3><%=intl._t("Router Info")%></h3>
@@ -78,12 +78,12 @@
 </ul>
 <p><%=intl._t("<b>Note")%>:</b> <%=intl._t("This section is not enabled by default unless <a href='/help/configuration#advancedconsole'>Advanced Console mode</a> is enabled. You may enable it on the <a href='/configsidebar'>Sidebar Configuration page</a>.")%></p>
 </div>
-<div id="reachabilityhelp">
+<div id=reachabilityhelp>
 <h2><%=intl._t("Reachability Help")%></h2>
 <p><%=intl._t("While I2P will work fine behind most firewalls, your speeds and network integration will generally improve if the I2P port is forwarded for both UDP and TCP.")%>&nbsp;
 <%=intl._t("If you think you have opened up your firewall and I2P still thinks you are firewalled, remember that you may have multiple firewalls, for example both software packages and external hardware routers.")%>&nbsp;
 <%=intl._t("If there is an error, the <a href=\"/logs\">logs</a> may also help diagnose the problem.")%></p>
-<ul id="reachability">
+<ul id=reachability>
 <li><b><%=intl._t("OK")%>:</b>
 <%=intl._t("Your UDP port does not appear to be firewalled.")%></li>
 <li><b><%=intl._t("Firewalled")%>:</b>

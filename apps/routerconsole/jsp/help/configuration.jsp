@@ -15,8 +15,8 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
-<h1 class="hlp"><%=intl._t("Configuration Help")%></h1>
-<div class=main id="help">
+<h1 class=hlp><%=intl._t("Configuration Help")%></h1>
+<div class=main id=help>
 <div class=confignav>
 <span class=tab2><%=intl._t("Configuration")%></span>
 <span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
@@ -32,8 +32,8 @@
 <span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
-<div id="configurationhelp">
-<h2 id="confignet"><%=intl._t("Network Configuration")%></h2>
+<div id=configurationhelp>
+<h2 id=confignet><%=intl._t("Network Configuration")%></h2>
 <p><%=intl._t("While I2P will work fine behind most firewalls, your speeds and network integration will generally improve if the I2P port is forwarded for both UDP and TCP.")%>&nbsp;<a href=/confignet>[<%=intl._t("Network Configuration")%>]</a>.</p>
 <p><%=intl._t("If you can, please poke a hole in your firewall to allow unsolicited UDP and TCP packets to reach you.")%>&nbsp;
 <%=intl._t("If you can't, I2P supports UPnP (Universal Plug and Play) and UDP hole punching with \"SSU introductions\" to relay traffic.")%>&nbsp;
@@ -41,7 +41,7 @@
 <%=intl._t("Certain firewalls such as symmetric NATs may not work well with I2P.")%></p>
 <p><%=intl._t("UPnP is used to communicate with Internet Gateway Devices (IGDs) to detect the external IP address and forward ports.")%>&nbsp;
 <%=intl._t("UPnP support is beta, and may not work for any number of reasons")%>:</p>
-<ul id="upnphelp">
+<ul id=upnphelp>
 <li><%=intl._t("No UPnP-compatible device present")%></li>
 <li><%=intl._t("UPnP disabled on the device")%></li>
 <li><%=intl._t("Software firewall interference with UPnP")%></li>
@@ -55,8 +55,8 @@
 <%=intl._t("If you specify the wrong IP address, or do not properly configure your NAT or firewall, your network performance will degrade substantially.")%>&nbsp;
 <%=intl._t("When in doubt, leave the settings at the defaults.")%>&nbsp;</p>
 </div>
-<div id="browserconfig">
-<h2 id="confignet"><%=intl._t("Web Browser Configuration")%></h2>
+<div id=browserconfig>
+<h2 id=confignet><%=intl._t("Web Browser Configuration")%></h2>
 <p><%=intl._t("In order to access websites hosted on I2P, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P HTTP proxy, by default running on <code>127.0.0.1 port 4444</code>. Most browsers offer an option to configure your proxy; in this mini-tutorial we'll focus on Firefox.")%></p>
 <ol>
 <li><%=intl._t("Open the Preferences page in Firefox and scroll to the bottom of the General section.")%></li>
@@ -71,8 +71,8 @@
 <p><%=intl._t("Note: To enhance your security when browsing .i2p sites, you may wish to consider installing an addon to prevent Javascript from running in the browser such as <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, though it's recommended to whitelist the address I2P+ is running on to enable various router console enhancements. In addition, an addon that prevents requests to offsite resources is also recommended, for example <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>.")%></p>
 <p><%=intl._t("For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>..")%></p>
 </div>
-<div id="tunnman">
-<h2 id="tunnelmanager"><%=intl._t("The Tunnel Manager")%></h2>
+<div id=tunnman>
+<h2 id=tunnelmanager><%=intl._t("The Tunnel Manager")%></h2>
 <p><%=intl._t("The Tunnel Manager enables configuration of local services provided by your router.")%>&nbsp;
 <%=intl._t("You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more.")%></p>
 <p><%=intl._t("By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels (for performance reasons) and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i> in the sidebar under Service Tunnels and on the <a href=/tunnels>Tunnels page</a>.")%>&nbsp;<%=intl._t("However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels.")%>&nbsp;

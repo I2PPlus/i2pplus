@@ -21,8 +21,8 @@
 <jsp:setProperty name="oldhelper" property="contextId" value="<%=i2pcontextId%>" />
 <% oldhelper.storeWriter(out); %>
 <jsp:setProperty name="oldhelper" property="full" value="<%=request.getParameter(\"f\")%>" />
-<h1 class="perf"><%=intl._t("Router Statistics")%></h1>
-<div class=main id="stats">
+<h1 class=perf><%=intl._t("Router Statistics")%></h1>
+<div class=main id=stats>
 <jsp:getProperty name="oldhelper" property="stats" />
 </div>
 <script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>

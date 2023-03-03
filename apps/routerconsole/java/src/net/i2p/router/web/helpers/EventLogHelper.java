@@ -99,8 +99,8 @@ public class EventLogHelper extends FormHandler {
         // So just use the "shared/console nonce".
         String nonce = CSSHelper.getNonce();
         try {
-            _out.write("<br><h3 id=\"displayevents\">" + _t("Display Events") + "</h3>");
-            _out.write("<form action=\"events\" method=\"post\">\n" +
+            _out.write("<br><h3 id=displayevents>" + _t("Display Events") + "</h3>");
+            _out.write("<form action=\"events\" method=post>\n" +
                        "<input type=hidden name=\"action\" value=\"Save\">\n" +
                        "<input type=hidden name=\"nonce\" value=\"" + nonce + "\" >\n<b>");
             _out.write(_t("Events since") + ":</b> <select name=\"from\">");
@@ -170,16 +170,16 @@ public class EventLogHelper extends FormHandler {
         if (events.isEmpty()) {
             if (isAll) {
                 if (_age == 0)
-                    return ("<table id=\"eventlog\">\n<tr><td class=infohelp>") + _t("No events found") + ("</td></tr></table>");
-                return ("<table id=\"eventlog\"><tr><td>") + _t("No events found in previous {0}", DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
+                    return ("<table id=eventlog>\n<tr><td class=infohelp>") + _t("No events found") + ("</td></tr></table>");
+                return ("<table id=eventlog><tr><td>") + _t("No events found in previous {0}", DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
             }
             if (_age == 0)
-                return ("<table id=\"eventlog\" data-sortable>\n<tr><td  class=infohelp>") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>\n");
-            return ("<table id=\"eventlog\">\n<tr><td class=infohelp>") +
+                return ("<table id=eventlog data-sortable>\n<tr><td  class=infohelp>") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>\n");
+            return ("<table id=eventlog>\n<tr><td class=infohelp>") +
                     _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
         }
         StringBuilder buf = new StringBuilder(2048);
-        buf.append("<table id=\"eventlog\"><thead><tr><th>");
+        buf.append("<table id=eventlog><thead><tr><th>");
         buf.append(_t("Time"));
         buf.append("</th><th>");
         if (isAll) {

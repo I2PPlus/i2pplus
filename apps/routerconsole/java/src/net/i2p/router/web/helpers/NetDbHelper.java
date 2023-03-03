@@ -360,7 +360,7 @@ public class NetDbHelper extends FormHandler {
      */
     private void renderNavBar() throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<div class=\"confignav\" id=\"confignav\">");
+        buf.append("<div class=confignav id=confignav>");
         boolean span = _graphical;
         if (!span)
             buf.append("<center>");
@@ -381,12 +381,12 @@ public class NetDbHelper extends FormHandler {
             if (i == tab) {
                 // we are there
                 if (span)
-                    buf.append("<span class=\"tab2\">");
+                    buf.append("<span class=tab2>");
                 buf.append(_t(titles[i]));
             } else {
                 // we are not there, make a link
                 if (span)
-                    buf.append("<span class=\"tab\">");
+                    buf.append("<span class=tab>");
                 buf.append("<a href=\"netdb").append(links[i]).append("\">").append(_t(titles[i])).append("</a>");
             }
             if (span)
@@ -406,7 +406,7 @@ public class NetDbHelper extends FormHandler {
     private void renderLookupForm() throws IOException {
         _out.write("<form action=\"/netdb\" method=POST>\n" +
                    "<input type=hidden name=\"nonce\" value=\"" + _newNonce + "\" >\n" +
-                   "<div id=\"lookupCondensed\" hidden>" +
+                   "<div id=lookupCondensed hidden>" +
                    "<select name=\"netdbLookup\">" +
                    "<option value=\"caps\" selected=selected>Capabilities</option>" +
                    "<option value=\"cost\">Cost</option>" +
@@ -421,9 +421,9 @@ public class NetDbHelper extends FormHandler {
                    "<option value=\"ssucaps\">SSU Capabilities</option>" +
                    "<option value=\"v\">Router Version</option>" +
                    "</select>" +
-                   "<input type=text size=\"30\"></div>" +
+                   "<input type=text size=30></div>" +
 
-                   "<table id=\"netdblookup\"><tr><th colspan=4>Network Database Search</th></tr>\n" +
+                   "<table id=netdblookup><tr><th colspan=4>Network Database Search</th></tr>\n" +
                    "<tr><td colspan=4 class=subheading><b>Enter one search field <i>only</i></b></td></tr>\n" +
                    "<tr><td><b>Capabilities</b></td><td><input type=text name=\"caps\" title=\"e.g. f or XOfR\"></td>\n" +
                    "<td><b>Cost</b></td><td><input type=text name=\"cost\"></td></tr>\n" +
