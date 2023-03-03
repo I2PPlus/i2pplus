@@ -578,7 +578,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<ul class=volatile>\n");
             // FIXME only show once
             if (!_manager.util().connected()) {
-                out.write("<noscript>\n<li class=\"noscriptWarning\">" +
+                out.write("<noscript>\n<li class=noscriptWarning>" +
                           _t("Warning! Javascript is disabled in your browser. " +
                           "If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.",
                           "<a href=\"configure\">" + _t("page refresh") + "</a>"));
@@ -592,7 +592,7 @@ public class I2PSnarkServlet extends BasicServlet {
                              .replaceFirst(" \\(", "</span> (");
                 if (msg.contains(_t("Warning - No I2P")))
                     msg = msg.replace("</span>", "");
-                out.write("<li class=\"msg\">" + msg + "</li>\n");
+                out.write("<li class=msg>" + msg + "</li>\n");
             }
             out.write("</ul>\n</div>\n");
             debug = false;
@@ -2157,7 +2157,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                  "<td class=peerCount><b><span class=right>" +
                                  curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
 /*
-                                 "<div class=\"percentBarOuter filecheck\" style=\"max-width: 60px; height: 8px !important;\" title=\"" +
+                                 "<div class=\"percentBarOuter filecheck\" style=max-width:60px;height:8px!important title=\"" +
                                  _t("Checking file integrity") + "\">" + "<div class=percentBarInner style=\"height: 8px !important; width: " +
                                  (new DecimalFormat("0%")).format(snark.getCheckingProgress()) + "\">" +
                                  "<div class=percentBarText></div></div></div>";
@@ -2474,7 +2474,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<td align=center class=torrentAction>");
         if (snark.isChecking()) {
             // show no buttons
-            out.write("<span class=\"isChecking\"></span>");
+            out.write("<span class=isChecking></span>");
         } else if (isRunning) {
             // Stop Button
             out.write("<input type=submit class=actionStop name=\"action_Stop_" + b64 + "\" value=\"" +
@@ -3003,7 +3003,7 @@ public class I2PSnarkServlet extends BasicServlet {
                   + "\" spellcheck=false title=\"");
         out.write(_t("File or directory to seed (full path or within the directory {0} )",
                     _manager.getDataDir().getAbsolutePath() + File.separatorChar));
-        out.write("\" required> <input type=submit class=\"create\" value=\"");
+        out.write("\" required> <input type=submit class=create value=\"");
         out.write(_t("Create torrent"));
         out.write("\" name=\"foo\" >");
         out.write("</td></tr>\n");
@@ -3527,14 +3527,14 @@ public class I2PSnarkServlet extends BasicServlet {
                        "</td><td><label for=\"").append(name).append("\">").append(name).append("</label></td><td>");
                if (homeURL.endsWith(".i2p/"))
                    homeURL = homeURL.substring(0, homeURL.length() - 1);
-            buf.append(urlify(homeURL, 64)).append("</td><td><input type=radio class=optbox value=\"0\" tabindex=\"-1\" name=\"ttype_")
+            buf.append(urlify(homeURL, 64)).append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
             if (!(isOpen || isPrivate))
                 buf.append(" checked=checked");
             else if (isKnownOpen)
                 buf.append(" disabled=disabled");
             buf.append(">" +
-                       "</td><td><input type=radio class=optbox value=1 tabindex=\"-1\" name=\"ttype_")
+                       "</td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
             if (isOpen)
                 buf.append(" checked=checked");
@@ -3543,7 +3543,7 @@ public class I2PSnarkServlet extends BasicServlet {
                      t.announceURL.equals("http://torrfreedom.i2p/announce.php"))
                 buf.append(" disabled=disabled");
             buf.append(">" +
-                       "</td><td><input type=radio class=optbox value=2 tabindex=\"-1\" name=\"ttype_")
+                       "</td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
             if (isPrivate) {
                 buf.append(" checked=checked");
@@ -4277,7 +4277,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append(_t("Start")).append("\" name=\"start\" class=starttorrent>");
                     buf.append("<input type=submit name=\"recheck\" value=\"").append(_t("Force Recheck"));
                     if (isRunning)
-                        buf.append("\" class=\"disabled\" disabled=disabled title=\"")
+                        buf.append("\" class=disabled disabled=disabled title=\"")
                            .append(_t("Stop the torrent in order to check file integrity"))
                            .append("\">");
                     else
@@ -4343,7 +4343,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 boolean isAudio = mime != null && isAudio(mime);
                 boolean isVideo = !isAudio && mime != null && isVideo(mime);
                 String path = base.substring(0, base.length() - 1);
-                String newTab = "<img src=\"/themes/console/light/images/newtab.png\" width=\"16\" height=\"auto\" class=\"newTab\">";
+                String newTab = "<img src=/themes/console/light/images/newtab.png width=16 height=auto class=newTab>";
                 if (isAudio || isVideo) {
                     buf.append("<div class=mainsection id=media>")
                        .append("<table id=mediaContainer>\n<tr>");
@@ -4507,7 +4507,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("</th>\n</tr>\n</thead>\n<tbody id=dirInfo>");
         if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
-            buf.append("<tr><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=\"ParentDir\">");
+            buf.append("<tr><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=ParentDir>");
             if (!isTopLevel) { // don't show parent dir link if top level
                 up = "up";
                 buf.append("<a href=\"");
@@ -4578,7 +4578,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                 long percent = 100 * (length - remaining) / length;
                                 status += " <div class=percentBarOuter>" +
                                          "<div class=percentBarInner style=\"width: " +
-                                         percent + "%;\"><div class=percentBarText tabindex=\"0\" title=\"" +
+                                         percent + "%;\"><div class=percentBarText tabindex=0 title=\"" +
                                          formatSize(remaining) + ' ' + _t("remaining") +
                                          "\">" + percent + "%</div></div></div>";
                             }
@@ -4616,7 +4616,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String ppath = complete ? path : path + "?limit=" + fai.preview;
                 if (!complete) {
                     double pct = fai.preview / (double) fai.length;
-                    preview = " &nbsp;<span class=\"audioPreview\">" + _t("Preview") + ": " + (new DecimalFormat("0.00%")).format(pct) + "</span>";
+                    preview = " &nbsp;<span class=audioPreview>" + _t("Preview") + ": " + (new DecimalFormat("0.00%")).format(pct) + "</span>";
                 }
                 if (isAudio || isVideo) {
                     // scale up image thumbnails if directory also contains audio/video
@@ -4767,7 +4767,8 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableLightbox = _manager.util().enableLightbox();
         if (enableLightbox) {
             buf.append("<link type=text/css rel=stylesheet href=").append(_contextPath).append(WARBASE + "lightbox.css>\n");
-            buf.append("<script charset=utf-8 src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n")
+            buf.append("<script charset=utf-8 src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION +
+                       "\" type=text/javascript></script>\n")
                .append("<script nonce=\"" + cspNonce + "\" type=text/javascript>\n" +
                        "var lightbox = new Lightbox();lightbox.load();\n" +
                        "</script>\n");
@@ -5302,7 +5303,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.8.2
      */
     private String toImg(String icon, String altText) {
-        return "<img alt=\"" + altText + "\" height=\"16\" width=\"16\" src=\"" + _contextPath + WARBASE + "icons/" + icon + ".png\">";
+        return "<img alt=\"" + altText + "\" height=16 width=16 src=\"" + _contextPath + WARBASE + "icons/" + icon + ".png\">";
     }
 
     /**
@@ -5314,7 +5315,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.33
      */
     private String toImg(String icon, String classText, String altText, String titleText) {
-        return "<img class=\"" + classText + "\" alt=\"" + altText + "\" height=\"16\" width=\"16\" src=\"" + _contextPath + WARBASE + "icons/" + icon + ".png\" title=\"" + titleText + "\">";
+        return "<img class=\"" + classText + "\" alt=\"" + altText + "\" height=16 width=16 src=\"" +
+                _contextPath + WARBASE + "icons/" + icon + ".png\" title=\"" + titleText + "\">";
     }
 
     /**
@@ -5334,7 +5336,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.8.2
      */
     private String toSVG(String icon, String altText) {
-        return "<img alt=\"" + altText + "\" height=\"16\" width=\"16\" src=\"" + _contextPath + WARBASE + "icons/" + icon + ".svg\">";
+        return "<img alt=\"" + altText + "\" height=16 width=16 src=\"" + _contextPath + WARBASE + "icons/" + icon + ".svg\">";
     }
 
     /**
@@ -5346,7 +5348,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.51+
      */
     private String toSVG(String icon, String altText, String titleText) {
-        return "<img alt=\"" + altText + "\" height=\"16\" width=\"16\" src=\"" + _contextPath +
+        return "<img alt=\"" + altText + "\" height=16 width=16 src=\"" + _contextPath +
                 WARBASE + "icons/" + icon + ".svg\" title=\"" + titleText + "\">";
     }
 
@@ -5359,8 +5361,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.51+
      */
     private String toSVGWithDataTooltip(String icon, String altText, String titleText) {
-        return "<span class=\"tooltipped\" data-tooltip=\"" + titleText + "\"><img alt=\"" + altText + "\" height=\"16\" width=\"16\" src=\"" + _contextPath +
-                WARBASE + "icons/" + icon + ".svg\"></span>";
+        return "<span class=tooltipped data-tooltip=\"" + titleText + "\"><img alt=\"" + altText +
+               "\" height=16 width=16 src=\"" + _contextPath + WARBASE + "icons/" + icon + ".svg\"></span>";
     }
 
     /**
@@ -5372,7 +5374,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.33
      */
     private String toSVG(String icon, String classText, String altText, String titleText) {
-        return "<img class=\"" + classText + "\" alt=\"" + altText + "\" height=\"16\" width=\"16\" src=\"" + _contextPath +
+        return "<img class=\"" + classText + "\" alt=\"" + altText + "\" height=16 width=16 src=\"" + _contextPath +
                 WARBASE + "icons/" + icon + ".svg\" title=\"" + titleText + "\">";
     }
 
