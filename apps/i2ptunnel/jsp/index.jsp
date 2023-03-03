@@ -353,7 +353,7 @@ ElGamal-2048
 <%
             if (isShared) {
 %>
-            &nbsp;<span class="shared" title="Tunnel is configured as a Shared Client">*</span>
+            &nbsp;<span class=shared title="Tunnel is configured as a Shared Client">*</span>
 <%
             } // isShared
 %>

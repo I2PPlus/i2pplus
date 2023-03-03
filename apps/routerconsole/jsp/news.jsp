@@ -16,7 +16,7 @@
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="newspage"><%=intl._t("Latest News")%></h1>
+<h1 class=newspage><%=intl._t("Latest News")%></h1>
 <div class=main id=news>
 <jsp:useBean class="net.i2p.router.web.NewsFeedHelper" id="feedHelper" scope="request" />
 <jsp:setProperty name="feedHelper" property="contextId" value="<%=i2pcontextId%>" />

@@ -74,8 +74,8 @@
 </div>
 <div class=linkcontainer>
 <h4 id=applinks><%=intl._t("Applications and Configuration")%>
-<span class="headerlinks">
-<a href="/confighome#configapps" class="customizelinks" style=float:right title="<%=intl._t("Customize links")%>"><%=intl._t("Customize links")%></a>
+<span class=headerlinks>
+<a href="/confighome#configapps" class=customizelinks style=float:right title="<%=intl._t("Customize links")%>"><%=intl._t("Customize links")%></a>
 <%
     if (homehelper.shouldShowWelcome()) {
 %>

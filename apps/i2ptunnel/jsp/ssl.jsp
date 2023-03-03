@@ -757,17 +757,17 @@
             if (!jettySSLFileExists) {
 %>
 </td><td></td></tr>
-<tr class="configerror"><td colspan=4>Cannot configure, Jetty SSL configuration file does not exist: <code><%=jettySSLFile.toString()%></code></td></tr>
+<tr class=configerror><td colspan=4>Cannot configure, Jetty SSL configuration file does not exist: <code><%=jettySSLFile.toString()%></code></td></tr>
 <%
             } else if (!jettySSLFileValid) {
 %>
 </td><td></td></tr>
-<tr class="configerror"><td colspan=4>Cannot configure, Jetty SSL configuration file is too old or invalid: <code><%=jettySSLFile.toString()%></code></td></tr>
+<tr class=configerror><td colspan=4>Cannot configure, Jetty SSL configuration file is too old or invalid: <code><%=jettySSLFile.toString()%></code></td></tr>
 <%
                 if (error.length() > 0) {
 %>
 </td></tr>
-<tr class="configerror"><td colspan=4><%=error%></td></tr>
+<tr class=configerror><td colspan=4><%=error%></td></tr>
 <%
                 }
             } else {

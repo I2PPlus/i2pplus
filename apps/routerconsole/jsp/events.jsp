@@ -13,8 +13,8 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("events")%>
- <jsp:useBean class="net.i2p.router.web.helpers.EventLogHelper" id="eventHelper" scope="request" />
- <jsp:setProperty name="eventHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.EventLogHelper" id="eventHelper" scope="request" />
+<jsp:setProperty name="eventHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */ %>
  <jsp:setProperty name="eventHelper" property="*" />
 <%
@@ -27,13 +27,13 @@
 <body>
 <script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
-<h1 class="log"><%=intl._t("Event Log")%></h1>
+<h1 class=log><%=intl._t("Event Log")%></h1>
 <div class=main id=events>
- <div class=eventspanel>
- <div class=widepanel>
- <jsp:getProperty name="eventHelper" property="allMessages" />
- <jsp:getProperty name="eventHelper" property="form" />
- <jsp:getProperty name="eventHelper" property="events" />
+<div class=eventspanel>
+<div class=widepanel>
+<jsp:getProperty name="eventHelper" property="allMessages" />
+<jsp:getProperty name="eventHelper" property="form" />
+<jsp:getProperty name="eventHelper" property="events" />
 </div>
 </div>
 </div>

@@ -22,7 +22,7 @@
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
 %>
 
-<h1 class="home"><%=intl._t("Router Sitemap")%></h1>
+<h1 class=home><%=intl._t("Router Sitemap")%></h1>
 
 <%
     String version = net.i2p.CoreVersion.VERSION;
@@ -36,7 +36,7 @@
 <jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
 <form action="/search.jsp" target=_blank rel=noreferrer method=POST>
 <table>
-<tr><td><span><jsp:getProperty name="searchhelper" property="selector" /><input size="40" type=text class=search name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /><button type=submit value="search" class=search><%=intl._t("Search")%></button></span></td></tr>
+<tr><td><span><jsp:getProperty name="searchhelper" property="selector" /><input size=40 type=text class=search name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /><button type=submit value="search" class=search><%=intl._t("Search")%></button></span></td></tr>
 </table>
 </form>
 </div>
