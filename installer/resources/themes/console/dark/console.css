@@ -2612,7 +2612,6 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 .revision,.sha256{display:inline-block;max-width:100px;overflow:hidden;text-overflow:ellipsis}
 .revision:hover,.sha256:hover{overflow:auto;text-overflow:clip}
 .statlist{padding:10px;columns:auto 520px;column-gap:10px;text-align:center}
-#peers .cells td,#peers td[class]{min-width:0}
 }
 
 @media screen and (min-width:1280px){
@@ -2650,11 +2649,10 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 td.optionsave{white-space:normal}
 .profilegroup::before{width:18px;height:14px}
 .statusnotes:last-child{margin-bottom:6px}
+.tab,.tab2{min-width:50px}
 .tab2{padding:4px 12px 5px}
 .tab a{padding:2px 14px 5px}
-.tab,.tab2{padding:1px 0;min-width:50px}
-.tunnel_local{margin-right:0}
-.tunnel_local{width:64px;line-height:1.08;box-sizing:border-box}
+.tunnel_local{margin-right:0;width:64px;line-height:1.08;box-sizing:border-box}
 #allTransit td{white-space:nowrap}
 #clientconf code{display:inline-block;white-space:nowrap}
 #faq h3{font-size:10pt}
@@ -2668,6 +2666,7 @@ td.optionsave{white-space:normal}
 #peers .idle,#peers .inout{min-width:104px}
 #peers .skew{display:none}
 #peers .widescroll .cells{font-size:8pt}
+#peers .duptx,#peers .duprx{display:none}
 #plugininstall input[type=text]{min-width:200px}
 #portfaq td:nth-child(2){white-space:normal}
 #profilelist .fast,#profilelist .highcap.integrated,#profilelist .standard.integrated{background-position:calc(50% - 8px) center,calc(50% + 8px) center;background-size:14px}
