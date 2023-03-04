@@ -2348,51 +2348,51 @@ h2,h2.welcome,h3,h3.welcome,#themeoptions{border-color:#242}
 
 /* help */
 .sitelink,.chatlink,.consolelink{padding:0 3px 0 18px;white-space:nowrap;border-radius:1px;box-shadow:var(--outline)}
-.sitelink{background:rgba(0,64,0,.3) var(--link) no-repeat 3px center/12px}
-.chatlink{background:rgba(0,64,0,.3) var(--chat) no-repeat 3px center/12px}
-.consolelink{background:rgba(0,64,0,.3) url(images/favicon.svg) no-repeat 3px center/12px}
-.sitelink.external{background:rgba(0,64,0,.3) var(--planet) no-repeat 3px center/12px}
-.sitelink:hover{background:var(--link) no-repeat 3px center/12px,var(--label)}
-.consolelink:hover{background:url(images/favicon.svg) no-repeat 3px center/12px,var(--label)}
-.sitelink.external:hover{background:var(--planet) no-repeat 3px center/12px,var(--label)}
-.chatlink:hover{background:var(--chat) no-repeat 3px center/12px,var(--label)}
 .sitelink:active,.chatlink:active,.consolelink:active{box-shadow:0 0 0 1px rgba(200,48,0,.5),inset 3px 3px 3px #000;background-color:#010}
-#help .confignav{margin-bottom:11px}
-#help h3{padding:7px 10px;font-size:11pt}
-#volunteer,#legal,#sidebarhelp,#reachabilityhelp,#configurationhelp,#themeoverride,#browserconfig,#tunnman,#advancedsettings,#faq,#reseedhelp,#troubleshoot,#newuserguide,#filterlist,#webhosting,#glossary{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
-#newuserguide{padding-bottom:20px}
-#newuserguide div[lang]{margin:0;padding:0;box-shadow:none}
-#trouble{margin:20px 0 15px}
-#themeoverride{margin-top:-2px}
-#volunteer{background:var(--hat) right bottom no-repeat,#000;background-size:auto 40%}
+.chatlink{background:rgba(0,64,0,.3) var(--chat) no-repeat 3px center/12px}
+.chatlink:hover{background:var(--chat) no-repeat 3px center/12px,var(--label)}
+.consolelink{background:rgba(0,64,0,.3) url(images/favicon.svg) no-repeat 3px center/12px}
+.consolelink:hover{background:url(images/favicon.svg) no-repeat 3px center/12px,var(--label)}
+.sitelink{background:rgba(0,64,0,.3) var(--link) no-repeat 3px center/12px}
+.sitelink:hover{background:var(--link) no-repeat 3px center/12px,var(--label)}
+.sitelink.external{background:rgba(0,64,0,.3) var(--planet) no-repeat 3px center/12px}
+.sitelink.external:hover{background:var(--planet) no-repeat 3px center/12px,var(--label)}
+ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
+#advancedsettings,#browserconfig,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
 #advancedsettings{padding:0 15px 10px}
-#help h2{font-size:12pt}
-#legal h2,#sidebarhelp h2,#volunteer h2,#reachabilityhelp h2,#configurationhelp h2,#advancedsettings h2,#browserconfig h2,#tunnman h2,#faq h2,#reseedhelp h2,#troubleshoot h2,#newuserguide h2,#filterlist h2,#webhosting h2,#themeoverride h2,#glossary h2{margin:-1px -21px 10px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%)}
 #advancedsettings h2{margin:-1px -16px 15px}
-#configinfo{margin:0 auto 0;width:calc(100% - 20px);border:none}
-#configinfo th{text-align:left;padding:10px 0 5px;letter-spacing:.05em;font:9pt var(--monospaced);color:#dd0;background:#000;border:none}
-#configinfo td{padding:5px 15px 10px;line-height:1.4;text-align:justify;background:#000}
-#configinfo tr:nth-last-child(n+2) td{border-bottom:var(--border_dotted)}
-#configinfo .infowarn{display:none}
-#help h2 a:hover{color:var(--ink)}
-#sidebarhelp h3,#faq h3,#reseedhelp h3{margin:0 -21px 10px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:10.5pt;border-radius:0;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%);border:var(--border)}
 #changelog h2{margin:0 0 -11px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
-#changelog:hover pre{will-change:transform}
 #changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);max-height:600px;overflow-y:scroll;border-left:var(--border);border-right:var(--border);background:#000}
-#fullhistory{margin-top:-12px;margin-bottom:9px;padding:6px;position:relative;z-index:999;text-align:right;border:var(--border);background:#000}
+#changelog:hover pre{will-change:transform}
+#configinfo .infowarn{display:none}
+#configinfo{margin:0 auto 0;width:calc(100% - 20px);border:none}
+#configinfo td{padding:5px 15px 10px;line-height:1.4;text-align:justify;background:#000}
+#configinfo th{text-align:left;padding:10px 0 5px;letter-spacing:.05em;font:9pt var(--monospaced);color:#dd0;background:#000;border:none}
+#configinfo tr:nth-last-child(n+2) td{border-bottom:var(--border_dotted)}
 #fullhistory a{display:inline-block;line-height:1.6;font-size:90%}
 #fullhistory a:hover{color:var(--hover)}
 #fullhistory a::before{width:19px;height:20px;display:inline-block;vertical-align:middle;background:var(--eye) no-repeat left 45%/16px;content:""}
 #fullhistory a:hover::before{background-image:var(--eye_hover)}
-ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
-#i2pupdates td.infohelp code{user-select:all}
+#fullhistory{margin-top:-12px;margin-bottom:9px;padding:6px;position:relative;z-index:999;text-align:right;border:var(--border);background:#000}
+#glossary b{font-size:110%}
 #help #configinfo .infowarn{padding:7px 10px 7px 36px;border:none;border-bottom:1px solid #000;box-shadow:none;background-size:20px}
-#help td ul{margin:10px 10px 0}
+#help .confignav{margin-bottom:11px}
+#help #faq li:last-child{padding-bottom:0}
+#help h2{font-size:12pt}
+#help h2 a:hover{color:var(--ink)}
+#help h3{padding:7px 10px;font-size:11pt}
 #help li{text-align:justify;line-height:1.5}
 #help li:last-child{padding-bottom:10px}
-#help #faq li:last-child{padding-bottom:0}
+#help td ul{margin:10px 10px 0}
 #help #terms{box-shadow:none}
-#glossary b{font-size:110%}
+#i2pupdates td.infohelp code{user-select:all}
+#advancedsettings h2,#browserconfig h2,#configurationhelp h2,#faq h2,#filterlist h2,#glossary h2,#legal h2,#newuserguide h2,#reachabilityhelp h2,#reseedhelp h2,#sidebarhelp h2,#themeoverride h2,#troubleshoot h2,#tunnman h2,#volunteer h2,#webhosting h2{margin:-1px -21px 10px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%)}
+#newuserguide div[lang]{margin:0;padding:0;box-shadow:none}
+#newuserguide{padding-bottom:20px}
+#sidebarhelp h3,#faq h3,#reseedhelp h3{margin:0 -21px 10px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:10.5pt;border-radius:0;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%);border:var(--border)}
+#themeoverride{margin-top:-2px}
+#trouble{margin:20px 0 15px}
+#volunteer{background:var(--hat) right bottom no-repeat,#000;background-size:auto 40%}
 
 /* help toc */
 #helptoc{margin:11px 0 10px;columns:550px 2;column-gap:12px}
@@ -2428,8 +2428,11 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #help h2,#help h3,#help #faq h3,#help #webhosting h3{background-repeat:no-repeat,repeat,repeat,no-repeat,repeat;background-blend-mode:normal,exclusion,overlay}
 
 /* faq */
+#faq code{user-select:all}
 #faq h3{padding-left:35px;word-spacing:0;letter-spacing:0;text-transform:none;font-size:10.5pt;background:var(--ask) no-repeat 10px center/18px,var(--h1);background-size:18px,2px,100% 4px,100%,96px}
 #faq p.infohelp{margin:-1px -11px 9px}
+#faq li code{margin-left:10px}
+#faq ul{margin-bottom:15px}
 #portfaq{margin:9px -10px 10px;width:auto}
 #portfaq td,#portfaq th{padding-top:10px;padding-bottom:10px}
 #portfaq th:first-child,#portfaq td:first-child{font-weight:700;text-align:right}
@@ -2440,9 +2443,6 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #portfaq td:nth-child(2){white-space:nowrap}
 #portfaq td:not(.infohelp):first-child{padding-left:10px}
 #portfaq td:not(.infohelp):last-child,#portfaq td[colspan="3"]{padding-right:10px;text-align:justify}
-#faq ul{margin-bottom:15px}
-#faq code{user-select:all}
-#faq li code{margin-left:10px}
 
 /* filters */
 #filterlist{padding-bottom:10px}
@@ -2866,12 +2866,16 @@ span#newtab{margin-top:4px}
 #udpconnections .cells td:first-child,#ntcpconnections .cells td:first-child{padding-right:8px;width:55px}
 }
 
-@media screen and (min-width:1634px){.leasesets_container{margin-bottom:8px} th code{font-size:9pt}}
+@media screen and (min-width:1634px){
+.leasesets_container{margin-bottom:8px} th code{font-size:9pt}
+}
+
 @media screen and (min-width:1800px){
 .linkcontainer .applink:last-of-type{margin-bottom:9px}
 #help .confignav{margin-left:-11px;margin-right:-11px;display:flex;justify-content:center;border-left:none;border-right:none}
 #help .tab,#help .tab2{margin-left:0;margin-right:0;flex-grow:1}
 }
+
 @media screen and (min-width:1840px){
 div[id^="config_"] .confignav{padding:4px 4px 5px 3px;display:flex;flex-direction:row;flex-wrap:wrap;align-content:space-evenly;justify-content:center}
 div[id^="config_"] .tab,div[id^="config_"] .tab2{margin:0 -1px -1px 0;min-width:70px;white-space:nowrap;flex:auto;flex-basis:content;flex-grow:.06}
@@ -2881,34 +2885,35 @@ div[id^="config_"] .tab,div[id^="config_"] .tab2{margin-top:-1px}
 div[id^="config_"] .tab:first-child{margin-left:-1px}
 }
 
+.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_soft)!important;background:var(--badge)}
+.rid td,tr:hover .rid td,#floodfills tr:hover .rid td {font-family:var(--monospaced);letter-spacing:.1em}
+.rid,.ric{width:unset;box-shadow:0 0 0 1px #000}
+.rid .rih{padding:2px 6px;vertical-align:middle;font-family:var(--monospaced);font-size:9pt}
+.rih a{text-shadow:1px 1px 1px rgba(0,0,0,.8)}
+.rid .rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
+.ric .rbw{line-height:1.2}
+.rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%)}
+.rbw.isff.isU{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
+.rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
+.rif,.rif img{line-height:0;font-size:0}
+.rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
 .tunnel_local,.tunnel_id,.rid td,.version,.routerHash{box-shadow:var(--highlight),0 0 1px 1px rgba(16,48,16,.8) inset;background:var(--badge)}
 .tunnel_local{width:98px;box-sizing:border-box}
 .tunnel_peer{display:inline-block;vertical-align:middle}
-.rid,.ric{width:unset;box-shadow:0 0 0 1px #000}
-.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_soft)!important;background:var(--badge)}
-.rid td,tr:hover .rid td,#floodfills tr:hover .rid td {font-family:var(--monospaced);letter-spacing:.1em}
-.rid .rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
-.rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%)}
-.rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
-.rbw.isff.isU{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
-.rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
-#floodfills .rif img{box-shadow:0 0 0 1px rgba(0,0,0,.3)}
-.rif,.rif img{line-height:0;font-size:0}
-.rid .rih{padding:2px 6px;vertical-align:middle;font-family:var(--monospaced);font-size:9pt}
-.rih a{text-shadow:1px 1px 1px rgba(0,0,0,.8)}
-.ric .rbw{line-height:16px}
 #banlist li .rid{margin-right:5px;margin-left:-4px;float:left}
-#profiles span[hidden]{display:none!important}
+#floodfills .rif img{box-shadow:0 0 0 1px rgba(0,0,0,.3)}
 #jobs label{float:right}
-#peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
-#peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
 #peers .edit a{margin:2px;vertical-align:middle}
+#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
+#peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
+#peers .reachability{display:none}
+#peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
+#profiles span[hidden]{display:none!important}
 #topCount{display:inline-block;position:absolute;right:3px;top:3px}
-#topCount table, #topCount td{line-height:1}
 #topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;;border:none}
+#topCount table, #topCount td{line-height:1}
 #topCount td{padding:4px 2px 2px 6px;min-width:32px;position:relative;line-height:1;border:var(--border_soft);text-align:left;box-shadow:var(--highlight);background:var(--badge)}
 #topCount td span{padding:1px 3px 1px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(0,0,0,.3)}
 #topCount td#ff{background:linear-gradient(135deg,rgba(0,0,0,0)88%,rgba(192,80,0,.8)88%),var(--badge)}
 #topCount td#u{background:linear-gradient(45deg,rgba(0,0,0,0)88%,rgba(234,0,0,.9)88%),var(--badge)}
-#peers .reachability{display:none}
-#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
+
