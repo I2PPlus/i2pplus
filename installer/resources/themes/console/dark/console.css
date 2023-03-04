@@ -44,6 +44,7 @@ tr:first-child td{border-top:var(--border)}
 /*td img{padding:0 1px 0 2px}*/
 th{padding:7px 5px;position:relative;line-height:1.1;text-align:center;font-size:90%;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 th[aria-sort]{font-style:italic}
+th code{user-select:all}
 th.options{padding:8px 5px 8px 10px;font-size:9pt}
 tr{vertical-align:middle;contain:layout}
 tr:nth-child(even),tr:nth-child(odd){background:var(--row)}
@@ -1052,136 +1053,138 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #transitSummary .peerFlag,#tunnels #tunnelPeerCount .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;box-shadow:0 0 0 1px #131;background:#151}
 
 /* netdb */
-#netdb #netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}
-#netdb #netdbcountrylist a:hover img{box-shadow:var(--outline),0 0 0 2px var(--hover);transform:scale(1.1)}
-#netdb #netdbcountrylist a{padding:2px 0;width:100%;display:inline-block}
-#netdboverview{margin-bottom:10px}
-#netdb #netdboverview th,#netdb #netdboverview tr,#netdb #netdboverview td{line-height:1;box-shadow:none}
-#netdboverview td,.sybil_addresses td{line-height:1.6}
 #netdb #netdboverview td{border-right:var(--border)}
+#netdb #netdboverview th,#netdb #netdboverview tr,#netdb #netdboverview td{line-height:1;box-shadow:none}
+#netdboverview a[href^="/netdb?caps"]{margin:0 10px 0 0;padding:3px;display:inline-block;vertical-align:middle;line-height:1}
+#netdboverview{margin-bottom:10px}
+#netdboverview #netdbversions td,#netdboverview #netdbtransports td,#netdboverview #netdbcountrylist td,#netdboverview #netdbtiers td{border-right:none;border-left:none}
 #netdboverview td{background:repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px);background-size:4px 100%}
-#netdboverview table th,#netdboverview table td{padding:6px 8px}
-#netdboverview table tr:last-child td{border-bottom:var(--border)}
-#netdbversions,#netdbtransports,#netdbcountrylist,#netdbtiers{margin:-1px 0 0;border:var(--border_soft);border-right:none;border-left:none}
-#netdbversions,#netdbtransports,#netdbtiers{border-right:none}
-#netdbcountrylist{border-right:none;border-bottom:none}
-#netdbcountrylist img{margin-right:5px;text-align:right}
-#netdbtransports th:first-child,#netdbcountrylist th:first-child,#netdbtiers th:first-child{text-align:left}
-#netdbtransports th,#netdbtransports td,#netdbtiers th,#netdbtiers td{padding-left:10px;padding-right:10px;line-height:1}
-#netdboverview #netdbtransports th{border-top:var(--border_softer)}
+#netdboverview td:nth-child(2){border-left:var(--border_softer);border-right:var(--border_softer)}
+#netdboverview td{padding:0}
+#netdboverview td,.sybil_addresses td{line-height:1.6}
 #netdboverview th[colspan="3"]{padding:12px;position:static;text-transform:uppercase;letter-spacing:.08em;font-size:12pt;background:var(--h1);background-size:2px,100% 4px,100%,175px}
 #netdboverview th[role="columnheader"]:not([data-sort-method="none"])::after {top:38%}
-#netdboverview td{padding:0}
-#netdboverview td:nth-child(2){border-left:var(--border_softer);border-right:var(--border_softer)}
-#netdboverview a[href^="/netdb?caps"]{margin:0 10px 0 0;padding:3px;display:inline-block;vertical-align:middle;line-height:1}
-#netdbversions{border-left:none}
-#netdbversions th:first-child{text-align:left}
-#netdboverview table th:last-child,#netdboverview table td:last-child{text-align:right}
-#netdbversions tbody tr:first-child td,#netdbcountrylist tbody tr:first-child td,#netdbtiers tbody tr:first-child td{border-top:var(--border)}
-#netdbtiers th{border-bottom:none}
-#netdboverview table th,#netdboverview table td{padding:5px 12px}
-#netdboverview table th{font-size:95%}
 #netdboverview table th:first-child::before,#netdboverview table td:first-child::before{min-height:26px;display:inline-block;vertical-align:middle;content:""}
-#netdboverview #netdbversions td,#netdboverview #netdbtransports td,#netdboverview #netdbcountrylist td,#netdboverview #netdbtiers td{border-right:none;border-left:none}
+#netdboverview table th{font-size:95%}
+#netdboverview table th:last-child,#netdboverview table td:last-child{text-align:right}
+#netdboverview table th,#netdboverview table td{padding:6px 8px}
+#netdboverview table tr:last-child td{border-bottom:var(--border)}
+#netdbcountrylist{border-right:none;border-bottom:none}
+#netdbcountrylist img{margin-right:5px;text-align:right}
+#netdbcountrylist th:last-child{padding-right:14px}
+#netdbcountrylist th:first-child[role="columnheader"]::after{left:64px;right:auto}
 #netdbcountrylist td,#netdbversions td,#netdbtransports td,#netdbtiers td{background:none;border-bottom:var(--border_softer)}
 #netdboverview #netdbcountrylist tr:last-child td{border-bottom:none}
+#netdbcountrylist a{padding:2px 0;width:100%;display:inline-block}
+#netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}
+#netdbcountrylist a:hover img{box-shadow:var(--outline),0 0 0 2px var(--hover);transform:scale(1.1)}
+#netdbtiers a{margin:0 8px 0 0;padding:0 4px;min-width:20px}
+#netdbtiers th{border-bottom:none}
 #netdboverview #netdbtiers tr:last-child td{border-bottom:none}
 #netdb #netdbtransports tr:first-child th{border-top:var(--border)}
+#netdboverview #netdbtransports th{border-top:var(--border_softer)}
+#netdbtransports th:first-child,#netdbcountrylist th:first-child,#netdbtiers th:first-child{text-align:left}
+#netdbtransports th,#netdbtransports td,#netdbtiers th,#netdbtiers td{padding-left:10px;padding-right:10px;line-height:1}
 #netdbtransports td:last-child,#netdbtiers td:last-child{width:30%;text-align:center}
+#netdbversions,#netdbtransports,#netdbcountrylist,#netdbtiers{margin:-1px 0 0;border:var(--border_soft);border-right:none;border-left:none}
+#netdbversions,#netdbtransports,#netdbtiers{border-right:none}
+#netdbversions tbody tr:first-child td,#netdbcountrylist tbody tr:first-child td,#netdbtiers tbody tr:first-child td{border-top:var(--border)}
+#netdbversions th:first-child{text-align:left}
 #netdbversions .version{min-width:48px}
-#netdbtiers a{margin:0 8px 0 0;padding:0 4px;min-width:20px}
-table[cellspacing="30"]>tbody>tr>th[colspan="3"]{padding:10px;text-transform:uppercase;font-size:11pt;letter-spacing:.08em;word-spacing:.1em}
+
+a.configpeer{background:var(--edit) var(--center)/12px,var(--badge)}
+img.unknownflag{opacity:.8}
+p.family a:hover{background:#020}
+p.family a{padding-left:4px;width:calc(100% - 141px);max-width:400px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;border-radius:0 10px 10px 0}
+p.family b{margin-right:-3px;min-width:118px;display:inline-block;vertical-align:middle;text-align:right;font-size:90%}
+p.family + p.family,.sybil_info+.sybil_info{margin-top:-4px}
+p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,linear-gradient(90deg,#000,#000800 80%,#001000);background-blend-mode:normal}
+.banlisted{width:18px;height:18px;display:inline-block;background:var(--ban)}
+.configpeer:hover,.configpeer:focus{background:var(--edit_hover) var(--center)/12px,var(--badge)}
+.familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
+.familysearch{background:var(--family) var(--center)/12px,var(--badge)}
+.familysearch img{margin-right:0;margin-left:0}
+.gwhois,.banlisted{vertical-align:middle;font-size:0}
+.gwhois a::before,.whois::after{margin:-3px 2px 0;width:12px;height:11px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat left center/11px;opacity:.7;content:""}
+.gwhois:hover a::before,.gwhois a:focus::before,.whois:hover::after,.whois:focus::after{opacity:1;transform:scale(1.2)}
+.keysearch,.signingkey,.version,.version a{color:var(--a)}
+.leaseset td{contain:paint}
+.leaseset th:last-child,.leasesets_container .leaseset tr:nth-child(2){font-size:90%}
+.leaseset th:first-child code{margin-left:4px}
+.leaseset th:last-child code{margin:0 0 0 4px;width:auto}
+.longstat.fam{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.longstat.fam.hide{display:none}
+.netdb_addresses{line-height:1.5}
+.netdbentry .netdb_name,.netdb_addresses .netdb_info,.netdb_addresses a,.netdb_addresses b{display:inline-block;vertical-align:middle;margin:0;padding:0;line-height:1.1}
+.netdbentry .familyname{max-width:140px;overflow:hidden;vertical-align:text-bottom;text-overflow:ellipsis;white-space:nowrap}
+.netdb_addresses ul{margin:0;padding:0;width:100%;display:inline-block;columns:auto;column-gap:5px}
+.netdb_addresses li,.netdb_ouraddresses{margin:2px 2px 2px 0;padding:2px 5px;vertical-align:middle;border:1px solid #020;background:#000b00}
+.netdb_addresses .netdb_info:not(.host){margin-left:0;max-width:100px;vertical-align:middle;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.netdb_addresses .netdb_transport{margin:-2px 4px -2px -5px;padding:5px 5px 4px;min-width:32px;line-height:1.6;vertical-align:middle;text-align:center;border-right:1px solid #020;background:#001800}
+.netdb_addresses .nowrap{margin:0 2px 0 0;display:inline-block;vertical-align:middle}
+.netdbentry img{margin:1px 0 0 0}
+.netdbentry td:first-child{padding-right:8px;border-right:var(--border_soft)}
+.netdbentry td:nth-child(2){word-wrap:break-word}
+.netdbentry th code{margin-left:0}
+.netdbentry th:first-child,.netdbentry td:first-child{width:1%;white-space:nowrap}
+.netdbentry th:first-child{white-space:nowrap;text-align:right}
+.netdbentry th:last-child{padding:5px;width:50px;white-space:nowrap;text-align:right}
+.netdbentry th{padding:5px 6px;text-align:left;font-weight:400}
+.netdbentry tr:last-child code{color:#bb7}
+.netdbentry tr:nth-child(2) td:last-child b,.netdbentry .familyname,.netdbStats li,.netdbStats b,#netdb .netdbentry th b,#netdb .netdbentry td:first-child b,#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code,.netdb_addresses li,.netdb_ouraddresses,.netdb_ouraddresses .netdb_transport{display:inline-block}
+.netdbentry tr:nth-child(2) td:last-child{text-align:right;white-space:nowrap;min-width:140px}
+.netdbentry .tunnel_cap,.netdbentry .tier,.netdbentry .ff,.netdbentry .reachable,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .tier,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{margin:0 2px;padding:2px 4px;vertical-align:middle}
+.netdbentry .version{padding:3px 8px}
+.netdb_family{vertical-align:middle}
+.netdb_header .configpeer,.netdb_header .configpeer{margin-right:5px}
+.netdb_header>*{display:inline-block;vertical-align:middle;line-height:0;font-size:0}
+.netdb_header img[src^="/flags"]{margin:0 0 0 4px}
+.netdb_header img[src^="/flags"]{width:auto;height:20px;vertical-align:middle;border:1px solid #030;box-shadow:var(--outline)}
+.netdb_header{margin:0;padding:0 3px;min-width:100px;display:inline-block;vertical-align:middle;line-height:0}
+.netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch,.sybil_routerinfo .viewprofile,.sybil_routerinfo .configpeer,.sybil_routerinfo .familysearch{margin:3px;padding:4px 8px;vertical-align:middle}
+.netdb_info + b{margin-left:15px}
+.netdb_info.host,.netdb_info.port{color:#bb0;user-select:all}
+.netdb_info.host::selection,.netdb_info.port::selection{color:#fff;background:#770}
+.netdb_ouraddresses:empty{display:none}
+.netdb_ouraddresses .netdb_transport{margin:-1px 5px 0 -6px;padding:2px;display:inline-block}
+.netdbstats .hide+hr{display:none}
+.netdbstats hr#expl,.netdbstats hr#hrd{display:block}
+.netdbStats hr,.sybil_routerinfo hr{margin:2px 0;display:block;color:transparent;opacity:.5;border-bottom:1px solid #030;background:none}
+.netdbStats li .bullet:last-of-type{opacity:0}
+.netdbStats li{padding:1px 0;margin:0 5px 0 0;display:inline-block;vertical-align:middle;white-space:normal;list-style:none}
+.signingkey.encryption{padding-left:20px;background:var(--lock) no-repeat 5px center/12px,var(--badge)}
+.signingkey{margin:2px 0 2px 2px;padding:2px 6px 2px 20px;display:inline-block;color:var(--ink);background:var(--crypto) no-repeat 4px center/14px,var(--badge)}
+.signingkey,#netdb_ram{font-size:90%;border:1px solid #020;border-radius:2px;box-shadow:var(--outline)}
 table[cellspacing="30"]>tbody>tr>td{padding:8px}
 table[cellspacing="30"]>tbody>tr>td>table>tbody>tr>th:first-child{padding:5px;text-align:left}
 table[cellspacing="30"]>tbody>tr>td:first-child>table>tbody>tr>th:first-child{text-align:center}
-.version a:hover,.version a:focus,a:hover .version,a:focus .version,a:hover .tier,a:focus .tier{color:var(--hover)}
-#netdb .version{margin:0 2px;padding:0 8px;vertical-align:middle}
-.netdb_header img[src^="/flags"]{width:auto;height:20px;vertical-align:middle;border:1px solid #030;box-shadow:var(--outline)}
+table[cellspacing="30"]>tbody>tr>th[colspan="3"]{padding:10px;text-transform:uppercase;font-size:11pt;letter-spacing:.08em;word-spacing:.1em}
 th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;border:var(--border)}
-.netdbentry tr:nth-child(2) td:last-child b,.netdbentry .familyname,.netdbStats li,.netdbStats b,#netdb .netdbentry th b,#netdb .netdbentry td:first-child b,#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code,.netdb_addresses li,.netdb_ouraddresses,.netdb_ouraddresses .netdb_transport{display:inline-block}
-.netdbentry tr:nth-child(2) td:last-child{text-align:right;white-space:nowrap;min-width:140px}
-.netdbentry .familyname{max-width:140px;overflow:hidden;vertical-align:text-bottom;text-overflow:ellipsis;white-space:nowrap}
-.netdb_family{vertical-align:middle}
-.netdbStats hr,.sybil_routerinfo hr{margin:2px 0;display:block;color:transparent;opacity:.5;border-bottom:1px solid #030;background:none}
-.netdbstats .hide+hr{display:none}
-.netdbstats hr#expl,.netdbstats hr#hrd{display:block}
-.netdbStats li{padding:1px 0;margin:0 5px 0 0;display:inline-block;vertical-align:middle;white-space:normal;list-style:none}
-.netdbStats li .bullet:last-of-type{opacity:0}
-.longstat.fam{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.longstat.fam.hide{display:none}
-.netdbentry th code{margin-left:0}
-.leaseset th:first-child code{margin-left:4px}
-.leaseset th:last-child code{margin:0 0 0 4px;width:auto}
-.leaseset td{contain:paint}
-.netdb_addresses{line-height:1.5}
-.netdb_addresses .netdb_transport{margin:-2px 4px -2px -5px;padding:5px 5px 4px;min-width:32px;line-height:1.6;vertical-align:middle;text-align:center;border-right:1px solid #020;background:#001800}
-.netdb_addresses .netdb_info:not(.host){margin-left:0;max-width:100px;vertical-align:middle;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.netdbentry .netdb_name,.netdb_addresses .netdb_info,.netdb_addresses a,.netdb_addresses b{display:inline-block;vertical-align:middle;margin:0;padding:0;line-height:1.1}
-.netdb_info.host,.netdb_info.port{color:#bb0;user-select:all}
-.netdb_info.host::selection,.netdb_info.port::selection{color:#fff;background:#770}
-.netdb_addresses ul{margin:0;padding:0;width:100%;display:inline-block;columns:auto;column-gap:5px}
-.netdb_addresses li,.netdb_ouraddresses{margin:2px 2px 2px 0;padding:2px 5px;vertical-align:middle;border:1px solid #020;background:#000b00}
-.netdb_addresses .nowrap{margin:0 2px 0 0;display:inline-block;vertical-align:middle}
-.netdb_info + b{margin-left:15px}
-.netdb_ouraddresses:empty{display:none}
-.netdb_ouraddresses .netdb_transport{margin:-1px 5px 0 -6px;padding:2px;display:inline-block}
-.netdb_header>*{display:inline-block;vertical-align:middle;line-height:0;font-size:0}
-.viewfullentry img,.profiledump img{margin:-1px 5px 1px;padding:4px;display:inline-block;width:14px;height:14px;line-height:0;vertical-align:middle;border:1px solid #030;box-shadow:var(--outline);background:var(--badge)}
-.viewfullentry img:hover,.profiledump img:hover{border:1px solid #d50;background:linear-gradient(180deg,#030,#000)}
-.familysearch img{margin-right:0;margin-left:0}
-.netdb_header .configpeer,.netdb_header .configpeer{margin-right:5px}
-.viewprofile+.viewfullentry,.viewfullentry+.configpeer,.viewprofile+.configpeer{margin-left:-7px}
 .version,#netdbtiers a,.routerHash{margin:0;padding:1px 5px;display:inline-block;text-align:center;font-weight:700;box-shadow:var(--outline);background:var(--badge)}
 .version{display:inline-block;line-height:1.4}
-.netdbentry .version{padding:3px 8px}
 .version:empty{display:none}
-.keysearch,.signingkey,.version,.version a{color:var(--a)}
-.signingkey,#netdb_ram{font-size:90%;border:1px solid #020;border-radius:2px;box-shadow:var(--outline)}
-.signingkey{margin:2px 0 2px 2px;padding:2px 6px 2px 20px;display:inline-block;color:var(--ink);background:var(--crypto) no-repeat 4px center/14px,var(--badge)}
-.signingkey.encryption{padding-left:20px;background:var(--lock) no-repeat 5px center/12px,var(--badge)}
-.leaseset th:last-child,.leasesets_container .leaseset tr:nth-child(2){font-size:90%}
-#netdb .netdbStats b{margin-right:2px;margin-left:0;text-align:left;color:var(--ink)}
-#netdb .netdbentry th b,#netdb .netdbentry td:first-child b{min-width:80px;text-align:right}
-#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:0 5px 0 0;padding:1px 4px 2px;font-family:var(--bodyfont);font-weight:700;letter-spacing:.12em;color:#bb0;text-shadow:none;border-radius:2px;box-shadow:var(--outline);background:var(--badge)}
-#netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:4px 6px 4px 4px}
-#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,.leaseset th code{width:150px;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid #020}
-#netdb .netdbentry th code:hover,#netdb .netdbentry th code:active,.leaseset th code:hover,#netdb .sybil_routerinfo th code:hover,#netdb .sybil_routerinfo th code:active{width:auto}
-#netdb .netdbentry th code::selection,#netdb .sybil_routerinfo th code::selection,.leaseset th code::selection{color:#fff;background:#070}
-#netdb .netdbentry th a{display:inline-block}
-#distance{color:#dd0}
-#netdb_ram{margin:0 1px 0 0;padding:1.5px 8px;display:inline-block;line-height:1.5;background:var(--badge)}
-.netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch,.sybil_routerinfo .viewprofile,.sybil_routerinfo .configpeer,.sybil_routerinfo .familysearch{margin:3px;padding:4px 8px;vertical-align:middle}
-.netdbentry .tunnel_cap,.netdbentry .tier,.netdbentry .ff,.netdbentry .reachable,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .tier,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{margin:0 2px;padding:2px 4px;vertical-align:middle}
-a.configpeer{background:var(--edit) var(--center)/12px,var(--badge)}
-.configpeer:hover,.configpeer:focus{background:var(--edit_hover) var(--center)/12px,var(--badge)}
+.version a:hover,.version a:focus,a:hover .version,a:focus .version,a:hover .tier,a:focus .tier{color:var(--hover)}
 .viewedit br{display:none}
+.viewfullentry img:hover,.profiledump img:hover{border:1px solid #d50;background:linear-gradient(180deg,#030,#000)}
+.viewfullentry img,.profiledump img{margin:-1px 5px 1px;padding:4px;display:inline-block;width:14px;height:14px;line-height:0;vertical-align:middle;border:1px solid #030;box-shadow:var(--outline);background:var(--badge)}
 .viewprofile,.configpeer,.familysearch{margin:1px;padding:4px;width:12px;height:12px;vertical-align:middle;display:inline-block;line-height:0;font-size:0;border:1px solid #030;box-shadow:var(--outline);background:var(--badge)}
 .viewprofile{background:var(--eye) var(--center)/12px,var(--badge)}
 .viewprofile:hover,.familysearch:hover,.configpeer:hover{border:1px solid #d50}
 .viewprofile:hover,.viewprofile:focus{background:var(--eye_hover) var(--center)/12px,var(--badge)}
-.netdb_header{margin:0;padding:0 3px;min-width:100px;display:inline-block;vertical-align:middle;line-height:0}
-.netdb_header img[src^="/flags"]{margin:0 0 0 4px}
-.familysearch{background:var(--family) var(--center)/12px,var(--badge)}
-.netdbentry th{padding:5px 6px;text-align:left;font-weight:400}
-.netdbentry th:last-child{padding:5px;width:50px;white-space:nowrap;text-align:right}
-.netdbentry th:first-child{white-space:nowrap;text-align:right}
-.netdbentry th:first-child,.netdbentry td:first-child{width:1%;white-space:nowrap}
-.netdbentry td:first-child{padding-right:8px;border-right:var(--border_soft)}
-.netdbentry td:nth-child(2){word-wrap:break-word}
-.netdbentry img{margin:1px 0 0 0}
-.netdbentry tr:last-child code{color:#bb7}
-.gwhois,.banlisted{vertical-align:middle;font-size:0}
+.viewprofile+.viewfullentry,.viewfullentry+.configpeer,.viewprofile+.configpeer{margin-left:-7px}
 .whois{vertical-align:baseline}
-.gwhois a::before,.whois::after{margin:-3px 2px 0;width:12px;height:11px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat left center/11px;opacity:.7;content:""}
 .whois::after{background-position:center top}
-.gwhois:hover a::before,.gwhois a:focus::before,.whois:hover::after,.whois:focus::after{opacity:1;transform:scale(1.2)}
-.banlisted{width:18px;height:18px;display:inline-block;background:var(--ban)}
-p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,linear-gradient(90deg,#000,#000800 80%,#001000);background-blend-mode:normal}
-p.family b{margin-right:-3px;min-width:118px;display:inline-block;vertical-align:middle;text-align:right;font-size:90%}
-p.family a{padding-left:4px;width:calc(100% - 141px);max-width:400px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;border-radius:0 10px 10px 0}
-p.family a:hover{background:#020}
-p.family + p.family,.sybil_info+.sybil_info{margin-top:-4px}
-.familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
+#distance{color:#dd0}
+#netdb .netdbentry th a{display:inline-block}
+#netdb .netdbentry th b,#netdb .netdbentry td:first-child b{min-width:80px;text-align:right}
+#netdb .netdbentry th code:hover,#netdb .netdbentry th code:active,.leaseset th code:hover,#netdb .sybil_routerinfo th code:hover,#netdb .sybil_routerinfo th code:active{width:auto}
+#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,.leaseset th code{width:150px;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid #020}
+#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:0 5px 0 0;padding:1px 4px 2px;font-family:var(--bodyfont);font-weight:700;letter-spacing:.12em;color:#bb0;text-shadow:none;border-radius:2px;box-shadow:var(--outline);background:var(--badge)}
+#netdb .netdbentry th code::selection,#netdb .sybil_routerinfo th code::selection,.leaseset th code::selection{color:#fff;background:#070}
+#netdb .netdbStats b{margin-right:2px;margin-left:0;text-align:left;color:var(--ink)}
+#netdb_ram{margin:0 1px 0 0;padding:1.5px 8px;display:inline-block;line-height:1.5;background:var(--badge)}
+#netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:4px 6px 4px 4px}
+#netdb .version{margin:0 2px;padding:0 8px;vertical-align:middle}
 
 /* netdb lookup */
 #netdb .tabletitle{margin-bottom:-2px}
@@ -1199,180 +1202,175 @@ p.family + p.family,.sybil_info+.sybil_info{margin-top:-4px}
 #netdblookup select{width:calc(100% - 10px)}
 
 /* leasesets */
-.leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:var(--border)}
+.addtobook{text-align:right}
+.addtobook a{font-size:0}
+.addtobook a:hover{filter:drop-shadow(0 0 1px var(--hover))}
+.addtobook a::after{margin:-14px -4px -8px;padding-left:6px;width:24px;height:26px;display:inline-block;vertical-align:middle;border-left:var(--border_softer);background:var(--ahelp) var(--center)/14px;content:""}
 .debugMode .netdb_leases{columns:12 360px;column-gap:4px}
-img.unknownflag{opacity:.8}
 .leasesets_container{columns:680px 2;column-gap:10px}
+.leasesets_container #leasesetdebug{margin:9px 0 2px;column-span:all}
 .leasesets_container table:first-child{margin-top:0}
 .leasesets_container table:last-child{margin-bottom:0}
 .leasesets_container table{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.leaseset th code{font-size:8.5pt}
+.leaseset th{font-size:9pt}
+.leaseset th:last-child a[href$="i2p/"]{padding-left:22px;background:var(--link) no-repeat 5px center/12px,var(--badge)}
+.leaseset th:last-child a,.lsdest.published{margin-right:5px}
+.leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:var(--border)}
+.leaseset th:last-child,.leaseset td:nth-child(2){padding-right:5px;white-space:nowrap;text-align:right}
+.leaseset th:last-child{padding-right:0}
+.leaseset th{padding:3px 5px;position:static;text-align:left;font-weight:400}
+.lsdest,.leaseset th:last-child a[href$="i2p/"]{margin-left:3px;padding:2px 4px 4px;display:inline-block;border:1px solid #020;border-radius:2px;box-shadow:var(--outline);background:var(--badge)}
+.lsdest{padding-left:22px;border-radius:0;border-left-width:4px;border-right-width:4px;background:var(--hardhat) no-repeat 4px center/14px,var(--badge)}
+.lsdest.published{padding-left:38px;background:var(--hardhat) no-repeat 4px center/14px,var(--globe) no-repeat 22px center/12px,var(--badge)}
 .main li .netdb_expiry{font-weight:400;text-transform:lowercase;font-style:italic}
 .netdb_addresses br:first-child,.sybil_routerinfo tr:last-child td br:first-child{display:none}
 .netdb_addresses{line-height:1.5}
+.netdbentry,.leaseset{margin-bottom:10px;width:100%}
+.netdbentry .netdb_family>*,.netdbentry .netdb_info,.netdbentry tr:nth-child(2) td:first-child b{display:inline-block;vertical-align:text-bottom}
+.netdbentry td b,.leaseset td b,#leasesetdebug td b,.sybil_routerinfo td b{color:var(--ink)}
 .netdbentry td:first-child b{display:inline-block;vertical-align:middle}
 .netdbentry td:first-child{padding-right:5px;min-width:80px;text-align:right}
+.netdbentry td,.leaseset td,#leasesetdebug td,.sybil_routerinfo td{line-height:1.6;color:#bb7}
 .netdb_expiry{margin-left:3px}
 .netdb_gateway{margin-left:0;margin-right:-10px;vertical-align:bottom}
 .netdb_info{margin-right:1px}
 .netdb_leases{columns:auto 108px;column-gap:4px}
 .netdb_leases li{margin:1px 4px 1px 0;padding:1px 5px 1px 0;display:inline-block;white-space:nowrap;list-style:none}
-.netdb_leases .tunnel_id{vertical-align:middle}
-.netdb_leases .tunnel_id{margin:0 2px 0 -1px;min-width:100px;line-height:1.22;text-align:center}
 .netdb_leases li b:first-child{margin:0;padding:0;min-width:60px;display:inline-block;text-align:right}
-.netdb_leases li b.leaseNumber::after{width:0;height:0;position:absolute;right:-10px;bottom:calc(50% - 5px);border-color:transparent transparent transparent #020;border-style:solid;border-width:5px;content:""}
 .netdb_leases li b.leaseNumber{margin-right:0;padding:1px 0 0;min-width:22px;position:relative;vertical-align:middle;text-align:center;text-shadow:var(--textshadow);background:#020;border-radius:2px 0 0 2px;filter:drop-shadow(0 0 1px #000)}
+.netdb_leases li b.leaseNumber::after{width:0;height:0;position:absolute;right:-10px;bottom:calc(50% - 5px);border-color:transparent transparent transparent #020;border-style:solid;border-width:5px;content:""}
 .netdb_leases .netdb_tunnel{margin:0;padding:0;border:none;box-shadow:none;background:none}
+.netdb_leases .tunnel_id{margin:0 2px 0 -1px;min-width:100px;vertical-align:middle;text-align:center}
 .netdb_leases .tunnel_peer,.tunneldisplay .tunnel_peer{min-width:64px}
-.netdb_leases .tunnel_peer tt,.netdb_leases .tunnel_peer a{margin:0;padding:0;letter-spacing:.1em}
-.netdb_leases .tunnel_peer tt,.netdb_leases .tunnel_peer tt{font-size:8.5pt;font-weight:700}
+.netdb_leases .tunnel_peer a{margin:0;padding:0;letter-spacing:.1em}
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink)}
 .netdb_tunnel{margin:0 5px 0 -1px;padding:1px 4px;display:inline-block;border:1px solid #030;border-radius:2px;box-shadow:var(--outline);background:#020}
-th code{user-select:all}
+#leasesetdebug td:nth-child(even){white-space:nowrap;text-align:left}
+#leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:1px inset #131}
+#leasesetdebug td:nth-child(2){width:10px}
+#leasesetdebug th a,#leasesetsummary a{word-spacing:normal;letter-spacing:normal;font-size:9pt;text-transform:capitalize}
+#leasesetdebug th:first-child,#leasesetsummary th:first-child{white-space:nowrap;text-align:left}
+#leasesetdebug th,#leasesetsummary th{padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;font-weight:700;text-transform:uppercase;background:var(--title)}
+#leasesetsummary,#leasesetdebug{margin-bottom:14px}
+#leasesetsummary td:first-child{padding-left:10px;width:100px;white-space:nowrap}
+#leasesetsummary th:first-child{padding:8px 10px}
+#leasesetsummary tr:last-child td:last-child{text-align:left}
+#netdb a[href$="i2p"]{margin-left:6px;display:inline-block}
 #netdb code{font-weight:400}
-#netdb .netdb_transport{margin-right:4px;width:48px;display:inline-block;text-align:center;color:var(--ink)}
-#netdb .sybil_addresses .netdb_transport{width:auto;text-align:right}
-/* highlight linked leaseset */
 #netdb .leaseset:target{border:1px solid #770}
-#netdb .leaseset:target tr:first-child th,#netdb .leaseset:target td{border-top:1px solid #770;border-bottom:1px solid #770}
 #netdb .leaseset:target th:first-child,#netdb .leaseset:target td:first-child,.leaseset:target .addtobook a::after{border-left:1px solid #770}
 #netdb .leaseset:target th:last-child,#netdb .leaseset:target td:last-child{border-right:1px solid #770}
-.netdbentry,.leaseset{margin-bottom:10px;width:100%}
-.netdbentry .netdb_family>*,.netdbentry .netdb_info,.netdbentry tr:nth-child(2) td:first-child b{display:inline-block;vertical-align:text-bottom}
-.netdbentry td,.leaseset td,#leasesetdebug td,.sybil_routerinfo td{line-height:1.6;color:#bb7}
-#netdb .leaseset tr,#netdb .leaseset td{box-shadow:none}
+#netdb .leaseset:target tr:first-child th,#netdb .leaseset:target td{border-top:1px solid #770;border-bottom:1px solid #770}
 #netdb .leaseset th:first-child{padding-left:10px}
-#netdb a[href$="i2p"]{margin-left:6px;display:inline-block}
-.netdbentry td b,.leaseset td b,#leasesetdebug td b,.sybil_routerinfo td b{color:var(--ink)}
-#leasesetsummary tr:last-child td:last-child{text-align:left}
-#leasesetsummary,#leasesetdebug{margin-bottom:14px}
-.leasesets_container #leasesetdebug{margin:9px 0 2px;column-span:all}
-.leaseset th{padding:3px 5px;position:static;text-align:left;font-weight:400}
-.leaseset th:last-child,.leaseset td:nth-child(2){padding-right:5px;white-space:nowrap;text-align:right}
-.leaseset th:last-child{padding-right:0}
-.leaseset th{font-size:9pt}
-.leaseset th code{font-size:8.5pt}
-.lsdest,.leaseset th:last-child a[href$="i2p/"]{margin-left:3px;padding:2px 4px 4px;display:inline-block;border:1px solid #020;border-radius:2px;box-shadow:var(--outline);background:var(--badge)}
-.lsdest{padding-left:22px;border-radius:0;border-left-width:4px;border-right-width:4px;background:var(--hardhat) no-repeat 4px center/14px,var(--badge)}
-.leaseset th:last-child a,.lsdest.published{margin-right:5px}
-.lsdest.published{padding-left:38px;background:var(--hardhat) no-repeat 4px center/14px,var(--globe) no-repeat 22px center/12px,var(--badge)}
-.leaseset th:last-child a[href$="i2p/"]{padding-left:22px;background:var(--link) no-repeat 5px center/12px,var(--badge)}
-.addtobook{text-align:right}
-.addtobook a{font-size:0}
-.addtobook a::after{margin:-14px -4px -8px;padding-left:6px;width:24px;height:26px;display:inline-block;vertical-align:middle;border-left:var(--border_softer);background:var(--ahelp) var(--center)/14px;content:""}
-.addtobook a:hover{filter:drop-shadow(0 0 1px var(--hover))}
-#leasesetdebug th,#leasesetsummary th{padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;font-weight:700;text-transform:uppercase;background:var(--title)}
-#leasesetdebug th a,#leasesetsummary a{word-spacing:normal;letter-spacing:normal;font-size:9pt;text-transform:capitalize}
-#leasesetsummary td:first-child{padding-left:10px;width:100px;white-space:nowrap}
-#leasesetdebug th:first-child,#leasesetsummary th:first-child{white-space:nowrap;text-align:left}
-#leasesetsummary th:first-child{padding:8px 10px}
-#leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:1px inset #131}
-#leasesetdebug td:nth-child(even){white-space:nowrap;text-align:left}
-#leasesetdebug td:nth-child(2){width:10px}
+#netdb .leaseset tr,#netdb .leaseset td{box-shadow:none}
+#netdb .netdb_transport{margin-right:4px;width:48px;display:inline-block;text-align:center;color:var(--ink)}
+#netdb .sybil_addresses .netdb_transport{width:auto;text-align:right}
 #noleasesets,#notinitialized,.netdbnotfound{margin-bottom:10px;padding:20px 24px 20px 58px;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
 
 /* sybils */
-.sybil_distance th{padding:5px;text-align:left;font-size:90%}
-.sybil_distance th:last-child,.sybil_distance td:last-child{text-align:right}
-.sybil_distance tr:nth-child(n+2):hover{background:#000}
-.sybil_distance:last-child{margin-bottom:8px}
+.sybil_addresses{padding:0;border-bottom:var(--border)}
+.sybil_addresses table,.sybil_addresses td{text-align:left;border:none}
+.sybil_addresses table{width:100%;margin:0}
+.sybil_addresses td:first-child{padding-right:9px;max-width:155px;font-weight:700}
+.sybil_container p{text-align:left;white-space:nowrap}
 .sybil_container p:first-child{margin-top:0}
 .sybil_container p:last-child{margin-bottom:0}
-.sybil_container p{text-align:left;white-space:nowrap}
 .sybil_container,.sybilinfo_container,.threatpoints + ul{padding:0 5px;display:flex;flex-wrap:wrap}
-.sybil_routerinfo b.netdb_transport{margin-right:0}
-.sybil_routerinfo td[colspan="3"]{white-space:normal}
-.sybil_routerinfo .viewprofile img,.sybil_routerinfo .viewfullentry img,.sybil_routerinfo .familysearch img,.sybil_routerinfo .configpeer img{margin-bottom:1px;margin-right:6px}
-.sybil_routerinfo td:first-child,.netdbentry td:first-child{padding-right:10px;text-align:right}
-.sybil_routerinfo th img[src^="/flags"]{margin-right:5px;width:30px;height:22px}
-.sybil_routerinfo .identicon{margin:0 1.5px 0 -2px;vertical-align:middle;border:none;border-radius:3px;filter:invert(1) saturate(1.1);mix-blend-mode:screen}
-#netdb .sybil_addresses,#netdb .sybil_addresses td{border-top:none}
-#netdb .sybil_addresses{padding-right:0}
-#netdb .sybil_addresses table td{box-shadow:var(--bevel);background:#000}
-#netdb .sybil_addresses table td:first-child{padding:8px 12px;border-right:var(--border)}
-#netdb .sybil_addresses table td:last-child{padding-left:4px}
-#netdb .sybil_routerinfo table td:last-child{border-right:none}
-#netdb .sybil_addresses table td b,#netdb .sybil_addresses table td .nowrap,#netdb .sybil_addresses table td span{display:inline-block}
-#netdb .sybil_addresses table br{display:none}
-.sybilinfo_params{padding:0;border-bottom:var(--border)}
-.sybilinfo_container{padding:4px 5px}
-.sybilinfo_container b{color:#bb3}
-.sybil_routerinfo{margin-bottom:10px}
-.sybil_routerinfo:first-of-type{margin-top:-11px}
-.sybil_routerinfo tr:last-child{border-top:none}
-.sybil_routerinfo th{padding:1px 1px 1px 6px}
-.sybil_routerinfo th[colspan="2"] b[style="float:right"]{margin-right:6px;font-size:85%;font-weight:400;font-style:italic}
-.sybil_routerinfo th:first-child{white-space:nowrap;text-align:left}
-.sybil_routerinfo th:last-child{width:1%;white-space:nowrap}
-.sybil_routerinfo td:first-child{width:50px}
-.sybil_routerinfo p{margin:0 0 0 3px;padding:0;line-height:1.4;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
-.sybil_routerinfo hr{margin:-2px 0}
-.sybil_routerinfo code{margin-left:5px;font-size:9pt}
-.sybil_routerinfo .familysearch img{margin-right:1px}
-.sybil_routerinfo .netdbheader{margin-right:0;padding:3px;text-align:right}
-.sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="]{margin:0 5px 0 3px}
-.sybil_routerinfo .netdb_transport{margin:0 3px;display:inline-block}
-.sybil_routerinfo+.threatpoints + ul + a[name] + table{margin-top:-11px}
-.sybilinfo_familyname{display:inline-block;vertical-align:top;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sybil_addresses table,.sybil_addresses td{text-align:left;border:none}
-.sybil_addresses td:first-child{padding-right:9px;max-width:155px;font-weight:700}
-.sybil_addresses table{width:100%;margin:0}
-.sybil_addresses{padding:0;border-bottom:var(--border)}
-.threatpoints{background:var(--eye_threat) no-repeat 8px center/20px,linear-gradient(90deg,#000,#000800 80%,#001000)}
-.threatpoints + ul{margin:4px 0 10px;padding:3px 5px;width:calc(100% - 12px);display:inline-block;border:var(--border);background:#000}
-.threatpoints + ul li{margin:1px 3px;display:inline-block;vertical-align:text-bottom;list-style:none;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
-.threatpoints + ul li a{max-width:200px;display:inline-block;vertical-align:text-bottom;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.threatpoints.hot{background:var(--eye_threat) no-repeat 8px center/20px,var(--hot) no-repeat right 2px center/24px,linear-gradient(90deg,#000,#000800 80%,#001000)}
-.sybilscan table,.sybilscan tr{border:none;background:none}
-.sybilscan td{border:none}
+.sybil_distance:last-child{margin-bottom:8px}
+.sybil_distance th:last-child,.sybil_distance td:last-child{text-align:right}
+.sybil_distance th{padding:5px;text-align:left;font-size:90%}
+.sybil_distance tr:nth-child(n+2):hover{background:#000}
 .sybil_info,p.family,.threatpoints,p.hashdist,#sybil_totals,p.notfound{margin:3px 0;padding:5px 5px 5px 33px;font-weight:700;color:#cc0;border:var(--border);box-shadow:inset 0 0 0 1px #300;background:var(--eye) no-repeat 8px center/16px,linear-gradient(90deg,#000,#000800 80%,#001000)}
 .sybil_info,#sybil_totals{margin-bottom:10px;padding-left:35px;background-image:var(--eye_threat);background-size:20px,100%}
 .sybilinfo{line-height:1.4}
 .sybil_info + a[name] + table.sybil_routerinfo,p.hashdist + a[name] + table.sybil_routerinfo{margin-top:10px}
-#sybilSearch td:nth-child(2){text-align:left}
+.sybilinfo_container{padding:4px 5px}
+.sybilinfo_container b{color:#bb3}
+.sybilinfo_familyname{display:inline-block;vertical-align:top;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sybilinfo_params{padding:0;border-bottom:var(--border)}
+.sybil_routerinfo{margin-bottom:10px}
+.sybil_routerinfo:first-of-type{margin-top:-11px}
+.sybil_routerinfo+.threatpoints + ul + a[name] + table{margin-top:-11px}
+.sybil_routerinfo b.netdb_transport{margin-right:0}
+.sybil_routerinfo code{margin-left:5px;font-size:9pt}
+.sybil_routerinfo .familysearch img{margin-right:1px}
+.sybil_routerinfo hr{margin:-2px 0}
+.sybil_routerinfo .identicon{margin:0 1.5px 0 -2px;vertical-align:middle;border:none;border-radius:3px;filter:invert(1) saturate(1.1);mix-blend-mode:screen}
+.sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="]{margin:0 5px 0 3px}
+.sybil_routerinfo .netdbheader{margin-right:0;padding:3px;text-align:right}
+.sybil_routerinfo .netdb_transport{margin:0 3px;display:inline-block}
+.sybil_routerinfo p{margin:0 0 0 3px;padding:0;line-height:1.4;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.sybil_routerinfo th[colspan="2"] b[style="float:right"]{margin-right:6px;font-size:85%;font-weight:400;font-style:italic}
+.sybil_routerinfo th:first-child{white-space:nowrap;text-align:left}
+.sybil_routerinfo th img[src^="/flags"]{margin-right:5px;width:30px;height:22px}
+.sybil_routerinfo th:last-child{width:1%;white-space:nowrap}
+.sybil_routerinfo th{padding:1px 1px 1px 6px}
+.sybil_routerinfo td[colspan="3"]{white-space:normal}
+.sybil_routerinfo td:first-child,.netdbentry td:first-child{padding-right:10px;text-align:right}
+.sybil_routerinfo td:first-child{width:50px}
+.sybil_routerinfo tr:last-child{border-top:none}
+.sybil_routerinfo .viewprofile img,.sybil_routerinfo .viewfullentry img,.sybil_routerinfo .familysearch img,.sybil_routerinfo .configpeer img{margin-bottom:1px;margin-right:6px}
+.sybilscan table,.sybilscan tr{border:none;background:none}
+.sybilscan td{border:none}
+.threatpoints{background:var(--eye_threat) no-repeat 8px center/20px,linear-gradient(90deg,#000,#000800 80%,#001000)}
+.threatpoints.hot{background:var(--eye_threat) no-repeat 8px center/20px,var(--hot) no-repeat right 2px center/24px,linear-gradient(90deg,#000,#000800 80%,#001000)}
+.threatpoints + ul{margin:4px 0 10px;padding:3px 5px;width:calc(100% - 12px);display:inline-block;border:var(--border);background:#000}
+.threatpoints + ul li{margin:1px 3px;display:inline-block;vertical-align:text-bottom;list-style:none;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.threatpoints + ul li a{max-width:200px;display:inline-block;vertical-align:text-bottom;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#known{margin-bottom:0}
+#netdb .sybil_addresses,#netdb .sybil_addresses td{border-top:none}
+#netdb .sybil_addresses{padding-right:0}
+#netdb .sybil_addresses table br{display:none}
+#netdb .sybil_addresses table td b,#netdb .sybil_addresses table td .nowrap,#netdb .sybil_addresses table td span{display:inline-block}
+#netdb .sybil_addresses table td{box-shadow:var(--bevel);background:#000}
+#netdb .sybil_addresses table td:first-child{padding:8px 12px;border-right:var(--border)}
+#netdb .sybil_addresses table td:last-child{padding-left:4px}
+#netdb .sybil_routerinfo table td:last-child{border-right:none}
+#pairs{margin-bottom:11px}
+#sybilanalysis form{margin:0}
+#sybilanalysis hr,#sybilanalysis i{margin:8px 0}
+#sybilanalysis i{display:inline-block}
+#sybilanalysis{margin:10px 0 9px;padding:10px 10px 8px 58px;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:var(--sybil) no-repeat 15px center/28px,var(--msg_nohat)}
+#sybilnav::after{width:100%;height:10px;display:block;content:""}
+#sybilnav a{width:100%;display:inline-block;text-shadow:var(--textshadow)}
+#sybilnav li{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-before:right}
+#sybilnav{margin:-12px -11px 10px;padding:6px 5px;overflow:hidden;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;columns:5 200px;column-gap:4px}
+#sybilnav,#sybils_summary{margin-bottom:10px;padding:10px;line-height:1.6;border:var(--border);background:#000}
+#sybilnav ul{margin:0}
+#sybilnav ul li{margin-left:0;margin-bottom:4px;padding-left:0;min-width:150px;white-space:nowrap;list-style:none;border:1px solid #151;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:linear-gradient(90deg,#000,#010 80%)}
+#sybilnav ul li:hover a{color:var(--hover)}
+#sybilnav ul li:hover::before{background:var(--eye_hover) no-repeat left center/16px}
+#sybilnav ul li:hover{border:1px solid var(--hover);box-shadow:var(--highlight),inset 0 0 2px 1px var(--hover);background:#000}
+#sybilnav ul li:active{border:1px solid var(--hover);box-shadow:var(--highlight),inset 3px 3px 3px 1px #5f2400;background:var(--hover)}
+#sybilnav ul li:active::before{background:var(--eye_active) no-repeat left center/16px}
+#sybilnav ul li a{padding-right:30%;box-sizing:border-box}
+#sybilnav ul li:active a{color:var(--ink)}
+#sybilnav ul li::before{margin-left:8px;padding-left:5px;width:18px;height:16px;display:inline-block;background:var(--eye) no-repeat left center/16px;content:""}
+#sybilnav ul li#configurePeriodic:active::before{filter:sepia(1) hue-rotate(-45deg) saturate(1.4) brightness(1.6)}
+#sybilnav ul li#configurePeriodic::before{background:var(--settings) no-repeat left center/14px}
+#sybilnav ul li#configurePeriodic:hover::before{background:var(--settings_hover) no-repeat left center/14px}
+#sybilnav ul li:first-child{margin-top:0}
+#sybilnav ul li:last-child{margin-bottom:-10px;padding-bottom:2px}
+#sybilnav ul li#runNew:active::before{background:var(--start_active) no-repeat 1px calc(50% - 1px)/12px}
+#sybilnav ul li#runNew::before{background:var(--start) no-repeat 1px calc(50% - 1px)/12px}
+#sybilnav ul li#runNew:hover::before{background:var(--start_hover) no-repeat 1px calc(50% - 1px)/12px}
+#sybilnav ul li,#sybilnav ul li::before{vertical-align:middle}
 #sybilSearch input[type=text]{width:calc(50% - 66px)}
+#sybilSearch td:nth-child(2){text-align:left}
+#sybils_summary{padding:20px 24px 20px 58px;line-height:2;background:#000 var(--floodfill) no-repeat 18px center/28px}
+#sybilTask input[type=checkbox]{margin:14px 8px}
 #sybilTask{margin:31px 0 9px}
-#sybilTask th{padding-left:8px;text-transform:uppercase;letter-spacing:.1em;font-size:11pt;text-align:left}
+#sybilTask .nowrap{padding:5px 0;margin:1px;height:48px;width:100%;display:inline-block;vertical-align:middle;background:#010}
+#sybilTask .nowrap:hover{box-shadow:none;background:#020}
+#sybilTask .nowrap::before{height:48px;display:inline-block;vertical-align:middle;content:""}
+#sybilTask .optionlist b{padding-right:5px;display:inline-block;min-width:220px;vertical-align:middle;text-align:right}
+#sybilTask .optionlist,#sybilTask .optionlist:hover{padding:1px 3px 1px 1px;text-align:left;border:none;box-shadow:none;background:#000;columns:500px 3;column-gap:2px}
 #sybilTask select,#sybilTask input{margin:6px}
 #sybilTask select,#sybilTask input[type=text]{width:140px}
 #sybilTask td{padding:1px 2px 1px 0;padding:0;background:#000}
-#sybilTask .optionlist,#sybilTask .optionlist:hover{padding:1px 3px 1px 1px;text-align:left;border:none;box-shadow:none;background:#000;columns:500px 3;column-gap:2px}
-#sybilTask .optionlist b{padding-right:5px;display:inline-block;min-width:220px;vertical-align:middle;text-align:right}
-#sybilTask .nowrap{padding:5px 0;margin:1px;height:48px;width:100%;display:inline-block;vertical-align:middle;background:#010}
-#sybilTask .nowrap::before{height:48px;display:inline-block;vertical-align:middle;content:""}
-#sybilTask .nowrap:hover{box-shadow:none;background:#020}
-#sybilTask input[type=checkbox]{margin:14px 8px}
+#sybilTask th{padding-left:8px;text-transform:uppercase;letter-spacing:.1em;font-size:11pt;text-align:left}
 #sybil_totals{font-weight:400}
-#sybilnav,#sybils_summary{margin-bottom:10px;padding:10px;line-height:1.6;border:var(--border);background:#000}
-#sybils_summary{padding:20px 24px 20px 58px;line-height:2;background:#000 var(--floodfill) no-repeat 18px center/28px}
-#sybilnav{margin:-12px -11px 10px;padding:6px 5px;overflow:hidden;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;columns:5 200px;column-gap:4px}
-#sybilnav li{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-before:right}
-#sybilnav ul{margin:0}
-#sybilnav ul li{margin-left:0;margin-bottom:4px;padding-left:0;min-width:150px;white-space:nowrap;list-style:none;border:1px solid #151;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:linear-gradient(90deg,#000,#010 80%)}
-#sybilnav ul li:hover{border:1px solid var(--hover);box-shadow:var(--highlight),inset 0 0 2px 1px var(--hover);background:#000}
-#sybilnav ul li:active{border:1px solid var(--hover);box-shadow:var(--highlight),inset 3px 3px 3px 1px #5f2400;background:var(--hover)}
-#sybilnav ul li:active a{color:var(--ink)}
-#sybilnav a{width:100%;display:inline-block;text-shadow:var(--textshadow)}
-#sybilnav ul li:hover a{color:var(--hover)}
-#sybilnav ul li a{padding-right:30%;box-sizing:border-box}
-#sybilnav ul li:first-child{margin-top:0}
-#sybilnav ul li:last-child{margin-bottom:-10px;padding-bottom:2px}
-#sybilnav ul li,#sybilnav ul li::before{vertical-align:middle}
-#sybilnav ul li::before{margin-left:8px;padding-left:5px;width:18px;height:16px;display:inline-block;background:var(--eye) no-repeat left center/16px;content:""}
-#sybilnav ul li:hover::before{background:var(--eye_hover) no-repeat left center/16px}
-#sybilnav ul li:active::before{background:var(--eye_active) no-repeat left center/16px}
-#sybilnav ul li#runNew::before{background:var(--start) no-repeat 1px calc(50% - 1px)/12px}
-#sybilnav ul li#runNew:hover::before{background:var(--start_hover) no-repeat 1px calc(50% - 1px)/12px}
-#sybilnav ul li#runNew:active::before{background:var(--start_active) no-repeat 1px calc(50% - 1px)/12px}
-#sybilnav ul li#configurePeriodic::before{background:var(--settings) no-repeat left center/14px}
-#sybilnav ul li#configurePeriodic:hover::before{background:var(--settings_hover) no-repeat left center/14px}
-#sybilnav ul li#configurePeriodic:active::before{filter:sepia(1) hue-rotate(-45deg) saturate(1.4) brightness(1.6)}
-#known{margin-bottom:0}
-#pairs{margin-bottom:11px}
-#sybilanalysis{margin:10px 0 9px;padding:10px 10px 8px 58px;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:var(--sybil) no-repeat 15px center/28px,var(--msg_nohat)}
-#sybilanalysis hr,#sybilanalysis i{margin:8px 0}
-#sybilanalysis i{display:inline-block}
-#sybilanalysis form{margin:0}
-#sybilnav::after{width:100%;height:10px;display:block;content:""}
 #sybil_totals,p.notfound{margin-bottom:10px}
 
 /* banlist */
