@@ -1102,8 +1102,6 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .banlisted{width:18px;height:18px;display:inline-block;background:var(--ban)}
 .configpeer:hover,.configpeer:focus{background:var(--edit_hover) var(--center)/12px,var(--badge)}
 .familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
-.familysearch{background:var(--family) var(--center)/12px,var(--badge)}
-.familysearch img{margin-right:0;margin-left:0}
 .gwhois,.banlisted{vertical-align:middle;font-size:0}
 .gwhois a::before,.whois::after{margin:-3px 2px 0;width:12px;height:11px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat left center/11px;opacity:.7;content:""}
 .gwhois:hover a::before,.gwhois a:focus::before,.whois:hover::after,.whois:focus::after{opacity:1;transform:scale(1.2)}
@@ -1171,7 +1169,8 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .viewprofile{background:var(--eye) var(--center)/12px,var(--badge)}
 .viewprofile:hover,.familysearch:hover,.configpeer:hover{border:1px solid #d50}
 .viewprofile:hover,.viewprofile:focus{background:var(--eye_hover) var(--center)/12px,var(--badge)}
-.viewprofile+.viewfullentry,.viewfullentry+.configpeer,.viewprofile+.configpeer{margin-left:-7px}
+.familysearch{background:var(--family) var(--center)/12px,var(--badge)}
+.familysearch img{margin-right:0;margin-left:0}
 .whois{vertical-align:baseline}
 .whois::after{background-position:center top}
 #distance{color:#dd0}
