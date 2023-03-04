@@ -83,15 +83,12 @@ function refreshSidebar() {
         }
 
         if (down) {
-          uncollapse();
           refreshAll();
-          countTunnels();
-          countNewsItems();
+          uncollapse();
         }
 
         function updateVolatile() {
           uncollapse();
-          sectionToggler();
 
           var b;
           for (b = 0; b < badges.length; b++) {
@@ -103,9 +100,6 @@ function refreshSidebar() {
               }
             }
           }
-
-          countTunnels();
-          countNewsItems();
 
           if (clock !== null && clockResponse !== null) {
             clock.innerHTML = clockResponse.innerHTML;
@@ -311,24 +305,6 @@ function refreshSidebar() {
         }
 
         function uncollapse() {
-          var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
-          var a;
-          for (a = 1; a < sectionTitle.length - 1; a += 1) {
-            var styleInline = sectionTitle[a].getAttribute("style");
-            if (styleInline) {
-              sectionTitle[a].removeAttribute("style");
-            }
-          }
-
-          var collapsed = document.querySelectorAll("#sidebar .volatile.collapse, #sidebar .volatile.collapse + hr, #sidebar table.volatile + hr");
-          var c;
-          for (c = 0; c < collapsed.length; c += 1) {
-            var styleHidden = collapsed[c].getAttribute("hidden");
-            var badgesHidden = collapsed[c].visibililty;
-            if (styleHidden) {
-              collapsed[c].hidden = null;
-            }
-          }
           sectionToggler();
           countTunnels();
           countNewsItems();
@@ -346,22 +322,6 @@ function refreshSidebar() {
 
         function isDown() {
           function hideSections() {
-            var collapse = document.querySelectorAll("#sidebar .collapse, #sb_peers_condensed, #sb_tunnels_condensed");
-            var h;
-            for (h = 0; h < collapse.length; h += 1) {
-              collapse[h].setAttribute("hidden", "");
-              if (collapse[h].nextElementSibling !== null && collapse[h].nextElementSibling.nodeName === "HR") {
-                collapse[h].nextElementSibling.setAttribute("hidden", "");
-              }
-            }
-            var collapsed = document.querySelectorAll("#sidebar table:not(#sb_peers_condensed):not(#sb_tunnels_condensed).collapsed, #sb_newsheadings.collapsed");
-            var c;
-            for (c = 0; c < collapsed.length; c += 1) {
-              collapsed[c].classList.remove("collapsed");
-              if (collapsed[c].nextElementSibling !== null && collapsed[c].nextElementSibling.nodeName === "HR") {
-                collapsed[c].nextElementSibling.setAttribute("hidden", "");
-              }
-            }
             if (shutdownStatus !== null) {
               shutdownStatus.setAttribute("hidden", "");
             }
