@@ -717,23 +717,22 @@ input[name="nofilter_commentsName"]{max-width:248px}
 #torrentEdit .info_tracker,#torrentEdit .info_tracker a{font-size:95%;font-weight:700;color:#97b897;pointer-events:none}
 
 /* toggle panels */
-input.toggle_input{
-position:absolute;opacity:0;z-index:-1;height:0;width:0}
-.toggleview:hover,input.toggle_input:focus + .toggleview{color:#f60;cursor:pointer}
-input:not(:checked) + .toggleview + hr + table,input:not(:checked) + .toggleview + hr + table + table{display:none}
+input.toggle_input{position:absolute;opacity:0;z-index:-1;height:0;width:0}
 input:checked + .toggleview + hr + table,input:checked + .toggleview + hr + table + table{display:table}
+input:not(:checked) + .toggleview + hr + table,input:not(:checked) + .toggleview + hr + table + table{display:none}
 .toggleview,.configTitle a:visited{color:#7c7}
+.toggleview:hover,input.toggle_input:focus + .toggleview{color:#f60;cursor:pointer}
 
 /* tabs */
-#dhtDebugPanel .toggleview:hover{mix-blend-mode:normal}
-#dhtDebugPanel .toggleview:active{border-top:var(--border);margin-top:-1px}
-.toggleview,#configSection .configTitle{min-width:340px;text-align:center;will-change:transform}
-.toggleview,#configSection .configTitle a{font-size:0}
+input:checked + .toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,51,0,.7);filter:drop-shadow(0 0 1px #930);transform:rotate(-90deg) scale(.9);transition:linear transform .01s}
 .configTitle a{display:inline-block;width:100%}
 .tab_label::after{margin:3px;padding:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:2px solid #000;border-radius:50%;box-shadow:0 0 1px 1px rgba(32,0,48,.5);background-size:16px,100%;content:"";mix-blend-mode:luminosity;pointer-events:none;will-change:transform}
+.toggleview,#configSection .configTitle{min-width:340px;text-align:center;will-change:transform}
+.toggleview,#configSection .configTitle a{font-size:0}
 .toggleview:hover .tab_label::after,#tab_config:hover .tab_label::after{mix-blend-mode:normal;filter:drop-shadow(0 0 1px #f30)}
 .toggleview:active .tab_label::after,#tab_config:active .tab_label::after{transform:rotate(90deg) scale(.9);transition:ease transform .01s}
-input:checked + .toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,51,0,.7);filter:drop-shadow(0 0 1px #930);transform:rotate(-90deg) scale(.9);transition:linear transform .01s}
+#dhtDebugPanel .toggleview:hover{mix-blend-mode:normal}
+#dhtDebugPanel .toggleview:active{border-top:var(--border);margin-top:-1px}
 #tab_addtorrent .tab_label::after{background:var(--add) no-repeat scroll center center/16px,var(--tabIcon)}
 #tab_newtorrent .tab_label::after{background:var(--create) no-repeat scroll center center/16px,var(--tabIcon)}
 #tab_config .tab_label::after{background:var(--config) no-repeat scroll center center/16px,var(--tabIcon)}
@@ -743,8 +742,8 @@ input:checked + .toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(15
 
 /* router down */
 .routerdown{padding:15px;font-size:120%;text-shadow:0 0 1px #000;border-bottom:var(--border);background:repeating-linear-gradient(90deg,rgba(0,80,0,.1) 1px,rgba(0,16,0,.3) 2px,rgba(0,16,0,.3) 3px),repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px,rgba(0,16,0,.5) 2px,rgba(0,16,0,.5) 3px),url(/themes/console/dark/images/camotile2.png) repeat top left}
-.routerdown span{display:none}
 .routerdown::after{width:40px;height:40px;display:inline-block;background:var(--offline) no-repeat center center/40px;content:"";animation:linear spin 5s reverse infinite}
+.routerdown span{display:none}
 
 /* inline notifications */
 .notify{margin-bottom:-2px;background:var(--row),var(--bg_dots)}
@@ -778,22 +777,24 @@ input:checked + .toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(15
 
 /* responsive layout */
 @media screen and (max-width:1499px){
+.magnetLabel{max-width:240px;overflow:hidden;text-overflow:ellipsis}
+.peerCount{padding-right:5px}
+.peerCount b{padding:2px 4px;min-width:48px;display:inline-block;vertical-align:middle;text-align:center;background:var(--badge)}
+.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText,.rowEven:not(.peerinfo) .torrentDownloaded .percentBarText{top:-16px}
+.torrentInfo .infohash{padding:5px 3px 8px 7px;background:var(--badge)}
+.torrentlink,.magnetlink{padding:7px 5px 3px 3px}
+.trackerLink{padding:0;width:0;min-width:0;font-size:0}
+.trackerLink img{display:none}
 #expand img,#shrink img{padding-top:6px}
 #torrents .torrentAction input{padding:11px;background-size:13px,100%,13px}
 #pagenavtop.pagenavcontrols{padding:7px 0 5px}
 #torrents #actionStopAll,#torrents #actionStartAll{padding:11px 18px}
 #torrents .infohash{padding-left:15px;max-width:60px;background-size:11px}
-.torrentInfo .infohash{padding:5px 3px 8px 7px;background:var(--badge)}
-.torrentlink,.magnetlink{padding:7px 5px 3px 3px}
-.magnetLabel{max-width:240px;overflow:hidden;text-overflow:ellipsis}
-.trackerLink{padding:0;width:0;min-width:0;font-size:0}
-.trackerLink img{display:none}
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText,.rowEven:not(.peerinfo) .torrentDownloaded .percentBarText{top:-16px}
-.peerCount{padding-right:5px}
-.peerCount b{padding:2px 4px;min-width:48px;display:inline-block;vertical-align:middle;text-align:center;background:var(--badge)}
 }
 
 @media screen and (max-width:1199px){
+td.graphicStatus img{padding-left:2px}
+td#bwHelp a{margin-left:2px}
 .clientid{padding:2px 4px 0;line-height:1.8}
 .configPanel .snarkConfigtitle{font-size:11pt}
 .dirInfoComplete{display:none}
@@ -801,40 +802,38 @@ input:checked + .toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(15
 .knownTracker a,#trackerselect a{display:inline-block;max-width:210px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .percentBarOuter{margin:2px auto}
 .percentBarText,.percentBarOuter{width:100px}
-td.graphicStatus img{padding-left:2px}
 #configs td:first-child::after{min-height:24px}
-td#bwHelp a{margin-left:2px}
-#torrentDisplay label{font-size:8.5pt}
-#torrents #actionStopAll,#torrents #actionStartAll{margin-top:0;padding:10px 16px}
 #torrents .torrentAction input{padding:10px;background-size:12px,100%,12px}
+#torrents #actionStopAll,#torrents #actionStartAll{margin-top:0;padding:10px 16px}
+#torrentDisplay label{font-size:8.5pt}
 #trackerselect a{max-width:300px}
 }
 
 @media screen and (max-width:1100px){
-#configs td:first-child{min-width:200px}
-.fileStatus img[src*="clock"]{margin-top:6px}
 .dirInfo .percentBarText,.dirInfo .percentBarOuter{padding:0;width:60px}
-.torrentName a{max-width:300px}
+.fileStatus img[src*="clock"]{margin-top:6px}
 .magnetLabel{max-width:200px}
+.torrentName a{max-width:300px}
+#configs td:first-child{min-width:200px}
 }
 
 @media screen and (max-width:1000px){#closelog img::after{height:8px}
 .canhide{display:none}
+.newTab{margin:-1px 4px 0}
+.torrentUploaded,.torrentUploaded:empty{width:0;max-width:0;min-width:0;padding:0;font-size:0;color:transparent}
+.torrentUploaded > *{display:none}
 #torrentDisplay{display:flex}
 #torrentDisplay label{min-width:0;flex-grow:1}
 #torrentDisplay label:first-child,#torrentDisplay label[for="all"]{border-left:none}
 #torrentDisplay label:last-child{border-right:none}
-.newTab{margin:-1px 4px 0}
 #trackerselect tr:first-child td{font-size:8pt}
-.torrentUploaded,.torrentUploaded:empty{width:0;max-width:0;min-width:0;padding:0;font-size:0;color:transparent}
-.torrentUploaded > *{display:none}
 }
 
 @media screen and (max-width:950px){#torrents td:nth-child(2){white-space:nowrap}
-#torrents td[colspan="10"]{white-space:normal}
 b.alwaysShow{display:none}
-#torrents td:first-child img{max-height:19px}
 .percentBarComplete{padding:3px 0 2px}
+#torrents td[colspan="10"]{white-space:normal}
+#torrents td:first-child img{max-height:19px}
 #tab_addtorrent .tab_label::after,#tab_newtorrent .tab_label::after,#tab_config .tab_label::after{width:14px;height:14px;background-size:14px,100%}
 }
 
