@@ -3888,7 +3888,7 @@ public class I2PSnarkServlet extends BasicServlet {
             //buf.append("<script charset=utf-8 src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n"); // debugging
         buf.append("</head>\n<body display:none;pointer-events:none class=\"lang_" + lang + "\">\n" +
                    "<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
-                   " class=snarkNav nav_main>");
+                   " class=\"snarkNav nav_main\">");
         if (_contextName.equals(DEFAULT_NAME))
             buf.append(_t("I2PSnark"));
         else
