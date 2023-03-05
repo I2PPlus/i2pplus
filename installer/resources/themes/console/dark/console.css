@@ -101,6 +101,7 @@ ul{margin:0;padding:0}
 .sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced) tr::before{width:calc(100% - 3px);transform:scaleX(0);height:1px;position:absolute;top:-3px;left:1px;z-index:0;display:block;background:linear-gradient(to right,rgba(255,96,0,.3),#f50,rgba(255,96,0,.3));opacity:.25;content:"";animation:bar .03s steps(3) reverse;backface-visibility:hidden;will-change:transform}
 #sb_peers,#sb_peersadvanced,#sb_tunnels,#sb_queue,#sb_bandwidth,#sb_general,#sb_advancedgeneral,#sb_localtunnels,#sb_advanced,#sb_internals,#sb_services,#sb_newsheadings table{margin:-7px auto -9px -1px}
 #sb_localtunnels{margin-bottom:-8px}
+#sb_localtunnels:not([hidden]) + #localtunnelSummary{display:none}
 #sb_advanced,#sb_internals,#sb_services,#sb_help{margin-top:-7px}
 #sb_general td,#sb_shortgeneral td,#sb_advancedgeneral td,#sb_peersadvanced td{white-space:nowrap}
 #sidebar tr{contain:paint}
@@ -2576,7 +2577,6 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #routerinformation h3 span a{padding:12px 3px 12px 12px}
 #sb_general td::before,#sb_shortgeneral td::before,#sb_advancedgeneral td::before,#sb_bandwidth td::before,#sb_peers td::before,#sb_peersadvanced td::before,#sb_tunnels td::before,#sb_queue td::before{min-height:18px}
 #sb_internals .sb_icon[href="/jobs"]{display:none!important}
-#sb_localtunnels:not([hidden]) + #localtunnelSummary{display:none}
 #sb_localtunnels td:first-child{width:18px}
 #sb_localtunnels td:last-child{background-size:14px}
 #sb_localtunnels td{line-height:1}
