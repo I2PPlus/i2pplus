@@ -2576,6 +2576,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #routerinformation h3 span a{padding:12px 3px 12px 12px}
 #sb_general td::before,#sb_shortgeneral td::before,#sb_advancedgeneral td::before,#sb_bandwidth td::before,#sb_peers td::before,#sb_peersadvanced td::before,#sb_tunnels td::before,#sb_queue td::before{min-height:18px}
 #sb_internals .sb_icon[href="/jobs"]{display:none!important}
+#sb_localtunnels:not([hidden]) + #localtunnelSummary{display:none}
 #sb_localtunnels td:first-child{width:18px}
 #sb_localtunnels td:last-child{background-size:14px}
 #sb_localtunnels td{line-height:1}

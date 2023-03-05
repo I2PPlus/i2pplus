@@ -103,6 +103,7 @@ p:empty + .sb_notice{margin-top:7px}
 #sb_tunnels a{padding-left:0}
 #sb_tunnels a:not(:hover):not(:focus){color:var(--ink)}
 #sb_localtunnels{margin:-6px -2px -7px 0;width:196px;text-align:center;box-sizing:border-box}
+#sb_localtunnels:not([hidden]) + #localtunnelSummary{display:none}
 #sb_localtunnels tr:nth-child(even){background:var(--bg3)}
 #sb_localtunnels td{padding:1px;vertical-align:middle;line-height:1}
 #sb_localtunnels td:first-child{padding-right:0;width:12px;text-align:left}
