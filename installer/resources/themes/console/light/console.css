@@ -1045,7 +1045,6 @@ h3#udpcon{margin-top:7px}
 #peers .tablefooter td{font-weight:700;background:var(--th)}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center/12px}
 #transportSummary th.out span{background:var(--out) no-repeat center center/12px}
-#transports{margin-bottom:-2px}
 #transports .script,#ntcpcon .script,#udpcon .script{margin:-3px 0 -4px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
 #transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
@@ -1113,7 +1112,7 @@ h3#udpcon{margin-top:7px}
 #tunnels .routerid > *{vertical-align:middle}
 #tunnels .routerid img,#profiles .routerid img,#peers .routerid img{margin:0 2px 0 -1px;vertical-align:middle;border-radius:1px}
 #refreshPage{cursor:pointer}
-#country,#router,#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
+#country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 .ipaddress a{line-height:1}
 #tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
 #tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;line-height:1;vertical-align:text-bottom}
