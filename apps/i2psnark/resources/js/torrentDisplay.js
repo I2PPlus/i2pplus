@@ -266,6 +266,7 @@ function checkFilterBar() {
 function checkPagenav() {
   var pagenav = document.getElementById("pagenavtop");
   var path = window.location.pathname;
+  var screenlog = document.querySelector("#screenlog ul");
   var storageFilter = "filter";
   if (!path.endsWith("i2psnark/")) {
     storageFilter = "filter_" + path.replace("/", "");
@@ -323,9 +324,15 @@ function refreshFilters() {
           if (pagenavResponse !== null) {pagenav.innerHTML = pagenavResponse.innerHTML;}
         }
         if (filterbar) {
-          initFilterBar();
+          //initFilterBar();
           var filterbarResponse = xhrfilter.responseXML.getElementById("torrentDisplay");
           if (!filterbar && filterbarResponse !== null) {filterbar.outerHTML = filterbarResponse.outerHTML;}
+        }
+        if (screenlog) {
+          var screenlogResponse = xhrfilter.responseXML.querySelector("#screenlog ul");
+          if (screenlogResponse != null && screenlog !== screenlogResponse) {
+            screenlog.innerHTML = screenlogResponse.innerHTML;
+          }
         }
       }
     }

@@ -122,7 +122,7 @@ public class NavHelper implements NavService, ClientApp {
             } else {
                 buf.append("<img src=\"/themes/console/images/plugin.svg\"");
             }
-            buf.append(" height=\"16\" width=\"16\" alt=\"\" hidden>");
+            buf.append(" height=16 width=16 alt=\"\" hidden>");
     }
 
     /**

@@ -264,6 +264,7 @@ button.download.control:active{background:var(--download) no-repeat center cente
 #clock::after{margin-left:3px;content:"UTC";display:inline-block;font-size:50%;vertical-align:middle}
 
 #sb_localtunnels{margin-top:-6px;margin-bottom:-8px;width:200px;border-collapse:separate;border-spacing:0}
+#sb_localtunnels:not([hidden]) + #localtunnelSummary{display:none}
 #sb_localtunnels a{width:100%;max-width:156px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #sb_localtunnels img{margin:0;padding:0;width:16px;height:16px;font-size:0;opacity:0}
 #sb_localtunnels img::before{content:"";display:inline-block;width:16px;height:16px}

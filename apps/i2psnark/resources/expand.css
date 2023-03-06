@@ -1,28 +1,6 @@
-#screenlog {
-  min-height: 56px !important;
-  background-size: 80px auto, calc(100% - 80px) calc(100% - 4px), 100% 100%, 100% 100% !important;
-  background-position: right -4px bottom -10px, left bottom 2px, center center, center top !important;
-}
-
-#screenlog.xpanded {
-  height: auto;
-  max-height: 300px;
-}
-
-#screenlog:hover, #screenlog:focus {
-  overflow-y: auto;
-}
-
-#expand {
-  display: none !important;
-}
-
-#shrink {
-  display: inline-block !important;
-}
-
-@media screen and (min-width: 1500px) {
-  #screenlog {
-    min-height: 60px !important;
-  }
-}
+#screenlog{min-height:56px!important;background-size:80px auto,calc(100% - 80px) calc(100% - 4px),100% 100%,100% 100%!important;background-position:right -4px bottom -10px,left bottom 2px,center center,center top!important}
+#screenlog.xpanded{height:auto;max-height:300px}
+#screenlog:hover,#screenlog:focus{overflow-y:auto}
+#expand{display:none!important}
+#shrink{display:inline-block!important}
+@media screen and (min-width:1500px){#screenlog{min-height:60px!important}}

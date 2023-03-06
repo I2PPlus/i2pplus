@@ -889,13 +889,8 @@ class NetDbRenderer {
                 for (int i = 0; i < ls.getLeaseCount(); i++) {
                     Lease lease = ls.getLease(i);
                     buf.append("<li title=\"").append(_t("Lease")).append("\"><b");
-                    if (!debug)
-                        buf.append(" class=\"leaseNumber\">");
-                    if (debug)
-                        buf.append(">").append(_t("Lease")).append(' ');
+                    buf.append(" class=\"leaseNumber\">");
                     buf.append(i + 1);
-                    if (debug)
-                        buf.append(":");
                     buf.append("</b> <span class=tunnel_peer title=\"Gateway\">");
                     buf.append(_context.commSystem().renderPeerHTML(lease.getGateway(), false));
                     buf.append("</span> ");

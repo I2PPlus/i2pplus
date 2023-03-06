@@ -47,7 +47,7 @@
 <a href="/help"><%=intl._t("Help")%></a>
 </div>
 </div>
-<h1 class=err><%=intl._t("ERROR")%>&ensp;<%=ERROR_CODE%>: <%=intl._t("Internal Server Error")%><br>
+<h1 class=err><%=intl._t("ERROR")%>&ensp;<%=ERROR_CODE%>: <%=intl._t("Internal Server Error")%></h1>
 <div class=sorry id=warning2>
 <div id=stacktrace>
 <p><%=intl._t("Error {0}", ERROR_CODE)%>: &ensp;<%=ERROR_URI%>&ensp;-&ensp;<%=ERROR_MESSAGE%></p>
@@ -71,8 +71,8 @@
 <b>I2P version:</b>&ensp;<%=net.i2p.router.RouterVersion.FULL_VERSION%><br>
 <b>API version:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%><br>
 <b>Java version:</b>&ensp;<%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%> <%=System.getProperty("java.runtime.version")%>)<br>
- <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
- <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
+<jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:getProperty name="logsHelper" property="unavailableCrypto" />
 <b>Wrapper version:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%><br>
 <b>Server version:</b>&ensp;<jsp:getProperty name="logsHelper" property="jettyVersion" /><br>
