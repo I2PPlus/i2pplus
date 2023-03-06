@@ -224,9 +224,7 @@ tr[id] + .peerinfo td{padding-top:4px}
 .priorityIndicator,.dirInfo .percentBarOuter{display:inline-block;float:none}
 .rowOdd,.rowEven{background:var(--row)}
 .rowEven td,.rowOdd td{border-top:none;border-bottom:none}
-.snarkCommented{position:absolute;display:inline-block;z-index:20;top:-7px;right:2px}
-.snarkCommented img{padding:0;margin:0;height:9px;width:auto;border:none;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
-.snarkFileicon:hover + .snarkFileName a{color:#f90}
+.snarkFileicon:hover+.snarkFileName a{color:#f90}
 .snarkFileName{padding:4px 2px;vertical-align:middle;line-height:1.2;text-align:left}
 .snarkFileSize{padding:4px 8px 4px 2px;width:1%;white-space:nowrap;font-weight:700;color:#b6b}
 .snarkFiletype{position:relative;vertical-align:middle}
@@ -266,6 +264,8 @@ tr[id] + .peerinfo td{padding-top:4px}
 #torrentOrderControl{float:right;line-height:1}
 #torrents tbody tr:hover,.dirInfo tbody tr:hover{background:linear-gradient(180deg,#58165e,#4a0d56)}
 #torrents tbody tr:last-child td{border-bottom:var(--border_hard)}
+#torrents .snarkCommented{width:9px;height:9px;display:inline-block;position:absolute;top:-7px;right:2px;z-index:20}
+#torrents .snarkCommented img{padding:0;margin:0;width:9px;height:9px;border:none;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
 
 th.peerCount{min-width:110px}
 th.peerCount img{margin-left:-4px}
@@ -1267,7 +1267,6 @@ tt,input,textarea{font-size:9pt}
 .RateDown:not(:empty),.RateUp:not(:empty){min-width:70px}
 .snarkNav:first-child:not(:last-child){padding-left:32px;background-position:11px center,center center}
 .torrentAction{padding-right:3px}
-.torrentDetails img[src$="rateme.svg"]{margin-top:-3px;width:12px;height:12px}
 .torrentDownloaded,.torrentUploaded,.RateDown,.RateUp{min-width:76px}
 .torrentETA:not(:empty){min-width:80px}
 .torrentInfo .infohash{padding:4px 4px 4px 20px;background:var(--hash) no-repeat 4px center/14px,linear-gradient(180deg,#dd0 50%,#cc0 50%)}
@@ -1293,6 +1292,8 @@ tt,input,textarea{font-size:9pt}
 #torrentEdit th:nth-child(4),#torrentEdit td:nth-child(4){padding-right:10%}
 #torrentInfoStats .nowrap{margin-right:6px}
 #torrentlist{margin-top:-2px}
+#torrents .snarkCommented{width:12px;height:12px;right:2px}
+#torrents .snarkCommented img{margin-top:-2px;width:12px;height:12px}
 #torrents .infohash{padding-left:16px;max-width:100px;background-size:13px,100%}
 #torrents tt{margin:1px 2px 1px 4px;padding:2px 3px 2px 5px;opacity:.9}
 }
