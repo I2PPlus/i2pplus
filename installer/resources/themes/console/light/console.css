@@ -136,6 +136,7 @@ h4.sb_info{margin-top:-11px}
 #sidebar{margin-bottom:2px;padding:8px;width:192px;text-align:center;font-size:8pt;color:var(--ink);clear:left;border:1px solid var(--border);border-radius:2px;box-shadow:var(--bevel);background:#fafaff;contain:paint}
 #sidebar #sb_internals td,#sidebar #sb_advanced td,#sidebar #sb_services td,#sidebar #sb_help td{text-align:center}
 #sidebar #sb_localtunnels{margin-top:-9px}
+#sidebar hr[hidden] + #sb_shutdownStatus{margin-top:-9px;margin-bottom:-8px}
 #sidebar tr,#sidebar tr:nth-child(n+0){background-image:none;background-color:transparent;border:0;contain:paint}
 #sidebar td{padding:0 2px;border:none;background-image:none}
 #sidebar td:first-child,#sb_localtunnels td:nth-child(2){text-align:left}
