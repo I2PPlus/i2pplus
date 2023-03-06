@@ -8,7 +8,6 @@ var ex = document.getElementById("expand");
 var sh = document.getElementById("shrink");
 
 function initToggle() {
-
   function clean() {
     if (screenlog.classList.contains("xpanded"))
       screenlog.classList.remove("xpanded");
@@ -24,9 +23,7 @@ function initToggle() {
     }
     localStorage.setItem("screenlog", "collapsed");
   }
-
   if (mainsection) {
-
     function expand() {
       clean();
       var x = document.createElement("link");
@@ -38,7 +35,6 @@ function initToggle() {
       screenlog.classList.add("xpanded");
       localStorage.setItem("screenlog", "expanded")
     }
-
     function shrink() {
       clean();
       var s = document.createElement("link");
@@ -50,7 +46,6 @@ function initToggle() {
       screenlog.classList.add("collapsed");
       localStorage.setItem("screenlog", "collapsed");
     }
-
     function checkStatus() {
       var logStatus = localStorage.getItem("screenlog");
       switch (logStatus) {
@@ -64,7 +59,6 @@ function initToggle() {
           shrink();
       }
     }
-
     var logStatus = localStorage.getItem("screenlog");
     switch (logStatus) {
       case "expanded":
@@ -76,13 +70,8 @@ function initToggle() {
       default:
         shrink();
     }
-
   }
-
   sh.addEventListener("click", shrink, false);
   ex.addEventListener("click", expand, false);
-
 }
-
-sh.addEventListener("click", initToggle,false);
-ex.addEventListener("click", initToggle,false);
+document.addEventListener("DOMContentLoaded", initToggle, true);
