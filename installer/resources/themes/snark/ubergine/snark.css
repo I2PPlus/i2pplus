@@ -31,6 +31,7 @@
 --select_hover:linear-gradient(180deg,#f60 50%,#f40 50%);
 --select:linear-gradient(180deg,rgba(96,0,96,.2) 50%,rgba(16,0,16,.3) 50%),var(--tile);
 --shadow_inset:inset 3px 3px 3px rgba(0,0,0,.6);
+--snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tabicon:linear-gradient(180deg,#767 50%,#323 50%,#212);
 --th:linear-gradient(180deg,#202,#101);
 }
@@ -111,8 +112,9 @@ tfoot td:first-child{padding-left:0;text-align:left}
 /* screenlog */
 .logshim{margin-top:-10px}
 .iframed .logshim{margin-top:-2px}
-#screenlog,#screenlog.collapsed{margin:1px 0 11px;padding:2px 5px 3px;height:56px;position:relative;width:auto;width:calc(100% - 12px);overflow:hidden;text-align:left;font:bold 9pt var(--bodyfont);color:#2c6aef;border-spacing:0;border-radius:4px;border:var(--border_hard);background:#2a192a url(images/hat.png) no-repeat right center;box-shadow:inset 0 0 0 1px #545,inset 0 0 3px 1px rgba(16,0,16,.6),0 0 1px 1px #434;outline:none;scrollbar-color:#441840 rgba(32,12,32,.8);scrollbar-width:thin}
-#screenlog,#screenlog.collapsed,#screenlog.xpanded{background:url(images/hat.png) no-repeat right center,repeating-linear-gradient(180deg,rgba(16,0,16,.5) 2px,rgba(48,16,48,.6) 4px),url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,linear-gradient(180deg,rgba(255,200,255,.1),rgba(255,240,255,.05),rgba(0,0,0,.1)),linear-gradient(180deg,#2a192a,#202);background-size:80px auto,100%,calc(100% - 80px) calc(100% - 4px),100%,100%;background-position:right -4px bottom -10px,center center,left bottom 2px,center center,center top;background-blend-mode:lighten,darken,luminosity,normal,normal}
+#screenlog,#screenlog.collapsed,#screenlog.xpanded{background:url(images/hat.png) no-repeat right center,repeating-linear-gradient(180deg,rgba(16,0,16,.5) 2px,rgba(48,16,48,.6) 4px),var(--snarkGraph) no-repeat,linear-gradient(180deg,rgba(255,200,255,.1),rgba(255,240,255,.05),rgba(0,0,0,.1)),linear-gradient(180deg,#2a192a,#202);background-size:80px auto,100%,calc(100% - 80px) calc(100% - 4px),100%,100%;background-position:right -4px bottom -10px,center center,left bottom 2px,center center,center top;background-blend-mode:lighten,darken,luminosity,normal,normal}
+#screenlog,#screenlog.collapsed{margin:1px 0 11px;padding:2px 5px 3px;height:56px;position:relative;width:auto;width:calc(100% - 12px);overflow:hidden;text-align:left;font:bold 9pt var(--bodyfont);color:#2c6aef;border-spacing:0;border-radius:4px;border:var(--border_hard);/*background:#2a192a url(images/hat.png) no-repeat right center;*/box-shadow:inset 0 0 0 1px #545,inset 0 0 3px 1px rgba(16,0,16,.6),0 0 1px 1px #434;outline:none;scrollbar-color:#441840 rgba(32,12,32,.8);scrollbar-width:thin}
+#screenlog.xpanded{height:auto;max-height:300px}
 #screenlog:hover,#screenlog:focus{overflow-y:auto}
 .iframed #screenlog,.iframed #torrents{border-radius:0}
 #screenlog:focus{filter:drop-shadow(0 0 1px #f60)}
@@ -122,7 +124,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 #screenlog ul{margin:-1px 0 0 -1px;padding:0 0 0 14px;list-style:none}
 #screenlog li{margin-left:-18px;padding-left:10px;padding-right:10px;line-height:1.28}
 #screenlog li::before{margin:1px 1px -1px -6px;width:12px;height:11px;display:inline-block;background:var(--bullet)no-repeat left bottom/9px;content:""}
-#closelog,#expand,#shrink{position:sticky;top:2px;z-index:500;float:right;font-size:0}
+#closelog,#expand,#shrink{position:sticky;top:2px;z-index:500;float:right;font-size:0;cursor:pointer}
 #closelog img,#expand img,#shrink img{margin:-3px -4px 4px 4px;padding:4px 5px;max-width:11px;width:11px;height:11px;opacity:.8;border:var(--border_hard);border-radius:0 0 0 3px;background:rgba(34,0,34,.8);mix-blend-mode:luminosity;filter:sepia(100%) hue-rotate(210deg)}
 #expand img,#shrink img{margin-right:-5px}
 #closelog img{border-radius:0 3px 0 0}
@@ -138,8 +140,6 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .script{display:inline-block;vertical-align:top}
 
 /* torrents */
-th.graphicStatus a img{mix-blend-mode:normal}
-th.graphicStatus img{mix-blend-mode:luminosity}
 th.torrentUploaded a img{display:inline-block}
 tr:not(.peerinfo) .torrentUploaded:empty::after{width:1%;display:inline;content:"‒"}
 tr a,td.peerCount{-webkit-text-stroke:1px rgba(0,0,0,.3)}

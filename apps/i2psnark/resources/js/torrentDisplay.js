@@ -266,7 +266,7 @@ function checkFilterBar() {
 function checkPagenav() {
   var pagenav = document.getElementById("pagenavtop");
   var path = window.location.pathname;
-  var screenlog = document.querySelector("#screenlog ul");
+  var screenlog = document.getElementById("messages");
   var storageFilter = "filter";
   if (!path.endsWith("i2psnark/")) {
     storageFilter = "filter_" + path.replace("/", "");
@@ -321,16 +321,18 @@ function refreshFilters() {
         if (pagenav && !storage) {
           checkPagenav();
           var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
-          if (pagenavResponse !== null) {pagenav.innerHTML = pagenavResponse.innerHTML;}
+          if (pagenavResponse !== null && pagenav.innerHTML !== pagenavResponse.innerHTML) {pagenav.innerHTML = pagenavResponse.innerHTML;}
         }
         if (filterbar) {
-          //initFilterBar();
           var filterbarResponse = xhrfilter.responseXML.getElementById("torrentDisplay");
           if (!filterbar && filterbarResponse !== null) {filterbar.outerHTML = filterbarResponse.outerHTML;}
+          else if (filterbar && filterBarResponse && filterbar.innerHTML !== filterbarResponse.innerHTML) {
+            filterbar.innerHTML = filterbarResponse.innerHTML;
+          }
         }
         if (screenlog) {
-          var screenlogResponse = xhrfilter.responseXML.querySelector("#screenlog ul");
-          if (screenlogResponse != null && screenlog !== screenlogResponse) {
+          var screenlogResponse = xhrfilter.responseXML.getElementById("messages");
+          if (screenlogResponse != null && screenlog.innerHTML !== screenlogResponse.innerHTML) {
             screenlog.innerHTML = screenlogResponse.innerHTML;
           }
         }

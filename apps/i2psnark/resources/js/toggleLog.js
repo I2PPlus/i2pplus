@@ -9,13 +9,13 @@ var sh = document.getElementById("shrink");
 
 function initToggle() {
   function clean() {
+    var expandLog = document.getElementById("expandLog");
+    var shrinkLog = document.getElementById("shrinkLog");
     if (screenlog.classList.contains("xpanded")) {screenlog.classList.remove("xpanded");}
     if (screenlog.classList.contains("collapsed")) {screenlog.classList.remove("collapsed");}
-    var expandLog = document.getElementById("expandLog");
     if (expandLog) {expandLog.remove();}
-    var shrinkLog = document.getElementById("shrinkLog");
     if (shrinkLog) {shrinkLog.remove();}
-    localStorage.setItem("screenlog", "collapsed");
+    localStorage.removeItem("screenlog");
   }
   if (mainsection) {
     function expand() {
@@ -38,7 +38,6 @@ function initToggle() {
       s.setAttribute("id", "shrinkLog");
       document.head.appendChild(s);
       screenlog.classList.add("collapsed");
-      localStorage.setItem("screenlog", "collapsed");
     }
     function checkStatus() {
       var logStatus = localStorage.getItem("screenlog");
@@ -46,25 +45,12 @@ function initToggle() {
         case "expanded":
           expand();
           break;
-        case "collapsed":
-          shrink();
-          break;
         default:
           shrink();
       }
     }
-    var logStatus = localStorage.getItem("screenlog");
-    switch (logStatus) {
-      case "expanded":
-       expand();
-        break;
-      case "collapsed":
-        shrink();
-        break;
-      default:
-        shrink();
-    }
   }
+  checkStatus();
   sh.addEventListener("click", shrink, false);
   ex.addEventListener("click", expand, false);
 }

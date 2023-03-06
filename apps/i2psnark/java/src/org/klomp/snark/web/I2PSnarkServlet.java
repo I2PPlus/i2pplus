@@ -399,6 +399,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));
+        long now = _context.clock().now();
         if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko"))
             out.write(HEADER_A + _themePath + HEADER_D + "\n");
 
@@ -408,13 +409,14 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         // add placeholder for filterbar css
         out.write("<style id=cssfilter type=text/css></style>\n");
-        out.write("</head>\n" + "<body style=display:none;pointer-events:none id=snarkxhr class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
+        // add style for inbound data graph
+        out.write("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp" +
+                  "?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160" +
+                  "&hideLegend=true&hideTitle=true&hideGrid=true&t=" + now + "\')}\"</style>");
+        out.write("</head>\n" + "<body style=display:none;pointer-events:none id=snarkxhr class=\"" +
+                  _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
         out.write(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
-/*
-        long now = System.currentTimeMillis();
-        String time = String.valueOf(now);
-*/
         if (isConfigure) {
             out.write("<div id=navbar>\n<a href=\"" + _contextPath + "/\" title=\"");
             out.write(_t("Torrents"));
@@ -549,33 +551,38 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
-            out.write("<div id=screenlog class=\"");
-            if (isConfigure)
-                out.write(" configpage");
-            if (!_manager.util().connected())
-                out.write(" init");
-             out.write("\" tabindex=\"0\">\n" +
-                      "<a id=closelog href=\"" + _contextPath + '/');
-            if (isConfigure)
+            out.write("<div id=screenlog");
+            if (isConfigure) {
+                out.write(" class=configpage");
+            }
+            //if (!_manager.util().connected())
+            //    out.write(" init");
+            //if (isConfigure || !_manager.util().connected())
+            //    out.write("\"");
+            out.write(" tabindex=0>\n");
+            out.write("<a id=closelog href=\"" + _contextPath + '/');
+            if (isConfigure) {
                 out.write("configure");
-            if (peerString.length() > 0)
+            }
+            if (peerString.length() > 0) {
                 out.write(peerString + "&amp;");
-            else
+            } else {
                 out.write("?");
+            }
             int lastID = msgs.get(msgs.size() - 1).id;
             out.write("action=Clear&amp;id=" + lastID + "&amp;nonce=" + _nonce + "\">");
             String tx = _t("clear messages");
             out.write(toThemeSVG("delete", tx, tx));
             out.write("</a>\n");
-            out.write("<a class=script id=expand href=\"#\">");
+            out.write("<a class=script id=expand>");
             String x = _t("Expand");
             out.write(toThemeSVG("expand", x, x));
             out.write("</a>\n");
-            out.write("<a class=script id=shrink href=\"#\">");
+            out.write("<a class=script id=shrink>");
             String s = _t("Shrink");
             out.write(toThemeSVG("shrink", s, s));
             out.write("</a>\n");
-            out.write("<ul class=volatile>\n");
+            out.write("<ul id=messages class=volatile>\n");
             // FIXME only show once
             if (!_manager.util().connected()) {
                 out.write("<noscript>\n<li class=noscriptWarning>" +
@@ -597,17 +604,19 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</ul>\n</div>\n");
             debug = false;
             if (debug && _context.isRouterContext()) {
-                out.write("<script charset=utf-8 src=\"/themes/js/toggleLog.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
+                out.write("<script charset=utf-8 type=text/javascript src=/themes/js/toggleLog.js></script>\n");
             } else {
-                out.write("<script charset=utf-8 src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
+                out.write("<script charset=utf-8 type=text/javascript src=\"" + _contextPath + WARBASE +
+                          "js/toggleLog.js?" + CoreVersion.VERSION + "\"></script>\n");
             }
             int delay = 0;
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0 && _context.isRouterContext()) {
                 if (debug) {
-                    out.write("<script charset=utf-8 type=text/javascript src=\"/themes/js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
+                    out.write("<script charset=utf-8 type=text/javascript src=/themes/js/graphRefresh.js></script>\n");
                 } else {
-                    out.write("<script charset=utf-8 type=text/javascript src=\"" + _contextPath + WARBASE + "js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
+                    out.write("<script charset=utf-8 type=text/javascript src=\"" + _contextPath + WARBASE +
+                              "js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
                 }
             }
         }
@@ -2372,7 +2381,7 @@ public class I2PSnarkServlet extends BasicServlet {
             long percent = 100 * (total - remaining) / total;
             out.write("<div class=percentBarOuter>");
             out.write("<div class=percentBarInner style=\"width: " + percent + "%;\">");
-            out.write("<div class=percentBarText tabindex=\"0\" title=\"");
+            out.write("<div class=percentBarText tabindex=0 title=\"");
             out.write(percent + "% " + _t("complete") + "; " + formatSize(remaining) + ' ' + _t("remaining"));
             out.write("\">");
             out.write(formatSize(total-remaining).replaceAll("iB","") + thinsp(noThinsp) + formatSize(total).replaceAll("iB",""));

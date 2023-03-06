@@ -103,8 +103,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown) + a[href="/i2psnark"]:hover{opacity:.8}
 
 /* screenlog */
-#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);scrollbar-color:#225 #001;scrollbar-width:thin}
-#screenlog,#screenlog.expanded,#screenlog.collapsed{background:url(../ubergine/images/hat.png) no-repeat scroll right top,repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px),url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,linear-gradient(180deg,#001,#000008);background-size:80px auto,100% 4px,calc(100% - 75px) calc(100% - 8px),100%;background-position:right -4px bottom -10px,center center,left bottom,center top;background-blend-mode:normal,overlay,normal,normal}
+#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:url(../ubergine/images/hat.png) no-repeat scroll right top,repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px),url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,linear-gradient(180deg,#001,#000008);background-size:80px auto,100% 4px,calc(100% - 75px) calc(100% - 8px),100%;background-position:right -4px bottom -10px,center center,left bottom,center top;background-blend-mode:normal,overlay,normal,normal;scrollbar-color:#225 #001;scrollbar-width:thin}
 .iframed #screenlog{margin-top:-5px}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:inset 0 0 0 1px #930}
@@ -112,7 +111,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #screenlog ul{margin:-1px 0 2px 0;padding:0 0 0 14px;list-style:none}
 #screenlog li{margin-left:-15px;line-height:1.25;color:var(--li)}
 #screenlog li::before{width:14px;height:11px;display:inline-block;background:var(--bullet) no-repeat left bottom / 9px;content:""}
-#closelog,#expand,#shrink{float:right;position:sticky;top:0}
+#closelog,#expand,#shrink{float:right;position:sticky;top:0;cursor:pointer}
 #shrink{display:none}
 #closelog img,#expand img,#shrink img{margin:-3px -5px 4px 5px;padding:5px;opacity:.8;background:#001;border:var(--border);border-top:none;border-right:none;width:12px;mix-blend-mode:luminosity;z-index:1}
 #closeLog img:hover,#closeLog img:focus,#expand img:hover,#expand img:focus,#shrink img:hover,#shrink img:focus{box-shadow:var(--highlight);background:#404;mix-blend-mode:normal}
