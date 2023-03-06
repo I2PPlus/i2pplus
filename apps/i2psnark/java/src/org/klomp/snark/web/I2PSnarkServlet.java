@@ -409,7 +409,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // add placeholder for filterbar css
         out.write("<style id=cssfilter type=text/css></style>\n");
         out.write("</head>\n" + "<body style=display:none;pointer-events:none id=snarkxhr class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
-        out.write("<iframe name=processForm id=processForm hidden></iframe>\n");
+        out.write(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
 /*
         long now = System.currentTimeMillis();
@@ -2953,7 +2953,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<div id=add class=snarkNewTorrent>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form id=addForm action=\"_post\" method=POST target=\"processForm\">\n");
+        out.write("<form id=addForm action=\"_post\" method=POST target=processForm>\n");
         out.write("<div class=sectionPanel id=addSection>\n");
         writeHiddenInputs(out, req, "Add");
         out.write("<input hidden class=toggle_input id=toggle_addtorrent type=checkbox");
@@ -2990,7 +2990,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
         out.write("<div class=sectionPanel id=createSection>\n<div>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form id=createForm action=\"_post\" method=POST target=\"processForm\">\n");
+        out.write("<form id=createForm action=\"_post\" method=POST target=processForm>\n");
         writeHiddenInputs(out, req, "Create");
         out.write("<input hidden class=toggle_input id=toggle_createtorrent type=checkbox>" +
                   "<label id=tab_newtorrent class=toggleview for=\"toggle_createtorrent\"><span class=tab_label>");
@@ -3101,7 +3101,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
 // configuration
 
-        out.write("<form action=\"" + _contextPath + "/configure#navbar\" method=POST>\n" +
+        out.write("<form action=\"" + _contextPath + "/configure\" method=POST>\n" +
                   "<div class=\"configPanel lang_" + lang + "\"><div class=snarkConfig>\n");
         writeHiddenInputs(out, req, "Save");
         out.write("<span class=configTitle>");
@@ -3114,7 +3114,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<tr><th class=suboption>");
         out.write(_t("User Interface"));
         if (_context.isRouterContext()) {
-            out.write("&nbsp;&nbsp;<a href=\"/torrentmgr\" target=_top class=script id=embed>");
+            out.write("&nbsp;&nbsp;<a href=/torrentmgr target=_top class=script id=embed>");
             out.write(_t("Switch to Embedded Mode"));
             out.write("</a>");
             out.write("<a href=\"" + _contextPath + "/configure\" target=_top class=script id=fullscreen>");
@@ -3743,6 +3743,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                          CoreVersion.VERSION + "\" id=iframeResizer></script>\n" +
                                          "<style type=text/css>body{display:block!important;pointer-events:auto!important}</style>\n</body>\n</html>";
     private static final String FTR_STD = "</div>\n</center><style type=text/css>body{display:block!important;pointer-events:auto!important}</style>\n</body>\n</html>";
+    private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
     /**
      * Modded heavily from the Jetty version in Resource.java,
