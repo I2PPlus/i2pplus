@@ -23,10 +23,16 @@ public class ConfigRestartBean {
     private static final String[] SET4 = {"shutdown", "stop", "Shutdown"};
 
     private static final String _systemNonce = Long.toString(RandomSource.getInstance().nextLong());
+    private static final String PROP_ADVANCED = "routerconsole.advanced";
 
     /** formerly System.getProperty("console.nonce") */
     public static String getNonce() {
         return _systemNonce;
+    }
+
+    public static boolean isAdvanced() {
+        RouterContext ctx = ContextHelper.getContext(null);
+        return ctx.getBooleanProperty(PROP_ADVANCED);
     }
 
     /** this also initiates the restart/shutdown based on action */
@@ -63,7 +69,7 @@ public class ConfigRestartBean {
         boolean restarting = isRestarting(ctx);
         long timeRemaining = ctx.router().getShutdownTimeRemaining();
         StringBuilder buf = new StringBuilder(128);
-        if ((shuttingDown || restarting) && timeRemaining <= 5*1000) {
+        if ((shuttingDown || restarting) && timeRemaining <= 15*1000) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span>");
             if (restarting)
                 buf.append(_t("Restart imminent", ctx));
@@ -75,9 +81,13 @@ public class ConfigRestartBean {
             buf.append(_t("Shutdown in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             int tuns = ctx.tunnelManager().getParticipatingCount();
             if (tuns > 0) {
-                buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
-                                                "Please wait for routing commitments to expire for {0} tunnels",
-                                                tuns, ctx));
+                if (isAdvanced()) {
+                    buf.append("&hellip;<br>").append(ngettext("{0} transit tunnel still active",
+                                                     "{0} transit tunnels still active", tuns, ctx));
+                } else {
+                    buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
+                                                     "Please wait for routing commitments to expire for {0} tunnels", tuns, ctx));
+                }
             }
             buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET1);
