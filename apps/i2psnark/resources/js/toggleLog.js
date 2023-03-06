@@ -9,18 +9,12 @@ var sh = document.getElementById("shrink");
 
 function initToggle() {
   function clean() {
-    if (screenlog.classList.contains("xpanded"))
-      screenlog.classList.remove("xpanded");
-    if (screenlog.classList.contains("collapsed"))
-      screenlog.classList.remove("collapsed");
+    if (screenlog.classList.contains("xpanded")) {screenlog.classList.remove("xpanded");}
+    if (screenlog.classList.contains("collapsed")) {screenlog.classList.remove("collapsed");}
     var expandLog = document.getElementById("expandLog");
-    if (expandLog) {
-        expandLog.remove();
-    }
+    if (expandLog) {expandLog.remove();}
     var shrinkLog = document.getElementById("shrinkLog");
-    if (shrinkLog) {
-        shrinkLog.remove();
-    }
+    if (shrinkLog) {shrinkLog.remove();}
     localStorage.setItem("screenlog", "collapsed");
   }
   if (mainsection) {
@@ -74,4 +68,5 @@ function initToggle() {
   sh.addEventListener("click", shrink, false);
   ex.addEventListener("click", expand, false);
 }
-document.addEventListener("DOMContentLoaded", initToggle, true);
+sh.addEventListener("click", initToggle, false);
+ex.addEventListener("click", initToggle, false);
