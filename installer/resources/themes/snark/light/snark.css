@@ -103,7 +103,7 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 
 /* screenlog */
 #screenlog,#screenlog.collapsed{margin:-2px 0 0;padding:3px 5px 3px 5px;min-width:810px;height:56px;width:auto;font-size:8.5pt;text-align:left;overflow:hidden;color:#6e6eb7;border-top:var(--border_soft);border-bottom:var(--border_soft);border-spacing:0;box-shadow:var(--highlight);contain:paint}
-#screenlog,#screenlog.expanded,#screenlog.collapsed{background:url(images/kitty.png) no-repeat right center,repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,var(--th);background-size:60px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}
+#screenlog,#screenlog.expanded,#screenlog.collapsed{background:url(images/kitty.png) no-repeat right center,repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,var(--th);background-size:60px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal;transition: ease all .15s}
 #screenlog .infohash{font-weight:700}
 .iframed #screenlog{margin-top:-12px}
 #screenlog:hover,#screenlog:focus{overflow-y:auto}
@@ -926,7 +926,7 @@ td.torrentDetails img,.dirInfo td:first-child img:not(.thumb){width:22px;height:
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
 #ourDest{margin:-1px 0 0 3px}
-#screenlog{height:60px}
+#screenlog{height:60px;min-height:60px}
 #screenlog li::before{width:15px;height:11px;background-size:10px 10px}
 #screenlog li,#screenlog li a,#screenlog li a:visited{font-size:9.5pt !important}
 #snarkFiles .ParentDir a{font-size:90%}

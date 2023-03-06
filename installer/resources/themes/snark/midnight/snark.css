@@ -940,7 +940,7 @@ thead img,thead img:hover{max-height:22px}
 #pagenavcontrols{transform:translateX(70px)}
 #pagenav img{height:16px}
 #screenlog + form{margin-top:9px}
-#screenlog{height:54px}
+#screenlog{height:60px;min-height:60px}
 #screenlog li::before{margin:0 1px 0 1px;width:15px;background-size:10px 10px}
 #screenlog li,#screenlog li a{font-size:9.5pt}
 #screenlog{margin-bottom:-10px}

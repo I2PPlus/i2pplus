@@ -1284,7 +1284,7 @@ tt,input,textarea{font-size:9pt}
 #navbar a{font-size:12pt}
 #navbar img{margin:-2px -9px 0 -5px}
 #pagenavbottom img{width:16px;height:16px}
-#screenlog{margin-top:0;height:60px}
+#screenlog{margin-top:0;height:60px;min-height:60px}
 #screenlog li,#screenlog li a{font-size:9.5pt}
 #screenlog li::before{width:14px;height:12px;background-size:10px}
 #torrentDisplay label{padding:4px 16px;min-width:110px}

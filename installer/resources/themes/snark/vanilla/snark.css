@@ -1037,7 +1037,7 @@ tr#torrentInfoStats td{padding-top:5px;padding-bottom:5px}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
 #configs th{font-size:10pt}
 #fullscreen,#embed{font-size:8.5pt}
-#screenlog{height:60px}
+#screenlog{height:60px;min-height:60px}
 #torrentDisplay{margin:-4px 0 -1px}
 #torrentInfoStats .nowrap{margin-right:6px}
 #torrents .infohash{background-size:12px}
