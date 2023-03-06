@@ -127,16 +127,17 @@ h4.sb_info{margin-top:-11px}
 #sidebar h3:hover a,#sidebar h3 a:hover{color:var(--hover);text-shadow:0 0 1px #fff}
 #sidebar h3:hover{background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
 #sidebar h3{margin:-9px -7px -3px;padding:2px 0;letter-spacing:.04em;text-transform:uppercase;font-size:9.5pt;border:1px solid #afafcf;border-left:none;border-right:none;border-radius:0;box-shadow:var(--highlight);background:#e7e7ff var(--h3);filter:none}
+#sidebar h4{margin:-7px;padding:6px 2px;line-height:1.05;font-size:8.5pt;letter-spacing:0;text-transform:none;color:#4f617f;text-decoration:none;border:none;border-radius:0;box-shadow:inset 0 0 0 1px #eef;background:linear-gradient(90deg,#ddf,#eef 10%,#fff 50%,#eef 90%,#ddf)}
 #sidebar h4::after{padding-top:8px;padding-bottom:8px;content:"";display:inline-block;box-sizing:border-box;min-height:12px;vertical-align:middle}
 #sidebar h4 a{vertical-align:baseline}
-#sidebar h4{margin:-7px;padding:6px 2px;line-height:1.05;font-size:8.5pt;letter-spacing:0;text-transform:none;color:#4f617f;text-decoration:none;border:none;border-radius:0;box-shadow:inset 0 0 0 1px #eef;background:linear-gradient(90deg,#ddf,#eef 10%,#fff 50%,#eef 90%,#ddf)}
 #sidebar hr.b{margin-bottom:5px;height:0;border-bottom:1px solid transparent;background:transparent}
 #sidebar hr{margin:8px -7px;height:1px;border-bottom:1px solid #afafcf;box-shadow:inset 0 1px 1px 1px #fff;background:#adadeb}
 #sidebar input[type=text]{text-align:right}
 #sidebar{margin-bottom:2px;padding:8px;width:192px;text-align:center;font-size:8pt;color:var(--ink);clear:left;border:1px solid var(--border);border-radius:2px;box-shadow:var(--bevel);background:#fafaff;contain:paint}
 #sidebar #sb_internals td,#sidebar #sb_advanced td,#sidebar #sb_services td,#sidebar #sb_help td{text-align:center}
 #sidebar #sb_localtunnels{margin-top:-9px}
-#sidebar hr[hidden] + #sb_shutdownStatus{margin-top:-9px;margin-bottom:-8px}
+#sidebar #sb_shutdownStatus{margin:-7px -6px;padding:7px 4px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,0 0 0 3px rgba(148,0,0,.5) inset}
+#sidebar hr[hidden] + #sb_shutdownStatus{margin:-9px -6px -7px}
 #sidebar tr,#sidebar tr:nth-child(n+0){background-image:none;background-color:transparent;border:0;contain:paint}
 #sidebar td{padding:0 2px;border:none;background-image:none}
 #sidebar td:first-child,#sb_localtunnels td:nth-child(2){text-align:left}
@@ -548,11 +549,11 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 .log_omitted{margin-right:1px}
 .nologs{padding:6px 8px}
 #logs font[color^="#"]::before{margin-right:5px;margin-left:-17px;margin:-2px 5px 0 -17px;width:6px;height:6px;display:inline-block;content:"";vertical-align:middle;border-radius:50%;background:#fff}
-#logs li{margin:0 0 -1px -5px;padding:1px 6px 1px 20px;width:calc(100% - 16px);list-style:none;font-size:8.5pt;text-align:left;opacity:.8;box-shadow:inset 0 0 0 1px #ddf,inset 0 0 0 2px #fff}
+#logs li{margin:0 0 -1px -5px;padding:1px 6px 1px 20px;width:calc(100% - 16px);text-align:left;list-style:none;font-size:8.5pt;;box-shadow:inset 0 0 0 1px #ddf,inset 0 0 0 2px #fff;opacity:.7}
 #logs li:nth-child(even){background:#f0f0ff}
 #logs li:nth-child(odd){background:#f3f3ff}
 #logs li:first-child{margin-top:1px}
-#logs li:hover{box-shadow:inset 0 0 0 1px #ddf,inset 0 0 0 2px #ff9;background:#ffe;opacity:1}
+#logs li:hover{box-shadow:inset 0 0 0 1px #ddf,inset 0 0 0 2px #ff9;background:#ffe;opacity:.85}
 #logs li:hover::after,#logs li:hover::before{opacity:.8}
 #logs li:last-child::after{border:none;margin:0}
 #logs table{position:relative}
@@ -2647,6 +2648,7 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #sidebar hr[hidden] ~ h4{margin-bottom:-4px}
 #sidebar hr[hidden] ~ #sb_advanced:not([hidden]) ~ h3{margin-top:-9px}
 #sidebar{margin-bottom:5px;width:228px}
+#sidebar table[id^="sb_"]{width:238px}
 #sidebar .reload,#sidebar .stop{margin:0 3px -5px;padding-top:6px;padding-bottom:6px;min-width:110px}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
 #sidebar #sb_CPUBar{margin-top:-4px}
@@ -2654,9 +2656,9 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #sidebar hr[hidden] ~ #sb_memoryBar{margin-bottom:-2px}
 #sidebar #sb_logo{margin-top:4px;height:41px !important}
 #sidebar #sb_newsheadings table{width:240px}
-#sidebar table[id^="sb_"]{width:238px}
 #sidebar #sb_services.collapsed{margin-bottom:-9px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-8px}
+#sidebar #sb_shutdownStatus{padding:8px 4px 6px}
 #sybilTask th{font-size:12pt}
 #udpconnections .cells td{border-left:none;border-right:none}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
