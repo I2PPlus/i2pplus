@@ -2629,6 +2629,8 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #sb_internals,#sb_advanced,#sb_help{width:240px}
 #sb_localtunnels a{max-width:188px}
 #sb_localtunnels td:first-child,#sb_localtunnels tr:hover td:first-child{background-size:17px}
+#sb_peers tr:last-child td,#sb_tunnels tr:last-child td{padding-bottom:2px}
+#sb_queue tr:last-child td{padding-bottom:3px}
 #sb_logo img{margin-top:-4px;margin-left:-2px;width:240px}
 #sb_memoryBar.percentBarOuter{margin-bottom:-5px}
 #homepage #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
