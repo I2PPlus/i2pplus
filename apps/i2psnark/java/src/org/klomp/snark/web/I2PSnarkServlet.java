@@ -5569,8 +5569,8 @@ public class I2PSnarkServlet extends BasicServlet {
             return;
         buf.append("<div id=editSection class=mainsection>\n" +
                    "<input hidden class=toggle_input id=toggle_torrentedit type=checkbox>" +
-                   "<label id=tab_torrentedit class=toggleview for=\"toggle_torrentedit\"><span class=tab_label>");
-        buf.append(_t("Edit Torrent"))
+                   "<label id=tab_torrentedit class=toggleview for=\"toggle_torrentedit\"><span class=tab_label>")
+           .append(_t("Edit Torrent"))
            .append("</span></label><hr>\n")
            .append("<table id=torrentEdit>\n");
         boolean isRunning = !snark.isStopped();
@@ -5656,10 +5656,11 @@ public class I2PSnarkServlet extends BasicServlet {
         if (com == null) {
             com = "";
         } else if (com.length() > 0) {
-            com = DataHelper.escapeHTML(com).replace("\r\n", "<br>").replace("\n", "<br>");
+            //com = DataHelper.escapeHTML(com).replace("\r\n", "<br>").replace("\n", "<br>");
+            com = DataHelper.escapeHTML(com);
         }
-        buf.append("<tr class=header><th colspan=4>").append(_t("Torrent Comment")).append("</th></tr>\n");
-        buf.append("<tr><td colspan=4 id=addCommentText><textarea name=\"nofilter_newTorrentComment\" cols=88 rows=4");
+        buf.append("<tr class=header><th colspan=4>").append(_t("Torrent Comment")).append("</th></tr>\n")
+           .append("<tr><td colspan=4 id=addCommentText><textarea name=\"nofilter_newTorrentComment\" cols=88 rows=4");
         if (isRunning)
             buf.append(" readonly");
         buf.append(">").append(com).append("</textarea></td>").append("</tr>\n");
