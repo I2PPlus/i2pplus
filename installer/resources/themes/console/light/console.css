@@ -1061,6 +1061,20 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;vertical-align:middle;box-sizing:border-box;float:none}
 #floodfills .percentBarOuter.nofail .percentBarInner{width:100%!important;display:inline-block;vertical-align:top;background:linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05) 50%),linear-gradient(90deg,#383,#494)}
 
+#peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
+#peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
+#peers .edit a{margin:0;vertical-align:middle}
+#topCount{display:inline-block;position:absolute;right:2px;top:2px}
+#topCount table,#topCount td{line-height:1}
+#topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;;border:none}
+#topCount td{padding:4px 2px 3px 6px;min-width:32px;position:relative;line-height:1;border:var(--border_soft);text-align:left;box-shadow:var(--highlight);background:var(--badge)}
+#topCount td span{padding:2px 4px 1px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(248,248,255,.2)}
+#topCount td#ff{background:linear-gradient(135deg,rgba(0,0,0,0)82%,rgba(192,80,0,.8)82%),var(--badge)}
+#topCount td#u{background:linear-gradient(45deg,rgba(0,0,0,0)82%,rgba(192,0,0,.8)82%),var(--badge)}
+#peers .reachability{display:none}
+#peers #ntcpcon,#peers #udpcon{position:relative}
+#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
+
 /* tunnels */
 .ipaddress a{line-height:1}
 .routerHash,.version{margin:0;padding:1px 3px;min-width:44px;display:inline-block;line-height:1.3;vertical-align:middle;text-align:center;font-weight:700;border:1px solid #bbc;box-shadow:var(--highlight);background:var(--badge)}
@@ -1073,10 +1087,9 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .tunnel_id{margin:0 3px;padding:2px 4px 2px 2px;min-width:109px;display:inline-block;box-sizing:border-box;vertical-align:middle;text-align:center}
 .tunnel_id:empty{text-align:center}
 .tunnel_id:empty::after{content:"n/a";display:inline-block}
-.tunnel_peer,.tunnel_local{margin:0;display:inline-block;vertical-align:middle;text-align:center;box-sizing:border-box}
+.tunnel_peer,.tunnel_local{margin:0;display:inline-block;vertical-align:middle;line-height:1.35;text-align:center;box-sizing:border-box}
 .tunnel_peer{margin:0;padding:3px 2px;width:auto;min-width:70px}
-.tunnel_peer:empty{vertical-align:top}
-.tunnel_local{margin-right:2px;line-height:1.35;text-align:center;text-transform:lowercase;font-size:8pt}
+.tunnel_local{margin-right:2px;width:99px;box-sizing:border-box;text-transform:lowercase;font-size:8pt}
 .tunnels_participating td.cells:first-child{font-size:0}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
@@ -1213,6 +1226,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #profiles .ok,#ntcpconnections td.queue:empty::before{width:15px;height:15px;display:inline-block;font-size:0;background-size:10px}
 #profiles_overview{margin-bottom:13px;background-image:url(../images/profile.svg)}
 #profiles_overview + .widescroll{margin-bottom:-5px}
+#profiles span[hidden]{display:none!important}
 #profiles td span{vertical-align:middle}
 #profiles .tunnel_peer img{margin-left:-6px}
 #profiles .tunnel_peer{margin-left:-6px}
@@ -2273,6 +2287,23 @@ table#consolepass input[name="name"]{margin-right:20px}
 #webhosting #guides li a{padding-left:22px}
 #help code,#webhosting i{font-weight:700}
 
+/* router widgets */
+.rid,.rid td,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);box-shadow:var(--highlight)}
+.rid{width:unset}
+.rid td,#profilelist .rid td{font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight);background:var(--badge)}
+.rif,.rif img{line-height:0;font-size:0}
+.rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
+.rid .rih{padding:2px 6px;font-family:var(--monospaced);line-height:1;font-size:9pt;vertical-align:middle}
+.rid .rbw{padding:2px 4px;min-width:16px;text-align:center;line-height:1;font-weight:900}
+.rbw.isff,#profilelist .rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
+.rbw.isU,#profilelist .rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0)82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isff.isU,#profilelist .rbw.isff.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+#topCount .rbw#ff{background:linear-gradient(135deg,rgba(0,0,0,0) 90%,rgba(192,80,0,.8)90%),var(--badge)}
+#topCount .rbw#u{background:linear-gradient(45deg,rgba(0,0,0,0)87%,rgba(192,0,0,.8)87%),var(--badge)}
+.ric{background:var(--badge)}
+.ric .rbw{line-height:1.05}
+#banlist li .rid{margin-right:5px;margin-left:-2px;float:left}
+
 /* iframe */
 .main.embedded{text-align:center;padding:2px;overflow:hidden}
 .main.embedded iframe{margin:1px -10px -4px;background:#f2f2ff}
@@ -2634,14 +2665,15 @@ tt,tt a,pre,div.news,.footnote,.links code,.news,.topness,#console code,#help co
 #sb_internals,#sb_advanced,#sb_help{width:240px}
 #sb_localtunnels a{max-width:188px}
 #sb_localtunnels td:first-child,#sb_localtunnels tr:hover td:first-child{background-size:17px}
-#sb_peers tr:last-child td,#sb_tunnels tr:last-child td{padding-bottom:2px}
-#sb_queue tr:last-child td{padding-bottom:3px}
 #sb_logo img{margin-top:-4px;margin-left:-2px;width:240px}
 #sb_memoryBar.percentBarOuter{margin-bottom:-5px}
 #homepage #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
 #homepage #sb_memoryBar + hr{margin-top:5px}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0 0 2px}
 #sb_peers[hidden] + #sb_peers_condensed,#sb_tunnels[hidden] + #sb_tunnels_condensed{width:239px}
+#homepage #sb_peers tr:last-child td{padding-bottom:1px}
+#homepage #sb_queue tr:last-child td{padding-bottom:3px}
+#homepage #sb_tunnels tr:last-child td{padding-bottom:2px}
 #sb_services{width:242px}
 #sb_updatesection.collapsed > h3.collapsed{margin-bottom:-10px}
 #schedjobs li{min-width:280px}
@@ -2684,33 +2716,3 @@ th code{font-size:9pt}
 #searchbar input,#searchbar select{height:30px}
 #searchbar button{height:29px;border-bottom:var(--border_input)}
 }
-
-.tunnel_peer{display:inline-block;line-height:1.35;vertical-align:middle}
-.tunnel_local{width:99px;box-sizing:border-box}
-.rid,.rid td,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);box-shadow:var(--highlight)}
-.rid{width:unset}
-.rid td,#profilelist .rid td{font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight);background:var(--badge)}
-.rif,.rif img{line-height:0;font-size:0}
-.rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
-.rid .rih{padding:2px 6px;font-family:var(--monospaced);line-height:1;font-size:9pt;vertical-align:middle}
-.rid .rbw{padding:2px 4px;min-width:16px;text-align:center;line-height:1;font-weight:900}
-.rbw.isff,#profilelist .rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
-.rbw.isU,#profilelist .rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isff.isU,#profilelist .rbw.isff.isU{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.ric{background:var(--badge)}
-.ric .rbw{line-height:1.05}
-#banlist li .rid{margin-right:5px;margin-left:-2px;float:left}
-#profiles span[hidden]{display:none!important}
-#peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
-#peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
-#peers .edit a{margin:0;vertical-align:middle}
-#topCount{display:inline-block;position:absolute;right:2px;top:2px}
-#topCount table,#topCount td{line-height:1}
-#topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;;border:none}
-#topCount td{padding:4px 2px 3px 6px;min-width:32px;position:relative;line-height:1;border:var(--border_soft);text-align:left;box-shadow:var(--highlight);background:var(--badge)}
-#topCount td span{padding:2px 4px 1px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(248,248,255,.2)}
-#topCount td#ff{background:linear-gradient(135deg,rgba(0,0,0,0)82%,rgba(192,80,0,.8)82%),var(--badge)}
-#topCount td#u{background:linear-gradient(45deg,rgba(0,0,0,0)82%,rgba(192,0,0,.8)82%),var(--badge)}
-#peers .reachability{display:none}
-#peers #ntcpcon,#peers #udpcon{position:relative}
-#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
