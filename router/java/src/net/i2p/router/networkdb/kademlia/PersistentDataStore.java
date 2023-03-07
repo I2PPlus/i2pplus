@@ -17,6 +17,7 @@ import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -36,6 +37,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
@@ -68,6 +70,11 @@ public class PersistentDataStore extends TransientDataStore {
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
     private static final int MAX_ROUTERS_INIT = SystemVersion.isSlow() ? 2000 : 5000;
+
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    public boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
+    }
 
     /**
      *  @param dbDir relative path
@@ -361,6 +368,13 @@ public class PersistentDataStore extends TransientDataStore {
                     dbFile.setLastModified(dataPublishDate);
                     if (_log.shouldDebug() && ri != null && !unreachable && !isOld && !isBadFF && !noSSU)
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                    if (enableReverseLookups()) {
+                        String ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
+                        String rl = ip != null ? getCanonicalHostName(ip) : null;
+                        String lookup = CommSystemFacadeImpl.getDomain(rl);
+                        if (_log.shouldDebug() && ip != null && rl != null)
+                            _log.debug("Reverse lookup of RouterInfo [" + key.toBase64().substring(0,6) + "] resolves to: " + lookup);
+                    }
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
                     dbFile.delete();
@@ -869,6 +883,17 @@ public class PersistentDataStore extends TransientDataStore {
                 _log.debug("Deleted " + f.getAbsolutePath());
             }
             return;
+        }
+    }
+
+    /**
+     * @since 0.9.58+
+     */
+    public String getCanonicalHostName(String hostName) {
+        try {
+            return InetAddress.getByName(hostName).getCanonicalHostName();
+        } catch(IOException exception) {
+            return hostName;
         }
     }
 }
