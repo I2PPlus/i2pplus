@@ -48,15 +48,8 @@ function initFilterBar() {
   checkIfActive();
 
   function checkIfActive() {
-    if (!storage || btnAll.checked === true) {
+    if (!storage && filterbar !== null) {
       btnAll.checked = true;
-      if (torrentform) {
-        torrentform.classList.remove("filterbarActive");
-      }
-    } else {
-      if (torrentform && !torrentform.classList.contains("filterbarActive")) {
-        torrentform.classList.add("filterbarActive");
-      }
     }
   }
 
