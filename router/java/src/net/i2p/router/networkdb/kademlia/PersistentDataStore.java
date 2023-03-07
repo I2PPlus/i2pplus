@@ -372,8 +372,8 @@ public class PersistentDataStore extends TransientDataStore {
                         String ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
                         String rl = ip != null ? getCanonicalHostName(ip) : null;
                         String lookup = CommSystemFacadeImpl.getDomain(rl);
-                        if (_log.shouldDebug() && ip != null && rl != null)
-                            _log.debug("Reverse lookup of RouterInfo [" + key.toBase64().substring(0,6) + "] resolves to: " + lookup);
+                        if (_log.shouldInfo() && ip != null && rl != null)
+                            _log.info("Reverse lookup of RouterInfo [" + key.toBase64().substring(0,6) + "] resolves to: " + lookup);
                     }
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
