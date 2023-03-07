@@ -377,7 +377,6 @@ td.tabletextarea{padding:0;background:#fafaff}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs a.delete::after,#logs a.configure::after{margin-top:2px;margin-bottom:-1px;width:16px;height:16px;float:right;background:var(--settings) no-repeat center center/16px;content:""}
 #tunnels h3 a[href^="/configtunnels#"]:hover::after,#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,#logs a.delete::after,#logs a.configure:hover::after{background:var(--settings_hover) no-repeat center center/16px}
 #tunnels h3 a[href^="/configtunnels#"]:hover,#logs a.configure:hover::after{background:var(--settings_hover) no-repeat center center/16px}
-#tunnels tr:hover .cells,#tunnel_defs tr:hover td,tr:hover .cells,.cells tr:hover td,#profilelist tr:hover td,#profile_defs tr:hover td,#floodfills tr:hover td,#debug tr:hover td,#jardump tr:hover td,#jobstats tr:hover td,#eventlog tr:hover td,#webappconfig tr:hover td,#tunnelconfig tr:hover td,#sidebarconf tr:hover td,#configstats tr:hover td,#loggingoptions tr:hover td,#addkeyring tr:hover td,.homelinkedit tr:hover td,#clientconfig tr:hover td,.netdbentry tr:hover td,#netdblookup tr:hover td,#peerdefs tr:hover td,#help tr:hover td:not(.infohelp):not(.infowarn)
 #udpconnections{margin-bottom:4px}
 #warning2{background:linear-gradient(180deg,rgba(248,248,255,.5),rgba(240,240,255,.5)),url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom/auto 160px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px) #f8f8ff}
 span#newtab{float:right;letter-spacing:0;text-align:right;font-size:8pt}
@@ -1178,7 +1177,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #tunnelconfig td:nth-child(n+2){text-align:left}
 #tunnelconfig td input[type=text]{width:calc(100% - 4px)}
 #tunnelconfigsave{margin-top:-22px}
-#profilelist tr:not(.lazyhide):hover td,#floodfills tr:hover td,#ntcpconnections tr:nth-last-child(n+2):hover td,#udpconnections tr:nth-last-child(n+2):hover td,#schedjobs tr:hover td,#jobstats tr:nth-last-child(n+2):hover td,#jardump tr:hover td,#sidebarconf tr:nth-last-child(n+2):hover td,#eventlog tr:hover td,#netdboverview table tr:hover td,#debug tr:hover td,#clientconfig tr:hover td,#webappconfig tr:hover td,#portfaq tr:hover td,.tunneldisplay tr:hover td{background-color:#ffd;color:var(--ink_darker);transition:ease background .2s .01s}
+#profilelist tr:not(.lazyhide):hover td:not(.rif):not(.rih):not(.rbw),#floodfills tr:hover td:not(.rif):not(.rih):not(.rbw),#ntcpconnections tr:nth-last-child(n+2):hover td:not(.rif):not(.rih):not(.rbw),#udpconnections tr:nth-last-child(n+2):hover td:not(.rif):not(.rih):not(.rbw),#schedjobs tr:hover td,#jobstats tr:nth-last-child(n+2):hover td,#jardump tr:hover td,#sidebarconf tr:nth-last-child(n+2):hover td,#eventlog tr:hover td,#netdboverview table tr:hover td,#debug tr:hover td,#clientconfig tr:hover td,#webappconfig tr:hover td,#portfaq tr:hover td,.tunneldisplay tr:hover td:not(.rif):not(.rih):not(.rbw){background-color:#ffd;color:var(--ink_darker);transition:ease background .2s .01s}
 
 /* peers - sort icons */
 #udpconnections th{vertical-align:top;padding-top:3px}
@@ -1252,11 +1251,12 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #floodfills .tier,#floodfills .ff,#floodfills .ssuintro,#floodfills .unreachable,#floodfills .reachable,#floodfills .hidden{margin:0 2px}
 #floodfills{margin-top:8px;margin-bottom:15px}
 #floodfills th{border-right:1px solid var(--border_inner);box-shadow:var(--highlight),inset 0 0 1px 1px #ddf}
-#floodfills:not(rid) td:first-child{padding-left:3px;padding-right:3px;width:1%;white-space:nowrap}
-#floodfills:not(.rid) td:first-child{border-left:1px solid #7789bf}
-#floodfills:not(.rid) td:last-child{border-right:1px solid #7789bf}
-#floodfills:not(.rid) td:not(.rih):nth-child(2){width:6%;min-width:64px}
+#floodfills td:not(.rif):first-child{padding-left:3px;padding-right:3px;width:1%;white-space:nowrap}
+#floodfills td:not(.rif):first-child{border-left:1px solid #7789bf}
+#floodfills td:not(.rbw):last-child{border-right:1px solid #7789bf}
+#floodfills td:not(.rih):nth-child(2){width:6%;min-width:64px}
 #floodfills .percentBarOuter,#floodfills .percentBarText{width:calc(100% - 8px)}
+#floodfills .percentBarOuter{margin-top:-1px}
 #floodfills .percentBarInner[style="width:0%"]{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#090,#0b0)}
 #floodfills .percentBarText{color:#fff;text-shadow:0 1px 1px #000;display:none}
 
@@ -2689,7 +2689,7 @@ th code{font-size:9pt}
 .rid .rbw{padding:2px 4px;min-width:16px;text-align:center;line-height:1;font-weight:900}
 .rbw.isff,#profilelist .rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
 .rbw.isU,#profilelist .rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isff.isU,#profilelist .rbw.isff.isU{linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isff.isU,#profilelist .rbw.isff.isU{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
 .ric{background:var(--badge)}
 .ric .rbw{line-height:1.05}
 #banlist li .rid{margin-right:5px;margin-left:-2px;float:left}
