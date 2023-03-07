@@ -20,7 +20,7 @@
 --highlight:inset 0 0 0 1px #000;
 --ink_btn:#2f1d30;
 --link:linear-gradient(180deg,#313 50%,#101 50%);
---monospaced:Droid Sans Mono,Noto Mono,Lucida Console,DejaVu Sans Mono,monospace;
+--monospaced:FiraCode,Noto Mono,Lucida Console,DejaVu Sans Mono,monospace;
 --nav_active:radial-gradient(at center bottom,rgba(255,200,0,.5) 0,rgba(0,0,0,0) 70%),linear-gradient(180deg,#f50,#f70);
 --nav_hover:radial-gradient(at center bottom,rgba(200,96,200,.6) 0,rgba(0,0,0,0) 90%),linear-gradient(180deg,#a15b73,#7e4062 50%,#591c3e 51%,#46133e);
 --nav:radial-gradient(at center bottom,rgba(148,48,0,.25),rgba(80,16,0,.15) 80%,rgba(0,0,0,0)),linear-gradient(180deg,#a68058 1%,#7a6045 27%,#5e4730 50%,#2e1700 51%,#1f0f00);

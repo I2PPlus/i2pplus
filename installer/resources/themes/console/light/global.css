@@ -43,7 +43,7 @@
 --ink_lighter:#71718e;
 --input_shadow:inset 2px 2px 2px rgba(0,0,0,.15);
 --membarinner_mobile:linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7));
---monospaced:Droid Sans Mono,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
+--monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 --outline:0 0 0 1px #779;
 --p:linear-gradient(135deg,#fafaff,#f8f8ff);
 --readonly:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 3px,#fafaff 4px),#fafaff;

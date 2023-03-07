@@ -1,25 +1,25 @@
 @charset "utf-8";
 
 @font-face {
-  font-family: "Droid Sans";
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  src: local("Droid Sans Regular"), local("DroidSans"), url(/themes/fonts/DroidSans/DroidSans.woff2) format("woff2");
+  font-family:"Droid Sans";
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+  src:local("Droid Sans Regular"),local("DroidSans"),url(/themes/fonts/DroidSans/DroidSans.woff2) format("woff2");
 }
 
 @font-face {
-  font-family: "Droid Sans";
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-  src: url(/themes/fonts/DroidSans/DroidSans-Bold.woff2) format("woff2"), local("Droid Sans Bold"), local("DroidSans-Bold");
+  font-family:"Droid Sans";
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+  src:url(/themes/fonts/DroidSans/DroidSans-Bold.woff2) format("woff2"),local("Droid Sans Bold"),local("DroidSans-Bold");
 }
 
-@font-face {
-  font-family: "Droid Sans Mono";
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  src: local("Droid Sans Mono"), local("DroidSans-Mono"), url(/themes/fonts/DroidSans/DroidSansMono.woff2) format("woff2");
+@font-face{
+  font-family:FiraCode;
+  font-weight:300,400,500,600,700;
+  font-style:normal;
+  font-display:swap;
+  src:url(/themes/fonts/FiraCode.woff2);format("woff2");
 }
