@@ -397,10 +397,12 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
                         dbFile.delete();
+/*
                     } else if (!hasIP) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> No IP address");
                         dbFile.delete();
+*/
                     } else if (isSlow) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
@@ -693,6 +695,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldError())
                             _log.error("Router [" + truncHash + "] is from a different network");
                         _routerFile.delete();
+/*
                     } else if (!hasIP) {
                         corrupt = true;
                         if (_log.shouldInfo())
@@ -700,6 +703,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("Banning: [" + truncHash + "] for 4h -> No IP address");
                             _context.banlist().banlistRouter(_key, "<b>➜</b> No IP address", null, null, now + 4*60*60*1000);
+*/
                     } else if (isBadFF) {
                         corrupt = true;
                         if (_log.shouldInfo())
