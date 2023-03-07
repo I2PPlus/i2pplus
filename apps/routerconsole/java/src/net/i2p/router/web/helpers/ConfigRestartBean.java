@@ -96,9 +96,14 @@ public class ConfigRestartBean {
             buf.append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             int tuns = ctx.tunnelManager().getParticipatingCount();
             if (tuns > 0) {
-                buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
-                                                "Please wait for routing commitments to expire for {0} tunnels",
+                if (isAdvanced()) {
+                    buf.append("&hellip;<br>").append(ngettext("{0} transit tunnel still active",
+                                                               "{0} transit tunnels still active", tuns, ctx));
+                } else {
+                    buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
+                                                      "Please wait for routing commitments to expire for {0} tunnels",
                                                 tuns, ctx));
+                }
             }
             buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET2);
