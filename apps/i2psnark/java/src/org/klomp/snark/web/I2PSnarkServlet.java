@@ -3334,7 +3334,7 @@ public class I2PSnarkServlet extends BasicServlet {
                   + _manager.util().getMaxUploaders() + "\" size=5 maxlength=3 pattern=\"[0-9]{1,3}\""
                   + " title=\"");
         out.write(_t("Maximum number of peers to upload to"));
-        out.write("\" > ");
+        out.write("\"> ");
         out.write(_t("peers"));
         out.write("</label></span><br>\n");
 
@@ -3344,7 +3344,7 @@ public class I2PSnarkServlet extends BasicServlet {
                   + (useOpenTrackers ? "checked " : "")
                   + "title=\"");
         out.write(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"));
-        out.write("\" ></span><br>\n");
+        out.write("\"></span><br>\n");
 
         out.write("<span class=configOption><label for=\"useDHT\"><b>");
         out.write(_t("Enable DHT"));
@@ -3352,7 +3352,7 @@ public class I2PSnarkServlet extends BasicServlet {
                   + (useDHT ? "checked " : "")
                   + "title=\"");
         out.write(_t("Use DHT to find additional peers"));
-        out.write("\" ></span><br>\n");
+        out.write("\"></span><br>\n");
 
         out.write("<span class=configOption><label for=\"autoStart\"><b>");
         out.write(_t("Auto start torrents"));
@@ -3360,7 +3360,7 @@ public class I2PSnarkServlet extends BasicServlet {
                   + (autoStart ? "checked " : "")
                   + "title=\"");
         out.write(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"));
-        out.write("\" ></span>");
+        out.write("\"></span>");
 
         if (_context.isRouterContext()) {
             out.write("<br>\n<span class=configOption><label><b>");
@@ -3368,7 +3368,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</b> <input type=text name=\"startupDelay\" size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\""
                       + " title=\"");
             out.write(_t("How long before auto-started torrents are loaded when I2PSnark starts"));
-            out.write("\" value=\"" + _manager.util().getStartupDelay() + "\" > ");
+            out.write("\" value=\"" + _manager.util().getStartupDelay() + "\"> ");
             out.write(_t("minutes"));
             out.write("</label></span>");
         }
