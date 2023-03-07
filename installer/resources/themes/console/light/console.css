@@ -15,7 +15,6 @@ code{text-align:left;font-size:8.5pt;color:#030}
 h1,.confignav{position:relative}
 h3#advancedconfig a,h3#bwlimiter a,h3.tabletitle a,h3.ptitle a,th a.script,th#upnpconfig a,h3#graphinfo a,#graphdisplay a,.h3navlinks{margin-top:-2px;float:right;font-size:8.5pt;letter-spacing:0;text-transform:capitalize}
 hr:last-child{margin-top:20px}
-img + tt{margin-left:4px}
 i{padding-right:2px}
 ol{margin:0 0 10px;padding:0}
 p:empty{display:none}
@@ -48,7 +47,6 @@ ul{margin:20px 0;padding:0}
 .clearer{clear:left;height:0;line-height:0}
 .hide,.hideme{display:none}
 .links code,#console code{margin:0 1px;padding:1px 4px;color:#910;font-size:8.5pt;font-weight:700;border-radius:4px;box-shadow:inset 0 0 0 1px #eef;background:#eef;user-select:all}
-.links code::-moz-selection,#console code::-moz-selection{background:#900}
 .links code::selection,#console code::selection{background:#900}
 .links li:first-child{padding-top:0}
 .links li{list-style:var(--star);text-align:justify;line-height:1.4;margin-right:10px}
@@ -1175,15 +1173,14 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 /* banned peers */
 #banlist{padding:5px 5px 3px 0;display:block;border:1px solid var(--border_inner);border-radius:2px;background:#fafaff;text-align:center;columns:328px auto;column-gap:0}
 #profiles #banlist{margin:-3px 0 2px -5px;padding:0;border:none;background:none}
-#banlist li{margin:3px 0 2px 5px;padding:3px 3px 3px 5px;min-width:calc(100% - 13px);min-height:34px;display:inline-block;position:relative;line-height:1.2;list-style:none;font-size:95%;box-shadow:0 0 0 1px #9898b3,var(--highlight),inset 0 0 8px 3px rgba(232,232,255,.6);background:linear-gradient(180deg,#fff,#f8f8ff);-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+#banlist li{margin:3px 0 2px 5px;padding:3px 3px 3px 5px;min-width:calc(100% - 13px);min-height:34px;display:inline-block;position:relative;line-height:1.2;list-style:none;font-size:95%;box-shadow:0 0 0 1px #ccd,var(--highlight),inset 0 0 8px 3px rgba(232,232,255,.6);background:linear-gradient(180deg,#fff,#f8f8ff);-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 #config_peers #banlist li{margin:0 -2px 5px 5px}
 #banlist li:hover{background:#ffe}
-#banlist li a[href^="configpeer"]{padding:2px 2px 1px 0;position:absolute;top:0;right:0;line-height:0;border-left:1px solid var(--border_inner);border-bottom:1px solid var(--border_inner);border-radius:0 0 0 2px;box-shadow:var(--highlight),inset 0 0 1px 1px #ffe;background:#fff;filter:none}
+#banlist li a[href^="configpeer"]{padding:2px 2px 1px 0;position:absolute;top:0;right:0;line-height:0;border-left:1px solid #ccd;border-bottom:1px solid #ccd;border-radius:0 0 0 2px;box-shadow:var(--highlight),inset 0 0 1px 1px #ffe;background:#fff;filter:none}
 #banlist li a[href^="configpeer"]:hover,#banlist li a[href^="configpeer"]:focus{box-shadow:inset 0 0 0 1px var(--hover)}
 #banlist li a[href^="configpeer"]:active{background:var(--hover);box-shadow:inset 3px 3px 3px 1px #5f2400}
-#banlist tt{margin-left:2px}
 #banlist li{min-height:42px}
-#banlist li hr{margin:3px 4px 3px 0;background:linear-gradient(90deg,#7e7fb9 70%,rgba(0,0,0,0) 95%);opacity:.75}
+#banlist li hr{margin:3px 4px 3px 0;background:linear-gradient(90deg,#ccd 70%,rgba(0,0,0,0));opacity:.75}
 #bannedips table tr{box-shadow:var(--highlight)}
 #bannedips table td{background:rgba(240,240,255,.4)}
 
@@ -1378,8 +1375,8 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .netdb_info + b{margin-left:15px}
 .netdb_info.host,.netdb_info.port{font-size:90%;color:#040;user-select:all}
 .netdb_info.port{color:#303}
-.netdb_info.host::-moz-selection{color:#fff;background:#070}
-.netdb_info.port::-moz-selection{color:#fff;background:#303}
+.netdb_info.host::selection{color:#fff;background:#070}
+.netdb_info.port::selection{color:#fff;background:#303}
 .netdb_transport{vertical-align:middle}
 .netdb_header img[src^="/flags"],th img[src^="/flags"]{margin-left:2px;width:24px;height:auto;border-radius:2px;box-shadow:0 0 0 1px #bbc}
 .netdb_header img[src="/flags.jsp?c=a0"]{margin-right:0;display:inline-block;vertical-align:middle}
@@ -1410,7 +1407,6 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 #netdb .netdbentry th code,#netdb .leaseset th code{margin-left:2px}
 #netdb .leaseset th:nth-child(2) code,#netdb .leaseset th:nth-child(2) code:hover{width:auto;letter-spacing:.1em}
 #netdb .netdbentry th code:hover,#netdb .netdbentry th code:active,.leaseset th code:hover,.leaseset th code:active,#netdb .sybil_routerinfo th code:hover,#netdb .sybil_routerinfo th code:active{width:auto;letter-spacing:0}
-#netdb .netdbentry th code::-moz-selection,#netdb .sybil_routerinfo th code::-moz-selection,.leaseset th code::-moz-selection{background:#070;color:#fff}
 #netdb .netdbentry th code::selection,#netdb .sybil_routerinfo th code::selection,.leaseset th code::selection{background:#070;color:#fff}
 
 .configpeer{background:var(--edit) no-repeat center center/12px,var(--btn)}
@@ -1705,7 +1701,6 @@ p#gatherstats{margin:11px 0 12px}
 .bucketCount{margin:-15px 0 8px;padding:4px;border:1px solid #ccccf0;border-left:3px solid #ccccf0;border-radius:0 2px 2px 0;background:linear-gradient(90deg,rgba(255,255,255,.3),rgba(255,255,255,0)),linear-gradient(180deg,#fff 50%,#eaeaff 50%)}
 .bucket{margin:2px;padding:1px 4px;width:7%;min-width:80px;max-width:100px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#152;font-size:90%;box-shadow:0 0 0 1px rgba(185,185,198,.65),var(--highlight);border-radius:2px;background:#f8f8ff;user-select:all}
 .bucket:hover{font-weight:700}
-.bucket::-moz-selection{color:#fff;background:#070}
 .bucket::selection{color:#fff;background:#070}
 .bucket:empty{display:none}
 #debug h3{border-width:1px}
@@ -1742,7 +1737,7 @@ p#gatherstats{margin:11px 0 12px}
 #jardump{overflow-x:auto;min-width:576px;padding:0}
 #jardump table{margin:-1px 0 0;border:none;font-size:8pt}
 #jardump .subheading{padding:5px 10px;border-left:none;border-right:none}
-#jardump .subheading code{font-weight:700}
+#jardump .subheading code{font-weight:600}
 .subheading.routerfiles{padding-left:10px;background:url(images/favicon.svg) no-repeat right 7px center,linear-gradient(90deg,#7e7fb9 5px,#fafaff 5px,#eef);background-size:16px,100%}
 .subheading.pluginfiles{padding-left:10px;background:var(--plugin) no-repeat right 7px center,linear-gradient(90deg,#7e7fb9 5px,#fafaff 5px,#eef);background-size:16px,100%}
 #jardump th{padding-top:7px;padding-bottom:7px;font-size:9.5pt}
@@ -1754,18 +1749,15 @@ p#gatherstats{margin:11px 0 12px}
 #jardump td:nth-child(2){text-align:right;font-style:italic}
 #jardump a[href^="https://gitlab.com/i2pplus"]{margin-left:-4px;padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
 .revision,.sha256,.unsignedmod{user-select:all}
-.unsignedmod::-moz-selection{background:red;color:#fff}
 .unsignedmod::selection{background:red;color:#fff}
-.revision tt::-moz-selection,.sha256 tt::-moz-selection{background:#070;color:#fff}
 .revision tt::selection,.sha256 tt::selection{background:#070;color:#fff}
-.revision br::-moz-selection,.sha256 br::-moz-selection{background:transparent}
 .revision br::selection,.sha256 br::selection{background:transparent}
-#jardump tt{letter-spacing:-.03em;font-size:8pt;font-weight:400}
-#jardump a tt{color:#359}
+#jardump td code{letter-spacing:-.03em;font-size:8pt;font-weight:400}
+#jardump a code{color:#359}
 #jardump code{font-weight:400}
-#jardump a:visited tt{color:#218}
-#jardump a:hover tt{color:var(--hover)}
-#jardump a:active tt{color:#f90}
+#jardump a:visited code{color:#218}
+#jardump a:hover code{color:var(--hover)}
+#jardump a:active code{color:#f90}
 #jardump hr{margin:0;background:#ddf;width:100%;height:1px;display:block}
 #jardump tr:hover td:first-child b,#portmapper tr:hover td:first-child,#sockets tr:hover td:first-child,#portfaq tr:hover td:first-child{color:#26262f}
 #jardump tr:hover .unsignedmod:not(:empty){background:#8f0000;color:#fff}
@@ -2188,7 +2180,6 @@ table#consolepass input[name="name"]{margin-right:20px}
 #configinfo td.infowarn,#configinfo tr:hover td.infowarn{padding-left:46px}
 #help code,#help tt{font-size:9pt;font-weight:400;color:#040}
 #help code::selection,#help tt::selection{color:#fff;background:#070}
-#help code::-moz-selection,#help tt::-moz-selection{color:#fff;background:#070}
 #sidebarhelp ul{margin-bottom:0;display:inline-block}
 #sidebarhelp ul:last-child{margin-bottom:5px}
 #sidebarhelp p + ul{margin-top:-15px}
