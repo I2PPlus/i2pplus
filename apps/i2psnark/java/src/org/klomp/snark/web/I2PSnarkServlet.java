@@ -3746,7 +3746,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=stylesheet type=text/css>";
     private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=stylesheet type=text/css>";
     private static final String HEADER_Z = "override.css\" rel=stylesheet type=text/css>";
-    private static final String TABLE_HEADER = "<table border=0 id=torrents width=100% >\n" + "<thead id=snarkHead>\n";
+    private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" +
                                          "<script charset=utf-8 type=text/javascript src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=iframeResizer></script>\n" +
