@@ -53,6 +53,7 @@ a.script{word-spacing:normal;letter-spacing:normal}
 .sb_notice + .sb_notice{margin-top:8px}
 .sb_notice a{padding:0;vertical-align:baseline}
 p:empty + .sb_notice{margin-top:7px}
+#processSidebarForm{display:none!important}
 #sidebar{margin:0 0 5px;padding:9px 1px 7px 1px;width:204px;line-height:1.25;word-wrap:break-word;text-align:center;font-size:9pt;color:inherit;border:var(--border);background:var(--bg);contain:paint}
 #xhr{margin-top:15px}
 #sidebar a{padding:2px;vertical-align:middle;user-select:none}

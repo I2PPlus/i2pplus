@@ -225,6 +225,7 @@ button.download.control:active{background:var(--download) no-repeat center cente
 #sidebar .download:hover{background:var(--download_hover) no-repeat 7px center/15px,var(--btn_hover)}
 #sidebar .download:active{background:var(--hover) var(--download) no-repeat 7px center/15px}
 
+#processSidebarForm{display:none!important}
 #sb_wrap{margin:0 0 10px 5px;padding:0;width:200px;display:block;float:left;clear:left;position:absolute;text-align:center;border:0}
 #sb_wrap.sticky{position:sticky!important;top:2px!important}
 #sidebar{background:var(--bg_main);background-size:4px 100%,100% 4px}
