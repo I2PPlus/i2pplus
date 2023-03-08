@@ -79,7 +79,8 @@ public class ReseedBundler {
             if (key.equals(me)) {
                 continue;
             }
-            if (ri.getPublished() < tooOld)
+
+            if (ri.getPublished() > tooOld)
                 continue;
             if (ri.getCapabilities().contains("U"))
                 continue;
@@ -131,8 +132,8 @@ public class ReseedBundler {
         if (toWrite.isEmpty())
             throw new IOException("No router infos to include. Reseed yourself first.");
         if (toWrite.size() < Math.min(count, MINIMUM))
-            throw new IOException("Not enough router infos to include, wanted " + count +
-                                  " but only found " + toWrite.size() + ". Please try again later.");
+            throw new IOException("Not enough RouterInfos to include -> Wanted " + count +
+                                  " but only found " + toWrite.size() + " valid RouterInfos. Please try again later.");
 
         File rv = new File(_context.getTempDir(), "genreseed-" + _context.random().nextInt() + ".zip");
         ZipOutputStream zip = null;

@@ -60,7 +60,7 @@ public class Reseeder {
     private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024;
     /** limit to spend on a single host, to avoid getting stuck on one that is seriously overloaded */
     //private static final int MAX_TIME_PER_HOST = 7 * 60 * 1000;
-    private static final int MAX_TIME_PER_HOST = 15 * 1000;
+    private static final int MAX_TIME_PER_HOST = 10 * 1000;
     //private static final long MAX_FILE_AGE = 30*24*60*60*1000L;
     private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
     /** Don't disable this! */
@@ -70,7 +70,7 @@ public class Reseeder {
     //private static final int MIN_RI_WANTED = 100;
     private static final int MIN_RI_WANTED = 800;
     //private static final int MIN_RESEED_SERVERS = 2;
-    private static final int MIN_RESEED_SERVERS = 10;
+    private static final int MIN_RESEED_SERVERS = 12;
     // network ID cross-check, proposal 147, as of 0.9.42
     private static final String NETID_PARAM = "?netid=";
 
