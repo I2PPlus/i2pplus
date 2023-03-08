@@ -8,6 +8,11 @@
 
 :root{
 --tier:linear-gradient(180deg,#397,#021);
+--isFF:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8) 82%);
+--isU:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8) 82%);
+--isD:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%);
+--isE:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%);
+--isG:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%);
 }
 
 /* global */
@@ -945,9 +950,9 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .statusnotes{margin:-2px 0 5px 0;padding:10px 7px;font-style:italic;font-size:105%;text-align:center;border:var(--border);background:#000800}
 .statusnotes+.statusnotes{margin-top:-6px}
 .tier,#capabilities_key b{background:var(--tier)}
-.tier.isD{background:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%),var(--tier)}
-.tier.isE{background:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%),var(--tier)}
-.tier.isG{background:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%),var(--tier)}
+.tier.isD{background:var(--isD),var(--tier)}
+.tier.isE{background:var(--isE),var(--tier)}
+.tier.isG{background:var(--isG),var(--tier)}
 
 .tunnel_cap{box-shadow:var(--outline)}
 .tunnel_cap:empty::after{content:"?"}
@@ -2892,18 +2897,18 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rih a{text-shadow:1px 1px 1px rgba(0,0,0,.8)}
 .rid .rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .ric .rbw{line-height:1.2}
-.rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
-.rbw.isff.isD{background:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
-.rbw.isff.isE{background:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
-.rbw.isff.isG{background:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
-.rbw.isff.isU{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isff.isU.isD{background:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isff.isU.isE{background:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isff.isU.isG{background:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isU.isD{background:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isU.isE{background:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isU.isG{background:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isff{background:var(--isFF),var(--badge)}
+.rbw.isff.isD{background:var(--isD),var(--isFF),var(--badge)}
+.rbw.isff.isE{background:var(--isE),var(--isFF),var(--badge)}
+.rbw.isff.isG{background:var(--isG),var(--isFF),var(--badge)}
+.rbw.isff.isU{background:var(--isFF),var(--isU),var(--badge)}
+.rbw.isff.isU.isD{background:var(--isD),var(--isFF),var(--isU),var(--badge)}
+.rbw.isff.isU.isE{background:var(--isE),var(--isFF),var(--isU),var(--badge)}
+.rbw.isff.isU.isG{background:var(--isG),var(--isFF),var(--isU),var(--badge)}
+.rbw.isU{background:var(--isU),var(--badge)}
+.rbw.isU.isD{background:var(--isD),var(--isU),var(--badge)}
+.rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
+.rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
 .rif,.rif img{line-height:0;font-size:0}
 .rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
 #banlist li .rid{margin-right:5px;margin-left:-4px;float:left}

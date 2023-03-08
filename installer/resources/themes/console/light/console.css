@@ -4,6 +4,15 @@
 
 @import url(global.css);
 
+:root{
+--tier:linear-gradient(180deg,#fff,#dbecff);
+--isFF:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8) 82%);
+--isU:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8) 82%);
+--isD:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%);
+--isE:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%);
+--isG:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%);
+}
+
 /* globals */
 html{margin:0}
 body,input,button,select,#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{font-family:var(--bodyfont)}
@@ -1314,7 +1323,10 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 .netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch{margin:3px;width:14px;height:14px}
 .netdb_header .configpeer,.netdb_header .configpeer{margin-right:5px}
 .confignav + .netdbentry,.infowarn + .netdbentry{margin-top:10px}
-#floodfills .ssuintro,#floodfills .unreachable,#floodfills .reachable,#floodfills .hidden,#floodfills .tier,#capabilities_key b,.netdbentry .tier,.netdbentry .ff,.netdbentry .ssuintro,.netdbentry .unreachable,.netdbentry .reachable,.netdbentry .hidden,.sybil_routerinfo .tier,.sybil_routerinfo .ff,.sybil_routerinfo .ssuintro,.sybil_routerinfo .unreachable,.sybil_routerinfo .reachable,.sybil_routerinfo .hidden{margin:2px;padding:1px 0;min-width:24px;display:inline-block;box-sizing:border-box;text-align:center;text-transform:none;font-weight:700;color:#4a415e;text-shadow:0 1px 1px #fff;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#dbecff)}
+#floodfills .ssuintro,#floodfills .unreachable,#floodfills .reachable,#floodfills .hidden,#floodfills .tier,#capabilities_key b,span.tier,.netdbentry .ff,.netdbentry .ssuintro,.netdbentry .unreachable,.netdbentry .reachable,.netdbentry .hidden,.sybil_routerinfo .ff,.sybil_routerinfo .ssuintro,.sybil_routerinfo .unreachable,.sybil_routerinfo .reachable,.sybil_routerinfo .hidden{margin:2px;padding:1px 0;min-width:24px;display:inline-block;box-sizing:border-box;text-align:center;text-transform:none;font-weight:700;color:#4a415e;text-shadow:0 1px 1px #fff;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--tier)}
+.tier.isD{background:var(--isD),var(--tier)}
+.tier.isE{background:var(--isE),var(--tier)}
+.tier.isG{background:var(--isG),var(--tier)}
 #netdb a:hover span,#profiles a:hover span,.version:hover a,#capabilities_key table b:hover{color:var(--hover)}
 #noleasesets,#notinitialized,.netdbnotfound{margin-top:-6px;margin-bottom:5px;padding:10px 20px;font-weight:700;text-align:center;color:var(--ink_light);border:1px solid var(--border_inner);box-shadow:0 0 1px #e0e0eb;border-radius:2px;background:linear-gradient(90deg,#f2f2ff,#f8f8ff,#f2f2ff)}
 #notinitialized,.netdbnotfound{margin-top:15px}
@@ -2280,9 +2292,18 @@ table#consolepass input[name="name"]{margin-right:20px}
 .rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);line-height:1;font-size:9pt;vertical-align:middle}
 .rid .rbw{padding:2px 4px;min-width:16px;text-align:center;line-height:1;font-weight:900}
-.rbw.isff,#profilelist .rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
-.rbw.isU,#profilelist .rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0)82%,rgba(192,0,0,.8)82%),var(--badge)}
-.rbw.isff.isU,#profilelist .rbw.isff.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isff{background:var(--isFF),var(--badge)}
+.rbw.isff.isD{background:var(--isD),var(--isFF),var(--badge)}
+.rbw.isff.isE{background:var(--isE),var(--isFF),var(--badge)}
+.rbw.isff.isG{background:var(--isG),var(--isFF),var(--badge)}
+.rbw.isff.isU{background:var(--isFF),var(--isU),var(--badge)}
+.rbw.isff.isU.isD{background:var(--isD),var(--isFF),var(--isU),var(--badge)}
+.rbw.isff.isU.isE{background:var(--isE),var(--isFF),var(--isU),var(--badge)}
+.rbw.isff.isU.isG{background:var(--isG),var(--isFF),var(--isU),var(--badge)}
+.rbw.isU{background:var(--isU),var(--badge)}
+.rbw.isU.isD{background:var(--isD),var(--isU),var(--badge)}
+.rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
+.rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
 #topCount .rbw#ff{background:linear-gradient(135deg,rgba(0,0,0,0) 90%,rgba(192,80,0,.8)90%),var(--badge)}
 #topCount .rbw#u{background:linear-gradient(45deg,rgba(0,0,0,0)87%,rgba(192,0,0,.8)87%),var(--badge)}
 .ric{background:var(--badge)}
