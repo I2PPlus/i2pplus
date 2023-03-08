@@ -319,7 +319,7 @@ function refreshFilters() {
         if (filterbar) {
           var filterbarResponse = xhrfilter.responseXML.getElementById("torrentDisplay");
           if (!filterbar && filterbarResponse !== null) {filterbar.outerHTML = filterbarResponse.outerHTML;}
-          else if (filterbar && filterBarResponse && filterbar.innerHTML !== filterbarResponse.innerHTML) {
+          else if (filterbar && filterBarResponse !== null && filterbar.innerHTML !== filterbarResponse.innerHTML) {
             filterbar.innerHTML = filterbarResponse.innerHTML;
           }
         }
