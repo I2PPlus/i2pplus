@@ -1238,6 +1238,9 @@ class NetDbRenderer {
         }
 
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
+        boolean hasD = DataHelper.stripHTML(info.getCapabilities()).contains("D");
+        boolean hasE = DataHelper.stripHTML(info.getCapabilities()).contains("E");
+        boolean hasG = DataHelper.stripHTML(info.getCapabilities()).contains("G");
         String caps = DataHelper.stripHTML(info.getCapabilities())
             .replace("XO", "X")
             .replace("PO", "P")
@@ -1262,6 +1265,13 @@ class NetDbRenderer {
             .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
             .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
             .replace("\"><span", tooltip);
+        if (hasD) {
+            caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"");
+        } else if (hasE) {
+            caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"");
+        } else if (hasG) {
+            caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"");
+        }
         buf.append(caps);
 /*
         if (info != null) {
