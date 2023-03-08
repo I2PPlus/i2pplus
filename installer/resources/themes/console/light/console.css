@@ -2321,6 +2321,7 @@ body.iframed{background:transparent}
 .iframed h1{margin:0 10px 10px 7px}
 .iframed .sorry{margin:5px 10px 10px 7px}
 iframe.iframed{margin:10px 0 0}
+#processSidebarForm{display:none!important}
 
 /* lazy loading */
 .lazy.lazyhide,.lazy.lazyhide td,.newsentry.lazyhide{opacity:0;contain:strict}
