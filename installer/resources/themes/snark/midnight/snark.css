@@ -51,6 +51,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 tfoot img,tfoot:nth-child(2) img,tfoot:nth-child(1) img,tfoot:nth-child(3) img,tfoot:nth-child(4) img{margin:0 2px 3px 0;padding-right:0}
 tfoot tr:nth-child(n+1){text-align:left}
 th img,td img,#closelog,#expand,#shrink{font-size:0}
+.noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .toggleview,.configTitle,#navbar,img,input[type=submit],.optbox,label,th img,#createSection,#closeLog,#expand,#shrink{user-select:none}
 .page{margin:5px 0 0;padding:0 0 12px;line-height:1.6;text-align:center;font-size:9pt;border:var(--border);border-radius:0 0 2px 2px;background:#003}
 .iframed .page{margin:4px 0 5px;padding:0;border:none;border-radius:0;box-shadow:none;background:none}

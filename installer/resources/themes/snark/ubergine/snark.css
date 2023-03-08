@@ -53,6 +53,7 @@ hr{margin:5px 0 7px 0;height:1px;width:0;text-align:center;color:#212;border:0 s
 input,button,textarea,select,a{outline:none;image-rendering:-webkit-optimize-contrast}
 th img,a img{font-size:0;overflow:hidden}
 table{margin:0 0 10px 0;padding:0;width:100%;color:#323;border:none;border-spacing:0;border-collapse:collapse}
+.iframed .mainsection table,.iframed .mainsection#commentSection table,.iframed .mainsection#media table,.iframed .mainsection#snarkFiles table,.iframed .mainsection#snarkInfo table,.iframed .resourceError,.iframed .resourceError#NotFound,.iframed #torrentEdit{padding:1px;box-shadow:0 0 0 1px rgba(180,152,180,.7),0 0 0 2px rgba(16,8,16,.9);filter:none}
 thead,tfoot{background:#101}
 th{padding:4px 2px 4px 4px;letter-spacing:0;font-size:8pt;color:#ddd;border-top:var(--border_hard);border-bottom:var(--border_hard)}
 thead th,.torrentInfo th,#torrentEdit th{background:var(--th)}
@@ -74,7 +75,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .mainsection table{border-radius:0}
 .mainsection#commentSection table,.mainsection#media table,.mainsection#snarkFiles table,.mainsection#snarkInfo table,.resourceError,.resourceError#NotFound{margin:0;border:1px solid #414;filter:none}
 .mainsection#commentSection table,.mainsection#media table,.mainsection#snarkFiles table,.mainsection#snarkInfo table,.mainsection table,#torrentEdit{box-shadow:0 0 0 1px rgba(119,102,119,.9),0 0 0 2px #212,0 0 2px 2px rgba(8,0,8,.3)}
-.iframed .mainsection table,.iframed .mainsection#commentSection table,.iframed .mainsection#media table,.iframed .mainsection#snarkFiles table,.iframed .mainsection#snarkInfo table,.iframed .resourceError,.iframed .resourceError#NotFound,.iframed #torrentEdit{padding:1px;box-shadow:0 0 0 1px rgba(180,152,180,.7),0 0 0 2px rgba(16,8,16,.9);filter:none}
+.noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .script{display:inline-block;vertical-align:top}
 .toggleview,.configTitle,#navbar,img,input[type=submit],input[type=radio],input[type=checkbox],label,th img,#createSection,#closelog,#pagenavbottom{user-select:none}
 

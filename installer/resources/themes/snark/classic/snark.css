@@ -38,6 +38,7 @@ code,tt,.bucket{font:bold 8.5pt var(--monospaced);padding:0 2px;color:#050}
 .script{margin:5px 0 2px;display:inline-block}
 .page{margin:5px 0 0 0;padding:9px;min-width:900px;line-height:1.6;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--highlight);background:var(--page);background-size:4px 100%}
 .iframed .page{margin:5px 0;padding:0;border:none;border-radius:0;box-shadow:none}
+.noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 table{margin:0 0 10px 0;padding:0;border:none;border-spacing:0;border-collapse:collapse}
 thead,tfoot{background:var(--bg)}
 thead{border-bottom:1px solid #101}

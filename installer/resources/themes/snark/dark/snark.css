@@ -64,6 +64,7 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 7px;min-width:120px;font-size:8
 .infohash::selection{color:#000;background:#0f0}
 .newTab{margin:1px 4px -2px;float:right;filter:sepia(1) saturate(0) invert(1)}
 .newTab:hover,.newTab:focus{filter:sepia(1) saturate(0) invert(1) drop-shadow(0 0 2px #f60)}
+.noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .page{margin:5px 0 0;min-width:890px;line-height:1.6;text-align:center;font-size:9pt;background:#000}
 .iframed .page{margin:5px 0;padding:0;border:none;background:none}
 .iframed #navbar,.iframed .mainsection,.iframed #addSection,.iframed #createSection,.iframed #configSection,.iframed .configPanel{border-left:none;border-right:none;border-radius:0}
@@ -126,7 +127,7 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 7px;min-width:120px;font-size:8
 #screenlog ul{margin:-1px 0 2px;padding:0 0 0 14px;list-style:none}
 #screenlog li,#screenlog li a,#torrents tt,#ourDest tt{line-height:1.15;font-size:8.5pt;font-weight:700}
 #screenlog li,#screenlog li a{line-height:1.28;text-shadow:0 0 1px #000,0 0 2px #000,0 0 3px #000,0 0 4px #001000}
-#screenlog li{margin-left:-15px;opacity:.7}
+#screenlog li{margin-left:-15px;opacity:.7;animation:shift .3s ease .3s both}
 #screenlog li:hover{opacity:1}
 #screenlog li::before{width:16px;height:11px;display:inline-block;background:var(--bullet) no-repeat 2px bottom/9px;filter:drop-shadow(0 0 1px #000);content:""}
 #closelog,#expand,#shrink{position:sticky;top:-2px;z-index:999;float:right;font-size:0;cursor:pointer}
@@ -762,6 +763,7 @@ input:checked + .toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(15
 @keyframes slide-in{0%{transform:translateY(-50px)} 100%{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(360deg)}}
 @keyframes uploading{from{background-position:left center} to{background-position:20% center}}
+@keyframes shift{from{transform:translateX(16px)}to{transform:translateX(0)}}
 
 /* browser specific */
 @supports (justify-content:center){#navbar{display:flex;justify-content:center} .snarkNav,.snarkNav:visited{margin-left:0;margin-right:0}}
@@ -829,7 +831,8 @@ b.alwaysShow{display:none}
 #tab_addtorrent .tab_label::after,#tab_newtorrent .tab_label::after,#tab_config .tab_label::after{width:14px;height:14px;background-size:14px,100%}
 }
 
-@media screen and (max-width:840px){.snarkNav.nav_main:not(:last-child),.snarkNav.nav_forum{white-space:nowrap;padding-left:8px;text-indent:-99999px;width:13px}
+@media screen and (max-width:840px){
+.snarkNav.nav_main:not(:last-child),.snarkNav.nav_forum{white-space:nowrap;padding-left:8px;text-indent:-99999px;width:13px}
 }
 
 /* mini-mode */

@@ -66,6 +66,7 @@ hr{background:transparent;color:transparent;height:0;border:none}
 .configTitle,.toggleview,.snarkNav{letter-spacing:.1em;text-transform:uppercase}
 .rowOdd,.torrentInfo tr:nth-child(odd),#trackerselect tr:nth-child(2n+2),.knownTracker:nth-child(odd),#mediaContainer th,#commentInfo tr:first-child,#torrentEdit tr:nth-child(even){background:#fafafa}
 .noneLoaded td{border-bottom:var(--border)}
+.noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .peerinfo:hover td,#torrentEdit tr:hover td{background-color:var(--tr_hover)}
 .rowEven,.torrentInfo tr:nth-child(even),#trackerselect tr:nth-child(2n+3),.knownTracker:nth-child(even){background:#f0f0f0}
 .rowOdd,.rowEven{background:var(--tr)}
