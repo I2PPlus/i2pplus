@@ -896,7 +896,6 @@ h4#updateplugins{margin-top:-13px}
 #pluginmanage{margin-bottom:-1px}
 #webappconfiguration{margin-bottom:-13px;margin-top:15px}
 
-
 /* home */
 #home{padding-bottom:1px}
 #home .welcome h2{margin:-9px -10px -8px}
@@ -1148,7 +1147,6 @@ a.keysearch{padding:2px 5px 2px 15px;display:inline-block;font-size:90%;border:1
 .netdb_header a[href^="/netdb?c="],.sybil_routerinfo a[href^="/netdb?c="],.netdb_header img[src="/flags.jsp?c=a0"],.sybil_routerinfo img[src="/flags.jsp?c=a0"]{margin:0 2px 0 6px;display:inline-block}
 .netdb_header img,.netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .viewfullentry,.netdb_header a[href^="/netdb?c"]{font-size:0;vertical-align:middle}
 .netdb_info{display:inline-block;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
-.netdb_tunnel{margin:1px 3px 0}
 p.family + p.family,p.sybil_info + p.sybil_info{margin-top:-4px}
 p.family a{display:inline-block}
 #lookupCondensed{display:none}
@@ -1156,13 +1154,13 @@ p.family a{display:inline-block}
 #netdb > .confignav{margin-bottom:15px}
 #netdb hr{margin:2px 0;display:none;width:100%}
 #netdb li,#netdb li:first-child{margin:1px 0;padding:0;display:inline-block;vertical-align:middle}
-#netdb .leaseset th:first-child code{width:150px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#373}
+#netdb .leaseset th:first-child code{width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #netdb .netdb_addresses li{margin:2px 1px;padding:0 6px 0 0;line-height:1.5;border:1px solid #bbc;background:var(--badge);contain:paint}
-#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{padding:0 4px;display:inline-block;vertical-align:middle;font-family:var(--monospaced);color:#373;border-radius:0;box-shadow:var(--box_border_badge);background:var(--badge)}
+#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{padding:0 4px;display:inline-block;vertical-align:middle;font-family:var(--monospaced);border-radius:0;box-shadow:var(--box_border_badge);background:var(--badge)}
 #netdb .netdb_transport{padding:3px;width:40px;display:inline-block;text-align:center;font-size:90%;background:var(--badge)}
 #netdb_ram,.netdbentry .version,.netdb_transport{padding:1px 5px;display:inline-block;box-shadow:var(--box_border_badge);background:var(--badge)}
 #netdb_ram{padding:1px 3px}
-#netdb ul,.netdb_addresses{margin:0;padding:0;columns:auto;line-height:1.2}
+#netdb ul,.netdb_addresses{margin:0;padding:0;columns:auto}
 #view_profile h3{margin-bottom:-11px;position:relative}
 #viewprofile td{padding:0}
 #view_profile pre{margin:0;padding:20px;width:calc(100% - 40px);line-height:20px;background:var(--pre)}
@@ -1188,14 +1186,14 @@ p.family a{display:inline-block}
 .lsdest.published{padding-left:38px;background:var(--hardhat) no-repeat 4px center/14px,var(--globe) no-repeat 22px center/12px,var(--badge)}
 .netdb_gateway img{vertical-align:middle}
 .netdb_leases,.netdb_leases li{padding:0;margin:-1px 0 0}
-.netdb_leases li{padding:2px 0 3px;vertical-align:middle;line-height:1.4;list-style:none}
+.netdb_leases li{padding:2px 0;vertical-align:middle;list-style:none}
 .netdb_leases li b:first-child{margin-right:2px;display:inline-block}
 .netdb_leases b.leaseNumber{margin:1px -3px 0 6px;min-width:24px;display:inline-block;vertical-align:baseline;text-align:center}
-.netdb_leases .tunnel_id{min-width:74px;line-height:1.5;text-align:center}
+.netdb_leases .tunnel_id{min-width:74px;text-align:center}
 .netdb_leases .tunnel_peer img{margin-bottom:-1px}
 .netdb_leases .tunnel_peer{margin-left:2px}
 .netdb_leases .tunnel_peer tt{margin:0 3px 0 0}
-.netdb_tunnel{margin-right:-4px;padding:0 4px;display:inline-block;border-radius:2px;background:var(--bg4)}
+.netdb_tunnel{display:inline-block;vertical-align:middle}
 #leasesetdebug,#leasesetsummary{font-size:9pt}
 #leasesetsummary{margin-top:15px;margin-bottom:10px}
 #leasesetsummary td:first-child{width:50px;white-space:nowrap}
@@ -1212,11 +1210,13 @@ p.family a{display:inline-block}
 #netdb .netdb_leases{margin-left:0;columns:8 104px;column-gap:2px}
 #netdb .netdb_leases li{display:inline-block;white-space:nowrap;vertical-align:middle}
 #netdb .netdb_leases li::before{min-height:24px;display:inline-block;vertical-align:middle;content:""}
-#netdb .netdb_leases li > *{vertical-align:middle}
 #netdb tr:not(.debugMode) .netdb_leases li{margin:-2px -4px -4px 0}
 #noleasesets,#notinitialized,.netdbnotfound{margin:10px 0 7px;padding:20px;text-align:center;font-weight:700;border:var(--border);background:var(--bg3)}
 
 /* Advanced lookup */
+.subheading{padding:10px;text-align:left;border:var(--border);background:var(--bg)}
+.subheading b{font-size:10pt}
+#closetorouter{margin-left:6px}
 #netdblookup{margin-bottom:4px}
 #netdblookup tr:nth-child(n+2){border-top:var(--border_softer)}
 #netdblookup th{text-align:left;font-size:140% }
@@ -1226,13 +1226,10 @@ p.family a{display:inline-block}
 #netdblookup td.subheading{text-align:left}
 #netdblookup tr:nth-last-child(n+3) input[type=text],#netdblookup select{width:calc(100% - 8px)}
 #netdblookup tr:nth-last-child(2) input[type=text]{width:calc(45% + 2px)}
-#closetorouter{margin-left:6px}
-.subheading{padding:10px;text-align:left;border:var(--border);background:var(--bg)}
-.subheading b{font-size:10pt}
 
 /* netdb router address info */
-.leasesets_container{columns:680px 2;column-gap:10px}
 th code{user-select:all}
+.leasesets_container{columns:680px 2;column-gap:10px}
 .leasesets_container table:first-child{margin-top:0}
 .leasesets_container table,.sybil_container p,.sybil_routerinfo p,#sybilnav li,#sybilnav li:first-child,.threatpoints + ul li,#peerdefs li,#banlist li,.joblog ol li,.twocol li,.optionlist label,.optionlist .nowrap,#helptoc li,#helptoc li:last-child,.service_container{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 .netdb_addresses br:first-child,.sybil_routerinfo tr:last-child td br:first-child{display:none}
@@ -1240,10 +1237,9 @@ th code{user-select:all}
 .netdbentry th:first-child::after{min-height:20px;display:inline-block;vertical-align:middle;content:""}
 .netdbentry th:last-child > *,.sybil_routerinfo th:nth-child(2) > *{display:inline-block;vertical-align:middle}
 .netdbentry td:first-child{text-align:right}
-#netdb td code{font-weight:400}
+.netdb_expiry{margin-left:1px}
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink_light)}
 .netdb_info{margin-right:1px}
-.netdb_expiry{margin-left:1px}
 
 /* sybils */
 .leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:var(--border)}
@@ -1937,7 +1933,7 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 
 /* tunnels */
 .router_id,.tunnel_local{width:64px;box-sizing:border-box}
-.tunnel_id{display:inline-block;min-width:78px;text-align:right}
+.tunnel_id{padding:2px 4px;display:inline-block;min-width:78px;text-align:right;border-radius:0;box-shadow:var(--box_border_badge);background:var(--badge)}
 .tunnel_cap{margin-left:1px}
 .router_id + .tunnel_cap{margin-left:2px}
 .tunnel_id:empty + .tunnel_cap{margin-left:12px;display:inline-block}
