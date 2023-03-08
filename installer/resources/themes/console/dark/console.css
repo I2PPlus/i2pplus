@@ -6,6 +6,10 @@
 @import url(global.css);
 @import url(../images/itooplus.css);
 
+:root{
+--tier:linear-gradient(180deg,#397,#021);
+}
+
 /* global */
 html{background:var(--bodybg),#000800}
 body{margin:5px 0 0 0;padding:0;text-align:center;font:8.5pt/1.3 var(--bodyfont);background:none}
@@ -940,7 +944,11 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .statusnotes:last-child{margin-bottom:10px}
 .statusnotes{margin:-2px 0 5px 0;padding:10px 7px;font-style:italic;font-size:105%;text-align:center;border:var(--border);background:#000800}
 .statusnotes+.statusnotes{margin-top:-6px}
-.tier,a .tier,#capabilities_key b{background:linear-gradient(180deg,#397,#021)}
+.tier,#capabilities_key b{background:var(--tier)}
+.tier.isD{background:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%),var(--tier)}
+.tier.isE{background:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%),var(--tier)}
+.tier.isG{background:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%),var(--tier)}
+
 .tunnel_cap{box-shadow:var(--outline)}
 .tunnel_cap:empty::after{content:"?"}
 .tunnel_cap,.tier,.ff,.unreachable,.reachable,#capabilities_key b{margin:1px 2px;padding:3px 2px;display:inline-block;min-width:20px;color:#bb7;text-shadow:var(--textshadow);text-align:center;border:1px solid #030;box-shadow:var(--outline)}
@@ -2874,6 +2882,9 @@ div[id^="config_"] .tab,div[id^="config_"] .tab2{margin-top:-1px}
 div[id^="config_"] .tab:first-child{margin-left:-1px}
 }
 
+.tunnel_local,.tunnel_id,.rid td,.version,.routerHash{box-shadow:var(--highlight),0 0 1px 1px rgba(16,48,16,.8) inset!important;background:var(--badge)}
+.tunnel_local{width:98px;box-sizing:border-box}
+.tunnel_peer{display:inline-block;vertical-align:middle}
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_soft)!important;background:var(--badge)}
 .rid td,tr:hover .rid td,#floodfills tr:hover .rid td {font-family:var(--monospaced);letter-spacing:.1em}
 .rid,.ric{width:unset;box-shadow:0 0 0 1px #000}
@@ -2881,14 +2892,20 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rih a{text-shadow:1px 1px 1px rgba(0,0,0,.8)}
 .rid .rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .ric .rbw{line-height:1.2}
-.rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%)}
-.rbw.isff.isU{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
-.rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%)}
+.rbw.isff{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
+.rbw.isff.isD{background:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
+.rbw.isff.isE{background:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
+.rbw.isff.isG{background:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),var(--badge)}
+.rbw.isff.isU{background:linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isff.isU.isD{background:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isff.isU.isE{background:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isff.isU.isG{background:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%),linear-gradient(135deg,rgba(0,0,0,0) 82%,rgba(192,80,0,.8)82%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isU{background:linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isU.isD{background:linear-gradient(135deg,#993 18%,rgba(0,0,0,0) 18%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isU.isE{background:linear-gradient(135deg,#717 18%,rgba(0,0,0,0) 18%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
+.rbw.isU.isG{background:linear-gradient(135deg,#711 18%,rgba(0,0,0,0) 18%),linear-gradient(45deg,rgba(0,0,0,0) 82%,rgba(192,0,0,.8)82%),var(--badge)}
 .rif,.rif img{line-height:0;font-size:0}
 .rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
-.tunnel_local,.tunnel_id,.rid td,.version,.routerHash{box-shadow:var(--highlight),0 0 1px 1px rgba(16,48,16,.8) inset;background:var(--badge)}
-.tunnel_local{width:98px;box-sizing:border-box}
-.tunnel_peer{display:inline-block;vertical-align:middle}
 #banlist li .rid{margin-right:5px;margin-left:-4px;float:left}
 #floodfills .rif img{box-shadow:0 0 0 1px rgba(0,0,0,.3)}
 #jobs label{float:right}
@@ -2905,4 +2922,3 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #topCount td span{padding:1px 3px 1px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(0,0,0,.3)}
 #topCount td#ff{background:linear-gradient(135deg,rgba(0,0,0,0)88%,rgba(192,80,0,.8)88%),var(--badge)}
 #topCount td#u{background:linear-gradient(45deg,rgba(0,0,0,0)88%,rgba(234,0,0,.9)88%),var(--badge)}
-
