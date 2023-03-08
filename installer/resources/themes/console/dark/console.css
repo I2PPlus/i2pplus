@@ -1538,8 +1538,8 @@ th .h3navlinks,#config_stats .h3navlinks,#config_webapps .h3navlinks{margin-top:
 th.options,#externali2cp th{padding:7px 10px}
 th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1);background-size:2px,100% 4px,100%,128px}
 .configtable{margin-top:-1px;margin-bottom:-2px}
-.configtable td.infohelp,p.infohelp,td.infohelp,p.infowarn,td.infowarn,#debugmode,.sybilinfo{padding:20px 24px 20px 58px;line-height:1.4;white-space:normal;font-weight:400;text-align:justify;border-bottom:var(--border);border-top:var(--border);background:var(--infohelp) no-repeat 15px center/28px,var(--msg)}
 .configtable td{padding:6px 10px;line-height:1.8;background:rgba(0,16,0,.3)}
+.configtable td.infohelp,p.infohelp,td.infohelp,p.infowarn,td.infowarn,#debugmode,.sybilinfo{padding:20px 24px 20px 58px;line-height:1.4;white-space:normal;font-weight:400;text-align:justify;border-bottom:var(--border);border-top:var(--border);background:var(--infohelp) no-repeat 15px center/28px,var(--msg)}
 .configtable td.tabletextarea{padding:0;background:none}
 .configtable tr:last-child{border-top:var(--border)}
 .h3navlinks{white-space:nowrap}
