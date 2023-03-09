@@ -482,7 +482,7 @@ td.commentAuthor .commentAuthorName{padding:0 5px 0 22px;width:120px;white-space
 #addCommentText{padding:18px 20px;text-align:center}
 .commentText{white-space:normal;text-align:justify;width:90%}
 .commentText:empty + .commentDelete{background:none}
-.commentWrapper{margin:2px 0;padding:8px 10px 8px 26px;text-align:left;line-height:1.3;white-space:normal;border:var(--border_softer);border-radius:3px;box-shadow:var(--highlight);background:#eef var(--comment) no-repeat scroll 6px center/16px;background-blend-mode:luminosity}
+.commentWrapper{margin:2px 0;padding:8px 10px 8px 26px;height:28px;max-height:300px;overflow:auto;resize:vertical;text-align:left;line-height:1.3;white-space:normal;border:var(--border_softer);border-radius:3px;box-shadow:var(--highlight);background:#eef var(--comment) no-repeat scroll 6px center/16px;background-blend-mode:luminosity}
 #commentsConfig .optbox{vertical-align:middle}
 #userComments select{margin-right:0}
 #commentDeleteAction{border-top:var(--border_softer);background:var(--th)}

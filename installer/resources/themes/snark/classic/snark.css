@@ -511,7 +511,7 @@ td#bwHelp a{margin-left:3px;display:inline-block;white-space:nowrap;line-height:
 .commentAuthorName:empty{display:none}
 td.commentAuthor{padding-left:5px}
 td.commentAuthor .commentAuthorName{padding:2px 5px 2px 24px;width:125px;white-space:nowrap;display:inline-block;overflow:hidden;text-overflow:ellipsis;text-align:left;box-shadow:0 0 0 1px #bbd;background:var(--user) no-repeat scroll 4px center / 14px,linear-gradient(180deg,var(--bg),var(--bg4))}
-.commentWrapper{margin:2px 0;padding:8px 10px 8px 26px;line-height:1.2;text-align:left;border:var(--border);border-radius:3px;box-shadow:var(--highlight);background:var(--comment) no-repeat scroll 6px center / 16px,linear-gradient(180deg,var(--bg),var(--bg2));background-blend-mode:luminosity}
+.commentWrapper{margin:2px 0;padding:8px 10px 8px 26px;height:28px;max-height:300px;overflow:auto;resize:vertical;line-height:1.2;text-align:left;border:var(--border);border-radius:3px;box-shadow:var(--highlight);background:var(--comment) no-repeat scroll 6px center / 16px,linear-gradient(180deg,var(--bg),var(--bg2));background-blend-mode:luminosity}
 #userComments select{margin-right:0}
 #commentDeleteAction{background:var(--bg)}
 #commentDeleteAction td{padding:8px 6px;border-top:var(--border);border-bottom:var(--border)}
@@ -524,7 +524,7 @@ td.commentAuthor .commentAuthorName{padding:2px 5px 2px 24px;width:125px;white-s
 #newRating select{width:90%}
 #myRating td:empty{padding:0;border-top:none;border-bottom:none}
 #myRating td:empty::after{min-height:1px}
-.commentRating img{padding:0;font-size:14pt;color:#FF7200;text-shadow:0 0 1px #900;filter:none}
+.commentRating img{padding:0;font-size:14pt;color:#ff7200;text-shadow:0 0 1px #900;filter:none}
 #showRatings td[colspan]{text-align:left}
 
 .info_tracker{margin:0 2px;padding:1px 6px 1px 18px;display:inline-block;white-space:nowrap;max-width:155px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;color:#bbf;border-radius:1px;box-shadow:0 0 0 1px #ccf;background:var(--bg2) var(--tracker) no-repeat left 3px center / 14px}

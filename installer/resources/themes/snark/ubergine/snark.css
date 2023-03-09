@@ -648,7 +648,7 @@ hr.debug{display:none}
 td .commentAuthorName{margin:0 4px 0 4px;padding:0 4px 0 22px;min-width:126px;max-width:126px;line-height:1.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:left;border-radius:3px;box-shadow:0 0 0 1px #000;background:var(--user) no-repeat 4px center/14px,linear-gradient(180deg,#313,#101)}
 .commentText{white-space:normal;text-align:left;width:90%}
 .commentText:empty + .commentDelete{background:none}
-.commentWrapper{border:var(--border_hard);margin:2px 0;padding:8px 10px 8px 26px;white-space:normal;border-radius:3px;box-shadow:inset 0 0 0 1px #515,0 0 1px 0 rgba(0,0,0,.3);background:#303 var(--comment) no-repeat 6px center/16px;background-blend-mode:luminosity}
+.commentWrapper{border:var(--border_hard);margin:2px 0;padding:8px 10px 8px 26px;height:28px;max-height:300px;overflow:auto;resize:vertical;white-space:normal;border-radius:3px;box-shadow:inset 0 0 0 1px #515,0 0 1px 0 rgba(0,0,0,.3);background:#303 var(--comment) no-repeat 6px center/16px;background-blend-mode:luminosity}
 .commentAction,.commentDelete{padding-left:1px;width:1%;white-space:nowrap}
 .addCommentText,.commentText{padding-right:0}
 .commentAction input[type=submit]{margin:8px}
