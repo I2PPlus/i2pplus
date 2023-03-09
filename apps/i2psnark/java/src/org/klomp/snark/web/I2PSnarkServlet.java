@@ -2615,8 +2615,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (showDebug) {
                         out.write(" &#10140; <i>" + _t("inactive") + "&nbsp;" + (t / 1000) + "s</i>");
                     } else {
-                        out.write("<span class=inactivity style=\"width: " + (t / 2000) +
-                                  "px;\" title=\"" + _t("Inactive") + ": " +
+                        out.write("<span class=inactivity style=\"width:" + (t / 2000) +
+                                  "px\" title=\"" + _t("Inactive") + ": " +
                                   (t / 1000) + ' ' + _t("seconds") + "\"></span>");
                     }
                 }

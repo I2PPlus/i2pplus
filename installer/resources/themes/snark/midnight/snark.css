@@ -708,7 +708,7 @@ td.trackerLink img{height:16px}
 .active .peerSeed img{opacity:1;animation:scale .2s linear 3s 2 forwards}
 
 .inactivity{margin-left:10px;height:4px;max-width:400px;min-width:5px;display:inline-block;border-radius:3px;box-shadow:0 0 0 1px #010;background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(0,0,0,.6) 15px,rgba(0,0,0,.6) 16px,rgba(0,0,0,0) 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#440 40px,#730 100px,#900);transition:ease width 3s}
-.inactivity[style="width:0px;"],.inactivity[style="width:1px;"],.inactivity[style="width:2px;"],.inactivity[style="width:3px;"],.inactivity[style="width:4px;"],.inactivity[style="width:5px;"]{display:none}
+.inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .magnetLabel{font-style:italic;display:inline-block;color:#9fa4c6}
 .magnetLabel,#torrents .infohash{vertical-align:text-bottom;line-height:1.3}
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}

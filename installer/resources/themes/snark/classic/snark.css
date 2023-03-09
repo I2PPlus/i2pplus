@@ -673,7 +673,7 @@ td.peerCount{padding-left:0;width:1%;white-space:nowrap;text-align:left;font-wei
 hr.debug{margin:10px 0 -5px;width:100%;display:none;color:#efefff;border:none;background:linear-gradient(90deg,var(--bg3),#ccf,var(--bg3))}
 
 .inactivity{margin-left:12px;min-width:5px;max-width:400px;height:4px;display:inline-block;border-radius:2px;box-shadow:0 0 0 1px #bbf,var(--highlight);background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(220,220,255,.9) 15px,rgba(220,220,255,.9) 16px,rgba(0,0,0,0) 16px),linear-gradient(90deg,#ee0 100px,#900)}
-.inactivity[style="width:0px;"],.inactivity[style="width:1px;"],.inactivity[style="width:2px;"],.inactivity[style="width:3px;"],.inactivity[style="width:4px;"],.inactivity[style="width:5px;"]{display:none}
+.inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 
 .magnetlink img,.torrentlink img,.magnetlink img:hover,.torrentlink img:hover{margin:-2px 0 0;padding:0;display:inline-block;vertical-align:middle;filter:none}
 .magnetlink,.torrentlink{margin:0 1px;padding:0 4px 1px;border-radius:2px}
