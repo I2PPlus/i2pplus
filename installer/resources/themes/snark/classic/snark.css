@@ -408,7 +408,7 @@ tr:hover .txBarInner{background:linear-gradient(180deg,#efe,#dfd)}
 #addSection{margin:9px 0;padding:0 10px;background:var(--bg3);background:var(--section)}
 #configSection{margin:0;padding:0 10px 12px 10px;background:var(--bg3);background:var(--section)}
 .configPanel{margin:9px 0 0 0;padding:0;background:linear-gradient(180deg,var(--bg),var(--bg3) 40px,var(--bg))}
-.iframed #addSection,.iframed #new,.iframed #addSection,.iframed #createSection{margin-top:-1px}
+.iframed #addSection,.iframed #new,.iframed #addSection,.iframed #createSection{margin:-1px 0}
 .iframed #new,.iframed #new + #configSection{margin-top:-11px}
 #addSection table,#createSection table{margin-top:-5px}
 
