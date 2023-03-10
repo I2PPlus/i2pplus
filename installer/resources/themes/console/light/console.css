@@ -2402,6 +2402,7 @@ th.options .optbox{vertical-align:sub}
 /* responsive layout */
 @media screen and (max-width:1499px){
 body{margin:4px}
+hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 .en #sitemap .applink img{padding-left:35px;padding-right:35px}
 .en .sitemapLink,.en .sitemapLabel,.en #sitemap .applink,.en #sitemap .applabel,.en #sitemap .applink table{width:120px;min-width:120px}
 .expiry ul{margin-left:-4px}
@@ -2438,6 +2439,7 @@ p#pluginconfigtext{margin-top:11px}
 #sb_internals a,#sb_advanced a #sb_help a{max-width:200px}
 #sb_peers_condensed,#sb_tunnels_condensed{margin-bottom:-10px}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
+#sb_warning+.sb_notice{margin-bottom:-6px}
 #searchbar select{padding:6px 24px 7px 8px}
 #sidebar #sb_CPUBar{margin-top:-4px}
 #sidebar #sb_internals.collapsed .sb_icon img,#sidebar #sb_advanced.collapsed .sb_icon img,#sidebar #sb_services.collapsed .sb_icon img{width:17px;height:17px}
