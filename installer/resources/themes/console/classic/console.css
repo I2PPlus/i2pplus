@@ -54,6 +54,7 @@ a.script{word-spacing:normal;letter-spacing:normal}
 
 /* sidebar */
 .sb_notice{margin:-5px 1px -6px;padding:7px 5px;line-height:1.1;font-size:8.5pt;font-weight:700;border:var(--border);border-radius:2px;box-shadow:0 0 1px #bbb,inset 0 0 0 1px #fbb;background:var(--label_focus)}
+.sb_notice:empty{display:none}
 .sb_notice + .sb_notice{margin-top:8px}
 .sb_notice a{padding:0;vertical-align:baseline}
 .sb table{margin:-5px 0 -5px 0;padding:0;width:204px;position:relative;overflow:hidden;text-align:center;font-size:8pt}

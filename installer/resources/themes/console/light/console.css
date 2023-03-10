@@ -189,6 +189,7 @@ a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 
 /* notify */
 .sb_notice{font-size:8pt}
+.sb_notice:empty{display:none}
 .sb_notice,#sidebar #xhr hr+b{margin:-5px -5px -6px;padding:5px 6px;line-height:1.2;font-weight:700;border:1px solid #89f;border-radius:2px;box-shadow:0 0 1px #bbb,var(--highlight);background:#f2f2ff}
 .sb_notice+.sb_notice{margin-top:8px}
 p:empty+.sb_notice{margin-top:9px}
