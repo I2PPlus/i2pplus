@@ -24,6 +24,7 @@ function initFilterBar() {
   var incomplete = document.querySelectorAll(".incomplete");
   var pagenav = document.getElementById("pagenavtop");
   var peerinfo = document.querySelectorAll(".peerinfo");
+  var screenlog = document.getElementById("screenlog");
   var seeding = document.querySelectorAll(".seeding");
   var stopped = document.querySelectorAll(".stopped");
   var tfoot = document.getElementById("snarkFoot");
@@ -48,15 +49,8 @@ function initFilterBar() {
   checkIfActive();
 
   function checkIfActive() {
-    if (!storage || btnAll.checked === true) {
+    if (!storage && filterbar !== null) {
       btnAll.checked = true;
-      if (torrentform) {
-        torrentform.classList.remove("filterbarActive");
-      }
-    } else {
-      if (torrentform && !torrentform.classList.contains("filterbarActive")) {
-        torrentform.classList.add("filterbarActive");
-      }
     }
   }
 
@@ -92,6 +86,14 @@ function initFilterBar() {
     stylesheet.innerText = rules;
   }
 
+  function disableBar() {
+    filterbar.classList.add("noPointer");
+  }
+
+  function enableBar() {
+    filterbar.classList.remove("noPointer");
+  }
+
   function showAll() {
     clean();
     checkPagenav();
@@ -102,7 +104,7 @@ function initFilterBar() {
     var query = window.location.search;
     window.localStorage.removeItem(storageFilter);
     btnAll.checked = true;
-    btnAll.style.pointerEvents = "none";
+    btnAll.classList.add("noPointer");
   }
 
   function showActive() {
@@ -190,14 +192,14 @@ function initFilterBar() {
   }
 
   if (filterbar) {
-     btnAll.addEventListener("click", () => {onClick();showAll();});
-     btnActive.addEventListener("click", () => {onClick();showActive();});
-     btnInactive.addEventListener("click", () => {onClick();showInactive();});
-     btnDownloading.addEventListener("click", () => {onClick();showDownloading();});
-     btnSeeding.addEventListener("click", () => {onClick();showSeeding();});
-     btnComplete.addEventListener("click", () => {onClick();showComplete();});
-     btnIncomplete.addEventListener("click", () => {onClick();showIncomplete();});
-     btnStopped.addEventListener("click", () => {onClick();showStopped();});
+     btnAll.addEventListener("click", () => {disableBar();onClick();showAll();enableBar();});
+     btnActive.addEventListener("click", () => {disableBar();onClick();showActive();enableBar();});
+     btnInactive.addEventListener("click", () => {disableBar();onClick();showInactive();enableBar();});
+     btnDownloading.addEventListener("click", () => {disableBar();onClick();showDownloading();enableBar();});
+     btnSeeding.addEventListener("click", () => {disableBar();onClick();showSeeding();enableBar();});
+     btnComplete.addEventListener("click", () => {disableBar();onClick();showComplete();enableBar();});
+     btnIncomplete.addEventListener("click", () => {disableBar();onClick();showIncomplete();enableBar();});
+     btnStopped.addEventListener("click", () => {disableBar();onClick();showStopped();enableBar();});
      switch (window.localStorage.getItem(storageFilter)) {
        case "all":
          btnAll.checked = true;
@@ -266,7 +268,6 @@ function checkFilterBar() {
 function checkPagenav() {
   var pagenav = document.getElementById("pagenavtop");
   var path = window.location.pathname;
-  var screenlog = document.querySelector("#screenlog ul");
   var storageFilter = "filter";
   if (!path.endsWith("i2psnark/")) {
     storageFilter = "filter_" + path.replace("/", "");
@@ -321,16 +322,15 @@ function refreshFilters() {
         if (pagenav && !storage) {
           checkPagenav();
           var pagenavResponse = xhrfilter.responseXML.getElementById("pagenavtop");
-          if (pagenavResponse !== null) {pagenav.innerHTML = pagenavResponse.innerHTML;}
+          if (pagenavResponse !== null && pagenav.innerHTML !== pagenavResponse.innerHTML) {pagenav.innerHTML = pagenavResponse.innerHTML;}
         }
         if (filterbar) {
-          //initFilterBar();
           var filterbarResponse = xhrfilter.responseXML.getElementById("torrentDisplay");
           if (!filterbar && filterbarResponse !== null) {filterbar.outerHTML = filterbarResponse.outerHTML;}
         }
         if (screenlog) {
-          var screenlogResponse = xhrfilter.responseXML.querySelector("#screenlog ul");
-          if (screenlogResponse != null && screenlog !== screenlogResponse) {
+          var screenlogResponse = xhrfilter.responseXML.getElementById("screenlog");
+          if (screenlogResponse !== null && screenlog.innerHTML !== screenlogResponse.innerHTML) {
             screenlog.innerHTML = screenlogResponse.innerHTML;
           }
         }

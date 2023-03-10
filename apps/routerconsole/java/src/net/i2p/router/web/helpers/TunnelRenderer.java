@@ -1,10 +1,9 @@
 package net.i2p.router.web.helpers;
 
-import java.net.InetAddress;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.net.InetAddress;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -968,6 +967,9 @@ class TunnelRenderer {
         return Messages.getString(s, o, _context);
     }
 
+    /**
+     * @since 0.9.58+
+     */
     public String getCanonicalHostName(String hostName) {
         try {
             return InetAddress.getByName(hostName).getCanonicalHostName();

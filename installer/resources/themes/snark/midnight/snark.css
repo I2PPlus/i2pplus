@@ -14,6 +14,7 @@
 --nav:linear-gradient(180deg,#112,#080818 50%,#000);
 --notify:linear-gradient(180deg,#113,#001);
 --row_filtered:var(--row);
+--snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tab_active:linear-gradient(90deg,rgba(0,0,32,.1),rgba(64,0,64,.2),rgba(0,0,32,.1)),linear-gradient(180deg,#080008,#0a000a);
 --tab_hover:linear-gradient(90deg,rgba(0,0,16,.05),rgba(96,0,96,.15),rgba(0,0,16,.05)),linear-gradient(180deg,#1d1a2d 50%,#000 50%);
 --tab:linear-gradient(90deg,rgba(0,0,16,.7),rgba(0,0,0,.1),rgba(0,0,16,.7)),var(--nav);
@@ -50,6 +51,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 tfoot img,tfoot:nth-child(2) img,tfoot:nth-child(1) img,tfoot:nth-child(3) img,tfoot:nth-child(4) img{margin:0 2px 3px 0;padding-right:0}
 tfoot tr:nth-child(n+1){text-align:left}
 th img,td img,#closelog,#expand,#shrink{font-size:0}
+.noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .toggleview,.configTitle,#navbar,img,input[type=submit],.optbox,label,th img,#createSection,#closeLog,#expand,#shrink{user-select:none}
 .page{margin:5px 0 0;padding:0 0 12px;line-height:1.6;text-align:center;font-size:9pt;border:var(--border);border-radius:0 0 2px 2px;background:#003}
 .iframed .page{margin:4px 0 5px;padding:0;border:none;border-radius:0;box-shadow:none;background:none}
@@ -103,8 +105,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown) + a[href="/i2psnark"]:hover{opacity:.8}
 
 /* screenlog */
-#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);scrollbar-color:#225 #001;scrollbar-width:thin}
-#screenlog,#screenlog.expanded,#screenlog.collapsed{background:url(../ubergine/images/hat.png) no-repeat scroll right top,repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px),url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,linear-gradient(180deg,#001,#000008);background-size:80px auto,100% 4px,calc(100% - 75px) calc(100% - 8px),100%;background-position:right -4px bottom -10px,center center,left bottom,center top;background-blend-mode:normal,overlay,normal,normal}
+#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:url(../ubergine/images/hat.png) no-repeat scroll right top,repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px),var(--snarkGraph) no-repeat,linear-gradient(180deg,#001,#000008);background-size:80px auto,100% 4px,calc(100% - 75px) calc(100% - 8px),100%;background-position:right -4px bottom -10px,center center,left bottom,center top;background-blend-mode:normal,overlay,normal,normal;scrollbar-color:#225 #001;scrollbar-width:thin}
 .iframed #screenlog{margin-top:-5px}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:inset 0 0 0 1px #930}
@@ -112,7 +113,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #screenlog ul{margin:-1px 0 2px 0;padding:0 0 0 14px;list-style:none}
 #screenlog li{margin-left:-15px;line-height:1.25;color:var(--li)}
 #screenlog li::before{width:14px;height:11px;display:inline-block;background:var(--bullet) no-repeat left bottom / 9px;content:""}
-#closelog,#expand,#shrink{float:right;position:sticky;top:0}
+#closelog,#expand,#shrink{float:right;position:sticky;top:0;cursor:pointer}
 #shrink{display:none}
 #closelog img,#expand img,#shrink img{margin:-3px -5px 4px 5px;padding:5px;opacity:.8;background:#001;border:var(--border);border-top:none;border-right:none;width:12px;mix-blend-mode:luminosity;z-index:1}
 #closeLog img:hover,#closeLog img:focus,#expand img:hover,#expand img:focus,#shrink img:hover,#shrink img:focus{box-shadow:var(--highlight);background:#404;mix-blend-mode:normal}
@@ -579,7 +580,7 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 td .commentAuthorName{padding-right:8px;width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
 .commentText{white-space:normal;text-align:justify;width:90%}
 .commentText:empty + .commentDelete{background:none}
-.commentWrapper{margin:2px 0;padding:12px 10px 12px 34px;text-align:left;white-space:normal;line-height:1.3;border:var(--border_inner);border-radius:3px;box-shadow:var(--highlight),0 0 1px 0 rgba(0,0,0,.3);background:#113 var(--comment) no-repeat scroll 12px center / 16px;background-blend-mode:luminosity}
+.commentWrapper{margin:2px 0;padding:12px 10px 12px 34px;height:28px;max-height:300px;overflow:auto;resize:vertical;text-align:left;white-space:normal;line-height:1.3;border:var(--border_inner);border-radius:3px;box-shadow:var(--highlight),0 0 1px 0 rgba(0,0,0,.3);background:#113 var(--comment) no-repeat scroll 12px center / 16px;background-blend-mode:luminosity}
 #commentsConfig .optbox{vertical-align:middle}
 #userComments select{margin-right:0}
 #commentDeleteAction{border-top:var(--border);background:linear-gradient(180deg,#000018,#00000d)}
@@ -707,7 +708,7 @@ td.trackerLink img{height:16px}
 .active .peerSeed img{opacity:1;animation:scale .2s linear 3s 2 forwards}
 
 .inactivity{margin-left:10px;height:4px;max-width:400px;min-width:5px;display:inline-block;border-radius:3px;box-shadow:0 0 0 1px #010;background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(0,0,0,.6) 15px,rgba(0,0,0,.6) 16px,rgba(0,0,0,0) 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#440 40px,#730 100px,#900);transition:ease width 3s}
-.inactivity[style="width:0px;"],.inactivity[style="width:1px;"],.inactivity[style="width:2px;"],.inactivity[style="width:3px;"],.inactivity[style="width:4px;"],.inactivity[style="width:5px;"]{display:none}
+.inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .magnetLabel{font-style:italic;display:inline-block;color:#9fa4c6}
 .magnetLabel,#torrents .infohash{vertical-align:text-bottom;line-height:1.3}
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}
@@ -940,7 +941,7 @@ thead img,thead img:hover{max-height:22px}
 #pagenavcontrols{transform:translateX(70px)}
 #pagenav img{height:16px}
 #screenlog + form{margin-top:9px}
-#screenlog{height:54px}
+#screenlog{height:60px;min-height:60px}
 #screenlog li::before{margin:0 1px 0 1px;width:15px;background-size:10px 10px}
 #screenlog li,#screenlog li a{font-size:9.5pt}
 #screenlog{margin-bottom:-10px}

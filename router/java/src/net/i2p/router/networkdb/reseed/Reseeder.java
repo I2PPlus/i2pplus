@@ -60,7 +60,7 @@ public class Reseeder {
     private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024;
     /** limit to spend on a single host, to avoid getting stuck on one that is seriously overloaded */
     //private static final int MAX_TIME_PER_HOST = 7 * 60 * 1000;
-    private static final int MAX_TIME_PER_HOST = 15 * 1000;
+    private static final int MAX_TIME_PER_HOST = 10 * 1000;
     //private static final long MAX_FILE_AGE = 30*24*60*60*1000L;
     private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
     /** Don't disable this! */
@@ -70,7 +70,7 @@ public class Reseeder {
     //private static final int MIN_RI_WANTED = 100;
     private static final int MIN_RI_WANTED = 800;
     //private static final int MIN_RESEED_SERVERS = 2;
-    private static final int MIN_RESEED_SERVERS = 10;
+    private static final int MIN_RESEED_SERVERS = 12;
     // network ID cross-check, proposal 147, as of 0.9.42
     private static final String NETID_PARAM = "?netid=";
 
@@ -122,6 +122,7 @@ public class Reseeder {
         "https://reseed-pl.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
         "https://reseed.diva.exchange/"             + ',' +   // reseed_at_diva.exchange.crt       CA
         "https://reseed.i2pgit.org/"                + ',' +   // hankhill19580_at_gmail.com.crt    CA                                Java 8+
+        "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
         "https://i2pseed.creativecowpat.net:8443/"  + ',' +   // creativecowpat_at_mail.i2p.crt    i2pseed.creativecowpat.net.crt    Java 7+
         "https://reseed.onion.im/"                  + ',' +   // lazygravy_at_mail.i2p             CA                                Java 8+
         "https://reseed.memcpy.io/"                 + ',' +   // hottuna_at_mail.i2p.crt           CA                                SNI required
@@ -129,7 +130,6 @@ public class Reseeder {
         "https://coconut.incognet.io/"              + ',' +   // rambler_at_mail.i2p.crt           CA
         "https://reseed2.i2p.net/";                           // echelon3_at_mail.i2p.crt          CA
 
-        //"https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
 
     private static final String SU3_FILENAME = "i2pseeds.su3";
 

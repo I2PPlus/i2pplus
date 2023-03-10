@@ -17,6 +17,7 @@ import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -36,6 +37,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
@@ -68,6 +70,11 @@ public class PersistentDataStore extends TransientDataStore {
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
     private static final int MAX_ROUTERS_INIT = SystemVersion.isSlow() ? 2000 : 5000;
+
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    public boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
+    }
 
     /**
      *  @param dbDir relative path
@@ -311,8 +318,10 @@ public class PersistentDataStore extends TransientDataStore {
             String MIN_VERSION = "0.9.57";
             String v = MIN_VERSION;
             String bw = "K";
+            String ip = null;
             boolean unreachable = false;
             boolean isFF = false;
+            boolean hasIP = false;
             boolean noSSU = true;
             boolean hasSalt = false;
             boolean isBadFF = isFF && noSSU;
@@ -322,11 +331,15 @@ public class PersistentDataStore extends TransientDataStore {
                 v = ri.getVersion();
                 unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
                 caps = ri.getCapabilities();
+                ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
                 if (caps.contains("f")) {
                     isFF = true;
                 }
                 if (caps.contains("salt")) {
                     hasSalt = true;
+                }
+                if (ip != null) {
+                    hasIP = true;
                 }
                 bw = ri.getBandwidthTier();
                 for (RouterAddress ra : ri.getAddresses()) {
@@ -339,7 +352,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
 
             boolean isSlow = (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
-                              bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt;
+                              bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt || !hasIP;
             String filename = null;
 
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
@@ -361,6 +374,12 @@ public class PersistentDataStore extends TransientDataStore {
                     dbFile.setLastModified(dataPublishDate);
                     if (_log.shouldDebug() && ri != null && !unreachable && !isOld && !isBadFF && !noSSU)
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                    if (enableReverseLookups()) {
+                        ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
+                        String rl = ip != null ? getCanonicalHostName(ip) : null;
+                        if (_log.shouldInfo() && ip != null && rl != null)
+                            _log.info("Reverse lookup of Router [" + key.toBase64().substring(0,6) + "] resolves to: " + (rl != null ? rl : ip));
+                    }
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
                     dbFile.delete();
@@ -371,16 +390,22 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
                         dbFile.delete();
-                    } else if (isSlow) {
-                        if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
-                        dbFile.delete();
                     } else if (hasSalt) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Invalid 'salt' caps");
                     } else if (isBadFF) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
+                        dbFile.delete();
+/*
+                    } else if (!hasIP) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> No IP address");
+                        dbFile.delete();
+*/
+                    } else if (isSlow) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
                         dbFile.delete();
                     } else if (isOld) {
                         if (_log.shouldDebug())
@@ -627,6 +652,7 @@ public class PersistentDataStore extends TransientDataStore {
                     Hash h = ri.getIdentity().calculateHash();
                     String v = ri.getVersion();
                     String MIN_VERSION = "0.9.57";
+                    String ip = null;
                     String truncHash = "";
                     Hash us = _context.routerHash();
                     boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());
@@ -636,14 +662,19 @@ public class PersistentDataStore extends TransientDataStore {
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
                     boolean isFF = false;
+                    boolean hasIP = false;
                     boolean noSSU = true;
                     boolean isSalt = false;
                     String caps = "unknown";
                     if (ri != null) {
                         truncHash = h.toBase64().substring(0,6);
                         caps = ri.getCapabilities();
+                        ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
                         if (caps.contains("f")) {
                             isFF = true;
+                        }
+                        if (ip != null) {
+                            hasIP = true;
                         }
                         if (caps.contains("salt")) {
                             isSalt = true;
@@ -664,6 +695,15 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldError())
                             _log.error("Router [" + truncHash + "] is from a different network");
                         _routerFile.delete();
+/*
+                    } else if (!hasIP) {
+                        corrupt = true;
+                        if (_log.shouldInfo())
+                            _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> No IP address");
+                        if (_log.shouldWarn())
+                            _log.warn("Banning: [" + truncHash + "] for 4h -> No IP address");
+                            _context.banlist().banlistRouter(_key, "<b>➜</b> No IP address", null, null, now + 4*60*60*1000);
+*/
                     } else if (isBadFF) {
                         corrupt = true;
                         if (_log.shouldInfo())
@@ -869,6 +909,17 @@ public class PersistentDataStore extends TransientDataStore {
                 _log.debug("Deleted " + f.getAbsolutePath());
             }
             return;
+        }
+    }
+
+    /**
+     * @since 0.9.58+
+     */
+    public String getCanonicalHostName(String hostName) {
+        try {
+            return InetAddress.getByName(hostName).getCanonicalHostName();
+        } catch(IOException exception) {
+            return hostName;
         }
     }
 }

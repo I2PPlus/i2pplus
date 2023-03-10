@@ -817,11 +817,21 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             String caps = ri.getCapabilities();
             String v = ri.getVersion();
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
+            String capacity = String.valueOf(getCapacity(peer));
+            boolean hasD = caps.contains("D");
+            boolean hasE = caps.contains("E");
+            boolean hasG = caps.contains("G");
             buf.append("<td class=\"rbw ").append(getCapacity(peer));
                 if (caps.contains("f"))
                     buf.append(" isff");
                 if (caps.contains("U"))
                     buf.append(" isU");
+                if (hasD)
+                    buf.append(" isD");
+                else if (hasE)
+                    buf.append(" isE");
+                else if (hasG)
+                    buf.append(" isG");
                 buf.append("\"><a href=\"/netdb?caps=");
                 buf.append(getCapacity(peer));
                 if (caps.contains("f"))
@@ -831,7 +841,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append("\" title=\"");
                 buf.append(_t("Show all routers with this capability in the NetDb"));
                 buf.append("\">");
-                buf.append(getCapacity(peer));
+                buf.append(capacity.replace("D", "").replace("E", "").replace("G", ""));
                 buf.append("</a>");
         } else {
             buf.append("<td class=rbw>?");

@@ -48,7 +48,7 @@ table{width:100%}
 #proxyNewHost{margin-bottom:15px}
 #proxyNewHost td{padding:8px}
 #proxyNewHost td:first-child{font-weight:700}
-#b64,#key{white-space:pre-wrap;word-break:break-all;text-align:justify;font-family:Droid Sans Mono,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;font-size:90%;user-select:all}
+#b64,#key{white-space:pre-wrap;word-break:break-all;text-align:justify;font-family:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;font-size:90%;user-select:all}
 #key{margin:20px 0 25px;padding:10px 14px;border:1px solid #fb7;background:#ffe}
 #proxyNewHost textarea:focus{filter:none}
 #proxyNewHost + hr{display:none}

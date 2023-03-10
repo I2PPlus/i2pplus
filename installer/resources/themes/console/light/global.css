@@ -24,7 +24,8 @@
 --border_softer:1px solid #dfdfec;
 --btn_hover:linear-gradient(180deg,#eee,#fff);
 --btn:linear-gradient(180deg,#fff,#efefff);
---btn_shadow:0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.1) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.1);
+--btn_shadow:0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.08) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.08);
+--btn_shadow_hover:var(--highlight),inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);
 --btn_shadow_active:var(--highlight),inset 2px 2px 3px 1px rgba(0,0,0,.35);
 --div_infohelp:linear-gradient(180deg,#f8f8ff,#f0f0ff);
 --filter_focus:drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
@@ -42,7 +43,7 @@
 --ink_lighter:#71718e;
 --input_shadow:inset 2px 2px 2px rgba(0,0,0,.15);
 --membarinner_mobile:linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7));
---monospaced:Droid Sans Mono,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
+--monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 --outline:0 0 0 1px #779;
 --p:linear-gradient(135deg,#fafaff,#f8f8ff);
 --readonly:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 3px,#fafaff 4px),#fafaff;

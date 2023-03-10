@@ -54,6 +54,7 @@ public class HomeHelper extends HelperBase {
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
         _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "tunnelmanager.svg" + S +
+        _x("Webapps") + S + _x("Manage Router webapps") + S + "/configwebapps" + S + I + "webapps.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
 
@@ -73,6 +74,7 @@ public class HomeHelper extends HelperBase {
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
         _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "tunnelmanager.svg" + S +
+        _x("Webapps") + S + _x("Manage Router webapps") + S + "/configwebapps" + S + I + "webapps.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         _x("Wizard") + S + _x("Configuration and bandwidth tester") + S + "/wizard" + S + I + "wizard.svg" + S +
         "";
@@ -80,6 +82,7 @@ public class HomeHelper extends HelperBase {
     static final String ADVANCED_SERVICES =
         _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "addressbook.svg" + S +
         _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "configure.svg" + S +
+        _x("Clients") + S + _x("Start or stop Router clients") + S + "/configclients" + S + I + "editclient.svg" + S +
         _x("Changelog") + S + _x("Recent changes") + S + "/help/changelog" + S + I + "changelog.svg" + S +
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "graphs.svg" + S +
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "mail.svg" + S +
@@ -91,6 +94,7 @@ public class HomeHelper extends HelperBase {
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
         _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "tunnelmanager.svg" + S +
+        _x("Webapps") + S + _x("Manage Router webapps") + S + "/configwebapps" + S + I + "webapps.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
 

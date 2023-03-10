@@ -614,7 +614,7 @@ class EventPumper implements Runnable {
         float lastRate = last / (float) lastPeriod;
         float currentRate = (float) (current / (double) currentTime);
 //        float factor = _transport.haveCapacity(95) ? 1.05f : 0.95f;
-        float factor = _transport.haveCapacity(95) ? 1.3f : 0.95f;
+        float factor = _transport.haveCapacity(95) ? 2.0f : 0.95f;
         float minThresh = factor * lastRate;
         if (currentRate > minThresh * 5 / 3) {
             // chance in 128
