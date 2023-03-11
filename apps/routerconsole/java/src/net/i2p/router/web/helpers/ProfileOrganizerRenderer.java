@@ -69,13 +69,13 @@ class ProfileOrganizerRenderer {
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
             if (prof == null)
                 continue;
-            if (mode == 2 && prof.getLastHeardFrom() <= hideBefore && isFF) {
+            if (mode == 2 && (prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore || prof.getIsActive()) && isFF) {
                 order.add(prof);
                 ff++;
                 continue;
             }
 //            if (prof.getLastSendSuccessful() <= hideBefore) {
-            if (mode < 2 && prof.getLastHeardFrom() >= hideBefore) {
+            if (mode < 2 && (prof.getLastHeardFrom() >= hideBefore || prof.getLastSendSuccessful() >= hideBefore) && !prof.getIsActive()) {
                 older++;
                 continue;
             }
@@ -118,6 +118,8 @@ class ProfileOrganizerRenderer {
                .append("<th>").append(_t("Version")).append("</th>");
             if (enableReverseLookups()) {
                 buf.append("<th>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
+            } else {
+                buf.append("<th>").append(_t("Host")).append("</th>");
             }
             buf.append("<th>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
@@ -174,11 +176,10 @@ class ProfileOrganizerRenderer {
                 } else {
                     buf.append("<span>&ensp;</span>");
                 }
+                buf.append("</td><td>");
+                String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
+                String rl = ip != null ? getCanonicalHostName(ip) : null;
                 if (enableReverseLookups()) {
-                    buf.append("</td><td>");
-
-                    String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
-                    String rl = ip != null ? getCanonicalHostName(ip) : null;
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span class=rlookup title=\"").append(rl).append("\">");
                         buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")));
@@ -186,6 +187,8 @@ class ProfileOrganizerRenderer {
                         buf.append("<span>").append(ip.replace("null", "unknown"));
                     }
                     buf.append("</span>");
+                } else {
+                    buf.append(ip != null ? ip : "");
                 }
                 buf.append("</td><td>");
                 boolean ok = true;
