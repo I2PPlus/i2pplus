@@ -700,7 +700,8 @@ public class NTCPTransport extends TransportImpl {
         NTCPConnection con = _conByIdent.remove(peer);
         if (con != null) {
             if (_log.shouldWarn())
-                _log.warn("Force disconnect of " + peer, new Exception("I did it"));
+//                _log.warn("Force disconnect of " + peer, new Exception("I did it"));
+                _log.warn("[NTCP] Forcing disconnection of [" + peer.toBase64().substring(0,6) + "]");
             con.close();
         }
     }
