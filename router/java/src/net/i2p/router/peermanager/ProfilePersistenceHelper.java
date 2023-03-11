@@ -352,6 +352,8 @@ class ProfilePersistenceHelper {
             } else if (caps.contains("K") || caps.contains("L") ||
                        caps.contains("M") || caps.contains("N") ||
                        caps.contains("U") || caps.contains("salt")) {
+                if (_log.shouldDebug())
+                    _log.debug("Dropping uninteresting profile: " + file.getName());
                 file.delete();
                 return null;
             } else if (file.getName().endsWith(OLD_SUFFIX)) {
