@@ -261,16 +261,43 @@ p:empty+.sb_notice{margin-top:9px}
 .tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) var(--center)/15px}
 
 /* section toggler */
-#sidebar h3{position:relative;contain:paint}
-h3:not(:hover) .toggleSection{background:var(--expand_hover),var(--expand_active),var(--collapse_hover),var(--collapse_active);background-size:10px}
+.sidebarlogo{text-align:center}
 .toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:28px;width:32px;background:rgba(0,0,0,.3) var(--collapse_hover) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:0 0 0 1px #000 inset;border-left:var(--border);display:none}
-h3:hover .toggleSection{display:inline-block;z-index:999}
 .toggleSection:not(:checked){background-image:var(--expand_hover)}
 .toggleSection:active{box-shadow:var(--btn_shadow_active);background:var(--hover) var(--expand_active) no-repeat center center/10px}
 .toggleSection:checked:active{background:var(--hover) var(--collapse_active) no-repeat center center/10px}
+h3:not(:hover) .toggleSection{background:var(--expand_hover),var(--expand_active),var(--collapse_hover),var(--collapse_active);background-size:10px}
+h3:hover .toggleSection{display:inline-block;z-index:999}
+.sb_icon#fast{background:var(--fast) no-repeat 25% center/19px,var(--badge)}
+.sb_icon#floodfill{background:var(--floodfill) no-repeat 25% center/19px,var(--badge)}
+.sb_icon#firewalled{background:var(--net_firewalled) no-repeat 25% center/19px,var(--badge)}
+.sb_icon#banned{background:var(--ban) no-repeat 25% center/19px,var(--badge)}
+.sb_icon#service{background:var(--server) no-repeat 25% center/19px,var(--badge)}
+.sb_icon#service{background:var(--server) no-repeat 17.5% calc(50% - 3px)/12px,var(--client) no-repeat calc(20% + 12px) calc(50% + 3px)/12px,var(--badge)}
+.sb_icon#utility{background:var(--hardhat) no-repeat calc(50% - 3px) calc(50% + 2px)/14px,var(--configure) no-repeat 20% center/19px,var(--badge)}
+.sb_icon#transit{background:var(--share) no-repeat 25% center/19px,var(--badge)}
+.sb_icon#tcount{background:var(--hardhat) no-repeat 25% center/19px,var(--badge)}
+.sb_icon#fast:hover,.sb_icon#fast:focus{background:var(--fast) no-repeat 25% center/19px,var(--badge_hover)}
+.sb_icon#floodfill:hover,.sb_icon#focus:hover{background:var(--floodfill) no-repeat 25% center/19px,var(--badge_hover)}
+.sb_icon#firewalled:hover,.sb_icon#firewalled:focus{background:var(--net_firewalled) no-repeat 25% center/19px,var(--badge_hover)}
+.sb_icon#banned:hover,.sb_icon#banned:focus{background:var(--ban) no-repeat 25% center/19px,var(--badge_hover)}
+.sb_icon#service:hover,.sb_icon#service:focus{background:var(--server) no-repeat 25% center/19px,var(--badge_hover)}
+.sb_icon#service:hover,.sb_icon#service:focus{background:var(--server) no-repeat 17.5% calc(50% - 3px)/12px,var(--client) no-repeat calc(20% + 12px) calc(50% + 3px)/12px,var(--badge_hover)}
+.sb_icon#utility:hover,.sb_icon#utility:focus{background:var(--hardhat) no-repeat calc(50% - 3px) calc(50% + 2px)/14px,var(--configure) no-repeat 20% center/19px,var(--badge_hover)}
+.sb_icon#transit:hover,.sb_icon#transit:focus{background:var(--share) no-repeat 25% center/19px,var(--badge_hover)}
+.sb_icon#tcount:hover,.sb_icon#tcount:focus{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_hover)}
+.sb_icon#fast:active{background:var(--fast) no-repeat 25% center/19px,var(--badge_active)}
+.sb_icon#floodfill:active{background:var(--floodfill) no-repeat 25% center/19px,var(--badge_active)}
+.sb_icon#firewalled:active{background:var(--net_firewalled) no-repeat 25% center/19px,var(--badge_active)}
+.sb_icon#banned:active{background:var(--ban) no-repeat 25% center/19px,var(--badge_active)}
+.sb_icon#service:active{background:var(--server) no-repeat 25% center/19px,var(--badge_active)}
+.sb_icon#service:active{background:var(--server) no-repeat 17.5% calc(50% - 3px)/12px,var(--client) no-repeat calc(20% + 12px) calc(50% + 3px)/12px,var(--badge_active)}
+.sb_icon#utility:active{background:var(--hardhat) no-repeat calc(50% - 3px) calc(50% + 2px)/14px,var(--configure) no-repeat 20% center/19px,var(--badge_active)}
+.sb_icon#transit:active{background:var(--share) no-repeat 25% center/19px,var(--badge_active)}
+.sb_icon#tcount:active{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_active)}
 #sb_updatesection h3.collapsed:not(.updating) a::after{content:"*"}
+#sidebar h3{position:relative;contain:paint}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:80%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #141,var(--highlight);position:relative;z-index:999;animation:fade .25s ease .5s reverse both}
-#tunnelCount{animation:none}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty, #sidebar .badge[hidden]{display:none}
@@ -307,33 +334,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #sb_peers_condensed span:not(.badge),#sb_tunnels_condensed span:not(.badge){position:relative;margin:0;height:19px;width:19px;line-height:0}
 #sb_peers_condensed .badge,#sb_tunnels_condensed .badge{position:absolute;right:-2px;top:2px;display:inline-block;background:rgba(0,0,0,.35);text-align:center;padding:1px 3px 2px;min-width:20px;border-radius:0 0 0 2px;margin:0;line-height:1;pointer-events:none}
 #sb_tunnels_condensed .badge{top:1px}
-.sb_icon#fast{background:var(--fast) no-repeat 25% center/19px,var(--badge)}
-.sb_icon#floodfill{background:var(--floodfill) no-repeat 25% center/19px,var(--badge)}
-.sb_icon#firewalled{background:var(--net_firewalled) no-repeat 25% center/19px,var(--badge)}
-.sb_icon#banned{background:var(--ban) no-repeat 25% center/19px,var(--badge)}
-.sb_icon#service{background:var(--server) no-repeat 25% center/19px,var(--badge)}
-.sb_icon#service{background:var(--server) no-repeat 17.5% calc(50% - 3px)/12px,var(--client) no-repeat calc(20% + 12px) calc(50% + 3px)/12px,var(--badge)}
-.sb_icon#utility{background:var(--hardhat) no-repeat calc(50% - 3px) calc(50% + 2px)/14px,var(--configure) no-repeat 20% center/19px,var(--badge)}
-.sb_icon#transit{background:var(--share) no-repeat 25% center/19px,var(--badge)}
-.sb_icon#tcount{background:var(--hardhat) no-repeat 25% center/19px,var(--badge)}
-.sb_icon#fast:hover,.sb_icon#fast:focus{background:var(--fast) no-repeat 25% center/19px,var(--badge_hover)}
-.sb_icon#floodfill:hover,.sb_icon#focus:hover{background:var(--floodfill) no-repeat 25% center/19px,var(--badge_hover)}
-.sb_icon#firewalled:hover,.sb_icon#firewalled:focus{background:var(--net_firewalled) no-repeat 25% center/19px,var(--badge_hover)}
-.sb_icon#banned:hover,.sb_icon#banned:focus{background:var(--ban) no-repeat 25% center/19px,var(--badge_hover)}
-.sb_icon#service:hover,.sb_icon#service:focus{background:var(--server) no-repeat 25% center/19px,var(--badge_hover)}
-.sb_icon#service:hover,.sb_icon#service:focus{background:var(--server) no-repeat 17.5% calc(50% - 3px)/12px,var(--client) no-repeat calc(20% + 12px) calc(50% + 3px)/12px,var(--badge_hover)}
-.sb_icon#utility:hover,.sb_icon#utility:focus{background:var(--hardhat) no-repeat calc(50% - 3px) calc(50% + 2px)/14px,var(--configure) no-repeat 20% center/19px,var(--badge_hover)}
-.sb_icon#transit:hover,.sb_icon#transit:focus{background:var(--share) no-repeat 25% center/19px,var(--badge_hover)}
-.sb_icon#tcount:hover,.sb_icon#tcount:focus{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_hover)}
-.sb_icon#fast:active{background:var(--fast) no-repeat 25% center/19px,var(--badge_active)}
-.sb_icon#floodfill:active{background:var(--floodfill) no-repeat 25% center/19px,var(--badge_active)}
-.sb_icon#firewalled:active{background:var(--net_firewalled) no-repeat 25% center/19px,var(--badge_active)}
-.sb_icon#banned:active{background:var(--ban) no-repeat 25% center/19px,var(--badge_active)}
-.sb_icon#service:active{background:var(--server) no-repeat 25% center/19px,var(--badge_active)}
-.sb_icon#service:active{background:var(--server) no-repeat 17.5% calc(50% - 3px)/12px,var(--client) no-repeat calc(20% + 12px) calc(50% + 3px)/12px,var(--badge_active)}
-.sb_icon#utility:active{background:var(--hardhat) no-repeat calc(50% - 3px) calc(50% + 2px)/14px,var(--configure) no-repeat 20% center/19px,var(--badge_active)}
-.sb_icon#transit:active{background:var(--share) no-repeat 25% center/19px,var(--badge_active)}
-.sb_icon#tcount:active{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_active)}
+#tunnelCount{animation:none}
 
 /* main section */
 .sb,.main,h1,#news,.confignav,.tab,.tab2,table.search,.applink,.sitemapLink,.sitemapLabel{border:var(--border_hard)}
@@ -347,7 +348,7 @@ div[id^="config_"].main{padding-bottom:14px}
 .messages #newsDisplay a:first-child{display:none}
 .messages #newsDisplay a:last-child{font-size:smaller}
 .newsAuthor{margin-right:2px;padding:0 0 0 18px;float:right;font-size:8pt;text-transform:none;background:var(--user) no-repeat 2px center/12px;opacity:.7}
-.newscontent a[href="/configadvanced"] + tt{margin-left:.35em} /* temp fix for .9.36 news */
+.newscontent a[href="/configadvanced"]+tt{margin-left:.35em} /* temp fix for .9.36 news */
 .newsDate{opacity:.9}
 #homepage #news{position:relative;z-index:1;background:var(--newsbg),var(--radar) no-repeat right bottom/auto 250px,#000}
 #homepage #news::before{position:absolute;top:0;bottom:0;left:0;right:0;z-index:5;content:"";display:inline-block;width:100%;height:100%;background:rgba(0,18,0,.4)}
@@ -464,15 +465,14 @@ input[type=file]{background:none}
 #sb_manualReseed{background:var(--download) no-repeat center left 6px/14px,var(--btn)}
 #sb_manualReseed:hover,#sb_manualReseed:focus,#sb_manualReseed:active{background:var(--download_hover) no-repeat center left 6px/14px,var(--btn_hover_radial)}
 
-.sidebarlogo{text-align:center}
 #sidebar button.reload,#sidebar button.stop,#sidebar button.cancel{margin:3px 2px;min-width:97px;text-transform:capitalize}
 #sidebar button.download{margin:5px 0 4px;padding:6px 12px;width:calc(100% - 20px);border-radius:20px;border:1px solid #151;box-shadow:inset 0 0 3px 0 rgba(16,56,16,.2),inset 0 -2px 4px 0 rgba(0,0,0,.4),inset 0 0 3px 1px rgba(32,80,32,.2),inset 0 2px 8px 2px rgba(0,48,0,.7),0 -2px 2px 1px #000;background:var(--glow_bottom),linear-gradient(180deg,#000a00,#000400)}
 #sidebar button.download:hover,#sidebar button.download:focus{border:1px solid #f60;box-shadow:inset 0 0 2px 0 rgba(96,32,0,.3),inset 0 0 3px 1px rgba(179,71,0,.4),inset 0 1px 9px 1px rgba(230,92,0,.3),inset 0 -3px 4px 0 rgba(0,0,0,.7),0 0 2px 1px #000;background:linear-gradient(180deg,rgba(255,96,0,.01),rgba(230,88,0,.01),rgba(77,29,0,.01)),var(--glow_bottom_hover),linear-gradient(180deg,#520,#000)}
 #sidebar button.download:active{padding:7px 11px 5px 13px;color:rgba(255,96,0,.5);text-shadow:0 -1px 1px rgba(0,0,0,.7);box-shadow:var(--btn_shadow_active),0 0 2px 1px #000;background:linear-gradient(180deg,#310,#520)}
 #sidebar button.cancel{min-width:151px}
 #updateAvailable{margin:0;padding:4px 0 0;width:calc(100% - 20px);display:inline-block;line-height:1.2;color:#dd3;font-size:9pt;text-shadow:var(--textshadow);opacity:.9}
-#updateAvailable + br + button + br+#updateAvailable::before{margin:2px 0 4px;width:100%;height:1px;display:inline-block;background:#252;content:""}
-#updateAvailable + br + button + br+#updateAvailable{margin-top:-10px}
+#updateAvailable+br+button+br+#updateAvailable{margin-top:-10px}
+#updateAvailable+br+button+br+#updateAvailable::before{margin:2px 0 4px;width:100%;height:1px;display:inline-block;background:#252;content:""}
 
 /* client config buttons aka project "X" */
 button.accept.control{background:var(--start) var(--center)/14px,var(--btn)}
@@ -515,7 +515,7 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 
 /* routerid */
 .tunnel_local,#tunnels .tunnel_cap,.version,#netdbtiers a,.routerHash{border:1px solid #030}
-.buckets br + br{line-height:5px}
+.buckets br+br{line-height:5px}
 .tunnel_cap:empty{box-shadow:none}
 
 /* graphs */
@@ -660,7 +660,7 @@ h3.stats{border:var(--border);border-radius:0}
 #stats .noevents::after{padding-bottom:10px}
 #stats label{display:inline-block}
 #stats h3{border-width:1px;border-radius:0}
-#stats form,#stats .toggle_input,#stats input:not(:checked)+h3,#stats input:not(:checked)+h3+.statlist,#stats input:not(:checked)+h3+.statlist + br{display:none}
+#stats form,#stats .toggle_input,#stats input:not(:checked)+h3,#stats input:not(:checked)+h3+.statlist,#stats input:not(:checked)+h3+.statlist+br{display:none}
 #stats input:checked+h3+.statlist{margin-bottom:-13px;display:block}
 #stats .confignav{position:sticky;top:-1px;z-index:999}
 #stats .tab,#stats .tab2{margin:0 -1px -1px 0;padding:5px 14px;font-size:90%}
@@ -1112,7 +1112,7 @@ img.unknownflag{opacity:.8}
 p.family a:hover{background:#020}
 p.family a{padding-left:4px;width:calc(100% - 141px);max-width:400px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;border-radius:0 10px 10px 0}
 p.family b{margin-right:-3px;min-width:118px;display:inline-block;vertical-align:middle;text-align:right;font-size:90%}
-p.family + p.family,.sybil_info+.sybil_info{margin-top:-4px}
+p.family+p.family,.sybil_info+.sybil_info{margin-top:-4px}
 p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,linear-gradient(90deg,#000,#000800 80%,#001000);background-blend-mode:normal}
 .banlisted{width:18px;height:18px;display:inline-block;background:var(--ban)}
 .configpeer:hover,.configpeer:focus{background:var(--edit_hover) var(--center)/12px,var(--badge)}
@@ -1155,7 +1155,7 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .netdb_header img[src^="/flags"]{width:auto;height:20px;vertical-align:middle;border:1px solid #030;box-shadow:var(--outline)}
 .netdb_header{margin:0;padding:0 3px;min-width:100px;display:inline-block;vertical-align:middle;line-height:0}
 .netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch,.sybil_routerinfo .viewprofile,.sybil_routerinfo .configpeer,.sybil_routerinfo .familysearch{margin:3px;padding:4px 8px;vertical-align:middle}
-.netdb_info + b{margin-left:15px}
+.netdb_info+b{margin-left:15px}
 .netdb_info.host,.netdb_info.port{color:#bb0;user-select:all}
 .netdb_info.host::selection,.netdb_info.port::selection{color:#fff;background:#770}
 .netdb_ouraddresses:empty{display:none}
@@ -1290,7 +1290,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .sybil_container p{text-align:left;white-space:nowrap}
 .sybil_container p:first-child{margin-top:0}
 .sybil_container p:last-child{margin-bottom:0}
-.sybil_container,.sybilinfo_container,.threatpoints + ul{padding:0 5px;display:flex;flex-wrap:wrap}
+.sybil_container,.sybilinfo_container,.threatpoints+ul{padding:0 5px;display:flex;flex-wrap:wrap}
 .sybil_distance:last-child{margin-bottom:8px}
 .sybil_distance th:last-child,.sybil_distance td:last-child{text-align:right}
 .sybil_distance th{padding:5px;text-align:left;font-size:90%}
@@ -1298,14 +1298,14 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .sybil_info,p.family,.threatpoints,p.hashdist,#sybil_totals,p.notfound{margin:3px 0;padding:5px 5px 5px 33px;font-weight:700;color:#cc0;border:var(--border);box-shadow:inset 0 0 0 1px #300;background:var(--eye) no-repeat 8px center/16px,linear-gradient(90deg,#000,#000800 80%,#001000)}
 .sybil_info,#sybil_totals{margin-bottom:10px;padding-left:35px;background-image:var(--eye_threat);background-size:20px,100%}
 .sybilinfo{line-height:1.4}
-.sybil_info + a[name] + table.sybil_routerinfo,p.hashdist + a[name] + table.sybil_routerinfo{margin-top:10px}
+.sybil_info+a[name]+table.sybil_routerinfo,p.hashdist+a[name]+table.sybil_routerinfo{margin-top:10px}
 .sybilinfo_container{padding:4px 5px}
 .sybilinfo_container b{color:#bb3}
 .sybilinfo_familyname{display:inline-block;vertical-align:top;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sybilinfo_params{padding:0;border-bottom:var(--border)}
 .sybil_routerinfo{margin-bottom:10px}
 .sybil_routerinfo:first-of-type{margin-top:-11px}
-.sybil_routerinfo+.threatpoints + ul + a[name] + table{margin-top:-11px}
+.sybil_routerinfo+.threatpoints+ul+a[name]+table{margin-top:-11px}
 .sybil_routerinfo b.netdb_transport{margin-right:0}
 .sybil_routerinfo code{margin-left:5px;font-size:9pt}
 .sybil_routerinfo .familysearch img{margin-right:1px}
@@ -1329,9 +1329,9 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .sybilscan td{border:none}
 .threatpoints{background:var(--eye_threat) no-repeat 8px center/20px,linear-gradient(90deg,#000,#000800 80%,#001000)}
 .threatpoints.hot{background:var(--eye_threat) no-repeat 8px center/20px,var(--hot) no-repeat right 2px center/24px,linear-gradient(90deg,#000,#000800 80%,#001000)}
-.threatpoints + ul{margin:4px 0 10px;padding:3px 5px;width:calc(100% - 12px);display:inline-block;border:var(--border);background:#000}
-.threatpoints + ul li{margin:1px 3px;display:inline-block;vertical-align:text-bottom;list-style:none;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
-.threatpoints + ul li a{max-width:200px;display:inline-block;vertical-align:text-bottom;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.threatpoints+ul{margin:4px 0 10px;padding:3px 5px;width:calc(100% - 12px);display:inline-block;border:var(--border);background:#000}
+.threatpoints+ul li{margin:1px 3px;display:inline-block;vertical-align:text-bottom;list-style:none;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.threatpoints+ul li a{max-width:200px;display:inline-block;vertical-align:text-bottom;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #known{margin-bottom:0}
 #netdb .sybil_addresses,#netdb .sybil_addresses td{border-top:none}
 #netdb .sybil_addresses{padding-right:0}
@@ -1523,7 +1523,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #certs h3:first-of-type{margin-top:8px}
 #certs h4{margin:15px 0 0;padding:8px 10px;letter-spacing:.08em;font-size:10pt;border:var(--border);background:linear-gradient(90deg,#000,#001000)}
 #certs h4:nth-of-type(n+2){margin-top:0}
-#certs h3 + p{margin:15px 0 10px}
+#certs h3+p{margin:15px 0 10px}
 #certs .infohelp{margin-top:8px}
 #certs .infohelp:first-of-type{background:url(/themes/console/images/certs.svg) no-repeat 15px center/28px,var(--msg)}
 #certs p:not(.infohelp){margin-top:-1px;padding:10px;border:var(--border);background:#000}
@@ -1538,7 +1538,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 /* infohelp/warn */
 form[action="events"]{padding:10px 10px 10px 50px;background:var(--logs) no-repeat 15px center/28px,var(--msg)}
 h3.ptitle{margin-bottom:-6px}
-h3.sybils + div,h3.sybils + a[name] + table{margin-top:-1px}
+h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 h3.sybils{margin-bottom:10px}
 h3.tabletitle a{text-transform:lowercase;letter-spacing:normal}
 h3.tabletitle,#i2pclientconfig,#advancedclientconfig,#webappconfiguration,#pconfig,#pluginfromurl,#pluginfromfile,#updateplugins,#pluginmanage,#bannedpeers,h3.ptitle,#transports,h3.sybils,#certs h3{margin-bottom:0;padding:8px 10px}
@@ -1569,7 +1569,7 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #addkeyring td.infohelp{padding:20px 24px 20px 58px;background:var(--keys) no-repeat 15px center/28px,var(--msg)}
 #bandwidthconfig tr:first-child .infohelp,#bandwidth.infohelp{padding:20px 24px 20px 58px;background:var(--speed) no-repeat 15px center/28px,var(--msg)}
 #bannedpeercount{margin:18px 8px;background:var(--ban) no-repeat 15px center/28px,var(--msg)}
-#browseronstart + p.infohelp,.infohelp#webbrowser{padding:20px 24px 20px 58px;background:var(--firefox) no-repeat 15px center/28px,var(--msg_nohat)}
+#browseronstart+p.infohelp,.infohelp#webbrowser{padding:20px 24px 20px 58px;background:var(--firefox) no-repeat 15px center/28px,var(--msg_nohat)}
 #bugreports td.infohelp{padding:20px 24px 20px 58px;background:var(--bug) no-repeat 15px center/28px,var(--msg)}
 #clientconf.infohelp,#webappconfigtext.infohelp{padding:20px 24px 20px 58px;position:relative;z-index:10;background:var(--editclient) no-repeat 15px center/28px,var(--msg)}
 #clientsconfig{margin-top:-2px}
@@ -1601,10 +1601,10 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #plugininstall tr,#plugininstall2 tr,#plugininstall td,#plugininstall2 td,#reseedconfig td,#manualreseed td,#i2pupdates td:not(.infohelp),#netconfig td,#externali2cp td,#joinfamily tr:last-child td,#newfamily tr:last-child td,#newfamily tr:last-child table tr{background:none}
 #profiles #bannedpeercount{margin-bottom:-2px}
 #reseedconfig tr:last-child,#i2pupdates tr:nth-child(2),#netconfig tr:last-child,#externali2cp tr:last-child{background:#000}
-#restartrouter + p.infohelp,#config_family .infohelp.needrestart{padding:20px 24px 20px 58px;background:var(--reboot) no-repeat 15px center/28px,var(--msg_nohat)}
-#servicedebug + p.infohelp{padding:20px 24px 20px 58px;background:var(--bug) no-repeat 15px center/28px,var(--msg_nohat)}
-#shutdownrouter + p.infohelp{padding:20px 24px 20px 58px;background:var(--power) no-repeat 15px center/28px,var(--msg_nohat)}
-#systray + p.infohelp{padding:20px 24px 20px 58px;background:var(--systray) no-repeat 15px center/28px,var(--msg_nohat)}
+#restartrouter+p.infohelp,#config_family .infohelp.needrestart{padding:20px 24px 20px 58px;background:var(--reboot) no-repeat 15px center/28px,var(--msg_nohat)}
+#servicedebug+p.infohelp{padding:20px 24px 20px 58px;background:var(--bug) no-repeat 15px center/28px,var(--msg_nohat)}
+#shutdownrouter+p.infohelp{padding:20px 24px 20px 58px;background:var(--power) no-repeat 15px center/28px,var(--msg_nohat)}
+#systray+p.infohelp{padding:20px 24px 20px 58px;background:var(--systray) no-repeat 15px center/28px,var(--msg_nohat)}
 #transports{margin-bottom:-1px}
 #tunnelconfigsave,#homeapps{margin-bottom:-2px}
 #tunnelconfig td:nth-child(n+2){text-align:left}
@@ -1634,8 +1634,8 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #iptransport a:hover::after,#advancedconfig a:hover::after,#reseedsetup a:hover::after{background:var(--helplink_hover) var(--center)/18px}
 #iptransport a::after,#advancedconfig a::after,#reseedsetup a::after{margin:0 2px 0 0;padding:0;width:19px;height:19px;float:right;background-size:19px;content:""}
 #servicedebug a,#graphinfo a{float:right;font-size:9pt;text-transform:none;letter-spacing:normal}
-#servicedebug + p + p{margin-top:20px;margin-bottom:-21px;padding:10px;border:var(--border);border-bottom:none;background:#001000}
-#shutdownrouter + p,#restartrouter + p,#servicedebug + p,#browseronstart + p,#runonstartup + p,#systray + p{margin:5px 0 -20px;border-bottom:none}
+#servicedebug+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:var(--border);border-bottom:none;background:#001000}
+#shutdownrouter+p,#restartrouter+p,#servicedebug+p,#browseronstart+p,#runonstartup+p,#systray+p{margin:5px 0 -20px;border-bottom:none}
 #shutdownrouter,#restartrouter,#servicedebug,#browseronstart,#rononstartup,#systray{margin-bottom:-6px}
 
 /* keyring */
@@ -1681,7 +1681,7 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 .langselect{padding:8px 4px 0;background:radial-gradient(circle at center -70px,rgba(0,96,0,.9),#000 60%),linear-gradient(180deg,#010,#000 80%)}
 .themechoice:hover{border:1px solid var(--hover);background:#000}
 .themechoice .optbox,.langselect .optbox{position:absolute;opacity:0}
-.themechoice .optbox:checked + img{opacity:1;filter:none;transform:scale(0.8)}
+.themechoice .optbox:checked+img{opacity:1;filter:none;transform:scale(0.8)}
 .themechoice img{padding:8px 0 3px;opacity:.6}
 .themechoice img,.langflag{animation:fade .15s ease .3s reverse both}
 .themechoice:hover img{filter:drop-shadow(0 0 1px var(--hover))}
@@ -1809,7 +1809,7 @@ form[action="/createreseed"]>h3{margin-bottom:-13px;padding:10px;word-spacing:.1
 #netconfig .optbox{margin:8px 6px;display:inline-block}
 #netconfig input[type=text]{transition:ease width .1s;will-change:transform}
 #netconfig input[name*="ost"]{width:250px}
-#netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus),#netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus){width:140px;min-width:140px;transition:ease width .1s}
+#netconfig .optbox:not(:checked)+input[type=text][name="ntcphost"]:not(:focus),#netconfig .optbox:not(:checked)+input[type=text][name="udpHost1"]:not(:focus){width:140px;min-width:140px;transition:ease width .1s}
 #netconfig tr,#i2pupdates tr,#config_reseed tr{background:#000}
 #config_update td,#config_reseed td,#config_plugins td{border-top:var(--border)}
 #netconfig tr:nth-last-child(3) .optionlist{margin-bottom:-1px}
@@ -1821,13 +1821,13 @@ form[action="/createreseed"]>h3{margin-bottom:-13px;padding:10px;word-spacing:.1
 #externaltcp{padding:0}
 
 /* advanced */
-input[name="ff"] + br{display:none}
-input[name="ff"] + br + input[name="ff"] + br{display:none}
-form[action="configclients"]:first-child>input[type=hidden] + p{margin-top:-1px;margin-bottom:-21px;padding:10px;border:var(--border);background:#000}
+input[name="ff"]+br{display:none}
+input[name="ff"]+br+input[name="ff"]+br{display:none}
+form[action="configclients"]:first-child>input[type=hidden]+p{margin-top:-1px;margin-bottom:-21px;padding:10px;border:var(--border);background:#000}
 form>table{font-size:9pt}
-input[type=hidden] + p{margin-bottom:-21px;padding:10px;border:var(--border);background:#000}
-input[type=hidden] + p + p{margin-top:20px;margin-bottom:-21px;padding:10px;border:var(--border);background:#001000}
-.wideload>form>input[type=hidden] + table + p+hr+.formaction{border-left:none;border-right:none}
+input[type=hidden]+p{margin-bottom:-21px;padding:10px;border:var(--border);background:#000}
+input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:var(--border);background:#001000}
+.wideload>form>input[type=hidden]+table+p+hr+.formaction{border-left:none;border-right:none}
 #advancedconfig a{padding-top:12px;padding-right:5px}
 #advancedconfig{position:relative;z-index:100}
 #advconf{margin-bottom:-2px}
@@ -1909,7 +1909,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 .infohelp#clientconf{margin-bottom:-2px}
 
 /* plugins */
-#webappconfig + p,#pluginconfigtext{margin-bottom:-1px}
+#webappconfig+p,#pluginconfigtext{margin-bottom:-1px}
 #availableplugins{margin:12px 0 -1px}
 #pluginconfig{margin-top:-15px}
 #pluginconfig th:first-child,#pluginconfig td:first-child{padding-right:50px;width:100px;white-space:nowrap;text-align:center}
@@ -1936,16 +1936,16 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 /* stats */
 .stattograph{margin:3px 1px;padding:6px 8px 6px 12px;width:220px;position:relative;display:inline-block;font-size:90%;text-align:left;color:#252;border:1px solid #020;border-left-width:3px;border-radius:1px;box-sizing:border-box;background:#000}
 .stattograph b{display:inline-block;word-break:break-all;white-space:nowrap;vertical-align:middle;overflow:hidden;box-sizing:border-box;text-overflow:ellipsis;pointer-events:none;text-transform:capitalize}
-.optbox:not(:checked) + label>.stattograph b{color:var(--a)}
-.optbox:checked + label>.stattograph b{color:var(--ink);text-shadow:var(--textshadow)}
+.optbox:not(:checked)+label>.stattograph b{color:var(--a)}
+.optbox:checked+label>.stattograph b{color:var(--ink);text-shadow:var(--textshadow)}
 .stattograph:hover b,.stattograph:focus b{color:var(--ink)}
-.optbox:checked + label>.stattograph{padding-left:22px;border:var(--border_soft);border-left-width:3px;box-shadow:var(--highlight),inset 4px 4px 4px rgba(0,0,0,.6);background:var(--yes) no-repeat 8px center,linear-gradient(180deg,#010,#020);background-size:8px,100%;background-blend-mode:normal,normal}
-.stattograph:hover,.optbox:checked + label>.stattograph:hover{border-color:var(--hover);background:#000}
-.optbox:checked + label>.stattograph:hover{background:#d50 var(--yes) no-repeat 8px center;background-size:8px}
-.optbox:checked + label>.stattograph:hover b{color:var(--ink);text-shadow:none}
-.optbox:not(:checked) + label>.stattograph:hover b{color:var(--hover)}
-.stattograph:active,.optbox:checked + label>.stattograph:active{background:var(--hover);box-shadow:var(--highlight),inset 4px 4px 4px rgba(0,0,0,.6)}
-.stattograph:active b,.optbox:checked + label>.stattograph:active b{color:var(--ink)}
+.optbox:checked+label>.stattograph{padding-left:22px;border:var(--border_soft);border-left-width:3px;box-shadow:var(--highlight),inset 4px 4px 4px rgba(0,0,0,.6);background:var(--yes) no-repeat 8px center,linear-gradient(180deg,#010,#020);background-size:8px,100%;background-blend-mode:normal,normal}
+.stattograph:hover,.optbox:checked+label>.stattograph:hover{border-color:var(--hover);background:#000}
+.optbox:checked+label>.stattograph:hover{background:#d50 var(--yes) no-repeat 8px center;background-size:8px}
+.optbox:checked+label>.stattograph:hover b{color:var(--ink);text-shadow:none}
+.optbox:not(:checked)+label>.stattograph:hover b{color:var(--hover)}
+.stattograph:active,.optbox:checked+label>.stattograph:active{background:var(--hover);box-shadow:var(--highlight),inset 4px 4px 4px rgba(0,0,0,.6)}
+.stattograph:active b,.optbox:checked+label>.stattograph:active b{color:var(--ink)}
 .statdesc{display:none}
 #configstats{margin-bottom:-2px;contain:paint}
 #config_stats h3 a,#config_logging h3 a{float:right;letter-spacing:normal;text-transform:none;font-size:9pt}
@@ -1958,7 +1958,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #configstats td{padding:6px 5px}
 #configstats td{color:#bb7;border:none}
 #configstats td:first-child{padding:8px;width:1%;white-space:nowrap}
-#configstats td:first-child:empty + td>label{pointer-events:none}
+#configstats td:first-child:empty+td>label{pointer-events:none}
 #configstats td:last-child{border-right:var(--border)}
 #configstats .tablefooter td{padding:5px 10px}
 #configstats .tablefooter:last-child td{text-align:right;background:#000}
@@ -2285,14 +2285,14 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs h3 a{margin:-8px 0;padding:10px 2px 9px 10px;border-left:var(--border)}
 #logs h3 a:first-of-type::after{margin-right:-3px}
 #logs h3+table{position:relative;z-index:1}
-#logs li{width:100%;list-style:none;word-break:break-all;line-height:1.6;text-align:left;font:bold 8.5pt var(--monospaced);border-top:1px solid #001800;border-right:1px solid #001800;border-bottom:1px solid #000}
+#logs pre,#logs li{font-weight:600;opacity:.9}
+#logs li{width:100%;list-style:none;word-break:break-all;line-height:1.6;text-align:left;font:600 8.5pt var(--monospaced);border-top:1px solid #001800;border-right:1px solid #001800;border-bottom:1px solid #000}
 #logs li:nth-child(even){border-top:1px solid #001c00;border-left:2px solid #040;border-right:1px solid #001c00;background:rgba(0,28,0,.4)}
 #logs li:nth-child(odd){border-left:2px solid #030;background:rgba(0,8,0,.4)}
 #logs li:last-child{border-bottom:1px solid #001800}
 #logs li:hover{text-shadow:var(--textshadow);box-shadow:inset 0 0 0 1px rgba(192,192,0,.4),inset 0 0 0 2px #000;border-color:rgba(192,192,0,.4);background:repeating-linear-gradient(90deg,rgba(0,0,0,.3) 2px,rgba(96,96,0,.3) 4px),repeating-linear-gradient(180deg,#002800 2px,#010 4px);background-size:4px 100%,100% 4px}
 #logs li:hover span{text-shadow:none;box-shadow:none}
 #logs .nologs{padding:5px 10px 7px}
-#logs pre,#logs li{font-weight:500}
 #logs table{position:relative}
 #logs table::before{width:calc(100% - 16px);transform:scaleX(0);height:2px;position:absolute;top:1px;left:8px;z-index:999;display:block;background:linear-gradient(to right,rgba(255,96,0,.3),#f50,rgba(255,96,0,.3));content:"";animation:bar .01s steps(2) reverse;backface-visibility:hidden;will-change:transform}
 #logs #wrapperlogs .nologs{padding:7px 18px}
@@ -2314,9 +2314,9 @@ font[color="#cc0000"]{color:#900}
 #logs li font[color="#cc0000"]::before{background:#900}
 .log_crit{background:#900}
 /* warning */
-font[color="#bf00df"]{color:#636}
-#logs li font[color="#bf00df"]::before{background:#636}
-.log_warn{background:#636}
+font[color="#bf00df"]{color:#737}
+#logs li font[color="#bf00df"]::before{background:#737}
+.log_warn{background:#737}
 /* error */
 font[color="#ff3300"]{color:#730}
 #logs li font[color="#ff3300"]::before{background:#730}
@@ -2326,7 +2326,7 @@ font[color="#006600"]{color:#346}
 #logs li font[color="#006600"]::before{background:#346}
 .log_debug,.log_omitted{background:#346}
 /* info */
-font[color="#000099"],#servicelogs{color:#363}
+font[color="#000099"]{color:#363}
 #logs li font[color="#000099"]::before{background:#363}
 
 /* h1 */
@@ -2450,19 +2450,19 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 /* filters */
 #filterlist{padding-bottom:10px}
 #filterlist code{margin:0 10px 15px 20px;padding-left:12px;display:inline-block;border-left:2px solid #990}
-#filterlist code+h3,#filterlist ul+h3,#filterlist code + p{margin-top:5px}
+#filterlist code+h3,#filterlist ul+h3,#filterlist code+p{margin-top:5px}
 #filterlist .example{margin-right:2px;color:#dd0;font-weight:700}
 
 /* webhosting */
+#webhosting h3{padding-left:32px;background:var(--server) no-repeat 8px center/auto 50%,var(--h1);background-size:auto 50%,2px,100% 4px,100%,96px}
+#webhosting i{font-weight:700}
 #webhosting th{text-align:left;padding-left:10px}
 #webhosting td{padding:10px;line-height:1.6}
 #webhosting td:first-child{padding-left:20px;width:1%;white-space:nowrap;font-weight:700}
 #webhosting ul{margin-top:-3px}
-#webhosting ul + p{margin-top:0}
+#webhosting ul+p{margin-top:0}
 #webhosting #guides{margin-left:-25px;list-style:none}
 #webhosting #guides li a{padding-left:22px}
-#webhosting i{font-weight:700}
-#webhosting h3{padding-left:32px;background:var(--server) no-repeat 8px center/auto 50%,var(--h1);background-size:auto 50%,2px,100% 4px,100%,96px}
 
 /* lazy loading */
 .lazy.lazyhide,.lazy.lazyhide td{opacity:0;contain:strict}
@@ -2473,21 +2473,22 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #tunnelPeerCount .lazy{contain:none}
 
 /* iframes */
-iframe.iframed{margin:15px 0 0}
-iframe{height:0}
 #dns{padding:0;min-width:650px}
-#webmail,#torrents{margin-top:-1px;padding:0;background:#000}
-#tunnelmgr{min-width:665px}
-#main#embedded{padding:0}
-#rawtext_frame{margin:0;height:calc(100vh - 80px)!important;overflow:auto!important}
-#webmail::before,#dns::before{top:-1px}
-#susimailframe,#i2psnarkframe{margin:0;box-shadow:var(--bevel);background:#000800}
-#susidnsframe{margin:0 0 -3px}
 #i2psnarkframe{margin-bottom:-2px}
 #i2ptunnelframe{margin:0 0 -5px}
-#tunnelmgr,#torrents,#webmail,#dns{min-height:4px;position:relative;overflow:hidden;line-height:0}
-#tunnelmgr::before,#torrents::before,#webmail::before,#dns::before{width:0;height:6px;display:block;position:absolute;top:0;left:1px;right:1px;opacity:.9;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.4)),linear-gradient(#d30,var(--hover));box-shadow:inset 0 0 0 2px rgba(0,0,0,.7);content:"";animation:reloader 8s ease-out .5s forwards}
+iframe{height:0}
+iframe.iframed{margin:15px 0 0}
+#main#embedded{padding:0}
 #pageloader{top:-1px;width:100%;height:2px}
+#rawtext_frame{margin:0;height:calc(100vh - 80px)!important;overflow:auto!important}
+#susidnsframe{margin:0 0 -3px}
+#susimailframe,#i2psnarkframe{margin:0;box-shadow:var(--bevel);background:#000800}
+#tunnelmgr,#torrents,#webmail,#dns{min-height:4px;position:relative;overflow:hidden;line-height:0}
+#tunnelmgr{min-width:665px}
+#tunnelmgr::before,#torrents::before,#webmail::before,#dns::before{width:0;height:6px;display:block;position:absolute;top:0;left:1px;right:1px;opacity:.9;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.4)),linear-gradient(#d30,var(--hover));box-shadow:inset 0 0 0 2px rgba(0,0,0,.7);content:"";animation:reloader 8s ease-out .5s forwards}
+#webmail,#torrents{margin-top:-1px;padding:0;background:#000}
+#webmail::before,#dns::before{top:-1px}
+
 /* Fixes for when app is not started and console error loads inside iframe */
 .iframed h1{margin:0 5px 0 5px}
 .iframed div.sorry{margin:-1px 5px 10px 5px}
@@ -2523,13 +2524,13 @@ iframe{height:0}
   #sitelinks a::after{margin-bottom:-7px;padding-top:0;padding-bottom:10px}
 
   @media screen and (-webkit-min-device-pixel-ratio:1.2){
-    #homepage h4 a::after{margin-bottom:-10px;margin-top:-3px}
-    #homepage h4::before{margin-top:-15px;margin-bottom:4px;height:10px;display:block;content:""}
+    .optionsingle#reseedproxytype{columns:2}
     #homepage h4{padding-top:7px;padding-bottom:4px}
+    #homepage h4::before{margin-top:-15px;margin-bottom:4px;height:10px;display:block;content:""}
+    #homepage h4 a::after{margin-bottom:-10px;margin-top:-3px}
     #jardump td{word-break:break-all;max-width:230px}
     #manualreseed th:last-child,#manualreseed td:last-child{border-right:var(--border)}
     #manualreseed th:last-child,#manualreseed td:last-child{border-right:var(--border)}
-    .optionsingle#reseedproxytype{columns:2}
     #reseedconfig .optbox[type=radio]{margin:4px 4px 4px 15px}
     #reseedproxysslhostport.optionlist{columns:1}
     #reseedproxytype{columns:2}
@@ -2704,13 +2705,9 @@ h4 span[style="float:right;"] .unbold{max-width:300px}
 }
 
 @media screen and (max-width:1000px){
-span.inbound,span.outbound{background-size:12px}
-table:not(:first-of-type).netdbentry th:first-child,table:not(:first-of-type).netdbentry td:first-child{padding:0;font-size:0}
-table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before{display:inline;font-weight:700;content:"Published:"}
-table:not(:first-of-type).netdbentry th:first-child,table:not(:first-of-type).netdbentry td:first-child,#netdb table:not(:first-of-type).netdbentry td:first-child b{width:0;min-width:0;max-width:0}
+.bw_title{margin:2px -6px -2px -3px;font-size:10pt}
 .encDests code{max-width:140px}
 .net_datausage{padding:4px 0;min-width:260px;white-space:normal}
-.bw_title{margin:2px -6px -2px -3px;font-size:10pt}
 #bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:5px;padding-right:8px;background:#002500}
 #bandwidthconfig .infohelp{padding-right:10px}
 #bandwidthconfig td:not(.infohelp):first-child{background:none}
@@ -2719,6 +2716,10 @@ table:not(:first-of-type).netdbentry th:first-child,table:not(:first-of-type).ne
 #netdblookup td:nth-child(even){width:auto}
 #reseedconfig tr:nth-child(3) td label{padding:5px 4px 5px 0;width:calc(100% - 4px)}
 #sb_wrap{position:absolute}
+span.inbound,span.outbound{background-size:12px}
+table:not(:first-of-type).netdbentry th:first-child,table:not(:first-of-type).netdbentry td:first-child,#netdb table:not(:first-of-type).netdbentry td:first-child b{width:0;min-width:0;max-width:0}
+table:not(:first-of-type).netdbentry th:first-child,table:not(:first-of-type).netdbentry td:first-child{padding:0;font-size:0}
+table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before{display:inline;font-weight:700;content:"Published:"}
 #tunnels .tunneldisplay span.inbound,#tunnels .tunneldisplay span.outbound{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2}
 #tunnels .tunneldisplay td:nth-child(n+2) span,#tunnels .tunneldisplay tt{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2;border:none;box-shadow:none;background:none}
 #tunnels .tunneldisplay .tunnel_cap{min-width:14px;text-align:center}
@@ -2809,7 +2810,7 @@ span#newtab{margin-top:4px}
 #applinks,#sitelinks,#help h3,#sybilTask th{font-size:12pt}
 #banlist li,#banlist li:first-child{min-height:52px}
 #banlist+h3.tabletitle{margin-bottom:-2px}
-#certs.main p + p:empty+h4{margin-top:-15px}
+#certs.main p+p:empty+h4{margin-top:-15px}
 #clock{margin-left:-1px}
 #consolepass input[name="nofilter_pw"],#consolepass input[name="name"],#externali2cp input[name="nofilter_pw"],#consolepass input[name="nofilter_pw"]:focus,#consolepass input[name="name"]:focus,#externali2cp input[name="nofilter_pw"]:focus{padding:7px 9px 7px 25px;background-position:6px center}
 #contactserver{margin-bottom:-17px}
@@ -2839,7 +2840,7 @@ span#newtab{margin-top:4px}
 #pconfig{margin-bottom:-15px}
 #peerprofiles.widescroll{margin-top:-12px;padding-top:116px}
 #peers .cells:nth-child(n+2){padding-left:15px;padding-right:15px}
-#pluginconfigtext + form>input{margin-top:3px}
+#pluginconfigtext+form>input{margin-top:3px}
 #reseedconfig input[type=text],#reseedconfig input[type=password]{width:250px}
 #sb_graphcontainer{margin:-6px 0 -8px;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 16px,rgba(64,160,64,.3) 17px,rgba(0,0,0,0) 17px,rgba(0,0,0,0) 32px),repeating-linear-gradient(to top,rgba(0,0,0,0),rgba(48,152,48,.2),rgba(0,0,0,0) 1px,rgba(0,0,0,0) 19px)}
 #sb_graphcontainer{height:54px}
