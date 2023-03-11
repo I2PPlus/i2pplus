@@ -391,7 +391,7 @@ class EstablishmentManager {
                         // queue it
                         inState.addMessage(msg);
                         if (_log.shouldWarn())
-                            _log.debug("Outbound message queued to inbound establish state");
+                            _log.debug("Outbound message queued to InboundEstablishState");
                         break;
 
                       case IB_STATE_COMPLETE:
@@ -401,7 +401,7 @@ class EstablishmentManager {
 
                       case IB_STATE_FAILED:
                         // race, failed
-                        _transport.failed(msg, "Outbound message failed during inbound establish");
+                        _transport.failed(msg, "Outbound message failed during InboundEstablish");
                         break;
                     }
                 }
@@ -438,7 +438,7 @@ class EstablishmentManager {
                         if (queued == null) {
                             queued = newQueued;
                             if (_log.shouldWarn())
-                                _log.warn("Queueing outbound establish to " + to + ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                                _log.warn("Queueing OutboundEstablish to " + to + ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                         }
                         // this used to be inside a synchronized (_outboundStates) block,
                         // but that's now a CHM, so protect the ArrayList
@@ -474,7 +474,7 @@ class EstablishmentManager {
                             if (!v2intros) {
                                 if (_builder == null) {
                                     _transport.markUnreachable(toHash);
-                                    _transport.failed(msg, "No v2 introducers");
+                                    _transport.failed(msg, "No v2 Introducers");
                                     return;
                                 }
                                 version = 1;
@@ -516,7 +516,7 @@ class EstablishmentManager {
                         sessionKey = new SessionKey(keyBytes);
                     } catch (IllegalArgumentException iae) {
                         _transport.markUnreachable(toHash);
-                        _transport.failed(msg, "Peer has bad key, cannot establish connection -> Marking unreachable");
+                        _transport.failed(msg, "Peer has BAD key, cannot establish connection -> Marking unreachable");
                         return;
                     }
                     if (version == 1) {
@@ -569,7 +569,7 @@ class EstablishmentManager {
 
         if (rejected) {
             if (_log.shouldWarn())
-                _log.warn("Too many pending, rejecting outbound establish to " + to);
+                _log.warn("Too many pending, rejecting OutboundEstablish to " + to);
             _transport.failed(msg, "Too many pending outbound connections");
             _context.statManager().addRateData("udp.establishRejected", deferred);
             return;
@@ -761,7 +761,7 @@ class EstablishmentManager {
         byte[] fromIP = from.getIP();
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Received session request from invalid address/port: " + from);
+                _log.warn("[SSU2] Received SessionRequest from invalid address/port: " + from);
             return;
         }
         boolean isNew = false;
@@ -913,7 +913,7 @@ class EstablishmentManager {
         if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID)
             return;
         if (_log.shouldWarn())
-            _log.warn("Sending termination packet [Code: " + terminationCode + "] on type " + type + " to: " + to);
+            _log.warn("Sending termination packet (Code: " + terminationCode + ") on type " + type + " to: " + to);
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
         _transport.send(packet);
     }
@@ -1229,7 +1229,7 @@ class EstablishmentManager {
         //peer.setTheyRelayToUsAs(0);
 
         if (_log.shouldDebug())
-            _log.debug("Inbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "] \n* " + state);
+            _log.debug("Inbound SSU handle successfully established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "] \n* " + state);
 
         //if (true) // for now, only support direct
         //    peer.setRemoteRequiresIntroduction(false);
@@ -1347,7 +1347,7 @@ class EstablishmentManager {
         //peer.setWeRelayToThemAs(0);
 
         if (_log.shouldDebug())
-            _log.debug("Outbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "] \n* " + state);
+            _log.debug("Outbound SSU handle successfully established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "] \n* " + state);
 
         _transport.addRemotePeerState(peer);
         _transport.setIP(remote.calculateHash(), state.getSentIP());
@@ -1559,7 +1559,7 @@ class EstablishmentManager {
             List<UDPPacket> requests = _builder.buildRelayRequest(_transport, this, state, _transport.getIntroKey());
             if (requests.isEmpty()) {
                 if (_log.shouldWarn())
-                    _log.warn("No valid introducers for: " + state);
+                    _log.warn("No valid Introducers for: " + state);
             processExpired(state);
             return;
         }
@@ -1609,7 +1609,7 @@ class EstablishmentManager {
                     }
                     if (bob != null && istate == INTRO_STATE_CONNECTED) {
                         if (_log.shouldDebug())
-                            _log.debug("Found connected introducer " + bob + " for " + state);
+                            _log.debug("Found connected Introducer " + bob + " for " + state);
                         long tag = addr.getIntroducerTag(i);
                         boolean ok = sendRelayRequest(tag, (PeerState2) bob, state);
                         // this transitions the state
@@ -1649,13 +1649,13 @@ class EstablishmentManager {
                             OutboundEstablishState oes = _outboundStates.get(rhid);
                             if (oes != null) {
                                 if (_log.shouldDebug())
-                                    _log.debug("Awaiting pending connection to introducer " + oes + " for " + state);
+                                    _log.debug("Awaiting pending connection to Introducer " + oes + " for " + state);
                                 break;
                             }
                             int version = _transport.getSSUVersion(ra);
                             if (version == 2) {
                                 if (_log.shouldDebug())
-                                    _log.debug("Connecting to introducer " + bob + " for " + state);
+                                    _log.debug("Connecting to Introducer " + bob + " for " + state);
                                 // arbitrary message because we have no way to connect for no reason
                                 DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context);
                                 dlm.setSearchKey(h);
@@ -1691,7 +1691,7 @@ class EstablishmentManager {
                     OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
                     if (istate == INTRO_STATE_INIT) {
                         if (_log.shouldDebug())
-                            _log.debug("Looking up introducer " + h + " for " + state);
+                            _log.debug("Looking up Introducer " + h + " for " + state);
                         istate = INTRO_STATE_LOOKUP_SENT;
                         state2.setIntroState(h, istate);
                         // TODO on success job
@@ -1705,7 +1705,7 @@ class EstablishmentManager {
                 state.introSent();
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("No valid introducers for " + state);
+                    _log.debug("No valid Introducers for " + state);
                 processExpired(state);
             }
         }
@@ -1733,13 +1733,13 @@ class EstablishmentManager {
         }
         if (ourra == null) {
             if (_log.shouldWarn())
-                _log.warn("No address to send in relay request");
+                _log.warn("No IP address to send in relay request");
             return false;
         }
         byte[] ourIP = ourra.getIP();
         if (ourIP == null) {
             if (_log.shouldWarn())
-                _log.warn("No IP to send in relay request");
+                _log.warn("No IP address to send in relay request");
             return false;
         }
         // Bob should already have our RI, especially if we just connected; we do not resend it here.
@@ -1759,7 +1759,7 @@ class EstablishmentManager {
             return false;
         }
         if (_log.shouldDebug())
-            _log.debug("Sending relay request to " + bob + " for " + charlie);
+            _log.debug("Sending RelayRequest to " + bob + " for " + charlie);
         _transport.send(packet);
         bob.setLastSendTime(_context.clock().now());
         return true;
@@ -1881,7 +1881,7 @@ class EstablishmentManager {
             if (!SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
                                      bobHash, null, data, spk)) {
                 if (_log.shouldWarn())
-                    _log.warn("Signature failed relay response " + code + " as alice from:\n" + signerRI);
+                    _log.warn("Signature failed RelayResponse (Code: " + code + ") as Alice from:\n" + signerRI);
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 charlie.fail();
@@ -1912,7 +1912,7 @@ class EstablishmentManager {
                 DataHelper.eq(ip, bob.getRemoteIP()) ||
                 _context.blocklist().isBlocklisted(ip)) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("BAD relay response from " + charlie + " for " + Addresses.toString(ip, port));
+                    _log.warn("BAD RelayResponse from " + charlie + " for " + Addresses.toString(ip, port));
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
@@ -1961,7 +1961,7 @@ class EstablishmentManager {
         } else if (code >= 64) {
             // that's it
             if (_log.shouldDebug())
-                _log.debug("Received RelayResponse rejection " + code + " from Charlie " + charlie);
+                _log.debug("Received RelayResponse rejection (Code: " + code + ") from Charlie " + charlie);
             charlie2.setIntroState(bobHash, istate);
             if (code == RELAY_REJECT_CHARLIE_BANNED)
                 _context.banlist().banlistRouter(charlieHash, " <b>➜</b> They banned us", null, null, _context.clock().now() + 6*60*60*1000);
@@ -1971,7 +1971,7 @@ class EstablishmentManager {
             // don't give up, maybe more bobs out there
             // TODO keep track
             if (_log.shouldDebug())
-                _log.debug("Received RelayResponse rejection " + code + " from Bob " + bob);
+                _log.debug("Received RelayResponse rejection (Code: " + code + ") from Bob " + bob);
             charlie2.setIntroState(bobHash, istate);
             notifyActivity();
         }
@@ -2095,7 +2095,7 @@ class EstablishmentManager {
                     _log.info("HolePunch before RelayResponse from " + state);
             } else {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("No state found for SSU2 hole punch from " + id);
+                    _log.info("No state found for SSU2 HolePunch from " + id);
                 return;
             }
         }
@@ -2652,7 +2652,7 @@ class EstablishmentManager {
             boolean removed = _liveIntroductions.remove(Long.valueOf(nonce), outboundState);
             if (removed) {
                 if (_log.shouldDebug())
-                    _log.debug("Relay request for " + outboundState + " timed out");
+                    _log.debug("RelayRequest for " + outboundState + " timed out");
                 _context.statManager().addRateData("udp.sendIntroRelayTimeout", 1);
             }
         }
@@ -3096,7 +3096,7 @@ class EstablishmentManager {
                 long lifetime = _context.clock().now() - eldest.getValue().getWhenAdded();
                 _context.statManager().addRateData("udp.inboundTokenLifetime", lifetime);
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Remove oldest inbound " + eldest.getValue() + " for " + eldest.getKey());
+                    _log.debug("[SSU2] Remove oldest Inbound " + eldest.getValue() + " for " + eldest.getKey());
             }
             return rv;
         }
