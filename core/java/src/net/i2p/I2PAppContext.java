@@ -539,6 +539,26 @@ public class I2PAppContext {
     }
 
     /**
+     * Return a float with a float default
+     * @since 0.9.58+
+     */
+    public float getProperty(String propName, float defaultVal) {
+        String val = null;
+        if (_overrideProps != null) {
+            val = _overrideProps.getProperty(propName);
+            if (val == null)
+                val = System.getProperty(propName);
+        }
+        float rv = defaultVal;
+        if (val != null) {
+            try {
+                rv = Float.parseFloat(val);
+            } catch (NumberFormatException nfe) {}
+        }
+        return rv;
+    }
+
+    /**
      * Return a boolean with a boolean default
      * @since 0.7.12
      */
