@@ -74,7 +74,7 @@ class RequestThrottler {
         if (SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90) {
             if (_log.shouldWarn())
                 _log.warn("Rejecting tunnel requests from Router [" + h.toBase64().substring(0,6) + "] -> " +
-                          "System is under sustained high load");
+                          "CPU is under sustained high load");
         } else if (rv && enableThrottle) {
             if (count > limit * 5 / 3) {
                 int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
@@ -84,18 +84,19 @@ class RequestThrottler {
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
                         _log.warn("Temp banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
-                                  " router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                                  " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 5 / 3) +
                                   " in " + (11*60 / portion) + "s)");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Rejecting tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
+                        _log.info("Rejecting tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "] -> " +
                                   "(Count/limit: " + count + "/" + (limit * 5 / 3) + " in " + (11*60 / portion) + "s)");
+                    context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                 }
             } else {
                 if (_log.shouldWarn())
                     _log.warn("Throttling tunnel requests from " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
-                              " router [" + h.toBase64().substring(0,6) + "]" +
+                              " Router [" + h.toBase64().substring(0,6) + "]" +
                               "\n* Count/limit: " + count + "/" + limit + " in " + (11*60 / portion) + "s");
             }
         }

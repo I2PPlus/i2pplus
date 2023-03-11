@@ -103,15 +103,18 @@ class ParticipatingThrottler {
         String MIN_VERSION = "0.9.57";
 
         if (v.equals("0.0.0")) {
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
                 _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" + " -> No router version in RouterInfo");
             context.banlist().banlistRouter(h, " <b>➜</b> No version in RouterInfo", null, null, context.clock().now() + bantime);
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLowShare) {
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
                 _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) + "] -> Slow and older than " + MIN_VERSION);
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isUnreachable) {
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
                 _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) + "] -> Unreachable and older than " + MIN_VERSION);
@@ -128,6 +131,7 @@ class ParticipatingThrottler {
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 11 / 9) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
+                    context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                     if (_log.shouldInfo())
                         _log.info("Ignoring tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 11 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
@@ -159,6 +163,7 @@ class ParticipatingThrottler {
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 7 / 3) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
+                    context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                     if (_log.shouldInfo())
                         _log.info("Ignoring tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 7 / 3) + " in " + (11*60 / LIFETIME_PORTION) + "s");
