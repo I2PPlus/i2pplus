@@ -69,17 +69,17 @@ class ProfileOrganizerRenderer {
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
             if (prof == null)
                 continue;
-            if (mode == 2 && (prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore || prof.getIsActive()) && isFF) {
+            if (mode == 2 && isFF) {
                 order.add(prof);
                 ff++;
                 continue;
             }
 //            if (prof.getLastSendSuccessful() <= hideBefore) {
-            if (mode < 2 && (prof.getLastHeardFrom() >= hideBefore || prof.getLastSendSuccessful() >= hideBefore) && !prof.getIsActive()) {
+            if ((prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
                 older++;
                 continue;
             }
-            if (mode < 2 && !full && !_organizer.isHighCapacity(peer)) {
+            if (!full && !_organizer.isHighCapacity(peer)) {
                 standard++;
                 continue;
             }
