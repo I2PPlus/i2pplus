@@ -506,9 +506,9 @@ class EstablishmentManager {
                     }
                     if (keyBytes == null) {
                         if (_log.shouldWarn())
-                            _log.warn("No intro key\n" + toRouterInfo);
+                            _log.warn("No Introduction key\n" + toRouterInfo);
                         _transport.markUnreachable(toHash);
-                        _transport.failed(msg, "Peer has no key, cannot establish connection -> marking unreachable");
+                        _transport.failed(msg, "Peer has no key, cannot establish connection -> Marking unreachable");
                         return;
                     }
                     SessionKey sessionKey;
@@ -516,7 +516,7 @@ class EstablishmentManager {
                         sessionKey = new SessionKey(keyBytes);
                     } catch (IllegalArgumentException iae) {
                         _transport.markUnreachable(toHash);
-                        _transport.failed(msg, "Peer has bad key, cannot establish connection -> marking unreachable");
+                        _transport.failed(msg, "Peer has bad key, cannot establish connection -> Marking unreachable");
                         return;
                     }
                     if (version == 1) {
@@ -913,7 +913,7 @@ class EstablishmentManager {
         if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID)
             return;
         if (_log.shouldWarn())
-            _log.warn("Sending immediate termination " + terminationCode + " on type " + type + " to: " + to);
+            _log.warn("Sending termination packet [Code: " + terminationCode + "] on type " + type + " to: " + to);
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
         _transport.send(packet);
     }
