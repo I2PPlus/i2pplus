@@ -11,7 +11,7 @@
 --bevel_notify:0 0 0 1px #777,var(--highlight),inset 0 0 3px 0 var(--a);
 --bg:url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
 --bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Lucida Grande,Bitstream Vera Sans,Verdana,sans-serif;
---border:1px solid #aaa;
+--border:1px solid #bbb;
 --border_filtered:none;
 --border_hard:1px solid #777;
 --btn_active:linear-gradient(180deg,#f2f2f2,#f8f8f8);
@@ -213,7 +213,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 tr:hover .magnetLabel{opacity:1}
 .active.downloading .percentBarInner{background:repeating-linear-gradient(135deg,#70a97e,#70a97e 10px,#47d16a 10px,#47d16a 20px)}
 .active.downloading .torrentAction,.active.downloading:hover .torrentAction,.active.RX .torrentAction,.active.RX:hover .torrentAction{background:var(--td_dl);animation:ease-in-out downloading .5s 3s forwards}
-.active .peerCount b{background:linear-gradient(180deg,#fff,#edd)}
+.active .peerCount b{box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#edd)}
 .active.seeding .percentBarComplete{background:linear-gradient(90deg,rgba(0,0,0,0) 49%,#b39,rgba(0,0,0,0) 51%) #7e70a9;background-size:200%,100%}
 .active.seeding:hover .percentBarComplete{background:linear-gradient(90deg,rgba(0,0,0,0) 49%,#d5a,rgba(0,0,0,0) 51%) #7259c0;background-size:200%,100%}
 .choked .left,.choked .right,.idle .left,.idle .right{display:none;text-align:center;font-size:0}
@@ -418,10 +418,11 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #createSection td:first-child{padding-right:10px;text-align:right;font-weight:700}
 #createSection td:nth-child(2) td:first-child{text-align:left}
 #createSection #trackerselect{margin:5px 0 8px 2px;width:100%;border:var(--border);border-collapse:separate;border-spacing:0;border-radius:4px}
-#createSection #trackerselect td{border-top:var(--border);border-right:var(--border)}
+#createSection #trackerselect td{padding:8px;border-top:var(--border);border-right:var(--border)}
 #createSection #trackerselect td:first-child{font-weight:400}
 #createSection #trackerselect td:last-child{text-align:center;border-right:none}
 #createSection #trackerselect tr:first-child td{font-weight:700;border:none;background:#fff}
+#createSection #trackerselect .optbox{margin:0}
 #editSection+#commentSection{margin-top:-13px}
 #metainfo{padding:4px 8px 4px 4px;line-height:1.5;white-space:nowrap;border:1px solid #aaa;box-shadow:var(--highlight);background:#ffe}
 #snarkInfo~#commentSection{margin:7px 0 1px}
