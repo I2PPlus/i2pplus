@@ -35,6 +35,7 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.VersionComparator;
 
 /**
  * Receive DatabaseStoreMessage data and store it in the local net db
@@ -213,13 +214,17 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     if (until > FloodfillNetworkDatabaseFacade.NEXT_RKEY_RI_ADVANCE_TIME) {
                                         // appx. 90% max drop rate so even just-reseeded new routers will make it eventually
                                         int pdrop = Math.min(110, (128 * count / LIMIT_ROUTERS) - 128);
-                                        if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0)
-                                            pdrop *= 3;
+                                        String MIN_VERSION = "0.9.57";
+                                        String v = ri.getVersion();
+                                        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+                                        if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || isOld)
+//                                            pdrop *= 3;
+                                            pdrop *= 5;
                                         if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                             if (_log.shouldWarn())
                                                 _log.warn("Dropping new unsolicited NetDbStore of " + ri.getCapabilities() +
                                                           " Router [" + key.toBase64().substring(0,6) + "] with distance " + distance +
-                                                          " -> Drop probability is " + (pdrop * 100 / 128));
+                                                          " -> Drop probability: " + (pdrop * 100 / 128) + "%");
                                             shouldStore = false;
                                             // still flood if requested
                                             if (_message.getReplyToken() > 0)
@@ -231,10 +236,14 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                         ourRKey = gen.getNextRoutingKey(getContext().routerHash()).getData();
                                         distance = (((rkey[0] ^ ourRKey[0]) & 0xff) << 8) |
                                                     ((rkey[1] ^ ourRKey[1]) & 0xff);
+                                        String MIN_VERSION = "0.9.57";
+                                        String v = ri.getVersion();
+                                        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
                                         if (distance >= 256) {
                                             int pdrop = Math.min(110, (128 * count / LIMIT_ROUTERS) - 128);
-                                            if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0)
-                                                pdrop *= 3;
+                                            if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || isOld)
+//                                                pdrop *= 3;
+                                                pdrop *= 5;
                                             if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                                 if (_log.shouldWarn())
                                                     _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
@@ -258,7 +267,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                     if (_log.shouldWarn())
                                         _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
-                                                  "] -> Drop probability is " + (pdrop * 100 / 128));
+                                                  "] -> Drop probability: " + (pdrop * 100 / 128) + "%");
                                     shouldStore = false;
                                     // don't bother checking ban/blocklists.
                                     //wasNew = true;
