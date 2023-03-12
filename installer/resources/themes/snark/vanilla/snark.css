@@ -530,6 +530,7 @@ td .commentAuthorName{margin-left:8px;width:120px;overflow:hidden;text-overflow:
 .commentText{padding-right:0;white-space:normal;text-align:justify}
 .commentText:empty + .commentDelete{background:none}
 .commentWrapper{margin:4px 2px;padding:8px 10px 8px 26px;height:28px;max-height:300px;overflow:auto;resize:vertical;text-align:left;border:var(--border_hard);border-radius:2px;box-shadow:0 0 0 1px #fff inset;background:var(--chat) no-repeat 6px center #fff6df;background-size:16px;background-blend-mode:luminosity}
+.commentText .commentWrapper{height:auto;resize:none}
 #commentsConfig .optbox{vertical-align:middle;margin-left:0}
 #userComments select{margin-right:0}
 #commentDeleteAction{border:var(--border_hard);box-shadow:inset 0 0 0 1px #efe8e0;background:var(--th)}

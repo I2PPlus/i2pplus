@@ -30,7 +30,7 @@ a:active{color:#f30}
 a:focus img{filter:drop-shadow(0 0 1px var(--hover))}
 b{color:var(--ink_light)}
 button::-moz-focus-inner,input::-moz-focus-inner{outline:none;border:none}
-code,tt{font-size:8.5pt;color:#070;font-weight:700;font-family:var(--monospaced)}
+code,tt{font-size:8.5pt;color:#070;font-weight:600;font-family:var(--monospaced)}
 img{border:none;margin:0 3px 0;vertical-align:middle;opacity:1.0;line-height:1}
 img:hover{border:none;opacity:1;line-height:1}
 input.default{width:1px;height:1px;visibility:hidden;display:none}
@@ -483,6 +483,7 @@ td.commentAuthor .commentAuthorName{padding:0 5px 0 22px;width:120px;white-space
 .commentText{white-space:normal;text-align:justify;width:90%}
 .commentText:empty + .commentDelete{background:none}
 .commentWrapper{margin:2px 0;padding:8px 10px 8px 26px;height:28px;max-height:300px;overflow:auto;resize:vertical;text-align:left;line-height:1.3;white-space:normal;border:var(--border_softer);border-radius:3px;box-shadow:var(--highlight);background:#eef var(--comment) no-repeat scroll 6px center/16px;background-blend-mode:luminosity}
+.commentText .commentWrapper{height:auto;resize:none}
 #commentsConfig .optbox{vertical-align:middle}
 #userComments select{margin-right:0}
 #commentDeleteAction{border-top:var(--border_softer);background:var(--th)}
