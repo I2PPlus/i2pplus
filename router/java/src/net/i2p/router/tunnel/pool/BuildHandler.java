@@ -85,7 +85,7 @@ class BuildHandler implements Runnable {
     private static final int MIN_QUEUE = SystemVersion.isSlow() ? 32 : 64;
     private static final int MAX_QUEUE = SystemVersion.isSlow() ? 160
                                          : (SystemVersion.getCores() < 4 || SystemVersion.getMaxMemory() < 512*1024*1024) ? 192
-                                         : (SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() > 2048*1024*1024) ? 512
+                                         : (SystemVersion.getCores() >= 6 && SystemVersion.getMaxMemory() >= 2048*1024*1024) ? 512
                                          : 384;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
 

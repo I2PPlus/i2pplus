@@ -1,16 +1,18 @@
 package net.i2p.router.tunnel.pool;
 
 import net.i2p.data.Hash;
-import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
-import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
-import net.i2p.util.SystemVersion;
-
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
+
+import net.i2p.util.Log;
+import net.i2p.util.ObjectCounter;
+import net.i2p.util.SimpleTimer;
+import net.i2p.util.SystemVersion;
+import net.i2p.util.VersionComparator;
 
 
 /**
@@ -71,10 +73,53 @@ class RequestThrottler {
         int count = counter.increment(h);
         boolean rv = count > limit;
         boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
+        boolean noSSU = true;
+        boolean isFF = false;
+        String MIN_VERSION = "0.9.57";
+        String v = MIN_VERSION;
+        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+        if (ri != null) {
+            for (RouterAddress ra : ri.getAddresses()) {
+                if (ra.getTransportStyle().equals("SSU") ||
+                    ra.getTransportStyle().equals("SSU2")) {
+                    noSSU = false;
+                    break;
+                }
+            }
+            if (ri.getCapabilities().contains("f")) {
+                isFF = true;
+            }
+            v = ri.getVersion();
+        }
+
+        if (isFF && (noSSU || isUnreachable)) {
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            if (noSSU) {
+                context.banlist().banlistRouter(h, " <b>➜</b> Floodfill with SSU disabled", null, null, context.clock().now() + 4*60*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning Floodfill [" + h.toBase64().substring(0,6) + "] for 4h -> No SSU transport enabled");
+            } else {
+                context.banlist().banlistRouter(h, " <b>➜</b> Floodfill is unreachable/firewalled", null, null, context.clock().now() + 4*60*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning Floodfill [" + h.toBase64().substring(0,6) + "] for 4h -> Unreachable/firewalled");
+            }
+        }
+
+        if (isOld && (isUnreachable || isLowShare)) {
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            if (isUnreachable) {
+                if (_log.shouldWarn())
+                    _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable and older than " + MIN_VERSION);
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Slow and older than " + MIN_VERSION);
+            }
+        }
+
         if (SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90) {
             if (_log.shouldWarn())
                 _log.warn("Rejecting tunnel requests from Router [" + h.toBase64().substring(0,6) + "] -> " +
-                          "System is under sustained high load");
+                          "CPU is under sustained high load");
         } else if (rv && enableThrottle) {
             if (count > limit * 5 / 3) {
                 int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
@@ -84,18 +129,19 @@ class RequestThrottler {
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
                         _log.warn("Temp banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
-                                  " router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                                  " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests (Count/limit: " + count + "/" + (limit * 5 / 3) +
                                   " in " + (11*60 / portion) + "s)");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Rejecting tunnel requests from temp banned router [" + h.toBase64().substring(0,6) + "] -> " +
+                        _log.info("Rejecting tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "] -> " +
                                   "(Count/limit: " + count + "/" + (limit * 5 / 3) + " in " + (11*60 / portion) + "s)");
+                    context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                 }
             } else {
                 if (_log.shouldWarn())
                     _log.warn("Throttling tunnel requests from " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
-                              " router [" + h.toBase64().substring(0,6) + "]" +
+                              " Router [" + h.toBase64().substring(0,6) + "]" +
                               "\n* Count/limit: " + count + "/" + limit + " in " + (11*60 / portion) + "s");
             }
         }

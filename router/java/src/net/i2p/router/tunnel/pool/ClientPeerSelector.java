@@ -85,7 +85,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     if (hiddenInbound) {
                         // No connected peers found, give up now
                         if (log.shouldWarn())
-                            log.warn("ClientPeerSelector SANFP hidden closest IB no active peers found, returning null");
+                            log.warn("ClientPeerSelector : SelectAllNonFailingPeers (hidden) closest Inbound no active peers found, returning null");
                         return null;
                     }
                     // ANFP does not fall back to non-connected
@@ -111,21 +111,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         lastHopExclude = exclude;
                     }
                     if (log.shouldInfo())
-                        log.info("CPS SFP closest IB " + lastHopExclude);
+                        log.info("ClientPeerSelector : SelectFastPeers closest Inbound " + lastHopExclude);
                 } else {
                     lastHopExclude = new OBEPExcluder(exclude);
                     if (log.shouldInfo())
-                        log.info("CPS SFP OBEP " + lastHopExclude);
+                        log.info("ClientPeerSelector : SelectFastPeers OBEP " + lastHopExclude);
                 }
                 if (hiddenInbound) {
                     // IB closest hop
                     if (log.shouldInfo())
-                        log.info("CPS SANFP hidden closest IB " + lastHopExclude);
+                        log.info("ClientPeerSelector : SelectAllNonFailingPeers (hidden) closest Inbound " + lastHopExclude);
                     ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                     if (matches.isEmpty()) {
                         // No connected peers found, give up now
                         if (log.shouldWarn())
-                            log.warn("CPS SANFP hidden closest IB no active peers found, returning null");
+                            log.warn("ClientPeerSelector : SelectAllNonFailingPeers (hidden) closest Inbound -> No active peers found, returning null");
                         return null;
                     }
                 } else if (hiddenOutbound) {
@@ -182,12 +182,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     if (pickFurthest) {
                         if (log.shouldInfo())
-                            log.info("CPS SANFP OBEP " + lastHopExclude);
+                            log.info("ClientPeerSelector : SelectAllNonFailingPeers OutboundEndpoint " + lastHopExclude);
                         ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                         if (matches.isEmpty()) {
                             // No connected peers found, give up now
                             if (log.shouldWarn())
-                                log.warn("CPS SANFP hidden OBEP no active peers found, returning null");
+                                log.warn("ClientPeerSelector : SelectAllNonFailingPeers (hidden) OutboundEndpoint -> No active peers found, returning null");
                             return null;
                         }
                         ctx.commSystem().exemptIncoming(matches.get(0));
@@ -208,7 +208,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     // middle hop(s)
                     // group 2 or 3
                     if (log.shouldInfo())
-                        log.info("CPS SFP middle " + exclude);
+                        log.info("ClientPeerSelector : SelectFastPeers Middle " + exclude);
                     ctx.profileOrganizer().selectFastPeers(length - 2, exclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
                     matches.remove(ctx.routerHash());
                     if (matches.size() > 1) {
@@ -228,14 +228,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (isInbound) {
                     exclude = new IBGWExcluder(exclude);
                     if (log.shouldInfo())
-                        log.info("CPS SFP IBGW " + exclude);
+                        log.info("ClientPeerSelector : SelectFastPeers InboundGateway " + exclude);
                 } else {
                     // exclude existing IBGWs to get some diversity ?
                     // OB closest-hop restrictions
                     if (checkClosestHop)
                         exclude = getClosestHopExclude(false, exclude);
                     if (log.shouldInfo())
-                        log.info("CPS SFP closest OB " + exclude);
+                        log.info("ClientPeerSelector : SelectFastPeers closest Outbound " + exclude);
                 }
                 // TODO exclude IPv6-only at IBGW? Caught in checkTunnel() below
                 ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
@@ -243,7 +243,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 rv.addAll(matches);
             }
             if (log.shouldInfo())
-                log.info("CPS " + length + (isInbound ? " IB " : " OB ") + "final: " + exclude);
+                log.info("ClientPeerSelector " + length + (isInbound ? " Inbound " : " Ooutbound ") + "final: " + exclude);
             if (rv.size() < length) {
                 // not enough peers to build the requested size
                 // client tunnels do not use overrides
@@ -309,7 +309,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (rv) {
                 s.add(h);
                 if (log.shouldDebug())
-                    log.debug("CPS IBGW exclude " + h.toBase64());
+                    log.debug("ClientPeerSelector InboundGateway exclude [" + h.toBase64().substring(0,6) + "]");
             }
             return rv;
         }
@@ -350,7 +350,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (rv) {
                 s.add(h);
                 if (log.shouldDebug())
-                    log.debug("CPS OBEP exclude " + h.toBase64());
+                    log.debug("ClientPeerSelector OutboundEndpoint exclude [" + h.toBase64().substring(0,6) + "]");
             }
             return rv;
         }

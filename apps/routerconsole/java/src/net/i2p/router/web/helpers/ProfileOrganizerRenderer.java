@@ -56,7 +56,7 @@ class ProfileOrganizerRenderer {
         boolean ffmode = local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
-        long hideBefore = ffmode ? now - 60*1000 : !ffmode && mode == 2 ? 15*60*1000 : now - 3*60*1000;
+        long hideBefore = ffmode ? now - 60*1000 : !ffmode && mode == 2 ? now - 60*60*1000 : now - 10*60*1000;
 
         Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new HashComparator() : new ProfileComparator());
         int older = 0;
@@ -69,17 +69,17 @@ class ProfileOrganizerRenderer {
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
             if (prof == null)
                 continue;
-            if (mode == 2 && prof.getLastHeardFrom() <= hideBefore && isFF) {
+            if (mode == 2 && isFF) {
                 order.add(prof);
                 ff++;
                 continue;
             }
 //            if (prof.getLastSendSuccessful() <= hideBefore) {
-            if (mode < 2 && prof.getLastHeardFrom() >= hideBefore) {
+            if ((prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
                 older++;
                 continue;
             }
-            if (mode < 2 && !full && !_organizer.isHighCapacity(peer)) {
+            if (!full && !_organizer.isHighCapacity(peer)) {
                 standard++;
                 continue;
             }
@@ -100,7 +100,7 @@ class ProfileOrganizerRenderer {
                                     order.size()).replace(".", " (active in the last minute).")).append('\n');
             } else {
                 buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.",
-                                    order.size()).replace(".", " (active in the last 3 minutes).")).append('\n');
+                                    order.size()).replace(".", " (active in the last 10 minutes).")).append('\n');
             }
             if (older > 0)
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
@@ -118,6 +118,8 @@ class ProfileOrganizerRenderer {
                .append("<th>").append(_t("Version")).append("</th>");
             if (enableReverseLookups()) {
                 buf.append("<th>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
+            } else {
+                buf.append("<th>").append(_t("Host")).append("</th>");
             }
             buf.append("<th>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
@@ -174,11 +176,10 @@ class ProfileOrganizerRenderer {
                 } else {
                     buf.append("<span>&ensp;</span>");
                 }
+                buf.append("</td><td>");
+                String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
+                String rl = ip != null ? getCanonicalHostName(ip) : null;
                 if (enableReverseLookups()) {
-                    buf.append("</td><td>");
-
-                    String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
-                    String rl = ip != null ? getCanonicalHostName(ip) : null;
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span class=rlookup title=\"").append(rl).append("\">");
                         buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")));
@@ -186,6 +187,8 @@ class ProfileOrganizerRenderer {
                         buf.append("<span>").append(ip.replace("null", "unknown"));
                     }
                     buf.append("</span>");
+                } else {
+                    buf.append(ip != null ? ip : "");
                 }
                 buf.append("</td><td>");
                 boolean ok = true;

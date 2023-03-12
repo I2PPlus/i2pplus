@@ -582,11 +582,11 @@ class TunnelRenderer {
             if (enableReverseLookups()) {
                 out.write("<td></td>");
             }
-            out.write("<td colspan=2><b>" + tunnelCount + ' ' + _t("local") + "</b>");
+            out.write("<td colspan=2><b>" + tunnelCount + ' ' + _t("local") + "</b></td>");
             if (!participating.isEmpty()) {
-                out.write("<td colspan=2><b>" + partCount + ' ' + _t("transit") + "</b>");
+                out.write("<td colspan=2><b>" + partCount + ' ' + _t("transit") + "</b></td>");
             }
-            out.write("</td><td></td></tr></tfoot>\n</table>\n");
+            out.write("<td></td></tr></tfoot>\n</table>\n");
         } else {
             out.write("<p class=infohelp>" + _t("No local or transit tunnels currently active."));
         }

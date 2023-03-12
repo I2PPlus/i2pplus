@@ -3688,7 +3688,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         PeerState ps =  _peersByIdent.get(peer);
         if (ps != null) {
             if (_log.shouldWarn())
-                _log.warn("Force disconnect of " + peer, new Exception("I did it"));
+//                _log.warn("Force disconnect of " + peer, new Exception("I did it"));
+                _log.warn("[SSU] Forcing disconnection of [" + peer.toBase64().substring(0,6) + "]");
             dropPeer(ps, true, "router");
         }
     }

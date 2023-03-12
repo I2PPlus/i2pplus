@@ -13879,7 +13879,7 @@ msgstr "带宽测试现在正在运行，将需要大约60秒完成，之后你�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:557
 msgid "Bandwidth Test in progress"
-msgstr "正在进行贷款测试"
+msgstr "正在进行带宽测试"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:559
 msgid ""
@@ -15372,7 +15372,7 @@ msgstr "完成"
 #, fuzzy
 #~| msgid "Bandwidth Test in progress"
 #~ msgid "Bandwidth test in progress..."
-#~ msgstr "正在进行贷款测试"
+#~ msgstr "正在进行带宽测试"
 
 #, fuzzy
 #~| msgid "Bandwidth test did not complete"

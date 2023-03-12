@@ -35,6 +35,7 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.VersionComparator;
 
 /**
  * Receive DatabaseStoreMessage data and store it in the local net db
@@ -80,7 +81,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         if (DatabaseEntry.isLeaseSet(type)) {
             getContext().statManager().addRateData("netDb.storeLeaseSetHandled", 1);
             if (_log.shouldDebug())
-                _log.debug("Handling DbStore of LeaseSet" + _message);
+                _log.debug("Handling NetDbStore of LeaseSet" + _message);
 
             try {
                 // Never store a leaseSet for a local dest received from somebody else.
@@ -169,13 +170,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 String req = ((_message.getReplyToken() > 0) ? " reply req." : "") +
                              ((_fromHash == null && ri.getReceivedAsPublished()) ? " unsolicited" : "");
                 if (_fromHash == null)
-                    _log.info("Handling NetDb store of Router [" + key.toBase64().substring(0,6) + "] \n* Published " +
+                    _log.info("Handling NetDbStore of Router [" + key.toBase64().substring(0,6) + "] \n* Published " +
                               DataHelper.formatTime(ri.getPublished()) + req);
                 else if (_fromHash.equals(key))
-                    _log.info("Handling NetDb store of Router [" + key.toBase64().substring(0,6) + "] \n* Published " +
+                    _log.info("Handling NetDbStore of Router [" + key.toBase64().substring(0,6) + "] \n* Published " +
                               DataHelper.formatTime(ri.getPublished()) + " from that router" + req);
                 else
-                    _log.info("Handling NetDb store of Router [" + key.toBase64().substring(0,6) + "] \n* Published " +
+                    _log.info("Handling NetDbStore of Router [" + key.toBase64().substring(0,6) + "] \n* Published " +
                               DataHelper.formatTime(ri.getPublished()) + " from: " + _fromHash.toBase64() + req);
             }
             try {
@@ -213,13 +214,17 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     if (until > FloodfillNetworkDatabaseFacade.NEXT_RKEY_RI_ADVANCE_TIME) {
                                         // appx. 90% max drop rate so even just-reseeded new routers will make it eventually
                                         int pdrop = Math.min(110, (128 * count / LIMIT_ROUTERS) - 128);
-                                        if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0)
-                                            pdrop *= 3;
+                                        String MIN_VERSION = "0.9.57";
+                                        String v = ri.getVersion();
+                                        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+                                        if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || isOld)
+//                                            pdrop *= 3;
+                                            pdrop *= 5;
                                         if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                             if (_log.shouldWarn())
-                                                _log.warn("Dropping new unsolicited dbStore of " + ri.getCapabilities() +
-                                                          " router " + key.toBase64() + " with distance " + distance +
-                                                          " drop probability " + (pdrop * 100 / 128));
+                                                _log.warn("Dropping new unsolicited NetDbStore of " + ri.getCapabilities() +
+                                                          " Router [" + key.toBase64().substring(0,6) + "] with distance " + distance +
+                                                          " -> Drop probability: " + (pdrop * 100 / 128) + "%");
                                             shouldStore = false;
                                             // still flood if requested
                                             if (_message.getReplyToken() > 0)
@@ -231,14 +236,18 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                         ourRKey = gen.getNextRoutingKey(getContext().routerHash()).getData();
                                         distance = (((rkey[0] ^ ourRKey[0]) & 0xff) << 8) |
                                                     ((rkey[1] ^ ourRKey[1]) & 0xff);
+                                        String MIN_VERSION = "0.9.57";
+                                        String v = ri.getVersion();
+                                        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
                                         if (distance >= 256) {
                                             int pdrop = Math.min(110, (128 * count / LIMIT_ROUTERS) - 128);
-                                            if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0)
-                                                pdrop *= 3;
+                                            if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || isOld)
+//                                                pdrop *= 3;
+                                                pdrop *= 5;
                                             if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                                 if (_log.shouldWarn())
-                                                    _log.warn("Dropping new unsolicited dbStore of router " + key.toBase64() +
-                                                              " with distance " + distance);
+                                                    _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
+                                                              "] with distance " + distance);
                                                 shouldStore = false;
                                                 // still flood if requested
                                                 if (_message.getReplyToken() > 0)
@@ -248,7 +257,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     }
                                 }
                                 if (shouldStore && _log.shouldDebug())
-                                    _log.debug("Allowing new unsolicited dbStore of router " + key.toBase64() + " with distance " + distance);
+                                    _log.debug("Allowing new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) + "] with distance " + distance);
                             } else {
                                 // non-ff
                                 // up to 100% drop rate
@@ -257,8 +266,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     pdrop *= 3;
                                 if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                     if (_log.shouldWarn())
-                                        _log.warn("Dropping new unsolicited dbStore of router " + key.toBase64() +
-                                                  " drop probability " + (pdrop * 100 / 128));
+                                        _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
+                                                  "] -> Drop probability: " + (pdrop * 100 / 128) + "%");
                                     shouldStore = false;
                                     // don't bother checking ban/blocklists.
                                     //wasNew = true;
@@ -266,7 +275,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             }
                         }
                         if (shouldStore && _log.shouldWarn())
-                            _log.warn("Handling new unsolicited dbStore of router " + key.toBase64());
+                            _log.warn("Handling new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) + "]");
                     } else if (prevNetDb.getPublished() >= ri.getPublished()) {
                         shouldStore = false;
                     }
@@ -287,7 +296,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if (!forever &&
                             getContext().blocklist().isBlocklisted(ri)) {
                             if (_log.shouldWarn())
-                                _log.warn("Blocklisting new peer " + key + ' ' + ri);
+                                _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]" + ri);
                             wasNew = false; // don't flood
                             shouldStore = false; // don't call heardAbout()
                         }
@@ -297,7 +306,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if ((!newAddr.equals(oldAddr)) &&
                             getContext().blocklist().isBlocklisted(ri)) {
                             if (_log.shouldWarn())
-                                _log.warn("New address received, Blocklisting old peer " + key + ' ' + ri);
+                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "]" + ri);
                             wasNew = false; // don't flood
                             shouldStore = false; // don't call heardAbout()
                         }

@@ -128,6 +128,9 @@ class EventPumper implements Runnable {
         MIN_BUFS = (int) Math.max(MIN_MINB, Math.max(MAX_MINB, 1 + (maxMemory / (4*1024*1024))));
     }
 
+    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 3f;
+    private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
+
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
 
     private static final Set<Status> STATUS_OK =
@@ -200,6 +203,15 @@ class EventPumper implements Runnable {
         _context.statManager().addRateData("ntcp.registerConnect", 1);
         _wantsConRegister.offer(con);
         _selector.wakeup();
+    }
+
+    /**
+     * Ratio of current connections/min vs previous before throttler activates
+     *
+     * @since 0.9.58+
+     */
+    private float getThrottleFactor() {
+        return _context.getProperty(PROP_THROTTLE_FACTOR, DEFAULT_THROTTLE_FACTOR);
     }
 
     /**
@@ -614,9 +626,11 @@ class EventPumper implements Runnable {
         float lastRate = last / (float) lastPeriod;
         float currentRate = (float) (current / (double) currentTime);
 //        float factor = _transport.haveCapacity(95) ? 1.05f : 0.95f;
-        float factor = _transport.haveCapacity(95) ? 2.0f : 0.95f;
+        float factor = _transport.haveCapacity(95) ? getThrottleFactor() : 0.95f;
         float minThresh = factor * lastRate;
-        if (currentRate > minThresh * 5 / 3) {
+        int maxConnections = _transport.getMaxConnections();
+        int currentConnections = _transport.countPeers();
+        if (currentRate > minThresh * 5 / 3 && (currentConnections > (maxConnections * 2 / 3))) {
             // chance in 128
             // max out at about 25% over the last rate
             int probAccept = Math.max(1, ((int) (4 * 128 * currentRate / minThresh)) - 512);
