@@ -1131,7 +1131,7 @@ p.infohelp + hr,p.infohelp + p + hr,#tunnelconfig + hr{display:none}
 
 /* routerid flags */
 img.unknownflag{opacity:.8}
-#netdbcountrylist img[src^="/flags"],.netdb_header img[src^="/flags"]{width:24px;height:18px}
+#netdbcountrylist img[src^="/flags"],.netdb_header img[src^="/flags"]{width:24px;height:18px;vertical-align:middle}
 #netdb td:not(.rif) > img[src^="/flags"]{margin-top:0;margin-bottom:0;border:var(--border_soft)}
 
 /* netdb */
@@ -1344,20 +1344,24 @@ p.sybil_info,p.family,p.threatpoints,p.hashdist,p.notfound,#sybil_totals{margin:
 /* netdb (main section) */
 #netdb td:not(.rif):not(.rih){padding-top:6px;padding-bottom:6px;position:static}
 #netdboverview{margin:15px 0 5px;border:var(--border)}
+#netdboverview thead{border:none}
 #netdboverview td{padding:0;border-left:var(--border);border-right:var(--border);background:rgba(255,255,255,.4)}
-#netdboverview table th,#netdboverview table td{padding:4px 8px}
+#netdboverview table th,#netdboverview table td{padding:6px 8px}
 #netdboverview th{font-size:10pt;color:var(--ink_light);pointer-events:none}
+#netdboverview th[colspan="3"]{padding:8px}
 #netdboverview th[role="columnheader"]{pointer-events:auto}
 #netdboverview table th{font-size:90%}
 #netdboverview table td:not(:first-child):not(:last-child){border-left:var(--border_softer);border-right:var(--border_softer)}
 #netdboverview table tr:hover{background:var(--row_hover)}
 #netdboverview table th::before,#netdboverview table td::before{height:24px;display:inline-block;vertical-align:middle;content:""}
-#netdboverview span,#netdboverview a{margin-top:0;margin-bottom:0}
+#netdboverview span,#netdboverview a{margin-top:0;margin-bottom:0;display:inline-block;vertical-align:middle}
 #netdbtransports th:first-child,#netdbcountrylist th:first-child,#netdbtiers th:first-child{text-align:left}
 #netdbversions,#netdbtransports,#netdbcountrylist,#netdbtiers{border:none;margin:-1px 0}
 #netdbversions{border-bottom:var(--border)}
 #netdbtransports,#netdbversions,#netdbtiers{border-bottom:var(--border)}
 #netdbversions,#netdbcountrylist,#netdbtransports,#netdbtiers{border-left:none;border-right:none;border-bottom:var(--border)}
+#netdbversions,#netdbcountrylist,#netdbtiers{margin-top:-7px}
+#netdbcountrylist{margin-bottom:-7px}
 #netdbcountrylist td:first-child,#netdbtransports td:first-child,#netdbtiers td:first-child,#netdbversions td:first-child{border-left:none}
 #netdbcountrylist td:last-child,#netdbtransports td:last-child,#netdbtiers td:last-child,#netdbversions td:last-child{border-right:none}
 #netdbtransports{position:relative}
