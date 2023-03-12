@@ -663,7 +663,7 @@ class EventPumper implements Runnable {
                 con.outboundConnected();
                 _context.statManager().addRateData("ntcp.connectSuccessful", 1);
             } else {
-                con.closeOnTimeout("Connect failed (10s timeout exceeded) -> marking unreachable", null);
+                con.closeOnTimeout("Connect failed (10s timeout exceeded) -> Marking unreachable", null);
                 _transport.markUnreachable(con.getRemotePeer().calculateHash());
                 _context.statManager().addRateData("ntcp.connectFailedTimeout", 1);
             }
@@ -671,7 +671,7 @@ class EventPumper implements Runnable {
             if (_log.shouldInfo())
 //                _log.info("Failed outbound " + con, ioe);
                 _log.info("Failed outbound " + con + " (" + ioe.getMessage() + ")");
-            con.closeOnTimeout("Connect failed (10s timeout exceeded or connection refused) -> marking unreachable", ioe);
+            con.closeOnTimeout("Connect failed (10s timeout exceeded or connection refused) -> Marking unreachable", ioe);
             _transport.markUnreachable(con.getRemotePeer().calculateHash());
             _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
         } catch (NoConnectionPendingException ncpe) {
