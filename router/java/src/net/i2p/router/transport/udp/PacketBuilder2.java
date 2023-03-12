@@ -294,18 +294,19 @@ class PacketBuilder2 {
         // the packet could have been built before the current mtu got lowered, so
         // compare to LARGE_MTU
         // Also happens on switch between IPv4 and IPv6
-        if (_log.shouldWarn()) {
+        if (_log.shouldWarn() || _log.shouldInfo()) {
             int maxMTU = PeerState2.MAX_MTU;
             off += MAC_LEN;
-            if (off + ipHeaderSize > currentMTU) {
-                _log.warn("[SSU2] Size is " + off + " bytes for " + packet +
-                       "; Data size " + dataSize + " bytes" +
-                       "; Packet size " + (off + ipHeaderSize) + " bytes" +
-                       "; MTU " + currentMTU + " bytes" +
-                       "; Fragments: " + DataHelper.toString(fragments) /* , new Exception() */ );
+            if (_log.shouldInfo()) {
+                if (off + ipHeaderSize > currentMTU) {
+                    _log.warn("[SSU2] Packet size (" + off + " bytes) is larger than current MTU (" + currentMTU + " bytes) " +
+                              packet + "; Data size " + dataSize + " bytes" + "; Packet size " + (off + ipHeaderSize) + " bytes" +
+                              "; Fragments: " + DataHelper.toString(fragments) /* , new Exception() */ );
+                }
+            } else {
+                _log.warn("[SSU2] Packet size (" + off + " bytes) is larger than current MTU (" + currentMTU + " bytes)");
             }
         }
-
         packet.setPriority(priority);
         if (fragments.isEmpty()) {
             SSU2Bitfield acked = peer.getAckedMessages();
@@ -511,7 +512,7 @@ class PacketBuilder2 {
         packet.setPriority(PRIORITY_LOW);
         return packet;
     }
-    
+
     /**
      * Build a new series of SessionConfirmed packets for the given peer,
      * encrypting it as necessary.
