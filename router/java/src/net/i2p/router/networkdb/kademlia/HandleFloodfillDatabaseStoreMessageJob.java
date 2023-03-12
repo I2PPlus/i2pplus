@@ -51,7 +51,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private final static int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
     // must be lower than LIMIT_ROUTERS in StartExplorersJob
     // because exploration does not register a reply job
-    private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1500 : 4000;
+//    private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1500 : 4000;
+    private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 2000 : 5000;
 
     /**
      * @param receivedMessage must never have reply token set if it came down a tunnel
@@ -177,7 +178,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                               DataHelper.formatTime(ri.getPublished()) + " from that router" + req);
                 else
                     _log.info("Handling NetDbStore of Router [" + key.toBase64().substring(0,6) + "] \n* Published " +
-                              DataHelper.formatTime(ri.getPublished()) + " from: " + _fromHash.toBase64() + req);
+                              DataHelper.formatTime(ri.getPublished()) + " from: [" + _fromHash.toBase64().substring(0,6) + "] " + req);
             }
             try {
                 // Never store our RouterInfo received from somebody else.
@@ -196,6 +197,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     // these are often just dup stores from concurrent lookups
                     prevNetDb = (RouterInfo) _facade.lookupLocallyWithoutValidation(key);
                     boolean isUnreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+                    boolean isFF = ri.getCapabilities().contains("f");
                     String MIN_VERSION = "0.9.57";
                     String v = ri.getVersion();
                     boolean noSSU = true;
@@ -207,8 +209,27 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             break;
                         }
                     }
+                    // actually new
                     if (prevNetDb == null) {
-                        // actually new
+                        if ((isFF && noSSU) || (isFF && isUnreachable)) {
+                            shouldStore = false;
+                            if (_log.shouldWarn()) {
+                                if (isFF && noSSU) {
+                                    _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
+                                              "] -> Floodfill with SSU disabled");
+                                } else {
+                                    _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
+                                              "] -> Floodfill is unreachable/firewalled");
+                                }
+                            }
+                        }
+                        if (isUnreachable && isOld) {
+                            shouldStore = false;
+                            if (_log.shouldWarn()) {
+                                _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
+                                          "] -> Router is older than " + MIN_VERSION + " and unreachable");
+                            }
+                        }
                         int count = _facade.getDataStore().size();
                         if (count > LIMIT_ROUTERS) {
                             if (_facade.floodfillEnabled()) {
@@ -265,6 +286,25 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 if (shouldStore && _log.shouldDebug())
                                     _log.debug("Allowing new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) + "] with distance " + distance);
                             } else {
+                                if ((isFF && noSSU) || (isFF && isUnreachable)) {
+                                    shouldStore = false;
+                                    if (_log.shouldWarn()) {
+                                        if (isFF && noSSU) {
+                                            _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
+                                                      "] -> Floodfill with SSU disabled");
+                                        } else {
+                                            _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
+                                                      "] -> Floodfill is unreachable/firewalled");
+                                        }
+                                    }
+                                }
+                                if (isUnreachable && isOld) {
+                                    shouldStore = false;
+                                    if (_log.shouldWarn()) {
+                                        _log.warn("Dropping new unsolicited NetDbStore of Router [" + key.toBase64().substring(0,6) +
+                                                  "] -> Router is older than " + MIN_VERSION + " and unreachable");
+                                    }
+                                }
                                 // non-ff
                                 // up to 100% drop rate
                                 int pdrop = (128 * count / LIMIT_ROUTERS) - 128;
