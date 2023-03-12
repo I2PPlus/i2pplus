@@ -195,6 +195,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (ri.getReceivedAsPublished()) {
                     // these are often just dup stores from concurrent lookups
                     prevNetDb = (RouterInfo) _facade.lookupLocallyWithoutValidation(key);
+                    boolean isUnreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
                     String MIN_VERSION = "0.9.57";
                     String v = ri.getVersion();
                     boolean noSSU = true;
@@ -225,7 +226,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     if (until > FloodfillNetworkDatabaseFacade.NEXT_RKEY_RI_ADVANCE_TIME) {
                                         // appx. 90% max drop rate so even just-reseeded new routers will make it eventually
                                         int pdrop = Math.min(110, (128 * count / LIMIT_ROUTERS) - 128);
-                                        if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || isOld || noSSU)
+                                        if (isUnreachable || isOld || noSSU)
 //                                            pdrop *= 3;
                                             pdrop *= 8;
                                         if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
@@ -246,7 +247,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                                     ((rkey[1] ^ ourRKey[1]) & 0xff);
                                         if (distance >= 256) {
                                             int pdrop = Math.min(110, (128 * count / LIMIT_ROUTERS) - 128);
-                                            if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || isOld || noSSU)
+                                            if (isUnreachable || isOld || noSSU)
 //                                                pdrop *= 3;
                                                 pdrop *= 8;
                                             if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
@@ -267,7 +268,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 // non-ff
                                 // up to 100% drop rate
                                 int pdrop = (128 * count / LIMIT_ROUTERS) - 128;
-                                if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || isOld || noSSU)
+                                if (isUnreachable || isOld || noSSU)
 //                                    pdrop *= 3;
                                     pdrop *= 8;
                                 if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
