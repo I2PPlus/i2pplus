@@ -821,10 +821,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             boolean hasD = caps.contains("D");
             boolean hasE = caps.contains("E");
             boolean hasG = caps.contains("G");
+            boolean isFF = caps.contains("f");
+            boolean isU = caps.contains("U");
             buf.append("<td class=\"rbw ").append(getCapacity(peer));
-                if (caps.contains("f"))
+                if (isFF)
                     buf.append(" isff");
-                if (caps.contains("U"))
+                if (isU)
                     buf.append(" isU");
                 if (hasD)
                     buf.append(" isD");
@@ -834,10 +836,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     buf.append(" isG");
                 buf.append("\"><a href=\"/netdb?caps=");
                 buf.append(getCapacity(peer));
-                if (caps.contains("f"))
+                if (isFF)
                     buf.append("f");
-                if (caps.contains("U"))
+                if (isU)
                     buf.append("U");
+                if (hasD)
+                    buf.append("D");
+                if (hasE)
+                    buf.append("E");
+                if (hasG)
+                    buf.append("G");
                 buf.append("\" title=\"");
                 buf.append(_t("Show all routers with this capability in the NetDb"));
                 buf.append("\">");
