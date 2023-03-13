@@ -116,7 +116,7 @@ class RequestThrottler {
             }
         }
 
-        if (SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90) {
+        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 95) {
             if (_log.shouldWarn())
                 _log.warn("Rejecting tunnel requests from Router [" + h.toBase64().substring(0,6) + "] -> " +
                           "CPU is under sustained high load");
