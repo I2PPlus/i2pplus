@@ -218,6 +218,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
 
+/*
         String MIN_VERSION = "0.9.57";
         boolean isHidden = getContext().router().isHidden();
         RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
@@ -238,6 +239,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 return;
             }
         }
+*/
 
         // pick some floodfill peers and send out the searches
         List<Hash> floodfillPeers;
