@@ -79,6 +79,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         Hash key = _message.getKey();
         DatabaseEntry entry = _message.getEntry();
         int type = entry.getType();
+        long now = getContext().clock().now();
         if (DatabaseEntry.isLeaseSet(type)) {
             getContext().statManager().addRateData("netDb.storeLeaseSetHandled", 1);
             if (_log.shouldDebug())
@@ -220,22 +221,24 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if (_log.shouldWarn()) {
                             _log.warn("Dropping unsolicited NetDbStore of banned " + cap + " Router [" + key.toBase64().substring(0,6) + "]");
                         }
+                    } else if ((isFF && noSSU) || (isFF && isUnreachable)) {
+                        shouldStore = false;
+                        wasNew = false;
+                        if (isFF && noSSU) {
+                            getContext().banlist().banlistRouter(key, " <b>➜</b> Floodfill with SSU disabled", null, null, now + 4*60*60*1000);
+                            if (_log.shouldWarn())
+                                _log.warn("Dropping unsolicited NetDbStore of " + cap + " Router [" + key.toBase64().substring(0,6) +
+                                          "] and banning for 4h -> Floodfill with SSU transport disabled");
+                        } else {
+                            getContext().banlist().banlistRouter(key, " <b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 4*60*60*1000);
+                            if (_log.shouldWarn())
+                                _log.warn("Dropping unsolicited NetDbStore of " + cap + " Router [" + key.toBase64().substring(0,6) +
+                                          "] and banning for 4h -> Floodfill is unreachable/firewalled");
+                        }
                     }
-                    // actually new
+                     // actually new
                     if (prevNetDb == null) {
-                        if ((isFF && noSSU) || (isFF && isUnreachable)) {
-                            shouldStore = false;
-                            wasNew = false;
-                            if (_log.shouldWarn()) {
-                                if (isFF && noSSU) {
-                                    _log.warn("Dropping unsolicited NetDbStore of new " + cap + " Router [" + key.toBase64().substring(0,6) +
-                                              "] -> Floodfill with SSU disabled");
-                                } else {
-                                    _log.warn("Dropping unsolicited NetDbStore of new " + cap + " Router [" + key.toBase64().substring(0,6) +
-                                              "] -> Floodfill is unreachable/firewalled");
-                                }
-                            }
-                        } else if (isUnreachable && isOld) {
+                        if (isUnreachable && isOld) {
                             shouldStore = false;
                             wasNew = false;
                             if (_log.shouldWarn()) {
