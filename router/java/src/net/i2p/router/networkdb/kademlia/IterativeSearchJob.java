@@ -218,7 +218,6 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
 
-
         String MIN_VERSION = "0.9.57";
         boolean isHidden = getContext().router().isHidden();
         RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
