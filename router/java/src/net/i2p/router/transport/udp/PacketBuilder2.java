@@ -294,16 +294,16 @@ class PacketBuilder2 {
         // the packet could have been built before the current mtu got lowered, so
         // compare to LARGE_MTU
         // Also happens on switch between IPv4 and IPv6
-        if (_log.shouldWarn() || _log.shouldInfo()) {
+        if (_log.shouldDebug() || _log.shouldInfo()) {
             int maxMTU = PeerState2.MAX_MTU;
             off += MAC_LEN;
-            if (_log.shouldInfo()) {
+            if (_log.shouldDebug()) {
                 if (off + ipHeaderSize > currentMTU) {
                     _log.warn("[SSU2] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes) " +
                               packet + "; Packet: " + off + " bytes; Header: " + ipHeaderSize + "bytes; Data: " + dataSize + " bytes; " +
                               "Fragments: " + DataHelper.toString(fragments) /* , new Exception() */ );
                 }
-            } else {
+            } else if (_log.shouldInfo()) {
                 _log.warn("[SSU2] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes)");
             }
         }
