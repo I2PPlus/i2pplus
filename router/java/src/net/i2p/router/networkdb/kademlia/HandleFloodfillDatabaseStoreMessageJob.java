@@ -215,6 +215,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     if (prevNetDb == null) {
                         if ((isFF && noSSU) || (isFF && isUnreachable)) {
                             shouldStore = false;
+                            wasNew = false;
                             if (_log.shouldWarn()) {
                                 if (isFF && noSSU) {
                                     _log.warn("Dropping unsolicited NetDbStore of new " + cap + " Router [" + key.toBase64().substring(0,6) +
@@ -224,23 +225,23 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                               "] -> Floodfill is unreachable/firewalled");
                                 }
                             }
-                        }
-                        if (isUnreachable && isOld) {
+                        } else if (isUnreachable && isOld) {
                             shouldStore = false;
+                            wasNew = false;
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of new " + cap + " Router [" + key.toBase64().substring(0,6) +
                                           "]-> Unreachable and older (" + v + ") than " + MIN_VERSION);
                             }
-                        }
-                        if (isUnreachable && isSlow) {
+                        } else if (isUnreachable && isSlow) {
                             shouldStore = false;
+                            wasNew = false;
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of new " + cap + " Router [" + key.toBase64().substring(0,6) +
                                           "] -> Unreachable and slow");
                             }
-                        }
-                        if (isOld && isSlow) {
+                        } else if (isOld && isSlow) {
                             shouldStore = false;
+                            wasNew = false;
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of new " + cap + " Router [" + key.toBase64().substring(0,6) +
                                           "] -> Slow and older (" + v + ") than " + MIN_VERSION);
@@ -355,10 +356,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     if (forever) {
                         wasNew = false; // don't flood
                         shouldStore = false; // don't call heardAbout()
-                        }
+                    }
                     if (prevNetDb == null) {
-                        if (!forever &&
-                            getContext().blocklist().isBlocklisted(ri)) {
+                        if (!forever && getContext().blocklist().isBlocklisted(ri)) {
                             if (_log.shouldWarn())
                                 _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]" + ri);
                             wasNew = false; // don't flood
@@ -367,8 +367,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     } else if (!forever) {
                         Collection<RouterAddress> oldAddr = prevNetDb.getAddresses();
                         Collection<RouterAddress> newAddr = ri.getAddresses();
-                        if ((!newAddr.equals(oldAddr)) &&
-                            getContext().blocklist().isBlocklisted(ri)) {
+                        if ((!newAddr.equals(oldAddr)) && getContext().blocklist().isBlocklisted(ri)) {
                             if (_log.shouldWarn())
                                 _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "]" + ri);
                             wasNew = false; // don't flood
