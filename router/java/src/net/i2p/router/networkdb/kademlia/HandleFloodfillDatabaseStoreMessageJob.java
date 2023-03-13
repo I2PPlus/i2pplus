@@ -80,6 +80,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         DatabaseEntry entry = _message.getEntry();
         int type = entry.getType();
         long now = getContext().clock().now();
+        boolean isBanned = getContext().banlist().isBanlistedForever(key) ||
+                           getContext().banlist().isBanlisted(key) ||
+                           getContext().banlist().isBanlistedHostile(key);
         if (DatabaseEntry.isLeaseSet(type)) {
             getContext().statManager().addRateData("netDb.storeLeaseSetHandled", 1);
             if (_log.shouldDebug())
@@ -205,9 +208,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     String v = ri.getVersion();
                     boolean noSSU = true;
                     boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
-                    boolean isBanned = getContext().banlist().isBanlistedForever(key) ||
-                                       getContext().banlist().isBanlisted(key) ||
-                                       getContext().banlist().isBanlistedHostile(key);
                     for (RouterAddress ra : ri.getAddresses()) {
                         if (ra.getTransportStyle().equals("SSU") ||
                             ra.getTransportStyle().equals("SSU2")) {
@@ -235,9 +235,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + " Router [" + key.toBase64().substring(0,6) +
                                           "] and banning for 4h -> Floodfill is unreachable/firewalled");
                         }
-                    }
-                     // actually new
-                    if (prevNetDb == null) {
+                    } else if (prevNetDb == null) { // actually new
                         if (isUnreachable && isOld) {
                             shouldStore = false;
                             wasNew = false;
@@ -366,7 +364,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (wasNew) {
                     // TODO should we not flood temporarily banned routers either?
                     boolean forever = getContext().banlist().isBanlistedForever(key);
-                    if (forever) {
+                    if (forever || isBanned) {
                         wasNew = false; // don't flood
                         shouldStore = false; // don't call heardAbout()
                     }
