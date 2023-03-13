@@ -56,7 +56,7 @@
 <tr><th>routerconsole.enablePluginInstall={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, this enables plugin installation on the <a href=/configplugins>Plugin Configuration page</a>. [Enabled by default]")%></td></tr>
 
-<tr><th>routerconsole.enableReverseLookups={true|false}</th></tr>
+<tr><th>routerconsole.enableReverseLookups={true|false}  <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]")%></td></tr>
 
 <tr><th>routerconsole.redirectToHTTPS={true|false}</th></tr>
