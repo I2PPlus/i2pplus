@@ -204,11 +204,21 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     String v = ri.getVersion();
                     boolean noSSU = true;
                     boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+                    boolean isBanned = getContext().banlist().isBanlistedForever(key) ||
+                                       getContext().banlist().isBanlisted(key) ||
+                                       getContext().banlist().isBanlistedHostile(key);
                     for (RouterAddress ra : ri.getAddresses()) {
                         if (ra.getTransportStyle().equals("SSU") ||
                             ra.getTransportStyle().equals("SSU2")) {
                             noSSU = false;
                             break;
+                        }
+                    }
+                    if (isBanned) {
+                        shouldStore = false;
+                        wasNew = false;
+                        if (_log.shouldWarn()) {
+                            _log.warn("Dropping unsolicited NetDbStore of banned " + cap + " Router [" + key.toBase64().substring(0,6) + "]");
                         }
                     }
                     // actually new
