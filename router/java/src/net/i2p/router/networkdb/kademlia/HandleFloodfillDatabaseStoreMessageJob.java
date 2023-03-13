@@ -196,8 +196,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (ri.getReceivedAsPublished()) {
                     // these are often just dup stores from concurrent lookups
                     prevNetDb = (RouterInfo) _facade.lookupLocallyWithoutValidation(key);
-                    boolean isUnreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-                    boolean isFF = ri.getCapabilities().contains("f");
+                    String cap = ri.getCapabilities();
+                    boolean isUnreachable = cap.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+                    boolean isFF = cap.contains("f");
+                    boolean isSlow = cap.contains("K") || cap.contains("L") || cap.contains("M") || cap.contains("N");
                     String MIN_VERSION = "0.9.57";
                     String v = ri.getVersion();
                     boolean noSSU = true;
@@ -230,6 +232,20 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                           "] -> Older than " + MIN_VERSION + " and unreachable");
                             }
                         }
+                        if (isUnreachable && isSlow) {
+                            shouldStore = false;
+                            if (_log.shouldWarn()) {
+                                _log.warn("Dropping unsolicited NetDbStore of new Router [" + key.toBase64().substring(0,6) +
+                                          "] -> Slow and unreachable");
+                            }
+                        }
+                        if (isOld && isSlow) {
+                            shouldStore = false;
+                            if (_log.shouldWarn()) {
+                                _log.warn("Dropping unsolicited NetDbStore of new Router [" + key.toBase64().substring(0,6) +
+                                          "] -> Older than " + MIN_VERSION + " and slow");
+                            }
+                        }
                         int count = _facade.getDataStore().size();
                         if (count > LIMIT_ROUTERS) {
                             if (_facade.floodfillEnabled()) {
@@ -252,7 +268,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                             pdrop *= 8;
                                         if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                             if (_log.shouldWarn())
-                                                _log.warn("Dropping unsolicited NetDbStore of new " + ri.getCapabilities() +
+                                                _log.warn("Dropping unsolicited NetDbStore of new " + cap +
                                                           " Router [" + key.toBase64().substring(0,6) + "] with distance " + distance +
                                                           " -> Drop probability: " + (pdrop * 100 / 128) + "%");
                                             shouldStore = false;
