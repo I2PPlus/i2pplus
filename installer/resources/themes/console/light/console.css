@@ -1323,7 +1323,9 @@ span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry
 .confignav+.netdbentry,.infowarn+.netdbentry{margin-top:10px}
 .netdbentry .ff,.netdbentry .reachable,.netdbentry .tier,.netdbentry .tunnel_cap,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .tier,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{margin:0 2px 0;padding:1px 6px;vertical-align:middle;line-height:1.5}
 .netdbentry .version{margin-left:-1px}
-.netdb_header .configpeer,.netdb_header .familysearch,.netdb_header .viewprofile{margin:3px;width:14px;height:14px}
+.netdb_header .configpeer,.netdb_header .familysearch,.netdb_header .viewprofile{margin:3px;width:14px;height:14px;box-shadow:var(--btn_shadow)}
+.netdb_header .configpeer:hover,.netdb_header .familysearch:hover,.netdb_header .viewprofile:hover{width:14px;height:14px;box-shadow:var(--btn_shadow_hover)}
+.netdb_header .configpeer:active,.netdb_header .familysearch:active,.netdb_header .viewprofile:active{width:14px;height:14px;box-shadow:var(--btn_shadow_active)}
 .netdb_header .configpeer{margin-right:5px}
 .netdb_header .viewprofile{margin-right:9px}
 .tier.isD{background:var(--isD),var(--tier)}
