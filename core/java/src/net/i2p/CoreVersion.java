@@ -60,8 +60,8 @@ public class CoreVersion {
     }
 
     public static void main(String args[]) {
-        System.out.println("I2P Core version: " + VERSION);
-        System.out.println("I2P API version:  " + PUBLISHED_VERSION);
-        System.out.println("ID: " + ID);
+        System.out.println("I2P+ Core version: " + VERSION);
+        System.out.println("I2P+ API version:  " + PUBLISHED_VERSION);
+        //System.out.println("ID: " + ID);
     }
 }
