@@ -1252,9 +1252,6 @@ class NetDbRenderer {
             .replace("Pf", "fP")
             .replace("Xf", "fX")
             .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
-            .replace("B", "<a href=\"/netdb?caps=B\"><span class=testing>B</span></a>") // not shown?
-            .replace("C", "<a href=\"/netdb?caps=C\"><span class=ssuintro>C</span></a>") // not shown?
-            .replace("H", "<a href=\"/netdb?caps=H\"><span class=hidden>H</span></a>") // not shown?
             .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
             .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
             .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
@@ -1266,11 +1263,11 @@ class NetDbRenderer {
             .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
             .replace("\"><span", tooltip);
         if (hasD) {
-            caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"");
+            caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");
         } else if (hasE) {
-            caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"");
+            caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");
         } else if (hasG) {
-            caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"");
+            caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");
         }
         buf.append(caps);
 /*
