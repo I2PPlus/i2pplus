@@ -40,7 +40,7 @@ textarea{margin:5px 0;resize:none;color:var(--ink);box-shadow:var(--highlight),i
 th[aria-sort]{font-style:italic}
 th code{font-weight:700;margin-left:3px}
 th code{user-select:all}
-thead{border: 1px solid var(--border_inner)}
+thead{border:1px solid var(--border_inner)}
 th:first-child{border-left:var(--border_inner)}
 th:last-child{border-right:var(--border_inner)}
 th{padding:6px 5px;color:var(--ink_light);text-align:left;font-size:9pt;line-height:1.1;border-bottom:1px solid var(--border_inner);border-top:1px solid var(--border_inner);vertical-align:middle;background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
@@ -252,7 +252,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_peers_condensed .sb_icon:hover,#sb_peers_condensed .sb_icon:focus,#sb_tunnels_condensed .sb_icon:hover,#sb_tunnels_condensed .sb_icon:focus{box-shadow:0 0 0 1px #f60 inset,0 0 0 2px #fff inset;background-blend-mode:normal}
 #sb_peers_condensed .sb_icon:active,#sb_tunnels_condensed .sb_icon:active{box-shadow:0 0 0 1px #f60 inset,0 0 0 2px #fff inset,4px 4px 4px rgba(0,0,0,.7) inset}
 #sb_peers_condensed span:not(.badge),#sb_tunnels_condensed span:not(.badge){display:inline-block;position:relative;margin:0;width:100%;height:19px}
-#sb_peers_condensed .badge,#sb_tunnels_condensed .badge{margin:0;padding:1px 3px 2px;min-width:20px;position:absolute;right:-3px;top:-1px;left:auto;display:inline-block;line-height:1;text-align:center;font-weight:600;text-shadow: 0 0 2px rgba(255,255,255,.5),1px 1px 1px rgba(255,255,255,.8);border-radius:0 0 2px 0;background:rgba(228,228,255,.45);pointer-events:none}
+#sb_peers_condensed .badge,#sb_tunnels_condensed .badge{margin:0;padding:1px 3px 2px;min-width:20px;position:absolute;right:-3px;top:-1px;left:auto;display:inline-block;line-height:1;text-align:center;font-weight:600;text-shadow:0 0 2px rgba(255,255,255,.5),1px 1px 1px rgba(255,255,255,.8);border-radius:0 0 2px 0;background:rgba(228,228,255,.45);pointer-events:none}
 #sb_peers_condensed .sb_icon:active .badge,#sb_tunnels_condensed .sb_icon:active .badge{background:none}
 .sb_icon#fast{background:var(--fast) no-repeat 25% center/19px,var(--btn)}
 .sb_icon#floodfill{background:var(--floodfill) no-repeat 25% center/19px,var(--btn)}
@@ -1319,12 +1319,13 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #view_profile td span{padding:3px 5px;position:absolute;bottom:0;right:0;display:inline-block;font-size:90%;border:1px solid var(--border_inner);border-radius:4px 0 0 0;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff 50%,#e2e2ff 50%);user-select:none}
 
 /* netdb */
-.netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch{margin:3px;width:14px;height:14px}
-.netdbentry .tunnel_cap,.netdbentry .tier,.netdbentry .ff,.netdbentry .reachable,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .tier,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{margin:0 2px 0;padding:1px 6px;line-height:1.5;vertical-align:middle}
-.netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch{margin:3px;width:14px;height:14px}
-.netdb_header .configpeer,.netdb_header .configpeer{margin-right:5px}
+span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry .ssuintro,.netdbentry .unreachable,.sybil_routerinfo .ff,.sybil_routerinfo .hidden,.sybil_routerinfo .reachable,.sybil_routerinfo .ssuintro,.sybil_routerinfo .unreachable,#capabilities_key b,#floodfills .hidden,#floodfills .reachable,#floodfills .ssuintro,#floodfills .tier,#floodfills .unreachable{margin:2px;padding:1px 0;min-width:28px;display:inline-block;box-sizing:border-box;text-align:center;text-transform:none;font-weight:700;color:#4a415e;text-shadow:0 1px 1px #fff;border:1px solid #bbc;box-shadow:var(--highlight);background:var(--tier)}
 .confignav+.netdbentry,.infowarn+.netdbentry{margin-top:10px}
-#floodfills .ssuintro,#floodfills .unreachable,#floodfills .reachable,#floodfills .hidden,#floodfills .tier,#capabilities_key b,span.tier,.netdbentry .ff,.netdbentry .ssuintro,.netdbentry .unreachable,.netdbentry .reachable,.netdbentry .hidden,.sybil_routerinfo .ff,.sybil_routerinfo .ssuintro,.sybil_routerinfo .unreachable,.sybil_routerinfo .reachable,.sybil_routerinfo .hidden{margin:2px;padding:1px 0;min-width:24px;display:inline-block;box-sizing:border-box;text-align:center;text-transform:none;font-weight:700;color:#4a415e;text-shadow:0 1px 1px #fff;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--tier)}
+.netdbentry .ff,.netdbentry .reachable,.netdbentry .tier,.netdbentry .tunnel_cap,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .tier,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{margin:0 2px 0;padding:1px 6px;vertical-align:middle;line-height:1.5}
+.netdbentry .version{margin-left:-1px}
+.netdb_header .configpeer,.netdb_header .familysearch,.netdb_header .viewprofile{margin:3px;width:14px;height:14px}
+.netdb_header .configpeer{margin-right:5px}
+.netdb_header .viewprofile{margin-right:9px}
 .tier.isD{background:var(--isD),var(--tier)}
 .tier.isE{background:var(--isE),var(--tier)}
 .tier.isG{background:var(--isG),var(--tier)}
@@ -2624,7 +2625,7 @@ h4#updateplugins,#news p{font-size:10pt}
 .log_omitted{margin-right:1px}
 .main,#news.news,h1,.sorry{margin-left:252px}
 .netdb_header .peerFlag{transform:translateY(1px)}
-.netdb_header img[src^="/flags"]{width: 32px}
+.netdb_header img[src^="/flags"]{width:32px}
 .newsAuthor{padding:0 0 0 14px;font-size:9.5pt;background-size:12px;background-position:left center}
 .percentBarOuter{width:232px}
 .percentBarText{margin-top:-1px}
