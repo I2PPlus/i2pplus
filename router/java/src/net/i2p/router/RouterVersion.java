@@ -18,15 +18,13 @@ public class RouterVersion {
     /** deprecated */
     public final static String ID = "Git";
     public final static String VERSION = CoreVersion.VERSION;
-    public final static long BUILD = 16;
+    public final static long BUILD = 0;
 
     /** for example "-test" */
     public final static String EXTRA = "+";
     public final static String FULL_VERSION = VERSION + "-" + BUILD + EXTRA;
     public static void main(String args[]) {
         System.out.println("I2P+ Router version: " + FULL_VERSION);
-//        System.out.println("Router ID: " + RouterVersion.ID);
         System.out.println("I2P+ Core version: " + CoreVersion.VERSION + EXTRA);
-//        System.out.println("Core ID: " + CoreVersion.ID);
     }
 }
