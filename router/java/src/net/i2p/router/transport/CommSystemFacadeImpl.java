@@ -763,13 +763,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                         buf.append(" &bullet; ").append(ip);
                     }
                 }
-                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
+                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\" loading=lazy></a>");
             } else {
                 buf.append("<img width=20 height=15 alt=\"??\"" +
                            " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
                 if (ri != null && ip != null)
                     buf.append(" &bullet; ").append(ip);
-                buf.append("\">");
+                buf.append("\" loading=lazy>");
             }
             buf.append("</td><td class=rih>");
             if (ri != null) {
@@ -907,7 +907,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             buf.append("\">");
             if (c != "a0" && c != null) {
                 buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=18 alt=\"")
-                   .append(c.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
+                   .append(c.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=").append(c).append("\" loading=lazy></a>");
             } else {
                 buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"")
                    .append(" src=\"/flags.jsp?c=a0\">");
@@ -915,7 +915,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             buf.append("</span>");
         } else {
             buf.append(_t("unknown")).append("\"><img class=unknownflag width=24 height=18 alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\">");
+                       " src=\"/flags.jsp?c=a0\" loading=lazy>");
         }
         buf.append("</span>");
         return buf.toString();
