@@ -1148,7 +1148,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .peerFlag::before{display:inline-block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:20;width:100%;border-radius:3px;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(0,0,0,.2));content:"";pointer-events:none}
 .netdb_header .peerFlag,.netdb_header .peerFlag img{border-radius:3px}
 .netdb_header .peerFlag::before{width:calc(100% - 3px);height:calc(100% + 2px);top:-2px;left:2px;bottom:-2px;right:2px}
-.routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
+.routerHash{display:inline-block;vertical-align:middle;letter-spacing:.1em;font-family:var(--monospaced)}
 .rlookup{padding:0 2px;display:inline-block;vertical-align:middle;line-height:1.3;font-style:italic}
 #tunnels .cc{display:none}
 #tunnels .peerFlag{margin:0;width:26px;height:20px;border-radius:3px;box-shadow:0 0 0 1px #bbc;background:#ddf}
@@ -1180,6 +1180,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #tunnelPeerCount td:first-child{width:1%}
 #tunnelPeerCount td:nth-child(5) a{white-space:normal;word-break:break-all}
 #tunnelPeerCount .version,#tunnelPeerCount .routerHash{vertical-align:middle;line-height:1.3}
+#tunnelPeerCount .version,#tunnelPeerCount .routerHash,#tunnelPeerCount .ric{margin:1px 0 -1px}
 #tunnelPeerCount th:first-child::before,#transitSummary th:first-child::before{width:12px;height:10px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center/10px;content:""}
 #tunnelPeerCount th:first-child,#transitSummary th:first-child{font-size:0}
 #tunnels #tunnelPeerCount td.bar{width:5%}
