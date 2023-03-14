@@ -174,7 +174,7 @@ a .sort:hover,a:focus .sort{opacity:1;border:1px solid var(--hover);background:v
 img.sort:active{box-shadow:var(--highlight),inset 2px 2px 2px #999}
 .sort.selected,.sort.selected:active{box-shadow:inset 1px 1px 1px #bbb;opacity:.8;mix-blend-mode:luminosity}
 input[type="file"]{background:none;font-size:9pt;padding:5px 0;max-width:400px}
-input[type=text],input[type=password],textarea{padding:5px;background:#fbfbff;box-shadow:inset 1px 1px 1px rgba(204,204,204,.6);border:1px solid #9ea8d1;border-radius:2px;color:var(--ink);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+input[type=text],input[type=password],textarea{padding:5px;font-weight:700;color:var(--ink);border:1px solid #9ea8d1;border-radius:2px;box-shadow:inset 1px 1px 1px rgba(204,204,204,.6);background:#fbfbff;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 input[type=text]:focus,input[type=password]:focus,textarea:focus{color:var(--ink_darker);box-shadow:0 0 1px #89f;background:#fff;border:1px solid #676c7f}
 input[type=text][disabled]{opacity:1;background:#e9e9e9;background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.3) 3px,#fafaff 4px),#fafaff;color:#4d4d5f;filter:none}
 textarea{font-family:var(--monospaced);font-size:9pt}
@@ -205,7 +205,7 @@ div.pagenav{border-top:1px solid #555;padding:10px 5px 0;font-size:9.5pt;border-
 .iframed #dologin{width:70%;max-width:600px;min-width:500px}
 
 /* configuration */
-textarea[name="config_text"]{margin-bottom:15px;resize:none;height:310px;scrollbar-color:#779 #fff}
+textarea[name="config_text"]{margin-bottom:15px;resize:none;height:310px;font-weight:500;scrollbar-color:#779 #fff}
 h3#config{margin:0 0 20px;padding:10px;text-align:center;text-transform:uppercase;font-size:11pt;letter-spacing:.08em;word-spacing:.1em;border-bottom:1px solid var(--border_inner);box-shadow:var(--highlight);text-shadow:0 1px 1px #fff;background:#fafaff;background:linear-gradient(90deg,rgba(240,240,255,.1),rgba(252,252,252,.5),rgba(240,240,255,.1)),linear-gradient(180deg,#fafaff 50%,#f2f2ff 50%)}
 #prefsave{margin-top:4px;padding-top:10px;padding-bottom:10px;border-top:1px solid var(--border_inner);background:#f6f6ff;box-shadow:var(--highlight)}
 .iframed #prefsave{padding-bottom:9px}
