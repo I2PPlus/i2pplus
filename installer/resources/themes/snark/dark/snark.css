@@ -410,8 +410,8 @@ td .commentAuthorName{margin:0 0 0 4px;padding:0 4px 0 22px;min-width:120px;max-
 #commentInfo tr:nth-child(odd),#userComments tr:nth-child(even){border-top:1px solid #000;background:rgba(0,32,0,.9)}
 #commentInfo th input[type=checkbox]{margin-left:4px;margin-right:4px}
 #commentInfo th input[type=submit]{float:none;display:inline-block;vertical-align:middle}
-#commentInfo th{padding:2px 5px 2px 30px;text-align:left;background:var(--comment) no-repeat 8px center/14px,var(--th)}
 #commentInfo th,#userComments th{padding:8px 5px;white-space:normal}
+#commentInfo th{padding:2px 5px 2px 30px;text-align:left;background:var(--comment) no-repeat 8px center/14px,var(--th)}
 #commentInfo td,#userComments td{padding:8px 5px}
 #commentInfo td.commentAction{padding:10px 6px 10px 10px;border-left:var(--border)}
 #commentInfo td:first-child,#userComments td:first-child{width:160px;min-width:160px}
@@ -425,6 +425,7 @@ td .commentAuthorName{margin:0 0 0 4px;padding:0 4px 0 22px;min-width:120px;max-
 #commentSection .commentDelete{padding:8px 6px 8px 24px;text-align:left;background:var(--nuke) no-repeat 2px center;background-size:16px}
 #metacomment{padding:0;line-height:1.4;text-align:justify}
 #metacomment .commentWrapper{margin:5px 4px}
+.commentText .commentWrapper{height:auto;resize:none}
 #myRating{border-top:var(--border);border-bottom:var(--border)}
 #myRating td:empty{padding:0;border-top:none;border-bottom:none;display:none}
 #myRating td:empty::after{min-height:1px}

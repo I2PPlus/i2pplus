@@ -54,7 +54,7 @@
 <ul>
 <li><code>http://stats.i2p/cgi-bin/newhosts.txt</code></li>
 <li><code>http://reg.i2p/export/hosts.txt</code></li>
-<li><code>http://scanner.linuxfarm.i2p/hosts.txt</code></li>
+<!--<li><code>http://scanner.linuxfarm.i2p/hosts.txt</code></li>-->
 <li><code>http://notbob.i2p/hosts.txt</code></li>
 <li><code>http://skank.i2p/hosts.txt</code></li>
 </ul>
@@ -83,7 +83,7 @@
 
 <h3><%=intl._t("Most of the eepsites are down?")%></h3>
 
-<p><%=intl._t("If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> and <a href=http://scanner.linuxfarm.i2p/ target=_blank rel=noreferrer class=sitelink>http://scanner.linuxfarm.i2p</a>track active eepsites.")%></p>
+<p><%=intl._t("If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> tracks active eepsites.")%></p>
 
 <h3><%=intl._t("Where are my I2P configuration files stored?")%></h3>
 

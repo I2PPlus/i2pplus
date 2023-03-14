@@ -339,20 +339,20 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     public void gotToken(long token, long expires) {
         if (_log.shouldDebug())
-            _log.debug("Got token: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
+            _log.debug("[SSU2] Received token: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
     }
 
     public void gotI2NP(I2NPMessage msg) {
-        throw new IllegalStateException("I2NP in Sess Created");
+        throw new IllegalStateException("I2NP in SessionCreated");
     }
 
     public void gotFragment(byte[] data, int off, int len, long messageId,int frag, boolean isLast) throws DataFormatException {
-        throw new DataFormatException("I2NP in Sess Created");
+        throw new DataFormatException("I2NP in SessionCreated");
     }
 
     public void gotACK(long ackThru, int acks, byte[] ranges) {
-        throw new IllegalStateException("ACK in Sess Created");
+        throw new IllegalStateException("ACK in SessionCreated");
     }
 
     public void gotTermination(int reason, long count) {
@@ -386,7 +386,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                     _context.clock().setOffset(0 - skew, true);
                     if (skew != 0)
                         _log.logAlways(Log.WARN, "NTP failure, SSU2 adjusted clock by " + skewString +
-                                                 " source router: " + bob.toBase64());
+                                                 " -> Source Router [" + bob.toBase64().substring(0,6) + "]");
 
                     if (!_context.clock().getUpdatedSuccessfully()) {
                         // clock update was either rejected or is pending.
@@ -561,7 +561,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             _currentState != OutboundState.OB_STATE_REQUEST_SENT) {
             // not fatal
             if (_log.shouldWarn())
-                _log.warn("Got out-of-order Retry with token " + token + " on: " + this);
+                _log.warn("Received out-of-order Retry with token " + token + " on: " + this);
             // retransmit session request, rate limit
             _nextSend = Math.max(_context.clock().now(), _lastSend + 750);
             return;
@@ -577,7 +577,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         //    throw new GeneralSecurityException("No Address block in Retry");
         createNewState(_routerAddress);
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received a retry token " + token + "\n* " + this);
+            _log.debug("[SSU2] Received a RetryToken " + token + "\n* " + this);
         _currentState = OutboundState.OB_STATE_RETRY_RECEIVED;
     }
 
@@ -590,7 +590,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                 byte data[] = pkt.getData();
                 int off = pkt.getOffset();
                 int len = pkt.getLength();
-                _log.debug("Session create error, State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
+                _log.debug("SessionCreate error - state at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
             }
             // fail inside synch rather than have Est. Mgr. do it to prevent races
             fail();
@@ -606,11 +606,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             _currentState != OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN) {
             // ignore dups
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Invalid state for session created: " + this);
+                _log.warn("[SSU2] Invalid state for SessionCreated: " + this);
             return;
         }
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received a session created on " + this);
+            _log.debug("[SSU2] Received a SessionCreated on " + this);
 
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
@@ -642,10 +642,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             return;
         }
         if (_timeReceived == 0)
-            throw new GeneralSecurityException("No DateTime block in Session Created");
+            throw new GeneralSecurityException("No DateTime block in SessionCreated");
         // EstablishmentManager.sendConfirmation() will validate IP but expects it non-null
         if (_aliceIP == null)
-            throw new GeneralSecurityException("No Address block in Session Created");
+            throw new GeneralSecurityException("No address block in SessionCreated");
         // _nextSend is now(), from packetReceived()
         if (_requestSentCount == 1)
             _rtt = (int) (_nextSend - _requestSentTime);
@@ -659,13 +659,13 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                 String skewString = DataHelper.formatDuration(Math.abs(_skew));
                 Hash bob = _remotePeer.calculateHash();
                 _log.logAlways(Log.WARN, "NTP failure, SSU2 adjusted clock by " + skewString +
-                                         " source router: " + bob.toBase64());
+                                         " source Router [" + bob.toBase64().substring(0,6) + "]");
             }
         }
         // Unlikely, we would have gotten a termination from him and failed already,
         // unless our skew limit is stricter than bob's.
         if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW)
-            throw new GeneralSecurityException("Skew exceeded in Session Created: " + _skew);
+            throw new GeneralSecurityException("Skew exceeded in SessionCreated: " + _skew);
         _sessReqForReTX = null;
         _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessionConfirmed");
 
@@ -730,7 +730,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                 System.arraycopy(data, off, save, 0, len);
                 _sessConfForReTX[i] = save;
                 if (_log.shouldDebug())
-                    _log.debug("Sess conf pkt " + i + '/' + packets.length + " bytes: " + len);
+                    _log.debug("SessionConfirmed packet " + i + '/' + packets.length + " bytes: " + len);
             }
             if (_rcvHeaderEncryptKey2 == null)
                 _rcvHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
@@ -849,7 +849,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             old = _introducers.put(h, state);
         }
         if (old != state && _log.shouldDebug())
-            _log.debug("Change state for introducer " + h.toBase64() + " from " + old + " to " + state + " on " + this);
+            _log.debug("Change state for Introducer [" + h.toBase64().substring(0,6) + "] from " + old + " to " + state + " on " + this);
     }
 
     /**

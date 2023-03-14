@@ -649,6 +649,7 @@ td .commentAuthorName{margin:0 4px 0 4px;padding:0 4px 0 22px;min-width:126px;ma
 .commentText{white-space:normal;text-align:left;width:90%}
 .commentText:empty + .commentDelete{background:none}
 .commentWrapper{border:var(--border_hard);margin:2px 0;padding:8px 10px 8px 26px;height:28px;max-height:300px;overflow:auto;resize:vertical;white-space:normal;border-radius:3px;box-shadow:inset 0 0 0 1px #515,0 0 1px 0 rgba(0,0,0,.3);background:#303 var(--comment) no-repeat 6px center/16px;background-blend-mode:luminosity}
+.commentText .commentWrapper{height:auto;resize:none}
 .commentAction,.commentDelete{padding-left:1px;width:1%;white-space:nowrap}
 .addCommentText,.commentText{padding-right:0}
 .commentAction input[type=submit]{margin:8px}

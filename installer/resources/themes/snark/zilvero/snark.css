@@ -463,6 +463,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 .commentRating{width:1%;white-space:nowrap}
 .commentText .commentWrapper{margin:5px 0}
 .commentWrapper{margin:6px;padding:9px 10px 10px;height:28px;max-height:300px;overflow:auto;resize:vertical;box-shadow:0 0 0 1px #ccc,inset 0 0 0 1px #f2f2f2;background:#ddd}
+.commentText .commentWrapper{height:auto;resize:none}
 .newTab{margin:1px 4px -2px;float:right}
 .snarkCommented{display:inline-block;position:absolute;top:-3px;right:0;z-index:20;line-height:0;font-size:0}
 .snarkCommented img{padding:0;height:9px;width:auto}

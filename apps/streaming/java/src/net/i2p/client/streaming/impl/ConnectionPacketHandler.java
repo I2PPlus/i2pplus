@@ -147,13 +147,13 @@ class ConnectionPacketHandler {
             if (con.getInputStream().isLocallyClosed()) {
                 if (_log.shouldWarn())
                     _log.warn("More data received after local close on " + con +
-                              "- sending reset and dropping " + packet);
+                              " -> Sending reset and dropping " + packet);
                 // the following will send a RESET
                 con.disconnect(false);
             } else {
                 if (_log.shouldWarn())
                     _log.warn("Inbound buffer exceeded on " + con +
-                              "- choking and dropping " + packet);
+                              " -> Choking and dropping " + packet);
                 // this will call ackImmediately()
                 con.setChoking(true);
                 // TODO we could still process the acks for this packet before discarding

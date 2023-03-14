@@ -284,7 +284,7 @@ public class OutNetMessage implements CDPQEntry {
     /**
      * As of 0.9.55, returns the previous number of failed transports.
      */
-    public synchronized int transportFailed(String transportStyle) { 
+    public synchronized int transportFailed(String transportStyle) {
         int rv;
         if (_failedTransports == null) {
             _failedTransports = new ArrayList<String>(2);
@@ -299,15 +299,15 @@ public class OutNetMessage implements CDPQEntry {
     /**
      * @since 0.9.55
      */
-    public synchronized int getFailedTransportCount() { 
-        return (_failedTransports == null ? 0 : _failedTransports.size()); 
+    public synchronized int getFailedTransportCount() {
+        return (_failedTransports == null ? 0 : _failedTransports.size());
     }
 
     /**
      * As of 0.9.55, changed from a Set to a List
      */
-    public synchronized List<String> getFailedTransports() { 
-        return (_failedTransports == null ? Collections.<String>emptyList() : _failedTransports); 
+    public synchronized List<String> getFailedTransports() {
+        return (_failedTransports == null ? Collections.<String>emptyList() : _failedTransports);
     }
 
     /** when did the sending process begin */

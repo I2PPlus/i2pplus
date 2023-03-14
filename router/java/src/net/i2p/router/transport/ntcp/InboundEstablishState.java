@@ -188,7 +188,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         byte[] ip = _con.getRemoteIP();
         if (_context.banlist().isBanlistedForever(aliceHash) || _context.banlist().isBanlistedHostile(aliceHash)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping inbound connection from " + (_context.banlist().isBanlistedForever(aliceHash) ?
+                _log.warn("Dropping Inbound connection from " + (_context.banlist().isBanlistedForever(aliceHash) ?
                           "permanently" : "") + " banlisted peer at " + Addresses.toString(ip) +
                           " [" + aliceHash.toBase64().substring(0,6) + "]");
             // So next time we will not accept the con from this IP,
@@ -223,7 +223,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _peerSkew = 0;
             if (diff != 0)
                 _log.logAlways(Log.WARN, "NTP failure, NTCP adjusted clock by " + DataHelper.formatDuration(diff) +
-                                         " source router: " + aliceHash.toBase64());
+                                         " -> Source Router [" + aliceHash.toBase64().substring(0,6) + "]");
         } else if (!skewOK) {
             // Only banlist if we know what time it is
             _context.banlist().banlistRouter(DataHelper.formatDuration(diff),
@@ -255,7 +255,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         if (!rv) {
             Hash aliceHash = alice.getHash();
             if (_log.shouldWarn())
-                _log.warn("Dropping inbound connection from wrong network: " + aliceID + " [" + aliceHash + "]");
+                _log.warn("Dropping Inbound connection (wrong network identifier): " + aliceID + " [" + aliceHash + "]");
             // So next time we will not accept the con from this IP,
             // rather than doing the whole handshake
             byte[] ip = _con.getRemoteIP();
@@ -365,7 +365,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 byte[] ip = _con.getRemoteIP();
                 if (ip != null) {
                     if (_log.shouldWarn())
-                        _log.warn("Dropping inbound connection from wrong network: " + Addresses.toString(ip));
+                        _log.warn("Dropping Inbound connection (wrong network identifier): " + Addresses.toString(ip));
                     // So next time we will not accept the con from this IP
                     _context.blocklist().add(ip);
                 }
