@@ -61,6 +61,17 @@ public abstract class SystemVersion {
     private static final boolean _oneDotNine;
     private static final boolean _oneDotTen;
     private static final boolean _oneDotEleven;
+    private static final boolean _twelve;
+    private static final boolean _thirteen;
+    private static final boolean _fourteen;
+    private static final boolean _fifteen;
+    private static final boolean _sixteen;
+    private static final boolean _seventeen;
+    private static final boolean _eighteen;
+    private static final boolean _nineteen;
+    private static final boolean _twenty;
+    private static final boolean _twentyOne;
+    private static final boolean _twentyTwo;
     private static final int _androidSDK;
 
     /** @since 0.9.55+ */
@@ -114,6 +125,17 @@ public abstract class SystemVersion {
             _oneDotNine = false;
             _oneDotTen = false;
             _oneDotEleven = false;
+            _twelve = false;
+            _thirteen = false;
+            _fourteen = false;
+            _fifteen = false;
+            _sixteen = false;
+            _seventeen = false;
+            _eighteen = false;
+            _nineteen = false;
+            _twenty = false;
+            _twentyOne = false;
+            _twentyTwo = false;
         } else {
             String version = System.getProperty("java.version");
             // handle versions like "8-ea" or "9-internal"
@@ -126,6 +148,17 @@ public abstract class SystemVersion {
             // Starting 2018, versions are YY.M, this works for that also
             _oneDotTen = _oneDotNine && VersionComparator.comp(version, "1.10") >= 0;
             _oneDotEleven = _oneDotTen && VersionComparator.comp(version, "1.11") >= 0;
+            _twelve = _oneDotEleven && VersionComparator.comp(version, "12.0") >= 0;
+            _thirteen = _twelve && VersionComparator.comp(version, "13.0") >= 0;
+            _fourteen = _thirteen && VersionComparator.comp(version, "14.0") >= 0;
+            _fifteen = _fourteen && VersionComparator.comp(version, "15.0") >= 0;
+            _sixteen = _fifteen && VersionComparator.comp(version, "16.0") >= 0;
+            _seventeen = _sixteen && VersionComparator.comp(version, "17.0") >= 0;
+            _eighteen = _seventeen && VersionComparator.comp(version, "18.0") >= 0;
+            _nineteen = _eighteen && VersionComparator.comp(version, "19.0") >= 0;
+            _twenty = _nineteen && VersionComparator.comp(version, "20.0") >= 0;
+            _twentyOne = _twenty && VersionComparator.comp(version, "21.0") >= 0;
+            _twentyTwo = _twentyOne && VersionComparator.comp(version, "22.0") >= 0;
         }
     }
 
@@ -140,19 +173,19 @@ public abstract class SystemVersion {
      */
     public static String getOS() {
         if (isWindows())
-            return "windows";
+            return "Windows";
         if (isMac())
-            return "mac";
+            return "Apple";
         if (isGNU())
-            return "linux"; /* actually... */
+            return "Linux"; /* actually... */
         if (isLinuxService())
-            return "linux";
+            return "Linux (Service)";
         if (isAndroid())
-            return "android";
+            return "Android";
         /** Everybody else knows if they're on a Windows machine or a
          * Mac, so for now, assume linux here.
          */
-        return "linux";
+        return "Linux";
     }
 
     /**
@@ -167,12 +200,12 @@ public abstract class SystemVersion {
     public static String getArch() {
         if (is64Bit()){
             if (isARM())
-                return "arm64";
+                return "ARM64";
             if (isX86())
-                return "amd64";
+                return "AMD64";
         }
         if (isARM())
-            return "arm";
+            return "ARM";
         if (isX86())
             return "386";
         return "unknown";
@@ -311,6 +344,105 @@ public abstract class SystemVersion {
      */
     public static boolean isJava11() {
         return _oneDotEleven;
+    }
+
+    /**
+     *
+     *  @return true if Java 12 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava12() {
+        return _twelve;
+    }
+
+    /**
+     *
+     *  @return true if Java 13 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava13() {
+        return _thirteen;
+    }
+
+    /**
+     *
+     *  @return true if Java 14 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava14() {
+        return _fourteen;
+    }
+
+    /**
+     *
+     *  @return true if Java 15 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava15() {
+        return _fifteen;
+    }
+
+    /**
+     *
+     *  @return true if Java 16 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava16() {
+        return _sixteen;
+    }
+
+    /**
+     *
+     *  @return true if Java 17 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava17() {
+        return _seventeen;
+    }
+
+    /**
+     *
+     *  @return true if Java 18 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava18() {
+        return _eighteen;
+    }
+
+    /**
+     *
+     *  @return true if Java 19 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava19() {
+        return _nineteen;
+    }
+
+    /**
+     *
+     *  @return true if Java 20 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava20() {
+        return _twenty;
+    }
+
+    /**
+     *
+     *  @return true if Java 21 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava21() {
+        return _twentyOne;
+    }
+
+    /**
+     *
+     *  @return true if Java 21 or higher, false for Android.
+     *  @since 0.9.59+
+     */
+    public static boolean isJava22() {
+        return _twentyTwo;
     }
 
     /**
@@ -479,34 +611,39 @@ public abstract class SystemVersion {
      *  @since 0.9.24
      */
     public static void main(String[] args) {
-        System.out.println("64 bit   : " + is64Bit());
-        System.out.println("Java 6   : " + isJava6());
-        System.out.println("Java 7   : " + isJava7());
-        System.out.println("Java 8   : " + isJava8());
-        System.out.println("Java 9   : " + isJava9());
-        System.out.println("Java 10  : " + isJava10());
-        System.out.println("Java 11  : " + isJava11());
-        for (int i = 12; i <= 17; i++) {
-            System.out.println("Java " + i + "  : " + isJava(i));
-        }
-        System.out.println("Android  : " + isAndroid());
-        if (isAndroid())
-            System.out.println("  Version: " + getAndroidVersion());
-        System.out.println("Apache   : " + isApache());
-        System.out.println("ARM      : " + isARM());
-        System.out.println("Cores    : " + getCores());
-        System.out.println("Gentoo   : " + isGentoo());
-        System.out.println("GNU      : " + isGNU());
-        System.out.println("Linux Svc: " + isLinuxService());
-        System.out.println("Mac      : " + isMac());
-        System.out.println("Max mem  : " + getMaxMemory());
-        System.out.println("OpenJDK  : " + isOpenJDK());
-        System.out.println("Slow     : " + isSlow());
-        System.out.println("Windows  : " + isWindows());
-        System.out.println("Win. Svc : " + isWindowsService());
-        System.out.println("Wrapper  : " + hasWrapper());
-        System.out.println("x86      : " + isX86());
-        System.out.println("Zero JVM : " + isZeroVM());
+        String jvm = isOpenJDK() ? "(OpenJDK)" : isZeroVM() ? "(Zero JVM)" : isApache() ? "(Apache)" : "";
+        if (isJava8())
+            System.out.println("Java 8 " + jvm);
+        else if (isJava9())
+            System.out.println("Java 9 " + jvm);
+        else if (isJava10())
+            System.out.println("Java 10 " + jvm);
+        else if (isJava11())
+            System.out.println("Java 11 " + jvm);
+        else if (isJava12())
+            System.out.println("Java 12 " + jvm);
+        else if (isJava13())
+            System.out.println("Java 13 " + jvm);
+        else if (isJava14())
+            System.out.println("Java 14 " + jvm);
+        else if (isJava15())
+            System.out.println("Java 15 " + jvm);
+        else if (isJava16())
+            System.out.println("Java 16 " + jvm);
+        else if (isJava17())
+            System.out.println("Java 17 " + jvm);
+        else if (isJava18())
+            System.out.println("Java 18 " + jvm);
+        else if (isJava19())
+            System.out.println("Java 19 " + jvm);
+        else if (isJava20())
+            System.out.println("Java 20 " + jvm);
+        else if (isJava21())
+            System.out.println("Java 21 " + jvm);
+        else if (isJava22())
+            System.out.println("Java 22 " + jvm);
+        System.out.println("Platform: " + getOS() + (is64Bit() ? " (64Bit)" : " (32Bit)"));
+        System.out.println("Cores / Max memory: " + getCores() + " / " + (getMaxMemory() / 1024 / 1024) + "KB");
         System.out.println("");
         System.out.println("System Properties:");
         TreeSet<String> keys = new TreeSet<String>(System.getProperties().stringPropertyNames());
@@ -517,8 +654,10 @@ public abstract class SystemVersion {
                     v = "\\n";
                 else if ("\r\n".equals(v))
                     v = "\\r\\n";
+            } else if (k.contains("user") || k.contains("vendor.url") || k.contains("printer")) {
+                continue;
             }
-            System.out.println(k + '=' + v);
+            System.out.println("  " + k + " = " + v);
         }
     }
 
