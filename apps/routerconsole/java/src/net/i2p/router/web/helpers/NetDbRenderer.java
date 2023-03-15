@@ -1241,6 +1241,7 @@ class NetDbRenderer {
         boolean hasD = DataHelper.stripHTML(info.getCapabilities()).contains("D");
         boolean hasE = DataHelper.stripHTML(info.getCapabilities()).contains("E");
         boolean hasG = DataHelper.stripHTML(info.getCapabilities()).contains("G");
+        boolean isU = DataHelper.stripHTML(info.getCapabilities()).contains("U");
         String caps = DataHelper.stripHTML(info.getCapabilities())
             .replace("XO", "X")
             .replace("PO", "P")
@@ -1252,9 +1253,6 @@ class NetDbRenderer {
             .replace("Pf", "fP")
             .replace("Xf", "fX")
             .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
-            .replace("B", "<a href=\"/netdb?caps=B\"><span class=testing>B</span></a>") // not shown?
-            .replace("C", "<a href=\"/netdb?caps=C\"><span class=ssuintro>C</span></a>") // not shown?
-            .replace("H", "<a href=\"/netdb?caps=H\"><span class=hidden>H</span></a>") // not shown?
             .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
             .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
             .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
@@ -1263,15 +1261,24 @@ class NetDbRenderer {
             .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
             .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
             .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
-            .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
-            .replace("\"><span", tooltip);
+            .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
         if (hasD) {
-            caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"");
+            if (isU)
+                caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "UD\"><span class");
+            else
+                caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "RD\"><span class");
         } else if (hasE) {
-            caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"");
+            if (isU)
+                caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "UE\"><span class");
+            else
+                caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "RE\"><span class");
         } else if (hasG) {
-            caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"");
+            if (isU)
+                caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "UG\"><span class");
+            else
+                caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "RG\"><span class");
         }
+        caps = caps.replace("\"><span", tooltip);
         buf.append(caps);
 /*
         if (info != null) {

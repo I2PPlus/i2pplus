@@ -277,13 +277,14 @@ class BuildHandler implements Runnable {
             }
 
             long now = _context.clock().now();
+            long uptime = _context.router().getUptime();
             long dropBefore = now - (BuildRequestor.REQUEST_TIMEOUT / 4);
             String PROP_MAX_TUNNELS = _context.getProperty("router.maxParticipatingTunnels");
             int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 2*1000 :
                                       SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
                                       SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
             int maxTunnels;
-            boolean highLoad = SystemVersion.getCPULoadAvg() > 90 && SystemVersion.getCPULoad() > 95;
+            boolean highLoad = SystemVersion.getCPULoadAvg() > 95 && SystemVersion.getCPULoad() > 95 && uptime > 5*60*1000;
             if (PROP_MAX_TUNNELS != null)
                 maxTunnels = Integer.valueOf(PROP_MAX_TUNNELS);
             else {
@@ -303,7 +304,7 @@ class BuildHandler implements Runnable {
             // TODO reject instead of drop also for a lower limit? see throttle
             if (lag > JOB_LAG_LIMIT_TUNNEL && maxTunnels > 0) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Dropping tunnel request due to job lag (" + lag + "ms)");
+                    _log.warn("Dropping tunnel request -> Job lag (" + lag + "ms)");
                     _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: High job lag").replace("requests: ", "requests:<br>"));
                 }
                 _context.statManager().addRateData("router.throttleTunnelCause", lag);
@@ -312,7 +313,7 @@ class BuildHandler implements Runnable {
 
             if (highLoad && maxTunnels > 0) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Dropping tunnel request due to high CPU load");
+                    _log.warn("Dropping tunnel request -> High CPU load");
                     _context.throttle().setTunnelStatus(_x("Dropping tunnel requests:<br>High CPU load"));
                 }
                 _context.statManager().addRateData("router.throttleTunnelCause", lag);

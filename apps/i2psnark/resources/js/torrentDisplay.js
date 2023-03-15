@@ -325,6 +325,7 @@ function refreshFilters() {
           if (pagenavResponse !== null && pagenav.innerHTML !== pagenavResponse.innerHTML) {pagenav.innerHTML = pagenavResponse.innerHTML;}
         }
         if (filterbar) {
+          initFilterBar();
           var filterbarResponse = xhrfilter.responseXML.getElementById("torrentDisplay");
           if (!filterbar && filterbarResponse !== null) {filterbar.outerHTML = filterbarResponse.outerHTML;}
         }
