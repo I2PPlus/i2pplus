@@ -3932,7 +3932,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String baseName = encodePath((new File(fullPath)).getName());
             MetaInfo meta = snark.getMetaInfo();
             buf.append("<div class=mainsection id=snarkInfo>");
-            buf.append("<table class=\"torrentInfo\" id=torrentInfo>\n");
+            buf.append("<table id=torrentInfo>\n");
             buf.append("<tr><th colspan=2>");
             toThemeImg(buf, "torrent");
             buf.append("<b>")

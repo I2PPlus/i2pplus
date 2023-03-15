@@ -14,7 +14,7 @@ select{padding-top:1px;padding-bottom:1px}
 .snarkNav{font-weight:700}
 th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,td.torrentDownloaded,td.torrentUploaded,td.RateDown,td.RateUp,.torrentName a:link,th#pagenav{font-size:10pt}
 .torrentDownloaded,th.torrentUploaded,.RateDown,th.RateUp,.percentBarComplete{font-weight:700}
-.torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
+#torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
 #configs input[name="nofilter_dataDir"],input[name="i2cpOpts"],input[name="nofilter_commentsName"]{width:calc(100% - 200px)}
 #configs td b{letter-spacing:.08em;min-width:180px}
 #configs td{line-height:2;padding-top:4px;padding-bottom:4px}
