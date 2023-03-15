@@ -1376,9 +1376,11 @@
         <copy todir="pkg-temp/lib/wrapper/linux-armv5/">
             <fileset dir="installer/lib/wrapper/linux-armv5/" excludes="*.txt" />
         </copy>
+        <!--
         <copy todir="pkg-temp/lib/wrapper/linux-armv6/">
             <fileset dir="installer/lib/wrapper/linux-armv6/" excludes="*.txt" />
         </copy>
+        -->
         <copy todir="pkg-temp/lib/wrapper/linux-armv7/">
             <fileset dir="installer/lib/wrapper/linux-armv7/" excludes="*.txt" />
         </copy>
