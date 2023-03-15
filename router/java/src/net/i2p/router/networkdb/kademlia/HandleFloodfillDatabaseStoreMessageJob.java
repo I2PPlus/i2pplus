@@ -372,8 +372,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     }
                     if (prevNetDb == null) {
                         if (!forever && getContext().blocklist().isBlocklisted(ri)) {
-                            if (_log.shouldWarn())
-                                _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]" + ri);
+                            if (_log.shouldInfo())
+                                _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "] \n" + ri);
+                            else if (_log.shouldWarn())
+                                _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]");
                             wasNew = false; // don't flood
                             shouldStore = false; // don't call heardAbout()
                         }
@@ -381,8 +383,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         Collection<RouterAddress> oldAddr = prevNetDb.getAddresses();
                         Collection<RouterAddress> newAddr = ri.getAddresses();
                         if ((!newAddr.equals(oldAddr)) && getContext().blocklist().isBlocklisted(ri)) {
-                            if (_log.shouldWarn())
-                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "]" + ri);
+                            if (_log.shouldInfo())
+                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "] \n" + ri);
+                            else if (_log.shouldWarn())
+                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "]");
                             wasNew = false; // don't flood
                             shouldStore = false; // don't call heardAbout()
                         }
