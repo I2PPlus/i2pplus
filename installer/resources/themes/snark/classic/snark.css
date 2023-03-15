@@ -694,7 +694,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 #commentstoggle input{margin-left:4px;margin-right:0;display:inline-block}
 th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
 #metacomment{padding:0;line-height:1.4;text-align:justify}
-#metacomment div{padding:0 4px;max-height:80px;overflow-y:auto}
+#metacomment div{padding:0 4px;overflow-y:auto}
 .iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-6px}
 .iframed #torrentInfoControl td{border-left:none;border-right:none}
 
