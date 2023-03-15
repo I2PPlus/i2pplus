@@ -1291,11 +1291,14 @@
         </copy>
         <!--
              Force using the new wrapper.jar.
-             The new jar with the old windows binaries will output a warning on windows.
+             The new jar with the old Windows binaries will *fail to work* on windows, so we'll copy
+             the correct version of the wrapper.jar file for windows and rename it so the user can
+             use it to replace the existing wrapper.jar file.
              We do not generate release files from this target.
              See preppkg-windows-only target below.
         -->
         <copy overwrite="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib" />
+        <copy file="installer/lib/wrapper/win-all/wrapper.jar" tofile="pkg-temp/lib/wrapper-windows.jar" />
     </target>
 
     <target name="preppkg-nowindows" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, jbigi-nowindows">
