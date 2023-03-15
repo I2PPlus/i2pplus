@@ -406,6 +406,7 @@ public class NetDbHelper extends FormHandler {
     private void renderLookupForm() throws IOException {
         _out.write("<form action=\"/netdb\" method=POST>\n" +
                    "<input type=hidden name=\"nonce\" value=\"" + _newNonce + "\" >\n" +
+/*
                    "<div id=lookupCondensed hidden>" +
                    "<select name=\"netdbLookup\">" +
                    "<option value=\"caps\" selected=selected>Capabilities</option>" +
@@ -422,7 +423,7 @@ public class NetDbHelper extends FormHandler {
                    "<option value=\"v\">Router Version</option>" +
                    "</select>" +
                    "<input type=text size=30></div>" +
-
+*/
                    "<table id=netdblookup><tr><th colspan=4>Network Database Search</th></tr>\n" +
                    "<tr><td colspan=4 class=subheading><b>Enter one search field <i>only</i></b></td></tr>\n" +
                    "<tr><td><b>Capabilities</b></td><td><input type=text name=\"caps\" title=\"e.g. f or XOfR\"></td>\n" +
@@ -446,21 +447,18 @@ public class NetDbHelper extends FormHandler {
                    "<tr><td><b>IPv6 Prefix</b></td><td><input type=text name=\"ipv6\"></td>\n" +
                    "<td><b>MTU</b></td><td><input type=text name=\"mtu\"></td></tr>\n" +
                    "<tr><td><b>Single port or range</b></td><td><input type=text name=\"port\"></td>\n" +
-                   //"<td><b>Signature Type</b></td><td><input type=text name=\"type\"></td></tr>\n" +
                    "<td><b>Signature Type</b></td><td><select name=\"type\"><option value=\"\" selected=selected></option>");
         for (SigType type : EnumSet.allOf(SigType.class)) {
             _out.write("<option value=\"" + type + "\">" + type + "</option>\n");
         }
         _out.write("</select></td></tr>\n" +
                    "<tr><td><b>SSU Capabilities</b></td><td><input type=text name=\"ssucaps\"></td>\n" +
-                   //"<td><b>Encryption Type</b></td><td><input type=text name=\"etype\"></td></tr>\n" +
                    "<td><b>Encryption Type</b></td><td><select name=\"etype\"><option value=\"\" selected=selected></option>");
         for (EncType type : EnumSet.allOf(EncType.class)) {
             _out.write("<option value=\"" + type + "\">" + type + "</option>\n");
         }
         _out.write("</select></td></tr>\n" +
                    "<tr><td><b>Router Version</b></td><td><input type=text name=\"v\"></td>\n" +
-                   //"<td><b>Transport</b></td><td><input type=text name=\"tr\" title=\"e.g. SSU or NTCP2\"></td></tr>\n" +
                    "<td><b>Transport</b></td><td><select name=\"tr\"><option value=\"\" selected=selected>" +
                    "<option value=\"NTCP\">NTCP</option>\n" +
                    "<option value=\"NTCP2\">NTCP2</option>\n" +
