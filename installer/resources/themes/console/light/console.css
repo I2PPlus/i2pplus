@@ -2295,6 +2295,8 @@ table#consolepass input[name="name"]{margin-right:20px}
 #help code,#webhosting i{font-weight:700}
 
 /* router widgets */
+.ric{background:var(--badge)}
+.ric .rbw{line-height:1.05}
 .rid,.rid td,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);box-shadow:var(--highlight)}
 .rid{width:unset}
 .rid td,#profilelist .rid td{font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight);background:var(--badge)}
@@ -2316,8 +2318,6 @@ table#consolepass input[name="name"]{margin-right:20px}
 .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
 #topCount .rbw#ff{background:linear-gradient(135deg,rgba(0,0,0,0) 90%,rgba(192,80,0,.8)90%),var(--badge)}
 #topCount .rbw#u{background:linear-gradient(45deg,rgba(0,0,0,0)87%,rgba(192,0,0,.8)87%),var(--badge)}
-.ric{background:var(--badge)}
-.ric .rbw{line-height:1.05}
 #banlist li .rid{margin-right:5px;margin-left:-2px;float:left}
 
 /* iframe */
