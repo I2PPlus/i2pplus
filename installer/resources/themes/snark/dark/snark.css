@@ -688,7 +688,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 .iframed #configSection{border-radius:0 0 4px 4px}
 #mainsection+#lowersection>#configSection{margin-top:-1px}
 #mainsection+#lowersection #createSection+#configSection{margin-top:-11px;padding-bottom:14px}
-#navbar,#createSection,#addSection,#configSection,.configPanel,.optionlist,.routerdown{box-shadow:var(--highlight),inset 0 0 1px 1px #252}
+#navbar,#createSection,#addSection,#configSection,.configPanel,.optionlist{box-shadow:var(--highlight),0 0 2px 1px #252 inset}
 
 /* torrent edit */
 #addCommentText{padding:18px 20px;text-align:center;border-bottom:var(--border)}
@@ -734,8 +734,8 @@ input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,
 #tab_torrentedit .tab_label::after{background:var(--edit) no-repeat scroll center center/16px,var(--tabIcon)}
 
 /* router down */
-.routerdown{padding:15px;font-size:120%;text-shadow:0 0 1px #000;border-bottom:var(--border);background:repeating-linear-gradient(90deg,rgba(0,80,0,.1) 1px,rgba(0,16,0,.3) 2px,rgba(0,16,0,.3) 3px),repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px,rgba(0,16,0,.5) 2px,rgba(0,16,0,.5) 3px),url(/themes/console/dark/images/camotile2.png) repeat top left}
-.routerdown::after{width:40px;height:40px;display:inline-block;background:var(--offline) no-repeat center center/40px;content:"";animation:linear spin 5s reverse infinite}
+.routerdown{padding:15px;font-size:120%;text-shadow:0 0 1px #000;border-bottom:var(--border);box-shadow:var(--highlight),0 0 2px 1px #070 inset,0 0 2px 2px #900 inset;background:repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px,rgba(16,48,16,.5) 4px) repeat center center/4px 4px,url(/themes/console/dark/images/camotile2.png) repeat top left}
+.routerdown::after{width:40px;height:40px;display:inline-block;vertical-align:middle;background:var(--offline) no-repeat center center/40px;content:"";animation:linear spin 5s reverse infinite}
 .routerdown span{display:none}
 
 /* inline notifications */
