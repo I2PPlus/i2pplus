@@ -270,7 +270,7 @@ td.trackerLink{text-align:right}
 #torrentInfo{margin-bottom:0;border-bottom:var(--border);background:var(--bg3)}
 #torrentInfo th:first-child img,#torrentInfoStats img,#trackers img{margin:-1px 4px 0 5px;max-height:16px;display:inline-block;vertical-align:middle}
 #torrentInfo th{padding:4px;text-align:left;border-top:none}
-#torrentInfo th,#torrentInfo td,#torrentInfo td:first-child{padding:8px 4px;line-height:1.6;vertical-align:middle}
+#torrentInfo th,#torrentInfo td,#torrentInfo td:first-child{padding:8px 4px;line-height:1.6;vertical-align:middle;border-bottom: var(--border_soft)}
 #torrentInfo th:last-child{padding-right:8px;width:1%;white-space:nowrap;text-align:right}
 #torrentInfo td{text-align:left}
 #torrentInfo tr:nth-child(odd){background:var(--bg)}
@@ -279,6 +279,8 @@ td.trackerLink{text-align:right}
 #torrentInfo tr:last-child td{background:var(--bg)}
 #torrentInfo tr:last-child td:last-child b{text-align:left}
 #torrentInfo input[type=submit]{min-width:60px;text-align:center}
+#torrentInfo #metacomment{padding:0;line-height:1.4;text-align:justify}
+#torrentInfo #metacomment .commentWrapper{padding:8px 12px;overflow-y:auto;min-height:40px;max-height:300px}
 #torrentInfoStats img[src$="head_tx.png"],#torrentInfoStats img[src$="head_rx.png"]{margin:0 2px}
 #torrentInfoControl td{padding:7px 3px 7px 8px;text-align:left;border-top:var(--border);background:var(--th)}
 #torrentOrderControl{float:right}
@@ -390,6 +392,7 @@ tr:hover .txBarInner{background:linear-gradient(180deg,#efe,#dfd)}
 .configTitle a:hover,.configTitle a:focus,.toggleview:hover,.toggleview:hover .tab_label,.toggleview:focus,.toggleview:focus .tab_label{color:var(--hover);text-shadow:none;transition:ease box-shadow .05s}
 .configTitle a:active,input:active + .toggleview{color:#f90}
 .configPanel > .snarkConfig{font-size:10pt;width:100%;padding-top:0}
+#tab_files{margin-top:-4px}
 
 #createSection td:first-child,#addSection td:first-child{padding-right:5px;padding-left:5px;width:120px;white-space:nowrap;font-weight:700}
 #createSection td:nth-child(n+2),#addSection td:nth-child(n+2){text-align:left}
@@ -693,8 +696,6 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 #commentstoggle{margin-left:10px;display:inline-block;vertical-align:middle}
 #commentstoggle input{margin-left:4px;margin-right:0;display:inline-block}
 th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
-#metacomment{padding:0;line-height:1.4;text-align:justify}
-#metacomment div{padding:0 4px;overflow-y:auto}
 .iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-6px}
 .iframed #torrentInfoControl td{border-left:none;border-right:none}
 
