@@ -57,7 +57,6 @@ table{margin:0 0 10px 0;padding:0;width:100%;color:#323;border:none;border-spaci
 thead,tfoot{background:#101}
 th{padding:4px 2px 4px 4px;letter-spacing:0;font-size:8pt;color:#ddd;border-top:var(--border_hard);border-bottom:var(--border_hard)}
 thead th,#torrentInfo th,#torrentEdit th{background:var(--th)}
-th .infohash{vertical-align:middle;font-size:9pt}
 th:first-child{padding-left:2px;text-align:left}
 thead img{margin:0 2px;padding:0;max-height:22px;vertical-align:middle;border:1px solid transparent;background:none;outline:none;opacity:.8}
 thead img.disable,img.disable:hover{opacity:.3}
@@ -365,6 +364,7 @@ tr:hover .uploaded{border-color:#747}
 #torrents .snarkCommented img{padding:0;margin:0;width:9px;height:9px;border:none;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
 
 /* details */
+th .infohash{vertical-align:middle;font-size:9pt}
 .iframed .mainsection#snarkInfo + .mainsection#commentSection,.iframed .mainsection:last-of-type{margin-bottom:0}
 .mainsection#media{margin-top:-1px}
 .mainsection #userComments input[type=checkbox]:not(:hover):not(:focus):not(:active){border:1px solid #515}
@@ -377,12 +377,12 @@ tr:hover .uploaded{border-color:#747}
 #completion:hover #metainfo{position:absolute;top:16px;left:-120px;z-index:9999;display:inline-block}
 #completion:not(:hover) #metainfo{display:none}
 #metacomment{padding:0;line-height:1.4;text-align:justify}
-#metacomment div{padding:4px 8px}
 #metacomment .commentWrapper{margin:5px;padding:15px;width:calc(100% - 42px);text-shadow:0 1px 1px rgba(0,0,0,.8);box-shadow:inset 0 0 0 1px #313,inset 0 0 0 2px #202,0 0 1px 0 rgba(0,0,0,.7);background:linear-gradient(180deg,#280028,#240024)}
 #metainfo{padding:6px 12px 6px 6px;white-space:nowrap;border:1px solid #000;box-shadow:inset 0 0 0 1px #202,inset 0 0 1px 1px rgba(160,100,160,.8),0 0 2px 2px rgba(0,0,0,.5);background:#202}
 #torrents .infohash,#torrentInfo .infohash{margin:0 -1px 0 0;padding:2px;display:inline-block;max-width:80px;white-space:nowrap;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;line-height:1;font-weight:700;text-shadow:none;opacity:.75;color:#101;border-radius:2px;box-shadow:0 0 0 1px #101,inset 0 0 0 1px #dd0;background:linear-gradient(180deg,#cc0,#aa0)}
 #torrentInfo .infohash{margin:0 5px;padding:4px 4px 4px 5px;max-width:120px;box-shadow:0 0 0 1px #202,0 0 2px 2px rgba(16,0,16,.8),inset 0 0 0 1px #dd0;background:linear-gradient(180deg,#dd0 50%,#cc0 50%)}
 #torrents .infohash{margin-right:2px;padding-left:15px;background:var(--hash) no-repeat 2px center/12px,linear-gradient(180deg,#cc0,#aa0)}
+#torrentInfo .infohash:focus,#torrentInfo .infohash:active{text-overflow:clip}
 #torrentsummary{margin-top:10px;padding:10px;display:block;line-height:2;font-size:115%;color:#fff8f8;border:var(--border_inner);box-shadow:0 0 0 1px rgba(119,102,119,.8),0 0 2px 1px #101;background:#101}
 #torrentsummary br{display:none}
 #torrentsummary span{margin:0 6px;display:inline-block}
