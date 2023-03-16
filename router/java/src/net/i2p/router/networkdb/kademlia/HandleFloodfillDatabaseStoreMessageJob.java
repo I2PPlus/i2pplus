@@ -219,7 +219,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         shouldStore = false;
                         wasNew = false;
                         if (_log.shouldWarn()) {
-                            _log.warn("Dropping unsolicited NetDbStore of banned " + cap + (isFF ? "Floodfill" : "Router") +
+                            _log.warn("Dropping unsolicited NetDbStore of banned " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "]" + ((isFF && noSSU) ? " -> SSU transport disabled" : ""));
                         }
                     } else if ((isFF && noSSU) || (isFF && isUnreachable)) {
@@ -241,21 +241,21 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             shouldStore = false;
                             wasNew = false;
                             if (_log.shouldWarn()) {
-                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? "Floodfill" : "Router") +
+                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] -> Unreachable and older (" + v + ") than " + MIN_VERSION);
                             }
                         } else if (isUnreachable && isSlow) {
                             shouldStore = false;
                             wasNew = false;
                             if (_log.shouldWarn()) {
-                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? "Floodfill" : "Router") +
+                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] -> Unreachable and slow");
                             }
                         } else if (isOld && isSlow) {
                             shouldStore = false;
                             wasNew = false;
                             if (_log.shouldWarn()) {
-                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? "Floodfill" : "Router") +
+                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] -> Slow and older (" + v + ") than " + MIN_VERSION);
                             }
                         }
@@ -281,7 +281,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                             pdrop *= 8;
                                         if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                             if (_log.shouldWarn())
-                                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? "Floodfill" : "Router") +
+                                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                                           " [" + key.toBase64().substring(0,6) + "] with distance " + distance +
                                                           " -> Drop probability: " + (pdrop * 100 / 128) + "%");
                                             shouldStore = false;
@@ -302,7 +302,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                                 pdrop *= 8;
                                             if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                                 if (_log.shouldWarn())
-                                                    _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? "Floodfill" : "Router") +
+                                                    _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                                               " [" + key.toBase64().substring(0,6) + "] with distance " + distance);
                                                 shouldStore = false;
                                                 // still flood if requested
@@ -313,7 +313,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     }
                                 }
                                 if (shouldStore && _log.shouldDebug())
-                                    _log.debug("Allowing unsolicited NetDbStore of new " + cap + (isFF ? "Floodfill" : "Router") +
+                                    _log.debug("Allowing unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                                " [" + key.toBase64().substring(0,6) + "] with distance " + distance);
                             } else {
                                 if ((isFF && noSSU) || (isFF && isUnreachable)) {
@@ -331,7 +331,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 if (isUnreachable && isOld) {
                                     shouldStore = false;
                                     if (_log.shouldWarn()) {
-                                        _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? "Floodfill" : "Router") +
+                                        _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                                   " [" + key.toBase64().substring(0,6) + "] -> Unreachable and older (" + v + ") than " + MIN_VERSION);
                                     }
                                 }
@@ -343,7 +343,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     pdrop *= 8;
                                 if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                     if (_log.shouldWarn())
-                                        _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? "Floodfill" : "Router") +
+                                        _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                                   " [" + key.toBase64().substring(0,6) + "] -> Drop probability: " + (pdrop * 100 / 128) + "%");
                                     shouldStore = false;
                                     // don't bother checking ban/blocklists.
@@ -352,7 +352,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             }
                         }
                         if (shouldStore && _log.shouldWarn())
-                            _log.warn("Handling unsolicited NetDbStore of new " + cap + (isFF ? "Floodfill" : "Router") +
+                            _log.warn("Handling unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "]");
                     } else if (prevNetDb.getPublished() >= ri.getPublished()) {
                         shouldStore = false;
