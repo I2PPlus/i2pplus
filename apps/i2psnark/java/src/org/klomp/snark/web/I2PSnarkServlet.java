@@ -3945,7 +3945,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
             buf.append("</th><th><span class=infohash title=\"")
-               .append(_t("Info hash")).append("\">")
+               .append(_t("Info hash")).append("\" tabindex=0>")
                .append(hex.toUpperCase(Locale.US))
                .append("</span>");
 
