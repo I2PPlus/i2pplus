@@ -2431,7 +2431,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("<span class=uploaded><span class=txBarText>");
                     out.write(txPercent);
                     out.write("&#8239;%");
-                    out.write("</span><span class=txBarInner style=\"width: calc(" + txPercentBar + " - 2px)\"></span>");
+                    out.write("</span><span class=txBarInner style=\"width:calc(" + txPercentBar + " - 2px)\"></span>");
                     out.write("</span>");
                 } else {
                     out.write("‒");
@@ -2460,7 +2460,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                               .replace("M", "</span><span class=left>M</span>")
                                               .replace("G", "</span><span class=left>G</span>")
                                               .replace("T", "</span><span class=left>T</span>"));
-                out.write("</span><span class=txBarInner style=\"width: calc(" + txPercentBar + " - 2px)\"></span></span>");
+                out.write("</span><span class=txBarInner style=\"width:calc(" + txPercentBar + " - 2px)\"></span></span>");
             }
         }
         out.write("</td>\n");
