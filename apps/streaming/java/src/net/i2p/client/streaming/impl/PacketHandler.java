@@ -163,7 +163,7 @@ class PacketHandler {
                 con.getPacketHandler().receivePacket(packet, con);
             } catch (I2PException ie) {
                 if (_log.shouldWarn())
-                    _log.warn("Received forged packet for " + con, ie);
+                    _log.warn("Received FORGED packet for " + con, ie);
             }
         } else {
             if (packet.isFlagSet(Packet.FLAG_RESET)) {
@@ -174,7 +174,7 @@ class PacketHandler {
                     con.getPacketHandler().receivePacket(packet, con);
                 } catch (I2PException ie) {
                     if (_log.shouldWarn())
-                        _log.warn("Received forged reset for " + con, ie);
+                        _log.warn("Received FORGED reset for " + con, ie);
                 }
             } else {
                 if ( (con.getSendStreamId() <= 0) ||
