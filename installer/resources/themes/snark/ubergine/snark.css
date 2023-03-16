@@ -46,14 +46,13 @@ a:active,a:visited:active{color:#f10}
 a img{outline:none}
 a img:hover,a img:focus,a:focus img{filter:drop-shadow(0 0 1px #f60)}
 form{margin-bottom:0}
+hr{margin:5px 0 7px 0;height:1px;width:0;text-align:center;color:#212;border:0 solid #212;background:#212}
 img{margin:0 3px 1px 3px;line-height:1;vertical-align:middle;border:none}
 img:hover{border:none}
-p{line-height:1.5}
-hr{margin:5px 0 7px 0;height:1px;width:0;text-align:center;color:#212;border:0 solid #212;background:#212}
 input,button,textarea,select,a{outline:none;image-rendering:-webkit-optimize-contrast}
-th img,a img{font-size:0;overflow:hidden}
+p{line-height:1.5}
 table{margin:0 0 10px 0;padding:0;width:100%;color:#323;border:none;border-spacing:0;border-collapse:collapse}
-.iframed .mainsection table,.iframed .mainsection#commentSection table,.iframed .mainsection#media table,.iframed .mainsection#snarkFiles table,.iframed .mainsection#snarkInfo table,.iframed .resourceError,.iframed .resourceError#NotFound,.iframed #torrentEdit{padding:1px;box-shadow:0 0 0 1px rgba(180,152,180,.7),0 0 0 2px rgba(16,8,16,.9);filter:none}
+th img,a img{font-size:0;overflow:hidden}
 thead,tfoot{background:#101}
 th{padding:4px 2px 4px 4px;letter-spacing:0;font-size:8pt;color:#ddd;border-top:var(--border_hard);border-bottom:var(--border_hard)}
 thead th,#torrentInfo th,#torrentEdit th{background:var(--th)}
@@ -69,7 +68,6 @@ td:first-child{text-align:right}
 tfoot td:first-child{padding-left:0;text-align:left}
 .configPanel,.configPanel td,.snarkNewTorrent,.snarkNewTorrent td,select,input,input.r,input[name="nofilter_dataDir"],a.control{font:9pt var(--bodyfont)}
 .page{margin:5px 0 0 0;padding:10px 10px 0;border:var(--border_hard);border-radius:4px;box-shadow:inset 0 0 3px 0 #101,0 0 2px 2px rgba(16,0,16,.4);background:repeating-linear-gradient(180deg,#2b172f 2px,#1f081f 4px);background-size:100% 4px}
-.iframed .page{margin-bottom:-6px;padding:0;border:none;border-radius:0;box-shadow:none;background:none}
 .infohash{font-family:var(--monospaced);color:#cc0;text-transform:uppercase;text-shadow:0 1px 1px #000;user-select:all}
 .mainsection table{border-radius:0}
 .mainsection#commentSection table,.mainsection#media table,.mainsection#snarkFiles table,.mainsection#snarkInfo table,.resourceError,.resourceError#NotFound{margin:0;border:1px solid #414;filter:none}
@@ -77,6 +75,8 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .script{display:inline-block;vertical-align:top}
 .toggleview,.configTitle,#navbar,img,input[type=submit],input[type=radio],input[type=checkbox],label,th img,#createSection,#closelog,#pagenavbottom{user-select:none}
+.iframed .page{margin-bottom:-6px;padding:0;border:none;border-radius:0;box-shadow:none;background:none}
+.iframed .mainsection table,.iframed .mainsection#commentSection table,.iframed .mainsection#media table,.iframed .mainsection#snarkFiles table,.iframed .mainsection#snarkInfo table,.iframed .resourceError,.iframed .resourceError#NotFound,.iframed #torrentEdit{padding:1px;box-shadow:0 0 0 1px rgba(180,152,180,.7),0 0 0 2px rgba(16,8,16,.9);filter:none}
 
 /* topnav */
 .iframed #navbar{margin-top:3px;margin-bottom:-9px;padding-bottom:12px;width:auto;position:relative;border-radius:0;box-shadow:inset 0 0 0 1px rgba(255,239,253,.25),inset 0 0 2px 1px rgba(255,239,253,.15);background:linear-gradient(180deg,#522852,#281428 50%,#1c0e1c 54%,#080008);filter:none}
@@ -364,7 +364,6 @@ tr:hover .uploaded{border-color:#747}
 #torrents .snarkCommented img{padding:0;margin:0;width:9px;height:9px;border:none;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
 
 /* details */
-th .infohash{vertical-align:middle;font-size:9pt}
 .iframed .mainsection#snarkInfo + .mainsection#commentSection,.iframed .mainsection:last-of-type{margin-bottom:0}
 .mainsection#media{margin-top:-1px}
 .mainsection #userComments input[type=checkbox]:not(:hover):not(:focus):not(:active){border:1px solid #515}
@@ -380,7 +379,7 @@ th .infohash{vertical-align:middle;font-size:9pt}
 #metacomment .commentWrapper{margin:5px;padding:15px;width:calc(100% - 42px);text-shadow:0 1px 1px rgba(0,0,0,.8);box-shadow:inset 0 0 0 1px #313,inset 0 0 0 2px #202,0 0 1px 0 rgba(0,0,0,.7);background:linear-gradient(180deg,#280028,#240024)}
 #metainfo{padding:6px 12px 6px 6px;white-space:nowrap;border:1px solid #000;box-shadow:inset 0 0 0 1px #202,inset 0 0 1px 1px rgba(160,100,160,.8),0 0 2px 2px rgba(0,0,0,.5);background:#202}
 #torrents .infohash,#torrentInfo .infohash{margin:0 -1px 0 0;padding:2px;display:inline-block;max-width:80px;white-space:nowrap;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;line-height:1;font-weight:700;text-shadow:none;opacity:.75;color:#101;border-radius:2px;box-shadow:0 0 0 1px #101,inset 0 0 0 1px #dd0;background:linear-gradient(180deg,#cc0,#aa0)}
-#torrentInfo .infohash{margin:0 5px;padding:4px 4px 4px 5px;max-width:120px;box-shadow:0 0 0 1px #202,0 0 2px 2px rgba(16,0,16,.8),inset 0 0 0 1px #dd0;background:linear-gradient(180deg,#dd0 50%,#cc0 50%)}
+#torrentInfo .infohash{margin:0 5px;padding:4px 4px 4px 5px;max-width:120px;vertical-align:middle;font-size:9pt;font-weight:600;box-shadow:0 0 0 1px #202,0 0 2px 2px rgba(16,0,16,.8),inset 0 0 0 1px #dd0;background:linear-gradient(180deg,#dd0 50%,#cc0 50%)}
 #torrents .infohash{margin-right:2px;padding-left:15px;background:var(--hash) no-repeat 2px center/12px,linear-gradient(180deg,#cc0,#aa0)}
 #torrentInfo .infohash:focus,#torrentInfo .infohash:active{text-overflow:clip}
 #torrentsummary{margin-top:10px;padding:10px;display:block;line-height:2;font-size:115%;color:#fff8f8;border:var(--border_inner);box-shadow:0 0 0 1px rgba(119,102,119,.8),0 0 2px 1px #101;background:#101}
@@ -977,12 +976,12 @@ td.torrentAction input[type=submit]{margin-top:1px}
 @keyframes active{from{background:linear-gradient(to left,#dd0 1px,rgba(255,255,0,0) 1px)}}
 @keyframes bar{from{width:100%}}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
-@keyframes fade-in{0%{filter:opacity(0)} 100%{filter:opacity(1)}}
+@keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
 @keyframes initializing{from{background-position:200% 100%}}
 @keyframes routerdown{from{background-size:100%,15% 100%}}
-@keyframes scale{0%,100%{transform:scale(1)} 50%{transform:scale(1.3)}}
+@keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
 @keyframes seeding{from{box-shadow:inset 0 0 0 1px rgba(16,0,16,.9),inset 0 1px 3px rgba(255,96,0,.4),inset 0 -1px 4px rgba(128,48,0,.4);background:radial-gradient(at center bottom,rgba(128,32,64,.6) 10%,rgba(0,0,0,0) 60%),linear-gradient(180deg,rgba(80,16,48,.9),rgba(16,0,16,.9))}}
-@keyframes slide-in{0%{transform:translateY(-50px)} 100%{transform:translateY(0)}}
+@keyframes slide-in{0%{transform:translateY(-50px)}100%{transform:translateY(0)}}
 @keyframes slide-right{from{transform:translateX(-30px) rotate(-90deg);filter:blur(1px)}to{transform:translateX(0) rotate(0);filter:blur(0)}}
 @keyframes spin{from{transform:rotate(360deg)}}
 @keyframes uploading{from{background-position:left center}to{background-position:20% center}}
@@ -992,7 +991,7 @@ td.torrentAction input[type=submit]{margin-top:1px}
 select{padding:5px 18px 5px 7px}
 .percentBarComplete{padding:3px 0 1px}
 .configPanel .configTitle{padding:5px 1px 4px;color:rgba(255,240,255,.75);text-transform:uppercase;font-variant:normal}
-.rowEven + .rowEven:nth-child(even),.rowOdd + .rowOdd:nth-child(even){background:#313} .rowEven + .rowEven:nth-child(odd),.rowOdd + .rowOdd:nth-child(odd){background:#414}
+.rowEven + .rowEven:nth-child(even),.rowOdd + .rowOdd:nth-child(even){background:#313}.rowEven + .rowEven:nth-child(odd),.rowOdd + .rowOdd:nth-child(odd){background:#414}
 .section,.mainsection{padding-top:9px}
 }
 
@@ -1011,10 +1010,10 @@ select{padding:5px 18px 5px 7px}
 .magnetLabel{max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .peerinfo .percentBarOuter{height:14px;line-height:11px}
 .tab_label::after{margin:4px 0 1px;width:16px;height:16px;background-size:14px}
-#torrentInfo img[src$="details.png"]{width:14px;height:14px}
 .torrentUploaded{padding-left:10px}
 #navbar{padding:12px 10px 10px}
 #screenlog{margin:-1px 0 10px}
+#torrentInfo img[src$="details.png"]{width:14px;height:14px}
 #torrents #actionStopAll,#torrents #actionStartAll{padding:11px 18px}
 #torrents .infohash{width:60px}
 #torrents .torrentAction input[type=submit]{padding:11px;background-size:12px,100%}
