@@ -392,7 +392,7 @@ tr:hover .txBarInner{background:linear-gradient(180deg,#efe,#dfd)}
 .configTitle a:hover,.configTitle a:focus,.toggleview:hover,.toggleview:hover .tab_label,.toggleview:focus,.toggleview:focus .tab_label{color:var(--hover);text-shadow:none;transition:ease box-shadow .05s}
 .configTitle a:active,input:active + .toggleview{color:#f90}
 .configPanel > .snarkConfig{font-size:10pt;width:100%;padding-top:0}
-#tab_files{margin-top:-4px}
+input:checked + #tab_files{margin-top:-4px}
 
 #createSection td:first-child,#addSection td:first-child{padding-right:5px;padding-left:5px;width:120px;white-space:nowrap;font-weight:700}
 #createSection td:nth-child(n+2),#addSection td:nth-child(n+2){text-align:left}
