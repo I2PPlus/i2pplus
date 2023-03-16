@@ -59,7 +59,7 @@ class StartExplorersJob extends JobImpl {
     private static final int LOW_ROUTERS = 2000;
     /** explore slowly if we have more than this many routers */
 //    private static final int MAX_ROUTERS = 2 * LOW_ROUTERS;
-    private static final int MAX_ROUTERS = 3000;
+    private static final int MAX_ROUTERS = 4000;
 //    private static final int MIN_FFS = 50;
     private static final int MIN_FFS = 200;
     static final int LOW_FFS = 2 * MIN_FFS;
@@ -158,7 +158,7 @@ class StartExplorersJob extends JobImpl {
             }
         } else {
             if (_log.shouldInfo())
-                _log.info("Not initiating Peer Exploration -> our router is a floodfill (router.exploreWhenFloodfill=true to override)");
+                _log.info("Not initiating Peer Exploration -> We are a floodfill (router.exploreWhenFloodfill=true to override)");
         }
     }
 
