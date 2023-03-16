@@ -183,8 +183,8 @@ class ProfileOrganizerRenderer {
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span class=rlookup title=\"").append(rl).append("\">");
                         buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")));
-                    } else {
-                        buf.append("<span>").append(ip.replace("null", "unknown"));
+                    } else if (ip == "null" || ip == null) {
+                        buf.append("<span>").append(_t("unknown"));
                     }
                     buf.append("</span>");
                 } else {

@@ -379,7 +379,7 @@ h3:active .badge{display:none}
 #resetreseed{padding:5px 0;border:none;background:none}
 td.tabletextarea{padding:0;background:#fafaff}
 #tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,.cells td,#profilelist tbody td:not(:first-child),#profile_defs td:not(:first-child),#floodfills td:not(:first-child),#debug td:not(:first-child),#jardump td:not(:first-child),#jobstats td:not(:first-child),#eventlog td:not(:first-child),#webappconfig td:not(:first-child),#tunnelconfig td:not(:first-child),#sidebarconf td:not(:first-child),#configstats td:not(:first-child),#loggingoptions td:not(:first-child),#addkeyring td:not(:first-child),.homelinkedit td:not(:first-child),#clientconfig td:not(:first-child),.netdbentry td:not(:first-child),#netdblookup td:not(:first-child),#peerdefs td:not(:first-child),#help td:not(.infohelp):not(.infowarn),#pluginconfig td:not(:first-child),#thresholds td:not(:first-child),#leasesetdebug td:not(:first-child),#enviro td:not(:first-child),#routerinformation td:not(:first-child),#udpconnections tbody td:nth-child(n+2){border-left:var(--border_soft)}
-#tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,#profilelist tbody td,#profile_defs td,#floodfills tbody td,#debug td,#jardump td,#jobstats td,#eventlog td,#webappconfig td,#tunnelconfig td,#sidebarconf td,#configstats td,#loggingoptions td,#addkeyring td,.homelinkedit td,#clientconfig td,.netdbentry td,#netdblookup td,#peerdefs td,#help td:not(.infohelp):not(.infowarn),#pluginconfig td,#thresholds td,#leasesetdebug td,#enviro td,#routerinformation td{box-shadow:var(--highlight);background:rgba(240,240,255,.4)}
+#tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,#profilelist tbody td,#profile_defs td,#floodfills tbody td,#debug td,#jardump td,#jobstats td,#eventlog td,#webappconfig td,#tunnelconfig td,#sidebarconf td,#configstats td,#loggingoptions td,#addkeyring td,.homelinkedit td,#clientconfig td,.netdbentry td,#netdblookup td,#peerdefs td,#help td:not(.infohelp):not(.infowarn),#pluginconfig td,#thresholds td,#leasesetdebug td,#enviro td,#routerinformation td{box-shadow:var(--highlight)}
 #tunnels .configpeer img,#profiles .configpeer img,#peers .configpeer img{opacity:0}
 #tunnels h3 a[href^="/configtunnels#"]:active,#logs a.configure:active::after,#logs a.delete:active::after{background-size:12px}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs a.delete::after,#logs a.configure::after{margin-top:2px;margin-bottom:-1px;width:16px;height:16px;float:right;background:var(--settings) no-repeat center center/16px;content:""}
@@ -438,6 +438,32 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #news ul{margin:4px 15px 0;padding:8px 15px 4px;text-align:left}
 #news p+ul{margin-top:0}
 #news li{margin:4px 0;padding:0 0 0 2px}
+
+/* router widgets */
+.rid{width:unset}
+.rid, .rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);box-shadow:var(--highlight);background:var(--badge)}
+.rid .rih{font-family:var(--monospaced);font-weight:500;letter-spacing:.1em;box-shadow:var(--highlight);background:var(--badge)}
+.rid .rih a{font-weight:600}
+.rif,.rif img{line-height:0;font-size:0}
+.rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
+.rid .rih{padding:2px 6px;font-family:var(--monospaced);line-height:1;font-size:9pt;vertical-align:middle}
+.rid .rbw{padding:2px 4px;min-width:16px;text-align:center;line-height:1;font-weight:900}
+.rid.ric .rbw{line-height:1.2}
+.rid .rbw.isff{background:var(--isFF),var(--badge)}
+.rid .rbw.isff.isD{background:var(--isD),var(--isFF),var(--badge)}
+.rid .rbw.isff.isE{background:var(--isE),var(--isFF),var(--badge)}
+.rid .rbw.isff.isG{background:var(--isG),var(--isFF),var(--badge)}
+.rid .rbw.isff.isU{background:var(--isFF),var(--isU),var(--badge)}
+.rid .rbw.isff.isU.isD{background:var(--isD),var(--isFF),var(--isU),var(--badge)}
+.rid .rbw.isff.isU.isE{background:var(--isE),var(--isFF),var(--isU),var(--badge)}
+.rid .rbw.isff.isU.isG{background:var(--isG),var(--isFF),var(--isU),var(--badge)}
+.rid .rbw.isU{background:var(--isU),var(--badge)}
+.rid .rbw.isU.isD{background:var(--isD),var(--isU),var(--badge)}
+.rid .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
+.rid .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
+#topCount .rbw#ff{background:linear-gradient(135deg,rgba(0,0,0,0) 90%,rgba(192,80,0,.8)90%),var(--badge)}
+#topCount .rbw#u{background:linear-gradient(45deg,rgba(0,0,0,0)87%,rgba(192,0,0,.8)87%),var(--badge)}
+#banlist li .rid{margin-right:5px;margin-left:-2px;float:left}
 
 /* info */
 #sidebarconf tr:nth-child(odd),.homelinkedit tr:nth-child(odd),#clientconfig tr:nth-child(odd),#netdb tr:nth-child(even),#webappconfig tr:nth-child(odd),#configstats tr:nth-child(odd),#pluginconfig table tr:nth-child(even),#routerinformation tr:nth-child(odd){background:var(--row_odd)}
@@ -1255,11 +1281,11 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #profilelist{margin-bottom:15px}
 #profilelist th,#profilelist td,#floodfills th,#floodfills td{text-align:center}
 #profilelist tr:first-child td,#profile_defs tr:first-child td{border-top:var(--border_inner)}
-#profilelist td:last-child{padding-right:5px;width:1%;white-space:nowrap;text-align:center}
+#profilelist td:not(.rih):not(.rbw):last-child{width:1%;white-space:nowrap;text-align:center}
 #profilelist th{white-space:nowrap}
 #profilelist th:nth-child(4),#profilelist td:nth-child(4){width:15%}
 #profilelist th.groups,#profilelist td.groups{width:10%;min-width:56px;white-space:nowrap}
-#profilelist td:first-child,#profilelist td:nth-child(2),#profilelist td:nth-child(3){width:1%;white-space:nowrap}
+#profilelist td:first-child:not(.rif):not(.rbw),#profilelist td:nth-child(2):not(.rih):not(.rbw),#profilelist td:nth-child(3){width:1%;white-space:nowrap}
 #profilelist td:nth-last-child(2) span,#profilelist td:nth-last-child(3) span{min-width:28px;display:inline-block}
 #profilelist td:nth-child(6) span,#profilelist td:nth-child(9) span{min-width:48px;display:inline-block;text-align:right}
 #profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span{min-width:40px}
@@ -2293,32 +2319,6 @@ table#consolepass input[name="name"]{margin-right:20px}
 #webhosting #guides li:first-child{margin-top:0}
 #webhosting #guides li a{padding-left:22px}
 #help code,#webhosting i{font-weight:700}
-
-/* router widgets */
-.rid,.rid td,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);box-shadow:var(--highlight)}
-.rid{width:unset}
-.rid td,#profilelist .rid td{font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight);background:var(--badge)}
-.rif,.rif img{line-height:0;font-size:0}
-.rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
-.rid .rih{padding:2px 6px;font-family:var(--monospaced);line-height:1;font-size:9pt;vertical-align:middle}
-.rid .rbw{padding:2px 4px;min-width:16px;text-align:center;line-height:1;font-weight:900}
-.rbw.isff{background:var(--isFF),var(--badge)}
-.rbw.isff.isD{background:var(--isD),var(--isFF),var(--badge)}
-.rbw.isff.isE{background:var(--isE),var(--isFF),var(--badge)}
-.rbw.isff.isG{background:var(--isG),var(--isFF),var(--badge)}
-.rbw.isff.isU{background:var(--isFF),var(--isU),var(--badge)}
-.rbw.isff.isU.isD{background:var(--isD),var(--isFF),var(--isU),var(--badge)}
-.rbw.isff.isU.isE{background:var(--isE),var(--isFF),var(--isU),var(--badge)}
-.rbw.isff.isU.isG{background:var(--isG),var(--isFF),var(--isU),var(--badge)}
-.rbw.isU{background:var(--isU),var(--badge)}
-.rbw.isU.isD{background:var(--isD),var(--isU),var(--badge)}
-.rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
-.rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
-#topCount .rbw#ff{background:linear-gradient(135deg,rgba(0,0,0,0) 90%,rgba(192,80,0,.8)90%),var(--badge)}
-#topCount .rbw#u{background:linear-gradient(45deg,rgba(0,0,0,0)87%,rgba(192,0,0,.8)87%),var(--badge)}
-.ric{background:var(--badge)}
-.ric .rbw{line-height:1.05}
-#banlist li .rid{margin-right:5px;margin-left:-2px;float:left}
 
 /* iframe */
 .main.embedded{text-align:center;padding:2px;overflow:hidden}

@@ -92,7 +92,7 @@ input[type=file]{background:none}
 label{vertical-align:sub}
 input[type="text"], input[type="password"]{margin: 4px 5px;font-weight:600}
 input[type=text] + label{white-space:nowrap;vertical-align:unset}
-input[name="nofilter_blindedPassword"],input.tunnelDescription,input.tunnelName,select#profile,.authentication,.clientKey,.clientName,#encryptMode,#hostField,#leasesetKey,#localDestination,#sigType,textarea[name="accessList"],#tunnelBackupQuantity,#tunnelBackupQuantityOut,#tunnelDepth,#tunnelDepthOut,#tunnelQuantity,#tunnelQuantityOut,#tunnelVariance,#tunnelVarianceOut,#userAgents{margin:5px;width:calc(100% - 10px)}
+input[name="nofilter_blindedPassword"],input.proxyList,input.tunnelDescription,input.tunnelName,select#profile,.authentication,.clientKey,.clientName,#encryptMode,#hostField,#leasesetKey,#localDestination,#sigType,textarea[name="accessList"],#tunnelBackupQuantity,#tunnelBackupQuantityOut,#tunnelDepth,#tunnelDepthOut,#tunnelQuantity,#tunnelQuantityOut,#tunnelVariance,#tunnelVarianceOut,#userAgents{margin:5px;width:calc(100% - 10px)}
 select{min-width:120px}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{margin:0;padding:0;font-weight:400;color:#ee9;border:none;box-shadow:none;background:none;cursor:default}
 select#profile,select#connectionProfile{margin:5px}

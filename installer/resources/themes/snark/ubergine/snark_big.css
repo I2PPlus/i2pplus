@@ -20,7 +20,7 @@ th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,td.torrentDownload
 .snarkAddInfo code,#pagenav,#trackerselect tr:first-child td,.clientid{font-size:9.5pt;font-weight:400}
 .snarkNav.nav_main:link{background-size:17px auto,100% 100%;padding-left:31px}
 .snarkNav,#pagenav{font-weight:700}
-.torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
+#torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
 .torrentUploaded{text-align:center;padding-right:10px}
 #configs input[name="nofilter_dataDir"],input[name="i2cpOpts"],input[name="nofilter_commentsName"]{width:calc(100% - 205px)}
 #configs td{line-height:2;padding-top:4px;padding-bottom:4px}

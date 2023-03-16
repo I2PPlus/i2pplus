@@ -2431,7 +2431,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("<span class=uploaded><span class=txBarText>");
                     out.write(txPercent);
                     out.write("&#8239;%");
-                    out.write("</span><span class=txBarInner style=\"width: calc(" + txPercentBar + " - 2px)\"></span>");
+                    out.write("</span><span class=txBarInner style=\"width:calc(" + txPercentBar + " - 2px)\"></span>");
                     out.write("</span>");
                 } else {
                     out.write("‒");
@@ -2460,7 +2460,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                               .replace("M", "</span><span class=left>M</span>")
                                               .replace("G", "</span><span class=left>G</span>")
                                               .replace("T", "</span><span class=left>T</span>"));
-                out.write("</span><span class=txBarInner style=\"width: calc(" + txPercentBar + " - 2px)\"></span></span>");
+                out.write("</span><span class=txBarInner style=\"width:calc(" + txPercentBar + " - 2px)\"></span></span>");
             }
         }
         out.write("</td>\n");
@@ -3932,7 +3932,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String baseName = encodePath((new File(fullPath)).getName());
             MetaInfo meta = snark.getMetaInfo();
             buf.append("<div class=mainsection id=snarkInfo>");
-            buf.append("<table class=\"torrentInfo\" id=torrentInfo>\n");
+            buf.append("<table id=torrentInfo>\n");
             buf.append("<tr><th colspan=2>");
             toThemeImg(buf, "torrent");
             buf.append("<b>")
@@ -3945,7 +3945,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
             buf.append("</th><th><span class=infohash title=\"")
-               .append(_t("Info hash")).append("\">")
+               .append(_t("Info hash")).append("\" tabindex=0>")
                .append(hex.toUpperCase(Locale.US))
                .append("</span>");
 
@@ -4386,7 +4386,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (er || ec) {
                 CommentSet comments = snark.getComments();
                 buf.append("<div class=mainsection id=commentSection>")
-                   .append("<input class=toggle_input id=toggle_comments type=checkbox");
+                   .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
                 buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\"><span class=tab_label>")
@@ -4436,7 +4436,7 @@ public class I2PSnarkServlet extends BasicServlet {
 // Directory info section
 
         buf.append("<div class=mainsection id=snarkFiles>");
-        buf.append("<input class=toggle_input id=toggle_files type=checkbox");
+        buf.append("<input hidden class=toggle_input id=toggle_files type=checkbox");
         // don't collapse file view if not in torrent root
         String up = "";
         if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null)
@@ -4761,7 +4761,7 @@ public class I2PSnarkServlet extends BasicServlet {
         CommentSet comments = snark.getComments();
         if (er || ec) {
             buf.append("<div class=mainsection id=commentSection>\n");
-                buf.append("<input class=toggle_input id=toggle_comments type=checkbox");
+                buf.append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
                 buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\"><span class=tab_label>");

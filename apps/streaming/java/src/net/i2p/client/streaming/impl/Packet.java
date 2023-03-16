@@ -920,13 +920,13 @@ class Packet {
             else
                 buf.append(" (no key data)");
             if (_offlineSignature != null)
-                buf.append("; Offline Signature: ").append(_offlineSignature.getType());
+                buf.append("\n* Offline Signature: ").append(_offlineSignature.getType());
             else
                 buf.append(" (no offline sig data)");
         }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
             if (_optionSignature != null)
-                buf.append("; Signature: ").append(_optionSignature.getType());
+                buf.append("\n* Signature: ").append(_optionSignature.getType());
             else
                 buf.append(" (to be signed)");
         }

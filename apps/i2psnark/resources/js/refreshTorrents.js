@@ -141,8 +141,8 @@ function refreshTorrents() {
             for (u = 0; u < updating.length; u++) {
               if (updating !== null && updatingResponse !== null) {
                 if (updating.length === updatingResponse.length) {
-                  if (updating[u].outerHTML !== updatingResponse[u].outerHTML) {
-                    updating[u].innerHTML = updatingResponse[u].innerHTML;
+                  if (updating[u].innerHTML !== updatingResponse[u].innerHTML) {
+                    updating[u].outerHTML = updatingResponse[u].outerHTML;
                   }
                 } else {refreshAll();}
               }

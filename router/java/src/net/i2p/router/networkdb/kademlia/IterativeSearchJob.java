@@ -496,13 +496,13 @@ public class IterativeSearchJob extends FloodSearchJob {
                 if (peer != null && peer.equals(_key)) {
                     failed(peer, false);
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("[Job " + getJobId() + "] Not doing zero-hop self-lookup of [" + peer.toBase64().substring(0,6) + "]");
+                        _log.warn("[Job " + getJobId() + "] Not sending zero-hop self-lookup of [" + peer.toBase64().substring(0,6) + "]");
                     return;
                 }
                 if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
                     failed(peer, false);
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("[Job " + getJobId() + "] Not doing zero-hop lookup to UNKNOWN [" + peer.toBase64().substring(0,6) + "]");
+                        _log.warn("[Job " + getJobId() + "] Not sending zero-hop lookup to UNKNOWN [" + peer.toBase64().substring(0,6) + "]");
                     return;
                 }
             }
