@@ -1253,7 +1253,7 @@ tt,input,textarea{font-size:9pt}
 .debuginfo td{font-family:var(--monospaced);font-size:9pt;line-height:1.2}
 .dirInfoComplete{margin-right:3px}
 .iframed #navbar{padding:12px 10px 10px}
-.magnetLabel{padding:3px 6px 3px 18px;border-radius:3px;box-shadow:var(--highlight);background:#303 var(--tag) no-repeat 5px center/11px}
+.magnetLabel{padding:1px 8px 1px 18px;border-radius:3px;box-shadow:var(--highlight);background:#303 var(--tag) no-repeat 5px center/11px}
 .mainsection td{padding-top:4px;padding-bottom:4px}
 .nav_main[href="/i2psnark/"],.snarkNav:last-child[href="/i2psnark/"],.nav_main[href="/i2psnark/"]:hover,.snarkNav:last-child[href="/i2psnark/"]:hover,.nav_main[href="/i2psnark/"]:focus,.snarkNav:last-child[href="/i2psnark/"]:focus{padding-left:32px;background-position:11px center,center center}
 .nav_main[href="/i2psnark/"]{padding-left:36px}
