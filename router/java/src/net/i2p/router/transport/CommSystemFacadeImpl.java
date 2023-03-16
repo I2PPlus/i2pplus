@@ -838,8 +838,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append(getCapacity(peer));
                 if (isFF)
                     buf.append("f");
-                if (isU)
+                if (isU) {
                     buf.append("U");
+                } else {
+                    buf.append("R");
+                }
                 if (hasD)
                     buf.append("D");
                 if (hasE)
