@@ -4386,7 +4386,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (er || ec) {
                 CommentSet comments = snark.getComments();
                 buf.append("<div class=mainsection id=commentSection>")
-                   .append("<input class=toggle_input id=toggle_comments type=checkbox");
+                   .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
                 buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\"><span class=tab_label>")
@@ -4436,7 +4436,7 @@ public class I2PSnarkServlet extends BasicServlet {
 // Directory info section
 
         buf.append("<div class=mainsection id=snarkFiles>");
-        buf.append("<input class=toggle_input id=toggle_files type=checkbox");
+        buf.append("<input hidden class=toggle_input id=toggle_files type=checkbox");
         // don't collapse file view if not in torrent root
         String up = "";
         if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null)
@@ -4761,7 +4761,7 @@ public class I2PSnarkServlet extends BasicServlet {
         CommentSet comments = snark.getComments();
         if (er || ec) {
             buf.append("<div class=mainsection id=commentSection>\n");
-                buf.append("<input class=toggle_input id=toggle_comments type=checkbox");
+                buf.append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
                 buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\"><span class=tab_label>");
