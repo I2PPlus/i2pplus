@@ -143,7 +143,7 @@ class PacketHandler {
                 if (con.getOptions().getAnswerPings())
                     receivePing(con, packet);
                 else if (_log.shouldWarn())
-                    _log.warn("Dropping ECHO packet " + packet + " on existing connection");
+                    _log.warn("Dropping ECHO packet on existing connection -> " + packet);
             } else if (packet.getReceiveStreamId() > 0) {
                 receivePong(packet);
             } else {
