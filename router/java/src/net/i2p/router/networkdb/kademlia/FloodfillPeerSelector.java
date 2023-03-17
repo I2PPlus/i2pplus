@@ -297,7 +297,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 4*60*60*1000);
                 _context.commSystem().forceDisconnect(entry);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> No SSU transport enabled");
+                    _log.warn("Temp banning and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> No SSU transport enabled");
             } else if (info != null && isUnreachable) {
                 badff.add(entry);
                 if (_log.shouldDebug())
@@ -305,7 +305,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 4*60*60*1000);
                 _context.commSystem().forceDisconnect(entry);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> Unreachable/firewalled");
+                    _log.warn("Temp banning and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> Unreachable/firewalled");
             } else if (info != null && hasSalt) {
                 badff.add(entry);
                 if (_log.shouldDebug())
@@ -313,7 +313,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill has bogus 'salt' cap", null, null, now + 4*60*60*1000);
                 _context.commSystem().forceDisconnect(entry);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> RouterInfo has 'salt' cap");
+                    _log.warn("Temp banning and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> RouterInfo has 'salt' cap");
             } else if (sameIP) {
                 badff.add(entry);
                 if (_log.shouldDebug())

@@ -405,7 +405,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 // shouldn't happen unless unsupported encryption
                 if (_log.shouldWarn())
 //                    _log.warn("Received Lease but can't send to it, failure code " + rc + " (to=" + _toString + ")");
-                    _log.warn("Received Lease " + _toString + " but can't send to it (unsupported encryption)");
+                    _log.warn("Received Lease " + _toString + " but can't send to it -> Unsupported encryption");
                 dieFatal(rc);
             }
         }
@@ -435,7 +435,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             } else if (_leaseSet.getReceivedAsPublished()) {
                 if (_log.shouldWarn())
-                    _log.warn(getJobId() + ": Only have RAP LS for " + _toString);
+                    _log.warn(getJobId() + ": Only have ReceivedAsPublished LeaseSet for " + _toString);
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             }
         }
@@ -720,7 +720,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // (should we always fail for this? or should we send it anyway, even if
             // we dont receive the reply? hmm...)
             if (_log.shouldWarn())
-                _log.warn("[Job " + getJobId() + "] Unable to create garlic message to " + _toString + " (no tunnels left or too lagged)");
+                _log.warn("[Job " + getJobId() + "] Unable to create garlic message to " + _toString + " -> No available tunnels or too lagged");
             getContext().statManager().addRateData("client.dispatchNoTunnels", now - _start);
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS);
             return;
@@ -804,8 +804,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     // Either the success or timeout job will fire, never both.
                     getContext().messageRegistry().registerPending(_selector, _replyFound, _replyTimeout);
                     if (_log.shouldInfo())
-                        _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() +
-                                  "] Reply selector expires " +
+                        _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Reply selector expires " +
                                   DataHelper.formatDuration(_overallExpiration - _selector.getExpiration()) +
                                   " before message, using selector only");
                 } else {
@@ -816,8 +815,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     _replyTimeout.getTiming().setStartAfter(_overallExpiration);
                     getContext().jobQueue().addJob(_replyTimeout);
                     if (_log.shouldInfo())
-                        _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() +
-                                  "] Reply selector expires " +
+                        _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Reply selector expires " +
                                   DataHelper.formatDuration(_selector.getExpiration() - _overallExpiration) +
                                   " after message, queueing separate timeout job");
                 }
@@ -828,8 +826,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 getContext().jobQueue().addJob(_replyTimeout);
             }
             if (_log.shouldInfo())
-                _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() +
-                          "] Dispatching message to " + _toString + _msg);
+                _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Dispatching message to " + _toString + _msg);
             long before = getContext().clock().now();
 
             // Note we do not have a first hop fail job, or a success job, here,
@@ -1035,7 +1032,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         //instructions.setDelayRequested(false);
         //instructions.setDelaySeconds(0);
         //instructions.setEncrypted(false);
-        
+
         DataMessage msg = new DataMessage(getContext());
         Payload p = _clientMessage.getPayload();
         if (p == null)
