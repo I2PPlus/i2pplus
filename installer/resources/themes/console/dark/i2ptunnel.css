@@ -194,7 +194,7 @@ td > input{margin-left:0}
 .tunnelConfig td{width:50%}
 .tunnelConfig td > b{margin-left:5px;min-width:30px;display:inline-block}
 .tunnelHelper{min-width:8px}
-.tunnelHelper a{width:20px;height:20px;display:inline-block;background:var(--ahelp) no-repeat center center/18px}
+.tunnelHelper a{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--ahelp) no-repeat center center/20px}
 .tunnelHelper a:hover{transform:scale(1.2)}
 .tunnelHelper a:active{transform:scale(.95)}
 .tunnelProperties{background:#000;overflow:hidden;text-align:left;border:var(--border)}
