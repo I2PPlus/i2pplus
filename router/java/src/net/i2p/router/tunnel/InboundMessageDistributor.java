@@ -97,8 +97,12 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         // FVSJ may result in an unsolicited RI store if the peer went non-ff.
                         // We handle this safely, so we don't ask him again.
                         // Todo: if peer was ff and RI is not ff, queue for exploration in netdb (but that isn't part of the facade now)
-                        if (_log.shouldWarn())
-                            _log.warn("Dropping DbStoreMessage sent down a tunnel for [" + _client.toBase64().substring(0,6) + "]" + msg);
+                        if (_log.shouldWarn() || _log.shouldInfo()) {
+                            if (_log.shouldInfo())
+                                _log.warn("Dropping DbStoreMessage sent down a tunnel for [" + _client.toBase64().substring(0,6) + "]" + msg);
+                            else
+                                _log.warn("Dropping DbStoreMessage sent down a tunnel for [" + _client.toBase64().substring(0,6) + "]");
+                        }
                         // Handle safely by just updating the caps table, after doing basic validation
                         Hash key = dsm.getKey();
                         if (_context.routerHash().equals(key))
@@ -120,8 +124,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         return;
                     } else if (dsm.getReplyToken() != 0) {
                         _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, type);
-                        _log.error("Dropping LeaseSet DbStoreMessage (" + msg + ") with reply token sent down a tunnel for [" +
-                                   _client.toBase64().substring(0,6) + "]");
+                        _log.error("Dropping LeaseSet DbStoreMessage with reply token sent down a tunnel for [" +
+                                   _client.toBase64().substring(0,6) + "]" + msg);
                         return;
                     } else {
                         // allow DSM of our own key (used by FloodfillVerifyStoreJob)
