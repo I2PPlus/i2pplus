@@ -123,7 +123,7 @@
             String hostname = editBean.getTunnelName(curServer);
             if (spoofedHost != null && spoofedHost.endsWith(".i2p") && !spoofedHost.contains("b32") && spoofedHost != "mysite.i2p") {
 %>
-<a class=helperLink href="https://<%=indexBean.getSpoofedHost(curServer)%>?i2paddresshelper=<%=indexBean.getDestinationBase64(curServer)%>" target=_blank></a>
+<a class=helperLink href="http://<%=indexBean.getSpoofedHost(curServer)%>?i2paddresshelper=<%=indexBean.getDestinationBase64(curServer)%>" target=_blank></a>
 
 <%
             } else if (hostname != null && hostname.contains(".i2p") && !hostname.contains("b32")) {
