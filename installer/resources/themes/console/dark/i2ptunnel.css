@@ -193,6 +193,10 @@ td > input{margin-left:0}
 .tunnelConfig td,td{padding:5px;border-top:1px solid #1c3f1b}
 .tunnelConfig td{width:50%}
 .tunnelConfig td > b{margin-left:5px;min-width:30px;display:inline-block}
+.tunnelHelper{min-width:8px}
+.tunnelHelper a{width:20px;height:20px;display:inline-block;background:var(--ahelp) no-repeat center center/18px}
+.tunnelHelper a:hover{transform:scale(1.2)}
+.tunnelHelper a:active{transform:scale(.95)}
 .tunnelProperties{background:#000;overflow:hidden;text-align:left;border:var(--border)}
 .tunnelProperties:hover td,.tunnelProperties:hover + .tunnelInfo td,.tunnelProperties:hover + .tunnelInfo + .tunnelInfo td,.tunnelProperties:hover + .tunnelInfo + .tunnelInfo + .tunnelInfo td{background:#002000;box-shadow:none}
 .tunnelProperties + .tunnelInfo td{border-top:var(--border)}
@@ -218,17 +222,17 @@ td > input{margin-left:0}
 .tunnelStatus div:hover .tooltip{padding:6px 12px;min-width:140px;display:inline-block;line-height:1.5;left:0;position:absolute;bottom:calc(100% + 4px);z-index:99999;color:var(--ink);font-size:9pt;box-shadow:var(--bevel_hard);background:var(--badge)}
 .tunnelStatus div .tooltip hr{margin:2px 0 4px;height:0;display:block;border:none;border-top:1px solid #000;border-bottom:1px solid #141;opacity:.8}
 .tunnelControl{width:5%;text-align:right;white-space:nowrap}
-#clientTunnels tr,#serverTunnels tr,.tunnelConfig tr{background:rgba(0,4,0,.4)}
-#serverTunnels tr:first-child,#clientTunnels tr:first-child{padding:7px 5px;background:#000;background:var(--heading),linear-gradient(180deg,#002000,#000 75%);background-size:100%,4px 100%,100%}
-#serverTunnels tr:first-child th,#clientTunnels tr:first-child th{background:none}
-#serverTunnels th:nth-child(n+2),#clientTunnels th:nth-child(n+2),.tunnelProperties td:nth-child(n+2){text-align:center}
-#filter{vertical-align:top}
+#clientAuth th:first-child,#clientAuth td:first-child{width:50%}
 #clientAuth th:nth-child(2),#clientAuth td:nth-child(2){width:auto}
 #clientAuth td:last-child{width:1%;text-align:center}
 #clientAuth td:last-child b{margin:0;padding:0 8px}
-#clientAuth th:first-child,#clientAuth td:first-child{width:50%}
 #clientAuth tr:first-child td{border-top:none}
+#clientTunnels tr,#serverTunnels tr,.tunnelConfig tr{background:rgba(0,4,0,.4)}
+#filter{vertical-align:top}
 #keyringManager{margin-right:4px;float:right}
+#serverTunnels tr:first-child,#clientTunnels tr:first-child{padding:7px 5px;background:#000;background:var(--heading),linear-gradient(180deg,#002000,#000 75%);background-size:100%,4px 100%,100%}
+#serverTunnels th:nth-child(n+2),#clientTunnels th:nth-child(n+2),.tunnelProperties td:nth-child(n+2){text-align:center}
+#serverTunnels tr:first-child th,#clientTunnels tr:first-child th{background:none}
 #tunnelListPage th{text-transform:none;letter-spacing:0;word-spacing:0}
 
 /* toggleinfo */

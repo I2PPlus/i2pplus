@@ -157,6 +157,10 @@ input[name="nofilter_blindedPassword"]{width:calc(100% - 38px)}
 .newTunnel select,.newTunnel input,.newTunnel .control{margin:2px 4px 2px 2px}
 .newtunnel form{width:100%;text-align:right}
 .tunnelDestination b,.tunnelDescription b{color:var(--ink_light)}
+.tunnelHelper{min-width:8px}
+.tunnelHelper a{width:20px;height:20px;display:inline-block;background:var(--ahelp) no-repeat center center/18px}
+.tunnelHelper a:hover{transform:scale(1.2)}
+.tunnelHelper a:active{transform:scale(.95)}
 .tunnelName{padding-left:8px;width:25%;min-width:150px}
 .tunnelName a{padding:3px 3px 3px 18px;background:var(--settings) no-repeat left center;background-size:14px}
 .tunnelName a:hover{background:var(--settings_hover) no-repeat left center;background-size:14px}

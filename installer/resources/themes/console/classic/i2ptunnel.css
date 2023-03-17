@@ -97,6 +97,10 @@ td.infohelp{padding:10px 10px 10px 38px;text-align:justify;background:var(--info
 .newTunnel{padding:7px;text-align:right;border-top:var(--border)}
 .newTunnel select,.newTunnel input,.newTunnel .control{margin:2px;float:none}
 .newtunnel form{width:100%;text-align:right}
+.tunnelHelper{min-width:8px}
+.tunnelHelper a{width:20px;height:20px;display:inline-block;background:var(--ahelp) no-repeat center center/18px}
+.tunnelHelper a:hover{transform:scale(1.2)}
+.tunnelHelper a:active{transform:scale(.95)}
 .tunnelName{width:25%;min-width:150px}
 .tunnelName a{padding:3px 3px 3px 17px;background:var(--settings) no-repeat 2px center / 13px}
 .tunnelName a:hover{background:var(--settings_hover) no-repeat 2px center / 13px}

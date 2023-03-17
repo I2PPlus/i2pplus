@@ -116,6 +116,10 @@ td > b{margin-right:5px;display:inline-block;min-width:30px}
 .newTunnel{text-align:right;border-top:var(--border);padding:5px;background:#fff}
 .newTunnel select,.newTunnel input,.newTunnel .control{margin:2px}
 .newtunnel form{width:100%;text-align:right}
+.tunnelHelper{min-width:8px}
+.tunnelHelper a{width:20px;height:20px;display:inline-block;background:var(--ahelp) no-repeat center center/18px}
+.tunnelHelper a:hover{transform:scale(1.2)}
+.tunnelHelper a:active{transform:scale(.95)}
 .tunnelName{width:25%;min-width:150px}
 .tunnelName a{margin-left:5px;padding:5px 5px 5px 25px;width:calc(100% - 20px);display:inline-block;box-sizing:border-box;font-weight:700;border:1px solid transparent;border-radius:1px 15px 15px 1px;background:var(--settings) no-repeat 6px center / 14px}
 .tunnelName a:hover,.tunnelName a:focus{border:var(--border);background:var(--settings_hover) no-repeat 6px center / 14px,linear-gradient(180deg,#113,#001);background-size:14px,100%}

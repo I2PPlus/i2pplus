@@ -91,6 +91,7 @@
 <table id=serverTunnels>
 <tr>
 <th class=tunnelName><%=intl._t("Name")%></th>
+<th class=tunnelHelper></th>
 <th class=tunnelType><%=intl._t("Type")%></th>
 <th class=tunnelLocation><%=intl._t("Points at")%></th>
 <th class=tunnelPreview><%=intl._t("Preview")%></th>
@@ -116,6 +117,17 @@
             }
 %>
 </td>
+<td class=tunnelHelper>
+<%
+            if (indexBean.getSpoofedHost(curServer) != null && indexBean.getSpoofedHost(curServer).endsWith(".i2p") &&
+                !indexBean.getSpoofedHost(curServer).contains("b32") && indexBean.getSpoofedHost(curServer) != "mysite.i2p") {
+%>
+<a class=helperLink href="https://<%=indexBean.getSpoofedHost(curServer)%>?i2paddresshelper=<%=indexBean.getDestinationBase64(curServer)%>" target=_blank></a>
+<%
+            }
+%>
+</td>
+
 <td class=tunnelType><%=indexBean.getTunnelType(curServer)%></td>
 <td class=tunnelLocation>
 <%
@@ -139,7 +151,9 @@ SSL
 </td>
 <td class="tunnelPreview volatile">
 <%
-            if (("httpserver".equals(indexBean.getInternalType(curServer)) || ("httpbidirserver".equals(indexBean.getInternalType(curServer)))) && indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
+            if (("httpserver".equals(indexBean.getInternalType(curServer)) ||
+                ("httpbidirserver".equals(indexBean.getInternalType(curServer)))) &&
+                indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
 %>
 <a class="control preview iconize" title="<%=intl._t("Test HTTP server through I2P")%>" href="http://<%=indexBean.getDestHashBase32(curServer)%>" target=_blank rel=noreferrer><%=intl._t("Preview")%></a>
 <%
@@ -186,7 +200,7 @@ SSL
 </td>
 </tr>
 <tr class=tunnelInfo style=display:none>
-<td class=tunnelDestination colspan=2>
+<td class=tunnelDestination colspan=3>
 <span class=tunnelDestinationLabel>
 <%
             String name = indexBean.getSpoofedHost(curServer);
@@ -250,7 +264,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
             if (encName != null && encName.length() > 0) {
 %>
 <tr class=tunnelInfo style=display:none>
-<td class=tunnelDestinationEncrypted colspan=2>
+<td class=tunnelDestinationEncrypted colspan=3>
 <span class=tunnelDestinationLabel><b><%=intl._t("Encrypted")%>:</b></span>
 <span class=selectAll><%=encName%></span>
 </td>
@@ -258,7 +272,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
             } else if (hasHostname) {
 %>
 <tr class=tunnelInfo style=display:none>
-<td class=tunnelDestinationEncrypted colspan=2>
+<td class=tunnelDestinationEncrypted colspan=3>
 <span class=tunnelDestinationLabel><b><%=intl._t("Destination")%>:</b></span>
 <span class=selectAll><%=indexBean.getDestHashBase32(curServer)%></span>
 </td>
@@ -266,7 +280,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
             } else if (altDest != null && !altDest.equals("")) {
 %>
 <tr class=tunnelInfo style=display:none>
-<td class=tunnelDestinationEncrypted colspan=2>
+<td class=tunnelDestinationEncrypted colspan=3>
 <span class=tunnelDestinationLabel><b><%=intl._t("Alt Destination")%>:</b></span>
 <span class=selectAll><%=altDestB32%></span>
 </td>
@@ -274,7 +288,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
             } else {
 %>
 <tr class=tunnelInfo style=display:none>
-<td class="tunnelDestinationEncrypted empty" colspan=2></td>
+<td class="tunnelDestinationEncrypted empty" colspan=3></td>
 <%
             }
 %>
@@ -324,6 +338,7 @@ ElGamal-2048
 <table id=clientTunnels>
 <tr>
 <th class=tunnelName><%=intl._t("Name")%></th>
+<th class=tunnelHelper></th>
 <th class=tunnelType><%=intl._t("Type")%></th>
 <th class=tunnelInterface><%=intl._t("Interface")%></th>
 <th class=tunnelPort><%=intl._t("Port")%></th>
@@ -348,6 +363,8 @@ ElGamal-2048
 <%
             }
 %>
+</td>
+<td class=tunnelHelper>
 </td>
 <td class=tunnelType><%=indexBean.getTunnelType(curClient)%>
 <%
@@ -419,7 +436,7 @@ ElGamal-2048
 </td>
 </tr>
 <tr class=tunnelInfo style=display:none>
-<td class=tunnelDestination colspan=2>
+<td class=tunnelDestination colspan=3>
 <span class=tunnelDestinationLabel>
 <%
                String cdest = indexBean.getClientDestination(curClient);
@@ -487,7 +504,7 @@ ECDSA-P256
                if ((cdest.contains(".i2p") && !cdest.contains(".b32") || cdest.length() > 70) && clientB32.length() > 0) {
 %>
 <tr class=tunnelInfo style=display:none>
-<td class=tunnelDestinationEncrypted colspan=2>
+<td class=tunnelDestinationEncrypted colspan=3>
 <span class=tunnelDestinationLabel><b>B32:</b></span>
 <span class=selectAll><%=clientB32%></span>
 </td>
@@ -495,7 +512,7 @@ ECDSA-P256
                } else {
 %>
 <tr class=tunnelInfo style=display:none>
-<td class=empty colspan=2></td>
+<td class=empty colspan=3></td>
 <%
                }
 %>
