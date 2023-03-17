@@ -64,18 +64,18 @@ body:not(.iframed) #globalTunnelControl{margin:1px auto -1px}
 
 /* headings */
 h2,h3{margin:10px 0 -1px;padding:8px 10px 8px 34px;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 1px #000;font-size:11pt;color:#ee9;border:var(--border);box-shadow:var(--highlight),inset 0 0 1px 1px #030;background:var(--heading),linear-gradient(180deg,#004000,#000 75%),url(/themes/console/dark/images/camotile2.png) top left}
-h2 span{margin-top:2px}
-.iframed h2{margin:14px 0 -1px}
 h3{margin-top:12px;border-radius:0}
+h2 span{margin-top:2px}
 body:not(.iframed) .panel h2{margin-top:0}
 #messages h2{background:var(--logs) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
 #globalTunnelControl h2{background:var(--mouse) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
-.iframed #globalTunnelControl h2{margin-top:6px}
 #clients h2{background:var(--client) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
 #servers h2{background:var(--server) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
 #tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3{background:var(--settings_inert) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%;background-blend-mode:normal,normal,exclusion,normal}
 #tunnelEditPage:not(.iframed) h3{margin-top:-1px}
 #wizardPanel h2,#ssl h2{background:var(--wizard) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%;background-blend-mode:normal,normal,exclusion,normal}
+.iframed h2{margin:14px 0 -1px}
+.iframed #globalTunnelControl h2{margin-top:6px}
 
 /* forms */
 ::placeholder{font-size:80%}
@@ -365,7 +365,7 @@ td.blankColumn{padding-right:8px;width:2%}
 }
 
 @media (min-width:1500px){
-body,td,a,button,input,input[type=submit],input[type=reset],.control,a.control,select,.freetext,textarea{font-size:10pt}
+a,body,button,input,input[type=reset],input[type=submit],select,td,textarea,.control,a.control,.freetext{font-size:10pt}
 div[class^="status"]{height:18px;background-size:auto 18px}
 h2,h3{font-size:12.5pt}
 select{padding:8px 24px 8px 12px}
@@ -374,9 +374,9 @@ th .help::after,th .help:hover::after,th .help:focus::after{width:20px;height:20
 .control{padding:8px 12px 8px}
 .control.iconize{padding:9px 12px 9px;line-height:1.1}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}
-.tunnelInfo .selectAll{max-width:none}
 .tunnelControl .control{margin:3px -3px 3px 0}
-#messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3,#wizardPanel h2,#ssl h2{padding:10.5px 10px 9.5px 40px;background-position:10px center;background-size:22px auto,4px 100%,100%}
+.tunnelInfo .selectAll{max-width:none}
+#clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{padding:10.5px 10px 9.5px 40px;background-position:10px center;background-size:22px auto,4px 100%,100%}
 #globalTunnelControl #toggleInfo{margin:-5px -4px 0 0;background-size:10px}
 #globalTunnelControl #toggleInfo img{width:17px;height:17px}
 #registration .displayText{width:800px}
