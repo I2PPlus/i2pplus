@@ -145,14 +145,14 @@ class TransientDataStore implements DataStore {
 //                        _log.info("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Updated RouterInfo [" + key.toBase64().substring(0,6) + "] -> Version: " + v + "; Caps: " + caps +
+                        _log.info("Updated RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
                                   "\n* Old: " + new Date(ori.getPublished()) + "\n* New: " + new Date(ri.getPublished()));
                     _data.put(key, data);
                     rv = true;
                 }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("New RouterInfo [" + key.toBase64().substring(0,6) + "] -> Version: " + v + "; Caps: " + caps +
+                    _log.info("New RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
                               "\n* Published: " + new Date(ri.getPublished()));
                 rv = true;
             }
