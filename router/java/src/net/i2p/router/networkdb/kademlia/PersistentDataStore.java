@@ -313,58 +313,52 @@ public class PersistentDataStore extends TransientDataStore {
         boolean isUs = key.equals(_context.routerHash());
         OutputStream fos = null;
         File dbFile = null;
+        String filename = null;
+        String MIN_VERSION = "0.9.57";
+        String v = MIN_VERSION;
+        String bw = "K";
+        String ip = null;
+        boolean unreachable = false;
+        boolean isFF = false;
+        boolean hasIP = false;
+        boolean noSSU = true;
+        boolean hasSalt = false;
+        boolean isBadFF = isFF && noSSU;
+        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+        v = ri.getVersion();
+        String caps = ri.getCapabilities();
+        unreachable = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
+        if (caps.contains("f")) {
+            isFF = true;
+        }
+        if (caps.contains("salt")) {
+            hasSalt = true;
+        }
+        if (ip != null) {
+            hasIP = true;
+        }
+        bw = ri.getBandwidthTier();
+        for (RouterAddress ra : ri.getAddresses()) {
+            if (ra.getTransportStyle().equals("SSU") ||
+                ra.getTransportStyle().equals("SSU2")) {
+                    noSSU = false;
+                    break;
+            }
+        }
+
+        boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
+                         bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt || !hasIP;
 
         try {
-            String MIN_VERSION = "0.9.57";
-            String v = MIN_VERSION;
-            String bw = "K";
-            String ip = null;
-            boolean unreachable = false;
-            boolean isFF = false;
-            boolean hasIP = false;
-            boolean noSSU = true;
-            boolean hasSalt = false;
-            boolean isBadFF = isFF && noSSU;
-            boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
-            String caps = "unknown";
-            if (ri != null) {
-                v = ri.getVersion();
-                unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-                caps = ri.getCapabilities();
-                ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
-                if (caps.contains("f")) {
-                    isFF = true;
-                }
-                if (caps.contains("salt")) {
-                    hasSalt = true;
-                }
-                if (ip != null) {
-                    hasIP = true;
-                }
-                bw = ri.getBandwidthTier();
-                for (RouterAddress ra : ri.getAddresses()) {
-                    if (ra.getTransportStyle().equals("SSU") ||
-                        ra.getTransportStyle().equals("SSU2")) {
-                        noSSU = false;
-                        break;
-                    }
-                }
-            }
-
-            boolean isSlow = (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
-                              bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt || !hasIP;
-            String filename = null;
-
-            if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
+            if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
                 filename = getRouterInfoName(key);
-            else
+            } else {
                 throw new IOException("We don't know how to write objects of type " + data.getClass().getName());
-
+            }
             dbFile = new File(_dbDir, filename);
             long dataPublishDate = getPublishDate(data);
-//            if (dbFile.lastModified() < dataPublishDate) {
-//            if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
-            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld && !isBadFF && !noSSU) || isUs) {
+            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld && !isBadFF && !noSSU && !isSlow) || isUs) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -372,7 +366,7 @@ public class PersistentDataStore extends TransientDataStore {
                     data.writeBytes(fos);
                     fos.close();
                     dbFile.setLastModified(dataPublishDate);
-                    if (_log.shouldDebug() && ri != null && !unreachable && !isOld && !isBadFF && !noSSU)
+                    if (_log.shouldDebug())
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                     if (enableReverseLookups()) {
                         ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
@@ -397,12 +391,6 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
                         dbFile.delete();
-/*
-                    } else if (!hasIP) {
-                        if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> No IP address");
-                        dbFile.delete();
-*/
                     } else if (isSlow) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
