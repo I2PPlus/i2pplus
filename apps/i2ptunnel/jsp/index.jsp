@@ -119,10 +119,18 @@
 </td>
 <td class=tunnelHelper>
 <%
-            if (indexBean.getSpoofedHost(curServer) != null && indexBean.getSpoofedHost(curServer).endsWith(".i2p") &&
-                !indexBean.getSpoofedHost(curServer).contains("b32") && indexBean.getSpoofedHost(curServer) != "mysite.i2p") {
+            String spoofedHost = indexBean.getSpoofedHost(curServer);
+            String hostname = editBean.getTunnelName(curServer);
+            if (spoofedHost != null && spoofedHost.endsWith(".i2p") && !spoofedHost.contains("b32") && spoofedHost != "mysite.i2p") {
 %>
 <a class=helperLink href="https://<%=indexBean.getSpoofedHost(curServer)%>?i2paddresshelper=<%=indexBean.getDestinationBase64(curServer)%>" target=_blank></a>
+
+<%
+            } else if (hostname != null && hostname.contains(".i2p") && !hostname.contains("b32")) {
+                int i2p = hostname.indexOf(".i2p");
+                hostname = hostname.substring(0, i2p + 4);
+%>
+<a class=helperLink href="https://<%=hostname%>?i2paddresshelper=<%=indexBean.getDestinationBase64(curServer)%>" target=_blank></a>
 <%
             }
 %>
