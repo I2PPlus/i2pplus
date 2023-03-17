@@ -6398,7 +6398,7 @@ msgstr "过去 20 分钟我方入站 和 出站流量"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1161
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1204
 msgid "Total number of tunnels in use"
-msgstr "已封禁对等节点数量"
+msgstr "正在使用的隧道数量"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1163
 msgid "Average tunnel build success for last 10m interval"
