@@ -130,7 +130,7 @@
                 int i2p = hostname.indexOf(".i2p");
                 hostname = hostname.substring(0, i2p + 4);
 %>
-<a class=helperLink href="https://<%=hostname%>?i2paddresshelper=<%=indexBean.getDestinationBase64(curServer)%>" target=_blank></a>
+<a class=helperLink href="http://<%=hostname%>?i2paddresshelper=<%=indexBean.getDestinationBase64(curServer)%>" target=_blank></a>
 <%
             }
 %>
