@@ -100,7 +100,7 @@ class ParticipatingThrottler {
         } else {
           v = "NoRI";
         }
-        String MIN_VERSION = "0.9.57";
+        String MIN_VERSION = "0.9.58";
 
         if (v.equals("0.0.0")) {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
