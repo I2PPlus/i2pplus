@@ -68,15 +68,16 @@ class ParticipatingThrottler {
     Result shouldThrottle(Hash h) {
         RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
         Hash us = context.routerHash();
+        String caps = ri != null ? ri.getCapabilities() : "";
         boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());
-        boolean isUnreachable = (ri != null && !isUs) && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-        boolean isLowShare = (ri != null && !isUs) && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
-                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW128) >= 0);
-        boolean isFast = (ri != null && !isUs) && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
-                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
-                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
+        boolean isUnreachable = (ri != null && !isUs) && caps != "" && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isLowShare = (ri != null && !isUs) && (caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                             caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                             caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
+                             caps.indexOf(Router.CAPABILITY_BW128) >= 0);
+        boolean isFast = (ri != null && !isUs) && caps != "" && (caps.indexOf(Router.CAPABILITY_BW256) >= 0 ||
+                         caps.indexOf(Router.CAPABILITY_BW512) >= 0 ||
+                         caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
 //        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
         int limit = isUnreachable || isLowShare ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 12, numTunnels * (PERCENT_LIMIT / 8) / 100))
@@ -106,18 +107,21 @@ class ParticipatingThrottler {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
-                _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" + " -> No router version in RouterInfo");
+                _log.warn("Temp banning " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                          " -> No router version in RouterInfo");
             context.banlist().banlistRouter(h, " <b>➜</b> No version in RouterInfo", null, null, context.clock().now() + bantime);
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLowShare) {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
-                _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) + "] -> Slow and older than " + MIN_VERSION);
+                _log.warn("Ignoring tunnel request from " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) +
+                          "] -> Slow and older than " + MIN_VERSION + " (" + v + ")");
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isUnreachable) {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
-                _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) + "] -> Unreachable and older than " + MIN_VERSION);
+                _log.warn("Ignoring tunnel request from " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) +
+                          "] -> Unreachable and older than " + MIN_VERSION + " (" + v + ")");
         }
 
         if (count > limit && enableThrottle) {
@@ -127,13 +131,13 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning fast Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                        _log.warn("Temp banning fast " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 11 / 9) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "]" +
+                        _log.info("Ignoring tunnel requests from temp banned " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 11 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
@@ -143,12 +147,12 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning mid-tier Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                        _log.warn("Temp banning mid-tier " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 10 / 9) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "]" +
+                        _log.info("Ignoring tunnel requests from temp banned " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 10 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
@@ -159,13 +163,13 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning slow or unreachable Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                        _log.warn("Temp banning slow or unreachable " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 7 / 3) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "]" +
+                        _log.info("Ignoring tunnel requests from temp banned " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 7 / 3) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
@@ -173,13 +177,13 @@ class ParticipatingThrottler {
                 rv = Result.REJECT;
                 if (_log.shouldWarn())
                     _log.warn("Rejecting tunnel requests from " + (isLowShare || isUnreachable ? "slow or unreachable" : isFast ? "fast" : "mid-tier") +
-                              " Router [" + h.toBase64().substring(0,6) + "] " +
+                              (caps != null ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] " +
                               "\n* High number of requests -> Count/limit: " + count + "/" + limit + " in " + 11*60 / LIFETIME_PORTION + "s");
             }
         } else {
             rv = Result.ACCEPT;
             if (_log.shouldDebug())
-                _log.debug("Accepting tunnel request from [" + h.toBase64().substring(0,6) + "]" +
+                _log.debug("Accepting tunnel request from " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
                            "\n* Count: " + count + " in " + 11*60 / LIFETIME_PORTION + "s");
         }
         return rv;
