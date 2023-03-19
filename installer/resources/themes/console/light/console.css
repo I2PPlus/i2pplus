@@ -582,7 +582,7 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 .log_omitted{margin-right:1px}
 .nologs{padding:6px 8px}
 #logs font[color^="#"]::before{margin-right:5px;margin-left:-17px;margin:-2px 5px 0 -17px;width:6px;height:6px;display:inline-block;content:"";vertical-align:middle;border-radius:50%;background:#fff}
-#logs li{margin:0 0 -1px -5px;padding:1px 6px 1px 20px;width:calc(100% - 16px);text-align:left;list-style:none;font-size:8.5pt;;box-shadow:inset 0 0 0 1px #ddf,inset 0 0 0 2px #fff;opacity:.7}
+#logs li{margin:0 0 -1px -5px;padding:1px 6px 1px 20px;width:calc(100% - 16px);text-align:left;list-style:none;font-size:8.5pt;font-weight:500;box-shadow:inset 0 0 0 1px #ddf,inset 0 0 0 2px #fff;opacity:.7}
 #logs li:nth-child(even){background:#f0f0ff}
 #logs li:nth-child(odd){background:#f3f3ff}
 #logs li:first-child{margin-top:1px}
@@ -623,7 +623,7 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #wrapperlogs{margin-bottom:5px;border-bottom-width:2px}
 #wrapperlogs .nologs{padding:11px 12px}
 #wrapperlogs tr:last-child td{padding:0}
-#wrapperlogs pre{margin:0;padding:3px 0 0 5px;white-space:pre-wrap;word-wrap:break-word;width:calc(100% - 5px);max-height:600px;overflow:auto;will-change:transform}
+#wrapperlogs pre{margin:0;padding:3px 0 0 5px;width:calc(100% - 5px);max-height:600px;white-space:pre-wrap;word-wrap:break-word;overflow:auto;font-weight:500;will-change:transform}
 #wrapperlogs p,#routerlogs p{margin:0;vertical-align:middle}
 
 /* critical */
