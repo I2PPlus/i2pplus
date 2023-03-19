@@ -373,6 +373,7 @@ th .help::after,th .help:hover::after,th .help:focus::after{width:20px;height:20
 .control{padding:8px 12px 8px}
 .control.iconize{padding:9px 12px 9px;line-height:1.1}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}
+.tunnelControl{padding-right:9px}
 .tunnelControl .control{margin:3px -3px 3px 0}
 .tunnelInfo .selectAll{max-width:none}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{padding:10.5px 10px 9.5px 40px;background-position:10px center;background-size:22px auto,4px 100%,100%}
