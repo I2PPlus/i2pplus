@@ -325,7 +325,7 @@ ElGamal-2048
         } // for loop
 %>
 <tr>
-<td class=newTunnel colspan=6>
+<td class=newTunnel colspan=7>
 <form id=addNewServerTunnelForm action="edit">
 <b><%=intl._t("New server tunnel")%>:</b>&nbsp;
 <select name="type">
@@ -549,7 +549,7 @@ ElGamal-2048
 </td>
 </tr>
 <tr>
-<td class=newTunnel colspan=6>
+<td class=newTunnel colspan=7>
 <form id=addNewClientTunnelForm action="edit">
 <b><%=intl._t("New client tunnel")%>:</b>&nbsp;
 <select name="type">
