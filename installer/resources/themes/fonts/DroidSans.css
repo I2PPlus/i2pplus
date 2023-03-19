@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-@font-face {
+@font-face{
   font-family:"Droid Sans";
   font-weight:400;
   font-style:normal;
@@ -8,7 +8,7 @@
   src:local("Droid Sans Regular"),local("DroidSans"),url(/themes/fonts/DroidSans/DroidSans.woff2) format("woff2");
 }
 
-@font-face {
+@font-face{
   font-family:"Droid Sans";
   font-weight:700;
   font-style:normal;

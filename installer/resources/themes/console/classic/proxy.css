@@ -85,7 +85,7 @@ button[type=submit]:active{color:#555;border:1px solid #999;box-shadow:inset 0 0
 #warning2 b{margin-right:3px;min-width:140px;display:inline-block;text-align:right}
 #warning2 p{margin-left:10px;margin-right:10px}
 
-@keyframes loader{from{width:0} 99%{width:100%} 100%{width:0}}
+@keyframes loader{from{width:0}99%{width:100%}100%{width:0}}
 
 @media screen and (max-width:1000px){
 .logo{float:none;position:absolute;top:10px;margin:0 5px;display:block;background-size:200px auto;min-width:530px;width:calc(100% - 36px)}

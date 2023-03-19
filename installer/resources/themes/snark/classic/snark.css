@@ -1,5 +1,5 @@
 /* I2PSnark theme "Classic" */
-/* Author: dr|z3d */
+/* Author:dr|z3d */
 
 @import url(/themes/console/classic/global.css);
 
@@ -23,7 +23,7 @@
 --row_filtered:var(--bg3);
 --section:linear-gradient(180deg,var(--bg2),var(--bg3));
 --title_shadow:var(--highlight),inset 0 0 0 0 var(--bg),0 1px 1px var(--bg4);
---label_shadow_active: 1px 1px 1px rgba(0,0,0,.2) inset,2px 2px 2px rgba(255,255,255,.1) inset;
+--label_shadow_active:1px 1px 1px rgba(0,0,0,.2) inset,2px 2px 2px rgba(255,255,255,.1) inset;
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 }
 
@@ -270,7 +270,7 @@ td.trackerLink{text-align:right}
 #torrentInfo{margin-bottom:0;border-bottom:var(--border);background:var(--bg3)}
 #torrentInfo th:first-child img,#torrentInfoStats img,#trackers img{margin:-1px 4px 0 5px;max-height:16px;display:inline-block;vertical-align:middle}
 #torrentInfo th{padding:4px;text-align:left;border-top:none}
-#torrentInfo th,#torrentInfo td,#torrentInfo td:first-child{padding:8px 4px;line-height:1.6;vertical-align:middle;border-bottom: var(--border_soft)}
+#torrentInfo th,#torrentInfo td,#torrentInfo td:first-child{padding:8px 4px;line-height:1.6;vertical-align:middle;border-bottom:var(--border_soft)}
 #torrentInfo th:last-child{padding-right:8px;width:1%;white-space:nowrap;text-align:right}
 #torrentInfo td{text-align:left}
 #torrentInfo tr:nth-child(odd){background:var(--bg)}
@@ -601,7 +601,7 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #configs input.r:focus{text-align:center}
 
 /* tracker config */
-.knownTracker label{ font-weight:700; color:var(--ink_light)}
+.knownTracker label{ font-weight:700;color:var(--ink_light)}
 .knownTracker:hover td{background:#ffd}
 .knownTracker a{display:inline-block;width:220px;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .trackerhome,.trackerannounce{width:260px}
@@ -705,7 +705,7 @@ th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
 .snarkCommented img{padding:0;height:9px;width:auto;border:none}
 
 .mainsection{background:var(--bg3);border-bottom:var(--border)}
-.iframed #commentSection,.iframed #snarkFiles{ border:none; border-top:var(--border); border-bottom:var(--border)}
+.iframed #commentSection,.iframed #snarkFiles{ border:none;border-top:var(--border);border-bottom:var(--border)}
 .iframed #snarkFiles + #commentSection{margin-top:5px}
 #dirInfo tr:last-child,#newrating{border-bottom:none}
 #snarkFiles,.iframed #snarkFiles,#snarkInfo + .mainsection{margin-top:8px}
@@ -736,13 +736,13 @@ th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
 #torrentEdit tr:last-child input{margin-right:0}
 
 /* animations */
-@keyframes slide-in{0%{transform:translateY(-40px)} 100%{transform:translateY(0)}}
-@keyframes fade-in{0%{filter:opacity(0)} 100%{filter:opacity(1)}}
-@keyframes disappear{from{visibility:visible} to{visibility:collapse}}
-@keyframes activity{0%,100%{background-position:left center} 50%{background-position:center center}}
-@keyframes scale{0%,100%{transform:scale(1)} 50%{transform:scale(1.3)}}
+@keyframes slide-in{0%{transform:translateY(-40px)}100%{transform:translateY(0)}}
+@keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
+@keyframes disappear{from{visibility:visible}to{visibility:collapse}}
+@keyframes activity{0%,100%{background-position:left center}50%{background-position:center center}}
+@keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
 
-@supports not (-moz-appearance:none){#navbar{padding-top:9px} .percentBarText{line-height:16px} .iframed .percentBarText,.iframed .percentBarText:hover,.iframed .percentBarText:focus{transition:none}}
+@supports not (-moz-appearance:none){#navbar{padding-top:9px}.percentBarText{line-height:16px}.iframed .percentBarText,.iframed .percentBarText:hover,.iframed .percentBarText:focus{transition:none}}
 
 /* responsive layout */
 @media screen and (max-width:1499px){

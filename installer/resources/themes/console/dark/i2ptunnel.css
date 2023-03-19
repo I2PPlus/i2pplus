@@ -1,4 +1,4 @@
-/* I2P TunnelManager theme: "Camo". Aka "dark". As in ops. */
+/* I2P TunnelManager theme:"Camo". Aka "dark". As in ops. */
 /* Author:dr|z3d */
 
 @import url(global.css);
@@ -35,10 +35,10 @@ div[class^="status"]{margin:0;padding:0;width:100%;height:16px;font-size:0;text-
 #screenlog span{margin:0;height:calc(100% + 2px);display:flex;align-items:stretch;position:absolute;top:-1px;bottom:-1px;right:-1px;vertical-align:middle}
 #screenlog .iconize{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0;box-shadow:var(--highlight),inset 0 0 1px 1px #050}
 #screenlog .iconize:hover,#screenlog .iconize:focus{box-shadow:var(--highlight),inset 0 0 1px 1px #f60}
-#screenlog .iconize:active{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0;box-shadow:var(--highlight), inset 5px 5px 5px rgba(0,0,0,.8)}
-#screenlog .clearlog{border-left:var(--border);background: rgba(0,0,0,.3) var(--close) no-repeat center center/14px}
-#screenlog .clearlog:hover{background: var(--close_hover) no-repeat center center/16px, var(--btnAction)}
-#screenlog .clearlog:active{background: var(--close) no-repeat center center/12px,linear-gradient(180deg,#010,#020)}
+#screenlog .iconize:active{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0;box-shadow:var(--highlight),inset 5px 5px 5px rgba(0,0,0,.8)}
+#screenlog .clearlog{border-left:var(--border);background:rgba(0,0,0,.3) var(--close) no-repeat center center/14px}
+#screenlog .clearlog:hover{background:var(--close_hover) no-repeat center center/16px,var(--btnAction)}
+#screenlog .clearlog:active{background:var(--close) no-repeat center center/12px,linear-gradient(180deg,#010,#020)}
 #statusMessages,#statusMessages:active,#statusMessages:focus{margin:0;padding:2px 4px 2px 8px;width:100%;height:80px;font-size:8.5pt;font-weight:600;color:#69f;border:none;border-radius:0;box-shadow:inset 0 0 3px 3px #000;background:linear-gradient(180deg,#000 0%,#010 100%)}
 #statusMessages::selection{background:#69f;color:#fff}
 
@@ -90,7 +90,7 @@ input[type="hidden"],input.default{display:none}
 input[readonly]{cursor:text}
 input[type=file]{background:none}
 label{vertical-align:sub}
-input[type="text"], input[type="password"]{margin: 4px 5px;font-weight:600}
+input[type="text"],input[type="password"]{margin:4px 5px;font-weight:600}
 input[type=text]+label{white-space:nowrap;vertical-align:unset}
 input[name="nofilter_blindedPassword"],input.proxyList,input.tunnelDescription,input.tunnelName,select#profile,.authentication,.clientKey,.clientName,#encryptMode,#hostField,#leasesetKey,#localDestination,#sigType,textarea[name="accessList"],#tunnelBackupQuantity,#tunnelBackupQuantityOut,#tunnelDepth,#tunnelDepthOut,#tunnelQuantity,#tunnelQuantityOut,#tunnelVariance,#tunnelVarianceOut,#userAgents{margin:5px;width:calc(100% - 10px)}
 select{min-width:120px}

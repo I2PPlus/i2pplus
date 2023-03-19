@@ -441,7 +441,7 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 
 /* router widgets */
 .rid{width:unset}
-.rid, .rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);box-shadow:var(--highlight);background:var(--badge)}
+.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);box-shadow:var(--highlight);background:var(--badge)}
 .rid .rih{font-family:var(--monospaced);font-weight:500;letter-spacing:.1em;box-shadow:var(--highlight);background:var(--badge)}
 .rid .rih a{font-weight:600}
 .rif,.rif img{line-height:0;font-size:0}
@@ -2365,22 +2365,22 @@ iframe.iframed{margin:10px 0 0}
 /* animations */
 @keyframes bar{from{width:300%}}
 @keyframes down{from{background-position:center center,100%}}
-@keyframes downloadbar{from{background:repeating-linear-gradient(135deg,rgba(221,221,255,.7) 1px,rgba(221,221,255,.7) 6px,rgba(238,238,255,.7) 7px,rgba(238,238,255,.7) 11px)} to{background:var(--activity)}}
+@keyframes downloadbar{from{background:repeating-linear-gradient(135deg,rgba(221,221,255,.7) 1px,rgba(221,221,255,.7) 6px,rgba(238,238,255,.7) 7px,rgba(238,238,255,.7) 11px)}to{background:var(--activity)}}
 @keyframes fade{from{filter:opacity(1)}to{filter:opacity(0)}}
-@keyframes fadein{from{background:#f7f7ff} to{background:#fff}}
-@keyframes grid-fade{from{background:repeating-linear-gradient(90deg,rgba(0,0,0,0),#efefef 1px,rgba(0,0,0,0) 1px,rgba(0,0,0,0) 10px),repeating-linear-gradient(180deg,#efefff,#efefff 1px,#f6f6ff 1px,#f6f6ff 10px)} to{background:repeating-linear-gradient(90deg,rgba(0,0,0,0),#f6f6ff 1px,rgba(0,0,0,0) 1px,rgba(0,0,0,0) 10px),repeating-linear-gradient(180deg,#f6f6ff,#f6f6ff 1px,#f6f6ff 1px,#f6f6ff 10px)}}
-@keyframes highlight{from{background:#efe} to{background:transparent}}
-@keyframes reloader{0%,100%{width:0} 80%,99%{width:120%}}
-@keyframes routerdown{from{background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px)} to{background:repeating-linear-gradient(135deg,#ddddd2,#ddddd2 10px,#fffff2 10px,#fffff2 20px)}}
-@keyframes slide{from{transform:translateY(-60px)} to{transform:translateY(0)}}
+@keyframes fadein{from{background:#f7f7ff}to{background:#fff}}
+@keyframes grid-fade{from{background:repeating-linear-gradient(90deg,rgba(0,0,0,0),#efefef 1px,rgba(0,0,0,0) 1px,rgba(0,0,0,0) 10px),repeating-linear-gradient(180deg,#efefff,#efefff 1px,#f6f6ff 1px,#f6f6ff 10px)}to{background:repeating-linear-gradient(90deg,rgba(0,0,0,0),#f6f6ff 1px,rgba(0,0,0,0) 1px,rgba(0,0,0,0) 10px),repeating-linear-gradient(180deg,#f6f6ff,#f6f6ff 1px,#f6f6ff 1px,#f6f6ff 10px)}}
+@keyframes highlight{from{background:#efe}to{background:transparent}}
+@keyframes reloader{0%,100%{width:0}80%,99%{width:120%}}
+@keyframes routerdown{from{background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px)}to{background:repeating-linear-gradient(135deg,#ddddd2,#ddddd2 10px,#fffff2 10px,#fffff2 20px)}}
+@keyframes slide{from{transform:translateY(-60px)}to{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(-360deg)}}
-@keyframes zoom{from{transform:scale(0)} to{scale:scale(1)}}
+@keyframes zoom{from{transform:scale(0)}to{scale:scale(1)}}
 
 /* browser specific */
 @supports (content-visibility:auto){.newsentry.lazyhide{contain:none;opacity:1}}
 @supports (text-justify:auto) and (-moz-appearance:none){body{background-attachment:fixed}}
 @supports (text-justify:auto){#events tr{box-shadow:var(--highlight)}}
-@supports (scroll-behavior:auto){#netdboverview table td{padding:5px 10px;box-shadow:var(--highlight);background:var(--row)} #netdboverview #netdbversions td:first-child,#netdboverview #netdbtransports td:first-child,#netdboverview #netdbcountrylist td:first-child,#netdbtiers td:first-child{white-space:nowrap;border-right:var(--border_soft)}}
+@supports (scroll-behavior:auto){#netdboverview table td{padding:5px 10px;box-shadow:var(--highlight);background:var(--row)}#netdboverview #netdbversions td:first-child,#netdboverview #netdbtransports td:first-child,#netdboverview #netdbcountrylist td:first-child,#netdbtiers td:first-child{white-space:nowrap;border-right:var(--border_soft)}}
 
 @supports not (-moz-appearance:none){
 div[lang="es"] li,div[lang="pt"] li,div[lang="sv"] li,div[lang="zh"] li{margin-left:25px}

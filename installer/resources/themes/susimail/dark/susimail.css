@@ -407,11 +407,11 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 #loading{margin:0;padding:50px 15px;text-align:center;font-size:10pt;border:none;background:repeating-linear-gradient(180deg,#001,#000 2px,#001 3px)}
 #loading b{padding:6px 0;width:40%;min-width:400px;display:inline-block;letter-spacing:2px;text-shadow:0 0 1px #001,0 0 5px #003;color:var(--ink);border-radius:2px;box-shadow:var(--highlight),inset 0 0 0 2px #001,inset 0 0 2px 3px #002,0 0 1px #001;background:repeating-linear-gradient(45deg,#020 1px,#020 20px,#000 20px,#000 40px);animation:loading 1s linear infinite forwards alternate}
 
-@keyframes attention{from{background-position:200%} to{background-position:0}}
-@keyframes fade-in{0%,80%{filter:opacity(0)} 100%{filter:opacity(1)}}
-@keyframes hide-up{from{margin-top:0} to{margin-top:-300px}}
-@keyframes loading{0%{background:linear-gradient(180deg,rgba(255,255,255,.2) 50%,rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg,#020 1px,#020 20px,#000 20px,#000 40px)} 100%{background:linear-gradient(180deg,rgba(255,255,255,.2) 50%,rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg,#000 1px,#000 20px,#020 20px,#020 40px)}}
-@keyframes scaleY{from{transform:scaleY(0)} to{transform:scaleY(1)}}
+@keyframes attention{from{background-position:200%}to{background-position:0}}
+@keyframes fade-in{0%,80%{filter:opacity(0)}100%{filter:opacity(1)}}
+@keyframes hide-up{from{margin-top:0}to{margin-top:-300px}}
+@keyframes loading{0%{background:linear-gradient(180deg,rgba(255,255,255,.2) 50%,rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg,#020 1px,#020 20px,#000 20px,#000 40px)}100%{background:linear-gradient(180deg,rgba(255,255,255,.2) 50%,rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg,#000 1px,#000 20px,#020 20px,#020 40px)}}
+@keyframes scaleY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 
 @supports (position:sticky){#pagenavbottom{display:none}}
 

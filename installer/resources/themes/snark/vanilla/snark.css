@@ -816,22 +816,22 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 #DoesNotExist{margin-top:10px}
 
 /* animations */
-@keyframes active{from{background:linear-gradient(to left,#f3c 3px,rgba(0,0,0,0) 3px)} to{background:linear-gradient(to left,#cb4dcb 3px,rgba(0,0,0,0) 3px)}}
-@keyframes disappear{from{visibility:visible} to{visibility:collapse}}
-@keyframes downloadbar{0%{background-position:left center} 100%{background-position:-29.5px center}}
-@keyframes downloading{from{background:linear-gradient(to left,#3d3 3px,rgba(0,0,0,0) 3px)} to{background:linear-gradient(to left,#7f7 3px,rgba(0,0,0,0) 3px)}}
-@keyframes fade-in{0%{filter:opacity(0)} 100%{filter:opacity(1)}}
-@keyframes scale{0%,100%{transform:scale(1)} 50%{transform:scale(1.3)}}
-@keyframes uploading{from{background-position:left center} to{background-position:20% center}}
+@keyframes active{from{background:linear-gradient(to left,#f3c 3px,rgba(0,0,0,0) 3px)}to{background:linear-gradient(to left,#cb4dcb 3px,rgba(0,0,0,0) 3px)}}
+@keyframes disappear{from{visibility:visible}to{visibility:collapse}}
+@keyframes downloadbar{0%{background-position:left center}100%{background-position:-29.5px center}}
+@keyframes downloading{from{background:linear-gradient(to left,#3d3 3px,rgba(0,0,0,0) 3px)}to{background:linear-gradient(to left,#7f7 3px,rgba(0,0,0,0) 3px)}}
+@keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
+@keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+@keyframes uploading{from{background-position:left center}to{background-position:20% center}}
 
 /* browser specific */
 @supports (justify-content:center){#navbar{display:flex;justify-content:center}}
-@supports (display:flex){#torrentDisplay{display:flex} #torrentDisplay label{min-width:0;flex-grow:1} #torrentDisplay label[for="all"]{border-left:none} #torrentDisplay label:last-child{border-right:none}}
+@supports (display:flex){#torrentDisplay{display:flex}#torrentDisplay label{min-width:0;flex-grow:1}#torrentDisplay label[for="all"]{border-left:none}#torrentDisplay label:last-child{border-right:none}}
 @supports (animation:ease all .1s){.ascending,.descending{filter:opacity(0);animation:ease fade-in .2s .6s forwards}}
 @supports not (-moz-appearance:none){.peerinfo .torrentDownloaded .percentBarText{line-height:normal}}
-@-moz-document url-prefix(){select option{color:#5f1227;box-shadow:inset 0 0 20px 20px #fffcdf;background:#fffcdf} select option:hover,select option:checked{box-shadow:inset 0 0 20px 20px #5f1227;background:#f60}}
+@-moz-document url-prefix(){select option{color:#5f1227;box-shadow:inset 0 0 20px 20px #fffcdf;background:#fffcdf}select option:hover,select option:checked{box-shadow:inset 0 0 20px 20px #5f1227;background:#f60}}
 @supports not (-moz-appearance:none){#torrents tbody tr:hover,.dirInfo tbody tr:hover{background:#f9efcf}}
-@supports not (-moz-appearance:none){.rowEven + .rowEven:nth-child(even),.rowOdd + .rowOdd:nth-child(even){background:#e8dfda} .rowEven + .rowEven:nth-child(odd),.rowOdd + .rowOdd:nth-child(odd){background:#e0d9d5}}
+@supports not (-moz-appearance:none){.rowEven + .rowEven:nth-child(even),.rowOdd + .rowOdd:nth-child(even){background:#e8dfda}.rowEven + .rowEven:nth-child(odd),.rowOdd + .rowOdd:nth-child(odd){background:#e0d9d5}}
 
 /* responsive layout */
 @media screen and (max-width:1500px){

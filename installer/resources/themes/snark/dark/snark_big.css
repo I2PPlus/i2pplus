@@ -4,7 +4,7 @@ b{font-weight:400}
 input[type],select,a.control{line-height:130%}
 input[type],select,select option,td,td a,#screenlog li,#screenlog li a,textarea,input.r,input[name="nofilter_dataDir"],
 td.torrentDownloaded,td.torrentUploaded,td.RateDown,td.RateUp,.torrentName a:link{font-size:10pt}
-th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp, th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp{font-weight:700}
+th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp{font-weight:700}
 th.suboption{font-weight:500}
 .configOption::after{content:"";display:inline-block;height:40px;vertical-align:middle}
 .configPanel,.configPanel td,.snarkNewTorrent,.snarkNewTorrent td,.snarkAddInfo,

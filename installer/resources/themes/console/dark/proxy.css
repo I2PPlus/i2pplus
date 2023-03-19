@@ -118,8 +118,8 @@ h1 + .sorry,#console_404 .sorry{margin:-1px 5px 10px 226px;padding:20px 20px 20p
 .iframed#servletError .warning,.iframed#servletError #warning2{margin:5px}
 .iframed#servletError .warning + #warning2{margin:-3px 4px 5px}
 
-@keyframes fade{from{opacity:0} to{opacity:1}}
-@keyframes loader{from{width:0} 99%{width:100%} 100%{width:0}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes loader{from{width:0}99%{width:100%}100%{width:0}}
 
 @media screen and (max-width:1500px){
 #proxyNewAddressHelper #warning{background-position:40px 120px,left top,left top}
@@ -149,7 +149,7 @@ h1 + .sorry,#console_404 .sorry{margin:-1px 5px 10px 226px;padding:20px 20px 20p
 }
 
 @media screen and (min-width:1500px){
-#warning2.sorry{margin:-12px 15px 12px 244px} #warning2 h3{margin-top:-11px}
+#warning2.sorry{margin:-12px 15px 12px 244px}#warning2 h3{margin-top:-11px}
 #error500 #warning2{margin-left:272px;margin-right:5px}
 h1 + .sorry,#console_404 .sorry{margin-left:272px}
 .logo a:nth-child(n+2)::after{width:100%;height:1px;display:inline-block;position:absolute;left:0;bottom:0;background:#000;content:""}
