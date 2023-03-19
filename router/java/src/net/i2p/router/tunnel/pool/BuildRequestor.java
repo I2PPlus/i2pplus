@@ -219,12 +219,12 @@ abstract class BuildRequestor {
                     }
                 }
                 if (pairedTunnel != null && log.shouldInfo())
-                    log.info("Couldn't find a paired tunnel, using Exploratory tunnel instead for: " + cfg);
+                    log.info("Can't find a paired tunnel, using Exploratory tunnel instead for: " + cfg);
             }
         }
         if (pairedTunnel == null) {
             if (log.shouldWarn())
-                log.warn("Tunnel build failed - couldn't find a paired tunnel " + cfg);
+                log.warn("Tunnel build failed -> Can't find a paired tunnel " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
             // Not even an exploratory tunnel? We are in big trouble.
             // Let's not spin through here too fast.
@@ -240,7 +240,7 @@ abstract class BuildRequestor {
         //long createTime = System.currentTimeMillis()-beforeCreate;
         if (msg == null) {
             if (log.shouldWarn())
-                log.warn("Tunnel build failed - couldn't create the tunnel build message " + cfg);
+                log.warn("Tunnel build failed -> Can't create the TunnelBuildMessage " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
             return false;
         }
@@ -278,7 +278,7 @@ abstract class BuildRequestor {
             }
 
             if (log.shouldInfo())
-                log.info("Sending tunnel build request [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel + " to ["
+                log.info("Sending TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel + " to ["
                           + ibgw.toBase64().substring(0,6) + "] for " + cfg + " Waiting for reply of "
                           + cfg.getReplyMessageId() + "...");
             // send it out a tunnel targeting the first hop
@@ -287,7 +287,7 @@ abstract class BuildRequestor {
             ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
         } else {
             if (log.shouldInfo())
-                log.info("Sending tunnel build request direct to [" + cfg.getPeer(1).toBase64().substring(0,6)
+                log.info("Sending TunnelBuildRequest direct to [" + cfg.getPeer(1).toBase64().substring(0,6)
                           + "] for " + cfg + " Waiting for reply of " + cfg.getReplyMessageId()
                           + " via " + pairedTunnel
                           + " with [MsgID " + msg.getUniqueId() + "]");
@@ -325,7 +325,7 @@ abstract class BuildRequestor {
             try {
                 ctx.outNetMessagePool().add(outMsg);
             } catch (RuntimeException re) {
-                log.error("Failed sending build message", re);
+                log.error("Failed sending TunnelBuildMessage", re);
                 return false;
             }
         }
