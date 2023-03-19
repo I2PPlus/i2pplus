@@ -405,26 +405,6 @@ div[id^="config_"].main{padding-bottom:14px}
 #events .messages{margin-top:26px;margin-bottom:-13px;box-shadow:inset 0 0 0 1px #700}
 #graphs .messages{top:-16px;z-index:999}
 
-/* welcome */
-div[lang="es"] li,div[lang="pt"] li,div[lang="sv"] li{list-style:none}
-div[lang="pt"] .twocol,div[lang="es"] .twocol,div[lang="sv"] .twocol{margin:10px -5px 5px;padding:10px;border:1px solid #000;border-radius:4px;background:rgba(0,32,0,.3)}
-div[lang="sv"] li::first-letter{text-transform:uppercase}
-p+.twocol{margin:10px 25px}
-.links b{color:#bb0;letter-spacing:.08em;line-height:1.65}
-.links li{margin-left:25px;list-style-image:var(--star);text-align:justify;line-height:1.6}
-.links{margin-top:10px;text-align:justify}
-.links+.twocol{margin-top:-5px}
-.twocol{display:block;columns:2 400px;column-gap:0}
-.twocol li{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
-.welcome h2{padding:10px 14px;background:url(images/favicon.svg) no-repeat right 10px center/24px,var(--h2)}
-.welcome h2::after{margin-left:1px;content:"+";font-size:120%}
-#console{padding-bottom:20px}
-#console li{text-align:justify}
-#console li b{font-size:110%;color:#bb0}
-#console p{margin:5px 20px 10px}
-#console ul{margin-left:10px;margin-right:10px;line-height:1.5}
-#home .welcome{display:none}
-
 /* forms */
 .optionlist,.optionsingle,#reseedssl{padding:1px 2px;border:var(--border_soft);box-shadow:inset 0 0 0 2px #000;column-gap:1px;transition:ease box-shadow .2s;background:repeating-linear-gradient(180deg,#000 1px,#000800 2px,#000800 3px)}
 .optionlist{padding-bottom:1px;columns:500px auto;contain:paint}
@@ -2350,6 +2330,10 @@ h1.webapp{background:var(--h1_webapp) no-repeat 10px center,var(--h1)}
 h1[class],h1{margin:0 5px 0 226px;position:relative;z-index:999;white-space:normal;line-height:1.2;letter-spacing:.15em;text-transform:uppercase;text-align:left;font-weight:700;font-style:normal;text-shadow:0 0 1px #000,0 0 2px #040,0 0 3px #000;border-radius:3px 3px 0 0;box-shadow:var(--bevel);background-blend-mode:normal,normal,normal,exclusion}
 
 /* help */
+div[lang="es"] li,div[lang="pt"] li,div[lang="sv"] li{list-style:none}
+div[lang="pt"] .twocol,div[lang="es"] .twocol,div[lang="sv"] .twocol{margin:10px -5px 5px;padding:10px;border:1px solid #000;border-radius:4px;background:rgba(0,32,0,.3)}
+div[lang="sv"] li::first-letter{text-transform:uppercase}
+p+.twocol{margin:10px 25px}
 .plus{margin-right:6px;padding:1px 2px;float:left;font-size:95%;font-weight:700;color:#000;border-radius:2px;background:#770}
 .sitelink,.chatlink,.consolelink{padding:0 3px 0 18px;white-space:nowrap;border-radius:1px;box-shadow:var(--outline)}
 .sitelink:active,.chatlink:active,.consolelink:active{box-shadow:0 0 0 1px rgba(200,48,0,.5),inset 3px 3px 3px #000;background-color:#010}
@@ -2357,10 +2341,16 @@ h1[class],h1{margin:0 5px 0 226px;position:relative;z-index:999;white-space:norm
 .chatlink:hover{background:var(--chat) no-repeat 3px center/12px,var(--label)}
 .consolelink{background:rgba(0,64,0,.3) url(images/favicon.svg) no-repeat 3px center/12px}
 .consolelink:hover{background:url(images/favicon.svg) no-repeat 3px center/12px,var(--label)}
+.links b{color:#bb0;letter-spacing:.08em;line-height:1.65}
+.links li{margin-left:25px;list-style-image:var(--star);text-align:justify;line-height:1.6}
+.links{margin-top:10px;text-align:justify}
+.links+.twocol{margin-top:-5px}
 .sitelink{background:rgba(0,64,0,.3) var(--link) no-repeat 3px center/12px}
 .sitelink:hover{background:var(--link) no-repeat 3px center/12px,var(--label)}
 .sitelink.external{background:rgba(0,64,0,.3) var(--planet) no-repeat 3px center/12px}
 .sitelink.external:hover{background:var(--planet) no-repeat 3px center/12px,var(--label)}
+.twocol{display:block;columns:2 400px;column-gap:0}
+.twocol li{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #advancedsettings,#browserconfig,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
 #changelog h2{margin:0 0 -11px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
