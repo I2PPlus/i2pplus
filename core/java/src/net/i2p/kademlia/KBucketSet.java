@@ -146,7 +146,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         if (bucket != null) {
             if (bucket.add(peer)) {
                 if (_log.shouldDebug())
-                    _log.debug("Peer [" + peer.toBase64().substring(0,6) + "] added to bucket\n* " + bucket);
+                    _log.debug("Router [" + peer.toBase64().substring(0,6) + "] added to bucket\n* " + bucket);
                 if (shouldSplit(bucket)) {
                     if (_log.shouldDebug())
                         _log.debug("Splitting bucket " + bucket);
@@ -156,7 +156,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
                 return true;
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Peer [" + peer.toBase64().substring(0,6) + "] NOT added to bucket - already known\n* " + bucket);
+                    _log.debug("Router [" + peer.toBase64().substring(0,6) + "] NOT added to bucket -> Already known\n* " + bucket);
                 return false;
             }
         } else {
