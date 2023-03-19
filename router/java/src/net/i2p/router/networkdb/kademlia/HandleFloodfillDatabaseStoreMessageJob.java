@@ -425,7 +425,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 getContext().profileManager().dbStoreReceived(_fromHash, wasNew);
                 getContext().statManager().addRateData("netDb.storeHandled", ackEnd-recvEnd);
             } else {
-                if (invalidMessage.contains("was published")) {
+                if (invalidMessage.contains("published over")) {
                     dontBlamePeer = true;
                     if (_log.shouldWarn())
                         _log.warn("Received stale RouterInfo from [" + _fromHash.toBase64().substring(0,6) + "] \n* " + invalidMessage);
@@ -438,7 +438,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
             if (_log.shouldWarn()) {
-                if (invalidMessage.contains("was published"))
+                if (invalidMessage.contains("published over"))
                     _log.warn("Received stale RouterInfo from [unknown] \n* " + invalidMessage);
                 else
                     _log.warn("Received INVALID data packet from [unknown] \n* " + invalidMessage);
