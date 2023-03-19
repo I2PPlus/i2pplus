@@ -99,7 +99,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     //getContext().statManager().addRateData("netDb.storeLocalLeaseSetAttempt", 1, 0);
                     // throw rather than return, so that we send the ack below (prevent easy attack)
                     dontBlamePeer = true;
-                    throw new IllegalArgumentException("Peer [" + key.toBase64().substring(0, 6) + "] attempted to store LOCAL LeaseSet");
+                    throw new IllegalArgumentException("Router [" + key.toBase64().substring(0, 6) + "] attempted to store LOCAL LeaseSet");
                 }
                 LeaseSet ls = (LeaseSet) entry;
                 //boolean oldrar = ls.getReceivedAsReply();
@@ -194,7 +194,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     // This is initiated by PeerTestJob from another peer
                     // throw rather than return, so that we send the ack below (prevent easy attack)
                     dontBlamePeer = true;
-                    throw new IllegalArgumentException("Peer attempted to store our RouterInfo");
+                    throw new IllegalArgumentException("Router [" + key.toBase64().substring(0, 6) + "] attempted to store our RouterInfo");
                 }
                 boolean shouldStore = true;
                 if (ri.getReceivedAsPublished()) {

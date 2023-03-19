@@ -1569,17 +1569,17 @@ public class ProfileOrganizer {
                 boolean exclude = TunnelPeerSelector.shouldExclude(_context, info);
                 if (exclude) {
                     // if (_log.shouldWarn())
-                    //     _log.warn("Peer " + peer.toBase64() + " has capabilities or other stats suggesting we avoid it");
+                    //     _log.warn("Router [" + peer.toBase64().substring(0,6) + "] has capabilities or other stats suggesting we avoid it");
                     return false;
                 } else {
                     // if (_log.shouldInfo())
-                    //     _log.info("Peer " + peer.toBase64() + " is locally known, allowing its use");
+                    //     _log.info("Router [" + peer.toBase64().substring(0,6) + "] is locally known, allowing its use");
                     return true;
                 }
             }
         } else {
             // if (_log.shouldWarn())
-            //    _log.warn("Peer " + peer.toBase64() + " is NOT locally known, disallowing its use");
+            //    _log.warn("Router [" + peer.toBase64().substring(0,6) + "] is NOT locally known, disallowing its use");
             return false;
         }
     }
