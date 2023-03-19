@@ -993,7 +993,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private String validate(Hash key, LeaseSet leaseSet) throws UnsupportedCryptoException {
         if (!key.equals(leaseSet.getHash())) {
             if (_log.shouldWarn())
-                _log.warn("Invalid NetDb store attempt! Key does not match LeaseSet destination!" +
+                _log.warn("Invalid NetDbStore attempt! Key does not match LeaseSet destination!" +
                           "\n* Key: [" + key.toBase32().substring(0,6) + "]" +
                           "\n* LeaseSet: [" + leaseSet.toBase64().substring(0,6) + "]");
             return "Key does not match LeaseSet destination - " + key.toBase64();
@@ -1142,7 +1142,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         String err = validate(key, leaseSet);
         if (err != null)
-            throw new IllegalArgumentException("Invalid NetDb store attempt - " + err);
+            throw new IllegalArgumentException("Invalid NetDbStore attempt - " + err);
 
         _ds.put(key, leaseSet);
 
@@ -1207,7 +1207,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private String validate(Hash key, RouterInfo routerInfo) throws IllegalArgumentException {
         if (!key.equals(routerInfo.getIdentity().getHash())) {
             if (_log.shouldWarn())
-                _log.warn("Invalid NetDb store attempt! Key [" + key.toBase64().substring(0,6) + "] " +
+                _log.warn("Invalid NetDbStore attempt! Key [" + key.toBase64().substring(0,6) + "] " +
                           "does not match identity for RouterInfo [" + routerInfo.toBase64().substring(0,6) + "]");
             return "Key does not match routerInfo.identity";
         }
@@ -1486,7 +1486,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         String err = validate(key, routerInfo);
         if (err != null)
-            throw new IllegalArgumentException("Invalid NetDb store attempt - " + err);
+            throw new IllegalArgumentException("Invalid NetDbStore attempt - " + err);
 
         //if (_log.shouldDebug())
         //    _log.debug("RouterInfo " + key.toBase64() + " is stored with "
