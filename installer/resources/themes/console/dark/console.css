@@ -353,7 +353,8 @@ div[id^="config_"].main{padding-bottom:14px}
 #newsDisplay a,#graphopts a,#routerinfo a,#routerinformation tr:nth-child(n+2) a:not(#revision),#fullhistory a,.graphstat,.graphstat:visited{margin:0 -2px;padding:2px 10px;color:var(--a);border:1px solid rgba(0,24,0,.5);border-radius:15px;box-shadow:var(--highlight);background:rgba(0,48,0,.3)}
 #newsDisplay a{min-width:90px;text-align:center}
 #news{margin:-1px 5px 0 226px;padding:6px 15px 8px;min-width:655px;font-size:8pt;text-align:right;box-shadow:0 1px 5px #000}
-#news hr{margin:8px 0 5px}
+#news hr{margin:8px 0 5px;background:repeating-linear-gradient(90deg,#242 2px,#000 4px);background-size:4px 100%}
+#news#news hr{opacity:.7}
 #news li{margin:3px 0 3px 15px;padding:5px;vertical-align:middle;word-wrap:break-word;text-align:justify;text-transform:capitalize;color:var(--a)}
 #news li::before{width:20px;height:10px;display:inline-block;list-style:none;background:var(--tunn_active) no-repeat left center/8px;content:""}
 #news #newsDisplay a:active,#graphopts a:active,#routerinformation tr:nth-child(n+2) a:not(#revision):active,#fullhistory a:active,.graphstat:active{box-shadow:inset 2px 2px 2px #000;background:#020}
@@ -774,6 +775,7 @@ pre#activetransports{margin:0 20px 0 0;padding:15px 5px 5px 15px;width:calc(100%
 #profilelist th:nth-child(4),#profilelist td:nth-child(4){width:15%}
 #profilelist th:nth-child(5),#profilelist td:nth-child(5){width:40%;text-align:center}
 #profilelist th:nth-child(5),#profilelist td:nth-child(5){width:10%;min-width:56px;white-space:nowrap}
+#profilelist th:nth-child(2)::after{right:-4px;z-index:10}
 #profilelist .tier,#profilelist .reachable,#profilelist .unreachable,#profilelist .ff{margin-top:-6px;margin-bottom:-6px;padding-top:2px;padding-bottom:1px}
 #profilelist tr:hover,#floodfills tr:hover{background:#030}
 #profilelist tr:hover td,#floodfills tr:hover td{color:var(--ink)}
@@ -1515,6 +1517,21 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #certs textarea+#end,#certs h3+#end{margin-bottom:10px;display:inline-block}
 
 /* configure */
+td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_advanced td,#config_bandwidth td.infohelp,#config_peers #banlist,#config_peers tr:not(:last-child) td,#consolepass td[colspan="3"],#criticallogs tr:first-child td,#enablefullstats,#help div,#helptranslate,#langsettings,#pluginconfigtext,#plugininstall tr:first-child .infohelp,#routerlogs tr:first-child td,#themeoptions,#themesettings,#wrapperlogs tr:first-child td{box-shadow:var(--highlight),inset 0 0 1px 1px #040}
+.optionlist label,.optionlist .nowrap{min-width:300px;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid;will-change:transform}
+.configtable th{word-spacing:0;letter-spacing:0;text-transform:none}
+#config_advanced td.optionsave,#config_bandwidth td.optionsave,#config_clients .formaction,#config_homepage .formaction,#config_i2cp td.optionsave,#config_keyring .optionsave,#config_logging td.optionsave,#config_network td.optionsave,#config_peers .configtable tr:last-child td,#config_peers .configtable tr:nth-child(4) td,#config_service .formaction,#configstats tr.tablefooter,#config_summarybar .formaction,#config_ui .formaction,#graphing.formaction,#i2pupdates tr:nth-child(2),#i2pupdates tr.tablefooter,#pluginconfigactions.formaction,#reseedconfig td.optionsave,#sidebarconf tr:last-child,#sybilTask .optionsave,#tunnelconfigsave.formaction,#webappconfigactions.formaction{background:var(--h3),var(--footer);background-size:2px,100%}
+#externali2cp tr,#i2pupdates tr,#joinfamily tr,#manualreseed tr,#netconfig tr,#newfamily tr:last-child,#plugininstall,#plugininstall2,#reseedconfig tr{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:none}
+#configstats tr.tablefooter td.optionsave,#sidebarconf tr:last-child td,#i2pupdates tr.tablefooter td{background:transparent }
+#externali2cp input[name="port"]{margin-left:6px}
+#externali2cp td{padding:5px}
+#netconfig .suboption,#externali2cp .suboption{padding-top:3px;padding-bottom:3px}
+#netconfig td.infohelp,#reseedconfig td.infohelp{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:#000 var(--infohelp) no-repeat 15px center/32px}
+#netconfig td.infowarn{background:#000 var(--infowarn) no-repeat 15px center/32px}
+#plugininstall,#reseedconfig{margin-bottom:10px}
+#refreshsidebar tr:first-child{box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset 0 0 1px 1px #030,inset 0 -1px 1px 1px #030}
+#updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after,#bandwidthconfig .optionsingle::after,.optionlist label::before,#netconfig label::before,#externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#reseed_urlselection label::before,#reseedproxytype label::before,#graphs .nowrap::before{content:"";display:inline-block;vertical-align:middle}
+#updatehelper .optionlist:hover,#updateProxyHostPort.optionlist:hover{background:#000;transition:ease box-shadow .2s;box-shadow:var(--option_highlight)}
 
 /* infohelp/warn */
 form[action="events"]{padding:10px 10px 10px 50px;background:var(--logs) no-repeat 15px center/28px,var(--msg)}
@@ -1601,6 +1618,8 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 .service_container .infohelp{padding:20px 24px 20px 58px}
 .service_container h3 a{font-size:0;float:right}
 #advancedconfig a::after{margin:-1px 2px -4px 0}
+#browserstart,#dumpthreads,#restart,#runonstart,#shutdown,#systray{margin-top:-11px;margin-bottom:5px;padding:5px;border:var(--border);background:#000}
+#browseronstart,#restartrouter,#runonstartup,#servicedebug,#shutdownrouter,#systray{margin-bottom:-6px}
 #config_service a[href$="#alternative_browser"]::after,#iptransport a::after,#advancedconfig a::after,#reseedsetup a::after{background:var(--helplink) var(--center)}
 #config_service a[href$="#alternative_browser"]::after{margin:-4px 0 -4px -3px;padding:4px 0 2px;width:18px;height:18px;display:inline-block;vertical-align:middle;background-size:18px;content:""}
 #config_service a[href$="#alternative_browser"]:hover::after,#iptransport a:hover::after,#advancedconfig a:hover::after,#reseedsetup a:hover::after{background:var(--helplink_hover) var(--center)}
@@ -1617,7 +1636,6 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #servicedebug a,#graphinfo a{float:right;font-size:9pt;text-transform:none;letter-spacing:normal}
 #servicedebug+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:var(--border);border-bottom:none;background:#001000}
 #shutdownrouter+p,#restartrouter+p,#servicedebug+p,#browseronstart+p,#runonstartup+p,#systray+p{margin:5px 0 -20px;border-bottom:none}
-#shutdownrouter,#restartrouter,#servicedebug,#browseronstart,#rononstartup,#systray{margin-bottom:-6px}
 
 /* keyring */
 .encDests th{text-align:left}
@@ -1689,19 +1707,19 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 #config_ui{padding-bottom:3px}
 #config_ui :-moz-broken{display:inline-block;visibility:hidden}
 #config_ui p.infohelp{margin-bottom:10px;background:#000 var(--ui) no-repeat 15px center/28px}
+#config_ui .formaction{background:#000}
 #enablefull label{min-width:calc(100% - 180px)}
 #helptranslate{padding:6px 10px 10px;clear:both;text-align:right}
 #home #chooselang::after,#home #configbandwidth::after{content:none}
-#langheading{margin-bottom:0}
+#langheading,#themeheading,#passwordheading{margin-bottom:0;padding:8px 10px;letter-spacing:.08em;word-spacing:.1em;font-size:10.5pt;border-radius:0;border:var(--border)}
 #langsettings{margin-top:-1px;margin-bottom:10px;padding:8px 7px 12px;border:var(--border);background:#000}
 #langsettings hr{display:none}
 #langui{margin:7px -8px -15px;padding:5px;border:var(--border);background:#000}
-#themeheading,#langheading,#passwordheading{margin-bottom:0;padding:8px 10px;letter-spacing:.08em;word-spacing:.1em;font-size:10.5pt;border-radius:0;border:var(--border)}
+#themeoptions{margin:0 -7px 5px;padding:8px 10px 8px 5px;position:relative;top:8px;clear:both;border-top:var(--border);border-bottom:var(--border);background:#000800}
 #themeoptions br{display:none}
 #themeoptions input,#enablefull input{margin:1px 10px 1px 2px}
 #themeoptions label,#enablefull label{margin:4px 0 4px 6px;padding:10px;min-width:calc(50% - 28px);display:inline-block;white-space:nowrap;border-radius:4px;box-shadow:var(--bevel);background:var(--tr)}
 #themeoptions label:hover,#enablefull label:hover{box-shadow:var(--outline),var(--highlight),0 0 2px 1px #f60}
-#themeoptions{margin:0 -7px 5px;padding:8px 10px 8px 5px;position:relative;top:8px;clear:both;border-top:var(--border);border-bottom:var(--border);background:#000800}
 #themeselect{margin:-1px 0;padding:8px 7px 0;clear:both;border:var(--border)}
 #themesettings,#consolepass,#langsettings,#pw_adduser{background:var(--bg_dots)}
 #themesettings{clear:both;border:var(--border);padding:8px 7px 0;margin:-1px 0;background:#000}
@@ -1893,6 +1911,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #webappconfig+p,#pluginconfigtext{margin-bottom:-1px}
 #availableplugins{margin:12px 0 -1px}
 #pluginconfig{margin-top:-15px}
+#pluginconfig tr{box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset -1px 0 0 1px #000,inset 0 0 1px 1px #020,inset 0 -1px 1px 1px #020,inset -1px 0 1px 1px #020;background:none;background:var(--row)}
 #pluginconfig th:first-child,#pluginconfig td:first-child{padding-right:50px;width:100px;white-space:nowrap;text-align:center}
 #pluginconfig table{border:var(--border);filter:drop-shadow(0 0 3px #000)}
 #pluginconfig table,#pluginconfig table td{border:var(--border_softer)}
@@ -1902,7 +1921,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #pluginconfig td:last-child table td:first-child{text-align:right}
 #pluginconfig td:last-child table tr{background:rgba(0,0,0,.2)}
 #pluginconfig table td:last-child{text-align:left}
-#plugininstall .infohelp{padding:20px 24px 20px 58px;background:var(--plugin) no-repeat 15px center/28px,var(--msg)}
+#plugininstall{position:relative;z-index:10}
 #plugininstall tr:nth-child(3) td:nth-last-child(2){padding:20px 24px 20px 58px;background:var(--link) no-repeat 15px center/28px}
 #plugininstall tr:nth-child(5) td:nth-last-child(2){padding:20px 24px 20px 58px;background:var(--files) no-repeat 15px center/28px}
 #plugininstall input[type=text]{width:50%;min-width:400px}
@@ -1911,6 +1930,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #plugininstall table,#plugininstall2 table{width:100%;border-spacing:0;border-collapse:separate}
 #plugininstall table tr,#plugininstall2 table tr{box-shadow:none;background:linear-gradient(180deg,#001800,#010)}
 #plugininstall table tr:hover,#plugininstall2 table tr:hover{box-shadow:var(--highlight)}
+#plugininstall .infohelp{padding:20px 24px 20px 58px;background:var(--plugin) no-repeat 15px center/28px,var(--msg)}
 #pluginconfigtext{padding:20px 18px 20px 58px;background:var(--pluginconfig) no-repeat 15px center/28px,var(--msg_nohat)}
 #pluginconfigtext input{margin:-5px -6px 0 0;float:right}
 
@@ -2029,36 +2049,13 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 
 /* misc / unsorted */
 a[href^="/netdb"]:hover span{color:var(--hover)}
-h2,h2.welcome,h3,h3.welcome,#themeoptions{border-color:#242}
-.configtable th{word-spacing:0;letter-spacing:0;text-transform:none}
-.formaction,td.optionsave,#pluginconfigtext,#plugininstall tr:first-child .infohelp,#helptranslate,#consolepass td[colspan="3"],#themeoptions,#themesettings,#langsettings,#certs h4,#certs textarea,#certs p,#config_advanced td,#config_peers tr:not(:last-child) td,#config_peers #banlist,#help div,#enablefullstats,.buckets,#criticallogs tr:first-child td,#routerlogs tr:first-child td,#wrapperlogs tr:first-child td,#config_bandwidth td.infohelp{box-shadow:var(--highlight),inset 0 0 1px 1px #040}
 .infohelp.vmcomm{margin-bottom:0}
-.optionlist label,.optionlist .nowrap{min-width:300px;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid;will-change:transform}
+.tunneldisplay td,#enviro td,#floodfills td:not(.rid td),#profilelist td:not([colspan]),#routerinformation td{box-shadow:var(--highlight),inset 0 0 2px 0 #040}
 #banneduntilrestart th,#banneduntilrestart td{border-right:var(--border)}
-#config_bandwidth td.optionsave,#config_advanced td.optionsave,#config_clients .formaction,#config_homepage .formaction,#config_i2cp td.optionsave,#config_keyring .optionsave,#config_logging td.optionsave,#config_network td.optionsave,#config_peers .configtable tr:nth-child(4) td,#config_peers .configtable tr:last-child td,#pluginconfigactions.formaction,#reseedconfig td.optionsave,#config_service .formaction,#configstats tr.tablefooter,#config_summarybar .formaction,#sidebarconf tr:last-child,#tunnelconfigsave.formaction,#config_ui .formaction,#graphing.formaction,#i2pupdates tr:nth-child(2),#i2pupdates tr.tablefooter,#webappconfigactions.formaction,#sybilTask .optionsave{background:var(--h3),var(--footer);background-size:2px,100%}
-#configstats tr.tablefooter td.optionsave,#sidebarconf tr:last-child td,#i2pupdates tr.tablefooter td{background:transparent }
-#config_ui .formaction{background:#000}
-#enviro td,#routerinformation td,.tunneldisplay td,#profilelist td:not([colspan]),#floodfills td:not(.rid td){box-shadow:var(--highlight),inset 0 0 2px 0 #040}
-#externali2cp input[name="port"]{margin-left:6px}
-#externali2cp td{padding:5px}
-#logs #enviro~.tabletitle::after,#jobs h3::after,#tunnels h3[id]::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:linear-gradient(90deg,#d30,var(--hover));content:"";animation:ease-out reloader 1s forwards;opacity:.4}
-#logs .tabletitle,#jobs h3,#tunnels h3[id]{position:relative;overflow:hidden}
-#netconfig .suboption,#externali2cp .suboption{padding-top:3px;padding-bottom:3px}
-#netconfig td.infohelp,#reseedconfig td.infohelp{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:#000 var(--infohelp) no-repeat 15px center/32px}
-#netconfig td.infowarn{background:#000 var(--infowarn) no-repeat 15px center/32px}
+#jobs h3,#logs .tabletitle,#tunnels h3[id]{position:relative;overflow:hidden}
+#jobs h3::after,#logs #enviro~.tabletitle::after,#tunnels h3[id]::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:linear-gradient(90deg,#d30,var(--hover));content:"";animation:ease-out reloader 1s forwards;opacity:.4}
 #netdboverview tr:hover,#logs #enviro:hover td,.tunneldisplay tr:hover td,#profilelist tr:hover td,#graphs .formaction,#events tr:hover,#config_peers #bannedips td{box-shadow:none}
-#news hr{color:#242;background:repeating-linear-gradient(90deg,#242 2px,#000 4px);background-size:4px 100%}
-#news#news hr{opacity:.7}
-#pluginconfig tr{box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset -1px 0 0 1px #000,inset 0 0 1px 1px #020,inset 0 -1px 1px 1px #020,inset -1px 0 1px 1px #020;background:none;background:var(--row)}
-#plugininstall,#reseedconfig{margin-bottom:10px}
-#plugininstall,#plugininstall2,#reseedconfig tr,#manualreseed tr,#i2pupdates tr,#netconfig tr,#externali2cp tr,#joinfamily tr,#newfamily tr:last-child{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:none}
-#plugininstall{position:relative;z-index:10}
-#profiles th::after{display:none}
-#refreshsidebar tr:first-child{box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset 0 0 1px 1px #030,inset 0 -1px 1px 1px #030}
 #routerinformation td:first-child{border-right:var(--border_soft)}
-#shutdown,#restart,#systray,#runonstart,#dumpthreads,#browserstart{margin-top:-11px;margin-bottom:5px;padding:5px;border:var(--border);background:#000}
-#updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after,#bandwidthconfig .optionsingle::after,.optionlist label::before,#netconfig label::before,#externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#reseed_urlselection label::before,#reseedproxytype label::before,#graphs .nowrap::before{content:"";display:inline-block;vertical-align:middle}
-#updatehelper .optionlist:hover,#updateProxyHostPort.optionlist:hover{background:#000;transition:ease box-shadow .2s;box-shadow:var(--option_highlight)}
 
 /* debug */
 .bucket{margin:1px 2px -2px;padding:1px 4px;max-width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#880;font-family:var(--monospaced);box-shadow:0 0 0 1px #030,var(--highlight);background:#010;user-select:all}
