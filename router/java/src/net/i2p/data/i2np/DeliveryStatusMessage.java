@@ -110,7 +110,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("\n* [MsgID ").append(getMessageId());
+        buf.append(" -> [MsgID ").append(getMessageId());
         buf.append("] arrived ").append(_context.clock().now() - _arrival);
         buf.append("ms ago");
         return buf.toString();
