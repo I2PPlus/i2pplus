@@ -76,23 +76,46 @@ h2,h3{margin:10px 0 -1px;padding:9px 10px 7px 30px;position:relative;font-size:1
 
 /* forms */
 a.control{display:inline-block}
+.authentication{height:30px}
 button{float:none;text-decoration:none}
 button,input[type=submit],input[type="reset"],a.control,.freetext,textarea,.displayText{font:9pt var(--bodyfont)}
+input{float:none;vertical-align:middle}
+input[name="nofilter_blindedPassword"]{width:calc(100% - 38px)}
+input[type="hidden"],input.default{display:none}
+input[required]:not(:focus)::placeholder,input.required:not(:focus)::placeholder{color:#f00;opacity:1}
+input[type=text] + label{white-space:nowrap}
+input[type=text][readonly]{box-shadow:inset 1px 1px 1px #e4e4ee}
+select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active,#sigType[disabled]{margin:0;padding:2px 0 2px 3px;font-weight:400;color:var(--ink);border:none;box-shadow:none;background:none;pointer-events:none}
+select{margin:4px;padding:5px 24px 5px 5px;min-width:140px;background:#fff;background:var(--dropdown) no-repeat right 8px center,linear-gradient(180deg,#fff,#efefff);background-size:10px,100%;color:var(--ink);font:9pt var(--bodyfont);border:var(--border_input);border-radius:2px;box-shadow:var(--highlight);box-shadow:var(--btn_shadow);overflow:hidden;text-overflow:ellipsis;appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+select:hover,select:active,select:focus{border:1px solid #535979;box-shadow:var(--highlight);background:var(--dropdown_hover) no-repeat right 8px center,linear-gradient(180deg,#eee,#fff);background-size:10px,100%}
+select:hover{color:var(--ink_darker)}
+select:focus{box-shadow:0 0 1px #89f}
+td[colspan="2"] > select#profile{width:calc(50% - 15px)}
+textarea{font-family:var(--monospaced)}
+textarea,input,select,button{font-size:9pt;vertical-align:middle}
+textarea[name="accessList"],.authentication,#hostField,#localDestination{margin:5px;padding:2px 4px;width:calc(100% - 20px);box-sizing:unset}
+textarea[name="accessList"]{padding:4px 8px;height:32px;line-height:1.1;will-change:transform}
+textarea[name="accessList"]:focus{height:112px}
 .buttons,.newTunnel{padding:7px 5px;text-align:right;border-top:1px solid var(--border_inner);box-shadow:var(--highlight);background:#fff;background:linear-gradient(180deg,#fafaff 50%,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px)}
 .buttons > *{vertical-align:middle}
 .clientKey[readonly]{background:var(--key) no-repeat 3px center,var(--readonly);background-size:16px,100%}
 .control,.control:link,.control:visited,button{margin:2px 4px;padding:5px 8px;min-width:100px;text-align:center;white-space:nowrap;box-sizing:border-box;text-decoration:none;font-style:normal;font-weight:400;color:var(--ink);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:linear-gradient(180deg,#fff,#efefff);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink_darker);border:1px solid #f60;box-shadow:var(--highlight),inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);background:linear-gradient(180deg,#eee,#fff);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 .control:active,button:active{box-shadow:var(--highlight),inset 2px 2px 2px #555;color:#4c526f}
-.control.iconize:active{background-blend-mode:luminosity}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center / 15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
 .control.create{background:var(--create) no-repeat center center / 15px,var(--btn),var(--create_hover)}
 .control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center / 15px,var(--btn_hover)}
+.control.iconize:active{background-blend-mode:luminosity}
 .control.preview{background:var(--eye) no-repeat center center / 19px,var(--btn),var(--eye_hover)}
 .control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center / 19px,var(--btn_hover)}
+.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center / 15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
 .control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center / 15px,var(--btn_hover)}
 .control.stop{background:var(--stop) no-repeat center center / 14px,var(--btn),var(--stop_hover)}
 .control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center / 14px,var(--btn_hover)}
+.displayText,.displayText:empty:hover,.displayText:empty:focus{margin:5px;padding:4px;width:calc(100% - 10px);width:290px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all;font-family:var(--monospaced);border:var(--border_input);border-radius:2px;box-shadow:inset 1px 1px 1px #e4e4ee;background:#fafaff;user-select:all}
+.displayText:hover,.displayText:focus{box-shadow:0 0 1px #89f;background:#ffe;outline:none}
+.displayText:focus{margin:1px 5px;padding:2px 4px;overflow:auto;text-overflow:clip;border:1px solid #676c7f;background:#fff}
+.displayText:empty,.displayText:empty:hover,.displayText:empty:focus{background:#e9e9e9}
+.displayText:empty::before{min-height:11px;display:inline-block;content:""}
 .editDisabled input[type=radio]:checked{opacity:1}
 .editDisabled input[type=radio],.editDisabled label{cursor:not-allowed}
 .editDisabled input[type=radio]:not(:checked){opacity:.4}
@@ -100,58 +123,34 @@ button,input[type=submit],input[type="reset"],a.control,.freetext,textarea,.disp
 .editDisabled .optbox:checked + span{font-weight:700;text-decoration:underline}
 .freetext,.freetext.tunnelDescription{padding:5px 8px;width:150px;color:var(--ink);border:var(--border_input);border-radius:2px;background:#fbfbff}
 .freetext[readonly],.freetext[readonly]:focus{color:var(--ink_lighter);border:1px solid #a8b1d6;box-shadow:inset 1px 1px 1px #e4e4ee;background:var(--readonly);filter:none}
-input{float:none;vertical-align:middle}
-input[required]:not(:focus)::placeholder,input.required:not(:focus)::placeholder{color:#f00;opacity:1}
-input[type="hidden"],input.default{display:none}
-input[type=text][readonly]{box-shadow:inset 1px 1px 1px #e4e4ee}
+.freetext,.tunnelConfig textarea,#customOptions,#userAgents,#hostField{margin:5px}
 .multiOption{margin:5px 10px 5px 5px;display:inline-block;vertical-align:middle}
 .optbox{margin:5px 3px 5px 5px;vertical-align:middle}
 .optbox,.optbox::before{will-change:transform}
 .optionsDisabled{cursor:not-allowed}
 .optionsDisabled .optbox,.optionsDisabled label{pointer-events:none}
 .port,.quantity,.period{width:80px}
-select{margin:4px;padding:5px 24px 5px 5px;min-width:140px;background:#fff;background:var(--dropdown) no-repeat right 8px center,linear-gradient(180deg,#fff,#efefff);background-size:10px,100%;color:var(--ink);font:9pt var(--bodyfont);border:var(--border_input);border-radius:2px;box-shadow:var(--highlight);box-shadow:var(--btn_shadow);overflow:hidden;text-overflow:ellipsis;appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 .tunnelConfig select,select#profile,select#connectionProfile{margin:5px}
-select:hover,select:active,select:focus{border:1px solid #535979;box-shadow:var(--highlight);background:var(--dropdown_hover) no-repeat right 8px center,linear-gradient(180deg,#eee,#fff);background-size:10px,100%}
-select:hover{color:var(--ink_darker)}
-select:focus{box-shadow:0 0 1px #89f}
-select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active,#sigType[disabled]{margin:0;padding:2px 0 2px 3px;font-weight:400;color:var(--ink);border:none;box-shadow:none;background:none;pointer-events:none}
-select#connectionProfile{width:calc(100% - 10px)}
-td[colspan="2"] > select#profile{width:calc(50% - 15px)}
-textarea,input,select,button{font-size:9pt;vertical-align:middle}
-.freetext,.tunnelConfig textarea,#customOptions,#userAgents,#hostField{margin:5px}
-textarea{font-family:var(--monospaced)}
-textarea[name="accessList"]:focus{height:112px}
-textarea[name="accessList"]:focus{height:80px}
-textarea[name="accessList"]{padding:4px 8px;height:32px;line-height:1.1;will-change:transform}
-textarea#statusMessages:focus{background:#fafaff;box-shadow:none}
-textarea#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:8.5pt var(--monospaced);color:#070;border:none;border-radius:0;box-shadow:none;filter:none}
-textarea#statusMessages::selection{color:#fff;background:#070}
-textarea[name="accessList"],#hostField,#localDestination,.authentication{margin:5px;padding:2px 4px;width:calc(100% - 20px);box-sizing:unset}
 .tunnelDescriptionLabel,.tunnelDestinationLabel{margin-right:3px;min-width:150px;display:inline-block;white-space:nowrap;text-align:right}
+.tunnelName,input.tunnelDescriptionText,#userAgents,.freetext.tunnelDescription,#websiteName,#localDest,#altlocaldest,.proxyList,#targetDestination,#leasesetKey,#privKeyFile,#filterDefinition{width:80%;width:calc(100% - 9px);min-width:280px;overflow:hidden;text-overflow:ellipsis}
 #clientHost{width:300px}
 #clientPort{width:100px}
+#connectionProfile{width:calc(100% - 10px)}
 #customOptions,#userAgents{width:calc(100% - 10px)}
-.tunnelName,input.tunnelDescriptionText,#userAgents,.freetext.tunnelDescription,#websiteName,#localDest,#altlocaldest,.proxyList,#targetDestination,#leasesetKey,#privKeyFile,#filterDefinition{width:80%;width:calc(100% - 9px);min-width:280px;overflow:hidden;text-overflow:ellipsis}
 #localDestination,textarea[name="accessList"],#hostField{margin:3px 0;width:calc(100% - 5px)}
+#oldDestFile{margin-left:5px}
 #oldName{width:30%;min-width:310px}
+#oldName{width:45%}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
-table#statusMessages textarea,table#statusMessages textarea:active{margin:0;height:80px;border:none;box-shadow:none}
+#statusMessages:focus{background:#fafaff;box-shadow:none}
+#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:8.5pt var(--monospaced);color:#070;border:none;border-radius:0;box-shadow:none;filter:none}
+#statusMessages::selection{color:#fff;background:#070}
+#statusMessages,#statusMessages:active{margin:0;height:80px;border:none;box-shadow:none}
 #targetHost,.host{width:30%;min-width:250px}
+#targetPort{margin-right:10px}
+#tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#encryptMode,#profile,#sigType{margin:5px;width:calc(100% - 10px)}
 #tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#localDestination,#customOptions,#name,#description,textarea[name="accessList"]{margin:0;width:100%;text-align:left}
 #tunnelMessages{padding:0}
-input[type=text] + label{white-space:nowrap}
-#targetPort{margin-right:10px}
-input[name="nofilter_blindedPassword"]{width:calc(100% - 38px)}
-#oldName{width:45%}
-.displayText,.displayText:empty:hover,.displayText:empty:focus{margin:5px;padding:4px;width:calc(100% - 10px);width:290px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all;font-family:var(--monospaced);border:var(--border_input);border-radius:2px;box-shadow:inset 1px 1px 1px #e4e4ee;background:#fafaff;user-select:all}
-.displayText:empty,.displayText:empty:hover,.displayText:empty:focus{background:#e9e9e9}
-.displayText:empty::before{min-height:11px;display:inline-block;content:""}
-.displayText:hover,.displayText:focus{box-shadow:0 0 1px #89f;background:#ffe;outline:none}
-.displayText:focus{margin:1px 5px;padding:2px 4px;overflow:auto;text-overflow:clip;border:1px solid #676c7f;background:#fff}
-.authentication{height:30px}
-#oldDestFile{margin-left:5px}
-#tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#encryptMode,#profile,#sigType{margin:5px;width:calc(100% - 10px)}
 
 /* index */
 .newTunnel{padding:7px;text-align:right;border-top:2px solid var(--border_inner);background:#fff}
@@ -207,15 +206,6 @@ th.tunnelControl{text-align:center}
 .tunnelConfig tr,.tunnelConfig th:last-child,.tunnelConfig td:last-child{border-right:1px solid var(--border_inner)}
 .tunnelConfig td{width:50%}
 .tunnelConfig td > b{margin:2px 0 2px 5px;min-width:30px;display:inline-block}
-#keyringManager{margin:-2px 0;padding:3px 3px 3px 22px;float:right;font-size:90%;background:var(--keys) no-repeat left center;background-size:20px}
-#sigType[disabled]{padding-left:14px;background:var(--crypto) no-repeat left center / 16px}
-#tunnelOpts td{padding:0;width:25%}
-#tunnelOpts table{border:none}
-#tunnelOpts table td{padding:5px;border-bottom:var(--border_softer)}
-#tunnelOpts table tr,#tunnelOpts table td:first-child,#throttler tr,#throttler th:first-child,#throttler td:first-child,#clientAuth tr,#clientAuth th:first-child,#clientAuth td:first-child{border-left:none}
-#tunnelOpts table tr,#tunnelOpts table td:first-child,#throttler tr,#throttler th:last-child,#throttler td:last-child,#clientAuth tr,#clientAuth th:last-child,#clientAuth td:last-child{border-right:none}
-#tunnelOpts table tr:first-child td{border-top:none}
-#tunnelOpts table tr:last-child td{border-bottom:none}
 input[type=text].filemanager{background:#fafaff var(--files) no-repeat 8px center / 15px}
 input[type=text].filemanager:focus{background:#fff var(--files) no-repeat 8px center / 15px}
 input[type=password].password,input[type=text].clientKey{background:#fafaff var(--key) no-repeat 8px center / 15px}
@@ -225,15 +215,24 @@ input[type=text].username,input[type=password].password{width:200px}
 input[type=password].password:focus,input[type=text].clientKey:focus{background:#fff var(--key) no-repeat 8px center / 15px}
 input[type=text].username:focus,input[type=text].clientName:focus{background:#fff var(--user) no-repeat 8px center / 15px}
 input[type=text].username:focus,input[type=password].password:focus,input[type=text].clientName:focus,input[type=text].clientKey:focus,input[type=text].filemanager:focus{padding-left:30px;background-blend-mode:normal}
+#keyringManager{margin:-2px 0;padding:3px 3px 3px 22px;float:right;font-size:90%;background:var(--keys) no-repeat left center;background-size:20px}
+#sigType[disabled]{padding-left:14px;background:var(--crypto) no-repeat left center / 16px}
+#tunnelOpts td{padding:0;width:25%}
+#tunnelOpts table{border:none}
+#tunnelOpts table td{padding:5px;border-bottom:var(--border_softer)}
+#tunnelOpts table tr,#tunnelOpts table td:first-child,#throttler tr,#throttler th:first-child,#throttler td:first-child,#clientAuth tr,#clientAuth th:first-child,#clientAuth td:first-child{border-left:none}
+#tunnelOpts table tr,#tunnelOpts table td:first-child,#throttler tr,#throttler th:last-child,#throttler td:last-child,#clientAuth tr,#clientAuth th:last-child,#clientAuth td:last-child{border-right:none}
+#tunnelOpts table tr:first-child td{border-top:none}
+#tunnelOpts table tr:last-child td{border-bottom:none}
 
 /* throttler */
+td.blankColumn{width:20%}
 #throttler,#clientAuth{border:none}
 td#throttle,#clientAuthConfig{padding:0;box-shadow:none}
 #throttler th{padding-left:20px}
 #throttler td{width:20%}
 #throttler td:first-child{width:20%;white-space:nowrap;text-align:right}
 #throttler tr:first-child th{border-top:none}
-td.blankColumn{width:20%}
 #throttler tr:nth-child(odd),#wizardTunnelTypes tr:nth-child(odd),#wizardSummary tr:nth-child(odd),#clientAuth tr:nth-child(even){background:#f7f8ff;background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(211,211,255,.3) 3px,#fff 5px)}
 #throttler tr:nth-child(even),#wizardTunnelTypes tr:nth-child(even),#wizardSummary tr:nth-child(even),#clientAuth tr:nth-child(odd){background:#eef;background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(230,230,255,.3) 3px,#fff 5px)}
 #throttler input[type=text]{width:80px}
@@ -246,6 +245,10 @@ td.blankColumn{width:20%}
 #tunnelRegistration td b{margin-left:5px}
 
 /* wizard specifics */
+.multiOption#isServer{padding-left:28px;background:var(--server) no-repeat 4px center / 22px}
+.multiOption#isClient{padding-left:28px;background:var(--client) no-repeat 4px center / 22px}
+th .help{font-size:0}
+th .help::after{width:16px;height:16px;display:inline-block;background:var(--helplink) no-repeat center center / 16px;content:""}
 #wizardTable{padding:0}
 #wizardPanel tr:first-child{background:#fafaff}
 #wizardPanel td:not(#wizardTable),#wizardTunnelTypes td{padding:10px}
@@ -263,29 +266,27 @@ td.blankColumn{width:20%}
 #wizardTunnelTypes,#wizardSummary{border:none;margin-top:-1px}
 #wizardTunnelTypes tr:last-child{background:#fafaff}
 #wizardPanel #name,#wizardPanel #description{width:300px}
-.multiOption#isServer{padding-left:28px;background:var(--server) no-repeat 4px center / 22px}
-.multiOption#isClient{padding-left:28px;background:var(--client) no-repeat 4px center / 22px}
-th .help{font-size:0}
-th .help::after{width:16px;height:16px;display:inline-block;background:var(--helplink) no-repeat center center / 16px;content:""}
 
 /* SSL wizard */
 #messages + #ssl{margin-top:8px}
 #ssl td{padding-top:10px;padding-bottom:10px}
 #ssl td:first-child{padding-left:10px}
-.iframed #ssl{margin-bottom:-5px}
 #ssl th:nth-child(n+3),#ssl td:nth-child(n+3){text-align:center}
 #ssl .configerror td{padding:20px 10px 20px 52px;font-weight:700;background:#ffe var(--err) no-repeat 12px center / 28px}
 .configerror code{margin-left:4px;font-weight:700;color:#050}
+.iframed #ssl{margin-bottom:-5px}
 
+.base32{max-width:120px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:text-bottom}
+.clientName,.clientKey{width:calc(100% - 38px)}
+.freetext[type=text].filemanager{width:calc(100% - 50px)}
+.nowrap{margin-right:15px;margin-left:10px;white-space:nowrap}
+.nowrap,.nowrap > *{vertical-align:middle}
 .tunnelInfo{display:none}
+.username,.password{width:calc(50% - 52px)}
+.username::placeholder,.password::placeholder{color:#2c354f;font-size:100%;font-style:italic;text-transform:lowercase;opacity:.4}
 #toggleInfo{margin:-2px -3px 0 0;padding:2px 5px;min-width:0;vertical-align:middle;cursor:pointer;transform:scale(1);animation:linear showToggle .1s .2s backwards}
 #toggleInfo img{height:8px;width:12px;mix-blend-mode:luminosity}
 #toggleInfo:hover img,#toggleInfo:focus img{mix-blend-mode:normal}
-.base32{max-width:120px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:text-bottom}
-.username,.password{width:calc(50% - 52px)}
-.username::placeholder,.password::placeholder{color:#2c354f;font-size:100%;font-style:italic;text-transform:lowercase;opacity:.4}
-.nowrap{margin-right:15px;margin-left:10px;white-space:nowrap}
-.nowrap,.nowrap > *{vertical-align:middle}
 #clientAuth{width:100%;box-sizing:border-box}
 #clientAuth th:nth-child(2),#clientAuth td:nth-child(2){width:auto}
 #clientAuth td:last-child{width:1%;text-align:center}
@@ -293,15 +294,13 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 #clientAuth th:first-child,#clientAuth td:first-child{width:50%}
 #clientAuth tr:first-child td{border-top:none}
 #clientAuth #leasesetKey{width:calc(100% - 20px)}
-.clientName,.clientKey{width:calc(100% - 38px)}
-.freetext[type=text].filemanager{width:calc(100% - 50px)}
 #regDisabled{margin-bottom:3px}
 
 /* initializing */
 #notReady,#notFound,#down{margin:60px auto 25px;padding:30px;width:400px;text-align:center;font-size:11pt;font-weight:700;border:5px solid #900;border-image:repeating-linear-gradient(135deg,#dd0 0px,#dd0 20px,#900 20px,#900 40px,#dd0 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;box-shadow:inset 0 0 0 1px #113,inset 0 0 2px 2px rgba(0,0,0,.4),0 0 0 2px #113,0 0 3px 3px rgba(0,0,0,.4);background:#ffd;background:repeating-linear-gradient(180deg,#dd9 2px,#eeb 4px)}
+#down b{color:#500}
 #notReady{border-image:repeating-linear-gradient(135deg,#ee9 0px,#ee9 20px,#d50 20px,#d50 40px,#ee9 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;background:repeating-linear-gradient(180deg,#ffd 2px,#eeb 4px)}
 #notReady b{color:#733}
-#down b{color:#500}
 
 @keyframes showToggle{from{transform:scale(0)}to{transform:scale(1)}}
 
@@ -327,24 +326,24 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 
 @media screen and (max-width:800px){
 th{font-size:9pt}
-.statusNotRunning,.statusRunning,.statusStarting,.statusStandby{background-size:auto 14px}
-.port,.quantity,.period{width:60px}
-#clientHost,.host{width:140px;min-width:140px}
-.multiOption{margin-right:3px}
 .control,.control:link,.control:visited{min-width:80px}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:260px;font-size:8pt}
+.host,#clientHost{width:140px;min-width:140px}
+.multiOption{margin-right:3px}
+.port,.quantity,.period{width:60px}
+.statusNotRunning,.statusRunning,.statusStarting,.statusStandby{background-size:auto 14px}
 }
 
 @media screen and (min-width:1000px){
-#messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3,#wizardPanel h2{background-position:7px 58%,center center,center center}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:386px}
+#messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3,#wizardPanel h2{background-position:7px 58%,center center,center center}
 #registration .displayText{width:600px}
 }
 
 @media screen and (min-width:1200px){
 h2,h3{padding:10px 10px 8px 30px;font-size:12pt}
-#messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3,#wizardPanel h2{padding-left:33px;background-size:20px,100%,100%}
 th{padding-top:7px;padding-bottom:7px}
+#messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3,#wizardPanel h2{padding-left:33px;background-size:20px,100%,100%}
 }
 
 @media screen and (min-width:1500px){
@@ -353,26 +352,26 @@ a.control,.control,.control.visited,button.control{padding-top:7px;padding-botto
 h2,h3{font-size:12.5pt}
 th{font-size:10.5pt}
 th .help::after{width:20px;height:20px;background-size:20px}
+.displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}
 .tunnelInfo .selectAll{max-width:none}
-textarea#statusMessages{font-size:9pt}
 .statusNotRunning,.statusRunning,.statusStarting,.statusStandby{background-size:auto 18px}
 #localDestination{height:34px}
-.displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}
 #registration .displayText{width:800px}
+#statusMessages{font-size:9pt}
 #toggleInfo{margin:-1px -2px 0 0}
 }
 
 /* chrome overrides */
 @supports not (-moz-appearance:none){
 button.control,input.control{padding:6px 8px}
-.iframed .panel#clients,.iframed .panel#ssl{margin-bottom:-4px}
-.iframed .panel:last-of-type{padding-bottom:8px}
-.iframed .panel#ssl{padding-bottom:4px}
-.freetext,.freetext.tunnelDescription{padding:5px}
 select{padding:6px 16px 6px 6px;white-space:normal}
 textarea,input[type=text],.displayText,*[readonly]{filter:none}
 table{background:#f0f0ff}
 tr{box-shadow:none}
+.freetext,.freetext.tunnelDescription{padding:5px}
+.iframed .panel#clients,.iframed .panel#ssl{margin-bottom:-4px}
+.iframed .panel:last-of-type{padding-bottom:8px}
+.iframed .panel#ssl{padding-bottom:4px}
 #throttler tr:nth-child(even){background:#f0f0ff}
 #throttler tr:nth-child(odd),.tunnelConfig tr,#wizardPanel tr,#registration tr{background:#f8f8ff}
 }
