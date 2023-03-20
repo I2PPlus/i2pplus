@@ -301,7 +301,7 @@ class SearchJob extends JobImpl {
             boolean onlyFloodfill = true;
             if (_floodfillPeersExhausted && onlyFloodfill && _state.getPending().isEmpty()) {
                 if (_log.shouldWarn())
-                    _log.warn("[Job " + getJobId() + "] No non-Floodfill peers left, and no more search queries pending. Searched: " +
+                    _log.warn("No non-Floodfill peers left, and no more search queries pending. Searched: " +
                               _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
                 fail();
                 return;
@@ -334,7 +334,7 @@ class SearchJob extends JobImpl {
                         getContext().netDb().lookupRouterInfo(peer, null, null, _timeoutMs);
                     } else if (!(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
                         if (_log.shouldWarn())
-                            _log.warn("[Job " + getJobId() + "] Error selecting closest hash that wasn't a router! "
+                            _log.warn("Error selecting closest hash that wasn't a router! "
                                       + peer + " : " + ds.getClass().getName());
                         _state.replyTimeout(peer);
                     } else {

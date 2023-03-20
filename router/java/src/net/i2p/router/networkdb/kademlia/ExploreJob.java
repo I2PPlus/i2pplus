@@ -180,7 +180,7 @@ class ExploreJob extends SearchJob {
                     }
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("[Job " + getJobId() + "] Failed encrypt to " + peer);
+                        _log.warn("Failed encrypt to " + peer);
                     // client went away, but send it anyway
                 }
             }

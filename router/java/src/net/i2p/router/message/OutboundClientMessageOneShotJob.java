@@ -233,7 +233,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     _log.info("[Job " + getJobId() + "] Message Expiration: " + (overallExpiration - _start) + "ms");
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("[Job " + getJobId() + "] Expired before we got to it");
+                    _log.warn("Message expired before we got to it");
                 // runJob() will call dieFatal()
             }
         } else {
@@ -431,7 +431,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (_leaseSet == null) {
                 // shouldn't happen
                 if (_log.shouldWarn())
-                    _log.warn("[Job " + getJobId() + "] LeaseSet for " + _toString + " not found via local lookup");
+                    _log.warn("LeaseSet for " + _toString + " not found via local lookup");
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             } else if (_leaseSet.getReceivedAsPublished()) {
                 if (_log.shouldWarn())
@@ -560,12 +560,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 break;
             }
             if (_log.shouldWarn())
-                _log.warn("[Job " + getJobId() + "] Skipping unreachable gateway [" + l.getGateway().toBase64().substring(0,6) + "] for " + _toString);
+                _log.warn("Skipping unreachable gateway [" + l.getGateway().toBase64().substring(0,6) + "] for " + _toString);
         }
         if (_lease == null) {
             _lease = leases.get(0);
             if (_log.shouldWarn())
-                _log.warn("[Job " + getJobId() + "] All leases are unreachable for " + _toString);
+                _log.warn("All leases are unreachable for " + _toString);
         }
         _cache.leaseCache.put(_hashPair, _lease);
         if (_log.shouldInfo())
@@ -630,7 +630,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _outTunnel = selectOutboundTunnel(_to);
         if (_outTunnel == null) {
             if (_log.shouldWarn())
-                _log.warn("[Job " + getJobId() + "] No outbound tunnels found to send payload through; this might take a while...");
+                _log.warn("No outbound tunnels found to send payload through; this might take a while...");
             getContext().statManager().addRateData("client.dispatchNoTunnels", now - _start);
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS);
             return;
@@ -720,7 +720,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // (should we always fail for this? or should we send it anyway, even if
             // we dont receive the reply? hmm...)
             if (_log.shouldWarn())
-                _log.warn("[Job " + getJobId() + "] Unable to create garlic message to " + _toString + " -> No available tunnels or too lagged");
+                _log.warn("Unable to create garlic message to " + _toString + " -> No available tunnels or too lagged");
             getContext().statManager().addRateData("client.dispatchNoTunnels", now - _start);
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS);
             return;
@@ -999,10 +999,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             statusToString = "Cannot send to meta-LeaseSet";
         if (_log.shouldWarn()) {
             if (statusToString != "")
-                _log.warn("[Job " + getJobId() + "] Sending of " + _clientMessageId + " to " + _toString +
+                _log.warn("Sending of " + _clientMessageId + " to " + _toString +
                           " failed after " + sendTime + "ms -> " + statusToString);
             else
-                _log.warn("[Job " + getJobId() + "] Sending of " + _clientMessageId + " to " + _toString +
+                _log.warn("Sending of " + _clientMessageId + " to " + _toString +
                           " failed after " + sendTime + "ms (Status: " + status + ")");
 //                      + "\n\t" + _outTunnel
 //                      + "\n\t" + _inTunnel
