@@ -42,6 +42,7 @@ td.infohelp{padding:10px 10px 10px 38px;text-align:justify;background:var(--info
 /*#globalTunnelControl td,#clients td,#servers td{padding: 12px 5px}*/
 #notReady,#down{margin:35px auto 30px;padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:1px solid #900;border-radius:2px;box-shadow:var(--highlight);background:#ffe}
 #sigType[disabled]{padding-left:14px;background:var(--crypto) no-repeat left center/16px}
+#tunnelEditPage td:not(.buttons):not(.infohelp):not(.infowarn){padding:2px 5px}
 .iframed h2,.iframed h3{margin-top:12px}
 .iframed#tunnelEditPage .panel,.iframed#tunnelRegistration .panel,.iframed#tunnelSSL.panel,.iframed#tunnelWizardPage .panel{margin-top:0;margin-bottom:1px}
 .iframed #globalTunnelControl{margin-top:8px}
@@ -87,7 +88,7 @@ textarea#statusMessages:focus{caret-color:transparent}
 .editDisabled input[type=radio]:checked{opacity:1}
 .editDisabled input[type=radio]:not(:checked){opacity:.4}
 .editDisabled .optbox:checked + span{font-weight:700;text-decoration:underline}
-.multiOption{margin:5px 10px 5px 5px;display:inline-block;font-size:0}
+.multiOption{margin:5px 10px 5px 0;display:inline-block;font-size:0}
 .multiOption input{vertical-align:middle}
 .multiOption#isClient,.multiOption#isServer{padding-left:28px}
 .multiOption#isClient{background:url(/themes/console/images/client.svg) no-repeat 4px center/22px}
@@ -96,6 +97,7 @@ textarea#statusMessages:focus{caret-color:transparent}
 .newTunnel{padding:7px;text-align:right;border-top:var(--border)}
 .newTunnel select,.newTunnel input,.newTunnel .control{margin:2px;float:none}
 .optbox{margin:2px 2px 2px 0}
+.optbox:first-of-type{margin-left:5px}
 .optbox[name="sigType"][disabled]:not(:checked),.optbox[name="sigType"][disabled]:not(:checked) + span{display:none}
 .panel table{margin:0;width:100%;border-collapse:collapse;border:var(--border);background:#fff url(images/bg2.png);background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.5)),url(images/bg2.png)}
 .period,.quantity{width:80px}
@@ -159,18 +161,20 @@ button,input[type=submit],input[type="reset"],a.control{display:inline-block;fon
 button.control,input[type=submit],input[type="reset"]{padding:6px 8px}
 .buttons,.newTunnel{padding:7px 5px;text-align:right;border-top:var(--border);background:var(--btn)}
 .buttons>*{vertical-align:middle}
-a.control,.control,.control:link,.control:visited,button{margin:2px 4px;padding:6px 8px;min-width:60px;overflow:hidden;white-space:nowrap;vertical-align:middle;text-align:center;text-decoration:none;font-style:normal;font-weight:400;color:#5e626e;border:var(--border);border-radius:3px;background:var(--btn)}
+a.control,.control,.control:link,.control:visited,button{margin:2px 4px;padding:6px 8px;min-width:100px;box-sizing:border-box;overflow:hidden;white-space:nowrap;vertical-align:middle;line-height:1.25;text-align:center;text-decoration:none;font-style:normal;font-weight:400;color:#5e626e;border:var(--border);border-radius:3px;background:var(--btn)}
 .control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink);border:var(--border);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover)}
 .control:active,button:active{border:var(--border);box-shadow:var(--btn_shadow_active)}
 .control.create{min-width:78px;background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}
 .control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
+.control.iconize:not([class*="all"]):not(.wizard){min-width:72px}
 .control.iconize:active{background-blend-mode:luminosity}
 .control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover)}
 .control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/19px,var(--btn_hover)}
 .control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover)}
 .control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
+.control[class$="all"],button,input[type=submit],input[type=reset]{min-width:92px}
 #clientTunnels .iconize,#serverTunnels .iconize{padding:6px 8px}
 
 /* wizard specifics */
@@ -306,7 +310,7 @@ div[class^="status"]{background-size:auto 14px}
 }
 
 @media screen and (min-width:1200px){
-body,.control,button,select,.freetext{font-size:10pt}
+a.control,body,.control,button,select,.freetext{font-size:10pt}
 th{font-size:10.5pt}
 h2,h3,#messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3,#wizardPanel h2{padding:10px 10px 8px 35px;font-size:12pt;background-position:8px center,0 0}
 #localDestination,.authentication{height:34px}
