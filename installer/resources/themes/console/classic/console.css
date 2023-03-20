@@ -620,8 +620,6 @@ div[id^="config_"].main{padding-bottom:20px}
 .optbox:checked+label>.stattograph:hover{background:#d50 var(--yes) no-repeat 6px center/8px}
 .stattograph:active b,.optbox:checked+label>.stattograph:active b,.optbox:checked+label>.stattograph:hover b{color:var(--hover)}
 .optbox:checked+label>.stattograph:hover b{color:var(--bg)}
-#advancedsettings h2{margin:10px 0 0}
-#advancedsettings p.infohelp{margin:-1px 0}
 #floodfillconfig,#joinfamily{margin-bottom:0}
 #configinfo th{text-align:left;font-family:var(--monospaced);font-weight:600;padding:7px 10px;color:#050}
 #configinfo td{text-align:justify;padding:5px 15px;background:rgba(230,230,255,.5)}
@@ -1868,6 +1866,8 @@ p+.twocol{margin:10px 30px}
 #help_newusers{background:url(images/favicon.svg) no-repeat 15px center,var(--th)}
 #help_webhosting{background:var(--webserver) no-repeat 15px center/32px,var(--th)}
 #configurationhelp h2,#advancedsettings h2,#filterlist h2{padding-left:38px;background:var(--configure) no-repeat 8px center/24px,var(--header)}
+#advancedsettings h2{margin:10px 0 0}
+#advancedsettings p.infohelp{margin:-1px 0}
 #sidebarhelp h2,#reachabilityhelp h2{padding-left:38px;background:url(/themes/console/images/sidebar.svg) no-repeat 8px center/24px,var(--header)}
 #reseedhelp h2{padding-left:38px;background:var(--reseed) no-repeat 8px center/24px,var(--header)}
 #faq h2,#glossary h2{padding-left:38px;background:var(--faq) no-repeat 8px center/24px,var(--header)}
