@@ -132,7 +132,7 @@ elif [ "$address" ]; then # Do we really have an address?
 
         # Check address type
     if [ $(echo $address | wc -c) -eq 525 ]; then
-        debug "Adress is B64 format"
+        debug "Address is B64 format"
         lookup=""
     elif [ "$(echo $address | grep -oiE 'b32.i2p$')" = 'b32.i2p' ] && [ $(echo $address | wc -c) -eq 61 ]; then
         debug "Address is b32.i2p format"
@@ -148,7 +148,7 @@ elif [ "$address" ]; then # Do we really have an address?
     echo " ➤ Initiating ping of $address"
 
      # Try to resolve B64 address
-    lookup=$(java -jar -Xms8m -Xmx8m $I2P/lib/i2ptunnel.jar -nocli -w -e "lookup ${address}" -d)
+    lookup=$(java -jar -Xms16m -Xmx16m $I2P/lib/i2ptunnel.jar -nocli -w -e "lookup ${address}" -d)
     if [ "$lookup" != "Unknown host: $address" ]; then
         echo " ✔ Found valid B64 address"
     fi
