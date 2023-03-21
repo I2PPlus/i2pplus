@@ -305,7 +305,7 @@ class IntroductionManager {
                 _context.banlist().isBanlisted(hash) ||
                 _transport.wasUnreachable(hash)) {
                 if (_log.shouldInfo())
-                    _log.info("Peer is failing, blocklisted or was unreachable: " + cur);
+                    _log.info("Router is failing, blocklisted or was unreachable: " + cur);
                 continue;
             }
             // Try to pick active peers,
@@ -314,7 +314,7 @@ class IntroductionManager {
                 cur.getLastSendTime() < inactivityCutoff &&
                 cur.getIntroducerTime() + (INTRODUCER_EXPIRATION / 4) < now) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Peer has been idle too long: " + cur);
+                    _log.info("Router has been idle too long: " + cur);
                 continue;
             }
             int oldFound = found;

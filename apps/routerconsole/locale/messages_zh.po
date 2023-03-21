@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-13 16:15+0000\n"
-"PO-Revision-Date: 2022-11-14 14:07+0000\n"
+"PO-Revision-Date: 2023-03-18 07:34+0000\n"
 "Last-Translator: xtoaster <zhazhenzhong@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
@@ -39,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.2.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:294
 #, fuzzy
@@ -3997,7 +3997,7 @@ msgstr "政治和 时事杂志"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Democracy &amp; human rights in Iran"
-msgstr ""
+msgstr "伊朗的民主和人权"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "English language Japanese News"
@@ -4519,9 +4519,8 @@ msgstr "Sybil分析"
 #. 7
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:55
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:528
-#, fuzzy
 msgid "Advanced Lookup"
-msgstr "高级连接"
+msgstr "高级查询"
 
 #. 8
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:56
@@ -5049,7 +5048,6 @@ msgid "to your router.config file."
 msgstr "到您的路由器.config 文件。"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:189
-#, fuzzy
 msgid "Peer Connections"
 msgstr "对等节点连接"
 
@@ -5118,7 +5116,7 @@ msgstr "在gwhois.org上查找地址"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:349
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:567
 msgid "Whois"
-msgstr ""
+msgstr "谁是"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:350
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:568
@@ -5237,7 +5235,6 @@ msgid "UDP connections"
 msgstr "UDP 连接"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:547
-#, fuzzy
 msgid "Advanced View"
 msgstr "高级设置"
 
@@ -5545,7 +5542,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:132
 msgid "Accepted"
-msgstr ""
+msgstr "公认"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:133
 msgid "Tunnels peer has refused to participate in"
@@ -5553,7 +5550,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:134
 msgid "Rejected"
-msgstr ""
+msgstr "拒绝"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:135
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:365
@@ -5562,9 +5559,8 @@ msgstr "整合"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:136
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:392
-#, fuzzy
 msgid "First Heard About"
-msgstr "初次接收"
+msgstr "第一次听说"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:137
 msgid "View/Edit"
@@ -6398,7 +6394,7 @@ msgstr "过去 20 分钟我方入站 和 出站流量"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1161
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1204
 msgid "Total number of tunnels in use"
-msgstr "已封禁对等节点数量"
+msgstr "正在使用的隧道数量"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1163
 msgid "Average tunnel build success for last 10m interval"
@@ -6431,9 +6427,8 @@ msgid ""
 msgstr "我方参与的隧道，直接为网络贡献带宽"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1195
-#, fuzzy
 msgid "Current / Maximum"
-msgstr "当前/最大允许传输单元"
+msgstr "当前/最大"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1198
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:526
@@ -6489,9 +6484,8 @@ msgstr "隧道"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingfastest_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingsummary_jsp.java:448
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingsummary_jsp.java:453
-#, fuzzy
 msgid "Transit"
-msgstr "传输"
+msgstr "中转"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1251
 msgid "Utility"
@@ -6518,7 +6512,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1280
 msgid "Average delay before scheduled jobs are run"
-msgstr ""
+msgstr "运行预定工作前的平均延迟"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1295
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
@@ -7281,7 +7275,6 @@ msgstr "路由器当前在隐藏模式下运行，这会阻止构建参与隧道
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:292
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:442
-#, fuzzy
 msgid "No transit tunnels currently active."
 msgstr "目前没有参与的隧道在运行。"
 
@@ -7291,7 +7284,6 @@ msgid "Tier"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:328
-#, fuzzy
 msgid "Address"
 msgstr "地址"
 
@@ -7321,9 +7313,8 @@ msgid "local"
 msgstr "本地"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:587
-#, fuzzy
 msgid "transit"
-msgstr "传输"
+msgstr "中转"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:591
 #, fuzzy
@@ -8098,7 +8089,7 @@ msgstr "日志最大体积"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:590
 msgid "GZIP Compression"
-msgstr ""
+msgstr "GZIP压缩"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:598
 msgid "Default log level"
@@ -9882,9 +9873,8 @@ msgid "Recent I2P+ Changes"
 msgstr "最近的变化"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:469
-#, fuzzy
 msgid "View the full change log"
-msgstr "查看完整的更新日志"
+msgstr "查看完整历史"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:444
 msgid "ostname Registration"
@@ -13545,9 +13535,8 @@ msgid "Active and scheduled jobs"
 msgstr "预定的任务"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:308
-#, fuzzy
 msgid "job queue statistics"
-msgstr "路由统计"
+msgstr "作业队列统计"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:444
 #, fuzzy
@@ -13575,9 +13564,8 @@ msgid "View event log"
 msgstr "查看事件日志"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:549
-#, fuzzy
 msgid "Critical / Error Level Logs"
-msgstr "关键日志"
+msgstr "关键/错误级别日志"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:564
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:572
@@ -13654,9 +13642,8 @@ msgid "Floodfills"
 msgstr "参与洪泛"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:482
-#, fuzzy
 msgid "Fast / High Capacity"
-msgstr "快速，高容量"
+msgstr "快速/高容量"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:472
 msgid "Manage I2P addresses"
@@ -13896,16 +13883,15 @@ msgstr "本地托管隧道"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingfastest_jsp.java:451
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingsummary_jsp.java:451
 msgid "Most Recent"
-msgstr ""
+msgstr "最近的"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipating_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingfastest_jsp.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingsummary_jsp.java:457
-#, fuzzy
 msgid "Fastest"
-msgstr "快速"
+msgstr "最快的"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:459
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:457
@@ -13948,7 +13934,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingfastest_jsp.java:308
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingfastest_jsp.java:444
 msgid "Fastest Transit Tunnels"
-msgstr ""
+msgstr "最快的过境隧道"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingsummary_jsp.java:308
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipatingsummary_jsp.java:444

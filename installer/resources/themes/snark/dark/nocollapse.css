@@ -1,33 +1,33 @@
 /* disable snark's collapsible panels */
-/* fixes a browser engine bug present in Konqueror, Midori, Qupzilla et al */
+/* fixes a browser engine bug present in Konqueror,Midori,Qupzilla et al */
 
-input:not(checked) + label + hr + table, input:not(checked) + label + hr + table + table {
-  display: table;
+input:not(checked) + label + hr + table,input:not(checked) + label + hr + table + table{
+  display:table;
 }
 
-.mainsection input:checked + label + hr + table, .mainsection input:not(checked) + label + hr + table {
-  margin-top: -14px;
+.mainsection input:checked + label + hr + table,.mainsection input:not(checked) + label + hr + table{
+  margin-top:-14px;
 }
 
-.mainsection input:checked + .toggleview, .mainsection input:not(checked) + .toggleview {
-  display: none;
+.mainsection input:checked + .toggleview,.mainsection input:not(checked) + .toggleview{
+  display:none;
 }
 
-label.toggleview, label.toggleview:hover, label.toggleview:active, .toggle_input:focus + label.toggleview {
-  background: #000 url(/themes/console/dark/images/header.png) repeat-x scroll center center;
-  background: linear-gradient(180deg,#1a261a, #000 75%);
-  box-shadow: inset 0 0 0 1px #000, 0 1px 1px #000;
-  mix-blend-mode: normal;
-  cursor: default;
+label.toggleview,label.toggleview:hover,label.toggleview:active,.toggle_input:focus + label.toggleview{
+  background:#000 url(/themes/console/dark/images/header.png) repeat-x scroll center center;
+  background:linear-gradient(180deg,#1a261a,#000 75%);
+  box-shadow:inset 0 0 0 1px #000,0 1px 1px #000;
+  mix-blend-mode:normal;
+  cursor:default;
 }
 
-.toggleview img, .toggleview img:hover, .toggleview img:focus, .toggleview img:active,
-.toggleview:hover img, .toggleview:focus img, .toggleview:active img,
-.toggle_input:focus + label > img {
-  border: 2px solid #000;
-  box-shadow: none;
-  background: #000;
-  background: linear-gradient(180deg,#000 50%, #040 50%);
-  transform: none;
-  filter: drop-shadow(0 0 1px #000);
+.toggleview img,.toggleview img:hover,.toggleview img:focus,.toggleview img:active,
+.toggleview:hover img,.toggleview:focus img,.toggleview:active img,
+.toggle_input:focus + label > img{
+  border:2px solid #000;
+  box-shadow:none;
+  background:#000;
+  background:linear-gradient(180deg,#000 50%,#040 50%);
+  transform:none;
+  filter:drop-shadow(0 0 1px #000);
 }

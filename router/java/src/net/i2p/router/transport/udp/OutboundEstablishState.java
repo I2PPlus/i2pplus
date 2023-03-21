@@ -414,7 +414,7 @@ class OutboundEstablishState {
             generateSessionKey();
         } catch (DHSessionKeyBuilder.InvalidPublicParameterException ippe) {
             if (_log.shouldWarn())
-                _log.warn("Peer " + getRemoteHostId() + " sent us an invalid DH parameter", ippe);
+                _log.warn("Router " + getRemoteHostId() + " sent us an invalid DH parameter", ippe);
             valid = false;
         }
         if (valid)

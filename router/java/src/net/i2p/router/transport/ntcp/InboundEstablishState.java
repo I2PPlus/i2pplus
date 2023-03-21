@@ -198,7 +198,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (getVersion() < 2)
                 fail("Banlisting incompatible Router [" + aliceHash.toBase64().substring(0,6) + "] -> No NTCP2 support");
             else if (_log.shouldWarn())
-                _log.warn("Peer is banlisted " + (_context.banlist().isBanlistedForever(aliceHash) ? "forever" : "") +
+                _log.warn("Router is banlisted " + (_context.banlist().isBanlistedForever(aliceHash) ? "forever" : "") +
                           " [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             return false;

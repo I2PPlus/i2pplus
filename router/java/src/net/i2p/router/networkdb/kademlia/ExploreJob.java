@@ -180,7 +180,7 @@ class ExploreJob extends SearchJob {
                     }
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("[Job " + getJobId() + "] Failed encrypt to " + peer);
+                        _log.warn("Failed encrypt to " + peer);
                     // client went away, but send it anyway
                 }
             }
@@ -203,23 +203,23 @@ class ExploreJob extends SearchJob {
         boolean isSingleCore = SystemVersion.getCores() < 2;
         boolean isSlow = SystemVersion.isSlow();
         int cpuLoad = SystemVersion.getCPULoad();
-        int sysLoad = SystemVersion.getSystemLoad();
-        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1000 && !isSlow && !isSingleCore && cpuLoad < 80 && sysLoad < 80) {
+        int cpuLoadAvg = SystemVersion.getCPULoadAvg();
+        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1500 && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 known peers)");
             return EXPLORE_BREDTH * 3;
-        } else if ((exploreBredth == null && getContext().netDb().getKnownRouters() > 3000) || (cpuLoad > 80 || sysLoad > 80) || (isSlow || isSingleCore)) {
+        } else if ((exploreBredth == null && getContext().netDb().getKnownRouters() > 3500) || (cpuLoad > 90 && cpuLoadAvg > 90) || (isSlow || isSingleCore)) {
             if (_log.shouldInfo())
-                if (cpuLoad > 80 || sysLoad > 80 || isSlow || isSingleCore)
-                    _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (High CPU/system load or device is low spec)");
+                if (cpuLoad > 80 || cpuLoadAvg > 80 || isSlow || isSingleCore)
+                    _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (High CPU load or device is low spec)");
                 else
                     _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (over 3000 known peers)");
             return 1;
-        } else if (exploreBredth == null && !isSlow && !isSingleCore && cpuLoad < 80 && sysLoad < 80) {
+        } else if (exploreBredth == null && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 3000 known peers)");
             return EXPLORE_BREDTH * 2;
-        } else if (getContext().netDb().getKnownRouters() < 1000) {
+        } else if (getContext().netDb().getKnownRouters() < 1500) {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + Math.min(EXPLORE_BREDTH + 1, 2) + " concurrent (less than 1000 known peers)");
             return Math.min(EXPLORE_BREDTH + 1, 2);

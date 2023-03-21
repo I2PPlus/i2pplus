@@ -1,6 +1,6 @@
 /* I2P Theme:Light */
 /* Description:RTL Light blue highlights for Arabic locale. */
-/* Author:dr|z3d */
+/* Author: dr|z3d */
 
 :root{
 --h1_rtl:linear-gradient(-135deg,#fcfcff,rgba(252,252,255,0) 600px),linear-gradient(180deg,#fcfcff 50%,rgba(248,248,255,.6) 50%),repeating-linear-gradient(-135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px) #fafaff;

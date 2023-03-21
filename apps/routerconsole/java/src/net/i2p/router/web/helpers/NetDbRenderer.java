@@ -1035,12 +1035,13 @@ class NetDbRenderer {
             }
             buf.append("</p>");
         }
+/*
         if (log.shouldWarn()) {
             long end = System.currentTimeMillis();
             log.warn("part 1 took " + (end - start));
             start = end;
         }
-
+*/
         if (!showStats) {
             // the summary table
             buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>")
@@ -1063,11 +1064,13 @@ class NetDbRenderer {
             buf.append("</td><td style=vertical-align:top>\n");
             out.write(buf.toString());
             buf.setLength(0);
+/*
             if (log.shouldWarn()) {
                 long end = System.currentTimeMillis();
                 log.warn("part 2 took " + (end - start));
                 start = end;
             }
+*/
             buf.append("<table id=netdbtiers>\n");
             buf.append("<thead>\n<tr><th>" + _t("Bandwidth Tier") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size() > 0) {
@@ -1095,12 +1098,13 @@ class NetDbRenderer {
             buf.append("</table>\n");
             out.write(buf.toString());
             buf.setLength(0);
+/*
             if (log.shouldWarn()) {
                 long end = System.currentTimeMillis();
                 log.warn("part 3 took " + (end - start));
                 start = end;
             }
-
+*/
             // transports table
             buf.append("<table id=netdbtransports>\n");
             buf.append("<thead>\n<tr><th>" + _t("Transports") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
@@ -1132,10 +1136,12 @@ class NetDbRenderer {
                 buf.append("</table>\n");
             }
             buf.append("</td></tr>\n</table>\n");
+/*
             if (log.shouldWarn()) {
                 long end = System.currentTimeMillis();
                 log.warn("part 4 took " + (end - start));
             }
+*/
         } // if !showStats
         out.write(buf.toString());
         out.flush();

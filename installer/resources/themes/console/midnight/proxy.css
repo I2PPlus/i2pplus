@@ -1,5 +1,5 @@
 /* I2P+ Router Console:proxy error theme:Midnight */
-/* Author:dr|z3d */
+/* Author: dr|z3d */
 
 @import url(global.css);
 @import url(../images/itooplus.css);
@@ -99,14 +99,14 @@ form[action="http://proxy.i2p/add"]{margin-bottom:15px}
 .option p{margin:5px 20px}
 .option .formaction{margin:20px -20px 0;padding:12px 10px;border-top:1px solid #225;background:#002}
 
-@keyframes loader{from{width:0} 99%{width:100%} 100%{width:0}}
+@keyframes loader{from{width:0}99%{width:100%}100%{width:0}}
 
 @media screen and (max-width:799px){
 body{font-size:10pt}
 p,td,h3,h4,#b64,a{font-size:90%}
 .logo{display:none}
 .logo hr ~ a{margin:-8px -3px 12px;padding:6px 8px;min-width:110px;position:relative;background:#225}
-.warning{margin-left:20px;padding-left:25px;background:#000; }
+.warning{margin-left:20px;padding-left:25px;background:#000;}
 .warning h3{margin:-10px -39px 10px -24px;padding:7px 14px}
 }
 

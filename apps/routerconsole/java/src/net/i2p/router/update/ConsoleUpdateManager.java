@@ -1071,7 +1071,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public void notifyAttemptFailed(UpdateTask task, String reason, Throwable t) {
         if (_log.shouldWarn())
-            _log.warn("Attempt failed " + task + " for " + task.getType() + ": " + reason, t);
+//            _log.warn("Attempt failed " + task + " for " + task.getType() + ": " + reason, t);
+            _log.warn("[" + task.getType() + "] Update or check failed " + reason, t);
     }
 
     /**
@@ -1082,7 +1083,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     public void notifyTaskFailed(UpdateTask task, String reason, Throwable t) {
         int level = task.getType() == TYPE_DUMMY ? Log.WARN : Log.ERROR;
         if (_log.shouldLog(level))
-            _log.log(level, "Failed " + task + " for " + task.getType() + ": " + reason, t);
+//            _log.log(level, "Failed " + task + " for " + task.getType() + ": " + reason, t);
+            _log.log(level, "[" + task.getType() + "] Update or check failed " + reason, t);
         List<RegisteredUpdater> toTry = _downloaders.get(task);
         if (toTry != null) {
             UpdateItem ui = new UpdateItem(task.getType(), task.getID());
@@ -1091,7 +1093,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 UpdateTask next = retry(ui, va.sourceMap, toTry, DEFAULT_MAX_TIME);  // fixme old maxtime lost
                 if (next != null) {
                    if (_log.shouldWarn())
-                       _log.warn("Retrying with " + next);
+                       _log.warn("Retrying with " + next + "...");
                 }
             }
         }

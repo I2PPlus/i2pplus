@@ -16,7 +16,7 @@
 html{padding:10px;border-right:1px solid #99c;background:#ddddef url(/themes/console/classic/images/bg0.png);background:linear-gradient(180deg,rgba(255,255,255,.4),rgba(255,255,255,.2)),url(/themes/console/classic/images/bg0.png) left top/120px,#ddddef;scrollbar-color:#779 #dde}
 body{padding:10px 20px;min-width:480px;max-width:1200px;font:10pt/130% var(--bodyfont);color:#4f4f63;border-radius:1px;box-shadow:var(--highlight),0 0 0 1px #99c,0 0 2px 2px rgba(0,0,0,.05);background:rgba(230,230,240,.4)}
 input,button,textarea,select,a{outline:none}
-h1,h2{margin-bottom:10px;letter-spacing:.08em;word-spacing:.1em;text-transform:uppercase;text-shadow:1px 1px 1px #fff; border:var(--border);border-radius:2px;box-shadow:var(--highlight),0 0 1px #ccc;background:linear-gradient(180deg,#fff 50%,#eef 50%)}
+h1,h2{margin-bottom:10px;letter-spacing:.08em;word-spacing:.1em;text-transform:uppercase;text-shadow:1px 1px 1px #fff;border:var(--border);border-radius:2px;box-shadow:var(--highlight),0 0 1px #ccc;background:linear-gradient(180deg,#fff 50%,#eef 50%)}
 h1{padding:8px 10px;font-size:14pt}
 h2{padding:5px 10px;font-size:11pt}
 p{margin:20px;line-height:1.4;text-align:justify;font-size:105%}

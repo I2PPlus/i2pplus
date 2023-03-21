@@ -56,8 +56,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         } else {
             // It should be rare to forget the router info for a peer in our own tunnel.
             if (_log.shouldWarn())
-                _log.warn("Lookup of " + _config.getPeer(1)
-                           + " required for " + msg);
+                _log.warn("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] required for " + msg);
             _context.netDb().lookupRouterInfo(_config.getPeer(1), new SendJob(_context, msg),
                                               new LookupFailedJob(_context), MAX_LOOKUP_TIME);
             return -1;
@@ -96,7 +95,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         public void runJob() {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getPeer(1));
             if (_log.shouldDebug())
-                _log.debug("Lookup of " + _config.getPeer(1) + " successful? " + (ri != null));
+                _log.debug("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] successful? " + (ri != null));
             int stat;
             if (ri != null) {
                 _nextHopCache = ri;
@@ -122,8 +121,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
 
         public void runJob() {
             if (_log.shouldWarn())
-                _log.warn("Lookup of " + _config.getPeer(1)
-                           + " failed for " + _config);
+                _log.warn("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config);
             _context.statManager().addRateData("tunnel.outboundLookupSuccess", 0);
             _config.tunnelFailedFirstHop();
         }
@@ -143,7 +141,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
 
         public void runJob() {
             if (_log.shouldWarn())
-                _log.warn("Send to " + _config.getPeer(1) + " failed for " + _config);
+                _log.warn("Send to [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config);
             _config.tunnelFailedFirstHop();
         }
     }

@@ -1,5 +1,5 @@
 /* I2P TunnelManager theme:"Midnight" */
-/* Author:dr|z3d. */
+/* Author: dr|z3d. */
 
 @import url(global.css);
 @import url(/themes/console/images/images.css);
@@ -7,6 +7,7 @@
 @import url(/themes/console/images/i2ptunnel.css);
 
 :root{
+--ahelp:url(/themes/console/images/addressbook.svg);
 --create:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%237670c2' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
 --create_hover:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23bf2295' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
 --create_active:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23fc1c66' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
@@ -68,9 +69,9 @@ table{background:#000}
 #screenlog{position:relative;contain:paint}
 #screenlog span{margin:0;height:calc(100% + 2px);display:flex;align-items:stretch;position:absolute;top:-1px;bottom:-1px;right:-1px;vertical-align:middle}
 #screenlog .iconize{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0}
-#screenlog .clearlog{border-left:var(--border);background: rgba(0,0,0,.3) var(--close) no-repeat center center / 16px}
-#screenlog .clearlog:hover{background: rgba(0,0,32,.5) var(--close_hover) no-repeat center center / 16px}
-#screenlog .clearlog:active{box-shadow:var(--btn_shadow_active);background: #113 var(--close) no-repeat center center / 14px}
+#screenlog .clearlog{border-left:var(--border);background:rgba(0,0,0,.3) var(--close) no-repeat center center / 16px}
+#screenlog .clearlog:hover{background:rgba(0,0,32,.5) var(--close_hover) no-repeat center center / 16px}
+#screenlog .clearlog:active{box-shadow:var(--btn_shadow_active);background:#113 var(--close) no-repeat center center / 14px}
 
 .base32{max-width:120px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:text-bottom}
 #clientAuth td:last-child b{margin:0;padding:0 8px}
@@ -116,6 +117,10 @@ td > b{margin-right:5px;display:inline-block;min-width:30px}
 .newTunnel{text-align:right;border-top:var(--border);padding:5px;background:#fff}
 .newTunnel select,.newTunnel input,.newTunnel .control{margin:2px}
 .newtunnel form{width:100%;text-align:right}
+.tunnelHelper{min-width:8px}
+.tunnelHelper a{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--ahelp) no-repeat center center/20px}
+.tunnelHelper a:hover{transform:scale(1.2)}
+.tunnelHelper a:active{transform:scale(.95)}
 .tunnelName{width:25%;min-width:150px}
 .tunnelName a{margin-left:5px;padding:5px 5px 5px 25px;width:calc(100% - 20px);display:inline-block;box-sizing:border-box;font-weight:700;border:1px solid transparent;border-radius:1px 15px 15px 1px;background:var(--settings) no-repeat 6px center / 14px}
 .tunnelName a:hover,.tunnelName a:focus{border:var(--border);background:var(--settings_hover) no-repeat 6px center / 14px,linear-gradient(180deg,#113,#001);background-size:14px,100%}

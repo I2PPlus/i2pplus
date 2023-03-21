@@ -699,9 +699,9 @@ public class NTCPTransport extends TransportImpl {
     public void forceDisconnect(Hash peer) {
         NTCPConnection con = _conByIdent.remove(peer);
         if (con != null) {
-            if (_log.shouldWarn())
-//                _log.warn("Force disconnect of " + peer, new Exception("I did it"));
-                _log.warn("[TCP] Forcing disconnection of [" + peer.toBase64().substring(0,6) + "]");
+            if (_log.shouldWarn()) {
+                _log.warn("[TCP] Forcing immediate disconnection of Router [" + peer.toBase64().substring(0,6) + "]");
+            }
             con.close();
         }
     }

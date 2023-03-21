@@ -1,5 +1,5 @@
 /* Console Global Mobile Override */
-/* Author:dr|z3d */
+/* Author: dr|z3d */
 
 h1,h1[class]{margin:6px 0 -11px;min-width:0}
 a[href="/summaryframe"]{margin:5px 0 2px}
@@ -55,7 +55,7 @@ h1,h1[class]{margin:6px 0 -11px}
 
 @media screen and (min-width:1500px){
 #sb_wrap{top:12px}
-#sidebar{width:600px} #sidebar table[id^="sb_"]{width:600px}
+#sidebar{width:600px}#sidebar table[id^="sb_"]{width:600px}
 h1,h1[class]{margin:6px 0 -12px}
 div.news{margin:0 0 -11px}
 div.main{margin:10px 0 0;min-width:0}

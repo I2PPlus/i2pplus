@@ -185,10 +185,12 @@ class ProfileOrganizerRenderer {
                         buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")));
                     } else if (ip == "null" || ip == null) {
                         buf.append("<span>").append(_t("unknown"));
+                    } else {
+                        buf.append("<span>").append(ip);
                     }
                     buf.append("</span>");
                 } else {
-                    buf.append(ip != null ? ip : "");
+                    buf.append(ip != null ? ip : _t("unknown"));
                 }
                 buf.append("</td><td>");
                 boolean ok = true;

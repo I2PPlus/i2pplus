@@ -327,7 +327,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
              if (_log.shouldDebug())
                  _log.debug("Dead: " + this, ioe);
              else if (_log.shouldWarn())
-                 _log.warn("Peer [" + _remotePeer.toBase64().substring(0,6) + "] is dead: " + this);
+                 _log.warn("Router [" + _remotePeer.toBase64().substring(0,6) + "] is dead: " + this);
              throw ioe;
          }
          return _packetNumber.getAndIncrement();
@@ -557,7 +557,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     // time exceeded
                                     _migrationState = MigrationState.MIGRATION_STATE_NONE;
                                     if (_log.shouldWarn())
-                                        _log.warn("[SSU2] Connection migration failed on " + this);
+                                        _log.warn("[SSU2] Connection migration failed " + this);
                                 } else if (from.equals(_pendingRemoteHostId)) {
                                     if (_log.shouldInfo())
                                         _log.info("[SSU2] Connection migration pending, received another packet from " + from + this);
@@ -640,17 +640,17 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 if ((old == null || ri.getPublished() > old.getPublished()) &&
                     fndf.floodConditional(ri)) {
                     if (_log.shouldDebug())
-                        _log.debug("Flooded RouterInfo: " + h);
+                        _log.debug("Flooded RouterInfo [" + h.toBase64().substring(0,6) + "]");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Flood request but we didn't: " + h);
+                        _log.info("Declined flooding RouterInfo [" + h.toBase64().substring(0,6) + "]");
                 }
             }
         } catch (IllegalArgumentException iae) {
             if (_log.shouldDebug())
-                _log.debug("RouterInfo store fail: " + ri, iae);
+                _log.debug("RouterInfo store failure: " + ri, iae);
             else if (_log.shouldWarn())
-                _log.warn("RouterInfo store fail: " + ri + "\n* " + iae.getMessage());
+                _log.warn("Failed NetDBStore of RouterInfo [" + ri.getHash().toBase64().substring(0,6) + "] \n* " + iae.getMessage());
         }
     }
 
@@ -834,8 +834,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         try {
             SSU2Bitfield ackbf = SSU2Bitfield.fromACKBlock(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0));
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Received new ACK block from " +
-                           _remotePeer.toBase64().substring(0,6) + ' ' +
+                _log.debug("[SSU2] Received new ACK block from " + _remotePeer.toBase64().substring(0,6) + ' ' +
                            SSU2Bitfield.toString(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0)));
             // calls bitSet() below
             ackbf.forEachAndNot(_ackedMessages, this);

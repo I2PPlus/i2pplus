@@ -168,7 +168,7 @@ abstract class PeerSelector {
                 failing.add(cur);
             } else if (_context.profileOrganizer().peerSendsBadReplies(cur)) {
                 if (true) {
-                    _log.warn("Peer " + cur.toBase64() + " sends us bad replies (but we still query them)");
+                    _log.warn("Router [" + cur.toBase64().substring(0,6) + "] is sending us bad replies (but we still query them)");
                 } else {
                     if (failing == null)
                         failing = new ArrayList(4);
@@ -178,7 +178,7 @@ abstract class PeerSelector {
                         if (profile != null) {
                             RateStat invalidReplyRateStat = profile.getDBHistory().getInvalidReplyRate();
                             Rate invalidReplyRate = invalidReplyRateStat.getRate(60*60*1000l);
-                            _log.warn("Peer " + cur.toBase64() + " sends us bad replies: current hour: "
+                            _log.warn("Router [" + cur.toBase64().substring(0,6) + "] is sending us bad replies: current hour: "
                                       + invalidReplyRate.getCurrentEventCount() + " and last hour: "
                                       + invalidReplyRate.getLastEventCount() + ":\n" + invalidReplyRate.toString());
                         }

@@ -104,11 +104,11 @@ public class HomeHelper extends HelperBase {
 // I2P specific
         _x("I2P Bug Reports") + S + _x("Bug tracker") + S + "http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" + S + I + "bug.svg" + S +
         _x("I2P FAQ") + S + _x("Frequently Asked Questions") + S + "http://i2p-projekt.i2p/faq" + S + I + "faq.svg" + S +
-        _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
         "i2pmetrics.i2p" + S + _x("Historical infrastructure data from the I2P network") + S + "http://i2pmetrics.i2p/" + S + I + "stats.svg" + S +
         _x("Project Website") + S + _x("I2P home page") + S + "http://i2p-projekt.i2p/" + S + I + "eepsites/i2p.svg" + S +
-        "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
         _x("Javadocs") + S + _x("I2P+ API documentation") + S + "http://javadoc.skank.i2p/" + S + I + "helplink.svg" + S +
+        //_x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
+        //"stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
 
 // software repositories + filesharing
         "cake.i2p" + S + _x("Transient server-encrypted filesharing and pastebin") + S + "http://cake.i2p/" + S + I + "eepsites/cake.svg" + S +
@@ -125,13 +125,11 @@ public class HomeHelper extends HelperBase {
 // domain name registration + uptime trackers
         "notbob.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://notbob.i2p/" + S + I + "eepsites/notbob.png" + S +
         "reg.i2p" + S + _x("I2P Domain Name Registration") + S + "http://reg.i2p/" + S + I + "eepsites/reg.svg" + S +
-        //"scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
-        _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "eepsites/registrar.svg" + S +
         //"Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
+        //"scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
+        //_x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "eepsites/registrar.svg" + S +
 
 // forums + social
-        _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
-        "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "eepsites/forum.svg" + S +
         "discuss.i2p" + S + _x("File-sharing forum") + S + "http://discuss.i2p/" + S + I + "eepsites/forum.svg" + S +
         "Natter" + S + _x("Alternative front-end for Twitter") + S + "http://natter.i2p/" + S + I + "eepsites/twitter.svg" + S +
@@ -139,6 +137,8 @@ public class HomeHelper extends HelperBase {
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "eepsites/ramble.svg" + S +
         "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
         "teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "eepsites/teddit.svg" + S +
+        //"dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
+        //_x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
         //"libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
         //"zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
         //_x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "eepsites/forum.svg" + S +
@@ -150,10 +150,10 @@ public class HomeHelper extends HelperBase {
         "major.i2p" + S + _x("IRC Logs for multiple networks") + S + "http://major.i2p/" + S + I + "eepsites/major.svg" + S +
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
         _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "eepsites/radio.svg" + S +
-        "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "eepsites/tv.svg" + S +
         "stormycloud.i2p" + S + _x("Privacy-focused not-for-profit organization") + S + "http://stormycloud.i2p/" + S + I + "eepsites/stormycloud.svg" + S +
         _x("speedtest") + S + _x("Outproxy bandwidth test") + S + "http://outproxy.purokishi.i2p/speedtest/" + S + I + "speedometer.svg" + S +
         "webhosting.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://webhosting.i2p/" + S + I + "eepsites/incog.svg" + S +
+        //"tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "eepsites/tv.svg" + S +
         //"tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
         //_x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
 
@@ -162,11 +162,11 @@ public class HomeHelper extends HelperBase {
         "DuckDuckGo" + S +_x("DuckDuckGo Search Engine (no javascript)") + S + "http://duckduckgo.i2p/" + S + I + "eepsites/duckduckgo.svg" + S +
         "btdigg.i2p" + S +_x("Clearnet BitTorrent DHT search engine") + S + "http://btdigg.i2p/" + S + I + "eepsites/torrentsearch.svg" + S +
         "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
-        "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
         "Mojeek" + S +_x("Privacy-focused Clearnet Search Engine") + S + "http://mojeek.i2p/" + S + I + "search.svg" + S +
         "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
-        "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
         "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
+        //"Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
+        //"Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
 
 // wikis & reference
         "ddosecrets.i2p" + S + _x("Enabling the free transmission of data in the public interest") + S + "http://ddosecrets.i2p/" + S + I + "wiki.svg" + S +
@@ -174,7 +174,6 @@ public class HomeHelper extends HelperBase {
         "hiddenwiki.i2p" + S + _x("Tor .onion site links") + S + "http://hiddenwiki.i2p/" + S + I + "wiki.svg" + S +
         _x("HTMLColors") + S + _x("HTML Color Reference") + S + "http://htmlcolors.i2p/" + S + I + "help.svg" + S +
         "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "wiki.svg" + S +
-        //"legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "eepsites/books.svg" + S +
         "mathworld.i2p" + S + _x("Wolfram's Online Math Reference") + S + "http://mathworld.i2p/" + S + I + "eepsites/books.svg" + S +
         "mdn.i2p" + S + _x("Mozilla Developer Network") + S + "http://mdn.i2p/" + S + I + "eepsites/mdn.svg" + S +
         "Philosopedia" + S + _x("Internet Encylopedia of Philosophy") + S + "http://philosopedia.i2p/" + S + I + "eepsites/books.svg" + S +
@@ -189,6 +188,7 @@ public class HomeHelper extends HelperBase {
         _x("WorldAtlas") + S + _x("World atlas including geography facts &amp; flags") + S + "http://worldatlas.i2p/" + S + I + "planet.svg" + S +
         //"cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
         //"ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
+        //"legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "eepsites/books.svg" + S +
         //_x("imperial.i2p") + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "eepsites/books.svg" + S +
         //"jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "eepsites/books.svg" + S +
         //"nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
@@ -198,7 +198,6 @@ public class HomeHelper extends HelperBase {
         "ArsTechnica" + S + _x("Technology News &amp; more...") + S + "http://arstechnica.i2p/" + S + I + "eepsites/arstechnica.svg" + S +
         "bellingcat.i2p" + S + _x("Independent investigative journalism") + S + "http://bellingcat.i2p/" + S + I + "eepsites/bellingcat.svg" + S +
         "BenthamsGaze" + S + _x("Information Security Research &amp; Education") + S + "http://benthamsgaze.i2p/" + S + I + "eepsites/benthamsgaze.png" + S +
-        //_x("ChinaDigitalTimes") + S + _x("Covering China from Cyberspace") + S + "http://chinadigitaltimes.i2p/" + S + I + "eepsites/chinadigitaltimes.png" + S +
         _x("CultureMagazine") + S + _x("Cannabis-related magazine") + S + "http://culturemagazine.i2p/" + S + I + "eepsites/cannabis.svg" + S +
         _x("CurrentAffairs") + S + _x("A magazine of Politics &amp; Culture") + S + "http://currentaffairs.i2p/" + S + I + "news.svg" + S +
         "Dawn" + S + _x("Democracy for the Arab world now") + S + "http://dawn.i2p/" + S + I + "news.svg" + S +
@@ -224,10 +223,8 @@ public class HomeHelper extends HelperBase {
         "iranfreedom.i2p" + S + _x("Democracy &amp; human rights in Iran") + S + "http://iranfreedom.i2p/" + S + I + "news.svg" + S +
         _x("JapanToday") + S + _x("English language Japanese News") + S + "http://japantoday.i2p/" + S + I + "eepsites/japantoday.svg" + S +
         _x("KrebsOnSecurity") + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "eepsites/krebs.png" + S +
-        //"LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "eepsites/linuxfarm.svg" + S +
         "LKML" + S + _x("Linux Kernel Mailing List") + S + "http://lkml.i2p/" + S + I + "news.svg" + S +
         _x("LittleAtoms") + S + _x("A rationalist journal") + S + "http://littleatoms.i2p/" + S + I + "eepsites/littleatoms.svg" + S +
-        //"Meduza" + S + _x("The Real Russia. Today.") + S + "http://meduza.i2p/" + S + I + "eepsites/meduza.svg" + S +
         _x("MetaCritic") + S + _x("Movie + TV + Music + Game reviews") + S + "http://metacritic.i2p/" + S + I + "eepsites/metacritic.svg" + S +
         _x("NakedSecurity") + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
         "MotherJones" + S + _x("Smart &amp; fearless journalism") + S + "http://motherjones.i2p/" + S + I + "news.svg" + S +
@@ -265,6 +262,9 @@ public class HomeHelper extends HelperBase {
         "Wired" + S + _x("Technology News &amp; more...") + S + "http://wired.i2p/" + S + I + "eepsites/wired.svg" + S +
         //"DarkNetDaily" + S + _x("Darknet related news site") + S + "http://darknetdaily.i2p/" + S + I + "news.svg" + S +
         //"dw.i2p" + S + _x("News &amp; Current Affairs from Germany and around the world") + S + "http://dw.i2p/" + S + I + "news.svg" + S +
+        //"LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "eepsites/linuxfarm.svg" + S +
+        //"Meduza" + S + _x("The Real Russia. Today.") + S + "http://meduza.i2p/" + S + I + "eepsites/meduza.svg" + S +
+        //_x("ChinaDigitalTimes") + S + _x("Covering China from Cyberspace") + S + "http://chinadigitaltimes.i2p/" + S + I + "eepsites/chinadigitaltimes.png" + S +
         //_x("KyivIndependent") + S + _x("News from Ukraine") + S + "http://kyivindependent.i2p/" + S + I + "kyivindependent.svg" + S +
 
         "";

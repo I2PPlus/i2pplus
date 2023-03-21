@@ -294,7 +294,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         if (empty) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
+                _log.warn("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
                           " [" + _key.toBase64().substring(0,6) + "] failed - no Floodfills in NetDb");
             // no floodfill peers, fail
             failed();
@@ -496,13 +496,13 @@ public class IterativeSearchJob extends FloodSearchJob {
                 if (peer != null && peer.equals(_key)) {
                     failed(peer, false);
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("[Job " + getJobId() + "] Not sending zero-hop self-lookup of [" + peer.toBase64().substring(0,6) + "]");
+                        _log.warn("Not sending zero-hop self-lookup of [" + peer.toBase64().substring(0,6) + "]");
                     return;
                 }
                 if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
                     failed(peer, false);
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("[Job " + getJobId() + "] Not sending zero-hop lookup to UNKNOWN [" + peer.toBase64().substring(0,6) + "]");
+                        _log.warn("Not sending zero-hop lookup to UNKNOWN [" + peer.toBase64().substring(0,6) + "]");
                     return;
                 }
             }
@@ -552,7 +552,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     if (!(type == EncType.ELGAMAL_2048 || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
                         failed(peer, false);
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("[Job " + getJobId() + "] Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) + "] with EncType " + type);
+                            _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) + "] with EncType " + type);
                         return;
                     }
 
@@ -566,7 +566,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                         if (ratchet1 && !ratchet2) {
                             failed(peer, false);
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("[Job " + getJobId() + "] Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) +
+                                _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) +
                                           "] -> Router does not support AEAD replies");
                             return;
                         }
@@ -587,7 +587,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                         }
                     } else {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("[Job " + getJobId() + "] Failed encrypt to " + ri);
+                            _log.warn("Failed encrypt to " + ri);
                         // client went away, but send it anyway
                     }
 

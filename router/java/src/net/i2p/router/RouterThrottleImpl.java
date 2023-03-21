@@ -191,7 +191,7 @@ public class RouterThrottleImpl implements RouterThrottle {
             if ((ra.getAverage() > maxProcessingTime * 0.9 || ra.getCurrent() > maxProcessingTime ||
                  ra.getLast() > maxProcessingTime) && maxTunnels > 0) {
 //                if (_log.shouldWarn()) {
-                _log.warn("Refusing participating tunnel request: message processing congestion" +
+                _log.warn("Refusing tunnel request -> Message processing congestion" +
                           "\n* Current: " + ((int)ra.getCurrent()) + "ms" +
                           "\n* Last: " + ((int)ra.getLast()) + "ms" +
                           "\n* Average: " + ((int)ra.getAverage()) + "ms" +
@@ -207,13 +207,13 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (numTunnels >= maxTunnels) {
             if (maxTunnels > 0) {
 //                if (_log.shouldWarn())
-                _log.warn("Refusing participating tunnel request: already participating in "
+                _log.warn("Refusing tunnel request -> Already participating in "
                           + numTunnels + " (max: " + maxTunnels + ")");
                 _context.statManager().addRateData("router.throttleTunnelMaxExceeded", numTunnels);
                 setTunnelStatus(_x("Declining requests" + ": " + _x("Limit reached")));
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Refusing participating tunnel request: disabled by configuration");
+                    _log.warn("Refusing tunnel request -> Disabled by configuration");
                 _context.statManager().addRateData("router.throttleTunnelMaxExceeded", numTunnels);
                 setTunnelStatus(_x("Declining tunnel requests" + ":<br>" + _x("Participation disabled")));
             }
@@ -247,7 +247,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                     if (v < probAccept*100) {
                         // ok
                         if (_log.shouldInfo())
-                            _log.info("Probabalistically accept tunnel request (p=" + probAccept
+                            _log.info("Probabalistically accepting tunnel request (p=" + probAccept
                                       + " v=" + v + " avg=" + avg + " current=" + numTunnels + ")");
                     } else {
                         if (_log.shouldWarn())
@@ -266,8 +266,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                     }
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Accepting participating tunnel request: tunnel count average is " + avg
-                                      + " and we only have " + numTunnels + ")");
+                        _log.info("Accepting tunnel request -> Tunnel count average is " + avg + " and we only have " + numTunnels + ")");
                 }
             }
         }
@@ -289,7 +288,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                 if (v < probAccept*100) {
                     // ok
                     if (_log.shouldInfo())
-                        _log.info("Probabalistically accept tunnel request (p=" + probAccept
+                        _log.info("Probabalistically accepting tunnel request (p=" + probAccept
                                   + " v=" + v + " test time avg 1m=" + avg1m + " 10m=" + avg10m + ")");
                 //} else if (false) {
                 //    if (_log.shouldWarn())

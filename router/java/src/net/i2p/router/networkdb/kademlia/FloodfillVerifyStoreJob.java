@@ -176,7 +176,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     // We don't have a compatible way to get a reply,
                     // skip it for now.
                      if (_log.shouldWarn())
-                         _log.warn("Skipping store verify for incompatible router " + peer);
+                         _log.warn("Skipping NetDbStore verify for incompatible router " + peer);
                     _facade.verifyFinished(_key);
                     return;
                 }
@@ -203,7 +203,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     // We don't have a compatible way to get a reply,
                     // skip it for now.
                      if (_log.shouldWarn())
-                         _log.warn("Skipping store verify to [" + _target.toBase64().substring(0,6) + "] for ECIES or ElG-only client [" + _client.toBase32().substring(0,6) + "]");
+                         _log.warn("Skipping NetDbStore verify to [" + _target.toBase64().substring(0,6) + "] for ECIES or ElG-only client [" + _client.toBase32().substring(0,6) + "]");
                     _facade.verifyFinished(_key);
                     return;
                 }
@@ -305,7 +305,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         }
 
         if (_log.shouldWarn())
-            _log.warn("[Job " + getJobId() + "] No other peers to verify floodfill with, using the one we sent to");
+            _log.warn("No other peers to verify floodfill with, using the one we sent to");
         return _sentTo;
     }
 
@@ -395,7 +395,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     return;
                 }
                 if (_log.shouldWarn()) {
-                    _log.warn("[Job " + getJobId() + "] Verify via Floodfill failed (older) for [" + _key.toBase64().substring(0,6) + "]");
+                    _log.warn("Verify via Floodfill failed (older) for [" + _key.toBase64().substring(0,6) + "]");
                 if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] Received older data \n* " + dsm.getEntry());
             } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
@@ -404,7 +404,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 pm.dbLookupReply(_target,  0,
                                 dsrm.getNumReplies(), 0, 0, delay);
                 if (_log.shouldWarn())
-                    _log.warn("[Job " + getJobId() + "] Verify via Floodfill failed (DbSearchReplyMsg) for [" + _key.toBase64().substring(0,6) + "]");
+                    _log.warn("Verify via Floodfill failed (DbSearchReplyMsg) for [" + _key.toBase64().substring(0,6) + "]");
                 // only for RI... LS too dangerous?
                 if (_isRouterInfo)
                     ctx.jobQueue().addJob(new SingleLookupJob(ctx, dsrm));
@@ -452,7 +452,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             }
             if (newDate > _published) {
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Verify failed, but new store already happened for [" + _key.toString().substring(0,6) + "]");
+                    _log.info("[Job " + getJobId() + "] Verify failed, but new NetDbStore already happened for [" + _key.toString().substring(0,6) + "]");
                 return;
             }
             Set<Hash> toSkip = new HashSet<Hash>(8);
@@ -464,7 +464,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             if (_ignore.size() < 20)
                 toSkip.addAll(_ignore);
             if (_log.shouldWarn())
-                _log.warn("[Job " + getJobId() + "] Verify failed, starting new store for [" + _key.toString().substring(0,6) + "]");
+                _log.warn("Verify failed, starting new NetDbStore for [" + _key.toString().substring(0,6) + "]");
             _facade.sendStore(_key, ds, null, null, FloodfillNetworkDatabaseFacade.PUBLISH_TIMEOUT, toSkip);
         }
     }
@@ -483,7 +483,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             //    getContext().profileManager().dbStoreFailed(_sentTo);
             getContext().statManager().addRateData("netDb.floodfillVerifyTimeout", getContext().clock().now() - _sendTime);
             if (_log.shouldWarn())
-                _log.warn("[Job " + getJobId() + "] Floodfill verify timed out for [" + _key.toBase64().substring(0,6) + "]");
+                _log.warn("Floodfill verify timed out for [" + _key.toBase64().substring(0,6) + "]");
             if (_attempted < MAX_PEERS_TO_TRY) {
                 // Don't resend, simply rerun FVSJ.this inline and
                 // chose somebody besides _target for verification

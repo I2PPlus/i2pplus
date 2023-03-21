@@ -109,10 +109,10 @@ class RequestThrottler {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             if (isUnreachable) {
                 if (_log.shouldWarn())
-                    _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable and older than " + MIN_VERSION);
+                    _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable / " + v);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Slow and older than " + MIN_VERSION);
+                    _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Slow / " + v);
             }
         }
 

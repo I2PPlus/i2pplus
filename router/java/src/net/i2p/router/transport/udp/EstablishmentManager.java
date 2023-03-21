@@ -1420,7 +1420,7 @@ class EstablishmentManager {
             state.generateSessionKey();
         } catch (DHSessionKeyBuilder.InvalidPublicParameterException ippe) {
             if (_log.shouldWarn())
-                _log.warn("Peer " + state + " sent us an invalid DH parameter", ippe);
+                _log.warn("Router " + state + " sent us an invalid DH parameter", ippe);
             _inboundStates.remove(state.getRemoteHostId());
             state.fail();
             return;
@@ -1461,7 +1461,7 @@ class EstablishmentManager {
         }
         if (pkt == null) {
             if (_log.shouldWarn())
-                _log.warn("Peer " + state + " sent us an invalid IP?");
+                _log.warn("Router " + state + " sent us an invalid IP?");
             _inboundStates.remove(state.getRemoteHostId());
             state.fail();
             return;
@@ -2462,7 +2462,7 @@ class EstablishmentManager {
                     RouterIdentity remote = inboundState.getConfirmedIdentity();
                     if (remote != null) {
                         if (_context.banlist().isBanlistedForever(remote.calculateHash()) ||
-                            _context.banlist().isBanlisted(remote.calculateHash())) {
+                            _context.banlist().isBanlistedHostile(remote.calculateHash())) {
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping Inbound connection from " +
                                 (_context.banlist().isBanlistedForever(remote.calculateHash()) ? "permanently" : "") +

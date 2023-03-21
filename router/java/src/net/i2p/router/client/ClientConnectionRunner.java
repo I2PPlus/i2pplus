@@ -966,7 +966,7 @@ class ClientConnectionRunner {
                      ( (granted != null) && (granted.getEarliestLeaseDate() > ours) ) ) {
                     // theirs is newer
                     if (_log.shouldDebug())
-                        _log.debug("Already requesting, theirs is newer; doing nothing: " + state);
+                        _log.debug("Already requesting, theirs is newer; doing nothing... " + state);
                 } else {
                     // ours is newer, so wait a few secs and retry
                     set.setDestination(dest);
@@ -974,7 +974,7 @@ class ClientConnectionRunner {
                     sp.rerequestTimer = timer;
                     timer.schedule(3*1000);
                     if (_log.shouldDebug())
-                        _log.debug("Already requesting, ours is newer; waiting 3 sec: " + state);
+                        _log.debug("Already requesting, ours is newer; waiting 3 sec... " + state);
                 }
                 // fire onCreated?
                 return; // already requesting
@@ -1030,13 +1030,13 @@ class ClientConnectionRunner {
             SessionParams sp = _sessions.get(h);
             if (sp == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,6) +"] - session went away");
+                    _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,6) +"] -> Session disappeared");
                 return;
             }
             synchronized(ClientConnectionRunner.this) {
                 if (sp.rerequestTimer != Rerequest.this) {
                     if (_log.shouldWarn())
-                        _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,6) + "] - newer request came in");
+                        _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,6) + "] -> Received newer request");
                     return;
                 }
             }
@@ -1071,16 +1071,16 @@ class ClientConnectionRunner {
             //    _log.debug("after writeMessage("+ msg.getClass().getName() + "): "
             //               + (_context.clock().now()-before) + "ms");
         } catch (I2CPMessageException ime) {
-            _log.error("Error sending I2CP message to client", ime);
+            _log.error("Error sending I2CP message to client (" + ime.getMessage() + ")");
             stopRunning();
         } catch (EOFException eofe) {
             // only warn if client went away
             if (_log.shouldWarn())
-                _log.warn("Error sending I2CP message - client went away", eofe);
+                _log.warn("Error sending I2CP message -> Client disappeared (" + eofe.getMessage() + ")");
             stopRunning();
         } catch (IOException ioe) {
             if (_log.shouldWarn())
-                _log.warn("IO Error sending I2CP message to client \n* Error: " + ioe.getMessage());
+                _log.warn("Error sending I2CP message to client (" + ioe.getMessage() + ")");
             stopRunning();
         } catch (Throwable t) {
             _log.log(Log.CRIT, "Unhandled exception sending I2CP message to client", t);

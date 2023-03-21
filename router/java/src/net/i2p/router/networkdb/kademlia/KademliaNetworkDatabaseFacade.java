@@ -993,7 +993,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private String validate(Hash key, LeaseSet leaseSet) throws UnsupportedCryptoException {
         if (!key.equals(leaseSet.getHash())) {
             if (_log.shouldWarn())
-                _log.warn("Invalid NetDb store attempt! Key does not match LeaseSet destination!" +
+                _log.warn("Invalid NetDbStore attempt! Key does not match LeaseSet destination!" +
                           "\n* Key: [" + key.toBase32().substring(0,6) + "]" +
                           "\n* LeaseSet: [" + leaseSet.toBase64().substring(0,6) + "]");
             return "Key does not match LeaseSet destination - " + key.toBase64();
@@ -1142,7 +1142,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         String err = validate(key, leaseSet);
         if (err != null)
-            throw new IllegalArgumentException("Invalid NetDb store attempt - " + err);
+            throw new IllegalArgumentException("Invalid NetDbStore attempt - " + err);
 
         _ds.put(key, leaseSet);
 
@@ -1207,7 +1207,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private String validate(Hash key, RouterInfo routerInfo) throws IllegalArgumentException {
         if (!key.equals(routerInfo.getIdentity().getHash())) {
             if (_log.shouldWarn())
-                _log.warn("Invalid NetDb store attempt! Key [" + key.toBase64().substring(0,6) + "] " +
+                _log.warn("Invalid NetDbStore attempt! Key [" + key.toBase64().substring(0,6) + "] " +
                           "does not match identity for RouterInfo [" + routerInfo.toBase64().substring(0,6) + "]");
             return "Key does not match routerInfo.identity";
         }
@@ -1296,8 +1296,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isUnreachable = routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         boolean isFF = false;
         boolean noSSU = true;
+        String caps = "";
         if (routerInfo != null) {
-            String caps = routerInfo.getCapabilities().toUpperCase();
+            caps = routerInfo.getCapabilities().toUpperCase();
             if (caps.contains("F")) {
                 isFF = true;
             }
@@ -1352,87 +1353,87 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
             _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> RouterInfo from the future (" +
                                              new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
-            return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " in the future";
+            return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
         }
         if (noSSU && isFF && !isUs) {
             if (_log.shouldWarn()) {
-                _log.warn("Dropping RouterInfo [" + riHash + "] -> Floodfill with SSU disabled");
+                //_log.warn("Dropping RouterInfo [" + riHash + "] -> Floodfill with SSU disabled");
                 _log.warn("Banning [" + riHash + "] for 4h -> Floodfill with SSU disabled");
             }
             _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> Floodfill with SSU disabled",
                                              null, null, 4*60*60*1000);
-            return "Router [" + routerId + "] Floodfill with SSU disabled";
+            return caps + " Router [" + routerId + "] -> Floodfill with SSU disabled";
         } else if (noSSU && !isUs) {
             if (_log.shouldWarn()) {
-                _log.warn("Dropping RouterInfo [" + riHash + "] -> Router with SSU disabled");
+                //_log.warn("Dropping RouterInfo [" + riHash + "] -> Router with SSU disabled");
                 _log.warn("Banning [" + riHash + "] for 4h -> Router with SSU disabled");
             }
             _context.banlist().banlistRouter(routerInfo.getIdentity().getHash(), " <b>➜</b> Router with SSU disabled",
                                              null, null, 4*60*60*1000);
-            return "Router [" + routerId + "] Router with SSU disabled";
+            return caps + " Router [" + routerId + "] -> Router with SSU disabled";
         }
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
                 _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> Router too old (" + v + ")");
-                return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
+                return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
             }
         } else {
             if (VersionComparator.comp(v, minRouterVersion) < 0) {
                 _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> Router too old (" + v + ")");
-                return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
+                return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
             }
         }
         if (uptime > 10*60*1000 && existing > 500 && isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 8)) {
-            if (_log.shouldWarn())
-                _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and published over 1h ago");
-            return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 1h ago";
+            if (_log.shouldInfo())
+                _log.info("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and published over 1h ago");
+            return caps + " Router [" + routerId + "] -> Slow and published over 1h ago";
         } else if (isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 4)) {
-            if (_log.shouldWarn())
-                _log.warn("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and published over 2h ago");
-            return "RouterInfo [" + routerId + "] is K, L or M tier and was published over 2h ago";
+            if (_log.shouldInfo())
+                _log.info("Dropping RouterInfo [" + riHash + "] -> K, L or M tier and published over 2h ago");
+            return caps + " Router [" + routerId + "] -> Slow and published over 2h ago";
         }
 //        if (upLongEnough && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED) && !isUs) {
             if (routerInfo.getAddresses().isEmpty()) {
-                if (_log.shouldWarn())
-                    _log.warn("Dropping RouterInfo [" + riHash + "] -> No addresses and published over 54m ago");
-                return "RouterInfo [" + routerId + "] has no addresses and was published over 54m ago";
+                if (_log.shouldInfo())
+                    _log.info("Dropping RouterInfo [" + riHash + "] -> No addresses and published over 54m ago");
+                return caps + " Router [" + routerId + "] -> No addresses and published over 54m ago";
             }
             // This should cover the introducers case below too
             // And even better, catches the case where the router is unreachable but knows no introducers
             if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || routerInfo.getAddresses().isEmpty()) {
-                if (_log.shouldWarn())
-                    _log.warn("Dropping RouterInfo [" + riHash + "] -> Unreachable and published over 54m ago");
-                return "RouterInfo [" + routerId + "] is unreachable and was published over 54m ago";
+                if (_log.shouldInfo())
+                    _log.info("Dropping RouterInfo [" + riHash + "] -> Unreachable and published over 54m ago");
+                return caps + " Router [" + routerId + "] -> Unreachable and published over 54m ago";
             }
             // Just check all the addresses, faster than getting just the SSU ones
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 // Introducers change often, introducee will ping introducer for 2 hours
                 if (ra.getOption("itag0") != null) {
-                    if (_log.shouldWarn())
-                        _log.warn("Dropping RouterInfo [" + riHash + "] -> SSU Introducers and was published over 54m ago");
-                    return "RouterInfo [" + routerId + "] has SSU Introducers and was published over 54m ago";
+                    if (_log.shouldInfo())
+                        _log.info("Dropping RouterInfo [" + riHash + "] -> SSU Introducers and published over 54m ago");
+                    return caps + " Router [" + routerId + "] -> SSU Introducers and published over 54m ago";
                 }
             }
         }
         if (expireRI != null && !isUs) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
                 long age = now - routerInfo.getPublished();
-                return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
+                return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " ago";
             }
         } else {
             if (upLongEnough && (routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION) && !isUs) {
                 long age = _context.clock().now() - routerInfo.getPublished();
-                return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
+                return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " ago";
             }
         }
         if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null && !isUs) {
-                    return "Router [" + routerId + "] is SSU only without introducers and was published over 15m ago";
+                    return caps + " Router [" + routerId + "] -> SSU only without Introducers and published over 15m ago";
                 } else {
                     if (isUnreachable && !isUs)
-                    return "Router [" + routerId + "] is unreachable on any transport and was published over 15m ago";
+                    return caps + " Router [" + routerId + "] -> Unreachable on any transport and published over 15m ago";
                 }
             }
         }
@@ -1486,7 +1487,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         String err = validate(key, routerInfo);
         if (err != null)
-            throw new IllegalArgumentException("Invalid NetDb store attempt - " + err);
+            throw new IllegalArgumentException("Invalid NetDbStore attempt - " + err);
 
         //if (_log.shouldDebug())
         //    _log.debug("RouterInfo " + key.toBase64() + " is stored with "

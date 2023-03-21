@@ -1936,7 +1936,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             if ( (oldPeer != null) && (oldPeer != peer) ) {
                 // this happens a lot
                 if (_log.shouldInfo())
-                    _log.info("Peer already connected (PBID): old=" + oldPeer + " new=" + peer);
+                    _log.info("Router already connected (PBID): Old = " + oldPeer + " New = " + peer);
                 // transfer over the old state/inbound message fragments/etc
                 peer.loadFrom(oldPeer);
                 oldEstablishedOn = oldPeer.getKeyEstablishedTime();
@@ -1984,7 +1984,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (oldPeer2 != null && oldPeer2 != peer && oldPeer2 != oldPeer) {
             // this shouldn't happen, should have been removed above
             if (_log.shouldWarn())
-                _log.warn("Peer already connected (PBRH): old=" + oldPeer2 + " new=" + peer);
+                _log.warn("Router already connected (PBRH): old=" + oldPeer2 + " new=" + peer);
             // transfer over the old state/inbound message fragments/etc
             // Send destroy before loadFrom(), because loadFrom() sets dead = true
             sendDestroy(oldPeer2, SSU2Util.REASON_REPLACED);
@@ -3687,9 +3687,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     public void forceDisconnect(Hash peer) {
         PeerState ps =  _peersByIdent.get(peer);
         if (ps != null) {
-            if (_log.shouldWarn())
-//                _log.warn("Force disconnect of " + peer, new Exception("I did it"));
-                _log.warn("[UDP] Forcing disconnection of [" + peer.toBase64().substring(0,6) + "]");
+            if (_log.shouldWarn()) {
+                _log.warn("[UDP] Forcing immediate disconnection of Router [" + peer.toBase64().substring(0,6) + "]");
+            }
             dropPeer(ps, true, "router");
         }
     }

@@ -1,63 +1,63 @@
 /* disable snark's collapsible panels and make section headings inert */
 
-input#toggle_addtorrent:not(checked) + label + hr + table, input#toggle_createtorrent:not(checked) + label + hr + table,
-input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table,
-input#toggle_createtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table + table,
-input#toggle_createtorrent:not(:checked) + label + hr + table, input#toggle_createtorrent:not(:checked) + label + hr + table + table {
-  display: table;
+input#toggle_addtorrent:not(checked) + label + hr + table,input#toggle_createtorrent:not(checked) + label + hr + table,
+input#toggle_addtorrent:checked + label + hr + table,input#toggle_createtorrent:checked + label + hr + table,
+input#toggle_createtorrent:checked + label + hr + table,input#toggle_createtorrent:checked + label + hr + table + table,
+input#toggle_createtorrent:not(:checked) + label + hr + table,input#toggle_createtorrent:not(:checked) + label + hr + table + table{
+  display:table;
 }
 
-.mainsection[id] table {
-  display: table;
+.mainsection[id] table{
+  display:table;
 }
 
-.mainsection[id] table:first-child {
-  margin-top: 10px;
+.mainsection[id] table:first-child{
+  margin-top:10px;
 }
 
-.mainsection[id] hr {
-  margin-bottom: 7px;
+.mainsection[id] hr{
+  margin-bottom:7px;
 }
 
-.toggleview, .toggleview:hover, .toggleview:focus, .toggleview:active {
-  cursor: default;
-  border: 1px solid #212;
-  border-bottom: 1px solid #101;
-  border-top: none;
-  background: linear-gradient(180deg,#656, #323 51%, #202 51%, #101);
-  box-shadow: inset 0 0 1px #838;
-  filter: drop-shadow(0 1px 1px rgba(17,0,17,.6));
+.toggleview,.toggleview:hover,.toggleview:focus,.toggleview:active{
+  cursor:default;
+  border:1px solid #212;
+  border-bottom:1px solid #101;
+  border-top:none;
+  background:linear-gradient(180deg,#656,#323 51%,#202 51%,#101);
+  box-shadow:inset 0 0 1px #838;
+  filter:drop-shadow(0 1px 1px rgba(17,0,17,.6));
 }
 
-.iframed .toggleview, .iframed .toggleview:hover, .iframed .toggleview:focus, .iframed .toggleview:active {
-  border: 1px solid #878;
-  border-bottom: 1px solid #767;
-  border-top: none;
-  box-shadow: inset 0 0 1px #535;
-  filter: drop-shadow(0 1px 2px #101);
+.iframed .toggleview,.iframed .toggleview:hover,.iframed .toggleview:focus,.iframed .toggleview:active{
+  border:1px solid #878;
+  border-bottom:1px solid #767;
+  border-top:none;
+  box-shadow:inset 0 0 1px #535;
+  filter:drop-shadow(0 1px 2px #101);
 }
 
-.toggleview img, .toggleview img:active, .toggleview:hover img,
-.toggleview:focus img, .toggleview img:active, .toggleview:active img,
-.mainsection[id] .toggleview img, .mainsection[id] .toggleview img:active, .mainsection[id]:hover .toggleview img,
-.mainsection[id] .toggleview:focus img, .mainsection[id] .toggleview img:active, .mainsection[id] .toggleview:active img,
-input:not(:checked) + .toggleview > img, #commentSection input:not(:checked) + .toggleview > img {
-  background: linear-gradient(180deg,#767 50%, #323 50%, #212);
-  mix-blend-mode: normal;
-  transform: none;
-  filter: none;
-  box-shadow: none;
+.toggleview img,.toggleview img:active,.toggleview:hover img,
+.toggleview:focus img,.toggleview img:active,.toggleview:active img,
+.mainsection[id] .toggleview img,.mainsection[id] .toggleview img:active,.mainsection[id]:hover .toggleview img,
+.mainsection[id] .toggleview:focus img,.mainsection[id] .toggleview img:active,.mainsection[id] .toggleview:active img,
+input:not(:checked) + .toggleview > img,#commentSection input:not(:checked) + .toggleview > img{
+  background:linear-gradient(180deg,#767 50%,#323 50%,#212);
+  mix-blend-mode:normal;
+  transform:none;
+  filter:none;
+  box-shadow:none;
 }
 
-#addSection:hover table, #createSection:hover table:not(#trackerselect),
-#configSection .configTitle, .toggleview {
-  will-change: auto;
+#addSection:hover table,#createSection:hover table:not(#trackerselect),
+#configSection .configTitle,.toggleview{
+  will-change:auto;
 }
 
-#addSection table, #createSection table:not(#trackerselect) {
-  animation: none;
+#addSection table,#createSection table:not(#trackerselect){
+  animation:none;
 }
 
-.toggle_input {
-  display: none;
+.toggle_input{
+  display:none;
 }

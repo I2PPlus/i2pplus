@@ -58,7 +58,7 @@ class ConnectionPacketHandler {
             boolean isTooFast = con.getSendStreamId() <= 0;
             // Apparently an i2pd bug... see verifyPacket()
             if ( (!packet.isFlagSet(Packet.FLAG_RESET)) && (!isTooFast) && (_log.shouldWarn()) )
-                _log.warn("Packet does NOT verify: " + packet + " on " + con);
+                _log.warn("Received packet that does NOT verify: " + packet + " on " + con);
             packet.releasePayload();
             return;
         }
@@ -82,7 +82,7 @@ class ConnectionPacketHandler {
         if ( (con.getCloseSentOn() > 0) && (con.getUnackedPacketsSent() <= 0) &&
              (seqNum > 0) && (packet.getPayloadSize() > 0)) {
             if (_log.shouldInfo())
-                _log.info("Received new data when we've sent them data and all of our data is acked: "
+                _log.info("Received new data when we've sent them data and all of our data is ACKed: "
                           + packet + " on " + con + "");
             // this is fine, half-close
             // Major bug before 0.9.9, packets were dropped here and a reset sent
@@ -120,7 +120,7 @@ class ConnectionPacketHandler {
             final int size = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE;
             if (size < con.getOptions().getMaxMessageSize()) {
                 if (_log.shouldInfo())
-                    _log.info("SYN ACK without MTU; reducing MTU to " + size
+                    _log.info("Received SYN ACK without MTU; reducing MTU to " + size
                               + " bytes (max: " + con.getOptions().getMaxMessageSize() + ")");
                 con.getOptions().setMaxMessageSize(size);
                 con.getOutputStream().setBufferSize(size);
@@ -277,7 +277,7 @@ class ConnectionPacketHandler {
                     con.setNextSendTime(_context.clock().now() + con.getOptions().getSendAckDelay());
                 } else {
                     if (_log.shouldDebug())
-                        _log.debug("ACK-only packet received: " + packet);
+                        _log.debug("Received ACK-only packet: " + packet);
                     ackOnly = true;
                 }
             }
@@ -433,7 +433,7 @@ class ConnectionPacketHandler {
         boolean congested;
         if (choke || (!isNew && sequenceNum > 0) || con.isChoked()) {
             if (_log.shouldDebug())
-                _log.debug("Congestion on the sending side; not adjusting window\n* " + con);
+                _log.debug("Congestion on the sending side, not adjusting window...\n* " + con);
             congested = true;
         } else {
             congested = false;
@@ -499,7 +499,7 @@ class ConnectionPacketHandler {
                 }
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("No change to [window " + con.getOptions().getWindowSize() +
+                    _log.debug("No change to [Window " + con.getOptions().getWindowSize() +
                                "]\n* Congested? " + congested + "; ACKed: " + acked + "; Resends: " + numResends);
             }
 
@@ -514,7 +514,7 @@ class ConnectionPacketHandler {
                           " (resends: " + numResends + ") for " + con);
         } else {
             if (_log.shouldDebug())
-                _log.debug("No change to [window " + con.getOptions().getWindowSize() +
+                _log.debug("No change to [Window " + con.getOptions().getWindowSize() +
                            "]\n* HighestAckedThrough: " + lowest + "; congestionWindowEnd: " + con.getCongestionWindowEnd() +
                            "; ACKed: " + acked + "; UnACKed: " + con.getUnackedPacketsSent());
         }
@@ -554,7 +554,7 @@ class ConnectionPacketHandler {
                     Destination dest = packet.getOptionalFrom();
                     if (dest == null) {
                         if (_log.shouldWarn())
-                            _log.warn("SYN Packet without FROM");
+                            _log.warn("Received SYN Packet without FROM");
                         return false;
                     }
                     con.setRemotePeer(dest);
@@ -568,8 +568,7 @@ class ConnectionPacketHandler {
                         return true;
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Packet without RST or SYN where we don't know stream ID: "
-                                      + packet);
+                            _log.warn("Received packet without RESET or SYN where we don't know StreamID: " + packet);
                         return false;
                     }
                 }
@@ -577,8 +576,7 @@ class ConnectionPacketHandler {
                 // Apparently an i2pd bug...
                 if (con.getSendStreamId() != packet.getReceiveStreamId()) {
                     if (_log.shouldWarn())
-                        _log.warn("Packet received with the wrong reply stream ID \n* "
-                                  + con + " / " + packet);
+                        _log.warn("Received packet with the WRONG reply StreamID \n* " + con + " / " + packet);
                     return false;
                 } else {
                     return true;
@@ -603,7 +601,7 @@ class ConnectionPacketHandler {
             Destination d2 = packet.getOptionalFrom();
             if (d1 != null && d2 != null && !d1.equals(d2)) {
                 if (_log.shouldWarn())
-                    _log.warn("Received RST from wrong destination on " + con);
+                    _log.warn("Received RESET packet from WRONG destination on " + con);
                 return;
             }
             SigningPublicKey spk = con.getRemoteSPK();
@@ -616,7 +614,7 @@ class ConnectionPacketHandler {
                 return;
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Reset received on " + con);
+                    _log.warn("Received RESET packet on " + con);
                 // ok, valid RST
                 con.resetReceived();
                 con.eventOccurred();
@@ -628,7 +626,7 @@ class ConnectionPacketHandler {
             }
         } else {
             if (_log.shouldWarn())
-                _log.warn("Received a packet for the wrong connection? "
+                _log.warn("Received a RESET packet for the WRONG connection? "
                           + con + " / " + packet);
             return;
         }
@@ -645,7 +643,7 @@ class ConnectionPacketHandler {
         Destination d1 = con.getRemotePeer();
         Destination d2 = packet.getOptionalFrom();
         if (d1 != null && d2 != null && !d1.equals(d2)) {
-            throw new I2PException("Received packet from wrong destination on " + con);
+            throw new I2PException("Received packet from WRONG destination on " + con);
         }
         // verify the signature if necessary
         if (con.getOptions().getRequireFullySigned() ||

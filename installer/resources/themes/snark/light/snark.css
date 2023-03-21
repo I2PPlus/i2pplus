@@ -1,6 +1,6 @@
 /* I2PSnark theme "Light" aka Corporat */
 /* Cat That Got The Cream Edition */
-/* Author:dr|z3d */
+/* Author: dr|z3d */
 /* Thanks to http://www.luxphile.com/2011/01/creative-commons-cat.html for the kitty image */
 
 @import url(/themes/console/light/global.css);
@@ -61,11 +61,11 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #torrentsimg{display:inline-block;vertical-align:middle}
 
 /* top navigation */
-#navbar{margin:0 auto 11px;padding:8px 10px 7px;position:sticky;top:-1px;z-index:2001;width:auto;width:calc(100% - 22px);min-width:880px;text-align:center;border:var(--border_soft);border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:var(--th); }
+#navbar{margin:0 auto 11px;padding:8px 10px 7px;position:sticky;top:-1px;z-index:2001;width:auto;width:calc(100% - 22px);min-width:880px;text-align:center;border:var(--border_soft);border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:var(--th);}
 .iframed #navbar{margin:-5px -1px;padding-top:6px;padding-bottom:6px;position:static;border-radius:0;border:none;border-bottom:var(--border_soft);box-shadow:none}
 .snarkNav{margin-right:-5px;padding:2px 10px 2px 24px;display:inline-block;position:relative;outline:none;line-height:1.4;letter-spacing:.08em;text-decoration:none;text-transform:uppercase;font-size:9pt;font-weight:700;border:var(--border_soft);border-radius:0;box-shadow:var(--highlight);filter:drop-shadow(0 0 1px rgba(220,220,255,.7));transition:ease-in box-shadow .1s}
 #navbar a,#navbar a:visited{color:#559;background-size:15px,100%;background-position:8px center;transition:ease-out box-shadow .1s}
-#navbar a:hover,#navbar a:focus{z-index:999;color:var(--hover);text-shadow:none; border:1px solid var(--hover);transition:ease border .1s}
+#navbar a:hover,#navbar a:focus{z-index:999;color:var(--hover);text-shadow:none;border:1px solid var(--hover);transition:ease border .1s}
 #navbar a:active,#navbar a:hover:active{color:#fff;box-shadow:inset 2px 2px 3px #7f3000;transition:ease box-shadow .1s}
 .snarkNav:last-child{border-radius:0 2px 2px 0}
 .snarkNav[href="/i2psnark/"]:last-of-type{border-radius:2px}
@@ -739,14 +739,14 @@ td.torrentAction input[type=submit]{margin-top:1px}
 #torrentEdit .info_tracker,#torrentEdit .info_tracker a{font-weight:700;color:#57579a;pointer-events:none}
 
 /* animations */
-@keyframes disappear{from{visibility:visible} to{visibility:collapse}}
-@keyframes down{from{background-position:left bottom,right bottom} to{background-position:left bottom,left top}}
-@keyframes downloadbar{0%,100%{background-position:left center} 50%{background-position:20% center}}
-@keyframes fade-in{0%{filter:opacity(0)} 100%{filter:opacity(1)}}
-@keyframes scale{0%,100%{transform:scale(1)} 50%{transform:scale(1.3)}}
-@keyframes slide-in{0%{transform:translateY(-40px)} 100%{transform:translateY(0)}}
+@keyframes disappear{from{visibility:visible}to{visibility:collapse}}
+@keyframes down{from{background-position:left bottom,right bottom}to{background-position:left bottom,left top}}
+@keyframes downloadbar{0%,100%{background-position:left center}50%{background-position:20% center}}
+@keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
+@keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+@keyframes slide-in{0%{transform:translateY(-40px)}100%{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(360deg)}}
-@keyframes uploading{from{background-position:left center} to{background-position:20% center}}
+@keyframes uploading{from{background-position:left center}to{background-position:20% center}}
 
 /* inline notifications */
 
@@ -756,9 +756,9 @@ body:not(.iframed) .notify:not([hidden]){height:calc(100% - 2px) !important}
 /* browser specific */
 @supports not (-moz-appearance:none){
 .snarkNav{padding-top:3px;padding-bottom:3px;image-rendering:-webkit-optimize-contrast}
-.percentBarText{line-height:16px} .iframed .percentBarText,.iframed .percentBarText:hover,.iframed .percentBarText:focus{transition:none}
+.percentBarText{line-height:16px}.iframed .percentBarText,.iframed .percentBarText:hover,.iframed .percentBarText:focus{transition:none}
 select{padding:6px 24px 6px 6px}
-img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;vertical-align:middle} .torrentName>*{line-height:1.4}
+img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;vertical-align:middle}.torrentName>*{line-height:1.4}
 .iframed #pagenavtop{margin:-1px 0 -33px}
 }
 
