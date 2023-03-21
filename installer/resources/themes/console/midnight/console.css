@@ -926,10 +926,12 @@ input[type="hidden"]+p+p{border:var(--border_inner);padding:10px;margin-top:20px
 
 /* transit summary */
 #tunnels #transitSummary th{position:relative}
-#tunnels #transitSummary td{padding:3px 6px}
+#tunnels #transitSummary th.tcount{min-width:64px}
+#tunnels #transitSummary th#data{min-width:72px}
+#transitSummary th.tcount::after{right:-4px;z-index:10}
+#tunnels #transitSummary td:not(.rif):not(.rih):not(.rbw){padding:5px 4px;text-align:center}
 #tunnels #transitSummary span:not([hidden]),#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}
-#tunnels #transitSummary td:nth-child(n+2) span:not([hidden]),#tunnels #transitSummary td:nth-child(n+2) b{min-width:28px;display:inline-block}
 .peerFlag img{width:24px;height:18px;display:inline-block;vertical-align:middle}
 
 /* update */
@@ -2199,11 +2201,9 @@ h1::first-letter{font-size:107%}
 /* tunnels */
 #tunnels th{font-size:90%}
 .tunnels_participating td.cells:first-child{font-size:0}
-.ibgw::after,.obep::after,.ptcp::after{width:28px;height:28px;display:inline-block;background:var(--ibgw) no-repeat center center/28px;content:""}
+.ibgw::after,.obep::after,.ptcp::after{width:28px;height:28px;display:inline-block;vertical-align:middle;background:var(--ibgw) no-repeat center center/28px;content:""}
 .obep::after{background:var(--obep) no-repeat center center}
 .ptcp::after{background:var(--ptcp) no-repeat center center}
-#tunnels .cells:first-child{width:1%;max-width:64px;min-width:64px}
-#tunnels .cells:nth-child(2),#tunnels .cells:nth-child(3),.tunnels_participating td:nth-child(4){width:2%;max-width:112px;min-width:112px;vertical-align:middle}
 
 /* tunnelpeercount */
 #tunnels #peercount{margin-bottom:-3px;background-image:url(/themes/console/images/peers.svg)}

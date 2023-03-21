@@ -1930,6 +1930,21 @@ div[lang="pt"] li br{display:none}
 #stats ul.statlist{margin:-7px 0 0;padding:0;width:calc(100% - 2px);box-shadow:var(--highlight),inset 0 0 2px 1px var(--bg4)}
 
 /* tunnels */
+h3+.statusnotes{margin-top:-1px}
+span.b32{margin-right:5px;padding:2px 4px;float:right;line-height:1.2;letter-spacing:.1em;font-family:var(--monospaced);font-size:80%;color:var(--code);box-shadow:0 0 0 1px var(--border_color),var(--highlight);background:var(--th);opacity:.8}
+span.b32:hover{opacity:1}
+span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active)}
+.ibgw::after,.obep::after,.ptcp::after{width:24px;height:24px;display:inline-block;background:var(--ibgw) no-repeat center center/24px;content:""}
+.obep::after{background:var(--obep) no-repeat center center/24px}
+.ptcp::after{background:var(--ptcp) no-repeat center center/24px}
+.inbound,.outbound{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--in) no-repeat center center/16px}
+.outbound{background:var(--out) no-repeat center center/16px}
+.inbound.small,.outbound.small{background-size:12px;background-position:center center}
+.small img{margin:0;padding:0}
+.direction .small{width:12px;margin-left:-2px}
+.statusnotes{margin:-6px 0 7px;padding:8px 0;color:var(--ink);font-style:italic;font-size:9pt;text-align:center;border:var(--border);background:var(--bg)}
+.rlookup{padding:0 2px 2px;display:inline-block;font-style:italic}
+.routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
 .router_id,.tunnel_local{width:64px;box-sizing:border-box}
 .tunnel_id{margin-left:4px;padding:2px 4px;min-width:78px;display:inline-block;line-height:1.35;vertical-align:middle;text-align:right;border-radius:0;box-shadow:var(--box_border_badge);background:var(--badge)}
 .tunnel_id:empty{opacity:0}
@@ -1937,21 +1952,8 @@ div[lang="pt"] li br{display:none}
 .tunneldisplay td{padding-top:4px;padding-bottom:4px}
 .tunnel_peer:empty{vertical-align:middle}
 .tunnel_peer:empty::before{margin:1px 6px 1px 2px}
-.tunnel_local{padding:3px 4px;display:inline-block;line-height:1.45;text-transform:lowercase;font-size:90%;vertical-align:middle;text-align:center}
+.tunnel_local{padding:3px 4px;display:inline-block;line-height:1.45;text-transform:lowercase;font-size:90%;vertical-align:middle;text-align:center;box-shadow:inset var(--box_border_badge),inset 0 0 0 2px var(--bg);background:var(--th)}
 .tunnels_participating td.cells:first-child{font-size:0}
-.ibgw::after,.obep::after,.ptcp::after{width:24px;height:24px;display:inline-block;background:var(--ibgw) no-repeat center center/24px;content:""}
-.obep::after{background:var(--obep) no-repeat center center/24px}
-.ptcp::after{background:var(--ptcp) no-repeat center center/24px}
-span.b32{margin-right:5px;padding:2px 4px;float:right;line-height:1.2;letter-spacing:.1em;font-family:var(--monospaced);font-size:80%;color:var(--code);box-shadow:0 0 0 1px var(--border_color),var(--highlight);background:var(--th);opacity:.8}
-span.b32:hover{opacity:1}
-span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active)}
-.inbound,.outbound{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--in) no-repeat center center/16px}
-.outbound{background:var(--out) no-repeat center center/16px}
-.inbound.small,.outbound.small{background-size:12px;background-position:center center}
-.small img{margin:0;padding:0}
-.direction .small{width:12px;margin-left:-2px}
-.statusnotes{margin:-6px 0 7px;padding:8px 0;color:var(--ink);font-style:italic;font-size:9pt;text-align:center;border:var(--border);background:var(--bg)}
-h3+.statusnotes{margin-top:-1px}
 .statusnotes+.statusnotes{margin-top:-8px}
 .tunneldisplay td{text-align:center}
 .tunneldisplay td:first-child{text-align:center;width:1%;white-space:nowrap}
@@ -1966,21 +1968,18 @@ h3+.statusnotes{margin-top:-1px}
 #tunnels td:first-child{border-left:var(--border)}
 #tunnels td:last-child{border-right:var(--border)}
 #tunnels td>*{vertical-align:middle}
-.tunnel_local{display:inline-block;box-shadow:inset var(--box_border_badge),inset 0 0 0 2px var(--bg);background:var(--th)}
 #tunnel_defs td:nth-child(even),#tunnel_defs td:first-child{width:1%}
 #tunnel_defs tr:first-child td{border-top:var(--border)}
 #tunnels h3 a img{margin:3px 3px 0 0}
 #tunnels .tunnel_display td:first-child{width:64px}
 #refreshPage{cursor:pointer}
-.routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
-#tunnels .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;box-shadow:0 0 0 1px #bbc}
-#tunnels .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:""}
-#tunnels .peerFlag img{margin:0;padding:1px;width:24px;height:18px;box-shadow:var(--highlight)}
-.rlookup{padding:0 2px 2px;display:inline-block;font-style:italic}
 #tunnels td:last-child .tunnel_peer:not(.tunnel_local){margin-left:-12px}
+#tunnels #transitPeers td:first-child{width:unset}
 
 /* transit summary */
 #tunnels #transitSummary th{position:relative}
+#tunnels #transitSummary th#data{min-width:72px}
+#tunnels #transitSummary th.tcount::after{right:-4px;z-index:10}
 #tunnels #transitSummary td:not(.rih):not(.rbw){padding:3px 6px}
 #tunnels #transitSummary span:not([hidden]),#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}

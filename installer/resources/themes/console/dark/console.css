@@ -1043,6 +1043,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 /* transit summary */
 #transitSummary th,#transitSummary td{vertical-align:middle;white-space:nowrap}
 #transitSummary th{position:relative}
+#transitSummary th.tcount::after{right:-4px;z-index:10}
 #transitSummary td:not(.rih):not(.rbw){padding:3px 6px}
 #transitSummary{margin-bottom:10px}
 #transitSummary td:not(.rih):not(.rbw):first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
