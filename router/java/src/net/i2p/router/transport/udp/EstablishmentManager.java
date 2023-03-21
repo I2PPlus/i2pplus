@@ -2462,7 +2462,7 @@ class EstablishmentManager {
                     RouterIdentity remote = inboundState.getConfirmedIdentity();
                     if (remote != null) {
                         if (_context.banlist().isBanlistedForever(remote.calculateHash()) ||
-                            _context.banlist().isBanlisted(remote.calculateHash())) {
+                            _context.banlist().isBanlistedHostile(remote.calculateHash())) {
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping Inbound connection from " +
                                 (_context.banlist().isBanlistedForever(remote.calculateHash()) ? "permanently" : "") +
