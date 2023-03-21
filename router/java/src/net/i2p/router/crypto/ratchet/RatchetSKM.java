@@ -614,7 +614,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     _outboundSessions.put(sess.getTarget(), sess);
                     rv = true;
                     if (_log.shouldWarn())
-                        _log.warn("Replaced old session, got new NS for " + sess.getTarget());
+                        _log.warn("Replaced old session, received new session request for " + sess.getTarget());
                 } else {
                     if (_log.shouldDebug())
                         _log.debug("Not replacing existing session for " + sess.getTarget());
