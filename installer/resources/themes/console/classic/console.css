@@ -1334,10 +1334,11 @@ p.sybil_info,p.family,p.threatpoints,p.hashdist,p.notfound,#sybil_totals{margin:
 #netdbcountrylist{margin-bottom:-7px}
 #netdbcountrylist td:first-child,#netdbtransports td:first-child,#netdbtiers td:first-child,#netdbversions td:first-child{border-left:none}
 #netdbcountrylist td:last-child,#netdbtransports td:last-child,#netdbtiers td:last-child,#netdbversions td:last-child{border-right:none}
+#netdbcountrylist img{margin-right:8px;padding:1px;text-align:center;font-size:70%;border-radius:2px;box-shadow:0 0 0 1px var(--border_badge)}
+#netdbcountrylist a:hover img{transform:scale(1.1)}
 #netdbtransports{position:relative}
 #netdbtransports td:last-child,#netdbtiers td:last-child{width:30%;text-align:center}
 #netdbversions .version{margin:0;padding:0}
-#netdbcountrylist img{margin-right:5px;font-size:80%;text-align:center}
 #netdbversions td,#netdbtiers td:last-child,#netdbcountrylist td:last-child{text-align:center}
 #netdbtiers td a{margin-right:6px}
 #netdbtiers td a:hover{box-shadow:var(--highlight),0 0 0 1px var(--hover)}
