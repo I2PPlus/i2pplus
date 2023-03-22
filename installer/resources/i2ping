@@ -8,7 +8,7 @@ fi
 
     # Can we find the i2ptunnel.jar
 if [ ! -f "$I2P/lib/i2ptunnel.jar" ]; then
-    echo " ✖ File $I2P/lib/i2ptunnel.jar not found, please edit $0 and change the I2P variable(generally set to the i2prouter location)."
+    echo " ✖ File $I2P/lib/i2ptunnel.jar not found, please edit $0 and change the I2P variable (generally set to the i2prouter location)."
     exit 1
 fi
 
