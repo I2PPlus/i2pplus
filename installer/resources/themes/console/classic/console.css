@@ -1099,11 +1099,6 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #graphopts a:hover,#graphopts a:focus,#newsDisplay a:hover,#newsDisplay a:focus,#routerinformation tr:nth-child(n+2) a:not(#revision):hover,#routerinformation tr:nth-child(n+2) a:not(#revision):focus{color:#557;border:1px solid var(--a);box-shadow:0 0 0 1px rgba(220,220,255,.6),var(--highlight);background:linear-gradient(180deg,var(--bg) 50%,var(--bg4) 50%)}
 #graphopts a:active,#newsDisplay a:active,#routerinformation tr:nth-child(n+2) a:active{color:var(--ink_h1);box-shadow:var(--btn_shadow_active);background:linear-gradient(0deg,var(--bg),var(--bg4))}
 
-/* routerid flags */
-img.unknownflag{opacity:.8}
-#netdbcountrylist img[src^="/flags"],.netdb_header img[src^="/flags"]{width:24px;height:18px;vertical-align:middle}
-#netdb td:not(.rif)>img[src^="/flags"]{margin-top:0;margin-bottom:0;border:var(--border_soft)}
-
 /* netdb */
 a.keysearch{padding:2px 5px 2px 15px;display:inline-block;font-size:90%;border:1px solid #bbd;border-radius:2px;background:var(--crypto) no-repeat 2px center/12px,var(--th)}
 .addtobook{text-align:right}
@@ -1311,6 +1306,14 @@ p.sybil_info,p.family,p.threatpoints,p.hashdist,p.notfound,#sybil_totals{margin:
 #sybilTask td{padding:0}
 #sybil_totals{font-weight:400}
 
+/* flags */
+img.unknownflag{opacity:.8}
+.netdb_header img[src^="/flags"],.peerFlag img,#netdbcountrylist img[src^="/flags"]{width:24px;height:18px;vertical-align:middle}
+.peerFlag img,#netdbcountrylist img{margin-right:8px;padding:1px;text-align:center;font-size:70%;border-radius:2px;box-shadow:0 0 0 1px var(--border_badge)}
+.peerFlag img {margin:0}
+#netdbcountrylist a:hover img{transform:scale(1.1)}
+#netdb td:not(.rif)>img[src^="/flags"]{margin-top:0;margin-bottom:0;border:var(--border_soft)}
+
 /* netdb (main section) */
 #netdb td:not(.rif):not(.rih){padding-top:6px;padding-bottom:6px;position:static}
 #netdboverview{margin:15px 0 5px;border:var(--border)}
@@ -1334,8 +1337,6 @@ p.sybil_info,p.family,p.threatpoints,p.hashdist,p.notfound,#sybil_totals{margin:
 #netdbcountrylist{margin-bottom:-7px}
 #netdbcountrylist td:first-child,#netdbtransports td:first-child,#netdbtiers td:first-child,#netdbversions td:first-child{border-left:none}
 #netdbcountrylist td:last-child,#netdbtransports td:last-child,#netdbtiers td:last-child,#netdbversions td:last-child{border-right:none}
-#netdbcountrylist img{margin-right:8px;padding:1px;text-align:center;font-size:70%;border-radius:2px;box-shadow:0 0 0 1px var(--border_badge)}
-#netdbcountrylist a:hover img{transform:scale(1.1)}
 #netdbtransports{position:relative}
 #netdbtransports td:last-child,#netdbtiers td:last-child{width:30%;text-align:center}
 #netdbversions .version{margin:0;padding:0}
@@ -1955,13 +1956,14 @@ div[lang="pt"] li br{display:none}
 #stats .toggle_input{width:0;height:0;position:absolute;top:-99999px;left:-99999px;opacity:0}
 
 /* routerinfo /  bw widgets */
-.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge)}
+.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);width:unset}
 .rid{width:unset}
 .rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight)}
+.rif{padding:0 1px}
 .rif,.rif img{line-height:0;font-size:0}
 .rif img{padding:0;margin:0!important;width:24px;height:18px;vertical-align:middle;display:inline-block}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
-.rid .rbw{min-width:20px;text-align:center;line-height:1;font-weight:900}
+.rid .rbw{min-width:20px;text-align:center;line-height:1}
 .rbw.isff{background:var(--isFF),var(--badge)}
 .rbw.isff.isD{background:var(--isD),var(--isFF),var(--badge)}
 .rbw.isff.isE{background:var(--isE),var(--isFF),var(--badge)}
@@ -1975,10 +1977,8 @@ div[lang="pt"] li br{display:none}
 .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
 .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
 .ric{background:var(--badge)}
-.ric .rbw{line-height:16px}
 
 /* tunnels */
-
 h3+.statusnotes{margin-top:-1px}
 span.b32{margin-right:5px;padding:2px 4px;float:right;line-height:1.2;letter-spacing:.1em;font-family:var(--monospaced);font-size:80%;color:var(--code);box-shadow:0 0 0 1px var(--border_color),var(--highlight);background:var(--th);opacity:.8}
 span.b32:hover{opacity:1}
@@ -2019,10 +2019,11 @@ span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active
 #tunnels td:first-child{border-left:var(--border)}
 #tunnels td:last-child{border-right:var(--border)}
 #tunnels td>*{vertical-align:middle}
+#tunnels .rif{padding:0 1px;width:unset;vertical-align:middle}
+#tunnels .tunnel_display td:first-child{width:64px}
 #tunnel_defs td:nth-child(even),#tunnel_defs td:first-child{width:1%}
 #tunnel_defs tr:first-child td{border-top:var(--border)}
 #tunnels h3 a img{margin:3px 3px 0 0}
-#tunnels .tunnel_display td:first-child{width:64px}
 #refreshPage{cursor:pointer}
 #tunnels td:last-child .tunnel_peer:not(.tunnel_local){margin-left:-12px}
 #tunnels #transitPeers td:first-child{width:unset}
@@ -2096,7 +2097,7 @@ iframe{height:0}
 .infohelp#jsRequired{border:none}
 .main.embedded{padding:0}
 #i2ptunnelframe{margin-bottom:-3px}
-#torrents,#webmail,#dns,#tunnelmgr{min-height:9px;position:relative;overflow:hidden;line-height:0;will-change:unset}
+#dns,#torrents,#tunnelmgr,#webmail{min-height:9px;position:relative;overflow:hidden;line-height:0;will-change:unset}
 #dns,#torrents,#webmail{padding:0;min-width:606px}
 #dns{background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.8)),url(images/bg0.png)}
 #tunnelmgr{padding:0 10px;min-width:550px}
@@ -2104,10 +2105,10 @@ iframe{height:0}
 #dns::before,#torrents::before,#tunnelmgr::before,#webmail::before{width:0;height:9px;display:block;position:absolute;top:0;left:0;right:0;background:linear-gradient(180deg,rgba(255,255,255,.2) 50%,rgba(0,0,0,.2) 50%),var(--reload);opacity:.7;content:"";animation:reloader 8s ease-out .5s forwards}
 
 /*animations */
-@keyframes downloadbar{from{background:repeating-linear-gradient(135deg,rgba(221,221,255,.7) 1px,rgba(221,221,255,.7) 6px,rgba(238,238,255,.7) 7px,rgba(238,238,255,.7) 11px)}to{background:var(--updating)}}
 @keyframes bar{from{width:260%}}
 @keyframes disappear{from{visibility:visible}to{visibility:hidden}}
 @keyframes down{from{background-position:center center,100%}}
+@keyframes downloadbar{from{background:repeating-linear-gradient(135deg,rgba(221,221,255,.7) 1px,rgba(221,221,255,.7) 6px,rgba(238,238,255,.7) 7px,rgba(238,238,255,.7) 11px)}to{background:var(--updating)}}
 @keyframes fade{from{opacity:1}to{opacity:0}}
 @keyframes logupdate{from{background-color:rgba(80,255,80,.3)}}
 @keyframes reloader{0%,100%{width:0}80%,99%{width:120%}}
@@ -2116,7 +2117,14 @@ iframe{height:0}
 @keyframes zoom{from{transform:scale(.8)}to{transform:scale(1)}}
 
 /* chrome overrides */
-@supports not (-moz-appearance:none){#sb_warning+p:empty+form{margin-top:12px}select{padding:5px 20px 5px 8px}.applabel{padding-bottom:1px}#reseedproxytype{columns:2}#reseedproxysslhostport.optionlist{columns:1}.optionsingle#reseedproxytype{columns:2}.sitemapLabel{padding-bottom:2px}}
+@supports not (-moz-appearance:none){
+#sb_warning+p:empty+form{margin-top:12px}
+select{padding:5px 20px 5px 8px}
+.applabel{padding-bottom:1px}
+.sitemapLabel{padding-bottom:2px}
+#reseedproxysslhostport.optionlist{columns:1}
+#reseedproxytype{columns:2}
+}
 
 @media screen and (max-width:1499px){
 .newsentry+hr+#newsStatus+#newsDisplay{margin:1px 3px -1px}
@@ -2141,25 +2149,28 @@ iframe{height:0}
 .cells td.peer,.cells td.direction{min-width:0}.cells td.idle,.cells td.inout{min-width:90px}
 }
 @media screen and (max-width:1200px){
+div[id^="config"] .tab a{padding-right:13px}
+h2{font-size:12pt}
+h3+.statusnotes{margin-top:5px}
+p.sybilinfo{margin:-3px 0 8px}
+table.sybil_routerinfo:last-child{margin-bottom:0}
+table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#jobstats td,#profilelist td,#tunnels td{padding:3px;border-right:var(--border_soft)}
 .applink,.sitemapLink,.sitemapLabel{width:120px}
 .applabel{width:116px}
 .applink img,.sitemapLink img{height:24px;max-height:24px;max-width:24px;display:inline-block}
 .eventspanel form{padding:10px;background:var(--bg)}
 .eventspanel select{margin-right:8px}
-h2{font-size:12pt}
 .netdbentry:last-child,table.leaseset:last-child{margin-bottom:0}
 .netdbentry,#leasesetdebug,#leasesetsummary,table.leaseset{margin:11px 0 -6px}
 .netdbentry th code,.sybil_routerinfo th code,.leaseset th code{font-size:8pt}
 .profilegroup::before{width:18px;height:14px}
-p.sybilinfo{margin:-3px 0 8px}
 .sitemapLink{margin:0 -11px 6px 14px}
-h3+.statusnotes{margin-top:5px}
 .statusnotes:last-child{margin-bottom:0}
-table.sybil_routerinfo:last-child{margin-bottom:0}
 .tab,.tab2{padding:1px 0;min-width:50px}
 .tab2{padding:3px 10px}
 .tab a{padding:2px 12px}
-div[id^="config"] .tab a{padding-right:13px}
+.tunnel_id{display:none}
+.widescroll+.infohelp{margin:0}
 #debugmode{margin-bottom:-6px}
 #enablefullstats input[type=checkbox]{margin-top:0;float:left}
 #floodfills,#profiles ul{margin-top:11px}
@@ -2174,7 +2185,6 @@ div[id^="config"] .tab a{padding-right:13px}
 #minigraphcontainer{margin-top:-57px;margin-left:1px;width:249px;height:38px;background-size:248px 38px;background-position:left 51px bottom}
 #minigraph{margin-left:-50px;height:42px}
 #netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
-.widescroll+.infohelp{margin:0}
 #netdb h3.tabletitle,h3.sybils{font-size:10pt}
 #netdblookup{margin-bottom:-11px}
 #netdb #netdboverview,#netdblookup{margin:11px 0 0}
@@ -2207,7 +2217,6 @@ div[id^="config"] .tab a{padding-right:13px}
 #searchbar button{height:25px}
 #sybilanalysis{margin:-3px 0 0}
 #sybilnav{margin:5px -6px 8px}
-table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#profilelist td,#jobstats td,#tunnels td{padding:3px;border-right:var(--border_soft)}
 #totaljobstats{margin-top:11px}
 #tunnelPeerCount td:nth-child(3),#tunnelPeerCount td:nth-child(3) a{line-height:1.1;font-size:90%}
 #tunnels .cells:first-child{width:1%;max-width:48px;min-width:48px}
@@ -2221,13 +2230,69 @@ table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#profil
 #tunnels .percentBarOuter,#tunnels .percentBarText{margin:0;width:50px}
 #upnpstatus+#ntcpcon{margin-top:5px}
 }
-
-@media screen and (max-width:1100px){.tunnel_id{width:auto;text-align:center}}
-@media screen and (max-width:1000px){.welcome h2{font-size:11pt}.confignav{font-size:8.5pt}.tab2{padding:3px 8px}.tab a{padding:2px 10px}input[name="pluginURL"]{width:260px}#plugininstall tr:nth-child(3) td:nth-last-child(2),#plugininstall2 tr:nth-child(2) td:nth-last-child(2){padding:15px 0 15px 36px;background-size:20px;background-position:10px center}img[src$="bound.png"]{transform:scale(.9)}#tunnels th,#profiles th{font-size:8pt}#config_update .messages{padding-left:40px;background-size:22px;background-position:8px center}#view_profile{padding:0;min-width:540px}#view_profile pre{margin:-5px 5px;width:calc(100% - 5px)}#view_profile h2{margin:-1px;font-size:13pt}#viewprofile{border:none;min-width:500px}input[name="speed"],input[name="capacity"]{min-width:80px;width:80px}#netdboverview th{font-size:9.5pt}#netdboverview table th::before,#netdboverview table td::before{height:20px;vertical-align:middle}#netdboverview a,#netdtiers a{margin:-1px 5px;vertical-align:middle}#netdboverview table th,#netdboverview table td{padding:4px;min-width:60px}#events{min-width:510px}#events select{min-width:100px}#events table{table-layout:fixed;width:100%}#events td:last-child{word-break:break-all}.encDests code{max-width:40px}#bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:5px;padding-right:8px;background:var(--bg2)}#bandwidthconfig td:not(.infohelp):first-child{padding-right:0;background:none}#bandwidthconfig .infohelp{padding-right:10px}.net_datausage{padding:4px 0;min-width:260px;white-space:normal}.bw_title{margin:2px -6px -2px -3px;font-size:10pt}#updateHelper select{max-width:200px}#reseedproxytype{columns:2 auto}#reseedconfig .nowrap b{min-width:50px}#reseed_urlselection.optionsingle{columns:1 auto}#reseedconfig tr:nth-child(3) td label{padding:5px 4px 5px 0;width:calc(100% - 4px)}#view_profile h3{border:none;border-bottom:var(--border)}}
-@media screen and (max-width:900px){.welcome h2{font-size:10pt}.homelinkedit input[name="nofilter_url"]{width:240px}#newfamily input[type=text]{width:160px}#joinfamily input[type="file"]{width:220px}h3.ptitle,h3.tabletitle,th.th_title,#udpcon,#ntcpcon{font-size:10pt}#ntcpconnections th:last-child{font-size:0}#ntcpconnections th:last-child::before{content:var(--err)}#consolepass input[name="name"],#externali2cp input[name="user"],#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"]{width:130px;min-width:130px}input[name="pluginURL"]{margin-left:0;width:190px}#plugininstall tr:nth-child(3) td:nth-last-child(2),#plugininstall tr:nth-child(5) td:nth-last-child(2){padding-left:5px;background-size:0}#plugininstall .optionsave,#plugininstall2 .optionsave{padding-right:0}input[name="pluginFile"]{margin-left:0;transform:scale(.9)}#profiles table,#peers table,#tunnels table,#jobs table{font-size:8pt}#netdbversions th:last-child,#netdbtransports th:last-child,#netdbcountrylist th:last-child{max-width:60px;overflow:hidden;text-overflow:ellipsis}#netdbversions td,#netdbtransports td,#netdbcountrylist td{font-size:8.5pt}}
-@media screen and (min-width:900px){#consolepass input[name="name"],#externali2cp input[name="user"],#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"]{width:160px}}
-@media screen and (min-width:1060px){#graphs td:first-child{padding:5px}}
-@media screen and (min-width:1000px){th.queue{white-space:nowrap}}
+@media screen and (max-width:1100px){
+.tunnel_id{width:auto;text-align:center}
+}
+@media screen and (max-width:1000px){
+img[src$="bound.png"]{transform:scale(.9)}
+input[name="pluginURL"]{width:260px}
+input[name="capacity"],input[name="speed"]{min-width:80px;width:80px}
+.bw_title{margin:2px -6px -2px -3px;font-size:10pt}
+.confignav{font-size:8.5pt}
+.encDests code{max-width:40px}
+.net_datausage{padding:4px 0;min-width:260px;white-space:normal}
+.tab2{padding:3px 8px}
+.tab a{padding:2px 10px}
+.welcome h2{font-size:11pt}
+#bandwidthconfig td:not(.infohelp):first-child{padding-right:0;background:none}
+#bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:5px;padding-right:8px;background:var(--bg2)}
+#bandwidthconfig .infohelp{padding-right:10px}
+#config_update .messages{padding-left:40px;background-size:22px;background-position:8px center}
+#events{min-width:510px}
+#events select{min-width:100px}
+#events table{table-layout:fixed;width:100%}
+#events td:last-child{word-break:break-all}
+#netdboverview a,#netdtiers a{margin:-1px 5px;vertical-align:middle}
+#netdboverview th{font-size:9.5pt}
+#netdboverview table th::before,#netdboverview table td::before{height:20px;vertical-align:middle}
+#netdboverview table th,#netdboverview table td{padding:4px;min-width:60px}
+#plugininstall tr:nth-child(3) td:nth-last-child(2),#plugininstall2 tr:nth-child(2) td:nth-last-child(2){padding:15px 0 15px 36px;background-size:20px;background-position:10px center}
+#profiles th,#tunnels th{font-size:8pt}
+#reseedconfig .nowrap b{min-width:50px}
+#reseedconfig tr:nth-child(3) td label{padding:5px 4px 5px 0;width:calc(100% - 4px)}
+#reseedproxytype{columns:2 auto}
+#reseed_urlselection.optionsingle{columns:1 auto}
+#updateHelper select{max-width:200px}
+#viewprofile{padding:0;border:none;min-width:540px}
+#view_profile h2{margin:-1px;font-size:13pt}
+#view_profile h3{border:none;border-bottom:var(--border)}
+#view_profile pre{margin:-5px 5px;width:calc(100% - 5px)}
+}
+@media screen and (max-width:900px){
+h3.ptitle,h3.tabletitle,th.th_title,#ntcpcon,#udpcon{font-size:10pt}
+input[name="pluginFile"]{margin-left:0;transform:scale(.9)}
+input[name="pluginURL"]{margin-left:0;width:190px}
+.homelinkedit input[name="nofilter_url"]{width:240px}
+#consolepass input[name="name"],#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#externali2cp input[name="user"]{width:130px;min-width:130px}
+#jobs table,#peers table,#profiles table,#tunnels table{font-size:8pt}
+#joinfamily input[type="file"]{width:220px}
+#newfamily input[type=text]{width:160px}
+#netdbversions th:last-child,#netdbtransports th:last-child,#netdbcountrylist th:last-child{max-width:60px;overflow:hidden;text-overflow:ellipsis}
+#netdbversions td,#netdbtransports td,#netdbcountrylist td{font-size:8.5pt}
+#ntcpconnections th:last-child{font-size:0}
+#ntcpconnections th:last-child::before{content:var(--err)}
+#plugininstall tr:nth-child(3) td:nth-last-child(2),#plugininstall tr:nth-child(5) td:nth-last-child(2){padding-left:5px;background-size:0}
+#plugininstall .optionsave,#plugininstall2 .optionsave{padding-right:0}
+}
+@media screen and (min-width:900px){
+#consolepass input[name="name"],#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#externali2cp input[name="user"]{width:160px}
+}
+@media screen and (min-width:1060px){
+#graphs td:first-child{padding:5px}
+}
+@media screen and (min-width:1000px){
+th.queue{white-space:nowrap}
+}
 @media screen and (min-width:1200px){
 .cells tt,#profilelist tt{margin-left:2px}
 #jobstats tr:not(last-child):td:first-child,#jobstats tr:not(last-child):hover td:first-child{padding:6px 0 6px 26px;background:var(--yes) no-repeat 8px center/12px}
@@ -2238,7 +2303,6 @@ table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#profil
 }
 @media screen and (min-width:1400px){
 a.graphstat{margin-right:2px;font-size:90%}
-#help #changelog pre{margin-left:0;padding-left:10px;columns:560px auto;column-gap:40px;column-rule:1px dotted #abf}
 .joblog ul{margin-left:-40px}
 .statlist .bullet{display:none}
 .statlist{padding-top:10px;text-align:center;columns:auto 540px;column-gap:10px}
@@ -2256,34 +2320,37 @@ a.graphstat{margin-right:2px;font-size:90%}
 .statsName>b{padding-left:14px;background:var(--stats) no-repeat left center/10px}
 .statsName b,.statsLongName{width:100%;display:inline-block;text-align:left}
 .statsName i{display:inline-block}
+.statsViewGraphs{margin:4px 0;padding:1px 8px 2px;width:calc(100% - 46px);display:inline-block;border-top:var(--border_soft);border-bottom:var(--border_soft)}
+#help #changelog pre{margin-left:0;padding-left:10px;columns:560px auto;column-gap:40px;column-rule:1px dotted #abf}
 #stats .statsName{margin:0 6px 10px 0;padding:10px 10px 0;width:calc(100% - 22px);min-width:540px;display:inline-block;border:var(--border);box-shadow:var(--highlight);background:var(--th)}
 #stats ul.statlist{margin-top:10px;padding-bottom:0;width:100%;border:none;background:none}
-.statsViewGraphs{margin:4px 0;padding:1px 8px 2px;width:calc(100% - 46px);display:inline-block;border-top:var(--border_soft);border-bottom:var(--border_soft)}
 }
 @media screen and (min-width:1500px){
 body,.main,.main td,.news p,#news p,.tab,.tab2,.main li b,.joblog li,.themelabel,.ui_lang,.statusnotes,#sidebar button.download,#consolepass td,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,textarea,.netdbentry th,.configtable th,.statlist a[name],.statlist b,.statlist li b,.statlist a[name]:hover,div.messages,th,label,input,input[type="submit"],input[type="reset"],button{font-size:10pt}
 body{overflow-x:hidden}
 button.control{padding:14px}
+code,pre,tt,tt a,.applabel a,.bucket,.tabletextarea textarea,#logs li,#routerlogs li,#servicelogs li,#updateAvailable{font-size:9.5pt}
+div.news{padding-bottom:5px}
+div.news,.cells tt,.flag+tt,.footnote,.news #newsDisplay,.news #newsStatus,.sb_notice,.topness,#banlist li,#help code,#help tt,#profilelist tt,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,#sidebar td{font-size:9pt}
+h1,.main,.news,#warning{margin-left:252px}
+h1[class],h1{padding:18px 20px 18px 60px;font-size:19pt;background-size:40px;background-position:11px center}
+h3,h3.ptitle,h3.tabletitle,th.th_title{font-size:11pt}
+h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 .cells tt,#profilelist tt{padding-right:3px;margin-left:-1px;margin-right:0}
 .confignav{padding:0 5px}
 .applink{width:160px}
 .applink img{padding:9px 60px 6px}
-div.news{padding-bottom:5px}
 .applabel a{padding-top:3px}
-.applabel a,#updateAvailable,code,tt,pre,#logs li,#routerlogs li,#servicelogs li,tt,tt a,code,.bucket,.tabletextarea textarea{font-size:9.5pt}
 .applabel{padding:2px;width:156px}
 .flag img,#peers .flag img,#profiles .flag img,#tunnels .flag img{margin:1px -1px;width:22px;height:16px}
 .footnote{font-size:8pt}
-h1[class],h1{padding:18px 20px 18px 60px;font-size:19pt;background-size:40px;background-position:11px center}
-h3,h3.ptitle,h3.tabletitle,th.th_title{font-size:11pt}
 .joblog h3{margin-top:8px}
 .langselect .optbox{margin-left:-64px}
-#sidebar td,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,div.news,#banlist li,.news #newsStatus,.news #newsDisplay,.topness,.footnote,.cells tt,.flag+tt,#profilelist tt,.sb_notice,#help code,#help tt{font-size:9pt}
 .main[id^="config_"] .encDests th,.main[id^="config_"] .encDests td{font-size:9pt}
 .main[id^="config_"] th,h4#updateplugins{font-size:10.5pt}
-.main,.news,h1,#warning{margin-left:252px}
 .newsAuthor{padding-left:14px;font-size:9pt;background-size:12px;background-position:left center}
 .newsAuthor i{margin-top:-1px;display:inline-block}
+.newsDate,.newsentry h3,.newsentry h3 a,#news.main h3{font-size:10.5pt}
 .sorry{margin-left:251px}
 .subheading b{font-size:10.5pt}
 .tab,.tab2{margin-top:-1px}
@@ -2292,10 +2359,8 @@ h3,h3.ptitle,h3.tabletitle,th.th_title{font-size:11pt}
 .themechoice .optbox,.langselect .optbox{width:144px}
 .tunnel_cap{margin-left:1px;padding:1px;min-width:15px}
 .tunnel_id:empty{margin-right:-10px}
-.newsentry h3,.newsentry h3 a,#news.main h3,.newsDate{font-size:10.5pt}
 #console h3{font-size:12pt}
 #externali2cp td label::before,#externali2cp .nowrap::before,#reseedconfig .nowrap::before{min-height:44px}
-h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #help .confignav{padding:0;position:sticky;top:-1px;z-index:999}
 #help .tab{margin-top:-1px;margin-bottom:-1px}
 #i2pclientconfig,h3.ptitle{margin-bottom:-15px}
@@ -2330,5 +2395,10 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #tunnels td:last-child .tunnel_peer:not(.tunnel_local)+.tunnel_cap{margin-left:1px}
 #webappconfiguration{margin-bottom:-14px}
 }
-@media screen and (min-width:1600px){#sb_localtunnels td:first-child{width:20px}}
-@media screen and (min-width:1634px){.leasesets_container{margin-bottom:2px}th code{font-size:9pt}}
+@media screen and (min-width:1600px){
+#sb_localtunnels td:first-child{width:20px}
+}
+@media screen and (min-width:1634px){
+.leasesets_container{margin-bottom:2px}
+th code{font-size:9pt}
+}
