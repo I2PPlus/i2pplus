@@ -89,8 +89,8 @@ input[type=text][readonly]{box-shadow:inset 1px 1px 1px #e4e4ee}
 select{margin:4px;padding:5px 24px 5px 5px;min-width:140px;overflow:hidden;text-overflow:ellipsis;appearance:none}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active,#sigType[disabled]{margin:0;padding:2px 0 2px 3px;font-weight:400;color:var(--ink);border:none;box-shadow:none;background:none;pointer-events:none}
 td[colspan="2"]>select#profile{width:calc(50% - 15px)}
-textarea{font-family:var(--monospaced)}
 textarea,input,select,button{font-size:9pt;vertical-align:middle}
+textarea{font-family:var(--monospaced)}
 textarea[name="accessList"],.authentication,#hostField,#localDestination{margin:5px;padding:2px 4px;width:calc(100% - 20px);box-sizing:unset}
 textarea[name="accessList"]{padding:4px 8px;height:32px;line-height:1.1;will-change:transform}
 textarea[name="accessList"]:focus{height:112px}
@@ -145,10 +145,10 @@ textarea[name="accessList"]:focus{height:112px}
 #oldName{width:30%;min-width:310px}
 #oldName{width:45%}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
-#statusMessages:focus{background:#fafaff;box-shadow:none}
-#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:8.5pt var(--monospaced);color:#070;border:none;border-radius:0;box-shadow:none;filter:none}
-#statusMessages::selection{color:#fff;background:#070}
 #statusMessages,#statusMessages:active{margin:0;height:80px;border:none;box-shadow:none}
+#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:500 8.5pt var(--monospaced);color:#070;border:none;border-radius:0;box-shadow:none;filter:none}
+#statusMessages:focus{background:#fafaff;box-shadow:none}
+#statusMessages::selection{color:#fff;background:#070}
 #targetHost,.host{width:30%;min-width:250px}
 #targetPort{margin-right:10px}
 #tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#encryptMode,#profile,#sigType{margin:5px;width:calc(100% - 10px)}
