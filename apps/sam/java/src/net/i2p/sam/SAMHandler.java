@@ -163,8 +163,10 @@ abstract class SAMHandler implements Runnable, Handler {
      * unregister with the bridge.
      */
     public void stopHandling() {
-        if (_log.shouldInfo())
-            _log.info("Stopping: " + this, new Exception("I did it"));
+//        if (_log.shouldInfo())
+//            _log.info("Stopping: " + this, new Exception("I did it"));
+        if (_log.shouldWarn())
+            _log.warn("Stopping SAM client: " + this);
         synchronized (stopLock) {
             stopHandler = true;
         }
