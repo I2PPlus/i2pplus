@@ -193,7 +193,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                           " [" + aliceHash.toBase64().substring(0,6) + "]");
             // So next time we will not accept the con from this IP,
             // rather than doing the whole handshake
-            if(ip != null)
+            if (ip != null)
                _context.blocklist().add(ip);
             if (getVersion() < 2)
                 fail("Banlisting incompatible Router [" + aliceHash.toBase64().substring(0,6) + "] -> No NTCP2 support");
