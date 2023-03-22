@@ -112,12 +112,12 @@ class NewsFetcher extends UpdateRunner {
             proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) &&
             _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) < 0) {
             if (_log.shouldWarn())
-                _log.warn("Cannot fetch news - HTTP client tunnel not running");
+                _log.warn("Cannot fetch news -> HTTP proxy tunnel not running");
             return;
         }
         if (shouldProxy && _context.commSystem().isDummy()) {
             if (_log.shouldWarn())
-                _log.warn("Cannot fetch news - VM Comm system");
+                _log.warn("Cannot fetch news -> VM Comm system is enabled");
             return;
         }
 

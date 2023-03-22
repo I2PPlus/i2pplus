@@ -186,14 +186,15 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private boolean verifyInbound(Hash aliceHash) {
         // get inet-addr
         byte[] ip = _con.getRemoteIP();
-        if (_context.banlist().isBanlistedForever(aliceHash) || _context.banlist().isBanlistedHostile(aliceHash)) {
+        //if (_context.banlist().isBanlistedForever(aliceHash) || _context.banlist().isBanlistedHostile(aliceHash)) {
+        if (_context.banlist().isBanlistedForever(aliceHash)) {
             if (_log.shouldWarn())
                 _log.warn("Dropping Inbound connection from " + (_context.banlist().isBanlistedForever(aliceHash) ?
                           "permanently" : "") + " banlisted peer at " + Addresses.toString(ip) +
                           " [" + aliceHash.toBase64().substring(0,6) + "]");
             // So next time we will not accept the con from this IP,
             // rather than doing the whole handshake
-            if(ip != null)
+            if (ip != null)
                _context.blocklist().add(ip);
             if (getVersion() < 2)
                 fail("Banlisting incompatible Router [" + aliceHash.toBase64().substring(0,6) + "] -> No NTCP2 support");
@@ -202,7 +203,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                           " [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             return false;
+        } else if (_context.banlist().isBanlistedHostile(aliceHash)) {
+            _context.commSystem().mayDisconnect(aliceHash);
+            return false;
         }
+
         if(ip != null)
            _transport.setIP(aliceHash, ip);
         if (_log.shouldDebug())

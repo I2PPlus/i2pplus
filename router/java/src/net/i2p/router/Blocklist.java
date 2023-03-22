@@ -93,6 +93,7 @@ public class Blocklist {
     private final Map<Hash, String> _peerBlocklist = new HashMap<Hash, String>(4);
 
     private static final String PROP_BLOCKLIST_ENABLED = "router.blocklist.enable";
+    private static final String PROP_BLOCKLIST_FEEDLIST_ENABLED = "router.blocklistFeed.enable";
     private static final String PROP_BLOCKLIST_TOR_ENABLED = "router.blocklistTor.enable";
     private static final String PROP_BLOCKLIST_DETAIL = "router.blocklist.detail";
     private static final String PROP_BLOCKLIST_FILE = "router.blocklist.file";
@@ -179,9 +180,10 @@ public class Blocklist {
             blFile = new File(_context.getConfigDir(), BLOCKLIST_FILE_DEFAULT);
             files.add(new BLFile(blFile, ID_LOCAL));
         }
-        files.add(new BLFile(_blocklistFeedFile, ID_FEED));
-        if (_context.router().isHidden() ||
-            _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY)) {
+        if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_FEEDLIST_ENABLED)) {
+            files.add(new BLFile(_blocklistFeedFile, ID_FEED));
+        }
+        if (_context.router().isHidden() || _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY)) {
             blFile = new File(_context.getConfigDir(), BLOCKLIST_COUNTRY_FILE);
             files.add(new BLFile(blFile, ID_COUNTRY));
         }
@@ -403,8 +405,7 @@ public class Blocklist {
         final boolean isFeedFile = blFile.equals(_blocklistFeedFile);
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(blFile), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"));
             String source = blFile.toString();
             String buf = null;
             while ((buf = br.readLine()) != null) {
