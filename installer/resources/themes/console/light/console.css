@@ -20,8 +20,8 @@ body{margin:6px;line-height:1.3;text-align:center;font-size:9pt;background:var(-
 a,h1,h2,h3,h4,th,input[type=submit],input[type=reset],button,select{text-shadow:0 1px 1px #fff}
 a:hover,a:focus,a:active,.applink:hover a,.applink:focus a,.applink:active a,input[type=submit]:hover,input[type=submit]:focus,input[type=submit]:active,input[type=reset]:hover,input[type=reset]:focus,input[type=reset]:active,button:hover,button:focus,button:active,select:hover,select:focus,select:active,.graphspanel a{text-shadow:none}
 b,#routerinformation td:first-child{color:var(--ink_light)}
-code,tt{font-size:8.5pt;font-weight:600;color:#373}
-code,pre,tt,textarea,#logs li,.bucket,.b32{font-family:var(--monospaced)}
+code,tt{font-size:8.5pt;color:#373}
+code,pre,tt,textarea,#logs li,.bucket,.b32{font-family:var(--monospaced);font-weight:500}
 code{text-align:left}
 h1,.confignav{position:relative}
 h2{margin:15px 0;padding:10px;word-spacing:.1em;letter-spacing:.08em;word-wrap:break-word;text-transform:uppercase;font-size:13pt;color:var(--ink_light);border:1px solid var(--border_inner);border-radius:2px;box-shadow:var(--highlight),0 0 1px rgba(220,220,220,.3)}
@@ -29,8 +29,8 @@ h2,h3{background:var(--h3),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8)
 h2 a,h3 a{word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase}
 h2 a:hover,h3 a:hover{color:#115}
 h2 img{opacity:.9}
+h3.ptitle a,h3.tabletitle a,h3#advancedconfig a,h3#bwlimiter a,h3#graphinfo a,th a.script,th#upnpconfig a,.h3navlinks,#graphdisplay a{margin-top:-2px;float:right;font-size:8.5pt;letter-spacing:0;text-transform:capitalize}
 h4{margin:5px 0 10px;padding:4px 6px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;text-transform:uppercase;color:var(--ink_light);border:1px solid var(--border_inner);border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(90deg,#fff,#eef)}
-h3#advancedconfig a,h3#bwlimiter a,h3.tabletitle a,h3.ptitle a,th a.script,th#upnpconfig a,h3#graphinfo a,#graphdisplay a,.h3navlinks{margin-top:-2px;float:right;font-size:8.5pt;letter-spacing:0;text-transform:capitalize}
 hr:last-child{margin-top:20px}
 i{padding-right:2px}
 ol{margin:0 0 10px;padding:0}
