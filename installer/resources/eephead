@@ -1,19 +1,20 @@
 #!/bin/sh
 # This is the location of ./i2prouter
-I2P="" # If lib/i2p.jar not found please specifiy location, example: I2P="/home/user/apps/i2p"
+# If lib/i2p.jar not found please specifiy location, example: I2P="/home/user/apps/i2p"
+I2P=""
 
- # I2P Variable not set, try and set our own location
+# I2P Variable not set, try and set our own location
 if [ -z "$I2P" ]; then
     I2P="$(cd "$(dirname "$0")" && pwd)"
 fi
 
 # Missing file
 if [ ! -f "$I2P/lib/i2p.jar" ]; then
-	echo "File $I2P/lib/i2p.jar not found, please edit $0 and change the I2P variable(generally set to the i2prouter location)."
-	exit 1
+    echo "File $I2P/lib/i2p.jar not found, edit $0 and change the I2P variable (normally the I2P+ application directory)"
+    exit 1
 fi
 
- # Show help with exit status
+# Show help with exit status
 send_help() {
     java -jar "$I2P/lib/i2p.jar" eephead
     if [ "$1" ]; then
@@ -23,12 +24,12 @@ send_help() {
     fi
 }
 
- # Null input or help request
+# Null input or help request
 if [ -z "$1" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     send_help
 fi
 
-    # Filter arguments
+# Filter arguments
 args=""
 for a in $@; do
     case $a in
@@ -86,7 +87,7 @@ for a in $@; do
     esac
 done
 
- # Don't allow the use of -p -c together
+# Don't allow the use of -p -c together
 if [ "$no_proxy" ] && [ "$proxy" ]; then
     echo " ✖ -p and -c can not be used together."
     send_help 1
@@ -94,7 +95,7 @@ fi
 
 # URL error
 if [ -z "$url" ]; then
-	echo "Invalid or missing URL, eg. ./eephead http://skank.i2p"
+    echo "Invalid or missing URL, eg. ./eephead http://skank.i2p"
     send_help 1
 fi
 

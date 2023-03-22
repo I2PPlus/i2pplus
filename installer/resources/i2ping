@@ -1,6 +1,7 @@
 #!/bin/sh
 # This is the location of ./i2prouter
-I2P="" # If lib/i2ptunnel.jar not found please specifiy location, example: I2P="/home/user/apps/i2p"
+# If lib/i2ptunnel.jar not found please specifiy location, example: I2P="/home/user/apps/i2p"
+I2P=""
 
 if [ -z "$I2P" ]; then
     I2P="$(cd "$(dirname "$0")" && pwd)"
@@ -8,7 +9,7 @@ fi
 
     # Can we find the i2ptunnel.jar
 if [ ! -f "$I2P/lib/i2ptunnel.jar" ]; then
-    echo " ✖ File $I2P/lib/i2ptunnel.jar not found, please edit $0 and change the I2P variable (generally set to the i2prouter location)."
+    echo " ✖ File $I2P/lib/i2ptunnel.jar not found, edit $0 and change the I2P variable (normally the I2P+ application directory)"
     exit 1
 fi
 
@@ -130,7 +131,7 @@ elif [ $list_file ] && [ -f $list_file ]; then
     exit $?
 elif [ "$address" ]; then # Do we really have an address?
 
-        # Check address type
+    # Check address type
     if [ $(echo $address | wc -c) -eq 525 ]; then
         debug "Address is B64 format"
         lookup=""
@@ -147,13 +148,13 @@ elif [ "$address" ]; then # Do we really have an address?
 
     echo " ➤ Initiating ping of $address"
 
-     # Try to resolve B64 address
+    # Try to resolve B64 address
     lookup=$(java -jar -Xms16m -Xmx16m $I2P/lib/i2ptunnel.jar -nocli -w -e "lookup ${address}" -d)
     if [ "$lookup" != "Unknown host: $address" ]; then
         echo " ✔ Found valid B64 address"
     fi
 
-     # Start single ping command
+    # Start single ping command
     echo " • Opening tunnel..."
     cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${address}"'"'
     eval ${cmd} | while read line; do # Parse output
