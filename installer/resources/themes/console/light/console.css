@@ -1127,7 +1127,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .tunnels_participating td.cells:first-child{font-size:0}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
-#routertunnels td:not(.rif):not(.rih):not(.rbw)::before{display:inline-block;vertical-align:middle;min-height:30px;content:""}
+#routertunnels .main td:not(.rif):not(.rih):not(.rbw)::before{display:inline-block;vertical-align:middle;min-height:30px;content:""}
 #tunnel_defs b{color:#fff}
 #tunnel_defs td:first-child,#tunnel_defs td:last-child{padding:0;width:0;font-size:0;display:none}
 #tunnel_defs td:nth-child(3){border-right:var(--border_soft)}
