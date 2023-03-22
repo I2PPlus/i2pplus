@@ -1127,6 +1127,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .tunnels_participating td.cells:first-child{font-size:0}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
+#routertunnels td:not(.rif):not(.rih):not(.rbw)::before{display:inline-block;vertical-align:middle;min-height:30px;content:""}
 #tunnel_defs b{color:#fff}
 #tunnel_defs td:first-child,#tunnel_defs td:last-child{padding:0;width:0;font-size:0;display:none}
 #tunnel_defs td:nth-child(3){border-right:var(--border_soft)}
@@ -2199,38 +2200,41 @@ table#consolepass input[name="name"]{margin-right:20px}
 #events .started,#events .stopped{background:rgba(0,255,0,.05)}
 
 /* help */
-#volunteer,#sidebarhelp,#configurationhelp,#reachabilityhelp,#advancedsettings,#themeoverride,#tunnman,#legal,#changelog,#faq,#reseedhelp,#troubleshoot,#newuserguide,#filterlist,#webhosting,#browserconfig,#glossary{border:1px solid var(--border_inner);border-radius:2px;margin-bottom:10px;padding:0 10px 5px;background:#fafaff}
-#reachabilityhelp{padding-bottom:15px}
-#volunteer,#configurationhelp{margin-top:15px}
-#tunnman{margin-top:10px;margin-bottom:5px}
+.confignav+#sidebarhelp{margin-top:13px}
+#advancedsettings,#browserconfig,#changelog,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:1px solid var(--border_inner);border-radius:2px;margin-bottom:10px;padding:0 10px 5px;background:#fafaff}
 #changelog{margin-bottom:5px;padding:0 0 0 10px}
 #changelog pre{margin:-10px 0 0;padding-top:8px;width:100%;height:600px;white-space:pre-wrap;font-size:8.5pt;will-change:transform}
-#help h2{margin:-1px -11px 10px;border-radius:2px 2px 0 0;text-transform:uppercase;filter:none}
-#help #newuserguide h2{margin:-1px -11px 0}
-#help h3{margin-bottom:-3px}
+#configinfo td.infowarn,#configinfo tr:hover td.infowarn{padding-left:46px}
 #help #changelog h2{margin-right:-1px}
-#help div,.logtable tr:nth-child(n+2) td,#console,.debug_container{background:linear-gradient(180deg,rgba(248,248,255,.5),rgba(250,250,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px) #fafaff;margin-bottom:13px;box-shadow:var(--highlight)}
+#help code{font-weight:600;user-select:all}
+#help code,#help tt{font-size:9pt;font-weight:600;color:#070}
+#help code::selection,#help tt::selection{color:#fff;background:#070}
+#help .confignav+div:last-of-type{margin:13px 0 5px}
+#help div,.logtable tr:nth-child(n+2) td,.debug_container{background:linear-gradient(180deg,rgba(248,248,255,.5),rgba(250,250,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px) #fafaff;margin-bottom:13px;box-shadow:var(--highlight)}
+#help h2{margin:-1px -11px 10px;border-radius:2px 2px 0 0;text-transform:uppercase;filter:none}
+#help h3{margin-bottom:-3px}
+#help li{text-align:justify}
+#help ul{margin:20px 0}
+#help p+ul{margin:0 0 20px}
+#help li ul{margin:0}
 #help #newuserguide div{box-shadow:none}
-#console{margin-bottom:4px}
-#help #volunteer,#wrapperlogs pre{background:linear-gradient(180deg,#fafaff,rgba(248,248,255,.3)),url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px/auto 80%,repeating-linear-gradient(135deg,rgba(252,252,255,.5) 2px,rgba(221,221,255,.3) 3px,#fafaff 5px) #fafaff;box-shadow:var(--highlight)}
+#help #newuserguide h2{margin:-1px -11px 0}
 #help p{padding-left:10px;padding-right:10px;line-height:1.5}
 #help p.infohelp{padding:15px 20px 15px 54px}
 #help td{line-height:1.5}
-#help td.infohelp,#help td.infowarn,#help td.infohelp:hover,#help td.infowarn:hover{padding-left:50px;padding-right:15px;color:var(--ink);background-size:24px}
-#configinfo td.infowarn,#configinfo tr:hover td.infowarn{padding-left:46px}
-#help code,#help tt{font-size:9pt;font-weight:400;color:#040}
-#help code::selection,#help tt::selection{color:#fff;background:#070}
+#help td.infohelp,#help td.infowarn,#help td.infohelp:hover,#help td.infowarn:hover,#help #portfaq td.infohelp{padding:12px 15px 12px 50px;color:var(--ink);background-size:24px}
+#help #faq td:first-child, #help #rootdir td:first-child{border-left:var(--border)}
+#help #volunteer,#wrapperlogs pre{background:linear-gradient(180deg,#fafaff,rgba(248,248,255,.3)),url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px/auto 80%,repeating-linear-gradient(135deg,rgba(252,252,255,.5) 2px,rgba(221,221,255,.3) 3px,#fafaff 5px) #fafaff;box-shadow:var(--highlight)}
+#reachabilityhelp{padding-bottom:15px}
 #sidebarhelp ul{margin-bottom:0;display:inline-block}
 #sidebarhelp ul:last-child{margin-bottom:5px}
 #sidebarhelp p+ul{margin-top:-15px}
-#help li{text-align:justify}
-#help li code{font-weight:700;color:#050}
+#sidebarhelp+#reachabilityhelp{margin-bottom:5px}
+#tunnman{margin-top:10px;margin-bottom:5px}
 #upnphelp{margin-top:-10px;display:inline-table;columns:auto 400px}
 #upnphelp li{min-width:400px;display:inline-block}
 #upnphelp li::before{margin-right:10px;margin-top:1px;width:6px;height:6px;display:inline-block;vertical-align:super;border-radius:50%;background:#333347;content:""}
-#help .confignav+div:last-of-type{margin:13px 0 5px}
-.confignav+#sidebarhelp{margin-top:13px}
-#sidebarhelp+#reachabilityhelp{margin-bottom:5px}
+#volunteer,#configurationhelp{margin-top:15px}
 
 /* toc */
 #helptoc{margin:15px 0 5px;display:block;columns:550px 2;column-gap:12px}
@@ -2274,7 +2278,6 @@ table#consolepass input[name="name"]{margin-right:20px}
 /* faq */
 #faq h3{padding:5px 10px 6px 35px;word-spacing:0;letter-spacing:0;text-transform:none;background:var(--question) no-repeat 10px center/18px,var(--h2);background-blend-mode:luminosity,normal,normal}
 #faq ul li{margin-top:0}
-#faq code,#advancedsettings code{font-weight:700;user-select:all}
 #portfaq{margin-top:18px}
 #portfaq th:first-child,#portfaq td:first-child{padding-top:6px;padding-bottom:6px;padding-left:10px;text-align:right;font-weight:700}
 #portfaq .infohelp{padding-top:15px;padding-bottom:15px}
@@ -2300,13 +2303,13 @@ table#consolepass input[name="name"]{margin-right:20px}
 
 /* filters */
 #filterlist{padding-bottom:15px}
-#filterlist code{margin:0 10px 5px 30px;padding-left:10px;display:inline-block;font-weight:700;border-left:2px solid #040;border-left:2px solid rgba(0,64,0,.7)}
+#filterlist code{margin:0 10px 5px 30px;padding-left:10px;display:inline-block;border-left:2px solid #040;border-left:2px solid rgba(0,64,0,.7)}
 #filterlist code+h3{margin-top:12px}
 #filterlist code+h4{margin-top:8px}
 #filterlist ul+h3,#filterlist ul+h4,#filterlist code+p{margin-top:10px}
 #filterlist p+code{margin-top:1px}
 #filterlist h4{text-transform:none;letter-spacing:0;word-spacing:0;border-width:0;border-bottom-width:1px;margin-left:10px;margin-right:10px;border-radius:0;box-shadow:none;background:none}
-#filterlist .example{margin-right:2px;color:#040;font-weight:700}
+#filterlist .example{margin-right:2px;color:#070;font-weight:700}
 
 /* webhosting */
 #webhosting th{text-align:left;padding-left:10px}
@@ -2316,7 +2319,7 @@ table#consolepass input[name="name"]{margin-right:20px}
 #webhosting #guides li{list-style:none}
 #webhosting #guides li:first-child{margin-top:0}
 #webhosting #guides li a{padding-left:22px}
-#help code,#webhosting i{font-weight:700}
+#webhosting i{font-weight:700}
 
 /* iframe */
 .main.embedded{text-align:center;padding:2px;overflow:hidden}
