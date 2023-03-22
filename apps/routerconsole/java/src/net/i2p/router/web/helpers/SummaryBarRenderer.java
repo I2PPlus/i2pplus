@@ -889,7 +889,8 @@ class SummaryBarRenderer {
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
-           .append(" <span class=badge hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
+           .append(" <span class=badge hidden title=\"").append(_t("Peers active in the last minute")).append(" / ")
+           .append(_t("Total peers in NetDb")).append("\">").append(active).append (" / ").append(_helper.getAllPeers()).append("</span>")
            .append("</a><input type=checkbox id=toggle_sb_peers class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
                    "<table id=sb_peers>\n" +
                    "<tr title=\"");
