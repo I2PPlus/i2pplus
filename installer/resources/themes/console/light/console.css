@@ -2702,6 +2702,7 @@ tt{margin-left:0;margin-right:3px;letter-spacing:.1em}
 #homepage #sb_tunnels tr:last-child td{padding-bottom:2px}
 #sb_services{width:242px}
 #sb_updatesection.collapsed>h3.collapsed{margin-bottom:-7px}
+#sb_warning+.sb_notice{margin-bottom:-6px}
 #schedjobs li{min-width:280px}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
