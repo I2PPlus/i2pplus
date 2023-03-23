@@ -490,10 +490,10 @@ div[id^="config"] .tab a{padding-right:18px}
 /* profiles */
 a.viewfullentry,#profilelist td:not(.rih):not(.rbw):last-child a,a[href^="/viewprofile"],.profiledump::after{font-size:0}
 a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
-.tunnel_cap,.tier,#capabilities_key b,#netdbtiers td a{margin:1px 2px 0;padding:1px 2px;min-width:14px;display:inline-block;text-align:center;text-shadow:0 1px 1px var(--bg);box-shadow:var(--highlight),0 0 0 1px var(--soft);background:var(--badge)}
-.tier.isD{background:var(--isD),var(--badge)}
-.tier.isE{background:var(--isE),var(--badge)}
-.tier.isG{background:var(--isG),var(--badge)}
+.tunnel_cap,.tier,#capabilities_key b,#netdbcongestion a,#netdbtiers td a{margin:1px 2px 0;padding:1px 2px;min-width:14px;display:inline-block;text-align:center;text-shadow:0 1px 1px var(--bg);box-shadow:var(--highlight),0 0 0 1px var(--soft);background:var(--badge)}
+.tier.isD,#netdbcongestion a.isD{background:var(--isD),var(--badge)}
+.tier.isE,#netdbcongestion a.isE{background:var(--isE),var(--badge)}
+.tier.isG,#netdbcongestion a.isG{background:var(--isG),var(--badge)}
 .version,.tier,.reachable,.unreachable,.ff{margin:1px 3px;padding:1px 4px;display:inline-block;min-width:12px;text-align:center}
 .ff,.reachable,.unreachable,.hidden,.ssutesting,.ssuintro,.tier,.tunnel_cap,#capabilities_key b{box-shadow:var(--box_border_badge),var(--highlight)}
 .ff{background:linear-gradient(180deg,#fff,#fdb)}
@@ -1328,23 +1328,22 @@ img.unknownflag{opacity:.8}
 #netdboverview table tr:hover{background:var(--row_hover)}
 #netdboverview table th::before,#netdboverview table td::before{height:24px;display:inline-block;vertical-align:middle;content:""}
 #netdboverview span,#netdboverview a{margin-top:0;margin-bottom:0;display:inline-block;vertical-align:middle}
-#netdbtransports th:first-child,#netdbcountrylist th:first-child,#netdbtiers th:first-child{text-align:left}
-#netdbversions,#netdbtransports,#netdbcountrylist,#netdbtiers{border:none;margin:-1px 0}
-#netdbversions{border-bottom:var(--border)}
+#netdbcongestion th:first-child,#netdbtransports th:first-child,#netdbcountrylist th:first-child,#netdbtiers th:first-child{text-align:left}
+#netdbcongestion,#netdbversions,#netdbtransports,#netdbcountrylist,#netdbtiers{border:none;margin:-1px 0}
 #netdbtransports,#netdbversions,#netdbtiers{border-bottom:var(--border)}
-#netdbversions,#netdbcountrylist,#netdbtransports,#netdbtiers{border-left:none;border-right:none;border-bottom:var(--border)}
+#netdbcongestion,#netdbversions,#netdbcountrylist,#netdbtransports,#netdbtiers{border-left:none;border-right:none;border-bottom:var(--border)}
 #netdbversions,#netdbcountrylist,#netdbtiers{margin-top:-7px}
 #netdbcountrylist{margin-bottom:-7px}
-#netdbcountrylist td:first-child,#netdbtransports td:first-child,#netdbtiers td:first-child,#netdbversions td:first-child{border-left:none}
-#netdbcountrylist td:last-child,#netdbtransports td:last-child,#netdbtiers td:last-child,#netdbversions td:last-child{border-right:none}
+#netdbcongestion td:first-child,#netdbcountrylist td:first-child,#netdbtransports td:first-child,#netdbtiers td:first-child,#netdbversions td:first-child{border-left:none}
+#netdbcongestion td:last-child,#netdbcountrylist td:last-child,#netdbtransports td:last-child,#netdbtiers td:last-child,#netdbversions td:last-child{border-right:none}
 #netdbtransports{position:relative}
-#netdbtransports td:last-child,#netdbtiers td:last-child{width:30%;text-align:center}
+#netdbcongestion td:last-child,#netdbtransports td:last-child,#netdbtiers td:last-child{width:30%;text-align:center}
 #netdbversions .version{margin:0;padding:0}
 #netdbversions td,#netdbtiers td:last-child,#netdbcountrylist td:last-child{text-align:center}
-#netdbtiers td a{margin-right:6px}
-#netdbtiers td a:hover{box-shadow:var(--highlight),0 0 0 1px var(--hover)}
-#netdbtiers td a:active{box-shadow:var(--btn_shadow_active),0 0 0 1px var(--hover)}
-#netdbtiers td a:hover b{color:var(--hover)}
+#netdbcongestion td a,#netdbtiers td a{margin-right:6px}
+#netdbcongestion td a:hover,#netdbtiers td a:hover{box-shadow:var(--highlight),0 0 0 1px var(--hover)}
+#netdbcongestion td a:active,#netdbtiers td a:active{box-shadow:var(--btn_shadow_active),0 0 0 1px var(--hover)}
+#netdbcongestion td a:hover b, #netdbtiers td a:hover b{color:var(--hover)}
 
 /* stats */
 .statlist{margin-left:0;margin-bottom:-27px;padding:0 10px 0 0;border:var(--border);background:var(--bg3)}

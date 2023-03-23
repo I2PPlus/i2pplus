@@ -1358,9 +1358,9 @@ span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry
 .netdb_header .configpeer:active,.netdb_header .familysearch:active,.netdb_header .viewprofile:active{width:14px;height:14px;box-shadow:var(--btn_shadow_active)}
 .netdb_header .configpeer{margin-right:5px}
 .netdb_header .viewprofile{margin-right:9px}
-.tier.isD{background:var(--isD),var(--tier)}
-.tier.isE{background:var(--isE),var(--tier)}
-.tier.isG{background:var(--isG),var(--tier)}
+.tier.isD,#netdbcongestion a.isD{background:var(--isD),var(--tier)}
+.tier.isE,#netdbcongestion a.isE{background:var(--isE),var(--tier)}
+.tier.isG,#netdbcongestion a.isG{background:var(--isG),var(--tier)}
 #netdb a:hover span,#profiles a:hover span,.version:hover a,#capabilities_key table b:hover{color:var(--hover)}
 #noleasesets,#notinitialized,.netdbnotfound{margin-top:-6px;margin-bottom:5px;padding:10px 20px;font-weight:700;text-align:center;color:var(--ink_light);border:1px solid var(--border_inner);box-shadow:0 0 1px #e0e0eb;border-radius:2px;background:linear-gradient(90deg,#f2f2ff,#f8f8ff,#f2f2ff)}
 #notinitialized,.netdbnotfound{margin-top:15px}
@@ -1437,12 +1437,12 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 #netdboverview td{padding:0;border:1px solid var(--border_soft)}
 #netdboverview table th,#netdboverview table td{padding:5px 8px;line-height:1.2;border:var(--border_soft)}
 #netdboverview table th::before,#netdboverview table td::before{min-height:26px;display:inline-block;vertical-align:middle;content:""}
-#netdbtiers th:first-child,#netdbtransports th:first-child,#netdbtiers td:first-child,#netdbtransports td:first-child{border-left:none}
-#netdbtiers th:last-child,#netdbtransports th:last-child,#netdbtiers td:last-child,#netdbtransports td:last-child{border-right:none}
+#netdbcongestion th:first-child,#netdbtiers th:first-child,#netdbtransports th:first-child,#netdbcongestion td:first-child,#netdbtiers td:first-child,#netdbtransports td:first-child{border-left:none}
+#netdbcongestion th:last-child,#netdbtiers th:last-child,#netdbtransports th:last-child,#netdbcongestion td:last-child,#netdbtiers td:last-child,#netdbtransports td:last-child{border-right:none}
 #netdboverview a{display:inline-block;width:100%}
-#netdbtiers a,#netdbversions .version{margin:-2px 0;padding:1px 3px;min-width:44px;display:inline-block;line-height:1.2;vertical-align:middle;text-align:center;font-weight:700;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--badge)}
-#netdbtiers a{margin:-2px 8px -2px 0;width:auto;min-width:20px}
-#netdbtiers a:hover b{color:var(--hover)}
+#netdbcongestion a,#netdbtiers a,#netdbversions .version{margin:-2px 0;padding:1px 3px;min-width:44px;display:inline-block;line-height:1.2;vertical-align:middle;text-align:center;font-weight:700;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--badge)}
+#netdbcongestion a,#netdbtiers a{margin:-2px 8px -2px 0;width:auto;min-width:20px}
+#netdbcongestion a:hover b,#netdbtiers a:hover b{color:var(--hover)}
 #netdbversions th:first-child,#netdbversions td:first-child{text-align:center}
 #netdbcountrylist img{margin-right:8px;padding:1px;vertical-align:middle;text-align:right;border:1px solid #d0d0db;border-radius:3px}
 #netdb th span,#netdb th img,#netdb th code,#netdb th a,#netdb th b{vertical-align:middle}

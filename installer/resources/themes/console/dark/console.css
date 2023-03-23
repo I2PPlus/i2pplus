@@ -495,7 +495,7 @@ input[type=submit],input[type=reset],input[type=file]::file-selector-button,butt
 input[type=file]::file-selector-button{font-size:8.5pt}
 
 /* routerid */
-.tunnel_local,#tunnels .tunnel_cap,.version,#netdbtiers a,.routerHash{border:var(--border_badge)}
+.tunnel_local,#tunnels .tunnel_cap,.version,#netdbtiers a,.routerHash,#netdbcongestion a{border:var(--border_badge)}
 .buckets br+br{line-height:5px}
 .tunnel_cap:empty{box-shadow:none}
 
@@ -1054,9 +1054,9 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 /* netdb */
 #netdb #netdboverview td{border-right:var(--border)}
 #netdb #netdboverview th,#netdb #netdboverview tr,#netdb #netdboverview td{line-height:1;box-shadow:none}
-#netdboverview a[href^="/netdb?caps"]{margin:0 10px 0 0;padding:3px;display:inline-block;vertical-align:middle;line-height:1}
+#netdbcongestion a,#netdboverview a[href^="/netdb?caps"]{margin:0 10px 0 0;padding:3px;display:inline-block;vertical-align:middle;line-height:1}
 #netdboverview{margin-bottom:10px}
-#netdboverview #netdbversions td,#netdboverview #netdbtransports td,#netdboverview #netdbcountrylist td,#netdboverview #netdbtiers td{border-right:none;border-left:none}
+#netdboverview #netdbcongestion td,#netdboverview #netdbversions td,#netdboverview #netdbtransports td,#netdboverview #netdbcountrylist td,#netdboverview #netdbtiers td{border-right:none;border-left:none}
 #netdboverview td{background:repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px);background-size:4px 100%}
 #netdboverview td:nth-child(2){border-left:var(--border_softer);border-right:var(--border_softer)}
 #netdboverview td{padding:0}
@@ -1072,21 +1072,23 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #netdbcountrylist img{margin-right:5px;text-align:right}
 #netdbcountrylist th:last-child{padding-right:14px}
 #netdbcountrylist th:first-child[role="columnheader"]::after{left:64px;right:auto}
-#netdbcountrylist td,#netdbversions td,#netdbtransports td,#netdbtiers td{background:none;border-bottom:var(--border_softer)}
+#netdbcongestion td,#netdbcountrylist td,#netdbversions td,#netdbtransports td,#netdbtiers td{background:none;border-bottom:var(--border_softer)}
 #netdboverview #netdbcountrylist tr:last-child td{border-bottom:none}
 #netdbcountrylist a{padding:2px 0;width:100%;display:inline-block}
 #netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}
 #netdbcountrylist a:hover img{box-shadow:var(--outline),0 0 0 2px var(--hover);transform:scale(1.1)}
-#netdbtiers a{margin:0 8px 0 0;padding:0 4px;min-width:20px}
-#netdbtiers th{border-bottom:none}
-#netdboverview #netdbtiers tr:last-child td{border-bottom:none}
+#netdbcongestion a,#netdbtiers a{margin:0 8px 0 0;padding:0 4px;min-width:20px}
+#netdbcongestion a.isD{background:var(--isD),var(--badge)}
+#netdbcongestion a.isE{background:var(--isE),var(--badge)}
+#netdbcongestion a.isG{background:var(--isG),var(--badge)}
+#netdbcongestion th,#netdboverview #netdbcongestion tr:last-child td,#netdbtiers th,#netdboverview #netdbtiers tr:last-child td{border-bottom:none}
 #netdb #netdbtransports tr:first-child th{border-top:var(--border)}
 #netdboverview #netdbtransports th{border-top:var(--border_softer)}
-#netdbtransports th:first-child,#netdbcountrylist th:first-child,#netdbtiers th:first-child{text-align:left}
-#netdbtransports th,#netdbtransports td,#netdbtiers th,#netdbtiers td{padding-left:10px;padding-right:10px;line-height:1}
+#netdbcongestion th:first-child,#netdbtransports th:first-child,#netdbcountrylist th:first-child,#netdbtiers th:first-child{text-align:left}
+#netdbcongestion th,#netdbcongestion td,#netdbtransports th,#netdbtransports td,#netdbtiers th,#netdbtiers td{padding-left:10px;padding-right:10px;line-height:1}
 #netdbtransports td:last-child,#netdbtiers td:last-child{width:30%;text-align:center}
-#netdbversions,#netdbtransports,#netdbcountrylist,#netdbtiers{margin:-1px 0 0;border:var(--border_soft);border-right:none;border-left:none}
-#netdbversions,#netdbtransports,#netdbtiers{border-right:none}
+#netdbcongestion,#netdbversions,#netdbtransports,#netdbcountrylist,#netdbtiers{margin:-1px 0 0;border:var(--border_soft);border-right:none;border-left:none}
+#netdbcongestion,#netdbversions,#netdbtransports,#netdbtiers{border-right:none}
 #netdbversions tbody tr:first-child td,#netdbcountrylist tbody tr:first-child td,#netdbtiers tbody tr:first-child td{border-top:var(--border)}
 #netdbversions th:first-child{text-align:left}
 #netdbversions .version{min-width:48px}
@@ -1157,7 +1159,7 @@ table[cellspacing="30"]>tbody>tr>td>table>tbody>tr>th:first-child{padding:5px;te
 table[cellspacing="30"]>tbody>tr>td:first-child>table>tbody>tr>th:first-child{text-align:center}
 table[cellspacing="30"]>tbody>tr>th[colspan="3"]{padding:10px;text-transform:uppercase;font-size:11pt;letter-spacing:.08em;word-spacing:.1em}
 th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;border:var(--border)}
-.version,#netdbtiers a,.routerHash{margin:0;padding:1px 5px;display:inline-block;text-align:center;font-weight:700;box-shadow:var(--outline);background:var(--badge)}
+.version,#netdbcongestion a,#netdbtiers a,.routerHash{margin:0;padding:1px 5px;display:inline-block;text-align:center;font-weight:700;box-shadow:var(--outline),var(--highlight);background:var(--badge)}
 .version{display:inline-block;line-height:1.4}
 .version:empty{display:none}
 .version a:hover,.version a:focus,a:hover .version,a:focus .version,a:hover .tier,a:focus .tier{color:var(--hover)}
