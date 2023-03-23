@@ -2225,7 +2225,7 @@ table#consolepass input[name="name"]{margin-right:20px}
 #help p.infohelp{padding:15px 20px 15px 54px}
 #help td{line-height:1.5}
 #help td.infohelp,#help td.infowarn,#help td.infohelp:hover,#help td.infowarn:hover,#help #portfaq td.infohelp{padding:12px 15px 12px 50px;color:var(--ink);background-size:24px}
-#help #faq td:first-child, #help #rootdir td:first-child{border-left:var(--border)}
+#help #advancedsettings td:first-child,#help #faq td:first-child, #help #rootdir td:first-child{border-left:var(--border)}
 #help #volunteer,#wrapperlogs pre{background:linear-gradient(180deg,#fafaff,rgba(248,248,255,.3)),url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px/auto 80%,repeating-linear-gradient(135deg,rgba(252,252,255,.5) 2px,rgba(221,221,255,.3) 3px,#fafaff 5px) #fafaff;box-shadow:var(--highlight)}
 #reachabilityhelp{padding-bottom:15px}
 #sidebarhelp ul{margin-bottom:0;display:inline-block}
@@ -2305,7 +2305,7 @@ table#consolepass input[name="name"]{margin-right:20px}
 
 /* filters */
 #filterlist{padding-bottom:15px}
-#filterlist code{margin:0 10px 5px 30px;padding-left:10px;display:inline-block;border-left:2px solid #040;border-left:2px solid rgba(0,64,0,.7)}
+#filterlist code{margin:0 10px 5px 30px;padding-left:10px;display:inline-block;border-left:2px solid #040;border-left:3px solid rgba(0,64,0,.7)}
 #filterlist code+h3{margin-top:12px}
 #filterlist code+h4{margin-top:8px}
 #filterlist ul+h3,#filterlist ul+h4,#filterlist code+p{margin-top:10px}
