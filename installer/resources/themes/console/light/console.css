@@ -1484,7 +1484,8 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .leasesets_container table:first-child{margin-top:0}
 .leaseset,.leaseset tr,.leaseset th,.leaseset td:not(.rif):not(.rih){border-color:#dfdfec}
 .leaseset th:first-child code{margin-left:4px}
-.leaseset th{font-weight:400;padding:5px;text-align:left}
+.leaseset th{font-weight:400;padding:3px 5px 4px;text-align:left}
+.leaseset th::before{display:inline-block;vertical-align:middle;min-height:26px;content:""}
 .leaseset th:last-child code{margin:0 0 0 4px;width:auto}
 .leaseset th:last-child{font-size:90%}
 .leaseset th:last-child,.leaseset td:nth-child(2){padding-right:5px;text-align:right}
@@ -1492,6 +1493,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .leaseset td:not(.rif):not(.rih){line-height:1.5;background:var(--row)}
 .leaseset td:not(.rif):not(.rih):first-child img{margin:0 3px 2px 5px;vertical-align:middle}
 .leaseset td:not(.rif):not(.rih) a[href$=".i2p"]{margin-left:6px}
+.leaseset tr:last-child td:not(.rif):not(.rih){padding:4px 5px 2px}
 .lsdest,.leaseset th:last-child a[href$="i2p/"]{margin-left:3px;padding:4px 6px;display:inline-block;border:1px solid #bbc;background:var(--row);border-left-width:4px;border-right-width:4px}
 .leaseset th:last-child a[href$="i2p/"]{padding-left:22px;background:var(--link) no-repeat 5px center/12px,var(--row)}
 .lsdest{padding-left:22px;border-radius:0;border-left-width:4px;border-right-width:4px;background:var(--hardhat) no-repeat 4px center/14px,var(--row)}
@@ -1499,7 +1501,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .main li .netdb_expiry{font-weight:400;text-transform:lowercase;font-style:italic}
 .netdb_gateway{margin-left:-3px;margin-right:-3px}
 .netdb_leases{columns:12 100px;column-gap:4px}
-.netdb_leases,.netdb_leases li,.netdb_leases li:first-child{margin:0}
+.netdb_leases{margin:0}
 .netdb_leases li{margin:-1px 0;padding:0;display:inline-block;list-style:none}
 .netdb_leases li b:first-child{margin:0;padding:0;min-width:60px;display:inline-block;text-align:right}
 .netdb_leases li b.leaseNumber{margin-right:-6px;min-width:22px;text-align:center}
