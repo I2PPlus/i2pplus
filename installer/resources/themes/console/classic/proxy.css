@@ -70,7 +70,7 @@ table{width:100%}
 #jumplinks #linuxfarm{background:url(../images/linuxfarm.svg) no-repeat 10px center/20px,var(--badge) !important;display:none}
 #jumplinks #notbob{background:url(../images/notbob.png) no-repeat 10px center/20px,var(--badge)}
 #jumplinks #reg{background:url(../images/reg.svg) no-repeat 10px center/20px,var(--badge)}
-#jumplinks #stats{background:url(../images/stats.svg) no-repeat 10px center/20px,var(--badge)}
+#jumplinks #stats{background:url(../images/stats.svg) no-repeat 10px center/20px,var(--badge);display:none}
 #proxy_error #jumplinks a:hover,#proxy_error #jumplinks a:focus{box-shadow:var(--badge_shadow_hover);background:url(../images/arrow_right.svg) no-repeat 10px center/20px,var(--badge) !important}
 #proxy_error #jumplinks a:active{padding:10px 11px 8px 35px;box-shadow:var(--btn_shadow_active);background:url(../images/arrow_right.svg) no-repeat 12px calc(50% + 1px)/19px,var(--badge) !important;background-blend-mode:luminosity}
 
