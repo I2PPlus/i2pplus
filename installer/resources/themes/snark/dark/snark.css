@@ -205,7 +205,6 @@ th.peerCount a img{margin-left:-5px}
 .choked{color:#f00000}
 .unchoked{color:#00f000}
 .choked .left{display:none}
-.choked .right,.choked .left,.idle .right,.idle .left{display:none}
 .choked::after{background:#900}
 .downloading.active:hover td#torrents .torrentAction{background:linear-gradient(to left,#3c3,#3c3 2px,#030 2px)}
 .downloading.active td#torrents .torrentAction{background:linear-gradient(to left,#3c3,#3c3 2px,transparent 2px)}
@@ -220,9 +219,9 @@ th.peerCount a img{margin-left:-5px}
 .RateUp,.RateDown,.torrentUploaded{text-align:center}
 .RateUp:not(:empty),.RateDown:not(:empty),.torrentDownloaded:not(:empty),.torrentUploaded:not(:empty){padding:0 3px;width:1%;white-space:nowrap;line-height:.9;color:#bb7}
 .RateUp,.torrentUploaded{font-style:italic}
-.RateDown .choked .right,.RateDown .choked .left,.RateDown .idle .right,.RateDown .idle .left{text-align:center}
 .RateDown .left,.RateUp .left,.torrentUploaded .left,.RateDown .right,.RateUp .right,.torrentUploaded .right{min-width:22px;display:inline-block;text-align:left}
 .RateDown .right,.RateUp .right,.torrentUploaded .right{min-width:40px;text-align:right}
+.choked .right,.choked .left,.idle .right,.idle .left{display:none!important}
 .rowOdd,.rowEven{background:var(--tr)}
 .rowOdd td,.rowEven td{color:#bb7;border-bottom:1px solid #000}
 .seeding.active:hover td#torrents .torrentAction{background:linear-gradient(to left,#f64384,#f64384 2px,#030 2px)}
