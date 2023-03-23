@@ -126,34 +126,35 @@ h4.sb_info{margin-top:-11px}
 #sb_shortgeneral{margin-top:-7px}
 #sb_wrap{margin:0 0 10px;padding:0;width:200px;display:block;position:absolute;float:left;clear:left;text-align:center;border:0}
 #sb_wrap.sticky{top:6px!important}
+#sidebar{margin-bottom:2px;padding:8px;width:192px;text-align:center;font-size:8pt;color:var(--ink);clear:left;border:1px solid var(--border);border-radius:2px;box-shadow:var(--bevel);background:#fafaff;contain:paint}
 #sidebar a:active,#sidebar td:first-child a:active b{color:#d30}
 #sidebar a:hover,#sidebar a:focus,#sidebar td:first-child a:hover b{color:var(--hover)}
 #sidebar a,#sidebar a:visited{color:var(--a)}
-#sidebar form button.download:hover,#sidebar form button.download:focus{background:var(--download_hover) no-repeat 6px center/15px,var(--btn_hover)}
-#sidebar form button.download{margin:-3px 0;padding:5px 7px 5px 22px;display:inline-block;vertical-align:middle;background:var(--download) no-repeat 6px center/15px,var(--btn)}
 #sidebar form{margin:-2px -7px -4px;padding:0 0 3px}
-#sidebar #sb_routerControl{margin-top:-5px}
-#sidebar h3:active a,#sidebar h3 a:active{color:#ffecdf;text-shadow:0 1px 1px #5f2d0c}
+#sidebar form button.download{margin:-3px 0;padding:5px 7px 5px 22px;display:inline-block;vertical-align:middle;background:var(--download) no-repeat 6px center/15px,var(--btn)}
+#sidebar form button.download:hover,#sidebar form button.download:focus{background:var(--download_hover) no-repeat 6px center/15px,var(--btn_hover)}
+#sidebar h3{margin:-9px -7px -3px;padding:2px 0;letter-spacing:.04em;text-transform:uppercase;font-size:9.5pt;border:1px solid #afafcf;border-left:none;border-right:none;border-radius:0;box-shadow:var(--highlight);background:#e7e7ff var(--h3);filter:none}
+#sidebar h3:hover{background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
 #sidebar h3:active{box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.4);background:var(--hover);transition:ease box-shadow .05s}
 #sidebar h3 a,#sidebar h3 a:visited{padding:3px 0 2px;display:inline-block;width:calc(100% - 4px);line-height:1.1;word-spacing:-.12em;text-transform:uppercase;text-decoration:none;color:var(--a)}
 #sidebar h3:hover a,#sidebar h3 a:hover{color:var(--hover);text-shadow:0 0 1px #fff}
-#sidebar h3:hover{background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
-#sidebar h3{margin:-9px -7px -3px;padding:2px 0;letter-spacing:.04em;text-transform:uppercase;font-size:9.5pt;border:1px solid #afafcf;border-left:none;border-right:none;border-radius:0;box-shadow:var(--highlight);background:#e7e7ff var(--h3);filter:none}
+#sidebar h3:active a,#sidebar h3 a:active{color:#ffecdf;text-shadow:0 1px 1px #5f2d0c}
 #sidebar h4{margin:-7px;padding:6px 2px;line-height:1.05;font-size:8.5pt;letter-spacing:0;text-transform:none;color:#4f617f;text-decoration:none;border:none;border-radius:0;box-shadow:inset 0 0 0 1px #eef;background:linear-gradient(90deg,#ddf,#eef 10%,#fff 50%,#eef 90%,#ddf)}
 #sidebar h4::after{padding-top:8px;padding-bottom:8px;content:"";display:inline-block;box-sizing:border-box;min-height:12px;vertical-align:middle}
 #sidebar h4 a{vertical-align:baseline}
-#sidebar hr.b{margin-bottom:5px;height:0;border-bottom:1px solid transparent;background:transparent}
 #sidebar hr{margin:8px -7px;height:1px;border-bottom:1px solid #afafcf;box-shadow:inset 0 1px 1px 1px #fff;background:#adadeb}
-#sidebar input[type=text]{text-align:right}
-#sidebar{margin-bottom:2px;padding:8px;width:192px;text-align:center;font-size:8pt;color:var(--ink);clear:left;border:1px solid var(--border);border-radius:2px;box-shadow:var(--bevel);background:#fafaff;contain:paint}
-#sidebar #sb_internals td,#sidebar #sb_advanced td,#sidebar #sb_services td,#sidebar #sb_help td{text-align:center}
-#sidebar #sb_localtunnels{margin-top:-9px}
-#sidebar #sb_shutdownStatus{margin:-7px -6px;padding:7px 4px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,0 0 0 3px rgba(148,0,0,.5) inset}
+#sidebar hr.b{margin-bottom:5px;height:0;border-bottom:1px solid transparent;background:transparent}
 #sidebar hr[hidden]+#sb_shutdownStatus{margin:-9px -6px -7px}
+#sidebar input[type=text]{text-align:right}
 #sidebar tr,#sidebar tr:nth-child(n+0){background-image:none;background-color:transparent;border:0;contain:paint}
 #sidebar td{padding:0 2px;border:none;background-image:none}
 #sidebar td:first-child,#sb_localtunnels td:nth-child(2){text-align:left}
 #sidebar td:last-child{text-align:right}
+#sidebar .sb_notice:empty,#sidebar .sb_notice:empty+hr{display:none}
+#sidebar #sb_internals td,#sidebar #sb_advanced td,#sidebar #sb_services td,#sidebar #sb_help td{text-align:center}
+#sidebar #sb_localtunnels{margin-top:-9px}
+#sidebar #sb_shutdownStatus{margin:-7px -6px;padding:7px 4px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,0 0 0 3px rgba(148,0,0,.5) inset}
+#sidebar #sb_routerControl{margin-top:-5px}
 
 /* sidebar graph */
 #sb_bandwidthgraph{margin:-5px 0 0 3px;padding:0;width:100%;border-collapse:separate;border-spacing:0;border:1px solid #89f;border-radius:2px;box-shadow:0 0 1px #e0e0eb;transition:ease border .7s}

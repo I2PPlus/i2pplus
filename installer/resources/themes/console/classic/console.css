@@ -86,6 +86,7 @@ p:empty+.sb_notice{margin-top:7px}
 #sidebar td:first-child a:active b{color:var(--active)}
 #sidebar hr{margin:8px -1px 7px -1px;height:0;color:var(--hr);border-bottom:var(--border);background:var(--hr)}
 #sidebar form{margin:-2px -2px -3px}
+#sidebar .sb_notice:empty,#sidebar .sb_notice:empty+hr{display:none}
 #sb_logo{margin-left:-2px;height:32px !important}
 #sb_logo img{width:200px;height:auto;filter:sepia(1) hue-rotate(190deg);user-select:none}
 #sb_logo a:active img{transform:scale(.97);filter:none}
