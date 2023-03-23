@@ -91,12 +91,12 @@ input[type=radio]:not(:checked){box-shadow:inset 0 0 0 2px #f8f8ff,inset 3px 3px
 input[type=radio]:not(:checked)::before{border-radius:50%}
 label:not([disabled]):hover{color:var(--ink_dark)}
 label[disabled],label[disabled]:hover{opacity:.45}
-select,select[disabled]:hover,select[disabled]:focus{margin:5px;padding:6px 24px 6px 8px;min-width:120px;text-align:left;font:9pt var(--bodyfont);color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--dropdown) no-repeat right 8px center / 10px,var(--btn);appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+select,select[disabled]:hover,select[disabled]:focus{margin:5px;padding:6px 24px 6px 8px;min-width:120px;text-align:left;font:9pt var(--bodyfont);color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--dropdown) no-repeat right 8px center/10px,var(--btn);appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 select:-moz-focusring{outline:1px solid transparent}
 select option{background:#fff}
 select:hover,select:focus,select:active{border:1px solid #868bac}
-select:hover,select:active{color:#19191f;box-shadow:var(--highlight),0 2px 1px #ddf;background:var(--dropdown_hover) no-repeat right 8px center / 10px,var(--btn_hover)}
-select:focus{color:#19191f;box-shadow:0 0 1px #f60;background:var(--dropdown_hover) no-repeat right 8px center / 10px,var(--btn_hover)}
+select:hover,select:active{color:#19191f;box-shadow:var(--highlight),0 2px 1px #ddf;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
+select:focus{color:#19191f;box-shadow:0 0 1px #f60;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{border:var(--border_input);box-shadow:var(--highlight);background:var(--btn);opacity:.8;cursor:default}
 textarea{margin:5px;padding:5px 8px;resize:none;font-size:9pt;color:var(--ink);border:var(--border_input);border-radius:2px;box-shadow:inset 1px 1px 1px rgba(204,204,204,.6);background:#fbfbff;transition:ease all .1s}
 textarea:focus{color:#393947;border:1px solid #676c7f;box-shadow:var(--txtinput_shadow_focus);background:#fff;transition:ease border .15s}

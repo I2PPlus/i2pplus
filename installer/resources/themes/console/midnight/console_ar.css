@@ -83,9 +83,9 @@ p.infowarn,td.infowarn{background:#000 url(images/infowarn.png) no-repeat right 
 #configstats td:nth-child(2){padding-right:15px}
 #configstats td.optionsave{text-align:left}
 #configstats th{text-align:right}
-.configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p#sybilinfo,p.infowarn,td.infowarn,p#keyringhelp,h3#shutdownrouter + p,h3#restartrouter + p,h3#servicedebug + p,h3#browseronstart + p,h3#runonstartup + p,h3#systray + p{padding:15px 45px 15px 15px;background:#000 var(--infohelp) no-repeat right 8px center / 28px}
+.configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p#sybilinfo,p.infowarn,td.infowarn,p#keyringhelp,h3#shutdownrouter + p,h3#restartrouter + p,h3#servicedebug + p,h3#browseronstart + p,h3#runonstartup + p,h3#systray + p{padding:15px 45px 15px 15px;background:#000 var(--infohelp) no-repeat right 8px center/28px}
 #config_update .messages a{margin:0 5px;float:left}
-#config_update .messages{padding:15px 55px 15px 15px;background:#000 var(--infohelp) no-repeat right 10px center / 28px;text-align:right}
+#config_update .messages{padding:15px 55px 15px 15px;background:#000 var(--infohelp) no-repeat right 10px center/28px;text-align:right}
 #config_update .suboption label[for="newsThroughProxy"]{margin-right:5px;margin-left:15px}
 #consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus,#consolepass input[name="name"],#externali2cp input[name="user"],#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus{background-position:right 3px center,center center;padding:4px 20px 4px 4px;margin:5px 3px 5px 15px}
 #consolepass tr:first-child td,p#clientconf.infohelp,p#webappconfigtext.infohelp,#floodfillconfig .infohelp,#bandwidthconfig tr:first-child .infohelp,h3#shutdownrouter + p.infohelp,h3#restartrouter + p.infohelp,h3#systray + p.infohelp,h3#servicedebug + p.infohelp,h3#browseronstart + p.infohelp,#addkeyring td:first-child,#config_peers tr:nth-child(3) td.infohelp,#config_reseed.main p.infohelp,#plugininstall tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(5) td:nth-last-child(2),#plugininstall2 tr:nth-child(2) td:nth-last-child(2),#manualreseed tr:nth-last-child(2) td.infohelp,p#enablefullstats,p#gatherstats,p#pluginconfigtext,#plugininstall .infohelp,#config_family .infohelp,#joinfamily tr:nth-child(3) td:first-child,#newfamily tr:last-child td:first-child,#config_summarybar .configtable td:not(.optionsave),#bugreports td.infohelp{background-position:right 12px center;padding:15px 50px 15px 15px}
@@ -107,7 +107,7 @@ input[type=submit],input[type="reset"],input[type=submit]:hover,input[type="rese
 #jardump.main th:nth-child(1),#jardump.main th:nth-child(3),#jardump.main th:nth-child(6),#jardump.main th:nth-child(7){text-align:right}
 #joinfamily tr:nth-child(3) td:first-child,#newfamily tr:last-child td:first-child{padding:5px}
 #manualreseed .optionsingle,#newfamily .optionsingle,#joinfamily .optionsingle,#manualreseed .optionsingle:hover ,#newfamily .optionsingle:hover,#joinfamily .optionsingle:hover{padding:5px 45px 5px 5px;background-position:right 8px center}
-p#helptranslate,#floodfillconfig tr:first-child .infohelp{padding-right:50px;text-align:right;background:var(--infohelp) no-repeat right 12px center / 28px}
+p#helptranslate,#floodfillconfig tr:first-child .infohelp{padding-right:50px;text-align:right;background:var(--infohelp) no-repeat right 12px center/28px}
 #pluginconfig td:first-child label{margin-right:6px;padding:3px 24px 3px 5px;text-align:right;border-radius:15px 2px 2px 15px;background:var(--plugin) no-repeat right 5px center,linear-gradient(180deg,#003,#000);background-size:14px,100%}
 #pluginconfigtext + form{float:left;margin-left:8px}
 #reseedconfig input{margin-left:8px;margin-right:0}

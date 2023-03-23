@@ -1954,7 +1954,7 @@ div[lang="pt"] li br{display:none}
 #stats .tab:not(.tab2):active{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--hover);transition:ease box-shadow .05s}
 #stats .toggle_input{width:0;height:0;position:absolute;top:-99999px;left:-99999px;opacity:0}
 
-/* routerinfo /  bw widgets */
+/* routerinfo/ bw widgets */
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);width:unset}
 .rid{width:unset}
 .rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight)}
@@ -2034,7 +2034,7 @@ span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active
 #tunnels #transitSummary td:not(.rih):not(.rbw){padding:3px 6px}
 #tunnels #transitSummary span:not([hidden]),#tunnels #transitSummary a{display:inline-block}
 #tunnels #transitSummary{margin-bottom:10px}
-#tunnels #tunnelPeerCount td.cells.rdns a::before{margin-top:-2.5px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center / 10px;content:""}
+#tunnels #tunnelPeerCount td.cells.rdns a::before{margin-top:-2.5px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center/10px;content:""}
 .rdns{max-width:unset}
 
 /* tunnelpeercount */

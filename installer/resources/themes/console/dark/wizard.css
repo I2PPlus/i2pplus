@@ -14,11 +14,11 @@ body#wizardpage{background:none}
 #wizardpage td{line-height:1.4}
 #wizardpage .langselect{margin:3px 0 4px 4px}
 #wizardpage .sb form{margin:0;padding:3px 0 7px;box-shadow:none}
-#wizardpage .sb h3,#wizardpage .sb h3:hover,#wizardpage .sb h3:active{margin:-7px -10px -9px;width:calc(100% + 20px);box-shadow:var(--lowlight);mix-blend-mode:normal;background:var(--h3) center center / 4px 100%,var(--navbar)}
+#wizardpage .sb h3,#wizardpage .sb h3:hover,#wizardpage .sb h3:active{margin:-7px -10px -9px;width:calc(100% + 20px);box-shadow:var(--lowlight);mix-blend-mode:normal;background:var(--h3) center center/4px 100%,var(--navbar)}
 #wizardpage .sb hr{width:calc(100% + 20px);margin:9px -10px 7px}
 #wizardpage .yes,#wizardpage .no{font-size:0;display:inline-block;width:20px;height:20px}
-#wizardpage .no{background:var(--no) no-repeat center center / 11px}
-#wizardpage .yes{background:var(--yes) no-repeat center center / 12px}
+#wizardpage .no{background:var(--no) no-repeat center center/11px}
+#wizardpage .yes{background:var(--yes) no-repeat center center/12px}
 #wizard h3{border-left-width:1px;border-radius:0}
 #wizard h3:first-of-type{margin-top:10px}
 #wizard p{margin:-10px 0;padding:10px 15px;font-size:110%;border-left:var(--border);border-right:var(--border)}

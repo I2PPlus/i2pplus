@@ -2060,7 +2060,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #config_peers tr:last-child,#config_peers #bannedips td:last-child tr:nth-child(n+3){box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset 0 0 1px 1px #030,inset 0 -1px 1px 1px #030,inset 0 0 0 2px #000,inset 0 -1px 0 2px #000}
 #config_peers tr:last-child td{background:none}
 
-/* misc / unsorted */
+/* misc/unsorted */
 a[href^="/netdb"]:hover span{color:var(--hover)}
 .infohelp.vmcomm{margin-bottom:0}
 .tunneldisplay td,#enviro td,#floodfills td:not(.rid td),#profilelist td:not([colspan]),#routerinformation td{box-shadow:var(--highlight),inset 0 0 2px 0 #040}
