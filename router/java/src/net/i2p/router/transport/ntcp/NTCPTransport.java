@@ -700,10 +700,11 @@ public class NTCPTransport extends TransportImpl {
         NTCPConnection con = _conByIdent.remove(peer);
         boolean isBanned = _context.banlist().isBanlisted(peer);
         boolean isBannedForever = _context.banlist().isBanlistedForever(peer);
+        boolean isBlocklisted = _context.blocklist().isBlocklisted(peer);
         if (con != null) {
             if (_log.shouldWarn()) {
                 _log.warn("[TCP] Forcing immediate disconnection of " +
-                          (isBannedForever ? "permanently banned " : isBanned ? "temp banned " : "") +
+                          (isBannedForever ? "permanently banned " : isBanned ? "temp banned " : isBlocklisted ? "blocklisted " : "") +
                           "Router [" + peer.toBase64().substring(0,6) + "]");
             }
             con.close();
