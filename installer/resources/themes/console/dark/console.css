@@ -2785,7 +2785,7 @@ span#newtab{margin-top:4px}
 .h3navlinks a:last-child{margin-right:2px}
 .joblog h3{margin-top:7px;padding-top:7px}
 .leaseset th{line-height:1}
-.log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin-bottom:-3px;min-width:40px;max-width:40px}
+.log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin-bottom:-3px;min-width:42px;max-width:42px}
 .main,#news,h1,h1[class],.sorry,h1+.sorry,#console_404 .sorry{margin-left:272px}
 .newsAuthor{padding-left:18px;background-size:13px}
 .sb_info .percentBarText{margin-top:-1px}
