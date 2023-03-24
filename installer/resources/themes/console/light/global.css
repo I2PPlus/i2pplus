@@ -17,7 +17,7 @@
 --bg:url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
 --bodybg:#a4a4cb;
 --bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;
---border:#7b7b9d;
+--border:1px solid #7b7b9d;
 --border_inner:1px solid #b6b6c9;
 --border_input:1px solid #97a2ce;
 --border_soft:1px solid #e0e0eb;
@@ -28,6 +28,7 @@
 --btn_shadow_active:var(--highlight),inset 2px 2px 3px 1px rgba(0,0,0,.35);
 --btn_shadow_hover:var(--highlight),inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);
 --div_infohelp:linear-gradient(180deg,#f8f8ff,#f0f0ff);
+--fiter_shadow:drop-shadow(0 0 1px rgba(220,220,255,.7));
 --filter_focus:drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
 --h1:var(--bg),linear-gradient(135deg,#fcfcff,rgba(252,252,255,0) 600px),linear-gradient(180deg,#fcfcff 50%,rgba(248,248,255,.6) 50%),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px);
 --h2:linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(90deg,#fcfcff 5%,rgba(231,231,255,.8) 25%);
@@ -57,6 +58,7 @@
 --table:repeating-linear-gradient(135deg,rgba(248,248,255,.8) 2px,rgba(221,221,255,.3) 3px,#fff 5px) #fff;
 --th:linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
 --txtinput:linear-gradient(180deg,#f2f2ff,#fff);
+--txt_shadow:1px 1px 1px rgba(255,255,255,.9);
 --txtinput_shadow_focus:0 0 0 1px rgba(255,255,255,.8),0 0 2px 2px rgba(255,96,0,.8),var(--highlight),var(--btn_shadow_active);
 --txtinput_shadow_search:var(--highlight),var(--btn_shadow_active);
 }
