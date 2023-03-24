@@ -372,7 +372,7 @@ h3:active .badge{display:none}
 .tab:hover{position:relative;z-index:30;box-shadow:inset 0 0 0 1px rgba(255,96,0,.7);background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
 .tab:active{box-shadow:inset 0 0 0 1px rgba(255,96,0,.4),inset 4px 4px 2px rgba(0,0,0,.4);background:linear-gradient(180deg,#e50,var(--hover))}
 .tab:active a,.tab a:active{color:#ffecdf;text-shadow:0 1px 1px #5f2d0c}
-.tab2{padding:4px 12px;position:relative;z-index:50;color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:inset 3px 3px 3px rgba(0,0,16,.7);background:radial-gradient(at center bottom,rgba(128,128,172,.6) 0,rgba(0,0,0,0) 50%),linear-gradient(180deg,rgba(31,43,63,.7),rgba(31,43,63,.5)),linear-gradient( 90deg,#6288cb,#7fadff,#6288cb)}
+.tab2{padding:4px 12px;position:relative;z-index:50;color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,3px 3px 3px rgba(0,0,16,.5) inset;background:radial-gradient(at center bottom,rgba(128,128,172,.6) 0,rgba(0,0,0,0) 50%),linear-gradient(180deg,rgba(31,43,63,.7),rgba(31,43,63,.5)),linear-gradient( 90deg,#6288cb,#7fadff,#6288cb)}
 
 /* main content div & variations */
 h3,#config_family th,#routerinformation h2{margin:12px 0 15px;padding:7px 5px 6px 7px;word-spacing:.1em;text-transform:uppercase;letter-spacing:.08em;font-size:11pt;color:var(--ink_light);border:var(--border_inner);box-shadow:var(--highlight),0 0 1px rgba(220,220,220,.3)}
