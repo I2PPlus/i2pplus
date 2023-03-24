@@ -18,7 +18,7 @@
 --bodybg:#a4a4cb;
 --bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;
 --border:#7b7b9d;
---border_inner:#b6b6c9;
+--border_inner:1px solid #b6b6c9;
 --border_input:1px solid #97a2ce;
 --border_soft:1px solid #e0e0eb;
 --border_softer:1px solid #dfdfec;

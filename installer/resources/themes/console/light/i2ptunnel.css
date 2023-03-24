@@ -27,10 +27,10 @@ hr{display:none}
 label{vertical-align:middle}
 table{background:#fafaff}
 tr{contain:layout}
-th{padding:6px 5px 6px 10px;text-align:left;font-size:9.5pt;color:var(--ink_light);border-bottom:1px solid var(--border_inner);border-top:1px solid var(--border_inner);background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
+th{padding:6px 5px 6px 10px;text-align:left;font-size:9.5pt;color:var(--ink_light);border-bottom:var(--border_inner);border-top:var(--border_inner);background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 th::first-letter{text-transform:uppercase}
 td{padding:5px;vertical-align:middle;border-top:var(--border_softer)}
-td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1px 1px #ddf;border:1px solid var(--border_inner);background:var(--infohelp) no-repeat 8px center/20px}
+td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1px 1px #ddf;border:var(--border_inner);background:var(--infohelp) no-repeat 8px center/20px}
 .nowrap,.nowrap>*{vertical-align:middle}
 .nowrap{margin-right:15px;margin-left:10px;white-space:nowrap}
 .required{display:none}
@@ -51,7 +51,7 @@ td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1p
 .iframed #messages.panel{padding-top:2px}
 .iframed #messages.panel+#globalTunnelControl.panel{padding-top:0}
 .iframed .panel:last-of-type{padding-bottom:4px}
-.panel table{margin:0;width:100%;border-collapse:collapse;border:1px solid var(--border_inner);background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px) #fff}
+.panel table{margin:0;width:100%;border-collapse:collapse;border:var(--border_inner);background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px) #fff}
 
 /* status */
 .statusNotRunning{color:#d00;background:var(--tunnelStopped)}
@@ -62,7 +62,7 @@ td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1p
 
 /* headings */
 h2.error{padding-left:40px;background:var(--err) no-repeat left 5px center/24px,var(--h2) #fff;background-position:8px center,center center,center center}
-h2,h3{margin:10px 0 -1px;padding:9px 10px 7px 36px;position:relative;font-size:11.5pt;text-transform:uppercase;letter-spacing:.12em;word-spacing:.1em;color:var(--ink_light);border:1px solid var(--border_inner);border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:#fcfcff;background:linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(135deg,#fcfcff 5%,rgba(231,231,255,.8) 15%) #fff}
+h2,h3{margin:10px 0 -1px;padding:9px 10px 7px 36px;position:relative;font-size:11.5pt;text-transform:uppercase;letter-spacing:.12em;word-spacing:.1em;color:var(--ink_light);border:var(--border_inner);border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:#fcfcff;background:linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(135deg,#fcfcff 5%,rgba(231,231,255,.8) 15%) #fff}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{background-size:18px,100%,100%;background-position:10px 60%,center center,center center}
 #clients h2{background:var(--client) no-repeat left 10px center/18px,var(--h2) #fff}
 #clientTunnels th,#serverTunnels th{font-size:90%}
@@ -94,7 +94,7 @@ textarea{font-family:var(--monospaced)}
 textarea[name="accessList"],.authentication,#hostField,#localDestination{margin:5px;padding:2px 4px;width:calc(100% - 20px);box-sizing:unset}
 textarea[name="accessList"]{padding:4px 8px;height:32px;line-height:1.1;will-change:transform}
 textarea[name="accessList"]:focus{height:112px}
-.buttons,.newTunnel{padding:7px 5px;text-align:right;border-top:1px solid var(--border_inner);box-shadow:var(--highlight);background:#fff;background:linear-gradient(180deg,#fafaff 50%,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px)}
+.buttons,.newTunnel{padding:7px 5px;text-align:right;border-top:var(--border_inner);box-shadow:var(--highlight);background:#fff;background:linear-gradient(180deg,#fafaff 50%,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px)}
 .buttons>*{vertical-align:middle}
 .clientName,.clientKey{width:calc(100% - 38px)}
 .clientKey[readonly]{background:var(--key) no-repeat 3px center,var(--readonly);background-size:16px,100%}
@@ -180,8 +180,8 @@ th.tunnelControl{text-align:center}
 .tunnelPort,.tunnelPreview{width:15%;text-align:center}
 .tunnelProperties{background:#fafaff;transition:ease background .05s}
 .tunnelProperties td{border-top:var(--border_softer)}
-.tunnelProperties+tr td{border-top:1px solid var(--border_inner)}
-.tunnelProperties+tr+tr td{border-bottom:1px solid var(--border_inner)}
+.tunnelProperties+tr td{border-top:var(--border_inner)}
+.tunnelProperties+tr+tr td{border-bottom:var(--border_inner)}
 .tunnelProperties:hover,.tunnelProperties:hover+.tunnelInfo,.tunnelProperties:hover+.tunnelInfo+.tunnelInfo{background:#ffd;transition:ease background .05s}
 .tunnelProperties:hover+.tunnelInfo+.tunnelInfo td{border-top:1px solid #ffd}
 .tunnelStatus{text-align:center;width:10%;min-width:48px}
@@ -202,7 +202,7 @@ th.tunnelControl{text-align:center}
 #screenlog .iconize{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0;box-shadow:var(--highlight),inset 0 0 1px 1px #ddf}
 #screenlog .iconize:hover,#screenlog .iconize:focus{box-shadow:var(--highlight),inset 0 0 1px 1px #f60}
 #screenlog .iconize:active{box-shadow:var(--highlight),inset 5px 5px 5px rgba(0,0,0,.2)}
-#screenlog .clearlog{border-left:1px solid var(--border_inner);background:rgba(255,255,255,.3) var(--close) no-repeat center center/16px}
+#screenlog .clearlog{border-left:var(--border_inner);background:rgba(255,255,255,.3) var(--close) no-repeat center center/16px}
 #screenlog .clearlog:hover{background:rgba(255,255,255.5) var(--close_hover) no-repeat center center/16px}
 #screenlog .clearlog:active{background:#f2f2f2 var(--close) no-repeat center center/14px}
 
@@ -216,8 +216,8 @@ input[type=text].username,input[type=password].password{width:200px}
 input[type=password].password:focus,input[type=text].clientKey:focus{background:#fff var(--key) no-repeat 8px center/15px}
 input[type=text].username:focus,input[type=text].clientName:focus{background:#fff var(--user) no-repeat 8px center/15px}
 input[type=text].username:focus,input[type=password].password:focus,input[type=text].clientName:focus,input[type=text].clientKey:focus,input[type=text].filemanager:focus{padding-left:30px;background-blend-mode:normal}
-.tunnelConfig tr,.tunnelConfig th:first-child,.tunnelConfig td:first-child{border-left:1px solid var(--border_inner)}
-.tunnelConfig tr,.tunnelConfig th:last-child,.tunnelConfig td:last-child{border-right:1px solid var(--border_inner)}
+.tunnelConfig tr,.tunnelConfig th:first-child,.tunnelConfig td:first-child{border-left:var(--border_inner)}
+.tunnelConfig tr,.tunnelConfig th:last-child,.tunnelConfig td:last-child{border-right:var(--border_inner)}
 .tunnelConfig td{width:50%}
 .tunnelConfig td>b{margin:2px 0 2px 5px;min-width:30px;display:inline-block}
 #filter{vertical-align:top}

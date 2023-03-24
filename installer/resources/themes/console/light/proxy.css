@@ -78,7 +78,7 @@ h3{text-transform:uppercase;letter-spacing:.1em;background:var(--h3)}
 #proxy_error #jumplinks a:active{padding:10px 11px 8px 35px;box-shadow:var(--badge_shadow_hover),var(--btn_shadow_active);background:url(../images/arrow_right.svg) no-repeat 12px calc(50% + 1px)/19px,var(--badge_active) !important;background-blend-mode:luminosity}
 
 /* console error messages */
-.sorry{margin:-11px 0 10px 214px;padding:20px 25px 20px 70px;min-width:481px;word-wrap:break-word;text-align:justify;font-weight:700;border:1px solid var(--border);border-radius:0 0 2px 2px;box-shadow:inset 0 0 1px red;background:var(--err) no-repeat 16px 40%/40px,linear-gradient(to top,rgba(250,250,255,.5),#f8f8ff 40px),repeating-linear-gradient(135deg,#fafaff 2px,rgba(248,248,255,.8) 3px,#fafaff 5px) #f8f8ff}
+.sorry{margin:-11px 0 10px 214px;padding:20px 25px 20px 70px;min-width:481px;word-wrap:break-word;text-align:justify;font-weight:700;border:var(--border);border-radius:0 0 2px 2px;box-shadow:inset 0 0 1px red;background:var(--err) no-repeat 16px 40%/40px,linear-gradient(to top,rgba(250,250,255,.5),#f8f8ff 40px),repeating-linear-gradient(135deg,#fafaff 2px,rgba(248,248,255,.8) 3px,#fafaff 5px) #f8f8ff}
 .sorry{color:var(--ink_light)}
 .sorry hr,.sorry hr:last-child{margin:10px 0;height:1px;color:#558;background:linear-gradient(90deg,#558,#77a)}
 #servletError #warning{padding-bottom:35px}

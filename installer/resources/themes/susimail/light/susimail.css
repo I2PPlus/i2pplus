@@ -14,7 +14,7 @@ a.fakebutton,a.fakebutton:visited{font-weight:400;color:var(--ink)}
 b,h3,.pagenav td,th{color:#5b5b71;text-shadow:0 1px 1px #fff}
 body{margin:5px;background:var(--bodybg) url(/themes/console/light/images/tile2.png)}
 body.iframed{margin:5px 0 0 0;background:transparent}
-div.footer{margin:-6px -1px -3px;border-top:none;border:1px solid var(--border_inner);box-shadow:var(--highlight);background:linear-gradient(90deg,rgba(232,232,255,.3) 15%,rgba(255,255,255,.8) 50%,rgba(232,232,255,.3) 85%),repeating-linear-gradient(180deg,#fff 1px,#ddf 2px,#fff 3px)}
+div.footer{margin:-6px -1px -3px;border:var(--border_inner);border-top:none;box-shadow:var(--highlight);background:linear-gradient(90deg,rgba(232,232,255,.3) 15%,rgba(255,255,255,.8) 50%,rgba(232,232,255,.3) 85%),repeating-linear-gradient(180deg,#fff 1px,#ddf 2px,#fff 3px)}
 div.header,.iframed .header{display:none}
 form{line-height:160%;border-top:none}
 li{margin-left:5px;margin-right:5px;line-height:12pt;font-size:8.5pt;color:var(--ink)}
@@ -35,7 +35,7 @@ table{width:100%}
 th{font-size:9pt;font-weight:700;vertical-align:middle}
 tr.mailbody,#message_full tr:first-child{box-shadow:var(--highlight);background:#fafaff}
 .footer hr{display:none}
-.header+form{border:1px solid var(--border_inner);border-radius:2px 2px 0 0;box-shadow:0 0 1px 1px rgba(220,220,255,.3);background:linear-gradient(180deg,#f8f8ff,#f2f2ff)}
+.header+form{border:var(--border_inner);border-radius:2px 2px 0 0;box-shadow:0 0 1px 1px rgba(220,220,255,.3);background:linear-gradient(180deg,#f8f8ff,#f2f2ff)}
 .iframed .footer{display:none}
 .iframed form{margin-bottom:4px}
 .iframed .page{margin:0;padding:1px;min-width:600px;border:none;border-radius:0;box-shadow:none;background:transparent}
@@ -53,7 +53,7 @@ tr.mailbody,#message_full tr:first-child{box-shadow:var(--highlight);background:
 #message_full{margin:0;padding:0;border-collapse:separate;border-spacing:0}
 .iframed #message_full{border-bottom:none}
 #message_full tr:first-child{background:#efefff;background:rgba(220,220,255,.2)}
-#message_full table:not(#mailhead) tr:first-child td{border-bottom:1px solid var(--border_inner);background:none}
+#message_full table:not(#mailhead) tr:first-child td{border-bottom:var(--border_inner);background:none}
 #mailhead{padding:0;margin:0}
 #mailhead tr{box-shadow:none}
 #mailhead tr:first-child{background:none}
@@ -160,7 +160,7 @@ tr.bottombuttons .pagenav{margin:0;width:100%}
 .pagenav td:nth-child(2){padding:3px 10px;width:2%;white-space:nowrap}
 .topbuttons div.pagenav{margin-top:10px;display:inline-block}
 .topbuttons .pagenavcontrols{padding-top:5px}
-#pagenavbottom,#mailbox #pagenavbottom td{border-top:1px solid var(--border_inner);box-shadow:none;position:relative;z-index:100}
+#pagenavbottom,#mailbox #pagenavbottom td{border-top:var(--border_inner);box-shadow:none;position:relative;z-index:100}
 #pagenavbottom td{text-align:center;padding:2px;background:linear-gradient(180deg,#fafaff 50%,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px),#fff}
 #pagenavbottom table{float:none}
 #messagenav{right:6px}
@@ -206,8 +206,8 @@ div.pagenav{border-top:1px solid #555;padding:10px 5px 0;font-size:9.5pt;border-
 
 /* configuration */
 textarea[name="config_text"]{margin-bottom:15px;resize:none;height:310px;font-weight:500;scrollbar-color:#779 #fff}
-h3#config{margin:0 0 20px;padding:10px;text-align:center;text-transform:uppercase;font-size:11pt;letter-spacing:.08em;word-spacing:.1em;border-bottom:1px solid var(--border_inner);box-shadow:var(--highlight);text-shadow:0 1px 1px #fff;background:#fafaff;background:linear-gradient(90deg,rgba(240,240,255,.1),rgba(252,252,252,.5),rgba(240,240,255,.1)),linear-gradient(180deg,#fafaff 50%,#f2f2ff 50%)}
-#prefsave{margin-top:4px;padding-top:10px;padding-bottom:10px;border-top:1px solid var(--border_inner);background:#f6f6ff;box-shadow:var(--highlight)}
+h3#config{margin:0 0 20px;padding:10px;text-align:center;text-transform:uppercase;font-size:11pt;letter-spacing:.08em;word-spacing:.1em;border-bottom:var(--border_inner);box-shadow:var(--highlight);text-shadow:0 1px 1px #fff;background:#fafaff;background:linear-gradient(90deg,rgba(240,240,255,.1),rgba(252,252,252,.5),rgba(240,240,255,.1)),linear-gradient(180deg,#fafaff 50%,#f2f2ff 50%)}
+#prefsave{margin-top:4px;padding-top:10px;padding-bottom:10px;border-top:var(--border_inner);background:#f6f6ff;box-shadow:var(--highlight)}
 .iframed #prefsave{padding-bottom:9px}
 
 /* top buttons */
@@ -217,7 +217,7 @@ tr.bottombuttons:last-child{background:linear-gradient(180deg,#fafaff 50%,rgba(2
 tr.bottombuttons:empty{display:none}
 tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td,.topbuttons tr:hover td,.topbuttons:hover td{box-shadow:none}
 .bottombuttons br{display:none}
-.topbuttons{margin:-1px -1px 0;padding:4px 5px 2px;position:sticky;top:-1px;z-index:1000;width:calc(100% - 10px);display:inline-block;vertical-align:middle;white-space:nowrap;text-align:center;font-size:9pt;font-weight:700;border:1px solid var(--border_inner);box-shadow:var(--highlight);background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
+.topbuttons{margin:-1px -1px 0;padding:4px 5px 2px;position:sticky;top:-1px;z-index:1000;width:calc(100% - 10px);display:inline-block;vertical-align:middle;white-space:nowrap;text-align:center;font-size:9pt;font-weight:700;border:var(--border_inner);box-shadow:var(--highlight);background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 .topbuttons a,.topbuttons input,.topbuttons select{vertical-align:middle}
 .topbuttons br{display:none}
 .topbuttons br~input{margin:3px 2px}
@@ -318,14 +318,14 @@ td span,td a,td b{vertical-align:middle;line-height:1}
 .mailListSubject{padding:3px 6px;white-space:normal;text-align:left;word-break:normal}
 #emptymailbox{padding:10px}
 #mailbox .bottombuttons input[type=submit][disabled]{display:none}
-#mailbox .bottombuttons td{padding:4px 4px 5px;border-top:1px solid var(--border_inner)}
+#mailbox .bottombuttons td{padding:4px 4px 5px;border-top:var(--border_inner)}
 #mailbox hr{display:none}
 #mailbox{position:relative;border-collapse:separate;border-spacing:0}
 #mailbox td{border-top:var(--border_soft)}
 #mailbox th:last-child{padding:6px 0;background:var(--nuke) no-repeat center center/14px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 #mailbox th.mailListAttachment,td.mailListAttachment.isAttached{background:var(--attach) no-repeat center center/14px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 #mailbox th.mailListFlagged{background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%);background-blend-mode:luminosity,normal}
-#mailbox th{padding:6px 5px;white-space:nowrap;font-size:70%;color:#54586f;border-bottom:1px solid var(--border_inner);background:#f6f6ff;background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
+#mailbox th{padding:6px 5px;white-space:nowrap;font-size:70%;color:#54586f;border-bottom:var(--border_inner);background:#f6f6ff;background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 #mailbox tr:hover .mailListSender a{color:var(--ink)}
 #mailbox tr:hover td.mailListAttachment.isAttached{background:rgba(240,240,200,.4) var(--attach) no-repeat center center/14px}
 #mailbox tr:nth-child(2){position:sticky;top:42px;z-index:500}
@@ -351,11 +351,11 @@ select::-ms-expand{display:none}
 .folders{margin:-3px 0 0 0;float:left}
 .folders select{margin-left:0;text-align:center}
 input.switchto:hover,input.moveto:hover{background:var(--folder_hover) no-repeat 6px center/14px,var(--btn_hover)}
-tr.mailbody td{border-top:1px solid var(--border_inner)}
+tr.mailbody td{border-top:var(--border_inner)}
 #loading{padding:15px;font-size:10pt;text-align:center;background:#ddf;background:repeating-linear-gradient(180deg,#ddf,#eef 2px,#ddf 3px);margin:0;border:none}
 #loading b{padding:6px 0;display:inline-block;width:40%;min-width:400px;color:#fff;letter-spacing:2px;text-shadow:0 0 1px #001,0 0 5px #003;border-radius:2px;box-shadow:inset 0 0 0 1px #99b,inset 0 0 0 2px #ddf,inset 0 0 2px 3px #77a,0 0 1px #bbb;background:#337;background:repeating-linear-gradient(45deg,#449 1px,#449 20px,#66a 20px,#77a 40px);animation:loading 1s linear infinite forwards alternate}
 #viewmail{position:relative}
-#viewmail .folders{padding:5px 6px 5px 4px;position:absolute;top:-1px;right:-1px;border:1px solid var(--border_inner);border-radius:0 0 0 3px;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.7) 50%,rgba(240,240,255,.4) 50%),repeating-linear-gradient(180deg,#eef 1px,#eef 2px,#fff 3px)}
+#viewmail .folders{padding:5px 6px 5px 4px;position:absolute;top:-1px;right:-1px;border:var(--border_inner);border-radius:0 0 0 3px;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.7) 50%,rgba(240,240,255,.4) 50%),repeating-linear-gradient(180deg,#eef 1px,#eef 2px,#fff 3px)}
 input.switchto,input.moveto{padding:5px 7px 5px 24px;background:var(--folder) no-repeat 6px center/14px,var(--btn)}
 #viewmail .moveto,#viewmail .select1{margin-bottom:2px}
 #viewmail .moveto{margin-right:8px}
