@@ -741,9 +741,10 @@ div.search+.linkcontainer{margin:-15px 0 0}
 #sitemap h3 img{padding-right:6px}
 .sitemapLink,.sitemapLabel{width:180px;min-width:180px;display:inline-block;text-align:center;font-size:9pt;border:1px solid var(--border_inner);border-radius:0;box-shadow:var(--highlight),inset 0 0 2px 1px #efefff;background:#f8f8ff}
 .en .sitemapLink,.en .sitemapLabel{width:136px;min-width:136px}
-.sitemapLink{margin:0 2px 7px}
-.sitemapLink:hover,.sitemapLink:hover .sitemapLabel{border-color:var(--hover);color:var(--hover)}
-.sitemapLabel{margin-bottom:-3px;padding:4px 0;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:none;border-top:1px solid var(--border_inner)}
+.sitemapLink{margin:0 2px 7px;position:relative;contain:paint}
+.sitemapLabel{margin:-1px 0 -4px;padding:4px 0 5px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:none;border-top:1px solid var(--border_inner)}
+.sitemapLink:hover,.sitemapLink:hover .sitemapLabel{color:var(--hover);border-color:var(--hover);box-shadow:var(--highlight)}
+.sitemapLink:hover::before{height:1px;display:inline-block;position:absolute;left:0;right:0;bottom:0;background:#fff;content:""}
 
 /* keyring */
 #config_keyring h3{margin-bottom:-2px}
@@ -2645,6 +2646,7 @@ h4#updateplugins,#news p{font-size:10pt}
 .newsAuthor{padding:0 0 0 14px;font-size:9.5pt;background-size:12px;background-position:left center}
 .percentBarOuter{width:232px}
 .percentBarText{margin-top:-1px}
+.sitemapLabel{min-height:16px}
 .statlist li a[href^="graph"]::before,.statlist li::before{margin:0 10px -30px -17px;height:6px;width:6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}
 .statlist li{padding:0 10px}
 .statlist>li>ul b{margin:-5px 0 0 3px}
