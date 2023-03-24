@@ -29,8 +29,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadFactory;
 
-import net.i2p.I2PException;
-import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
@@ -38,19 +36,22 @@ import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
-import net.i2p.client.streaming.RouterRestartException;
 import net.i2p.client.streaming.IncomingConnectionFilter;
+import net.i2p.client.streaming.RouterRestartException;
 import net.i2p.client.streaming.StatefulConnectionFilter;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.I2PAppContext;
+import net.i2p.I2PException;
+import net.i2p.i2ptunnel.access.FilterFactory;
+import net.i2p.i2ptunnel.access.InvalidDefinitionException;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
-import net.i2p.i2ptunnel.access.FilterFactory;
-import net.i2p.i2ptunnel.access.InvalidDefinitionException;
+import net.i2p.util.SystemVersion;
 
 public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
@@ -84,7 +85,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     /** max number of threads  - this many slowlorisses will DOS this server, but too high could OOM the JVM */
     private static final String PROP_HANDLER_COUNT = "i2ptunnel.blockingHandlerCount";
 //    private static final int DEFAULT_HANDLER_COUNT = 65;
-    private static final int DEFAULT_HANDLER_COUNT = 80;
+    private static final long MAXMEM = SystemVersion.getMaxMemory();
+    private static final int DEFAULT_HANDLER_COUNT = MAXMEM < 512*1024*1024 || SystemVersion.isSlow() ? 128 : MAXMEM < 1024*1024*1024 ? 512 : 1024;
     /** min number of threads */
 //    private static final int MIN_HANDLERS = 0;
     private static final int MIN_HANDLERS = 1;
