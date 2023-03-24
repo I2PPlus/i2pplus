@@ -1283,13 +1283,13 @@ class Connection {
             // we got rescheduled already
             long left = getTimeLeft();
             if (left > 0) {
-                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but there is time left (" + left + ")");
+                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but there is time left (" + left + "ms)");
                 schedule(left);
                 return;
             }
             // these are either going to time out or cause further rescheduling
             if (getUnackedPacketsSent() > 0) {
-                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but there are unacked packets");
+                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but there are unACKed packets");
                 return;
             }
             // this shouldn't have been scheduled
@@ -1308,7 +1308,7 @@ class Connection {
             //    return;
             //}
 
-            if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, with action=" + _options.getInactivityAction());
+            if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, with action -> " + _options.getInactivityAction());
 
             // bugger it, might as well do the hard work now
             switch (_options.getInactivityAction()) {
