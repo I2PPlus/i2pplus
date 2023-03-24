@@ -20,7 +20,7 @@ th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,td.torrentDownload
 #configs td{line-height:2;padding-top:4px;padding-bottom:4px}
 #embed::after{height:14px}
 #embed,#fullscreen{margin:-6px -4px -28px;padding:8px 9px 7px 10px}
-#torrents tt,.snarkAddInfo code{font-size:9.5pt}
+#torrents code,.snarkAddInfo code{font-size:9.5pt}
 }
 @media screen and (max-width:1400px){
 .iframed #torrents td.torrentName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

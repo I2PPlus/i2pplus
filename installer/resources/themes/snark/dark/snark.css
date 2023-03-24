@@ -122,7 +122,7 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 7px;min-width:120px;font-size:8
 #screenlog a,#screenlog a:visited{font-weight:700;color:#2b2}
 #screenlog a:hover{color:#f70}
 #screenlog ul{margin:-1px 0 2px;padding:0 0 0 14px;list-style:none}
-#screenlog li,#screenlog li a,#torrents tt,#ourDest tt{line-height:1.15;font-size:8.5pt;font-weight:700}
+#screenlog li,#screenlog li a,#torrents code,#ourDest code{line-height:1.15;font-size:8.5pt;font-weight:700}
 #screenlog li,#screenlog li a{line-height:1.28;text-shadow:0 0 1px #000,0 0 2px #000,0 0 3px #000,0 0 4px #001000}
 #screenlog li{margin-left:-15px;opacity:.7}
 #screenlog li:hover{opacity:1}
@@ -279,7 +279,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 #torrents tfoot td:first-child{padding-left:0;text-align:left}
 #torrents tfoot th{padding-bottom:4px;white-space:normal}
 #torrents img{padding:0}
-#torrents tt{display:inline-block;line-height:1.2;letter-spacing:.1em;font-weight:700}
+#torrents code{display:inline-block;line-height:1.2;letter-spacing:.1em;font-weight:700}
 #torrents .graphicStatus{padding-left:5px;padding-right:5px;width:1%;text-align:center}
 #torrents td.graphicStatus{padding-left:2px}
 #torrents .infohash{margin-right:3px;padding:1px 5px 1px 17px;color:#000;background:#cc0 var(--hash2) no-repeat 3px center/12px}
@@ -351,15 +351,15 @@ tr:hover .percentBarText{opacity:1}
 .uploaded{padding:2px 2px 0;min-width:68px;display:inline-block;position:relative;text-align:center;line-height:1.3;border:1px solid #141;border-left-width:5px;box-shadow:var(--highlight),inset 0 3px 3px rgba(0,0,0,.6);background:repeating-linear-gradient(90deg,#000,#000 10%,#020 10%,#020 20%)}
 
 /* peers */
-.peerinfo tt{margin:0 8px 0 0;padding:1px 4px;float:left}
+.peerinfo code{margin:0 8px 0 0;padding:1px 4px;float:left}
 .peerinfo:hover .percentBarText{opacity:.8;font-size:95%}
 .peerinfo,.debuginfo.rowOdd,.debuginfo.rowEven{background:linear-gradient(90deg,#000800 70%,#000d00)}
 .peerinfo td:first-child{background:var(--peer) no-repeat 9px center/18px}
 .peerinfo td,.debuginfo td{padding-top:4px;padding-bottom:4px}
 .peerinfo td:first-child::before,.debuginfo td:first-child::before{min-height:28px;display:inline-block;vertical-align:middle;content:""}
 .peerclient{margin:3px 0;padding:1px;border-radius:1px;background:#000;box-shadow:0 0 0 1px #020}
-.peerclient,.peerinfo tt,.clientid{display:inline-block;vertical-align:middle;line-height:1.2}
-.peerinfo tt{margin:0;padding:2px 9px 2px 5px;font-size:85%;color:#bb0;border-radius:4px 0 0 4px;background:none}
+.peerclient,.peerinfo code,.clientid{display:inline-block;vertical-align:middle;line-height:1.2}
+.peerinfo code{margin:0;padding:2px 9px 2px 5px;font-size:85%;color:#bb0;border-radius:4px 0 0 4px;background:none}
 .clientid{margin-left:-8px;padding:2px 4px;width:57px;display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:middle;text-overflow:ellipsis;font-size:85%;text-align:center;background:var(--badge)}
 .clientVersion{display:none}
 .peerinfo td>*{vertical-align:middle}
@@ -367,7 +367,7 @@ tr:hover .percentBarText{opacity:1}
 #torrents .peerinfo .torrentDownloaded{text-align:center}
 #torrents .peerinfo:hover td:first-child{background:#030 var(--peer) no-repeat 9px center/18px}
 #ourDest{margin-left:4px;padding:1px 0 1px 4px;display:inline-block;line-height:1.1;border:1px solid #020;border-radius:1px;box-shadow:var(--highlight);background:var(--badge)}
-#ourDest tt{margin:0 1px 0 4px;padding:2px 4px 2px 6px;display:inline-block;line-height:1.2;color:#bb0;text-shadow:0 1px 1px #000;border-radius:0 1px 1px 0;background:#010}
+#ourDest code{margin:0 1px 0 4px;padding:2px 4px 2px 6px;display:inline-block;line-height:1.2;color:#bb0;text-shadow:0 1px 1px #000;border-radius:0 1px 1px 0;background:#010}
 
 /* debug */
 hr.debug{display:none}
@@ -975,7 +975,7 @@ th.peerCount a img{margin-left:-20px}
 #configSection .configTitle,.toggleview{min-width:380px}
 #configSection{margin-bottom:-11px}
 #configs td:first-child::after{min-height:28px}
-#screenlog li,#screenlog li a,#ourDest tt,#screenlog,#screenlog a{font-size:9pt}
+#screenlog li,#screenlog li a,#ourDest code,#screenlog,#screenlog a{font-size:9pt}
 #screenlog{margin:-11px -11px 0;min-height:60px}
 #torrentDisplay .filterbutton{min-width:120px}
 #torrentinfostats img,#trackers img{margin:-3px 5px 0;max-height:18px}

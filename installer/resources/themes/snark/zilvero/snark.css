@@ -42,7 +42,7 @@ body,html{min-height:calc(100% - 5px)}
 html{border-right:var(--border);background:repeating-linear-gradient(180deg,#ddd 2px,#bbb 4px) #bbb;background-size:100% 4px;scrollbar-color:#999 #eee}
 body{margin:0;padding:5px 5px 0;min-width:800px;color:var(--ink);background:var(--b_snark_hover),var(--b_snark_active),var(--b_tracker_hover),var(--b_tracker_active),var(--b_forum_hover),var(--b_forum_active);background-size:0}
 body.iframed{min-width:700px;padding:0;background:#777}
-code,tt{font-weight:700;color:#393}
+code{font-weight:700;color:#393}
 form{margin:0}
 hr{background:transparent;color:transparent;height:0;border:none}
 img{font-size:0}
@@ -54,7 +54,7 @@ th img{max-height:24px}
 tr{contain:layout}
 th{padding-top:7px;padding-bottom:7px;vertical-align:middle;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 td{padding:3px}
-tt{margin:0 2px}
+code{margin:0 2px}
 .canhide{display:none}
 .configTitle,.toggleview,.snarkNav{letter-spacing:.1em;text-transform:uppercase}
 .configTitle img{display:none}
@@ -231,9 +231,9 @@ tr:hover .magnetLabel{opacity:1}
 .active .peerCount b{background:linear-gradient(180deg,#fff,#edd)}
 .peerCount .left,.peerCount .right{min-width:22px;display:inline-block;text-align:center}
 .peerdata>*{vertical-align:middle}
-.peerclient,.peerclient tt,.clientid{line-height:1.4;vertical-align:middle}
+.peerclient,.peerclient code,.clientid{line-height:1.4;vertical-align:middle}
 .peerclient{padding-right:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.peerclient tt{margin:0 3px 0 1px}
+.peerclient code{margin:0 3px 0 1px}
 .clientid{margin:0 0 1px -2px;padding:1px 2px;width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:center;font-size:90%}
 .clientversion{display:none}
 .peerinfo{background-color:#fffffd}

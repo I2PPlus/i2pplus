@@ -32,7 +32,7 @@ body.iframed{margin:1px 0}
 p{line-height:1.5}
 hr{width:0;height:1px;margin:5px 0 7px 0;text-align:center;color:transparent;background:transparent}
 img{margin:0 3px 1px 3px;vertical-align:middle;line-height:1;border:none}
-code,tt,.bucket{font:bold 8.5pt var(--monospaced);padding:0 2px;color:#050}
+code,.bucket{font:bold 8.5pt var(--monospaced);padding:0 2px;color:#050}
 .center{text-align:center}
 .nowrap{white-space:nowrap;display:inline-block}
 .script{margin:5px 0 2px;display:inline-block}
@@ -261,8 +261,8 @@ td.trackerLink{text-align:right}
 #torrents tfoot th br{display:inline-block;margin-left:20px}
 #torrents tfoot tr:first-child th{vertical-align:middle}
 #torrents tfoot th:nth-child(n+2){text-align:center;white-space:nowrap}
-#torrents tt{display:inline-block;letter-spacing:.1em;font-weight:700;color:var(--bg);border-radius:2px}
-#torrents tfoot th tt{margin-left:3px;display:inline}
+#torrents code{display:inline-block;letter-spacing:.1em;font-weight:700;color:var(--bg);border-radius:2px}
+#torrents tfoot th code{margin-left:3px;display:inline}
 #filterResults td{padding:10px 8px;text-align:center;font-weight:700;font-style:italic;border-top:var(--border);border-bottom:var(--border);box-shadow:var(--highlight);background:linear-gradient(180deg,var(--bg),#ebebff)}
 #filterResults,#filterResults td{animation:disappear .1s linear 2s both}
 
@@ -650,14 +650,14 @@ td.peerCount{padding-left:0;width:1%;white-space:nowrap;text-align:left;font-wei
 
 /* peerid + client */
 .peerclient{padding:1px;box-sizing:border-box;border-radius:2px;background:#99f}
-.peerclient,.peerinfo tt,.clientid{display:inline-block;vertical-align:middle;line-height:1.2;box-sizing:border-box;font-size:90%}
-.peerinfo tt{margin:-1px 0;border-radius:2px 0 0 2px;padding:0 5px;background:none}
+.peerclient,.peerinfo code,.clientid{display:inline-block;vertical-align:middle;line-height:1.2;box-sizing:border-box;font-size:90%}
+.peerinfo code{margin:-1px 0;border-radius:2px 0 0 2px;padding:0 5px;background:none}
 .clientid{margin:0 0 0 -3px;padding:2px 1px;width:50px;display:inline-block;border-radius:0 1px 1px 0;overflow:hidden;text-overflow:ellipsis;font-size:90%;text-align:center;white-space:nowrap;background:var(--bg3);background:linear-gradient(180deg,var(--bg3),var(--bg4))}
 .clientversion{display:none}
 .peerinfo td > *{vertical-align:middle}
 .peerdata{padding-left:0}
 #ourDest{margin-left:3px;padding:2px 0 2px 4px;display:inline-block;border:var(--border);border-radius:2px;background:var(--bg3);background:linear-gradient(180deg,var(--bg3),var(--bg4));opacity:.85;line-height:1}
-#ourDest tt{margin:-1px 0 -1px 4px;padding:2px 4px 2px 6px;display:inline-block;background:#99f;border-radius:0 1px 1px 0}
+#ourDest code{margin:-1px 0 -1px 4px;padding:2px 4px 2px 6px;display:inline-block;background:#99f;border-radius:0 1px 1px 0}
 .peerinfo td > *{vertical-align:middle}
 
 /* end peer + client */
@@ -894,7 +894,7 @@ body,th,td,table a,input,input[type=text],input.r,input[name="nofilter_dataDir"]
 #actionStopAll,#actionStartAll{margin-top:4px}
 #configs td:first-child{min-width:220px}
 #editSection + #snarkFiles{margin-top:0}
-#screenlog li,#torrents tt,code,#torrents tt,#ourDest tt{font-size:9pt}
+#screenlog li,#torrents code,code,#ourDest code{font-size:9pt}
 #screenlog{height:60px;min-height:60px}
 #screenlog.xpanded{height:300px}
 #torrents td.torrentDetails img{width:22px;height:22px;max-width:22px;max-height:22px}
