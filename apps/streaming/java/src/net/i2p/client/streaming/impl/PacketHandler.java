@@ -322,7 +322,7 @@ class PacketHandler {
                 // if it has a send ID, it's almost certainly for a recently removed connection.
                 if (_log.shouldWarn()) {
                     boolean recent = _manager.wasRecentlyClosed(packet.getSendStreamId());
-                    _log.warn("Dropping packet " + packet + " with Send ID but no connection found -> Recently disconnected? " + recent);
+                    _log.warn("Dropping packet " + packet + " with SendStreamID but no connection found -> Recently disconnected? " + recent);
                 }
                 // don't bother sending reset
                 // TODO send reset if recent && has data?
