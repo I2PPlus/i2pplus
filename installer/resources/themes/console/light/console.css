@@ -127,9 +127,9 @@ h4.sb_info{margin-top:-11px}
 #sb_wrap{margin:0 0 10px;padding:0;width:200px;display:block;position:absolute;float:left;clear:left;text-align:center;border:0}
 #sb_wrap.sticky{top:6px!important}
 #sidebar{margin-bottom:2px;padding:8px;width:192px;text-align:center;font-size:8pt;color:var(--ink);clear:left;border:var(--border);border-radius:2px;box-shadow:var(--bevel);background:#fafaff;contain:paint}
-#sidebar a:active,#sidebar td:first-child a:active b{color:#d30}
-#sidebar a:hover,#sidebar a:focus,#sidebar td:first-child a:hover b{color:var(--hover)}
 #sidebar a,#sidebar a:visited{color:var(--a)}
+#sidebar a:hover,#sidebar a:focus,#sidebar td:first-child a:hover b{color:var(--hover)}
+#sidebar a:active,#sidebar td:first-child a:active b{color:#d30}
 #sidebar form{margin:-2px -7px -4px;padding:0 0 3px}
 #sidebar form button.download{margin:-3px 0;padding:5px 7px 5px 22px;display:inline-block;vertical-align:middle;background:var(--download) no-repeat 6px center/15px,var(--btn)}
 #sidebar form button.download:hover,#sidebar form button.download:focus{background:var(--download_hover) no-repeat 6px center/15px,var(--btn_hover)}
@@ -1021,23 +1021,14 @@ h3#scheduledjobs+ol li::before{background:var(--timer) no-repeat 6px center/12px
 
 .smallhead th,#ntcpconnections th,#transportSummary th{font-size:8pt}
 .mediumtags{font-weight:700}
-.cells,.cells td{padding-top:4px;padding-bottom:4px;border-left:var(--border_soft);border-top:var(--border_soft);border-bottom:var(--border_soft)}
+.cells,.cells td:not(.rif):not(.rih):not(.rbw){border-left:var(--border_soft);border-top:var(--border_soft);border-bottom:var(--border_soft)}
 .tablefooter{background:#f8f8ff}
-.tablefooter tr,.tablefooter td{padding:8px 2px;line-height:1.1;font-size:9pt;border-top:var(--border_inner);border-bottom:var(--border_inner);background:#f8f8ff}
+.tablefooter tr,.tablefooter td,.cells .tablefooter td{padding:8px 2px;line-height:1.1;font-size:9pt;border-top:var(--border_inner);border-bottom:var(--border_inner);background:#f8f8ff}
 tfoot td:not(:first-child),#peers tfoot td:not(:first-child){border-left:none;box-shadow:none}
 tfoot td:not(:last-child),#peers tfoot td:not(:last-child){border-right:none;box-shadow:none}
 .formaction{margin-top:-15px;padding:5px;text-align:right;border:var(--border_inner);background:#fafaff}
 .footnote,.footnote hr{display:none}
 .topness{margin-top:0;margin-right:5px;margin-bottom:5px;font-size:8pt;text-align:right}
-
-#config_homepage .formaction,#config_clients .formaction,#webappconfigactions{margin-top:-6px}
-#sidebardefaults{margin-top:-6px}
-
-#config_update form{margin-bottom:0}
-table#addkeyring tr:last-child td{padding:5px;border-top:var(--border_inner)}
-#refreshsidebar tr:first-child td{padding-left:50px;background:var(--timer) no-repeat 15px center/28px,var(--th)}
-#refreshsidebar tr:first-child td:last-child{background:var(--th)}
-
 #logs #enviro~.tabletitle::after,#jobs h3::after,#tunnels h3[id]::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:linear-gradient(90deg,#d30,var(--hover));content:"";animation:ease-out reloader 1s forwards;opacity:.7}
 #logs .tabletitle,#jobs h3,#tunnels h3[id]{position:relative;overflow:hidden}
 
@@ -1098,8 +1089,10 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;vertical-align:middle;box-sizing:border-box;float:none}
 #floodfills .percentBarOuter.nofail .percentBarInner{width:100%!important;display:inline-block;vertical-align:top;background:linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05) 50%),linear-gradient(90deg,#383,#494)}
 
-#peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
+#peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer,#peers .tablefooter td{padding-left:8px;text-align:left;border-bottom:var(--border_inner)}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
+#peers .tablefooter td {border-top:var(--border_inner);border-bottom:var(--border_inner)}
+#peers #udpconnections tbody tr:last-child td,#peers #ntcpconnections tbody tr:last-child td{border-bottom:var(--border_inner)}
 #peers .edit a{margin:0;vertical-align:middle;box-shadow:var(--btn_shadow)}
 #peers .edit a:hover{margin:0;vertical-align:middle;border-color:var(--hover);box-shadow:var(--btn_shadow_hover)}
 #topCount{display:inline-block;position:absolute;right:2px;top:2px}
@@ -1115,12 +1108,16 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 
 /* tunnels */
 .ipaddress a{line-height:1}
+.peerFlag{position:relative;z-index:10;display:inline-block;vertical-align:middle}
+.peerFlag::before{display:inline-block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:20;width:100%;border-radius:3px;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(0,0,0,.2));content:"";pointer-events:none}
 .routerHash,.version{margin:0;padding:1px 3px;min-width:44px;display:inline-block;line-height:1.3;vertical-align:middle;text-align:center;font-weight:700;border:1px solid #bbc;box-shadow:var(--highlight);background:var(--badge)}
 .tunnel_cap{min-width:24px;padding:1px 4px;display:inline-block;margin:1px 2px;text-align:center;vertical-align:middle}
 .tunnel_cap:empty::after{content:"?"}
 .tunneldisplay,.statusnotes,#config_service .infohelp,#config_service .formaction{position:relative;z-index:100}
 .tunneldisplay td{text-align:center}
+.tunneldisplay:not(#transitSummary):not(#allTransit) td:not(.rif):not(.rih):not(.rbw)::before{display:inline-block;vertical-align:middle;min-height:30px;content:""}
 .tunneldisplay td:nth-child(3){white-space:nowrap}
+.tuneldisplay .peerFlag::before{display:none}
 .tunnel_local,.tunnel_id,.tunnel_cap{display:inline-block;vertical-align:middle;box-sizing:border-box;border:1px solid #bbd;background:var(--row);line-height:1.3}
 .tunnel_id{margin:0 3px;padding:2px 4px 2px 2px;min-width:109px;display:inline-block;box-sizing:border-box;vertical-align:middle;text-align:center;line-height:1.2}
 .tunnel_id:empty{text-align:center}
@@ -1131,7 +1128,6 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .tunnels_participating td.cells:first-child{font-size:0}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
-#routertunnels .main td:not(.rif):not(.rih):not(.rbw)::before{display:inline-block;vertical-align:middle;min-height:30px;content:""}
 #tunnel_defs b{color:#fff}
 #tunnel_defs td:first-child,#tunnel_defs td:last-child{padding:0;width:0;font-size:0;display:none}
 #tunnel_defs td:nth-child(3){border-right:var(--border_soft)}
@@ -1173,8 +1169,6 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
 
 /* transit summary */
-.peerFlag{position:relative;z-index:10;display:inline-block;vertical-align:middle}
-.peerFlag::before{display:inline-block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:20;width:100%;border-radius:3px;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(0,0,0,.2));content:"";pointer-events:none}
 .netdb_header .peerFlag,.netdb_header .peerFlag img{border-radius:3px}
 .netdb_header .peerFlag::before{width:calc(100% - 3px);height:calc(100% + 2px);top:-2px;left:2px;bottom:-2px;right:2px}
 .routerHash{display:inline-block;vertical-align:middle;letter-spacing:.1em;font-family:var(--monospaced)}
@@ -1863,6 +1857,7 @@ p#clientconf.infohelp+.wideload{margin-top:12px}
 pre#activetransports b{padding-bottom:2px}
 pre#activetransports{margin:-16px 0 0;padding:10px 0 0 10px;display:inline-block;width:calc(100% - 12px);font-size:9pt;border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #ddf;background:#fafaff}
 p#tunnelconfig{margin-bottom:-13px}
+table#addkeyring tr:last-child td{padding:5px;border-top:var(--border_inner)}
 #advancedconfig a,#iptransport a,#reseedsetup a{padding:6px 8px}
 #bandwidthconfig .optionsingle:hover,#reseedproxytype label:hover{background-color:#ffd}
 #bannedpeercount{background:var(--ban) no-repeat 15px center/28px,var(--div_infohelp)}
@@ -1870,6 +1865,7 @@ p#tunnelconfig{margin-bottom:-13px}
 #bwlimiter a:active,#i2pclientconfig a:active,#config_logging h3 a:active,#graphdisplay a:active,#version a:active,#logs h3 a:active,#tunnels h3 a:not(.lsview):active,#advancedconfig a:active,#iptransport a:active,#reseedsetup a:active,#graphinfo a:active,.h3navlinks a:active{box-shadow:inset 2px 2px 1px #aab}
 #clientsconfig input.add{float:left}
 #config_advanced h3#advancedconfig a{margin-top:-6px}
+#config_homepage .formaction,#config_clients .formaction,#webappconfigactions{margin-top:-6px}
 #configinfo th{color:#050}
 #configinfo td{padding:10px;text-align:justify}
 #config_logging h3 a:hover::before,#config_logging h3 a:focus::before,#routerinformation #version a:hover::before,#routerinformation #version a:focus::before{background:var(--eye_hover) no-repeat left center/14px}
@@ -1921,6 +1917,8 @@ select[name="newlogclass"]{margin-left:3px}
 .buttonDown:active{background:var(--mv_down_active) no-repeat center center}
 .buttonBottom:active{background:var(--mv_bottom_active) no-repeat center center}
 .buttonTop,.buttonBottom,.buttonUp,.buttonDown,.buttonTop,.buttonTop:hover,.buttonBottom:hover,.buttonUp:hover,.buttonDown:hover,.buttonTop:focus,.buttonBottom:focus,.buttonUp:focus,.buttonDown:focus,.buttonTop:active,.buttonBottom:active,.buttonUp:active,.buttonDown:active{background-size:11px,100%}
+#refreshsidebar tr:first-child td{padding-left:50px;background:var(--timer) no-repeat 15px center/28px,var(--th)}
+#refreshsidebar tr:first-child td:last-child{background:var(--th)}
 #sidebarconf label{display:inline-block;width:100%}
 #sidebarconf tr:hover label{color:var(--hover)}
 #sidebarconf button{margin:2px;padding:2px 3px;width:22px;height:22px;min-width:0}
@@ -1929,6 +1927,7 @@ select[name="newlogclass"]{margin-left:3px}
 #sidebarconf th:nth-child(2),#sidebarconf td:nth-child(2){text-align:left;padding-left:10px}
 #sidebarconf td:first-child,#sidebarconf td:nth-child(3),#sidebarconf td:nth-child(4){padding:2px 5px;width:1%;white-space:nowrap;text-align:center}
 #sidebarconf td:nth-child(3) button,#sidebarconf td:nth-child(4) button{margin:4px}
+#sidebardefaults{margin-top:-6px}
 .buttonTop img,.buttonBottom img,.buttonUp img,.buttonDown img{opacity:0}
 
 /* stats */
@@ -2103,6 +2102,7 @@ table#consolepass input[name="name"]{margin-right:20px}
 #i2pupdates textarea,#i2pupdates input[type=text]{margin:5px 0 5px 10px;width:calc(100% - 210px);min-width:0;box-sizing:border-box}
 #i2pupdates input[name="devSU3URL"],#i2pupdates input[name="newsURL"],#i2pupdates input[name="zipURL"]{width:calc(100% - 210px) !important}
 #i2pupdates textarea{margin:8px 0 8px 3px;height:76px;min-height:32px}
+#config_update form{margin-bottom:0}
 #config_update .suboption label[for="newsThroughProxy"]{margin-right:20px}
 #config_update .suboption .optbox{margin:0 3px 0 -5px}
 
