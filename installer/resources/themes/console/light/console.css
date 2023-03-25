@@ -225,6 +225,8 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_advanced:not(.collapsed)~#sb_routerControl{padding-bottom:2px}
 #sb_advanced:not(.collapsed)~#sb_tunnelstatus{margin-bottom:-7px}
 #sb_advancedgeneral[hidden]~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-7px}
+#sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:11px}
+#sb_advancedgeneral:not([hidden])~#sb_services.collapsed{margin-bottom:-11px}
 #sb_advancedgeneral:not([hidden])~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
 #sb_updatesection.collapsed>h3.collapsed::before{display:inline-block;min-height:16px;vertical-align:middle;content:""}
 #sb_updatesection.collapsed>*:not(h3){display:none}
@@ -2241,7 +2243,6 @@ table#consolepass input[name="name"]{margin-right:20px}
 #volunteer,#configurationhelp{margin-top:15px}
 
 /* toc */
-#helptoc{margin:15px 0 5px;display:block;columns:550px 2;column-gap:12px}
 #helptoc li,#helptoc li:last-child{margin:10px 0 12px;padding:20px 10px 20px 60px;width:calc(100% - 70px);list-style:none;box-shadow:0 0 0 1px rgba(185,185,198,.65),var(--highlight),inset 0 0 0 2px #ddf;background-blend-mode:luminosity;break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid;transition:ease box-shadow .2s}
 #helptoc li:hover{box-shadow:0 0 0 1px rgba(185,185,198,.65),var(--highlight),inset 0 0 0 2px rgba(146,48,0,.7);background-blend-mode:normal;transition:ease box-shadow .3s}
 #helptoc li:hover b{color:var(--hover)}
@@ -2273,6 +2274,7 @@ table#consolepass input[name="name"]{margin-right:20px}
 #webhosting h2{background:var(--webserver) no-repeat 8px center,var(--h2)}
 #themeoverride h2{background:var(--ui) no-repeat 8px center,var(--h2)}
 #help h2,#help #newuserguide h2{padding:9px 8px 8px 36px;font-size:13pt;background-size:22px,100%,100%,100%}
+#help #helptoc{margin:15px 0 5px;display:block;columns:550px 2;column-gap:12px}
 
 /* reseed */
 #reseedhelp ol ul li{list-style-type:square}
