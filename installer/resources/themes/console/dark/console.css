@@ -252,10 +252,10 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar .firewalled{box-shadow:0 0 0 1px rgba(64,0,0,.6) inset,var(--bevel);background:linear-gradient(90deg,rgba(16,0,0,.7),rgba(64,0,0,.4),rgba(16,0,0,.7))}
 #sidebar .warn{color:#900}
 #sidebar .clockskew{color:#990}
-#sidebar .testing,.tunnelBuildStatus.starting,#sb_localtunnels td[colspan="3"]{color:#aa3;box-shadow:var(--highlight),inset 0 0 2px 1px #bb0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.5),rgba(0,0,0,.5) 10px,rgba(56,56,0,.5) 10px,rgba(48,48,0,.5) 20px) repeat center center/400%}
 #sidebar .hidden,#sidebar .vmcomm,.tunnelBuildStatus.hidden{color:#999;box-shadow:var(--highlight),inset 0 0 2px 1px #777}
 #sidebar .running,.tunnelBuildStatus.active{box-shadow:var(--highlight),inset 0 0 2px 1px rgba(0,192,0,.7);background:repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px,rgba(0,64,0,.3) 4px) center center/100% 4px,var(--glow_top),linear-gradient(to right,rgba(16,40,15,.5),rgba(0,0,0,.9),rgba(16,40,15,.5))}
 #sidebar #sb_localtunnels td[colspan="3"],#sidebar #sb_localtunnels tr:hover td[colspan="3"]{width:100%;line-height:12px;font-size:0;background-size:400%!important}
+#sidebar .testing,.tunnelBuildStatus.starting,#sb_localtunnels td[colspan="3"],#sidebar #routerdown td{color:#aa3;box-shadow:var(--highlight),inset 0 0 2px 1px #bb0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.5),rgba(0,0,0,.5) 10px,rgba(56,56,0,.5) 10px,rgba(48,48,0,.5) 20px) repeat center center/400% !important}
 
 /* tunnel build status */
 .tunnelBuildStatus{color:#ee9}
