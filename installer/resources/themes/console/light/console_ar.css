@@ -1,4 +1,4 @@
-/* I2P Theme:Light */
+/* I2P Theme: Light */
 /* Description:RTL Light blue highlights for Arabic locale. */
 /* Author: dr|z3d */
 
@@ -61,10 +61,8 @@ th a.script{float:left}
 #stats form{margin:0}
 
 /* sidebar */
-#sb_logo img{margin-right:-5px}
 .sb{margin-bottom:4px}
 .sb h4{text-align:center}
-#sb_wrap{margin-right:-1px}
 .logo{float:right}
 .percentBarInner{border-left:1px solid #afafcf;border-right:none}
 .percentBarOuter{margin:-4px -3px -4px -5px;background:linear-gradient(to left,rgba(0,255,0,.05) 50%,rgba(255,255,0,.05) 75%,rgba(255,128,0,.05) 90%,rgba(255,0,0,.1)),repeating-linear-gradient(90deg,rgba(180,180,255,.7) 1px,rgba(180,180,255,.7) 2px,rgba(221,221,255,.7) 2px,rgba(221,221,255,.7) 4px)}
@@ -81,7 +79,10 @@ th a.script{float:left}
 .sb_info .percentBarText{padding-top:1px;direction:ltr}
 .sb_updatestatus,.sb_info .percentBarText{font-size:9pt}
 .tunnelBuildStatus::before{margin-left:4px;width:4px;height:9px}
+#sb_logo img{margin-right:-5px}
+#sb_wrap{margin-right:-1px}
 #sidebar{margin-right:-21px}
+#sidebar h3{text-align:center!important}
 #sidebar td:first-child,#sb_localtunnels td:nth-child(2){text-align:right}
 #sidebar td.digits{text-align:left}
 #sidebar #sb_services td{text-align:right}
@@ -108,19 +109,19 @@ div.joblog li{text-align:left;direction:ltr}
 #eventlog{margin-left:-16px;margin-right:0}
 
 /* home / sitemap */
+table.search{margin-top:-26px;margin-bottom:15px}
 table.search td:nth-child(2){padding:0 10px 0 0}
 table.search td:nth-child(3){padding:0 2px 0 8px}
 input.search[type=text],input.search[type=text]:focus{background-position:right 4px center;padding:5px 24px 5px 5px}
 button.search,input[type=submit],input[type="reset"],button.search:hover,input[type=submit]:hover,input[type="reset"]:hover,button.search:focus,input[type=submit]:focus,input[type="reset"]:focus,button.search:active,input[type=submit]:active,input[type="reset"]:active{background-position:right 10px center!important;padding:6px 28px 6px 12px!important}
-table.search{margin-top:-26px;margin-bottom:15px}
 .search td{padding-top:4px;padding-bottom:0}
-#home{padding-bottom:10px}
-#applinks{margin-top:15px;background:url(images/favicon.svg) no-repeat 10px center/16px,var(--title_ar)}
-#sitelinks{clear:left;margin-top:10px;background:var(--planet) no-repeat 10px center/16px,var(--title_ar)}
-#applinks,#sitelinks,#news h3,.news h3{background-position:right 7px center,right center,right center;padding:6px 30px 6px 10px;direction:ltr}
-#applinks a,#sitelinks a{float:left}
 .applabel a{font-size:11pt}
 .applink:hover .appicon .extlink::after{left:-1px;right:auto;border-radius:2px 0 2px 0}
+#applinks,#sitelinks,#news h3,.news h3{background-position:right 7px center,right center,right center;padding:6px 30px 6px 10px;direction:ltr}
+#applinks a,#sitelinks a{float:left}
+#applinks{margin-top:15px;background:url(images/favicon.svg) no-repeat 10px center/16px,var(--title_ar)}
+#home{padding-bottom:10px}
+#sitelinks{clear:left;margin-top:10px;background:var(--planet) no-repeat 10px center/16px,var(--title_ar)}
 
 /* news */
 div.news h3,#news h3,#newspage #news h3{padding:5px 30px 5px 10px;background:var(--news) no-repeat right 8px center/15px,var(--title_ar)}
@@ -222,9 +223,9 @@ td.optionsave,#peerdefs td:first-child{text-align:left}
 #clientconfig{margin:0 -32px 5px}
 #clientconfig th:first-child,#clientconfig td:first-child,#webappconfig th:first-child,#webappconfig td:first-child{text-align:left}
 #clientconfig td:nth-child(2),#clientconfig td:nth-child(3){text-align:center}
-#config_advanced form,#config_bandwidth form,#config_keyring form,#config_network form,#config_reseed form,#config_ui form{margin: 0 16px 0 -16px}
+#config_advanced form,#config_bandwidth form,#config_keyring form,#config_network form,#config_reseed form,#config_ui form{margin:0 16px 0 -16px}
 #config_advanced .wideload{margin-left:0;margin-right:0}
-#config_homepage form{margin: 0 16px 0 -16px}
+#config_homepage form{margin:0 16px 0 -16px}
 #config_homepage form:last-of-type{margin-bottom:-18px}
 #config_homepage.main input.delete{float:right}
 #config_keyring form h3,#config_update form h3,form h3{margin-right:-16px;margin-left:16px}
@@ -242,8 +243,8 @@ td.optionsave,#peerdefs td:first-child{text-align:left}
 #config_reseed #reseedurl:hover,#installPluginUrl:hover{background:#ffd var(--link) no-repeat right 10px center;background-size:28px 28px}
 #config_reseed #reseedzip:hover,#installPluginFile:hover{background:#ffd var(--files) no-repeat right 10px center;background-size:28px 28px}
 #config_service p.infohelp{margin-right:-16px;margin-left:16px}
-#config_service form{margin: 0 12px 12px -19px}
-#config_stats form{margin: 0 16px 0 -16px}
+#config_service form{margin:0 12px 12px -19px}
+#config_stats form{margin:0 16px 0 -16px}
 #config_stats .tabletitle{margin-left:16px;margin-right:-16px}
 #statconfig {margin:0 -16px}
 #configstats td:first-child{text-align:center}
@@ -297,7 +298,7 @@ textarea#advancedsettings,#i2pupdates textarea,#addkeyring textarea,#reseedconfi
 #updateplugins{margin:0}
 #webappconfigactions{margin-left:0;margin-right:0}
 #webappconfig th:nth-child(2),#webappconfig td:nth-child(2),#webappconfig th:nth-child(3),#webappconfig td:nth-child(3){text-align:center}
-#tunnelconfigsave{margin: -22px 0 2px!important}
+#tunnelconfigsave{margin:-22px 0 2px!important}
 #sidebarconf{margin:0 0 5px}
 #sidebardefaults{margin:-6px 0 3px}
 
