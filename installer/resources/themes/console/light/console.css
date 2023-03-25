@@ -14,6 +14,7 @@
 }
 
 /* globals */
+*::after,*::before,button,.applink,.confignav,.graphspanel,h1,h2,h3,h4,img,.langselect,.newsAuthor,.sb_netstatus,.sybil_routerinfo th img,.themechoice,.tunnelbuildstatus,.viewfullentry,#graphopts,#netdbcountrylist img,#newsDisplay,#sb_advanced,#sb_help,#sb_internals,#sb_services,#sidebar a,#sidebar form,#sidebar h3,#sidebar img[src$="i2plogo.png"],#themeoptions,#version a{user-select:none}
 html{margin:0}
 body,input,button,select,#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{font-family:var(--bodyfont)}
 body{margin:6px;line-height:1.3;text-align:center;font-size:9pt;background:var(--bodybg) url(images/tile2.png) top left/32px}
@@ -62,6 +63,7 @@ ul{margin:20px 0;padding:0}
 .applink a:focus,.applink a:visited:focus,#sitemap a:link:focus,#sitemap a:visited:focus,.warning a:focus{color:var(--hover)}
 .clearer{clear:left;height:0;line-height:0}
 .hide,.hideme{display:none}
+.lastrow:not(:last-of-type) td,#config_bandwidth #bandwidthconfig td,#config_peers td,#config_stats td,#config_ui td,#config_update td,#debug .debug_section td,#enviro tr:last-child td,#externali2cp td,#jobstats tr:last-child td,#netconfig td,#netdblookup tr:nth-last-child(2) td,#netdblookup tr:nth-last-child(4) td,#pluginconfig td,#routerinformation tr:last-child td,#schedjobs tr:last-child td{border-bottom:var(--border_inner)}
 .links code,#console code{margin:0 1px;padding:1px 4px;color:#910;font-size:8.5pt;font-weight:700;border-radius:4px;box-shadow:inset 0 0 0 1px #eef;background:#eef;user-select:all}
 .links code::selection,#console code::selection{background:#900}
 .links li:first-child{padding-top:0}
@@ -77,7 +79,6 @@ ul{margin:20px 0;padding:0}
 #news a+tt{margin-left:4px}
 #peers img[src$="bound.svg"],#profiles img[src$="bound.svg"],#tunnels img[src$="bound.svg"]{opacity:0}
 #routerinformation .h3navlinks a,#config_logging .h3navlinks a{margin-top:-7px}
-#sidebar a,#sidebar img[src$="i2plogo.png"],#sidebar h3,.confignav,*::before,*::after,.applink,.themechoice,.langselect,.newsAuthor,#netdbcountrylist img,.viewfullentry,.sybil_routerinfo th img,.graphspanel,#themeoptions,#graphopts,#newsDisplay,#version a,#sb_internals,#sb_advanced,#sb_services,#sb_help,.sb_netstatus,.tunnelbuildstatus,#sidebar form,h1,h2,h3,h4,button,img{user-select:none}
 
 /* sidebar */
 h4.sb_info+hr+form{margin-bottom:-1px;padding-top:5px}
@@ -477,18 +478,17 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #enviro tr,.configtable tr,#pluginconfig table tr,#graphs tr,#netdb tr,#routerinformation tr{background:var(--row_even);box-shadow:var(--highlight)}
 #enviro,.configtable,#graphs table,#netdb table,#routerinforamation table{box-shadow:inset 0 0 4px 2px #eef;background:var(--table)}
 #bandwidthconfig tr{box-shadow:var(--highlight),inset 0 0 2px 2px #f2f2ff,inset 0 0 0 3px #eef;background:#f4f4ff}
+#enviro td,#jardump td,#jardump th,#jobstats td,#routerinformation td{border-top:var(--border_soft);border-bottom:var(--border_soft)}
+#enviro td,#routerinformation td{padding-top:6px;padding-bottom:6px}
 #enviro td:first-child,#routerinformation td:first-child{padding-right:5px;padding-left:10px;width:1%;min-width:70px;white-space:nowrap;text-align:right}
+#enviro tr:first-child td,#jobstats tr:first-child td,#routerinformation tr:first-child td{border-top:var(--border_inner)}
 #enviro #revision{padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
 #routerinformation{padding-top:4px}
-#routerinformation td,#enviro td,#jobstats td,#jardump td,#jardump th{border-top:var(--border_soft);border-bottom:var(--border_soft)}
-#enviro td,#routerinformation td{padding-top:6px;padding-bottom:6px}
 #routerinformation td:first-child{min-width:90px;padding-top:8px;padding-bottom:8px}
 #routerinformation #portmapper th,#routerinformation #portmapper td:nth-child(n+2){text-align:center}
 #routerinformation #revision:active{color:#d30;border:none;box-shadow:none;background:none}
 #routerinformation tr:nth-child(n+2) a:not(#revision){font-size:90%;margin:-1px 0 -1px 2px;display:none}
 #routerinformation table:hover tr:nth-child(n+2) a{display:inline}
-#routerinformation tr:first-child td,#enviro tr:first-child td,#jobstats tr:first-child td,#jobs #jobstats tr:last-child td{border-top:var(--border_inner)}
-#routerinformation tr:last-child td,#enviro tr:last-child td,#jobstats tr:last-child td,#jobs #jobstats tr:nth-last-child(2) td,.lastrow:not(:last-of-type) td,#config_bandwidth #bandwidthconfig td,#externali2cp td,#netconfig td,#config_peers td,#pluginconfig td,#config_stats td,#config_ui td,#config_update td,#debug .debug_section td,#netdblookup tr:nth-last-child(2) td,#netdblookup tr:nth-last-child(4) td,#schedjobs tr:last-child td{border-bottom:var(--border_inner)}
 #routerinformation code{font-size:105%}
 #routerinformation h2{margin-top:12px;margin-bottom:-2px}
 #enviro td:last-child b,#routerinformation td:last-child b{margin-right:1px}
@@ -2686,6 +2686,7 @@ tt{margin-left:0;margin-right:3px;letter-spacing:.1em}
 #sb_advancedgeneral,#sb_bandwidth,#sb_general,#sb_peers,#sb_peersadvanced,#sb_queue,#sb_shortgeneral,#sb_tunnels{margin-top:-12px;margin-bottom:-6px}
 #sb_advanced:not(.collapsed){margin-bottom:-7px}
 #sb_bandwidth,#sb_peers,#sb_tunnels{margin-bottom:-8px}
+#sb_internals:not(.collapsed){margin-bottom:-4px}
 #sb_graphcontainer:not([hidden]){height:44px}
 #sb_localtunnels a{max-width:188px}
 #sb_localtunnels td:first-child,#sb_localtunnels tr:hover td:first-child{background-size:17px}
