@@ -12,8 +12,8 @@ code{text-align:right}
 h1,h2 ,h3,h4{direction:rtl;text-align:right}
 h2,h3{background:linear-gradient(180deg,#fff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(to left,#fff 5%,rgba(231,231,255,.8) 15%)}
 h2{font-size:16pt}
-h3{font-size:13pt;padding-right:10px}
-form{text-align:right;margin:0 16px 0 -16px}
+h3{font-size:13pt;padding-right:10px;text-align:right!important}
+form{text-align:right;margin:0}
 input[type="file"]:hover{border-radius:15px 0 0 15px;background:linear-gradient(to left,rgba(255,255,255,0),#dda)}
 label{text-align:right;display:inline-block}
 pre{text-align:right}
@@ -31,6 +31,7 @@ td{text-align:right}
 #debug h2{background:var(--bug) no-repeat 6px center,linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(to left,#fcfcff 5%,rgba(231,231,255,.8) 25%);background-size:20px,100%,100%}
 #help pre,#logs li,#proof textarea{text-align:left;direction:ltr}
 #portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:center}
+#tunnels .cells, #tunnel_defs td:nth-child(n+3), .cells, .cells td, #profilelist tbody td:not(:first-child), #profile_defs td:not(:first-child), #floodfills td:not(:first-child), #debug td:not(:first-child), #jardump td:not(:first-child), #jobstats td:not(:first-child), #eventlog td:not(:first-child), #webappconfig td:not(:first-child), #tunnelconfig td:not(:first-child), #sidebarconf td:not(:first-child), #configstats td:not(:first-child), #loggingoptions td:not(:first-child), #addkeyring td:not(:first-child), .homelinkedit td:not(:first-child), #clientconfig td:not(:first-child), .netdbentry td:not(:first-child), #netdblookup td:not(:first-child), #peerdefs td:not(:first-child), #help td:not(.infohelp):not(.infowarn), #pluginconfig td:not(:first-child), #thresholds td:not(:first-child), #leasesetdebug td:not(:first-child), #enviro td:not(:first-child), #routerinformation td:not(:first-child), #udpconnections tbody td:nth-child(n+2) {border-left:var(--border_inner)}
 
 /* page headings */
 h1{margin:0 212px -15px 0;padding:16px 20px 15px 10px;background:var(--h1_network) no-repeat 8px center,var(--ht_rtl)}
@@ -50,9 +51,9 @@ h1.webapp{background:var(--h1_webapp) no-repeat right 10px center,var(--h1_rtl)}
 h1[class]{padding-right:48px;background-position:right 10px center;background-size:34px auto,100%,100%,100%}
 
 button,input[type=submit],input[type="reset"]{display:inline-block;line-height:120%;font-size:10pt}
-div.wideload{margin-left:-16px;margin-right:16px}
+div.wideload{margin-left:-32px;margin-right:32px}
 th a.script{float:left}
-.h3navlinks{float:left}
+.h3navlinks{float:left;display:none}
 .links code{font-size:10pt}
 .tab,.tab2{display:inline-block;font-size:11pt;margin-top:-5px;padding-top:6px;padding-bottom:6px}
 .tab a{padding:0 5px;display:inline}
@@ -65,6 +66,7 @@ th a.script{float:left}
 .sb h4{text-align:center}
 #sb_wrap{margin-right:-1px}
 .logo{float:right}
+.percentBarInner{border-left:1px solid #afafcf;border-right:none}
 .percentBarOuter{margin:-4px -3px -4px -5px;background:linear-gradient(to left,rgba(0,255,0,.05) 50%,rgba(255,255,0,.05) 75%,rgba(255,128,0,.05) 90%,rgba(255,0,0,.1)),repeating-linear-gradient(90deg,rgba(180,180,255,.7) 1px,rgba(180,180,255,.7) 2px,rgba(221,221,255,.7) 2px,rgba(221,221,255,.7) 4px)}
 .sb h3 a{font-size:120%}
 .sb h3,.sb h4{text-align:center}
@@ -109,7 +111,7 @@ div.joblog li{text-align:left;direction:ltr}
 table.search td:nth-child(2){padding:0 10px 0 0}
 table.search td:nth-child(3){padding:0 2px 0 8px}
 input.search[type=text],input.search[type=text]:focus{background-position:right 4px center;padding:5px 24px 5px 5px}
-button.search,input[type=submit],input[type="reset"],button.search:hover,input[type=submit]:hover,input[type="reset"]:hover,button.search:focus,input[type=submit]:focus,input[type="reset"]:focus,button.search:active,input[type=submit]:active,input[type="reset"]:active{background-position:right 10px center;padding:6px 28px 6px 12px}
+button.search,input[type=submit],input[type="reset"],button.search:hover,input[type=submit]:hover,input[type="reset"]:hover,button.search:focus,input[type=submit]:focus,input[type="reset"]:focus,button.search:active,input[type=submit]:active,input[type="reset"]:active{background-position:right 10px center!important;padding:6px 28px 6px 12px!important}
 table.search{margin-top:-26px;margin-bottom:15px}
 .search td{padding-top:4px;padding-bottom:0}
 #home{padding-bottom:10px}
@@ -207,20 +209,29 @@ td.optionsave,#peerdefs td:first-child{text-align:left}
 .main[id^="config_"] select,.main[id^="config_"] textarea,.main[id^="config_"] .optbox{margin-right:3px}
 .optionsingle p{padding:15px 55px 15px 15px}
 .optionsingle table{margin-right:0}
-.sub-option label{min-width:0;width:auto}
-.sub-option .optbox,#config_update .suboption .optbox{margin-right:0;margin-left:5px}
+.suboption{margin-right:0!important}
+.suboption label{min-width:0;width:auto}
+.suboption .optbox,#config_update .suboption .optbox{margin-right:0;margin-left:5px}
 .themelabel{padding:3px;font-size:10pt;font-weight:700}
 #addkeyring tr:last-child td{text-align:left}
 #bandwidthconfig td:first-child:not(.infohelp){padding:0 5px 0 80px;background:url(/themes/console/images/info/arrow_left.png) no-repeat 30px center}
 #bannedips,#banlist{margin-left:0;margin-right:0}
 #bannedips,#bannedips table{direction:ltr}
 #browserstart{margin-bottom:15px}
-#clientconfig,#webappconfig{margin-right:-32px}
+#clientconfig,#webappconfig{margin-right:0}
+#clientconfig{margin:0 -32px 5px}
 #clientconfig th:first-child,#clientconfig td:first-child,#webappconfig th:first-child,#webappconfig td:first-child{text-align:left}
 #clientconfig td:nth-child(2),#clientconfig td:nth-child(3){text-align:center}
+#config_advanced form,#config_bandwidth form,#config_keyring form,#config_network form,#config_reseed form,#config_ui form{margin: 0 16px 0 -16px}
 #config_advanced .wideload{margin-left:0;margin-right:0}
-#config_homepage.main input.delete{float:right;margin-top:5px}
+#config_homepage form{margin: 0 16px 0 -16px}
+#config_homepage form:last-of-type{margin-bottom:-18px}
+#config_homepage.main input.delete{float:right}
 #config_keyring form h3,#config_update form h3,form h3{margin-right:-16px;margin-left:16px}
+#config_logging form,#config_update form{margin:0 10px -18px -20px}
+#config_network .infohelp{margin:1px -16px -2px 16px}
+#config_update form{margin-bottom:0}
+#config_logging h3 a::before, #webappconfiguration a::before, #routerinformation #version a::before, #i2pclientconfig a::before, #pluginmanage a::before {background-position:right center}
 #config_plugins{overflow:hidden}
 #config_plugins .wideload{margin-bottom:22px}
 #config_reseed .confignav+.infohelp+form{margin-left:-16px;margin-right:16px}
@@ -231,9 +242,12 @@ td.optionsave,#peerdefs td:first-child{text-align:left}
 #config_reseed #reseedurl:hover,#installPluginUrl:hover{background:#ffd var(--link) no-repeat right 10px center;background-size:28px 28px}
 #config_reseed #reseedzip:hover,#installPluginFile:hover{background:#ffd var(--files) no-repeat right 10px center;background-size:28px 28px}
 #config_service p.infohelp{margin-right:-16px;margin-left:16px}
+#config_service form{margin: 0 12px 12px -19px}
+#config_stats form{margin: 0 16px 0 -16px}
+#config_stats .tabletitle{margin-left:16px;margin-right:-16px}
+#statconfig {margin:0 -16px}
 #configstats td:first-child{text-align:center}
 #configstats td:nth-child(2){padding-right:10px;direction:ltr}
-#config_service form{margin: 0 12px 12px -19px}
 #config_summarybar table.configtable{margin-right:0}
 #config_ui.main .langselect .optbox,#config_ui.main .langselect .optbox:hover,#config_ui.main .langselect .optbox:focus{margin-left:0;margin-right:-2px}
 #config_ui.main .themechoice .optbox{margin-left:0;margin-right:-38px}
@@ -243,13 +257,13 @@ td.optionsave,#peerdefs td:first-child{text-align:left}
 #consolepass tr:first-child td,p#clientconf.infohelp,p#webappconfigtext.infohelp,#floodfillconfig .infohelp,#bandwidthconfig tr:first-child .infohelp,h3#shutdownrouter+p.infohelp,h3#restartrouter+p.infohelp,h3#systray+p.infohelp,h3#servicedebug+p.infohelp,h3#browseronstart+p.infohelp,#addkeyring td:first-child,#config_peers tr:nth-child(3) td.infohelp,#config_reseed.main p.infohelp,#plugininstall tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(5) td:nth-last-child(2),#plugininstall2 tr:nth-child(2) td:nth-last-child(2),#manualreseed tr:nth-last-child(2) td.infohelp,p#enablefullstats,p#gatherstats,p#pluginconfigtext,#plugininstall .infohelp,#config_family .infohelp,#joinfamily tr:nth-child(3) td:first-child,#newfamily tr:last-child td:first-child,#config_summarybar .configtable td:not(.optionsave),#bugreports td.infohelp{background-position:right 12px center;padding:15px 50px 15px 15px}
 .formaction#clientsconfig,.formaction#pluginconfig{margin-left:32px;margin-right:-32px;margin-bottom:15px}
 .formaction#submitconsolepass,.formaction#tunnelconfigsave,.formaction#homeapps,.formaction#homesites,#sidebardefaults,#loggingoptions,#reseedconfig,#addkeyring,#netconfig,#advconf,#bandwidthconfig,#externali2cp,#newfamily,#webappconfigactions,#configstats{margin-bottom:15px}
+#externali2cp,#tunnelconfig{margin:0 0 10px}
 form[action="configpeer"]>h3.tabletitle{margin-left:16px;margin-right:-16px}
 form[action="configpeer"]{margin-left:-16px;margin-right:16px}
 h3#advancedconfig a,h3#bwlimiter a,h3.tabletitle a,h3.ptitle a,th a.script,th#upnpconfig a,h3#graphinfo a,h3#graphdisplay a{float:left}
 #helptranslate{padding:20px 20px 20px 20px;text-align:right;background:var(--infohelp) no-repeat right 14px center/28px}
-#i2pupdates input[type=text]:not([readonly]),#i2pupdates textarea,.main[id^="config_"] textarea,input[name="newsURL"]{width:calc(100% - 10px)}
-#i2pupdates td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"]{text-align:left}
-#i2pupdates td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"]{text-align:right}
+#i2pupdates input[type=text]:not([readonly]),#i2pupdates textarea,.main[id^="config_"] textarea,input[name="newsURL"]{width:calc(100% - 208px)}
+#i2pupdates td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"],#loggingoptions td:first-child{text-align:left}
 .infohelp#webappconfig,h3#webappconfiguration,#pluginconfig,h3#pconfig{margin-right:0}
 #installPluginUrl,#installPluginFile,#reseedzip,#reseedcreatefile{padding:5px 55px 0 5px}
 #joinfamily tr:nth-child(3) td:first-child,#newfamily tr:last-child td:first-child{padding:5px}
@@ -261,11 +275,13 @@ h3#advancedconfig a,h3#bwlimiter a,h3.tabletitle a,h3.ptitle a,th a.script,th#up
 #pluginconfig{margin-right:-32px}
 #pluginconfig table th:nth-child(2),#pluginconfig table td:nth-child(2){text-align:right}
 #pluginconfigtext+form{float:left;margin-left:8px}
+#pluginconfigtext input{margin:-6px -6px 0 -6px;float:left}
 #pluginconfig th:first-child,#pluginconfig td:first-child{min-width:100px;white-space:normal;text-align:left;padding-right:5px}
 #pluginconfig th:nth-child(2),#pluginconfig th:nth-child(3),#pluginconfig td:nth-child(2),#pluginconfig td:nth-child(3){text-align:center}
 #plugininstall,#plugininstall2{margin:0 0 0 -16px}
 #plugininstall,#plugininstall2{margin-right:0}
 #reseedurl input[type=text],#reseedzip input[type="file"],#reseedcreatefile p{width:calc(100% - 20px)}
+#routerinformation .h3navlinks a, #config_logging .h3navlinks a{padding:12px}
 #sidebarconf td:last-child{text-align:right;padding-left:10px}
 #sidebarconf td:nth-last-child(2){text-align:left}
 #sidebarconf th:last-child{text-align:center}
@@ -279,8 +295,11 @@ textarea#advancedsettings,#i2pupdates textarea,#addkeyring textarea,#reseedconfi
 #tunnelconfig td:nth-child(n+2){text-align:right}
 #updateHelper b,#updateProxyHostPort b,#i2pupdates b{text-align:left}
 #updateplugins{margin:0}
-#webappconfigactions{margin-left:32px;margin-right:-32px}
+#webappconfigactions{margin-left:0;margin-right:0}
 #webappconfig th:nth-child(2),#webappconfig td:nth-child(2),#webappconfig th:nth-child(3),#webappconfig td:nth-child(3){text-align:center}
+#tunnelconfigsave{margin: -22px 0 2px!important}
+#sidebarconf{margin:0 0 5px}
+#sidebardefaults{margin:-6px 0 3px}
 
 /* logs */
 .logtable tr:first-child td{direction:ltr;text-align:right}
