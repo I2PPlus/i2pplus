@@ -97,6 +97,8 @@ h4.sb_info{margin-top:-11px}
 #sb_advancedgeneral td:first-child,#sb_general td:first-child,#sb_shortgeneral td:first-child{max-width:130px}
 #sb_advanced a,#sb_help a,#sb_internals a{padding:2px;display:inline-block;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #sb_advanced a:hover,#sb_help a:hover,#sb_internals a:hover{background:#ffd;border-radius:3px}
+#sb_advancedgeneral[hidden]~#sb_updatesection{margin-bottom:-2px}
+#sb_advancedgeneral:not([hidden])~#sb_updatesection{margin-bottom:-5px}
 #sb_internals{margin-bottom:-4px}
 #sb_internals td{padding:0}
 #sb_localtunnels:not([hidden])+#localtunnelSummary{display:none}
@@ -222,7 +224,8 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_advanced:not(.collapsed)~#sb_peers_condensed,#sb_advanced:not(.collapsed)~#sb_tunnels_condensed{margin-bottom:-10px}
 #sb_advanced:not(.collapsed)~#sb_routerControl{padding-bottom:2px}
 #sb_advanced:not(.collapsed)~#sb_tunnelstatus{margin-bottom:-7px}
-#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
+#sb_advancedgeneral[hidden]~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-7px}
+#sb_advancedgeneral:not([hidden])~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
 #sb_updatesection.collapsed>h3.collapsed::before{display:inline-block;min-height:16px;vertical-align:middle;content:""}
 #sb_updatesection.collapsed>*:not(h3){display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}
@@ -932,7 +935,7 @@ button.download.control{background:var(--download) no-repeat center center/14px,
 button.download.control:hover,button.download.control:focus{background:var(--download_hover) no-repeat center center/14px,var(--btn_hover)}
 
 /* sidebar buttons */
-#updateAvailable{margin:-2px 0 7px;width:100%;display:inline-block;line-height:1.2;font-size:9pt;opacity:.9}
+#updateAvailable{margin:-4px 0 7px;width:100%;display:inline-block;line-height:1.2;font-size:9pt;opacity:.9}
 #updateAvailable+br+button+br+#updateAvailable::before{margin:2px 0 4px;width:calc(100% - 20px);height:1px;display:inline-block;background:#ddf;content:""}
 #updateAvailable+br+button+br+#updateAvailable{margin-top:8px}
 #sidebar button{margin:0 1px -3px;min-width:87px}
@@ -2695,7 +2698,7 @@ tt{margin-left:0;margin-right:3px;letter-spacing:.1em}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0 0 2px}
 #sb_peers[hidden]+#sb_peers_condensed,#sb_tunnels[hidden]+#sb_tunnels_condensed{width:239px}
 #sb_services{width:242px}
-#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-7px}
+#sb_advancedgeneral.collapsed~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
 #sb_warning+.sb_notice{margin-bottom:-6px}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
