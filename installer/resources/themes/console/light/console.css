@@ -144,7 +144,7 @@ h4.sb_info{margin-top:-11px}
 #sidebar h3:active .badge,#sidebar h3:active .toggleSection{display:none}
 #sidebar h3:active .toggleSection{opacity:0}
 #sidebar h4{margin:-7px;padding:6px 2px;line-height:1.05;font-size:8.5pt;letter-spacing:0;text-transform:none;color:#4f617f;text-decoration:none;border:none;border-radius:0;box-shadow:inset 0 0 0 1px #eef;background:linear-gradient(90deg,#ddf,#eef 10%,#fff 50%,#eef 90%,#ddf)}
-#sidebar h4::after{padding-top:8px;padding-bottom:8px;content:"";display:inline-block;box-sizing:border-box;min-height:12px;vertical-align:middle}
+/*#sidebar h4::after{padding-top:8px;padding-bottom:8px;content:"";display:inline-block;box-sizing:border-box;min-height:12px;vertical-align:middle}*/
 #sidebar h4 a{vertical-align:baseline}
 #sidebar hr{margin:8px -7px;height:1px;border-bottom:1px solid #afafcf;box-shadow:inset 0 1px 1px 1px #fff;background:#adadeb}
 #sidebar hr.b{margin-bottom:5px;height:0;border-bottom:1px solid transparent;background:transparent}
@@ -225,6 +225,9 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
+#sb_advanced:not(.collapsed)~#sb_peers_condensed,#sb_advanced:not(.collapsed)~#sb_tunnels_condensed{margin-bottom:-10px}
+#sb_advanced:not(.collapsed)~#sb_routerControl{padding-bottom:2px}
+#sb_advanced:not(.collapsed)~#sb_tunnelstatus{margin-bottom:-7px}
 #sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
 #sb_updatesection.collapsed>h3.collapsed::before{display:inline-block;min-height:16px;vertical-align:middle;content:""}
 #sb_updatesection.collapsed>*:not(h3){display:none}
@@ -347,7 +350,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar .running,.tunnelBuildStatus.active{border:1px solid #595;background:rgba(220,255,220,.15);box-shadow:inset 0 0 1px 0 rgba(0,255,0,.5),0 0 1px rgba(96,96,96,.5)}
 
 /* tunnel build status */
-.tunnelBuildStatus{padding:6px 3px 8px;color:#393}
+.tunnelBuildStatus{padding:6px 3px;color:#393}
 .tunnelBuildStatus::before{margin:-3px 0 -1px;width:16px;height:16px;display:inline-block;vertical-align:middle;border-radius:50%;content:"";transform:scale(.7)}
 .tunnelBuildStatus.accepting::before{background:var(--tunn_ready) no-repeat center center/15px}
 .tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) no-repeat center center/15px}
