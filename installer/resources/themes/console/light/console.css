@@ -1210,7 +1210,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #peercount a img,#participating a img{opacity:0}
 #tunnelPeerCount .configpeer{margin:0;display:inline-block}
 #tunnelPeerCount td:first-child span{margin:0 1px;vertical-align:middle}
-#tunnelPeerCount tr:not(:last-child):hover td{background:#ffe}
+#tunnelPeerCount tr:not(:last-child):hover td:not(.rif):not(.rih):not(.rbw){background:#ffe}
 #tunnelPeerCount td{max-width:none;min-width:0;white-space:nowrap;text-align:center}
 #tunnelPeerCount td:first-child{width:1%}
 #tunnelPeerCount td:nth-child(5) a{white-space:normal;word-break:break-all}
@@ -1222,17 +1222,16 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 
 /* banned peers */
 #banlist{padding:5px 5px 3px 0;display:block;border:var(--border_inner);border-radius:2px;background:#fafaff;text-align:center;columns:328px auto;column-gap:0}
-#profiles #banlist{margin:-3px 0 2px -5px;padding:0;border:none;background:none}
-#banlist li{margin:3px 0 2px 5px;padding:3px 3px 3px 5px;min-width:calc(100% - 13px);min-height:34px;display:inline-block;position:relative;line-height:1.2;list-style:none;box-shadow:0 0 0 1px #ccd,var(--highlight),inset 0 0 8px 3px rgba(232,232,255,.6);background:linear-gradient(180deg,#fff,#f8f8ff);-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
-#config_peers #banlist li{margin:0 -2px 5px 5px}
+#banlist li{margin:3px 0 2px 5px;padding:3px 3px 3px 5px;min-width:calc(100% - 13px);min-height:42px;display:inline-block;position:relative;line-height:1.2;list-style:none;box-shadow:0 0 0 1px #ccd,var(--highlight),inset 0 0 8px 3px rgba(232,232,255,.6);background:linear-gradient(180deg,#fff,#f8f8ff);-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 #banlist li:hover{background:#ffe}
 #banlist li a[href^="configpeer"]{padding:2px 2px 1px 0;position:absolute;top:0;right:0;line-height:0;border-left:1px solid #ccd;border-bottom:1px solid #ccd;border-radius:0 0 0 2px;box-shadow:var(--highlight),inset 0 0 1px 1px #ffe;background:#fff;filter:none}
 #banlist li a[href^="configpeer"]:hover,#banlist li a[href^="configpeer"]:focus{box-shadow:inset 0 0 0 1px var(--hover)}
 #banlist li a[href^="configpeer"]:active{background:var(--hover);box-shadow:inset 3px 3px 3px 1px #5f2400}
-#banlist li{min-height:42px}
 #banlist li hr{margin:3px 4px 3px 0;background:linear-gradient(90deg,#ccd 70%,rgba(0,0,0,0));opacity:.75}
 #bannedips table tr{box-shadow:var(--highlight)}
 #bannedips table td{background:rgba(240,240,255,.4)}
+#config_peers #banlist li{margin:0 -2px 5px 5px}
+#profiles #banlist{margin:-3px 0 2px -5px;padding:0;border:none;background:none}
 
 /* peers - sort icons */
 .sortup,.sortdown,.sortupactive,.sortdownactive{margin:3px 1px 0;padding:1px;width:16px;height:12px;display:inline-block;vertical-align:middle;text-align:center;border:var(--border_input);border-radius:2px;background-size:9px auto,100%}
@@ -1247,9 +1246,10 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 .sortupactive{background:var(--mv_up_hover) no-repeat center calc(50% + 1px)/12px 10px,#fff}
 .sortdownactive{background:var(--mv_down_hover) no-repeat center calc(50% + 1px)/12px 10px,#fff}
 
+.infohelp,.infowarn,#configinfo,#peerdefs,#profile_defs,#thresholds{font-size:9pt}
+.reachable{min-width:20px}
+#peers th,#tunnels th{text-align:center;font-size:90%}
 #udpconnections th{vertical-align:top;padding-top:3px}
-#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn{font-size:9pt}
-#tunnels th,#peers th{text-align:center;font-size:90%}
 
 /* profiles */
 .profilegroup{margin:2px 0 2px 10px;display:inline-block}
@@ -1275,8 +1275,6 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #profilelist td:nth-child(2) span,#profilelist td:nth-child(3) span,#floodfills .tier{margin:0 2px;padding:1px 4px;min-width:20px;display:inline-block;box-sizing:border-box;vertical-align:middle;text-align:center;border:1px solid #bbd;line-height:1.3}
 #floodfills td:empty::before,#ntcpconnections td:empty::before,#udpconnections td:empty::before,#profilelist td:empty::before,#tunnels .cells:empty::before{width:100%;display:inline-block;text-align:center;opacity:.8;content:"‒"}
 #floodfills td:nth-child(3) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;text-align:right}
-.reachable{min-width:20px}
-
 #profilelist{margin-bottom:15px}
 #profilelist th,#profilelist td,#floodfills th,#floodfills td{text-align:center}
 #profilelist tr:first-child td,#profile_defs tr:first-child td{border-top:var(--border_inner)}
@@ -1290,7 +1288,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span{min-width:40px}
 #profilelist td[colspan="10"],#profilelist td[colspan="10"]:hover{padding:0;background:#77f}
 #profilelist .nospeed{text-align:center}
-#profilelist .lowlatency,#profilelist .highlatency{font-size:120%;color:var(--ink_code)}
+#profilelist .lowlatency,#profilelist .highlatency{font-size:105%;color:var(--ink_code)}
 #profilelist .highlatency{color:#900}
 #profilelist .fast,#profilelist .highcap,#profilelist .integrated,#profilelist .standard,#profilelist .fast.integrated,#profilelist .highcap.integrated,#profilelist .standard.integrated{width:56px;height:16px;display:inline-block;font-size:0;background-size:16px}
 #profilelist .fast{background:var(--fast) no-repeat calc(50% - 10px) center,var(--highcap) no-repeat calc(50% + 10px) center}
