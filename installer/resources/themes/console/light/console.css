@@ -702,8 +702,8 @@ div[id^="config"] tr:last-child td,#events tr:last-child td,#profiles tr:last-ch
 .applink table{background:none;border:none;margin:auto;width:auto}
 .applink tr{background:none;border:none;margin:0}
 #home .applink td{background:none;border:none;padding:0}
-.applink,.applabel,.sitemapLink,.sitemapLabel,#sitemap .applink,.themechoice,.themelabel,.langselect,.ui_lang{border-color:#a7a7be}
-.applink{margin:3px;padding:0;position:relative;float:left;width:160px;text-align:center;border:var(--border_inner);border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #eef,0 0 1px #ddf;background:#f8f8ff}
+.applink,.applabel,.sitemapLink,.sitemapLabel,#sitemap .applink,.themechoice,.themelabel,.langselect,.ui_lang{border-color:#c4c4d4}
+.applink{margin:3px;padding:0;position:relative;float:left;width:160px;text-align:center;border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #eef,0 0 1px #ddf;background:#f8f8ff}
 .applink:active .applabel a,.sitemapLink:active .sitemapLabel{color:#fff}
 .applink:active .applabel,.sitemapLink:active .sitemapLabel{box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);background:var(--hover)}
 .applink:active img{transform:scale(.9)}
