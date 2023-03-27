@@ -226,7 +226,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_advanced:not(.collapsed)~#sb_tunnelstatus{margin-bottom:-7px}
 #sb_advancedgeneral[hidden]~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-7px}
 #sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:11px}
-#sb_advancedgeneral:not([hidden])~#sb_services.collapsed{margin-bottom:-11px}
+#sb_advancedgeneral:not([hidden])~#sb_services.collapsed{margin-bottom:-9px}
 #sb_advancedgeneral:not([hidden])~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
 #sb_updatesection.collapsed>h3.collapsed::before{display:inline-block;min-height:16px;vertical-align:middle;content:""}
 #sb_updatesection.collapsed>*:not(h3){display:none}
@@ -2687,8 +2687,13 @@ tt{margin-left:0;margin-right:3px;letter-spacing:.1em}
 #sb_advanced,#sb_help,#sb_internals{width:240px}
 #sb_advanced a,#sb_help a,#sb_internals a{max-width:232px}
 #sb_advancedgeneral,#sb_bandwidth,#sb_general,#sb_peers,#sb_peersadvanced,#sb_queue,#sb_shortgeneral,#sb_tunnels{margin-top:-12px;margin-bottom:-6px}
+#sb_advancedgeneral.collapsed~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
+#sb_advancedgeneral:not([hidden])~#sb_peers{margin-bottom:-5px}
 #sb_advanced:not(.collapsed){margin-bottom:-7px}
-#sb_bandwidth,#sb_peers,#sb_tunnels{margin-bottom:-8px}
+body:not(#homepage) #sb_advancedgeneral:not([hidden])~#sb_tunnels{margin-bottom:-8px}
+#homepage #sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:0}
+#sb_tunnels{margin-bottom:-7px}
+#sb_bandwidth{margin-bottom:-8px}
 #sb_internals:not(.collapsed){margin-bottom:-4px}
 #sb_graphcontainer:not([hidden]){height:44px}
 #sb_localtunnels a{max-width:188px}
@@ -2698,8 +2703,7 @@ tt{margin-left:0;margin-right:3px;letter-spacing:.1em}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0 0 2px}
 #sb_peers[hidden]+#sb_peers_condensed,#sb_tunnels[hidden]+#sb_tunnels_condensed{width:239px}
 #sb_services{width:242px}
-#sb_advancedgeneral.collapsed~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
-#sb_warning+.sb_notice{margin-bottom:-6px}
+#sb_warning+.sb_notice{margin-bottom:-3px}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-2px}

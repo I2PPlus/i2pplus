@@ -173,7 +173,7 @@ th.tunnelControl{text-align:center}
 .tunnelInfo td{background:none;border:none}
 .tunnelInfo+.tunnelInfo td{border-top:1px solid #d2d2e0}
 .tunnelInterface,.tunnelLocation{width:20%}
-.tunnelName{padding-left:8px;width:25%;min-width:150px}
+.tunnelName{padding-left:8px;width:calc(100% - 9px);min-width:150px}
 .tunnelName a{padding:3px 3px 3px 18px;background:var(--settings) no-repeat left center/14px}
 .tunnelName a:hover{background:var(--settings_hover) no-repeat left center/14px}
 .tunnelName a{font-weight:700}
@@ -249,6 +249,7 @@ td#throttle,#clientAuthConfig{padding:0;box-shadow:none}
 #throttler tr:first-child th{border-top:none}
 #throttler tr:nth-child(odd),#wizardTunnelTypes tr:nth-child(odd),#wizardSummary tr:nth-child(odd),#clientAuth tr:nth-child(even){background:#f7f8ff;background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(211,211,255,.3) 3px,#fff 5px)}
 #throttler tr:nth-child(even),#wizardTunnelTypes tr:nth-child(even),#wizardSummary tr:nth-child(even),#clientAuth tr:nth-child(odd){background:#eef;background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(230,230,255,.3) 3px,#fff 5px)}
+#throttler tr:nth-child(2) td,#throttler tr:nth-child(6) td{font-size:90%}
 #throttler input[type=text]{width:80px}
 
 /* register */
