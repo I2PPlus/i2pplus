@@ -330,6 +330,7 @@ img[src$="details.png"]{opacity:.7}
 .iframed #addSection table,.iframed #createSection table:not(#trackerselect){position:static;animation:fade-in .1s ease-out;animation:none}
 .section,.mainsection .section,.mainsection{margin:0;padding:0;word-wrap:break-word;text-align:center}
 .iframed #mainsection>#torrentlist{margin-top:-11px}
+.iframed #mainsection>#torrentlist:not(.filterbarActive){margin-top:0}
 .iframed #mainsection>#screenlog + #torrentlist,.iframed #mainsection>#screenlog + script + #torrentlist{margin-top:0}
 #snarkInfo~.mainsection{border-bottom:var(--border_soft)}
 .iframed #snarkInfo~.mainsection{border-top:var(--border_soft)}
@@ -857,24 +858,18 @@ tr:not(.peerinfo) .torrentUploaded:empty::after{display:inline;font-size:9pt;con
 }
 
 @media screen and (min-width:1200px){
-.active.downloading .peerCount b{background:repeating-linear-gradient(135deg,#252,#252 8px,#141 9px,#141 17px)}
-.active.downloading .peerCount b::before{border-color:transparent #252 transparent transparent}
-.active.seeding.complete .peerCount b{background:repeating-linear-gradient(135deg,#937,#937 8px,#826 9px,#826 17px)}
-.active.seeding.complete .peerCount b::before{border-color:transparent #937 transparent transparent}
-.inactive.downloading .peerCount b,.active.starting.processing .peerCount b{color:#333;background:#bb0}
-.inactive.downloading .peerCount b::before,.active.starting.processing .peerCount b::before{border-color:transparent #bb0 transparent transparent}
-.inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:0 1px 1px #222}
 .nav_main:link,.nav_main:visited,.nav_main:hover,.nav_main:focus,.nav_main:active{padding-left:27px;background-size:17px,100%}
-.nopeers.incomplete .peerCount b::before{border-color:transparent #aaa transparent transparent}
-.nopeers.incomplete .peerCount b{text-shadow:0 1px 1px #999;background:#aaa}
-.nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#333;text-shadow:0 1px 1px #aaa}
 .percentDownloaded{pointer-events:none}
 .RateUp:not(:empty),#torrents tfoot th.RateUp:not(:empty),.peerinfo .RateUp:not(:empty){padding-right:10px}
 .snarkNav:link,.snarkNav:visited{letter-spacing:.1em;font-size:11pt}
-.stopped.complete .peerCount b{background:#28f}
-.stopped.complete .peerCount b::before{border-color:transparent #28f transparent transparent}
-.stopped.incomplete .peerCount b::before,.inactive.neterror .peerCount b::before{border-color:transparent #900 transparent transparent}
-.stopped.incomplete .peerCount b,.inactive.neterror .peerCount b{color:#eee;background:#900}
+.torrentAction{padding-right:3px}
+.torrentName{padding-left:4px}
+.trackerconfig input.trackername{width:180px;max-width:180px}
+.trackerconfig th:nth-child(7),.trackerconfig td:nth-child(7){padding-left:50px}
+.trackerhome,.trackerannounce,.knownTracker a{width:300px;max-width:300px}
+#configs tr:nth-last-child(n+4) td{padding-top:3px;padding-bottom:3px}
+#screenlog li::before{background-size:10px}
+/* peer count */
 td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-weight:700}
 .peerCount b{padding:4px 3px;min-width:104px;display:inline-block;position:relative;line-height:1;text-align:center;font-size:95%;color:#ddd;text-shadow:0 1px 1px #000;-webkit-text-stroke:0;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
 .peerCount b .left{margin-right:0}
@@ -889,13 +884,21 @@ td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-w
 .peerCount b a:hover .right{margin-left:-9px}
 .peerCount b a[href*="?p="]:hover::after{top:calc(50% - 2px);border-color:#fff transparent transparent transparent}
 .peerCount b a:hover::after{width:0;height:0;position:absolute;right:5px;bottom:calc(50% - 2px);border-color:transparent transparent #fff transparent;border-style:solid;border-width:3px;content:""}
-.torrentAction{padding-right:3px}
-.torrentName{padding-left:4px}
-.trackerconfig input.trackername{width:180px;max-width:180px}
-.trackerconfig th:nth-child(7),.trackerconfig td:nth-child(7){padding-left:50px}
-.trackerhome,.trackerannounce,.knownTracker a{width:300px;max-width:300px}
-#configs tr:nth-last-child(n+4) td{padding-top:3px;padding-bottom:3px}
-#screenlog li::before{background-size:10px}
+.active.downloading .peerCount b{background:repeating-linear-gradient(135deg,#252,#252 8px,#141 9px,#141 17px)}
+.active.downloading .peerCount b::before{border-color:transparent #252 transparent transparent}
+.active.seeding.complete .peerCount b{background:repeating-linear-gradient(135deg,#937,#937 8px,#826 9px,#826 17px)}
+.active.seeding.complete .peerCount b::before{border-color:transparent #937 transparent transparent}
+.active.starting .peerCount b,.inactive.downloading .peerCount b{color:#333;background:#bb0}
+.active.starting .peerCount b::before,.inactive.downloading .peerCount b::before{border-color:transparent #bb0 transparent transparent}
+.active.starting .peerCount b:empty::after{display:inline;content:"..."}
+.inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:0 1px 1px #222}
+.nopeers.incomplete .peerCount b::before{border-color:transparent #aaa transparent transparent}
+.nopeers.incomplete .peerCount b{text-shadow:0 1px 1px #999;background:#aaa}
+.nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#333;text-shadow:0 1px 1px #aaa}
+.stopped.complete .peerCount b{background:#28f}
+.stopped.complete .peerCount b::before{border-color:transparent #28f transparent transparent}
+.stopped.incomplete .peerCount b::before,.inactive.neterror .peerCount b::before{border-color:transparent #900 transparent transparent}
+.stopped.incomplete .peerCount b,.inactive.neterror .peerCount b{color:#eee;background:#900}
 }
 
 @media screen and (min-width:1400px){
