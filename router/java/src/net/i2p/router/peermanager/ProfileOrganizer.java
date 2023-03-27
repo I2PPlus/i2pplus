@@ -787,7 +787,7 @@ public class ProfileOrganizer {
     public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
             List<Hash> connected = _context.commSystem().getEstablished();
-            if (connected.isEmpty() || connected == null)
+            if (connected != null && connected.isEmpty())
                 return;
             getReadLock();
             try {
