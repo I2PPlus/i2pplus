@@ -249,7 +249,7 @@ td#throttle,#clientAuthConfig{padding:0;box-shadow:none}
 #throttler tr:first-child th{border-top:none}
 #throttler tr:nth-child(odd),#wizardTunnelTypes tr:nth-child(odd),#wizardSummary tr:nth-child(odd),#clientAuth tr:nth-child(even){background:#f7f8ff;background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(211,211,255,.3) 3px,#fff 5px)}
 #throttler tr:nth-child(even),#wizardTunnelTypes tr:nth-child(even),#wizardSummary tr:nth-child(even),#clientAuth tr:nth-child(odd){background:#eef;background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(230,230,255,.3) 3px,#fff 5px)}
-#throttler tr:nth-child(2) td,#throttler tr:nth-child(6) td{font-size:90%}
+#throttler tr:nth-child(2) td,#throttler tr:nth-child(6) td,#throttler tr:not(:nth-child(2)) td:first-child b,#throttler tr:not(:nth-child(6)) td:first-child b{font-size:90%}
 #throttler input[type=text]{width:80px}
 
 /* register */
