@@ -106,12 +106,12 @@ textarea[name="accessList"]:focus{height:112px}
 .control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}
 .control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.iconize:active{background-blend-mode:luminosity}
-.control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover)}
-.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/19px,var(--btn_hover)}
 .control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
 .control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover)}
 .control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
+.control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover)}
+.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/19px,var(--btn_hover)}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{margin:5px;padding:4px;width:calc(100% - 10px);width:290px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all;font-family:var(--monospaced);border:var(--border_input);border-radius:2px;box-shadow:inset 1px 1px 1px #e4e4ee;background:#fafaff;user-select:all}
 .displayText:hover,.displayText:focus{box-shadow:0 0 1px #89f;background:#ffe;outline:none}
 .displayText:focus{margin:1px 5px;padding:2px 4px;overflow:auto;text-overflow:clip;border:1px solid #676c7f;background:#fff}
