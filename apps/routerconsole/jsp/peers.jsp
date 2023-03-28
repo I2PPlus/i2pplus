@@ -62,7 +62,7 @@
   var ntcpTfoot = document.querySelector("#ntcpconnections tfoot");
   var peersNTCP = document.getElementById("peersNTCP");
   var peersSSU = document.getElementById("peersSSU");
-  var refreshPeersId = setInterval(refreshPeers, 30000);
+  var refreshPeersId = setInterval(refreshPeers, 60000);
   var ssuConn = document.getElementById("udpconnections");
   var ssuH3 = document.getElementById("udpcon");
   var ssuTfoot = document.querySelector("#udpconnections tfoot");
@@ -82,7 +82,7 @@
 
   function initRefresh() {
     addSortListeners();
-    refreshPeers();
+    //refreshPeers();
     lazyload();
   }
 
@@ -129,7 +129,6 @@
                     (countFF > 0 ? "<td class=rbw id=ff>F<span> " + countFF + "</span></td>" : "") +
                     "</tr></table>";
       topCount.innerHTML = counter;
-      //pCount.innerHTML = counter;
     }
   }
 
