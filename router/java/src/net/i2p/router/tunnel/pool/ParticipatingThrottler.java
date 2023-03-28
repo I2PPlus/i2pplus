@@ -78,7 +78,7 @@ class ParticipatingThrottler {
         boolean isFast = (ri != null && !isUs) && caps != "" && (caps.indexOf(Router.CAPABILITY_BW256) >= 0 ||
                          caps.indexOf(Router.CAPABILITY_BW512) >= 0 ||
                          caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
-        boolean isLU = (ri != null && !isUs) && isUnreachable && caps.indexOf(Router.CAPABILITY_BW12) >= 0;
+        boolean isLU = (ri != null && !isUs) && isUnreachable && (caps.indexOf(Router.CAPABILITY_BW12) >= 0 || caps.indexOf(Router.CAPABILITY_BW32) >= 0);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
 //        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
         int limit = isUnreachable || isLowShare ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 12, numTunnels * (PERCENT_LIMIT / 8) / 100))
@@ -119,7 +119,7 @@ class ParticipatingThrottler {
                 _log.warn("Temp banning and immediately disconnecting from " + (caps != "" ? caps : "") +
                           " Router [" + h.toBase64().substring(0,6) + "] for " + (period*4) + "m" +
                           " -> " + v + " / LU");
-            context.banlist().banlistRouter(h, " <b>➜</b> LU (" + v + ")", null, null, context.clock().now() + (bantime*4));
+            context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime*4));
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLowShare) {
             //context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             context.commSystem().forceDisconnect(h);
