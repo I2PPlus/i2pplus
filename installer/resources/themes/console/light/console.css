@@ -198,7 +198,8 @@ a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 #sidebar .sb_update b{margin-top:-2px;display:inline-block;line-height:1.2;word-spacing:0;letter-spacing:0;vertical-align:middle;font-size:8.5pt}
 #sidebar .sb_update br::before{content:"";display:inline-block;height:3px}
 #sidebar .sb_updatestatus{margin:-7px 2px 5px;padding:4px 0 3px;display:block;font-style:italic;border:1px solid #afafcf;border-top:none;border-radius:0 0 3px 3px;box-shadow:var(--highlight);background:linear-gradient(90deg,#ddf,#efefff 30%,#efefff 60%,#ddf);filter:var(--filter_shadow)}
-#sidebar .sb_updatestatus+.percentBarOuter{margin-bottom:-18px}
+#sidebar .sb_updatestatus+.percentBarOuter{margin-bottom:1px}
+#sb_advancedgeneral:not([hidden])~#sidebar .sb_updatestatus+.percentBarOuter{margin-bottom:-2px}
 
 /* notify */
 .sb_notice{font-size:8pt}
@@ -2670,6 +2671,7 @@ tt{margin-left:0;margin-right:3px;letter-spacing:.1em}
 #config_service h3{margin-bottom:-15px;padding-left:12px;line-height:24px}
 #config_service h3 a{padding:6px 8px}
 #configstats td::before{min-height:24px}
+#contactserver{padding:2px 4px 4px;display:inline-block}
 #error500 #sidebar img[src$="i2plogo.png"]{margin-top:-1px;margin-left:-3px;width:232px}
 #externali2cp .nowrap::before,#externali2cp td label::before,#netconfig label::before,#reseedconfig .nowrap::before{min-height:48px}
 #helptoc b{font-size:120%}
