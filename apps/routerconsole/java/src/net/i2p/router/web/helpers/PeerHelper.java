@@ -447,7 +447,7 @@ public class PeerHelper extends HelperBase {
             }
 */
             buf.append("<a class=configpeer href=\"/configpeer?peer=").append(h.toBase64()).append("\" title=\"").append(_t("Configure peer"))
-               .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a></td>");
+               .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>");
             buf.append("</td></tr>\n");
             out.write(buf.toString());
             buf.setLength(0);
