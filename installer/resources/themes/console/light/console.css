@@ -1274,6 +1274,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #profiles th,#profiles td{text-align:center}
 #profiles th{font-size:90%}
 #profilelist td:nth-child(2) span,#profilelist td:nth-child(3) span,#floodfills .tier{margin:0 2px;padding:1px 4px;min-width:20px;display:inline-block;box-sizing:border-box;vertical-align:middle;text-align:center;border:1px solid #bbd;line-height:1.3}
+#profilelist td:nth-child(3) span:empty{display:none}
 #floodfills td:empty::before,#ntcpconnections td:empty::before,#udpconnections td:empty::before,#profilelist td:empty::before,#tunnels .cells:empty::before{width:100%;display:inline-block;text-align:center;opacity:.8;content:"‒"}
 #floodfills td:nth-child(3) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;text-align:right}
 #profilelist{margin-bottom:15px}
@@ -1284,7 +1285,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #profilelist th:nth-child(4),#profilelist td:nth-child(4){width:15%}
 #profilelist th.groups,#profilelist td.groups{width:10%;min-width:56px;white-space:nowrap}
 #profilelist td:first-child:not(.rif):not(.rbw),#profilelist td:nth-child(2):not(.rih):not(.rbw),#profilelist td:nth-child(3){width:1%;white-space:nowrap}
-#profilelist td:nth-last-child(2) span,#profilelist td:nth-last-child(3) span{min-width:28px;display:inline-block}
+#profilelist td:nth-last-child(2) span:not(.peerFlag),#profilelist td:nth-last-child(3) span{min-width:28px;display:inline-block}
 #profilelist td:nth-child(6) span,#profilelist td:nth-child(9) span{min-width:48px;display:inline-block;text-align:right}
 #profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span{min-width:40px}
 #profilelist td[colspan="10"],#profilelist td[colspan="10"]:hover{padding:0;background:#77f}
