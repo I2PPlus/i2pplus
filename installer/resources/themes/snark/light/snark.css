@@ -871,7 +871,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after{display:inline;font-size:9pt;con
 #screenlog li::before{background-size:10px}
 /* peer count */
 td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-weight:700}
-.peerCount b{padding:4px 3px;min-width:104px;display:inline-block;position:relative;line-height:1;text-align:center;font-size:95%;color:#ddd;text-shadow:1px 1px 1px rgba(0,0,0,.8);-webkit-text-stroke:0;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
+.peerCount b{padding:4px 3px;min-width:104px;display:inline-block;position:relative;line-height:1;text-align:center;font-size:95%;color:#ddd;text-shadow:1px 1px 1px rgba(0,0,0,.6);-webkit-text-stroke:0;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
 .peerCount b .left{margin-right:0}
 .peerCount b .left,.peerCount b .right{margin:0 1px;padding:2px 3px 1px;min-width:38px;display:inline-block;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px rgba(32,32,32,.4),inset 2px 2px 2px rgba(0,0,0,.2);background:linear-gradient(180deg,rgba(128,128,180,.2),rgba(192,192,220,.2))}
 .peerCount b .right{margin-left:0}
@@ -891,7 +891,7 @@ td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-w
 .active.starting .peerCount b,.inactive.downloading .peerCount b{color:#333;background:#bb0}
 .active.starting .peerCount b::before,.inactive.downloading .peerCount b::before{border-color:transparent #bb0 transparent transparent}
 .active.starting .peerCount b:empty::after{display:inline;content:"..."}
-.inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:1px 1px 1px #222}
+.inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:1px 1px 1px rgba(0,0,0,.6)}
 .nopeers.incomplete .peerCount b::before{border-color:transparent #aaa transparent transparent}
 .nopeers.incomplete .peerCount b{text-shadow:1px 1px 1px #999;background:#aaa}
 .nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#333;text-shadow:var(--txt_shadow)}
