@@ -2704,6 +2704,7 @@ body:not(#homepage) #sb_advancedgeneral:not([hidden])~#sb_tunnels{margin-bottom:
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0 0 2px}
 #sb_peers[hidden]+#sb_peers_condensed,#sb_tunnels[hidden]+#sb_tunnels_condensed{width:239px}
 #sb_services{width:242px}
+#sb_services.collapsed+hr+#sb_warning{}
 #sb_warning+.sb_notice{margin-bottom:-3px}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
@@ -2726,7 +2727,7 @@ body:not(#homepage) #sb_advancedgeneral:not([hidden])~#sb_tunnels{margin-bottom:
 #sidebar #sb_newsheadings table{width:240px}
 #sidebar #sb_services.collapsed{margin-bottom:-9px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-8px}
-#sidebar #sb_shutdownStatus{padding:8px 4px 6px}
+#sidebar #sb_shutdownStatus{padding:8px 4px 9px;line-height:1.2}
 #homepage #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
 #homepage #sb_memoryBar+hr{margin-top:5px}
 #homepage #sb_peers tr:last-child td{padding-bottom:1px}
