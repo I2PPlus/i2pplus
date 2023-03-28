@@ -69,9 +69,9 @@ table{background:#000}
 #screenlog{position:relative;contain:paint}
 #screenlog span{margin:0;height:calc(100% + 2px);display:flex;align-items:stretch;position:absolute;top:-1px;bottom:-1px;right:-1px;vertical-align:middle}
 #screenlog .iconize{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0}
-#screenlog .clearlog{border-left:var(--border);background:rgba(0,0,0,.3) var(--close) no-repeat center center / 16px}
-#screenlog .clearlog:hover{background:rgba(0,0,32,.5) var(--close_hover) no-repeat center center / 16px}
-#screenlog .clearlog:active{box-shadow:var(--btn_shadow_active);background:#113 var(--close) no-repeat center center / 14px}
+#screenlog .clearlog{border-left:var(--border);background:rgba(0,0,0,.3) var(--close) no-repeat center center/16px}
+#screenlog .clearlog:hover{background:rgba(0,0,32,.5) var(--close_hover) no-repeat center center/16px}
+#screenlog .clearlog:active{box-shadow:var(--btn_shadow_active);background:#113 var(--close) no-repeat center center/14px}
 
 .base32{max-width:120px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:text-bottom}
 #clientAuth td:last-child b{margin:0;padding:0 8px}
@@ -81,7 +81,7 @@ table{background:#000}
 #clientAuth tr:first-child td{border-top:none}
 #keyringManager{float:right}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{margin:0 5px;padding:0;font-weight:400;color:var(--ink);border:none;box-shadow:none;background:none;cursor:default}
-#sigType[disabled]{padding-left:16px;text-align:left;background:var(--crypto) no-repeat left center / 16px}
+#sigType[disabled]{padding-left:16px;text-align:left;background:var(--crypto) no-repeat left center/16px}
 #toggleInfo:hover img,#toggleInfo:focus img{mix-blend-mode:normal}
 #toggleInfo img{height:8px;width:12px;mix-blend-mode:luminosity}
 #toggleInfo{margin:-2px -4px 0 0;padding:2px 5px;min-width:0;vertical-align:middle}
@@ -122,9 +122,9 @@ td > b{margin-right:5px;display:inline-block;min-width:30px}
 .tunnelHelper a:hover{transform:scale(1.2)}
 .tunnelHelper a:active{transform:scale(.95)}
 .tunnelName{width:25%;min-width:150px}
-.tunnelName a{margin-left:5px;padding:5px 5px 5px 25px;width:calc(100% - 20px);display:inline-block;box-sizing:border-box;font-weight:700;border:1px solid transparent;border-radius:1px 15px 15px 1px;background:var(--settings) no-repeat 6px center / 14px}
-.tunnelName a:hover,.tunnelName a:focus{border:var(--border);background:var(--settings_hover) no-repeat 6px center / 14px,linear-gradient(180deg,#113,#001);background-size:14px,100%}
-.tunnelName a:active{color:var(--active);border:var(--border_active);box-shadow:var(--highlight),inset 3px 3px 3px #000;background:var(--settings_active) no-repeat 6px center / 14px,var(--btn_active)}
+.tunnelName a{margin-left:5px;padding:5px 5px 5px 25px;width:calc(100% - 20px);display:inline-block;box-sizing:border-box;font-weight:700;border:1px solid transparent;border-radius:1px 15px 15px 1px;background:var(--settings) no-repeat 6px center/14px}
+.tunnelName a:hover,.tunnelName a:focus{border:var(--border);background:var(--settings_hover) no-repeat 6px center/14px,linear-gradient(180deg,#113,#001);background-size:14px,100%}
+.tunnelName a:active{color:var(--active);border:var(--border_active);box-shadow:var(--highlight),inset 3px 3px 3px #000;background:var(--settings_active) no-repeat 6px center/14px,var(--btn_active)}
 .tunnelType{width:25%}
 .tunnelPreview,.tunnelPort{width:15%;text-align:center}
 .tunnelLocation,.tunnelInterface{width:20%}
@@ -148,18 +148,18 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--a_hover);background:var(--btn_hover)}
 .control:active,button:active{text-decoration:none;background:var(--hover)}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center / 15px,var(--btn),var(--start_hover),var(--start_active);-webkit-text-stroke:0}
-.control.stop{background:var(--stop) no-repeat center center / 14px,var(--btn),var(--stop_hover),var(--start_active)}
-.control.preview{background:var(--eye) no-repeat center center / 19px,var(--btn),var(--eye_hover),var(--eye_active)}
-.control.create{background:var(--create) no-repeat center center / 15px,var(--btn),var(--create_hover),var(--create_active)}
-.control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center / 15px,var(--btn_hover)}
-.control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center / 14px,var(--btn_hover)}
-.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center / 19px,var(--btn_hover)}
-.control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center / 15px,var(--btn_hover)}
-.control.start:active{background:var(--hover) var(--start_active) no-repeat center center / 14px}
-.control.stop:active{background:var(--hover) var(--stop_active) no-repeat center center / 13px}
-.control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center / 18px}
-.control.create:active{background:var(--hover) var(--create_active) no-repeat center center / 14px}
+.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover),var(--start_active);-webkit-text-stroke:0}
+.control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover),var(--start_active)}
+.control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover),var(--eye_active)}
+.control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover),var(--create_active)}
+.control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
+.control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
+.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/19px,var(--btn_hover)}
+.control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
+.control.start:active{background:var(--hover) var(--start_active) no-repeat center center/14px}
+.control.stop:active{background:var(--hover) var(--stop_active) no-repeat center center/13px}
+.control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center/18px}
+.control.create:active{background:var(--hover) var(--create_active) no-repeat center center/14px}
 a.control{display:inline-block}
 input[type=text],input[type=password],textarea{color:var(--ink_darker);-webkit-text-stroke:0}
 input[type=text]:focus,textarea:focus{color:var(--ink)}
@@ -188,7 +188,7 @@ textarea[name="accessList"]:focus{height:80px}
 #filter{vertical-align:top}
 th .help{font-size:0}
 th .help::after{width:16px;height:16px;display:inline-block;background:var(--helplink) no-repeat center center;background-size:16px;content:""}
-th .help:hover::after,th .help:focus::after{background:var(--helplink_hover) no-repeat center center / 16px}
+th .help:hover::after,th .help:focus::after{background:var(--helplink_hover) no-repeat center center/16px}
 #localDestination,.authentication{margin:0;height:32px}
 #localDestination:focus,.authentication:focus{filter:drop-shadow(0 0 1px var(--ink))}
 #leasesetKey{padding:3px;height:24px}
@@ -213,17 +213,17 @@ input.tunnelName,input.tunnelDescriptionText,#userAgents,.tunnelDescription,#loc
 .port,.quantity,.period{width:80px}
 .port[readonly]{width:120px}
 .username,.password{width:200px}
-.username{padding-left:26px;background:var(--user) no-repeat 6px center / 14px,linear-gradient(180deg,#001,#000);background-blend-mode:luminosity}
-.username:focus{padding-left:26px;background:#000 var(--user) no-repeat 6px center / 14px;background-blend-mode:normal}
-.password{padding-left:26px;background:var(--key) no-repeat 6px center / 14px,linear-gradient(180deg,#001,#000);background-blend-mode:luminosity}
+.username{padding-left:26px;background:var(--user) no-repeat 6px center/14px,linear-gradient(180deg,#001,#000);background-blend-mode:luminosity}
+.username:focus{padding-left:26px;background:#000 var(--user) no-repeat 6px center/14px;background-blend-mode:normal}
+.password{padding-left:26px;background:var(--key) no-repeat 6px center/14px,linear-gradient(180deg,#001,#000);background-blend-mode:luminosity}
 
-.password:focus{padding-left:26px;background:#000 var(--key) no-repeat 6px center / 14px;background-size:14px,100%;background-blend-mode:normal}
+.password:focus{padding-left:26px;background:#000 var(--key) no-repeat 6px center/14px;background-size:14px,100%;background-blend-mode:normal}
 .proxyList{width:40%;min-width:280px}
 input[type=text] + label{white-space:nowrap;vertical-align:unset}
 
 #notReady,#down{margin:55px auto 50px;padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:1px solid #005;box-shadow:var(--highlight),inset 0 0 4px 4px rgba(0,0,0,.4),0 0 0 1px #000,0 0 0 2px #001,0 0 0 6px #002,0 0 0 8px #003;background:repeating-linear-gradient(180deg,#002 2px,#001 4px)}
 #down{font-size:0;border:1px solid #414}
-#down::after{width:32px;height:32px;display:inline-block;vertical-align:middle;background:var(--update) no-repeat center center / 32px;content:"";mix-blend-mode:luminosity;animation:linear spin 5s forwards infinite}
+#down::after{width:32px;height:32px;display:inline-block;vertical-align:middle;background:var(--update) no-repeat center center/32px;content:"";mix-blend-mode:luminosity;animation:linear spin 5s forwards infinite}
 
 /* wizard */
 #wizardPanel{font-size:10pt}
@@ -244,8 +244,8 @@ input[type=text] + label{white-space:nowrap;vertical-align:unset}
 #wizardPanel .tag{margin-right:3px;width:10%;min-width:150px;display:inline-block;white-space:nowrap;text-align:right;font-weight:700}
 #wizardPanel select{min-width:160px}
 #wizardPanel .infohelp p{margin:0;padding:0 10px 0 5px}
-.multiOption#isServer{padding-left:28px;background:var(--server) no-repeat 4px center / 22px}
-.multiOption#isClient{padding-left:28px;background:var(--client) no-repeat 4px center / 22px}
+.multiOption#isServer{padding-left:28px;background:var(--server) no-repeat 4px center/22px}
+.multiOption#isClient{padding-left:28px;background:var(--client) no-repeat 4px center/22px}
 
 /* more space */
 .displayText{margin:5px;padding:4px;width:calc(100% - 10px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;word-break:break-all;font-family:var(--monospaced);color:#7171d1;border:1px solid #302b74;background:var(--text_focus);box-shadow:var(--highlight);user-select:all}

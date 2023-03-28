@@ -1071,33 +1071,60 @@ class NetDbRenderer {
                 start = end;
             }
 */
+            String showAll = _t("Show all routers with this capability in the NetDb");
             buf.append("<table id=netdbtiers>\n");
             buf.append("<thead>\n<tr><th>" + _t("Bandwidth Tier") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=K\" title=\"Show all routers with this capability in the NetDb\"><b>K</b></a>Under 12&#8239;KB/s</td><td>")
+                buf.append("<tr><td><a href=\"/netdb?caps=K\" title=\"").append(showAll).append("\"><b>K</b></a>Under 12&#8239;KB/s</td><td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td></tr>\n");
             }
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=L\" title=\"Show all routers with this capability in the NetDb\"><b>L</b></a>12 - 48&#8239;KB/s</td><td>")
+                buf.append("<tr><td><a href=\"/netdb?caps=L\" title=\"").append(showAll).append("\"><b>L</b></a>12 - 48&#8239;KB/s</td><td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size()).append("</td></tr>\n");
             }
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW64).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=M\" title=\"Show all routers with this capability in the NetDb\"><b>M</b></a>49 - 65&#8239;KB/s</td><td>")
+                buf.append("<tr><td><a href=\"/netdb?caps=M\" title=\"").append(showAll).append("\"><b>M</b></a>49 - 65&#8239;KB/s</td><td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW64).size()).append("</td></tr>\n");
             }
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW128).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=N\" title=\"Show all routers with this capability in the NetDb\"><b>N</b></a>66 - 130&#8239;KB/s</td><td>")
+                buf.append("<tr><td><a href=\"/netdb?caps=N\" title=\"").append(showAll).append("\"><b>N</b></a>66 - 130&#8239;KB/s</td><td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW128).size()).append("</td></tr>\n");
             }
-            buf.append("<tr><td><a href=\"/netdb?caps=O\" title=\"Show all routers with this capability in the NetDb\"><b>O</b></a>131 - 261&#8239;KB/s</td><td>")
+            buf.append("<tr><td><a href=\"/netdb?caps=O\" title=\"").append(showAll).append("\"><b>O</b></a>131 - 261&#8239;KB/s</td><td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW256).size()).append("</td></tr>\n");
-            buf.append("<tr><td><a href=\"/netdb?caps=P\" title=\"Show all routers with this capability in the NetDb\"><b>P</b></a>262 - 2047&#8239;KB/s</td><td>")
+            buf.append("<tr><td><a href=\"/netdb?caps=P\" title=\"").append(showAll).append("\"><b>P</b></a>262 - 2047&#8239;KB/s</td><td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW512).size()).append("</td></tr>\n");
-            buf.append("<tr><td><a href=\"/netdb?caps=X\" title=\"Show all routers with this capability in the NetDb\"><b>X</b></a>Over 2048&#8239;KB/s</td><td>")
+            buf.append("<tr><td><a href=\"/netdb?caps=X\" title=\"").append(showAll).append("\"><b>X</b></a>Over 2048&#8239;KB/s</td><td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW_UNLIMITED).size()).append("</td></tr>\n");
             buf.append("</table>\n");
             out.write(buf.toString());
             buf.setLength(0);
+
+            if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size() > 0 ||
+                _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_SEVERE).size() > 0 ||
+                _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_NO_TUNNELS).size() > 0) {
+
+                buf.append("<table id=netdbcongestion>\n");
+                buf.append("<thead>\n<tr><th>" + _t("Congestion Cap") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
+                if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size() > 0) {
+                    buf.append("<tr><td><a class=isD href=\"/netdb?caps=D\" title=\"").append(showAll).append("\"><b>D</b></a>")
+                       .append(_t("Low performance / medium congestion")).append("</td><td>")
+                       .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size()).append("</td></tr>\n");
+                }
+                if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_SEVERE).size() > 0) {
+                    buf.append("<tr><td><a class=isE href=\"/netdb?caps=E\" title=\"").append(showAll).append("\"><b>E</b></a>")
+                       .append(_t("High congestion")).append("</td><td>")
+                       .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_SEVERE).size()).append("</td></tr>\n");
+                }
+                if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_NO_TUNNELS).size() > 0) {
+                    buf.append("<tr><td><a class=isG href=\"/netdb?caps=G\" title=\"").append(showAll).append("\"><b>G</b></a>")
+                       .append(_t("Rejecting all tunnel requests")).append("</td><td>")
+                       .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_NO_TUNNELS).size()).append("</td></tr>\n");
+                }
+                buf.append("</table>\n");
+                out.write(buf.toString());
+                buf.setLength(0);
+            }
 /*
             if (log.shouldWarn()) {
                 long end = System.currentTimeMillis();

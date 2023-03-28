@@ -24,7 +24,7 @@ th.suboption{font-weight:500}
 #configs td,.trackerconfig td{font-size:10.5pt}
 #embed::after{height:14px}
 #embed,#fullscreen{margin:-25px -4px -9px;padding:8px 9px 7px 10px}
-#torrents tt{font-size:9.5pt}
+#torrents code{font-size:9.5pt}
 #trackerselect td:nth-child(2),#trackerselect td:nth-child(3){width:15%}
 #trackerselect tr:first-child td{font-size:9pt}
 @media (max-width:1400px){.iframed #torrents td.torrentName a{max-width:400px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}

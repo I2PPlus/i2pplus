@@ -3686,9 +3686,14 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
      */
     public void forceDisconnect(Hash peer) {
         PeerState ps =  _peersByIdent.get(peer);
+        boolean isBanned = _context.banlist().isBanlisted(peer);
+        boolean isBannedForever = _context.banlist().isBanlistedForever(peer);
+        boolean isBlocklisted = _context.blocklist().isBlocklisted(peer);
         if (ps != null) {
             if (_log.shouldWarn()) {
-                _log.warn("[UDP] Forcing immediate disconnection of Router [" + peer.toBase64().substring(0,6) + "]");
+                _log.warn("[UDP] Forcing immediate disconnection of " +
+                          (isBannedForever ? "permanently banned " : isBanned ? "temp banned " : isBlocklisted ? "blocklisted " : "") +
+                          "Router [" + peer.toBase64().substring(0,6) + "]");
             }
             dropPeer(ps, true, "router");
         }

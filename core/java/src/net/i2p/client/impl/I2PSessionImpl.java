@@ -839,7 +839,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             else
                 msg = "Cannot connect to the router on " + _hostname + ':' + _portNum + " to build tunnels";
             if (ioe.getMessage() != null)
-                msg += " - " + ioe.getMessage();
+                msg += "\n* " + ioe.getMessage();
             throw new I2PSessionException(getPrefix() + msg, ioe);
         } finally {
             if (success) {
@@ -1091,14 +1091,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                                     // shouldnt happen
                                     sess.setSessionId(null);
                                     if (_log.shouldWarn())
-                                        _log.warn("Dup or our session id " + id);
+                                        _log.warn("Duplicate or our SessionID " + id);
                                 } else {
                                     SubSession old = _subsessionMap.putIfAbsent(id, sess);
                                     if (old != null) {
                                         // shouldnt happen
                                         sess.setSessionId(null);
                                         if (_log.shouldWarn())
-                                            _log.warn("Dup session id " + id);
+                                            _log.warn("Duplicate SessionID " + id);
                                     }
                                 }
                             }

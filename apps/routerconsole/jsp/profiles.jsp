@@ -62,14 +62,13 @@
   var pbody = document.getElementById("pbody");
   var plist = document.getElementById("profilelist");
   var thresholds = document.getElementById("thresholds");
-  var refreshProfilesId = setInterval(refreshProfiles, 15000);
+  var refreshProfilesId = setInterval(refreshProfiles, 60000);
   var uri = window.location.search.substring(1) !== null ? window.location.pathname + "?" + window.location.search.substring(1) : window.location.pathname;
   var sorterFF = null;
   var sorterP = null;
   var xhrprofiles = new XMLHttpRequest();
   function initRefresh() {
     addSortListeners();
-    refreshProfiles();
   }
   function addSortListeners() {
     if (ff && sorterFF === null) {

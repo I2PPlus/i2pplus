@@ -53,7 +53,7 @@ class ProfileOrganizerRenderer {
         boolean full = mode == 0;
         Hash us = _context.routerHash();
         RouterInfo local = _context.netDb().lookupRouterInfoLocally(us);
-        boolean ffmode = local.getCapabilities().indexOf('f') >= 0;
+        boolean ffmode = local != null && local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
         long hideBefore = ffmode ? now - 60*1000 : !ffmode && mode == 2 ? now - 60*60*1000 : now - 10*60*1000;

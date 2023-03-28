@@ -175,7 +175,7 @@ th.peerCount{text-align:center}
 .peerdata,.debuginfo td[colspan="10"]{padding-left:0;text-align:left}
 .peerinfo td,.debuginfo td{padding-top:5px;padding-bottom:5px}
 .peerinfo td:first-child,.peerinfo:hover td:first-child{background-image:var(--peer);background-position:center center;background-repeat:no-repeat;background-size:18px}
-.peerinfo tt{margin:0 1px}
+.peerinfo code{margin:0 1px}
 .RateUp,.RateDown,.torrentDownloaded,.torrentUploaded{padding:0 5px;font-weight:700}
 .RateDown{color:#395}
 .RateUp,.peerinfo .RateUp .unchoked{color:#cb4dcb}
@@ -231,10 +231,10 @@ th.peerCount{text-align:center}
 #torrents td[colspan="3"],#torrents td[colspan="9"]{text-align:left}
 #torrents td[colspan="9"]{white-space:normal}
 #torrents th:empty,#torrents td:empty{padding:0;width:0;min-width:0;font-size:0}
-#torrents tt{padding:2px 3px;letter-spacing:.1em;color:#fff;background:#7f654f}
+#torrents code{padding:2px 3px;letter-spacing:.1em;color:#fff;background:#7f654f}
 #totals{display:inline-block;margin:2px 0 2px 6px;font-weight:700}
 #totals span,#ourDest{white-space:nowrap}
-#totals tt{line-height:1.7}
+#totals code{line-height:1.7}
 
 /* download bars */
 .active .percentBarComplete{color:#ad681f;box-shadow:inset 0 0 0 1px #b5a79b,inset 0 2px 2px 2px rgba(239,231,224,.6),inset 0 -2px 2px 2px rgba(236,200,172,.6);background:radial-gradient(at center bottom,rgba(220,180,0,.1) 10%,rgba(0,0,0,0) 70%),linear-gradient(180deg,#fffbef,#f0d6c2)}
@@ -445,7 +445,7 @@ textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:
 .configPanel tr:last-child td,.snarkConfig tr:nth-last-child(3){display:none}
 .configPanel tr:nth-last-child(2) td{text-align:right}
 #createSection form,#configSection form,#addSection form{color:#ddd}
-code,tt{padding:0 1px;font-family:var(--monospaced);font-size:8.5pt;font-weight:700;color:#313;user-select:all}
+code{padding:0 1px;font-family:var(--monospaced);font-size:8.5pt;font-weight:700;color:#313;user-select:all}
 .routerdown{color:#7f4c0f}
 .trackerconfig{margin-top:11px;text-align:left;border-collapse:separate;border-spacing:0}
 .trackerconfig th{background:linear-gradient(180deg,#efefef 51%,#cfc7c2 52%)}
@@ -678,9 +678,9 @@ td.torrentDetails{padding-left:6px}
 .peerdata{padding-left:0}
 .peerclient{margin:3px 0;padding:0;border:var(--border);border-radius:2px;box-shadow:var(--highlight);background:#cfc7c2}
 #ourDest{margin-left:3px;padding:0 0 0 4px;display:inline-block;border:var(--border);border-radius:2px;box-shadow:var(--highlight);background:#cfc7c2;opacity:.85}
-#ourDest tt,.peerinfo tt{margin:1px 1px 1px 4px;padding:0 4px 0 6px;display:inline-block;background:#3f271b}
-.peerclient,.peerinfo tt,.clientid{display:inline-block;vertical-align:middle;line-height:1.2}
-.peerinfo tt{margin-left:1px;padding:2px 5px;box-shadow:none;opacity:.8}
+#ourDest code,.peerinfo code{margin:1px 1px 1px 4px;padding:0 4px 0 6px;display:inline-block;background:#3f271b}
+.peerclient,.peerinfo code,.clientid{display:inline-block;vertical-align:middle;line-height:1.2}
+.peerinfo code{margin-left:1px;padding:2px 5px;box-shadow:none;opacity:.8}
 .clientid{margin:0 1px 0 -3px;padding:2px 4px 2px 0;width:58px;display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:middle;text-overflow:ellipsis;font-size:90%;text-align:center;border-radius:0 2px 2px 0;background:#cfc7c2}
 .clientVersion{display:none}
 .peerinfo td > *{vertical-align:middle}
@@ -840,7 +840,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 .torrentAction input[type=submit]{padding:11px;background-size:13px,100%,13px}
 .torrentAction input[type=submit]:active{background-size:11px,100%}
 #actionStopAll,#actionStartAll{padding:11px 18px}
-#totals tt{line-height:1.5}
+#totals code{line-height:1.5}
 tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{margin-top:3px}
 }
 
@@ -936,7 +936,7 @@ body,#torrents td,.snarkAddInfo,th,td,.snarkFileName,a.control,input[type=submit
 .nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker:active,.nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum:active{padding-left:23px;background-position:5px center,center center,center center}
 .rowOdd td,.rowEven td{padding-top:3px;padding-bottom:3px}
 #torrents tfoot tr:first-child th{padding-top:4px;padding-bottom:4px;line-height:1.5}
-.peerinfo tt{display:inline-block;margin:0 3px}
+.peerinfo code{display:inline-block;margin:0 3px}
 .torrentName{padding-left:1px}
 .torrentDownloaded .percentBarText{line-height:17px}
 .peerinfo .torrentDownloaded .percentBarText{line-height:14px}
@@ -1000,7 +1000,7 @@ img[src$="details.png"]{max-height:18px}
 td.graphicStatus img{width:auto;height:23px}
 td.torrentDetails img,.dirInfo td:first-child img:not(.thumb){width:22px;height:22px}
 td.torrentDetails img{margin-top:-3px;margin-bottom:-3px}
-textarea,tt,#torrents tt,#screenlog{font-size:9pt}
+textarea,#torrents code,#screenlog{font-size:9pt}
 thead a img,thead img{max-height:22px}
 tr#torrentInfoStats td{padding-top:5px;padding-bottom:5px}
 .configTitle,.configTitle:hover,.configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.toggleview{min-width:300px}
@@ -1013,7 +1013,7 @@ tr#torrentInfoStats td{padding-top:5px;padding-bottom:5px}
 .nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum:active{background-position:9px center,center center,center center}
 .nav_main,.nav_main:hover,.nav_main:focus,.nav_main:active,.nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum:active{padding-left:27px}
 .nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker:active{padding-left:25px;background-position:7px center,center center,center center}
-.peerinfo tt{margin:1px 4px 1px 1px}
+.peerinfo code{margin:1px 4px 1px 1px}
 .percentBarComplete{padding:2px 0 1px}
 .RateUp{padding-right:15px}
 .snarkAddInfo,.configPanel td,.snarkNewTorrent td,.configPanel th,.configPanel td,.snarkNewTorrent td,select,select option,input,textarea,input[name="nofilter_dataDir"]{font-size:10pt}

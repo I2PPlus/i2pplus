@@ -1069,11 +1069,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write(_t("Our destination (identity) for this session"));
                 out.write("\">");
                 out.write(_t("Dest."));
-                out.write("<tt title=\"");
+                out.write("<code title=\"");
                 out.write(_t("Our destination (identity) for this session"));
                 out.write("\">");
                 out.write(IPString.substring(0, 4));
-                out.write("</tt></span>");
+                out.write("</code></span>");
             }
             out.write("</span>");
             out.write("</th>\n");
@@ -2548,9 +2548,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     boolean addVersion = true;
                     ch = ch.substring(0, 4);
                     String client;
-                    out.write("<span class=peerclient><tt title=\"");
+                    out.write("<span class=peerclient><code title=\"");
                     out.write(_t("Destination (identity) of peer"));
-                    out.write("\">" + peer.toString().substring(5, 9)+ "</tt>&nbsp;");
+                    out.write("\">" + peer.toString().substring(5, 9)+ "</code>&nbsp;");
                     out.write("<span class=clientid>");
                     if ("AwMD".equals(ch))
                         client = _t("I2PSnark");

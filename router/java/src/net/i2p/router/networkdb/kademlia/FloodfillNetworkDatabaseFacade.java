@@ -46,6 +46,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     public static final char CAPABILITY_BW256 = 'O';
     public static final char CAPABILITY_BW512 = 'P';
     public static final char CAPABILITY_BW_UNLIMITED = 'X';
+    public static final char CAPABILITY_CONGESTION_MODERATE = 'D';
+    public static final char CAPABILITY_CONGESTION_SEVERE = 'E';
+    public static final char CAPABILITY_NO_TUNNELS = 'G';
     private final Map<Hash, FloodSearchJob> _activeFloodQueries;
     private boolean _floodfillEnabled;
     private final Set<Hash> _verifiesInProgress;
@@ -606,7 +609,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         long maxMemory = SystemVersion.getMaxMemory();
         // 250 for every 32 MB, min of 250, max of 1250
 //        MAX_DB_BEFORE_SKIPPING_SEARCH = (int) Math.max(250l, Math.min(1250l, maxMemory / ((32 * 1024 * 1024l) / 250)));
-        MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 2000 : 2500;
+        MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 2000 : 3000;
     }
 
     /**

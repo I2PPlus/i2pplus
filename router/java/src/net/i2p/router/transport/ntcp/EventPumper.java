@@ -116,9 +116,9 @@ class EventPumper implements Runnable {
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
 
 //    private static final int MIN_MINB = 4;
-    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 16 : 32;
+    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 32 : 64;
 //    private static final int MAX_MINB = 12;
-    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 128 : 256;
+    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 256 : 512;
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {

@@ -74,18 +74,18 @@ form{line-height:1.6;border-top:none}
 label:hover{color:#000}
 input[type=submit],input[type=reset],#settings,.topbuttons .fakebutton{margin:3px;padding:7px 6px;min-width:0;background:var(--btn);background-size:12px,100%;cursor:pointer}
 #dologin input[type=submit],#dologin #settings{line-height:1.25}
-input.cancel,#nukemail input.clearselection{padding:7px 14px 7px 27px;background:var(--no) no-repeat 10px center / 12px,var(--btn)}
-input.cancel:hover,#nukemail input.clearselection:hover,input.cancel:focus,#nukemail input.clearselection:focus{background:var(--no_hover) no-repeat 10px center / 12px,var(--btn_hover)}
-input.cancel:active,#nukemail input.clearselection:active{background:#f60 var(--no_active) no-repeat 10px center / 12px}
+input.cancel,#nukemail input.clearselection{padding:7px 14px 7px 27px;background:var(--no) no-repeat 10px center/12px,var(--btn)}
+input.cancel:hover,#nukemail input.clearselection:hover,input.cancel:focus,#nukemail input.clearselection:focus{background:var(--no_hover) no-repeat 10px center/12px,var(--btn_hover)}
+input.cancel:active,#nukemail input.clearselection:active{background:#f60 var(--no_active) no-repeat 10px center/12px}
 input.clearselection{padding:7px 11px 7px 28px;background:url(/themes/susimail/images/none.png) no-repeat 8px center,var(--btn)}
 input.clearselection:hover,input.clearselection:focus{background:url(/themes/susimail/images/none.png) no-repeat 8px center,var(--btn_hover)}
 input.clearselection:active{background:#f60 url(/themes/susimail/images/none.png) no-repeat 8px center}
 input.delete,input.delete_attachment,input.really_delete{padding:7px 11px 7px 28px;background:var(--delete) no-repeat 8px center,var(--btn);background-size:16px,100%}
 input.delete:hover,input.delete_attachment:hover,input.really_delete:hover,input.delete:focus,input.delete_attachment:focus,input.really_delete:focus{background:var(--delete_hover) no-repeat 8px center,var(--btn_hover);background-size:16px,100%}
 input.delete:active,input.delete_attachment:active,input.really_delete:active{background:#f60 var(--delete_active) no-repeat 8px center;background-size:16px}
-input.download{padding:7px 11px 7px 28px;background:var(--download) no-repeat 10px center / 14px,var(--btn)}
-input.download:hover,input.download:focus{background:var(--download) no-repeat 10px center / 14px,var(--btn_hover)}
-input.download:active{background:var(--download) no-repeat 10px center / 14px,var(--btn_hover)}
+input.download{padding:7px 11px 7px 28px;background:var(--download) no-repeat 10px center/14px,var(--btn)}
+input.download:hover,input.download:focus{background:var(--download) no-repeat 10px center/14px,var(--btn_hover)}
+input.download:active{background:var(--download) no-repeat 10px center/14px,var(--btn_hover)}
 input.offline{padding:7px 11px 7px 28px;background:var(--offline) no-repeat 8px center,var(--btn);background-size:14px,100%}
 input.offline:hover,input.offline:focus{background:var(--offline_hover) no-repeat 8px center,var(--btn_hover);background-size:14px,100%}
 input.offline:active{background:#f60 var(--offline_active) no-repeat 8px center;background-size:14px}
@@ -93,64 +93,64 @@ input.list,input.moveto,#pagenav input.switchto{padding:7px 11px 7px 28px;backgr
 input.list:hover,input.moveto:hover,#pagenav input.switchto:hover,input.list:focus,input.moveto:focus,#pagenav input.switchto:focus{background:var(--folder_hover) no-repeat 8px center,var(--btn_hover)}
 input.list:active,input.moveto:active,#pagenav input.switchto:active{background:#f60 var(--folder_active) no-repeat 8px center}
 input.forward{padding:7px 11px 7px 28px;background:var(--forward) no-repeat 8px center,var(--btn);background-size:14px,100%}
-input.forward:hover,input.forward:focus{background:var(--forward_hover) no-repeat 10px center / 14px,var(--btn_hover);background-size:14px,100%}
-input.forward:active{background:#f60 var(--forward_active) no-repeat 10px center / 14px}
-input.login{padding:7px 11px 7px 28px;background:var(--login) no-repeat 10px center / 14px,var(--btn)}
-input.login:hover,input.login:focus{background:var(--login_hover) no-repeat 10px center / 14px ,var(--btn_hover)}
-input.login:active{background:#f60 var(--login_active) no-repeat 10px center / 14px}
+input.forward:hover,input.forward:focus{background:var(--forward_hover) no-repeat 10px center/14px,var(--btn_hover);background-size:14px,100%}
+input.forward:active{background:#f60 var(--forward_active) no-repeat 10px center/14px}
+input.login{padding:7px 11px 7px 28px;background:var(--login) no-repeat 10px center/14px,var(--btn)}
+input.login:hover,input.login:focus{background:var(--login_hover) no-repeat 10px center/14px ,var(--btn_hover)}
+input.login:active{background:#f60 var(--login_active) no-repeat 10px center/14px}
 #info{overflow:hidden}
-input.logout{padding:7px 14px 7px 28px;background:var(--logout) no-repeat 10px center / 14px,var(--btn)}
-input.logout:hover,input.logout:focus{background:var(--logout_hover) no-repeat 10px center / 14px,var(--btn_hover)}
-input.logout:active{background:#f60 var(--logout_active) no-repeat 10px center / 14px}
-#info input.logout,#info input.logout:hover,#info input.logout:focus,#info input.logout:active{margin:-11px -4px -8px 12px;padding-right:10px;float:none;line-height:normal;border:none;border-left:1px solid #131;border-radius:0;box-shadow:none;background:var(--logout) no-repeat 10px center / 14px,var(--badge);filter:none}
-#info input.logout:hover,#info input.logout:focus{background:var(--logout_hover) no-repeat 10px center / 14px,var(--badge)}
-#info input.logout:active{box-shadow:var(--btn_shadow_active);background:#f60 var(--logout_active) no-repeat 10px center / 14px}
-input.reload,input.refresh,input[name="refresh"][disabled],.topbuttons .fakebutton{padding:7px 11px 7px 28px;background:var(--refresh) no-repeat 10px center / 13px,var(--btn)}
+input.logout{padding:7px 14px 7px 28px;background:var(--logout) no-repeat 10px center/14px,var(--btn)}
+input.logout:hover,input.logout:focus{background:var(--logout_hover) no-repeat 10px center/14px,var(--btn_hover)}
+input.logout:active{background:#f60 var(--logout_active) no-repeat 10px center/14px}
+#info input.logout,#info input.logout:hover,#info input.logout:focus,#info input.logout:active{margin:-11px -4px -8px 12px;padding-right:10px;float:none;line-height:normal;border:none;border-left:1px solid #131;border-radius:0;box-shadow:none;background:var(--logout) no-repeat 10px center/14px,var(--badge);filter:none}
+#info input.logout:hover,#info input.logout:focus{background:var(--logout_hover) no-repeat 10px center/14px,var(--badge)}
+#info input.logout:active{box-shadow:var(--btn_shadow_active);background:#f60 var(--logout_active) no-repeat 10px center/14px}
+input.reload,input.refresh,input[name="refresh"][disabled],.topbuttons .fakebutton{padding:7px 11px 7px 28px;background:var(--refresh) no-repeat 10px center/13px,var(--btn)}
 .topbuttons .fakebutton{padding-left:26px}
 input[name="refresh"][disabled]{margin-top:2px}
-input.reload:hover,input.refresh:hover,.fakebutton:hover,input.reload:focus,input.refresh:focus,.fakebutton:focus{background:var(--refresh_hover) no-repeat 10px center / 13px,var(--btn_hover)}
-input.reload:active,input.refresh:active,.fakebutton:active{background:#f60 var(--refresh_active) no-repeat 10px center / 13px}
+input.reload:hover,input.refresh:hover,.fakebutton:hover,input.reload:focus,input.refresh:focus,.fakebutton:focus{background:var(--refresh_hover) no-repeat 10px center/13px,var(--btn_hover)}
+input.reload:active,input.refresh:active,.fakebutton:active{background:#f60 var(--refresh_active) no-repeat 10px center/13px}
 input.invertselection{padding:7px 11px 7px 28px;background:url(/themes/susimail/images/selection.png) no-repeat 8px center,var(--btn)}
 input.invertselection:hover,input.invertselection:focus{background:url(/themes/susimail/images/selection.png) no-repeat 8px center,var(--btn_hover)}
 input.invertselection:active{background:#f60 url(/themes/susimail/images/selection.png) no-repeat 8px center}
 input.show{padding:7px 11px 7px 28px;background:-var(--yes) no-repeat 8px center,var(--btn)}
 input.show:hover,input.show:focus{background:var(--yes_hover) no-repeat 8px center,var(--btn_hover)}
-input.show:active{background:#f60 var(--yes_active) no-repeat 10px center / 12px}
+input.show:active{background:#f60 var(--yes_active) no-repeat 10px center/12px}
 input.markall{padding:7px 11px 7px 28px;background:url(/themes/susimail/images/all.png) no-repeat 8px center,var(--btn)}
 input.markall:hover,input.markall:focus{background:url(/themes/susimail/images/all.png) no-repeat 8px center,var(--btn_hover)}
 input.markall:active{background:#f60 url(/themes/susimail/images/all.png) no-repeat 8px center}
-input.new{padding:7px 11px 7px 28px;background:var(--compose) no-repeat 10px center / 14px,var(--btn)}
-input.new:hover,input.new:focus{background:var(--compose_hover) no-repeat 10px center / 14px,var(--btn_hover)}
+input.new{padding:7px 11px 7px 28px;background:var(--compose) no-repeat 10px center/14px,var(--btn)}
+input.new:hover,input.new:focus{background:var(--compose_hover) no-repeat 10px center/14px,var(--btn_hover)}
 input.new:active{background:#f60 var(--compose_active) no-repeat 8px center;background-size:14px,100%}
-input.reply{padding:7px 11px 7px 28px;background:var(--reply) no-repeat 8px center / 14px,var(--btn)}
-input.reply:hover,input.reply:focus{background:var(--reply_hover) no-repeat 8px center / 14px,var(--btn_hover)}
-input.reply:active{background:#f60 var(--reply_active) no-repeat 8px center / 14px}
-input.replyall{padding:7px 11px 7px 28px;background:var(--replyall) no-repeat 10px center / 14px,var(--btn)}
-input.replyall:hover,input.replyall:focus{background:var(--replyall_hover) no-repeat 10px center / 14px,var(--btn_hover)}
-input.replyall:active{background:#f60 var(--replyall_active) no-repeat 10px center / 14px}
+input.reply{padding:7px 11px 7px 28px;background:var(--reply) no-repeat 8px center/14px,var(--btn)}
+input.reply:hover,input.reply:focus{background:var(--reply_hover) no-repeat 8px center/14px,var(--btn_hover)}
+input.reply:active{background:#f60 var(--reply_active) no-repeat 8px center/14px}
+input.replyall{padding:7px 11px 7px 28px;background:var(--replyall) no-repeat 10px center/14px,var(--btn)}
+input.replyall:hover,input.replyall:focus{background:var(--replyall_hover) no-repeat 10px center/14px,var(--btn_hover)}
+input.replyall:active{background:#f60 var(--replyall_active) no-repeat 10px center/14px}
 input.markall{margin-right:0}
-input.setpagesize,input.save{padding:7px 13px 7px 28px;background:var(--yes) no-repeat 10px center / 12px,var(--btn)}
+input.setpagesize,input.save{padding:7px 13px 7px 28px;background:var(--yes) no-repeat 10px center/12px,var(--btn)}
 input.setpagesize{padding:7px 26px 7px 36px}
-input.setpagesize:hover,input.setpagesize:focus,input.save:hover,input.save:focus{background:var(--yes_hover) no-repeat 10px center / 12px,var(--btn_hover)}
-input.setpagesize:active,input.save:active{background:#f60 var(--yes_active) no-repeat 10px center / 12px}
+input.setpagesize:hover,input.setpagesize:focus,input.save:hover,input.save:focus{background:var(--yes_hover) no-repeat 10px center/12px,var(--btn_hover)}
+input.setpagesize:active,input.save:active{background:#f60 var(--yes_active) no-repeat 10px center/12px}
 input.setpagesize,input.setpagesize:hover,input.setpagesize:focus,input.setpagesize:active{background-position:16px center}
-input.send{padding:7px 11px 7px 28px;background:var(--send) no-repeat 10px center / 16px,var(--btn_hover)}
-input.send:hover,input.send:focus{background:var(--send_hover) no-repeat 10px center / 16px,var(--btn_hover)}
-input.send:active{background:#f60 var(--send_active) no-repeat 10px center / 16px}
+input.send{padding:7px 11px 7px 28px;background:var(--send) no-repeat 10px center/16px,var(--btn_hover)}
+input.send:hover,input.send:focus{background:var(--send_hover) no-repeat 10px center/16px,var(--btn_hover)}
+input.send:active{background:#f60 var(--send_active) no-repeat 10px center/16px}
 input.send + input.cancel{padding-right:10px}
-input.configure,#settings{padding:7px 11px 7px 28px;background:var(--configure) no-repeat 10px center / 14px,var(--btn)}
-input.configure:hover,#settings:hover,input.configure:focus,#settings:focus{background:var(--configure_hover) no-repeat 10px center / 14px,var(--btn_hover)}
-input.configure:active,#settings:active{background:#f60 var(--configure_active) no-repeat 10px center / 14px}
-input.saveas,input.saveasdraft{padding:7px 10px 7px 27px;background:var(--save) no-repeat 10px center / 15px,var(--btn)}
-input.saveas:hover,input.saveasdraft:hover,input.saveas:focus,input.saveasdraft:focus{background:var(--save_hover) no-repeat 10px center / 15px,var(--btn_hover)}
-input.saveas:active,input.saveasdraft:active{background:#f60 var(--save_active) no-repeat 10px center / 15px}
-input.new_upload{padding:7px 11px 7px 28px;background:var(--attach) no-repeat 10px center / 15px,var(--btn)}
-input.new_upload:hover,input.new_upload:focus{background:var(--attach_hover) no-repeat 10px center / 15px,var(--btn_hover)}
-input.new_upload:active{background:#f60 var(--attach_active) no-repeat 10px center / 15px}
+input.configure,#settings{padding:7px 11px 7px 28px;background:var(--configure) no-repeat 10px center/14px,var(--btn)}
+input.configure:hover,#settings:hover,input.configure:focus,#settings:focus{background:var(--configure_hover) no-repeat 10px center/14px,var(--btn_hover)}
+input.configure:active,#settings:active{background:#f60 var(--configure_active) no-repeat 10px center/14px}
+input.saveas,input.saveasdraft{padding:7px 10px 7px 27px;background:var(--save) no-repeat 10px center/15px,var(--btn)}
+input.saveas:hover,input.saveasdraft:hover,input.saveas:focus,input.saveasdraft:focus{background:var(--save_hover) no-repeat 10px center/15px,var(--btn_hover)}
+input.saveas:active,input.saveasdraft:active{background:#f60 var(--save_active) no-repeat 10px center/15px}
+input.new_upload{padding:7px 11px 7px 28px;background:var(--attach) no-repeat 10px center/15px,var(--btn)}
+input.new_upload:hover,input.new_upload:focus{background:var(--attach_hover) no-repeat 10px center/15px,var(--btn_hover)}
+input.new_upload:active{background:#f60 var(--attach_active) no-repeat 10px center/15px}
 input.new_upload{float:right;margin-right:0}
-input.switchto,input.moveto{padding:7px 11px 7px 28px;background:var(--folder) no-repeat 10px center / 14px,var(--btn)}
-input.switchto:hover,input.moveto:hover,input.switchto:focus,input.moveto:focus{background:var(--folder_hover) no-repeat 10px center / 14px,var(--btn_hover)}
-input.switchto:active,input.moveto:active{background:#f60 var(--folder_active) no-repeat 10px center / 14px}
+input.switchto,input.moveto{padding:7px 11px 7px 28px;background:var(--folder) no-repeat 10px center/14px,var(--btn)}
+input.switchto:hover,input.moveto:hover,input.switchto:focus,input.moveto:focus{background:var(--folder_hover) no-repeat 10px center/14px,var(--btn_hover)}
+input.switchto:active,input.moveto:active{background:#f60 var(--folder_active) no-repeat 10px center/14px}
 input[disabled]{opacity:.4;pointer-events:none}
 input[type=file]::file-selector-button{margin:2px 3px;padding:4px 2px}
 .topbuttons .select2{margin:0 -2px;padding:7px 24px 7px 8px}
@@ -167,18 +167,18 @@ div.pagenav{padding:10px 5px 0;border-top:1px solid #555;border-radius:0 0 2px 2
 .pagenav tr{display:table-row;border:none}
 .pagenav td{border:none}
 #messagenav{margin-right:-1px;margin-left:-7px;float:right}
-input.firstpage{padding:4px 10px;text-indent:-99999px;background:var(--first) no-repeat center center / 14px,var(--btn)}
-input.firstpage:hover{background:var(--first_hover) no-repeat center center / 14px,var(--btn_hover)}
-input.firstpage:active{background:#f60 var(--first_active) no-repeat center center / 14px}
-input.lastpage{padding:4px 10px;background:var(--last) no-repeat center center / 14px,var(--btn);text-indent:-99999px}
-input.lastpage:hover{background:var(--last_hover) no-repeat center center / 14px,var(--btn_hover)}
-input.lastpage:active{background:#f60 var(--last_active) no-repeat center center / 14px}
-input.prevpage,input.prev{padding:4px 10px;text-indent:-99999px;background:var(--previous) no-repeat center center / 14px,var(--btn)}
-input.prev:hover,input.prevpage:hover{background:var(--previous_hover) no-repeat center center / 14px,var(--btn_hover)}
-input.prev:active,input.prevpage:active{background:#f60 var(--previous_active) no-repeat center center / 14px}
-input.nextpage,input.next{padding:4px 10px;text-indent:-99999px;background:var(--next) no-repeat center center / 14px,var(--btn)}
-input.nextpage:hover,input.next:hover{background:var(--next_hover) no-repeat center center / 14px,var(--btn_hover)}
-input.nextpage:active,input.next:active{background:#f60 var(--next_active) no-repeat center center / 14px}
+input.firstpage{padding:4px 10px;text-indent:-99999px;background:var(--first) no-repeat center center/14px,var(--btn)}
+input.firstpage:hover{background:var(--first_hover) no-repeat center center/14px,var(--btn_hover)}
+input.firstpage:active{background:#f60 var(--first_active) no-repeat center center/14px}
+input.lastpage{padding:4px 10px;background:var(--last) no-repeat center center/14px,var(--btn);text-indent:-99999px}
+input.lastpage:hover{background:var(--last_hover) no-repeat center center/14px,var(--btn_hover)}
+input.lastpage:active{background:#f60 var(--last_active) no-repeat center center/14px}
+input.prevpage,input.prev{padding:4px 10px;text-indent:-99999px;background:var(--previous) no-repeat center center/14px,var(--btn)}
+input.prev:hover,input.prevpage:hover{background:var(--previous_hover) no-repeat center center/14px,var(--btn_hover)}
+input.prev:active,input.prevpage:active{background:#f60 var(--previous_active) no-repeat center center/14px}
+input.nextpage,input.next{padding:4px 10px;text-indent:-99999px;background:var(--next) no-repeat center center/14px,var(--btn)}
+input.nextpage:hover,input.next:hover{background:var(--next_hover) no-repeat center center/14px,var(--btn_hover)}
+input.nextpage:active,input.next:active{background:#f60 var(--next_active) no-repeat center center/14px}
 #pagenavbottom,#mailbox #pagenavbottom td{position:relative;z-index:100;border-top:var(--border);box-shadow:none}
 #pagenavbottom td{padding:2px;text-align:center;background:#010}
 #pagenavbottom table{float:none}
@@ -232,8 +232,8 @@ img.sort:active{box-shadow:var(--highlight),inset 2px 2px 2px #000}
 .iframed #dologin h1{display:none}
 #dologin input[type=text],input[name="pagesize"]{text-align:left}
 #dologin input[name="user"],#dologin input[name="pass"]{padding:7px 7px 7px 28px;background-blend-mode:luminosity}
-#dologin input[name="user"]{background:#000 var(--user) no-repeat 7px center / 16px}
-#dologin input[name="pass"]{background:#000 var(--key) no-repeat 7px center / 16px}
+#dologin input[name="user"]{background:#000 var(--user) no-repeat 7px center/16px}
+#dologin input[name="pass"]{background:#000 var(--key) no-repeat 7px center/16px}
 #dologin input[name="user"]:focus,#dologin input[name="pass"]:focus{background-color:#010;background-blend-mode:normal}
 #dologin input[name="user"],#dologin input[name="pass"],#dologin input[name="host"]{margin-right:5px;max-width:300px}
 #dologin hr{margin:0 0 4px;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,128,0,.8) 45%,rgba(0,128,0,.8) 55%,rgba(0,0,0,0))}
@@ -245,10 +245,10 @@ img.sort:active{box-shadow:var(--highlight),inset 2px 2px 2px #000}
 #dologin tr:last-child a:hover{color:#494;box-shadow:0 0 0 1px #020;background:var(--glow_bottom),var(--th);transition:ease all .1s}
 #dologin tr:last-child a:active{color:#f90;box-shadow:0 0 1px #020,inset 3px 3px 3px #000;transition:ease all .05s}
 #dologin tr:last-child td{color:transparent}
-#toggle{margin:0;height:20px;width:20px;min-width:0;vertical-align:middle;font-size:0;border:none;box-shadow:none;background:var(--show) no-repeat center center / 20px;cursor:pointer;mix-blend-mode:luminosity}
-#toggle.hidepass{background:var(--hide) no-repeat center center / 20px}
+#toggle{margin:0;height:20px;width:20px;min-width:0;vertical-align:middle;font-size:0;border:none;box-shadow:none;background:var(--show) no-repeat center center/20px;cursor:pointer;mix-blend-mode:luminosity}
+#toggle.hidepass{background:var(--hide) no-repeat center center/20px}
 #toggle:hover{mix-blend-mode:normal}
-#toggle.showpass{background:var(--show) no-repeat center center / 20px}
+#toggle.showpass{background:var(--show) no-repeat center center/20px}
 
 /* configuration */
 textarea[name="config_text"]{margin:0 auto 15px;padding:0 5px;resize:none;width:600px;min-width:0;height:370px;line-height:20px;border:var(--border);box-shadow:0 0 2px 2px rgba(0,0,0,.5);background:repeating-linear-gradient(180deg,#000800,#000800 20px,#000 20px,#000 40px);animation:fade-in .1s ease .3s both,scaleY .05s ease .5s both}
@@ -259,7 +259,7 @@ h3#config{margin:0 0 20px;padding:10px;text-align:center;text-transform:uppercas
 
 /* top buttons */
 #info{margin:4px 140px 0 4px;padding:0 8px 0 3px;float:right;line-height:1.5;text-transform:lowercase;font-weight:400;color:var(--ink);border:1px solid #131;border-radius:2px;box-shadow:0 0 1px 0 #000;background:var(--badge)}
-#infoUser{margin-right:6px;padding:3px 8px 4px 20px;display:inline-block;text-align:center;font-weight:700;color:var(--ink);border-right:1px solid #131;background:var(--user) no-repeat 2px center / 15px}
+#infoUser{margin-right:6px;padding:3px 8px 4px 20px;display:inline-block;text-align:center;font-weight:700;color:var(--ink);border-right:1px solid #131;background:var(--user) no-repeat 2px center/15px}
 .topbuttons{margin:-1px -1px 0;padding:5px 5px 4px;width:calc(100% - 10px);min-width:800px;display:inline-block;vertical-align:middle;white-space:nowrap;text-align:center;font-weight:700;border:var(--border);box-shadow:var(--bevel);background:var(--th)}
 .topbuttons#readmail{padding:5px 5px 8px}
 body:not(.iframed) .topbuttons{position:sticky;top:-1px;z-index:1000;background:var(--topnav)}
@@ -284,10 +284,10 @@ tr.bottombuttons:empty{display:none}
 #composemail .bottombuttons{background:none;box-shadow:none}
 
 /* notifications */
-.notifications{margin:0 30%;padding:0 10px 2px;min-width:360px;position:fixed;top:0;left:0;right:0;z-index:9999;text-align:center;font-size:90%;text-shadow:var(--txt_shadow);border:1px solid #000;border-top:none;box-shadow:0 2px 2px 1px rgba(0,0,0,.5),inset 0 0 0 1px #040;background:#020 var(--no) no-repeat right 6px top 6px / 14px;cursor:crosshair;animation:2s hide-up 4s ease-out forwards}
+.notifications{margin:0 30%;padding:0 10px 2px;min-width:360px;position:fixed;top:0;left:0;right:0;z-index:9999;text-align:center;font-size:90%;text-shadow:var(--txt_shadow);border:1px solid #000;border-top:none;box-shadow:0 2px 2px 1px rgba(0,0,0,.5),inset 0 0 0 1px #040;background:#020 var(--no) no-repeat right 6px top 6px/14px;cursor:crosshair;animation:2s hide-up 4s ease-out forwards}
 .iframed .notifications{margin:-1px 30% 0;border:var(--border);border-top:none;border-radius:0 0 2px 2px;box-shadow:0 2px 2px 1px rgba(0,0,0,.5),inset 0 0 0 1px #010}
 .notifications.msgerror{margin:0 20%}
-.notifications:hover{background:#020 var(--no_hover) no-repeat right 6px top 6px / 14px}
+.notifications:hover{background:#020 var(--no_hover) no-repeat right 6px top 6px/14px}
 .notifications p.info,.notifications p.info b{text-align:center;font-size:10pt;text-shadow:none;color:var(--ink)}
 .notifications p{letter-spacing:.07em;word-spacing:.2em;font-weight:700;text-shadow:var(--txt_shadow);animation:fade-in 1s linear}
 p.error{text-align:center}
@@ -309,10 +309,10 @@ td p.error{padding:10px}
 #attachedfile{padding:4px 5px}
 #newmail input[type=checkbox]{margin:0}
 #attachedfile input[type=checkbox]{margin:1px;float:right}
-#attachedfile label{padding:5px 10px 5px 24px;width:calc(100% - 34px);min-width:400px;max-width:600px;display:inline-block;white-space:nowrap;line-height:1.4;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;font-style:italic;border-radius:2px 15px 15px 2px;box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,0 0 0 1px #000;background:var(--attach_active) no-repeat 9px center / 14px,linear-gradient(90deg,#010 70%,#020)}
-#attachedfile label:hover{color:#930;box-shadow:var(--highlight),inset 0 0 0 2px #930;background:var(--attach_hover) no-repeat 9px center / 14px,linear-gradient(90deg,#020 70%,#010)}
+#attachedfile label{padding:5px 10px 5px 24px;width:calc(100% - 34px);min-width:400px;max-width:600px;display:inline-block;white-space:nowrap;line-height:1.4;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;font-style:italic;border-radius:2px 15px 15px 2px;box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,0 0 0 1px #000;background:var(--attach_active) no-repeat 9px center/14px,linear-gradient(90deg,#010 70%,#020)}
+#attachedfile label:hover{color:#930;box-shadow:var(--highlight),inset 0 0 0 2px #930;background:var(--attach_hover) no-repeat 9px center/14px,linear-gradient(90deg,#020 70%,#010)}
 #attachedfile label:active{box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,inset 4px 4px 3px #000}
-.attached{margin:0;padding:15px 35px 15px 30px;overflow:auto;text-align:left;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:var(--attached) no-repeat 10px center / 16px,repeating-linear-gradient(180deg,#010,#000 2px)}
+.attached{margin:0;padding:15px 35px 15px 30px;overflow:auto;text-align:left;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:var(--attached) no-repeat 10px center/16px,repeating-linear-gradient(180deg,#010,#000 2px)}
 .attached img{margin-top:4px;padding:3px;max-width:100%;max-width:calc(100% - 10px);border:1px solid #030;border-radius:2px;background:#000;text-align:center;image-orientation:from-image}
 #deleteattached::before,#addattachment td:last-child::after{margin:1px 0 2px;height:1px;display:block;background:#252;content:""}
 #addattachment td:first-child::after{width:100%;height:7px;display:block;content:""}
@@ -320,7 +320,7 @@ td p.error{padding:10px}
 #deleteattached{text-align:right}
 #deleteattached input{margin:8px 0 0 0}
 #imageInfo{margin-top:16px;padding-top:10px;width:100%;display:block;text-align:left;font-weight:700;border-top:1px dotted #242}
-#imageInfo::before{width:20px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--package) no-repeat left center / 16px;content:""}
+#imageInfo::before{width:20px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--package) no-repeat left center/16px;content:""}
 
 /* mail list */
 tr.list0,tr.list1{background:var(--row)}
@@ -339,12 +339,12 @@ td.mailListSize{font-style:italic;box-shadow:var(--highlight)}
 td.mailListAttached{padding:3px}
 td.mailListAttachment img{opacity:0}
 td.mailListFlagged img{display:none}
-td.mailListFlagged.new{background:var(--newmail) no-repeat center center / 14px}
+td.mailListFlagged.new{background:var(--newmail) no-repeat center center/14px}
 td.mailListSender a,td.mailListSender a:hover{font-weight:400;color:var(--ink);line-height:1.2}
 td.mailListSubject a{padding:3px 0;display:inline-block}
 tr:hover .listDate{box-shadow:0 0 0 1px #000,inset 0 0 0 1px #262;opacity:.9}
 tr:hover .listSize{box-shadow:0 0 0 1px #262;color:var(--ink)}
-tr:hover .mailListAttachment.isAttached{background:var(--attach_hover) no-repeat center center / 14px}
+tr:hover .mailListAttachment.isAttached{background:var(--attach_hover) no-repeat center center/14px}
 tr:hover td.mailListSubject a{width:calc(100% - 2px);border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,64,0,.9) 20%)}
 tr:active td.mailListSubject a{box-shadow:inset 2px 2px 1px #000}
 tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td,.topbuttons tr:hover td,.topbuttons:hover td,#mailbox tr:hover,#mailbox tr:hover td{box-shadow:none}
@@ -357,7 +357,7 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 .listSize{min-width:56px;display:inline-block;vertical-align:middle;text-align:right;border-radius:2px;box-shadow:0 0 0 1px #000;background:var(--badge)}
 .listSizeUnit{margin:1px 1px 1px 2px;padding:2px 1px;display:inline-block;min-width:14px;color:var(--ink);text-align:center;font-size:90%;font-style:normal;font-weight:700;text-shadow:var(--txt_shadow);border-radius:0 1px 1px 0;background:#010}
 .listTime{margin-right:2px;min-width:42px;opacity:.85}
-.mailListAttachment.isAttached{background:var(--attach) no-repeat center center / 14px}
+.mailListAttachment.isAttached{background:var(--attach) no-repeat center center/14px}
 .mailListAttachment{min-width:16px}
 .mailListCount{text-align:right}
 .mailListDelete,.mailListDate,.mailListSize,.mailListFlagged,.mailListAttachment{padding:3px 6px;width:1%;white-space:nowrap}
@@ -374,8 +374,8 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 #mailbox hr{display:none}
 #mailbox{position:relative;border-collapse:separate;border-spacing:0}
 #mailbox td{color:var(--ink)}
-#mailbox th:last-child{padding:6px 0;background:var(--nuke) no-repeat center center / 14px,var(--th)}
-#mailbox th.MailListAttachment{background:var(--attach) no-repeat center center / 14px ,var(--th)}
+#mailbox th:last-child{padding:6px 0;background:var(--nuke) no-repeat center center/14px,var(--th)}
+#mailbox th.MailListAttachment{background:var(--attach) no-repeat center center/14px ,var(--th)}
 #mailbox th.mailListFlagged{background:url(/themes/susimail/images/status.png) no-repeat center center,var(--th)}
 #mailbox th{padding:6px 5px;white-space:nowrap;font-size:70%;color:var(--ink);background:var(--th)}
 #mailbox tr:hover .mailListSender a{color:var(--ink)}
@@ -395,7 +395,7 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 /* confirm delete */
 #confirmdelete td{box-shadow:var(--highlight);background:repeating-linear-gradient(45deg,#900,#900 10px,#000 10px,#000 20px);background-size:400%;animation:attention 240s linear infinite both}
 .iframed #confirmdelete td{border-radius:0 0 2px 2px}
-#nukemail{margin:3px 3px 2px;padding:35px 20px 20px;font-weight:700;font-style:italic;color:#a00;border:1px solid #700;box-shadow:var(--highlight),inset 0 0 1px 1px #b00;background:var(--question) no-repeat center 20px / 32px,linear-gradient(180deg,#100,#000,#100)}
+#nukemail{margin:3px 3px 2px;padding:35px 20px 20px;font-weight:700;font-style:italic;color:#a00;border:1px solid #700;box-shadow:var(--highlight),inset 0 0 1px 1px #b00;background:var(--question) no-repeat center 20px/32px,linear-gradient(180deg,#100,#000,#100)}
 #nukemail.floating{margin:0 auto 1px;width:480px;position:absolute;z-index:2000;top:250px;left:0;right:0;box-shadow:var(--highlight),inset 0 0 2px 1px #700,0 0 0 1px #000,0 0 3px 3px rgba(0,0,0,.7),0 0 1000px 1000px rgba(8,0,0,.7);animation:fade-in linear .5s}
 .iframed #nukemail{margin:2px 4px 4px}
 .iframed #nukemail.floating{margin:0 auto 1px;top:230px;left:0;right:0}

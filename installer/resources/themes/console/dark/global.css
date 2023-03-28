@@ -15,10 +15,10 @@
 --bevel_hard:var(--highlight),inset 0 0 0 2px rgba(32,80,32,.6);
 --bevel_hover:var(--highlight),inset 0 0 0 2px rgba(255,96,0,.35);
 --bevel_warn:var(--highlight),inset 0 0 2px 1px #900;
---bg_dots:repeating-linear-gradient(90deg,rgba(0,8,0,.5) 2px,rgba(0,16,0,.5) 4px) center center / 4px 100%,repeating-linear-gradient(180deg,#000 2px,#010 4px) center center / 100% 4px;
+--bg_dots:repeating-linear-gradient(90deg,rgba(0,8,0,.5) 2px,rgba(0,16,0,.5) 4px) center center/4px 100%,repeating-linear-gradient(180deg,#000 2px,#010 4px) center center/100% 4px;
 --bg_title:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1'%3E%3Cpath fill='%2300180088' d='M0 0h1v1H0z'/%3E%3Cpath fill='%2300000050' d='M1 0h1v1H1z'/%3E%3C/svg%3E");
 --bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;
---bodybg:var(--bg_title) center center / 2px,var(--hstripe) fixed center center / 4px 100%;
+--bodybg:var(--bg_title) center center/2px,var(--hstripe) fixed center center/4px 100%;
 --border:1px solid #242;
 --border_hard:1px solid #252;
 --border_hover:1px solid #f60;
@@ -43,9 +43,9 @@
 --glow_bottom:radial-gradient(at center bottom,rgba(16,72,16,.3),rgba(0,0,0,0) 50%);
 --glow_bottom_hover:radial-gradient(at center bottom,rgba(255,96,0,.25),rgba(0,0,0,0) 50%);
 --glow_top:radial-gradient(at center -45px,rgba(16,72,16,.3),rgba(0,0,0,0) 85%);
---graphoverlay:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.4)),repeating-linear-gradient(90deg,rgba(192,255,192,.01) 2px,rgba(0,0,0,.1) 4px) center center / 4px 100%,repeating-linear-gradient(180deg,rgba(0,0,0,.2) 2px,rgba(192,255,192,.01) 4px) center center / 100% 4px;
---h1:var(--bg_title) left top / 2px,repeating-linear-gradient(to bottom,rgba(0,24,0,.3) 2px,rgba(0,0,0,.3) 4px) center center / 100% 4px,linear-gradient(180deg,#020,#010 50%,#010 50%,#000),var(--camotile) left top /256px,#000;
---h2:repeating-linear-gradient(90deg,rgba(0,0,0,.4) 2px,rgba(0,32,0,.6) 4px) center center / 4px 100%,linear-gradient(180deg,#001800,#000 75%);
+--graphoverlay:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.4)),repeating-linear-gradient(90deg,rgba(192,255,192,.01) 2px,rgba(0,0,0,.1) 4px) center center/4px 100%,repeating-linear-gradient(180deg,rgba(0,0,0,.2) 2px,rgba(192,255,192,.01) 4px) center center/100% 4px;
+--h1:var(--bg_title) left top/2px,repeating-linear-gradient(to bottom,rgba(0,24,0,.3) 2px,rgba(0,0,0,.3) 4px) center center/100% 4px,linear-gradient(180deg,#020,#010 50%,#010 50%,#000),var(--camotile) left top /256px,#000;
+--h2:repeating-linear-gradient(90deg,rgba(0,0,0,.4) 2px,rgba(0,32,0,.6) 4px) center center/4px 100%,linear-gradient(180deg,#001800,#000 75%);
 --h3_blend:normal,normal,normal,exclusion;
 --h3_fade:linear-gradient(180deg,#005000,#000 75%);
 --h3:var(--bg_title);
@@ -59,16 +59,16 @@
 --input_txt:linear-gradient(180deg,#000800,#001800);
 --isdown:repeating-linear-gradient(135deg,#131,#131 10px,#300 11px,#000 12px,#000 19px,#300 19px,#000 20px);
 --label:linear-gradient(180deg,#001800 50%,#000 50%);
---mainbg:repeating-linear-gradient(90deg,rgba(0,0,0,.8) 2px,rgba(0,24,0,.7) 4px) center center / 4px 100%,repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px,rgba(0,24,0,.7) 4px) center center / 100% 4px,var(--camo) center center / 2048px;
+--mainbg:repeating-linear-gradient(90deg,rgba(0,0,0,.8) 2px,rgba(0,24,0,.7) 4px) center center/4px 100%,repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px,rgba(0,24,0,.7) 4px) center center/100% 4px,var(--camo) center center/2048px;
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
---msg:repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(0,32,0,.3) 4px) center center / 100% 4px,var(--hat) no-repeat right 2px bottom -2px / auto 56px,linear-gradient(180deg,#010,#000400);
---msg_nohat:repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(0,32,0,.3) 4px) center center / 100% 4px,linear-gradient(180deg,#010,#000400);
---msg_warn:repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(96,0,0,.3) 4px) center center / 100% 4px,var(--hat) no-repeat right 2px bottom -2px / auto 56px,linear-gradient(180deg,#100,#040000);
---msg_warn_nohat:repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(96,0,0,.3) 4px) center center / 100% 4px,linear-gradient(180deg,#100,#040000);
+--msg:repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(0,32,0,.3) 4px) center center/100% 4px,var(--hat) no-repeat right 2px bottom -2px/auto 56px,linear-gradient(180deg,#010,#000400);
+--msg_nohat:repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(0,32,0,.3) 4px) center center/100% 4px,linear-gradient(180deg,#010,#000400);
+--msg_warn:repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(96,0,0,.3) 4px) center center/100% 4px,var(--hat) no-repeat right 2px bottom -2px/auto 56px,linear-gradient(180deg,#100,#040000);
+--msg_warn_nohat:repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(96,0,0,.3) 4px) center center/100% 4px,linear-gradient(180deg,#100,#040000);
 --navbar:linear-gradient(180deg,#1a261a,#223022 7%,#212f21 9%,#172317 21%,#091109 49%,#050d05 50%,#020602 51%,#010301 53%,#000000 56%);
 --nav_hover:linear-gradient(180deg,#730,#620 50%,#410 50%,#000);
 --nav:linear-gradient(180deg,#002900,#000400);
---newsbg:var(--bg_title) left top / 2px,repeating-linear-gradient(180deg,rgba(0,0,0,.5) 2px,rgba(0,32,0,.5) 4px) repeat center center / 4px 100%;
+--newsbg:var(--bg_title) left top/2px,repeating-linear-gradient(180deg,rgba(0,0,0,.5) 2px,rgba(0,32,0,.5) 4px) repeat center center/4px 100%;
 --note_shadow:var(--bevel_hard),inset 0 0 7px 7px rgba(0,0,0,.8);
 --on:#6b6,0 0 0 1px rgba(0,0,0,.7),0 0 1px 0 rgba(0,0,0,.5);
 --option_highlight:inset 0 0 0 1px #002500;
@@ -79,8 +79,8 @@
 --tab_hover:linear-gradient(180deg,#730,#410 50%,#310 50%,#180800,#000);
 --textshadow:0 1px 1px rgba(0,0,0,.8);
 --th:linear-gradient(180deg,#010,#000);
---title:var(--bg_title) center center / 2px,repeating-linear-gradient(180deg,rgba(0,48,0,.4) 2px,rgba(0,0,0,.8) 4px) center center / 100% 4px,linear-gradient(180deg,rgba(0,64,0,.6),rgba(0,0,0,.9)),var(--camo) center center / 2048px;
---topnav:repeating-linear-gradient(90deg,rgba(0,0,0,.4) 2px,rgba(0,32,0,.7) 4px) center center / 4px 100%,linear-gradient(180deg,rgba(0,16,0,.8),#000),var(--camo) repeat center center / 2048px;
+--title:var(--bg_title) center center/2px,repeating-linear-gradient(180deg,rgba(0,48,0,.4) 2px,rgba(0,0,0,.8) 4px) center center/100% 4px,linear-gradient(180deg,rgba(0,64,0,.6),rgba(0,0,0,.9)),var(--camo) center center/2048px;
+--topnav:repeating-linear-gradient(90deg,rgba(0,0,0,.4) 2px,rgba(0,32,0,.7) 4px) center center/4px 100%,linear-gradient(180deg,rgba(0,16,0,.8),#000),var(--camo) repeat center center/2048px;
 --tr:linear-gradient(180deg,#001400,#000600);
 --txt_focus:linear-gradient(180deg,#001800,#001000);
 --txt_shadow:0 1px 1px #000;
@@ -127,17 +127,17 @@ label[disabled],label[disabled]:hover{opacity:.45;cursor:default}
 p{text-align:justify;line-height:1.6}
 p:empty{display:none}
 pre,textarea,.widescroll{scrollbar-color:rgba(16,48,16,.4) rgba(0,0,0,0);transition:ease scrollbar-color .5s}
-pre{overflow-x:auto;text-align:left;font:8.5pt var(--monospaced)}
+pre{overflow-x:auto;text-align:left;font:500 8.5pt var(--monospaced)}
 pre:hover,textarea:hover,.widescroll:hover{scrollbar-color:rgba(24,80,24,.8) rgba(0,0,0,.9);transition:ease scrollbar-color .2s}
-select{margin:5px 10px;padding:7px 24px 7px 12px;min-width:110px;color:var(--a);font-size:8pt;font-weight:700;text-overflow:ellipsis;outline:none;box-shadow:var(--btn_shadow);border:1px solid #000;border-radius:2px;background:var(--dropdown) no-repeat right 10px center / 10px,var(--btn);cursor:pointer;-moz-appearance:none;-webkit-appearance:none;appearance:none}
+select{margin:5px 10px;padding:7px 24px 7px 12px;min-width:110px;color:var(--a);font-size:8pt;font-weight:700;text-overflow:ellipsis;outline:none;box-shadow:var(--btn_shadow);border:1px solid #000;border-radius:2px;background:var(--dropdown) no-repeat right 10px center/10px,var(--btn);cursor:pointer;-moz-appearance:none;-webkit-appearance:none;appearance:none}
 select:hover,select:focus{color:var(--hover);border:1px solid #f60}
-select:hover,select:focus,select:active{color:var(--hover);box-shadow:var(--btn_shadow_hover);background:#000 var(--dropdown_hover) no-repeat right 10px center / 10px}
-select[disabled],select[disabled]:hover{color:#494;border:none;box-shadow:var(--btn_shadow);background:var(--dropdown) no-repeat right 10px center,var(--btn) / 10px;opacity:.7;cursor:not-allowed}
+select:hover,select:focus,select:active{color:var(--hover);box-shadow:var(--btn_shadow_hover);background:#000 var(--dropdown_hover) no-repeat right 10px center/10px}
+select[disabled],select[disabled]:hover{color:#494;border:none;box-shadow:var(--btn_shadow);background:var(--dropdown) no-repeat right 10px center,var(--btn)/10px;opacity:.7;cursor:not-allowed}
 select option{font-weight:400;font-size:9.5pt;color:var(--hover);background:#000}
 select:-moz-focusring{outline:1px solid transparent}
 select::-moz-focus-inner{outline:none;border:none}
 table{width:100%}
-textarea{margin:10px;padding:5px;width:calc(100% - 15px);min-height:100px;resize:none;text-align:left;font:8.5pt var(--monospaced);color:#bb7;border:var(--border_hard);border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,#000,#010)}
+textarea{margin:10px;padding:5px;width:calc(100% - 15px);min-height:100px;resize:none;text-align:left;font:500 8.5pt var(--monospaced);color:#bb7;border:var(--border_hard);border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,#000,#010)}
 textarea[disabled]{background:#000}
 .center{text-align:center}
 .left{text-align:left}

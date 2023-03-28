@@ -95,6 +95,7 @@ public class Blocklist {
     private static final String PROP_BLOCKLIST_ENABLED = "router.blocklist.enable";
     private static final String PROP_BLOCKLIST_FEEDLIST_ENABLED = "router.blocklistFeed.enable";
     private static final String PROP_BLOCKLIST_TOR_ENABLED = "router.blocklistTor.enable";
+    private static final String PROP_BLOCKLIST_COUNTRIES_ENABLED = "router.blocklistCountries.enable";
     private static final String PROP_BLOCKLIST_DETAIL = "router.blocklist.detail";
     private static final String PROP_BLOCKLIST_FILE = "router.blocklist.file";
     public static final String BLOCKLIST_FILE_DEFAULT = "blocklist.txt";
@@ -164,8 +165,10 @@ public class Blocklist {
         if (_started)
             return;
         _started = true;
-        if (! _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED))
+        if (! _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED)) {
+            _log.warn("All blocklists disabled (router.blocklist.enable=false)");
             return;
+        }
         List<BLFile> files = new ArrayList<BLFile>(5);
 
         // install dir
@@ -174,6 +177,8 @@ public class Blocklist {
         if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_TOR_ENABLED)) {
             blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_TOR_EXITS);
             files.add(new BLFile(blFile, ID_TOR));
+        } else {
+            _log.warn("Tor blocklist disabled (router.blocklistTor.enable=false)");
         }
         // config dir
         if (!_context.getConfigDir().equals(_context.getBaseDir())) {
@@ -182,10 +187,17 @@ public class Blocklist {
         }
         if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_FEEDLIST_ENABLED)) {
             files.add(new BLFile(_blocklistFeedFile, ID_FEED));
+        } else {
+            _log.warn("Feed blocklist disabled (router.blocklistFeed.enable=false)");
         }
-        if (_context.router().isHidden() || _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY)) {
+        if (_context.router().isHidden() || _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY) ||
+            _context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED)) {
             blFile = new File(_context.getConfigDir(), BLOCKLIST_COUNTRY_FILE);
             files.add(new BLFile(blFile, ID_COUNTRY));
+            if (_context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED))
+                _log.warn("Countries blocklist enabled (router.blocklistCountries.enable=true)");
+            else if (_context.router().isHidden())
+                _log.warn("Countries blocklist enabled (Router is operating in hidden mode)");
         }
         // user specified
         String file = _context.getProperty(PROP_BLOCKLIST_FILE);
@@ -458,13 +470,13 @@ public class Blocklist {
         // save to tell the update manager
         if (read > 0)
             blf.version = blFile.lastModified();
-        if (_log.shouldInfo()) {
-            _log.info("Stats for " + blFile);
-            _log.info("Removed " + badcount + " bad entries and comment lines");
-            _log.info("Read " + read + " valid entries from the blocklist " + blFile);
-            //_log.info("Blocking " + (isFeedFile ? feedcount : ipcount) + " IPs and " + peercount + " hashes");
-            _log.info("Blocking " + ipcount + " IPs and " + peercount + " hashes");
-            _log.info("Blocklist processing finished, time: " + (_context.clock().now() - start));
+        if (_log.shouldWarn()) {
+            _log.warn("Stats for " + blFile);
+            _log.warn("Removed " + badcount + " bad entries and comment lines");
+            _log.warn("Read " + read + " valid entries from the blocklist " + blFile);
+            //_log.warn("Blocking " + (isFeedFile ? feedcount : ipcount) + " IPs and " + peercount + " hashes");
+            _log.warn("Blocking " + ipcount + " IPs and " + peercount + " hashes (" + (ipcount + peercount) + " total)");
+            _log.warn("Blocklist processing finished, took: " + (_context.clock().now() - start) + "ms");
         }
         return count;
     }

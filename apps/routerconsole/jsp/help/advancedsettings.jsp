@@ -42,7 +42,7 @@
 <table id=configinfo>
 
 <tr><th id=advancedconsole>routerconsole.advanced={true|false}</th></tr>
-<tr><td><%=intl._t("When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href=/netdb?f=3>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar.")%></td></tr>
+<tr><td><%=intl._t("When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?f=3'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar.")%></td></tr>
 
 <tr><th>routerconsole.allowUntrustedPlugins={true|false}</th></tr>
 <tr><td><%=intl._t("Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process.")%></td></tr>
@@ -75,7 +75,7 @@
 <tr><td><%=intl._t("Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks.")%></td></tr>
 
 <tr><th>router.defaultProcessingTimeThrottle={n}</th></tr>
-<tr><td><%=intl._t("This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay<i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]")%></td></tr>
+<tr><td><%=intl._t("This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]")%></td></tr>
 
 <tr><th>router.disableTunnelTesting={true|false}</th></tr>
 <tr><td><%=intl._t("Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]")%></td></tr>

@@ -17,31 +17,30 @@
 body{margin:0;padding:0;text-align:center;background:var(--bodybg) url(images/tile2.png) fixed;background-size:32px;scrollbar-color:#779 #fff}
 body.iframed{margin-bottom:-11px;padding:5px 5px 10px;background:none}
 h2,h3,th,.buttons,.newTunnel,.control,label,.infohelp,.infowarn,.nowrap,b,#throttler td{user-select:none}
-.selectAll{margin-left:6px;user-select:all}
-.selectAll:hover{background:#eef}
-div{box-sizing:border-box}
-button,h1,h2,h3,th,.control,.newTunnel,.buttons{user-select:none}
-hr{display:none}
+a:hover,a:focus,a:active,button:hover,button:focus,button:active,select:hover,select:focus,select:active{text-shadow:none}
 br{clear:left}
+button,h1,h2,h3,th,.control,.newTunnel,.buttons{user-select:none}
+div{box-sizing:border-box}
 form{margin:0}
+h2,h3,th,a,button.control,select{text-shadow:0 1px 1px #fff}
+h2,h3{border-radius:2px 2px 0 0}
+hr{display:none}
 label{vertical-align:middle}
 table{background:#fafaff}
 tr{contain:layout}
-.required{display:none}
-#filter{vertical-align:top}
-th{padding:6px 5px;text-align:left;font-size:9.5pt;color:var(--ink_light);border-bottom:1px solid var(--border_inner);border-top:1px solid var(--border_inner);background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
-th{padding-left:10px}
+th{padding:6px 5px 6px 10px;text-align:left;font-size:9.5pt;color:var(--ink_light);border-bottom:var(--border_inner);border-top:var(--border_inner);background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 th::first-letter{text-transform:uppercase}
 td{padding:5px;vertical-align:middle;border-top:var(--border_softer)}
-h2,h3,th,a,button.control,select{text-shadow:0 1px 1px #fff}
-a:hover,a:focus,a:active,button:hover,button:focus,button:active,select:hover,select:focus,select:active{text-shadow:none}
-.tunnelConfig tr,#wizardPanel tr,#registration tr{background:repeating-linear-gradient(135deg,rgba(252,252,255,.5) 2px,rgba(240,240,255,.3) 3px,#fafaff 5px) #fafaff}
-td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1px 1px #ddf;border:1px solid var(--border_inner);background:var(--infohelp) no-repeat 8px center / 20px}
-.nowrap{margin-right:15px;margin-left:10px;white-space:nowrap}
+td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1px 1px #ddf;border:var(--border_inner);background:var(--infohelp) no-repeat 8px center/20px}
 .nowrap,.nowrap>*{vertical-align:middle}
+.nowrap{margin-right:15px;margin-left:10px;white-space:nowrap}
+.required{display:none}
+.selectAll:hover{background:#eef}
+.selectAll{margin-left:6px;user-select:all}
+.tunnelConfig tr,#registration tr,#wizardPanel tr{background:repeating-linear-gradient(135deg,rgba(252,252,255,.5) 2px,rgba(240,240,255,.3) 3px,#fafaff 5px) #fafaff}
 
 /* panels */
-.panel{margin:8px auto;padding:0 10px 10px;width:calc(100% - 14px);max-width:2000px;min-width:650px;overflow:hidden;text-align:left;border:1px solid #575775;border-radius:2px;box-shadow:inset 0 0 1px #999;background:#fff;background:linear-gradient(90deg,#fff 0%,rgba(247,248,255,.5),#fff),linear-gradient(180deg,#efefff,#fff,#efefff);filter:drop-shadow(0 0 2px rgba(96,96,160,.7))}
+.panel{margin:8px auto;padding:0 10px 10px;width:calc(100% - 14px);max-width:2000px;min-width:650px;overflow:hidden;text-align:left;border:1px solid #575775;border-radius:2px;box-shadow:inset 0 0 1px #999;background:linear-gradient(90deg,#fff 0%,rgba(247,248,255,.5),#fff),linear-gradient(180deg,#efefff,#fff,#efefff);filter:drop-shadow(0 0 2px rgba(96,96,160,.7))}
 .iframed .panel.iframed{margin:0 auto -8px auto}
 .iframed .panel{margin:16px auto -8px auto;padding:0;width:100%;border:none;box-shadow:none;background:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 .iframed .panel#clients,.iframed .panel#ssl{margin-top:8px;padding-bottom:8px}
@@ -53,28 +52,30 @@ td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1p
 .iframed #messages.panel{padding-top:2px}
 .iframed #messages.panel+#globalTunnelControl.panel{padding-top:0}
 .iframed .panel:last-of-type{padding-bottom:4px}
-.panel table{margin:0;width:100%;border-collapse:collapse;border:1px solid var(--border_inner);background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px) #fff}
+.panel table{margin:0;width:100%;border-collapse:collapse;border:var(--border_inner);background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px) #fff}
 
 /* status */
 .statusNotRunning{color:#d00;background:var(--tunnelStopped)}
 .statusRunning{color:#0b0;background:var(--tunnelRunning)}
-.statusStarting{color:#ff3;background:var(--tunnelStarting)}
 .statusStandby{color:#d30;background:var(--tunnelStandby)}
-.statusNotRunning,.statusRunning,.statusStarting,.statusStandby{margin:0;padding:0;width:100%;height:24px;overflow:hidden;text-align:center;font-size:0;background-size:auto 16px;background-position:center center;background-repeat:no-repeat;filter:drop-shadow(0 0 1px rgba(220,220,255,.7));will-change:transform}
+.statusStarting{color:#ff3;background:var(--tunnelStarting)}
+.statusNotRunning,.statusRunning,.statusStandby,.statusStarting{margin:0;padding:0;width:100%;height:24px;overflow:hidden;text-align:center;font-size:0;background-size:auto 16px;background-position:center center;background-repeat:no-repeat;filter:drop-shadow(0 0 1px rgba(220,220,255,.7));will-change:transform}
 
 /* headings */
-h2.error{padding-left:40px;background:var(--err) no-repeat left 5px center / 24px,var(--h2) #fff;background-position:8px center,center center,center center}
-h2,h3{margin:10px 0 -1px;padding:9px 10px 7px 36px;position:relative;font-size:11.5pt;text-transform:uppercase;letter-spacing:.12em;word-spacing:.1em;color:var(--ink_light);border:1px solid var(--border_inner);border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:#fcfcff;background:linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(135deg,#fcfcff 5%,rgba(231,231,255,.8) 15%) #fff}
+h2.error{padding-left:40px;background:var(--err) no-repeat left 5px center/24px,var(--h2) #fff;background-position:8px center,center center,center center}
+h2,h3{margin:10px 0 -1px;padding:9px 10px 7px 36px;position:relative;font-size:11.5pt;text-transform:uppercase;letter-spacing:.12em;word-spacing:.1em;color:var(--ink_light);border:var(--border_inner);box-shadow:var(--highlight);background:#fcfcff;background:linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(135deg,#fcfcff 5%,rgba(231,231,255,.8) 15%) #fff}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{background-size:18px,100%,100%;background-position:10px 60%,center center,center center}
 #clients h2{background:var(--client) no-repeat left 10px center/18px,var(--h2) #fff}
+#clientTunnels th,#serverTunnels th{font-size:90%}
 #globalTunnelControl h2{background:var(--mouse) no-repeat left 10px center/18px,var(--h2) #fff}
 #messages h2{background:var(--logs) no-repeat left 10px center/18px,var(--h2) #fff}
 #servers h2{background:var(--server) no-repeat left 10px center/18px,var(--h2) #fff}
 #tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3{background:var(--settings_inert) no-repeat left 10px center/18px,var(--h2) #fff}
 #wizardPanel h2,#ssl h2{background:var(--wizard) no-repeat left 10px center/18px,var(--h2) #fff}
-.iframed #globalTunnelControl h2{margin-top:6px}
-.iframed #globalTunnelControl{margin-bottom:-16px}
-.iframed h2,.iframed h3{margin-top:14px}
+.iframed h2,.iframed h3{margin-top:15px}
+.iframed #globalTunnelControl h2{margin-top:5px}
+.iframed #globalTunnelControl{margin-bottom:-18px}
+.iframed h2#screenlog{margin-top:13px}
 
 /* forms */
 a.control{display:inline-block}
@@ -87,33 +88,30 @@ input[type="hidden"],input.default{display:none}
 input[required]:not(:focus)::placeholder,input.required:not(:focus)::placeholder{color:#f00;opacity:1}
 input[type=text]+label{white-space:nowrap}
 input[type=text][readonly]{box-shadow:inset 1px 1px 1px #e4e4ee}
+select{margin:4px;padding:5px 24px 5px 5px;min-width:140px;overflow:hidden;text-overflow:ellipsis;appearance:none}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active,#sigType[disabled]{margin:0;padding:2px 0 2px 3px;font-weight:400;color:var(--ink);border:none;box-shadow:none;background:none;pointer-events:none}
-select{margin:4px;padding:5px 24px 5px 5px;min-width:140px;background:#fff;background:var(--dropdown) no-repeat right 8px center,linear-gradient(180deg,#fff,#efefff);background-size:10px,100%;color:var(--ink);font:9pt var(--bodyfont);border:var(--border_input);border-radius:2px;box-shadow:var(--highlight);box-shadow:var(--btn_shadow);overflow:hidden;text-overflow:ellipsis;appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
-select:hover,select:active,select:focus{border:1px solid #535979;box-shadow:var(--highlight);background:var(--dropdown_hover) no-repeat right 8px center,linear-gradient(180deg,#eee,#fff);background-size:10px,100%}
-select:hover{color:var(--ink_darker)}
-select:focus{box-shadow:0 0 1px #89f}
 td[colspan="2"]>select#profile{width:calc(50% - 15px)}
-textarea{font-family:var(--monospaced)}
 textarea,input,select,button{font-size:9pt;vertical-align:middle}
+textarea{font-family:var(--monospaced)}
 textarea[name="accessList"],.authentication,#hostField,#localDestination{margin:5px;padding:2px 4px;width:calc(100% - 20px);box-sizing:unset}
 textarea[name="accessList"]{padding:4px 8px;height:32px;line-height:1.1;will-change:transform}
 textarea[name="accessList"]:focus{height:112px}
-.buttons,.newTunnel{padding:7px 5px;text-align:right;border-top:1px solid var(--border_inner);box-shadow:var(--highlight);background:#fff;background:linear-gradient(180deg,#fafaff 50%,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px)}
+.buttons,.newTunnel{padding:7px 5px;text-align:right;border-top:var(--border_inner);box-shadow:var(--highlight);background:#fff;background:linear-gradient(180deg,#fafaff 50%,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px)}
 .buttons>*{vertical-align:middle}
 .clientName,.clientKey{width:calc(100% - 38px)}
 .clientKey[readonly]{background:var(--key) no-repeat 3px center,var(--readonly);background-size:16px,100%}
 .control,.control:link,.control:visited,button{margin:2px 4px;padding:5px 8px;min-width:100px;text-align:center;white-space:nowrap;box-sizing:border-box;text-decoration:none;font-style:normal;font-weight:400;color:var(--ink);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:linear-gradient(180deg,#fff,#efefff);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink_darker);border:1px solid #f60;box-shadow:var(--highlight),inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);background:linear-gradient(180deg,#eee,#fff);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 .control:active,button:active{box-shadow:var(--highlight),inset 2px 2px 2px #555;color:#4c526f}
-.control.create{background:var(--create) no-repeat center center / 15px,var(--btn),var(--create_hover)}
-.control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center / 15px,var(--btn_hover)}
+.control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}
+.control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.iconize:active{background-blend-mode:luminosity}
-.control.preview{background:var(--eye) no-repeat center center / 19px,var(--btn),var(--eye_hover)}
-.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center / 19px,var(--btn_hover)}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center / 15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
-.control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center / 15px,var(--btn_hover)}
-.control.stop{background:var(--stop) no-repeat center center / 14px,var(--btn),var(--stop_hover)}
-.control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center / 14px,var(--btn_hover)}
+.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
+.control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
+.control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover)}
+.control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
+.control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover)}
+.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/19px,var(--btn_hover)}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{margin:5px;padding:4px;width:calc(100% - 10px);width:290px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all;font-family:var(--monospaced);border:var(--border_input);border-radius:2px;box-shadow:inset 1px 1px 1px #e4e4ee;background:#fafaff;user-select:all}
 .displayText:hover,.displayText:focus{box-shadow:0 0 1px #89f;background:#ffe;outline:none}
 .displayText:focus{margin:1px 5px;padding:2px 4px;overflow:auto;text-overflow:clip;border:1px solid #676c7f;background:#fff}
@@ -149,10 +147,10 @@ textarea[name="accessList"]:focus{height:112px}
 #oldName{width:30%;min-width:310px}
 #oldName{width:45%}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
-#statusMessages:focus{background:#fafaff;box-shadow:none}
-#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:8.5pt var(--monospaced);color:#070;border:none;border-radius:0;box-shadow:none;filter:none}
-#statusMessages::selection{color:#fff;background:#070}
 #statusMessages,#statusMessages:active{margin:0;height:80px;border:none;box-shadow:none}
+#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:500 8.5pt var(--monospaced);color:#070;border:none;border-radius:0;box-shadow:none;filter:none}
+#statusMessages:focus{background:#fafaff;box-shadow:none}
+#statusMessages::selection{color:#fff;background:#070}
 #targetHost,.host{width:30%;min-width:250px}
 #targetPort{margin-right:10px}
 #tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#encryptMode,#profile,#sigType{margin:5px;width:calc(100% - 10px)}
@@ -170,30 +168,29 @@ th.tunnelControl{text-align:center}
 .tunnelHelper a{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--ahelp) no-repeat center center/20px}
 .tunnelHelper a:hover{transform:scale(1.2)}
 .tunnelHelper a:active{transform:scale(.95)}
-.tunnelInfo{display:none;background:linear-gradient(180deg,#fff,#eef)}
 .tunnelInfo b,.tunnelInfo .selectAll{display:inline-block;vertical-align:text-bottom}
 .tunnelInfo .selectAll{max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tunnelInfo td{background:none;border:none}
 .tunnelInfo+.tunnelInfo td{border-top:1px solid #d2d2e0}
 .tunnelInterface,.tunnelLocation{width:20%}
-.tunnelName{padding-left:8px;width:25%;min-width:150px}
-.tunnelName a{padding:3px 3px 3px 18px;background:var(--settings) no-repeat left center;background-size:14px}
-.tunnelName a:hover{background:var(--settings_hover) no-repeat left center;background-size:14px}
+.tunnelName{padding-left:8px;width:calc(100% - 9px);min-width:150px}
+.tunnelName a{padding:3px 3px 3px 18px;background:var(--settings) no-repeat left center/14px}
+.tunnelName a:hover{background:var(--settings_hover) no-repeat left center/14px}
 .tunnelName a{font-weight:700}
 .tunnelType{width:25%}
 .tunnelLocation font[color="red"]{margin-left:2px}
 .tunnelPort,.tunnelPreview{width:15%;text-align:center}
 .tunnelProperties{background:#fafaff;transition:ease background .05s}
 .tunnelProperties td{border-top:var(--border_softer)}
-.tunnelProperties+tr td{border-top:1px solid var(--border_inner)}
-.tunnelProperties+tr+tr td{border-bottom:1px solid var(--border_inner)}
+.tunnelProperties+tr td{border-top:var(--border_inner)}
+.tunnelProperties+tr+tr td{border-bottom:var(--border_inner)}
 .tunnelProperties:hover,.tunnelProperties:hover+.tunnelInfo,.tunnelProperties:hover+.tunnelInfo+.tunnelInfo{background:#ffd;transition:ease background .05s}
 .tunnelProperties:hover+.tunnelInfo+.tunnelInfo td{border-top:1px solid #ffd}
 .tunnelStatus{text-align:center;width:10%;min-width:48px}
 .tunnelStatus div{position:relative}
 .tunnelStatus div:hover{overflow:visible}
 .tunnelStatus .tooltip{pointer-events:none}
-.tunnelStatus div:hover .tooltip{padding:6px 12px;min-width:140px;display:inline-block;line-height:1.5;left:0;position:absolute;bottom:calc(100% + 4px);z-index:99999;color:var(--ink);font-size:9pt;border:var(--badgeborder);box-shadow:var(--highlight),0 2px 2px rgba(0,0,0,.1);background:#eef}
+.tunnelStatus div:hover .tooltip{padding:6px 12px;min-width:140px;display:inline-block;line-height:1.5;left:0;position:absolute;bottom:calc(100% + 4px);z-index:99999;color:var(--ink);font-size:9pt;border:var(--badgeborder);box-shadow:var(--highlight),0 2px 2px rgba(0,0,0,.1);background:#f5f5f9}
 .tunnelStatus .tooltip hr{margin:2px 0 4px;height:0;display:block;border:none;border-top:1px solid #bbc;border-bottom:1px solid #fff;opacity:.8}
 #serverTunnels td,#clientTunnels td{border-top:var(--border_softer)}
 #toggleInfo{margin:-2px -3px 0 0;padding:2px 5px;min-width:0;vertical-align:middle;cursor:pointer;transform:scale(1);animation:linear showToggle .1s .2s backwards}
@@ -207,33 +204,40 @@ th.tunnelControl{text-align:center}
 #screenlog .iconize{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0;box-shadow:var(--highlight),inset 0 0 1px 1px #ddf}
 #screenlog .iconize:hover,#screenlog .iconize:focus{box-shadow:var(--highlight),inset 0 0 1px 1px #f60}
 #screenlog .iconize:active{box-shadow:var(--highlight),inset 5px 5px 5px rgba(0,0,0,.2)}
-#screenlog .clearlog{border-left:1px solid var(--border_inner);background:rgba(255,255,255,.3) var(--close) no-repeat center center / 16px}
-#screenlog .clearlog:hover{background:rgba(255,255,255.5) var(--close_hover) no-repeat center center / 16px}
-#screenlog .clearlog:active{background:#f2f2f2 var(--close) no-repeat center center / 14px}
+#screenlog .clearlog{border-left:var(--border_inner);background:rgba(255,255,255,.3) var(--close) no-repeat center center/16px}
+#screenlog .clearlog:hover{background:rgba(255,255,255.5) var(--close_hover) no-repeat center center/16px}
+#screenlog .clearlog:active{background:#f2f2f2 var(--close) no-repeat center center/14px}
 
 /* edit */
-input[type=text].filemanager{background:#fafaff var(--files) no-repeat 8px center / 15px}
-input[type=text].filemanager:focus{background:#fff var(--files) no-repeat 8px center / 15px}
-input[type=password].password,input[type=text].clientKey{background:#fafaff var(--key) no-repeat 8px center / 15px}
+input[type=text].filemanager{background:#fafaff var(--files) no-repeat 8px center/15px}
+input[type=text].filemanager:focus{background:#fff var(--files) no-repeat 8px center/15px}
+input[type=password].password,input[type=text].clientKey{background:#fafaff var(--key) no-repeat 8px center/15px}
 input[type=text].username,input[type=password].password,input[type=text].clientName,input[type=text].clientKey,input[type=text].filemanager{padding-left:30px;background-blend-mode:luminosity}
-input[type=text].username,input[type=text].clientName{background:#fafaff var(--user) no-repeat 8px center / 15px;background-size:15px}
+input[type=text].username,input[type=text].clientName{background:#fafaff var(--user) no-repeat 8px center/15px}
 input[type=text].username,input[type=password].password{width:200px}
-input[type=password].password:focus,input[type=text].clientKey:focus{background:#fff var(--key) no-repeat 8px center / 15px}
-input[type=text].username:focus,input[type=text].clientName:focus{background:#fff var(--user) no-repeat 8px center / 15px}
+input[type=password].password:focus,input[type=text].clientKey:focus{background:#fff var(--key) no-repeat 8px center/15px}
+input[type=text].username:focus,input[type=text].clientName:focus{background:#fff var(--user) no-repeat 8px center/15px}
 input[type=text].username:focus,input[type=password].password:focus,input[type=text].clientName:focus,input[type=text].clientKey:focus,input[type=text].filemanager:focus{padding-left:30px;background-blend-mode:normal}
-.tunnelConfig tr,.tunnelConfig th:first-child,.tunnelConfig td:first-child{border-left:1px solid var(--border_inner)}
-.tunnelConfig tr,.tunnelConfig th:last-child,.tunnelConfig td:last-child{border-right:1px solid var(--border_inner)}
+.tunnelConfig tr,.tunnelConfig th:first-child,.tunnelConfig td:first-child{border-left:var(--border_inner)}
+.tunnelConfig tr,.tunnelConfig th:last-child,.tunnelConfig td:last-child{border-right:var(--border_inner)}
 .tunnelConfig td{width:50%}
 .tunnelConfig td>b{margin:2px 0 2px 5px;min-width:30px;display:inline-block}
+#filter{vertical-align:top}
 #keyringManager{margin:-2px 0;padding:3px 3px 3px 22px;float:right;font-size:90%;background:var(--keys) no-repeat left center;background-size:20px}
-#sigType[disabled]{padding-left:14px;background:var(--crypto) no-repeat left center / 16px}
+#sigType[disabled]{padding-left:14px;background:var(--crypto) no-repeat left center/16px}
+#tunnelOpts tr,#tunnelOpts td:first-child,#throttler tr,#throttler th:first-child,#throttler td:first-child,#clientAuth tr,#clientAuth th:first-child,#clientAuth td:first-child{border-left:none}
+#tunnelOpts tr,#tunnelOpts td:first-child,#throttler tr,#throttler th:last-child,#throttler td:last-child,#clientAuth tr,#clientAuth th:last-child,#clientAuth td:last-child{border-right:none}
 #tunnelOpts td{padding:0;width:25%}
 #tunnelOpts table{border:none}
-#tunnelOpts table td{padding:5px;border-bottom:var(--border_softer)}
-#tunnelOpts table tr,#tunnelOpts table td:first-child,#throttler tr,#throttler th:first-child,#throttler td:first-child,#clientAuth tr,#clientAuth th:first-child,#clientAuth td:first-child{border-left:none}
-#tunnelOpts table tr,#tunnelOpts table td:first-child,#throttler tr,#throttler th:last-child,#throttler td:last-child,#clientAuth tr,#clientAuth th:last-child,#clientAuth td:last-child{border-right:none}
+#tunnelOpts table td{padding:4px 8px;border-bottom:var(--border_softer)}
 #tunnelOpts table tr:first-child td{border-top:none}
+#tunnelOpts table tr:nth-child(even) td{padding:8px}
+#tunnelOpts table tr:nth-child(even) td:nth-child(n+2){border-left:var(--border_inner)}
+#tunnelOpts table tr:nth-child(odd) td{padding-left:5px;font-size:90%;border-bottom:var(--border_inner)}
+#tunnelOpts table tr:nth-child(2) td{border-bottom:var(--border_inner)}
+#tunnelOpts table tr:nth-child(3)td {border-top:var(--border_inner)}
 #tunnelOpts table tr:last-child td{border-bottom:none}
+#tunnelOpts table td select {margin:0;width:100%}
 
 /* throttler */
 td.blankColumn{width:20%}
@@ -245,6 +249,7 @@ td#throttle,#clientAuthConfig{padding:0;box-shadow:none}
 #throttler tr:first-child th{border-top:none}
 #throttler tr:nth-child(odd),#wizardTunnelTypes tr:nth-child(odd),#wizardSummary tr:nth-child(odd),#clientAuth tr:nth-child(even){background:#f7f8ff;background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(211,211,255,.3) 3px,#fff 5px)}
 #throttler tr:nth-child(even),#wizardTunnelTypes tr:nth-child(even),#wizardSummary tr:nth-child(even),#clientAuth tr:nth-child(odd){background:#eef;background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(230,230,255,.3) 3px,#fff 5px)}
+#throttler tr:nth-child(2) td,#throttler tr:nth-child(6) td,#throttler tr:not(:nth-child(2)) td:first-child b,#throttler tr:not(:nth-child(6)) td:first-child b{font-size:90%}
 #throttler input[type=text]{width:80px}
 
 /* register */
@@ -264,9 +269,9 @@ td#throttle,#clientAuthConfig{padding:0;box-shadow:none}
 
 /* wizard specifics */
 th .help{font-size:0}
-th .help::after{width:16px;height:16px;display:inline-block;background:var(--helplink) no-repeat center center / 16px;content:""}
-.multiOption#isServer{padding-left:28px;background:var(--server) no-repeat 4px center / 22px}
-.multiOption#isClient{padding-left:28px;background:var(--client) no-repeat 4px center / 22px}
+th .help::after{width:16px;height:16px;display:inline-block;background:var(--helplink) no-repeat center center/16px;content:""}
+.multiOption#isServer{padding-left:28px;background:var(--server) no-repeat 4px center/22px}
+.multiOption#isClient{padding-left:28px;background:var(--client) no-repeat 4px center/22px}
 #wizardTable{padding:0}
 #wizardPanel tr:first-child{background:#fafaff}
 #wizardPanel td:not(#wizardTable),#wizardTunnelTypes td{padding:10px}
@@ -291,7 +296,7 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 #ssl td{padding-top:10px;padding-bottom:10px}
 #ssl td:first-child{padding-left:10px}
 #ssl th:nth-child(n+3),#ssl td:nth-child(n+3){text-align:center}
-#ssl .configerror td{padding:20px 10px 20px 52px;font-weight:700;background:#ffe var(--err) no-repeat 12px center / 28px}
+#ssl .configerror td{padding:20px 10px 20px 52px;font-weight:700;background:#ffe var(--err) no-repeat 12px center/28px}
 .iframed #ssl{margin-bottom:-5px}
 
 /* initializing */

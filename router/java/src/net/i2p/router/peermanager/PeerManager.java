@@ -78,7 +78,10 @@ class PeerManager {
         Router.CAPABILITY_BW512 +
         Router.CAPABILITY_BW_UNLIMITED +
         Router.CAPABILITY_REACHABLE +
-        Router.CAPABILITY_UNREACHABLE;
+        Router.CAPABILITY_UNREACHABLE +
+        Router.CAPABILITY_CONGESTION_MODERATE +
+        Router.CAPABILITY_CONGESTION_SEVERE +
+        Router.CAPABILITY_NO_TUNNELS;
 
     /**
      *  Profiles are now loaded in a separate thread,

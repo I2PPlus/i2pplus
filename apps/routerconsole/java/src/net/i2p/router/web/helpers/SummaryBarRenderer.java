@@ -1268,9 +1268,10 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Congestion"));
         if (_context.router().getUptime() > 2*60*1000) {
-           buf.append(" <span class=badge hidden title=\"").append(_t("Job lag")).append("\">");
-           buf.append(_helper.getJobLag());
-           buf.append("</span>");
+           buf.append(" <span class=badge hidden title=\"").append(_t("Job lag")).append(" / ")
+              .append(_t("Message delay")).append("\">")
+              .append(_helper.getJobLag()).append(" / ").append(_helper.getMessageDelay())
+              .append("</span>");
         }
         buf.append("</a><input type=checkbox id=toggle_sb_queue class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
                    "<table id=sb_queue>\n" +
@@ -1305,7 +1306,7 @@ class SummaryBarRenderer {
         }
         buf.append("</td></tr>\n");
 
-        if (_context.getBooleanProperty("routerconsole.showPeerTestAvg")) {
+        if (_context.getBooleanPropertyDefaultTrue("routerconsole.showPeerTestAvg")) {
             buf.append("<tr title=\"")
                .append(_t("Average time to test a peer (successful / total)"))
                .append("\">" +

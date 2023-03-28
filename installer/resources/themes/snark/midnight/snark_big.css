@@ -23,7 +23,7 @@ select,a.control,input[type=submit],input.accept,th,#trackerselect tr:first-chil
 .torrentName a,.dirInfo .snarkFileName a{font-weight:400;padding-top:2px;padding-bottom:2px}
 .percentbartext{font-size:8.5pt}
 .dirInfo .percentbartext{line-height:12px}
-#torrents tt{font-size:9.5pt}
+#torrents code{font-size:9.5pt}
 #configs td{line-height:200%;padding-top:4px;padding-bottom:4px}
 #embed,#fullscreen{margin:-37px -4px -6px;padding:0 9px 0 10px;font-size:10pt}
 #embed::after{height:14px}

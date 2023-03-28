@@ -203,9 +203,13 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                           " [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             return false;
-        } else if (_context.banlist().isBanlistedHostile(aliceHash)) {
+        } else if (_context.banlist().isBanlistedHostile(aliceHash) || _context.banlist().isBanlisted(aliceHash)) {
             _context.commSystem().mayDisconnect(aliceHash);
-            return false;
+            boolean isHostile = _context.banlist().isBanlisted(aliceHash);
+            if (_log.shouldWarn())
+                _log.warn("Router [" + aliceHash.toBase64().substring(0,6) + "] is temp banned" +
+                          (isHostile ? " and tagged as hostile" : "") + ", validating anyway...");
+            return true;
         }
 
         if(ip != null)

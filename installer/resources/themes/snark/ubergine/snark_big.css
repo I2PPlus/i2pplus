@@ -30,8 +30,8 @@ th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,td.torrentDownload
 #pagecount{padding-top:3px;padding-bottom:4px;font-weight:700}
 #screenlog li::before{margin-right:2px;background-size:10px 10px}
 #torrents thead img{min-height:13px}
-#torrents tt{letter-spacing:.2em;font-weight:700}
-#torrents td tt{padding:0 3px;min-width:38px;text-align:center;font-size:8.5pt}
+#torrents code{letter-spacing:.2em;font-weight:700}
+#torrents td code{padding:0 3px;min-width:38px;text-align:center;font-size:8.5pt}
 }
 @media screen and (max-width:800px){#torrents thead img{min-height:10px}}
 @media screen and (max-width:1400px){.iframed #torrents td.torrentName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
