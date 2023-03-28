@@ -116,9 +116,8 @@ class ParticipatingThrottler {
             context.commSystem().forceDisconnect(h);
             rv = Result.DROP;
             if (_log.shouldWarn())
-                _log.warn("Temp banning and immediately disconnecting from " + (caps != "" ? caps : "") +
-                          " Router [" + h.toBase64().substring(0,6) + "] for " + (period*4) + "m" +
-                          " -> " + v + " / LU");
+                _log.warn("Temp banning and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "] for " + (period*4) + "m" +
+                          " -> " + v + (caps != "" ? " / " + caps : ""));
             context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime*4));
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLowShare) {
             //context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
