@@ -2718,7 +2718,7 @@ body:not(#homepage) #sb_advancedgeneral:not([hidden])~#sb_tunnels{margin-bottom:
 #sidebar hr[hidden]~h4{margin-bottom:-4px}
 #sidebar hr[hidden]~#sb_advanced:not([hidden])~h3{margin-top:-9px}
 #sidebar hr[hidden]+#sb_CPUBar{margin-top:-7px}
-#sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-2px}
+body:not(#homepage) #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-2px}
 #sidebar{margin-bottom:5px;width:228px}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{transform:translateY(-1px)}
 #sidebar table[id^="sb_"]{width:238px}
@@ -2735,6 +2735,8 @@ body:not(#homepage) #sb_advancedgeneral:not([hidden])~#sb_tunnels{margin-bottom:
 #homepage #sb_peers tr:last-child td{padding-bottom:1px}
 #homepage #sb_queue tr:last-child td{padding-bottom:3px}
 #homepage #sb_tunnels tr:last-child td{padding-bottom:2px}
+#homepage #sb_advancedgeneral:not([hidden])~#sb_memoryBar{margin-bottom:-2px}
+#homepage #sb_advancedgeneral[hidden]~#sb_memoryBar{margin-bottom:6px}
 #sybilTask th{font-size:12pt}
 #udpconnections .cells td{border-left:none;border-right:none}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
