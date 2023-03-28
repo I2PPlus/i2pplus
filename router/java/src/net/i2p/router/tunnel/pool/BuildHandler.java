@@ -747,7 +747,7 @@ class BuildHandler implements Runnable {
         boolean isInGW = req.readIsInboundGateway();
         boolean isOutEnd = req.readIsOutboundEndpoint();
 
-        int bantime = 30*60*1000;
+        int bantime = 10*60*1000;
         int period = bantime / 60 / 1000;
 
         Hash from = state.fromHash;
@@ -769,8 +769,7 @@ class BuildHandler implements Runnable {
             return;
         }
 
-        if (ourId <= 0 || ourId > TunnelId.MAX_ID_VALUE ||
-            nextId <= 0 || nextId > TunnelId.MAX_ID_VALUE) {
+        if (ourId <= 0 || ourId > TunnelId.MAX_ID_VALUE || nextId <= 0 || nextId > TunnelId.MAX_ID_VALUE) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
             if (_log.shouldWarn())
                 _log.warn("Dropping hostile tunnel request -> BAD Tunnel ID " + req);
