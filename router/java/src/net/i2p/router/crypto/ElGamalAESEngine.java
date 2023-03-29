@@ -231,7 +231,7 @@ public final class ElGamalAESEngine {
         } else {
             _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
             if (_log.shouldWarn()) {
-                _log.warn("ElG decrypt fail: known tag [" + st + "], failed decrypt");
+                _log.warn("ElG decryption failure -> Known tag [" + st + "], failed decrypt");
             }
         }
         return decrypted;
