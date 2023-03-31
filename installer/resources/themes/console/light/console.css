@@ -1020,6 +1020,8 @@ h3#scheduledjobs+ol li::before{background:var(--timer) no-repeat 6px center/12px
 #schedjobs li{margin:2px 0;padding:3px 5px;width:auto;min-width:280px;display:inline-block;border:1px solid #dde}
 #jobstats{margin-top:1px}
 #jobs #jobstats th,#jobs #jobstats td{font-size:8.5pt}
+#jobs #jobstats th{position:relative}
+#jobs #jobstats th::after{right:0}
 #jobs #jobstats th:nth-child(n+2),#jobs #jobstats td:nth-child(n+2){text-align:right;padding-right:.5%}
 
 /* jobs */
@@ -2608,7 +2610,7 @@ th.queue{white-space:nowrap}
 .tunnel_id:not(:empty)::before{width:16px;height:14px;display:inline-block;vertical-align:middle;content:""}
 #help #terms{padding:5px 0 0;columns:2 auto;column-gap:35px;column-rule:var(--border_inner)}
 #jardump{overflow:hidden}
-#jobstats td:first-child,#jobstats tr:hover td:first-child{padding:6px 0 6px 26px;background:var(--yes) no-repeat 8px center/12px}
+#jobstats td:first-child,#jobstats tr:hover td:first-child{padding:6px 0 6px 24px;background-image:var(--timer);background-repeat:no-repeat;background-position:5px center;background-size:14px}
 #jobstats tr:last-child td:first-child,#jobstats tr:last-child:hover td:first-child{padding:7px 8px;background-image:none}
 #ntcpconnections .spacer{display:none}
 #terms p{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
@@ -2677,7 +2679,8 @@ tt{margin-left:0;margin-right:3px;letter-spacing:.1em}
 #externali2cp .nowrap::before,#externali2cp td label::before,#netconfig label::before,#reseedconfig .nowrap::before{min-height:48px}
 #helptoc b{font-size:120%}
 #iptransport a{padding-top:6px}
-#jobs #jobstats th,#jobs #jobstats td{font-size:100%}
+#jobs #jobstats th{font-size:90%}
+#jobs #jobstats td{font-size:100%}
 #loggingoptions{margin-bottom:-3px}
 #logs font[color^="#"]::before{margin-right:6px;margin-left:5px;width:7px;height:7px}
 #minigraphcontainer{margin-top:-43px;margin-left:1px;width:234px;height:38px;background-size:248px 40px}
