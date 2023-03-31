@@ -628,8 +628,8 @@ th img{filter:none;opacity:.85}
 .pagenavcontrols{margin:-2px auto 0;padding:7px 5px 3px;position:absolute;left:40%;right:40%;z-index:500;line-height:1.2;font-size:9pt;font-weight:700;color:#272e3f}
 #pagenavtop.pagenavcontrols{margin-top:0}
 .pagenavcontrols::before{height:26px;content:""}
-.pagenavcontrols img,.pagenavcontrols img:hover,#pagenavbottom a:focus img{padding:3px;width:12px;height:12px;border:var(--border_input);border-radius:2px;background:linear-gradient(180deg,#fff 50%,#ddf 50%);opacity:.8;filter:drop-shadow(0 0 1px #bbb)}
-.pagenavcontrols img:hover,#pagenavbottom a:focus img{opacity:1;filter:drop-shadow(0 0 1px var(--hover))}
+.pagenavcontrols img,.pagenavcontrols img:hover,#pagenavbottom a:focus img{padding:3px;width:12px;height:12px;border:1px solid #ccf;border-radius:2px;background:var(--btn);box-shadow:var(--highlight),var(--btn_shadow)}
+.pagenavcontrols img:hover,#pagenavbottom a:focus img{border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover)}
 .pagenavcontrols a:active img{box-shadow:inset 0 0 0 1px #ddf,inset 3px 3px 3px #558;filter:none;transform:none}
 .pagenavcontrols img.disable,.pagenavcontrols img.disable:hover,.pagenavcontrols a:active img.disable{background:none;opacity:.2;filter:none}
 .pagenavcontrols img{margin:0 3px}
