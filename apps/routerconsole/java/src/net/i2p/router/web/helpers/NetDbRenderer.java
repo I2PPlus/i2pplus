@@ -1108,7 +1108,7 @@ class NetDbRenderer {
                 buf.append("<thead>\n<tr><th>" + _t("Congestion Cap") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
                 if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size() > 0) {
                     buf.append("<tr><td><a class=isD href=\"/netdb?caps=D\" title=\"").append(showAll).append("\"><b>D</b></a>")
-                       .append(_t("Low performance / medium congestion")).append("</td><td>")
+                       .append(_t("Medium congestion / low performance")).append("</td><td>")
                        .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size()).append("</td></tr>\n");
                 }
                 if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_SEVERE).size() > 0) {
