@@ -309,22 +309,22 @@ div:not(#pagesize).topbuttons,.iframed div:not(#pagesize).topbuttons{border-bott
 @keyframes fade-in{from{filter:opacity(0)}to{filter:opacity(1)}}
 
 /* responsive layout */
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 #dologin{width:500px}
 #dologin td:first-child{width:22%}
 #dologin td:last-child{width:78%}
 }
 
-@media screen and (max-width:700px){
+@media (max-width:700px){
 .topbuttons input[type=submit],.topbuttons input[type="reset"]{margin:3px 5px;min-width:50px}
 }
 
-@media screen and (min-width:1300px){
+@media (min-width:1300px){
 .iframed body,.iframed td,.iframed textarea,.iframed div,.iframed p.mailbody,.iframed input,.iframed input[type=submit],.iframed input[type="reset"],.iframed p.error{font-size:10pt}
 .iframed .pagenav input{font-size:0}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,td,textarea,div,p.mailbody,input,input[type=submit],input[type="reset"],p.error,#settings,.fakebutton{font-size:10pt}
 #dologin tr:last-child a{font-size:9pt}
 .pagenav input{font-size:0}

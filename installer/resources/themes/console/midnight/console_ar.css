@@ -149,11 +149,11 @@ textarea[name="trustedKeys"]{direction:ltr}
 .sybil_routerinfo th{padding:1px 3px 1px 1px}
 #sybilnav ul li a{padding-right:0}
 
-@media screen and (max-width:1500px){
+@media (max-width:1500px){
 body{margin:5px 10px 0 0}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 .main,.news,h1[class],.sorry,#warning.sorry{margin-right:268px;margin-left:0}
 .sb img[src$="i2plogo.png"]{width:204px;margin:-2px -4px 0 0}
 .sb h4{font-size:11pt}
@@ -161,7 +161,7 @@ body{margin:5px 10px 0 0}
 div[lang="ar"],div[lang="ar"] code,div[lang="ar"] b{font-size:11pt}
 }
 
-@media screen and (min-width:1840px){
+@media (min-width:1840px){
 .sb{width:200px}
 .sb #sb_logo{height:40px;margin-top:1px}
 .sb img[src$="i2plogo.png"]{width:204px}

@@ -1,4 +1,4 @@
-@media screen and (min-width:0) and (max-width:4000px){
+@media (min-width:0) and (max-width:4000px){
 a.control,input[type=submit],input.accept{padding-top:2px;padding-bottom:2px;text-transform:uppercase;letter-spacing:.05em}
 a.control,input[type=submit],input.accept,th{font-weight:400;font-size:12pt}
 input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Droid Sans,Roboto Sans,Ubuntu,Segoe UI,Lucida Grande,Helvetica,Arial,Verdana,sans-serif;line-height:1.2}
@@ -33,5 +33,5 @@ th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,td.torrentDownload
 #torrents code{letter-spacing:.2em;font-weight:700}
 #torrents td code{padding:0 3px;min-width:38px;text-align:center;font-size:8.5pt}
 }
-@media screen and (max-width:800px){#torrents thead img{min-height:10px}}
-@media screen and (max-width:1400px){.iframed #torrents td.torrentName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+@media (max-width:800px){#torrents thead img{min-height:10px}}
+@media (max-width:1400px){.iframed #torrents td.torrentName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}

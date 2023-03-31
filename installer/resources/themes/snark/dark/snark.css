@@ -768,7 +768,7 @@ input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,
 @supports not (-moz-appearance:none){.percentBarText{padding:0}.iframed .percentBarText,.iframed .percentBarText:hover,.iframed .percentBarText:focus{transition:none}.page,.configPanel,#setPriority,#torrentInfoControl,.commentAction[colspan="5"]{background:repeating-linear-gradient(90deg,rgba(0,0,0,.4),rgba(0,0,0,.4) 2px,rgba(0,32,0,.4) 3px),repeating-linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,16,0,.5) 1px,rgba(0,16,0,.5) 2px),url(/themes/console/dark/images/camotile2.png) #000;background-blend-mode:normal}.debuginfo,.debuginfo td:last-child{border-right:var(--border)}}
 
 /* responsive layout */
-@media screen and (max-width:1499px){
+@media (max-width:1499px){
 .magnetLabel{max-width:240px;overflow:hidden;text-overflow:ellipsis}
 .peerCount{padding-right:5px}
 .peerCount b{padding:2px 4px;min-width:48px;display:inline-block;vertical-align:middle;text-align:center;background:var(--badge)}
@@ -784,7 +784,7 @@ input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,
 #torrents .infohash{padding-left:15px;max-width:60px;background-size:11px}
 }
 
-@media screen and (max-width:1199px){
+@media (max-width:1199px){
 td.graphicStatus img{padding-left:2px}
 td#bwHelp a{margin-left:2px}
 .clientid{padding:2px 4px 0;line-height:1.8}
@@ -801,7 +801,7 @@ td#bwHelp a{margin-left:2px}
 #trackerselect a{max-width:300px}
 }
 
-@media screen and (max-width:1100px){
+@media (max-width:1100px){
 .dirInfo .percentBarText,.dirInfo .percentBarOuter{padding:0;width:60px}
 .fileStatus img[src*="clock"]{margin-top:6px}
 .magnetLabel{max-width:200px}
@@ -809,7 +809,7 @@ td#bwHelp a{margin-left:2px}
 #configs td:first-child{min-width:200px}
 }
 
-@media screen and (max-width:1000px){#closelog img::after{height:8px}
+@media (max-width:1000px){#closelog img::after{height:8px}
 .canhide{display:none}
 .newTab{margin:-1px 4px 0}
 .torrentUploaded,.torrentUploaded:empty{width:0;max-width:0;min-width:0;padding:0;font-size:0;color:transparent}
@@ -821,7 +821,7 @@ td#bwHelp a{margin-left:2px}
 #trackerselect tr:first-child td{font-size:8pt}
 }
 
-@media screen and (max-width:950px){#torrents td:nth-child(2){white-space:nowrap}
+@media (max-width:950px){#torrents td:nth-child(2){white-space:nowrap}
 b.alwaysShow{display:none}
 .percentBarComplete{padding:3px 0 2px}
 #torrents td[colspan="10"]{white-space:normal}
@@ -829,12 +829,12 @@ b.alwaysShow{display:none}
 #tab_addtorrent .tab_label::after,#tab_newtorrent .tab_label::after,#tab_config .tab_label::after{width:14px;height:14px;background-size:14px,100%}
 }
 
-@media screen and (max-width:840px){
+@media (max-width:840px){
 .snarkNav.nav_main:not(:last-child),.snarkNav.nav_forum{white-space:nowrap;padding-left:8px;text-indent:-99999px;width:13px}
 }
 
 /* mini-mode */
-@media screen and (max-width:800px){
+@media (max-width:800px){
 td .commentAuthorName{margin-left:1px;min-width:84px;max-width:84px}
 th a img{max-height:16px}
 th.graphicStatus{padding-left:5px}
@@ -876,7 +876,7 @@ tr:hover .peerCount a,tr:hover .peerCount a:hover,tr:hover .peerCount a:focus,tr
 #userComments .commentDelete{padding-left:0;background:none}
 }
 
-@media screen and (min-width:1000px){
+@media (min-width:1000px){
 .torrentDownloaded{padding-left:9px;padding-right:9px}
 .torrentETA:not(:empty),.RateUp:not(:empty),.torrentUploaded:not(:empty),.RateDown:not(:empty){padding-right:8px;padding-left:8px}
 .torrentName{padding-right:3px}
@@ -884,7 +884,7 @@ tr:hover .peerCount a,tr:hover .peerCount a:hover,tr:hover .peerCount a:focus,tr
 #userComments td{white-space:nowrap}
 }
 
-@media screen and (min-width:1100px){
+@media (min-width:1100px){
 body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],input[type=reset],select,button,a{font-size:9pt}
 .dirInfo td,#torrents .peerinfo td{padding-top:4px;padding-bottom:4px}
 #torrentInfo td{padding-top:6px;padding-bottom:6px}
@@ -893,7 +893,7 @@ body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],inp
 #totals{word-spacing:2px}
 }
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 .peerCount b a{color:#fff}
 .peerCount b a[href*="?p="]:hover::after{top:calc(50% - 2px);border-color:#fff transparent transparent transparent}
 .peerCount b a:hover .left,.peerCount b a:hover .right{min-width:32px;color:#f60;background:linear-gradient(180deg,rgba(220,80,0,.3),rgba(255,96,0,.3))}
@@ -940,7 +940,7 @@ th.torrentUploaded img{display:none}
 #configs a{margin-left:4px;white-space:nowrap}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],input[type=reset],input[type=text],select,button,a{font-size:10pt}
 td.graphicStatus img{margin-top:-3px;margin-bottom:-3px;height:24px}
 th.peerCount a img{margin-left:-20px}

@@ -589,7 +589,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #addSection,#configSection,#createSection{margin-top:-1px}
 }
 
-@media screen and (max-width:1499px){
+@media (max-width:1499px){
 th img{max-height:20px}
 td.graphicStatus{background-size:24px auto}
 .snarkCommented{top:-1px;right:1px}
@@ -598,18 +598,18 @@ td.graphicStatus{background-size:24px auto}
 #screenlog li::before{margin-top:-1px}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 .magnetLabel{padding-left:12px;max-width:250px;background-size:11px}
 #torrents .infohash{width:64px}
 #screenlog{font-size:8.5pt}
 }
 
-@media screen and (max-width:1100px){
+@media (max-width:1100px){
 .knownTracker td{min-width:60px}
 .trackerAnnounce,.trackerConfig a,.trackerHome,.trackername{max-width:120px}
 }
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 input.add,input.create{min-width:90px}
 input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:436px}
 tr:hover td.trackerLink,tr:hover td.torrentDetails,tr:hover td.torrentName,tr:hover td.torrentDownloaded,tr:hover td.RateDown,tr:hover td.torrentAction{background:none}
@@ -623,7 +623,7 @@ tr:hover td.trackerLink,tr:hover td.torrentDetails,tr:hover td.torrentName,tr:ho
 #torrents th:nth-child(n+4){text-align:center}
 }
 
-@media screen and (max-width:900px){
+@media (max-width:900px){
 .torrentETA,.torrentUploaded,.RateUp{display:none}
 .torrentName{max-width:250px;white-space:nowrap;word-break:break-all;overflow:hidden;text-overflow:ellipsis}
 #torrentDisplay{display:flex}
@@ -632,7 +632,7 @@ tr:hover td.trackerLink,tr:hover td.torrentDetails,tr:hover td.torrentName,tr:ho
 #torrentDisplay label[for="all"]{border-left:none}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,td,th:not(.suboption),span,table a,input[type=submit],input[type=text],textarea{font-size:9.5pt}
 td.graphicStatus img{width:26px;height:26px}
 td.torrentDetails img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){width:23px;height:23px}

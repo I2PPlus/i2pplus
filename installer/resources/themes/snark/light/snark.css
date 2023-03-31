@@ -764,7 +764,7 @@ img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;v
 }
 
 /*responsive layout */
-@media screen and (max-width:1499px){
+@media (max-width:1499px){
 #torrentDisplay{top:40px}
 .trackerLink img{margin-right:-10px;height:14px}
 .torrentAction input[type=submit]{padding:11px;background-size:13px,100%}
@@ -773,7 +773,7 @@ img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;v
 #configs a[href="/config.jsp"]{margin-top:2px}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 .dirInfoComplete{display:none}
 .nav_main{padding-left:26px}
 .torrentName a{max-width:300px}
@@ -784,7 +784,7 @@ img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;v
 #torrents .torrentAction input:active{background-size:auto 10px,100%}
 }
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 b.alwaysShow{display:inline}
 body,td,#screenlog li,#screenlog a,button,input,select,.snarkAddInfo,code,th,a,a:link,.snarkAddInfo,.fileStatus{font-size:8.5pt}
 .commentDate{white-space:normal}
@@ -815,7 +815,7 @@ td.graphicStatus img{width:auto;height:21px}
 
 }
 
-@media screen and (max-width:800px){
+@media (max-width:800px){
 .canhide{display:none}
 code{font-size:8pt}
 .graphicStatus img{height:20px}
@@ -840,11 +840,11 @@ code{font-size:8pt}
 #totals{margin-left:2px}
 }
 
-@media screen and (min-width:800px){
+@media (min-width:800px){
 tr:not(.peerinfo) .torrentUploaded:empty::after{display:inline;font-size:9pt;content:"‒"}
 }
 
-@media screen and (min-width:1000px){
+@media (min-width:1000px){
 .iframed .pagenavcontrols{padding:3px 5px 4px}
 .iframed #screenlog li{font-weight:700}
 .peerinfo:hover td:nth-child(n+2){background:#ffd}
@@ -857,7 +857,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after{display:inline;font-size:9pt;con
 #torrents th:nth-child(n+4){text-align:center}
 }
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 .nav_main:link,.nav_main:visited,.nav_main:hover,.nav_main:focus,.nav_main:active{padding-left:27px;background-size:17px,100%}
 .percentDownloaded{pointer-events:none}
 .RateUp:not(:empty),#torrents tfoot th.RateUp:not(:empty),.peerinfo .RateUp:not(:empty){padding-right:10px}
@@ -901,13 +901,13 @@ td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-w
 .stopped.incomplete .peerCount b,.inactive.neterror .peerCount b{color:#eee;background:#900}
 }
 
-@media screen and (min-width:1400px){
+@media (min-width:1400px){
 .peerCount .left,.peerCount .right{min-width:20px}
 .debuginfo td:nth-child(2){word-spacing:.5em}
 .debuginfo b{margin-right:5px;min-width:80px;display:inline-block;text-align:right}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,.snarkAddInfo,#commentInfo textarea,input[type=text],input[type=submit],.control{font-size:10pt}
 code{font-size:9pt}
 input[type=submit]{min-width:100px}
@@ -936,7 +936,7 @@ td.torrentDetails img,.dirInfo td:first-child img:not(.thumb){width:22px;height:
 #torrentInfoStats .nowrap{margin-right:6px}
 }
 
-@media screen and (min-width:1600px){
+@media (min-width:1600px){
 a,a:link,th,td,button,input,select,textarea{font-size:10pt}
 .pagenavcontrols{padding:5px 5px 4px}
 #torrents code{font-size:9pt}

@@ -47,7 +47,7 @@ ul.links li{text-align:justify}
 #externali2cp td label{margin-right:8px;white-space:nowrap}
 
 /* global overrides */
-@media screen and (min-width:0){a,b,.sb h3 a,.sb h4{font-weight:400;font-size:100%}
+@media (min-width:0){a,b,.sb h3 a,.sb h4{font-weight:400;font-size:100%}
 body,p,#news p{font:11pt "Noto Sans",Verdana,"Bitstream Vera Sans",Helvetica,Sans,sans-serif;font-size-adjust:.6}
 .logo a:link{font-size:11pt}
 h1{font-weight:400}
@@ -64,11 +64,11 @@ h3#pluginmanage{margin-bottom:-15px}
 h3#pconfig{margin-bottom:-16px}
 }
 /* responsive layout */
-@media screen and (min-width:800px){label,select,select option,#configstats th b,p.infohelp,p.infowarn,td.infohelp,td.infowarn{font-size:11pt;font-weight:400}
+@media (min-width:800px){label,select,select option,#configstats th b,p.infohelp,p.infowarn,td.infohelp,td.infowarn{font-size:11pt;font-weight:400}
 input[type=text],input[type=password],textarea{font-size:11pt}
 .logo a:link{font-size:11pt}
 }
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 .sb,.sb .xhr{font:9.5pt/125%}
 .sb .stop,.sb .reload{min-width:106px}
 h1{font-size:20pt;padding:14px 15px 16px}
@@ -82,13 +82,13 @@ span#newtab{margin-top:4px}
  div[lang="zh"] a{font-size:10.5pt}
 }
 
-@media screen and @supports (display:-webkit-box) and (min-width:1500px){
+@media @supports (display:-webkit-box) and (min-width:1500px){
 .langselect img{margin-left:-20px;margin-top:-31px}
 .langselect input[name="lang"]:checked + img{margin-left:-15px;margin-top:-27px}
 input[type=submit],input[type="reset"],input[type=submit]:hover,input[type="reset"]:hover,input[type=submit]:active,input[type="reset"]:active,input[type=submit]:focus,input[type="reset"]:focus,input.reload[value="Force garbage collection"],input.reload[value="Force garbage collection"]:hover,.main input[type=submit],.main input[type="reset"],.main input[type=submit]:hover,.main input[type="reset"]:hover,.main input[type=submit]:focus,.main input[type="reset"]:focus,.main input[type=submit]:active,.main input[type="reset"]:active{padding-top:3px;padding-bottom:3px;background-position:8px center}
 }
 
-@media screen and (min-width:1840px){
+@media (min-width:1840px){
 .applink{min-width:164px;margin:3px 4px 5px}
 .applabel{width:160px}
 .applabel a,.applabel a:hover{max-width:154px}

@@ -121,17 +121,17 @@ h1+.sorry,#console_404 .sorry{margin:-1px 5px 10px 226px;padding:20px 20px 20px 
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes loader{from{width:0}99%{width:100%}100%{width:0}}
 
-@media screen and (max-width:1500px){
+@media (max-width:1500px){
 #proxyNewAddressHelper #warning{background-position:40px 120px,left top,left top}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 #jumplinks br{display:block}
 #jumplinks a,#jumplinks a:first-of-type{margin:4px 3px 4px 20px;padding:10px 10px 10px 38px;width:calc(100% - 88px);display:inline-block;float:none;background-position:12px center}
 #proxy_error #jumplinks{margin-bottom:0}
 }
 
-@media screen and (max-width:800px){
+@media (max-width:800px){
 .logo{margin:0 16px;width:calc(100% - 53px);min-width:330px;position:absolute;top:16px;z-index:999;background:var(--h2),var(--nav)}
 .logo a{margin-top:10px}
 .logo a:nth-child(n+2){padding:2px 5px;width:auto;border:none}
@@ -148,7 +148,7 @@ h1+.sorry,#console_404 .sorry{margin:-1px 5px 10px 226px;padding:20px 20px 20px 
 #warning h3+p{margin-top:15px}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 h1+.sorry,#console_404 .sorry{margin-left:272px}
 .logo a:nth-child(n+2)::after{width:100%;height:1px;display:inline-block;position:absolute;left:0;bottom:0;background:#000;content:""}
 .logo a:last-child::after{content:none}

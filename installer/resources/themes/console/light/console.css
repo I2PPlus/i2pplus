@@ -2419,7 +2419,7 @@ th.options .optbox{vertical-align:sub}
 }
 
 /* responsive layout */
-@media screen and (max-width:1499px){
+@media (max-width:1499px){
 body{margin:4px}
 h1{margin-top:5px}
 hr[hidden]+#sb_graphcontainer{margin-top:-9px}
@@ -2474,18 +2474,18 @@ p#pluginconfigtext{margin-top:11px}
 #sitemap h3 img{margin-top:-8px;padding-right:6px}
 }
 
-@media screen and (max-width:1480px){
+@media (max-width:1480px){
 .themechoice img{margin-bottom:29px}
 }
 
-@media screen and (max-width:1400px){
+@media (max-width:1400px){
 #peers #ntcpconnections th.queue{font-size:0}
 #peers #ntcpconnections th.queue::after{width:16px;height:16px;display:inline-block;background:var(--err) no-repeat center center/16px;content:""}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
 #peers #transportSummary .ipv6{display:table-cell}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 #searchbar button{height:28px}
 .tab,.tab2{min-width:48px}
 .tab a{padding:3px 8px}
@@ -2518,21 +2518,21 @@ td.spacer,th.spacer{display:none}
 #tunnels .tunnel_cap{margin-left:1px;margin-right:1px}
 }
 
-@media screen and (max-width:1150px){
+@media (max-width:1150px){
 h4 .unbold{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 h4 span[style="float:right;"] .unbold{max-width:300px}
 #certs h4,#certs h4>*{line-height:14px}
 #certs h4 span{display:inline-block;vertical-align:middle}
 }
 
-@media screen and (max-width:1100px){
+@media (max-width:1100px){
 .tunnel_local{margin-right:5px;margin-left:2px;padding:2px 4px}
 .tunnel_peer:empty{vertical-align:middle}
 .tunnel_peer:empty::before{margin:1px 6px 1px 2px}
 .tunnel_cap{margin-left:5px}
 }
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 form[action="events"]{padding-left:10px;background:none}
 form[action="events"] select{min-width:80px}
 form[action="events"] select+b,form[action="events"] input[type=submit]{margin-left:3px}
@@ -2567,7 +2567,7 @@ form[action="events"] select+b,form[action="events"] input[type=submit]{margin-l
 #webappconfig tr:last-child td,#clientconfig tr:last-child td,#tunnelconfig tr:last-child td{border-top:none}
 }
 
-@media screen and (max-width:900px){
+@media (max-width:900px){
 h3#ntcpcon,h3#udpcon{font-size:10pt;letter-spacing:0}
 input[name="family"]{width:120px;min-width:120px}
 input[name="speed"],input[name="capacity"]{width:60px;min-width:60px}
@@ -2583,29 +2583,29 @@ select[name="newlogclass"]{width:200px;text-overflow:ellipsis}
 #reseedproxytype{columns:3 auto}
 }
 
-@media screen and (max-width:800px){
+@media (max-width:800px){
 .warning{background-image:var(--itooplus) no-repeat right 5px bottom/auto 90%;background-blend-mode:overlay}
 .warning h3{margin:-34px -29px 20px;font-size:10pt}
 .logo{margin:10px 5px 0;width:calc(100% - 20px);min-width:430px;position:absolute;top:0}
 .logo a:link:not(img){margin:0 5px;width:auto;display:inline-block}
 }
 
-@media screen and (min-height:700px){
+@media (min-height:700px){
 .warning{margin-bottom:30px}
 }
 
-@media screen and (min-width:800px){
+@media (min-width:800px){
 .warning h3{margin:-39px -34px 30px -109px}
 }
 
-@media screen and (min-width:1000px){
+@media (min-width:1000px){
 th.queue{white-space:nowrap}
 .leaseset td:first-child img{margin-bottom:3px;vertical-align:middle}
 .bw_title{margin:0;width:calc(100% - 12px);position:absolute;left:1px;right:1px;top:1px}
 #bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding:30px 15px 0 80px;position:relative;background-position:30px calc(50% + 12px)}
 }
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 .tunnel_id:not(:empty){min-width:108px;text-align:right;background:var(--hardhat) no-repeat 5px center/14px,var(--row)}
 .tunnel_id:not(:empty)::before{width:16px;height:14px;display:inline-block;vertical-align:middle;content:""}
 #help #terms{padding:5px 0 0;columns:2 auto;column-gap:35px;column-rule:var(--border_inner)}
@@ -2618,18 +2618,18 @@ th.queue{white-space:nowrap}
 #tunnels #tunnelPeerCount td:nth-child(2){white-space:nowrap}
 }
 
-@media screen and (min-width:1400px){
+@media (min-width:1400px){
 .warning p{font-size:10.5pt}
 }
 
-@media screen and (min-width:1400px){
+@media (min-width:1400px){
 .statlist li.statlist .statsName:first-child{margin-top:0}
 #changelog pre{margin-left:-10px;padding-left:10px;padding-bottom:5px;columns:550px auto;column-gap:25px;column-rule:1px solid rgba(64,64,128,.5)}
 #profiles .tab:first-child,#profiles .tab2:first-child,#help .tab:first-child,#help .tab2:first-child,#netdb .tab:first-child,#netdb .tab2:first-child,#debug .tab:first-child,#debug .tab2:first-child{border-radius:2px 0 0 2px}
 #profiles .tab:last-child,#profiles .tab2:last-child,#help .tab:last-child,#help .tab2:last-child,#netdb .tab:last-child,#netdb .tab2:last-child,#debug .tab:last-child,#debug .tab2:last-child{border-radius:0 2px 2px 0}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,button,input,select,th,.infohelp,.infowarn,.main,.main li b,.main td,.newscontent p,.news p,.percentBarText,.statusnotes,.tab,.tab2,.themelabel,.ui_lang,#configinfo,#configinfo th,#help code,#news p,#peerdefs,#profile_defs,#sidebar button.download,#sidebar .cancel,#sidebar .reload[value="restartImmediate"],#thresholds{font-size:10pt}
 button.control{padding:14px}
 code,code a,pre,textarea,.applabel a,.main[id^="config_"] th,#changelog pre,#logs li,#news tt,#updateAvailable{font-size:9.5pt}
@@ -2748,12 +2748,12 @@ body:not(#homepage) #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-2px}
 #xhr>hr+#sb_shortgeneral{margin-top:-7px}
 }
 
-@media screen and (min-width:1634px){
+@media (min-width:1634px){
 .leasesets_container{margin-bottom:2px}
 th code{font-size:9pt}
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:1.1){
+@media (-webkit-min-device-pixel-ratio:1.1){
 #searchbar{margin-bottom:-14px;padding:8px 3px 2px}
 #searchbar span{padding-bottom:1px}
 #searchbar input,#searchbar select{height:30px}

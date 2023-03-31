@@ -415,23 +415,23 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 
 @supports (position:sticky){#pagenavbottom{display:none}}
 
-@media screen and (-webkit-min-device-pixel-ratio:0){
+@media (-webkit-min-device-pixel-ratio:0){
 td.mailListSubject a{margin:-1px 0;padding:5px 0}
 .listSize,.listSizeUnit{font-size:95%}
 }
 
-@media screen and (max-width:1500px){
+@media (max-width:1500px){
 .debugHeader pre{font-size:8.5pt}
 body:not(.iframed) #mailbox tr:nth-child(2){top:47px}
 #viewmail .folders{top:-1px}
 #viewmail .folders select{margin-top:2px}
 }
 
-@media screen and (max-width:1300px){
+@media (max-width:1300px){
 .pagenavcontainer{padding:0;top:10px;right:3px;border:none}
 }
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 #dologin{width:60%;min-width:480px;display:inline-block}
 body{margin:3px;font-size:8.5pt}
 th.mailListDate{white-space:nowrap;text-align:center}
@@ -447,18 +447,18 @@ input.switchto,input.switchto:hover,input.switchto:focus,#serverRefresh,#info in
 .folders{margin:0 0 0 -2px;border:none}
 }
 
-@media screen and (max-width:900px){
+@media (max-width:900px){
 .pagenavcontainer{position:fixed;top:8px;right:5px}
 #infoUser{display:none}
 #info{padding:3px 0 3px 8px}
 }
 
-@media screen and (min-width:1300px){
+@media (min-width:1300px){
 body,input,select,.fakebutton{font-size:9.5pt}
 .iframed td:not(.mailListSender){padding:3px 5px}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,input,select,.fakebutton,textarea[name="config_text"]{font-size:10pt}
 a[class^="link"]{font-size:95%}
 p.footer,p.footer a{line-height:12pt;font-size:9pt}

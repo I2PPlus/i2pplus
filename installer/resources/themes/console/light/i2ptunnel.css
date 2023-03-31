@@ -307,27 +307,27 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 
 @keyframes showToggle{from{transform:scale(0)}to{transform:scale(1)}}
 
-@media screen and (max-width:1500px){
+@media (max-width:1500px){
 .panel table:last-of-type{margin-bottom:1px}
 #regDisabled{margin-bottom:4px}
 }
 
-@media screen and (max-width:1300px){
+@media (max-width:1300px){
 #serverTunnels .iconize,#clientTunnels .iconize{padding:12.5px 7px;min-width:48px;vertical-align:middle;font-size:0;background-size:12px,100%}
 #serverTunnels .preview.iconize,#clientTunnels .preview.iconize{min-width:64px;background-size:16px,100%}
 }
 
-@media screen and (max-width:1100px){
+@media (max-width:1100px){
 .nowrap{margin-right:0}
 .nowrap .port,.nowrap .quantity,.nowrap .period{margin-right:2px;width:24px}
 .nowrap .multiOption{margin-right:2px;margin-left:0}
 }
 
-@media screen and (max-width:900px){
+@media (max-width:900px){
 .tunnelInfo .selectAll{max-width:110px}
 }
 
-@media screen and (max-width:800px){
+@media (max-width:800px){
 th{font-size:9pt}
 .control,.control:link,.control:visited{min-width:80px}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:260px;font-size:8pt}
@@ -337,19 +337,19 @@ th{font-size:9pt}
 .statusNotRunning,.statusRunning,.statusStarting,.statusStandby{background-size:auto 14px}
 }
 
-@media screen and (min-width:1000px){
+@media (min-width:1000px){
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:386px}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{background-position:12px 58%,center center,center center}
 #registration .displayText{width:600px}
 }
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 h2,h3{padding:10px 10px 8px 30px;font-size:12pt}
 th{padding-top:7px;padding-bottom:7px}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{padding-left:42px;background-size:22px,100%,100%}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,select,.control,button.control,a.control,input,.freetext,textarea,.displayText{font-size:10pt}
 a.control,.control,.control.visited,button.control{padding-top:7px;padding-bottom:7px}
 h2,h3{font-size:12.5pt}

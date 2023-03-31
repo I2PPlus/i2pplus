@@ -284,7 +284,7 @@ svg #arrow stop:last-child{stop-color:#010}
 
 @keyframes fade-in{from{filter:opacity(0)}to{filter:opacity(1)}}
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 #current{padding:2px 10px;display:inline-block;font-size:10pt}
 #filter a{margin:3px 1px;padding:0 4px}
 #filtered,#results{font-size:9.5pt}
@@ -298,18 +298,18 @@ svg #arrow stop:last-child{stop-color:#010}
 .names a[href$=".i2p/"]{max-width:260px;overflow:hidden;text-overflow:ellipsis}
 }
 
-@media screen and (max-width:1000px){.illustrate{margin:15px auto 10px;width:90%;min-width:450px}}
+@media (max-width:1000px){.illustrate{margin:15px auto 10px;width:90%;min-width:450px}}
 
-@media screen and (max-width:710px){
+@media (max-width:710px){
 #navi a.abook,#navi a#overview,#navi a#subs,#navi a#configlink{padding:5px 8px;background:linear-gradient(180deg,#020 50%,#000 50%)}
 #navi a.abook:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a#configlink:hover,#navi a.abook:focus,#navi a#overview:focus,#navi a#subs:focus,#navi a#configlink:focus{padding:5px 8px;background:#000}
 #navi a.abook:active,#navi a#overview:active,#navi a#subs:active,#navi a#configlink:active{background:#f60}}
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 #content h3{padding-top:8px;padding-bottom:8px}
 }
 
-@media screen and (min-width:1400px){
+@media (min-width:1400px){
 body,input[type=submit],input[type=reset],.fakebutton,input,select,h4,td.names a,li,#filter a,#filter span a,#host_details td,th,#search td,.destaddress{font-size:9.5pt}
 p,#content p{font-size:10pt}
 textarea,th{font-size:9pt}
@@ -322,7 +322,7 @@ form[action="addressbook"]>p.buttons{margin-bottom:-20px}
 textarea[name="config"]{height:280px}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,input[type=submit],input[type=reset],input[type=file]::file-selector-button,.fakebutton,input,select,h4,td.names a,li,#filter a,#filter span a,td,.destaddress{font-size:10pt}
 th,pre{font-size:9pt}
 input[type=submit],input[type=reset],.fakebutton{padding:8px 12px 8px}
@@ -331,7 +331,7 @@ input[type=text]{padding:8px}
 #host_list td.helper a::after,#host_list td.b32link a::after{width:18px;height:18px;background-size:18px}
 }
 
-@media screen and (min-width:1600px){
+@media (min-width:1600px){
 p,#content p,li,#content li{font-size:10.5pt}
 textarea,pre{font-size:9.5pt}
 }

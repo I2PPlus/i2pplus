@@ -87,14 +87,14 @@ table{width:100%}
 
 @keyframes loader{from{width:0}99%{width:100%}100%{width:0}}
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 .logo{float:none;position:absolute;top:10px;margin:0 5px;display:block;background-size:200px auto;min-width:530px;width:calc(100% - 36px)}
 .logo a:nth-child(n+2){width:25%;white-space:nowrap;font-size:10pt}
 .warning{margin:140px 5px 0}
 .warning h3:first-child{font-size:11pt}
 #proxyerror .warning{margin-top:10px;padding-bottom:10px}
 }
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,p,td,button,input,select{font-size:10pt}
 #warning,#warning2{margin-left:252px}
 #error500 #sidebar img[src$="i2plogo.png"]{margin:-2px 0 -5px -2px;width:232px}

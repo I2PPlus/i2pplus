@@ -39,7 +39,7 @@ table[id^="sb_"] td,#sidebar #sb_localtunnels td{padding:2px 6px 0}
 #sb_wrap{position:absolute;z-index:10000;top:8px;right:0;overflow:hidden}
 #sb_wrap #sidebar{width:120px;border:none;box-shadow:none;background:none;overflow:hidden;text-align:right}
 
-@media screen and (min-width:640px){
+@media (min-width:640px){
 h1,h1[class]{margin:6px 0 -11px}
 #sidebar td,#sidebar td a{font-size:11pt}
 #sidebar td{padding:5px 8px}
@@ -53,7 +53,7 @@ h1,h1[class]{margin:6px 0 -11px}
 #sidebar #sb_services a:active,#sidebar #sb_internals a:active,#sidebar #sb_advanced a:active{box-shadow:0 0 0 1px var(--active),var(--btn_shadow_active)}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 #sb_wrap{top:12px}
 #sidebar{width:600px}#sidebar table[id^="sb_"]{width:600px}
 h1,h1[class]{margin:6px 0 -12px}

@@ -1,4 +1,4 @@
-@media screen and (min-width:0) and (max-width:4000px){
+@media (min-width:0) and (max-width:4000px){
 input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Droid Sans,Roboto Sans,Ubuntu,Segoe UI,Lucida Grande,Helvetica,Arial,Verdana,sans-serif;line-height:1.2}
 a.control,input[type=submit],input.accept{padding-top:2px;padding-bottom:2px;text-transform:uppercase;letter-spacing:.05em}
 a.control,input[type=submit],input.accept,th,#trackerselect tr:first-child td{font-weight:400;font-size:12pt}
@@ -22,6 +22,6 @@ th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,td.torrentDownload
 #embed,#fullscreen{margin:-6px -4px -28px;padding:8px 9px 7px 10px}
 #torrents code,.snarkAddInfo code{font-size:9.5pt}
 }
-@media screen and (max-width:1400px){
+@media (max-width:1400px){
 .iframed #torrents td.torrentName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }

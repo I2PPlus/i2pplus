@@ -818,7 +818,7 @@ hr.debug{margin:3px 0 -5px;width:100%;display:none;background:#120f35}
 @keyframes uploading{from{background-position:left center}to{background-position:-43px center}}
 
 /* responsive layout */
-@media screen and (max-width:1499px){
+@media (max-width:1499px){
 .configPanel .configTitle{margin-top:-1px}
 .iframed #screenlog,.iframed #torrentInfo{margin-top:-5px}
 .percentBarComplete{padding:3px 0}
@@ -833,7 +833,7 @@ hr.debug{margin:3px 0 -5px;width:100%;display:none;background:#120f35}
 #torrentDisplay{border-left:none;border-right:none}
 }
 
-@media screen and (max-width:1199px){
+@media (max-width:1199px){
 .canhide{display:none}
 .configPanel .configTitle{font-size:10.5pt}
 .dirInfoComplete{display:none}
@@ -856,7 +856,7 @@ hr.debug{margin:3px 0 -5px;width:100%;display:none;background:#120f35}
 #trackerselect a{max-width:280px}
 }
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText,.rowEven:not(.peerinfo) .torrentDownloaded .percentBarText{min-width:120px;top:-22px;left:-22px}
 .trackerLink img{display:none}
 #mediaContainer th .newTab{margin:0 4px}
@@ -868,7 +868,7 @@ hr.debug{margin:3px 0 -5px;width:100%;display:none;background:#120f35}
 #torrents .trackerLink{padding:0;width:0;min-width:0;font-size:0}
 }
 
-@media screen and (max-width:950px){
+@media (max-width:950px){
 b.alwaysShow{display:inline}
 input[name="nofilter_dataDir"]{width:350px;max-width:350px}
 input.trackerhome,input.trackerannounce,.knownTracker a,#trackerselect a{max-width:130px}
@@ -893,12 +893,12 @@ tfoot .torrentDownloaded,tfoot .RateDown{font-size:0}
 #torrents td:nth-child(2){white-space:nowrap}
 }
 
-@media screen and (max-width:900px){
+@media (max-width:900px){
 #torrentDisplay label{padding-top:2px;min-width:0}
 #ourDest{display:none}
 }
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 a,th,thead th,tfoot th,td,select,select option,.snarkAddInfo,.snarkFileName,code,textarea,input[name="nofilter_dataDir"]{font-size:9pt}
 .configPanel .configTitle,.snarkNav{font-size:11pt}
 .iframed #pagenavcontrols{transform:translateX(46px)}
@@ -913,7 +913,7 @@ a,th,thead th,tfoot th,td,select,select option,.snarkAddInfo,.snarkFileName,code
 #torrentDisplay label{min-width:100px}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 a,th,thead th,tfoot th,td,select,select option,.snarkAddInfo,.snarkFileName,textarea,button,input[name="nofilter_dataDir"],input[type=submit],input[type=text]{font-size:10pt}
 code{font-size:10pt}
 td.graphicStatus img{margin-left:1px;height:24px}

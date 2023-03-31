@@ -244,11 +244,11 @@ p.messages{color:#fff;text-align:center;font-weight:700}
 
 @keyframes hide-up{from{margin-top:0}to{margin-top:-300px}}
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 .iframed .illustrate{margin:10px auto 10px;width:90%;min-width:450px}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 .iframed #prev a,.iframed #next a{padding:11px 14px}
 .iframed #prev::after,.iframed #next::after{top:calc(50% - 5px)}
 .headline h3{padding-left:36px;line-height:1.4;font-size:10pt;background-size:20px,100%}
@@ -260,7 +260,7 @@ p.messages{color:#fff;text-align:center;font-weight:700}
 #host_list th{font-size:8.5pt}
 }
 
-@media screen and (min-width:1400px){
+@media (min-width:1400px){
 body,p,td,textarea,input,button,li,a{font-size:10pt}
 code,tt{font-size:9pt}
 h4,#navi a{font-size:11pt}
