@@ -154,6 +154,7 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 #clientHost{width:300px}
 #clientPort{width:100px}
 #customOptions{width:calc(100% - 10px)}
+#encryptMode,#tunnelBackupQuantity,#tunnelBackupQuantityOut,#tunnelDepth,#tunnelDepthOut,#tunnelQuantity,#tunnelQuantityOut,#tunnelVariance,#tunnelVarianceOut{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #filter input::placeholder{color:#ee8;opacity:.4}
 #hostField,#leasesetKey,#userAgents{margin:0;width:calc(100% - 10px);text-align:left}
 #localDestination{margin:0;height:34px}
@@ -164,9 +165,9 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 #sigType[disabled]{padding-left:14px;color:var(--ink);background:var(--crypto) no-repeat left center/16px}
 #targetHost,.host{width:30%;min-width:250px}
 #targetPort{margin-right:10px}
-#encryptMode,#tunnelBackupQuantity,#tunnelBackupQuantityOut,#tunnelDepth,#tunnelDepthOut,#tunnelQuantity,#tunnelQuantityOut,#tunnelVariance,#tunnelVarianceOut{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #tunnelMessages{padding:0}
 #tunnelRegistration .displayText,#tunnelRegistration .displayText:hover{margin:3px 0;padding:5px 8px;height:auto;overflow:hidden}.username[type=text],.password[type=password],.filemanager[type=text]{padding-left:28px;width:200px;box-shadow:var(--highlight),inset 4px 4px 4px #000,0 0 0 1px #000}
+#userAgents{margin:5px}
 
 /* tables */
 table{background:#000 url(images/camotile2.png);background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,.7)),url(images/camotile2.png)}
