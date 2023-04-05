@@ -300,9 +300,11 @@ class FloodfillPeerSelector extends PeerSelector {
                 _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 4*60*60*1000);
                 if (shouldDisconnect) {
                     _context.commSystem().forceDisconnect(entry);
+                    if (_log.shouldWarn())
+                        _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] -> No SSU transport enabled");
+                } else if (_log.shouldWarn()) {
+                    _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> No SSU transport enabled");
                 }
-                if (_log.shouldWarn())
-                    _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] -> No SSU transport enabled");
             } else if (info != null && isUnreachable) {
                 badff.add(entry);
                 if (_log.shouldDebug())

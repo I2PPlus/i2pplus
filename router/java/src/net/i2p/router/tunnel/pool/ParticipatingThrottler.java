@@ -146,7 +146,7 @@ class ParticipatingThrottler {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
-                _log.warn("Ignoring tunnel request from [" + h.toBase64().substring(0,6) +
+                _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) +
                           "] -> " + v + (caps != "" ? " / " + caps : ""));
         }
 
