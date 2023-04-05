@@ -44,6 +44,8 @@ class ParticipatingThrottler {
     private static boolean isHexaCore = SystemVersion.getCores() >= 6;
     private final static boolean DEFAULT_SHOULD_THROTTLE = true;
     private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     /** portion of the tunnel lifetime */
     private static final int LIFETIME_PORTION = 3;
@@ -91,7 +93,8 @@ class ParticipatingThrottler {
         Result rv;
         int bantime = 30*60*1000;
         int period = bantime / 60 / 1000;
-        boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
+        boolean shouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
+        boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         String v;
         if (ri != null) {
             if (ri.getVersion() != null) {
@@ -105,7 +108,9 @@ class ParticipatingThrottler {
         String MIN_VERSION = "0.9.58";
 
         if (v.equals("0.0.0")) {
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            if (shouldDisconnect) {
+                context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            }
             rv = Result.DROP;
             if (_log.shouldWarn())
                 _log.warn("Temp banning " + (caps != "" ? caps : "") +
@@ -113,19 +118,30 @@ class ParticipatingThrottler {
                           " -> No router version in RouterInfo");
             context.banlist().banlistRouter(h, " <b>➜</b> No version in RouterInfo", null, null, context.clock().now() + bantime);
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLU) {
-            context.commSystem().forceDisconnect(h);
-            rv = Result.DROP;
-            if (_log.shouldWarn())
-                _log.warn("Temp banning for " + (period*4) + "m and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> " + v + (caps != "" ? " / " + caps : ""));
+            if (shouldDisconnect) {
+                context.commSystem().forceDisconnect(h);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning for " + (period*4) + "m and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                              " -> " + v + (caps != "" ? " / " + caps : ""));
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for " + (period*4) + "m" +
+                              " -> " + v + (caps != "" ? " / " + caps : ""));
+            }
             context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime*4));
-        } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLowShare) {
-            //context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
-            context.commSystem().forceDisconnect(h);
             rv = Result.DROP;
-            if (_log.shouldWarn())
-                _log.warn("Ignoring tunnel request and immediately disconnecting from [" + h.toBase64().substring(0,6) +
-                          "] -> " + v + (caps != "" ? " / " + caps : ""));
+        } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLowShare) {
+            if (shouldDisconnect) {
+                context.commSystem().forceDisconnect(h);
+                if (_log.shouldWarn())
+                    _log.warn("Ignoring tunnel request and immediately disconnecting from Router [" + h.toBase64().substring(0,6) +
+                              "] -> " + v + (caps != "" ? " / " + caps : ""));
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) +
+                              "] -> " + v + (caps != "" ? " / " + caps : ""));
+            }
+            rv = Result.DROP;
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isUnreachable) {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
@@ -134,7 +150,7 @@ class ParticipatingThrottler {
                           "] -> " + v + (caps != "" ? " / " + caps : ""));
         }
 
-        if (count > limit && enableThrottle) {
+        if (count > limit && shouldThrottle) {
             if (isFast && !isUnreachable && count > limit * 11 / 9) {
                 if (count == (limit * 11 / 9) + 1) {
                     context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);

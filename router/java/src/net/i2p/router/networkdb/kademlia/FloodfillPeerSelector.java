@@ -204,6 +204,8 @@ class FloodfillPeerSelector extends PeerSelector {
     //private static final long HEARD_AGE = 60*60*1000L;
     private static final long HEARD_AGE = 90*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
+    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     /**
      *  See above for description
@@ -242,6 +244,7 @@ class FloodfillPeerSelector extends PeerSelector {
         long now = _context.clock().now();
         long installed = _context.getProperty("router.firstInstalled", 0L);
         boolean enforceHeard = installed > 0 && (now - installed) > INSTALL_AGE;
+        boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
 
         double maxFailRate = 0.95;
         if (_context.router().getUptime() > 60*60*1000) {
@@ -295,7 +298,9 @@ class FloodfillPeerSelector extends PeerSelector {
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router has SSU transport disabled");
                 badff.add(entry);
                 _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 4*60*60*1000);
-                _context.commSystem().forceDisconnect(entry);
+                if (shouldDisconnect) {
+                    _context.commSystem().forceDisconnect(entry);
+                }
                 if (_log.shouldWarn())
                     _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] -> No SSU transport enabled");
             } else if (info != null && isUnreachable) {
@@ -303,7 +308,9 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is unreachable");
                 _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 4*60*60*1000);
-                _context.commSystem().mayDisconnect(entry);
+                if (shouldDisconnect) {
+                    _context.commSystem().mayDisconnect(entry);
+                }
                 if (_log.shouldWarn())
                     _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> Unreachable/firewalled");
             } else if (info != null && hasSalt) {
