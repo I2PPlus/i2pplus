@@ -60,6 +60,7 @@
 <script nonce="<%=cspNonce%>" src=/js/lazyload.js type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var bbody = document.getElementById("sessionBanlist");
+  var bfoot = document.getElementById("sessionBanlistFooter");
   var ff = document.getElementById("floodfills");
   var ffprofiles = document.getElementById("ffProfiles");
   var info = document.getElementById("profiles_overview");
@@ -137,8 +138,10 @@
         if (sessionBans) {
           addSortListeners();
           if (bbody) {
-              var bbodyResponse = xhrprofiles.responseXML.getElementById("bbody");
+              var bbodyResponse = xhrprofiles.responseXML.getElementById("sessionBanlist");
+              var bfootResponse = xhrprofiles.responseXML.getElementById("sessionBanlistFooter");
               bbody.innerHTML = bbodyResponse.innerHTML;
+              bfoot.innerHTML = bfootResponse.innerHTML;
               sorterBans.refresh();
           }
         }

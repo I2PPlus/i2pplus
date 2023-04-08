@@ -138,7 +138,7 @@ class BanlistRenderer {
                 tempBanned++;
             }
         }
-        buf.append("</tbody>\n<tfoot><tr><th colspan=4>")
+        buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=4>")
            .append(_t("Total session-only bans"))
            .append(": ").append(tempBanned)
            .append("</th></tr></tfoot>\n</table>\n");
