@@ -67,9 +67,11 @@
   var plist = document.getElementById("profilelist");
   var thresholds = document.getElementById("thresholds");
   var refreshProfilesId = setInterval(refreshProfiles, 60000);
+  var sessionBans = document.getElementById("sessionBanned");
   var uri = window.location.search.substring(1) !== null ? window.location.pathname + "?" + window.location.search.substring(1) : window.location.pathname;
   var sorterFF = null;
   var sorterP = null;
+  var sorterBans = null;
   var xhrprofiles = new XMLHttpRequest();
   function initRefresh() {
     addSortListeners();
@@ -83,6 +85,10 @@
       sorterP = new Tablesort((plist), {descending: true});
       plist.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       plist.addEventListener('afterSort', function() {progressx.hide();}, true);
+    } else if (sessionBans && sorterBans === null) {
+      sorterBans = new Tablesort(sessionBans);
+      sessionBans.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
+      sessionBans.addEventListener('afterSort', function() {progressx.hide();}, true);
     }
   }
   function refreshProfiles() {
@@ -127,10 +133,17 @@
             ff.innerHTML = ffResponse.innerHTML;
           }
         }
+        if (sessionBans) {
+          addSortListeners();
+          var sessionBansResponse = xhrprofiles.responseXML.getElementById("sessionBanned");
+          sessionBans.innerHTML = sessionBansResponse.innerHTML;
+          sorterFF.refresh();
+          lazyload();
+        }
         progressx.hide();
       }
     }
-    if (ff || plist) {
+    if (ff || plist || sessionBans) {
       addSortListeners();
     }
     if (!uri.includes("f=3")) {

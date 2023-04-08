@@ -107,13 +107,17 @@ class BanlistRenderer {
 
         buf.append("<table id=sessionBanned>\n");
         buf.append("<thead><tr><th>")
-           .append(_t("Reason")).append("</th>").append("<th>").append("<th>").append(_t("Router Hash")).append("</th>")
+           .append(_t("Reason")).append("</th>")
+           .append("<th></th>")
+           .append("<th>").append(_t("Router Hash")).append("</th>")
+           .append("<th>").append(_t("Expiry")).append("</th>")
            .append("</tr></thead>\n<tbody>\n");
         int tempBanned = 0;
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
             Banlist.Entry entry = e.getValue();
             long expires = entry.expireOn-_context.clock().now();
+            String expireString = DataHelper.formatDuration2(expires);
             if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
                 (entry.cause.toLowerCase().contains("hash") ||
                 entry.cause.toLowerCase().contains("blocklist"))) {
@@ -123,14 +127,16 @@ class BanlistRenderer {
                 if (entry.cause.toLowerCase().contains("floodfill")) {
                     buf.append(" class=banFF");
                 }
-                buf.append("><td>").append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ",""));
-                buf.append("</td><td>:</td><td>")
-                   .append(key.toBase64())
-                   .append("</td></tr>\n");
+                buf.append(">")
+                   .append("<td>").append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ","")).append("</td>")
+                   .append("<td>:</td>")
+                   .append("<td><span class=b64>").append(key.toBase64()).append("</span></td>")
+                   .append("<td>").append(expireString).append("</td>")
+                   .append("</tr>\n");
                 tempBanned++;
             }
         }
-        buf.append("</tbody>\n<tfoot><tr><th colspan=3>")
+        buf.append("</tbody>\n<tfoot><tr><th colspan=4>")
            .append(_t("Total peers banned this session"))
            .append(": ").append(tempBanned)
            .append("</th></tr></tfoot>\n</table>\n");

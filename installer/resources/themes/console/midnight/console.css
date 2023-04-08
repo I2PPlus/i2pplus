@@ -1201,6 +1201,14 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 #permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
 #banneduntilrestart td{border-right:var(--border_inner);text-align:center}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border_inner);border-bottom:var(--border_inner);background:linear-gradient(180deg,#080818 50%,#000 50%)}
+#sessionBanned {margin:11px auto 9px}
+#sessionBanned th,#sessionBanned td{padding:6px 12px}
+#sessionBanned thead th{font-size:90%;text-align:left}
+#sessionBanned tfoot th{padding:8px 12px}
+#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
+#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
+#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
+#sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
 
 /* netdb (main section) */
 #netdb #pagenav~#pagenav{display:none}

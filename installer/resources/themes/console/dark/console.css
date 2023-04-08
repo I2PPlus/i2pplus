@@ -1418,7 +1418,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
 #sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
 #sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
-#sessionBanned td:last-child{font-family:var(--monospaced);font-weight:500;user-select:all}
+#sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
 
 .applink,.applabel,.statusnotes,.main,#news,.search tr,.logo,.themechoice,.themelabel,.langselect,.ui_lang{box-shadow:var(--bevel)}
 .appicon,.sitemapLink img{animation:zoom .15s linear .3s both;backface-visibility:hidden;will-change:transform}

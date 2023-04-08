@@ -297,7 +297,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router has SSU transport disabled");
                 badff.add(entry);
-                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 4*60*60*1000);
+                _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill with SSU disabled", null, null, now + 4*60*60*1000);
                 if (shouldDisconnect) {
                     _context.commSystem().forceDisconnect(entry);
                     if (_log.shouldWarn())
@@ -309,7 +309,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is unreachable");
-                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 4*60*60*1000);
+                _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 4*60*60*1000);
                 if (shouldDisconnect) {
                     _context.commSystem().mayDisconnect(entry);
                 }
@@ -319,7 +319,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: RouterInfo has bogus 'salt' cap");
-                _context.banlist().banlistRouter(key, "<b>➜</b> Floodfill has bogus 'salt' cap", null, null, now + 4*60*60*1000);
+                _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill has bogus 'salt' cap", null, null, now + 4*60*60*1000);
                 _context.commSystem().forceDisconnect(entry);
                 if (_log.shouldWarn())
                     _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] -> RouterInfo has 'salt' cap");

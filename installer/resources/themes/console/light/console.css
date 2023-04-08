@@ -838,6 +838,14 @@ h1::first-letter{font-size:112%}
 #banneduntilrestart td:last-child{text-align:center}
 #bannedips tr:nth-child(even){background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px)}
 #bannedips tr:nth-child(odd){background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px)}
+#sessionBanned {margin:11px auto 9px}
+#sessionBanned th,#sessionBanned td{padding:6px 12px}
+#sessionBanned thead th{font-size:90%;text-align:left}
+#sessionBanned tfoot th{padding:8px 12px}
+#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
+#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
+#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
+#sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
 
 #certs h3{margin-top:15px;margin-bottom:-6px;border-width:1px;border-radius:0;filter:none}
 #certs h4{padding:8px 8px 6px;border-radius:0}
