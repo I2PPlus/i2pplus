@@ -86,7 +86,7 @@
       plist.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       plist.addEventListener('afterSort', function() {progressx.hide();}, true);
     } else if (sessionBans && sorterBans === null) {
-      sorterBans = new Tablesort(sessionBans);
+      sorterBans = new Tablesort((sessionBans), {descending: false});
       sessionBans.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       sessionBans.addEventListener('afterSort', function() {progressx.hide();}, true);
     }
