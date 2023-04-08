@@ -237,7 +237,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // Only banlist if we know what time it is
             _context.banlist().banlistRouter(DataHelper.formatDuration(diff),
                                              aliceHash,
-                                             " <b>➜</b> " + _x("Excessive clock skew: {0}"));
+                                             " <b>➜</b> " + _x("Excessive clock skew ({0})"));
             _transport.setLastBadSkew(_peerSkew);
             if (_log.shouldWarn())
                 _log.warn("Excessive clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");

@@ -315,7 +315,7 @@ class OutboundNTCP2State implements EstablishState {
                     // Only banlist if we know what time it is
                     _context.banlist().banlistRouter(DataHelper.formatDuration(diff),
                                                      _con.getRemotePeer().calculateHash(),
-                                                     "Excessive clock skew: {0}");  // _x in IES
+                                                     " <b>➜</b> Excessive clock skew ({0})");  // _x in IES
                     _transport.setLastBadSkew(_peerSkew);
                     return;
                 }
