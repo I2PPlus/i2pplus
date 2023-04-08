@@ -137,7 +137,7 @@
           addSortListeners();
           var sessionBansResponse = xhrprofiles.responseXML.getElementById("sessionBanned");
           sessionBans.innerHTML = sessionBansResponse.innerHTML;
-          sorterFF.refresh();
+          sorterBans.refresh();
           lazyload();
         }
         progressx.hide();

@@ -1209,6 +1209,7 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 #sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
 #sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
+#sessionBanned th:last-child,#sessionBanned td:last-child{user-select:none}
 
 /* netdb (main section) */
 #netdb #pagenav~#pagenav{display:none}
