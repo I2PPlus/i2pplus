@@ -821,7 +821,7 @@ h1.webapp{min-height:22px;background-image:var(--h1_webapp)}
 h1[class],#wizardpage h1{background-size:34px auto,4px,100%,100%,100%}
 h1::first-letter{font-size:112%}
 
-/* /configpeers */
+/* bans */
 .banperiod{margin:1px 0 0 1px;display:inline-block;vertical-align:middle}
 #bannedips{margin-bottom:10px}
 #bannedips td{vertical-align:top;padding:0;width:50%}
@@ -839,7 +839,8 @@ h1::first-letter{font-size:112%}
 #bannedips tr:nth-child(even){background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px)}
 #bannedips tr:nth-child(odd){background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px)}
 #sessionBanned {margin:11px auto 9px}
-#sessionBanned th,#sessionBanned td{padding:6px 12px}
+#profiles #sessionBanned th, #profiles #sessionBanned td{padding:6px 12px;text-align:left}
+#profiles #sessionBanned th:nth-child(4),#profiles #sessionBanned td:nth-child(4){text-align:right}
 #sessionBanned thead th{font-size:90%;text-align:left}
 #sessionBanned tfoot th{padding:8px 12px}
 #sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}

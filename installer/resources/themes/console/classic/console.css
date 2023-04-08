@@ -833,12 +833,12 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 #sessionBanned {margin:11px auto 9px}
 #sessionBanned th,#sessionBanned td{padding:6px 12px}
 #sessionBanned thead th{font-size:90%;text-align:left}
-#sessionBanned tfoot th{padding:8px 12px}
 #sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
 #sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
 #sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
-#sessionBanned th:last-child,#sessionBanned td:last-child{user-select:none}
+#sessionBanned th:last-child,#sessionBanned td:last-child{text-align:right;user-select:none}
+#profiles #sessionBanned tfoot th{padding:8px 12px;text-align:center}
 
 /* headings */
 h1{margin:0 0 0 211px;padding:16px 20px 16px 56px;min-width:530px;line-height:.93;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:18pt;text-align:left;color:var(--ink_h1);border:var(--border);background-color:var(--bg)}

@@ -13,7 +13,8 @@ public class ProfilesHelper extends HelperBase {
                                           {_x("All"),                           // 0
                                            _x("High Capacity"),                 // 1
                                            _x("Floodfill"),                     // 2
-                                           _x("Banned"),   };                   // 3
+                                           _x("Banned"),                        // 3
+                                           _x("Session Bans"),    };            // 4
 
     private static final String links[] =
                                           {"",                                  // 0

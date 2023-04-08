@@ -110,7 +110,7 @@ class BanlistRenderer {
            .append(_t("Reason")).append("</th>")
            .append("<th></th>")
            .append("<th>").append(_t("Router Hash")).append("</th>")
-           .append("<th>").append(_t("Expiry")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Expiry")).append("</th>")
            .append("</tr></thead>\n<tbody id=sessionBanlist>\n");
         int tempBanned = 0;
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
@@ -120,6 +120,7 @@ class BanlistRenderer {
             String expireString = DataHelper.formatDuration2(expires);
             if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
                 (entry.cause.toLowerCase().contains("hash") ||
+                entry.cause.toLowerCase().contains("sybil") ||
                 entry.cause.toLowerCase().contains("blocklist"))) {
                 continue;
             } else {
@@ -131,13 +132,14 @@ class BanlistRenderer {
                    .append("<td>").append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ","")).append("</td>")
                    .append("<td>:</td>")
                    .append("<td><span class=b64>").append(key.toBase64()).append("</span></td>")
-                   .append("<td>").append(expireString).append("</td>")
+                   .append("<td>").append("<span hidden>").append(expires).append("</span>")
+                   .append(expireString).append("</td>")
                    .append("</tr>\n");
                 tempBanned++;
             }
         }
         buf.append("</tbody>\n<tfoot><tr><th colspan=4>")
-           .append(_t("Total peers banned this session"))
+           .append(_t("Total session-only bans"))
            .append(": ").append(tempBanned)
            .append("</th></tr></tfoot>\n</table>\n");
         out.write(buf.toString());
