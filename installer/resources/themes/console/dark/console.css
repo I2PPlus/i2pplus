@@ -1411,6 +1411,14 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #banneduntilrestart{border-left:1px solid var(--border)}
 #banneduntilrestart td{border-right:var(--border);text-align:center}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border);border-bottom:var(--border);background:var(--th)}
+#sessionBanned {margin:11px auto 9px}
+#sessionBanned th,#sessionBanned td{padding:6px 12px}
+#sessionBanned thead th{font-size:90%;text-align:left}
+#sessionBanned tfoot th{padding:8px 12px}
+#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
+#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
+#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
+#sessionBanned td:last-child{font-family:var(--monospaced);font-weight:500;user-select:all}
 
 .applink,.applabel,.statusnotes,.main,#news,.search tr,.logo,.themechoice,.themelabel,.langselect,.ui_lang{box-shadow:var(--bevel)}
 .appicon,.sitemapLink img{animation:zoom .15s linear .3s both;backface-visibility:hidden;will-change:transform}
@@ -2278,7 +2286,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs h3 a:first-of-type::after{margin-right:-3px}
 #logs h3+table{position:relative;z-index:1}
 #logs pre,#logs li{font-weight:600;opacity:.9}
-#logs li{width:100%;list-style:none;word-break:break-all;line-height:1.6;text-align:left;font:600 8.5pt var(--monospaced);border-top:1px solid #001800;border-right:1px solid #001800;border-bottom:1px solid #000}
+#logs li{width:100%;list-style:none;word-break:break-all;line-height:1.6;text-align:left;font:500 8.5pt var(--monospaced);border-top:1px solid #001800;border-right:1px solid #001800;border-bottom:1px solid #000}
 #logs li:nth-child(even){border-top:1px solid #001c00;border-left:2px solid #040;border-right:1px solid #001c00;background:rgba(0,28,0,.4)}
 #logs li:nth-child(odd){border-left:2px solid #030;background:rgba(0,8,0,.4)}
 #logs li:last-child{border-bottom:1px solid #001800}
@@ -2296,7 +2304,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:none}
 #servicelogs{color:var(--ink)}
 #wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
-#wrapperlogs pre{margin:0;padding:4px 6px;width:calc(100% - 5px);max-height:600px;white-space:pre-wrap;resize:none;color:#8f935c}
+#wrapperlogs pre{margin:0;padding:4px 6px;width:calc(100% - 5px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c}
 #wrapperlogs tr:nth-child(2){background:rgba(0,16,0,.3)}
 #wrapperlogs tr:last-child td{padding:0}
 

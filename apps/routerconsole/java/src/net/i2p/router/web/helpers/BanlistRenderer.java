@@ -63,7 +63,7 @@ class BanlistRenderer {
             if (expires <= 0)
                 continue;
             buf.append("<li>").append(_context.commSystem().renderPeerHTML(key, false));
-            buf.append(' ').append("<span class=banreason>");
+            buf.append(' ').append("<span class=banperiod>");
             String expireString = DataHelper.formatDuration2(expires);
             if (key.equals(Hash.FAKE_HASH))
                 buf.append(_t("Permanently banned"));
@@ -89,6 +89,51 @@ class BanlistRenderer {
             buf.append("</li>\n");
         }
         buf.append("</ul>\n");
+        out.write(buf.toString());
+        out.flush();
+    }
+
+    /* @since 0.9.59+ */
+    public void renderBanlistCompact(Writer out) throws IOException {
+        StringBuilder buf = new StringBuilder(1024);
+        Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(new HashComparator());
+
+        entries.putAll(_context.banlist().getEntries());
+        if (entries.isEmpty()) {
+            buf.append("<i>").append(_t("No bans currently active")).append("</i>");
+            out.write(buf.toString());
+            return;
+        }
+
+        buf.append("<table id=sessionBanned>\n");
+        buf.append("<thead><tr><th>")
+           .append(_t("Reason")).append("</th>").append("<th>").append("<th>").append(_t("Router Hash")).append("</th>")
+           .append("</tr></thead>\n<tbody>\n");
+        int tempBanned = 0;
+        for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
+            Hash key = e.getKey();
+            Banlist.Entry entry = e.getValue();
+            long expires = entry.expireOn-_context.clock().now();
+            if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
+                (entry.cause.toLowerCase().contains("hash") ||
+                entry.cause.toLowerCase().contains("blocklist"))) {
+                continue;
+            } else {
+                buf.append("<tr");
+                if (entry.cause.toLowerCase().contains("floodfill")) {
+                    buf.append(" class=banFF");
+                }
+                buf.append("><td>").append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ",""));
+                buf.append("</td><td>:</td><td>")
+                   .append(key.toBase64())
+                   .append("</td></tr>\n");
+                tempBanned++;
+            }
+        }
+        buf.append("</tbody>\n<tfoot><tr><th colspan=3>")
+           .append(_t("Total peers banned this session"))
+           .append(": ").append(tempBanned)
+           .append("</th></tr></tfoot>\n</table>\n");
         out.write(buf.toString());
         out.flush();
     }

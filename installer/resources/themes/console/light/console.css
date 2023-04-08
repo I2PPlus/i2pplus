@@ -822,7 +822,7 @@ h1[class],#wizardpage h1{background-size:34px auto,4px,100%,100%,100%}
 h1::first-letter{font-size:112%}
 
 /* /configpeers */
-.banreason{margin:1px 0 0 1px;display:inline-block;vertical-align:middle}
+.banperiod{margin:1px 0 0 1px;display:inline-block;vertical-align:middle}
 #bannedips{margin-bottom:10px}
 #bannedips td{vertical-align:top;padding:0;width:50%}
 #permabanned tr:nth-child(2) td,#ipv4 td,#ipv6 td{border-bottom:var(--border_inner);background:linear-gradient(180deg,#fff 50%,rgba(238,238,255,.2) 50%,#eef 100%) #fff}

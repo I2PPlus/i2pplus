@@ -27,6 +27,10 @@
 %>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%></h1>
 <%
+    } else if (req.equals("4")) {
+%>
+<h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Session Banned Peers")%></h1>
+<%
     } else if (req.equals("3")) {
 %>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Banned Peers")%></h1>

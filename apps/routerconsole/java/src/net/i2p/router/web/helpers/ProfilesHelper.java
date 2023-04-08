@@ -19,13 +19,14 @@ public class ProfilesHelper extends HelperBase {
                                           {"",                                  // 0
                                            "?f=1",                              // 1
                                            "?f=2",                              // 2
-                                           "?f=3"          };                   // 3
+                                           "?f=3",                              // 3
+                                           "?f=4"          };                   // 4
 
     public void setFull(String f) {
         if (f != null) {
             try {
                 _full = Integer.parseInt(f);
-                if (_full < 0 || _full > 3)
+                if (_full < 0 || _full > 4)
                     _full = 0;
             } catch (NumberFormatException nfe) {}
         }
@@ -47,6 +48,8 @@ public class ProfilesHelper extends HelperBase {
         try {
             renderNavBar();
         } catch (IOException ioe) {}
+        if (_full == 4)
+            getBanlistCompact();
         if (_full == 3)
             getBanlistSummary();
         else
@@ -80,6 +83,21 @@ public class ProfilesHelper extends HelperBase {
         return "";
     }
 
+    /** @return empty string, writes directly to _out */
+    public String getBanlistCompact() {
+        try {
+            BanlistRenderer rend = new BanlistRenderer(_context);
+            StringBuilder buf = new StringBuilder(1024);
+            //buf.append("<p class=infohelp id=bannedpeercount>").append(_t("Total number of banned peers")).append(": ")
+            //   .append(_context.banlist().getRouterCount()).append("</p>");
+            //_out.write(buf.toString());
+            rend.renderBanlistCompact(_out);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return "";
+    }
+
     /**
      *  @since 0.9.1
      */
@@ -90,6 +108,8 @@ public class ProfilesHelper extends HelperBase {
             return 2;
         if (_full == 3)
             return 3;
+        if (_full == 4)
+            return 4;
         return 0;
     }
 
