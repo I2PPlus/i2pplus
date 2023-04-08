@@ -111,7 +111,7 @@ class BanlistRenderer {
            .append("<th></th>")
            .append("<th>").append(_t("Router Hash")).append("</th>")
            .append("<th>").append(_t("Expiry")).append("</th>")
-           .append("</tr></thead>\n<tbody>\n");
+           .append("</tr></thead>\n<tbody id=sessionBanlist>\n");
         int tempBanned = 0;
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
