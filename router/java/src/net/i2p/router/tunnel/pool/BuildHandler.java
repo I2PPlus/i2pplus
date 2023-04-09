@@ -867,11 +867,12 @@ class BuildHandler implements Runnable {
             _context.statManager().addRateData("tunnel.rejectFuture", 1);
             if (_log.shouldWarn())
                 _log.warn("Dropping hostile tunnel request -> Too far in future " + DataHelper.formatDuration(0 - timeDiff) + " " + req);
-            if (from != null)
+            if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (too far in future)", null, null, _context.clock().now() + bantime);
                 _log.warn("Temp banning [" + from.toBase64().substring(0,6) + "] for " + period +
                           "m -> Hostile tunnel request (too far in future)");
+            }
             return;
         }
 
