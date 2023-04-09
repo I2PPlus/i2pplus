@@ -193,7 +193,9 @@ public class Banlist {
     public boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, long expireOn) {
         long banDuration =  ((expireOn - _context.clock().now()) / 1000) / 60;
         if (peer == null) {
-            _log.error("Cannot apply router ban, peer is null", new Exception());
+//            _log.error("Cannot apply Router ban, peer is null", new Exception());
+            if (_log.shouldWarn())
+                _log.warn("Cannot apply Router ban, peer is null");
             return false;
         }
         if (peer.equals(_context.routerHash())) {
