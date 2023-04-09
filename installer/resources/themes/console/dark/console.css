@@ -1208,6 +1208,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdblookup td.subheading{padding:10px;text-align:left;border:var(--border);background:#000}
 #netdblookup td.subheading b{font-size:10pt}
 #netdblookup td.optionsave{padding:10px}
+#netdblookup td b{font-size:90%}
 #netdblookup .optbox{margin:10px }
 #netdblookup input[type=text]{width:calc(100% - 11px)}
 #netdblookup select{width:calc(100% - 10px)}
