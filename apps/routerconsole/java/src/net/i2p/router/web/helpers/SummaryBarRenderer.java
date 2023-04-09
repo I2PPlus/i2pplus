@@ -854,9 +854,7 @@ class SummaryBarRenderer {
     }
 
     public String renderUpdateStatusHTML() {
-//        if (_helper == null) return "";
         String updateStatus = _helper.getUpdateStatus();
-//        if ("".equals(updateStatus)) return "";
         StringBuilder buf = new StringBuilder(512);
         if (_helper == null || "".equals(updateStatus)) {
             buf.append("<div id=sb_updatesection class=\"hide volatile\" hidden></div>\n");
@@ -961,7 +959,6 @@ class SummaryBarRenderer {
 
         buf.append("<table id=sb_peers_condensed hidden>\n")
            .append("<tr><td>")
-           //.append("<a class=sb_icon id=floodfill href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
            .append("<a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"").append(_t("Floodfill"))
            .append("\"><span><span class=badge>").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
            .append("<a class=sb_icon id=fast href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
