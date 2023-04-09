@@ -222,6 +222,7 @@ public class HomeHelper extends HelperBase {
         "intpolicydigest.i2p" + S + _x("Politics &amp; Current Affairs Journal") + S + "http://intpolicydigest.i2p/" + S + I + "news.svg" + S +
         "iranfreedom.i2p" + S + _x("Democracy &amp; human rights in Iran") + S + "http://iranfreedom.i2p/" + S + I + "news.svg" + S +
         _x("JapanToday") + S + _x("English language Japanese News") + S + "http://japantoday.i2p/" + S + I + "eepsites/japantoday.svg" + S +
+        _x("JStorDaily") + S + _x("Where news meets its scholarly match") + S + "http://jstordaily.i2p/" + S + I + "eepsites/jstordaily.png" + S +
         _x("KrebsOnSecurity") + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "eepsites/krebs.png" + S +
         "LKML" + S + _x("Linux Kernel Mailing List") + S + "http://lkml.i2p/" + S + I + "news.svg" + S +
         _x("LittleAtoms") + S + _x("A rationalist journal") + S + "http://littleatoms.i2p/" + S + I + "eepsites/littleatoms.svg" + S +
@@ -250,6 +251,7 @@ public class HomeHelper extends HelperBase {
         _x("TheConversation") + S + _x("Academic commentary and essays") + S + "http://theconversation.i2p/" + S + I + "eepsites/theconversation.svg" + S +
         _x("TheGuardian") + S + _x("Global News") + S + "http://theguardian.i2p/" + S + I + "eepsites/theguardian.svg" + S +
         _x("TheHackerNews") + S + _x("Computer &amp; cyber security news") + S + "http://thehackernews.i2p/" + S + I + "news.svg" + S +
+        _x("TheHill") + S + _x("US Political News") + S + "http://thehill.i2p/" + S + I + "eepsites/thehill.svg" + S +
         _x("TheMarkup") + S + _x("Watching Big Tech...") + S + "http://themarkup.i2p/" + S + I + "news.svg" + S +
         _x("TheMoscowTimes") + S + _x("Independent Journalism from Russia") + S + "http://themoscowtimes.i2p/" + S + I + "news.svg" + S +
         _x("TheNewRepublic") + S + _x("Politics &amp; Current Affairs magazine") + S + "http://newrepublic.i2p/" + S + I + "eepsites/newrepublic.svg" + S +
