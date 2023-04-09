@@ -132,7 +132,7 @@ class BanlistRenderer {
                    .append("<td>").append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ","")).append("</td>")
                    .append("<td>:</td>")
                    .append("<td><span class=b64>").append(key.toBase64()).append("</span></td>")
-                   .append("<td>").append("<span hidden>").append(expires).append("</span>")
+                   .append("<td>").append("<span hidden>").append(expires).append(" </span>")
                    .append(expireString).append("</td>")
                    .append("</tr>\n");
                 tempBanned++;
