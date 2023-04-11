@@ -113,7 +113,7 @@ chmod 755 ./graceful_helper
 chmod 755 ./ssleepget
 
 rm -rf ./icons ./lib/wrapper
-rm -f ./lib/*.dll ./*.bat ./*.cmd ./*.exe ./utility.jar
+rm -f ./lib/*.dll ./lib/wrapper-windows.jar ./*.bat ./*.cmd ./*.exe ./utility.jar ./docs/*.ico
 rm -f ./scripts/fixperms2.bat
 
 if [ ! `echo $HOST_OS  |grep osx` ]; then
