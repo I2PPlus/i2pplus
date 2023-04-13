@@ -223,6 +223,7 @@ public class HomeHelper extends HelperBase {
         "iranfreedom.i2p" + S + _x("Democracy &amp; human rights in Iran") + S + "http://iranfreedom.i2p/" + S + I + "news.svg" + S +
         _x("JapanToday") + S + _x("English language Japanese News") + S + "http://japantoday.i2p/" + S + I + "eepsites/japantoday.svg" + S +
         _x("JStorDaily") + S + _x("Where news meets its scholarly match") + S + "http://jstordaily.i2p/" + S + I + "eepsites/jstordaily.png" + S +
+        _x("Jurist") + S + _x("Legal News &amp; Commentary") + S + "http://jurist.i2p/" + S + I + "eepsites/jurist.svg" + S +
         _x("KrebsOnSecurity") + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "eepsites/krebs.png" + S +
         "LKML" + S + _x("Linux Kernel Mailing List") + S + "http://lkml.i2p/" + S + I + "news.svg" + S +
         _x("LittleAtoms") + S + _x("A rationalist journal") + S + "http://littleatoms.i2p/" + S + I + "eepsites/littleatoms.svg" + S +
@@ -236,6 +237,7 @@ public class HomeHelper extends HelperBase {
         _x("OpenDemocracy") + S + _x("Independent International Media Platform") + S + "http://opendemocracy.i2p/" + S + I + "news.svg" + S +
         _x("Planeta") + S + _x("News and blog feeds on I2P") + S + "http://planeta.i2p/" + S + I + "planet.svg" + S +
         "Phayul" + S + _x("News &amp; Views on Tibet") + S + "http://phayul.i2p/" + S + I + "news.svg" + S +
+        _x("RadioFreeAsia") + S + _x("Reliable journalism for countries under censorship") + S + "http://rfa.i2p/" + S + I + "eepsites/rfa.svg" + S +
         _x("SaveTibet") + S + _x("International Campaign for Tibet") + S + "http://savetibet.i2p/" + S + I + "eepsites/savetibet.svg" + S +
         "RollingStone" + S + _x("Lifestyle magazine") + S + "http://rollingstone.i2p/" + S + I + "eepsites/rollingstone.svg" + S +
         _x("SchneierOnSecurity") + S + _x("Internationally renowned security technologist") + S + "http://schneieronsecurity.i2p/" + S + I + "eepsites/schneier.png" + S +
