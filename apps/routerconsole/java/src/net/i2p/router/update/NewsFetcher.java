@@ -213,7 +213,7 @@ class NewsFetcher extends UpdateRunner {
     private static final String CLEARNET_HTTPS_SU3_KEY = "su3ssl";
 
     /*  @since 0.9.59+ */
-    private static final String PROP_ENABLE_TORRENT_UPDATES = "routerconsole.enableTorrentUpdates";
+    private static final String PROP_ENABLE_TORRENT_UPDATES = "router.enableTorrentUpdates";
     private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
 
     // unused

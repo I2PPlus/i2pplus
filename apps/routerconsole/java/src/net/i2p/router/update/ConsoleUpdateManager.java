@@ -93,6 +93,10 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private static final String PROP_UNSIGNED_AVAILABLE = "router.updateUnsignedAvailable";
     private static final String PROP_DEV_SU3_AVAILABLE = "router.updateDevSU3Available";
 
+    /*  @since 0.9.59+ */
+    private static final String PROP_ENABLE_TORRENT_UPDATES = "router.enableTorrentUpdates";
+    private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
+
     /**
      *  @param args ignored
      */
@@ -732,7 +736,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 _log.warn("Ignoring registration for " + type + ", SU3 updates disabled");
             return;
         }
-        if (method == TORRENT && !_allowTorrent) {
+        boolean enableTorrentUpdates = _context.getProperty(PROP_ENABLE_TORRENT_UPDATES, DEFAULT_ENABLE_TORRENT_UPDATES);
+        if (method == TORRENT && (!_allowTorrent || !enableTorrentUpdates)) {
             if (_log.shouldWarn())
                 _log.warn("Ignoring torrent registration");
             return;
