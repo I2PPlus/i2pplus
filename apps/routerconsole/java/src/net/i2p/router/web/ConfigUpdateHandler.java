@@ -90,25 +90,18 @@ public class ConfigUpdateHandler extends FormHandler {
      *
      *  These versions have not been released since 0.9.22, 2015.
      */
-    private static final String PACK200_URLS =
-    "http://echelon.i2p/i2p/i2pupdate.su2\r\n" +
+    private static final String PACK200_URLS = "";
+    //"http://echelon.i2p/i2p/i2pupdate.su2\r\n" +
     //"http://inr.i2p/i2p/i2pupdate.su2\r\n" +
     //"http://meeh.i2p/i2pupdate/i2pupdate.su2\r\n" +
-    "http://stats.i2p/i2p/i2pupdate.su2";
+    //"http://stats.i2p/i2p/i2pupdate.su2";
     // "http://www.i2p2.i2p/_static/i2pupdate.su2\r\n" +
     //"http://update.dg.i2p/files/i2pupdate.su2";
     //"http://update.killyourtv.i2p/i2pupdate.su2\r\n" ;
     // "http://update.postman.i2p/i2pupdate.su2" ;
 
-    private static final String NO_PACK200_URLS =
-    "http://echelon.i2p/i2p/i2pupdate.sud\r\n" +
-    //"http://inr.i2p/i2p/i2pupdate.sud\r\n" +
-    //"http://meeh.i2p/i2pupdate/i2pupdate.sud\r\n" +
-    "http://stats.i2p/i2p/i2pupdate.sud";
-    // "http://www.i2p2.i2p/_static/i2pupdate.sud\r\n" +
-    //"http://update.dg.i2p/files/i2pupdate.sud";
-    //"http://update.killyourtv.i2p/i2pupdate.sud\r\n" ;
-    // "http://update.postman.i2p/i2pupdate.sud" ;
+    private static final String NO_PACK200_URLS = "";
+    //"http://stats.i2p/i2p/i2pupdate.sud";
 
     /**
      *  These are only for .sud and .su2.
