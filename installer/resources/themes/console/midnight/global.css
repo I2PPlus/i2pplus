@@ -136,4 +136,4 @@ label[disabled],label[disabled]:hover{opacity:.45;cursor:default}
 @supports not (-moz-appearance:none){select{padding:7px 24px 7px 10px}}
 
 @media (forced-colors:active){*{forced-color-adjust:none}}
-@media screen and (max-width:1499px){select{padding:5px 24px 5px 6px}}
+@media (max-width:1499px){select{padding:5px 24px 5px 6px}}

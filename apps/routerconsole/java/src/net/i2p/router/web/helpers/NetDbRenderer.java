@@ -1108,7 +1108,7 @@ class NetDbRenderer {
                 buf.append("<thead>\n<tr><th>" + _t("Congestion Cap") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
                 if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size() > 0) {
                     buf.append("<tr><td><a class=isD href=\"/netdb?caps=D\" title=\"").append(showAll).append("\"><b>D</b></a>")
-                       .append(_t("Low performance / medium congestion")).append("</td><td>")
+                       .append(_t("Medium congestion / low performance")).append("</td><td>")
                        .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size()).append("</td></tr>\n");
                 }
                 if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_SEVERE).size() > 0) {
@@ -1269,7 +1269,12 @@ class NetDbRenderer {
         if (_context.banlist().isBanlisted(h)) {
             buf.append("<a class=banlisted href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
         }
-
+        byte[] padding = info.getIdentity().getPadding();
+        if (padding != null && padding.length >= 64) {
+            if (DataHelper.eq(padding, 0, padding, 32, 32)) {
+                buf.append("<span class=compressible title=\"" + _t("RouterInfo is compressible") + "\"></span> ");
+            }
+        }
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
         boolean hasD = DataHelper.stripHTML(info.getCapabilities()).contains("D");
         boolean hasE = DataHelper.stripHTML(info.getCapabilities()).contains("E");
@@ -1342,18 +1347,6 @@ class NetDbRenderer {
                .append("\" title=\"").append(_t("Configure peer"))
                .append("\">").append(_t("Edit")).append("</a>");
             buf.append(_context.commSystem().renderPeerFlag(h));
-/*
-            String country = _context.commSystem().getCountry(info.getIdentity().getHash());
-            if (country != null) {
-                buf.append("<a href=\"/netdb?c=").append(country).append("\">");
-                buf.append("<img height=12 width=16 loading=lazy alt=\"").append(country.toUpperCase(Locale.US)).append('\"');
-                buf.append(" title=\"").append(getTranslatedCountry(country)).append('\"');
-                buf.append(" src=\"/flags.jsp?c=").append(country).append("\"> ").append("</a>");
-            } else {
-                buf.append("<img height=12 width=16 loading=lazy alt=\"??\"").append(" title=\"unknown\"").append(" src=\"/flags.jsp?c=a0\">");
-            }
-*/
-            //buf.append("</span>");
         } else {
             long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60*1000).getAvgOrLifetimeAvg();
             used /= 1024*1024;

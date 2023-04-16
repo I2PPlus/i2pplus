@@ -328,11 +328,11 @@ svg #arrow stop:last-child{stop-color:#001}
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
 
 /* responsive layout */
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 .illustrate{margin:15px auto 10px;min-width:450px;width:90%}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 #navi a,#navi a:visited,#navi a:hover,#navi a:focus,#navi a:active{padding-left:21px;background-size:12px,100%}
 #filter{padding:0 1px}
 #filter p{margin-left:0;margin-right:0}
@@ -350,11 +350,11 @@ form[action="export"]::after{height:21px}
 .names a[href$=".i2p/"]{max-width:260px}
 }
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 #filter a{font-size:10pt;margin:0 2px -5px;display:inline-block;min-width:12px}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,#navi a,input[type=text],select,h4,td.names a,#filter p,#search td,p,a,.help li,td,tt,code,input[type=submit],input[type=reset],.destaddress,input[type="file"],input[type="file"]::file-selector-button{font-size:10.5pt}
 textarea,textarea[name="config"],textarea[name="content"],#subsLog pre{font-size:10pt}
 h3{font-size:12pt}
@@ -367,7 +367,7 @@ input#exporthosts{margin:6px 0 -2px 2px}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:18px;height:18px}
 }
 
-@media screen and (min-width:1640px){
+@media (min-width:1640px){
 body,input[type=text],select,h4,td.names a,#filter p,#search td,p,a,
 .help li,td,tt,code,input[type=submit],input[type=reset],.destaddress{font-size:10.5pt}
 .headline#subscriptions h3 span a{font-size:90%}

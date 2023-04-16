@@ -211,6 +211,11 @@ class NewsFetcher extends UpdateRunner {
     private static final String CLEARNET_SU2_KEY = "su2clearnet";
     private static final String CLEARNET_HTTP_SU3_KEY = "su3clearnet";
     private static final String CLEARNET_HTTPS_SU3_KEY = "su3ssl";
+
+    /*  @since 0.9.59+ */
+    private static final String PROP_ENABLE_TORRENT_UPDATES = "router.enableTorrentUpdates";
+    private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
+
     // unused
     //private static final String I2P_SUD_KEY = "sudi2p";
     //private static final String I2P_SU2_KEY = "su2i2p";
@@ -292,7 +297,10 @@ class NewsFetcher extends UpdateRunner {
                             // Must do su3 first
                             //if (ConfigUpdateHandler.USE_SU3_UPDATE) {
                                 addMethod(HTTP, args.get(I2P_SU3_KEY), sourceMap);
-                                addMethod(TORRENT, args.get(SU3_KEY), sourceMap);
+                                boolean enableTorrentUpdates = _context.getProperty(PROP_ENABLE_TORRENT_UPDATES, DEFAULT_ENABLE_TORRENT_UPDATES);
+                                if (enableTorrentUpdates) {
+                                    addMethod(TORRENT, args.get(SU3_KEY), sourceMap);
+                                }
                                 addMethod(HTTP_CLEARNET, args.get(CLEARNET_HTTP_SU3_KEY), sourceMap);
                                 addMethod(HTTPS_CLEARNET, args.get(CLEARNET_HTTPS_SU3_KEY), sourceMap);
                                 // notify about all sources at once

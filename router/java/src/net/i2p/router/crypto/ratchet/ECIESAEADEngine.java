@@ -274,14 +274,14 @@ public final class ECIESAEADEngine {
         } else {
             decrypted = null;
             if (_log.shouldWarn())
-                _log.warn("ECIES decryption failure, tag found but no state and too small (" + data.length + " bytes) for NewSessionReply");
+                _log.warn("ECIES decryption failure -> Tag found but no state and too small (" + data.length + " bytes) for NewSessionReply");
         }
         if (decrypted != null) {
             _context.statManager().updateFrequency("crypto.eciesAEAD.decryptExistingSession");
         } else {
             _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
             if (_log.shouldWarn()) {
-                _log.warn("ECIES decryption failure: known tag [" + st + "] but failed decrypt with key \n* Key: " + key);
+                _log.warn("ECIES decryption failure -> Known tag [" + st + "] but failed decrypt with key \n* Key: " + key);
             }
         }
         return decrypted;
@@ -299,10 +299,10 @@ public final class ECIESAEADEngine {
             return x_decryptSlow(data, targetPrivateKey, keyManager);
         } catch (DataFormatException dfe) {
             if (_log.shouldWarn())
-                _log.warn("ECIES decrypt error", dfe);
+                _log.warn("ECIES decryption error", dfe);
             return NO_CLOVES;
         } catch (Exception e) {
-            _log.error("ECIES decrypt error", e);
+            _log.error("ECIES decryption error", e);
             return NO_CLOVES;
         }
     }
@@ -328,7 +328,7 @@ public final class ECIESAEADEngine {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 // we'll get this a lot on muxed SKM
                 if (_log.shouldInfo())
-                    _log.info("Decrypt fail NS");
+                    _log.info("ECIES decryption failure for NewSession");
             }
         } else {
             decrypted = null;
@@ -367,14 +367,14 @@ public final class ECIESAEADEngine {
         if (pk == null) {
             // very unlikely
             if (_log.shouldDebug())
-                _log.debug("Elg2 decode fail NS");
+                _log.debug("Decoding failure for NewSession -> No PublicKey");
             data[KEYLEN - 1] = xx31;
             return null;
         }
         // fast MSB check for key < 2^255
         if ((pk.getData()[KEYLEN - 1] & 0x80) != 0) {
             if (_log.shouldDebug())
-                _log.debug("Bad PublicKey decode fail for NewSession");
+                _log.debug("Decoding failure for NewSession -> Bad PublicKey (wrong length)");
             data[KEYLEN - 1] = xx31;
             return null;
         }
@@ -392,7 +392,7 @@ public final class ECIESAEADEngine {
                                         targetPrivateKey.toPublic().getData(), 0);
         state.start();
         if (_log.shouldDebug())
-            _log.debug("State before decrypt new session: " + state);
+            _log.debug("State before decrypting NewSession: " + state);
 
         int payloadlen = data.length - (KEYLEN + KEYLEN + MACLEN + MACLEN);
         byte[] payload = new byte[payloadlen];
@@ -402,7 +402,7 @@ public final class ECIESAEADEngine {
             // we'll get this a lot on muxed SKM
             // logged at INFO in caller
             if (_log.shouldDebug())
-                _log.debug("Decrypt fail NS, state at failure: " + state, gse);
+                _log.debug("NewSession decryption failure -> State at failure: " + state, gse);
             // restore original data for subsequent ElG attempt
             System.arraycopy(xx, 0, data, 0, KEYLEN - 1);
             data[KEYLEN - 1] = xx31;
@@ -460,8 +460,8 @@ public final class ECIESAEADEngine {
         byte[] alicePK = new byte[KEYLEN];
         state.getRemotePublicKey().getPublicKey(alicePK, 0);
         if (_log.shouldDebug()) {
-            _log.debug("NewSession decrypt success from PublicKey [" + Base64.encode(alicePK) + "]");
-            _log.debug("State after decrypt new session: " + state);
+            _log.debug("NewSession decryption success from PublicKey [" + Base64.encode(alicePK) + "]");
+            _log.debug("State after decrypting NewSession: " + state);
         }
         if (Arrays.equals(alicePK, NULLPK)) {
             state.destroy();
@@ -511,7 +511,7 @@ public final class ECIESAEADEngine {
                                         targetPrivateKey.toPublic().getData(), 0);
         state.start();
         if (_log.shouldDebug())
-            _log.debug("State before decrypt new session: " + state);
+            _log.debug("State before decrypting NewSession: " + state);
 
         int payloadlen = data.length - (KEYLEN + MACLEN);
         byte[] payload = new byte[payloadlen];
@@ -575,7 +575,7 @@ public final class ECIESAEADEngine {
 
         if (_log.shouldDebug()) {
             _log.debug("N decrypt success");
-            //_log.debug("State after decrypt new session: " + state);
+            //_log.debug("State after decrypting NewSession: " + state);
         }
         state.destroy();
 
@@ -654,7 +654,7 @@ public final class ECIESAEADEngine {
             return null;
         }
         if (_log.shouldDebug())
-            _log.debug("State after decrypt NewSessionReply: " + state);
+            _log.debug("State after decrypting NewSessionReply: " + state);
 
         // split()
         // Noise does it too but it trashes the keys
@@ -704,7 +704,7 @@ public final class ECIESAEADEngine {
         byte[] bobPK = new byte[KEYLEN];
         state.getRemotePublicKey().getPublicKey(bobPK, 0);
         if (_log.shouldDebug())
-            _log.debug("NewSessionReply decrypt success from PK " + Base64.encode(bobPK));
+            _log.debug("NewSessionReply decryption success from PK " + Base64.encode(bobPK));
         if (Arrays.equals(bobPK, NULLPK)) {
             // TODO
             if (_log.shouldWarn())
@@ -758,7 +758,7 @@ public final class ECIESAEADEngine {
         boolean ok = decryptAEADBlock(tag, data, TAGLEN, data.length - TAGLEN, key, nonce);
         if (!ok) {
             if (_log.shouldWarn())
-                _log.warn("Decrypt of ExistingSession failed");
+                _log.warn("Decryption of ExistingSession failed");
             return null;
         }
         if (data.length == TAGLEN + MACLEN) {
@@ -796,7 +796,7 @@ public final class ECIESAEADEngine {
         if (pc.cloveSet.isEmpty()) {
             // this is legal
             if (_log.shouldDebug())
-                _log.debug("No garlic block in ExistingSession payload");
+                _log.debug("No Garlic block in ExistingSession payload");
             return NO_CLOVES;
         }
         int num = pc.cloveSet.size();
@@ -1064,11 +1064,11 @@ public final class ECIESAEADEngine {
                                           RatchetSessionTag currentTag, RatchetSKM keyManager,
                                           ReplyCallback callback) {
         if (_log.shouldDebug())
-            _log.debug("State before encrypt NewSessionReply: " + state);
+            _log.debug("State before encrypting NewSessionReply: " + state);
         byte[] tag = currentTag.getData();
         state.mixHash(tag, 0, TAGLEN);
         if (_log.shouldDebug())
-            _log.debug("State after mixhash tag before encrypt NewSessionReply: " + state);
+            _log.debug("State after MixHash tag before encrypting NewSessionReply: " + state);
 
         byte[] payload = createPayload(cloves, 0, NSR_OVERHEAD);
 
@@ -1079,7 +1079,7 @@ public final class ECIESAEADEngine {
             state.writeMessage(enc, TAGLEN, ZEROLEN, 0, 0);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
-                _log.warn("Encrypt fail NewSessionReply part 1", gse);
+                _log.warn("Encryption failure for NewSessionReply part 1", gse);
             return null;
         }
         if (_log.shouldDebug())
@@ -1109,7 +1109,7 @@ public final class ECIESAEADEngine {
             sender.encryptWithAd(hash, payload, 0, enc, TAGLEN + KEYLEN + MACLEN, payload.length);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
-                _log.warn("Encrypt fail NewSessionReply part 2", gse);
+                _log.warn("Encrypt failure for NewSessionReply part 2", gse);
             return null;
         }
         // tell the SKM
@@ -1171,7 +1171,7 @@ public final class ECIESAEADEngine {
         if (encr != null) {
         System.arraycopy(rawTag, 0, encr, 0, TAGLEN);
         } else if (_log.shouldWarn()) {
-            _log.warn("ECIES ExistingSession encrypt fail");
+            _log.warn("ECIES ExistingSession encryption failure");
         }
         return encr;
     }
@@ -1261,7 +1261,7 @@ public final class ECIESAEADEngine {
 
         public void gotDateTime(long time) throws DataFormatException {
             if (_log.shouldDebug())
-                _log.debug("Got DATE block: " + DataHelper.formatTime(time));
+                _log.debug("Received DATE block: " + DataHelper.formatTime(time));
             if (datetime != 0)
                 throw new DataFormatException("Multiple DATETIME blocks");
             datetime = time;
@@ -1274,19 +1274,19 @@ public final class ECIESAEADEngine {
 
         public void gotOptions(byte[] options, boolean isHandshake) {
             if (_log.shouldDebug())
-                _log.debug("Got OPTIONS block length " + options.length);
+                _log.debug("Received OPTIONS block (" + options.length + " bytes)");
             // TODO
         }
 
         public void gotGarlic(GarlicClove clove) {
             if (_log.shouldDebug())
-                _log.debug("Got GARLIC block: " + clove);
+                _log.debug("Received GARLIC block: " + clove);
             cloveSet.add(clove);
         }
 
         public void gotNextKey(NextSessionKey next) {
             if (_log.shouldDebug())
-                _log.debug("Got NEXTKEY block: " + next);
+                _log.debug("Received NEXTKEY block: " + next);
             // could have both a forward and reverse.
             // shouldn't have two forwards or two reverses
             if (nextKeys == null)
@@ -1296,7 +1296,7 @@ public final class ECIESAEADEngine {
 
         public void gotAck(int id, int n) {
             if (_log.shouldDebug())
-                _log.debug("Got ACK block: " + id + " / " + n);
+                _log.debug("Received ACK block: " + id + " / " + n);
             if (skm != null)
                 skm.receivedACK(remote, id, n);
             else if (_log.shouldWarn())
@@ -1305,30 +1305,30 @@ public final class ECIESAEADEngine {
 
         public void gotAckRequest() {
             if (_log.shouldDebug())
-                _log.debug("Got ACK REQUEST block");
+                _log.debug("Received ACK REQUEST block");
             ackRequested = true;
         }
 
         public void gotTermination(int reason) {
             if (_log.shouldDebug())
-                _log.debug("Got TERMINATION block, reason: " + reason);
+                _log.debug("Received TERMINATION block, reason: " + reason);
             // TODO
         }
 
         public void gotPN(int pn) {
             if (_log.shouldDebug())
-                _log.debug("Got PN block, pn: " + pn);
+                _log.debug("Received PN block, pn: " + pn);
             // TODO
         }
 
         public void gotUnknown(int type, int len) {
             if (_log.shouldDebug())
-                _log.debug("Got UNKNOWN block, type: " + type + " len: " + len);
+                _log.debug("Received UNKNOWN block, type: " + type + " len: " + len);
         }
 
         public void gotPadding(int paddingLength, int frameLength) {
             if (_log.shouldDebug())
-                _log.debug("Got PADDING block, len: " + paddingLength + " in frame len: " + frameLength);
+                _log.debug("Received PADDING block, len: " + paddingLength + " in frame len: " + frameLength);
         }
     }
 

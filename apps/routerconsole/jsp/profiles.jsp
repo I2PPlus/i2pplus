@@ -27,6 +27,10 @@
 %>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%></h1>
 <%
+    } else if (req.equals("4")) {
+%>
+<h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Session Banned Peers")%></h1>
+<%
     } else if (req.equals("3")) {
 %>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Banned Peers")%></h1>
@@ -55,6 +59,8 @@
 <script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
 <script nonce="<%=cspNonce%>" src=/js/lazyload.js type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
+  var bbody = document.getElementById("sessionBanlist");
+  var bfoot = document.getElementById("sessionBanlistFooter");
   var ff = document.getElementById("floodfills");
   var ffprofiles = document.getElementById("ffProfiles");
   var info = document.getElementById("profiles_overview");
@@ -63,9 +69,11 @@
   var plist = document.getElementById("profilelist");
   var thresholds = document.getElementById("thresholds");
   var refreshProfilesId = setInterval(refreshProfiles, 60000);
+  var sessionBans = document.getElementById("sessionBanned");
   var uri = window.location.search.substring(1) !== null ? window.location.pathname + "?" + window.location.search.substring(1) : window.location.pathname;
   var sorterFF = null;
   var sorterP = null;
+  var sorterBans = null;
   var xhrprofiles = new XMLHttpRequest();
   function initRefresh() {
     addSortListeners();
@@ -79,6 +87,10 @@
       sorterP = new Tablesort((plist), {descending: true});
       plist.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
       plist.addEventListener('afterSort', function() {progressx.hide();}, true);
+    } else if (sessionBans && sorterBans === null) {
+      sorterBans = new Tablesort((sessionBans), {descending: false});
+      sessionBans.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
+      sessionBans.addEventListener('afterSort', function() {progressx.hide();}, true);
     }
   }
   function refreshProfiles() {
@@ -123,10 +135,20 @@
             ff.innerHTML = ffResponse.innerHTML;
           }
         }
+        if (sessionBans) {
+          addSortListeners();
+          if (bbody) {
+              var bbodyResponse = xhrprofiles.responseXML.getElementById("sessionBanlist");
+              var bfootResponse = xhrprofiles.responseXML.getElementById("sessionBanlistFooter");
+              bbody.innerHTML = bbodyResponse.innerHTML;
+              bfoot.innerHTML = bfootResponse.innerHTML;
+              sorterBans.refresh();
+          }
+        }
         progressx.hide();
       }
     }
-    if (ff || plist) {
+    if (ff || plist || sessionBans) {
       addSortListeners();
     }
     if (!uri.includes("f=3")) {

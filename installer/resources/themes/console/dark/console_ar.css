@@ -142,7 +142,7 @@ td{text-align:right}
 #wrapperlogs pre,table[id$="logs"] ul,.logtable ul li{direction:ltr;text-align:left}
 #xhr{margin:0 -9px 0 auto}
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 .main,.news,h1[class],.sorry{margin-right:260px;margin-left:6px}
 .tunnelBuildStatus::before{margin:0}
 #sidebar #sb_logo{ margin:-8px -10px -9px 0}

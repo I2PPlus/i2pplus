@@ -131,13 +131,13 @@ a:hover,a:focus{
   text-align:right;
 }
 
-@media screen and (max-height:600px){
+@media (max-height:600px){
   body{
     margin:5% auto 10px;
   }
 }
 
-@media screen and (max-width:800px){
+@media (max-width:800px){
   body{
     padding:10px 10px 5px;
     min-width:600px;

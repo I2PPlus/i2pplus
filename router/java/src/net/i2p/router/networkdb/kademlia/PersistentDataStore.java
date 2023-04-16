@@ -690,7 +690,7 @@ public class PersistentDataStore extends TransientDataStore {
                             _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> No IP address");
                         if (_log.shouldWarn())
                             _log.warn("Banning: [" + truncHash + "] for 4h -> No IP address");
-                            _context.banlist().banlistRouter(_key, "<b>➜</b> No IP address", null, null, now + 4*60*60*1000);
+                            _context.banlist().banlistRouter(_key, " <b>➜</b> No IP address", null, null, now + 4*60*60*1000);
 */
                     } else if (isBadFF) {
                         corrupt = true;
@@ -698,14 +698,14 @@ public class PersistentDataStore extends TransientDataStore {
                             _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> Floodfill with SSU disabled");
                         if (_log.shouldWarn())
                             _log.warn("Banning: [" + truncHash + "] for 8h -> Floodfill with SSU disabled");
-                            _context.banlist().banlistRouter(_key, "<b>➜</b> Floodfill with SSU disabled", null, null, now + 8*60*60*1000);
+                            _context.banlist().banlistRouter(_key, " <b>➜</b> Floodfill with SSU disabled", null, null, now + 8*60*60*1000);
                     } else if (isSalt) {
                         corrupt = true;
                         if (_log.shouldInfo())
                             _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> RouterInfo has bogus 'salt' cap");
                         if (_log.shouldWarn())
                             _log.warn("Banning: [" + truncHash + "] for 8h -> RouterInfo has bogus 'salt' cap");
-                            _context.banlist().banlistRouter(_key, "<b>➜</b> RouterInfo has bogus 'salt' cap", null, null, now + 8*60*60*1000);
+                            _context.banlist().banlistRouter(_key, " <b>➜</b> RouterInfo has bogus 'salt' cap", null, null, now + 8*60*60*1000);
                     } else if (!h.equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
@@ -713,7 +713,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("RouterInfo [" + truncHash + "] does not match [" + _key.toBase64().substring(0,6) + "] from " + _routerFile);
                             _log.warn("Banning: [" + truncHash + "] for 1h -> Corrupt RouterInfo");
-                            _context.banlist().banlistRouter(_key, "<b>➜</b> Corrupt RouterInfo", null, null, now + 60*60*1000);
+                            _context.banlist().banlistRouter(_key, " <b>➜</b> Corrupt RouterInfo", null, null, now + 60*60*1000);
                         _routerFile.delete();
                     } else if (ri.getPublished() <= _knownDate) {
                         // Don't store but don't delete

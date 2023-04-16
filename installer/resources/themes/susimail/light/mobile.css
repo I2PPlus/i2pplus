@@ -22,7 +22,7 @@ form{
   display:none;
 }
 
-@media screen and (max-width:900px){
+@media (max-width:900px){
 .mailListDate{
   white-space:normal;
   line-height:100%;

@@ -58,6 +58,6 @@ select:focus{box-shadow:0 0 0 1px #89f;background:var(--dropdown_hover) no-repea
 @keyframes fade-in-iframe{from{filter:opacity(0);transform:scale(0)}to{filter:opacity(1);transform:scale(1)}}
 
 @supports not (-moz-appearance:none){hr{height:1px}}
-@media screen and (max-width:1200px){#identicon th:last-child,#identicon td:last-child,#qr th:last-child,#qr td:last-child{display:none}}
-@media screen and (max-width:720px){html{padding:4px}p{line-height:1.5}#identicon th:first-child,#identicon td:first-child,#identicon th:nth-child(2),#identicon td:nth-child(2),#qr th:first-child,#qr td:first-child{display:none}}
-@media screen and (min-width:1300px) and (min-height:600px){body{margin:2% auto}}
+@media (max-width:1200px){#identicon th:last-child,#identicon td:last-child,#qr th:last-child,#qr td:last-child{display:none}}
+@media (max-width:720px){html{padding:4px}p{line-height:1.5}#identicon th:first-child,#identicon td:first-child,#identicon th:nth-child(2),#identicon td:nth-child(2),#qr th:first-child,#qr td:first-child{display:none}}
+@media (min-width:1300px) and (min-height:600px){body{margin:2% auto}}

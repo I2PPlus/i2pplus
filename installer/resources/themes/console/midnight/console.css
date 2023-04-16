@@ -1201,6 +1201,17 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 #permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
 #banneduntilrestart td{border-right:var(--border_inner);text-align:center}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border_inner);border-bottom:var(--border_inner);background:linear-gradient(180deg,#080818 50%,#000 50%)}
+#sessionBanned {margin:11px auto 9px}
+#sessionBanned th,#sessionBanned td{padding:6px 12px}
+#sessionBanned thead th{font-size:90%;text-align:left}
+#sessionBanned tfoot th{padding:8px 12px}
+#profiles #sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0;border-left:none!important}
+#profiles #sessionBanned td:first-child{border-right:none!important}
+#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
+#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
+#sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
+#sessionBanned th:last-child,#sessionBanned td:last-child{text-align:right;user-select:none}
+#sessionBanned th{user-select:none}
 
 /* netdb (main section) */
 #netdb #pagenav~#pagenav{display:none}
@@ -1557,7 +1568,8 @@ span#distance{color:#d6fffd}
 .netdbentry th:last-child{text-align:right;padding:5px;white-space:nowrap;width:50px}
 .netdbentry th:first-child{white-space:nowrap}
 .gwhois,.gwhois:hover,.banlisted{vertical-align:middle;font-size:0}
-.banlisted{width:18px;height:18px;display:inline-block;background:var(--ban)}
+.banlisted{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
+.compressible{background:url(/themes/console/images/clamp.svg)}
 .netdbentry td:first-child{width:80px}
 .netdbentry td:nth-child(2){word-break:break-all;hyphens:none}
 .netdbentry tr:last-child code{font-weight:700}
@@ -2490,7 +2502,7 @@ iframe.iframed{margin:15px 0 0}
 }
 
 /*responsive layout */
-@media screen and (max-width:1800px){
+@media (max-width:1800px){
 #criticallogs+h3.tabletitle a:first-child{padding-left:4px;padding-right:10px}
 #criticallogs+h3.tabletitle a:last-child{padding-left:20px;padding-right:12px}
 #sb_internals.collapsed td{width:calc(100% + 37px)}
@@ -2499,7 +2511,7 @@ iframe.iframed{margin:15px 0 0}
 #sb_advanced.collapsed td{width:calc(100% + 66px)}
 }
 
-@media screen and (max-width:1499px){
+@media (max-width:1499px){
 h1[class],h1{padding-left:50px;background-size:32px auto,100% 4px,4px 100%}
 input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[value$="updates"]:focus,input.check[value$="updates"]:active{padding-left:26px;background-size:14px,100%}
 .main h3 a{line-height:1}
@@ -2540,15 +2552,15 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #sb_services.collapsed td{width:calc(100% + 59px)}
 }
 
-@media screen and (max-width:1400px){
+@media (max-width:1400px){
 .revision,.sha256{max-width:100px;display:inline-block;overflow:hidden;text-overflow:ellipsis}
 #criticallogs+h3.tabletitle a:first-child{padding-left:4px;padding-right:10px}
 #criticallogs+h3.tabletitle a:last-child{padding-left:12px;padding-right:12px}
 }
 
-@supports (columns:2 500px){@media screen and (max-width:1400px){#stats .statlist{padding:10px;columns:auto 500px;column-gap:10px;text-align:center}.statsName{min-width:0}#stats .statlist li li{margin-left:6px}}}
+@supports (columns:2 500px){@media (max-width:1400px){#stats .statlist{padding:10px;columns:auto 500px;column-gap:10px;text-align:center}.statsName{min-width:0}#stats .statlist li li{margin-left:6px}}}
 
-@media screen and (max-width:1360px){
+@media (max-width:1360px){
 #floodfills th:nth-child(8),#floodfills td:nth-child(8),#floodfills th:nth-child(13),#floodfills td:nth-child(13),#floodfills th:nth-child(14),#floodfills td:nth-child(14){display:none}
 #peers th,#peers .tablefooter td{font-size:85%}
 #peers #ntcpconnections th.queue{font-size:0}
@@ -2556,7 +2568,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
 }
 
-@media screen and (max-width:1240px){
+@media (max-width:1240px){
 #peers th,#peers td{min-width:0}
 #peers th,#peers .tablefooter td{font-size:85%}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
@@ -2571,7 +2583,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #profilelist td:nth-child(5){white-space:normal}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 #tunnels #peercount img{margin:-2px -4px}
 #tunnels .percentBarOuter,#tunnels .percentBarText{margin:0 2px;width:70px}
 #netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
@@ -2606,7 +2618,7 @@ td.optionsave,#i2pupdates td:first-child{width:30%;white-space:normal}
 #jardump th:nth-child(3),#jardump th:nth-child(4),#jardump th:nth-child(5),#jardump th:nth-child(6),#jardump td:nth-child(3),#jardump td:nth-child(4),#jardump td:nth-child(5),#jardump td:nth-child(6){display:none}
 }
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 #updateHelper select{max-width:200px}
 #reseedproxytype{columns:2 auto}
 #reseed_urlselection.optionsingle{columns:1 auto}
@@ -2619,18 +2631,18 @@ td.optionsave,#i2pupdates td:first-child{width:30%;white-space:normal}
 .encDests code{max-width:140px}
 }
 
-@media screen and (max-width:900px){
+@media (max-width:900px){
 .welcome h2{font-size:10pt}
 #ntcpconnections th:last-child{font-size:0}
 #ntcpconnections th:last-child::before{content:var(--err)}
 #ntcpconnections td:last-child{width:24px;white-space:nowrap}
 }
 
-@media screen and (min-width:1060px){
+@media (min-width:1060px){
 #graphs td:first-child{padding:5px 0}
 }
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 h3.tabletitle a,#version.tabletitle a{padding-left:18px}
 #thresholds th,#thresholds td{width:33%}
 .topness,#newsStatus,#newsDisplay{font-size:9pt}
@@ -2643,13 +2655,13 @@ h3.tabletitle a,#version.tabletitle a{padding-left:18px}
 #jobstats tfoot tr td:first-child{padding-left:8px;background-image:none}
 }
 
-@media screen and (min-width:1400px){
+@media (min-width:1400px){
 #changelog pre{margin-left:0;padding-left:10px;width:calc(100% - 22px);overflow-y:hidden;white-space:pre-wrap;font-size:10pt;columns:540px auto;column-gap:40px;column-rule:1px dotted #26235c}
 #stats .statlist{padding:10px;columns:auto 540px;column-gap:10px;text-align:center}
 .statsName{min-width:540px}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,.main,.main td,.news p,#news p,.statusnotes,textarea,th,.applabel a,tt,code,.messages,.messages #newsStatus,#news li{font-size:10pt}
 h1{padding:14px 15px 15px 62px;font-size:19pt;background-position:14px center}
 h2{font-size:14pt}
@@ -2742,16 +2754,16 @@ table[id^="sb_"],#sidebar #sb_localtunnels{width:236px}
 
 @supports not (-moz-appearance:none){#searchbar span{margin:-1px -1px -5px}}
 
-@media screen and (min-width:1634px){
+@media (min-width:1634px){
 .leasesets_container{margin-bottom:8px}
 th code{font-size:9pt}
 }
 
-@media screen and (min-width:1828px){
+@media (min-width:1828px){
 #profilelist{margin-top:5px}
 }
 
-@media screen and (min-width:1840px){
+@media (min-width:1840px){
 h1[class]{padding:17px 20px 16px 64px;font-size:20pt;background-position:15px center}
 h2{padding:12px 10px}
 h3.h3table,h3.tabletitle,#i2pclientconfig,#advancedclientconfig,#webappconfiguration,#pconfig,#pluginfromurl,#pluginfromfile,#updateplugins,#pluginmanage,#bannedpeers,h3.ptitle,#transports,#upnpstatus,h3.sybils,#config_keyring h3{padding:9px 10px}
@@ -2809,7 +2821,7 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #sidebar #sb_internals.collapsed td,#sidebar #sb_advanced.collapsed td,#sidebar #sb_services.collapsed td{width:257px}
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:1.1){
+@media (-webkit-min-device-pixel-ratio:1.1){
 #searchbar{margin-bottom:-14px;padding:8px 3px 2px}
 #searchbar span{padding-bottom:1px}
 #searchbar input,#searchbar select{height:30px}

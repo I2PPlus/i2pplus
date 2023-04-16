@@ -1,4 +1,4 @@
-@media screen and (min-width:0) and (max-width:4000px){
+@media (min-width:0) and (max-width:4000px){
 input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Open Sans,Segoe UI,Droid Sans,Roboto Sans,Ubuntu,Lucida Grande,Helvetica,Arial,Verdana,sans-serif;line-height:1.2}
 .snarkNav:link,.iframed .snarkNav:link{font-weight:700;padding-bottom:5px}
 .iframed .snarkNav:link{padding-top:3px}
@@ -26,6 +26,6 @@ a.control,input[type=submit],input.accept,th,#trackerselect tr:first-child td{fo
 #configs input[name="nofilter_dataDir"],input[name="i2cpOpts"],input[name="nofilter_commentsName"]{width:calc(100% - 200px)}
 }
 
-@media screen and (max-width:1400px){
+@media (max-width:1400px){
 .iframed #torrents td.torrentName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }

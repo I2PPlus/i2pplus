@@ -32,4 +32,4 @@ body#wizardpage{background:none}
 #wizardpage #messages li{padding:0;text-align:center}
 #xhr #bandwidth{padding:38px 24px 38px 86px;width:100%;position:absolute;top:-10px;left:-1px;right:-1px}
 
-@media screen and (min-width:1500px){#wizardpage #sb_logo{padding:9px 10px 16px}#wizardpage select{font-size:inherit}}
+@media (min-width:1500px){#wizardpage #sb_logo{padding:9px 10px 16px}#wizardpage select{font-size:inherit}}

@@ -651,12 +651,12 @@ class PacketHandler {
                     if (state.getRemotePort() == 65520) {
                         // distinct port of buggy router
                         _context.banlist().banlistRouterForever(state.getRemotePeer(),
-                                                                " <b>➜</b> " + _x("Excessive clock skew: {0}"),
+                                                                " <b>➜</b> " + _x("Excessive clock skew ({0})"),
                                                                 DataHelper.formatDuration(skew));
                     } else {
                         _context.banlist().banlistRouter(DataHelper.formatDuration(skew),
                                                          state.getRemotePeer(),
-                                                         " <b>➜</b> " + _x("Excessive clock skew: {0}"));
+                                                         " <b>➜</b> " + _x("Excessive clock skew ({0})"));
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", skew);
                     if (_log.shouldWarn())
@@ -676,12 +676,12 @@ class PacketHandler {
                     if (state.getRemotePort() == 65520) {
                         // distinct port of buggy router
                         _context.banlist().banlistRouterForever(state.getRemotePeer(),
-                                                                " <b>➜</b> " + _x("Excessive clock skew: {0}"),
+                                                                " <b>➜</b> " + _x("Excessive clock skew ({0})"),
                                                                 DataHelper.formatDuration(0 - skew));
                     } else {
                         _context.banlist().banlistRouter(DataHelper.formatDuration(0 - skew),
                                                          state.getRemotePeer(),
-                                                         " <b>➜</b> " + _x("Excessive clock skew: {0}"));
+                                                         " <b>➜</b> " + _x("Excessive clock skew ({0})"));
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", 0-skew);
                     if (_log.shouldWarn())

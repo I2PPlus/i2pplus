@@ -43,7 +43,7 @@ class SummaryBarRenderer {
 
     static final String ALL_SECTIONS[] =
         {"HelpAndFAQ", "I2PServices", "I2PInternals", "RouterInfo", "ShortRouterInfo", "AdvancedRouterInfo", "MemoryBar", "NetworkReachability",
-        "UpdateStatus", "RestartStatus", "Peers", "PeersAdvanced", "FirewallAndReseedStatus", "Bandwidth", "BandwidthGraph", "Tunnels",
+        "UpdateStatus", "RestartStatus", "Peers", "FirewallAndReseedStatus", "Bandwidth", "BandwidthGraph", "Tunnels",
         "Congestion", "TunnelStatus", "Destinations", "NewsHeadings", "Advanced", "Clock", "CPUBar"};
     static final Map<String, String> SECTION_NAMES;
 
@@ -60,7 +60,6 @@ class SummaryBarRenderer {
         aMap.put("UpdateStatus", _x("Update Status"));
         aMap.put("RestartStatus", _x("Restart Status"));
         aMap.put("Peers", _x("Peers"));
-        aMap.put("PeersAdvanced", _x("Peers (advanced)"));
         aMap.put("FirewallAndReseedStatus", _x("Firewall &amp; Reseed Status"));
         aMap.put("Bandwidth", _x("Bandwidth"));
         aMap.put("BandwidthGraph", _x("Bandwidth Graph"));
@@ -132,8 +131,6 @@ class SummaryBarRenderer {
                 buf.append(restartStatus); // prerendered above
             else if ("Peers".equals(section))
                 buf.append(renderPeersHTML());
-            else if ("PeersAdvanced".equals(section))
-                buf.append(renderPeersAdvancedHTML());
             else if ("FirewallAndReseedStatus".equals(section))
                 buf.append(renderFirewallAndReseedStatusHTML());
             else if ("Bandwidth".equals(section))
@@ -857,9 +854,7 @@ class SummaryBarRenderer {
     }
 
     public String renderUpdateStatusHTML() {
-//        if (_helper == null) return "";
         String updateStatus = _helper.getUpdateStatus();
-//        if ("".equals(updateStatus)) return "";
         StringBuilder buf = new StringBuilder(512);
         if (_helper == null || "".equals(updateStatus)) {
             buf.append("<div id=sb_updatesection class=\"hide volatile\" hidden></div>\n");
@@ -964,96 +959,6 @@ class SummaryBarRenderer {
 
         buf.append("<table id=sb_peers_condensed hidden>\n")
            .append("<tr><td>")
-           //.append("<a class=sb_icon id=floodfill href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
-           .append("<a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"").append(_t("Floodfill"))
-           .append("\"><span><span class=badge>").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
-           .append("<a class=sb_icon id=fast href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
-           .append("\"><span><span class=badge>").append(_helper.getFastPeers()).append("</span></span></a>\n")
-           .append("<a class=sb_icon id=firewalled href=\"/netdb?caps=U\" title=\"").append(_t("Unreachable"))
-           .append("\"><span><span class=badge>").append(_helper.getUnreachablePeers()).append("</span></span></a>\n")
-           .append("<a class=sb_icon id=banned href=\"/profiles?f=3\" title=\"").append(_t("Banned"))
-           .append("\"><span><span class=badge>").append(_helper.getBanlistedPeers()).append("</span></span></a>\n")
-           .append("</td></tr>\n</table>\n");
-
-        return buf.toString();
-    }
-
-    /** @since 0.9.32 */
-    public String renderPeersAdvancedHTML() {
-        if (_helper == null) return "";
-        StringBuilder buf = new StringBuilder(512);
-        int active = _helper.getActivePeers();
-        buf.append("<h3><a href=\"/peers\" target=_top title=\"")
-           .append(_t("Show all current peer connections"))
-           .append("\">")
-           .append(_t("Peers"))
-           .append(" <span class=badge hidden title=\"").append(_t("Peers active in the last minute")).append("\">").append(active).append("</span>")
-           .append("</a><input type=checkbox id=toggle_sb_peersadvanced class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
-                   "<table id=sb_peersadvanced>\n" +
-                   "<tr title=\"")
-           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"))
-           .append("\">" +
-                   "<td><b>")
-           .append(_t("Active"))
-           .append("</b></td><td class=digits><span>");
-        buf.append(active)
-           .append(SummaryHelper.THINSP)
-           .append(Math.max(active, _helper.getActiveProfiles()))
-           .append("</span></td></tr>\n" +
-                   "<tr title=\"")
-           .append(_t("The number of peers available for building client tunnels"))
-           .append("\">" +
-                   "<td><b>")
-           .append(_t("Fast"))
-           .append("</b></td><td class=digits><span>")
-           .append(_helper.getFastPeers())
-           .append("</span></td></tr>\n" +
-                   "<tr title=\"")
-           .append(_t("The number of peers available for building exploratory tunnels"))
-           .append("\">" +
-                   "<td><b>")
-           .append(_t("High capacity"))
-           .append("</b></td><td class=digits><span>")
-           .append(_helper.getHighCapacityPeers())
-           .append("</span></td></tr>\n" +
-                   "<tr title=\"")
-           .append(_t("The number of peers available for network database inquiries"))
-           .append("\">" +
-                   "<td><b>")
-           .append(_t("Integrated"))
-           .append("</b></td><td class=digits><span>")
-           .append(_helper.getWellIntegratedPeers())
-           .append("</span></td></tr>\n" +
-                   "<tr title=\"")
-           .append(_t("The number of peers without a published public ip address in our network database"))
-           .append("\">" +
-                   "<td><b>")
-           .append(_t("Unreachable"))
-           .append("</b></td><td class=digits><span>")
-           .append(_helper.getUnreachablePeers())
-           .append("</span></td></tr>\n" +
-                   "<tr title=\"")
-           .append(_t("The total number of peers in our network database"))
-           .append("\">" +
-                   "<td><a href=\"/netdb\"><b>")
-           .append(_t("Known"))
-           .append("</b></a></td><td class=digits><span>")
-           .append(_helper.getAllPeers())
-           .append("</span></td></tr>\n" +
-                   "<tr class=separator><td colspan=2><hr></td></tr>" +
-                   "<tr title=\"")
-           .append(_t("The number of banned peers"))
-           .append("\">" +
-                   "<td><a href=\"/profiles?f=3\"><b>")
-           .append(_t("Banned"))
-           .append("</b></a></td><td class=digits><span>")
-           .append(_helper.getBanlistedPeers())
-           .append("</span></td></tr>\n" +
-                   "</table>\n");
-
-        buf.append("<table id=sb_peers_condensed hidden>\n")
-           .append("<tr><td>")
-           //.append("<a class=sb_icon id=floodfill href=\"/netdb?caps=f\" title=\"").append(_t("Floodfill"))
            .append("<a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"").append(_t("Floodfill"))
            .append("\"><span><span class=badge>").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
            .append("<a class=sb_icon id=fast href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))

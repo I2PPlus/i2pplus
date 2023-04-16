@@ -272,22 +272,22 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 @supports not (-moz-appearance:none){select{white-space:normal}}
 
 /* responsive layout */
-@media screen and (max-width:1300px){
+@media (max-width:1300px){
 #serverTunnels .iconize,#clientTunnels .iconize{padding:12.5px 7px;min-width:48px;vertical-align:middle;font-size:0;background-size:12px,100%}
 #serverTunnels .preview.iconize,#clientTunnels .preview.iconize{min-width:64px;background-size:16px,100%}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 th{font-size:9pt}
 .tunnelDestinationLabel{min-width:120px}
 #reachableBy{min-width:0}
 }
 
-@media screen and (max-width:900px){
+@media (max-width:900px){
 .tunnelInfo .selectAll{max-width:110px}
 }
 
-@media screen and (max-width:800px){
+@media (max-width:800px){
 b+.port{margin-left:2px;width:40px}
 div[class^="status"]{background-size:auto 14px}
 .control,.control:link,.control:visited{min-width:60px}
@@ -300,22 +300,22 @@ div[class^="status"]{background-size:auto 14px}
 #tunnelWizardPage #targetDestination{width:200px}
 }
 
-@media screen and (max-width:700px){
+@media (max-width:700px){
 #leasesetKey,#tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#leasesetKey{min-width:270px}
 }
 
-@media screen and (min-width:1000px){
+@media (min-width:1000px){
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:386px}
 #registration .displayText{width:600px}
 }
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 a.control,body,.control,button,select,.freetext{font-size:10pt}
 th{font-size:10.5pt}
 h2,h3,#messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3,#wizardPanel h2{padding:10px 10px 8px 35px;font-size:12pt;background-position:8px center,0 0}
 #localDestination,.authentication{height:34px}
 }
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 div[class^="status"]{height:18px;background-size:auto 18px}
 th .help::after{width:20px;height:20px;background-size:20px}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}

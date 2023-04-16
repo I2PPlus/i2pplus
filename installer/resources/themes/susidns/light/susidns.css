@@ -277,7 +277,7 @@ svg{opacity:.9}
 @keyframes hide-up{from{margin-top:0}to{margin-top:-300px}}
 
 /* responsive layout */
-@media screen and (max-width:1499px){
+@media (max-width:1499px){
 input.search[type=submit]{padding:6px 5px}
 input.search[type="text"]{padding:4px 8px}
 .headline h3{font-size:10.5pt;background-size:18px}
@@ -285,7 +285,7 @@ input.search[type="text"]{padding:4px 8px}
 #current{font-size:10pt}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 .iframed #prev a,.iframed #next a{padding:11px 10px}
 .iframed #prev::after,.iframed #next::after{top:calc(50% - 6px)}
 #book .head{top:90px}
@@ -293,23 +293,23 @@ input.search[type="text"]{padding:4px 8px}
 #filtered,#results{font-size:9.5pt}
 }
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 .illustrate{margin:10px auto 10px;width:90%;min-width:450px}
 .iframed .illustrate{margin-bottom:25px}
 #content h3{font-size:10pt}
 }
 
-@media screen and (max-width:680px){
+@media (max-width:680px){
 #navi{padding:5px 3px}
 #navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs,#navi a.abook:hover,#navi a#configlink:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a.abook:focus,#navi a#configlink:focus,#navi a#overview:focus,#navi a#subs:focus{padding:3px 10px;min-width:50px;background:var(--nav) #fff}
 #visualid img[src^="/imagegen"]{width:228px;height:228px}
 }
 
-@media screen and (min-width:1000px){
+@media (min-width:1000px){
 #content h3{font-size:10.5pt}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,p,td,textarea,input,button,li,a,h4{font-size:10pt}
 code,tt,.destaddress,th{font-size:9pt}
 input.search[type=text]{margin:0 -8px 0 0}

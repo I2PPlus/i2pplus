@@ -47,7 +47,7 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  @param mode 0 = high cap; 1 = all; 2 = floodfill
+     *  @param mode 0 = high cap; 1 = all; 2 = floodfill; 3 = banned; 4 = ban summary by hash
      */
     public void renderStatusHTML(Writer out, int mode) throws IOException {
         boolean full = mode == 0;
@@ -380,7 +380,7 @@ class ProfileOrganizerRenderer {
                .append("</tbody>\n</table>\n</div>\n"); // thresholds
             buf.append("</div>\n");
 
-        } else {
+        } else if (mode == 3) {
 
             buf.append("<div class=widescroll id=ff>\n")
                .append("<table id=floodfills data-sortable>\n")

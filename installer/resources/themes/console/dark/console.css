@@ -1111,7 +1111,8 @@ p.family a{padding-left:4px;width:calc(100% - 141px);max-width:400px;display:inl
 p.family b{margin-right:-3px;min-width:118px;display:inline-block;vertical-align:middle;text-align:right;font-size:90%}
 p.family+p.family,.sybil_info+.sybil_info{margin-top:-4px}
 p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,linear-gradient(90deg,#000,#000800 80%,#001000);background-blend-mode:normal}
-.banlisted{width:18px;height:18px;display:inline-block;background:var(--ban)}
+.banlisted,.compressible{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
+.compressible{background:url(/themes/console/images/clamp.svg)}
 .configpeer:hover,.configpeer:focus{background:var(--edit_hover) var(--center)/12px,var(--badge)}
 .familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
 .gwhois,.banlisted{vertical-align:middle;font-size:0}
@@ -1208,6 +1209,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdblookup td.subheading{padding:10px;text-align:left;border:var(--border);background:#000}
 #netdblookup td.subheading b{font-size:10pt}
 #netdblookup td.optionsave{padding:10px}
+#netdblookup td b{font-size:90%}
 #netdblookup .optbox{margin:10px }
 #netdblookup input[type=text]{width:calc(100% - 11px)}
 #netdblookup select{width:calc(100% - 10px)}
@@ -1411,6 +1413,16 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #banneduntilrestart{border-left:1px solid var(--border)}
 #banneduntilrestart td{border-right:var(--border);text-align:center}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border);border-bottom:var(--border);background:var(--th)}
+#sessionBanned {margin:11px auto 9px}
+#sessionBanned th,#sessionBanned td{padding:6px 12px}
+#sessionBanned thead th{font-size:90%;text-align:left}
+#profiles #sessionBanned tfoot th{padding:8px 12px;text-align:center}
+#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
+#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
+#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
+#sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
+#sessionBanned th:last-child,#sessionBanned td:last-child{text-align:right;user-select:none}
+#sessionBanned th{user-select:none}
 
 .applink,.applabel,.statusnotes,.main,#news,.search tr,.logo,.themechoice,.themelabel,.langselect,.ui_lang{box-shadow:var(--bevel)}
 .appicon,.sitemapLink img{animation:zoom .15s linear .3s both;backface-visibility:hidden;will-change:transform}
@@ -2278,7 +2290,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs h3 a:first-of-type::after{margin-right:-3px}
 #logs h3+table{position:relative;z-index:1}
 #logs pre,#logs li{font-weight:600;opacity:.9}
-#logs li{width:100%;list-style:none;word-break:break-all;line-height:1.6;text-align:left;font:600 8.5pt var(--monospaced);border-top:1px solid #001800;border-right:1px solid #001800;border-bottom:1px solid #000}
+#logs li{width:100%;list-style:none;word-break:break-all;line-height:1.6;text-align:left;font:500 8.5pt var(--monospaced);border-top:1px solid #001800;border-right:1px solid #001800;border-bottom:1px solid #000}
 #logs li:nth-child(even){border-top:1px solid #001c00;border-left:2px solid #040;border-right:1px solid #001c00;background:rgba(0,28,0,.4)}
 #logs li:nth-child(odd){border-left:2px solid #030;background:rgba(0,8,0,.4)}
 #logs li:last-child{border-bottom:1px solid #001800}
@@ -2296,7 +2308,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:none}
 #servicelogs{color:var(--ink)}
 #wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
-#wrapperlogs pre{margin:0;padding:4px 6px;width:calc(100% - 5px);max-height:600px;white-space:pre-wrap;resize:none;color:#8f935c}
+#wrapperlogs pre{margin:0;padding:4px 6px;width:calc(100% - 5px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c}
 #wrapperlogs tr:nth-child(2){background:rgba(0,16,0,.3)}
 #wrapperlogs tr:last-child td{padding:0}
 
@@ -2525,7 +2537,7 @@ iframe.iframed{margin:15px 0 0}
   #applinks a::after,#sitelinks a::after{margin-top:0;padding-top:8px}
   #sitelinks a::after{margin-bottom:-7px;padding-top:0;padding-bottom:10px}
 
-  @media screen and (-webkit-min-device-pixel-ratio:1.2){
+  @media (-webkit-min-device-pixel-ratio:1.2){
     .optionsingle#reseedproxytype{columns:2}
     #homepage h4{padding-top:7px;padding-bottom:4px}
     #homepage h4::before{margin-top:-15px;margin-bottom:4px;height:10px;display:block;content:""}
@@ -2541,11 +2553,11 @@ iframe.iframed{margin:15px 0 0}
 }
 
 /* responsive layout */
-@media screen and (max-width:1599px){
+@media (max-width:1599px){
 #reseedproxytype{columns:250px 3}#reseed_urlselection.optionsingle{columns:1 auto}
 }
 
-@media screen and (max-width:1499px){
+@media (max-width:1499px){
 h1[class],h1,h1.conf.adv{padding:13px 15px 12px 50px;min-width:620px;font-size:17pt;background-size:32px,2px,100% 4px,100%,164px;background-position:10px center}
 h3 .b32{margin-right:-16px}
 h3[id*="jobs"]:first-of-type{margin-top:21px}
@@ -2614,17 +2626,17 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #webappconfiguration a{padding-top:9px}
 }
 
-@media screen and (max-width:1399px){
+@media (max-width:1399px){
 .revision,.sha256{display:inline-block;max-width:100px;overflow:hidden;text-overflow:ellipsis}
 .revision:hover,.sha256:hover{overflow:auto;text-overflow:clip}
 .statlist{padding:10px;columns:auto 520px;column-gap:10px;text-align:center}
 }
 
-@media screen and (min-width:1280px){
+@media (min-width:1280px){
 #submitconsolepass{margin-bottom:0}
 }
 
-@media screen and (max-width:1240px){
+@media (max-width:1240px){
 #peers .confignav,#tunnels .confignav{margin:-6px -6px 5px}
 #peers #udpcon{margin-top:-5px}
 #peers .confignav+#udpcon{margin-top:0}
@@ -2651,7 +2663,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #upnpstatus,#peers .infohelp{margin:0}
 }
 
-@media screen and (max-width:1199px){
+@media (max-width:1199px){
 td.optionsave{white-space:normal}
 .profilegroup::before{width:18px;height:14px}
 .statusnotes:last-child{margin-bottom:6px}
@@ -2692,12 +2704,12 @@ td.optionsave{white-space:normal}
 #udpconnections .cells{border:1px inset #131}
 }
 
-@media screen and (max-width:1150px){
+@media (max-width:1150px){
 h4 .unbold{max-width:150px;display:inline-block;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 h4 span[style="float:right;"] .unbold{max-width:300px}
 }
 
-@media screen and (max-width:1100px){
+@media (max-width:1100px){
 .tunnel_id,.tunnel_peer{margin:1px 2px;min-width:0;text-align:center}
 .tunnel_local{margin-left:2px;padding:4px;min-width:76px}
 .tunnel_peer:empty{vertical-align:middle}
@@ -2706,7 +2718,7 @@ h4 span[style="float:right;"] .unbold{max-width:300px}
 #floodfills td{font-size:8pt}
 }
 
-@media screen and (max-width:1000px){
+@media (max-width:1000px){
 .bw_title{margin:2px -6px -2px -3px;font-size:10pt}
 .encDests code{max-width:140px}
 .net_datausage{padding:4px 0;min-width:260px;white-space:normal}
@@ -2729,7 +2741,7 @@ table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before{dis
 #updateHelper select{max-width:200px}
 }
 
-@media screen and (max-width:900px){
+@media (max-width:900px){
 th{font-size:8pt}
 .tunneldisplay .cells{padding:4px 2px}
 #ntcpconnections th:last-child{font-size:0}
@@ -2737,7 +2749,7 @@ th{font-size:8pt}
 #ntcpconnections td:last-child{width:24px;white-space:nowrap}
 }
 
-@media screen and (min-width:1200px){
+@media (min-width:1200px){
 .ls_crypto{display:inline-block;columns:340px 4}
 .tab2{margin-bottom:-1px;padding:5px 12px 6px}
 #jobstats tbody td:first-child{padding-left:28px;background:var(--yes) no-repeat 8px center;background-size:12px}
@@ -2746,11 +2758,11 @@ th{font-size:8pt}
 #terms p:first-child{margin-top:0}
 }
 
-@media screen and (min-width:1200px) and (max-width:1499px){
+@media (min-width:1200px) and (max-width:1499px){
 .tunnel_id:not(:empty){padding-left:13px;text-align:right;background:var(--hardhat) no-repeat 5px center/12px}
 }
 
-@media screen and (min-width:1400px){
+@media (min-width:1400px){
 .statsName{border:1px solid #131}
 .statlist{padding:10px;columns:auto 540px;column-gap:10px;text-align:center}
 #help #changelog pre{margin-left:0;padding-left:10px;width:calc(100% - 22px);overflow-y:hidden;font-size:10pt;columns:515px auto;column-gap:30px;column-rule:var(--dotted)}
@@ -2759,7 +2771,7 @@ th{font-size:8pt}
 #stats .joblog{margin-bottom:-10px}
 }
 
-@media screen and (min-width:1500px){
+@media (min-width:1500px){
 body,code,input[type=file]::file-selector-button,select,textarea,th,th code,tt,.confignav,.main,.main button,.main input,.main td,.main textarea,.statlist a[name],.statlist a[name]:hover,.statlist b,.statlist li b,#changelog pre,#configinfo th,#news,#news p,#sidebar button,#warning2 p{font-size:10pt}
 button.control{font-size:0}
 code,pre,tt,.leaseset th,#newsDisplay a,#updateAvailable{font-size:9.5pt}
@@ -2873,17 +2885,17 @@ span#newtab{margin-top:4px}
 #udpconnections .cells td:first-child,#ntcpconnections .cells td:first-child{padding-right:8px;width:55px}
 }
 
-@media screen and (min-width:1634px){
+@media (min-width:1634px){
 .leasesets_container{margin-bottom:8px}th code{font-size:9pt}
 }
 
-@media screen and (min-width:1800px){
+@media (min-width:1800px){
 .linkcontainer .applink:last-of-type{margin-bottom:9px}
 #help .confignav{margin-left:-11px;margin-right:-11px;display:flex;justify-content:center;border-left:none;border-right:none}
 #help .tab,#help .tab2{margin-left:0;margin-right:0;flex-grow:1}
 }
 
-@media screen and (min-width:1840px){
+@media (min-width:1840px){
 div[id^="config_"] .confignav{padding:4px 4px 5px 3px;display:flex;flex-direction:row;flex-wrap:wrap;align-content:space-evenly;justify-content:center}
 div[id^="config_"] .tab,div[id^="config_"] .tab2{margin:0 -1px -1px 0;min-width:70px;white-space:nowrap;flex:auto;flex-basis:content;flex-grow:.06}
 div[id^="config_"] .tab2:first-child{border-left:none}

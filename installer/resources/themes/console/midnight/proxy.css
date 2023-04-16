@@ -101,7 +101,7 @@ form[action="http://proxy.i2p/add"]{margin-bottom:15px}
 
 @keyframes loader{from{width:0}99%{width:100%}100%{width:0}}
 
-@media screen and (max-width:799px){
+@media (max-width:799px){
 body{font-size:10pt}
 p,td,h3,h4,#b64,a{font-size:90%}
 .logo{display:none}
@@ -110,14 +110,14 @@ p,td,h3,h4,#b64,a{font-size:90%}
 .warning h3{margin:-10px -39px 10px -24px;padding:7px 14px}
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
 #proxyNewAddressHelper .logo{display:none}
 #proxy_error #jumplinks{margin-bottom:0}
 #jumplinks br{display:block}
 #jumplinks a,#jumplinks a:first-of-type{margin:4px 3px 4px 20px;padding:10px 10px 10px 38px;width:calc(100% - 88px);display:inline-block;float:none;background-position:12px center}
 }
 
-@media screen and (min-width:800px){
+@media (min-width:800px){
 .logo hr + a{margin-top:-20px}
 .logo hr ~ a{margin:0 -11px -1px;padding:10px 4px;display:inline-block}
 }
