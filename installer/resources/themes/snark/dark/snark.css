@@ -424,7 +424,7 @@ td .commentAuthorName{margin:0 0 0 4px;padding:0 4px 0 22px;min-width:120px;max-
 #commentSection .commentDelete{padding:8px 6px 8px 24px;text-align:left;background:var(--nuke) no-repeat 2px center;background-size:16px}
 #metacomment{padding:0;line-height:1.4;text-align:justify}
 #metacomment .commentWrapper{margin:5px 4px}
-.commentText .commentWrapper{height:auto;resize:none}
+.commentText .commentWrapper{height:auto;resize:none;white-space:normal}
 #myRating{border-top:var(--border);border-bottom:var(--border)}
 #myRating td:empty{padding:0;border-top:none;border-bottom:none;display:none}
 #myRating td:empty::after{min-height:1px}
