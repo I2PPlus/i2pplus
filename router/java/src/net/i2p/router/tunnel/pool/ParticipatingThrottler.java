@@ -1,17 +1,20 @@
 package net.i2p.router.tunnel.pool;
 
+
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterInfo;
+
+import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
-
-import net.i2p.data.router.RouterInfo;
-import net.i2p.router.NetworkDatabaseFacade;
-import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
-import net.i2p.router.Router;
 
 /**
  * Count how often we have accepted a tunnel with the peer
@@ -81,6 +84,8 @@ class ParticipatingThrottler {
                          caps.indexOf(Router.CAPABILITY_BW512) >= 0 ||
                          caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         boolean isLU = (ri != null && !isUs) && isUnreachable && (caps.indexOf(Router.CAPABILITY_BW12) >= 0 || caps.indexOf(Router.CAPABILITY_BW32) >= 0);
+        byte[] padding = ri != null ? ri.getIdentity().getPadding() : null;
+        boolean isCompressible = padding != null && padding.length >= 64 && DataHelper.eq(padding, 0, padding, 32, 32);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
 //        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
         int limit = isUnreachable || isLowShare ? Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 12, numTunnels * (PERCENT_LIMIT / 8) / 100))
@@ -117,6 +122,14 @@ class ParticipatingThrottler {
                           " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                           " -> No router version in RouterInfo");
             context.banlist().banlistRouter(h, " <b>➜</b> No version in RouterInfo", null, null, context.clock().now() + bantime);
+        } else if (VersionComparator.comp(v, "0.9.57") < 0 && isCompressible) {
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            rv = Result.DROP;
+            if (_log.shouldWarn())
+                _log.warn("Temp banning " + (caps != "" ? caps : "") +
+                          " Router [" + h.toBase64().substring(0,6) + "] for 4h" +
+                          " -> Compressible RouterInfo / " + v);
+            context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo &amp; older than 0.9.57", null, null, context.clock().now() + 4*60*60*1000);
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLU) {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
