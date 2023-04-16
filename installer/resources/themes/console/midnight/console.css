@@ -1568,7 +1568,8 @@ span#distance{color:#d6fffd}
 .netdbentry th:last-child{text-align:right;padding:5px;white-space:nowrap;width:50px}
 .netdbentry th:first-child{white-space:nowrap}
 .gwhois,.gwhois:hover,.banlisted{vertical-align:middle;font-size:0}
-.banlisted{width:18px;height:18px;display:inline-block;background:var(--ban)}
+.banlisted{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
+.compressible{background:url(/themes/console/images/clamp.svg)}
 .netdbentry td:first-child{width:80px}
 .netdbentry td:nth-child(2){word-break:break-all;hyphens:none}
 .netdbentry tr:last-child code{font-weight:700}

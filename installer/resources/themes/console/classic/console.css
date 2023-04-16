@@ -1115,7 +1115,8 @@ a.keysearch{padding:2px 5px 2px 15px;display:inline-block;font-size:90%;border:1
 .addtobook{text-align:right}
 .addtobook a{font-size:0}
 .addtobook a::after{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--abook_helper) no-repeat center center/16px;content:""}
-.banlisted{width:18px;height:18px;display:inline-block;background:var(--ban)}
+.banlisted{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
+.compressible{background:url(/themes/console/images/clamp.svg)}
 .encryption a.keysearch{background:var(--lock) no-repeat 2px center/12px,var(--th)}
 .familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
 .familysearch img{margin:1px 2px;padding:2px;height:14px;width:14px;display:inline-block;vertical-align:middle;border:1px solid #bbd;border-radius:2px;background:var(--bg)}
