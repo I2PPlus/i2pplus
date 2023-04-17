@@ -163,7 +163,7 @@ public class HomeHelper extends HelperBase {
         "btdigg.i2p" + S +_x("Clearnet BitTorrent DHT search engine") + S + "http://btdigg.i2p/" + S + I + "eepsites/torrentsearch.svg" + S +
         "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
         "Mojeek" + S +_x("Privacy-focused Clearnet Search Engine") + S + "http://mojeek.i2p/" + S + I + "search.svg" + S +
-        "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
+        //"raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
         "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
         //"Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
         //"Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
@@ -233,9 +233,7 @@ public class HomeHelper extends HelperBase {
         _x("NakedSecurity") + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
         "MotherJones" + S + _x("Smart &amp; fearless journalism") + S + "http://motherjones.i2p/" + S + I + "news.svg" + S +
         _x("NewStatesman") + S + _x("Politics &amp; Current Affairs magazine") + S + "http://newstatesman.i2p/" + S + I + "eepsites/newstatesman.svg" + S +
-        _x("Newsweek") + S + _x("American &amp; International News") + S + "http://newsweek.i2p/" + S + I + "eepsites/newsweek.svg" + S +
         _x("NewsNow") + S + _x("The Independent News Discovery Platform") + S + "http://newsnow.i2p/" + S + I + "eepsites/newsnow.svg" + S +
-        _x("NewVoiceUkraine") + S + _x("Independent News from Ukraine") + S + "http://newvoiceukraine.i2p/" + S + I + "eepsites/newvoice.svg" + S +
         _x("OpenDemocracy") + S + _x("Independent International Media Platform") + S + "http://opendemocracy.i2p/" + S + I + "news.svg" + S +
         _x("Planeta") + S + _x("News and blog feeds on I2P") + S + "http://planeta.i2p/" + S + I + "planet.svg" + S +
         "Phayul" + S + _x("News &amp; Views on Tibet") + S + "http://phayul.i2p/" + S + I + "news.svg" + S +
@@ -254,24 +252,26 @@ public class HomeHelper extends HelperBase {
         _x("TheAtlantic") + S + _x("News &amp; Reviews") + S + "http://theatlantic.i2p/" + S + I + "news.svg" + S +
         _x("TheConversation") + S + _x("Academic commentary and essays") + S + "http://theconversation.i2p/" + S + I + "eepsites/theconversation.svg" + S +
         _x("TheGuardian") + S + _x("Global News") + S + "http://theguardian.i2p/" + S + I + "eepsites/theguardian.svg" + S +
-        _x("TheHackerNews") + S + _x("Computer &amp; cyber security news") + S + "http://thehackernews.i2p/" + S + I + "news.svg" + S +
         _x("TheHill") + S + _x("US Political News") + S + "http://thehill.i2p/" + S + I + "eepsites/thehill.svg" + S +
         _x("TheMarkup") + S + _x("Watching Big Tech...") + S + "http://themarkup.i2p/" + S + I + "news.svg" + S +
         _x("TheMoscowTimes") + S + _x("Independent Journalism from Russia") + S + "http://themoscowtimes.i2p/" + S + I + "news.svg" + S +
         _x("TheNewRepublic") + S + _x("Politics &amp; Current Affairs magazine") + S + "http://newrepublic.i2p/" + S + I + "eepsites/newrepublic.svg" + S +
         _x("TheTibetPost") + S + _x("International News from Tibet") + S + "http://thetibetpost.i2p/" + S + I + "eepsites/tibetpost.svg" + S +
         _x("TheWeek") + S + _x("All you need to know about everything that matters") + S + "http://theweek.i2p/" + S + I + "eepsites/theweek.svg" + S +
-        _x("ThreatPost") + S + _x("Security related news") + S + "http://threatpost.i2p/" + S + I + "news.svg" + S +
         "TorrentFreak" + S + _x("Filesharing &amp; copyright news") + S + "http://torrentfreak.i2p/" + S + I + "eepsites/torrentfreak.svg" + S +
         "Ukrinform" + S + _x("Ukranian National News Agency") + S + "http://ukrinform.i2p/" + S + I + "news.svg" + S +
         _x("UpstreamJournal") + S + _x("A magazine about human rights and social justice") + S + "http://upstreamjournal.i2p/" + S + I + "news.svg" + S +
         "Wired" + S + _x("Technology News &amp; more...") + S + "http://wired.i2p/" + S + I + "eepsites/wired.svg" + S +
+        //_x("TheHackerNews") + S + _x("Computer &amp; cyber security news") + S + "http://thehackernews.i2p/" + S + I + "news.svg" + S +
         //"DarkNetDaily" + S + _x("Darknet related news site") + S + "http://darknetdaily.i2p/" + S + I + "news.svg" + S +
         //"dw.i2p" + S + _x("News &amp; Current Affairs from Germany and around the world") + S + "http://dw.i2p/" + S + I + "news.svg" + S +
         //"LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "eepsites/linuxfarm.svg" + S +
         //"Meduza" + S + _x("The Real Russia. Today.") + S + "http://meduza.i2p/" + S + I + "eepsites/meduza.svg" + S +
         //_x("ChinaDigitalTimes") + S + _x("Covering China from Cyberspace") + S + "http://chinadigitaltimes.i2p/" + S + I + "eepsites/chinadigitaltimes.png" + S +
         //_x("KyivIndependent") + S + _x("News from Ukraine") + S + "http://kyivindependent.i2p/" + S + I + "kyivindependent.svg" + S +
+        //_x("Newsweek") + S + _x("American &amp; International News") + S + "http://newsweek.i2p/" + S + I + "eepsites/newsweek.svg" + S +
+        //_x("NewVoiceUkraine") + S + _x("Independent News from Ukraine") + S + "http://newvoiceukraine.i2p/" + S + I + "eepsites/newvoice.svg" + S +
+        //_x("ThreatPost") + S + _x("Security related news") + S + "http://threatpost.i2p/" + S + I + "news.svg" + S +
 
         "";
 
