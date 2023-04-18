@@ -78,7 +78,7 @@ textarea[name="destination"]{width:calc(100% + 10px)}
 textarea[name="config"]:focus,textarea[name="content"]:focus{background:#fff}
 tr:hover .destaddress{color:#333}
 .active{color:#393;text-decoration:underline}
-.book textarea{padding:0;margin:0;resize:none;border:none;border-left:1px solid #ccccf0;border-right:1px solid #ccccf0;background:none}
+.book textarea{padding:0;margin:0;resize:none;border:0;border-left:1px solid #ccccf0;border-right:1px solid #ccccf0;background:none}
 .book th{padding-left:3px;text-align:left;font-size:90%;border-bottom:var(--border_inner)}
 .book td{padding:3px;border-top:var(--border_soft)}
 .book tr:first-child td,.book tr.head+.list1 td{border-top:none;border-bottom:var(--border_soft)}
@@ -89,7 +89,7 @@ tr:hover .destaddress{color:#333}
 .headline{margin:-1px 0 -2px;padding:8px 5px;border:var(--border_inner);background:linear-gradient(135deg,#fafaff,#f2f2ff)}
 .help#helpsubs{padding:0 15px 0 45px;font-size:10pt;background:var(--infohelp) no-repeat 10px center/26px,linear-gradient(135deg,#fafaff,#f8f8ff)}
 .info a[href^="http"],.helper a{width:100%;display:inline-block}
-.page{margin:-4px 0;padding:10px 0;min-width:700px;font-size:9pt;border:none;border-radius:2px}
+.page{margin:-4px 0;padding:10px 0;min-width:700px;font-size:9pt;border:0;border-radius:2px}
 .selected,#activefilter{font-weight:700;color:#999;box-shadow:var(--highlight),inset 2px 2px 2px #aaa}
 .storage::-moz-selection{background:#373}
 .storage::selection{background:#373}
@@ -116,7 +116,7 @@ tr:hover .destaddress{color:#333}
 #content{margin:-1px 0 0;padding:0 15px;border:var(--border_inner);background:#fafaff}
 #content h3{padding:5px 8px 5px 34px;letter-spacing:0;text-transform:none;border:var(--border_inner);border-radius:2px;box-shadow:var(--highlight),0 0 1px #ccc;background:var(--question) no-repeat 8px center,linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(135deg,#fcfcff 5%,rgba(231,231,255,.8) 15%);background-size:20px,100%,100%;background-blend-mode:luminosity,normal,normal}
 #content p{margin-left:15px;margin-right:15px;line-height:130%;font-size:110%}
-#content textarea,#host_details textarea{margin:0 0 0 -15px;width:100%;border:none;box-shadow:none;resize:none;filter:none}
+#content textarea,#host_details textarea{margin:0 0 0 -15px;width:100%;border:0;box-shadow:none;resize:none;filter:none}
 #current{margin:-1px 0;padding:3px 10px 2px;display:inline-block;vertical-align:middle;text-align:center;font-size:11.5pt;border-left:var(--border_inner);border-right:var(--border_inner)}
 #dtls form+#buttons{margin-top:-2px;border:var(--border_inner)}
 #dtls .headline h3{margin-bottom:3px}
@@ -154,12 +154,12 @@ tr:hover .destaddress{color:#333}
 .iframed #book,.iframed #emptybook{margin-bottom:0}
 .iframed #book+#buttons{margin:-61px 0 -2px}
 .iframed #content h3{margin-top:3px}
-.iframed #content{padding:0;overflow:hidden;border:none;background:none}
+.iframed #content{padding:0;overflow:hidden;border:0;background:none}
 .iframed #content textarea{margin:0;border:var(--border_inner)}
 .iframed #helpconfig,.iframed #helpsubs{margin-top:10px;margin-bottom:8px;border-radius:0;box-shadow:var(--highlight)}
 .iframed #import{margin:0 0 14px}
-.iframed #empty{margin-bottom:20px;height:20px;border:none;border-top:var(--border_inner);border-bottom:var(--border_inner)}
-.iframed #messages{border:none}
+.iframed #empty{margin-bottom:20px;height:20px;border:0;border-top:var(--border_inner);border-bottom:var(--border_inner)}
+.iframed #messages{border:0}
 #bk.iframed .page{padding-bottom:18px}
 #bk.iframed #published.page{padding-bottom:3px}
 
@@ -207,7 +207,7 @@ td.destinations textarea{height:28px;box-shadow:none}
 #visualid{margin-top:-1px;padding-top:0;border:var(--border_inner);border-radius:2px;background:#fafaff}
 #visualid h3{margin-top:0;padding:8px 10px 6px;border-bottom:var(--border_inner);box-shadow:var(--highlight);background:linear-gradient(180deg,#fcfcff 50%,#eef 50%)}
 #idAddress{text-transform:none;letter-spacing:0}
-#visualid table{margin:12px 0 0;width:100%;border:none;border-collapse:collapse;background:none}
+#visualid table{margin:12px 0 0;width:100%;border:0;border-collapse:collapse;background:none}
 #visualid tr:first-child td{padding-bottom:15px}
 #visualid td{width:50%}
 #visualid td:first-child{text-align:right}
@@ -228,7 +228,7 @@ a.fakebutton:hover,a.fakebutton:focus{color:#111}
 a.fakebutton:active{color:#666}
 form[action="export"]{margin:-1px 0}
 form[action="addressbook"] table{width:100%;font-weight:700}
-input[type=submit]::-moz-focus-inner,input[type=reset]::-moz-focus-inner,button::-moz-focus-inner{outline:none;border:none}
+input[type=submit]::-moz-focus-inner,input[type=reset]::-moz-focus-inner,button::-moz-focus-inner{outline:none;border:0}
 input[type=submit],input[type=reset],.fakebutton{margin:5px 5px 5px 0;padding:4px 3px;font:9pt var(--bodyfont);text-decoration:none;color:#4f4f63;border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--btn);filter:drop-shadow(0 0 1px rgba(220,220,255,.7));cursor:pointer}
 input[type=submit]:hover,input[type=reset]:hover,input[type=submit]:focus,input[type=reset]:focus,.fakebutton:hover,.fakebutton:focus{color:#111;border:1px solid var(--hover);box-shadow:var(--highlight),inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);background:var(--btn_hover);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 input[type=submit]:active,input[type=reset]:active,.fakebutton:active,input[type=file]:active::file-selector-button{color:#666;box-shadow:var(--highlight),inset 3px 3px 2px #555;background-blend-mode:luminosity}
@@ -258,7 +258,7 @@ input.update{margin-left:5px}
 /* page nav buttons */
 #next,#prev{position:relative;display:inline-block;line-height:0;vertical-align:middle}
 #next::after,#prev::after{height:0;width:0;position:absolute;top:calc(50% - 6px);right:calc(50% - 3px);border-width:6px;border-style:solid;border-color:transparent #575779 transparent transparent;content:"";pointer-events:none}
-#next.inactive,#prev.inactive{padding:12px 10px;border:none}
+#next.inactive,#prev.inactive{padding:12px 10px;border:0}
 #next.inactive::after,#prev.inactive::after{opacity:.6}
 #next a,#prev a{margin:0;padding:12px 10px;font-size:0}
 #next a,#next.inactive{border-radius:0 2px 2px 0}

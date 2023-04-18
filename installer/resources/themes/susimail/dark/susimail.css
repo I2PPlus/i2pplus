@@ -31,7 +31,7 @@ span.coloured{color:#327bbf}
 div.header,.iframed .header{display:none}
 div.footer{margin:0 -1px -1px;border-top:none;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #040,inset 0 0 0 3px #000;background:linear-gradient(90deg,#000800 15%,#000 50%,#000800 85%)}
 .iframed .footer{display:none}
-hr{margin:5px;width:100%;height:1px;border:none;background:#252;opacity:.5}
+hr{margin:5px;width:100%;height:1px;border:0;background:#252;opacity:.5}
 .footer hr{display:none}
 p.mailbody{margin-top:0;padding:0 0 15px;word-break:break-all;line-height:1.3;text-align:left;color:#b5b774}
 .linkspam{color:#300}
@@ -43,12 +43,12 @@ a:active,tr:hover td[onclick]:active a{color:var(--active)}
 .noborder{margin-left:0;margin-top:0;margin-right:0}
 pre{margin-left:10px;margin-right:10px;font-size:9pt}
 .page{margin:0;padding:10px;min-width:600px;line-height:1.6;text-align:center;color:var(--ink);box-shadow:var(--highlight);border:var(--border);border-radius:1px}
-.iframed .page{margin:0;padding:1px;min-width:620px;border:none;border-radius:0}
+.iframed .page{margin:0;padding:1px;min-width:620px;border:0;border-radius:0}
 th{font-weight:700;vertical-align:middle}
 .spacer{display:none}
 form{line-height:1.6;border-top:none}
 .header + form{border:var(--border);box-shadow:0 0 1px 1px #000}
-.iframed form{margin-bottom:8px;border:none;box-shadow:none}
+.iframed form{margin-bottom:8px;border:0;box-shadow:none}
 .iframed .header + form{margin-bottom:-10px;padding-bottom:17px}
 
 /* message view */
@@ -61,7 +61,7 @@ form{line-height:1.6;border-top:none}
 #message_full tr:first-child{background:repeating-linear-gradient(180deg,#010 1px,#010 2px,#000 3px)}
 #mailhead{margin:0;padding:0}
 #mailhead tr:first-child{background:none}
-#mailhead td{padding:3px;vertical-align:text-bottom;border:none}
+#mailhead td{padding:3px;vertical-align:text-bottom;border:0}
 #mailhead td:first-child{width:1%;min-width:60px;white-space:nowrap;font-weight:700;color:var(--ink)}
 #mailhead td[colspan="2"],#mailhead hr,.mailbody hr{display:none}
 #toggleHeaders:active a{color:var(--ink);background:var(--hover)}
@@ -102,7 +102,7 @@ input.login:active{background:#f60 var(--login_active) no-repeat 10px center/14p
 input.logout{padding:7px 14px 7px 28px;background:var(--logout) no-repeat 10px center/14px,var(--btn)}
 input.logout:hover,input.logout:focus{background:var(--logout_hover) no-repeat 10px center/14px,var(--btn_hover)}
 input.logout:active{background:#f60 var(--logout_active) no-repeat 10px center/14px}
-#info input.logout,#info input.logout:hover,#info input.logout:focus,#info input.logout:active{margin:-11px -4px -8px 12px;padding-right:10px;float:none;line-height:normal;border:none;border-left:1px solid #131;border-radius:0;box-shadow:none;background:var(--logout) no-repeat 10px center/14px,var(--badge);filter:none}
+#info input.logout,#info input.logout:hover,#info input.logout:focus,#info input.logout:active{margin:-11px -4px -8px 12px;padding-right:10px;float:none;line-height:normal;border:0;border-left:1px solid #131;border-radius:0;box-shadow:none;background:var(--logout) no-repeat 10px center/14px,var(--badge);filter:none}
 #info input.logout:hover,#info input.logout:focus{background:var(--logout_hover) no-repeat 10px center/14px,var(--badge)}
 #info input.logout:active{box-shadow:var(--btn_shadow_active);background:#f60 var(--logout_active) no-repeat 10px center/14px}
 input.reload,input.refresh,input[name="refresh"][disabled],.topbuttons .fakebutton{padding:7px 11px 7px 28px;background:var(--refresh) no-repeat 10px center/13px,var(--btn)}
@@ -164,8 +164,8 @@ input[type=text]::placeholder,input[type=password]::placeholder{text-transform:l
 
 /* pagenav */
 div.pagenav{padding:10px 5px 0;border-top:1px solid #555;border-radius:0 0 2px 2px}
-.pagenav tr{display:table-row;border:none}
-.pagenav td{border:none}
+.pagenav tr{display:table-row;border:0}
+.pagenav td{border:0}
 #messagenav{margin-right:-1px;margin-left:-7px;float:right}
 input.firstpage{padding:4px 10px;text-indent:-99999px;background:var(--first) no-repeat center center/14px,var(--btn)}
 input.firstpage:hover{background:var(--first_hover) no-repeat center center/14px,var(--btn_hover)}
@@ -191,7 +191,7 @@ tr.bottombuttons .pagenav{width:100%;margin:0}
 .pagenav input{margin:2px 1px;float:none}
 .pagenav input[name="prevpage"]{margin-right:5px}
 .pagenav input[name="nextpage"]{margin-left:5px}
-.pagenav input[disabled],.pagenav input[disabled]:hover,.pagenav input[disabled]:active{border:none;box-shadow:var(--highlight)}
+.pagenav input[disabled],.pagenav input[disabled]:hover,.pagenav input[disabled]:active{border:0;box-shadow:var(--highlight)}
 .topbuttons #messagenav{right:8px}
 .topbuttons #messagenav{top:7px;right:5px}
 .topbuttons .pagenav td{padding:0;width:auto}
@@ -245,7 +245,7 @@ img.sort:active{box-shadow:var(--highlight),inset 2px 2px 2px #000}
 #dologin tr:last-child a:hover{color:#494;box-shadow:0 0 0 1px #020;background:var(--glow_bottom),var(--th);transition:ease all .1s}
 #dologin tr:last-child a:active{color:#f90;box-shadow:0 0 1px #020,inset 3px 3px 3px #000;transition:ease all .05s}
 #dologin tr:last-child td{color:transparent}
-#toggle{margin:0;height:20px;width:20px;min-width:0;vertical-align:middle;font-size:0;border:none;box-shadow:none;background:var(--show) no-repeat center center/20px;cursor:pointer;mix-blend-mode:luminosity}
+#toggle{margin:0;height:20px;width:20px;min-width:0;vertical-align:middle;font-size:0;border:0;box-shadow:none;background:var(--show) no-repeat center center/20px;cursor:pointer;mix-blend-mode:luminosity}
 #toggle.hidepass{background:var(--hide) no-repeat center center/20px}
 #toggle:hover{mix-blend-mode:normal}
 #toggle.showpass{background:var(--show) no-repeat center center/20px}
@@ -404,7 +404,7 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 #nukemail span::after{margin:25px 0 -18px;width:100%;height:1px;display:block;background:linear-gradient(90deg,#000,#500,#000);content:""}
 
 /* loading mail */
-#loading{margin:0;padding:50px 15px;text-align:center;font-size:10pt;border:none;background:repeating-linear-gradient(180deg,#001,#000 2px,#001 3px)}
+#loading{margin:0;padding:50px 15px;text-align:center;font-size:10pt;border:0;background:repeating-linear-gradient(180deg,#001,#000 2px,#001 3px)}
 #loading b{padding:6px 0;width:40%;min-width:400px;display:inline-block;letter-spacing:2px;text-shadow:0 0 1px #001,0 0 5px #003;color:var(--ink);border-radius:2px;box-shadow:var(--highlight),inset 0 0 0 2px #001,inset 0 0 2px 3px #002,0 0 1px #001;background:repeating-linear-gradient(45deg,#020 1px,#020 20px,#000 20px,#000 40px);animation:loading 1s linear infinite forwards alternate}
 
 @keyframes attention{from{background-position:200%}to{background-position:0}}
@@ -428,7 +428,7 @@ body:not(.iframed) #mailbox tr:nth-child(2){top:47px}
 }
 
 @media (max-width:1300px){
-.pagenavcontainer{padding:0;top:10px;right:3px;border:none}
+.pagenavcontainer{padding:0;top:10px;right:3px;border:0}
 }
 
 @media (max-width:1000px){
@@ -436,7 +436,7 @@ body:not(.iframed) #mailbox tr:nth-child(2){top:47px}
 body{margin:3px;font-size:8.5pt}
 th.mailListDate{white-space:nowrap;text-align:center}
 td.mailListDate{width:1%;line-height:1;white-space:normal;text-align:center}
-.listDate{padding-bottom:1px;text-align:center;font-weight:700;border:none;border-bottom:1px solid rgba(0,64,0,.4);box-shadow:none;opacity:.85;background:none}
+.listDate{padding-bottom:1px;text-align:center;font-weight:700;border:0;border-bottom:1px solid rgba(0,64,0,.4);box-shadow:none;opacity:.85;background:none}
 .listDate span{min-width:0}
 .listTime{text-align:center;font-size:95%}
 input.switchto,input.switchto:hover,input.switchto:focus,#serverRefresh,#info input.logout,#info input.logout:hover,#info input.logout:focus{width:20px;line-height:14px;font-size:0;background-position:center center}
@@ -444,7 +444,7 @@ input.switchto,input.switchto:hover,input.switchto:focus,#serverRefresh,#info in
 .topbuttons input[type="submit"],.topbuttons input[type="reset"],.topbuttons .fakebutton,.topbuttons select{margin:2px;vertical-align:middle}
 .topbuttons input.new{margin:2px 1px 2px 0}
 .topbuttons select{margin-left:-2px}
-.folders{margin:0 0 0 -2px;border:none}
+.folders{margin:0 0 0 -2px;border:0}
 }
 
 @media (max-width:900px){

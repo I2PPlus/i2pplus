@@ -20,7 +20,7 @@ h2,h3{margin:10px 0 -1px;padding:8px 10px 6px 30px;position:relative;word-spacin
 h2,h3,th,.buttons,.newTunnel,.control,label,.infohelp,.infowarn,.nowrap,b,#throttler td{user-select:none}
 hr{display:none}
 input[type="hidden"],input.default{display:none}
-select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{margin:0;padding:0;color:var(--ink);border:none;box-shadow:none;background:none;cursor:default}
+select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{margin:0;padding:0;color:var(--ink);border:0;box-shadow:none;background:none;cursor:default}
 select{margin:4px;min-width:140px}
 textarea:focus::placeholder,input:focus::placeholder,#filter input:focus::placeholder{opacity:0}
 textarea::placeholder,input::placeholder{font-style:italic}
@@ -49,7 +49,7 @@ td.infohelp{padding:10px 10px 10px 38px;text-align:justify;background:var(--info
 .iframed #messages + #globalTunnelControl{margin-top:16px}
 .iframed #page::after{width:100%;height:11px;display:block;content:""}
 .iframed .panel#clients{margin-top:8px;margin-bottom:0}
-.iframed .panel{margin:16px auto -8px;padding:0;width:100%;border:none;box-shadow:none;background:none}
+.iframed .panel{margin:16px auto -8px;padding:0;width:100%;border:0;box-shadow:none;background:none}
 .iframed .panel.iframed{margin:0 auto -8px}
 .iframed .panel#messages,.iframed #globalTunnelControl{margin-top:0}
 .iframed #globalTunnelControl{margin-bottom:-16px}
@@ -82,7 +82,7 @@ textarea[name="accessList"]:focus{height:80px}
 table#statusMessages textarea,table#statusMessages textarea:active{margin:0;height:80px;font-size:9pt;border:0;box-shadow:none}
 textarea{line-height:1.5;font-size:.9;border:var(--border);border-radius:2px;box-shadow:inset 1px 1px 1px #ddd;background:#fff}
 textarea:focus{box-shadow:inset 0 0 0 1px #89f,0 0 1px rgba(136,153,255,.4)}
-textarea#statusMessages{margin:0;padding:2px 4px 2px 8px;word-break:break-all;color:#070;border:none;border-radius:0;box-shadow:none}
+textarea#statusMessages{margin:0;padding:2px 4px 2px 8px;word-break:break-all;color:#070;border:0;border-radius:0;box-shadow:none}
 textarea#statusMessages:focus{caret-color:transparent}
 .editDisabled input[type=radio],.editDisabled label{cursor:not-allowed}
 .editDisabled input[type=radio]:checked{opacity:1}
@@ -127,7 +127,7 @@ th.tunnelControl{text-align:center}
 .tunnelStatus div{position:relative}
 .tunnelStatus div span{pointer-events:none}
 .tunnelStatus div:hover span{padding:6px 12px;min-width:140px;display:inline-block;line-height:1.5;left:0;position:absolute;bottom:calc(100% + 4px);z-index:99999;color:var(--ink);font-size:9pt;border:1px solid var(--border_badge);box-shadow:var(--highlight),0 2px 2px rgba(0,0,0,.1);background:var(--badge)}
-.tunnelStatus div span hr{margin:2px 0 4px;height:0;display:block;border:none;border-top:1px solid #bbc;border-bottom:1px solid #fff;opacity:.8}
+.tunnelStatus div span hr{margin:2px 0 4px;height:0;display:block;border:0;border-top:1px solid #bbc;border-bottom:1px solid #fff;opacity:.8}
 .tunnelType{width:25%}
 .username,.password{width:200px}
 .username{padding-left:22px;background:#fff var(--user) no-repeat 3px center/16px}
@@ -144,7 +144,7 @@ th.tunnelControl{text-align:center}
 #oldName,#targetDestination,select#connectionProfile{width:calc(100% - 20px);min-width:280px}
 #tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#localDestination,#customOptions,#leasesetKey,#name,#description,textarea[name="accessList"]{margin:0;width:100%;text-align:left}
 td#throttle,#clientAuthConfig{padding:0}
-#throttler,#clientAuth{border:none}
+#throttler,#clientAuth{border:0}
 #throttler th{padding-left:20px}
 #throttler th:last-child,#throttler td:last-child,#clientAuth th:last-child,#clientAuth td:last-child{border-right:none}
 #throttler td{width:20%}
@@ -182,9 +182,9 @@ a.control,.control,.control:link,.control:visited,button{margin:2px 4px;padding:
 #wizardPanel input[type=checkbox],#wizardPanel input[type=radio]{margin-left:4px}
 #wizardTable{padding:0}
 #wizardTunnelTypes td:first-child,#wizardSummary td:first-child{width:10%;min-width:150px;white-space:nowrap;text-align:right;font-weight:700}
-#wizardTunnelTypes td:last-child{padding:10px 15px 10px 10px;text-align:justify;border:none}
+#wizardTunnelTypes td:last-child{padding:10px 15px 10px 10px;text-align:justify;border:0}
 #wizardTunnelTypes select,#wizardPanel .freetext{margin-left:0}
-#wizardTunnelTypes,#wizardSummary{margin-top:-1px;border:none}
+#wizardTunnelTypes,#wizardSummary{margin-top:-1px;border:0}
 #wizardSummary td:last-child{border-right:none}
 #wizardTable td,#wizardPanel table td{border-top:1px solid #dfe1ec}
 #wizardTunnelTypes tr:last-child{background:var(--th)}
@@ -253,7 +253,7 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 #filter{vertical-align:top}
 #filter input::placeholder{color:var(--ink);opacity:.4}
 #tunnelOpts td{padding:0;width:25%}
-#tunnelOpts table{border:none}
+#tunnelOpts table{border:0}
 #tunnelOpts table td{padding:5px;border-bottom:1px solid #dfe1ec}
 #tunnelOpts table tr:first-child td{border-top:none}
 #tunnelOpts table tr:last-child td{border-bottom:none}
