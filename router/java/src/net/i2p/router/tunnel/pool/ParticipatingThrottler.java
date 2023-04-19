@@ -216,8 +216,7 @@ class ParticipatingThrottler {
             } else {
                 rv = Result.REJECT;
                 if (_log.shouldWarn())
-                    _log.warn("Rejecting tunnel requests from " + (isLowShare || isUnreachable ? "slow or unreachable" : isFast ? "fast" : "mid-tier") +
-                              (caps != null ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] " +
+                    _log.warn("Rejecting tunnel requests from " + (caps != null ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] " +
                               "\n* High number of requests -> Count/limit: " + count + "/" + limit + " in " + 11*60 / LIFETIME_PORTION + "s");
             }
         } else {
