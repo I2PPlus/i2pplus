@@ -183,10 +183,15 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
         } // client != null
 
         if ( (target == null) || ( (tunnel == null) && (_context.routerHash().equals(target) ) ) ) {
-
             if (tunnel == null && _context.routerHash().equals(target)) {
-                if (_log.shouldWarn())
-                    _log.warn("Dropping BAD message sent to us with no TunnelID");
+                if (type == GarlicMessage.MESSAGE_TYPE)
+                    _log.log(Log.CRIT, "WARNING! Router targeted by Inbound garlic message, dropping..." +
+                                       "\n* InboundMessageDistributor for client [" + _client.toBase64().substring(0,6) + "]" +
+                                       " -> Sent to " + target + " / " + tunnel + " : " + msg);
+                else
+                    _log.log(Log.CRIT, "WARNING! Router targeted by Inbound message, dropping..." +
+                                       "\n* InboundMessageDistributor for client [" + _client.toBase64().substring(0,6) + "]" +
+                                       " -> Sent to " + target + " / " + tunnel + " : " + msg);
                 return;
             } else
 
@@ -213,15 +218,19 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         _log.info("Received GarlicMessage in wrong context: " + buf.toString());
                     }
                     _receiver.receive((GarlicMessage)msg);
+/*
                 } else if (_context.routerHash().equals(target)) {
                     if (_log.shouldLog(Log.WARN))
                         _log.warn("Possible de-anonymization attempt handling GarlicMessage -> Dropping..." +
-                                  "\n* For: [" + _client.toBase64().substring(0,6) + "] -> Sent to " + target + " / " + tunnel + "\n* " + msg);
+                                  "\n* For client [" + _client.toBase64().substring(0,6) + "]" +
+                                  " -> Sent to " + target + " / " + tunnel + "\n* " + msg);
                     return;
+*/
                 } else {
                     if (_log.shouldLog(Log.WARN))
                         _log.warn("Unexpected Garlic message in Inbound Message Distributor -> Dropping..." +
-                                  "\n* For: [" + _client.toBase64().substring(0,6) + "] -> Sent to " + target + " / " + tunnel + "\n* " + msg);
+                                  "\n* For: [" + _client.toBase64().substring(0,6) + "]" +
+                                  " -> Sent to " + target + " / " + tunnel + "\n* " + msg);
                     return;
                 }
             } else {
