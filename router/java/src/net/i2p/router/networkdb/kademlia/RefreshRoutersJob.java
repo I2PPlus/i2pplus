@@ -18,9 +18,9 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
-
 
 /**
  * Go through all the routers once, after startup, and refetch their router infos.
@@ -132,10 +132,16 @@ class RefreshRoutersJob extends JobImpl {
                 String caps = "unknown";
                 boolean noSSU = true;
                 boolean isFF = false;
+                String country = "unknown";
+                boolean noCountry = true;
                 if (ri != null) {
                     caps = ri.getCapabilities().toUpperCase();
                     if (caps.contains("F")) {
                         isFF = true;
+                    }
+                    country = getContext().commSystem().getCountry(h);
+                    if (country != null && country != "unknown") {
+                        noCountry = false;
                     }
                 }
                 if (ri != null) {
@@ -192,6 +198,12 @@ class RefreshRoutersJob extends JobImpl {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Uninteresting");
                     } else if (noSSU && isFF) {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
+                    } else if (noCountry && uptime > 3*60*1000) {
+                        _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Address not resolvable via GeoIP");
+                        if (_log.shouldWarn())
+                            _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
+                        getContext().banlist().banlistRouter(h, " <b>➜</b> No GeoIP-resolvable address", null, null, getContext().clock().now() + 4*60*60*1000);
+                        getContext().simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                     } else {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> less than " +
                                    (routerAge / 60 / 60 / 1000) + "h old \n* Published: " + new Date(ri.getPublished()));
@@ -233,6 +245,14 @@ class RefreshRoutersJob extends JobImpl {
             requeue(Integer.valueOf(refresh));
             if (_log.shouldDebug())
                 _log.debug("Next RouterInfo check in " + refresh + "ms");
+        }
+    }
+
+    private class Disconnector implements SimpleTimer.TimedEvent {
+        private final Hash h;
+        public Disconnector(Hash h) { this.h = h; }
+        public void timeReached() {
+            getContext().commSystem().forceDisconnect(h);
         }
     }
 }

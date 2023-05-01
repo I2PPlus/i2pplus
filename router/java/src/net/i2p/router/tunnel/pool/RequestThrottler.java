@@ -7,6 +7,7 @@ import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
@@ -77,6 +78,8 @@ class RequestThrottler {
         boolean isFF = false;
         String MIN_VERSION = "0.9.57";
         String v = MIN_VERSION;
+        String country = "unknown";
+        boolean noCountry = true;
         boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
         if (ri != null) {
             for (RouterAddress ra : ri.getAddresses()) {
@@ -90,10 +93,13 @@ class RequestThrottler {
                 isFF = true;
             }
             v = ri.getVersion();
+            country = context.commSystem().getCountry(h);
+            if (country != null && country != "unknown") {
+                noCountry = false;
+            }
         }
 
         if (isFF && (noSSU || isUnreachable)) {
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             if (noSSU) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Floodfill with SSU disabled", null, null, context.clock().now() + 4*60*60*1000);
                 if (_log.shouldWarn())
@@ -103,10 +109,30 @@ class RequestThrottler {
                 if (_log.shouldWarn())
                     _log.warn("Temp banning Floodfill [" + h.toBase64().substring(0,6) + "] for 4h -> Unreachable/firewalled");
             }
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+        }
+
+        if ((noCountry && isLowShare) || (noCountry && isUnreachable)) {
+            if (noCountry && isLowShare) {
+                context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP-resolvable address and slow", null, null, context.clock().now() + 4*60*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP + slow tier");
+            } else {
+                context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP-resolvable address and unreachable", null, null, context.clock().now() + 4*60*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP + unreachable");
+            }
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+        }
+
+        if (noCountry) {
+            context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP-resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+            if (_log.shouldWarn())
+                _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
         }
 
         if (isOld && (isUnreachable || isLowShare)) {
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             if (isUnreachable) {
                 if (_log.shouldWarn())
                     _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable / " + v);
@@ -114,6 +140,7 @@ class RequestThrottler {
                 if (_log.shouldWarn())
                     _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Slow / " + v);
             }
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
         }
 
         if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 95) {
