@@ -974,6 +974,10 @@ public class SybilRenderer {
             buf.append("<a class=banlisted href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
         }
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
+        boolean hasD = DataHelper.stripHTML(info.getCapabilities()).contains("D");
+        boolean hasE = DataHelper.stripHTML(info.getCapabilities()).contains("E");
+        boolean hasG = DataHelper.stripHTML(info.getCapabilities()).contains("G");
+        boolean isU = DataHelper.stripHTML(info.getCapabilities()).contains("U");
         String caps = DataHelper.stripHTML(info.getCapabilities())
            .replace("XO", "X")
            .replace("PO", "P")
@@ -996,8 +1000,24 @@ public class SybilRenderer {
            .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
            .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
            .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
-           .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>")
-           .replace("\"><span", tooltip);
+           .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
+        if (hasD) {
+            if (isU)
+                caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "UD\"><span class");
+            else
+                caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "RD\"><span class");
+        } else if (hasE) {
+            if (isU)
+                caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "UE\"><span class");
+            else
+                caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "RE\"><span class");
+        } else if (hasG) {
+            if (isU)
+                caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "UG\"><span class");
+            else
+                caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "RG\"><span class");
+        }
+        caps = caps.replace("\"><span", tooltip);
         buf.append(caps);
         buf.append("<a href=\"/netdb?v=").append(DataHelper.stripHTML(info.getVersion())).append("\">")
             .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
