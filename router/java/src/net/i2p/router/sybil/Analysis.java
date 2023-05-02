@@ -94,17 +94,21 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static final double POINTS48 = 0.5;
 
     private static final double POINTS_FAMILY = -10.0;
-    private static final double POINTS_FAMILY_VERIFIED = POINTS_FAMILY * 4;
+//    private static final double POINTS_FAMILY_VERIFIED = POINTS_FAMILY * 4;
+    private static final double POINTS_FAMILY_VERIFIED = POINTS_FAMILY * 10;
     private static final double POINTS_NONFF = -5.0;
-    private static final double POINTS_BAD_FAMILY = 20.0;
+//    private static final double POINTS_BAD_FAMILY = 20.0;
+    private static final double POINTS_BAD_FAMILY = 100.0;
     private static final double POINTS_BAD_OUR_FAMILY = 100.0;
     private static final double POINTS_OUR_FAMILY = -100.0;
     public static final double MIN_CLOSE = 242.0;
     private static final double PAIR_DISTANCE_FACTOR = 2.0;
     private static final double OUR_KEY_FACTOR = 4.0;
     private static final double VERSION_FACTOR = 1.0;
-    private static final double POINTS_BAD_VERSION = 20.0;
-    private static final double POINTS_UNREACHABLE = 4.0;
+//    private static final double POINTS_BAD_VERSION = 20.0;
+    private static final double POINTS_BAD_VERSION = 30.0;
+//    private static final double POINTS_UNREACHABLE = 4.0;
+    private static final double POINTS_UNREACHABLE = 10.0;
     private static final double POINTS_NEW = 4.0;
     // since we're blocking by default now, don't make this too high,
     // so we don't always turn a temporary block into a permanent one.
