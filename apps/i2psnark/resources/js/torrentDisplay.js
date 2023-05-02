@@ -22,6 +22,8 @@ function initFilterBar() {
   var downloading = document.querySelectorAll(".downloading");
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
   var incomplete = document.querySelectorAll(".incomplete");
+  var mainsection = document.getElementById("mainsection");
+  var noload = document.getElementById("noload");
   var pagenav = document.getElementById("pagenavtop");
   var peerinfo = document.querySelectorAll(".peerinfo");
   var screenlog = document.getElementById("screenlog");
@@ -251,6 +253,10 @@ function checkFilterBar() {
     refreshFilters();
   }
 
+  if (noload) {
+    refreshAll();
+  }
+
   sortIcon.forEach(function (item) {
     item.addEventListener("click", () => {
       setQuery();
@@ -344,6 +350,13 @@ function refreshFilters() {
 function checkIfVisible() {
   var torrentform = document.getElementById("torrentlist");
   onVisible(torrentform, () => {checkFilterBar();});
+}
+
+function refreshAll() {
+  var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
+  if (mainsectionResponse !== null && mainsection !== mainsectionResponse) {
+    mainsection.innerHTML = mainsectionResponse.innerHTML;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", checkIfVisible(), true);
