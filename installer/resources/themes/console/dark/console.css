@@ -1339,7 +1339,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #netdb .sybil_addresses table td b,#netdb .sybil_addresses table td .nowrap,#netdb .sybil_addresses table td span{display:inline-block}
 #netdb .sybil_addresses table td{box-shadow:var(--bevel);background:#000}
 #netdb .sybil_addresses table td:first-child{padding:8px 12px;border-right:var(--border)}
-#netdb .sybil_addresses table td:last-child{padding::6px 12px}
+#netdb .sybil_addresses table td:last-child{padding:6px 12px}
 #netdb .sybil_routerinfo table td:last-child{border-right:none}
 #netdb .sybilScan td{padding:4px 20px;text-align:left;border:0}
 #netdb .sybilScan td:first-child{width:400px;white-space:nowrap;text-align:right}
