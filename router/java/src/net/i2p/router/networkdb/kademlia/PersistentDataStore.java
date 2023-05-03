@@ -76,6 +76,8 @@ public class PersistentDataStore extends TransientDataStore {
     public boolean enableReverseLookups() {
         return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
     }
+    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     /**
      *  @param dbDir relative path
@@ -329,6 +331,7 @@ public class PersistentDataStore extends TransientDataStore {
         boolean hasSalt = false;
         boolean isBadFF = isFF && noSSU;
         boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+        boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         v = ri.getVersion();
         String caps = ri.getCapabilities();
         unreachable = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
@@ -396,7 +399,9 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> Router is spoofing our IP address!");
                         _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 8*60*60*1000);
-                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        if (shouldDisconnect) {
+                            _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        }
                         dbFile.delete();
                     }
                     if (unreachable) {
@@ -422,9 +427,15 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> IP address does not resolve via GeoIP");
                         if (_log.shouldWarn())
-                            _log.warn("Temp banning Router [" + key.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
-                        _context.banlist().banlistRouter(key, " <b>➜</b> No GeoIP-resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
-                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                            _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + key.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
+                        if (isFF) {
+                            _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
+                        } else {
+                            _context.banlist().banlistRouter(key, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
+                        }
+                        if (shouldDisconnect) {
+                            _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        }
                         dbFile.delete();
                     } else {
                         // we've already written the file, no need to waste our time

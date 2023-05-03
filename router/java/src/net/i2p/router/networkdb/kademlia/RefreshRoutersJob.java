@@ -53,6 +53,8 @@ class RefreshRoutersJob extends JobImpl {
     private final static long EXPIRE = 31*24*60*60*1000;
     private final static long OLDER = 2*60*60*1000;
     private static long RESTART_DELAY_MS = 5*60*1000;
+    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     public RefreshRoutersJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);
@@ -66,8 +68,12 @@ class RefreshRoutersJob extends JobImpl {
         Random rand = new Random();
         long lag = getContext().jobQueue().getMaxLag();
         int netDbCount = getContext().netDb().getKnownRouters();
+        long uptime = getContext().router().getUptime();
         boolean isCpuHighLoad = SystemVersion.getCPULoad() > 80;
-        if (_facade.isInitialized() && lag < 500 && getContext().commSystem().getStatus() != Status.DISCONNECTED && netDbCount < 5000) {
+        boolean shouldDisconnect = getContext().getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
+        if (_facade.isInitialized() && lag < 500 &&
+            getContext().commSystem().getStatus() != Status.DISCONNECTED &&
+            netDbCount < 5000 && uptime > 60*1000) {
             if (_routers == null || _routers.isEmpty()) {
                 // make a list of all routers, floodfill first
                 _routers = _facade.getFloodfillPeers();
@@ -116,7 +122,6 @@ class RefreshRoutersJob extends JobImpl {
                 String freshness = getContext().getProperty("router.refreshSkipIfYounger");
                 String refreshTimeout = getContext().getProperty("router.refreshTimeout");
                 int routerAge = 15*60*1000;
-                long uptime = getContext().router().getUptime();
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.57";
                 Hash us = getContext().routerHash();
@@ -201,9 +206,15 @@ class RefreshRoutersJob extends JobImpl {
                     } else if (noCountry && uptime > 3*60*1000) {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Address not resolvable via GeoIP");
                         if (_log.shouldWarn())
-                            _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
-                        getContext().banlist().banlistRouter(h, " <b>➜</b> No GeoIP-resolvable address", null, null, getContext().clock().now() + 4*60*60*1000);
-                        getContext().simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+                            _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
+                        if (isFF) {
+                            getContext().banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, getContext().clock().now() + 4*60*60*1000);
+                        } else {
+                            getContext().banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, getContext().clock().now() + 4*60*60*1000);
+                        }
+                        if (shouldDisconnect) {
+                            getContext().simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+                        }
                     } else {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> less than " +
                                    (routerAge / 60 / 60 / 1000) + "h old \n* Published: " + new Date(ri.getPublished()));

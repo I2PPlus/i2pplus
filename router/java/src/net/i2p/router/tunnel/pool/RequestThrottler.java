@@ -43,6 +43,8 @@ class RequestThrottler {
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
     private final static boolean DEFAULT_SHOULD_THROTTLE = true;
     private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     RequestThrottler(RouterContext ctx) {
         this.context = ctx;
@@ -74,6 +76,7 @@ class RequestThrottler {
         int count = counter.increment(h);
         boolean rv = count > limit;
         boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
+        boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         boolean noSSU = true;
         boolean isFF = false;
         String MIN_VERSION = "0.9.57";
@@ -109,27 +112,44 @@ class RequestThrottler {
                 if (_log.shouldWarn())
                     _log.warn("Temp banning Floodfill [" + h.toBase64().substring(0,6) + "] for 4h -> Unreachable/firewalled");
             }
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            if (shouldDisconnect) {
+                context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            }
         }
 
         if ((noCountry && isLowShare) || (noCountry && isUnreachable)) {
             if (noCountry && isLowShare) {
-                context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP-resolvable address and slow", null, null, context.clock().now() + 4*60*60*1000);
+                context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address and slow", null, null, context.clock().now() + 4*60*60*1000);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP + slow tier");
+                    _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 4h -> " +
+                              "Address not resolvable via GeoIP + slow tier");
             } else {
-                context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP-resolvable address and unreachable", null, null, context.clock().now() + 4*60*60*1000);
+                if (isFF) {
+                    context.banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+                } else {
+                    context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+                }
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP + unreachable");
+                    _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 4h -> " +
+                              "Address not resolvable via GeoIP + unreachable");
             }
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            if (shouldDisconnect) {
+                context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            }
         }
 
         if (noCountry) {
-            context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP-resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+            if (isFF) {
+                context.banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+            } else {
+                context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+            }
             if (_log.shouldWarn())
-                _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+                _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 4h -> " +
+                          "Address not resolvable via GeoIP");
+            if (shouldDisconnect) {
+                context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            }
         }
 
         if (isOld && (isUnreachable || isLowShare)) {
