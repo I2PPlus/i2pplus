@@ -123,7 +123,7 @@ class RefreshRoutersJob extends JobImpl {
                 String refreshTimeout = getContext().getProperty("router.refreshTimeout");
                 int routerAge = 15*60*1000;
                 String v = ri.getVersion();
-                String MIN_VERSION = "0.9.57";
+                String MIN_VERSION = "0.9.58";
                 Hash us = getContext().routerHash();
                 boolean isUs = us.equals(ri.getIdentity().getHash());
                 boolean isHidden = getContext().router().isHidden();

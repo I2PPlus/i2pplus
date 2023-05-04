@@ -317,7 +317,7 @@ public class PersistentDataStore extends TransientDataStore {
         OutputStream fos = null;
         File dbFile = null;
         String filename = null;
-        String MIN_VERSION = "0.9.57";
+        String MIN_VERSION = "0.9.58";
         String v = MIN_VERSION;
         String bw = "K";
         String ip = null;
@@ -362,6 +362,7 @@ public class PersistentDataStore extends TransientDataStore {
 
         boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
                          bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt || !hasIP;
+        boolean isLTier = bw.equals("L");
 
         try {
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
@@ -399,12 +400,17 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> Router is spoofing our IP address!");
                         _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 8*60*60*1000);
-                        if (shouldDisconnect) {
-                            _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
-                        }
+                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         dbFile.delete();
-                    }
-                    if (unreachable) {
+                    } else if (isLTier && unreachable && isOld) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + MIN_VERSION);
+                        if (_log.shouldWarn())
+                            _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
+                        _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.58", null, null, _context.clock().now() + 8*60*60*1000);
+                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        dbFile.delete();
+                    } else if (unreachable) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
                         dbFile.delete();
@@ -677,7 +683,7 @@ public class PersistentDataStore extends TransientDataStore {
                     ri.readBytes(fis, true);  // true = verify sig on read
                     Hash h = ri.getIdentity().calculateHash();
                     String v = ri.getVersion();
-                    String MIN_VERSION = "0.9.57";
+                    String MIN_VERSION = "0.9.58";
                     String ip = null;
                     String truncHash = "";
                     Hash us = _context.routerHash();
