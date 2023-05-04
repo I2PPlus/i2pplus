@@ -1433,7 +1433,8 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .netdb_info.port::selection{color:#fff;background:#303}
 .netdb_transport{vertical-align:middle}
 .netdb_header img[src^="/flags"],th img[src^="/flags"]{margin-left:2px;width:24px;height:auto;border-radius:2px}
-.netdb_header img[src="/flags.jsp?c=a0"]{margin-right:0;display:inline-block;vertical-align:middle}
+.netdb_header img[src="/flags.jsp?c=a0"]{margin-right:0;margin-top:-2px;display:inline-block;vertical-align:middle}
+#netdb{contain:paint}
 #netdb_ourinfo .version{margin-right:4px}
 #netdboverview thead{border:0}
 #netdboverview th,#netdblookup th{padding:8px 5px 8px 32px;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:11pt;background:var(--globe) no-repeat 8px center/18px,var(--h2)}
@@ -1560,7 +1561,7 @@ p.sybil_info,p.family,p.threatpoints,p.hashdist,p#sybil_totals,p.notfound{margin
 p.sybilinfo,#sybilanalysis{padding:20px 20px 20px 53px;border-radius:2px;background:var(--sybil) no-repeat 15px center/28px,var(--div_infohelp);filter:var(--filter_shadow)}
 p#sybil_totals{font-weight:400;background:var(--eye_static) no-repeat 8px center/16px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fafaff 5px),#fafaff}
 p.threatpoints.hot{background:var(--eye_static) no-repeat 8px center/20px,var(--hot) no-repeat right 4px center/24px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fafaff 5px),#fafaff}
-p.threatpoints{padding-left:33px;background:var(--eye_static) no-repeat 8px center/20px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fafaff 5px),#fafaff}
+p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no-repeat 8px center/20px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fafaff 5px),#fafaff}
 .identicon{margin:-1px 0 -1px 2px;padding:0;width:28px;height:28px;vertical-align:middle;image-rendering:optimize-contrast}
 .sybil_addresses table{margin:0;width:100%;border-top:var(--border_inner);border-bottom:var(--border_inner)}
 .sybil_addresses table,.sybil_addresses td{border:0}
@@ -1572,7 +1573,6 @@ p.threatpoints{padding-left:33px;background:var(--eye_static) no-repeat 8px cent
 .sybil_distance th:last-child,.sybil_distance td:last-child{text-align:right}
 .sybil_distance th{text-align:left;padding:5px}
 .sybil_distance tr:nth-child(n+2):hover{background:#ffe;font-weight:700}
-.sybilinfo_container b{color:#335}
 .sybilinfo_container{margin:0}
 .sybilinfo_familyname{display:inline-block;vertical-align:top;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sybilinfo_params{padding:0;border:var(--border_inner)}
@@ -1604,13 +1604,14 @@ p.threatpoints{padding-left:33px;background:var(--eye_static) no-repeat 8px cent
 .threatpoints+ul li:first-child{margin-top:0}
 .threatpoints+ul li:last-child{margin-bottom:10px}
 .threatpoints+ul li a{margin-left:2px;padding:0 2px;white-space:nowrap;font-size:8pt;border-radius:1px;background:#eef}
-#netdb .sybil_addresses{padding:0;border-bottom:var(--border_inner);line-height:1.2}
+#netdb .sybil_addresses{padding:0;border-top:var(--border_inner);line-height:1.2}
+#netdb .sybil_addresses table td{padding:4px 12px;line-height:1.4}
 #netdb .sybilinfo_container:empty{padding:0;line-height:0;margin:-4px 0}
 #netdb .sybilinfo_container:empty+hr,#netdb .sybilinfo_container+hr{height:0;border-bottom:var(--border_inner);opacity:1;margin:0}
 #netdb #sybil_ourinfo th{padding-top:3px;padding-bottom:3px}
-#netdb .sybil_routerinfo:first-of-type{margin-top:-13px}
+#netdb .sybil_routerinfo:first-of-type{margin-top:-8px}
 #netdb .sybil_routerinfo th code{margin-top:5px;margin-bottom:5px;letter-spacing:.07em}
-#netdb .sybil_routerinfo th img[src^="/flags"]{margin:-3px 0 0}
+#netdb .sybil_routerinfo th img[src^="/flags"]:not([src$="a0"]){margin:-3px 0 0}
 #netdb .sybil_routerinfo tr:first-child,#netdb .sybil_routerinfo th{border-bottom:var(--border_inner)}
 #netdb .sybil_routerinfo tr:nth-child(2),#netdb .sybil_routerinfo tr:nth-child(2) td{border-top:var(--border_inner)}
 #netdb .sybilscan table,#netdb .sybilscan tr,#netdb .sybilscan td{border:0;background:none;box-shadow:none}
