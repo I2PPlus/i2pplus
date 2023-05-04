@@ -1628,18 +1628,18 @@ p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no
 #sybilnav ul li:last-child{margin-bottom:-20px}
 #sybil_ourinfo .identicon{margin:-8px 0}
 #sybils_summary{padding:20px 10px 20px 50px;line-height:1.6;background:var(--floodfill) no-repeat 8px center,repeating-linear-gradient(135deg,rgba(248,238,255,.5) 2px,rgba(240,240,255,.3) 3px,#fafaff 5px),#fafaff;columns:400px auto}
+#sybilTask{margin:12px 0 6px}
 #sybilTask input[type=checkbox]{margin:14px 8px}
-#sybilTask{margin:13px 0 -10px}
+#sybilTask select,#sybilTask input{margin:6px}
+#sybilTask select,#sybilTask input[type=text]{width:140px}
+#sybilTask th{text-transform:uppercase;letter-spacing:.1em;font-size:11pt}
+#sybilTask td{padding:0}
 #sybilTask .nowrap{padding:5px 0;margin:1px;height:48px;width:100%;display:inline-block;vertical-align:middle;background:#eaeaff}
 #sybilTask .nowrap:hover{background:#ffd}
 #sybilTask .nowrap::before{content:"";display:inline-block;height:48px;vertical-align:middle}
 #sybilTask .optionlist b{padding-right:5px;display:inline-block;min-width:220px;vertical-align:middle;text-align:right}
 #sybilTask .optionlist,#sybilTask .optionlist:hover{padding:1px 3px 1px 1px;text-align:left;border:0;background:#fff;columns:500px 3;column-gap:2px}
-#sybilTask select,#sybilTask input{margin:6px}
-#sybilTask select,#sybilTask input[type=text]{width:140px}
-#sybilTask th{text-transform:uppercase;letter-spacing:.1em;font-size:11pt}
-#sybilTask td{padding:0}
-#sybilTask td:first-child{padding-left:20px;width:1%;white-space:nowrap;text-align:right}
+#sybilTask .optionsave{padding:4px}
 
 /* lookup */
 #netdblookup{margin:15px 0 5px}
