@@ -90,8 +90,8 @@ textarea{margin:10px;padding:3px 8px;width:calc(100% - 15px);min-height:100px;te
 input[type=text]:focus,input[type=password]:focus,textarea:focus{color:var(--ink);border:1px solid #6466a5;box-shadow:var(--outline),0 0 0 2px var(--a_hover),var(--btn_shadow_active);background:var(--text_focus);transition:ease all .3s}
 textarea:focus{box-shadow:inset 0 0 0 1px var(--a_hover),var(--btn_shadow_active);scrollbar-width:auto}
 input[type=text]:disabled,input[readonly],input[readonly]:focus{color:#26235c;border:var(--border_inner);box-shadow:none;background:linear-gradient(180deg,#000,#000019);filter:none;cursor:not-allowed}
-button::-moz-focus-inner,input[type=submit]::-moz-focus-inner,input[type=reset]::-moz-focus-inner{outline:none;border:none}
-input[type="file"]{margin:5px 10px;padding:0;font-weight:400;color:var(--ink);border:none;box-shadow:none;background:none;cursor:pointer}
+button::-moz-focus-inner,input[type=submit]::-moz-focus-inner,input[type=reset]::-moz-focus-inner{outline:none;border:0}
+input[type="file"]{margin:5px 10px;padding:0;font-weight:400;color:var(--ink);border:0;box-shadow:none;background:none;cursor:pointer}
 input[type="file"]:hover,input[type="file"]:active{color:var(--hover)}
 button,input[type=submit],input[type=reset],select,.control,.fakebutton,.fakebutton:visited{border-radius:1px;box-shadow:var(--highlight),inset 0 0 2px 0 #559,inset 0 0 1px 1px rgba(85,85,153,.5);background:8px 5px no-repeat,var(--btn);cursor:pointer}
 input[type=submit],input[type=reset],button{min-width:0;background-size:12px,100%}

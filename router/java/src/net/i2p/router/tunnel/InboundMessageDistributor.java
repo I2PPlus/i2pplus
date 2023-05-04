@@ -50,8 +50,11 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
     }
 
     public void distribute(I2NPMessage msg, Hash target, TunnelId tunnel) {
-        if (_log.shouldDebug())
-            _log.debug("InboundMessageDistributor for [" + _client + "] to " + target + " / " + tunnel + " : " + msg);
+        if (_log.shouldDebug()) {
+          String truncDest = _client != null ? _client.toString().substring(0,12) + "..." : "";
+            _log.debug("InboundMessageDistributor for client [" + (_client != null ? truncDest : "unknown") + "] to " +
+                       target + " / " + tunnel + " \n* " + msg);
+        }
 
         // allow messages on client tunnels even after client disconnection, as it may
         // include e.g. test messages, etc.  DataMessages will be dropped anyway
@@ -82,7 +85,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                      DatabaseSearchReplyMessage orig = (DatabaseSearchReplyMessage) msg;
                      if (orig.getNumReplies() > 0) {
                          if (_log.shouldInfo())
-                             _log.info("Removing replies from a DSRM down a tunnel for " + _client + ": " + msg);
+                             _log.info("Removing replies from a DSRM down a tunnel for [" + _client.toString().substring(0,12) +
+                                       "...] " + msg);
                          DatabaseSearchReplyMessage newMsg = new DatabaseSearchReplyMessage(_context);
                          newMsg.setFromHash(orig.getFromHash());
                          newMsg.setSearchKey(orig.getSearchKey());
@@ -99,9 +103,11 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         // Todo: if peer was ff and RI is not ff, queue for exploration in netdb (but that isn't part of the facade now)
                         if (_log.shouldWarn() || _log.shouldInfo()) {
                             if (_log.shouldInfo())
-                                _log.warn("Dropping DbStoreMessage sent down a tunnel for [" + _client.toBase64().substring(0,6) + "]" + msg);
+                                _log.warn("Dropping DbStoreMessage sent down a tunnel for client [" + _client.toString().substring(0,12) +
+                                          "...] \n* " + msg);
                             else
-                                _log.warn("Dropping DbStoreMessage sent down a tunnel for [" + _client.toBase64().substring(0,6) + "]");
+                                _log.warn("Dropping DbStoreMessage sent down a tunnel for client [" + _client.toString().substring(0,12) +
+                                          "...]");
                         }
                         // Handle safely by just updating the caps table, after doing basic validation
                         Hash key = dsm.getKey();
@@ -124,8 +130,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         return;
                     } else if (dsm.getReplyToken() != 0) {
                         _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, type);
-                        _log.error("Dropping LeaseSet DbStoreMessage with reply token sent down a tunnel for [" +
-                                   _client.toBase64().substring(0,6) + "]" + msg);
+                        _log.error("Dropping DANGEROUS LeaseSet DbStoreMessage with reply token sent down a tunnel for [" +
+                                   _client + "] \n* " + msg);
                         return;
                     } else {
                         // allow DSM of our own key (used by FloodfillVerifyStoreJob)
@@ -147,8 +153,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     // drop it, since we should only get the above message types down
                     // client tunnels
                     _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, type);
-                    _log.error("Dropping dangerous message (" + msg + ") sent down a tunnel for [" +
-                               _client.toBase64().substring(0,6) + "]", new Exception("cause"));
+                    _log.error("Dropping DANGEROUS message [" + msg + "] sent down a tunnel for [" +
+                               _client + "]", new Exception("cause"));
                     return;
 
             } // switch
@@ -159,7 +165,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     DatabaseStoreMessage dsm = (DatabaseStoreMessage) msg;
                     if (dsm.getReplyToken() != 0) {
                         _context.statManager().addRateData("tunnel.dropDangerousExplTunnelMessage", 1, type);
-                        _log.error("Dropping DbStoreMessage (" + msg + ") with reply token sent down Exploratory tunnel");
+                        _log.error("Dropping DANGEROUS DbStoreMessage [" + msg + "] with reply token sent down Exploratory tunnel");
                         return;
                     }
                     if (dsm.getEntry().isLeaseSet())
@@ -177,28 +183,75 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
 
                 default:
                     _context.statManager().addRateData("tunnel.dropDangerousExplTunnelMessage", 1, type);
-                    _log.error("Dropping dangerous message (" + msg + ") sent down Exploratory tunnel", new Exception("cause"));
+                    _log.error("Dropping dangerous message [" + msg + "] sent down Exploratory tunnel", new Exception("cause"));
                     return;
             } // switch
         } // client != null
 
         if ( (target == null) || ( (tunnel == null) && (_context.routerHash().equals(target) ) ) ) {
+            if (tunnel == null && _context.routerHash().equals(target)) {
+                if (type == GarlicMessage.MESSAGE_TYPE)
+                    _log.log(Log.CRIT, "WARNING! Router targeted by Inbound garlic message, dropping..." +
+                                       "\n* InboundMessageDistributor for client [" + _client.toString().substring(0,12) +
+                                       "...]" +
+                                       " -> Sent to " + target + " / " + tunnel + " : " + msg);
+                else
+                    _log.log(Log.CRIT, "WARNING! Router targeted by Inbound message, dropping..." +
+                                       "\n* InboundMessageDistributor for client [" + _client.toString().substring(0,12) +
+                                       "...]" +
+                                       " -> Sent to " + target + " / " + tunnel + " : " + msg);
+                return;
+            } else
+
             // targeting us either implicitly (no target) or explicitly (no tunnel)
             // make sure we don't honor any remote requests directly (garlic instructions, etc)
             if (type == GarlicMessage.MESSAGE_TYPE) {
-                // in case we're looking for replies to a garlic message (cough load tests cough)
-                _context.inNetMessagePool().handleReplies(msg);
-                //if (_log.shouldDebug())
-                //    _log.debug("received garlic message in the tunnel, parse it out");
-                _receiver.receive((GarlicMessage)msg);
+                if ( (target == null) && (tunnel == null) ) {
+                    // in case we're looking for replies to a garlic message (cough load tests cough)
+                    _context.inNetMessagePool().handleReplies(msg);
+                    //if (_log.shouldLog(Log.DEBUG))
+                    //    _log.debug("received garlic message in the tunnel, parse it out");
+                    if (_log.shouldLog(Log.INFO)) {
+                        StringBuilder buf = new StringBuilder(128);
+                        buf.append("(Target: ");
+                        if (target == null)
+                            buf.append("NULL");
+                        else
+                            buf.append(target);
+                        buf.append("; Tunnel: ");
+                        if (tunnel == null)
+                            buf.append("NULL");
+                        else
+                            buf.append(tunnel);
+                        buf.append(")");
+                        _log.info("Received GarlicMessage in wrong context " + buf.toString());
+                    }
+                    _receiver.receive((GarlicMessage)msg);
+/*
+                } else if (_context.routerHash().equals(target)) {
+                    if (_log.shouldLog(Log.WARN))
+                        _log.warn("Possible de-anonymization attempt handling GarlicMessage -> Dropping..." +
+                                  "\n* For client [" + _client.toString().substring(0,12) +
+                                  "...]" +
+                                  " -> Sent to " + target + " / " + tunnel + "\n* " + msg);
+                    return;
+*/
+                } else {
+                    if (_log.shouldLog(Log.WARN))
+                        _log.warn("Unexpected Garlic message in Inbound Message Distributor -> Dropping..." +
+                                  "\n* For client: [" + _client.toString().substring(0,12) +
+                                  "...] -> Sent to " + target + " / " + tunnel + "\n* " + msg);
+                    return;
+                }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Importing Inbound tunnel message into our InNetMessagePool " + msg);
+                    _log.info("Importing Inbound tunnel message into our InNetMessagePool \n* " + msg);
                 _context.inNetMessagePool().add(msg, null, null);
             }
+
 /****** latency measuring attack?
         } else if (_context.routerHash().equals(target)) {
-            // the want to send it to a tunnel, except we are also that tunnel's gateway
+            // they want to send it to a tunnel, except we are also that tunnel's gateway
             // dispatch it directly
             if (_log.shouldInfo())
                 _log.info("distributing inbound tunnel message back out, except we are the gateway");
@@ -216,7 +269,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             TunnelInfo out = _context.tunnelManager().selectOutboundTunnel(_client, target);
             if (out == null) {
                 if (_log.shouldWarn())
-                    _log.warn("No Outbound tunnel to send the client message for " + _client + ": " + msg);
+                    _log.warn("No Outbound tunnel to send the client message for [" + _client.toString().substring(0,12) +
+                              "...] " + "\n* " + msg);
                 return;
             }
             if (_log.shouldDebug())
@@ -257,6 +311,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         dsm.setReplyToken(0);
                         dsm.setReplyTunnel(null);
                         dsm.setReplyGateway(null);
+                        String truncDest = _client != null ? _client.toString().substring(0,12) + "..." : "";
 
                             if (dsm.getEntry().isLeaseSet()) {
                                     // Case 1:
@@ -275,8 +330,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                                     // ... and inject it.
                                     ((LeaseSet)dsm.getEntry()).setReceivedBy(_client);
                                     if (_log.shouldInfo())
-                                        _log.info("Storing garlic LeaseSet down tunnel for: [" + dsm.getKey().toBase64().substring(0,6) +
-                                                  "] sent to: [" + (_client != null ? _client.toBase64().substring(0,6) : "router") + "]");
+                                        _log.info("Storing garlic LeaseSet down tunnel for [" + dsm.getKey().toBase64().substring(0,6) +
+                                                  "] sent to " + (_client != null ? "client [" + truncDest : "[router") + "]");
                                     _context.inNetMessagePool().add(dsm, null, null);
                             } else {
                                 if (_client != null) {
@@ -285,8 +340,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                                     // open an attack vector)
                                     _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
                                                                        DatabaseStoreMessage.MESSAGE_TYPE);
-                                    _log.error("Dropping dangerous message (" + dsm + ") sent down a tunnel for: " +
-                                               _client, new Exception("cause"));
+                                    _log.error("Dropping DANGEROUS message (" + dsm + ") sent down a tunnel for client [" + truncDest + "]",
+                                               new Exception("cause"));
                                     return;
                                 }
                                 // Case 3:
@@ -298,7 +353,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
 
                                 // ... and inject it.
                                 if (_log.shouldInfo())
-                                    _log.info("Storing garlic RouterInfo sent down tunnel for [" + dsm.getKey() + "]");
+                                    _log.info("Received DBStoreMessage for RouterInfo [" + dsm.getKey() + "]");
                                 _context.inNetMessagePool().add(dsm, null, null);
                             }
                 } else if (_client != null && type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
@@ -311,7 +366,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                   /****
                     if (orig.getNumReplies() > 0) {
                         if (_log.shouldInfo())
-                            _log.info("Removing replies from a garlic DSRM down a tunnel for " + _client + ": " + data);
+                            _log.info("Removing replies from a garlic DSRM down a tunnel for client [" + _client.toString().substring(0,12) +
+                                      "...] " + data);
                         DatabaseSearchReplyMessage newMsg = new DatabaseSearchReplyMessage(_context);
                         newMsg.setFromHash(orig.getFromHash());
                         newMsg.setSearchKey(orig.getSearchKey());
@@ -329,9 +385,9 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                            type != OutboundTunnelBuildReplyMessage.MESSAGE_TYPE) {
                             // drop it, since the data we receive shouldn't include other stuff,
                             // as that might open an attack vector
-                            _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
-                                                               data.getType());
-                            _log.error("Dropping dangerous message (" + data + ") down a tunnel for: " + _client, new Exception("cause"));
+                            _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, data.getType());
+                            _log.error("Dropping DANGEROUS message (" + data + ") down a tunnel for client [" + _client.toString().substring(0,12) +
+                                       "...]", new Exception("cause"));
                 } else {
                             _context.inNetMessagePool().add(data, null, null);
                 }
@@ -345,7 +401,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         _log.error("Can't send a " + data.getClass().getSimpleName() + " to a destination");
                 } else if (_client != null && _client.equals(to)) {
                     if (_log.shouldDebug())
-                        _log.debug("Data message came down a tunnel for: " + _client);
+                        _log.debug("Data message came down a tunnel for client [" + _client.toString().substring(0,12) + "...]");
                     DataMessage dm = (DataMessage)data;
                     Payload payload = new Payload();
                     payload.setEncryptedData(dm.getData());
@@ -357,8 +413,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     if (tgt != null && _client.equals(tgt.getAliasOf())) {
                         // same as above, just different log
                         if (_log.shouldDebug())
-                            _log.debug("Data message came down a tunnel for: "
-                                       + _client + " targeting shared [" + to.toBase64().substring(0,6) + "]");
+                            _log.debug("Data message came down a tunnel for client ["+ _client.toString().substring(0,12) +
+                                       "...] targeting shared client destination [" + to.toString().substring(0,12) + "]");
                         DataMessage dm = (DataMessage)data;
                         Payload payload = new Payload();
                         payload.setEncryptedData(dm.getData());
@@ -366,12 +422,12 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         _context.clientManager().messageReceived(m);
                     } else {
                         if (_log.shouldError())
-                            _log.error("Data message came down a tunnel for "
-                                   +  _client + " but targeted [" + to.toBase64().substring(0,6) + "]");
+                            _log.error("Data message came down a tunnel for client [" + _client.toString().substring(0,12) +
+                                       "...] but targeted [" + to.toString().substring(0,12) + "]");
                     }
                 } else {
                     if (_log.shouldError())
-                        _log.error("Data message came down an Exploratory tunnel targeting [" + to.toBase64().substring(0,6) + "]");
+                        _log.error("Data message came down an Exploratory tunnel targeting destination [" + to.toString().substring(0,12) + "]");
                 }
                 return;
 
@@ -379,7 +435,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             case DeliveryInstructions.DELIVERY_MODE_TUNNEL:
                 if (_log.shouldInfo())
                     _log.info("Clove targeted [" + instructions.getRouter().toBase64().substring(0,6) + "]:" + instructions.getTunnelId()
-                               + "] - treat recursively to prevent leakage");
+                               + "] - handling recursively to prevent leakage...");
                 distribute(data, instructions.getRouter(), instructions.getTunnelId());
                 return;
 

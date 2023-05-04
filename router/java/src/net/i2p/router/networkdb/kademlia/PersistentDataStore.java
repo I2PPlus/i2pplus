@@ -45,6 +45,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -75,6 +76,8 @@ public class PersistentDataStore extends TransientDataStore {
     public boolean enableReverseLookups() {
         return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
     }
+    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     /**
      *  @param dbDir relative path
@@ -314,10 +317,13 @@ public class PersistentDataStore extends TransientDataStore {
         OutputStream fos = null;
         File dbFile = null;
         String filename = null;
-        String MIN_VERSION = "0.9.57";
+        String MIN_VERSION = "0.9.58";
         String v = MIN_VERSION;
         String bw = "K";
         String ip = null;
+        String ourIP = null;
+        ourIP = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(_context.router().getRouterInfo()));
+        long uptime = _context.router().getUptime();
         boolean unreachable = false;
         boolean isFF = false;
         boolean hasIP = false;
@@ -325,10 +331,13 @@ public class PersistentDataStore extends TransientDataStore {
         boolean hasSalt = false;
         boolean isBadFF = isFF && noSSU;
         boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+        boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         v = ri.getVersion();
         String caps = ri.getCapabilities();
         unreachable = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
+        String country = "unknown";
+        boolean noCountry = true;
         if (caps.contains("f")) {
             isFF = true;
         }
@@ -346,9 +355,14 @@ public class PersistentDataStore extends TransientDataStore {
                     break;
             }
         }
+        country = _context.commSystem().getCountry(key);
+        if (country != null && country != "unknown") {
+            noCountry = false;
+        }
 
         boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
                          bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt || !hasIP;
+        boolean isLTier = bw.equals("L");
 
         try {
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
@@ -380,7 +394,23 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             } else {
                 if (ri != null && !isUs) {
-                    if (unreachable) {
+                    if (!isUs && hasIP && ip.equals(ourIP)) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Router is spoofing our IP address");
+                        if (_log.shouldWarn())
+                            _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> Router is spoofing our IP address!");
+                        _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 8*60*60*1000);
+                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        dbFile.delete();
+                    } else if (isLTier && unreachable && isOld) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + MIN_VERSION);
+                        if (_log.shouldWarn())
+                            _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
+                        _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.58", null, null, _context.clock().now() + 8*60*60*1000);
+                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        dbFile.delete();
+                    } else if (unreachable) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
                         dbFile.delete();
@@ -398,6 +428,20 @@ public class PersistentDataStore extends TransientDataStore {
                     } else if (isOld) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
+                        dbFile.delete();
+                    } else if (noCountry && uptime > 3*60*1000) {
+                        if (_log.shouldDebug())
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> IP address does not resolve via GeoIP");
+                        if (_log.shouldWarn())
+                            _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + key.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
+                        if (isFF) {
+                            _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
+                        } else {
+                            _context.banlist().banlistRouter(key, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
+                        }
+                        if (shouldDisconnect) {
+                            _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        }
                         dbFile.delete();
                     } else {
                         // we've already written the file, no need to waste our time
@@ -639,7 +683,7 @@ public class PersistentDataStore extends TransientDataStore {
                     ri.readBytes(fis, true);  // true = verify sig on read
                     Hash h = ri.getIdentity().calculateHash();
                     String v = ri.getVersion();
-                    String MIN_VERSION = "0.9.57";
+                    String MIN_VERSION = "0.9.58";
                     String ip = null;
                     String truncHash = "";
                     Hash us = _context.routerHash();
@@ -908,6 +952,14 @@ public class PersistentDataStore extends TransientDataStore {
             return InetAddress.getByName(hostName).getCanonicalHostName();
         } catch(IOException exception) {
             return hostName;
+        }
+    }
+
+    private class Disconnector implements SimpleTimer.TimedEvent {
+        private final Hash h;
+        public Disconnector(Hash h) { this.h = h; }
+        public void timeReached() {
+            _context.commSystem().forceDisconnect(h);
         }
     }
 }

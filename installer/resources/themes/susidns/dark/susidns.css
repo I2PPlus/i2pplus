@@ -18,7 +18,7 @@ form[action="addressbook"]>p.buttons,#filter,#search,#visualid tr:last-child td,
 form[action="addressbook"]>p.buttons{margin:-13px -3px 0;padding:8px 5px;border:var(--border)}
 form[action="export"]>#buttons{margin-top:15px;padding:0 0 10px;border:var(--border);background:#000}
 h3,.b32link,.buttons,.helper,#add,#buttons,#filter,#host_list img,#host_list td a::after,#host_list th,#import,#navi{user-select:none}
-hr{margin:5px 0;width:100%;height:1px;display:none;text-align:center;border:none;background:#242}
+hr{margin:5px 0;width:100%;height:1px;display:none;text-align:center;border:0;background:#242}
 html{background:none}
 input#exporthosts:active{background:#f60 var(--download_active) no-repeat center center/16px}
 input#exporthosts:hover{background:#000 var(--download_hover) no-repeat center center/16px}
@@ -80,7 +80,7 @@ th{padding:5px 10px;text-align:left;color:var(--ink);font-size:8.5pt}
 #prev a,#next a,#current{box-shadow:var(--highlight)}
 #current{padding:3px 10px;display:inline-block;vertical-align:middle;text-align:center;font-size:11pt;color:var(--ink);border-left:var(--border_hard);border-right:var(--border_hard)}
 #prev,#next{margin-top:-1px;position:relative;display:inline-block;line-height:0;vertical-align:middle}
-#prev.inactive,#next.inactive{padding:10px 16px;border:none}
+#prev.inactive,#next.inactive{padding:10px 16px;border:0}
 #prev a,#next a{margin:0;padding:10px 16px;font-size:0}
 #prev::after,#next::after{height:0;width:0;position:absolute;top:calc(50% - 5px);right:calc(50% - 3px);border-width:6px;border-style:solid;border-color:transparent #494 transparent transparent;content:"";pointer-events:none}
 #prev.inactive,#next.inactive{opacity:.4;pointer-events:none}
@@ -154,8 +154,8 @@ td.destinations{max-width:50px;padding:1px 8px}
 #booksearch input[type=text],#booksearch input[type=submit]{animation:fade-in .5s ease 1s both}
 #booksearch input[type=text]{padding:7px 8px;min-width:280px;border-radius:1px 0 0 1px;box-shadow:none}
 #booksearch input[type=text]:focus{border:1px solid var(--hover);filter:none;}
-#booksearch input[type=submit]{margin-left:-16px;width:40px;min-width:0;position:relative;z-index:10;overflow:hidden;color:transparent;text-shadow:none;-webkit-text-stroke:0;border:none;border-radius:0 1px 1px 0;background:#000 var(--search) no-repeat center center/14px}
-#booksearch input[type=submit]:hover,#booksearch input[type=submit]:focus,#booksearch input[type=text]:focus~input[type=submit]{border:none;box-shadow:inset 0 0 0 1px var(--hover),inset 0 0 0 2px #000,inset 0 0 3px 1px rgba(255,96,0,.8),inset 0 0 5px 0 rgba(255,96,0,.8),inset 0 0 0 4px #000}
+#booksearch input[type=submit]{margin-left:-16px;width:40px;min-width:0;position:relative;z-index:10;overflow:hidden;color:transparent;text-shadow:none;-webkit-text-stroke:0;border:0;border-radius:0 1px 1px 0;background:#000 var(--search) no-repeat center center/14px}
+#booksearch input[type=submit]:hover,#booksearch input[type=submit]:focus,#booksearch input[type=text]:focus~input[type=submit]{border:0;box-shadow:inset 0 0 0 1px var(--hover),inset 0 0 0 2px #000,inset 0 0 3px 1px rgba(255,96,0,.8),inset 0 0 5px 0 rgba(255,96,0,.8),inset 0 0 0 4px #000}
 #booksearch input[type=submit]:active{box-shadow:inset 0 0 0 1px var(--hover),inset 0 0 0 2px #000,var(--btn_shadow_active);background:var(--hover) var(--search) no-repeat center center/14px;background-blend-mode:luminosity}
 #booksearch{padding:6px;text-align:center}
 #booksearch input{vertical-align:middle;line-height:1.3}
@@ -178,7 +178,7 @@ p#filtered{margin:-27px 0 10px;padding:12px 10px 8px 20px;font-size:10pt;box-sha
 #add .buttons,#import .buttons{margin:5px 0 -10px;padding:5px 5px 4px;border-top:var(--border)}
 #add td:first-child,#import td:first-child{width:100px;white-space:nowrap;text-align:right}
 #add td:last-child,#import td:last-child{padding-right:5px}
-#import input[type=file]{border:none;background:none}
+#import input[type=file]{border:0;background:none}
 #exporthosts:disabled{pointer-events:none;opacity:.5}
 #export{padding-left:3px;height:44px;position:absolute;top:2px;top:0;right:1px;border-left:var(--border);contain:paint}
 
@@ -197,7 +197,7 @@ p#filtered{margin:-27px 0 10px;padding:12px 10px 8px 20px;font-size:10pt;box-sha
 #hostNotes:hover td{background:transparent}
 #hostNotes td:last-child input[type=submit]{margin:13px 10px 10px;float:right;display:none}
 #hostNotes td:last-child textarea:focus+input[type=submit]{display:inline-block}
-#hostNotes textarea{margin:0;padding:7px 8px;height:72px;font-size:9pt;font-weight:400;border:none;border-radius:0;box-shadow:none;background:transparent}
+#hostNotes textarea{margin:0;padding:7px 8px;height:72px;font-size:9pt;font-weight:400;border:0;border-radius:0;box-shadow:none;background:transparent}
 #hostNotes textarea:hover,#hostNotes textarea:focus{border-right:none;border-left:none;;box-shadow:inset 0 0 0 1px rgba(255,96,0,.5);background:#000}
 #hostNotes textarea::placeholder{font-style:italic}
 #hostNotes textarea:focus::placeholder{color:transparent}
@@ -227,7 +227,7 @@ td>img[width="320"],td>img[src^="/imagegen"]{margin:10px 3px;padding:2px;border-
 #visualid tr:last-child{background:#000}
 #visualid tr td,#visualid tr:hover td{border-left:none;border-right:none;border-bottom:var(--border);box-shadow:none;background:#010;background:repeating-linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,16,0,.5) 1px,rgba(0,16,0,.5) 2px),url(/themes/console/dark/images/camotile2.png)}
 #visualid tr:first-child td{padding:15px 5px}
-#visualid tr:last-child td{padding:18px 6px;border:none}
+#visualid tr:last-child td{padding:18px 6px;border:0}
 
 /* help */
 .help h3:first-child{margin-top:-21px}
@@ -243,7 +243,7 @@ td>img[width="320"],td>img[src^="/imagegen"]{margin:10px 3px;padding:2px;border-
 #content p{margin-bottom:8px;padding:0 10px;line-height:1.6;font-size:110%}
 #ovrvw #content{padding:10px 10px 20px}
 #helpsubs{padding:15px 0 10px 40px;background:var(--infohelp) no-repeat 15px center,var(--help);background-size:32px,4px 100%}
-#helpsubs p{padding:15px;line-height:1.3;border:none}
+#helpsubs p{padding:15px;line-height:1.3;border:0}
 
 /* svg */
 .illustrate{margin:20px auto 10px;padding:0 11px;max-width:700px;height:auto;font-size:10pt;border:var(--border);border-radius:4px;box-shadow:var(--highlight),inset 0 0 2px 1px #242;background:#000;opacity:.8}

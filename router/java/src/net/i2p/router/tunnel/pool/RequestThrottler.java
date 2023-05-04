@@ -7,6 +7,7 @@ import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
@@ -42,6 +43,8 @@ class RequestThrottler {
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
     private final static boolean DEFAULT_SHOULD_THROTTLE = true;
     private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     RequestThrottler(RouterContext ctx) {
         this.context = ctx;
@@ -61,6 +64,8 @@ class RequestThrottler {
         boolean isFast = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
+        boolean isLTier = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
         int portion = isSlow ? 6 : 4;
         int min = (isSlow ? MIN_LIMIT / 2 : MIN_LIMIT) / portion;
@@ -73,10 +78,13 @@ class RequestThrottler {
         int count = counter.increment(h);
         boolean rv = count > limit;
         boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
+        boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         boolean noSSU = true;
         boolean isFF = false;
-        String MIN_VERSION = "0.9.57";
+        String MIN_VERSION = "0.9.58";
         String v = MIN_VERSION;
+        String country = "unknown";
+        boolean noCountry = true;
         boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
         if (ri != null) {
             for (RouterAddress ra : ri.getAddresses()) {
@@ -90,10 +98,19 @@ class RequestThrottler {
                 isFF = true;
             }
             v = ri.getVersion();
+            country = context.commSystem().getCountry(h);
+            if (country != null && country != "unknown") {
+                noCountry = false;
+            }
+        }
+
+        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 95) {
+            if (_log.shouldWarn())
+                _log.warn("Rejecting tunnel requests from Router [" + h.toBase64().substring(0,6) + "] -> " +
+                          "CPU is under sustained high load");
         }
 
         if (isFF && (noSSU || isUnreachable)) {
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             if (noSSU) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Floodfill with SSU disabled", null, null, context.clock().now() + 4*60*60*1000);
                 if (_log.shouldWarn())
@@ -103,10 +120,49 @@ class RequestThrottler {
                 if (_log.shouldWarn())
                     _log.warn("Temp banning Floodfill [" + h.toBase64().substring(0,6) + "] for 4h -> Unreachable/firewalled");
             }
+            if (shouldDisconnect) {
+                context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            }
+/*
+        if ((noCountry && isLowShare) || (noCountry && isUnreachable)) {
+            if (noCountry && isLowShare) {
+                context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address and slow", null, null, context.clock().now() + 4*60*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 4h -> " +
+                              "Address not resolvable via GeoIP + slow tier");
+            } else {
+                if (isFF) {
+                    context.banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+                } else {
+                    context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+                }
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 4h -> " +
+                              "Address not resolvable via GeoIP + unreachable");
+            }
+            if (shouldDisconnect) {
+                context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            }
         }
-
-        if (isOld && (isUnreachable || isLowShare)) {
+*/
+        } else if (noCountry) {
+            if (isFF) {
+                context.banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+            } else {
+                context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
+            }
+            if (_log.shouldWarn())
+                _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 4h -> " +
+                          "Address not resolvable via GeoIP");
+            if (shouldDisconnect) {
+                context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            }
+        } else if (isLTier && isUnreachable && isOld) {
+            if (_log.shouldWarn())
+                _log.warn("Temp banning for 8h and immediately disconnecting from [" + h.toBase64().substring(0,6) + "] -> LU / " + v);
+            context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + 8*60*60*1000);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+        } else if (isOld && (isUnreachable || isLowShare)) {
             if (isUnreachable) {
                 if (_log.shouldWarn())
                     _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable / " + v);
@@ -114,12 +170,7 @@ class RequestThrottler {
                 if (_log.shouldWarn())
                     _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Slow / " + v);
             }
-        }
-
-        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 95) {
-            if (_log.shouldWarn())
-                _log.warn("Rejecting tunnel requests from Router [" + h.toBase64().substring(0,6) + "] -> " +
-                          "CPU is under sustained high load");
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
         } else if (rv && enableThrottle) {
             if (count > limit * 5 / 3) {
                 int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;

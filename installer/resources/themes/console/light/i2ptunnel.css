@@ -42,7 +42,7 @@ td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1p
 /* panels */
 .panel{margin:8px auto;padding:0 10px 10px;width:calc(100% - 14px);max-width:2000px;min-width:650px;overflow:hidden;text-align:left;border:1px solid #575775;border-radius:2px;box-shadow:inset 0 0 1px #999;background:linear-gradient(90deg,#fff 0%,rgba(247,248,255,.5),#fff),linear-gradient(180deg,#efefff,#fff,#efefff);filter:drop-shadow(0 0 2px rgba(96,96,160,.7))}
 .iframed .panel.iframed{margin:0 auto -8px auto}
-.iframed .panel{margin:16px auto -8px auto;padding:0;width:100%;border:none;box-shadow:none;background:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+.iframed .panel{margin:16px auto -8px auto;padding:0;width:100%;border:0;box-shadow:none;background:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 .iframed .panel#clients,.iframed .panel#ssl{margin-top:8px;padding-bottom:8px}
 .iframed .panel#clients{padding-bottom:4px}
 .iframed .panel#ssl{margin-top:16px;margin-bottom:-11px}
@@ -89,7 +89,7 @@ input[required]:not(:focus)::placeholder,input.required:not(:focus)::placeholder
 input[type=text]+label{white-space:nowrap}
 input[type=text][readonly]{box-shadow:inset 1px 1px 1px #e4e4ee}
 select{margin:4px;padding:5px 24px 5px 5px;min-width:140px;overflow:hidden;text-overflow:ellipsis;appearance:none}
-select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active,#sigType[disabled]{margin:0;padding:2px 0 2px 3px;font-weight:400;color:var(--ink);border:none;box-shadow:none;background:none;pointer-events:none}
+select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active,#sigType[disabled]{margin:0;padding:2px 0 2px 3px;font-weight:400;color:var(--ink);border:0;box-shadow:none;background:none;pointer-events:none}
 td[colspan="2"]>select#profile{width:calc(50% - 15px)}
 textarea,input,select,button{font-size:9pt;vertical-align:middle}
 textarea{font-family:var(--monospaced)}
@@ -147,8 +147,8 @@ textarea[name="accessList"]:focus{height:112px}
 #oldName{width:30%;min-width:310px}
 #oldName{width:45%}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
-#statusMessages,#statusMessages:active{margin:0;height:80px;border:none;box-shadow:none}
-#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:500 8.5pt var(--monospaced);color:#070;border:none;border-radius:0;box-shadow:none;filter:none}
+#statusMessages,#statusMessages:active{margin:0;height:80px;border:0;box-shadow:none}
+#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:500 8.5pt var(--monospaced);color:#070;border:0;border-radius:0;box-shadow:none;filter:none}
 #statusMessages:focus{background:#fafaff;box-shadow:none}
 #statusMessages::selection{color:#fff;background:#070}
 #targetHost,.host{width:30%;min-width:250px}
@@ -170,7 +170,7 @@ th.tunnelControl{text-align:center}
 .tunnelHelper a:active{transform:scale(.95)}
 .tunnelInfo b,.tunnelInfo .selectAll{display:inline-block;vertical-align:text-bottom}
 .tunnelInfo .selectAll{max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tunnelInfo td{background:none;border:none}
+.tunnelInfo td{background:none;border:0}
 .tunnelInfo+.tunnelInfo td{border-top:1px solid #d2d2e0}
 .tunnelInterface,.tunnelLocation{width:20%}
 .tunnelName{padding-left:8px;width:calc(100% - 9px);min-width:150px}
@@ -191,7 +191,7 @@ th.tunnelControl{text-align:center}
 .tunnelStatus div:hover{overflow:visible}
 .tunnelStatus .tooltip{pointer-events:none}
 .tunnelStatus div:hover .tooltip{padding:6px 12px;min-width:140px;display:inline-block;line-height:1.5;left:0;position:absolute;bottom:calc(100% + 4px);z-index:99999;color:var(--ink);font-size:9pt;border:var(--badgeborder);box-shadow:var(--highlight),0 2px 2px rgba(0,0,0,.1);background:#f5f5f9}
-.tunnelStatus .tooltip hr{margin:2px 0 4px;height:0;display:block;border:none;border-top:1px solid #bbc;border-bottom:1px solid #fff;opacity:.8}
+.tunnelStatus .tooltip hr{margin:2px 0 4px;height:0;display:block;border:0;border-top:1px solid #bbc;border-bottom:1px solid #fff;opacity:.8}
 #serverTunnels td,#clientTunnels td{border-top:var(--border_softer)}
 #toggleInfo{margin:-2px -3px 0 0;padding:2px 5px;min-width:0;vertical-align:middle;cursor:pointer;transform:scale(1);animation:linear showToggle .1s .2s backwards}
 #toggleInfo img{height:8px;width:12px;mix-blend-mode:luminosity}
@@ -228,7 +228,7 @@ input[type=text].username:focus,input[type=password].password:focus,input[type=t
 #tunnelOpts tr,#tunnelOpts td:first-child,#throttler tr,#throttler th:first-child,#throttler td:first-child,#clientAuth tr,#clientAuth th:first-child,#clientAuth td:first-child{border-left:none}
 #tunnelOpts tr,#tunnelOpts td:first-child,#throttler tr,#throttler th:last-child,#throttler td:last-child,#clientAuth tr,#clientAuth th:last-child,#clientAuth td:last-child{border-right:none}
 #tunnelOpts td{padding:0;width:25%}
-#tunnelOpts table{border:none}
+#tunnelOpts table{border:0}
 #tunnelOpts table td{padding:4px 8px;border-bottom:var(--border_softer)}
 #tunnelOpts table tr:first-child td{border-top:none}
 #tunnelOpts table tr:nth-child(even) td{padding:8px}
@@ -241,7 +241,7 @@ input[type=text].username:focus,input[type=password].password:focus,input[type=t
 
 /* throttler */
 td.blankColumn{width:20%}
-#throttler,#clientAuth{border:none}
+#throttler,#clientAuth{border:0}
 td#throttle,#clientAuthConfig{padding:0;box-shadow:none}
 #throttler th{padding-left:20px}
 #throttler td{width:20%}
@@ -286,7 +286,7 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 #wizardTunnelTypes td:first-child,#wizardSummary td:first-child{font-weight:700;width:10%;min-width:150px;text-align:right;white-space:nowrap;color:var(--ink_light)}
 #wizardTunnelTypes td:last-child{text-align:justify;padding:10px 20px 10px 10px}
 #wizardTunnelTypes select{margin-left:0}
-#wizardTunnelTypes,#wizardSummary{border:none;margin-top:-1px}
+#wizardTunnelTypes,#wizardSummary{border:0;margin-top:-1px}
 #wizardTunnelTypes tr:last-child{background:#fafaff}
 #wizardPanel #name,#wizardPanel #description{width:300px}
 

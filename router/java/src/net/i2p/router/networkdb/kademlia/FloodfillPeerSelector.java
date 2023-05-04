@@ -266,6 +266,7 @@ class FloodfillPeerSelector extends PeerSelector {
         List<Hash> rv = new ArrayList<Hash>(howMany);
         List<Hash> okff = new ArrayList<Hash>(limit);
         List<Hash> badff = new ArrayList<Hash>(limit);
+        long uptime = _context.router().getUptime();
         for (int i = 0; found < howMany && i < limit; i++) {
             Hash entry = sorted.get(i);
             if (entry == null)
@@ -275,6 +276,8 @@ class FloodfillPeerSelector extends PeerSelector {
             MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2);
             boolean sameIP = false;
             boolean noSSU = true;
+            boolean noCountry = true;
+            String country = "unknown";
             String caps = null;
             if (info != null) {
                 caps = DataHelper.stripHTML(info.getCapabilities());
@@ -284,6 +287,10 @@ class FloodfillPeerSelector extends PeerSelector {
             for (String ip : entryIPs) {
                 if (!maskedIPs.add(ip))
                     sameIP = true;
+            }
+            country = _context.commSystem().getCountry(key);
+            if (country != null && country != "unknown") {
+                noCountry = false;
             }
             if (info != null) {
                 for (RouterAddress ra : info.getAddresses()) {
@@ -304,6 +311,19 @@ class FloodfillPeerSelector extends PeerSelector {
                         _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] -> No SSU transport enabled");
                 } else if (_log.shouldWarn()) {
                     _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> No SSU transport enabled");
+                }
+            } else if (info != null && noCountry && uptime > 60*1000) {
+                badff.add(entry);
+                if (_log.shouldDebug())
+                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Address not resolvable via GeoIP");
+                _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, now + 4*60*60*1000);
+                if (shouldDisconnect) {
+                    _context.commSystem().forceDisconnect(entry);
+                    if (_log.shouldWarn())
+                        _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] -> No GeoIP resolvable address");
+                } else {
+                    if (_log.shouldWarn())
+                        _log.warn("Temp banning Floodfill [" + key.toBase64().substring(0,6) + "] for 4h -> No GeoIP resolvable address");
                 }
             } else if (info != null && isUnreachable) {
                 badff.add(entry);
@@ -340,6 +360,13 @@ class FloodfillPeerSelector extends PeerSelector {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is slow (L, M or N tier)");
+                if (info.getBandwidthTier().equals("L")) {
+                    _context.banlist().banlistRouter(key, " <b>➜</b> L tier Floodfill", null, null, now + 4*60*60*1000);
+                    _context.commSystem().forceDisconnect(entry);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + key.toBase64().substring(0,6) + "] -> L tier");
+                    }
+                }
             } else {
                 PeerProfile prof = _context.profileOrganizer().getProfile(entry);
                 double maxGoodRespTime = MAX_GOOD_RESP_TIME;

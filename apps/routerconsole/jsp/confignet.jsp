@@ -96,7 +96,7 @@
 <div class=optionlist>
 <label><input type=radio class=optbox name="ntcpAutoIP" value=true <%=nethelper.getTcpAutoIPChecked(2) %> >
 <%=intl._t("Use auto-detected IP address")%>&nbsp;
-<i>(<%=intl._t("currently")%>&nbsp;<jsp:getProperty name="nethelper" property="udpIP" />)</i>&nbsp;
+<i>(<jsp:getProperty name="nethelper" property="udpIP" />)</i>&nbsp;
 <%=intl._t("if we are not firewalled").replace("we are ", "")%></label><br>
 <label><input type=radio class=optbox name="ntcpAutoIP" value="always" <%=nethelper.getTcpAutoIPChecked(3) %> >
 <%=intl._t("Always use auto-detected IP address (not firewalled)")%></label><br>

@@ -39,7 +39,7 @@ input[type=text],input[type=password],textarea{min-width:160px}
 input.update{margin-left:0}
 textarea{margin:0 auto 10px}
 textarea[name="config"],textarea[name="content"]{padding:2px 5px;height:200px;border:var(--border);box-shadow:none}
-td.destinations textarea,td.destinations textarea:focus{margin:0 0 0 5px;padding:0;font:normal 8pt var(--monospaced);resize:none;border:none;border-left:1px solid #888;border-right:1px solid #888;border-radius:0;box-shadow:0 none;background:none}
+td.destinations textarea,td.destinations textarea:focus{margin:0 0 0 5px;padding:0;font:normal 8pt var(--monospaced);resize:none;border:0;border-left:1px solid #888;border-right:1px solid #888;border-radius:0;box-shadow:0 none;background:none}
 p.buttons{margin:0 -11px;padding:10px;border:var(--border);background:var(--bg)}
 #buttons,.buttons{text-align:right}
 #book+#buttons{margin:-12px 10px 23px;border:var(--border);border-top:none;border-bottom:none}
@@ -153,7 +153,7 @@ td.destinations{padding:0;max-width:50px}
 #prev a,#prev.inactive{border-radius:4px 0 0 4px}
 #next a,#next.inactive{border-radius:0 4px 4px 0}
 #prev,#next{margin-top:-1px;position:relative;display:inline-block;line-height:0;vertical-align:middle}
-#prev.inactive,#next.inactive{padding:8px 14px 12px;border:none}
+#prev.inactive,#next.inactive{padding:8px 14px 12px;border:0}
 #prev a,#next a{margin:0;padding:11px 14px;font-size:0}
 #prev::after,#next::after{height:0;width:0;position:absolute;top:calc(50% - 5px);right:calc(50% - 3px);border-width:6px;border-style:solid;border-color:transparent #5c5c8a transparent transparent;content:"";pointer-events:none}
 #prev.inactive::after,#next.inactive::after{opacity:.6}
@@ -187,7 +187,7 @@ td.destinations{padding:0;max-width:50px}
 .illustrate .a{filter:none}
 p.help{margin:0;padding:15px 15px 15px 42px;line-height:1.2;background:#ffe var(--infohelp) no-repeat 10px center/22px}
 #helpconfig{margin:-1px -11px;}
-#helpsubs{margin:-1px -11px;border:none}
+#helpsubs{margin:-1px -11px;border:0}
 #helpconfig h3{margin:-1px}
 #help h3{margin:-1px -1px 10px}
 #ovrvw #content{margin-top:25px}
@@ -209,7 +209,7 @@ img[src="/imagegen/id?s=256&c="],img[src="/imagegen/id?s=20&c="]{opacity:0}
 /* notifications */
 #messages{margin:0 3%;padding:5px 20px;top:0;left:0;right:0;position:fixed;z-index:999;line-height:1.5;text-align:center;border-radius:0 0 4px 4px;box-shadow:0 1px 2px rgba(100,100,200,.7);background:#113 var(--no) right 8px top 5px no-repeat;background-size:16px 16px;cursor:crosshair;animation:2s hide-up 10s ease-out forwards}
 #messages:hover{background:#113 var(--no) right 8px top 5px no-repeat;background-size:16px 16px}
-.iframed #messages{border:none}
+.iframed #messages{border:0}
 #messages:empty{display:none}
 #messages p{font-size:9pt;letter-spacing:2px;color:#ff9;text-shadow:0 1px 1px #000}
 p.messages{color:#fff;text-align:center;font-weight:700}
@@ -220,7 +220,7 @@ p.messages{color:#fff;text-align:center;font-weight:700}
 #subsLog pre{padding:8px 10px;white-space:pre-wrap;line-height:1.2}
 
 /* iframe */
-.iframed .page{background:transparent;margin:0 1px;border:none}
+.iframed .page{background:transparent;margin:0 1px;border:0}
 .iframed p.help{margin-top:-13px;padding-bottom:18px}
 .iframed p.buttons{margin-bottom:-4px}
 .iframed textarea[name="config"],.iframed textarea[name="content"]{border-left:none;border-right:none}
@@ -229,7 +229,7 @@ p.messages{color:#fff;text-align:center;font-weight:700}
 .iframed #book+#buttons{margin:-11px 0 0}
 .iframed #book+#buttons p{margin:0}
 .iframed #booksearch,.iframed #filter{background:var(--th)}
-.iframed #content h3{border:none;margin:0;border-bottom:1px dotted var(--border_color)}
+.iframed #content h3{border:0;margin:0;border-bottom:1px dotted var(--border_color)}
 .iframed #content h3:first-child{margin-top:10px}
 .iframed .fakebutton{margin-bottom:-2px}
 .iframed #helpconfig,.iframed #helpsubs{margin:-1px -12px -5px;}

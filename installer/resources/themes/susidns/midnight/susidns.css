@@ -63,7 +63,7 @@ p#filtered{margin:-26px 0 10px}
 .help h3:first-child{margin-top:-21px}
 .help h3{margin:10px -31px;border-radius:0}
 .help{margin-bottom:5px;padding:20px 30px;border:var(--border);background:#001}
-.help p{border:none;padding:0}
+.help p{border:0;padding:0}
 .help ul li:last-child{margin-bottom:-10px}
 
 #search{margin-top:-1px;margin-bottom:20px}
@@ -94,7 +94,7 @@ td.names a{font-size:9pt}
 #buttons{text-align:right;background:linear-gradient(90deg,#001,#000)}
 #config+#buttons,#content+#buttons{margin:-3px 0 12px;padding:10px 5px;border:var(--border);background:var(--panel)}
 #content h3:first-child{margin-top:-15px;font-size:10.5pt}
-#content h3{margin:0 20px 10px;padding:5px 10px;border:none;border-bottom:1px dotted #2d295f;border-radius:0;background:none}
+#content h3{margin:0 20px 10px;padding:5px 10px;border:0;border-bottom:1px dotted #2d295f;border-radius:0;background:none}
 #content p+h3{margin-top:15px}
 #content p{padding:0 30px;line-height:1.4}
 
@@ -108,7 +108,7 @@ td.names a{font-size:9pt}
 #filter+#search>form{margin:0;padding:0}
 #filter+#search{margin-top:13px;margin-bottom:-18px;border:var(--border)}
 #filter span a:active{background:none;box-shadow:none;color:#4f0519}
-#filter span a,#filter span a:hover{display:inline-block;word-spacing:normal;letter-spacing:normal;border:none;background:none;transform:none}
+#filter span a,#filter span a:hover{display:inline-block;word-spacing:normal;letter-spacing:normal;border:0;background:none;transform:none}
 #filter span b{margin:-3px 5px 0;line-height:.8;text-transform:uppercase;font-size:11pt;color:#fff}
 
 form[action="subscriptions"]{margin:0}
@@ -138,7 +138,7 @@ textarea[name="config"]{height:220px;overflow-y:scroll;resize:none}
 .book td:nth-child(3){padding:2px 25px 2px 0;width:20px;text-align:center}
 .book th{padding-top:6px;padding-bottom:6px}
 
-.destinations textarea{margin:0;padding:1px 1px 1px 2px;width:100%;height:32px;resize:none;overflow-x:auto;overflow-y:hidden;border-radius:0;border:none;border-left:var(--border_soft);border-right:3px solid #17142f}
+.destinations textarea{margin:0;padding:1px 1px 1px 2px;width:100%;height:32px;resize:none;overflow-x:auto;overflow-y:hidden;border-radius:0;border:0;border-left:var(--border_soft);border-right:3px solid #17142f}
 #host_details{margin-top:-25px}
 #idAddress{text-transform:none}
 
@@ -159,7 +159,7 @@ input#exporthosts:active{text-shadow:0 1px 1px #3C1751;box-shadow:var(--highligh
 #add td:first-child,#import td:first-child{width:1%;min-width:120px;white-space:nowrap;text-align:right}
 #add td:last-child,#import td:last-child{width:94%}
 #add input[type=text],#import input[type=file]{width:calc(100% - 16px)}
-#import .buttons,#add .buttons{margin:10px -10px 0;padding:12px 8px;border:none;border-top:var(--border)}
+#import .buttons,#add .buttons{margin:10px -10px 0;padding:12px 8px;border:0;border-top:var(--border)}
  #add .buttons{margin-top:12px}
 #import table{margin-top:-2px}
 #import input[type=file]{margin-left:-5px}
@@ -167,7 +167,7 @@ input#exporthosts:active{text-shadow:0 1px 1px #3C1751;box-shadow:var(--highligh
 
 /* forms */
 input{margin:2px 4px 2px 0;padding:4px}
-input[type=file]{border:none;background:none}
+input[type=file]{border:0;background:none}
 input[type=submit],input[type=reset],.fakebutton,.fakebutton:visited{padding:6px 10px;min-width:100px;text-align:center}
 input[type=submit]:hover,input[type=reset]:hover,input[type=submit]:focus,input[type=reset]:focus{background-size:100%}
 .fakebutton:hover,.fakebutton:focus{background-size:auto}
@@ -226,7 +226,7 @@ p.book{padding-left:35px}
 #hostNotes td:last-child{padding:0}
 #hostNotes input[type=submit]{margin:14px 20px 12px;display:none;float:right}
 #hostNotes textarea:focus+input[type=submit]{display:inline-block}
-#hostNotes textarea{margin:0;padding:4px 10px;font-family:var(--bodyfont);font-size:inherit;font-weight:400;color:var(--ink);border:none;box-shadow:none;opacity:1;background:transparent;border-bottom:1px solid transparent;-moz-user-select:auto;-webkit-user-select:auto;user-select:auto}
+#hostNotes textarea{margin:0;padding:4px 10px;font-family:var(--bodyfont);font-size:inherit;font-weight:400;color:var(--ink);border:0;box-shadow:none;opacity:1;background:transparent;border-bottom:1px solid transparent;-moz-user-select:auto;-webkit-user-select:auto;user-select:auto}
 #hostNotes textarea:focus{border-bottom:var(--border_soft);background:#000}
 
 /* hostname list */
@@ -273,7 +273,7 @@ tr:hover td.destinations{color:#aa0}
 #prev a,#next a,#current{box-shadow:var(--highlight)}
 #current{padding:3px 10px;display:inline-block;vertical-align:middle;text-align:center;font-size:11pt;color:var(--ink);border-left:1px solid #26225d;border-right:1px solid #26225d}
 #prev,#next{margin-top:-1px;position:relative;display:inline-block;vertical-align:middle;line-height:0}
-#prev.inactive,#next.inactive{padding:10px;border:none}
+#prev.inactive,#next.inactive{padding:10px;border:0}
 #prev a,#next a{margin:0;padding:10px;font-size:0}
 #prev::after,#next::after{height:0;width:0;position:absolute;top:calc(50% - 5px);right:calc(50% - 3px);border-width:6px;border-style:solid;border-color:transparent #89f transparent transparent;content:"";pointer-events:none}
 #prev.inactive::after,#next.inactive::after{opacity:.6}
@@ -301,7 +301,7 @@ svg #arrow stop:nth-child(2){stop-color:#003}
 svg #arrow stop:last-child{stop-color:#001}
 
 /* iframed */
-.iframed .page{margin:1px 0 0;overflow:hidden;border:none}
+.iframed .page{margin:1px 0 0;overflow:hidden;border:0}
 .iframed .headline h3,.iframed h4,.iframed #filtered,.iframed #search,.iframed #helpconfig{margin:-1px 10px 0}
 .iframed #filter{margin:-1px 10px -29px}
 .iframed .headline h3:first-child+h4{margin:13px 10px 0}

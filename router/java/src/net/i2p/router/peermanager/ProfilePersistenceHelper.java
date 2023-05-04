@@ -108,16 +108,15 @@ class ProfilePersistenceHelper {
     @SuppressWarnings("deprecation")
     public void writeProfile(PeerProfile profile, OutputStream out, boolean addComments) throws IOException {
         String groups = null;
-        if (_context.profileOrganizer().isFailing(profile.getPeer())) {
-            groups = "Failing";
-        } else if (!_context.profileOrganizer().isHighCapacity(profile.getPeer())) {
+        //if (_context.profileOrganizer().isFailing(profile.getPeer())) {
+        //    groups = "Failing";
+        if (!_context.profileOrganizer().isHighCapacity(profile.getPeer())) {
             groups = "Standard";
         } else {
             if (_context.profileOrganizer().isFast(profile.getPeer()))
                 groups = "Fast, High Capacity";
             else
                 groups = "High Capacity";
-
             if (_context.profileOrganizer().isWellIntegrated(profile.getPeer()))
                 groups = groups + ", Integrated";
         }
@@ -228,7 +227,8 @@ class ProfilePersistenceHelper {
     public List<PeerProfile> readProfiles() {
         long start = System.currentTimeMillis();
         long down = _context.router().getEstimatedDowntime();
-        long cutoff = down < 15*24*60*60*1000L ? start - down - 24*60*60*1000 : start;
+//        long cutoff = down < 15*24*60*60*1000L ? start - down - 24*60*60*1000 : start;
+        long cutoff = down < 15*24*60*60*1000L ? start - down - 7*24*60*60*1000 : start;
         List<File> files = selectFiles();
         if (files.size() > LIMIT_PROFILES)
             Collections.shuffle(files, _context.random());
@@ -312,7 +312,7 @@ class ProfilePersistenceHelper {
         if (_log.shouldWarn()) {
             if (i > 0) {
                 //_log.warn("Deleted " + i + " stale peer profiles");
-                _log.warn("Not deleting " + i + " (stale?) peer profiles - will expire when read at startup");
+                _log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
             }
         }
         return i;
@@ -324,9 +324,11 @@ class ProfilePersistenceHelper {
     @SuppressWarnings("deprecation")
     public PeerProfile readProfile(File file, long cutoff) {
         if (file.lastModified() < cutoff) {
-            file.delete();
+            if (_log.shouldWarn())
+                _log.warn("Not deleting stale peer profile " + file.getName() + " -> Will expire when read at startup");
+            //file.delete();
             return null;
-    }
+        }
         Hash peer = getHash(file.getName());
         try {
             if (peer == null) {

@@ -35,18 +35,21 @@ public class SearchHelper extends HelperBase {
         "mojeek.i2p"               + S +     "http://mojeek.i2p/search?date=1&size=1&t=40&q=%s" + S +
         "natter.i2p"               + S +     "http://natter.i2p/search?f=tweets&q=%s" + S +
         "notbob.i2p"               + S +     "http://notbob.i2p/cgi-bin/defcon.cgi?search=%s" + S +
-        "raklet.i2p"               + S +     "http://raklet.i2p/search?page=1&query=%s" + S +
+        "psychonaut.i2p"           + S +     "http://psychonaut.i2p/w/index.php?search=%s&fulltext=Search" + S +
         "slashdot.i2p"             + S +     "http://slashdot.i2p/index2.pl?fhfilter=%s" + S +
         "stackoverflow.i2p"        + S +     "http://duckduckgo.i2p/?q=site%3Astackoverflow.com+%s" + S +
         "teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + S +
-        "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + //S +
+        "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + S +
+        "wired.i2p"                + S +     "http://wired.i2p/search/?q=%s" + S +
+        "wordnik.i2p"              + S +     "http://wordnik.i2p/words?myWord=%s" +
         //"zzz.i2p"                  + S +     "http://zzz.i2p/search?type=posts&query=%s" + //S +
         //"ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + S +
         //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + S +
         //"epsilon.i2p"              + S +     "http://epsilon.i2p/search.jsp?q=%s" +  S +
         //"imperial.i2p"             + S +     "http://imperial.i2p/search/?q=%s" + S +
         //"legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
+        //"raklet.i2p"               + S +     "http://raklet.i2p/search?page=1&query=%s" + S +
         //"ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + S +
         //"seeker.i2p"               + S +     "http://seeker.i2p/index.php?query=%s" + S +
         //"searchthis.i2p"           + S +     "http://searchthis.i2p/cgi-bin/search.cgi?q=%s" + S +

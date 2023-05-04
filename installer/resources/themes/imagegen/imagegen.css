@@ -29,8 +29,8 @@ table{margin:0 auto;border-collapse:separate;border-spacing:10px}
 th{height:16px;text-align:center;font-weight:400;border:var(--border);border-radius:2px;box-shadow:var(--highlight),0 0 1px #ccc;background:#fff}
 th.title{padding:5px;white-space:nowrap;font-size:11pt;font-weight:700;background:var(--th)}
 td{padding:0 5px;text-align:center;vertical-align:top}
-hr{margin-top:10px;height:1px;border:none;border-bottom:1px solid #fff;background:#7e7fb9}
-iframe{margin:5px;width:358px;height:358px;overflow:hidden;border:none;border-radius:1px;box-shadow:0 0 0 1px #77789f,0 0 1px 1px #aaa;background:#fff;animation:fade-in-iframe .3s ease .7s both}
+hr{margin-top:10px;height:1px;border:0;border-bottom:1px solid #fff;background:#7e7fb9}
+iframe{margin:5px;width:358px;height:358px;overflow:hidden;border:0;border-radius:1px;box-shadow:0 0 0 1px #77789f,0 0 1px 1px #aaa;background:#fff;animation:fade-in-iframe .3s ease .7s both}
 #qr,#randomart,#identicon{text-align:center;padding:5px 0}
 #randomart td{min-width:240px;text-align:center}
 #nav{text-align:right}
@@ -39,7 +39,7 @@ form>*{vertical-align:middle}
 .formtitle{margin:-1px auto 10px;padding:4px 5px;width:400px;word-spacing:.1em;letter-spacing:.2em;text-transform:uppercase;font-size:11pt;font-weight:700;border:1px solid #8d8daa;border-radius:0 0 2px 2px;box-shadow:var(--highlight),0 1px 1px #dde;background:#fff;background:var(--th);text-rendering:optimizeLegibility}
 input,button,select{margin:5px 3px;font:10pt/130% var(--bodyfont)}
 button,select{box-shadow:var(--highlight),0 0 1px #aaa;cursor:pointer}
-button::-moz-focus-inner{border:none;outline:none}
+button::-moz-focus-inner{border:0;outline:none}
 button{padding:4.5px 8px;display:inline-block;color:#333;border:1px solid #99b;border-radius:2px;box-shadow:var(--highlight);background:#fff;background:var(--btn)}
 button>*{vertical-align:middle}
 button:hover,button:focus{color:#111;border:1px solid #89f;background:var(--btn_hover);filter:drop-shadow(0 0 1px #89f)}

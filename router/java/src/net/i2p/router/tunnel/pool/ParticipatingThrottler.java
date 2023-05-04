@@ -126,10 +126,9 @@ class ParticipatingThrottler {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
-                _log.warn("Temp banning " + (caps != "" ? caps : "") +
-                          " Router [" + h.toBase64().substring(0,6) + "] for 4h" +
+                _log.warn("Temp banning " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for 4h" +
                           " -> Compressible RouterInfo / " + v);
-            context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo &amp; older than 0.9.57", null, null, context.clock().now() + 4*60*60*1000);
+            context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo &amp; older than 0.9.57", null, null, context.clock().now() + 16*60*60*1000);
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLU) {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
@@ -138,7 +137,7 @@ class ParticipatingThrottler {
                               " -> " + v + (caps != "" ? " / " + caps : ""));
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for " + (period*4) + "m" +
+                    _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for " + (period*16) + "m" +
                               " -> " + v + (caps != "" ? " / " + caps : ""));
             }
             context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime*4));
@@ -216,8 +215,7 @@ class ParticipatingThrottler {
             } else {
                 rv = Result.REJECT;
                 if (_log.shouldWarn())
-                    _log.warn("Rejecting tunnel requests from " + (isLowShare || isUnreachable ? "slow or unreachable" : isFast ? "fast" : "mid-tier") +
-                              (caps != null ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] " +
+                    _log.warn("Rejecting tunnel requests from " + (caps != null ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] " +
                               "\n* High number of requests -> Count/limit: " + count + "/" + limit + " in " + 11*60 / LIFETIME_PORTION + "s");
             }
         } else {

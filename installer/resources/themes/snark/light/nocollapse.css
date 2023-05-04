@@ -17,7 +17,7 @@ input:checked + .toggleview,input:not(:checked) + .toggleview,
 div[class] .toggleview img,div[class] .toggleview:hover img,div[class] .toggleview img:hover,div[class] .toggleview img:active,div[class] .toggleview:active img{
   margin:0;
   padding:5px;
-  border:none;
+  border:0;
   box-shadow:none;
   background:none;
   background:#020;

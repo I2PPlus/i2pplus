@@ -773,7 +773,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
-            String MIN_VERSION = "0.9.57";
+            String MIN_VERSION = "0.9.58";
             boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
             Hash us = _context.routerHash();
             boolean isUs = us.equals(ri.getIdentity().getHash());

@@ -75,7 +75,7 @@ class ProfileOrganizerRenderer {
                 continue;
             }
 //            if (prof.getLastSendSuccessful() <= hideBefore) {
-            if ((prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
+            if (mode != 2 && (prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
                 older++;
                 continue;
             }
