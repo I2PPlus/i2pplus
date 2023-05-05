@@ -72,7 +72,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     public static final String PROP_NONFF = "router.sybilAnalyzeAll";
     public static final String PROP_BLOCKTIME = "router.sybilBlockPeriod";
     public static final String PROP_REMOVETIME = "router.sybilDeleteOld";
-    private static final long MIN_FREQUENCY = 60*60*1000L;
+//    private static final long MIN_FREQUENCY = 60*60*1000L;
+    private static final long MIN_FREQUENCY = 15*60*1000L;
     private static final long MIN_UPTIME = 75*60*1000L;
 
     public static final int PAIRMAX = 20;
