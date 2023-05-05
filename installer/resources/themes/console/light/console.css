@@ -1587,11 +1587,11 @@ p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no
 .sybil_routerinfo,.sybil_routerinfo tr:nth-child(2) td,#netdb .sybil_routerinfo tr:last-child td{border-bottom:none}
 .sybil_routerinfo td[colspan="3"]{white-space:normal}
 .sybil_routerinfo td:first-child,.netdbentry td:first-child{padding-right:8px;text-align:right}
-.sybil_routerinfo td:first-child{width:50px;white-space:nowrap}
+.sybil_routerinfo td:first-child{width:50px;white-space:normal}
 .sybil_routerinfo th[colspan="2"]{padding-right:6px;font-size:90%}
 .sybil_routerinfo th:first-child{white-space:nowrap;text-align:left}
 .sybil_routerinfo th img{margin:0 3px}
-.sybil_routerinfo th:last-child b[style="float:right;"]{margin-top:2px;font-size:90%;font-style:italic}
+.sybil_routerinfo th:last-child b[style="float:right"]{margin:2px 2px 0 0;font-style:italic}
 .sybil_routerinfo th:last-child{width:1%;white-space:nowrap;text-align:right}
 .sybil_routerinfo th{padding:1px 1px 2px 6px}
 .sybil_routerinfo+.threatpoints+ul+a[name]+table{margin-top:-13px}
