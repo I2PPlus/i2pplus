@@ -230,7 +230,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             _log.warn("Dropping unsolicited NetDbStore of banned " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "]" + ((isFF && noSSU) ? " -> SSU transport disabled" : ""));
                         }
-                    } else if (noCountry && uptime > 30*1000) {
+                    } else if (noCountry && uptime > 45*1000) {
                         shouldStore = false;
                         wasNew = false;
                         if (isFF)

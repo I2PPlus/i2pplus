@@ -86,6 +86,7 @@ class RequestThrottler {
         String country = "unknown";
         boolean noCountry = true;
         boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+        long uptime = context.router().getUptime();
         if (ri != null) {
             for (RouterAddress ra : ri.getAddresses()) {
                 if (ra.getTransportStyle().equals("SSU") ||
@@ -124,7 +125,7 @@ class RequestThrottler {
                 context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             }
 /*
-        if ((noCountry && isLowShare) || (noCountry && isUnreachable)) {
+        if (uptime > 45*1000 && (noCountry && isLowShare) || (noCountry && isUnreachable)) {
             if (noCountry && isLowShare) {
                 context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address and slow", null, null, context.clock().now() + 4*60*60*1000);
                 if (_log.shouldWarn())
@@ -145,7 +146,7 @@ class RequestThrottler {
             }
         }
 */
-        } else if (noCountry) {
+        } else if (uptime > 45*1000 && noCountry) {
             if (isFF) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
             } else {

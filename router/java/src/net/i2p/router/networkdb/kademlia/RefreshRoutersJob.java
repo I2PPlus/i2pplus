@@ -203,7 +203,7 @@ class RefreshRoutersJob extends JobImpl {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Uninteresting");
                     } else if (noSSU && isFF) {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
-                    } else if (noCountry && uptime > 3*60*1000) {
+                    } else if (noCountry && uptime > 45*1000) {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Address not resolvable via GeoIP");
                         if (_log.shouldWarn())
                             _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
