@@ -243,6 +243,7 @@ class FloodfillPeerSelector extends PeerSelector {
         int found = 0;
         long now = _context.clock().now();
         long installed = _context.getProperty("router.firstInstalled", 0L);
+        long uptime = _context.router().getUptime();
         boolean enforceHeard = installed > 0 && (now - installed) > INSTALL_AGE;
         boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
 
@@ -266,10 +267,9 @@ class FloodfillPeerSelector extends PeerSelector {
         List<Hash> rv = new ArrayList<Hash>(howMany);
         List<Hash> okff = new ArrayList<Hash>(limit);
         List<Hash> badff = new ArrayList<Hash>(limit);
-        long uptime = _context.router().getUptime();
         for (int i = 0; found < howMany && i < limit; i++) {
             Hash entry = sorted.get(i);
-            if (entry == null)
+            if (entry == null || uptime < 45*1000)
                 break;  // shouldn't happen
             // put anybody in the same /16 at the end
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
@@ -294,10 +294,10 @@ class FloodfillPeerSelector extends PeerSelector {
             }
             if (info != null) {
                 for (RouterAddress ra : info.getAddresses()) {
-                    if (ra.getTransportStyle().equals("SSU") ||
-                        ra.getTransportStyle().equals("SSU2"))
+                    if (ra.getTransportStyle().equals("SSU") || ra.getTransportStyle().equals("SSU2")) {
                         noSSU = false;
-                        break;
+                    }
+                    break;
                 }
             }
             if (info != null && noSSU) {
