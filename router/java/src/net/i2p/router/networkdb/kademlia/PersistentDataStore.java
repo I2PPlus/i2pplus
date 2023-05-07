@@ -372,7 +372,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
             dbFile = new File(_dbDir, filename);
             long dataPublishDate = getPublishDate(data);
-            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld && !isBadFF && !noSSU && !isSlow) || isUs) {
+            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && (!isOld || isFF) && !isBadFF && !noSSU && !isSlow) || isUs) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
