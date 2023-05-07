@@ -300,7 +300,7 @@ class FloodfillPeerSelector extends PeerSelector {
                         break;
                 }
             }
-            if (noSSU) {
+            if (info != null && noSSU) {
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router has SSU transport disabled");
                 badff.add(entry);
