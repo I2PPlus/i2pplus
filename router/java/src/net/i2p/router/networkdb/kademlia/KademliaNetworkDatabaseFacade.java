@@ -808,6 +808,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 noCountry = false;
             }
 
+/**
             if (uptime > 45*1000 && noCountry && !isUs) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Address not resolvable via GeoIP");
@@ -820,7 +821,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         _context.banlist().banlistRouter(key, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
                 _ds.remove(key);
                 _kb.remove(key);
-            } else if (isLTier && isUnreachable && isOld) {
+**/
+            if (isLTier && isUnreachable && isOld) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.58");
                 if (_log.shouldWarn())
@@ -834,6 +836,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Uninteresting");
                 _ds.remove(key);
                 _kb.remove(key);
+/**
             } else if (noSSU && isFF && !isUs) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
@@ -843,6 +846,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill with SSU disabled", null, null, _context.clock().now() + 4*60*60*1000);
                 _ds.remove(key);
                 _kb.remove(key);
+**/
             } else if (key != null && _context.banlist().isBanlistedForever(key)) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Permanently blocklisted");
@@ -1399,6 +1403,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                              new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
             return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
         }
+/**
         if (noSSU && isFF && !isUs) {
             if (_log.shouldWarn()) {
                 //_log.warn("Dropping RouterInfo [" + riHash + "] -> Floodfill with SSU disabled");
@@ -1425,7 +1430,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _context.banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
                 else
                     _context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
-        } else if (isLTier && isUnreachable && isOld) {
+**/
+        if (isLTier && isUnreachable && isOld) {
             if (_log.shouldInfo())
                 _log.info("Dropping RouterInfo [" + routerId + "] -> LU and older than 0.9.58");
             if (_log.shouldWarn())

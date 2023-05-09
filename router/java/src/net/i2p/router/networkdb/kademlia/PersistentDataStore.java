@@ -429,6 +429,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
                         dbFile.delete();
+/**
                     } else if (noCountry && uptime > 45*1000) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> IP address does not resolve via GeoIP");
@@ -443,6 +444,7 @@ public class PersistentDataStore extends TransientDataStore {
                             _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         }
                         dbFile.delete();
+**/
                     } else {
                         // we've already written the file, no need to waste our time
                         if (_log.shouldDebug())
