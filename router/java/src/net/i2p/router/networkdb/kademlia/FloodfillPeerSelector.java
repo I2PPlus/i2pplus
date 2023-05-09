@@ -314,7 +314,6 @@ class FloodfillPeerSelector extends PeerSelector {
                 } else if (_log.shouldWarn()) {
                     _log.warn("Temp banning Floodfill [" + entry.toBase64().substring(0,6) + "] for 4h -> No SSU transport enabled");
                 }
-**/
             } else if (info != null && noCountry && uptime > 60*1000) {
                 badff.add(entry);
                 if (_log.shouldDebug())
