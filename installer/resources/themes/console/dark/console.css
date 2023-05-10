@@ -544,6 +544,8 @@ form[action="updategraphs"]{margin:-11px -11px -18px;border:var(--border);border
 #graph_single{animation:grid-fade .15s ease .4s forwards both}
 #graph_single .graphspanel{margin-top:16px}
 #graphs .nowrap{text-align:left;line-height:3}
+#graphdisplay:not(.visible){margin-bottom:-18px;border-radius:0 0 4px 4px}
+#graphdisplay:hover,#graphdisplay:focus{color:var(--hover);-webkit-text-stroke:0}
 
 /* jobs */
 .joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0}

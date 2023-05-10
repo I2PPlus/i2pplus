@@ -1093,6 +1093,8 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #graphs form input,#graphs form select{margin:3px 5px 3px 0;vertical-align:middle}
 #graphs input[type=text]{min-width:60px}
 #graphs .nowrap{line-height:3;display:inline-block}
+#graphdisplay:not(.visible){margin-bottom:-11px}
+#graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
 
 /* single view */
 #graph_single{padding-left:0;padding-right:0}

@@ -561,6 +561,8 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #graphs .statimage,#graphs .statimage:hover,#graphs a:hover .statimage,#graph_single .statimage,#graph_single .statimage:hover{margin:0;padding:0;max-width:calc(100% + 2px);border:0;box-shadow:none;background:none}
 #graph_single .graphContainer{padding:6px 6px 6px 0;max-width:calc(100% - 32px);box-sizing:content-box;background:#fff;animation:ease grid-fade 2s forwards}
 #updategraphs .messages{margin-bottom:4px}
+#graphdisplay:not(.visible){margin-bottom:5px}
+#graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
 
 /* notifications */
 .error{color:#900}

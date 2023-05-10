@@ -608,7 +608,7 @@ p#upnpconfig,p#ipchange,p#ipv6config,p#tcpconfig,p#confignotes,p#defaultswork{ma
 .messages #newsDisplay a:last-child{display:inline-block}
 
 /* graphs */
-#graphing{margin:-8px 0 0;padding-top:1px;border-left:none;border-right:none}
+#graphing{margin:-10px 0 0;padding-top:1px;border-left:none;border-right:none}
 form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-bottom:10px;padding:10px 10px 0;border:var(--border_inner);background:var(--panel)}
 .graphspanel{padding:0;margin:15px 0 -15px 0;width:100%;text-align:center;overflow:auto;background:none}
 .graphspanel a{font-size:0}
@@ -633,12 +633,10 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 #graphs .nowrap{line-height:3;display:inline-block}
 #graphs .nowrap b{min-width:150px;text-align:right;display:inline-block;margin-right:5px}
 #graphs input[type=text]{min-width:80px}
-#graphs tr:first-child td{border:0}
+#graphs #gform td{border:0!important}
 #graphs td:first-child{padding:13px 3px 13px 5px;width:85px;white-space:nowrap;text-align:right}
 #graphs td:nth-child(2){width:260px;white-space:nowrap}
 #graphs td.infohelp{padding:5px 5px 5px 40px;text-align:left;border:1px inset #120f35;border-right:none;border-left:none;background-color:#010008;background-size:20px}
-#graphdisplay+form{display:none;opacity:0;will-change:transform}
-#graphdisplay:hover+form,#graphdisplay+form:hover{display:block;animation:fade .5s ease .2s reverse both}
 #graphopts a:empty{display:none}
 #graphopts a{margin:3px -2px;text-transform:capitalize}
 #graphopts{margin:30px -10px 0;padding:10px 0 8px;text-align:center;border-top:var(--border_inner);background:rgba(0,0,16,.5)}
@@ -650,6 +648,8 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 #graph_single .graphContainer{padding-top:5px}
 #updategraphs .messages{margin-bottom:10px}
 #graphing{border-top:none !important}
+#graphdisplay:not(.visible){margin-bottom:10px}
+#graphdisplay:hover,#graphdisplay:focus{color:var(--hover);-webkit-text-stroke:0}
 
 .smallhead th,#ntcpconnections th{font-size:8pt}
 .smallhead th a:hover{text-decoration:none}
