@@ -124,6 +124,8 @@
     } else {
       config.hidden = false;
       h3.classList.add("visible");
+      document.getElementById("gwidth").focus();
+      setTimeout(() => {window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});}, 500);
     }
   }
   toggleView();
