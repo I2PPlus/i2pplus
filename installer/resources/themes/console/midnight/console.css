@@ -93,7 +93,7 @@ ul{margin:0;padding:0}
 .widescroll table{white-space:nowrap}
 #newtab:hover{filter:drop-shadow(0 0 3px var(--hover))}
 #newtab{margin-top:2px;float:right;letter-spacing:0;text-align:right;font-size:8pt}
-#sidebar img[src$="i2plogo.png"],#sidebar h3,.confignav,*::before,*::after,h1,h2,h3,h4,.applink,.clearer,#sidebar img,.formaction,label,#themeoptions,#helptranslate,#consolepass,.applink,#sitemapcontainer{user-select:none}
+#sidebar img[src$="i2plogo.png"],#sidebar h3,.confignav,*::before,*::after,h1,h2,h3,h4,.applink,.clearer,#sidebar  img,.formaction,label,#themeoptions,#helptranslate,#consolepass,.applink,#sitemapcontainer{user-select:none}
 
 /* standard buttons and inputs */
 input[name="refreshInterval"]{margin-right:3px;margin-left:0;width:80px;text-align:right}
@@ -557,7 +557,8 @@ div[id^="config_"].main{padding-bottom:14px}
 #config_ui,#netdb{padding-bottom:3px}
 
 /* top navigation */
-.confignav{margin:-1px -11px 15px;padding:7px 5px 8px;line-height:1.3;text-align:center;font-weight:700;border:var(--border);background:linear-gradient(to bottom,rgba(0,0,64,.15),rgba(0,0,48,.15) 50%,rgba(0,0,32,.15) 50%,rgba(0,0,16,.15)),var(--th);background-size:100%,100% 4px,4px 100%}
+.confignav{margin:-1px -11px 15px;padding:7px 5px 8px;position:relative;line-height:1.3;text-align:center;font-weight:700;border:var(--border);background:linear-gradient(to bottom,rgba(0,0,64,.15),rgba(0,0,48,.15) 50%,rgba(0,0,32,.15) 50%,rgba(0,0,16,.15)),var(--th);background-size:100%,100% 4px,4px 100%;contain:none!important}
+.confignav::after{position:absolute;left:2px;bottom:-3px;width:calc(100% - 4px);height:1px;display:inline-block;background:#17173e;content:""}
 .tab,.tab2{margin:0 -2px -1px -2px;padding:2px 0;min-width:60px;display:inline-block;border:var(--border);box-shadow:var(--highlight);box-sizing:border-box}
 .tab a,.tab a:visited{padding:4px 16px;display:inline-block;color:var(--a)}
 .tab{background:linear-gradient(180deg,#112,#080818 50%,#000);box-shadow:var(--highlight),inset 0 0 1px 0 #446}
@@ -2771,8 +2772,8 @@ h3.h3table,h3.tabletitle,#i2pclientconfig,#advancedclientconfig,#webappconfigura
 .configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p.sybilinfo,p.infowarn,td.infowarn{padding:20px 25px 20px 55px}
 div[id^="config_"] .encDests td,div[id^="config_"] .encDests th{font-size:9pt}
 div[id^="config_"] td:not(.infowarn):not(.infohelp){padding-top:8px;padding-bottom:8px}
-div[id^="config_"] .confignav{padding:4px 4px 5px 3px;display:flex;flex-direction:row;flex-wrap:wrap;align-content:space-evenly;justify-content:center}
-div[id^="config_"] .tab,div[id^="config_"] .tab2{flex:auto;flex-basis:auto;flex-grow:.06;margin:0 -1px -1px 0;white-space:nowrap;min-width:70px}
+div[id^="config_"] .confignav{padding:4px 4px 5px 3px;border-left:0}
+div[id^="config_"] .tab,div[id^="config_"] .tab2{margin:0 -1px -1px 0;}
 div[id^="config_"] .tab2{padding:6px 6px 4px}
 div[id^="config_"] .tab a{padding:4px 6px}
 div[id^="config_"] .confignav{padding:0}
