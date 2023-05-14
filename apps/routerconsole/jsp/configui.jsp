@@ -22,7 +22,7 @@
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
 <h1 class=conf><%=uihelper._t("User Interface Configuration")%></h1>
 <div class=main id=config_ui>
- <%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
 <h3 id=themeheading><%=uihelper._t("Router Console Theme")%></h3>
