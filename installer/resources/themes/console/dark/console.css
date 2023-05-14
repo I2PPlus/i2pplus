@@ -394,7 +394,8 @@ div[id^="config_"].main{padding-bottom:14px}
 #homepage .newsentry h3{margin-top:8px;box-shadow:none;background:var(--news) no-repeat 8px center/15px}
 
 /* top navigation */
-.confignav{margin:-1px -11px -1px;padding:7px 7px 8px;font-weight:700;line-height:1.36;text-align:center;box-shadow:var(--bevel);background:var(--topnav)}
+.confignav{margin:-1px -11px -1px;padding:7px 7px 8px;position:relative;font-weight:700;line-height:1.36;text-align:center;box-shadow:var(--bevel);background:var(--topnav);contain:none!important}
+.confignav::after{position:absolute;left:2px;bottom:-3px;width:calc(100% - 4px);height:1px;display:inline-block;background:#0c250c;content:""}
 .tab,.tab2{margin:0 -3px -1px -3px;padding:1px 0 2px;min-width:60px;display:inline-block;position:relative;box-sizing:border-box;vertical-align:middle;background:#000}
 .tab{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:var(--glow_top),linear-gradient(180deg,#002900,#000400)}
 .tab a{padding:4px 14px;display:inline-block;text-shadow:var(--textshadow)}
@@ -2900,8 +2901,8 @@ span#newtab{margin-top:4px}
 }
 
 @media (min-width:1840px){
-div[id^="config_"] .confignav{padding:4px 4px 5px 3px;display:flex;flex-direction:row;flex-wrap:wrap;align-content:space-evenly;justify-content:center}
-div[id^="config_"] .tab,div[id^="config_"] .tab2{margin:0 -1px -1px 0;min-width:70px;white-space:nowrap;flex:auto;flex-basis:content;flex-grow:.06}
+div[id^="config_"] .confignav{padding:4px 4px 5px 3px;border-left:0}
+div[id^="config_"] .tab,div[id^="config_"] .tab2{margin:0 -1px -1px 0}
 div[id^="config_"] .tab2:first-child{border-left:none}
 div[id^="config_"] .confignav{padding:0}
 div[id^="config_"] .tab,div[id^="config_"] .tab2{margin-top:-1px}
