@@ -30,6 +30,7 @@
                       java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
                       java.io.File.separatorChar + "console" + java.io.File.separatorChar + theme +
                       java.io.File.separatorChar;
+   String uri = request.getRequestURI();
    java.io.File themeOverride = new java.io.File(themeBase + "override.css");
    boolean hasOverride = themeOverride.exists();
 %>
@@ -37,6 +38,13 @@
     if (theme.contains("dark") || theme.contains("night")) {
 %>
 <style>html{background:#000}</style>
+<%
+    }
+%>
+<%
+    if (uri.contains("config")) {
+%>
+<link rel=preload href="/themes/console/confignav.css" as="style">
 <%
     }
 %>
@@ -71,7 +79,6 @@
     // https://www.w3.org/TR/referrer-policy/
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
     response.setHeader("Referrer-Policy", "same-origin");
-    String uri = request.getRequestURI();
     if (uri.contains("override.css"))
         response.setHeader("Cache-Control", "private, no-cache, max-age=84600");
     else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
