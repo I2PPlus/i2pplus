@@ -1061,6 +1061,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write(_t("in"));
                 out.write(" / ");
                 out.write(obtunnels);
+                out.write(' ');
                 out.write(_t("out"));
                 out.write("</span>");
             }
