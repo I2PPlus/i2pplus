@@ -1054,12 +1054,15 @@ public class I2PSnarkServlet extends BasicServlet {
             String ibtunnels = _manager.util().getI2CPOptions().get("inbound.quantity");
             String obtunnels = _manager.util().getI2CPOptions().get("outbound.quantity");
             if (_manager.util().connected()) {
-                out.write("<span class=canhide title=\"" + _t("Configured maximum (actual usage may be less)") +
+                out.write(" <span class=canhide title=\"" + _t("Configured maximum (actual usage may be less)") +
                           "\"> &bullet; " + _t("Tunnels") + ": ");
                 out.write(ibtunnels);
-                out.write(" in / ");
+                out.write(' ');
+                out.write(_t("in"));
+                out.write(" / ");
                 out.write(obtunnels);
-                out.write(" out</span>");
+                out.write(_t("out"));
+                out.write("</span>");
             }
 
             String IPString = _manager.util().getOurIPString();
