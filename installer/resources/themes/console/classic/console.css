@@ -485,6 +485,7 @@ div[id^="config"] .tab a{padding-right:18px}
 .tab:active{box-shadow:inset 0 0 0 1px #f90,var(--highlight_active);background:var(--hover)}
 .tab:active a{color:var(--bg)}
 .tab2{padding:7px 15px 5px;z-index:10;vertical-align:top;color:#565799;text-shadow:0 1px 1px var(--bg);box-shadow:var(--btn_shadow_active);background:linear-gradient(180deg,var(--bg4),var(--bg2))}
+.tab:not(:hover)::before{filter:saturate(.3)!important}
 #peers .tab,#peers .tab2{margin:-1px -3px -1px;min-width:120px}
 #peers .confignav{padding-top:0;padding-bottom:0}
 
@@ -734,7 +735,7 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 .themechoice:hover,.themechoice:hover>img~.themelabel{background:var(--bg)}
 .themechoice:hover>img~.themelabel{border-top:1px solid var(--hover)}
 .themechoice .optbox:hover+img~.themelabel{color:var(--hover);font-weight:700}
-.themechoice .optbox:checked+img~.themelabel{padding:4px 2px 2px;font-size:95%;font-weight:700;color:var(--selected);box-shadow:var(--btn_shadow_active);background:var(--bg3)}
+.themechoice .optbox:checked+img~.themelabel{padding:4px 2px 2px;font-size:95%;font-weight:700;color:var(--selected);box-shadow:0 0 0 1px #fff inset,2px 2px 2px rgba(0,0,0,.25) inset;background:var(--bg3)}
 .themechoice:hover .optbox:not(:checked)+img,.langselect:hover .optbox:not(:checked)+img{transform:scale(1.05)}
 .themechoice .optbox:focus+img~.themelabel{color:var(--hover);background:var(--label_focus)}
 .themechoice:active .themelabel,.themechoice .optbox:active+img~.themelabel{color:var(--bg);box-shadow:var(--highlight);background:var(--hover)}
@@ -750,7 +751,7 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 .langselect:active .ui_lang,.langselect:active>.optbox~.ui_lang{color:var(--bg);box-shadow:var(--highlight);background:var(--hover)}
 .langselect:active .optbox:checked~.ui_lang,.langselect .optbox:focus~.ui_lang{color:var(--hover);box-shadow:none;background:var(--label_focus)}
 .langselect .optbox:active~.ui_lang{color:var(--bg);background:var(--hover)}
-.langselect .optbox:checked~.ui_lang,.langselect .optbox:focus:checked~.ui_lang{padding:4px 2px 2px;z-index:2;font-size:95%;font-weight:700;color:var(--selected);box-shadow:var(--btn_shadow_active);background:var(--label_focus)}
+.langselect .optbox:checked~.ui_lang,.langselect .optbox:focus:checked~.ui_lang{padding:4px 2px 2px;z-index:2;font-size:95%;font-weight:700;color:var(--selected);box-shadow:0 0 0 1px #fff inset,2px 2px 2px rgba(0,0,0,.25) inset;background:var(--label_focus)}
 .ui_lang{margin:-32px -4px 0;text-align:center;padding:3px 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:capitalize;font-size:9pt;z-index:2;border-top:var(--border);border-radius:0 0 2px 2px;background:var(--header)}
 #themeoptions{margin:0 -5px -3px;padding:5px 10px 5px 5px;position:relative;top:4px;clear:both;border-top:var(--border);background:var(--bg3)}
 #themeoptions label{margin:4px 10px 4px 0;display:inline-block;white-space:nowrap}
@@ -767,6 +768,7 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 .langflag img{margin:0 0 -4px;width:40px;height:30px;position:relative;z-index:3;border:0}
 .langselect .optbox:checked+.langflag,.langselect:hover>.langflag{opacity:1}
 .langselect .optbox:checked+.langflag{transform:scale(.8);box-shadow:0 0 0 1px #f60}
+#config_ui p.infohelp {margin-top:0}
 
 /* configui password */
 #consolepass th:nth-child(2){text-align:left}
