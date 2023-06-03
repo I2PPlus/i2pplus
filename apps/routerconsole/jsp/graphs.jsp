@@ -111,7 +111,27 @@
 <%
     }
 %>
+  var config = document.getElementById("gform");
+  var toggle = document.getElementById("toggleSettings");
+  var h3 = document.getElementById("graphdisplay");
+  toggle.hidden = true;
+  function toggleView() {
+    if (toggle.checked === false) {
+      config.hidden = true;
+      if (h3.classList.contains("visible")) {
+        h3.classList.remove("visible");
+      }
+    } else {
+      config.hidden = false;
+      h3.classList.add("visible");
+      document.getElementById("gwidth").focus();
+      setTimeout(() => {window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});}, 500);
+    }
+  }
+  toggleView();
+  toggle.addEventListener("click", toggleView);
   window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
+<noscript><style>#gform{display:block!important}#graphdisplay{margin-bottom:15px!important;color:var(--ink)!important;cursor:default!important}</style></noscript>
 </body>
 </html>

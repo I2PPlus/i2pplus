@@ -1172,7 +1172,11 @@ public class SummaryHelper extends HelperBase {
         String source = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         boolean needSpace = false;
         if (status.length() > 0) {
-            buf.append("<h4 class=\"sb_info sb_update volatile\">").append(status).append("</h4>\n");
+            buf.append("<h4 class=\"sb_info sb_update volatile");
+            if (NewsHelper.isUpdateInProgress()) {
+                buf.append(" inProgress");
+            }
+            buf.append("\">").append(status).append("</h4>\n");
             needSpace = true;
         }
         String dver = NewsHelper.updateVersionDownloaded();

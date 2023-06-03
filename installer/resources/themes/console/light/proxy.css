@@ -48,6 +48,7 @@ h3{text-transform:uppercase;letter-spacing:.1em;background:var(--h3)}
 #proxy_error p{padding-left:15px;padding-right:25px;font-size:110%}
 #proxy_error p:first-of-type{padding-top:5px}
 #proxy_error hr+p{margin-top:30px}
+#proxy_error #denied{padding:50px 0;font-size:115%;font-weight:700}
 #proxy_error .warning hr{margin:25px 0 20px;display:block}
 #proxyNewAddressHelper .warning{padding-bottom:20px}
 #proxyNewHost{margin-bottom:20px}

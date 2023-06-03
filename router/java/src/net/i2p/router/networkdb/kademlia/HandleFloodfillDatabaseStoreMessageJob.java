@@ -209,12 +209,19 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     String v = ri.getVersion();
                     boolean noSSU = true;
                     boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+                    String country = "unknown";
+                    boolean noCountry = true;
+                    long uptime = getContext().router().getUptime();
                     for (RouterAddress ra : ri.getAddresses()) {
                         if (ra.getTransportStyle().equals("SSU") ||
                             ra.getTransportStyle().equals("SSU2")) {
                             noSSU = false;
                             break;
                         }
+                    }
+                    country = getContext().commSystem().getCountry(key);
+                    if (country != null && country != "unknown") {
+                        noCountry = false;
                     }
                     if (isBanned) {
                         shouldStore = false;
@@ -223,19 +230,48 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             _log.warn("Dropping unsolicited NetDbStore of banned " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "]" + ((isFF && noSSU) ? " -> SSU transport disabled" : ""));
                         }
+                    } else if (noCountry && uptime > 45*1000) {
+                        shouldStore = false;
+                        wasNew = false;
+                        if (_log.shouldWarn()) {
+                            _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
+                                      " [" + key.toBase64().substring(0,6) + "] -> Address not resolvable via GeoIP");
+                        }
+/**
+                        if (isFF)
+                            getContext().banlist().banlistRouter(key, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, now + 4*60*60*1000);
+                        else
+                            getContext().banlist().banlistRouter(key, " <b>➜</b> No GeoIP resolvable address", null, null, now + 4*60*60*1000);
+                        if (_log.shouldWarn()) {
+                            _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
+                                      " [" + key.toBase64().substring(0,6) + "] and banning for 4h -> Address not resolvable via GeoIP");
+                        }
+**/
                     } else if ((isFF && noSSU) || (isFF && isUnreachable)) {
                         shouldStore = false;
                         wasNew = false;
-                        if (isFF && noSSU) {
+                        if (noSSU) {
+                            if (_log.shouldWarn())
+                                _log.warn("Dropping unsolicited NetDbStore of " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
+                                          "] -> SSU transport disabled");
+/**
                             getContext().banlist().banlistRouter(key, " <b>➜</b> Floodfill with SSU disabled", null, null, now + 4*60*60*1000);
                             if (_log.shouldWarn())
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
                                           "] and banning for 4h -> SSU transport disabled");
+**/
                         } else {
+                          shouldStore = false;
+                          wasNew = false;
+                            if (_log.shouldWarn())
+                                _log.warn("Dropping unsolicited NetDbStore of " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
+                                          "] -> Unreachable");
+/**
                             getContext().banlist().banlistRouter(key, " <b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 4*60*60*1000);
                             if (_log.shouldWarn())
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
                                           "] and banning for 4h -> Unreachable");
+**/
                         }
                     } else if (prevNetDb == null) { // actually new
                         if (isUnreachable && isOld) {
@@ -243,7 +279,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             wasNew = false;
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
-                                          " [" + key.toBase64().substring(0,6) + "] -> Unreachable (" + v + ")");
+                                          " [" + key.toBase64().substring(0,6) + "] -> " + v);
                             }
                         } else if (isUnreachable && isSlow) {
                             shouldStore = false;
@@ -251,6 +287,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] -> Unreachable and slow");
+                            }
+                        } else if (isUnreachable) {
+                            shouldStore = false;
+                            wasNew = false;
+                            if (_log.shouldWarn()) {
+                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
+                                          " [" + key.toBase64().substring(0,6) + "] -> Unreachable");
                             }
                         } else if (isOld && isSlow) {
                             shouldStore = false;

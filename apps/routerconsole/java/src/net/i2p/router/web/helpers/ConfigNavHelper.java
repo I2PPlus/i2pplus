@@ -63,6 +63,9 @@ public class ConfigNavHelper extends HelperBase {
         boolean span = graphical;
         if (!span)
             buf.append("<center>");
+        else {
+            buf.append("<link rel=stylesheet type=text/css href=/themes/console/confignav.css>\n");
+        }
         List<Tab> tabs = new ArrayList<Tab>(pages.length);
         boolean hidePlugins = !PluginStarter.pluginsEnabled(_context);
         for (int i = 0; i < pages.length; i++) {
@@ -72,18 +75,24 @@ public class ConfigNavHelper extends HelperBase {
         }
         Collections.sort(tabs, new TabComparator());
         for (int i = 0; i < tabs.size(); i++) {
-                String page = "config" + tabs.get(i).page;
+            String page = "config" + tabs.get(i).page;
+            String id = page;
+            if (id.equals("config")) {
+                id += "bandwidth";
+            }
+            id = id.replace("config", "nav_");
             if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) {
                 // we are there
                 if (span)
-                    buf.append("<span class=tab2>");
+                    buf.append("<span id=" + id + " class=tab2>");
                 buf.append(tabs.get(i).title);
             } else {
                 // we are not there, make a link
                 if (span)
-                    buf.append("<span class=tab>");
-                if (page.equals("configembed"))
+                    buf.append("<span id=" + id + " class=tab title=\"" + tabs.get(i).title + "\">");
+                if (page.equals("configembed")) {
                     page = "embed";
+                }
                 buf.append("<a href=\"").append(page).append("\">").append(tabs.get(i).title).append("</a>");
             }
             if (span)

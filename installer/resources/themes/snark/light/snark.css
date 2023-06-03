@@ -200,8 +200,8 @@ tfoot .RateUp,tfoot .RateDown,td.RateUp,td.RateDown,tfoot .torrentUploaded,td.to
 #torrents td[colspan="10"]{white-space:normal}
 #torrents tfoot tr:first-child th{padding:5px 0 5px 4px;background:linear-gradient(180deg,#fafaff 50%,rgb(240,240,255)) #fafaff;vertical-align:middle;font-weight:700;font-style:normal;color:var(--ink_light)}
 #torrents code{padding:2px 3px;margin:0 3px;display:inline-block;letter-spacing:.1em;font-size:8.5pt;text-shadow:var(--txt_shadow);border-radius:2px}
-#totals{margin:2px 0 2px 5px;display:inline-block;white-space:nowrap;font-weight:700}
-#totals span,#ourDest{white-space:nowrap}
+#totals span,#ourDest{display:inline-block;vertical-align:middle;white-space:nowrap}
+#totals{margin:2px 0 2px 5px;font-weight:700}
 
 /* download bars */
 .active .peerSeed img{opacity:1;animation:scale .2s linear 3s 2 forwards}
@@ -925,7 +925,6 @@ td.torrentDetails img,.dirInfo td:first-child img:not(.thumb){width:22px;height:
 #torrentInfo .infohash{padding:4px 4px 5px 20px;background:#f8f8ff var(--hash) no-repeat 4px center/14px}
 #torrentInfo th:first-child img,#torrentinfostats img,#trackers img{margin:-2px 5px 0;max-height:18px}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
-#ourDest{margin:-1px 0 0 3px}
 #screenlog{height:60px;min-height:60px}
 #screenlog li::before{width:15px;height:11px;background-size:10px}
 #screenlog li,#screenlog li a,#screenlog li a:visited{font-size:9.5pt !important}

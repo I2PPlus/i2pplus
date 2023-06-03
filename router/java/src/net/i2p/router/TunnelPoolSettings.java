@@ -88,6 +88,8 @@ public class TunnelPoolSettings {
     private static final int        MAX_PRIORITY = 25;
     private static final int        EXPLORATORY_PRIORITY = 30;
 
+    private final long _msgIdBloomXor;
+
     /**
      *  Exploratory tunnel
      */
@@ -106,6 +108,7 @@ public class TunnelPoolSettings {
         _backupQuantity = DEFAULT_BACKUP_QUANTITY;
         // _rebuildPeriod = DEFAULT_REBUILD_PERIOD;
         //_duration = DEFAULT_DURATION;
+
         if (isInbound) {
             _length = _isExploratory ? DEFAULT_IB_EXPL_LENGTH : DEFAULT_IB_LENGTH;
             _lengthVariance = _isExploratory ? DEFAULT_IB_EXPL_LENGTH_VARIANCE : DEFAULT_LENGTH_VARIANCE;
@@ -113,11 +116,14 @@ public class TunnelPoolSettings {
             _length = _isExploratory ? DEFAULT_OB_EXPL_LENGTH : DEFAULT_OB_LENGTH;
             _lengthVariance = _isExploratory ? DEFAULT_OB_EXPL_LENGTH_VARIANCE : DEFAULT_LENGTH_VARIANCE;
         }
+
         _lengthOverride = -1;
         _allowZeroHop = DEFAULT_ALLOW_ZERO_HOP;
         _IPRestriction = DEFAULT_IP_RESTRICTION;
         _unknownOptions = new Properties();
         _randomKey = generateRandomKey();
+        _msgIdBloomXor = RandomSource.getInstance().nextLong();
+
         if (_isExploratory && !_isInbound)
             _priority = EXPLORATORY_PRIORITY;
         if (!_isExploratory)
@@ -287,6 +293,8 @@ public class TunnelPoolSettings {
      *  @return non-null
      */
     public Properties getUnknownOptions() { return _unknownOptions; }
+
+    public long getMsgIdBloomXor() { return _msgIdBloomXor; }
 
     /**
      *  Defaults in props are NOT honored.
