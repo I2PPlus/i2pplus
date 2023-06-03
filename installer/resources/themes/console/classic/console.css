@@ -203,7 +203,7 @@ p:empty+.sb_notice{margin-top:7px}
 .percentBarOuter:hover .percentBarText{opacity:1;transition:ease opacity .2s;pointer-events:none}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:1px 0 4px;width:90%;float:none;position:absolute;top:-20px;left:5%;right:5%;z-index:9999;vertical-align:middle;font-size:105%;border-radius:1px;background:#eef;filter:drop-shadow(0 0 1px #ddf) drop-shadow(0 0 1px #779);pointer-events:none}
 #sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-15px;border-style:solid;border-width:8px;border-color:#eef transparent transparent transparent;content:""}
-#sb_CPUBar .percentBarInner{border:0;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(240,240,250,.7) 50%,rgba(220,220,255,.7) 50%,rgba(140,140,220,.9)),repeating-linear-gradient(90deg,var(--bg4),var(--bg4) 4px,rgba(0,0,0,0) 5px,rgba(0,0,0,0) 10px) left center/10px 100%,linear-gradient(90deg,rgba(0,0,0,0) 150px,rgba(0,128,0,.3) 150px,rgba(255,96,0,.4),rgba(255,0,0,.5))}
+#sb_CPUBar .percentBarInner{border:0;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(240,240,250,.5) 50%,rgba(220,220,255,.5) 50%,rgba(140,140,220,.5)),repeating-linear-gradient(90deg,var(--bg4),var(--bg4) 4px,#bbc 5px,#bbc 10px) left center/10px 100%,linear-gradient(90deg,rgba(0,0,0,0) 150px,rgba(0,128,0,.3) 150px,rgba(255,96,0,.4),rgba(255,0,0,.5))}
 
 /* updates download bar */
 .sb_update b{margin-top:-4px;display:inline-block;line-height:1.2}
@@ -240,7 +240,7 @@ h3:hover .toggleSection{display:inline-block}
 .toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 .toggleSection:not(:checked){padding-top:6px}
 #sidebar h3,#sidebar h3 a{position:relative;z-index:10}
-#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef}
+#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #ccd,0 0 0 1px #fff inset;background:#eef}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
 #sidebar h3:active .badge{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
@@ -260,7 +260,7 @@ h3:hover .toggleSection{display:inline-block}
 #sb_peers_condensed:not([hidden])+hr,#sb_tunnels_condensed:not([hidden])+hr{display:block}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed,#sidebar #sb_services.collapsed,#sb_peers_condensed,#sb_tunnels_condensed{margin:-8px 0 -9px;padding:3px 0;width:calc(100% - 2px)}
 #sidebar #sb_peers_condensed td,#sidebar #sb_tunnels_condensed td{padding:4px 1px;display:flex;justify-content:space-evenly;max-width:unset;vertical-align:middle;text-align:center;background:none}
-#sb_peers_condensed .sb_icon,#sb_tunnels_condensed .sb_icon{margin:0 1px;flex:auto;padding:5px;height:19px;text-align:center;box-shadow:0 0 0 1px #dfdfec inset,0 0 0 2px #fff inset;display:inline-block;background-blend-mode:luminosity}
+#sb_peers_condensed .sb_icon,#sb_tunnels_condensed .sb_icon{margin:0 1px;flex:auto;padding:5px;height:19px;text-align:center;box-shadow:0 0 0 1px #ccd inset,0 0 0 2px #fff inset;display:inline-block;background-blend-mode:luminosity}
 #sb_peers_condensed .sb_icon:hover,#sb_peers_condensed .sb_icon:focus,#sb_tunnels_condensed .sb_icon:hover,#sb_tunnels_condensed .sb_icon:focus{box-shadow:0 0 0 1px #f60 inset,0 0 0 2px #fff inset;background-blend-mode:normal}
 #sb_peers_condensed .sb_icon:active,#sb_tunnels_condensed .sb_icon:active{box-shadow:0 0 0 1px #f60 inset,0 0 0 2px #fff inset,4px 4px 4px rgba(0,0,0,.7) inset;background-blend-mode:luminosity}
 #sb_peers_condensed span:not(.badge),#sb_tunnels_condensed span:not(.badge){display:inline-block;position:relative;margin:0;width:100%;height:19px}
@@ -2400,7 +2400,7 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #sidebar h3{padding:4px 0 3px}
 #sidebar h3 a,#netdboverview th{font-size:11pt}
 #sidebar button[type=submit],#sidebar .reload[value="restart"]{margin:2px 4px 1px;min-width:110px}
-#sidebar .percentBarOuter{margin-left:2px;width:237px}
+#sidebar .percentBarOuter{margin-left:2px;width:239px}
 #sidebar .reload,#sidebar .stop{min-width:102px}
 #sidebar #sb_newsheadings td:last-child,#sidebar #sb_newsheadings tr:hover td:last-child{padding-bottom:5px;background-position:4px 6px}
 #sidebar table[id^="sb_"],#sb_newsheadings table{width:245px;min-width:245px}
