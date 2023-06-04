@@ -9,7 +9,6 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 import net.i2p.data.Hash;
@@ -19,6 +18,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -63,7 +63,7 @@ class StartExplorersJob extends JobImpl {
     static final int LOW_FFS = 2 * MIN_FFS;
     private static final long MAX_LAG = 150;
     private static final long MAX_MSG_DELAY = 650;
-    private final long _msgIDBloomXor = new Random().nextLong();
+    private final long _msgIDBloomXor = RandomSource.getInstance().nextLong();
     static final String PROP_EXPLORE_DELAY = "router.explorePeersDelay";
     static final String PROP_EXPLORE_BUCKETS = "router.exploreBuckets";
     static final String PROP_FORCE_EXPLORE = "router.exploreWhenFloodfill";
