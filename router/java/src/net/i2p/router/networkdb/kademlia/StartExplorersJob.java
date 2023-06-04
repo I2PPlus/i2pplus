@@ -9,6 +9,7 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import net.i2p.data.Hash;
