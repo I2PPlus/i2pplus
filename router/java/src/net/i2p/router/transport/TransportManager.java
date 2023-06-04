@@ -970,7 +970,7 @@ public class TransportManager implements TransportEventListener {
         if (_log.shouldDebug())
             _log.debug("I2NPMessage received: " + message.getClass().getSimpleName() /*, new Exception("Where did I come from again?") */ );
         try {
-            _context.inNetMessagePool().add(message, fromRouter, fromRouterHash, _msgIdBloomXor);
+            _context.inNetMessagePool().add(message, fromRouter, fromRouterHash, _msgIDBloomXor);
             //if (_log.shouldDebug())
             //    _log.debug("Added to in pool");
         } catch (IllegalArgumentException iae) {
