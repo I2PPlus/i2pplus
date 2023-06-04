@@ -16,6 +16,7 @@ import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.RandomSource;
 import net.i2p.util.Translate;
 
 /**
@@ -26,6 +27,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     private RouterContext _context;
     private FloodfillNetworkDatabaseFacade _facade;
     private Log _log;
+    private final long _msgIDBloomXor = RandomSource.getInstance().nextLong();    
 
     public FloodfillDatabaseLookupMessageHandler(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         _context = context;
@@ -48,7 +50,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
         DatabaseLookupMessage dlm = (DatabaseLookupMessage)receivedMessage;
         if (!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
-            Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash);
+            Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
             //if (false) {
             //    // might as well inline it, all the heavy lifting is queued up in later jobs, if necessary
             //    j.runJob();

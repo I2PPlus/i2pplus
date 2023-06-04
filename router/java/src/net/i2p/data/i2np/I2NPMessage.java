@@ -86,7 +86,12 @@ public interface I2NPMessage {
 
     /**
      * Replay resistant message ID
+     * optionally, the caller may pass a msgIDBloomXor value, and the
+     * return value will be Xor'ed with that value. Passing a msgIDBloomXor
+     * value of 0 will result in the original ID being returned, instead of
+     * passing 0 use the no-arg version.
      */
+    public long getUniqueId(long msgIDBloomXor); 
     public long getUniqueId();
     public void setUniqueId(long id);
 

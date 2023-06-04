@@ -120,20 +120,36 @@ public class InNetMessagePool implements Service {
         return old;
     }
 
+    /**
+     * Add a new message to the pool.
+     * If there is 
+     * a HandlerJobBuilder for the inbound message type, the message is loaded
+     * into a job created by that builder and queued up for processing instead
+     * (though if the builder doesn't create a job, it is added to the pool).
+     * Equivalent to the 4-argument version with a 0-value msgIDBloomXor
+     *
+     * @param messageBody non-null
+     * @param fromRouter may be null
+     * @param fromRouterHash may be null, calculated from fromRouter if null
+     *
+     * @return -1 for some types of errors but not all; 0 otherwise
+     *         (was queue length, long ago)
+     */
     public int add(I2NPMessage messageBody, RouterIdentity fromRouter, Hash fromRouterHash) {
         return add(messageBody, fromRouter, fromRouterHash, 0);
     }
 
     /**
      * Add a new message to the pool.
-     * If there is
-     * a HandlerJobBuilder for the inbound message type, the message is loaded
+     * If there is a HandlerJobBuilder for the inbound message type, the message is loaded
      * into a job created by that builder and queued up for processing instead
      * (though if the builder doesn't create a job, it is added to the pool)
+     * if msgIDBloomXor is 0 the Xor factor is 0, therefore the ID is returned unchanged.
      *
      * @param messageBody non-null
      * @param fromRouter may be null
      * @param fromRouterHash may be null, calculated from fromRouter if null
+     * @param msgIDBloomXor constant value to XOR with the messageID before passing to the bloom filter.
      *
      * @return -1 for some types of errors but not all; 0 otherwise
      *         (was queue length, long ago)
@@ -149,7 +165,8 @@ public class InNetMessagePool implements Service {
 
         if (_log.shouldDebug())
                 _log.debug("Received " + messageBody.getClass().getSimpleName() +
-                           " [MsgID " + messageBody.getUniqueId() + "]" +
+                           " [MsgID " + messageBody.getUniqueId() + "] " +
+                           " [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "]" + 
                            "\n* Expires: " + new Date(exp));
 
         //if (messageBody instanceof DataMessage) {
@@ -164,10 +181,7 @@ public class InNetMessagePool implements Service {
             // just validate the expiration
             invalidReason = _context.messageValidator().validateMessage(exp);
         } else {
-            if (msgIDBloomXor == 0)
-                invalidReason = _context.messageValidator().validateMessage(messageBody.getUniqueId(), exp);
-            else
-                invalidReason = _context.messageValidator().validateMessage(messageBody.getUniqueId() ^ msgIDBloomXor, exp);
+            invalidReason = _context.messageValidator().validateMessage(messageBody.getUniqueId(msgIDBloomXor), exp);
         }
 
         if (invalidReason != null) {
@@ -175,14 +189,17 @@ public class InNetMessagePool implements Service {
             //if (messageBody instanceof TunnelCreateMessage)
             //    level = Log.INFO;
             if (_log.shouldLog(level))
-                _log.log(level, "Dropping " + invalidReason + ' ' + messageBody.getClass().getSimpleName() + " -> " + messageBody +
+                _log.log(level, "Dropping " + invalidReason + ' ' + messageBody.getClass().getSimpleName() + 
+                                " [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "] -> " + messageBody +
                                 "\n* Expires: " + new Date(exp));
             _context.statManager().addRateData("inNetPool.dropped", 1);
             // FIXME not necessarily a duplicate, could be expired too long ago / too far in future
             _context.statManager().addRateData("inNetPool.duplicate", 1);
             if (doHistory) {
                 history.droppedOtherMessage(messageBody, (fromRouter != null ? fromRouter.calculateHash() : fromRouterHash));
-                history.messageProcessingError(messageBody.getUniqueId(), messageBody.getClass().getSimpleName(), "Duplicate/expired");
+                history.messageProcessingError(messageBody.getUniqueId(msgIDBloomXor),
+                                               messageBody.getClass().getSimpleName(),
+                                               "Duplicate/expired");
             }
             return -1;
         }
@@ -302,9 +319,9 @@ public class InNetMessagePool implements Service {
                 } else {
                     if (doHistory) {
                         String mtype = messageBody.getClass().getName();
-                        history.receiveMessage(mtype, messageBody.getUniqueId(),
-                                                             messageBody.getMessageExpiration(),
-                                                             fromRouterHash, true);
+                        history.receiveMessage(mtype, messageBody.getUniqueId(msgIDBloomXor), 
+                                               messageBody.getMessageExpiration(), 
+                                               fromRouterHash, true);	
                     }
                     return 0; // no queue
                 }
@@ -313,9 +330,9 @@ public class InNetMessagePool implements Service {
 
         if (doHistory) {
             String mtype = messageBody.getClass().getName();
-            history.receiveMessage(mtype, messageBody.getUniqueId(),
-                                                 messageBody.getMessageExpiration(),
-                                                 fromRouterHash, true);
+            history.receiveMessage(mtype, messageBody.getUniqueId(msgIDBloomXor), 
+                                   messageBody.getMessageExpiration(), 
+                                   fromRouterHash, true);	
         }
         return 0; // no queue
     }

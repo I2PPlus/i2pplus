@@ -1,7 +1,15 @@
+2023-05-29 idk
+ * adds "virtual contexts" to bloom filter, where each entity that
+  passes an i2np message to the bloom filter xor's the messageID with a random, local value.
+  credit Xe Iaso for discovering the issue, obscuratus for the solution
+
 2023-03-15 dr|z3d
  * Wrapper: Upgrade to 3.5.51
 
 2023-03-14 I2P+ 2.2.0+
+
+2023-03-13 idk
+ * Send and check target destination in first streaming SYN packet
 
 2023-03-13 dr|z3d
  * Router:

@@ -121,7 +121,7 @@ class OutboundMessageDistributor {
                 _log.debug("Queueing Inbound message to ourselves: " + m);
             // TODO if UnknownI2NPMessage, convert it.
             // See FragmentHandler.receiveComplete()
-            _context.inNetMessagePool().add(m, null, null);
+            _context.inNetMessagePool().add(m, null, null, 0); 
             return;
         } else {
             OutNetMessage out = new OutNetMessage(_context, m, _context.clock().now() + MAX_DISTRIBUTE_TIME, _priority, target);

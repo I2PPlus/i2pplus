@@ -15,6 +15,7 @@ import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
+import net.i2p.util.RandomSource;
 
 /**
  * Create a HandleDatabaseStoreMessageJob whenever a DatabaseStoreMessage arrives
@@ -23,6 +24,7 @@ import net.i2p.router.RouterContext;
 public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
     private RouterContext _context;
     private FloodfillNetworkDatabaseFacade _facade;
+    private final long _msgIDBloomXor = RandomSource.getInstance().nextLong();
 
     public FloodfillDatabaseStoreMessageHandler(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         _context = context;
@@ -35,7 +37,7 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
     }
 
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
-        Job j = new HandleFloodfillDatabaseStoreMessageJob(_context, (DatabaseStoreMessage)receivedMessage, from, fromHash, _facade);
+        Job j = new HandleFloodfillDatabaseStoreMessageJob(_context, (DatabaseStoreMessage)receivedMessage, from, fromHash, _facade, _msgIDBloomXor);
         if (false) {
             j.runJob();
             return null;

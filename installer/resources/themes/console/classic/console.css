@@ -1329,6 +1329,9 @@ img.unknownflag{opacity:.8}
 .peerFlag img{margin:0}
 #netdbcountrylist a:hover img{transform:scale(1.1)}
 #netdb td:not(.rif)>img[src^="/flags"]{margin-top:0;margin-bottom:0;border:var(--border_soft)}
+#banlist .peerFlag img{border-radius:0;box-shadow:none;opacity:1}
+#banlist .rif{padding:.5px 1px 1px}
+#banlist .rih,#banlist .rih a{font-weight:600}
 
 /* netdb (main section) */
 #netdb td:not(.rif):not(.rih){padding-top:6px;padding-bottom:6px;position:static}
