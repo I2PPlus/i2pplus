@@ -22,6 +22,7 @@ import net.i2p.data.i2np.VariableTunnelBuildReplyMessage;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.Service;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig;
@@ -539,7 +540,7 @@ public class TunnelDispatcher implements Service {
                                + "\n* Type: " + submsg.getClass().getSimpleName() + "[MsgID " + id + "/" + submsg.getUniqueId() + "]");
                 return;
             }
-            //_context.messageHistory().tunnelDispatched("message " + msg.getUniqueId() + "/" + msg.getMessage().getUniqueId() + " on tunnel "
+            //_context.messageHistory().tunnelDispatched("message " + msg.getRawUniqueId() + "/" + msg.getMessage().getRawUniqueId() + " on tunnel " 
             //                                               + msg.getTunnelId().getTunnelId() + " as inbound gateway");
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(),
                                                        submsg.getUniqueId(),

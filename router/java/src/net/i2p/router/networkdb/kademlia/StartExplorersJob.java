@@ -8,7 +8,6 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -21,7 +20,6 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
-
 
 /**
  * Fire off search jobs for random keys from the explore pool, up to MAX_PER_RUN
@@ -65,6 +63,7 @@ class StartExplorersJob extends JobImpl {
     static final int LOW_FFS = 2 * MIN_FFS;
     private static final long MAX_LAG = 150;
     private static final long MAX_MSG_DELAY = 650;
+    private final long _msgIDBloomXor = new Random().nextLong();
     static final String PROP_EXPLORE_DELAY = "router.explorePeersDelay";
     static final String PROP_EXPLORE_BUCKETS = "router.exploreBuckets";
     static final String PROP_FORCE_EXPLORE = "router.exploreWhenFloodfill";
@@ -126,7 +125,7 @@ class StartExplorersJob extends JobImpl {
                     // This is very effective so we don't need to do it often
                     boolean realexpl = !((needffs && getContext().random().nextInt(2) == 0) ||
                                         (lowffs && getContext().random().nextInt(4) == 0));
-                    ExploreJob j = new ExploreJob(getContext(), _facade, key, realexpl);
+                    ExploreJob j = new ExploreJob(getContext(), _facade, key, realexpl, _msgIDBloomXor);
                     // spread them out
                     Random random = getContext().random();
                     delay += 100 + (random.nextInt(250));
