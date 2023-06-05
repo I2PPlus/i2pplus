@@ -16,6 +16,7 @@ b{color:var(--ink_light)}
 br{clear:left}
 div{box-sizing:border-box}
 form{margin:0}
+form[action="list"]{margin-bottom:10px}
 h2,h3{margin:10px 0 -1px;padding:8px 10px 6px 30px;position:relative;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:11pt;color:var(--ink_light);border:var(--border);box-shadow:var(--highlight);background:var(--h2)}
 h2,h3,th,.buttons,.newTunnel,.control,label,.infohelp,.infowarn,.nowrap,b,#throttler td{user-select:none}
 hr{display:none}
