@@ -229,7 +229,7 @@ textarea[name="accessList"],#hostField,#localDestination,.authentication{margin:
 input[name="nofilter_blindedPassword"],#altlocaldest,#altPrivKeyFile,#localDest,#privKeyFile{width:200px;width:calc(100% - 10px);min-width:200px}
 input[name="nofilter_blindedPassword"]{width:calc(100% - 38px)}
 input[type=text]+label{white-space:nowrap}
-input::placeholder{text-align:center;font-size:80%;opacity:.7}
+input::placeholder{text-align:center;font-size:90%;opacity:.7}
 .base32{max-width:120px;display:inline-block;vertical-align:text-bottom;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .nowrap{margin-right:20px;white-space:nowrap}
 .nowrap,.nowrap>*{vertical-align:middle}
@@ -278,17 +278,14 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 #serverTunnels .iconize,#clientTunnels .iconize{padding:12.5px 7px;min-width:48px;vertical-align:middle;font-size:0;background-size:12px,100%}
 #serverTunnels .preview.iconize,#clientTunnels .preview.iconize{min-width:64px;background-size:16px,100%}
 }
-
 @media (max-width:1200px){
 th{font-size:9pt}
 .tunnelDestinationLabel{min-width:120px}
 #reachableBy{min-width:0}
 }
-
 @media (max-width:900px){
 .tunnelInfo .selectAll{max-width:110px}
 }
-
 @media (max-width:800px){
 b+.port{margin-left:2px;width:40px}
 div[class^="status"]{background-size:auto 14px}
@@ -301,18 +298,15 @@ div[class^="status"]{background-size:auto 14px}
 .tunnelType,.tunnelInterface,.tunnelProperties td:nth-child(n+2){text-align:center}
 #tunnelWizardPage #targetDestination{width:200px}
 }
-
 @media (max-width:700px){
 #leasesetKey,#tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#leasesetKey{min-width:270px}
 }
-
 @media (min-width:1000px){
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:386px}
 #registration .displayText{width:600px}
 }
-
 @media (min-width:1200px){
-a.control,body,.control,button,select,.freetext{font-size:10pt}
+a.control,body,.control,button,label,select,.freetext{font-size:10pt}
 th{font-size:10.5pt}
 h2,h3,#messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3,#wizardPanel h2{padding:10px 10px 8px 35px;font-size:12pt;background-position:8px center,0 0}
 #localDestination,.authentication{height:34px}
