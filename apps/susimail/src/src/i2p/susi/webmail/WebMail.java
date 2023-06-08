@@ -3074,7 +3074,7 @@ public class WebMail extends HttpServlet
         }
 
         out.println("<div id=composemail>" +
-                        "<table id=newmail cellspacing=0 cellpadding=2 width=100%>\n" +
+                        "<table id=newmail width=100%>\n" +
                         "<tr><td colspan=2><hr></td></tr>\n" +
                         "<tr><td class=right>" + _t("From") + "</td>" +
                         "<td><input type=text size=80 name=\"" +
@@ -3129,7 +3129,7 @@ public class WebMail extends HttpServlet
 
         out.println("<div id=dologin>" +
                         "<h1>" + _t("I2PMail Login") + "</h1>" +
-                        "<table cellspacing=3 cellpadding=5 width=100%>\n" +
+                        "<table width=100%>\n" +
                         // current postman hq length limits 16/12, new postman version 32/32
                         "<tr>" +
                         "<td width=30% class=right>" + _t("User") + "</td>" +
@@ -3247,7 +3247,7 @@ public class WebMail extends HttpServlet
 
         String curSort = folder.getCurrentSortBy();
         SortOrder curOrder = folder.getCurrentSortingDirection();
-        out.println("</div><table id=mailbox cellspacing=0 cellpadding=2 width=100%>\n" +
+        out.println("</div><table id=mailbox width=100%>\n" +
                     "<tr class=spacer><td colspan=7><hr></td></tr>\n<tr>\n" +
                     "<th class=\"mailListDate left\">" + sortHeader(SORT_DATE, _t("Date"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
                     "<th class=\"mailListSender left\">" + sortHeader(SORT_SENDER, showToColumn ? _t("To") : _t("From"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
@@ -3583,7 +3583,7 @@ public class WebMail extends HttpServlet
             showFolderSelect(out, mc.getFolderName(), true);
             out.print("</div>\n");
         }
-            out.println("<table id=message_full cellspacing=0 cellpadding=2>\n");
+            out.println("<table id=message_full>\n");
         if (hasHeader) {
             String subj = mail.subject;
             if (subj.length() > 0)

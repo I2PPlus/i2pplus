@@ -450,7 +450,7 @@ public class RrdGraph implements RrdGraphConstants {
             im.xorigin = 0;
         }
         else {
-            im.xorigin = (int) (PADDING_LEFT + im.unitslength * getFontCharWidth(FontTag.UNIT));
+            im.xorigin = (int) (PADDING_LEFT + im.unitslength * getFontCharWidth(FONTTAG_AXIS));
         }
 
         if (!gdef.onlyGraph && gdef.verticalLabel != null) {
@@ -474,7 +474,7 @@ public class RrdGraph implements RrdGraphConstants {
         }
         else {
             im.xgif = PADDING_RIGHT + im.xsize + im.xorigin;
-            im.ygif = im.yorigin + (int) (PADDING_PLOT * getFontHeight(FONTTAG_DEFAULT));
+            im.ygif = im.yorigin + (int) (PADDING_PLOT * getFontHeight(FONTTAG_AXIS));
         }
     }
 

@@ -83,18 +83,20 @@
     xhrgraphs.onreadystatechange = function () {
       if (xhrgraphs.readyState==4) {
         if (xhrgraphs.status==200) {
-          if (nographs)
+          if (nographs) {
             nographs.outerHTML = allgraphs.outerHTML;
+          }
           var graphsResponse = xhrgraphs.responseXML.getElementById("allgraphs");
           var graphsParent = graphs.parentNode;
           graphsParent.replaceChild(graphsResponse, graphs);
-          } else {
-            function isDown() {
-              if (!nographs)
-                graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
+        } else {
+          function isDown() {
+            if (!nographs) {
+              graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
             }
-            setTimeout(isDown, 60000);
           }
+          setTimeout(isDown, 60000);
+        }
       }
     }
     window.addEventListener("DOMContentLoaded", progressx.hide());
@@ -114,6 +116,7 @@
   var config = document.getElementById("gform");
   var toggle = document.getElementById("toggleSettings");
   var h3 = document.getElementById("graphdisplay");
+  var sb = document.getElementById("sidebar");
   toggle.hidden = true;
   function toggleView() {
     if (toggle.checked === false) {
@@ -125,7 +128,9 @@
       config.hidden = false;
       h3.classList.add("visible");
       document.getElementById("gwidth").focus();
-      setTimeout(() => {window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});}, 500);
+      if (sb !== null && sb.scrollHeight < document.body.scrollHeight) {
+        setTimeout(() => {window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});}, 500);
+      }
     }
   }
   toggleView();

@@ -32,7 +32,7 @@
 <form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <h3 class=tabletitle id=reseedsetup><%=intl._t("Reseeding Configuration")%>&nbsp;<span class=h3navlinks><a title="<%=intl._t("Help with reseeding")%>" href="/help/reseed">[<%=intl._t("Reseeding Help")%>]</a></span></h3>
-<table id=reseedconfig class=configtable border=0 cellspacing=5>
+<table id=reseedconfig class=configtable>
 <!--
 <tr>
 <td class=infohelp colspan=2>

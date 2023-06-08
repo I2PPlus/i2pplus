@@ -92,7 +92,7 @@
 <%
                 }  // showNotes
 %>
-<table class=book id=host_details cellspacing=0 cellpadding=5>
+<table class=book id=host_details>
 <tr>
 <td><%=intl._t("Hostname")%></td>
 <td><a href="http://<%=addr.getName()%>/" target=_blank rel=noreferrer><%=addr.getDisplayName()%></a>

@@ -109,6 +109,7 @@ select option{text-align:left;font-weight:400;font-size:9.5pt;color:var(--ink);b
 select option:hover,select option:focus,select option:checked{box-shadow:inset 0 0 20px 20px var(--hover)}
 select:hover,select:focus,select:active{color:var(--a_hover);text-shadow:0 1px 1px #000;border:1px solid var(--a_hover);background:var(--dropdown_hover) center right 10px no-repeat,var(--btn_hover);background-size:10px auto,100%,100%}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{opacity:.7;pointer-events:none}
+table{border-spacing:0}
 .optbox{width:21px;height:21px;position:relative;vertical-align:middle;box-sizing:border-box;outline:none;border:1px solid #27235c;box-shadow:var(--btn_shadow_active);background:var(--optbox);appearance:none;filter:drop-shadow(0 0 1px #000);will-change:transform}
 .optbox[type=radio]{border-radius:50%}
 .optbox[type=checkbox]::before{position:absolute;transition:linear transform .1s;transform:scale(1)}
