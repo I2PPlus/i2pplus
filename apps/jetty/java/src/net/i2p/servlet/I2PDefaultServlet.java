@@ -217,7 +217,7 @@ public class I2PDefaultServlet extends DefaultServlet
                              "#dirlist a:visited {color: #700}\n" +
                              "#dirlist a:hover, #dirlist a:focus {color: #d30}\n" +
                              "</style>\n";
-        String tableHeader = "<table border=0 width=100% cellspacing=10 class=\"listing\">\n" +
+        String tableHeader = "<table border=0 width=100% class=\"listing\">\n" +
                              "<thead>\n<tr><th align=left class=\"name\"><b>Name</b></th>" +
                              "<th align=right nowrap class=\"lastmodified\"><b>Last modified (UTC)</b></th>" +
                              "<th align=right nowrap class=\"size\"><b>Size (bytes)</b></th></tr>\n</thead>\n<tbody>\n";

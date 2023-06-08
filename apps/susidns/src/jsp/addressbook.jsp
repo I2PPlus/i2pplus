@@ -398,7 +398,7 @@
 <input type=hidden name="end" value="99">
 <input type=hidden name=action value="<%=intl._t("Delete Selected")%>">
 <div id=book>
-<table class=book id=host_list cellspacing=0 cellpadding=5>
+<table class=book id=host_list>
 <tr class=head>
 <%
     if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */

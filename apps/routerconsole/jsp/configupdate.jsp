@@ -35,12 +35,12 @@
     if (updatehelper.canInstall()) {
 %>
 <h3 class=tabletitle><%=intl._t("I2P &amp; News Updates")%></h3>
-<table id=i2pupdates class=configtable border=0 cellspacing=5>
+<table id=i2pupdates class=configtable>
 <%
     } else {
 %>
 <h3><%=intl._t("News Updates")%></h3>
-<table id=i2pupdates class=configtable border=0 cellspacing=5>
+<table id=i2pupdates class=configtable>
 <tr>
 <td align=right>
 <b><%=intl._t("News Updates")%>:</b>
