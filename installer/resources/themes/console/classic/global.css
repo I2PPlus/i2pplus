@@ -109,7 +109,7 @@ input[type=radio]:checked::before{width:9px;height:9px;left:25%;top:25%;border-r
 input::placeholder{font-style:italic;color:var(--ink_light);opacity:.7}
 input:focus::placeholder{opacity:0}
 label:not([disabled]):hover{color:var(--ink)}
-table{width:100%}
+table{width:100%;border-spacing:0}
 th{font-size:9pt;font-weight:700;color:var(--ink_light)}
 textarea{width:100%;resize:none;font:500 9pt var(--monospaced);color:var(--ink_light);border:var(--border);box-shadow:var(--shadow_input);scrollbar-color:#acafb9 #f2f2ff}
 textarea:focus{color:var(--ink);box-shadow:var(--btn_shadow_active),0 0 0 1px rgba(255,96,0,.6)}

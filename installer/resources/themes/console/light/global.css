@@ -102,6 +102,7 @@ select:hover,select:focus,select:active{border:1px solid #868bac}
 select:hover,select:active{color:#19191f;box-shadow:var(--highlight),0 2px 1px #ddf;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
 select:focus{color:#19191f;box-shadow:0 0 1px #f60;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{border:var(--border_input);box-shadow:var(--highlight);background:var(--btn);opacity:.8;cursor:default}
+table{border-spacing:0}
 textarea{margin:5px;padding:5px 8px;resize:none;font-size:9pt;color:var(--ink);border:var(--border_input);border-radius:2px;box-shadow:inset 1px 1px 1px rgba(204,204,204,.6);background:#fbfbff;transition:ease all .1s}
 textarea:focus{color:#393947;border:1px solid #676c7f;box-shadow:var(--txtinput_shadow_focus);background:#fff;transition:ease border .15s}
 textarea::placeholder,input::placeholder{font-style:italic;color:var(--ink);opacity:.4}
