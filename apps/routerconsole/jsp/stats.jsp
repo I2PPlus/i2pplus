@@ -26,25 +26,22 @@
 <jsp:getProperty name="oldhelper" property="stats" />
 </div>
 <script nonce="<%=cspNonce%>" type=text/javascript>
-  var visibility = document.visibilityState;
-  if (visibility == "visible") {
-    setInterval(function() {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/stats?' + new Date().getTime(), true);
-      xhr.responseType = "document";
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState==4 && xhr.status==200) {
-          var statlist = document.getElementById("statlist");
-          var statlistResponse = xhr.responseXML.getElementById("statlist");
-          var statlistParent = statlist.parentNode;
-          if (!Object.is(statlist.innerHTML, statlistResponse.innerHTML)) {
-            statlistParent.replaceChild(statlistResponse, statlist);
-          }
+  setInterval(function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/stats?' + new Date().getTime(), true);
+    xhr.responseType = "document";
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState==4 && xhr.status==200) {
+        var statlist = document.getElementById("statlist");
+        var statlistResponse = xhr.responseXML.getElementById("statlist");
+        var statlistParent = statlist.parentNode;
+        if (!Object.is(statlist.innerHTML, statlistResponse.innerHTML)) {
+          statlistParent.replaceChild(statlistResponse, statlist);
         }
       }
-      xhr.send();
-    }, 60000);
-  }
+    }
+    xhr.send();
+  }, 60000);
 </script>
 <script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
