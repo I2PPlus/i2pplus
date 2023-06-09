@@ -107,10 +107,9 @@ public class StatsGenerator {
                .append("\"");
             if (group.equals(_t("Router")))
                 buf.append(" checked");
-//            buf.append(" onclick='clearSelected();document.getElementById(\"").append(group).append("\").classList.add(\"tab2\")'>\n");
             buf.append(" hidden>\n");
             buf.append("<h3>").append(group).append("</h3>\n");
-            buf.append("<ul class=statlist>");
+            buf.append("<ul id=statlist>");
             out.write(buf.toString());
             buf.setLength(0);
             for (String stat : stats) {
