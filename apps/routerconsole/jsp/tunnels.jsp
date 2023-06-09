@@ -43,8 +43,9 @@
           var tunnels = document.getElementById("tunnels");
           var tunnelsResponse = xhr.responseXML.getElementById("tunnels");
           var tunnelsParent = tunnels.parentNode;
-            if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML))
-              tunnelsParent.replaceChild(tunnelsResponse, tunnels);
+          if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
+            tunnelsParent.replaceChild(tunnelsResponse, tunnels);
+          }
         }
       }
       xhr.send();
