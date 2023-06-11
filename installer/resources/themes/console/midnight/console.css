@@ -566,7 +566,7 @@ div[id^="config_"].main{padding-bottom:14px}
 .tab:hover a{color:var(--a_hover);text-shadow:0 1px 1px #000;background:none}
 .tab:active{box-shadow:var(--btn_shadow_active);background:radial-gradient(at center bottom,rgba(200,96,200,.8) 0,rgba(0,0,0,0) 90%),linear-gradient(180deg,#501f6c,var(--hover))}
 .tab:active a,#help .tab:active a{color:var(--ink);background:none;text-shadow:none}
-.tab2{padding:6px 14px;color:var(--ink);text-shadow:0 1px 1px #000;box-shadow:var(--highlight),inset 4px 4px 4px rgba(0,0,0,.5);background:radial-gradient(at center bottom,rgba(128,0,128,.4) 0,rgba(0,0,0,0) 90%),linear-gradient(90deg,rgba(96,0,96,.2),rgba(96,0,96,.2)),linear-gradient(180deg,#000,#1a1b2f)}
+.tab2{padding:6px 14px;color:var(--ink);text-shadow:0 1px 1px #000;box-shadow:var(--highlight),inset 4px 4px 4px rgba(0,0,0,.5);background:radial-gradient(at center bottom,rgba(128,0,128,.4) 0,rgba(0,0,0,0) 90%),linear-gradient(90deg,rgba(96,0,96,.2),rgba(96,0,96,.2)),linear-gradient(180deg,#000,#1a1b2f);pointer-events:none}
 
 #bwlimiter a,#advancedconfig a,.tabletitle a,#upnpconfig a,#servicedebug a,.ptitle a,#configstats th a,#graphinfo a,.h3navlinks{float:right;letter-spacing:normal;text-transform:capitalize;font-size:9pt}
 h3+p,h3+table{position:relative;z-index:20}
@@ -2109,13 +2109,13 @@ h3.stats{border:var(--border_inner);border-radius:0}
 #stats #statlist li br,#stats #statlist li li br{display:inline-block}
 #stats #statlist li li::before{content:"\279F\00A0";vertical-align:baseline}
 #stats #statlist li li:last-child::before{content:"\27A1\00A0"}
-#gatherstats{margin:10px 10px 20px}
+#gatherstats{margin:19px 10px 20px}
 #stats .confignav{position:sticky;top:-1px;z-index:999}
 #stats form{border:var(--border_inner);padding:10px;margin:-15px 0 10px}
 #stats form{display:none}
-#stats h3{margin:0 10px 8px;border-width:1px}
-#stats .joblog li:last-child{margin-bottom:12px}
-#stats .joblog{margin-top:-4px;margin-bottom:-10px;overflow:hidden}
+#stats h3{margin:8px 10px 4px;border-width:1px}
+#statsWrap li:last-child{margin-bottom:12px}
+#statsWrap{margin-top:-4px;margin-bottom:-10px;overflow:hidden}
 #stats label{display:inline-block}
 .statsLongName{color:#37a3df;font-weight:700}
 .statsLongName{margin-left:15px;margin-bottom:-10px;padding-bottom:6px;width:calc(100% - 12px);display:block;border-bottom:1px solid #27235c;opacity:.8}

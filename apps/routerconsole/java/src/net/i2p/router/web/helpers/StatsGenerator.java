@@ -42,12 +42,10 @@ public class StatsGenerator {
             String group = entry.getKey();
             Set<String> stats = entry.getValue();
             buf.append("<label class=\"togglestat tab");
-//            if (group.equals(_t("Router")))
-//                buf.append(" tab2");
             buf.append("\" id=\"");
-            buf.append(group);
+            buf.append(group.replace(" ", "_").replace("[", "").replace("]", ""));
             buf.append("\" for=\"toggle_");
-            buf.append(group);
+            buf.append(group.replace(" ", "_").replace("[", "").replace("]", ""));
             buf.append("\">");
             buf.append(_t(group));
             buf.append("</label>");
@@ -55,8 +53,6 @@ public class StatsGenerator {
             buf.setLength(0);
         }
         buf.append("</div>");
-
-        buf.append("<div class=joblog>\n");
         buf.append("<p id=gatherstats>");
         buf.append(_t("Statistics gathered during this router's uptime")).append(" (");
         long uptime = _context.router().getUptime();
@@ -65,48 +61,17 @@ public class StatsGenerator {
         buf.append(' ').append( _t("These statistics are primarily used for development and debugging."));
         buf.append(' ').append("<a href=\"/configstats\">[").append(_t("Configure")).append("]</a>");
         buf.append("</p>");
-
-/**
-        buf.append("<form action=\"\"><b>");
-        buf.append(_t("Jump to section")).append(":</b> <select name=\"go\" onChange='location.href=this.value'>");
-        out.write(buf.toString());
-        buf.setLength(0);
-
-        Map<String, SortedSet<String>> unsorted = _context.statManager().getStatsByGroup();
-        Map<String, Set<String>> groups = new TreeMap<String, Set<String>>(new AlphaComparator());
-        groups.putAll(unsorted);
-        for (String group : groups.keySet()) {
-            buf.append("<option value=\"#").append(group).append("\">");
-            buf.append(_t(group)).append("</option>\n");
-            // let's just do the groups
-            //Set stats = (Set)entry.getValue();
-            //for (Iterator statIter = stats.iterator(); statIter.hasNext(); ) {
-            //    String stat = (String)statIter.next();
-            //    buf.append("<option value=\"/stats.jsp#");
-            //    buf.append(stat);
-            //    buf.append("\">...");
-            //    buf.append(stat);
-            //    buf.append("</option>\n");
-            //}
-            //out.write(buf.toString());
-            //buf.setLength(0);
-        }
-        buf.append("</select> <input type=submit value=\"").append(_t("GO")).append("\" />");
-        buf.append("</form>");
-**/
-
-//        buf.append("<script charset=utf-8 type=text/javascript src=\"/js/clearSelected.js\"></script>");
-
+        buf.append("<div id=statsWrap>\n");
         out.write(buf.toString());
         buf.setLength(0);
 
         for (Map.Entry<String, Set<String>> entry : groups.entrySet()) {
             String group = entry.getKey();
             Set<String> stats = entry.getValue();
-            buf.append("<input name=\"statgroup\" type=radio class=toggle_input id=\"toggle_").append(group)
-               .append("\"");
+            buf.append("<input name=\"statgroup\" type=radio class=toggle_input id=\"toggle_")
+               .append(group.replace(" ", "_").replace("[", "").replace("]", "")).append("\"");
             if (group.equals(_t("Router")))
-                buf.append(" checked");
+                buf.append(" checked=checked");
             buf.append(" hidden>\n");
             buf.append("<h3>").append(group).append("</h3>\n");
             buf.append("<ul id=statlist>");
@@ -207,20 +172,19 @@ public class StatsGenerator {
                 buf.append("<span class=nowrap>");
                 buf.append(_t("Average")).append(": <span class=statvalue>");
                 buf.append(num(curRate.getAverageValue()));
-                    buf.append("</span> &bullet; ");
+                buf.append("</span> &bullet; ");
                 buf.append(_t("Highest average"));
                 buf.append(": <span class=statvalue>");
                 buf.append(num(curRate.getExtremeAverageValue()));
                 buf.append("</span>");
 
-                // This is rarely interesting
-                // Don't bother to translate
                 if (showAll) {
                     buf.append(" &bullet; ");
-                    buf.append("Highest total in a period: <span class=statvalue>");
+                    buf.append(_t("Highest total in a period"));
+                    buf.append(": <span class=statvalue>");
                     buf.append(num(curRate.getExtremeTotalValue()));
                     buf.append("</span>");
-                    }
+                }
 
                 // Saturation stats, which nobody understands, even when it isn't meaningless
                 // Don't bother to translate

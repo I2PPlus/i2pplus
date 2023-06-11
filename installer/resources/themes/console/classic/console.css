@@ -484,7 +484,7 @@ div[id^="config"] .tab a{padding-right:18px}
 .tab:hover{z-index:12;box-shadow:var(--highlight),inset 0 0 1px 1px var(--hover);background:var(--header_hover)}
 .tab:active{box-shadow:inset 0 0 0 1px #f90,var(--highlight_active);background:var(--hover)}
 .tab:active a{color:var(--bg)}
-.tab2{padding:7px 15px 5px;z-index:10;vertical-align:top;color:#565799;text-shadow:0 1px 1px var(--bg);box-shadow:var(--btn_shadow_active);background:linear-gradient(180deg,var(--bg4),var(--bg2))}
+.tab2{padding:7px 15px 5px;z-index:10;vertical-align:top;color:#565799;text-shadow:0 1px 1px var(--bg);box-shadow:var(--btn_shadow_active);background:linear-gradient(180deg,var(--bg4),var(--bg2));pointer-events:none}
 .tab:not(:hover)::before{filter:saturate(.3)!important}
 #peers .tab,#peers .tab2{margin:-1px -3px -1px;min-width:120px}
 #peers .confignav{padding-top:0;padding-bottom:0}
@@ -977,7 +977,7 @@ html[lang="es"] .sitemapLink,html[lang="es"] .sitemapLabel{width:160px}
 .joblog form:first-child{margin-top:10px}
 .joblog table{margin-top:15px}
 .joblog p{line-height:1.3}
-.joblog h3,#stats .joblog h3{margin:10px 0 20px 0}
+.joblog h3,#statsWrap h3{margin:10px 0 20px 0}
 .joblog h3:first-child{margin:-10px 0 15px 0}
 .joblog hr{margin:15px 0 15px}
 h2#jobrunners{display:none}
@@ -1365,10 +1365,12 @@ img.unknownflag{opacity:.8}
 #netdbcongestion td a:hover b, #netdbtiers td a:hover b{color:var(--hover)}
 
 /* stats */
+.statsViewGraphs{margin-left:20px}
+#gatherstats{margin:15px 0 5px}
+#gatherstats+form{background:var(--bg)}
 #statlist{margin-left:0;margin-bottom:-27px;padding:0 10px 0 0;border:var(--border);background:var(--bg3)}
 #statlist:last-of-type{margin-bottom:-22px}
 #statlist a[name],#statlist b,#statlist li b,#statlist a[name]:hover{line-height:1.2;letter-spacing:normal;text-decoration:none;font-size:9pt}
-#statlist ul+br{display:none}
 #statlist li b,#statlist b a:hover,h3.stats a:hover{color:var(--ink_light)}
 #statlist li::before{margin-left:5px;vertical-align:baseline;line-height:.6;font-size:14pt;color:var(--ink);content:"\2B26\00A0"}
 #statlist li{margin-left:5px;padding:2px;list-style:none}
@@ -1383,14 +1385,26 @@ img.unknownflag{opacity:.8}
 #statlist a[href*="graph"]{margin-top:2px}
 #statlist li a[href*="graph"]:first-of-type{margin-left:-1px}
 #statlist a[href*="graph"]::after{content:"\00A0"}
-.statsViewGraphs{margin-left:20px}
 #stats form{margin:-13px 0 -11px;padding:10px;border:var(--border)}
-#gatherstats+form{background:var(--bg)}
 #stats a[href^="graph?"]::before{margin-left:4px;color:var(--ink);font-size:14pt;content:"\279F\00A0"}
 #stats a[href^="graph?"]:hover::before{color:var(--ink)}
 #stats a[href$="showEvents=true"]::before{display:none}
+#stats ul{margin-left:10px;padding-left:0}
+#statlist ul+br{display:none}
 #statnav{padding:10px 10px 10px 15px;border:var(--border)}
 #stats h3.stats{margin-bottom:9px;border:var(--border);border-radius:0}
+#stats form{display:none}
+#stats input:not(:checked)+h3,#stats input:not(:checked)+h3+ul#statlist,#stats input:not(:checked)+h3+ul#statlist+br{display:none}
+#stats input:checked+h3+ul#statlist{display:block;margin-bottom:-13px}
+#stats label{display:inline-block}
+#stats ul#statlist{margin:-7px 0 0;padding:0;width:calc(100% - 2px);box-shadow:var(--highlight),inset 0 0 2px 1px var(--bg4)}
+#stats .tab,#stats .tab2{margin:-1px -1px -1px 0;padding:6px 14px;font-size:90%}
+#stats .tab:not(.tab2){color:var(--a)}
+#stats .tab:not(.tab2):hover{color:var(--hover)}
+#stats .tab:not(.tab2):active{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--hover);transition:ease box-shadow .05s}
+#stats .toggle_input{width:0;height:0;position:absolute;top:-99999px;left:-99999px;opacity:0}
+#statsWrap{margin-top:-4px;margin-bottom:0;overflow:hidden}
+#statsWrap h3{margin:12px 0 6px;border-width:1px}
 
 .eventspanel br{display:none}
 .eventspanel h3{margin-top:0}
@@ -1957,21 +1971,6 @@ div[lang="pt"] li br{display:none}
 #filterlist p+h3{margin-top:10px}
 #filterlist p+p,#filterlist ul+p{margin-top:-6px}
 #filterlist .example{margin-right:2px;color:#070;font-weight:700}
-
-/* stats */
-#gatherstats{margin:15px 0}
-#stats form{display:none}
-#stats input:not(:checked)+h3,#stats input:not(:checked)+h3+ul#statlist,#stats input:not(:checked)+h3+ul#statlist+br{display:none}
-#stats input:checked+h3+ul#statlist{display:block;margin-bottom:-13px}
-#stats label{display:inline-block}
-#stats ul#statlist{margin:-7px 0 0;padding:0;width:calc(100% - 2px);box-shadow:var(--highlight),inset 0 0 2px 1px var(--bg4)}
-#stats .joblog{margin-top:-4px;margin-bottom:0;overflow:hidden}
-#stats .joblog h3{margin-bottom:6px;border-width:1px}
-#stats .tab,#stats .tab2{margin:-1px -1px -1px 0;padding:6px 14px;font-size:90%}
-#stats .tab:not(.tab2){color:var(--a)}
-#stats .tab:not(.tab2):hover{color:var(--hover)}
-#stats .tab:not(.tab2):active{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--hover);transition:ease box-shadow .05s}
-#stats .toggle_input{width:0;height:0;position:absolute;top:-99999px;left:-99999px;opacity:0}
 
 /* routerinfo/ bw widgets */
 .rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #bbd!important;background:var(--badge);width:unset}
