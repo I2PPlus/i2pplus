@@ -646,9 +646,8 @@ h3.stats{border:var(--border);border-radius:0}
 #stats input:checked+h3+#statlist{margin-bottom:-13px;display:block}
 #stats label{display:inline-block}
 #stats .confignav{position:sticky;top:-1px;z-index:999}
-#stats .joblog{margin-top:-4px;margin-bottom:-9px;overflow:hidden}
 #stats .noevents,#statlist li li:last-child::after{margin-bottom:0}
-#stats .noevents{margin-bottom:5px;padding:5px 0 18px}
+#stats .noevents{margin-bottom:5px;padding:5px 0 24px}
 #stats .noevents::after,#statlist li li:last-child::after{margin-bottom:0;padding-bottom:0;border-bottom-color:transparent}
 #stats .noevents::after{margin-top:6px;margin-bottom:0;margin-right:20px;padding-bottom:10px}
 #stats #statlist{margin:0 0 50px;padding:0;border:0;background:none}
@@ -657,11 +656,13 @@ h3.stats{border:var(--border);border-radius:0}
 #stats .statsName b,.statsName i{display:inline-block}
 #stats .statsName b{width:calc(100% - 24px)}
 #stats .tab,#stats .tab2{margin:0 -1px -1px 0;padding:5px 14px;font-size:90%}
-#stats .tab2{text-shadow:var(--textshadow);box-shadow:var(--highlight),inset 3px 3px 2px #010;background:linear-gradient(180deg,#030,#003800)}
 #stats .tab:not(.tab2){color:var(--a)}
 #stats .tab:not(.tab2):hover{color:var(--hover)}
 #stats .tab:not(.tab2):active{color:var(--ink)}
-#stats #gatherstats{margin:15px 0 11px}
+#stats .tab2{text-shadow:var(--textshadow);box-shadow:var(--highlight),inset 3px 3px 2px #010;background:linear-gradient(180deg,#030,#003800)}
+#stats #gatherstats{margin:12px 0 2px}
+#statsWrap{margin-top:-4px;margin-bottom:-9px;padding-bottom:6px;overflow:hidden}
+.confignav+#statsWrap{margin-top:0}
 
 /* eventlogs */
 form[action="events"]{background:#000}
@@ -2772,7 +2773,7 @@ th{font-size:8pt}
 #help #changelog pre{margin-left:0;padding-left:10px;width:calc(100% - 22px);overflow-y:hidden;font-size:10pt;columns:515px auto;column-gap:30px;column-rule:var(--dotted)}
 #help .confignav,#debug .confignav{position:sticky;top:0}
 #profiles #banlist{margin:3px -5px 0;padding:10px 5px;border:0}
-#stats .joblog{margin-bottom:-10px}
+#statsWrap{margin-bottom:-10px}
 }
 
 @media (min-width:1500px){

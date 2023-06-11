@@ -26,7 +26,10 @@
 <jsp:getProperty name="oldhelper" property="stats" />
 </div>
 <script nonce="<%=cspNonce%>" type=text/javascript>
-  setInterval(function() {
+  function initRefresh() {
+    setInterval(updateStats, 60000);
+  }
+  function updateStats() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/stats?' + new Date().getTime(), true);
     xhr.responseType = "document";
@@ -41,8 +44,29 @@
       }
     }
     xhr.send();
-  }, 60000);
+  }
+  var infohelp = document.querySelector("#gatherstats");
+  var nav = document.querySelector(".confignav");
+  var routerTab = document.getElementById("Router");
+  var tabs = document.querySelectorAll(".togglestat");
+  function initTabs() {
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.remove("tab2");
+    }
+  }
+  nav.addEventListener("click", function(element) {
+    if (element.target.classList.contains("togglestat")) {
+      if (infohelp) {infohelp.remove();}
+      updateStats();
+      initTabs();
+      element.target.classList.add("tab2");
+    }
+  });
+  document.body.addEventListener("DOMContentLoaded", () => {
+    initRefresh();
+    initTabs();
+  });
+  window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>
