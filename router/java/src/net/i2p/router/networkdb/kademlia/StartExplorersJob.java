@@ -14,6 +14,7 @@ import java.util.Set;
 
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
@@ -64,7 +65,7 @@ class StartExplorersJob extends JobImpl {
     static final int LOW_FFS = 2 * MIN_FFS;
     private static final long MAX_LAG = 150;
     private static final long MAX_MSG_DELAY = 650;
-    private final long _msgIDBloomXor = RandomSource.getInstance().nextLong();
+    private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
     static final String PROP_EXPLORE_DELAY = "router.explorePeersDelay";
     static final String PROP_EXPLORE_BUCKETS = "router.exploreBuckets";
     static final String PROP_FORCE_EXPLORE = "router.exploreWhenFloodfill";
