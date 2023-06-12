@@ -28,7 +28,7 @@
 %>
 </head>
 <body id=perfgraphs>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <%
     // needs to be after the summary bar is rendered, so
@@ -47,7 +47,7 @@
 <div class=main id=graph_single>
  <jsp:getProperty name="graphHelper" property="singleStat" />
 </div>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce=<%=cspNonce%> type=text/javascript>
   var main = document.getElementById("perfgraphs");
   var graph = document.getElementById("single");
   var graphImage = document.getElementById("graphSingle");
@@ -126,6 +126,6 @@ if (graph && visibility == "visible") {
 }
 <%  } %>
 </script>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%> type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

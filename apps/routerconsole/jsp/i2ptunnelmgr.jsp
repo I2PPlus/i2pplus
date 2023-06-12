@@ -34,7 +34,7 @@
 <%=intl.title("Tunnel Manager")%>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Tunnel Manager")%> <a href="/i2ptunnel/" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class=main id=tunnelmgr>
@@ -49,7 +49,7 @@
 </iframe>
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script charset=utf-8 type=text/javascript src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce=<%=cspNonce%> type=text/javascript>
   function setupFrame() {
     f = document.getElementById("i2ptunnelframe");
     f.addEventListener("load", function() {

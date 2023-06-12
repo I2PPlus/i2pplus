@@ -15,7 +15,7 @@
 <style type=text/css>input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Homepage Customization")%></h1>
 <div class=main id=config_homepage>
@@ -64,6 +64,6 @@
 </div>
 </form>
 </div>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%> type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

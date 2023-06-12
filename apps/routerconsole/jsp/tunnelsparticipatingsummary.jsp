@@ -16,7 +16,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body id=transitbypeer>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Transit Tunnels by Peer")%></h1>
 <div class=main id=tunnels>
@@ -34,12 +34,12 @@
 %>
 <jsp:getProperty name="transitSummaryHelper" property="transitSummary" />
 </div>
-<script nonce="<%=cspNonce%>" src=/js/lazyload.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.dotsep.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.number.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" type=module>
+<script nonce=<%=cspNonce%> src=/js/lazyload.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> type=module>
   import {onVisible} from "/js/onVisible.js";
   var main = document.getElementById("tunnels");
   var peers = document.getElementById("transitPeers");

@@ -16,7 +16,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body id=routerjobs>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue Stats")%></h1>
 <div class=main id=jobs>
 <div class=confignav>
@@ -28,10 +28,10 @@
 <% jobQueueHelper.storeWriter(out); %>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueStats" />
 </div>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.dotsep.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.number.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> type=text/javascript>
   var stats = document.getElementById("jobstats");
   var tbody = document.getElementById("statCount");
   var tfoot = document.getElementById("statTotals");

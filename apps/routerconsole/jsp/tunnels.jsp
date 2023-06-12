@@ -15,7 +15,7 @@
 <%=intl.title("local tunnels")%>
 </head>
 <body id=routertunnels>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Local Tunnels")%></h1>
 <div class=main id=tunnels>
@@ -31,7 +31,7 @@
 <% tunnelHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary" />
 </div>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce=<%=cspNonce%> type=text/javascript>
   var visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {
@@ -52,6 +52,6 @@
     }, 15000);
   }
 </script>
-<script nonce="<%=cspNonce%>" type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%> type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>
