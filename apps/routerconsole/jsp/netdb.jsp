@@ -107,7 +107,52 @@
 <script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.number.js type=text/javascript></script>
 <script nonce="<%=cspNonce%>" type=text/javascript>
   var countries = document.getElementById("netdbcountrylist");
-  if (countries) {new Tablesort(countries, {descending: true});}
+  if (countries) {var ccsorter = new Tablesort(countries, {descending: true});}
+  function initRefresh() {
+    setInterval(updateNetDb, 60000);
+  }
+  function updateNetDb() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/netdb?' + new Date().getTime(), true);
+    xhr.responseType = "document";
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState==4 && xhr.status==200) {
+        var congestion = document.getElementById("netdbcongestion");
+        var congestionResponse = xhr.responseXML.getElementById("netdbcongestion");
+        var cclist = document.getElementById("cclist");
+        var cclistResponse = xhr.responseXML.getElementById("cclist");
+        var overview = document.getElementById("netdboverview");
+        var overviewResponse = xhr.responseXML.getElementById("netdboverview");
+        var tiers = document.getElementById("netdbtiers");
+        var tiersResponse = xhr.responseXML.getElementById("netdbtiers");
+        var transports = document.getElementById("netdbtransports");
+        var transportsResponse = xhr.responseXML.getElementById("netdbtransports");
+        var versions = document.getElementById("netdbversions");
+        var versionsResponse = xhr.responseXML.getElementById("netdbversions");
+        if (congestion !== null && congestion.innerHTML !== congestionResponse.innerHTML) {
+          congestion.innerHTML = congestionResponse.innerHTML;
+        }
+        if (cclist !== null && cclist.innerHTML !== cclistResponse.innerHTML) {
+          if (typeof ccsorter === "undefined") {var ccsorter = new Tablesort(countries, {descending: true});}
+          cclist.innerHTML = cclistResponse.innerHTML;
+          ccsorter.refresh();
+        } else if (versions && !cclist) {
+            overview.innerHTML = overviewResponse.innerHTML;
+        }
+        if (tiers !== null && tiers.innerHTML !== tiersResponse.innerHTML) {
+          tiers.innerHTML = tiersResponse.innerHTML;
+        }
+        if (transports !== null && transports.innerHTML !== transportsResponse.innerHTML) {
+          transports.innerHTML = transportsResponse.innerHTML;
+        }
+        if (versions !== null && versions.innerHTML !== versionsResponse.innerHTML) {
+          versions.innerHTML = versionsResponse.innerHTML;
+        }
+      }
+    }
+    xhr.send();
+  }
+  document.addEventListener("DOMContentLoaded", initRefresh(), true);
   window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
 </body>
