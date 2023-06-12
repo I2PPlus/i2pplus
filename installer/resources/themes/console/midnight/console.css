@@ -1213,6 +1213,7 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 #netdboverview tr{background:none}
 #netdboverview table tr:hover td{background:#202}
 #netdboverview th{background:var(--title)}
+#netdboverview th[colspan="3"]{padding:10px;text-transform:uppercase;letter-spacing:.08em}
 #netdboverview table th{font-size:90%;box-shadow:none;background:linear-gradient(180deg,#080818,#000008)}
 #netdboverview td{padding:0;background:none}
 #netdboverview td{border-left:var(--border_inner);border-right:var(--border_inner)}
@@ -2736,7 +2737,7 @@ select,.main input[type=submit],.main input[type=reset],.main input[type=submit]
 #sidebar button.download{font-size:10pt}
 #sidebar button,#sidebar .stop,#sidebar .reload{min-width:110px}
 #sidebar form{margin-bottom:-8px}
-#sidebar h3 a,#netdboverview tr:first-child th[colspan="3"]{font-size:11pt}
+#sidebar h3 a,#netdboverview tr:first-child th[colspan="3"]{font-size:12pt}
 #sidebar h3{padding:5px 0 3px}
 #sidebar h4{margin:-9px -11px -10px}
 #sidebar hr{margin-top:9px}
