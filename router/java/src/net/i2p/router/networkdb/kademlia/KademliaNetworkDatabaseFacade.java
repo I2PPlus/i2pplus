@@ -774,8 +774,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.58";
+            String CURRENT_VERSION = "0.9.59";
             long uptime = _context.router().getUptime();
             boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+            boolean isOlderThanCurrent = VersionComparator.comp(v, CURRENT_VERSION) < 0;
             Hash us = _context.routerHash();
             boolean isUs = us.equals(ri.getIdentity().getHash());
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
@@ -822,16 +824,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _ds.remove(key);
                 _kb.remove(key);
 **/
-            if (isLTier && isUnreachable && isOld) {
+            if (!isUs && isLTier && isUnreachable && isOlderThanCurrent) {
                 if (_log.shouldInfo())
-                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.58");
+                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.59");
                 if (_log.shouldWarn())
                     _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                              " [" + key.toBase64().substring(0,6) + "] for 4h -> LU and older than 0.9.58");
-                    _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.58", null, null, _context.clock().now() + 4*60*60*1000);
+                              " [" + key.toBase64().substring(0,6) + "] for 4h -> LU and older than 0.9.59");
+                    _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 4*60*60*1000);
                 _ds.remove(key);
                 _kb.remove(key);
-            } else if (uninteresting && !isHidden) {
+            } else if (!isUs && uninteresting && !isHidden) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Uninteresting");
                 _ds.remove(key);
@@ -1330,6 +1332,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String v = routerInfo.getVersion();
         String minRouterVersion = "0.9.20";
         String MIN_VERSION = "0.9.58";
+        String CURRENT_VERSION = "0.9.59";
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                                 routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
@@ -1343,7 +1346,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean noCountry = true;
         String country = "unknown";
         Hash h = null;
-        boolean isOld = routerInfo != null && VersionComparator.comp(v, MIN_VERSION) < 0;
+        boolean isOld = routerInfo != null && !isUs && VersionComparator.comp(v, MIN_VERSION) < 0;
+        boolean isOlderThanCurrent = routerInfo != null && !isUs && VersionComparator.comp(v, CURRENT_VERSION) < 0;
         if (routerInfo != null) {
             routerId = routerInfo.toBase64().substring(0,6);
             caps = routerInfo.getCapabilities().toUpperCase();
@@ -1431,13 +1435,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 else
                     _context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
 **/
-        if (isLTier && isUnreachable && isOld) {
+        if (isLTier && isUnreachable && isOlderThanCurrent) {
             if (_log.shouldInfo())
-                _log.info("Dropping RouterInfo [" + routerId + "] -> LU and older than 0.9.58");
+                _log.info("Dropping RouterInfo [" + routerId + "] -> LU and older than 0.9.59");
             if (_log.shouldWarn())
                 _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                          " [" + routerId + "] for 4h -> LU and older than 0.9.58");
-                _context.banlist().banlistRouter(h, " <b>➜</b> LU and older than 0.9.58", null, null, _context.clock().now() + 4*60*60*1000);
+                          " [" + routerId + "] for 4h -> LU and older than 0.9.59");
+                _context.banlist().banlistRouter(h, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 4*60*60*1000);
         }
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
@@ -1468,7 +1472,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
             // This should cover the introducers case below too
             // And even better, catches the case where the router is unreachable but knows no introducers
-            if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || routerInfo.getAddresses().isEmpty()) {
+            if (!isUs && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || routerInfo.getAddresses().isEmpty()) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + routerId + "] -> Unreachable and published over 54m ago");
                 return caps + " Router [" + routerId + "] -> Unreachable and published over 54m ago";

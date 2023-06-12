@@ -110,7 +110,7 @@
   var ccsorter = countries !== null ? new Tablesort(countries, {descending: true}) : null;
   function initRefresh() {
     var url = window.location.href;
-    if (!url.includes("?f") && !url.includes("?l") && !url.includes("?n") && !url.includes("?r")) {
+    if (!url.includes("?c") && !url.includes("?f") && !url.includes("?l") && !url.includes("?ls") && !url.includes("?n") && !url.includes("?r")) {
       setInterval(updateNetDb, 60000);
     }
   }
