@@ -1151,7 +1151,7 @@ class NetDbRenderer {
             if (!countryList.isEmpty()) {
                 Collections.sort(countryList, new CountryComparator());
                 buf.append("<table id=netdbcountrylist data-sortable>\n");
-                buf.append("<thead>\n<tr data-sort-method=thead><th>" + _t("Country") + "</th><th data-sort-default>" + _t("Count") + "</th></tr>\n</thead>\n");
+                buf.append("<thead>\n<tr><th>" + _t("Country") + "</th><th data-sort-default>" + _t("Count") + "</th></tr>\n</thead>\n");
                 buf.append("<tbody id=cclist>");
                 for (String country : countryList) {
                     int num = countries.count(country);
