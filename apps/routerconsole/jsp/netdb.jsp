@@ -111,7 +111,7 @@
   function initRefresh() {
     var url = window.location.href;
     if (!url.includes("?c") && !url.includes("?f") && !url.includes("?l") && !url.includes("?ls") && !url.includes("?n") && !url.includes("?r")) {
-      setInterval(updateNetDb, 60000);
+      setInterval(updateNetDb, 30000);
     }
   }
   function updateNetDb() {
