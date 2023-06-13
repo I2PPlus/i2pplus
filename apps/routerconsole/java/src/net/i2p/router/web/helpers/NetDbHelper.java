@@ -404,7 +404,7 @@ public class NetDbHelper extends FormHandler {
      *  @since 0.9.28
      */
     private void renderLookupForm() throws IOException {
-        _out.write("<form action=\"/netdb\" method=POST>\n" +
+        _out.write("<form action=\"/netdb\" method=GET>\n" +
                    "<input type=hidden name=\"nonce\" value=\"" + _newNonce + "\" >\n" +
 /*
                    "<div id=lookupCondensed hidden>" +

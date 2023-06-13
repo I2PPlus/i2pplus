@@ -16,7 +16,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
 </head>
 <body>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.PeerHelper" id="peerHelper" scope="request" />
 <jsp:setProperty name="peerHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -51,11 +51,11 @@
 %>
 <jsp:getProperty name="peerHelper" property="peerSummary" />
 </div>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.number.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" src=/js/lazyload.js type=text/javascript></script>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/lazyload.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> type=text/javascript>
   var autorefresh = document.getElementById("autorefresh");
   var ntcpConn = document.getElementById("ntcpconnections");
   var ntcpH3 = document.getElementById("ntcpcon");

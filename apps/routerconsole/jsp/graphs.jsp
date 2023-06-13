@@ -28,7 +28,7 @@
 %>
 </head>
 <body id=perfgraphs>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=perf><%=intl._t("Performance Graphs")%></h1>
 <div class=main id=graphs>
@@ -40,7 +40,7 @@
 <jsp:getProperty name="graphHelper" property="form" />
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce=<%=cspNonce%> type=text/javascript>
   var main = document.getElementById("perfgraphs");
   var graph = document.getElementsByClassName("statimage")[0];
   var visibility = document.visibilityState;

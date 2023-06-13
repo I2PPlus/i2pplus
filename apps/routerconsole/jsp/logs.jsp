@@ -15,7 +15,7 @@
 <%=intl.title("logs")%>
 </head>
 <body id=i2plogs>
-<script nonce="<%=cspNonce%>" type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
@@ -149,7 +149,7 @@
 </tbody>
 </table>
 </div>
-<script nonce="<%=cspNonce%>" type=module>
+<script nonce=<%=cspNonce%> type=module>
   import {onVisible} from "/js/onVisible.js";
   var mainLogs = document.getElementById("logs");
   var criticallogs = document.getElementById("criticallogs");

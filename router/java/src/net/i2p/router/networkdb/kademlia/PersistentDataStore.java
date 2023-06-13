@@ -318,6 +318,7 @@ public class PersistentDataStore extends TransientDataStore {
         File dbFile = null;
         String filename = null;
         String MIN_VERSION = "0.9.58";
+        String CURRENT_VERSION = "0.9.59";
         String v = MIN_VERSION;
         String bw = "K";
         String ip = null;
@@ -331,6 +332,7 @@ public class PersistentDataStore extends TransientDataStore {
         boolean hasSalt = false;
         boolean isBadFF = isFF && noSSU;
         boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+        boolean isOlderThanCurrent = VersionComparator.comp(v, CURRENT_VERSION) < 0;
         boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         v = ri.getVersion();
         String caps = ri.getCapabilities();
@@ -402,12 +404,12 @@ public class PersistentDataStore extends TransientDataStore {
                         _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 8*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         dbFile.delete();
-                    } else if (isLTier && unreachable && isOld) {
+                    } else if (isLTier && unreachable && isOlderThanCurrent) {
                         if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + MIN_VERSION);
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + CURRENT_VERSION);
                         if (_log.shouldWarn())
                             _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
-                        _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.58", null, null, _context.clock().now() + 8*60*60*1000);
+                        _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 8*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         dbFile.delete();
                     } else if (unreachable) {

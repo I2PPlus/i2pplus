@@ -180,7 +180,6 @@ public class HomeHelper extends HelperBase {
         "plato.i2p" + S + _x("Standford Encylopedia of Philosophy") + S + "http://plato.i2p/" + S + I + "eepsites/plato.png" + S +
         _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psychonaut.i2p/" + S + I + "eepsites/psy.svg" + S +
         _x("SimplifiedGuide") + S + _x("Computing-related tutorials") + S + "http://simplified.i2p/" + S + I + "help.svg" + S +
-        _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "eepsites/urbandictionary.svg" + S +
         "vuldb.i2p" + S + _x("Vulnerability Database") + S + "http://vuldb.i2p/" + S + I + "eepsites/vuldb.svg" + S +
         "w3schools.i2p" + S + _x("Web technology reference and learning site") + S + "http://w3schools.i2p/" + S + I + "eepsites/w3schools.svg" + S +
         "wikiless.i2p" + S + _x("Alternative Wikipedia front-end focused on privacy") + S + "http://wikiless.i2p/" + S + I + "wiki.svg" + S +
@@ -193,6 +192,7 @@ public class HomeHelper extends HelperBase {
         //"jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "eepsites/books.svg" + S +
         //"nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
         //"tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "eepsites/books.svg" + S +
+        //_x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "eepsites/urbandictionary.svg" + S +
 
 // news + blogs
         "ArsTechnica" + S + _x("Technology News &amp; more...") + S + "http://arstechnica.i2p/" + S + I + "eepsites/arstechnica.svg" + S +
@@ -207,7 +207,6 @@ public class HomeHelper extends HelperBase {
         _x("DigitalJournal") + S + _x("Global news &amp; media platform") + S + "http://digitaljournal.i2p/" + S + I + "news.svg" + S +
         _x("DigitalTrends") + S + _x("Tech News &amp; Reviews") + S + "http://digitaltrends.i2p/" + S + I + "eepsites/digitaltrends.svg" + S +
         "EFF" + S + _x("Defending your rights in the digital world") + S + "http://eff.i2p/" + S + I + "eepsites/eff.svg" + S +
-        "E-IR" + S + _x("International Politics Journal") + S + "http://e-internationalrelations.i2p/" + S + I + "news.svg" + S +
         "EllipticNews" + S + _x("The Elliptic Curve Cryptography Blog") + S + "http://ellipticnews.i2p/" + S + I + "news.svg" + S +
         _x("EpochTimes") + S + _x("Accurate News") + S + "http://epochtimes.i2p/" + S + I + "eepsites/epochtimes.svg" + S +
         _x("ForeignPolicy") + S + _x("The Global Magazine of News &amp; Ideas") + S + "http://foreignpolicy.i2p/" + S + I + "news.svg" + S +
@@ -263,6 +262,7 @@ public class HomeHelper extends HelperBase {
         _x("UpstreamJournal") + S + _x("A magazine about human rights and social justice") + S + "http://upstreamjournal.i2p/" + S + I + "news.svg" + S +
         _x("WashingtonInstitute") + S + _x("Advancing a balanced &amp; realistic understanding of American interests in the Middle East") + S + "http://washingtoninstitute.i2p/" + S + I + "eepsites/washingtoninstitute.svg" + S +
         "Wired" + S + _x("Technology News &amp; more...") + S + "http://wired.i2p/" + S + I + "eepsites/wired.svg" + S +
+        //"E-IR" + S + _x("International Politics Journal") + S + "http://e-internationalrelations.i2p/" + S + I + "news.svg" + S +
         //_x("TheHackerNews") + S + _x("Computer &amp; cyber security news") + S + "http://thehackernews.i2p/" + S + I + "news.svg" + S +
         //"DarkNetDaily" + S + _x("Darknet related news site") + S + "http://darknetdaily.i2p/" + S + I + "news.svg" + S +
         //"dw.i2p" + S + _x("News &amp; Current Affairs from Germany and around the world") + S + "http://dw.i2p/" + S + I + "news.svg" + S +

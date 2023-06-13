@@ -338,10 +338,10 @@ function refreshSidebar() {
 
           function modElements() {
             var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
-            var a;
-            for (a = 1; a < sectionTitle.length - 1; a += 1) {
-              sectionTitle[a].setAttribute("style", "pointer-events: none");
-            }
+            //var a;
+            //for (a = 1; a < sectionTitle.length - 1; a += 1) {
+            //  sectionTitle[a].setAttribute("style", "pointer-events: none");
+            //}
             var digits = document.querySelectorAll(".digits");
             var i;
             for (i = 0; i < digits.length; i += 1) {
