@@ -84,6 +84,7 @@ ul{margin:0;padding:0}
 .viewedit .configpeer:hover,.viewedit .configpeer:focus{background:var(--edit_hover) no-repeat center center/12px,var(--element)}
 .viewprofile,.configpeer,.familysearch{margin:1px 2px;padding:4px;width:12px;height:12px;vertical-align:middle;display:inline-block;line-height:0;font-size:0;border:var(--border_badge);box-shadow:var(--highlight);background:var(--element)}
 .configpeer{background:var(--edit) no-repeat center center/12px,var(--element)}
+.tunneldisplay .configpeer{margin:0}
 .viewprofile{background:var(--eye) no-repeat center center/12px,var(--element)}
 .viewprofile:hover,.familysearch:hover,.configpeer:hover,.viewprofile:focus,.familysearch:focus,.configpeer:focus{border:1px solid var(--a)}
 .viewprofile:hover,.viewprofile:focus{background:var(--eye_hover) no-repeat center center/12px,var(--element)}
@@ -1330,28 +1331,23 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{padding:1px 2px;min-width:36px;max-width:36px;display:inline-block;overflow:hidden;line-height:.9;white-space:nowrap;text-overflow:ellipsis;text-align:center;color:#000;border-radius:2px}
 
 /* Override error log colors */
-font[color="#006600"]{/* debug/notify */
-color:var(--ink);opacity:.8}
-font[color="#bf00df"]{/* warning */
-color:#848}
-font[color="#ff3300"]{/* error */
-color:#d00}
-font[color="#cc0000"]{/* critical */
-color:#f00}
-font[color="#000099"]{/* info */
-color:var(--ink)}
-
-#logs font[color^="#"]::before{margin-left:0;margin-right:5px;width:6px;height:6px;display:inline-block;vertical-align:calc(1px);border-radius:50%;background:#fff;content:""}
-/* critical */
-#logs li font[color="#cc0000"]::before,.log_crit{background:#f00}
-/* debug */
-#logs li font[color="#006600"]::before,.log_debug,.log_omitted{background:var(--ink);opacity:.8}
 .log_omitted{font-weight:700}
-/* error */
-#logs li font[color="#ff3300"]::before,.log_error{background:#d00}
+#logs font[color^="#"]::before{margin-left:0;margin-right:5px;width:6px;height:6px;display:inline-block;vertical-align:calc(1px);border-radius:50%;background:#fff;content:""}
+
+/* debug/notify */
+font[color="#006600"]{color:var(--ink);opacity:.8}
+#logs li font[color="#006600"]::before,.log_debug,.log_omitted{background:var(--ink);opacity:.8}
 /* warning */
+font[color="#bf00df"]{color:#848}
 #logs li font[color="#bf00df"]::before,.log_warn{background:#848}
+/* error */
+font[color="#ff3300"]{color:#d00}
+#logs li font[color="#ff3300"]::before,.log_error{background:#d00}
+/* critical */
+font[color="#cc0000"]{color:#f00}
+#logs li font[color="#cc0000"]::before,.log_crit{background:#f00}
 /* info */
+font[color="#000099"]{color:var(--ink)}
 #logs li font[color="#000099"]::before,.log_info{background:var(--ink)}
 
 /* profiles */
@@ -2511,42 +2507,42 @@ iframe.iframed{margin:15px 0 0}
 @media (max-width:1499px){
 h1[class],h1{padding-left:50px;background-size:32px auto,100% 4px,4px 100%}
 input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[value$="updates"]:focus,input.check[value$="updates"]:active{padding-left:26px;background-size:14px,100%}
+.en .sitemapLink,.en .sitemapLabel{width:120px;min-width:120px}
 .main h3 a{line-height:1}
 .netdbentry .tunnel_cap,.netdbentry .tier,.netdbentry .ff,.netdbentry .reachable,.netdbentry .unreachable,.netdbentry .version{padding:2px 4px}
-.sitemapLink,.sitemapLabel{width:160px}
-.en .sitemapLink,.en .sitemapLabel{width:120px;min-width:120px}
 .sitemapLabel{margin-bottom:-3px}
+.sitemapLink,.sitemapLabel{width:160px}
 .tunnelBuildStatus{font-size:90%}
-.tunnels_client th:first-child{font-size:0!important}
+.tunnel_peer img,.routerid img{margin:1px 2px -1px 0}
 .tunnels_client th:first-child::after{vertical-align:middle;line-height:0;letter-spacing:-0.25em;font-size:12pt;content:"\21E9\21E7"}
+.tunnels_client th:first-child{font-size:0!important}
 #applinks+.linkgroup .applink:last-child{margin-bottom:12px}
 #banlist li hr{margin-top:4px}
+#bannedpeers{margin-bottom:-13px}
 #chooselang img,#configbandwidth img{margin-top:0}
+#clock{margin:-7px -10px -9px;padding:12px 0 9px;font-size:16pt}
 #config_bandwidth .h3navlinks a{margin:-4px 0 0 -16px;background-size:19px}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px}
 #config_update .messages i{line-height:2}
-#bannedpeers{margin-bottom:-13px}
 #iptransport a::after,#advancedconfig a::after,#reseedsetup a::after,.h3navlinks a[href="/help/faq#alternative_browser"]::after{width:16px;height:16px;background-size:16px}
 #logs a.configure::after{background-size:14px}
 #logs h3.tabletitle a.delete{padding-right:16px}
 #pluginconfigtext input{margin:-5px -14px 0}
 #profiles #banlist{margin-top:-3px;margin-bottom:7px}
 #routerinformation .h3navlinks a{line-height:1.4}
+#sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:14px}
+#sb_internals.collapsed td,#sb_advanced.collapsed td{width:calc(100% + 30px)}
+#sb_internals .sb_icon[href="/jobs"]{display:none!important}
+#sb_services.collapsed td{width:calc(100% + 59px)}
+#sb_tunnelstatus .tunnelBuildStatus::before{margin:-2px 0;background-size:12px}
 #searchbar button{height:28px}
 #searchbar span{margin:-3px -2px -4px}
-#clock{margin:-7px -10px -9px;padding:12px 0 9px;font-size:16pt}
-#sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:14px}
-#sb_tunnelstatus .tunnelBuildStatus::before{margin:-2px 0;background-size:12px}
 #sidebarconf button img{width:10px;height:10px}
 #sidebar h3::before{height:14px}
 #sidebar h3{margin-bottom:-9px;padding:5px 0}
 #sitelinks+.linkgroup .applink:last-child{margin-bottom:8px}
 #sitemap .applink img{padding-left:62px;padding-right:62px}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs a.configure::after,#logs a.delete::after{width:14px;height:14px;background-size:12px}
-.tunnel_peer img,.routerid img{margin:1px 2px -1px 0}
-#sb_internals .sb_icon[href="/jobs"]{display:none!important}
-#sb_internals.collapsed td,#sb_advanced.collapsed td{width:calc(100% + 30px)}
-#sb_services.collapsed td{width:calc(100% + 59px)}
 }
 
 @media (max-width:1400px){
@@ -2566,6 +2562,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 }
 
 @media (max-width:1240px){
+.tunnel_cap{margin:2px -1px}
 #peers th,#peers td{min-width:0}
 #peers th,#peers .tablefooter td{font-size:85%}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
@@ -2574,40 +2571,39 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #tunnels .flag{margin-left:3px}
 #tunnels th,#tunnels td:not(.rif):not(.rih):not(.rbw){padding-left:2px;padding-right:2px}
 #tunnels .routerid,.tunnel_peer{margin-right:1px;min-width:58px}
-.tunnel_cap{margin:2px -1px}
 #tunnels .cells{padding-left:2px;padding-right:2px}
 #profilelist th,#profilelist td{padding-left:3px;padding-right:3px}
 #profilelist td:nth-child(5){white-space:normal}
 }
 
 @media (max-width:1200px){
+.appicon{height:40px}
+.applabel{width:130px}
+.applink img{height:24px;max-height:24px;max-width:24px}
+.h3navlinks a{margin:0;padding:7px 14px}
+.newsAuthor{padding:0 0 0 16px}
+.news h3,#newspage h3,.newsAuthor{background-size:11px}
+.news h3,#newspage h3{padding-left:26px;font-size:9.5pt;background-position:9px center}
+.profilegroup::before{width:18px;height:14px}
+.sb_netstatus{padding:6px 3px}
+.tab2{padding:3px 12px 4px}
+.tab a{padding:2px 14px}
+.tab a{padding-left:9px;padding-right:9px}
+.tab,.tab2{min-width:48px}
+.tab,.tab2{padding:1px 0 2px;min-width:50px}
+td.optionsave,#i2pupdates td:first-child{width:30%;white-space:normal}
 #tunnels #peercount img{margin:-2px -4px}
 #tunnels .percentBarOuter,#tunnels .percentBarText{margin:0 2px;width:70px}
 #netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
-.tab,.tab2{padding:1px 0 2px;min-width:50px}
-.tab2{padding:3px 12px 4px}
-.tab a{padding:2px 14px}
 #floodfills td{border-right:1px inset #120f35}
 #floodfills td:last-child{border-right:var(--border_inner)}
 #plugininstall input[type=text]{min-width:200px}
-td.optionsave,#i2pupdates td:first-child{width:30%;white-space:normal}
 #i2pupdates td:first-child{line-height:1.2}
 #portfaq td:nth-child(2){white-space:normal}
 #help h3,#faq h3{font-size:10pt}
 #profilelist .fast,#profilelist .highcap,#profilelist .integrated,#profilelist .standard,#profilelist .fast.integrated,#profilelist .highcap.integrated,#profilelist .standard.integrated{width:50px;height:14px;background-size:14px}
 #profilelist .fast,#profilelist .highcap.integrated,#profilelist .standard.integrated{background-position:calc(50% - 8px) center,calc(50% + 8px) center;background-size:14px}
-.profilegroup::before{width:18px;height:14px}
 #profilelist td:nth-last-child(2) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span{text-align:center}
-.h3navlinks a{margin:0;padding:7px 14px}
-.sb_netstatus{padding:6px 3px}
-.tab,.tab2{min-width:48px}
-.tab a{padding-left:9px;padding-right:9px}
-.news h3,#newspage h3,.newsAuthor{background-size:11px}
-.news h3,#newspage h3{padding-left:26px;font-size:9.5pt;background-position:9px center}
-.newsAuthor{padding:0 0 0 16px}
-.appicon{height:40px}
-.applink img{height:24px;max-height:24px;max-width:24px}
-.applabel{width:130px}
 #searchbar select{padding-top:6px;padding-bottom:6px}
 #searchbar button{height:27px}
 #tunnels .cells:first-child{width:1%;max-width:48px;min-width:48px}
@@ -2616,16 +2612,16 @@ td.optionsave,#i2pupdates td:first-child{width:30%;white-space:normal}
 }
 
 @media (max-width:1000px){
-#updateHelper select{max-width:200px}
-#reseedproxytype{columns:2 auto}
-#reseed_urlselection.optionsingle{columns:1 auto}
-#reseedconfig tr:nth-child(3) td label{padding:5px 4px 5px 0;width:calc(100% - 4px)}
-#bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:5px;padding-right:8px;background:#000025}
-#bandwidthconfig td:not(.infohelp):first-child{padding-right:0;background:none}
-#bandwidthconfig .infohelp{padding-right:10px}
 .net_datausage{padding:4px 0;min-width:260px;white-space:normal}
 .bw_title{margin:2px -6px -2px -3px;font-size:10pt}
 .encDests code{max-width:140px}
+#bandwidthconfig .bw_in,#bandwidthconfig .bw_out,#bandwidthconfig .bw_share{padding-left:5px;padding-right:8px;background:#000025}
+#bandwidthconfig .infohelp{padding-right:10px}
+#bandwidthconfig td:not(.infohelp):first-child{padding-right:0;background:none}
+#reseedconfig tr:nth-child(3) td label{padding:5px 4px 5px 0;width:calc(100% - 4px)}
+#reseedproxytype{columns:2 auto}
+#reseed_urlselection.optionsingle{columns:1 auto}
+#updateHelper select{max-width:200px}
 }
 
 @media (max-width:900px){
@@ -2641,27 +2637,29 @@ td.optionsave,#i2pupdates td:first-child{width:30%;white-space:normal}
 
 @media (min-width:1200px){
 h3.tabletitle a,#version.tabletitle a{padding-left:18px}
-#thresholds th,#thresholds td{width:33%}
-.topness,#newsStatus,#newsDisplay{font-size:9pt}
 .news hr{margin-bottom:5px}
+.topness,#newsStatus,#newsDisplay{font-size:9pt}
 #help h3,#faq h3{font-size:10.5pt}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:var(--border_inner)}
 #terms p{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 #terms p:first-child{margin-top:0}
+#thresholds th,#thresholds td{width:33%}
 #jobstats tbody td:first-child,#jobstats tbody tr:hover td:first-child{padding:6px 0 6px 26px;background-image:var(--yes);background-position:7px center;background-repeat:no-repeat;background-size:12px}
 #jobstats tfoot tr td:first-child{padding-left:8px;background-image:none}
 }
 
 @media (min-width:1400px){
+.statsName{min-width:540px}
 #changelog pre{margin-left:0;padding-left:10px;width:calc(100% - 22px);overflow-y:hidden;white-space:pre-wrap;font-size:10pt;columns:540px auto;column-gap:40px;column-rule:1px dotted #26235c}
 #stats #statlist{padding:10px;columns:auto 540px;column-gap:10px;text-align:center}
-.statsName{min-width:540px}
 }
 
 @media (min-width:1500px){
 body,.main,.main td,.news p,#news p,.statusnotes,textarea,th,.applabel a,tt,code,.messages,.messages #newsStatus,#news li{font-size:10pt}
 h1{padding:14px 15px 15px 62px;font-size:19pt;background-position:14px center}
 h2{font-size:14pt}
+img.app,img#sitelinks{margin-top:-5px;padding:14px 61px 44px}
+select,.main input[type=submit],.main input[type=reset],.main input[type=submit]:hover,.main input[type=reset]:hover,.main input[type=submit]:focus,.main input[type=reset]:focus,.main input[type=submit]:active,.main input[type=reset]:active,input.download[value^="Dump"]:hover,input.download[value^="Dump"]:focus{padding-top:7px;padding-bottom:7px}
 .appicon{padding-top:4px;height:50px}
 .applabel a,.applabel a:hover{padding:3px 0;max-width:146px}
 .applabel{width:150px}
@@ -2670,7 +2668,6 @@ h2{font-size:14pt}
 .applink{min-width:150px}
 .bw_title{margin-left:-60px;margin-right:-15px;padding-left:10px}
 .iframed .warning,.iframed #warning.sorry{margin-left:10px;margin-right:10px}
-img.app,img#sitelinks{margin-top:-5px;padding:14px 61px 44px}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin-bottom:-3px;min-width:40px;max-width:40px}
 .main button,.main input,select{font-size:10pt}
 .main[id^="config_"] th,h4#updateplugins{font-size:9.5pt}
@@ -2683,6 +2680,11 @@ img.app,img#sitelinks{margin-top:-5px;padding:14px 61px 44px}
 .cells tt,#profilelist tt,#floodfills tt{margin-left:1px;margin-right:2px;font-size:9pt}
 .joblog h3{margin-top:8px}
 .ui_lang{width:138px}
+.percentBarOuter{width:210px}
+.percentBarText{margin-top:-2px;width:230px;font-size:10pt}
+.sb td,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,.smallhead,pre,#newsStatus,#newsDisplay{font-size:9pt}
+.sb_notice{margin-bottom:-8px}
+.tunneldisplay td:first-child img{margin:0 2px;width:28px;height:21px;box-shadow:0 0 0 1px #225}
 #bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:60px;padding-right:15px;min-width:240px;background-position:20px calc(50% + 14px)}
 #banlist{padding:3px}
 #banlist li{width:calc(100% - 18px)}
@@ -2709,8 +2711,6 @@ h4#updateplugins{margin-top:-15px}
 #news #newsDisplay a{margin-top:0}
 #ntcpconnections th,#udpconnections th,#newsDisplay{font-size:90%}
 #peerprofiles.widescroll{padding-top:114px}
-.percentBarOuter{width:210px}
-.percentBarText{margin-top:-2px;width:230px;font-size:10pt}
 #pluginconfig{margin-top:-15px}
 #plugininstall2 td{padding-bottom:12px}
 #profilelist td:first-child,#profilelist th:first-child,#floodfills td:first-child,#floodfills th:first-child{width:1%;white-space:nowrap}
@@ -2724,12 +2724,9 @@ h4#updateplugins{margin-top:-15px}
 #sb_memoryBar.percentBarOuter,#sb_CPUBar.percentBarOuter{margin:-5px -8px -8px}
 #sb_newsheadings{margin-left:-1px;margin-bottom:-10px;width:200px}
 #sb_newsheadings table{width:218px}
-.sb_notice{margin-bottom:-8px}
 #sb_services a:link,#sb_internals a:link,#sb_advanced a:link,#sb_help a:link{max-width:227px}
 #sb_services a{padding-top:4px;padding-bottom:4px}
 #sb_services{margin-bottom:-10px;width:240px}
-.sb td,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,.smallhead,pre,#newsStatus,#newsDisplay{font-size:9pt}
-select,.main input[type=submit],.main input[type=reset],.main input[type=submit]:hover,.main input[type=reset]:hover,.main input[type=submit]:focus,.main input[type=reset]:focus,.main input[type=submit]:active,.main input[type=reset]:active,input.download[value^="Dump"]:hover,input.download[value^="Dump"]:focus{padding-top:7px;padding-bottom:7px}
 #servletError .iframed #warning2,.iframed #warning2.sorry{margin:-16px 8px 10px}
 #sidebar button.download{font-size:10pt}
 #sidebar button,#sidebar .stop,#sidebar .reload{min-width:110px}
@@ -2752,8 +2749,8 @@ table[id^="sb_"],#sidebar #sb_localtunnels{width:236px}
 @supports not (-moz-appearance:none){#searchbar span{margin:-1px -1px -5px}}
 
 @media (min-width:1634px){
-.leasesets_container{margin-bottom:8px}
 th code{font-size:9pt}
+.leasesets_container{margin-bottom:8px}
 }
 
 @media (min-width:1828px){
@@ -2764,10 +2761,16 @@ th code{font-size:9pt}
 h1[class]{padding:17px 20px 16px 64px;font-size:20pt;background-position:15px center}
 h2{padding:12px 10px}
 h3.h3table,h3.tabletitle,#i2pclientconfig,#advancedclientconfig,#webappconfiguration,#pconfig,#pluginfromurl,#pluginfromfile,#updateplugins,#pluginmanage,#bannedpeers,h3.ptitle,#transports,#upnpstatus,h3.sybils,#config_keyring h3{padding:9px 10px}
+p,.infohelp,.infowarn,td.infohelp,td.infowarn,.logo a,#console code,#console li,#console p,div[id^="config_"] td,#help code,#help li,#help p,#help table,#news .newsentry p,#warning a,#warning h4,#warning li,#warning p{font-size:10.5pt}
 .applink{margin:3px 4px 5px;min-width:164px}
 .applabel{width:160px}
 .applabel a,.applabel a:hover{max-width:154px}
 .configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p.sybilinfo,p.infowarn,td.infowarn{padding:20px 25px 20px 55px}
+.main,.news,h1,#warning.sorry,#warning2.sorry{margin-left:268px}
+.routerid img{width:auto;height:14px}
+.sb td,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,.smallhead,pre,#newsStatus,#newsDisplay,.footnote,.topness,#bwlimiter a,#advancedconfig a,.tabletitle a,#upnpconfig a,#servicedebug a,.ptitle a,#configstats th a,#graphinfo a,.h3navlinks,.applink a:link,.applink a:hover,.applink a:active{font-size:9.5pt}
+.sb td{padding-top:1px;padding-bottom:1px}
+.sb td:first-child{max-width:120px}
 div[id^="config_"] .encDests td,div[id^="config_"] .encDests th{font-size:9pt}
 div[id^="config_"] td:not(.infowarn):not(.infohelp){padding-top:8px;padding-bottom:8px}
 div[id^="config_"] .confignav{padding:4px 4px 5px 3px;border-left:0}
@@ -2777,11 +2780,6 @@ div[id^="config_"] .tab a{padding:4px 6px}
 div[id^="config_"] .confignav{padding:0}
 div[id^="config_"] .tab,div[id^="config_"] .tab2{margin-top:-1px}
 div[id^="config_"] .tab:first-child{margin-left:-1px}
-.main,.news,h1,#warning.sorry,#warning2.sorry{margin-left:268px}
-.routerid img{width:auto;height:14px}
-.sb td,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,.smallhead,pre,#newsStatus,#newsDisplay,.footnote,.topness,#bwlimiter a,#advancedconfig a,.tabletitle a,#upnpconfig a,#servicedebug a,.ptitle a,#configstats th a,#graphinfo a,.h3navlinks,.applink a:link,.applink a:hover,.applink a:active{font-size:9.5pt}
-.sb td{padding-top:1px;padding-bottom:1px}
-.sb td:first-child{max-width:120px}
 #applinks,#sitelinks{padding:8px 10px 8px 34px;font-size:11pt}
 #bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{margin-left:12px}
 #config_advanced #advconf td.tabletextarea{padding-top:0;padding-bottom:0}
@@ -2790,7 +2788,6 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #error500 #sidebar img[src$="i2plogo.png"]{margin-top:-1px;margin-bottom:-9px}
 #joinfamily tr:last-child td,#newfamily tr:last-child td,#plugininstall tr:nth-child(n+2) td{padding:8px}
 #logs li,pre#service_logs,#routerlogs li{font-size:10pt}
-#news .newsentry p,#console p,#console li,#help p,#help li,#console code,#help code,#help table,#warning p,#warning li,#warning a,.logo a,#warning h4,.infowarn,.infohelp,td.infowarn,td.infohelp,p,div[id^="config_"] td{font-size:10.5pt}
 #newsStatus,#news #newsDisplay a,.newsAuthor{font-size:9pt}
 #plugininstall2 td{padding:8px}
 #plugininstall #url td:first-child{padding-left:50px}
