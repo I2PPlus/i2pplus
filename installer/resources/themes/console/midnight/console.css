@@ -21,8 +21,6 @@
 /* globals */
 html{background:var(--bodybg)}
 body{margin:2px 0 0;padding:0;text-align:center;font:8.5pt/130% var(--bodyfont)}
-a:active tt{color:#9fe9f9}
-a:link tt,a:visited tt{color:#4e47bf}
 a[name="chelp"],a[name="help"]{pointer-events:none}
 code{text-align:left;font:9pt var(--monospaced);color:#393}
 div[id^="config_"] td:not(.infohelp):not(.infowarn){padding-left:10px;padding-right:10px}
@@ -51,20 +49,17 @@ pre{width:98%;overflow-x:auto;text-align:left;font:8.5pt var(--monospaced);color
 small{font-size:9pt}
 table hr{margin:0 0;padding:0 0;height:1px;display:none;color:#26235c;border:0 solid #26235c;background:#26235c}
 table{margin:1px 0;padding:1px;width:100%;font-size:9pt;border-collapse:collapse;border:var(--border_inner)}
-table tt,#jardump td:nth-child(4){color:#393}
 td{padding:5px}
 th code{user-select:all}
 th{padding:6px 2px;line-height:1.1;text-align:center;font-size:9pt;color:var(--ink);border-top:var(--border_inner);border-bottom:var(--border_inner);background:var(--th);background-size:100% 4px,4px 100%}
 tr:hover{box-shadow:none}
 tr{vertical-align:middle;box-shadow:var(--highlight),inset 0 0 2px 1px #00003a;contain:layout}
-tt{font:bold 8.5pt var(--monospaced);color:#393}
 ul{margin:0;padding:0}
 .clearer{margin-bottom:-16px;height:0;clear:left;line-height:0}
 .familysearch{background:var(--family) no-repeat center center/12px,var(--element)}
 .footnote,.topness{display:none}
 .inbound{background:var(--in) no-repeat center center}
 .inbound,.outbound{display:inline-block;width:16px;height:16px;vertical-align:middle;background-size:16px}
-.infohelp tt{font-size:9pt}
 .main a:hover,a:hover tt{color:var(--a_hover)}
 .main{margin:-1px 3px 5px 212px;padding:0 10px;width:auto;min-width:620px;position:relative;text-align:left;font-size:9pt;color:var(--ink);border:var(--border);background:var(--bg_main)}
 .main#home{padding-bottom:3px}
@@ -1178,9 +1173,6 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 #tunnelconfig th:not(.th_title)[colspan="3"]{padding:12px 10px 12px 34px;text-transform:none;letter-spacing:0;word-spacing:0;text-shadow:0 1px 1px #000;box-shadow:var(--highlight),inset 0 0 2px 1px #f00;background:var(--infowarn) no-repeat 10px center,linear-gradient(180deg,rgba(128,128,128,.05),rgba(0,0,0,.3)),repeating-linear-gradient(180deg,#400 2px,#100 4px);background-size:18px,100%,100% 4px}
 #upnpscan{padding:5px 15px;margin:-11px 0 10px;border:var(--border_inner);background:#000}
 
-.routerid img{margin-right:2px;box-shadow:var(--outline)}
-.flag{margin-right:3px}
-
 /* configpeers banlist */
 #bannedips{margin-bottom:-5px;margin-top:-1px}
 #bannedips table{margin-bottom:-1px}
@@ -1274,14 +1266,7 @@ table[cellspacing="30"]>tbody>tr>th[colspan="3"]{padding:10px;word-spacing:.1em;
 .netdb_leases li b.leaseNumber{margin-right:-6px;min-width:22px;text-align:center}
 .netdb_gateway{margin-left:0;margin-right:-8px;vertical-align:bottom}
 .netdb_gateway img{vertical-align:bottom}
-.netdb_tunnel{margin-left:4px;margin-right:-4px;padding:2px 4px;display:inline-block;border:var(--border_badge);border-radius:2px;background:#003}
 .netdb_leases li,.netdb_leases li>*{vertical-align:middle}
-.netdb_leases .tunnel_id{min-width:74px}
-.netdb_leases .routerid{margin-left:2px;vertical-align:middle;background:none}
-.netdb_leases .routerid img{margin:-1px 4px 0 -1px;display:inline-block}
-.netdb_leases .tunnel_peer{margin:0 3px;padding-right:2px;vertical-align:middle;border-radius:2px}
-.netdb_leases .tunnel_peer tt,.netdb_leases .tunnel_peer tt a{font-size:8.5pt;font-weight:700}
-.netdb_leases .tunnel_peer tt,.netdb_leases .tunnel_peer a{letter-spacing:.1em;margin:0;padding:0}
 .main li .netdb_expiry{font-weight:400;text-transform:lowercase;font-style:italic}
 
 /* logs */
@@ -1572,7 +1557,8 @@ span#distance{color:#d6fffd}
 .leaseset th:last-child,.leaseset td:nth-child(2){text-align:right;padding-right:5px}
 .leaseset td:first-child img{margin-left:3px;margin-right:2px;vertical-align:middle}
 .viewfullentry,.viewprofile,.configpeer{font-size:0}
-#leasesetdebug,#leasesetsummary{margin-top:-4px;margin-bottom:10px}
+#leasesetdebug{margin:-4px 0 10px}
+.leaseset+#leasesetdebug{column-span:all;margin:10px 0 0}
 #leasesetdebug th,#leasesetsummary th{font-weight:700;text-transform:uppercase;font-size:10pt;letter-spacing:.08em;word-spacing:.1em;padding:8px 10px}
 #leasesetdebug th a,#leasesetsummary a{font-size:9pt;text-transform:capitalize;letter-spacing:normal;word-spacing:normal}
 #leasesetsummary td:first-child{width:100px;white-space:nowrap;padding-left:10px}
@@ -1582,6 +1568,7 @@ span#distance{color:#d6fffd}
 #leasesetdebug td:nth-child(2){width:10px}
 #leasesetdebug th a,#leasesetsummary th a{font-size:0}
 #noleasesets,#notinitialized,.netdbnotfound{margin-top:-4px;margin-bottom:10px;padding:20px 25px 20px 55px;text-align:left;font-weight:700;border:var(--border_inner);background:#000 var(--infohelp) no-repeat 15px center/28px}
+#leasesetsummary{margin-top:-4px;margin-bottom:10px}
 
 /* infohelp/warn */
 .infohelp,#helptranslate,#consolepass tr:first-child td,#gatherstats{white-space:normal;line-height:1.4;box-shadow:var(--highlight),inset 0 0 2px 1px #606}
@@ -1614,9 +1601,6 @@ a[href^="https://gwhois"]::after{margin:0 1px 0;width:12px;height:12px;display:i
 .b32{margin:-2px 8px 0 0;text-transform:none;font-size:80%;color:#990;float:right;vertical-align:middle}
 .b32{margin:-3px 6px 0 0;padding:4px 8px;min-width:0;line-height:1}
 h3 .b32{font-size:inherit}
-img+tt{letter-spacing:.15em}
-.routerid tt{min-width:32px;display:inline-block;letter-spacing:.15em;text-align:center}
-.routerid tt,.routerid a tt{font-weight:700}
 .tunnel_cap,.tier,.ff,.unreachable,.reachable,#capabilities_key b{margin:1px 2px;padding:2px 4px;display:inline-block;min-width:16px;vertical-align:middle;text-align:center;border:var(--border_badge);text-shadow:0 1px 1px #000;border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
 .tier.isD,#netdbcongestion a.isD{background:var(--isD),var(--element)}
 .tier.isE,#netdbcongestion a.isE{background:var(--isE),var(--element)}
@@ -1625,13 +1609,10 @@ img+tt{letter-spacing:.15em}
 .tunnel_cap:empty{border:0}
 .tunnel_cap:empty::after{content:"?"}
 .tunnel_id:not(:empty){margin-left:2px;padding:2px 8px 2px 18px;min-width:78px;display:inline-block;line-height:1.35;vertical-align:middle;text-align:right;border:var(--border_badge);box-shadow:var(--highlight);background:var(--hardhat) no-repeat 6px center/12px, var(--element)}
-.tunnel_local,span.b32,.routerid{margin:0 3px;padding:2px;min-width:64px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
+.tunnel_local,span.b32{margin:0 3px;padding:2px;min-width:64px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
 span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 .tunnel_local{padding:2px;min-width:102px;box-sizing:border-box;line-height:1.7;font-size:80%;text-transform:lowercase}
 .tunnel_peer{display:inline-block;vertical-align:middle}
-.tunnel_peer{margin:0 3px}
-.tunnel_peer img,.routerid img{margin:2px 4px -2px 2px;display:inline-block}
-.tunnel_peer tt{margin-left:2px;display:inline-block}
 #tunnel_defs{margin-top:-1px;margin-bottom:10px}
 #tunnel_defs td{padding:8px}
 #tunnel_defs td:first-child{display:none!important}
@@ -1649,7 +1630,6 @@ span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 #tunnels td:not(.rif):not(.rih):not(.rbw){padding:4px}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
 #tunnels img{font-size:0}
-.tunnel_peer{display:inline-block;vertical-align:middle}
 #exploratorytunnels{margin-top:15px}
 .statusnotes{margin:-2px 0 5px 0;padding:10px;font-size:9pt;font-style:italic;text-align:center;border:var(--border_inner);box-shadow:var(--bevel);background:var(--notes)}
 h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
@@ -1665,8 +1645,6 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #ssuadv{float:none;margin-left:5px}
 span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .tx .right,.rx .right,.duptx .right,.duprx .right,.cwnd .left,.cwnd .right{width:auto}
-#peers .routerid,#profiles .routerid{padding:3px 2px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:2px;background:var(--element)}
-#peers .routerid img,#profiles .routerid img{margin-right:0}
 #peers img,#peers a[href^="https://gwhois"]{margin:0;padding:0;display:inline-block;vertical-align:middle;font-size:0}
 #peers img:hover[src="/themes/console/images/search.svg"]{transform:scale(1.2)}
 #peers img:active[src="/themes/console/images/search.svg"]{transform:scale(.9)}
@@ -1762,13 +1740,15 @@ b.netdb_transport{display:inline-block;margin-right:5px}
 .netdb_info+b{margin-left:15px}
 .netdb_info.host::selection,.netdb_info.port::selection{color:#fff;background:#090}
 .netdb_info.host,.netdb_info.port{font-size:90%;user-select:all}
+.netdb_leases .tunnel_id{min-width:74px}
+.netdb_leases .tunnel_peer{margin:0 3px;padding-right:2px;display:inline-block;vertical-align:middle}
 .netdbstats .hide+hr{display:none}
 .netdbstats hr#expl,.netdbstats hr#hrd{display:block}
 .netdbStats hr,.sybil_routerinfo hr{margin:2px 0;display:block;color:transparent;opacity:.5;border-bottom:1px solid #224;background:none}
 .netdbStats li{margin:0 10px 0 0;padding:1px 0;max-width:210px;white-space:normal;line-height:1.4;vertical-align:middle;list-style:none;text-align:left}
 .netdbStats li.hide+hr{display:none}
 .netdbStats li .bullet:last-of-type{opacity:0}
-.netdb_tunnel{margin-right:3px;margin-left:-3px;border-radius:0 2px 2px 0;background:#113}
+.netdb_tunnel{margin-right:3px;margin-left:-5px;display:inline-block}
 .signingkey.encryption{padding-left:18px;background:var(--lock) 4px calc(50% - 1px) no-repeat,var(--element);background-size:12px,100%}
 .signingkey{margin:2px 0;padding:2px 4px 2px 16px;display:inline-block;font-size:90%;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--crypto) no-repeat 3px center,var(--element);background-size:12px,100%}
 .netdbentry tr:nth-child(2) td:last-child b,.netdbentry .familyname,.netdbStats li,.netdbStats b,#netdb .netdbentry th b,#netdb .netdbentry td:first-child b,#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code,.netdb_addressesli,.netdb_ouraddresses,.netdb_ouraddresses .netdb_transport{display:inline-block}
@@ -1961,10 +1941,11 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 /* jardump */
 #jardump{padding:0;overflow:auto}
 #jardump{margin-top:-1px;margin-bottom:0;font-size:8pt;border:0}
-#revision,#jardump a tt{padding-left:12px;background:var(--gitlab) no-repeat left center/10px}
+#revision,#jardump a code{padding-left:12px;background:var(--gitlab) no-repeat left center/10px}
 #jardump tt{letter-spacing:-.03em;font-size:9pt;font-weight:400}
 #jardump a tt{padding-left:13px;background-size:11px}
-#jardump td:nth-child(4) tt{font-size:8pt}
+#jardump td:nth-child(4){color:#393}
+#jardump td:nth-child(4) code{font-size:8pt}
 #jardump hr{margin:1px 0 0;width:100%;height:1px;display:block;background:#120f35}
 #jardump th{border-right:none;border-left:none;border-bottom-color:#26235c}
 #jardump th,#jardump td{vertical-align:middle;text-align:center}
@@ -2677,14 +2658,12 @@ select,.main input[type=submit],.main input[type=reset],.main input[type=submit]
 .sorry{margin-left:232px}
 .subheading b{font-size:10.5pt}
 .themechoice,.langselect{width:134px}
-.cells tt,#profilelist tt,#floodfills tt{margin-left:1px;margin-right:2px;font-size:9pt}
 .joblog h3{margin-top:8px}
 .ui_lang{width:138px}
 .percentBarOuter{width:210px}
 .percentBarText{margin-top:-2px;width:230px;font-size:10pt}
 .sb td,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,.smallhead,pre,#newsStatus,#newsDisplay{font-size:9pt}
 .sb_notice{margin-bottom:-8px}
-.tunneldisplay td:first-child img{margin:0 2px;width:28px;height:21px;box-shadow:0 0 0 1px #225}
 #bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:60px;padding-right:15px;min-width:240px;background-position:20px calc(50% + 14px)}
 #banlist{padding:3px}
 #banlist li{width:calc(100% - 18px)}
@@ -2825,9 +2804,10 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rid,.rid td{margin:0;padding:2px 1px!important;line-height:0;vertical-align:middle;text-align:center;border:var(--border_badge)!important;box-shadow:var(--highlight);background:var(--badge)}
 .rid{width:unset}
 .rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em}
-.rid .rif{padding:2px!important}
+.rid .rif{padding:1px 0!important}
 .rid .rif,.rid .rif img{line-height:0;font-size:0}
-.rif img{padding:0;margin:0;width:24px;height:18px;vertical-align:middle;display:inline-block}
+.rif img{padding:0;margin:1px 0;width:24px;height:18px;vertical-align:middle;display:inline-block}
+.tunneldisplay .rif img{margin:0 2px}
 .rid .rih{padding:2px 6px!important;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{padding-left:4px!important;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .ric{background:var(--badge)}
@@ -2845,11 +2825,14 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
 .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
 #banlist li .rid{margin:1px 5px -1px -2px;float:left}
-#banlist .rif img{margin-left:1px}
-#profiles span[hidden]{display:none!important}
+#banlist .rif img{margin:0}
+#peers .edit a{margin:2px;vertical-align:middle}
+#peers .reachability{display:none}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
-#peers .edit a{margin:2px;vertical-align:middle}
+#peers #ntcpcon,#peers #udpcon{position:relative}
+#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
+#profiles span[hidden]{display:none!important}
 #topCount{display:inline-block;position:absolute;right:2px;top:2px}
 #topCount table,#topCount td{line-height:1}
 #topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:3px;border:0}
@@ -2857,6 +2840,3 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #topCount td span{padding:2px 4px 1px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(0,0,0,.2)}
 #topCount td#ff{background:linear-gradient(135deg,rgba(0,0,0,0)82%,rgba(192,80,0,.8)82%),var(--badge)}
 #topCount td#u{background:linear-gradient(45deg,rgba(0,0,0,0)82%,rgba(192,0,0,.8)82%),var(--badge)}
-#peers .reachability{display:none}
-#peers #ntcpcon,#peers #udpcon{position:relative}
-#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
