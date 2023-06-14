@@ -309,13 +309,11 @@ p:empty+.sb_notice{margin-top:10px}
 #sb_localtunnels a{width:100%;max-width:156px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #sb_localtunnels img{margin:0;padding:0;width:16px;height:16px;font-size:0;opacity:0}
 #sb_localtunnels img::before{content:"";display:inline-block;width:16px;height:16px}
-#sb_localtunnels tr:nth-child(n+2) td{border-top:1px solid #18153788}
-#sb_localtunnels tr:nth-child(n+3) td{border-top:1px solid #18153799}
+#sb_localtunnels td{border-top:1px solid #000;border-bottom:1px solid #000}
 #sb_localtunnels td{line-height:1}
 #sb_localtunnels td:first-child{padding:2px 1px;width:18px;text-align:left}
 #sb_localtunnels td:last-child{padding-right:0;width:1%;text-align:right}
 #sb_localtunnels td:first-child{background-image:var(--client);background-position:center center;background-repeat:no-repeat;background-size:16px}
-#sidebar #sb_localtunnels td:nth-child(2)::before{display:none}
 #sb_localtunnels td.tunnelServer{background-image:var(--server)}
 #sb_localtunnels td.tunnelI2PSnark{background-image:url(/themes/console/images/snark.svg)}
 #sb_localtunnels td.ping{background-image:var(--ping)}
@@ -324,6 +322,7 @@ p:empty+.sb_notice{margin-top:10px}
 #sb_localtunnels td.tunnelRebuilding{background-image:url(/themes/console/images/local_down.png)}
 #sb_localtunnels tr:hover,#sb_localtunnels tr:hover td{background-color:#39144f}
 #sb_localtunnels tr:active a{color:var(--active)}
+#sidebar #sb_localtunnels td:nth-child(2)::before{display:none}
 
 /* apps */
 #sb_services{width:204px;margin:-6px -10px -8px;border-collapse:collapse}
