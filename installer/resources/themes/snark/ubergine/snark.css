@@ -1031,7 +1031,8 @@ td.peerCount:empty::after{display:none}
 .torrentName a{max-width:320px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #commentDeleteAction td{padding-top:4px}
 #configSection .configTitle,.iframed .toggleview{padding:0 5px 3px}
-#navbar a,#navbar a:hover,#navbar a:focus,#navbar a:active{padding:4px 8px 4px 22px;background-size:15px auto,100%;background-position:6px 50%,center center}
+#navbar a,#navbar a:hover,#navbar a:focus,#navbar a:active{padding:4px 8px 4px 22px;background-size:15px auto,100%;background-position:center center}
+#navbar a.nav_tracker{background-position:6px 50%,center center}
 #navbar{margin-bottom:6px;width:calc(100% - 22px);min-width:600px;transition:ease width .5s .5s}
 #totals{margin-left:4px;white-space:nowrap}
 #trackerselect td{font-size:9pt}
