@@ -30,6 +30,8 @@
     setInterval(updateStats, 60000);
   }
   function updateStats() {
+    progressx.show();
+    progressx.progress(0.5);
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/stats?' + new Date().getTime(), true);
     xhr.responseType = "document";
@@ -44,6 +46,7 @@
       }
     }
     xhr.send();
+    progressx.hide();
   }
   var infohelp = document.querySelector("#gatherstats");
   var nav = document.querySelector(".confignav");
@@ -60,13 +63,14 @@
       updateStats();
       initTabs();
       element.target.classList.add("tab2");
+      progressx.hide();
     }
   });
-  document.body.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
     initTabs();
+    progressx.hide();
   });
-  window.addEventListener("DOMContentLoaded", progressx.hide());
 </script>
 </body>
 </html>
