@@ -259,6 +259,8 @@ td.peerCount:empty{text-align:center}
 .stopped.complete .peerCount b::before{border-color:transparent #28f transparent transparent}
 .stopped.incomplete .peerCount b::before,.inactive.neterror .peerCount b::before{border-color:transparent #900 transparent transparent}
 .stopped.incomplete .peerCount b,.inactive.neterror .peerCount b{background:#900}
+.starting .peerCount b::before{border-color:transparent #fc0 transparent transparent}
+.starting .peerCount b{height:10px;background:repeating-linear-gradient(135deg,#fc0,#fc0 8px,#c90 9px,#c90 17px)}
 
 /* download bars */
 .percentBarInner,.percentBarOuter{height:14px;max-width:80px}
