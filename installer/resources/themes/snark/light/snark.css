@@ -146,7 +146,8 @@ tfoot .RateUp,tfoot .RateDown,td.RateUp,td.RateDown,tfoot .torrentUploaded,td.to
 .downloading.active:hover td:last-child{background:linear-gradient(to left,#3c3,#3c3 3px,transparent 3px)}
 .downloading.active td:last-child{background:linear-gradient(to left,#3c3,#3c3 3px,transparent 3px)}
 .fileStatus{padding:2px 10px;width:1%;white-space:nowrap;font-style:italic;text-align:center}
-.filtered{border-top:var(--border_softer)}
+.filtered{border-top:var(--border_inner);background:var(--row)}
+.filtered~.filtered{border-top:var(--border_softer)}
 .graphicStatus{max-width:32px;text-align:center}
 .graphicStatus{white-space:nowrap;width:1%}
 .iframed .routerdown{margin-top:0;margin-bottom:11px}
@@ -162,7 +163,7 @@ tfoot .RateUp,tfoot .RateDown,td.RateUp,td.RateDown,tfoot .torrentUploaded,td.to
 .routerdown::after{margin-top:6px;width:40px;height:40px;display:inline-block;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";animation:linear spin 5s reverse infinite}
 .routerdown{margin:20px 10px 10px;padding:15px;font-size:0;color:#001;border:1px solid #bbc;border-radius:3px;box-shadow:var(--highlight),inset 5px 5px 3px #88a;background:repeating-linear-gradient(45deg,#fff,#eef 20px,#eef 20px,#fff 40px) right top,repeating-linear-gradient(135deg,#ddf,#eef 20px,#fff 20px,#eef 40px) left top;background-size:200%,200%;animation:linear down 60s forwards infinite reverse;background-blend-mode:multiply,normal}
 .rowEven+.rowEven td:nth-child(2),.rowOdd td+.rowOdd td:nth-child(2){padding:4px 0;text-align:left}
-.rowOdd,.rowEven,#commentInfo tr,#userComments tr{border-top:var(--border_softer);background:var(--row)}
+.rowOdd:not(.filtered),.rowEven:not(.filtered),#commentInfo tr,#userComments tr{border-top:var(--border_softer);background:var(--row)}
 .seeding.active:hover td:last-child{background:linear-gradient(to left,#f64384,#f64384 3px,transparent 3px)}
 .seeding.active td:last-child{background:linear-gradient(to left,#f64384,#f64384 3px,transparent 3px)}
 .snarkFileName{padding:4px 0;text-align:left}
