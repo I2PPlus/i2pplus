@@ -1247,6 +1247,7 @@ code,input,textarea{font-size:9pt}
 .priority{padding:4px 10px;width:1%;white-space:nowrap;vertical-align:middle;text-align:center;font-size:8pt}
 .RateDown:not(:empty),.RateUp:not(:empty){min-width:70px}
 .snarkNav:first-child:not(:last-child){padding-left:32px;background-position:11px center,center center}
+.starting .peerCount b{height:12px}
 .torrentAction{padding-right:3px}
 .torrentDownloaded,.torrentUploaded,.RateDown,.RateUp{min-width:76px}
 .torrentETA:not(:empty){min-width:80px}
