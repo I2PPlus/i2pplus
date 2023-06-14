@@ -477,11 +477,11 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #sb_peers_condensed[hidden],#sb_tunnels_condensed[hidden]{display:none}
 #sb_peers_condensed:not([hidden])+hr,#sb_tunnels_condensed:not([hidden])+hr{display:block}
 #sidebar #sb_peers_condensed td,#sidebar #sb_tunnels_condensed td{padding:1px 2px 1px 1px;max-width:unset;display:flex;justify-content:space-evenly;align-content:center}
-#sb_peers_condensed .sb_icon,#sb_tunnels_condensed .sb_icon{margin:0;flex:auto;padding:18px 5px;box-shadow:var(--bevel);display:inline-block;background-blend-mode:luminosity}
+#sb_peers_condensed .sb_icon,#sb_tunnels_condensed .sb_icon{margin:0;flex:auto;padding:15px 5px;box-shadow:var(--bevel);display:inline-block;background-blend-mode:luminosity}
 #sb_peers_condensed .sb_icon:hover,#sb_peers_condensed .sb_icon:focus,#sb_tunnels_condensed .sb_icon:hover,#sb_tunnels_condensed .sb_icon:focus{box-shadow:var(--highlight),0 0 1px 1px var(--a_hover) inset;background-blend-mode:normal}
 #sb_peers_condensed .sb_icon:active,#sb_tunnels_condensed .sb_icon:active{box-shadow:var(--highlight),0 0 1px 1px var(--a_hover) inset,4px 4px 4px rgba(0,0,0,.85) inset}
 #sb_peers_condensed span:not(.badge),#sb_tunnels_condensed span:not(.badge){position:relative;margin:0;height:19px;width:19px;line-height:0}
-#sb_peers_condensed .badge,#sb_tunnels_condensed .badge{position:absolute;right:-2px;top:-3px;display:inline-block;background:rgba(0,16,0,.45);text-align:center;padding:1px 3px 2px;min-width:20px;border-radius:0 0 0 2px;margin:0;line-height:1;font-size:95%;pointer-events:none}
+#sb_peers_condensed .badge,#sb_tunnels_condensed .badge{position:absolute;right:-3px;top:0;display:inline-block;background:rgba(0,16,0,.45);text-align:center;padding:1px 3px 2px;min-width:20px;border-radius:0 0 0 2px;margin:0;line-height:1;font-size:95%;pointer-events:none}
 .sb_icon#fast{background:var(--fast) no-repeat 25% center/19px,var(--badge)}
 .sb_icon#floodfill{background:var(--floodfill) no-repeat 25% center/19px,var(--badge)}
 .sb_icon#firewalled{background:var(--net_firewalled) no-repeat 25% center/19px,var(--badge)}
