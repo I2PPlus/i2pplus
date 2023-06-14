@@ -259,6 +259,8 @@ td.peerCount:empty{text-align:center}
 .stopped.complete .peerCount b::before{border-color:transparent #28f transparent transparent}
 .stopped.incomplete .peerCount b::before,.inactive.neterror .peerCount b::before{border-color:transparent #900 transparent transparent}
 .stopped.incomplete .peerCount b,.inactive.neterror .peerCount b{background:#900}
+.starting .peerCount b::before{border-color:transparent #fc0 transparent transparent}
+.starting .peerCount b{height:10px;background:repeating-linear-gradient(135deg,#fc0,#fc0 8px,#c90 9px,#c90 17px)}
 
 /* download bars */
 .percentBarInner,.percentBarOuter{height:14px;max-width:80px}
@@ -1029,7 +1031,8 @@ td.peerCount:empty::after{display:none}
 .torrentName a{max-width:320px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #commentDeleteAction td{padding-top:4px}
 #configSection .configTitle,.iframed .toggleview{padding:0 5px 3px}
-#navbar a,#navbar a:hover,#navbar a:focus,#navbar a:active{padding:4px 8px 4px 22px;background-size:15px auto,100%;background-position:6px 50%,center center}
+#navbar a,#navbar a:hover,#navbar a:focus,#navbar a:active{padding:4px 8px 4px 22px;background-size:15px auto,100%;background-position:center center}
+#navbar a.nav_tracker{background-position:6px 50%,center center}
 #navbar{margin-bottom:6px;width:calc(100% - 22px);min-width:600px;transition:ease width .5s .5s}
 #totals{margin-left:4px;white-space:nowrap}
 #trackerselect td{font-size:9pt}
@@ -1245,6 +1248,7 @@ code,input,textarea{font-size:9pt}
 .priority{padding:4px 10px;width:1%;white-space:nowrap;vertical-align:middle;text-align:center;font-size:8pt}
 .RateDown:not(:empty),.RateUp:not(:empty){min-width:70px}
 .snarkNav:first-child:not(:last-child){padding-left:32px;background-position:11px center,center center}
+.starting .peerCount b{height:12px}
 .torrentAction{padding-right:3px}
 .torrentDownloaded,.torrentUploaded,.RateDown,.RateUp{min-width:76px}
 .torrentETA:not(:empty){min-width:80px}
