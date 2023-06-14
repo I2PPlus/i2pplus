@@ -265,29 +265,8 @@ button.download.control:active{background:var(--download) no-repeat center cente
 #sb_general td,#sb_shortgeneral td,#sb_advancedgeneral td{white-space:nowrap}
 #clock{margin:-7px -10px -10px;padding:11px 0 9px;position:relative;z-index:10;font-size:18pt;font-weight:700;letter-spacing:.1em;box-shadow:var(--bevel_h1);opacity:.8}
 #clock::after{margin-left:3px;content:"UTC";display:inline-block;font-size:50%;vertical-align:middle}
-
-#sb_localtunnels{margin-top:-6px;margin-bottom:-8px;width:200px;border-collapse:separate;border-spacing:0}
-#sb_localtunnels:not([hidden])+#localtunnelSummary{display:none}
-#sb_localtunnels a{width:100%;max-width:156px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#sb_localtunnels img{margin:0;padding:0;width:16px;height:16px;font-size:0;opacity:0}
-#sb_localtunnels img::before{content:"";display:inline-block;width:16px;height:16px}
-#sb_localtunnels td{line-height:1}
-#sb_localtunnels td:first-child{padding:2px 0 2px 1px;width:16px;text-align:left}
-#sb_localtunnels td:last-child{padding-right:0;width:1%;text-align:right}
-#sb_localtunnels td:first-child{background-image:var(--client);background-position:center center;background-repeat:no-repeat;background-size:16px}
-#sidebar #sb_localtunnels td:nth-child(2)::before{display:none}
-#sb_localtunnels td.tunnelServer{background-image:var(--server)}
-#sb_localtunnels td.tunnelI2PSnark{background-image:url(/themes/console/images/snark.svg)}
-#sb_localtunnels td.ping{background-image:var(--ping)}
-#sb_localtunnels td:last-child{background-image:url(/themes/console/images/local_inprogress.png);background-position:right 1px center;background-repeat:no-repeat;background-size:16px}
-#sb_localtunnels td.tunnelReady{background-image:url(/themes/console/images/local_up.png)}
-#sb_localtunnels td.tunnelRebuilding{background-image:url(/themes/console/images/local_down.png)}
-#sb_localtunnels tr:hover td:first-child{border-radius:2px 0 0 2px}
-#sb_localtunnels tr:hover td:last-child{border-radius:0 2px 2px 0}
-#sb_localtunnels tr:active a{color:var(--active)}
-
 #sb_services a:link,#sb_internals a:link,#sb_advanced a:link,#sb_help a:link{padding:1px .2em;max-width:191px;display:inline-block;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;word-break:break-all;vertical-align:middle}
-#sb_services a:hover,#sb_internals a:hover,#sb_advanced a:hover,#sb_localtunnels tr:hover,#sb_newsheadings a:hover,#sb_localtunnels tr:hover a,#sb_help a:hover,.news a:hover,#console a:hover,#help a:hover{color:var(--a_hover);border-radius:2px;background-color:#1e0b28}
+#sb_services a:hover,#sb_internals a:hover,#sb_advanced a:hover,#sb_newsheadings a:hover,#sb_help a:hover,.news a:hover,#console a:hover,#help a:hover{color:var(--a_hover);border-radius:2px;background-color:#1e0b28}
 #sb_services a:active,#sb_internals a:active,#sb_advanced a:active,#sb_help a:active,#sb_newsheadings a:active,#sb_localtunnels tr:active,.news a:active,#console a:active,#help a:active{color:var(--active);background-color:#39144f}
 #sb_peers a,#sb_peersadvanced a,#sb_tunnels a,#sb_general a,#sb_shortgeneral a,#sb_advancedgeneral a,#sb_queue a{padding:0;color:var(--ink)}
 #sb_peers a:hover,#sb_peers a:focus,#sb_peersadvanced a:hover,#sb_peersadvanced a:focus,#sb_tunnels a:hover,#sb_tunnels a:focus,#sb_queue a:hover,#sb_queue a:focus{color:var(--a)}
@@ -325,6 +304,25 @@ p:empty+.sb_notice{margin-top:10px}
 #sidebar a:hover{color:var(--a_hover)}
 #sidebar hr:last-child{margin-top:5px;margin-bottom:-5px}
 #sb_services,#sb_internals,#sb_advanced,#sb_help{margin-top:-5px;margin-bottom:-9px}
+#sb_localtunnels{margin-top:-6px;margin-bottom:-8px;width:200px;border-collapse:separate;border-spacing:0}
+#sb_localtunnels:not([hidden])+#localtunnelSummary{display:none}
+#sb_localtunnels a{width:100%;max-width:156px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#sb_localtunnels img{margin:0;padding:0;width:16px;height:16px;font-size:0;opacity:0}
+#sb_localtunnels img::before{content:"";display:inline-block;width:16px;height:16px}
+#sb_localtunnels td{border-top:1px solid #000;border-bottom:1px solid #000}
+#sb_localtunnels td{line-height:1}
+#sb_localtunnels td:first-child{padding:2px 1px;width:18px;text-align:left}
+#sb_localtunnels td:last-child{padding-right:0;width:1%;text-align:right}
+#sb_localtunnels td:first-child{background-image:var(--client);background-position:center center;background-repeat:no-repeat;background-size:16px}
+#sb_localtunnels td.tunnelServer{background-image:var(--server)}
+#sb_localtunnels td.tunnelI2PSnark{background-image:url(/themes/console/images/snark.svg)}
+#sb_localtunnels td.ping{background-image:var(--ping)}
+#sb_localtunnels td:last-child{background-image:url(/themes/console/images/local_inprogress.png);background-position:right 1px center;background-repeat:no-repeat;background-size:16px}
+#sb_localtunnels td.tunnelReady{background-image:url(/themes/console/images/local_up.png)}
+#sb_localtunnels td.tunnelRebuilding{background-image:url(/themes/console/images/local_down.png)}
+#sb_localtunnels tr:hover,#sb_localtunnels tr:hover td{background-color:#39144f}
+#sb_localtunnels tr:active a{color:var(--active)}
+#sidebar #sb_localtunnels td:nth-child(2)::before{display:none}
 
 /* apps */
 #sb_services{width:204px;margin:-6px -10px -8px;border-collapse:collapse}
@@ -364,9 +362,9 @@ p:empty+.sb_notice{margin-top:10px}
 #sb_newsheadings tr:last-child td{border-bottom:none}
 
 /* minigraph */
-#sb_graphstats{margin-top:1px;padding:2px 8px;display:inline-block;position:relative;z-index:1000;font-size:110%;font-weight:700;border:1px solid #26235c;border-top:none;background:rgba(0,0,0,.65);opacity:0;transition:ease opacity .3s}
+#sb_graphstats{margin-top:1px;padding:2px 8px;display:inline-block;position:relative;z-index:1000;font-size:110%;font-weight:700;text-shadow:1px 1px 1px rgba(0,0,0,.6);border:1px solid #26235c;border-top:none;border-radius:0 0 2px 2px;background:rgba(0,0,16,.5);opacity:0;transition:ease opacity .3s;pointer-events:none}
 #sb_graphcontainer:hover #sb_graphstats{opacity:1;transition:ease opacity .3s}
-#sb_graphcontainer{margin:-6px -9px -8px;padding:0 1px;height:44px;position:relative;z-index:10;overflow:hidden;box-shadow:inset 0 0 0 1px #26235c,inset 0 0 0 2px #000,inset 0 0 3px 1px #004;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 14px,rgba(112,107,199,.7) 15px,rgba(0,0,0,0) 15px,rgba(0,0,0,0) 30px),repeating-linear-gradient(to top,rgba(0,0,0,0),rgba(112,107,199,.3),rgba(0,0,0,0) 1px,rgba(0,0,0,0) 14px)}
+#sb_graphcontainer{margin:-6px -9px -8px;padding:0 1px;height:44px;position:relative;z-index:10;overflow:hidden;box-shadow:inset 0 0 0 1px #26235c,inset 0 0 0 2px #000,inset 0 0 3px 1px #004;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 16px,rgba(112,107,199,.3) 17px,rgba(0,0,0,0) 18px,rgba(0,0,0,0) 32px),repeating-linear-gradient(to top,rgba(0,0,0,0),rgba(112,107,199,.3),rgba(0,0,0,0) 1px,rgba(0,0,0,0) 14px)}
 #sidebar #minigraph{margin:-19px -1px 0;width:198px;height:40px}
 #xhr>hr+#sb_graphcontainer>span+a>#minigraph{height:40px}
 #sidebar #minigraphcontainer{margin-top:-43px;margin-left:1px;width:204px;height:39px;background-repeat:no-repeat;background-size:204px 40px}
@@ -478,11 +476,11 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #sb_peers_condensed[hidden],#sb_tunnels_condensed[hidden]{display:none}
 #sb_peers_condensed:not([hidden])+hr,#sb_tunnels_condensed:not([hidden])+hr{display:block}
 #sidebar #sb_peers_condensed td,#sidebar #sb_tunnels_condensed td{padding:1px 2px 1px 1px;max-width:unset;display:flex;justify-content:space-evenly;align-content:center}
-#sb_peers_condensed .sb_icon,#sb_tunnels_condensed .sb_icon{margin:0;flex:auto;padding:18px 5px;box-shadow:var(--bevel);display:inline-block;background-blend-mode:luminosity}
+#sb_peers_condensed .sb_icon,#sb_tunnels_condensed .sb_icon{margin:0;flex:auto;padding:15px 5px;box-shadow:var(--bevel);display:inline-block;background-blend-mode:luminosity}
 #sb_peers_condensed .sb_icon:hover,#sb_peers_condensed .sb_icon:focus,#sb_tunnels_condensed .sb_icon:hover,#sb_tunnels_condensed .sb_icon:focus{box-shadow:var(--highlight),0 0 1px 1px var(--a_hover) inset;background-blend-mode:normal}
 #sb_peers_condensed .sb_icon:active,#sb_tunnels_condensed .sb_icon:active{box-shadow:var(--highlight),0 0 1px 1px var(--a_hover) inset,4px 4px 4px rgba(0,0,0,.85) inset}
 #sb_peers_condensed span:not(.badge),#sb_tunnels_condensed span:not(.badge){position:relative;margin:0;height:19px;width:19px;line-height:0}
-#sb_peers_condensed .badge,#sb_tunnels_condensed .badge{position:absolute;right:-2px;top:-3px;display:inline-block;background:rgba(0,16,0,.45);text-align:center;padding:1px 3px 2px;min-width:20px;border-radius:0 0 0 2px;margin:0;line-height:1;font-size:95%;pointer-events:none}
+#sb_peers_condensed .badge,#sb_tunnels_condensed .badge{position:absolute;right:-3px;top:0;display:inline-block;background:rgba(0,16,0,.45);text-align:center;padding:1px 3px 2px;min-width:20px;border-radius:0 0 0 2px;margin:0;line-height:1;font-size:95%;pointer-events:none}
 .sb_icon#fast{background:var(--fast) no-repeat 25% center/19px,var(--badge)}
 .sb_icon#floodfill{background:var(--floodfill) no-repeat 25% center/19px,var(--badge)}
 .sb_icon#firewalled{background:var(--net_firewalled) no-repeat 25% center/19px,var(--badge)}
@@ -1037,7 +1035,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #sidebarconf button{margin:2px 6px 2px 2px;padding:12px;min-width:0;border-radius:1px}
 #sidebarconf button:active{background:var(--hover)}
 #sidebarconf button img{display:none}
-#sidebarconf th:nth-child(1),.homelinkedit th:first-child,#consolepass th:first-child{width:5%;text-align:center;text-indent:-99999px;background:var(--nuke) no-repeat center center;background-size:14px}
+#sidebarconf th:nth-child(1),.homelinkedit th:first-child,#consolepass th:first-child{width:5%;text-align:center;text-indent:-99999px;background:var(--nuke) no-repeat center center,var(--th);background-size:14px}
 #sidebarconf th:nth-child(2){text-align:left}
 #sidebarconf td:first-child{width:1%;text-align:center}
 #sidebarconf td:nth-child(3),#sidebarconf td:nth-child(4){padding:0 4px;width:1%;white-space:nowrap;border-right:none}
@@ -2681,8 +2679,7 @@ h4#updateplugins{margin-top:-15px}
 #logs h3.tabletitle{padding:12px 2px 10px 12px}
 #loggingoptions tr:nth-last-child(n+3) input[type=text],#loggingoptions tr:nth-last-child(n+3) select{min-width:250px}
 #sidebar #minigraphcontainer{margin:-43px -4px 0 1px;width:260px;height:39px;background-size:260px 40px;background-position:right bottom}
-#sidebar #minigraph{margin-top:-22px;margin-left:-4px;height:38px;width:260px}
-#homepage #minigraph{margin-top:-21px}
+#sidebar #minigraph{margin-top:-21px;margin-left:-4px;height:40px;width:260px}
 #netdbcountrylist img{width:28px;height:auto}
 #netdboverview table th,#netdboverview table td{padding:7px 8px}
 #newsStatus,#news #newsDisplay a,.newsAuthor{font-size:9pt}
@@ -2776,6 +2773,7 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #sb_services a:link,#sb_internals a:link,#sb_advanced a:link,#sb_help a:link{max-width:247px}
 #sb_services a{padding-top:5px;padding-bottom:5px}
 #sb_services{width:260px}
+#sidebar{width:240px}
 #sidebar button,#sidebar .stop,#sidebar .reload{min-width:121px}
 #sidebar form{margin-bottom:-8px}
 #sidebar h3 a{margin-top:3px;display:inline-block;font-size:10.5pt}
@@ -2786,12 +2784,15 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #sidebar #sb_logo{margin-top:1px;height:48px!important}
 #sidebar #sb_newsheadings table{width:258px}
 #sidebar #sb_services,#sb_wrap{width:260px}
-#sidebar table[id^="sb_"],#sidebar #sb_localtunnels{width:256px}
-#sidebar{width:240px}
+#sidebar table[id^="sb_"]{width:256px}
+#sidebar #sb_localtunnels{margin-left:-10px;width:260px}
+#sidebar #sb_localtunnels td:first-child{padding:2px 0 2px 5px;width:16px}
+#sidebar #sb_localtunnels td:first-child img{margin-left:2px}
+#sidebar #sb_localtunnels td:last-child{padding-right:5px}
+#sidebar #sb_internals.collapsed td,#sidebar #sb_advanced.collapsed td,#sidebar #sb_services.collapsed td{width:257px}
 #tunnels h3 a:not(.lsview),#criticallogs+h3.tabletitle a,#iptransport a,#advancedconfig a,#reseedsetup a{font-size:0}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
 #warning h3{padding:10px 15px 9px;font-size:12pt}
-#sidebar #sb_internals.collapsed td,#sidebar #sb_advanced.collapsed td,#sidebar #sb_services.collapsed td{width:257px}
 }
 
 @media (-webkit-min-device-pixel-ratio:1.1){
