@@ -92,6 +92,7 @@ public class IndexBean {
     private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
     private static final boolean DEFAULT_DISABLE_OLD = false;
     private static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
+    private static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
 
     public IndexBean() {
         _context = I2PAppContext.getGlobalContext();
@@ -349,6 +350,7 @@ public class IndexBean {
 
     public String getTheme() {
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
+/**
         // remap deprecated themes
         if (theme.equals("midnight")) {
             if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
@@ -357,7 +359,13 @@ public class IndexBean {
             if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
                 theme = "light";
         }
+**/
         return "/themes/console/" + theme + "/";
+    }
+
+    /** @since 0.9.59+ */
+    public boolean useSoraFont() {
+        return _context.getBooleanProperty(PROP_ENABLE_SORA_FONT);
     }
 
     public int getTunnelCount() {
@@ -399,7 +407,7 @@ public class IndexBean {
              return l.compareTo(r);
         }
     }
-    
+
     /**
      *  Is it a client or server in the UI and I2P side?
      *  Note that a streamr client is a UI and I2P client but a server on the localhost side.

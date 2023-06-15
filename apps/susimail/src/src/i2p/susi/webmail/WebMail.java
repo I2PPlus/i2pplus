@@ -253,6 +253,7 @@ public class WebMail extends HttpServlet
     private static final String RC_PROP_THEME = "routerconsole.theme";
     private static final String RC_PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
     private static final String RC_PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
+    private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private static final String CONFIG_THEME = "theme";
     private static final String DEFAULT_THEME = "dark";
     /** From CSSHelper */
@@ -1990,6 +1991,7 @@ public class WebMail extends HttpServlet
             // Apply any override
             theme = Config.getProperty(CONFIG_THEME, theme);
         }
+/**
         // remap deprecated themes
         if (theme.equals("midnight")) {
             if (ctx.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
@@ -1998,7 +2000,9 @@ public class WebMail extends HttpServlet
             if (ctx.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
                 theme = "light";
         }
+**/
         boolean forceMobileConsole = ctx.getBooleanProperty(RC_PROP_FORCE_MOBILE_CONSOLE);
+        boolean enableSoraFont = ctx.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);
         boolean isMobile = (forceMobileConsole || isMobile(httpRequest.getHeader("User-Agent")));
 
         httpRequest.setCharacterEncoding("UTF-8");
@@ -2336,24 +2340,27 @@ public class WebMail extends HttpServlet
                     out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes\" />\n" +
                         "<link rel=stylesheet type=text/css href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
                 }
+                if (enableSoraFont) {
+                    out.println("<link rel=preload as=style href=\"" + sessionObject.themePath + "../../fonts/Sora.css?" + CoreVersion.VERSION + "\">");
+                }
                 if(state == State.LIST)
-                    out.println("<link rel=stylesheet href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" type=text/css media=\"print\" />\n");
+                    out.println("<link rel=stylesheet href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" type=text/css media=\"print\" />");
                 if (state == State.NEW || state == State.CONFIG) {
                     // TODO cancel if to and body are empty
-                    out.println("<script charset=utf-8 src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
+                    out.println("<script charset=utf-8 src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>");
                 } else if (state == State.LIST) {
-                    out.println("<script charset=utf-8 src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
-                    out.println("<script charset=utf-8 src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
+                    out.println("<script charset=utf-8 src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>");
+                    out.println("<script charset=utf-8 src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>");
                 } else if (state == State.LOADING) {
                     // TODO JS?
-                    out.println("<noscript><meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\"></noscript>\n");
+                    out.println("<noscript><meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\"></noscript>");
                 }
                 // setup noscript style so we can hide js buttons when js is disabled
-                out.println("<noscript><style type=text/css>.script{display: none !important}</style></noscript>\n");
-                out.println("<script charset=utf-8 type=text/javascript src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>\n");
+                out.println("<noscript><style type=text/css>.script{display: none !important}</style></noscript>");
+                out.println("<script charset=utf-8 type=text/javascript src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>");
 //                out.println("<script charset=utf-8 src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>");
-                out.println("<style type=text/css>body{display:none;pointer-events:none}</style>\n");
-                out.println("</head>\n");
+                out.println("<style type=text/css>body{display:none;pointer-events:none}</style>");
+                out.println("</head>");
                 if (state == State.LIST)
                     out.print("<body id=main>\n");
                 else

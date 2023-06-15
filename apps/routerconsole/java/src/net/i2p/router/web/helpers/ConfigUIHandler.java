@@ -18,6 +18,7 @@ public class ConfigUIHandler extends FormHandler {
     private boolean _universalTheming;
     private boolean _forceMobileConsole;
     private boolean _embedApps;
+    private boolean _useSoraFont;
     private String _config;
 
     @Override
@@ -38,6 +39,8 @@ public class ConfigUIHandler extends FormHandler {
     public void setForceMobileConsole(String baa) { _forceMobileConsole = true; }
 
     public void setEmbedApps(String baa) { _embedApps = true; }
+
+    public void setUseSoraFont(String baa) { _useSoraFont = true; }
 
     public void setTheme(String val) {
         _config = val;
@@ -71,6 +74,10 @@ public class ConfigUIHandler extends FormHandler {
             changes.put(CSSHelper.PROP_EMBED_APPS, "true");
         else
             removes.add(CSSHelper.PROP_EMBED_APPS);
+        if (_useSoraFont)
+            changes.put(CSSHelper.PROP_ENABLE_SORA_FONT, "true");
+        else
+            removes.add(CSSHelper.PROP_ENABLE_SORA_FONT);
         boolean ok = _context.router().saveConfig(changes, removes);
         if (ok) {
             if (!oldTheme.equals(_config))

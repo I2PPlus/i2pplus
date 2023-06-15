@@ -37,6 +37,10 @@ public class CSSHelper extends HelperBase {
     /** @since 0.9.36 */
     public static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
     public static final boolean DEFAULT_DISABLE_OLD = false;
+    /** @since 0.9.59+ */
+    public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
+    public static final boolean DEFAULT_ENABLE_SORA_FONT = false;
+
 
     private static final String _consoleNonce = Long.toString(RandomSource.getInstance().nextLong());
 
@@ -50,22 +54,13 @@ public class CSSHelper extends HelperBase {
 
     public String getTheme(String userAgent) {
         String url = BASE_THEME_PATH;
-        if (userAgent != null && userAgent.contains("MSIE") && !userAgent.contains("Trident/6") &&
-            !_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD)) {
+        if (userAgent != null && userAgent.contains("MSIE") && !userAgent.contains("Trident/6")) {
             url += FORCE + "/";
         } else {
             // This is the first thing to use _context on most pages
             if (_context == null)
                 throw new IllegalStateException("No contexts. This is usually because the router is either starting up or shutting down.");
             String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
-            // remap deprecated themes
-            if (theme.equals("midnight")) {
-                if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                    theme = "dark";
-            } else if (theme.equals("classic")) {
-                if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                    theme = "light";
-            }
             url += theme + "/";
         }
         return url;
@@ -77,6 +72,24 @@ public class CSSHelper extends HelperBase {
      */
     public boolean embedApps() {
         return _context.getBooleanProperty(PROP_EMBED_APPS);
+    }
+
+    /**
+     * Returns whether we should use Sora display font
+     * @since 0.9.59+
+     */
+    public boolean useSoraDisplayFont() {
+        return _context.getBooleanProperty(PROP_ENABLE_SORA_FONT);
+    }
+
+    /**
+     *  Save config for alternative display font if enabled
+     *  @since 0.9.59+
+     */
+    public void setSoraDisplayFont() {
+        // Protected with nonce in css.jsi
+        if (PROP_ENABLE_SORA_FONT != null && PROP_ENABLE_SORA_FONT == "true")
+            _context.router().saveConfig(PROP_ENABLE_SORA_FONT, "true");
     }
 
     /**

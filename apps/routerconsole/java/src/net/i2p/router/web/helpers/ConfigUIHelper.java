@@ -22,18 +22,12 @@ public class ConfigUIHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(512);
         buf.append("<div id=availablethemes>");
         String current = _context.getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
-        // remap deprecated themes
-        if (current.equals("midnight")) {
-            if (_context.getProperty(CSSHelper.PROP_DISABLE_OLD, CSSHelper.DEFAULT_DISABLE_OLD))
-                current = "dark";
-        } else if (current.equals("classic")) {
-            if (_context.getProperty(CSSHelper.PROP_DISABLE_OLD, CSSHelper.DEFAULT_DISABLE_OLD))
-                current = "light";
-        }
+        boolean universalTheming = _context.getBooleanProperty(CSSHelper.PROP_UNIVERSAL_THEMING);
+        boolean useSoraFont = _context.getBooleanProperty(CSSHelper.PROP_ENABLE_SORA_FONT);
         Set<String> themes = themeSet();
         for (String theme : themes) {
             buf.append("<label for=\"").append(theme).append("\"><div class=themechoice style=display:inline-block;text-align:center>" +
-                       "<input type=radio class=optbox name=\"theme\" ");
+                       "<input type=radio class=optbox name=theme ");
             if (theme.equals(current))
                 buf.append(CHECKED);
             buf.append("value=\"").append(theme).append("\" id=\"").append(theme).append("\">" +
@@ -42,7 +36,6 @@ public class ConfigUIHelper extends HelperBase {
                        "<div class=themelabel style=text-align:center>" + _t(theme) + "</div>" +
                        "</div></label>\n");
         }
-        boolean universalTheming = _context.getBooleanProperty(CSSHelper.PROP_UNIVERSAL_THEMING);
         buf.append("</div><div id=themeoptions>" +
                    "<label><input type=checkbox class=\"optbox slider\" name=\"universalTheming\" ");
         if (universalTheming)
@@ -50,22 +43,28 @@ public class ConfigUIHelper extends HelperBase {
         buf.append("value=1>")
            .append(_t("Set theme universally across all apps"))
            .append("</label><br>\n");
+        buf.append("<label><input type=checkbox class=\"optbox slider\" name=\"useSoraFont\" ");
+        if (useSoraFont)
+            buf.append(CHECKED);
+        buf.append("value=1>")
+           .append(_t("Use alternative display font in console and webapps"))
+           .append("</label><br>\n");
         return buf.toString();
     }
 
     public String getForceMobileConsole() {
         StringBuilder buf = new StringBuilder(256);
         boolean forceMobileConsole = _context.getBooleanProperty(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
-        buf.append("<label><input type=checkbox class=\"optbox slider\" name=\"forceMobileConsole\" ");
+        boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
+        buf.append("<label><input type=checkbox class=\"optbox slider\" name=forceMobileConsole ");
         if (forceMobileConsole)
             buf.append(CHECKED);
         buf.append("value=1>")
            .append(_t("Force the mobile console to be used"))
            .append("</label><br>\n");
-        boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         buf.append("<label title=\"")
            .append(_t("Enabling the Universal Theming option is recommended when embedding these applications"))
-           .append("\"><input type=checkbox class=\"optbox slider\" name=\"embedApps\" ");
+           .append("\"><input type=checkbox class=\"optbox slider\" name=embedApps ");
         if (embedApps)
             buf.append(CHECKED);
         buf.append("value=1>")
@@ -83,14 +82,11 @@ public class ConfigUIHelper extends HelperBase {
          File[] files = dir.listFiles();
          if (files == null)
              return rv;
-         boolean skipOld = _context.getProperty(CSSHelper.PROP_DISABLE_OLD, CSSHelper.DEFAULT_DISABLE_OLD);
          for (int i = 0; i < files.length; i++) {
              if (!files[i].isDirectory())
                  continue;
              String name = files[i].getName();
              if (name.equals("images"))
-                 continue;
-             if (skipOld && (name.equals("midnight") || name.equals("classic")))
                  continue;
              rv.add(name);
          }
@@ -199,11 +195,10 @@ public class ConfigUIHelper extends HelperBase {
                 continue;
             // we use "lang" so it is set automagically in CSSHelper
             buf.append("<label for=\"").append(lang).append("\"><div class=langselect>")
-               .append("<input type=radio class=optbox name=\"lang\" ");
+               .append("<input type=radio class=optbox name=lang ");
             if (lang.equals(current))
                 buf.append(CHECKED);
             buf.append("value=\"").append(lang).append("\" id=\"").append(lang).append("\">")
-//               .append("<img height=\"48\" width=\"48\" alt=\"\" src=\"/flags.jsp?s=48&amp;c=").append(langs[i][1]).append("\">")
                .append("<span class=langflag><img width=48 height=36 alt=\"\" src=\"/flags.jsp?c=")
                .append(langs[i][1]).append("\"></span>")
                .append("<div class=ui_lang>");
@@ -229,7 +224,7 @@ public class ConfigUIHelper extends HelperBase {
         Properties config = net.i2p.I2PAppContext.getGlobalContext().getProperties();
         // only show delete user button if user(s) configured
         if (!config.toString().contains("routerconsole.auth.i2prouter"))
-            buf.append("<style type=text/css>#consolepass .delete {display: none !important;)</style>\n");
+            buf.append("<style type=text/css>#consolepass .delete{display:none!important)</style>\n");
         buf.append("<table id=consolepass>\n");
         if (userpw.isEmpty()) {
             buf.append("<tr><td class=infohelp colspan=3>" +
@@ -247,9 +242,9 @@ public class ConfigUIHelper extends HelperBase {
             }
         }
         buf.append("<tr><td id=pw_adduser colspan=3>" +
-                   "<b>" + _t("Username") + ":</b> " + "<input type=text name=\"name\" title=\"" +
+                   "<b>" + _t("Username") + ":</b> " + "<input type=text name=name title=\"" +
                    _t("Please supply a username") + "\"><b>" + _t("Password") + ":</b> " +
-                   "<input type=password size=40 name=\"nofilter_pw\" title=\"" +
+                   "<input type=password size=40 name=nofilter_pw title=\"" +
                    _t("Please supply a password") + "\">" + "</td></tr>\n</table>\n");
         return buf.toString();
     }

@@ -88,6 +88,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String WARBASE = "/.resources/";
     private static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private boolean debug;
 
     String cspNonce = Integer.toHexString(_context.random().nextInt());
@@ -179,6 +180,10 @@ public class I2PSnarkServlet extends BasicServlet {
 
     public boolean isAdvanced() {
         return _context.getBooleanProperty(PROP_ADVANCED);
+    }
+
+    public boolean useSoraFont() {
+        return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);
     }
 
     /**
@@ -393,6 +398,9 @@ public class I2PSnarkServlet extends BasicServlet {
                            java.io.File.separatorChar + "snark" + java.io.File.separatorChar + _manager.getTheme() +
                            java.io.File.separatorChar;
         File override = new File(themeBase + "override.css");
+        if (!isStandalone() && useSoraFont()) {
+            out.write("<link rel=stylesheet type=text/css href=/themes/fonts/Sora.css>");
+        }
         if (!isStandalone() && override.exists()) {
             out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
         }

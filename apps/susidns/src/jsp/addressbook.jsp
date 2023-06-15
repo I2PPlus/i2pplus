@@ -35,9 +35,10 @@
 %>
 <%@ page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true" import="net.i2p.servlet.RequestWrapper"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <%
    String importMessages = null;
    if (intl._t("Import").equals(request.getParameter("action"))) {
@@ -59,6 +60,13 @@
 <link rel=preload href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=preload href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=stylesheet type=text/css href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<%
+    if (base.useSoraFont()) {
+%>
+<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<%
+    }
+%>
 <link rel=stylesheet type=text/css href="<%=book.getTheme()%>override.css">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script charset=utf-8 src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
