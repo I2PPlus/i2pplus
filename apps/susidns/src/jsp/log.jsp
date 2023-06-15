@@ -28,9 +28,10 @@
 <%@ page contentType="text/html" %>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:useBean id="log" class="i2p.susi.dns.LogBean" scope="session" />
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
+<jsp:useBean id="log" class="i2p.susi.dns.LogBean" scope="session" />
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:setProperty name="log" property="*" />
 <!DOCTYPE HTML>
 <html>
@@ -38,6 +39,13 @@
 <meta charset=utf-8>
 <title><%=intl._t("subscription log")%> - susidns</title>
 <link rel=stylesheet type=text/css href="<%=log.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<%
+    if (base.useSoraFont()) {
+%>
+<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<%
+    }
+%>
 <link rel=stylesheet type=text/css href="<%=log.getTheme()%>override.css">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type=text/css>body{display:none;pointer-events:none}</style>

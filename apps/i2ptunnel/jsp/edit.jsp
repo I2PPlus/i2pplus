@@ -35,6 +35,13 @@ if (tun != null) {
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<%
+  if (indexBean.useSoraFont()) {
+%>
+<link href="<%=indexBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<%
+  }
+%>
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet type=text/css>
 <script charset=utf-8 src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <script charset=utf-8 src="/js/selectAll.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>

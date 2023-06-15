@@ -27,9 +27,10 @@
 <%@page pageEncoding="UTF-8"%>
 <%@ page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>
-<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
+<jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:setProperty name="subs" property="*" />
 <!DOCTYPE HTML>
 <html>
@@ -37,6 +38,13 @@
 <meta charset=utf-8>
 <title><%=intl._t("subscriptions")%> - susidns</title>
 <link rel=stylesheet type=text/css href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<%
+    if (base.useSoraFont()) {
+%>
+<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<%
+    }
+%>
 <link rel=stylesheet type=text/css href="<%=subs.getTheme()%>override.css">
 <script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type=text/css>body{display:none;pointer-events:none}</style>

@@ -4,6 +4,7 @@
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.EditBean"%>
 <!DOCTYPE html>
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
+<jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
 <% String pageStr = request.getParameter("page");
    /* Get the number of the page we came from */
@@ -52,6 +53,13 @@
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<%
+    if (indexBean.useSoraFont()) {
+%>
+<link href="<%=indexBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<%
+    }
+%>
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet type=text/css>
 <style type=text/css>body{display:none;pointer-events:none}</style>
 </head>

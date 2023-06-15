@@ -438,9 +438,9 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .configTitle,.toggleview{margin:0 0 -3px;display:inline-block}
 .mainsection .configTitle{margin:-11px 0 -5px;padding:7 15px 6px;font-size:120%}
 .mainsection .toggleview{margin-top:-10px;display:block}
-#configSection .configTitle:active,.toggleview:active{box-shadow:inset 0 0 1px #7f2f7f,inset 4px 4px 3px 3px #101;background:linear-gradient(0deg,#212,#101);transition:box-shadow ease .05s}
+#configSection .configTitle,.toggleview{padding:3px 1px;width:320px;min-width:0;vertical-align:middle;line-height:0;font-size:0;color:transparent;font-size:0;border:1px solid #212;border-bottom:var(--border_hard);border-top:none;border-radius:0 0 3px 3px;box-shadow:inset 0 0 1px #545;background:linear-gradient(180deg,#434,#212 51%,#150015 51%,#000);filter:drop-shadow(0 1px 1px rgba(17,0,17,.6))}
 #configSection .configTitle:hover,.toggleview:hover,input:focus+.toggleview{background:linear-gradient(180deg,#656,#323 51%,#202 51%,#101);box-shadow:inset 0 0 1px #939}
-#configSection .configTitle,.toggleview{padding:3px 1px;width:320px;min-width:0;vertical-align:middle;line-height:0;font-size:0;color:transparent;font-size:0;border:1px solid #212;border-bottom:var(--border_hard);border-top:none;border-radius:0 0 3px 3px;box-shadow:inset 0 0 1px #545;background:linear-gradient(180deg,#434,#212 51%,#150015 51%,#000);filter:drop-shadow(0 1px 1px rgba(17,0,17,.6));transition:linear box-shadow .1s}
+#configSection .configTitle:active,.toggleview:active{box-shadow:inset 0 0 1px #7f2f7f,inset 4px 4px 3px 3px rgba(0,0,0,.6);background:linear-gradient(0deg,#212,#101)}
 #tab_comments{margin-top:-1px}
 .iframed .configPanel .configTitle,.iframed .configPanel .configTitle:hover,.iframed .configPanel .configTitle:active{box-shadow:inset 0 0 1px #868}
 .iframed #configSection .configTitle,.iframed .toggleview{border:1px solid #878;border-bottom:1px solid #767;border-top:none;box-shadow:inset 0 0 1px #868,inset 0 -2px 0 2px rgba(0,0,0,.3);filter:drop-shadow(0 1px 2px #101);transition:none}

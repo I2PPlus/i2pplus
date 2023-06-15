@@ -17,6 +17,13 @@
 <link href="<%=indexBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=indexBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
 <link href="<%=indexBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<%
+  if (indexBean.useSoraFont()) {
+%>
+<link href="<%=indexBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<%
+  }
+%>
 <link href="<%=indexBean.getTheme()%>override.css" rel=stylesheet type=text/css> 
 <link rel=icon href="<%=indexBean.getTheme()%>images/favicon.svg">
 <style type=text/css>body{display:none;pointer-events:none}</style>

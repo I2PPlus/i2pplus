@@ -34,6 +34,7 @@ public class BaseBean
     private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
     private static final boolean DEFAULT_DISABLE_OLD = false;
     public static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
+    private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private static final String ADDRESSBOOK_DIR = "addressbook";
     private static final String CONFIG_FILE = "config.txt";
 
@@ -151,6 +152,11 @@ public class BaseBean
                 themes = new String[0];
             }
             return themes;
+    }
+
+    /** @since 0.9.59+ */
+    public boolean useSoraFont() {
+        return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);
     }
 
     /**

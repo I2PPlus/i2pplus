@@ -18,7 +18,7 @@ public class RouterVersion {
     /** deprecated */
     public final static String ID = "Git";
     public final static String VERSION = CoreVersion.VERSION;
-    public final static long BUILD = 35;
+    public final static long BUILD = 36;
 
     /** for example "-test" */
     public final static String EXTRA = "+";
