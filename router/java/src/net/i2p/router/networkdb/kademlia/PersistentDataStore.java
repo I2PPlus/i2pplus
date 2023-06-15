@@ -400,8 +400,8 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Router is spoofing our IP address");
                         if (_log.shouldWarn())
-                            _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> Router is spoofing our IP address!");
-                        _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 8*60*60*1000);
+                            _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
+                        _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         dbFile.delete();
                     } else if (isLTier && unreachable && isOlderThanCurrent) {
