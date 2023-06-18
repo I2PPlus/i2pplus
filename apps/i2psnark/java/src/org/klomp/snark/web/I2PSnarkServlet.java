@@ -3899,6 +3899,9 @@ public class I2PSnarkServlet extends BasicServlet {
                            java.io.File.separatorChar + "snark" + java.io.File.separatorChar + _manager.getTheme() +
                            java.io.File.separatorChar;
         File override = new File(themeBase + "override.css");
+        if (!isStandalone() && useSoraFont()) {
+            buf.append("<link rel=stylesheet type=text/css href=/themes/fonts/Sora.css>\n");
+        }
         if (!isStandalone() && override.exists()) {
             buf.append(HEADER_A + _themePath + HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
         }
