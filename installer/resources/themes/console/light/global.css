@@ -99,7 +99,7 @@ select,select[disabled]:hover,select[disabled]:focus{margin:5px;padding:6px 24px
 select:-moz-focusring{outline:1px solid transparent}
 select option{background:#fff}
 select:hover,select:focus,select:active{border:1px solid #868bac}
-select:hover,select:active{color:#19191f;box-shadow:var(--highlight),0 2px 1px #ddf;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
+select:hover,select:active{color:var(--ink_dark);box-shadow:var(--highlight),0 2px 1px #ddf;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
 select:focus{color:#19191f;box-shadow:0 0 1px #f60;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{border:var(--border_input);box-shadow:var(--highlight);background:var(--btn);opacity:.8;cursor:default}
 table{border-spacing:0}

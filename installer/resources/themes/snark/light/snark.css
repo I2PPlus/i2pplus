@@ -256,7 +256,7 @@ audio::-webkit-media-controls-enclosure{border-radius:0;filter:invert(1)}
 video::-webkit-media-controls-panel{display:none}
 video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-panel{display:flex}
 body:not(.framed) #torrentInfo{margin-top:8px}
-.configTitle,.toggleview{margin:0 0 -3px 0;padding:3px 15px;min-width:260px;display:inline-block;text-transform:uppercase;font-size:10pt;font-weight:700;color:#559;border:var(--border_soft);border-top:0;border-radius:0 0 3px 3px;box-shadow:0 1px 2px rgba(220,220,255,.7),var(--highlight);background:linear-gradient(180deg,#fff 50%,#f2f2ff 50%)}
+.configTitle,.toggleview{margin:0 0 -3px 0;padding:3px 15px;min-width:260px;display:inline-block;text-transform:uppercase;font-size:10pt;font-weight:700;color:#559;border:var(--border_soft);border-top:0;border-radius:0 0 3px 3px;box-shadow:0 1px 2px rgba(220,220,255,.7),var(--highlight);background:var(--btn)}
 .configTitle:active,.toggleview:active{box-shadow:var(--highlight),inset 2px 2px 3px #7f756f}
 .configTitle{color:#446}
 .configPanel .configTitle{padding:6px 0;min-width:400px;line-height:1.3;letter-spacing:2px;font-size:110%;color:#555875;background:linear-gradient(180deg,#fcfcff,#fafaff 51%,#f6f6ff 100%);pointer-events:none}
@@ -301,15 +301,15 @@ body:not(.framed) #torrentInfo{margin-top:8px}
 
 /* inputs & buttons */
 input{font-family:var(--bodyfont);text-align:left;padding:4px;border-radius:2px;border:var(--border_input);background:#fff;color:var(--ink);margin:2px 4px 2px 0;box-shadow:inset 0 0 1px #fff,0 0 1px #999}
-input[type=submit],a.control,input.disabled{margin:6px 3px 6px 6px;padding:5px 8px;min-width:90px;text-align:center;font:bold 9pt var(--bodyfont);color:#227;text-shadow:var(--txt_shadow);border:var(--border_input);border-radius:2px;box-shadow:var(--highlight),0 0 1px #ddd;background:linear-gradient(180deg,#fff 50%,#f2f2ff 50%);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+input[type=submit],a.control,input.disabled{margin:6px 3px 6px 6px;padding:5px 8px;min-width:90px;text-align:center;font-family:var(--bodyfont);font-size:9pt;font-weight:700;color:#227;text-shadow:var(--txt_shadow);border:var(--border_input);border-radius:2px;box-shadow:var(--btn);background:var(--btn_shadow)}
 a.control,a.controld{margin:6px 3px 6px 3px;padding:5px 8px 4px 5px;display:inline-block;min-width:0;white-space:nowrap;font-weight:700;border-radius:2px}
 a.controld{color:#459;font-weight:400;display:none}
 a.control img,a.control:hover img,a.control:focus img,a.control:active img{filter:none}
 a.control:active img{mix-blend-mode:luminosity}
 input[type=submit],a.control:not(.disabled){color:var(--ink_light);font-weight:400;box-shadow:var(--btn_shadow);border:var(--border_input);background:linear-gradient(180deg,#fff,#efefff);transition:ease border .7s}
-input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:var(--hover);text-shadow:none;border:1px solid #559;box-shadow:var(--highlight);background:linear-gradient(#fff 50%,#ffe8bf 50%,#efd9b3 100%)}
-input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:var(--ink_darker);border:1px solid var(--hover);box-shadow:var(--highlight),inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);background:linear-gradient(180deg,#eee,#fff);transition:ease border .7s}
-input[type=submit]:active,a.control:active{color:#4c526f;box-shadow:var(--highlight),inset 2px 2px 2px #555;background:linear-gradient(180deg,#eee,#fff);background-blend-mode:luminosity}
+input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:var(--hover);text-shadow:none;border:1px solid #559;box-shadow:var(--btn_shadow_hover);background:linear-gradient(#fff 50%,#ffe8bf 50%,#efd9b3 100%)}
+input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:var(--ink_dark);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover);transition:ease border .7s}
+input[type=submit]:active,a.control:active{color:#4c526f;box-shadow:var(--highlight),inset 2px 2px 2px #555;background:var(--btn_hover);background-blend-mode:luminosity}
 input[name="savepri"]{float:right}
 input[type=text],input.r,input[name="nofilter_dataDir"],textarea,select{padding:5px 7px;min-width:120px;font-size:9pt}
 input.r{text-align:right;background:#fff;border:var(--border_input);color:var(--ink)}
