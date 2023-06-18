@@ -338,7 +338,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         Hash peerHash = socket.getPeerDestination().calculateHash();
         String peerB32 = socket.getPeerDestination().toBase32();
         if (_log.shouldInfo())
-            _log.info("[HTTPServer] Incoming connection to " + toString() + " (port" + socket.getLocalPort() + ")" +
+            _log.info("[HTTPServer] Incoming connection to " + toString() + " (port " + socket.getLocalPort() + ")" +
                       "\n* From: " + peerB32 + " on port " + socket.getPort());
         // local is fast, so synchronously. Does not need that many threads.
         try {

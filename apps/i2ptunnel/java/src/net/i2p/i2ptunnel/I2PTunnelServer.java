@@ -790,8 +790,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     protected void blockingHandle(I2PSocket socket) {
         if (_log.shouldInfo())
-            _log.info("Incoming connection to " + toString() + " (port " + socket.getLocalPort() +
-                      ")\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
+            _log.info("Incoming connection to " + toString() + " (port " + socket.getLocalPort() + ")" +
+                      "\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
         long afterAccept = getTunnel().getContext().clock().now();
         long afterSocket = -1;
         //local is fast, so synchronously. Does not need that many
