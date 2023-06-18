@@ -142,7 +142,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     @Override
     protected void blockingHandle(I2PSocket socket) {
         if (_log.shouldInfo())
-            _log.info("Incoming connection to '" + toString() + "' port " + socket.getLocalPort() +
+            _log.info("Incoming connection to " + toString() + " (port " + socket.getLocalPort() + ")" +
                       "\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
         try {
             String modifiedRegistration;
