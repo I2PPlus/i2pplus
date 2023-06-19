@@ -9,7 +9,7 @@
  * Console: Switch from post to get for netdb lookups
 
 2023-06-07 dr|z3d
- * Console: Merge upstream comsetic fixes for graph rendering
+ * Console: Merge upstream cosmetic fixes for graph rendering
 
 2023-05-14 dr|z3d
  * Console: Iconize navbar links in configuration section
