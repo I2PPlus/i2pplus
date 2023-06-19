@@ -151,7 +151,6 @@ tfoot .RateUp,tfoot .RateDown,td.RateUp,td.RateDown,tfoot .torrentUploaded,td.to
 .filtered~.filtered{border-top:var(--border_softer)}
 .graphicStatus{width:1%;max-width:32px;white-space:nowrap;text-align:center}
 .graphicStatus img{padding-top:3px;padding-bottom:3px;width:auto}
-.iframed .routerdown{margin-top:0;margin-bottom:11px}
 .noneLoaded i{padding:10px;display:inline-block}
 .noneLoaded,.noneLoaded:hover{text-align:center;font-size:9pt;font-weight:700;color:#272e3f;border-bottom:var(--border_soft);box-shadow:inset 0 0 1px #fff;background:linear-gradient(90deg,#eef,#fff,#eef)}
 .peerCount .left,.peerCount .right{min-width:12px;display:inline-block}
@@ -161,8 +160,9 @@ tfoot .RateUp,tfoot .RateDown,td.RateUp,td.RateDown,tfoot .torrentUploaded,td.to
 .percentBarOuter:hover .percentBarText,.percentBarOuter:active .percentBarText{opacity:1}
 .RateUp:empty,.RateDown:empty,.torrentAction:empty{width:0;padding:0}
 .RateUp,.RateDown,.torrentDownloaded,.torrentUploaded{padding:0 3px}
-.routerdown::after{margin-top:6px;width:40px;height:40px;display:inline-block;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";animation:linear spin 5s reverse infinite}
-.routerdown{margin:20px 10px 10px;padding:15px;font-size:0;color:#001;border:1px solid #bbc;border-radius:3px;box-shadow:var(--highlight),inset 5px 5px 3px #88a;background:repeating-linear-gradient(45deg,#fff,#eef 20px,#eef 20px,#fff 40px) right top,repeating-linear-gradient(135deg,#ddf,#eef 20px,#fff 20px,#eef 40px) left top;background-size:200%,200%;animation:linear down 60s forwards infinite reverse;background-blend-mode:multiply,normal}
+#down::after{margin-top:6px;width:40px;height:40px;display:inline-block;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";animation:linear spin 5s reverse infinite}
+#down{margin:20px 10px 10px;padding:15px;font-size:0;color:#001;border:1px solid #bbc;border-radius:3px;box-shadow:var(--highlight),inset 5px 5px 3px #88a;background:repeating-linear-gradient(45deg,#fff,#eef 20px,#eef 20px,#fff 40px) right top,repeating-linear-gradient(135deg,#ddf,#eef 20px,#fff 20px,#eef 40px) left top;background-size:200%,200%;animation:linear down 60s forwards infinite reverse;background-blend-mode:multiply,normal}
+.iframed #down{margin:11px 11px 12px}
 .rowEven+.rowEven td:nth-child(2),.rowOdd td+.rowOdd td:nth-child(2){padding:4px 0;text-align:left}
 .rowOdd:not(.filtered),.rowEven:not(.filtered),#commentInfo tr,#userComments tr{border-top:var(--border_softer);background:var(--row)}
 .seeding.active:hover td:last-child{background:linear-gradient(to left,#f64384,#f64384 3px,transparent 3px)}
