@@ -980,7 +980,7 @@ public class Blocklist {
     /**
      * Does the peer's IP address appear in the blocklist?
      * If so, and it isn't banlisted, banlist it forever...
-     * or, if the user configured an override, ban it for the 
+     * or, if the user configured an override, ban it for the
      * override period.
      * @since 0.9.29
      */
@@ -1002,7 +1002,7 @@ public class Blocklist {
     /**
      * Does the peer's IP address appear in the blocklist?
      * If so, and it isn't banlisted, banlist it forever...
-     * or, if the user configured an override, ban it for the 
+     * or, if the user configured an override, ban it for the
      * override period.
      * @since 0.9.29
      */
@@ -1285,7 +1285,7 @@ public class Blocklist {
      */
     private void banlistRouter( Hash peer, String reason, String reasonCode, long duration) {
         if (duration > 0)
-            _context.banlist().banlistRouter(peer, reason, reasonCode, null, System.currentTimeMillis()+expireInterval());
+            _context.banlist().banlistRouter(peer, reason, reasonCode, null, System.currentTimeMillis() + expireInterval());
         else
             _context.banlist().banlistRouterForever(peer, reason, reasonCode);
     }
@@ -1309,7 +1309,7 @@ public class Blocklist {
             // just ban it and be done
             if (_log.shouldWarn())
                 _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session");
-            banlistRouter(peer, " <b>➜</b> " + "Banned", expireInterval());
+            banlistRouter(peer, " <b>➜</b> Banned", "Banned", expireInterval());
             return;
         }
 
