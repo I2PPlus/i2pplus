@@ -1,7 +1,94 @@
+2023-06-15 dr|z3d
+ * Console: Add UI toggle to enable/disable alternative display font for console
+   and default web apps
+
+2023-06-14 dr|z3d
+ * Console: enable auto-refresh for /netdb and /stats
+
+2023-06-12 dr|z3d
+ * Console: Switch from post to get for netdb lookups
+
+2023-06-07 dr|z3d
+ * Console: Merge upstream comsetic fixes for graph rendering
+
+2023-05-14 dr|z3d
+ * Console: Iconize navbar links in configuration section
+
+2023-05-10 dr|z3d
+ * Console: Add visibility toggle for settings panel on /graphs
+
+2023-05-05 dr|z3d
+ * Router: Reject unsolicted RIs if unreachable or no GeoIP data
+
+2023-05-01 dr|z3d
+ * Router: Increase DNS cache time to 1h (was 2m)
+ * Console: Incorporate congestion caps indicators into sybil section
+
+2023-04-18 dr|z3d
+ * Router: Force immediate disconnect from peers publishing wrong IP address
+
+2023-04-14 dr|z3d
+ * Console: Disable router updates via torrent unless
+   routerconsole.enableTorrentUpdates=true
+
+2023-04-11 dr|z3d
+ * Installer: Delete Windows-specific files post-install on non-Windows,
+   esp. wrapper-windows.jar which was preventing wrapper from functioning
+
+2023-04-09 dr|z3d
+ * Console: Remove option for redundant Peers (advanced) sidebar section
+
+2023-04-08 dr|z3d
+ * Console: Add auto-refreshing session bans page to /profiles
+
+2023-03-28 dr|z3d
+ * Router: Increase ban time for routers making excessive lookup requests
+ * Console: Show peer test avg in sidebar by default; show message delay
+   on congestion badge
+
+2023-03-26 dr|z3d
+* Proxy: Update outproxy UserAgent to latest Tor browser version
+
+2023-03-26 dr|z3d
+ * I2PTunnel: Allocate more handler threads for i2ptunnelserver according to
+   JVM-allocated RAM
+
+2023-03-26 dr|z3d
+ * Console: Add Congestion caps count on /netdb
+
+2023-03-22 dr|z3d
+ * Blocklist:
+   - Add router.blocklistCountries.enable option to enable selective
+     blocking of countries
+   - Add router.blocklistFeed.enable option to enable/disable feed blocklist
+ * Console: Add known peers to sidebar peers badge
+
+2023-03-21 dr|z3d
+ * i2ping: Allocate more ram to the JVM to avoid OOM on newer java versions
+   (reported by dragonheart)
+
+2023-03-20 dr|z3d
+ * Router: Logging tweaks - don't display job id for warn level entries
+
+2023-03-19 dr|z3d
+ * Console: Display ip address if no authoritative hostname on /profiles
+
+2023-03-18 dr|z3d
+ * Router: Log caps and version of older/unreachable routers when ignoring
+   tunnel requests
+
+2023-03-17 dr|z3d
+ * I2PTunnel: Add address helper link for qualifying servers on index page
+
+2023-03-15 dr|z3d
+ * Installer:
+   - Supply wrapper-windows.jar with universal installer for Win64
+   - Update service wrapper to 3.5.51 for non-Windows; drop ARM6
+
 2023-05-29 idk
- * adds "virtual contexts" to bloom filter, where each entity that
-  passes an i2np message to the bloom filter xor's the messageID with a random, local value.
-  credit Xe Iaso for discovering the issue, obscuratus for the solution
+ * Router: Add "virtual contexts" to bloom filter, where each entity that passes
+   an i2np message to the bloom filter xor's the messageID with a random, local value.
+   credit Xe Iaso for discovering the issue, obscuratus for the solution
 
 2023-03-15 dr|z3d
  * Wrapper: Upgrade to 3.5.51
