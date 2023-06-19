@@ -17,6 +17,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -89,6 +90,7 @@ public class Blocklist {
     private final File _blocklistFeedFile;
     private final boolean _haveIPv6;
     private boolean _started;
+    private long _lastExpired = 0;
     // temp
     private final Map<Hash, String> _peerBlocklist = new HashMap<Hash, String>(4);
 
@@ -98,6 +100,7 @@ public class Blocklist {
     private static final String PROP_BLOCKLIST_COUNTRIES_ENABLED = "router.blocklistCountries.enable";
     private static final String PROP_BLOCKLIST_DETAIL = "router.blocklist.detail";
     private static final String PROP_BLOCKLIST_FILE = "router.blocklist.file";
+    private static final String PROP_BLOCKLIST_EXPIRE_INTERVAL = "router.blocklist.expireInterval";
     public static final String BLOCKLIST_FILE_DEFAULT = "blocklist.txt";
     public static final String BLOCKLIST_FILE_TOR_EXITS = "blocklist_tor.txt";
     private static final String BLOCKLIST_FEED_FILE = "docs/feed/blocklist/blocklist.txt";
@@ -152,6 +155,37 @@ public class Blocklist {
         _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES) : null;
     }
 
+
+    private int expireInterval(){
+        String expireIntervalValue = _context.getProperty(PROP_BLOCKLIST_EXPIRE_INTERVAL, "0");
+        try{
+            Integer expireIntervalInt = 0;
+            if (expireIntervalValue.endsWith("s")) {
+                expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
+                expireIntervalInt = Integer.parseInt(expireIntervalValue) * 1000;
+            }else if(expireIntervalValue.endsWith("m")){
+                expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
+                expireIntervalInt = Integer.parseInt(expireIntervalValue) * 60000;
+            }else if(expireIntervalValue.endsWith("h")){
+                expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
+                expireIntervalInt = Integer.parseInt(expireIntervalValue) * 3600000;
+            }else if (expireIntervalValue.endsWith("d")) {
+                expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
+                expireIntervalInt = Integer.parseInt(expireIntervalValue) * 86400000;
+            }else{
+                expireIntervalInt = Integer.parseInt(expireIntervalValue);
+            }
+            if (expireIntervalInt < 0)
+                expireIntervalInt = 0;
+            return expireIntervalInt;
+        }catch(NumberFormatException nfe){
+            if (_log.shouldLog(_log.ERROR))
+                _log.error("format error in "+PROP_BLOCKLIST_EXPIRE_INTERVAL, nfe);
+        }
+        // if we don't have a valid value in this field, return 0 which is the same as disabling it.
+        return 0;
+    }
+
     /**
      *  Loads the following files in-order:
      *  $I2P/blocklist.txt
@@ -165,7 +199,7 @@ public class Blocklist {
         if (_started)
             return;
         _started = true;
-        if (! _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED)) {
+        if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED)) {
             _log.warn("All blocklists disabled (router.blocklist.enable=false)");
             return;
         }
@@ -215,6 +249,11 @@ public class Blocklist {
         // but it's important to have this initialized before we read in the netdb.
         //job.getTiming().setStartAfter(_context.clock().now() + 30*1000);
         _context.jobQueue().addJob(job);
+        if (expireInterval() > 0) {
+            Job cleanupJob = new CleanupJob();
+            cleanupJob.getTiming().setStartAfter(_context.clock().now() + expireInterval());
+            _context.jobQueue().addJob(cleanupJob);
+        }
     }
 
     /**
@@ -252,6 +291,32 @@ public class Blocklist {
                     _log.warn("No update manager");
                 }
             }
+        }
+    }
+
+    private class CleanupJob extends JobImpl {
+        public CleanupJob() {
+            super(_context);
+        }
+        public String getName(){
+            return "Expire blocklist at user-defined interval of " + expireInterval();
+        }
+        public void runJob() {
+            clear();
+            _lastExpired = System.currentTimeMillis();
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Expiring blocklist entrys at" + _lastExpired);
+            // schedule the next one
+            super.requeue(expireInterval());
+        }
+    }
+
+    private void clear(){
+        synchronized(_singleIPBlocklist) {
+            _singleIPBlocklist.clear();
+        }
+        synchronized(_singleIPv6Blocklist) {
+            _singleIPv6Blocklist.clear();
         }
     }
 
@@ -308,11 +373,18 @@ public class Blocklist {
                     reason = " <b>➜</b> " + _x("Hash") + ": " + peerhash;
                 else
                     reason = " <b>➜</b> " + _x("Banned by Router Hash");
-                _context.banlist().banlistRouterForever(peer, reason, comment);
+                banlistRouter(peer, reason, comment);
             }
             _peerBlocklist.clear();
             return count;
         }
+    }
+
+    private void banlistRouter(Hash peer, String reason, String comment) {
+        if (expireInterval() > 0)
+            _context.banlist().banlistRouter(peer, reason, comment, null, expireInterval());
+        else
+            _context.banlist().banlistRouterForever(peer, reason, comment);
     }
 
     /**
@@ -908,6 +980,9 @@ public class Blocklist {
     /**
      * Does the peer's IP address appear in the blocklist?
      * If so, and it isn't banlisted, banlist it forever...
+     * or, if the user configured an override, ban it for the 
+     * override period.
+     * @since 0.9.29
      */
     public boolean isBlocklisted(Hash peer) {
         List<byte[]> ips = getAddresses(peer);
@@ -927,6 +1002,8 @@ public class Blocklist {
     /**
      * Does the peer's IP address appear in the blocklist?
      * If so, and it isn't banlisted, banlist it forever...
+     * or, if the user configured an override, ban it for the 
+     * override period.
      * @since 0.9.29
      */
     public boolean isBlocklisted(RouterInfo pinfo) {
@@ -1162,7 +1239,7 @@ public class Blocklist {
                 _context.banlist().banlistRouter(peer, reason, sip, null, _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
             return;
         }
-        _context.banlist().banlistRouterForever(peer, reason, sip);
+        banlistRouter(peer, reason, sip);
         if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_DETAIL))
             return;
         boolean shouldRunJob;
@@ -1190,7 +1267,7 @@ public class Blocklist {
         }
         public String getName() { return "Enforce Blocklist IP Ban"; }
         public void runJob() {
-            banlistForever(_peer, _ips);
+            banlistRouter(_peer, _ips, expireInterval());
             synchronized (_inProcess) {
                 _inProcess.remove(_peer);
             }
@@ -1206,7 +1283,13 @@ public class Blocklist {
      * So we also stagger these jobs.
      *
      */
-    private synchronized void banlistForever(Hash peer, List<byte[]> ips) {
+    private void banlistRouter( Hash peer, String reason, String reasonCode, long duration) {
+        if (duration > 0)
+            _context.banlist().banlistRouter(peer, reason, reasonCode, null, System.currentTimeMillis()+expireInterval());
+        else
+            _context.banlist().banlistRouterForever(peer, reason, reasonCode);
+    }
+    private synchronized void banlistRouter(Hash peer, List<byte[]> ips, long duration) {
         // This only checks one file for now, pick the best one
         // user specified
         File blFile = null;
@@ -1226,7 +1309,7 @@ public class Blocklist {
             // just ban it and be done
             if (_log.shouldWarn())
                 _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session");
-            _context.banlist().banlistRouterForever(peer, " <b>➜</b> " + "Banned");
+            banlistRouter(peer, " <b>➜</b> " + "Banned", expireInterval());
             return;
         }
 
@@ -1259,7 +1342,7 @@ public class Blocklist {
                         //reason = reason + " banned by " + BLOCKLIST_FILE_DEFAULT + " entry \"" + buf + "\"";
                         if (_log.shouldWarn())
                             _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Source: blocklist.txt");
-                        _context.banlist().banlistRouterForever(peer, reason, buf.toString());
+                        banlistRouter(peer, reason, buf.toString(), expireInterval());
                         return;
                     }
                 }
