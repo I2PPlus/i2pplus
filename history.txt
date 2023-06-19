@@ -11,6 +11,11 @@
 2023-06-07 dr|z3d
  * Console: Merge upstream cosmetic fixes for graph rendering
 
+2023-05-29 idk
+ * Router: Add "virtual contexts" to bloom filter, where each entity that passes
+   an i2np message to the bloom filter xor's the messageID with a random, local value.
+   credit Xe Iaso for discovering the issue, obscuratus for the solution
+
 2023-05-14 dr|z3d
  * Console: Iconize navbar links in configuration section
 
@@ -84,11 +89,6 @@
  * Installer:
    - Supply wrapper-windows.jar with universal installer for Win64
    - Update service wrapper to 3.5.51 for non-Windows; drop ARM6
-
-2023-05-29 idk
- * Router: Add "virtual contexts" to bloom filter, where each entity that passes
-   an i2np message to the bloom filter xor's the messageID with a random, local value.
-   credit Xe Iaso for discovering the issue, obscuratus for the solution
 
 2023-03-15 dr|z3d
  * Wrapper: Upgrade to 3.5.51
