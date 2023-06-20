@@ -3,7 +3,7 @@
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 }
 *{-webkit-text-stroke:0!important}
-a,a.control,a:link,a:visited,a#settings,b,button,h3,h4,h5,input[type="reset"],input[type="submit"],select,.control,.control:link,.control:visited,.fakebutton,.fakebutton:visited,.panel th,.rih,.rih a,.statvalue,.tab,.torrentDownloaded,.tunnelConfig th,.txBarText,a#expand,#logs li,#logs pre,#navbar a,#ourDest,#sb_localtunnels a,#screenlog li,#sidebar a,#statusMessages,#statusMessages:active,#statusMessages:focus,#torrents tfoot tr:first-child th{font-weight:600}
+a,a.control,a:link,a:visited,a#settings,b,button,h3,h4,h5,input[type="reset"],input[type="submit"],select,.control,.control:link,.control:visited,.fakebutton,.fakebutton:visited,.panel th,.rih,.rih a,td a:link,.statvalue,.tab,.torrentDownloaded,.snarkFileName a,.torrentName a,.tunnelConfig th,.txBarText,a#expand,#logs li,#logs pre,#navbar a,#ourDest,#sb_localtunnels a,#screenlog li,#sidebar a,#statusMessages,#statusMessages:active,#statusMessages:focus,#torrents tfoot tr:first-child th{font-weight:600}
 h1{font-weight:800}
 input[type=password],input[type=text],label,pre,textarea,.infohash,.infohelp,.infowarn,.listDate{font-weight:500}
 h2,.headline h3,.tab2,#sidebar h3,#sidebar h3 a,.main h3{font-weight:700}
