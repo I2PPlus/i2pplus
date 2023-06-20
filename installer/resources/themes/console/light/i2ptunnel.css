@@ -22,7 +22,7 @@ br{clear:left}
 button,h1,h2,h3,th,.control,.newTunnel,.buttons{user-select:none}
 div{box-sizing:border-box}
 form{margin:0}
-h2,h3,th,a,button.control,select{text-shadow:0 1px 1px #fff}
+h2,h3,th,a,button,select,.control{text-shadow:0 1px 1px #fff}
 h2,h3{border-radius:2px 2px 0 0}
 hr{display:none}
 label{vertical-align:middle}
@@ -100,13 +100,16 @@ textarea[name="accessList"]:focus{height:112px}
 .buttons>*{vertical-align:middle}
 .clientName,.clientKey{width:calc(100% - 38px)}
 .clientKey[readonly]{background:var(--key) no-repeat 3px center,var(--readonly);background-size:16px,100%}
+a.control:link,a.control:visited{color:var(--ink_light)}
+a:link:hover,a:hover,a:visited:hover,a:visited:focus{color:#f60;text-decoration:none;text-shadow:none}
+a.control:hover{color:var(--ink)}
 .control,.control:link,.control:visited,button{margin:2px 4px;padding:5px 8px;min-width:100px;text-align:center;white-space:nowrap;box-sizing:border-box;text-decoration:none;font-style:normal;font-weight:400;color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:linear-gradient(180deg,#fff,#efefff);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
-a.control:hover,a.control:focus,.control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink);border:1px solid #f60;box-shadow:var(--btn_shadow_hover);background:linear-gradient(180deg,#eee,#fff);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
+.control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink);border:1px solid #f60;box-shadow:var(--btn_shadow_hover);background:linear-gradient(180deg,#eee,#fff);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 .control:active,button:active{box-shadow:var(--highlight),inset 2px 2px 2px #555;color:#4c526f}
 .control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}
 .control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.iconize:active{background-blend-mode:luminosity}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
+.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent!important;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
 .control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover)}
 .control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
