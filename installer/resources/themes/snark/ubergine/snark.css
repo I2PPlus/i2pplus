@@ -203,8 +203,8 @@ td.graphicStatus img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inl
 .torrentDownloaded{padding-left:5px;padding-right:5px;width:1%;max-width:200px;white-space:nowrap;text-align:center;color:#76a}
 .torrentETA{line-height:1.2;text-align:center;font-weight:700;font-style:italic;color:#dd7}
 .trackerLink,.torrentDetails{padding:2px 0;width:1%}
-#torrentlist{margin:0 1px 2px;padding:0 1px 1px;display:block;border:1px solid rgba(119,102,119,.7);border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 1px 1px #323;background:#202}
-#torrents{margin:1px 0 0;width:calc(100% - 2px);width:100%;border-collapse:separate;border:var(--border_hard);border-spacing:0;border-radius:4px;box-shadow:0 0 0 1px #101;background:#212}
+#torrentlist{margin:0 1px 2px;padding:0 1px;display:block;border:1px solid rgba(119,102,119,.7);border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 1px 1px #323;background:#202}
+#torrents{margin:1px 0 0;width:calc(100% - 2px);width:100%;border-collapse:separate;border:var(--border_inner);border-spacing:0;border-radius:4px;box-shadow:0 0 0 1px #101;background:#212}
 #torrents thead{filter:drop-shadow(0 1px 1px #101)}
 #torrents thead th:nth-child(3){max-width:40px;overflow:visible;white-space:nowrap}
 #torrents thead th{padding-top:3px;padding-bottom:4px;vertical-align:middle;border-top:none;border-bottom:var(--border_inner)}
@@ -222,7 +222,7 @@ td.graphicStatus img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inl
 #totals{display:inline-block;margin:5px 0 3px 6px;font-weight:700;vertical-align:middle}
 #totals span,#ourDest{white-space:nowrap}
 .iframed #torrentlist{border-radius:0}
-.iframed #torrents{margin:1px 0}
+.iframed #torrents{margin:1px 0;border-radius:0}
 .iframed #torrents thead th{padding-bottom:3px}
 .iframed #torrents tfoot tr:first-child th{padding-top:4px;padding-bottom:2px}
 
@@ -825,6 +825,7 @@ td .commentAuthorName{margin:0 4px 0 4px;padding:0 4px 0 22px;min-width:126px;ma
 #torrentDisplay label:hover{color:var(--hover);box-shadow:var(--highlight),inset 0 0 0 2px rgba(255,128,0,.3);background:var(--btnAction_hover)}
 #torrentDisplay label:active{text-shadow:none;-webkit-text-stroke:0}
 #torrentlist #torrentDisplay~#torrents,.iframed #torrentlist #torrentDisplay~#torrents{border-radius:0 0 4px 4px;border-top:none;box-shadow:none}
+.iframed #torrentlist #torrentDisplay~#torrents{border-radius:0}
 .iframed #torrentDisplay{margin:1px 1px -1px;position:relative;z-index:999;border-radius:0}
 .iframed #torrentlist #torrentDisplay>input~#torrents,.iframed #torrents,.iframed #torrents tfoot th{border-radius:0}
 
