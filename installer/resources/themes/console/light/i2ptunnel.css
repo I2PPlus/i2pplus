@@ -100,8 +100,8 @@ textarea[name="accessList"]:focus{height:112px}
 .buttons>*{vertical-align:middle}
 .clientName,.clientKey{width:calc(100% - 38px)}
 .clientKey[readonly]{background:var(--key) no-repeat 3px center,var(--readonly);background-size:16px,100%}
-.control,.control:link,.control:visited,button{margin:2px 4px;padding:5px 8px;min-width:100px;text-align:center;white-space:nowrap;box-sizing:border-box;text-decoration:none;font-style:normal;font-weight:400;color:var(--ink);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:linear-gradient(180deg,#fff,#efefff);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
-.control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink_darker);border:1px solid #f60;box-shadow:var(--highlight),inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);background:linear-gradient(180deg,#eee,#fff);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
+.control,.control:link,.control:visited,button{margin:2px 4px;padding:5px 8px;min-width:100px;text-align:center;white-space:nowrap;box-sizing:border-box;text-decoration:none;font-style:normal;font-weight:400;color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:linear-gradient(180deg,#fff,#efefff);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+a.control:hover,a.control:focus,.control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink);border:1px solid #f60;box-shadow:var(--btn_shadow_hover);background:linear-gradient(180deg,#eee,#fff);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 .control:active,button:active{box-shadow:var(--highlight),inset 2px 2px 2px #555;color:#4c526f}
 .control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}
 .control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
