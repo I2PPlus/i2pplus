@@ -2086,12 +2086,12 @@ select[name="newlogclass"]{margin-left:3px}
 #consolepass th:nth-child(2){text-align:left}
 #consolepass td:not([colspan]):first-child{width:100px;white-space:nowrap}
 #consolepass td{padding:5px 10px}
-#consolepass input{margin:5px}
+#consolepass input{margin:5px;width:200px}
 #consolepass td#pw_adduser{padding:5px 10px;border-top:var(--border_inner)}
 td#pw_adduser input{margin:5px 20px 5px 5px}
-#consolepass input[name="name"]{margin-right:20px}
+#consolepass input[name="name"]{margin-right:20px;padding-left:26px}
 #consolepass input[name="name"],#externali2cp input[name="user"],#reseedconfig input[name="username"],#reseedconfig input[name="susername"]{background:#fbfbff var(--user) no-repeat 5px center/18px}
-#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type=password]{padding:6px 5px 6px 26px;background:#fbfbff var(--key) no-repeat 5px center/16px;background-blend-mode:luminosity}
+#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type=password]{padding:6px 5px 6px 26px;background:#fbfbff var(--key) no-repeat 7px center/16px;background-blend-mode:luminosity}
 #consolepass input[name="name"],#externali2cp input[name="user"],#reseedconfig input[name="username"],#reseedconfig input[name="susername"]
 #consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus,#reseedconfig input[name="username"]:focus,#consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus,#reseedconfig input[type=password]:focus{background-color:#fff;background-blend-mode:normal}
 
