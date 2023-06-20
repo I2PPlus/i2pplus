@@ -10,7 +10,7 @@ a:active,tr:hover td[onclick]:active a{color:var(--active)}
 a{color:#327bbf;text-decoration:none;font-weight:700;outline:none}
 a:hover,a:focus,tr:hover td[onclick] a{text-decoration:none;color:var(--hover)}
 a:visited{color:#6b97bf}
-a.fakebutton,a.fakebutton:visited{font-weight:400;color:var(--ink)}
+a.fakebutton,a.fakebutton:visited{font-weight:400;color:var(--ink_light)}
 b,h3,.pagenav td,th{color:#5b5b71;text-shadow:var(--txt_shadow)}
 body{margin:5px;background:var(--bodybg) url(/themes/console/light/images/tile2.png)}
 body.iframed{margin:5px 0 0 0;background:transparent}
@@ -69,8 +69,8 @@ input[type=text]::placeholder,input[type=password]::placeholder{font-style:itali
 input[type=text]:focus::placeholder,input[type=password]:focus::placeholder{opacity:0}
 #attachedfile input[type=checkbox]:hover,#attachedfile input[type=checkbox]:focus,.mailListDelete input[type=checkbox]:hover,.mailListDelete input[type=checkbox]:focus{filter:sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933)}
 input[type=text],input[type=password]{cursor:text;font-family:var(--bodyfont);font-size:9pt}
-input[type=submit],input[type=reset],#settings,.fakebutton{margin:3px;padding:4px 5px;font:9pt var(--bodyfont);text-decoration:none;text-shadow:var(--txt_shadow);color:var(--ink);border:1px solid #9ea8d1;border-radius:2px;box-shadow:0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.1) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.1);background:var(--btn);background-size:14px,100%;cursor:pointer;opacity:1;filter:drop-shadow(0 0 1px rgba(220,220,255,.7));}
-input[type=submit]:hover,input[type=reset]:hover,input[type=submit]:focus,input[type=reset]:focus,#settings:hover,#settings:focus,.fakebutton:hover,.fakebutton:focus{color:#222;border:1px solid var(--hover);box-shadow:var(--highlight),inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
+input[type=submit],input[type=reset],#settings,.fakebutton{margin:3px;padding:4px 5px;font:9pt var(--bodyfont);text-decoration:none;text-shadow:var(--txt_shadow);color:var(--ink_light);border:1px solid #9ea8d1;border-radius:2px;box-shadow:0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.1) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.1);background:var(--btn);background-size:14px,100%;cursor:pointer;opacity:1;filter:drop-shadow(0 0 1px rgba(220,220,255,.7));}
+input[type=submit]:hover,input[type=reset]:hover,input[type=submit]:focus,input[type=reset]:focus,#settings:hover,#settings:focus,.fakebutton:hover,.fakebutton:focus{color:var(--ink);border:1px solid var(--hover);box-shadow:var(--highlight),inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 input[type=submit]:active,input[type=reset]:active,#settings:active,.fakebutton:active{box-shadow:var(--highlight),inset 2px 2px 2px #999;color:#555;background-blend-mode:luminosity;border:1px solid var(--active)}
 input.cancel,#nukemail input.clearselection{padding:5px 7px 5px 22px;background:var(--no) no-repeat 6px center/12px,var(--btn)}
 input.cancel:hover,#nukemail input.clearselection:hover{background:var(--no) no-repeat 6px center/12px,var(--btn_hover)}
@@ -343,11 +343,11 @@ td span,td a,td b{vertical-align:middle;line-height:1}
 #nukemail span{margin:30px auto 20px;padding-bottom:20px;display:inline-block;width:100%;font-size:120%;border-bottom:1px solid #933}
 
 /* loading mail */
-select{margin:5px;padding:5px 24px 5px 5px;min-width:120px;text-align:left;font-size:9pt;color:var(--ink);border:var(--border_input);border-radius:2px;box-shadow:0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.1) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.1);background:var(--dropdown) no-repeat right 8px center/10px,var(--btn);appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+select{margin:5px;padding:5px 24px 5px 5px;min-width:120px;text-align:left;font-size:9pt;color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.1) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.1);background:var(--dropdown) no-repeat right 8px center/10px,var(--btn);appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 select:-moz-focusring{outline:1px solid transparent}
 select option{background:#fff}
-select:hover,select:active{cursor:pointer;color:var(--ink_darker);box-shadow:var(--highlight);background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
-select:focus{color:var(--ink_darker);box-shadow:0 0 1px #89f;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
+select:hover,select:active{cursor:pointer;color:var(--ink);box-shadow:var(--highlight);background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
+select:focus{color:var(--ink);box-shadow:0 0 1px #89f;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
 select::-moz-focus-inner{outline:none;border:0}
 select::-ms-expand{display:none}
 .folders{margin:-3px 0 0 0;float:left}

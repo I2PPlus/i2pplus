@@ -71,6 +71,9 @@
 <tr><th>router.blocklist.file={/path/to/additional_blocklist.txt}</th></tr>
 <tr><td><%=intl._t("This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]")%></td></tr>
 
+<tr><th>router.blocklist.expireInterval={n}</th></tr>
+<tr><td><%=intl._t("This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]")%></td></tr>
+
 <tr><th>router.buildHandlerThreads={n}</th></tr>
 <tr><td><%=intl._t("Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks.")%></td></tr>
 

@@ -2341,7 +2341,7 @@ public class WebMail extends HttpServlet
                         "<link rel=stylesheet type=text/css href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
                 }
                 if (enableSoraFont) {
-                    out.println("<link rel=preload as=style href=\"" + sessionObject.themePath + "../../fonts/Sora.css?" + CoreVersion.VERSION + "\">");
+                    out.println("<link rel=stylesheet type=text/css href=\"" + sessionObject.themePath + "../../fonts/Sora.css?" + CoreVersion.VERSION + "\">");
                 }
                 if(state == State.LIST)
                     out.println("<link rel=stylesheet href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" type=text/css media=\"print\" />");

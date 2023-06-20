@@ -2078,23 +2078,22 @@ select[name="newlogclass"]{margin-left:3px}
 #themeoptions,#themesettings{box-shadow:var(--highlight)}
 #themeoptions{margin:0 -5px -1px;padding:5px 10px 4px 5px;position:relative;top:4px;clear:both;border-top:var(--border_inner);background:repeating-linear-gradient(45deg,rgba(252,252,255,.5) 2px,rgba(221,221,255,.3) 3px,#fafaff 5px),#fafaff}
 #themeoptions br{display:none}
-#themeoptions label{margin:2px 10px 2px 0;display:inline-block;white-space:nowrap}
+#themeoptions label{margin:2px 10px 2px 0;display:inline-block;white-space:nowrap;columns:auto 720px}
 #themeoptions input{margin:2px 5px}
-#themesettings{clear:both}
+#themesettings{margin-bottom:12px;width:calc(100% - 12px);float:left}
 
 /* console password */
-table#consolepass th:nth-child(2){text-align:left}
-table#consolepass td:not[colspan]:first-child{width:100px;white-space:nowrap}
-table#consolepass td{padding:5px 10px}
-table#consolepass input{margin:5px}
-table#consolepass td#pw_adduser{padding:5px 10px;border-top:var(--border_inner)}
+#consolepass th:nth-child(2){text-align:left}
+#consolepass td:not([colspan]):first-child{width:100px;white-space:nowrap}
+#consolepass td{padding:5px 10px}
+#consolepass input{margin:5px;width:200px}
+#consolepass td#pw_adduser{padding:5px 10px;border-top:var(--border_inner)}
 td#pw_adduser input{margin:5px 20px 5px 5px}
-table#consolepass input[name="name"]{margin-right:20px}
-#consolepass input[name="name"],#externali2cp input[name="user"],#reseedconfig input[name="username"],#reseedconfig input[name="susername"]{background:#fbfbff var(--user) no-repeat 5px center}
-#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type=password]{padding:6px 5px 6px 26px;background:#fbfbff var(--key) no-repeat 5px center;background-size:16px;background-blend-mode:luminosity}
-#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus,#reseedconfig input[name="username"]:focus,#consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus,#reseedconfig input[type=password]:focus{background-color:#fff;background-blend-mode:normal}
+#consolepass input[name="name"]{margin-right:20px;padding-left:26px}
+#consolepass input[name="name"],#externali2cp input[name="user"],#reseedconfig input[name="username"],#reseedconfig input[name="susername"]{background:#fbfbff var(--user) no-repeat 5px center/18px}
+#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type=password]{padding:6px 5px 6px 26px;background:#fbfbff var(--key) no-repeat 7px center/16px;background-blend-mode:luminosity}
 #consolepass input[name="name"],#externali2cp input[name="user"],#reseedconfig input[name="username"],#reseedconfig input[name="susername"]
-#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type=password]{padding:6px 5px 6px 26px;background-size:16px;background-blend-mode:luminosity}
+#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus,#reseedconfig input[name="username"]:focus,#consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus,#reseedconfig input[type=password]:focus{background-color:#fff;background-blend-mode:normal}
 
 /* update */
 #i2pupdates input[type=text]:not([readonly]),#i2pupdates textarea,.main[id^="config_"] textarea,input[name="newsURL"]{margin-left:3px;width:calc(100% - 6px)}

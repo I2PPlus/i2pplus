@@ -25,6 +25,7 @@ h1,tr,.main,iframe,.sb,#sb_wrap{contain:layout}
 h1,.main,.news,.sorry{margin-left:211px}
 hr{margin:3px 0;height:2px;border:0;background:var(--border_color)}
 i{padding-right:1px}
+label{color:var(--ink_light)}
 p{padding:5px 20px 0 20px;text-align:justify}
 pre{margin:0 20px;padding-top:10px;width:95%;overflow:auto;font-size:8.5pt}
 thead,tfoot{border:var(--border)}
