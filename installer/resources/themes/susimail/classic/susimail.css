@@ -26,7 +26,7 @@ div.footer{margin:0 -10px -10px;padding:1px;display:none;border-top:var(--border
 div.header{display:none}
 div#pagenav{border-top:var(--border);padding:10px 5px 0;font-size:9.5pt;border-radius:0 0 4px 4px;margin:0 -11px}
 .folders{margin-left:-2px;padding:0 5px 5px}
-.folders > *{vertical-align:middle}
+.folders>*{vertical-align:middle}
 h3#config{margin:-11px auto 10px;padding:5px 10px;width:300px;font-size:11pt;color:var(--ink_light);border:var(--border);border-radius:0 0 2px 2px;background:var(--header)}
 img.sort:not(.selected):hover{transform:scale(1.2)}
 img.sort{padding:3px 4px;width:10px;height:10px;display:inline-block;vertical-align:middle;opacity:.6}
@@ -232,11 +232,10 @@ tr:hover .listDate{opacity:.9}
 #mailbox th.mailListAttachment{background:var(--attach) no-repeat center center/14px,var(--header)}
 #mailbox th.mailListDelete{background:var(--nuke) no-repeat center center/14px,var(--header)}
 #mailbox th.mailListFlagged{background:url(../images/status.png) no-repeat center center,var(--header);background-blend-mode:luminosity}
-#mailbox th > *{vertical-align:middle}
+#mailbox th>*{vertical-align:middle}
+#mailbox td.mailListSize{text-align:right}
 #mailbox td.mailListSender{padding-left:18px}
-#mailbox td.mailListSender a{font-weight:400}
-#mailbox td:nth-child(3) a{font-weight:400}
-#mailbox td:nth-child(5){text-align:left}
+#mailbox td.mailListSender a{font-weight:400;color:var(--ink)}
 #mailbox tr:hover td:nth-child(3) a{color:#104e99}
 #mailbox tr.bottombuttons td{padding-top:5px;padding-bottom:5px;border-top:var(--border);background:var(--bg)}
 #mailbox tr.bottombuttons td:first-child{text-align:left}
@@ -278,10 +277,10 @@ tr:hover .listDate{opacity:.9}
 .iframed .page{margin:-6px 1px 11px;min-width:580px;border:0;box-shadow:none;background:transparent}
 .iframed p.mailbody{margin:0;padding:0 20px 10px}
 .iframed .topbuttons,.iframed p.error,.iframed p.info{margin:-1px -11px;border:var(--border);border-left:none;border-right:none}
-.iframed .topbuttons{margin-bottom:-2px;padding:6px 0 5px}
+.iframed .topbuttons{margin-bottom:-2px;padding:6px 0 1px}
 .iframed .topbuttons .pagenavcontrols{border:0}
 .iframed .topbuttons .pagenavcontrols td{padding:0 5px}
-.iframed .topbuttons > *{vertical-align:middle}
+.iframed .topbuttons>*{vertical-align:middle}
 .iframed #viewmail{margin:1px 0 -10px;padding:0;border:var(--border)}
 .iframed #viewmail .folders{padding-top:4px}
 
