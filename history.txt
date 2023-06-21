@@ -1,3 +1,6 @@
+2023-06-21 dr|z3d
+ * I2PTunnel: Add server/client status counters to index page
+
 2023-06-15 dr|z3d
  * Console: Add UI toggle to enable/disable alternative display font for console
    and default web apps
