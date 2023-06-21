@@ -857,18 +857,18 @@ public class SummaryHelper extends HelperBase {
 //                    if ((timeToExpire < 0) || !ls.isCurrent(0)) {
                     if (timeToExpire < 0) {
                         // red light
-                        buf.append("<td class=tunnelRebuilding><img src=/themes/console/images/local_down.png alt=\"")
+                        buf.append("<td class=tunnelRebuilding><img src=/themes/console/images/local_down.svg alt=\"")
                            .append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired")).append(" ")
                            .append(DataHelper.formatDuration2(0 - timeToExpire));
                         buf.append(" ").append(_t("ago")).append(". ").append(_t("Rebuilding")).append("&hellip;\" width=16 height=16></td></tr>\n");
                     } else {
                         // green light
-                        buf.append("<td class=tunnelReady><img src=/themes/console/images/local_up.png alt=Ready title=\"")
-                           .append(_t("Ready")).append("\" width=16 height=16></td></tr>\n");
+                        buf.append("<td class=tunnelReady><img src=/themes/console/images/local_up.svg alt=\"")
+                           .append(_t("Ready")).append("\" title=\"").append(_t("Ready")).append("\" width=16 height=16></td></tr>\n");
                     }
                 } else {
                     // yellow light
-                    buf.append("<td class=tunnelBuilding><img src=/themes/console/images/local_inprogress.png alt=\"")
+                    buf.append("<td class=tunnelBuilding><img src=/themes/console/images/local_inprogress.svg alt=\"")
                        .append(_t("Building")).append("&hellip;\" title=\"").append(_t("Building tunnels"))
                        .append("&hellip;\" width=16 height=16></td></tr>\n");
                 }

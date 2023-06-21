@@ -271,6 +271,14 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 #screenlog .clearlog:hover{box-shadow:none;background:rgba(255,255,255.5) var(--close_hover) no-repeat center center/16px}
 #screenlog .clearlog:active{box-shadow:var(--btn_shadow_active);background:#f2f2f2 var(--close) no-repeat center center/14px}
 
+/* server/client count */
+#countClient,#countServer{margin:-1px -2px 0 0;float:right;text-transform:none}
+#countClient span:empty,#countServer span:empty{display:none}
+.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding:4px 6px 4px 25px;display:inline-block;font-size:9pt;box-shadow:var(--box_border_badge);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
+.standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
+.starting:not([hidden]){background-image:var(--local_inprogress),var(--badge)}
+.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
+
 /* chrome */
 @supports not (-moz-appearance:none){select{white-space:normal}}
 
