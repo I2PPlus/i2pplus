@@ -45,30 +45,30 @@
 <%
     if (uri.contains("config")) {
 %>
-<link rel=preload href="/themes/console/confignav.css" as="style">
+<link rel=preload href="/themes/console/confignav.css" as=style>
 <%
     }
 %>
-<link rel=preload href="<%=themePath%>global.css" as="style">
+<link rel=preload href="<%=themePath%>global.css" as=style>
 <%
     if (useSoraFont) {
 %>
-<link rel=preload href="/themes/fonts/Sora.css" as="style">
+<link rel=preload href="/themes/fonts/Sora.css" as=style>
 <%
     } else {
 %>
-<link rel=preload href="/themes/fonts/DroidSans.css" as="style">
+<link rel=preload href="/themes/fonts/DroidSans.css" as=style>
 <%
     }
 %>
 <link rel=preload href="<%=themePath%>images/i2plogo.png" as=image>
-<link rel=preload href="/themes/console/images/images.css" as="style">
-<link rel=preload href="<%=themePath%>images/images.css" as="style">
+<link rel=preload href="/themes/console/images/images.css" as=style>
+<link rel=preload href="<%=themePath%>images/images.css" as=style>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <%
     if (hasOverride) {
 %>
-<link rel=preload href="<%=themePath%>override.css" as="style">
+<link rel=preload href="<%=themePath%>override.css" as=style>
 <%
     }
 %>

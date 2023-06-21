@@ -27,14 +27,22 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
+    if (ctx.getProperty("routerconsole.lang") != null) {
         lang = ctx.getProperty("routerconsole.lang");
+    }
 %>
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <link type=text/css rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
+<%
+    if (useSoraFont) {
+%>
+<link href=/themes/fonts/Sora.css rel=stylesheet type=text/css>
+<%
+    }
+%>
 <%=intl.title("Page Not Found")%>
 <script nonce=<%=cspNonce%> type=text/javascript>if (window.location !== window.top.location) {window.top.location = window.location;}</script>
 </head>
