@@ -303,9 +303,9 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 .iframed #ssl{margin-bottom:-5px}
 
 /* server/client count */
-#countClient,#countServer{margin:-1px -2px 0 0;float:right;text-transform:none}
+#countClient,#countServer{margin:-1px -1px 0 0;float:right;text-transform:none}
 #countClient span:empty,#countServer span:empty{display:none}
-.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding:4px 6px 4px 25px;display:inline-block;font-size:9pt;box-shadow:var(--bevel);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
+.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding:4px 6px 4px 28px;display:inline-block;letter-spacing:.1em;font-size:9pt;box-shadow:var(--highlight),0 0 0 1px #e2e2e9;background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
 .standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
 .starting:not([hidden]){background-image:var(--local_inprogress),var(--badge)}
 .stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
@@ -319,8 +319,11 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 @keyframes showToggle{from{transform:scale(0)}to{transform:scale(1)}}
 
 @media (max-width:1500px){
+.control.create{margin-right:2px}
 .panel table:last-of-type{margin-bottom:1px}
 #regDisabled{margin-bottom:4px}
+#countClient,#countServer{margin:-2px -3px 0 0;line-height:1.15}
+
 }
 
 @media (max-width:1300px){
