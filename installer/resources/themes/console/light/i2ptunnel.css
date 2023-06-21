@@ -303,7 +303,7 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 .iframed #ssl{margin-bottom:-5px}
 
 /* server/client count */
-#countClient,#countServer{margin:-3px -2px 0 0;float:right;text-transform:none}
+#countClient,#countServer{margin:-1px -2px 0 0;float:right;text-transform:none}
 #countClient span:empty,#countServer span:empty{display:none}
 .running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding:4px 6px 4px 25px;display:inline-block;font-size:9pt;box-shadow:var(--bevel);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
 .standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
