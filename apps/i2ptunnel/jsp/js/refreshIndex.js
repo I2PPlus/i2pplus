@@ -191,56 +191,56 @@ function countServices() {
   if (runningClient !== null && runningClient.length > 0) {
     runningClientCount.innerHTML = " x " + runningClient.length;
     runningClientCount.hidden = false;
-  } else {
+  } else if (runningClient !== null) {
     runningClientCount.innerHTML == "";
     runningClientCount.hidden = true;
   }
   if (runningServer !== null && runningServer.length > 0) {
     runningServerCount.innerHTML = " x " + runningServer.length;
     runningServerCount.hidden = false;
-  } else {
+  } else if (runningServer !== null) {
     runningServerCount.innerHTML = "";
     runningServerCount.hidden = true;
   }
   if (standbyClient !== null && standbyClient.length > 0) {
     standbyClientCount.innerHTML = " x " + standbyClient.length;
     standbyClientCount.hidden = false;
-  } else {
+  } else if (standbyClient !== null) {
     standbyClientCount.innerHTML = "";
     standbyClientCount.hidden = true;
   }
   if (standbyServer !== null && standbyServer.length > 0) {
     standbyServerCount.innerHTML = " x " + standbyServer.length;
     standbyServerCount.hidden = false;
-  } else {
+  } else if (standbyServer !== null) {
     standbyServerCount.innerhHTML = "";
     standbyServerCount.hidden = true;
   }
   if (startingClient !== null && startingClient.length > 0) {
     startingClientCount.innerHTML = " x " + startingClient.length;
     startingClientCount.hidden = false;
-  } else {
+  } else if (startingClient !== null) {
     startingClientCount.innerHTML = "";
     startingClientCount.hidden = true;
   }
   if (startingServer !== null && startingServer.length > 0) {
     startingServerCount.innerHTML = " x " + startingServer.length;
     startingServerCount.hidden = false;
-  } else {
+  } else if (startingServer !== null) {
     startingServerCount.innerHTML = "";
     startingServerCount.hidden = true;
   }
   if (stoppedClient !== null && stoppedClient.length > 0) {
     stoppedClientCount.innerHTML = " x " + stoppedClient.length;
     stoppedClientCount.hidden = false;
-  } else {
+  } else if (stoppedClient !== null) {
     stoppedClientCount.innerHTML = "";
     stoppedClientCount.hidden = true;
   }
   if (stoppedServer !== null && stoppedServer.length > 0) {
     stoppedServerCount.innerHTML = " x " + stoppedServer.length;
     stoppedServerCount.hidden = false;
-  } else {
+  } else if (stoppedServer !== null) {
     stoppedServerCount.innerHTML = "";
     stoppedServerCount.hidden = true;
   }
