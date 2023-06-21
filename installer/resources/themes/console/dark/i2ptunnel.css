@@ -287,7 +287,6 @@ td#throttle,#clientAuthConfig{padding:0}
 #wizardPanel .options{padding:10px}
 #wizardPanel .tag{margin-right:3px;width:10%;min-width:150px;white-space:nowrap;display:inline-block;font-weight:700;text-align:right}
 
-
 /* registration */
 #oldName{width:45%}
 #registration input[type=file]{margin-top:5px;margin-bottom:5px}
@@ -307,6 +306,14 @@ td#throttle,#clientAuthConfig{padding:0}
 #notReady,#down{margin:53px auto 50px;padding:30px;width:400px;text-align:center;font-size:11pt;font-weight:700;box-shadow:var(--highlight),inset 0 0 4px 4px rgba(0,0,0,.4),0 0 0 1px #000,0 0 0 2px #020,0 0 0 6px #030,0 0 0 8px #040;background:#020;background:repeating-linear-gradient(180deg,#020 2px,#010 4px)}
 #down{padding:20px;font-size:0}
 #down::after{width:40px;height:40px;display:inline-block;vertical-align:middle;background:var(--update) no-repeat center center;background-size:40px 40px;content:"";animation:linear spin 5s forwards infinite}
+
+/* server/client count */
+#countClient,#countServer{margin:-3px -2px 0 0;float:right;text-transform:none}
+#countClient span:empty,#countServer span:empty{display:none}
+.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding:4px 6px 4px 25px;display:inline-block;font-size:9pt;box-shadow:var(--bevel);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
+.standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
+.starting:not([hidden]){background-image:var(--local_inprogress),var(--badge)}
+.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 
 /* error */
 tr.configerror{box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset -1px 0 0 1px #000,inset 0 0 2px 1px #900,inset 0 -1px 2px 1px #900,inset -1px 0 2px 1px #900}
@@ -378,7 +385,7 @@ th .help::after,th .help:hover::after,th .help:focus::after{width:20px;height:20
 .tunnelControl .control{margin:3px -3px 3px 0}
 .tunnelInfo .selectAll{max-width:none}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{padding:10.5px 10px 9.5px 40px;background-position:10px center;background-size:22px auto,4px 100%,100%}
-#globalTunnelControl #toggleInfo{margin:-5px -4px 0 0;background-size:10px}
+#globalTunnelrol #toggleInfo{mn:-5px -4px 0 0;background-size:10px}
 #globalTunnelControl #toggleInfo img{width:17px;height:17px}
 #registration .displayText{width:800px}
 #statusMessages,#statusMessages:active,#statusMessages:focus{font-size:9pt}

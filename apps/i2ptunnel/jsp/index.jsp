@@ -94,7 +94,14 @@
 </table>
 </div>
 <div class=panel id=servers>
-<h2><%=intl._t("I2P Server Tunnels").replace("I2P ", "")%></h2>
+<h2><%=intl._t("I2P Server Tunnels").replace("I2P ", "")%>
+<span id=countServer>
+<span class=running></span>
+<span class=starting></span>
+<span class=standby></span>
+<span class=stopped></span>
+</span>
+</h2>
 <table id=serverTunnels>
 <tr>
 <th class=tunnelName><%=intl._t("Name")%></th>
@@ -349,7 +356,14 @@ ElGamal-2048
 </table>
 </div>
 <div class=panel id=clients>
-<h2><%=intl._t("I2P Client Tunnels").replace("I2P ", "")%></h2>
+<h2><%=intl._t("I2P Client Tunnels").replace("I2P ", "")%>
+<span id=countClient>
+<span class=running></span>
+<span class=starting></span>
+<span class=standby></span>
+<span class=stopped></span>
+</span>
+</h2>
 <table id=clientTunnels>
 <tr>
 <th class=tunnelName><%=intl._t("Name")%></th>
