@@ -5,23 +5,6 @@ var countClient = document.getElementById("countClient");
 var messages = document.getElementById("tunnelMessages");
 var toggle = document.getElementById("toggleInfo");
 
-var runningClientCount = document.querySelector("#countClient .running");
-var runningClient = document.querySelectorAll("#clientTunnels .statusRunning");
-var runningServerCount = document.querySelector("#countServer .running");
-var runningServer = document.querySelectorAll("#serverTunnels .statusRunning");
-var standbyClientCount = document.querySelector("#countClient .standby");
-var standbyClient = document.querySelectorAll("#clientTunnels .statusStandby");
-var standbyServerCount = document.querySelector("#countServer .standby");
-var standbyServer = document.querySelectorAll("#serverTunnels .statusStandby");
-var startingClientCount = document.querySelector("#countClient .starting");
-var startingClient = document.querySelectorAll("#clientTunnels .statusStarting");
-var startingServerCount = document.querySelector("#countServer .starting");
-var startingServer = document.querySelectorAll("#serverTunnels .statusStarting");
-var stoppedClientCount = document.querySelector("#countClient .stopped");
-var stoppedClient = document.querySelectorAll("#clientTunnels .statusNotRunning");
-var stoppedServerCount = document.querySelector("#countServer .stopped");
-var stoppedServer = document.querySelectorAll("#serverTunnels .statusNotRunning");
-
 function refreshTunnelStatus(timestamp) {
   var index = document.getElementById("page");
   var url = window.location.pathname;
@@ -69,57 +52,82 @@ function refreshTunnelStatus(timestamp) {
           countServices();
         }
 
+/*
         function countServices() {
+          var runningClientCount = document.querySelector("#countClient .running");
+          var runningClient = document.getElementsByClassName("cli statusRunning");
+          var runningServerCount = document.querySelector("#countServer .running");
+          var runningServer = document.getElementsByClassName("svr statusRunning");
+          var standbyClientCount = document.querySelector("#countClient .standby");
+          var standbyClient = document.getElementsByClassName("cli statusStandby");
+          var standbyServerCount = document.querySelector("#countServer .standby");
+          var standbyServer = document.getElementsByClassName("svr statusStandby");
+          var startingClientCount = document.querySelector("#countClient .starting");
+          var startingClient = document.getElementsByClassName("cli statusStarting");
+          var startingServerCount = document.querySelector("#countServer .starting");
+          var startingServer = document.getElementsByClassName("svr statusStarting");
+          var stoppedClientCount = document.querySelector("#countClient .stopped");
+          var stoppedClient = document.getElementsByClassName("cli statusNotRunning");
+          var stoppedServerCount = document.querySelector("#countServer .stopped");
+          var stoppedServer = document.getElementsByClassName("svr statusNotRunning");
           if (runningClient !== null && runningClient.length > 0) {
             runningClientCount.innerHTML = " x " + runningClient.length;
             runningClientCount.hidden = false;
           } else {
+            runningClientCount.innerHTML == "";
             runningClientCount.hidden = true;
           }
           if (runningServer !== null && runningServer.length > 0) {
             runningServerCount.innerHTML = " x " + runningServer.length;
             runningServerCount.hidden = false;
           } else {
+            runningServerCount.innerHTML = "";
             runningServerCount.hidden = true;
           }
           if (standbyClient !== null && standbyClient.length > 0) {
             standbyClientCount.innerHTML = " x " + standbyClient.length;
             standbyClientCount.hidden = false;
           } else {
+            standbyClientCount.innerHTML = "";
             standbyClientCount.hidden = true;
           }
           if (standbyServer !== null && standbyServer.length > 0) {
             standbyServerCount.innerHTML = " x " + standbyServer.length;
             standbyServerCount.hidden = false;
           } else {
+            standbyServerCount.innerhHTML = "";
             standbyServerCount.hidden = true;
           }
           if (startingClient !== null && startingClient.length > 0) {
             startingClientCount.innerHTML = " x " + startingClient.length;
             startingClientCount.hidden = false;
           } else {
+            startingClientCount.innerHTML = "";
             startingClientCount.hidden = true;
           }
           if (startingServer !== null && startingServer.length > 0) {
             startingServerCount.innerHTML = " x " + startingServer.length;
             startingServerCount.hidden = false;
           } else {
+            startingServerCount.innerHTML = "";
             startingServerCount.hidden = true;
           }
           if (stoppedClient !== null && stoppedClient.length > 0) {
             stoppedClientCount.innerHTML = " x " + stoppedClient.length;
             stoppedClientCount.hidden = false;
           } else {
+            stoppedClientCount.innerHTML = "";
             stoppedClientCount.hidden = true;
           }
           if (stoppedServer !== null && stoppedServer.length > 0) {
             stoppedServerCount.innerHTML = " x " + stoppedServer.length;
             stoppedServerCount.hidden = false;
           } else {
+            stoppedServerCount.innerHTML = "";
             stoppedServerCount.hidden = true;
           }
         }
-
+*/
         function refreshPanels() {
           var servers = document.getElementById("servers");
           var serversResponse = xhrtunnman.responseXML.getElementById("servers");
@@ -159,7 +167,83 @@ function refreshTunnelStatus(timestamp) {
       }
     }
   }
+  countServices();
   xhrtunnman.send();
+}
+
+function countServices() {
+  var runningClientCount = document.querySelector("#countClient .running");
+  var runningClient = document.getElementsByClassName("cli statusRunning");
+  var runningServerCount = document.querySelector("#countServer .running");
+  var runningServer = document.getElementsByClassName("svr statusRunning");
+  var standbyClientCount = document.querySelector("#countClient .standby");
+  var standbyClient = document.getElementsByClassName("cli statusStandby");
+  var standbyServerCount = document.querySelector("#countServer .standby");
+  var standbyServer = document.getElementsByClassName("svr statusStandby");
+  var startingClientCount = document.querySelector("#countClient .starting");
+  var startingClient = document.getElementsByClassName("cli statusStarting");
+  var startingServerCount = document.querySelector("#countServer .starting");
+  var startingServer = document.getElementsByClassName("svr statusStarting");
+  var stoppedClientCount = document.querySelector("#countClient .stopped");
+  var stoppedClient = document.getElementsByClassName("cli statusNotRunning");
+  var stoppedServerCount = document.querySelector("#countServer .stopped");
+  var stoppedServer = document.getElementsByClassName("svr statusNotRunning");
+  if (runningClient !== null && runningClient.length > 0) {
+    runningClientCount.innerHTML = " x " + runningClient.length;
+    runningClientCount.hidden = false;
+  } else {
+    runningClientCount.innerHTML == "";
+    runningClientCount.hidden = true;
+  }
+  if (runningServer !== null && runningServer.length > 0) {
+    runningServerCount.innerHTML = " x " + runningServer.length;
+    runningServerCount.hidden = false;
+  } else {
+    runningServerCount.innerHTML = "";
+    runningServerCount.hidden = true;
+  }
+  if (standbyClient !== null && standbyClient.length > 0) {
+    standbyClientCount.innerHTML = " x " + standbyClient.length;
+    standbyClientCount.hidden = false;
+  } else {
+    standbyClientCount.innerHTML = "";
+    standbyClientCount.hidden = true;
+  }
+  if (standbyServer !== null && standbyServer.length > 0) {
+    standbyServerCount.innerHTML = " x " + standbyServer.length;
+    standbyServerCount.hidden = false;
+  } else {
+    standbyServerCount.innerhHTML = "";
+    standbyServerCount.hidden = true;
+  }
+  if (startingClient !== null && startingClient.length > 0) {
+    startingClientCount.innerHTML = " x " + startingClient.length;
+    startingClientCount.hidden = false;
+  } else {
+    startingClientCount.innerHTML = "";
+    startingClientCount.hidden = true;
+  }
+  if (startingServer !== null && startingServer.length > 0) {
+    startingServerCount.innerHTML = " x " + startingServer.length;
+    startingServerCount.hidden = false;
+  } else {
+    startingServerCount.innerHTML = "";
+    startingServerCount.hidden = true;
+  }
+  if (stoppedClient !== null && stoppedClient.length > 0) {
+    stoppedClientCount.innerHTML = " x " + stoppedClient.length;
+    stoppedClientCount.hidden = false;
+  } else {
+    stoppedClientCount.innerHTML = "";
+    stoppedClientCount.hidden = true;
+  }
+  if (stoppedServer !== null && stoppedServer.length > 0) {
+    stoppedServerCount.innerHTML = " x " + stoppedServer.length;
+    stoppedServerCount.hidden = false;
+  } else {
+    stoppedServerCount.innerHTML = "";
+    stoppedServerCount.hidden = true;
+  }
 }
 
 function bindToggle() {
@@ -175,3 +259,4 @@ function refreshIndex() {
 
 bindToggle();
 setInterval(refreshIndex, 5000);
+document.addEventListener("DOMContentLoaded", countServices(), true);
