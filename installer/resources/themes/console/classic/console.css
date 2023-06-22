@@ -2158,6 +2158,7 @@ select{padding:5px 20px 5px 8px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:12px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed,#sidebar #sb_services.collapsed,#sb_peers_condensed,#sb_tunnels_condensed{margin-left:-1px;width:calc(100% + 2px)}
 #sb_internals .sb_icon[href="/jobs"]{display:none!important}
+#sb_wrap{position:fixed!important}
 }
 @media (max-width:1400px){
 #peers #ntcpconnections th.queue{font-size:0}

@@ -729,7 +729,8 @@ tr.addnew{border-top:var(--border_inner)}
 .themechoice .optbox+img{padding:5px 0}
 .themelabel{margin-left:-4px;margin-right:-4px;padding:4px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--a);border-top:var(--border_inner);box-shadow:var(--highlight);background:linear-gradient(180deg,#141221,#001)}
 .ui_lang{margin:10px -4px 0;padding:3px 2px 4px;width:124px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:capitalize;color:var(--a);border-top:var(--border_inner);border-radius:0 0 2px 2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#141221,#001)}
-#themeheading,#langheading,#passwordheading{margin-bottom:0;padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10.5pt;border:var(--border_inner);border-radius:0}
+#applytheme{margin-top:11px}
+#langheading,#passwordheading,#themeheading{margin-bottom:0;padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10.5pt;border:var(--border_inner);border-radius:0}
 #langheading{margin:14px 0 0}
 #langsettings{margin-top:-1px;margin-bottom:10px;padding:8px 7px 12px;border:var(--border_inner)}
 #langsettings hr{display:none}
@@ -2514,6 +2515,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #sb_internals .sb_icon[href="/jobs"]{display:none!important}
 #sb_services.collapsed td{width:calc(100% + 59px)}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-2px 0;background-size:12px}
+#sb_wrap{position:fixed!important}
 #searchbar button{height:28px}
 #searchbar span{margin:-3px -2px -4px}
 #sidebarconf button img{width:10px;height:10px}

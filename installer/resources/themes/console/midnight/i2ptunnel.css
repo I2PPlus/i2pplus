@@ -293,9 +293,9 @@ td.infohelp{padding:10px 10px 10px 38px;background:var(--infohelp) no-repeat 10p
 #tunnelOpts table td:last-child{border-right:none}
 
 /* server/client count */
-#countClient,#countServer{margin:-3px -2px 0 0;float:right;text-transform:none}
+#countClient,#countServer{margin:-5px -5px 0 0;float:right;line-height:1.45;text-transform:none}
 #countClient span:empty,#countServer span:empty{display:none}
-.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding:4px 6px 4px 25px;display:inline-block;font-size:9pt;box-shadow:var(--bevel);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
+.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding:4px 6px 4px 26px;display:inline-block;font-size:9pt;box-shadow:var(--bevel);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
 .standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
 .starting:not([hidden]){background-image:var(--local_inprogress),var(--badge)}
 .stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
@@ -307,6 +307,7 @@ td.infohelp{padding:10px 10px 10px 38px;background:var(--infohelp) no-repeat 10p
 /* responsive layout */
 @media (max-width:1499px){
 .tunnelName a,.tunnelName a:hover,.tunnelName a:focus,.tunnelName a:active{margin-left:2px;padding-left:22px;width:calc(100% - 40px);background-size:12px,100%}
+#countClient,#countServer{margin:-6px -4px 0 0;line-height:1.2}
 }
 
 @media (max-width:1300px){
