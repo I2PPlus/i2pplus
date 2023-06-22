@@ -8,9 +8,10 @@ function stickySidebar() {
   var sbHeight = sb.getBoundingClientRect().height;
   var sbWrap = document.getElementById("sb_wrap");
   var viewportHeight = window.visualViewport.height;
+  var viewportWidth = window.visualViewport.width;
 
   if (sbWrap) {
-    if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight)) {
+    if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight) && viewportWidth > 1500) {
       sbWrap.style.position = "sticky";
       sbWrap.style.top = "5px";
       sbWrap.classList.add("sticky");
