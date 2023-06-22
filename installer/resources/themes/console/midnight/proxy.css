@@ -23,7 +23,7 @@
 }
 
 html{margin:0}
-html{background:repeating-linear-gradient(90deg,rgba(0,0,16,.7) 2px,rgba(0,0,0,.5) 4px),repeating-linear-gradient(180deg,rgba(0,0,32,.7) 2px,rgba(0,0,0,.8) 4px),var(--tile) #001;background-size:100% 4px,4px 100%,171px 148px}
+html{background:repeating-linear-gradient(90deg,rgba(0,0,16,.7) 2px,rgba(0,0,0,.5) 4px),repeating-linear-gradient(180deg,rgba(16,16,96,.8) 2px,rgba(0,0,0,0) 4px),var(--tile) #001;background-size:4px 4px,4px 4px,171px 148px}
 body{margin:2px 0 0;padding:0;line-height:1.3;text-align:center;font-size:10.5pt;color:#c9ceff}
 body::before{width:0;height:4px;display:inline-block;position:absolute;left:0;top:0;box-shadow:0 2px 2px rgba(0,0,0,.8);background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#d30,#f60);content:""}
 hr{margin:20px 0;height:1px;border:0;background:rgba(38,35,92,.7)}
