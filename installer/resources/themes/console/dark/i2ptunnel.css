@@ -374,7 +374,7 @@ td.blankColumn{padding-right:8px;width:2%}
 
 @media (min-width:1500px){
 a,body,button,input,input[type=reset],input[type=submit],select,td,textarea,.control,a.control,.freetext{font-size:10pt}
-div[class^="status"]{height:18px;background-size:auto 18px}
+div[class^="status"]{height:20px;background-size:auto 20px}
 h2,h3{font-size:12.5pt}
 select{padding:8px 24px 8px 12px}
 th{font-size:10pt}
