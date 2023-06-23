@@ -1474,11 +1474,16 @@ class NetDbRenderer {
                             buf.append("\">").append(DataHelper.stripHTML(val)).append("</a>");
                         }
                         buf.append("</span>");
+/*
                         if (!DataHelper.stripHTML(val).equals("::") && !DataHelper.stripHTML(val).equals("127.0.0.1")) {
                             buf.append(" <span class=\"gwhois\" title=\"").append(_t("Lookup via gwhois.org"))
                                .append("\"><a href=\"https://gwhois.org/").append(DataHelper.stripHTML(val))
                                .append("\" target=_blank>gwhois</a></span>");
                         }
+                        if (!DataHelper.stripHTML(val).equals("::") && !DataHelper.stripHTML(val).equals("127.0.0.1")) {
+                            buf.append("<span>").append(DataHelper.stripHTML(val)).append("</span>");
+                        }
+*/
                         buf.append("</span> ");
                     } else if (name.contains("port")) {
                         buf.append("<span class=nowrap><span class=netdb_name>")
