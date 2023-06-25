@@ -1044,7 +1044,7 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #enablefullstats{line-height:1.2;text-align:left;background:var(--bg)}
 #profiles_overview,#themeheading{margin-top:15px}
 #refreshsidebar td:not(.optionsave){padding:var(--pad_info);background:var(--bg) var(--timer) var(--bgpos_info)}
-#webappconfigtext{margin-bottom:-1px}
+#webappconfigtext{margin:11px 0 -1px}
 #config_stats .tablefooter td,#enablefull td{padding:10px}
 #netconfig tr,#externali2cp tr{background:var(--bg)}
 #externali2cp label+br{display:none}
@@ -2412,6 +2412,7 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #sybilTask th{font-size:12pt}
 #systray,#servicedebug,#browseronstart{margin-bottom:-15px}
 #tunnels td:last-child .tunnel_peer:not(.tunnel_local)+.tunnel_cap{margin-left:1px}
+#webappconfigtext{margin:13px 0 -1px}
 #webappconfiguration{margin-bottom:-14px}
 }
 @media (min-width:1600px){
