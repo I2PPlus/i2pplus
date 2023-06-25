@@ -61,6 +61,7 @@ p.buttons{margin:0 -11px;padding:10px;border:var(--border);background:var(--bg)}
 #navi a:hover,#navi a:focus{z-index:10;color:var(--hover);border-color:1px solid var(--hover)}
 .iframed #navi a:hover,.iframed #navi a:focus{z-index:1;border-color:var(--border_color)}
 #navi a:active{color:#778;border:1px solid #f90}
+#navi a.selected{pointer-events:none}
 .headline+#book>table{margin-top:10px}
 
 /* page titles */
