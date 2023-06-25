@@ -240,7 +240,7 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 .tunnelInfo{display:none}
 .username::placeholder,.password::placeholder{text-transform:lowercase;font-size:100%;font-style:italic;color:var(--ink);opacity:.4}
 #keyringManager{float:right}
-#notReady,#down{margin:50px auto 36px;padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:var(--border);border-radius:2px;box-shadow:0 0 0 1px #fff,0 0 0 2px #ddf,0 0 0 5px #779;background:var(--bg2)}
+#notReady,#down{margin:50px auto 36px;padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:var(--border);border-radius:2px;box-shadow:0 0 0 1px #fff,0 0 0 2px #ddf,0 0 0 5px #779;background:var(--bg2);background:repeating-linear-gradient(135deg,#e2e2ff,#e2e2ff 10%,#f2f2ff 10%,#f2f2ff 20%)}
 #oldName{width:45%}
 #registration input[type="file"]{margin-top:5px;margin-bottom:5px}
 #registration td{padding:8px}
