@@ -12,7 +12,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("config i2cp")%>
-<style type='text/css'>button span.hide {display:none;} input.default {width:1px;height:1px;visibility:hidden;}</style>
+<style type=text/css>button span.hide{display:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
 <body>
 
@@ -92,7 +92,7 @@
 <tr>
 <td>
 <b class=suboption>
-<label><input type=checkbox class=optbox name="auth" value=true <jsp:getProperty name="clientshelper" property="auth" /> >
+<label><input type=checkbox class=class="optbox slider" name="auth" value=true <jsp:getProperty name="clientshelper" property="auth" /> >
 <%=intl._t("Require username and password")%></label>
 </b><br>
 <div class=optionlist id=i2cp_userpass>
