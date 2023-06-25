@@ -65,7 +65,7 @@ button.go:active,button.accept:active{background:var(--yes) no-repeat 8px center
 
 /* jump links */
 #jumplinks{margin-bottom:50px}
-#jumplinks h4{margin:0 15px 15px;padding:0 0 10px}
+#jumplinks h4{margin:0 0 15px;padding:0 0 10px}
 #jumplinks br{display:none}
 #jumplinks a{margin:3px 0 3px 6px;padding:9px 12px 9px 35px;float:left;text-shadow:var(--txt_shadow);-webkit-text-stroke:0;box-shadow:var(--outline),var(--bevel);background:url(../images/arrow_right.svg) no-repeat 10px center/20px,var(--badge);animation:fade .5s ease 3s both}
 #jumplinks a:first-of-type{margin-left:19px}
@@ -121,3 +121,5 @@ p,td,h3,h4,#b64,a{font-size:90%}
 .logo hr + a{margin-top:-20px}
 .logo hr ~ a{margin:0 -11px -1px;padding:10px 4px;display:inline-block}
 }
+
+@media (min-width:1500px){body{font-size:11pt}}

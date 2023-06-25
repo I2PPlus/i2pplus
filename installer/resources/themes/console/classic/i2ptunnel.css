@@ -322,7 +322,7 @@ h2,h3,#messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#tunnelEditPa
 #localDestination,.authentication{height:34px}
 }
 @media (min-width:1500px){
-div[class^="status"]{height:18px;background-size:auto 18px}
+div[class^="status"]{height:20px;background-size:auto 20px}
 th .help::after{width:20px;height:20px;background-size:20px}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}
 .tunnelInfo .selectAll{max-width:none}

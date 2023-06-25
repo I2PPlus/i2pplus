@@ -39,7 +39,7 @@
 </h3>
 <form action="configplugins" method=POST>
 <table id=plugininstall class=configtable>
-<tr>
+<tr hidden>
 <td class=infohelp colspan=2>
 <%=intl._t("For available plugins, visit {0}.", "<a href=\"http://stats.i2p/i2p/plugins/\" target=_blank>zzz's plugin page</a>")%>
 </td>

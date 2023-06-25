@@ -54,7 +54,7 @@
 %>
 <tr>
 <td align=right><b><%=intl._t("GZIP Compression")%>:</b></td>
-<td><label><input type=checkbox class=optbox name="logcompress" value=true <jsp:getProperty name="logginghelper" property="logCompress" /> > Compress logs</label></td>
+<td><label><input type="checkbox" class="optbox slider" name="logcompress" value=true <jsp:getProperty name="logginghelper" property="logCompress" /> > Compress logs</label></td>
 <td></td>
 </tr>
 <%

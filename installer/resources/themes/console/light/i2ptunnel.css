@@ -371,7 +371,7 @@ th{font-size:10.5pt}
 th .help::after{width:20px;height:20px;background-size:20px}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}
 .tunnelInfo .selectAll{max-width:none}
-.statusNotRunning,.statusRunning,.statusStarting,.statusStandby{background-size:auto 18px}
+.statusNotRunning,.statusRunning,.statusStarting,.statusStandby{background-size:auto 20px}
 #localDestination{height:34px}
 #registration .displayText{width:800px}
 #statusMessages{font-size:9pt}

@@ -881,7 +881,7 @@ th.options,#externali2cp th{padding:7px 10px}
 .infohelp#clientconf+.wideload{margin-top:12px}
 .infowarn#clientconf,p#keyringhelp,#config_tunnels .infohelp{margin-bottom:12px}
 #configclient{margin-top:-11px}
-#clientconfig{margin-top:-12px}
+#clientconfig{margin-top:12px}
 #clientconfig td:nth-child(3){white-space:nowrap}
 #clientconfig th,#config_keyring th,#config_plugins #plugininstall th{letter-spacing:0;word-spacing:0;text-transform:none}
 #clientconfig th:first-child{padding-right:5px;text-align:right}
@@ -970,7 +970,9 @@ form[action="/createreseed"]>h3{margin-bottom:-13px;padding:10px;word-spacing:.1
 #config_reseed form,#installPluginUrl form,#installPluginFile form,#newFamily form,#joinfamily form{margin:0;padding:0}
 #config_reseed form{margin:0;padding:0}
 #config_reseed #manualreseed .optionsingle table,#config_reseed #manualreseed .optionsingle tr,#config_reseed #manualreseed .optionsingle td{padding-left:40px;background:none;border:0;box-shadow:none}
-#config_reseed #manualreseed .optionsingle td:last-child{padding-right:12px;padding-left:0;width:1%;white-space:nowrap;text-align:right}
+#config_reseed #manualreseed tr:nth-child(n+2) td{padding-top:5px!important;padding-bottom:5px!important}
+#config_reseed #manualreseed td:first-child{border-right:0!important}
+#config_reseed #manualreseed .optionsingle td:last-child{padding-right:5px;padding-left:0;width:1%;white-space:nowrap;text-align:right;border-left:0}
 #config_reseed #manualreseed tr:nth-child(5) td:nth-last-child(2),#plugininstall tr:nth-child(5) td:nth-last-child(2){padding:15px 25px 15px 55px;background:#000 var(--files) no-repeat 15px center/28px}
 #config_reseed #manualreseed tr:nth-last-child(2) td.infohelp{padding:15px 25px 15px 55px;background:#000 var(--package) no-repeat 15px center/28px}
 #config_reseed .optionsave input[type=submit]{display:inline-block}
@@ -1018,7 +1020,7 @@ form[action="/createreseed"]>h3{margin-bottom:-13px;padding:10px;word-spacing:.1
 input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],input[name="logfilesize"],select[name="defaultloglevel"],select[name="newloglevel"]{width:125px}
 #loggingoptions td{padding:6px}
 #loggingoptions td:first-child{padding-right:10px;line-height:1.2}
-#loggingoptions td:nth-child(2){width:1%;white-space:nowrap;text-align:center}
+#loggingoptions td:nth-child(2){width:1%;white-space:nowrap}
 #loggingoptions tr:nth-last-child(2){white-space:nowrap}
 #loggingoptions tr:nth-last-child(n+3) td:last-child,#loggingoptions p{line-height:1.4;font-size:100%}
 #loggingoptions p{margin:6px 6px 5px}
@@ -1091,7 +1093,7 @@ tr:nth-child(4) .net_bwrate::before{width:22px;background:var(--share) left top 
 #config_stats #graphchoice{margin-bottom:-2px}
 #configstats label::after{padding:4px 8px;content:attr(data-tooltip);display:none;position:absolute;top:-26px;left:0;white-space:nowrap;z-index:10;font-size:110%;color:#000;border-radius:1px;box-shadow:0 0 0 1px #113;background:#ddf}
 #configstats label:hover::after{display:inline-block}
-#configstats label{position:relative;font-size:90%}
+#configstats label{position:relative;font-size:80%}
 #configstats{margin-bottom:-2px}
 #configstats .optbox{margin:0;padding:0;vertical-align:middle}
 #configstats .optbox:not(:checked)+label>.stattograph b{font-style:italic;color:rgba(201,206,255,.7)}
@@ -2669,6 +2671,7 @@ select,.main input[type=submit],.main input[type=reset],.main input[type=submit]
 #banlist li{width:calc(100% - 18px)}
 button.control[class],button.control[class]:hover,button.control[class]:focus{padding:14px;font-size:0;background-position:center center}
 #clientconf.infohelp{margin:12px 0 -13px}
+#clientconfig{margin-top:14px}
 #externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#netconfig label::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#graphs .nowrap::before{min-height:50px}
 #i2pclientconfig,#pconfig,#pluginfromurl,#pluginfromfile,#clientconf.infohelp,#webappconfiguration{margin:-4px 0 -15px}
 #i2pclientconfig{margin-bottom:3px}
