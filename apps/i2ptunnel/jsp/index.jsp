@@ -595,7 +595,7 @@ ElGamal-2048
 
   if (!indexBean.isInitialized()) {
 %>
-<div id=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
+<div id=notReady class=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
 <%
   }  // !isInitialized()
 %>
