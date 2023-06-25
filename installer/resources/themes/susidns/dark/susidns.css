@@ -320,7 +320,7 @@ body,input[type=submit],input[type=reset],.fakebutton,input,select,h4,td.names a
 p,#content p{font-size:10pt}
 textarea,th{font-size:9pt}
 #navi{padding:6px 5px}
-#navi a.abook,#navi a.abook:hover,#navi a.abook:focus,#navi a.abook:active,#navi a#overview,#navi a#overview:hover,#navi a#overview:focus,#navi a#overview:active,#navi a#subs,#navi a#subs:hover,#navi a#subs:focus,#navi a#subs:active,#navi a#configlink,#navi a#configlink:hover,#navi a#configlink:focus,#navi a#configlink:active{padding:8px 10px 8px 29px;letter-spacing:.1em;font-size:10pt;background-position:10px center}
+#navi a.abook,#navi a.abook:hover,#navi a.abook:focus,#navi a.abook:active,#navi a#overview,#navi a#overview:hover,#navi a#overview:focus,#navi a#overview:active,#navi a#subs,#navi a#subs:hover,#navi a#subs:focus,#navi a#subs:active,#navi a#configlink,#navi a#configlink:hover,#navi a#configlink:focus,#navi a#configlink:active,#navi a.selected,#navi a[class].selected,#navi a[id].selected{padding:8px 10px 8px 29px!important;letter-spacing:.1em;font-size:10pt;background-position:10px center!important}
 h3{font-size:12pt}
 #filter a{margin:0 2px -2px;min-width:14px}
 #filter{background:linear-gradient(90deg,#000,#001000 10%,#001000 90%,#000)}
