@@ -881,7 +881,7 @@ th.options,#externali2cp th{padding:7px 10px}
 .infohelp#clientconf+.wideload{margin-top:12px}
 .infowarn#clientconf,p#keyringhelp,#config_tunnels .infohelp{margin-bottom:12px}
 #configclient{margin-top:-11px}
-#clientconfig{margin-top:-12px}
+#clientconfig{margin-top:12px}
 #clientconfig td:nth-child(3){white-space:nowrap}
 #clientconfig th,#config_keyring th,#config_plugins #plugininstall th{letter-spacing:0;word-spacing:0;text-transform:none}
 #clientconfig th:first-child{padding-right:5px;text-align:right}
@@ -2671,6 +2671,7 @@ select,.main input[type=submit],.main input[type=reset],.main input[type=submit]
 #banlist li{width:calc(100% - 18px)}
 button.control[class],button.control[class]:hover,button.control[class]:focus{padding:14px;font-size:0;background-position:center center}
 #clientconf.infohelp{margin:12px 0 -13px}
+#clientconfig{margin-top:14px}
 #externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#netconfig label::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#graphs .nowrap::before{min-height:50px}
 #i2pclientconfig,#pconfig,#pluginfromurl,#pluginfromfile,#clientconf.infohelp,#webappconfiguration{margin:-4px 0 -15px}
 #i2pclientconfig{margin-bottom:3px}
