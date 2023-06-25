@@ -47,6 +47,7 @@ table{width:100%}
 .warning tr{background:#ffe;border:1px solid #fb7}
 #b64,#key{white-space:pre-wrap;word-break:break-all;text-align:justify;font-family:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;font-size:90%;user-select:all}
 #key{margin:20px 0 25px;padding:10px 14px;border:1px solid #fb7;background:#ffe}
+#extraMsg{margin-top:15px;display:inline-block}
 #proxyerror .warning{margin-left:20px}
 #proxyNewAddressHelper .warning{padding-bottom:0}
 #proxyNewAddressHelper .warning hr{display:none}
