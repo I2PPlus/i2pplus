@@ -203,7 +203,7 @@ tfoot .RateUp,tfoot .RateDown,td.RateUp,td.RateDown,tfoot .torrentUploaded,td.to
 #torrents td[colspan="10"]{white-space:normal}
 #torrents tfoot tr:first-child th{padding:5px 0 5px 4px;background:linear-gradient(180deg,#fafaff 50%,rgb(240,240,255)) #fafaff;vertical-align:middle;font-weight:700;font-style:normal;color:var(--ink_light)}
 #torrents code{padding:2px 3px;margin:0 3px;display:inline-block;letter-spacing:.1em;font-size:8.5pt;text-shadow:var(--txt_shadow);border-radius:2px}
-#totals span,#ourDest{display:inline-block;vertical-align:middle;white-space:nowrap}
+#totals span,#ourDest,#ourDest code{display:inline-block;vertical-align:baseline;white-space:nowrap;line-height:1.5}
 #totals{margin:2px 0 2px 5px;font-weight:700}
 
 /* download bars */
