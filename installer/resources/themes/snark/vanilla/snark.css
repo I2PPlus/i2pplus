@@ -176,6 +176,8 @@ th.peerCount{text-align:center}
 .rowOdd:last-child td,.rowEven:last-child td{border-bottom:none}
 #snarkTbody tr:not(.filtered) td,#torrentEdit td{border-top:1px solid rgba(111,83,62,.6);border-bottom:1px solid rgba(0,0,0,0)}
 #snarkTbody tr:first-child td{border-top:1px solid rgba(0,0,0,0)}
+#snarkTbody tr.filtered{background:linear-gradient(180deg,#f5f2f0,#eae4e1)}
+#snarkTbody tr.filtered:nth-child(n+2) td{border-top:1px solid rgba(111,83,62,.6)}
 .rowOdd,#torrentEdit tr:nth-last-child(even),.knownTracker:nth-child(even){background:#efe6e0}
 .snarkFileName{padding:4px 0;text-align:left;font-size:8pt;font-weight:700}
 .snarkFileSize{padding:4px 2px;width:1%;white-space:nowrap;font-weight:700;color:#727}
