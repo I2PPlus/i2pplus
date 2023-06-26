@@ -268,7 +268,7 @@ class Daemon {
                                             if (log != null) {
                                                 if (success)
                                                     log.append("Additional address for " + key +
-                                                               " added to addressbook [" + addressbook.getLocation() + "]");
+                                                               " [" + addressbook.getLocation() + "]");
                                                 else
                                                     log.append("Failed to add additional address for " + key +
                                                                " [" + addressbook.getLocation() + "]");
@@ -485,8 +485,7 @@ class Daemon {
                             boolean success = router.put(key, dest, props);
                             if (log != null) {
                                 if (success)
-                                    log.append("New domain " + key +
-                                               " added to addressbook [" + addressbook.getLocation() + "]");
+                                    log.append("New domain " + key + " [" + addressbook.getLocation() + "]");
                                 else
                                     log.append("Save to naming service " + router + " failed for new key " + key);
                             }

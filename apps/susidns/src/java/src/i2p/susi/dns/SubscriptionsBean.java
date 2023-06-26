@@ -75,7 +75,7 @@ public class SubscriptionsBean extends BaseBean
     private void locked_reloadSubs()
     {
         File file = subsFile();
-        if(file.isFile()) {
+        if (file.isFile()) {
             StringBuilder buf = new StringBuilder();
             BufferedReader br = null;
             try {
@@ -122,8 +122,8 @@ public class SubscriptionsBean extends BaseBean
                 out.println(url);
             }
             out.close();
-                        if (out.checkError())
-                            throw new IOException("Failed write to " + file);
+            if (out.checkError())
+                throw new IOException("Failed write to " + file);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
