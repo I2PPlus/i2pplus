@@ -19,6 +19,7 @@ function initFilterBar() {
   var btnStopped = document.getElementById("stopped");
   var complete = document.querySelectorAll(".complete");
   var debuginfo = document.querySelectorAll(".debuginfo");
+  var down = document.getElementById("down");
   var downloading = document.querySelectorAll(".downloading");
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
   var incomplete = document.querySelectorAll(".incomplete");
@@ -253,7 +254,7 @@ function checkFilterBar() {
     refreshFilters();
   }
 
-  if (noload) {
+  if (noload || down) {
     refreshAll();
   }
 
@@ -341,6 +342,13 @@ function refreshFilters() {
             screenlog.innerHTML = screenlogResponse.innerHTML;
           }
         }
+      } else {
+        function noAjax() {
+          var failMessage = "<div class=routerdown id=down><span>Router is down</span></div>";
+          if (mainsection) {mainsection.innerHTML = failMessage;}
+          else {snarkInfo.innerHTML = failMessage;}
+        }
+        setTimeout(noAjax, 5000);
       }
     }
   };
