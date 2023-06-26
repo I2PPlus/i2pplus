@@ -19,12 +19,10 @@ function initFilterBar() {
   var btnStopped = document.getElementById("stopped");
   var complete = document.querySelectorAll(".complete");
   var debuginfo = document.querySelectorAll(".debuginfo");
-  var down = document.getElementById("down");
   var downloading = document.querySelectorAll(".downloading");
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
   var incomplete = document.querySelectorAll(".incomplete");
   var mainsection = document.getElementById("mainsection");
-  var noload = document.getElementById("noload");
   var pagenav = document.getElementById("pagenavtop");
   var peerinfo = document.querySelectorAll(".peerinfo");
   var screenlog = document.getElementById("screenlog");
@@ -244,7 +242,9 @@ function initFilterBar() {
 }
 
 function checkFilterBar() {
+  var down = document.getElementById("down");
   var filterbar = document.getElementById("torrentDisplay");
+  var noload = document.getElementById("noload");
   var query = window.location.search;
   var sortIcon = document.querySelectorAll(".sortIcon");
 
