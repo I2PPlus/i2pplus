@@ -9,6 +9,7 @@ input[type=password],input[type=text],label,pre,textarea,.infohash,.infohelp,.in
 h2,.headline h3,.tab2,#sidebar h3,#sidebar h3 a,.main h3{font-weight:700}
 .tab a{padding:4px 12px}
 .tunnel_id{min-width:102px;font-size:90%}
+.uploaded{min-width:74px}
 #torrents tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{margin-right:2px}
 #torrents tfoot tr:first-child th{min-width:80px}
 @font-face{font-display:swap;font-family:FiraCode;font-style:normal;font-weight:300,400,500,600,700;src:url(/themes/fonts/FiraCode.woff2);format("woff2")}
