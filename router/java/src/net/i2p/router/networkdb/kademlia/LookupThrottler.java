@@ -21,7 +21,7 @@ class LookupThrottler {
     private static final TunnelId DUMMY_ID = new TunnelId();
     /** this seems like plenty */
 //    private static final int MAX_LOOKUPS = 30;
-    private static final int MAX_LOOKUPS = 50;
+    private static final int MAX_LOOKUPS = 9;
     private static final long CLEAN_TIME = 3*60*1000;
 
     LookupThrottler() {
