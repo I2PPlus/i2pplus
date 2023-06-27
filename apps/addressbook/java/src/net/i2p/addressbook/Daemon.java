@@ -628,14 +628,12 @@ class Daemon {
                                 continue;
                             } else {
                                 if (log != null)
-                                    log.append("No action in command line" +
-                                               " [" + addressbook.getLocation() + "]");
+                                    log.append("No action in command line" + " [" + addressbook.getLocation() + "]");
                                 invalid++;
                                 continue;
                             }
                         } else if (log != null) {
-                            log.append("Bad hostname " + key + " ["
-                                   + addressbook.getLocation() + "]");
+                            log.append("Bad hostname " + key + " [" + addressbook.getLocation() + "]");
                             invalid++;
                         }
                   /****

@@ -63,16 +63,16 @@
 </div>
 <hr>
 <div class=headline id=subscriptions>
-<h3><%=intl._t("Subscription Log")%></h3>
+<h3><%=intl._t("Subscription Log")%>&nbsp;<span><%=intl._t("Most recent (excluding bad domains)")%></span></h3>
 <h4><%=intl._t("File location")%>: <span class=storage>${log.logName}</span></h4>
 </div>
-<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <div id=messages>${log.messages}</div>
 <div id=config>
 <pre>${log.logged}</pre>
 </div>
 </div>
 <span data-iframe-height></span>
+<script charset=utf-8 nonce="<%=cspNonce%>" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
 <style type=text/css>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

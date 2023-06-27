@@ -66,29 +66,34 @@ public class LogBean extends BaseBean
 
     private void locked_reloadLog() {
         File log = logFile();
+        int maxLines = 600;
         if (log.isFile()) {
             BufferedReader br = null;
             try {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(log), "UTF-8"));
-                List<String> lines = new ArrayList<String>(300);
+                List<String> lines = new ArrayList<String>(maxLines);
                 String line;
                 while ((line = br.readLine()) != null) {
                     lines.add(line);
-                    if (lines.size() >= 300) {
+                    if (lines.size() >= maxLines) {
                         lines.remove(0);
                     }
                 }
-                StringBuilder buf = new StringBuilder(lines.size() * 80);
+                StringBuilder buf = new StringBuilder(maxLines * 80);
+                // Reverse order, most recent first
+                //for (int i = maxLines - 1; i >= 0; i--) {
                 for (int i = 0; i < lines.size(); i++) {
-                    buf.append(lines.get(i)).append('\n');
+                    if (!lines.get(i).contains("Bad hostname")) {
+                        buf.append(lines.get(i)).append('\n');
+                    }
                 }
-                logged = buf.toString();
+                logged = buf.toString().replace(" added to addressbook","");
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             } finally {
                 if (br != null)
-                    try { br.close(); } catch (IOException ioe) {}
+                    try {br.close();} catch (IOException ioe) {}
             }
         } else {
             logged = LOG_FILE;
