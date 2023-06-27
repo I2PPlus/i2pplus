@@ -9,7 +9,7 @@
 :root{
 --nav:linear-gradient(180deg,#141424 50%,#000 50%);
 --nav_hover:linear-gradient(180deg,#3c1751 50%,#0a030d 50%);
---nav_selected:linear-gradient(180deg,#000,#141424);
+--nav_selected:radial-gradient(circle at center 130%, #551155cc, #00000055 80%),linear-gradient(180deg,#002,#181828);
 }
 
 body{margin:0 10px;overflow-x:hidden;font-size:9.5pt;background:repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px,rgba(0,0,0,.9) 5px,rgba(0,0,0,.7) 6px),var(--tile),#000010}
@@ -98,7 +98,8 @@ td.names a{font-size:9pt}
 
 #booksearch{margin:0;padding:7px 5px;text-align:center;border:var(--border)}
 #buttons{text-align:right;background:linear-gradient(90deg,#001,#000)}
-#config+#buttons,#content+#buttons{margin:-3px 0 12px;padding:10px 5px;border:var(--border);background:var(--panel)}
+#config+#buttons,#content+#buttons{margin:-3px 0 12px;padding:7px 5px 10px;border:var(--border);background:var(--panel)}
+#cfg #buttons{padding:7px 5px}
 #content h3:first-child{margin-top:-15px;font-size:10.5pt}
 #content h3{margin:0 20px 10px;padding:5px 10px;border:0;border-bottom:1px dotted #2d295f;border-radius:0;background:none}
 #content p+h3{margin-top:15px}
@@ -134,7 +135,7 @@ img[src="/imagegen/id?s=256&c="],img[src="/imagegen/id?s=20&c="]{opacity:0}
 
 #ovrvw #content p{margin-bottom:10px;line-height:1.5}
 td>img[width="320"],td>img[src^="/imagegen"]{margin:10px 3px;padding:5px;width:240px;height:240px;border-radius:2px;border:var(--border);background:#000}
-textarea[name="config"],textarea[name="content"]{margin:-26px 0 0;resize:none;font-size:8.5pt;border:var(--border);border-radius:0}
+textarea[name="config"],textarea[name="content"]{margin:-27px 0 0;resize:none;font-size:8.5pt;border:var(--border);border-radius:0}
 textarea[name="config"]{height:220px;overflow-y:scroll;resize:none}
 
 .book td.names{width:200px;white-space:nowrap}
@@ -165,7 +166,7 @@ input#exporthosts:active{text-shadow:0 1px 1px #3C1751;box-shadow:var(--highligh
 #add td:first-child,#import td:first-child{width:1%;min-width:120px;white-space:nowrap;text-align:right}
 #add td:last-child,#import td:last-child{width:94%}
 #add input[type=text],#import input[type=file]{width:calc(100% - 16px)}
-#import .buttons,#add .buttons{margin:10px -10px 0;padding:12px 8px;border:0;border-top:var(--border)}
+#import .buttons,#add .buttons{margin:10px -10px 0;padding:9px 8px 8px;border:0;border-top:var(--border)}
  #add .buttons{margin-top:12px}
 #import table{margin-top:-2px}
 #import input[type=file]{margin-left:-5px}
@@ -198,7 +199,7 @@ textarea:focus::placeholder{opacity:0}
 /* identicon */
 #visualid h3{margin-top:-1px;border-left:none;border-right:none}
 #visualid{margin-top:-10px;border:var(--border);background:#001}
-#visualid table{margin-top:-15px;margin-bottom:-1px;width:100%;border-left:none;border-right:none;border-collapse:collapse}
+#visualid table{margin-top:-15px;margin-bottom:-1px;width:100%;border-left:0;border-right:0;border-collapse:collapse}
 #visualid td[colspan="2"]{padding:17px 9px 15px;text-align:right;border-top:var(--border)}
 #visualid td:first-child{text-align:right}
 
@@ -219,7 +220,7 @@ p.book{padding-left:35px}
 /* host details page */
 #host_details td{padding:5px 10px}
 #host_details td:first-child{width:10%;min-width:10px;white-space:nowrap;text-align:right;font-weight:700;border-right:var(--border_soft)}
-#host_details td:last-child{width:90%;text-align:left;border-left:none;border-right:none}
+#host_details td:last-child{width:90%;text-align:left;border-left:0;border-right:0}
 #host_details td.destinations{background:none}
 #host_details .destaddress{font-family:var(--monospaced)}
 #host_details tr:hover,#host_details tr:hover td,#visualid tr:hover,#visualid tr:hover td{background:transparent}
@@ -313,19 +314,19 @@ svg #arrow stop:last-child{stop-color:#001}
 .iframed#subsLog .headline h3:first-child+h4{margin:-1px 10px 26px}
 .iframed .book tr.head th{border-top:var(--border);border-bottom:var(--border)}
 .iframed #book #host_details{border-top:var(--border)}
-.iframed #book,.iframed #book+#buttons,.iframed #book table{border-top:none;border-bottom:none}
+.iframed #book,.iframed #book+#buttons,.iframed #book table{border-top:0;border-bottom:0}
 .iframed #emptybook{margin:-15px 10px 20px}
 .iframed #helpsubs{margin-bottom:0}
 .iframed input.export{margin-right:14px}
 .iframed #messages>.messages{margin:5px 10px 10px}
-.iframed #navi{border-right:none;border-left:none}
+.iframed #navi{border-right:0;border-left:0}
 .iframed #published{margin-bottom:0}
 .iframed #visualid{margin-bottom:10px}
 .iframed #visualid td[colspan="2"]{padding:22px 19px 20px}
 .iframed#sbs #content,.iframed #config,.iframed #config+#buttons,.iframed#subsLog #config{margin:-27px 10px -13px}
 .iframed #helpsubs,.iframed #helpconfig,.iframed #add,.iframed #import,.iframed #book,.iframed #book+#buttons{margin-left:10px;margin-right:10px}
 .iframed#subsLog pre{width:calc(100% - 17px)}
-.iframed #import{margin-top:10px;}
+.iframed #import{margin:10px 10px 0}
 .iframed #config+#buttons,.iframed #content+#buttons{margin:12px 10px}
 .iframed #messages{top:-4px}
 
