@@ -641,7 +641,7 @@ th img{filter:none;opacity:.85}
 .peerinfo code{margin:0;padding:0 5px;color:#282;text-shadow:var(--txt_shadow);border-radius:2px 0 0 2px;background:none}
 #ourDest,#ourDest code{display:inline-block;vertical-align:middle;line-height:16px}
 #ourDest{margin:0 0 0 3px;padding:0 0 0 4px;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--badge);opacity:.85}
-#ourDest code{margin:1px 1px 1px 4px;padding:0 2px 0 4px;border-radius:0 1px 1px 0;background:linear-gradient(180deg,#eef,#ddf)}
+#ourDest code{margin:0}
 
 #lowersection>#createSection+#configSection{margin-top:0}
 .inactivity{margin-left:12px;min-width:5px;max-width:400px;height:8px;display:inline-block;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(255,255,255,.5) 15px,rgba(255,255,255,.5) 16px,rgba(0,0,0,0) 16px),linear-gradient(180deg,rgba(255,255,255,.4) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#bb0 60px,#900 120px)}
