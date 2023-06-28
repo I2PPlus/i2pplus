@@ -50,7 +50,13 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context.statManager().addRateData("netDb.lookupsReceived", 1);
 
         DatabaseLookupMessage dlm = (DatabaseLookupMessage)receivedMessage;
-        if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
+        boolean isBanned = fromHash != null && (_context.banlist().isBanlistedForever(fromHash) ||
+                           _context.banlist().isBanlisted(fromHash) ||
+                           _context.banlist().isBanlistedHostile(fromHash));
+        if (isBanned) {
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
+            return null;
+        } else if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
              !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
              _context.netDb().floodfillEnabled()) ||
              _context.routerHash().equals(fromHash)) {
@@ -61,14 +67,15 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                 _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> We are not a floodfill");
             }
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         } else if (_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 8h -> Max 10 requests in 30s exceeded");
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 4h -> Max 10 requests in 30s exceeded");
             }
             if (fromHash != null) {
-                _context.banlist().banlistRouter(fromHash, " <b>➜</b> Excessive lookup requests", null, null, _context.clock().now() + 8*60*60*1000);
+                _context.banlist().banlistRouter(fromHash, " <b>➜</b> Excessive lookup requests", null, null, _context.clock().now() + 4*60*60*1000);
                 _context.commSystem().mayDisconnect(fromHash);
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
