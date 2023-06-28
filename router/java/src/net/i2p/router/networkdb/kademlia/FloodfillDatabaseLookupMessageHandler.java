@@ -50,16 +50,27 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context.statManager().addRateData("netDb.lookupsReceived", 1);
 
         DatabaseLookupMessage dlm = (DatabaseLookupMessage)receivedMessage;
-        if (!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
+        if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
+             !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
+             _context.netDb().floodfillEnabled()) ||
+             _context.routerHash().equals(fromHash)) {
             Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
             return j;
+        } else if (!_context.netDb().floodfillEnabled() && !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> We are not a floodfill");
+            }
+            return null;
         } else if (_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 4h -> Max 10 requests in 30s exceeded");
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 8h -> Max 10 requests in 30s exceeded");
             }
-            _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests", null, null, _context.clock().now() + 4*60*60*1000);
-            _context.commSystem().mayDisconnect(dlm.getFrom());
+            if (fromHash != null) {
+                _context.banlist().banlistRouter(fromHash, " <b>➜</b> Excessive lookup requests", null, null, _context.clock().now() + 8*60*60*1000);
+                _context.commSystem().mayDisconnect(fromHash);
+            }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         } else {
