@@ -1286,7 +1286,7 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #logs h3.tabletitle a.delete:active::after{background:var(--close_active) no-repeat center center;transform:scale(.85)}
 #logs h3.tabletitle a.delete::after{margin:0 8px;background:var(--close) no-repeat center center/14px}
 #logs h3.tabletitle a.delete:hover::after,#logs a.delete:focus::after{background:var(--close_hover) no-repeat center center/14px}
-#logs #eventlogLink{padding:12px 4px 8px 9px;float:right;border-bottom:none;background:none}
+#logs #eventlogLink{padding:12px 4px 8px 9px;float:right;font-size:0;border-bottom:none;background:none}
 #logs #eventlogLink::after{margin:-2px 12px 0 8px;width:16px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/logs.svg) no-repeat center center/14px;content:"";filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}
 #logs li{margin:0 5px 0 13px;padding:2px 2px 2px 7px;width:calc(100% - 9px);word-break:break-all;list-style:none;text-align:left;font:8.5pt/1.5 var(--monospaced);border-top:1px solid rgba(64,64,80,.2);border-right:1px solid rgba(40,40,48,.2);border-bottom:1px solid #000;border-left:2px solid #224;background:rgba(10,10,34,.6);opacity:.8}
@@ -2694,7 +2694,7 @@ h4#updateplugins{margin-top:-15px}
 #peerprofiles.widescroll{padding-top:114px}
 #pluginconfig{margin-top:-15px}
 #plugininstall2 td{padding-bottom:12px}
-#profilelist td:first-child,#profilelist th:first-child,#floodfills td:first-child,#floodfills th:first-child{width:1%;white-space:nowrap}
+#profilelist td:not(.rif):not(.rbw):not(.rih):first-child,#profilelist th:first-child,#floodfills td:not(.rif):not(.rbw):not(.rih):first-child,#floodfills th:first-child{width:1%;white-space:nowrap}
 #reseedconfig input[type=text],#reseedconfig input[type=password]{width:250px}
 #sb_general,#sb_shortgeneral,#sb_advancedgeneral,#sb_bandwidth,#sb_peers,#sb_peersadvanced,#sb_tunnels,#sb_queue{margin-top:-7px;margin-bottom:-10px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:18px}
