@@ -1384,8 +1384,8 @@ h3[id="udpcon"]{width:auto}
 #profile_defs,#thresholds{margin-top:-1px;margin-bottom:10px}
 #profile_defs tr:first-child td{border-top:none}
 #profile_defs tr:hover td{background:none}
-#profilelist .highlatency{color:#900}
 #profilelist .lowlatency,#profilelist .highlatency{width:12px;min-width:0;color:#373}
+#profilelist .highlatency{color:#900}
 #profilelist .nospeed{text-align:center}
 #profilelist .separator,#profilelist .separator:hover{padding:0;border:var(--border_inner)}
 #profilelist td:first-child>*,#floodfills td:first-child>*,#udpconnections td:first-child>*,#ntcpconnections td:first-child>*{vertical-align:middle}
@@ -1407,7 +1407,7 @@ h3[id="udpcon"]{width:auto}
 #udpconnections tfoot:hover td{border-top:var(--border_inner)}
 #udpconnections tfoot td{color:var(--ink)}
 #udpconnections tfoot td:first-child{padding-left:9px}
-#udpconnections tr:hover,#ntcpconnections tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#jardump tr:hover,#sidebarconf tr:hover,#webappconfig tr:hover td,.tunneldisplay tr:hover td:not(.rif):not(.rih):not(.rbw),#profilelist tr:hover,#floodfills tr:hover,.eventspanel tr:hover,#profiles tr:hover td{background:#202;color:#eff1ff}
+#udpconnections tr:hover,#ntcpconnections tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#jardump tr:hover,#sidebarconf tr:hover,#webappconfig tr:hover td,.tunneldisplay tr:hover td:not(.rif):not(.rih):not(.rbw),#profilelist tr:hover,#floodfills tr:hover,.eventspanel tr:hover,#profiles tr:hover td:not(.rif):not(.rih):not(.rbw){background:#202;color:#eff1ff}
 #udpconnections tr:hover td:not(.rif):not(.rbw):not(.rih),#ntcpconnections tr:hover td:not(.rif):not(.rbw):not(.rih):{color:var(--ink)}
 .unreachable,#profiles .unreachable{background:linear-gradient(180deg,#300,#200)}
 #view_profile h3 a{letter-spacing:0;font-size:90%;text-transform:none}
