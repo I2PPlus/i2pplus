@@ -100,8 +100,8 @@ td.names a{font-size:9pt}
 #buttons{text-align:right;background:linear-gradient(90deg,#001,#000)}
 #config+#buttons,#content+#buttons{margin:-3px 0 12px;padding:7px 5px 10px;border:var(--border);background:var(--panel)}
 #cfg #buttons{padding:7px 5px}
-#content h3:first-child{margin-top:-15px;font-size:10.5pt}
-#content h3{margin:0 20px 10px;padding:5px 10px;border:0;border-bottom:1px dotted #2d295f;border-radius:0;background:none}
+#content h3{margin:0 20px 10px;padding:5px 10px;font-size:10.5pt;border:0;border-bottom:1px dotted #2d295f;border-radius:0;background:none}
+#content h3:first-child{margin-top:-15px}
 #content p+h3{margin-top:15px}
 #content p{padding:0 30px;line-height:1.4}
 
@@ -195,6 +195,7 @@ textarea:focus::placeholder{opacity:0}
 #search input[type=text]:focus{border:1px solid var(--hover);filter:none;}
 #search input[type=text]:focus ~ input[type=submit]{transition:ease all .1s}
 #subsLog pre{margin-top:-26px;padding-left:10px;width:calc(100% - 17px);height:100%;white-space:pre-wrap;font-weight:400;color:var(--ink);background:#000}
+#subsLog h3 span{text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:90%;opacity:.9}
 
 /* identicon */
 #visualid h3{margin-top:-1px;border-left:none;border-right:none}
@@ -254,8 +255,7 @@ td.names:hover,#host_list td.b32link:hover,#host_list td.helper:hover,#host_list
 #host_list td.b32link a,#host_list td.helper a{font-size:0}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:16px;height:16px;display:inline-block;text-align:center;background:var(--link) no-repeat center center;cursor:pointer;content:""}
 #host_list td.helper a::after{background:var(--helper) no-repeat center center}
-#host_list td.b32link a:hover,#host_list td.helper a:hover,
-#host_list td.b32link a:focus,#host_list td.helper a:focus{filter:drop-shadow(0 0 2px #652787)}
+#host_list td.b32link a:hover,#host_list td.helper a:hover,#host_list td.b32link a:focus,#host_list td.helper a:focus{filter:drop-shadow(0 0 2px #652787)}
 #host_list .destaddress{padding:3px 3px 3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--monospaced);font-weight:400;text-shadow:0 1px 1px #000;opacity:.7;user-select:all}
 #host_list tr:hover .destaddress,#host_list .destaddress:focus{opacity:1}
 #host_list .destaddress:focus{text-overflow:clip}
@@ -297,8 +297,7 @@ svg .privatezone{fill:#002}
 svg tspan{fill:var(--ink)}
 svg tspan:hover,svg .tooltip:hover .g{fill:#272}
 svg .tooltip.link:hover{stroke:var(--hover)}
-svg a tspan:hover,svg #sublist:hover #hovershow,
-svg .a.tooltip:hover+.b>tspan,svg .a.private:hover+.b>tspan,svg a:hover .g{fill:var(--hover)}
+svg a tspan:hover,svg #sublist:hover #hovershow,svg .a.tooltip:hover+.b>tspan,svg .a.private:hover+.b>tspan,svg a:hover .g{fill:var(--hover)}
 svg #hover stop:first-child,svg #hover2 stop:first-child{stop-color:#005}
 svg #hover stop:last-child,svg #hover2 stop:last-child{stop-color:#001}
 svg #arrow stop:first-child{stop-color:#007}
@@ -338,21 +337,21 @@ svg #arrow stop:last-child{stop-color:#001}
 }
 
 @media (max-width:1200px){
-#navi a,#navi a:visited,#navi a:hover,#navi a:focus,#navi a:active{padding-left:21px;background-size:12px,100%}
-#filter{padding:0 1px}
-#filter p{margin-left:0;margin-right:0}
-#filter a{min-width:6px;padding:0 6px}
-#paginate{margin-top:-3px;margin-right:2px}
 form[action="export"]::after{height:21px}
-#addressbook input#exporthosts{margin-top:4px}
-#prev,#next,#current{font-size:10pt}
-#filtered,#results{font-size:9.5pt}
 .headline h3,#subscriptions.headline h3,#configure.headline h3{padding-left:30px;background-size:20px,4px 100%,100%;background-position:6px center}
-.iframed #prev a,.iframed #next a{padding:11px 10px}
-.iframed #prev::after,.iframed #next::after{top:calc(50% - 5px)}
-#prev.inactive::after,#next.inactive::after{top:calc(50% - 6px)}
-#current{padding:2px 10px;display:inline-block;font-size:10pt}
 .names a[href$=".i2p/"]{max-width:260px}
+#addressbook input#exporthosts{margin-top:4px}
+#current{padding:2px 10px;display:inline-block;font-size:10pt}
+#filter{padding:0 1px}
+#filter a{min-width:6px;padding:0 6px}
+#filter p{margin-left:0;margin-right:0}
+#filtered,#results{font-size:9.5pt}
+#navi a,#navi a:visited,#navi a:hover,#navi a:focus,#navi a:active{padding-left:21px;background-size:12px,100%}
+#paginate{margin-top:-3px;margin-right:2px}
+#prev.inactive::after,#next.inactive::after{top:calc(50% - 6px)}
+#prev,#next,#current{font-size:10pt}
+.iframed #prev::after,.iframed #next::after{top:calc(50% - 5px)}
+.iframed #prev a,.iframed #next a{padding:11px 10px}
 }
 
 @media (min-width:1200px){
@@ -360,20 +359,21 @@ form[action="export"]::after{height:21px}
 }
 
 @media (min-width:1500px){
-body,#navi a,input[type=text],select,h4,td.names a,#filter p,#search td,p,a,.help li,td,tt,code,input[type=submit],input[type=reset],.destaddress,input[type="file"],input[type="file"]::file-selector-button{font-size:10.5pt}
-textarea,textarea[name="config"],textarea[name="content"],#subsLog pre{font-size:10pt}
+a,body,code,h4,.help li,input[type="file"],input[type="file"]::file-selector-button,input[type=reset],input[type=submit],input[type=text],p,select,td,tt,.destaddress,td.names a,#filter p,#navi a,#search td{font-size:10.5pt}
 h3{font-size:12pt}
-#filter a{font-size:11pt;min-width:14px}
+textarea,textarea[name="config"],textarea[name="content"],#subsLog pre{font-size:10pt}
 .destinations textarea{height:34px}
-#ovrvw #content p{line-height:1.6}
-#export{padding-left:4px;height:40px;position:absolute;top:-1px;right:6px}
-input#exporthosts{margin:6px 0 -2px 2px}
 #addressbook.headline h3{padding-right:45px}
+#content h3{font-size:11.5pt}
+#export{padding-left:4px;height:40px;position:absolute;top:-1px;right:6px}
+#filter a{font-size:12pt;min-width:16px}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:18px;height:18px}
+input#exporthosts{margin:6px 0 -2px 2px}
+#ovrvw #content p{line-height:1.6}
 }
 
 @media (min-width:1640px){
-body,input[type=text],select,h4,td.names a,#filter p,#search td,p,a,
-.help li,td,tt,code,input[type=submit],input[type=reset],.destaddress{font-size:10.5pt}
+body,input[type=text],select,h4,td.names a,#filter p,#search td,p,a,code,input[type=reset],input[type=submit],td,tt,.destaddress,.help li{font-size:10.5pt}
 .headline#subscriptions h3 span a{font-size:90%}
+#content h3{font-size:12pt}
 }
