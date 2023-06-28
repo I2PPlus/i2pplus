@@ -12,6 +12,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
@@ -49,15 +50,11 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context.statManager().addRateData("netDb.lookupsReceived", 1);
 
         DatabaseLookupMessage dlm = (DatabaseLookupMessage)receivedMessage;
-        if (!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
+        RouterInfo us = _context.netDb().lookupRouterInfoLocally(_context.routerHash());
+        boolean isUs = us != null && fromHash.equals(_context.routerHash());
+        if (!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) || isUs) {
             Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
-            //if (false) {
-            //    // might as well inline it, all the heavy lifting is queued up in later jobs, if necessary
-            //    j.runJob();
-            //    return null;
-            //} else {
             return j;
-            //}
         } else if (_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
@@ -70,7 +67,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         } else {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> Max 30 requests in 5m exceeded");
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> Max 20 requests in 3m exceeded");
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
