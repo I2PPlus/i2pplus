@@ -60,6 +60,10 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
              !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
              _context.netDb().floodfillEnabled()) ||
              _context.routerHash().equals(fromHash)) {
+            if (_log.shouldInfo()) {
+                _log.info("Replying to " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "]");
+            }
             Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
             return j;
         } else if (!_context.netDb().floodfillEnabled() && !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
