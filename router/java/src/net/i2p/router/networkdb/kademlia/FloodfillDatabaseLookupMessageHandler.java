@@ -50,9 +50,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context.statManager().addRateData("netDb.lookupsReceived", 1);
 
         DatabaseLookupMessage dlm = (DatabaseLookupMessage)receivedMessage;
-        RouterInfo us = _context.netDb().lookupRouterInfoLocally(_context.routerHash());
-        boolean isUs = us != null && fromHash.equals(_context.routerHash());
-        if (!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) || isUs) {
+        if (!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
             return j;
         } else if (_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
