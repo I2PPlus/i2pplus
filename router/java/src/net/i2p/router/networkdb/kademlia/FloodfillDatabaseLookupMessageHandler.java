@@ -56,15 +56,22 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             //    j.runJob();
             //    return null;
             //} else {
-                return j;
+            return j;
             //}
-        } else {
+        } else if (_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 4h -> Max 15 requests in 3m exceeded");
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 4h -> Max 10 requests in 20s exceeded");
             }
             _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests", null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().mayDisconnect(dlm.getFrom());
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
+            return null;
+        } else {
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> Max 20 requests in 3m exceeded");
+            }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         }
