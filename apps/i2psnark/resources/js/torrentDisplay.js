@@ -23,7 +23,6 @@ function initFilterBar() {
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
   var incomplete = document.querySelectorAll(".incomplete");
   var mainsection = document.getElementById("mainsection");
-  var noload = document.getElementById("noload");
   var pagenav = document.getElementById("pagenavtop");
   var peerinfo = document.querySelectorAll(".peerinfo");
   var screenlog = document.getElementById("screenlog");
@@ -243,7 +242,9 @@ function initFilterBar() {
 }
 
 function checkFilterBar() {
+  var down = document.getElementById("down");
   var filterbar = document.getElementById("torrentDisplay");
+  var noload = document.getElementById("noload");
   var query = window.location.search;
   var sortIcon = document.querySelectorAll(".sortIcon");
 
@@ -253,7 +254,7 @@ function checkFilterBar() {
     refreshFilters();
   }
 
-  if (noload) {
+  if (noload || down) {
     refreshAll();
   }
 
@@ -341,6 +342,13 @@ function refreshFilters() {
             screenlog.innerHTML = screenlogResponse.innerHTML;
           }
         }
+      } else {
+        function noAjax() {
+          var failMessage = "<div class=routerdown id=down><span>Router is down</span></div>";
+          if (mainsection) {mainsection.innerHTML = failMessage;}
+          else {snarkInfo.innerHTML = failMessage;}
+        }
+        setTimeout(noAjax, 5000);
       }
     }
   };

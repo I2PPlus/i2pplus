@@ -268,7 +268,7 @@ class Daemon {
                                             if (log != null) {
                                                 if (success)
                                                     log.append("Additional address for " + key +
-                                                               " added to addressbook [" + addressbook.getLocation() + "]");
+                                                               " [" + addressbook.getLocation() + "]");
                                                 else
                                                     log.append("Failed to add additional address for " + key +
                                                                " [" + addressbook.getLocation() + "]");
@@ -485,8 +485,7 @@ class Daemon {
                             boolean success = router.put(key, dest, props);
                             if (log != null) {
                                 if (success)
-                                    log.append("New domain " + key +
-                                               " added to addressbook [" + addressbook.getLocation() + "]");
+                                    log.append("New domain " + key + " [" + addressbook.getLocation() + "]");
                                 else
                                     log.append("Save to naming service " + router + " failed for new key " + key);
                             }
@@ -629,14 +628,12 @@ class Daemon {
                                 continue;
                             } else {
                                 if (log != null)
-                                    log.append("No action in command line" +
-                                               " [" + addressbook.getLocation() + "]");
+                                    log.append("No action in command line" + " [" + addressbook.getLocation() + "]");
                                 invalid++;
                                 continue;
                             }
                         } else if (log != null) {
-                            log.append("Bad hostname " + key + " ["
-                                   + addressbook.getLocation() + "]");
+                            log.append("Bad hostname " + key + " [" + addressbook.getLocation() + "]");
                             invalid++;
                         }
                   /****

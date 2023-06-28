@@ -12,6 +12,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
@@ -51,20 +52,21 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         DatabaseLookupMessage dlm = (DatabaseLookupMessage)receivedMessage;
         if (!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
-            //if (false) {
-            //    // might as well inline it, all the heavy lifting is queued up in later jobs, if necessary
-            //    j.runJob();
-            //    return null;
-            //} else {
-                return j;
-            //}
-        } else {
+            return j;
+        } else if (_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 4h -> Max 50 requests in 3m exceeded");
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 4h -> Max 10 requests in 30s exceeded");
             }
             _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests", null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().mayDisconnect(dlm.getFrom());
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
+            return null;
+        } else {
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> Max 20 requests in 3m exceeded");
+            }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         }

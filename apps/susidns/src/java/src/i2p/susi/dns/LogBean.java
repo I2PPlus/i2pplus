@@ -43,76 +43,87 @@ import net.i2p.util.SecureFileOutputStream;
 
 public class LogBean extends BaseBean
 {
-	private String logName, logged;
-	private static final String LOG_FILE = "log.txt";
-	public String getLogName()
-	{
-		loadConfig();
-		logName = logFile().toString();
-		return logName;
-	}
+    private String logName, logged;
+    private static final String LOG_FILE = "log.txt";
+    public String getLogName() {
+        loadConfig();
+        logName = logFile().toString();
+        return logName;
+    }
 
-	/**
-	 * @since 0.9.35
-	 */
-	private File logFile() {
-		return new File(addressbookDir(), LOG_FILE);
-	}
+    /**
+     * @since 0.9.35
+     */
+    private File logFile() {
+        return new File(addressbookDir(), LOG_FILE);
+    }
 
-	private void reloadLog() {
-		synchronized(LogBean.class) {
-			locked_reloadLog();
-		}
-	}
+    private void reloadLog() {
+        synchronized(LogBean.class) {
+            locked_reloadLog();
+        }
+    }
 
-	private void locked_reloadLog()
-	{
-		File log = logFile();
-		if(log.isFile()) {
-			StringBuilder buf = new StringBuilder();
-			BufferedReader br = null;
-			try {
-				br = new BufferedReader(new InputStreamReader(new FileInputStream(log), "UTF-8"));
-				String line;
-				while( ( line = br.readLine() ) != null ) {
-					buf.append( line );
-					buf.append( "\n" );
-				}
-				logged = buf.toString();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				if (br != null)
-					try { br.close(); } catch (IOException ioe) {}
-			}
-		} else {
-			logged = LOG_FILE;
-		}
-	}
+    private void locked_reloadLog() {
+        File log = logFile();
+        int maxLines = 600;
+        if (log.isFile()) {
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(log), "UTF-8"));
+                List<String> lines = new ArrayList<String>(maxLines);
+                String line;
+                while ((line = br.readLine()) != null) {
+                    lines.add(line);
+                    if (lines.size() >= maxLines) {
+                        lines.remove(0);
+                    }
+                }
+                StringBuilder buf = new StringBuilder(maxLines * 80);
+                // Reverse order, most recent first
+                //for (int i = maxLines - 1; i >= 0; i--) {
+                for (int i = 0; i < lines.size(); i++) {
+                    if (!lines.get(i).contains("Bad hostname")) {
+                        buf.append(lines.get(i)).append('\n');
+                    }
+                }
+                logged = buf.toString().replace(" added to addressbook","");
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                if (br != null)
+                    try {br.close();} catch (IOException ioe) {}
+            }
+        } else {
+            logged = LOG_FILE;
+        }
+    }
 
-	public String getMessages() {
-		String message = "";
-		if( action != null ) {
-					if (logged != null && logged.length() > 2)
-					reloadLog();
-					message = _t("Subscription log reloaded.");
-		}
-		if( message.length() > 0 )
-			message = "<p class=\"messages\">" + message + "</p>";
-		return message;
-		}
+    public String getMessages() {
+        String message = "";
+        if (action != null) {
+            if (logged != null && logged.length() > 2) {
+                reloadLog();
+                message = _t("Subscription log reloaded.");
+            }
+        }
+        if (message.length() > 0) {
+            message = "<p class=\"messages\">" + message + "</p>";
+        }
+        return message;
+    }
 
-	public void setLogged(String logged) {
-		// will come from form with \r\n line endings
-		this.logged = DataHelper.stripHTML(logged);
-	}
+    public void setLogged(String logged) {
+        // will come from form with \r\n line endings
+        this.logged = DataHelper.stripHTML(logged);
+    }
 
-	public String getLogged()
-	{
-		if( logged != null )
-			return logged;
-		reloadLog();
-		return logged;
-	}
+    public String getLogged() {
+        if (logged != null) {
+            return logged;
+        }
+        reloadLog();
+        return logged;
+    }
 }

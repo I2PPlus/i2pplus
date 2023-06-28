@@ -53,14 +53,15 @@ p.buttons{margin:0 -11px;padding:10px;border:var(--border);background:var(--bg)}
 #navi{margin:-1px -11px 0;padding:3px;display:flex;position:sticky;top:-1px;z-index:999;text-align:center;flex-flow:wrap;justify-content:center;border:var(--border);background:var(--th)}
 #navi a,#navi a:visited{border:var(--border);border-radius:2px;margin:3px 0;box-shadow:0 0 1px 0 #ddd,var(--highlight);display:inline-block;outline:none;color:#5c5c8a}
 #navi a{margin:-4px -3px;padding:5px 12px 4px;background:linear-gradient(180deg,#fff 50%,#eaebff 50%);text-transform:uppercase;letter-spacing:.08em;flex-grow:1;border-radius:0;position:relative;z-index:1}
-#navi a:first-child{border-left:none}
-#navi a:last-child{border-right:none}
+#navi a:first-child{border-left:0}
+#navi a:last-child{border-right:0}
 #navi a.selected{z-index:10}
 #navi a.selected:not(.details),#navi a:active{box-shadow:var(--highlight),inset 3px 3px 3px #aaabcc;background:linear-gradient(180deg,#e8e9ff,#fafbff)}
 #navi a.selected.details::after{content:"*"}
 #navi a:hover,#navi a:focus{z-index:10;color:var(--hover);border-color:1px solid var(--hover)}
 .iframed #navi a:hover,.iframed #navi a:focus{z-index:1;border-color:var(--border_color)}
 #navi a:active{color:#778;border:1px solid #f90}
+#navi a.selected{pointer-events:none}
 .headline+#book>table{margin-top:10px}
 
 /* page titles */

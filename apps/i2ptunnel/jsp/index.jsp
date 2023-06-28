@@ -96,10 +96,10 @@
 <div class=panel id=servers>
 <h2><%=intl._t("I2P Server Tunnels").replace("I2P ", "")%>
 <span id=countServer>
-<span class=running></span>
-<span class=starting></span>
-<span class=standby></span>
-<span class=stopped></span>
+<span class="running svr"></span>
+<span class="starting svr"></span>
+<span class="standby svr"></span>
+<span class="stopped svr"></span>
 </span>
 </h2>
 <table id=serverTunnels>
@@ -358,10 +358,10 @@ ElGamal-2048
 <div class=panel id=clients>
 <h2><%=intl._t("I2P Client Tunnels").replace("I2P ", "")%>
 <span id=countClient>
-<span class=running></span>
-<span class=starting></span>
-<span class=standby></span>
-<span class=stopped></span>
+<span class="running cli"></span>
+<span class="starting cli"></span>
+<span class="standby cli"></span>
+<span class="stopped cli"></span>
 </span>
 </h2>
 <table id=clientTunnels>
@@ -588,14 +588,16 @@ ElGamal-2048
 </tr>
 </table>
 </div>
-<noscript><style type=text/css>.script{display:none}.tunnelInfo{display:table-row!important}</style></noscript>
 <%
 
   }  // isInitialized()
 
   if (!indexBean.isInitialized()) {
 %>
-<div id=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
+<div id=notReady class=notReady>
+<%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%>
+<noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript>
+</div>
 <%
   }  // !isInitialized()
 %>
@@ -603,7 +605,7 @@ ElGamal-2048
 <script charset=utf-8 src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
-<noscript><style type=text/css>.script{display:none!important}#screenlog_buttons{display:table-row!important}</style></noscript>
+<noscript><style type=text/css>.script{display:none!important}.tunnelInfo{display:table-row!important}#screenlog_buttons{display:table-row!important}</style></noscript>
 <style type=text/css>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

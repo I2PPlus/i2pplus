@@ -73,7 +73,7 @@
 </form>
 </div>
 <div class=linkcontainer>
-<h4 id=applinks><%=intl._t("Applications and Configuration")%>
+<h4 id=applinks><%=intl._t("Applications and Configuration").replace(" and ", " &amp; ")%>
 <span class=headerlinks>
 <a href="/confighome#configapps" class=customizelinks style=float:right title="<%=intl._t("Customize links")%>"><%=intl._t("Customize links")%></a>
 <%

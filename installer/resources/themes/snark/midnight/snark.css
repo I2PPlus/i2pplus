@@ -208,8 +208,8 @@ td.peerCount{padding-left:0;padding-right:5px;width:1%;white-space:nowrap;text-a
 .peerCount .right,.peerCount .left{min-width:24px;display:inline-block}
 .peerCount .left{margin-left:1px;margin-right:4px;text-align:left;opacity:.8}
 .peerCount .right{margin-right:2px;text-align:right}
-.peerCount b{padding:4px 3px;min-width:80px;display:inline-block;text-align:center;position:relative;line-height:1;font-size:95%;text-shadow:0 1px 1px #101;border-radius:2px;background:#535}
-.peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:transparent #535 transparent transparent;content:""}
+.peerCount b{padding:4px 3px;min-width:80px;display:inline-block;text-align:center;position:relative;line-height:1;font-size:95%;text-shadow:0 1px 1px #101;border-radius:2px;background:#e45bb8}
+.peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:transparent #e45bb8 transparent transparent;content:""}
 .peerCount b a:not(:hover):not(:focus),.peerCount b a:not(:hover):not(:focus):visited{color:#d0d;text-shadow:0 1px 1px #000}
 .inactive.downloading .peerCount b a:not(:hover):not(:focus),.inactive.downloading .peerCount b a:not(:hover):not(:focus):visited{color:#900;text-shadow:0 1px 1px #990}
 .active.seeding.complete .peerCount b{background:repeating-linear-gradient(135deg,#937,#937 8px,#826 9px,#826 17px)}
@@ -218,8 +218,8 @@ td.peerCount{padding-left:0;padding-right:5px;width:1%;white-space:nowrap;text-a
 .active.downloading .peerCount b::before{border-color:transparent #252 transparent transparent}
 .inactive.downloading .peerCount b{color:#101;background:#bb0}
 .inactive.downloading .peerCount b::before{border-color:transparent #bb0 transparent transparent}
-.stopped.complete .peerCount b{background:#28f}
-.stopped.complete .peerCount b::before{border-color:transparent #28f transparent transparent}
+.stopped.complete .peerCount b{background:#00b6e4}
+.stopped.complete .peerCount b::before{border-color:transparent #00b6e4 transparent transparent}
 .nopeers.incomplete .peerCount b{text-shadow:0 1px 1px #bbb;background:#aaa}
 .nopeers.incomplete .peerCount b::before{border-color:transparent #aaa transparent transparent}
 .stopped.incomplete .peerCount b,.inactive.neterror .peerCount b{color:#ccc;text-shadow:0 1px 1px #000;background:#900}
@@ -228,9 +228,9 @@ td.peerCount{padding-left:0;padding-right:5px;width:1%;white-space:nowrap;text-a
 .peerCount b a:hover .left,.peerCount b a:hover .right{box-shadow:rgba(255,96,0,.5),inset 2px 2px 2px rgba(0,0,0,.3);background:linear-gradient(180deg,rgba(32,16,32,.9),rgba(64,16,64,.9))}
 .inactive .peerCount b a:hover,.inactive .peerCount b a:hover .left,.peerCount b a:hover .right{color:#fff}
 .inactive .peerCount b:hover a .left,.inactive .peerCount b:hover a .right{box-shadow:inset 0 0 0 1px rgba(255,255,0,.5),inset 2px 2px 2px rgba(0,0,0,.3);background:linear-gradient(180deg,rgba(128,128,0,.9),rgba(192,192,0,.9))}
-.peerCount b:not(:empty){color:#aaa}
+.peerCount b:not(:empty){color:#ccc}
 .nopeers .peerCount b{content:"‒";color:#000}
-#torrents .peerCount b a{color:#ccc}
+#torrents .peerCount b a{color:#eee}
 #torrents .peerCount b:hover a,#torrents .peerCount b:hover a span,#torrents .peerCount b a:focus span,#torrents .peerCount b a:active span{color:#fff}
 
  /* action buttons */
@@ -720,7 +720,7 @@ td.trackerLink img{height:16px}
 .RateDown .left,.RateUp .left,.torrentUploaded .left,.RateDown .right,.RateUp .right,.torrentUploaded .right{min-width:22px;display:inline-block;text-align:left}
 .RateDown .right,.RateUp .right,.torrentUploaded .right{min-width:40px;text-align:right}
 .uploaded,.txBarInner{position:relative;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.8),inset 3px 3px 3px rgba(0,0,0,.8)}
-.uploaded{padding:3px 0 1px;min-width:68px;display:inline-block;vertical-align:middle;font-weight:700;color:#a7acff;text-shadow:0 1px 1px #000,0 0 2px #337;border:1px solid #181858;border-left-width:5px;box-shadow:var(--highlight),0 0 0 1px #000,inset 3px 3px 3px rgba(0,0,0,.8);background:repeating-linear-gradient(90deg,#000,#000 5%,#080848 5%,#080848 10%);background-size:200%}
+.uploaded{padding:3px 0 1px;min-width:68px;display:inline-block;vertical-align:middle;text-align:center;font-weight:700;color:#a7acff;text-shadow:0 1px 1px #000,0 0 2px #337;border:1px solid #181858;border-left-width:5px;box-shadow:var(--highlight),0 0 0 1px #000,inset 3px 3px 3px rgba(0,0,0,.8);background:repeating-linear-gradient(90deg,#000,#000 5%,#080848 5%,#080848 10%);background-size:200%}
 .active .uploaded{background:repeating-linear-gradient(90deg,#000,#000 5%,#303 5%,#505 10%);background-size:200%;animation:uploading .5s linear 4s 1 forwards reverse}
 tr:hover .uploaded{border-color:#181878}
 .txBarInner{height:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;z-index:1;background:rgba(192,48,192,.25);box-shadow:inset 3px 3px 3px rgba(0,0,0,.8);border:0}
