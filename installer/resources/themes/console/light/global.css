@@ -37,12 +37,12 @@
 --h4app:linear-gradient(90deg,#fcfcff 5%,rgba(231,231,255,.8) 25%) #f8f8ff;
 --highlight:inset 0 0 0 1px #fff;
 --hover:#f60;
---ink:#4f4f63;
+--ink:#5b5b71;
 --ink_active:#4c526f;
 --ink_code:#373;
 --ink_dark:#393947;
 --ink_darker:#19191f;
---ink_light:#5b5b71;
+--ink_light:#66667f;
 --ink_lighter:#71718e;
 --input_shadow:inset 1px 1px 1px rgba(0,0,0,.15);
 --membarinner_mobile:linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7));

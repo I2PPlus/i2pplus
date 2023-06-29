@@ -218,6 +218,7 @@ p.messages{color:#fff;text-align:center;font-weight:700}
 /* subscriptions */
 #sbs #content{margin:-11px}
 #sbs h3 a{margin:3px 5px 0 0;float:right;font-size:8.5pt}
+#subsLog h3 span{margin:2px 4px 0 0;float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:80%;opacity:.9}
 #subsLog pre{padding:8px 10px;white-space:pre-wrap;line-height:1.2}
 
 /* iframe */
@@ -264,8 +265,8 @@ p.messages{color:#fff;text-align:center;font-weight:700}
 @media (min-width:1400px){
 body,p,td,textarea,input,button,li,a{font-size:10pt}
 code,tt{font-size:9pt}
-h4,#navi a{font-size:11pt}
-h3,h3 a{font-size:11pt}
-#filter span,#filter a,#activefilter{min-width:16px;font-size:10pt}
+h3,h3 a,h4,#navi a{font-size:11pt}
 .illustrate{margin-top:25px}
+#activefilter,#filter a,#filter span,{min-width:16px;font-size:10pt}
+#subsLog h3 span{margin:3px 4px 0 0}
 }
