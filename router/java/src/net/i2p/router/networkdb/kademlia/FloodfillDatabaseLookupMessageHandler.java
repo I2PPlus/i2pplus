@@ -53,12 +53,13 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         boolean isBanned = fromHash != null && (_context.banlist().isBanlistedForever(fromHash) ||
                            _context.banlist().isBanlisted(fromHash) ||
                            _context.banlist().isBanlistedHostile(fromHash));
+        boolean ourRI = dlm.getSearchKey() != null && dlm.getSearchKey().equals(_context.routerHash());
         if (isBanned) {
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         } else if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
              !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
-             _context.netDb().floodfillEnabled()) ||
+             (_context.netDb().floodfillEnabled()) || ourRI) ||
              _context.routerHash().equals(fromHash)) {
             if (_log.shouldInfo()) {
                 _log.info("Replying to " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
