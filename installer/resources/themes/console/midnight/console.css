@@ -2742,7 +2742,7 @@ th code{font-size:9pt}
 h1[class]{padding:17px 20px 16px 64px;font-size:20pt;background-position:15px center}
 h2{padding:12px 10px}
 h3.h3table,h3.tabletitle,#i2pclientconfig,#advancedclientconfig,#webappconfiguration,#pconfig,#pluginfromurl,#pluginfromfile,#updateplugins,#pluginmanage,#bannedpeers,h3.ptitle,#transports,#upnpstatus,h3.sybils,#config_keyring h3{padding:9px 10px}
-p,.infohelp,.infowarn,td.infohelp,td.infowarn,.logo a,#console code,#console li,#console p,div[id^="config_"] td,#help code,#help li,#help p,#help table,#news .newsentry p,#warning a,#warning h4,#warning li,#warning p{font-size:10.5pt}
+p,.infohelp,.infowarn,td.infohelp,td.infowarn,.logo a,#console code,#console li,#console p,div[id^="config_"] td,#help code,#help li,#help p,#help td,#help th,#news .newsentry p,#warning a,#warning h4,#warning li,#warning p{font-size:10.5pt}
 .applink{margin:3px 4px 5px;min-width:164px}
 .applabel{width:160px}
 .applabel a,.applabel a:hover{max-width:154px}

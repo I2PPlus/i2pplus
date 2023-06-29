@@ -105,6 +105,8 @@ h4{display:none;}
 .headline h3:first-child{margin-bottom:24px}
 .headline h3::first-letter{font-size:115%}
 .headline#subscriptions h3{background:var(--subscription) no-repeat 9px center/18px,var(--title)}
+.headline#subscriptions h3 span{float:right}
+.headline#subscriptions h3 span a{margin:4px 4px 0 0;display:inline-block;font-size:80%}
 .headline#configure h3{background:var(--config) no-repeat 9px center/20px,var(--title)}
 .headline h3:first-child+h4{margin-top:-25px;margin-bottom:26px}
 #addressbook.headline h3{padding-right:44px;contain:paint}
@@ -112,6 +114,7 @@ h4{display:none;}
 #add h3,#import h3{margin:-6px -1px 15px;padding:8px 10px 8px 34px;font-size:11pt;background:var(--add) no-repeat 10px center/14px,var(--title)}
 #import h3{background:var(--download) no-repeat 10px center/16px,var(--title)}
 #dtls .headline h3:first-child{margin-bottom:28px}
+#subsLog #subscriptions h3 span{margin:3px 6px 0 0;display:inline-block;text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:85%;opacity:.85}
 
 /* host list */
 .addrhlpr{font-size:9pt}

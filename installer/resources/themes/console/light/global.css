@@ -37,12 +37,12 @@
 --h4app:linear-gradient(90deg,#fcfcff 5%,rgba(231,231,255,.8) 25%) #f8f8ff;
 --highlight:inset 0 0 0 1px #fff;
 --hover:#f60;
---ink:#4f4f63;
+--ink:#5b5b71;
 --ink_active:#4c526f;
 --ink_code:#373;
---ink_dark:#393947;
---ink_darker:#19191f;
---ink_light:#5b5b71;
+--ink_dark:#444455;
+--ink_darker:#393947;
+--ink_light:#66667f;
 --ink_lighter:#71718e;
 --input_shadow:inset 1px 1px 1px rgba(0,0,0,.15);
 --membarinner_mobile:linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7));
@@ -73,7 +73,13 @@ a{text-decoration:none}
 a:link,a:visited{color:var(--a);text-decoration:none;font-weight:700;word-wrap:break-word;outline:none}
 a:link:hover,a:hover,a:visited:hover,a:visited:focus{color:#f60;text-decoration:none;text-shadow:none}
 a:active,a:visited:active{color:#f30}
-button,input[type=submit],input[type=reset],label,select,.control,.optbox{cursor:pointer}
+input[type=file],input[type=submit],input[type=reset],button,label,select,.fakebutton.optbox{font-family:var(--bodyfont);cursor:pointer}
+input,input:visited,button,button:visited{margin:3px;padding:5px;line-height:1.4;font-size:9pt;color:var(--ink_light);text-decoration:none;text-shadow:var(--txt_shadow);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--btn);background-size:14px,100%;opacity:1;filter:var(--filter_shadow)}
+button a,button a:visited{font-weight:400;color:var(--ink_light)}
+button:hover,input[type=submit]:hover,input[type=reset]:hover,button:focus,input[type=submit]:focus,input[type=reset]:focus{color:var(--ink_dark);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover);filter:saturate(100%) drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
+button:hover a{color:var(--ink_dark)}
+button:active,input[type=submit]:active,input[type=reset]:active{color:var(--ink_active);box-shadow:var(--btn_shadow_active);background-blend-mode:luminosity;transition:none}
+button a:active{color:var(--ink_active)}
 b{color:var(--ink_light)}
 button::-moz-focus-inner,input[type=submit]::-moz-focus-inner,input[type=reset]::-moz-focus-inner,.control::-moz-focus-inner,select::-moz-focus-inner{outline:none;border:0}
 img{border:0;font-size:0}
@@ -98,9 +104,9 @@ label[disabled],label[disabled]:hover{opacity:.45}
 select,select[disabled]:hover,select[disabled]:focus{margin:5px;padding:6px 24px 6px 8px;min-width:120px;text-align:left;font:9pt var(--bodyfont);color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--dropdown) no-repeat right 8px center/10px,var(--btn);appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 select:-moz-focusring{outline:1px solid transparent}
 select option{background:#fff}
-select:hover,select:focus,select:active{border:1px solid #868bac}
+select:hover,select:focus,select:active{color:var(--ink_dark);border:1px solid #868bac}
 select:hover,select:active{color:var(--ink_dark);box-shadow:var(--highlight),0 2px 1px #ddf;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
-select:focus{color:#19191f;box-shadow:0 0 1px #f60;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
+select:focus{box-shadow:0 0 1px #f60;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{border:var(--border_input);box-shadow:var(--highlight);background:var(--btn);opacity:.8;cursor:default}
 table{border-spacing:0}
 textarea{margin:5px;padding:5px 8px;resize:none;font-size:9pt;color:var(--ink);border:var(--border_input);border-radius:2px;box-shadow:inset 1px 1px 1px rgba(204,204,204,.6);background:#fbfbff;transition:ease all .1s}
