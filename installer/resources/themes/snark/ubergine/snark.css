@@ -715,7 +715,8 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #trackerselect td:first-child,#trackerselect td:nth-child(2),#trackerselect td:nth-child(3){width:20%;min-width:100px;white-space:nowrap}
 #trackerselect td{padding:5px}
 #trackerselect td:first-child{width:30%;text-align:center}
-#trackerselect tr:first-child td{padding-top:8px;padding-bottom:8px;font-weight:700;border-bottom:var(--border_inner);background:linear-gradient(180deg,#313,#000)}
+#trackerselect tr:first-child td{padding:8px 5px;font-size:90%;font-weight:700;border-bottom:var(--border_inner);background:linear-gradient(180deg,#313,#000)}
+#trackerselect tr:first-child td:first-child{padding-left:10px;text-align:left}
 #trackerselect tr:nth-child(n+2) td{border-right:1px solid rgba(16,0,16,.5)}
 #trackerselect tr:nth-child(n+3) td{border-top:var(--border_hard)}
 #trackerselect td:last-child{text-align:center;width:30%;border-right:none}
