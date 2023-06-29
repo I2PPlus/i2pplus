@@ -306,8 +306,8 @@ a.control,a.controld{margin:6px 3px 6px 3px;padding:5px 8px 4px 5px;display:inli
 a.controld{color:#459;font-weight:400;display:none}
 a.control img,a.control:hover img,a.control:focus img,a.control:active img{filter:none}
 a.control:active img{mix-blend-mode:luminosity}
-input[type=submit],a.control:not(.disabled){color:var(--ink_light);font-weight:400;box-shadow:var(--btn_shadow);border:var(--border_input);background:linear-gradient(180deg,#fff,#efefff);transition:ease border .7s}
-input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:var(--hover);text-shadow:none;border:1px solid #559;box-shadow:var(--btn_shadow_hover);background:linear-gradient(#fff 50%,#ffe8bf 50%,#efd9b3 100%)}
+input[type=submit],a.control:not(.disabled){color:var(--ink_light);font-weight:400;box-shadow:var(--btn_shadow);border:var(--border_input);background:var(--btn);transition:ease border .7s}
+input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:var(--hover);text-shadow:none;border:1px solid #559;box-shadow:var(--btn_shadow_hover);background:var(--btn_hover)}
 input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:var(--ink_dark);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover);transition:ease border .7s}
 input[type=submit]:active,a.control:active{color:#4c526f;box-shadow:var(--highlight),inset 2px 2px 2px #555;background:var(--btn_hover);background-blend-mode:luminosity}
 input[name="savepri"]{float:right}
@@ -317,6 +317,13 @@ input[type=text],textarea{color:var(--ink_lighter)}
 input[type=text]{font-weight:700}
 input[type=text]:disabled{opacity:.5}
 input[type=text]:focus,textarea:focus{color:var(--ink)}
+#addSection input.add,#addSection input.add:hover,#addSection input.add:focus,#addSection input.add:active,input.create,input.create:hover,input.create:focus,input.create:active{width:80px;color:transparent;text-shadow:none}
+#addSection input.add:hover,#addSection input.add:focus,input.create:hover,input.create:focus{background-blend-mode:normal}
+#addSection input.add{background:var(--add) no-repeat center center/16px,var(--btn)}
+#addSection input.add:hover,#addSection input.add:focus{background:var(--add) no-repeat center center/16px,var(--btn)}
+#addSection input.add,#addSection input.add:active,input.create,input.create:active{background-blend-mode:luminosity}
+input.create{background:var(--create) no-repeat center center/16px,var(--btn)}
+input.create:hover,input.create:focus{background:var(--create) no-repeat center center/16px,var(--btn)}
 .knownTracker input[type=radio],.knownTracker input[type=radio]:hover,.knownTracker input[type=radio]:focus{opacity:.3}
 .knownTracker input[type=radio]:checked,.knownTracker input[type=radio]:checked:hover{opacity:.5}
 #addSection input[type=text],#createSection input[type=text]{width:80%}
