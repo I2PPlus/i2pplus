@@ -853,7 +853,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after{display:inline;font-size:9pt;con
 }
 
 @media (min-width:1200px){
-.nav_main:link,.nav_main:visited,.nav_main:hover,.nav_main:focus,.nav_main:active{padding-left:27px;background-size:17px,100%}
+.nav_main:link,.nav_main:visited,.nav_main:hover,.nav_main:focus,.nav_main:active{padding-left:27px;background-size:17px,100%!important}
 .percentDownloaded{pointer-events:none}
 .RateUp:not(:empty),#torrents tfoot th.RateUp:not(:empty),.peerinfo .RateUp:not(:empty){padding-right:10px}
 .snarkNav:link,.snarkNav:visited{letter-spacing:.1em;font-size:11pt}
