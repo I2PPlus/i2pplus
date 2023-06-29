@@ -312,11 +312,11 @@ input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focu
 input[type=submit]:active,a.control:active{color:#4c526f;box-shadow:var(--highlight),inset 2px 2px 2px #555;background:var(--btn_hover);background-blend-mode:luminosity}
 input[name="savepri"]{float:right}
 input[type=text],input.r,input[name="nofilter_dataDir"],textarea,select{padding:5px 7px;min-width:120px;font-size:9pt}
-input.r{text-align:right;background:#fff;border:var(--border_input);color:var(--ink)}
+input.r{text-align:right;background:#fff;border:var(--border_input);color:var(--ink_lighter)}
 input[type=text],textarea{color:var(--ink_lighter)}
 input[type=text]{font-weight:700}
 input[type=text]:disabled{opacity:.5}
-input[type=text]:focus,textarea:focus{color:var(--ink_light)}
+input[type=text]:focus,textarea:focus{color:var(--ink)}
 .knownTracker input[type=radio],.knownTracker input[type=radio]:hover,.knownTracker input[type=radio]:focus{opacity:.3}
 .knownTracker input[type=radio]:checked,.knownTracker input[type=radio]:checked:hover{opacity:.5}
 #addSection input[type=text],#createSection input[type=text]{width:80%}
