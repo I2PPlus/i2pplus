@@ -87,7 +87,7 @@ ul{margin:0;padding:0}
 .widepanel h3{padding:6px 10px;text-align:left;text-transform:uppercase;font-size:10.5pt;letter-spacing:.08em;word-spacing:.1em;border:var(--border_inner);border-radius:0}
 .widescroll{overflow:auto}
 .widescroll table{white-space:nowrap}
-.main:not(id^="config") th,#jobs th,#netdboverview th,#tunnels #transitSummary th,#profiles th{position:relative}
+.main:not([id^="config"]) th,#jobs th,#netdboverview th,#tunnels #transitSummary th,#profiles th{position:relative}
 #newtab:hover{filter:drop-shadow(0 0 3px var(--hover))}
 #newtab{margin-top:2px;float:right;letter-spacing:0;text-align:right;font-size:8pt}
 #sidebar img[src$="i2plogo.png"],#sidebar h3,.confignav,*::before,*::after,h1,h2,h3,h4,.applink,.clearer,#sidebar  img,.formaction,label,#themeoptions,#helptranslate,#consolepass,.applink,#sitemapcontainer{user-select:none}
@@ -1432,9 +1432,10 @@ h3[id="udpcon"]{width:auto}
 #floodfills td{padding:3px;text-align:center}
 #floodfills:not(.rid) td:nth-child(2){width:6%;min-width:64px}
 #floodfills:not(.rid) td:nth-child(odd){background:rgba(0,0,0,.3)}
-#floodfills .percentBarInner{margin-left:1px;max-width: calc(100% - 1px);width:inherit;display:inline-block;background:linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),linear-gradient(90deg,#700 25px,#800 40px,#900 50px)}
-#floodfills .percentBarInner[style="width:0%"],#floodfills .percentBarOuter.nofail>.percentBarInner{margin-left:0;width:calc(100% + 1px)!important;max-width:100%;background:linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),linear-gradient(90deg,#070,#080)}
-#floodfills .percentBarOuter{text-align:left;background:#000;border:var(--border_inner);opacity:.9;height:16px}
+#floodfills .percentBarInner{margin-left:0;width:inherit;max-width:100%;display:inline-block;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 2px,rgba(255,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),linear-gradient(90deg,#500 25px,#600 40px,#700 50px)}
+#floodfills .percentBarInner[style="width:0%"],#floodfills .percentBarOuter.nofail>.percentBarInner{width:100%!important;background:repeating-linear-gradient(90deg,rgba(0,0,0,.1) 2px,rgba(0,255,0,.5) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),#151}
+#floodfills .percentBarOuter{text-align:left;background:#000;border:1px solid #151;height:16px}
+#floodfills .percentBarOuter:not(.nofail){background:repeating-linear-gradient(90deg,#000,#000 5%,#300 5%,#300 10%);border:1px solid #700}
 #floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText{box-sizing:border-box;float:none}
 #floodfills .percentBarOuter,#floodfills .percentBarText{margin:0 2px;width:calc(100% - 6px);display:inline-block}
 #floodfills .percentBarText{color:#fff;text-shadow:0 1px 1px #000;display:none}
@@ -1444,6 +1445,8 @@ h3[id="udpcon"]{width:auto}
 #floodfills td:nth-last-child(2){text-align:center}
 #floodfills td:empty{text-align:center}
 #floodfills td:empty::before,#ntcpconnections td:empty::before,#udpconnections td:empty::before,#profilelist td:empty::before{content:"‒";display:inline-block;opacity:.8;width:100%;text-align:center}
+#floodfills tr:not(:hover) td:nth-child(n+6){background:rgba(0,128,0,.1)!important}
+#floodfills tr:not(:hover) td:nth-child(n+10){background:rgba(128,0,0,.15)!important}
 
 /* home */
 .appicon{height:45px}
