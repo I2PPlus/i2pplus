@@ -228,7 +228,7 @@ class ProfilePersistenceHelper {
         long start = System.currentTimeMillis();
         long down = _context.router().getEstimatedDowntime();
 //        long cutoff = down < 15*24*60*60*1000L ? start - down - 24*60*60*1000 : start;
-        long cutoff = down < 15*24*60*60*1000L ? start - down - 7*24*60*60*1000 : start;
+        long cutoff = down < 15*24*60*60*1000L ? start - down - 7*24*60*60*1000 : start - 3*24*60*60*1000;
         List<File> files = selectFiles();
         if (files.size() > LIMIT_PROFILES)
             Collections.shuffle(files, _context.random());
