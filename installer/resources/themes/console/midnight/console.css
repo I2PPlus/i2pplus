@@ -1607,7 +1607,7 @@ h3 .b32{font-size:inherit}
 .tunnel_cap,.tier,.ff,.unreachable,.reachable,#capabilities_key b{margin:1px 2px;padding:2px 4px;display:inline-block;min-width:16px;vertical-align:middle;text-align:center;border:var(--border_badge);text-shadow:0 1px 1px #000;border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
 .tier.isD,#netdbcongestion a.isD{background:var(--isD),var(--element)}
 .tier.isE,#netdbcongestion a.isE{background:var(--isE),var(--element)}
-.tier.isG,,#netdbcongestion a.isG{background:var(--isG),var(--element)}
+.tier.isG,#netdbcongestion a.isG{background:var(--isG),var(--element)}
 .tunnel_cap{padding:2px 3px;color:var(--ink)}
 .tunnel_cap:empty{border:0}
 .tunnel_cap:empty::after{content:"?"}
