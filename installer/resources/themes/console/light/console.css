@@ -125,7 +125,7 @@ h4.sb_info{margin-top:-11px}
 #sb_logo a:hover img,#sb_logo a:focus{opacity:1;transition:ease filter .03s;filter:none}
 #sb_logo a img{outline:none}
 #sb_logo img{opacity:.9;transition:ease opacity .15s;margin:0;width:200px;height:auto;image-rendering:-webkit-optimize-contrast;filter:sepia(1) hue-rotate(190deg);transition:ease filter .05s;user-select:none}
-#sb_logo{margin:0 0 0 -5px;height:35px !important;padding:0 0 1px;text-align:center}
+#sb_logo{margin:0 0 0 -5px;height:35px!important;padding:0 0 1px;text-align:center}
 #sb_peersadvanced a:active b,#sb_peersadvanced a:visited:active b{color:#f90}
 #sb_peersadvanced a:hover b,#sb_peersadvanced a:visited:hover b{color:var(--hover)}
 #sb_peersadvanced .separator td{padding:0}
@@ -2107,7 +2107,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 #i2pupdates .nowrap,#i2pupdates .nowrap b{display:inline-block;vertical-align:middle}
 #i2pupdates .optiontextarea .nowrap b{margin-top:-48px;margin-bottom:-28px;height:76px;vertical-align:middle}
 #i2pupdates textarea,#i2pupdates input[type=text]{margin:5px 0 5px 10px;width:calc(100% - 210px);min-width:0;box-sizing:border-box}
-#i2pupdates input[name="devSU3URL"],#i2pupdates input[name="newsURL"],#i2pupdates input[name="zipURL"]{width:calc(100% - 210px) !important}
+#i2pupdates input[name="devSU3URL"],#i2pupdates input[name="newsURL"],#i2pupdates input[name="zipURL"]{width:calc(100% - 210px)!important}
 #i2pupdates textarea{margin:8px 0 8px 3px;height:76px;min-height:32px}
 #config_update form{margin-bottom:0}
 #config_update .suboption label[for="newsThroughProxy"]{margin-right:20px}
@@ -2480,6 +2480,7 @@ p#pluginconfigtext{margin-top:11px}
 #sidebar #sb_CPUBar{margin-top:-4px}
 #sidebar #sb_internals.collapsed .sb_icon img,#sidebar #sb_advanced.collapsed .sb_icon img,#sidebar #sb_services.collapsed .sb_icon img{width:17px;height:17px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-13px}
+body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-10px}
 #sidebar,#sb_services.collapsed{margin-bottom:-14px}
 #sidebar #sb_routerControl{margin-top:-6px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-3px}
@@ -2737,7 +2738,8 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
 #sidebar .percentBarOuter{margin:-6px 0 -7px -6px;width:238px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-8px}
-#sidebar #sb_logo{margin-top:4px;height:41px !important}
+body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-5px}
+#sidebar #sb_logo{margin-top:4px;height:41px!important}
 #sidebar #sb_newsheadings table{width:240px}
 #sidebar #sb_services.collapsed{margin-bottom:-9px}
 #sidebar #sb_shutdownStatus{padding:8px 4px 9px;line-height:1.2}
