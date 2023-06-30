@@ -2639,7 +2639,7 @@ h3.tabletitle a,#version.tabletitle a{padding-left:18px}
 }
 
 @media (min-width:1500px){
-body,.main,.main td,.news p,#news p,.statusnotes,textarea,th,.applabel a,tt,code,.messages,.messages #newsStatus,#news li{font-size:10pt}
+body,.main,.main td,.news p,#news p,.statusnotes,textarea,th,.applabel a,tt,code,.messages,.messages #newsStatus,#news li,#sidebar h4,#sidebar h4 a{font-size:10pt}
 h1{padding:14px 15px 15px 62px;font-size:19pt;background-position:14px center}
 h2{font-size:14pt}
 img.app,img#sitelinks{margin-top:-5px;padding:14px 61px 44px}
@@ -2665,7 +2665,7 @@ select,.main input[type=submit],.main input[type=reset],.main input[type=submit]
 .ui_lang{width:138px}
 .percentBarOuter{width:210px}
 .percentBarText{margin-top:-2px;width:230px;font-size:10pt}
-.sb td,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,.smallhead,pre,#newsStatus,#newsDisplay{font-size:9pt}
+.sb td,#sidebar a,#sidebar button,.smallhead,pre,#newsStatus,#newsDisplay{font-size:9pt}
 .sb_notice{margin-bottom:-8px}
 #bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:60px;padding-right:15px;min-width:240px;background-position:20px calc(50% + 14px)}
 #banlist{padding:3px}
@@ -2750,7 +2750,7 @@ p,.infohelp,.infowarn,td.infohelp,td.infowarn,.logo a,#console code,#console li,
 .configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p.sybilinfo,p.infowarn,td.infowarn{padding:20px 25px 20px 55px}
 .main,.news,h1,#warning.sorry,#warning2.sorry{margin-left:268px}
 .routerid img{width:auto;height:14px}
-.sb td,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,.smallhead,pre,#newsStatus,#newsDisplay,.footnote,.topness,#bwlimiter a,#advancedconfig a,.tabletitle a,#upnpconfig a,#servicedebug a,.ptitle a,#configstats th a,#graphinfo a,.h3navlinks,.applink a:link,.applink a:hover,.applink a:active{font-size:9.5pt}
+.sb td,#sidebar a,#sidebar button,.smallhead,pre,#newsStatus,#newsDisplay,.footnote,.topness,#bwlimiter a,#advancedconfig a,.tabletitle a,#upnpconfig a,#servicedebug a,.ptitle a,#configstats th a,#graphinfo a,.h3navlinks,.applink a:link,.applink a:hover,.applink a:active{font-size:9.5pt}
 .sb td{padding-top:1px;padding-bottom:1px}
 .sb td:first-child{max-width:120px}
 div[id^="config_"] .encDests td,div[id^="config_"] .encDests th{font-size:9pt}
