@@ -32,6 +32,10 @@ public class ClientMessagePool {
         OutboundClientMessageOneShotJob.init(_context);
     }
 
+    public OutboundCache getCache() {
+        return _cache;
+    }
+  
     /**
      *  @since 0.8.8
      */
