@@ -1707,7 +1707,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #banlist li a[href^="configpeer"]:active{box-shadow:var(--btn_shadow_active);background:linear-gradient(180deg,var(--hover) 50%,#501f6c 50%)}
 
 /* netdb */
-b.netdb_transport{display:inline-block;margin-right:5px}
+b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:60px;display:inline-block;vertical-align:middle;text-align:center;border:var(--border_inner);box-shadow:var(--bevel);background:var(--element)}
 .leasesets_container{columns:550px 2;column-gap:10px}
 .leasesets_container table{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 .leasesets_container table:first-child{margin-top:0}
@@ -1834,7 +1834,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 .leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:var(--border_inner)}
 #sybil_ourinfo .unreachable,#netdb_ourinfo .unreachable{display:none}
 .sybil_addresses{padding:0;border-bottom:var(--border_inner)}
-.sybil_addresses table,.sybil_addresses td{border:0;background:#000010}
+.sybil_addresses table,.sybil_addresses td{border:0!important;background:#000010}
 .sybil_addresses table{width:100%;margin:0}
 .sybil_addresses td:first-child{padding-right:9px;width:1%;white-space:nowrap;font-weight:700}
 .sybil_addresses .nowrap{max-width:400px}
@@ -1847,7 +1847,6 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 .sybilinfo_container,.threatpoints+ul{padding:4px 5px;columns:400px 5;column-gap:0}
 .sybilinfo_familyname{display:inline-block;vertical-align:top;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sybilinfo_params{padding:0;border-bottom:var(--border_inner)}
-.sybil_routerinfo b.netdb_transport{margin-right:0}
 .sybil_routerinfo p{margin:0;padding:0;width:100%;line-height:1.5;break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
 .sybil_routerinfo tr:last-child{border-top:none}
 .sybil_routerinfo th img[src^="/flags"]{margin-right:5px;width:auto;height:23px}
