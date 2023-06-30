@@ -1432,9 +1432,8 @@ h3[id="udpcon"]{width:auto}
 #floodfills td{padding:3px;text-align:center}
 #floodfills:not(.rid) td:nth-child(2){width:6%;min-width:64px}
 #floodfills:not(.rid) td:nth-child(odd){background:rgba(0,0,0,.3)}
-
-#floodfills .percentBarInner{width:inherit;display:inline-block;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#700 25px,#800 40px,#900 50px)}
-#floodfills .percentBarInner[style="width:0%"]{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#070,#080)}
+#floodfills .percentBarInner{margin-left:1px;max-width: calc(100% - 1px);width:inherit;display:inline-block;background:linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),linear-gradient(90deg,#700 25px,#800 40px,#900 50px)}
+#floodfills .percentBarInner[style="width:0%"],#floodfills .percentBarOuter.nofail>.percentBarInner{margin-left:0;width:calc(100% + 1px)!important;max-width:100%;background:linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),linear-gradient(90deg,#070,#080)}
 #floodfills .percentBarOuter{text-align:left;background:#000;border:var(--border_inner);opacity:.9;height:16px}
 #floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText{box-sizing:border-box;float:none}
 #floodfills .percentBarOuter,#floodfills .percentBarText{margin:0 2px;width:calc(100% - 6px);display:inline-block}
@@ -2807,17 +2806,19 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #searchbar button{height:29px;border-bottom:var(--border)}
 }
 
-.rid,.rid td{margin:0;padding:2px 1px!important;line-height:0;vertical-align:middle;text-align:center;border:var(--border_badge)!important;box-shadow:var(--highlight);background:var(--badge)}
+.rid,.rid td{margin:0;padding:2px 1px!important;line-height:0;vertical-align:middle;text-align:center;border:var(--border_badge)!important;box-shadow:var(--bevel)!important;background:var(--badge)}
 .rid{width:unset}
 .rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em}
 .rid .rif{padding:1px 0!important}
+#profiles .rid .rif{padding:1px 2px!important}
+#profiles #banlist .rid .rif,#banlist .rid .rif{padding:1px!important}
 .rid .rif,.rid .rif img{line-height:0;font-size:0}
 .rif img{padding:0;margin:1px 0;width:24px;height:18px;vertical-align:middle;display:inline-block}
 .tunneldisplay .rif img{margin:0 2px}
 .rid .rih{padding:2px 6px!important;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{padding-left:4px!important;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .ric{background:var(--badge)}
-.ric .rbw{padding:2px!important;min-width:20px;line-height:1.3;box-shadow:var(--highlight);background:var(--badge)}
+.ric .rbw{padding:2px!important;min-width:20px;line-height:1.3}
 .rbw.isff{background:var(--isFF),var(--badge)}
 .rbw.isff.isD{background:var(--isD),var(--isFF),var(--badge)}
 .rbw.isff.isE{background:var(--isE),var(--isFF),var(--badge)}
