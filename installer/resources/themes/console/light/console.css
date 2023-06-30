@@ -266,7 +266,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_peers_condensed,#sb_tunnels_condensed{margin:-12px -5px -4px;padding:3px 0}
 #sidebar #sb_advancedgeneral[hidden]~#sb_peers_condensed{margin-bottom:-7px}
 #sb_tunnels_condensed{margin-bottom:-10px}
-#homepage #sb_tunnels_condensed{margin-bottom:-7px}
+#homepage #sb_tunnels_condensed,#sb_shortgeneral~#sb_peers_condensed{margin-bottom:-7px}
 #sb_peers[hidden]+#sb_peers_condensed,#sb_tunnels[hidden]+#sb_tunnels_condensed{display:table}
 #sb_peers_condensed[hidden],#sb_tunnels_condensed[hidden]{display:none}
 #sb_peers_condensed:not([hidden])+hr,#sb_tunnels_condensed:not([hidden])+hr{display:block}
@@ -2470,7 +2470,8 @@ p#pluginconfigtext{margin-top:11px}
 #sb_peers_condensed,#sb_tunnels_condensed,#sb_services_condensed,#homepage #sb_tunnels_condensed{margin-bottom:-7px}
 #sidebar #sb_advancedgeneral[hidden] ~ #sb_peers_condensed,#sidebar #sb_tunnels_condensed{margin-bottom:-10px}
 #sb_advancedgeneral:not([hidden]) ~ #sb_services.collapsed{margin-bottom:-11px}
-,#sidebar #sb_advancedgeneral[hidden] ~ #sb_services.collapsed{margin-bottom:-14px}
+#sidebar #sb_advancedgeneral[hidden] ~ #sb_services.collapsed{margin-bottom:-14px}
+#homepage #sb_shortgeneral~#sb_peers_condensed{margin-bottom:-10px}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
 #sb_warning+.sb_notice{margin-bottom:-6px}
 #sb_wrap{position:fixed!important}
@@ -2686,6 +2687,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #homepage #sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:0}
 #homepage #sb_memoryBar+hr{margin-top:5px}
 #homepage #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
+#homepage #sb_shortgeneral~#sb_memoryBar.percentBarOuter{margin-bottom:-4px}
 #homepage #sb_peers tr:last-child td{padding-bottom:1px}
 #homepage #sb_queue tr:last-child td{padding-bottom:3px}
 #homepage #sb_tunnels tr:last-child td{padding-bottom:2px}
@@ -2722,6 +2724,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sb_warning+.sb_notice{margin-bottom:-3px}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
+#sidebar #sb_updateform{padding-bottom:1px}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{transform:translateY(-1px)}
 #sidebar h3::after{min-height:19px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
 #sidebar h3 a{padding:4px 0 2px;font-size:11pt}
