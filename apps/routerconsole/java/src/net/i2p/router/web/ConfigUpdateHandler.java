@@ -144,7 +144,7 @@ public class ConfigUpdateHandler extends FormHandler {
         if (_action.equals(_t("Check for updates"))) {
             ConsoleUpdateManager mgr = UpdateHandler.updateManager(_context);
             if (mgr == null) {
-                addFormError("Update manager not registered, cannot check");
+                addFormError(_t("Update manager not registered, cannot check for updates") + "...");
                 return;
             }
             if (mgr.isUpdateInProgress() || mgr.isCheckInProgress()) {
