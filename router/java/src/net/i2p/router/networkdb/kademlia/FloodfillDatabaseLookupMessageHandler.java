@@ -74,7 +74,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                           "from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> We are not a floodfill");
             } else if (_log.shouldWarn()) {
-                _log.warn("Dropping " + dlm.getSearchType() + " from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> We are not a floodfill");
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
@@ -85,7 +85,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                           "from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 4h -> Max 10 requests in 30s exceeded");
             } else if (_log.shouldWarn()) {
-                _log.warn("Dropping " + dlm.getSearchType() + " from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 4h -> Max 10 requests in 30s exceeded");
             }
             if (fromHash != null) {
@@ -100,7 +100,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                           "from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> Max 20 requests in 3m exceeded");
             } else if (_log.shouldWarn()) {
-                _log.warn("Dropping " + dlm.getSearchType() + " from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                _log.warn("Dropping " + dlm.getSearchType() + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> Max 20 requests in 3m exceeded");
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
