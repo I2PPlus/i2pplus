@@ -87,6 +87,7 @@ ul{margin:0;padding:0}
 .widepanel h3{padding:6px 10px;text-align:left;text-transform:uppercase;font-size:10.5pt;letter-spacing:.08em;word-spacing:.1em;border:var(--border_inner);border-radius:0}
 .widescroll{overflow:auto}
 .widescroll table{white-space:nowrap}
+.main:not(id^="config") th,#jobs th,#netdboverview th,#tunnels #transitSummary th,#profiles th{position:relative}
 #newtab:hover{filter:drop-shadow(0 0 3px var(--hover))}
 #newtab{margin-top:2px;float:right;letter-spacing:0;text-align:right;font-size:8pt}
 #sidebar img[src$="i2plogo.png"],#sidebar h3,.confignav,*::before,*::after,h1,h2,h3,h4,.applink,.clearer,#sidebar  img,.formaction,label,#themeoptions,#helptranslate,#consolepass,.applink,#sitemapcontainer{user-select:none}
@@ -923,7 +924,6 @@ input[type="hidden"]+p+p{border:var(--border_inner);padding:10px;margin-top:20px
 #tunnels td:not(.rif):not(.rih):not(.rbw){text-align:center}
 
 /* transit summary */
-#tunnels #transitSummary th{position:relative}
 #tunnels #transitSummary th.tcount{min-width:64px}
 #tunnels #transitSummary th#data{min-width:72px}
 #transitSummary th.tcount::after{right:-4px;z-index:10}
@@ -2368,20 +2368,19 @@ h1,.main h2,#applinks,#sitelinks,.main h3{-webkit-text-stroke:1px rgba(179,186,2
 /* mini faq */
 #faq h3{padding:8px 10px 8px 35px;word-spacing:0;letter-spacing:0;text-transform:none;font-size:10.5pt;background:var(--question) no-repeat 10px 55%,var(--th);background-size:18px,4px 100%,100%;background-blend-mode:luminosity,normal}
 #faq p.infohelp{margin:10px -10px}
-#faq ul{margin-bottom:-15px}
 #faq ul+h3{margin-top:15px}
 #faq li code{margin-left:10px}
 #faq code,#help code{user-select:all}
 #portfaq{width:auto;margin:10px -10px}
-#portfaq td,#portfaq th{padding-top:10px;padding-bottom:10px}
-#portfaq th:first-child,#portfaq td:first-child{font-weight:700;text-align:right}
-#portfaq .infohelp{padding-top:15px;padding-bottom:15px}
-#portfaq th{padding:8px 5px;text-align:left}
+#portfaq td:not(.infohelp),#portfaq th{padding:10px}
+#portfaq th:first-child,#portfaq td:not(.infohelp):first-child{font-weight:700;text-align:right}
+#portfaq th{padding:8px 10px;text-align:left}
 #portfaq th[colspan="3"]{padding-left:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;font-size:10.5pt}
 #portfaq td[colspan="3"]{font-weight:400}
 #portfaq td:nth-child(2){white-space:nowrap}
-#portfaq td:first-child{padding-left:10px}
-#portfaq td:last-child,#portfaq td[colspan="3"]{padding-right:10px;text-align:justify}
+#portfaq td:not(.infohelp):first-child{padding-left:10px}
+#portfaq td:not(.infohelp):last-child,#portfaq td:not(.infohelp)[colspan="3"]{padding:10px;text-align:justify}
+#portfaq .infohelp{padding:15px 15px 15px 50px;text-align:justify}
 
 /* reseed */
 #reseedhelp ol{display:block;margin-right:30px}
