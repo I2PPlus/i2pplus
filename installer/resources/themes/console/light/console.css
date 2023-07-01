@@ -2725,6 +2725,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
 #sidebar #sb_updateform{padding-bottom:1px}
+#homepage #sidebar #sb_updateform{padding-bottom:6px}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{transform:translateY(-1px)}
 #sidebar h3::after{min-height:19px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
 #sidebar h3 a{padding:4px 0 2px;font-size:11pt}
@@ -2744,7 +2745,10 @@ h4#updateplugins,#news p{font-size:10pt}
 body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-5px}
 #sidebar #sb_logo{margin-top:4px;height:41px!important}
 #sidebar #sb_newsheadings table{width:240px}
-#sidebar #sb_services.collapsed{margin-bottom:-9px}
+#sidebar #sb_advanced.collapsed,#sidebar #sb_internals.collapsed{margin-bottom:-8px!important}
+#sidebar #sb_peers_condensed{margin-bottom:-7px!important}
+#sidebar #sb_services.collapsed{margin-bottom:-9px!important}
+#homepage #sidebar #sb_advancedgeneral:not([hidden])~#sb_tunnels_condensed{margin-bottom:-10px!important}
 #sidebar #sb_shutdownStatus{padding:8px 4px 9px;line-height:1.2}
 #sidebar table[id^="sb_"]{width:238px}
 #statlist li a[href^="graph"]::before,#statlist li::before{margin:0 10px -30px -17px;height:6px;width:6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}
