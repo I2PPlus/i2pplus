@@ -1067,8 +1067,8 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .peer_arrow{margin:2px 1px;width:22px;display:inline-block;text-align:center}
 .peersort{text-align:center;display:inline-block}
 .reachability{margin:4px 4px 0;float:right;font-size:70%;color:#4f4f5f}
-#floodfills .percentBarOuter,#tunnels .percentBarOuter{margin:0;height:16px;position:relative;text-align:left;border:1px solid #ccccf0;box-shadow:var(--highlight),0 3px 2px rgba(0,0,0,.15) inset;background:#eef;opacity:.9}
-#floodfills .percentBarInner,#tunnels .percentBarInner{width:inherit;display:inline-block;vertical-align:top;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 2px,rgba(0,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.1)),linear-gradient(90deg,#900 25px,#a00 40px,#b00 50px)}
+#floodfills .percentBarOuter,#tunnels .percentBarOuter{margin:0;height:16px;position:relative;text-align:left;border:1px solid #ccccf0;box-shadow:var(--highlight),0 3px 2px rgba(0,0,0,.15) inset;background:repeating-linear-gradient(90deg,#e2e2f2,#e2e2f2 10%,#f8f8ff 10%,#f8f8ff 20%);opacity:.9}
+#floodfills .percentBarInner,#tunnels .percentBarInner{width:inherit;display:inline-block;vertical-align:top;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 2px,rgba(0,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.1)),linear-gradient(90deg,#b00 25px,#c20000 40px,#c00 50px)}
 #floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;vertical-align:middle;box-sizing:border-box;float:none}
 #floodfills .percentBarOuter.nofail .percentBarInner{width:100%!important;display:inline-block;vertical-align:top;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 2px,rgba(0,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.1)),linear-gradient(90deg,#383,#494)}
 #peers p.infohelp{margin-top:14px}
