@@ -1,5 +1,5 @@
 /* I2PSnark theme "Ubergine" */
-/* Guantanamo Commemorative Edition. */
+/* Guantanamo Commemorative Edition */
 /* Author: dr|z3d */
 @import url(/themes/fonts/DroidSans.css);
 @import url(chromescroll.css);
@@ -840,7 +840,7 @@ td .commentAuthorName{margin:0 4px 0 4px;padding:0 4px 0 22px;min-width:126px;ma
 .peerdata{padding-left:2px}
 .peerinfo td>*{vertical-align:middle}
 .peerinfo code{margin-left:0;margin-right:0;padding:2px 5px;border-radius:4px 0 0 4px}
-#ourDest{margin:-3px 3px;padding:1px 0 1px 4px;display:inline-block;border:1px solid #000;border-radius:4px;box-shadow:inset 0 0 0 1px #101;background:#313}
+#ourDest{margin:-3px 0;padding:1px 0 1px 4px;display:inline-block;border:1px solid #000;border-radius:4px;box-shadow:inset 0 0 0 1px #101;background:#313}
 #ourDest code{margin:0 0 0 4px;padding:2px 3px 2px 4px;display:inline-block;background:#212}
 
 input[type=radio]:checked::before{border-radius:50%}
