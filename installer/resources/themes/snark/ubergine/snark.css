@@ -1225,13 +1225,13 @@ td.peerCount:empty::after{margin:0 -2px;width:8px;height:8px;display:inline-bloc
 }
 
 @media (min-width:1500px){
-body,code,th,td,#commentInfo textarea,input[type=submit],input[type=reset],select,select option,button,a.control,#torrents a:not(#debugMode),.configPanel,.configPanel td,.snarkNewTorrent,.snarkNewTorrent td,select,input,input.r,input[name="nofilter_dataDir"]{font-size:10pt}
+body,button,code,input,input[type=reset],input[type=submit],input[name="nofilter_dataDir"],input.r,select,select option,textarea,td,th,.configPanel,.configPanel td,a.control,.snarkNewTorrent,.snarkNewTorrent td,#torrents a:not(#debugMode){font-size:10pt}
+textarea,#commentInfo textarea{font-size:9.5pt}
 td.graphicStatus img{height:24px}
 td.torrentDetails img,.dirInfo td:first-child img:not(.thumb){margin-top:-2px;margin-bottom:-2px;width:22px;height:22px}
 td.trackerLink img{padding:4px;width:18px;height:18px}
 th.graphicStatus{padding-left:4px}
 th,td,.choked,.unchoked{letter-spacing:0}
-code,input,textarea{font-size:9pt}
 .configOption::after{height:40px}
 .configPanel .configTitle,.configPanel .configTitle:hover{padding:6px 5px 5px;min-width:600px;font-size:11pt}
 .configPanel .configTitle img,#trackers .configTitle img{margin:-2px -2px 0 0}
