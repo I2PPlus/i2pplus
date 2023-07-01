@@ -3208,7 +3208,12 @@ class EstablishmentManager {
                 try {
                     doPass();
                 } catch (RuntimeException re) {
-                    _log.error("Error in the establisher", re);
+                    if (re.toString().contains("unsupported address type")) {
+                       if (_log.shouldWarn())
+                           _log.warn("Error in the establisher: Unsupported address type (localhost?)");
+                    } else {
+                        _log.error("Error in the establisher", re);
+                    }
                     // don't loop too fast
 //                    try { Thread.sleep(1000); } catch (InterruptedException ie) {}
                     try { Thread.sleep(300); } catch (InterruptedException ie) {}
