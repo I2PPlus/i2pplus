@@ -380,7 +380,7 @@ class ProfileOrganizerRenderer {
                .append("</tbody>\n</table>\n</div>\n"); // thresholds
             buf.append("</div>\n");
 
-        } else if (mode == 3) {
+        } else if (mode == 2) {
 
             buf.append("<div class=widescroll id=ff>\n")
                .append("<table id=floodfills data-sortable>\n")
@@ -407,21 +407,18 @@ class ProfileOrganizerRenderer {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-                boolean isBanned = info != null ? _context.banlist().isBanlisted(peer) : false;
-                boolean isUnreachable = info != null ? info.getCapabilities().indexOf('U') >= 0 : false;
-                boolean isFF = info != null ? info.getCapabilities().indexOf('f') >= 0 : false;
-                boolean hasSalt = info != null ? info.getCapabilities().contains("salt") : false;
+                boolean isBanned = _context.banlist().isBanlisted(peer);
+                boolean isUnreachable = info != null && info.getCapabilities().indexOf('U') >= 0;
+                boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
+                boolean hasSalt = info != null && info.getCapabilities().contains("salt");
                 int displayed = 0;
                 boolean isResponding = prof.getDbResponseTime() != null;
                 boolean isGood = prof.getLastSendSuccessful() > 0 && isResponding &&
                                  (dbh != null && dbh.getLastStoreSuccessful() > 0 ||
                                  dbh.getLastLookupSuccessful() > 0);
-                if (dbh == null) {
-                    continue;
-                } else {
-                    order.add(prof);
-                }
-                if (dbh != null && isFF && !isUnreachable && !isBanned && isGood) {
+
+                //if (dbh != null && isFF && !isUnreachable && !isBanned && isGood) {
+                if (dbh != null && isFF && !isUnreachable && !isBanned) {
                     displayed++;
                     buf.append("<tr class=lazy><td nowrap>");
                     buf.append(_context.commSystem().renderPeerHTML(peer, true));
@@ -595,7 +592,7 @@ class ProfileOrganizerRenderer {
     }
 
     private String davg (DBHistory dbh, long rate, RateAverages ra) {
-            RateStat rs = dbh.getFailedLookupRate();
+            RateStat rs = dbh != null ? dbh.getFailedLookupRate() : null;
             if (rs == null)
                 return "0%";
             Rate r = rs.getRate(rate);

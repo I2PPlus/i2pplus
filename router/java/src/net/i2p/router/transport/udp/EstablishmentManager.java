@@ -3238,9 +3238,8 @@ class EstablishmentManager {
                     int live = _liveIntroductions.size();
                     int claimed = _outboundByClaimedAddress.size();
                     int hash = _outboundByHash.size();
-                    _log.debug("OB states: " + oactive + "; IB states: " + iactive +
-                               "; OB queued: " + queued + "; Intros: " + live +
-                               "; OB claimed: " + claimed + "; Hash: " + hash);
+                    _log.debug("Inbound states [" + iactive + "] * Outbound states [" + oactive + "] -> " +
+                               "Queued: " + queued + "; Intros: " + live + "; Claimed: " + claimed + "; Hash: " + hash);
                 }
             }
             _activity = 0;

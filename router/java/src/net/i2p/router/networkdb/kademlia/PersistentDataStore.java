@@ -365,6 +365,9 @@ public class PersistentDataStore extends TransientDataStore {
         boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
                          bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt || !hasIP;
         boolean isLTier = bw.equals("L");
+        boolean isBanned = ri != null && (_context.banlist().isBanlistedForever(key) ||
+                           _context.banlist().isBanlisted(key) ||
+                           _context.banlist().isBanlistedHostile(key));
 
         try {
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
@@ -374,7 +377,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
             dbFile = new File(_dbDir, filename);
             long dataPublishDate = getPublishDate(data);
-            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && (!isOld || isFF) && !isBadFF && !noSSU && !isSlow) || isUs) {
+            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && (!isOld || isFF) && !isBadFF && !noSSU && !isSlow && !isBanned) || isUs) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -395,7 +398,7 @@ public class PersistentDataStore extends TransientDataStore {
                     dbFile.delete();
                 }
             } else {
-                if (ri != null && !isUs) {
+                if (ri != null && !isUs && !isBanned) {
                     if (!isUs && hasIP && ip.equals(ourIP)) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Router is spoofing our IP address");

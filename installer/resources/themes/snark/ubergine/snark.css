@@ -1,5 +1,5 @@
 /* I2PSnark theme "Ubergine" */
-/* Guantanamo Commemorative Edition. */
+/* Guantanamo Commemorative Edition */
 /* Author: dr|z3d */
 @import url(/themes/fonts/DroidSans.css);
 @import url(chromescroll.css);
@@ -715,7 +715,8 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #trackerselect td:first-child,#trackerselect td:nth-child(2),#trackerselect td:nth-child(3){width:20%;min-width:100px;white-space:nowrap}
 #trackerselect td{padding:5px}
 #trackerselect td:first-child{width:30%;text-align:center}
-#trackerselect tr:first-child td{padding-top:8px;padding-bottom:8px;font-weight:700;border-bottom:var(--border_inner);background:linear-gradient(180deg,#313,#000)}
+#trackerselect tr:first-child td{padding:8px 5px;font-size:90%;font-weight:700;border-bottom:var(--border_inner);background:linear-gradient(180deg,#313,#000)}
+#trackerselect tr:first-child td:first-child{padding-left:10px;text-align:left}
 #trackerselect tr:nth-child(n+2) td{border-right:1px solid rgba(16,0,16,.5)}
 #trackerselect tr:nth-child(n+3) td{border-top:var(--border_hard)}
 #trackerselect td:last-child{text-align:center;width:30%;border-right:none}
@@ -839,7 +840,7 @@ td .commentAuthorName{margin:0 4px 0 4px;padding:0 4px 0 22px;min-width:126px;ma
 .peerdata{padding-left:2px}
 .peerinfo td>*{vertical-align:middle}
 .peerinfo code{margin-left:0;margin-right:0;padding:2px 5px;border-radius:4px 0 0 4px}
-#ourDest{margin:-3px 3px;padding:1px 0 1px 4px;display:inline-block;border:1px solid #000;border-radius:4px;box-shadow:inset 0 0 0 1px #101;background:#313}
+#ourDest{margin:-3px 0;padding:1px 0 1px 4px;display:inline-block;border:1px solid #000;border-radius:4px;box-shadow:inset 0 0 0 1px #101;background:#313}
 #ourDest code{margin:0 0 0 4px;padding:2px 3px 2px 4px;display:inline-block;background:#212}
 
 input[type=radio]:checked::before{border-radius:50%}
@@ -874,7 +875,7 @@ body:not(.iframed) .mainsection #userComments{border-radius:0 0 4px 4px}
 tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{margin-right:2px;margin-top:-3px;display:inline-block;vertical-align:middle;text-shadow:0 0 1px #101;font-family:80%/0 400 var(--bodyfont)}
 tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before{content:"\27A4";transform:rotate(90deg) scaleX(.6)}
 tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{content:"\27A4";transform:rotate(-90deg) scaleX(.6)}
-.choked .left,.choked .right{display:none}
+.choked .left,.choked .right{display:none!important}
 .inactivity{margin-left:10px;max-width:400px;min-width:5px;height:4px;display:inline-block;border-radius:3px;box-shadow:0 0 0 1px #200;background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(0,0,0,.5) 15px,rgba(0,0,0,.5) 16px,rgba(0,0,0,0) 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#770 50px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .peerinfo .RateDown .left,.peerinfo .RateDown .right,.peerinfo .RateUp .left,.peerinfo .RateUp .right{opacity:.5;text-shadow:0 0 1px #000}
@@ -1224,13 +1225,13 @@ td.peerCount:empty::after{margin:0 -2px;width:8px;height:8px;display:inline-bloc
 }
 
 @media (min-width:1500px){
-body,code,th,td,#commentInfo textarea,input[type=submit],input[type=reset],select,select option,button,a.control,#torrents a:not(#debugMode),.configPanel,.configPanel td,.snarkNewTorrent,.snarkNewTorrent td,select,input,input.r,input[name="nofilter_dataDir"]{font-size:10pt}
+body,button,code,input,input[type=reset],input[type=submit],input[name="nofilter_dataDir"],input.r,select,select option,textarea,td,th,.configPanel,.configPanel td,a.control,.snarkNewTorrent,.snarkNewTorrent td,#torrents a:not(#debugMode){font-size:10pt}
+textarea,#commentInfo textarea{font-size:9.5pt}
 td.graphicStatus img{height:24px}
 td.torrentDetails img,.dirInfo td:first-child img:not(.thumb){margin-top:-2px;margin-bottom:-2px;width:22px;height:22px}
 td.trackerLink img{padding:4px;width:18px;height:18px}
 th.graphicStatus{padding-left:4px}
 th,td,.choked,.unchoked{letter-spacing:0}
-code,input,textarea{font-size:9pt}
 .configOption::after{height:40px}
 .configPanel .configTitle,.configPanel .configTitle:hover{padding:6px 5px 5px;min-width:600px;font-size:11pt}
 .configPanel .configTitle img,#trackers .configTitle img{margin:-2px -2px 0 0}

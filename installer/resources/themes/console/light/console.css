@@ -125,7 +125,7 @@ h4.sb_info{margin-top:-11px}
 #sb_logo a:hover img,#sb_logo a:focus{opacity:1;transition:ease filter .03s;filter:none}
 #sb_logo a img{outline:none}
 #sb_logo img{opacity:.9;transition:ease opacity .15s;margin:0;width:200px;height:auto;image-rendering:-webkit-optimize-contrast;filter:sepia(1) hue-rotate(190deg);transition:ease filter .05s;user-select:none}
-#sb_logo{margin:0 0 0 -5px;height:35px !important;padding:0 0 1px;text-align:center}
+#sb_logo{margin:0 0 0 -5px;height:35px!important;padding:0 0 1px;text-align:center}
 #sb_peersadvanced a:active b,#sb_peersadvanced a:visited:active b{color:#f90}
 #sb_peersadvanced a:hover b,#sb_peersadvanced a:visited:hover b{color:var(--hover)}
 #sb_peersadvanced .separator td{padding:0}
@@ -181,6 +181,7 @@ a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 .percentBarInner[style="width:100%;"]{border-right:none}
 .percentBarText{padding:0;display:inline;width:100%;height:14px;float:left;white-space:nowrap;text-align:center;font-weight:700;color:var(--ink_light);text-shadow:var(--txt_shadow);opacity:0;transition:ease opacity .2s}
 .percentBarOuter:hover .percentBarText{opacity:1;transition:ease opacity .2s;pointer-events:none}
+#sb_memoryBar .percentBarOuter{margin:-7px}
 #sb_memoryBar .percentBarInner,#sb_CPUBar .percentBarInner{background:linear-gradient(90deg,rgba(0,255,0,.05),rgba(255,255,0,.1) 160px,rgba(255,0,0,.1) 180px,rgba(255,0,0,.2)),linear-gradient(180deg,rgba(255,255,255,.6),rgba(238,238,255,.6) 50%,rgba(180,180,255,.7) 50%,rgba(140,140,255,.7))}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:0;width:95%;float:none;position:absolute;top:-18px;left:2.5%;right:2.5%;z-index:9999;vertical-align:middle;font-size:110%;border-radius:1px;background:#eef;filter:drop-shadow(0 0 1px #eef) drop-shadow(0 0 1px #000)}
 #sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-13px;border-style:solid;border-width:8px;border-color:#eef transparent transparent transparent;content:""}
@@ -227,8 +228,9 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_advanced:not(.collapsed)~#sb_routerControl{padding-bottom:2px}
 #sb_advanced:not(.collapsed)~#sb_tunnelstatus{margin-bottom:-7px}
 #sb_advancedgeneral[hidden]~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-7px}
+#sb_advancedgeneral:not([hidden])~#sb_peers_condensed+hr,#sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed+hr,#sb_advancedgeneral:not([hidden])~#sb_internals.collapsed+hr,#sb_advancedgeneral:not([hidden])~#sb_services.collapsed+hr{margin-bottom:5px}
 #sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:11px}
-#sb_advancedgeneral:not([hidden])~#sb_services.collapsed{margin-bottom:-9px}
+#sb_advancedgeneral:not([hidden])~#sb_services.collapsed{margin-bottom:-6px}
 #sb_advancedgeneral:not([hidden])~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
 #sb_updatesection.collapsed>h3.collapsed::before{display:inline-block;min-height:16px;vertical-align:middle;content:""}
 #sb_updatesection.collapsed>*:not(h3){display:none}
@@ -261,12 +263,13 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_services.collapsed,#sb_internals.collapsed,#sb_advanced.collapsed{margin:-11px -11px -9px -6px}
 #sb_services.collapsed{margin-bottom:-10px}
 #sidebar table.collapsed+hr{display:block}
+#sb_peers_condensed,#sb_tunnels_condensed{margin:-12px -5px -4px;padding:3px 0}
+#sidebar #sb_advancedgeneral[hidden]~#sb_peers_condensed{margin-bottom:-7px}
+#sb_tunnels_condensed{margin-bottom:-10px}
+#homepage #sb_tunnels_condensed,#sb_shortgeneral~#sb_peers_condensed{margin-bottom:-7px}
 #sb_peers[hidden]+#sb_peers_condensed,#sb_tunnels[hidden]+#sb_tunnels_condensed{display:table}
 #sb_peers_condensed[hidden],#sb_tunnels_condensed[hidden]{display:none}
 #sb_peers_condensed:not([hidden])+hr,#sb_tunnels_condensed:not([hidden])+hr{display:block}
-#sb_peers_condensed,#sb_tunnels_condensed{margin:-12px -5px -7px;padding:3px 0}
-#sb_tunnels_condensed{margin-bottom:-10px}
-#homepage #sb_tunnels_condensed{margin-bottom:-7px}
 #sidebar #sb_peers_condensed td,#sidebar #sb_tunnels_condensed td{padding:3px 0;display:flex;column-gap:1px;max-width:unset;text-align:center;background:none;vertical-align:middle;text-align:center}
 #sidebar #sb_peers_condensed td::after,#sidebar #sb_tunnels_condensed td::after{min-height:28px}
 #sb_peers_condensed .sb_icon,#sb_tunnels_condensed .sb_icon{margin:0;padding:2px 5px;flex:auto;align-items:stretch;text-align:center;box-shadow:0 0 0 1px #afafcf inset,0 0 0 2px #fff inset,var(--btn_shadow);display:inline-block;background-blend-mode:luminosity}
@@ -1064,10 +1067,10 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .peer_arrow{margin:2px 1px;width:22px;display:inline-block;text-align:center}
 .peersort{text-align:center;display:inline-block}
 .reachability{margin:4px 4px 0;float:right;font-size:70%;color:#4f4f5f}
-#floodfills .percentBarOuter,#tunnels .percentBarOuter{margin:0;height:16px;position:relative;text-align:left;border:1px solid #ccccf0;box-shadow:var(--highlight),0 3px 2px rgba(0,0,0,.15) inset;background:#eef;opacity:.9}
-#floodfills .percentBarInner,#tunnels .percentBarInner{width:inherit;display:inline-block;vertical-align:top;background:linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05) 50%),linear-gradient(90deg,#900 25px,#a00 40px,#b00 50px)}
+#floodfills .percentBarOuter,#tunnels .percentBarOuter{margin:0;height:16px;position:relative;text-align:left;border:1px solid #ccccf0;box-shadow:var(--highlight),0 3px 2px rgba(0,0,0,.15) inset;background:repeating-linear-gradient(90deg,#e2e2f2,#e2e2f2 10%,#f8f8ff 10%,#f8f8ff 20%);opacity:.9}
+#floodfills .percentBarInner,#tunnels .percentBarInner{width:inherit;display:inline-block;vertical-align:top;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 2px,rgba(0,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.1)),linear-gradient(90deg,#b00 25px,#c20000 40px,#c00 50px)}
 #floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;vertical-align:middle;box-sizing:border-box;float:none}
-#floodfills .percentBarOuter.nofail .percentBarInner{width:100%!important;display:inline-block;vertical-align:top;background:linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05) 50%),linear-gradient(90deg,#383,#494)}
+#floodfills .percentBarOuter.nofail .percentBarInner{width:100%!important;display:inline-block;vertical-align:top;background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 2px,rgba(0,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.1)),linear-gradient(90deg,#383,#494)}
 #peers p.infohelp{margin-top:14px}
 #peers .infohelp code{font-size:9pt}
 #peers .rbw{line-height:1.25}
@@ -2104,7 +2107,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 #i2pupdates .nowrap,#i2pupdates .nowrap b{display:inline-block;vertical-align:middle}
 #i2pupdates .optiontextarea .nowrap b{margin-top:-48px;margin-bottom:-28px;height:76px;vertical-align:middle}
 #i2pupdates textarea,#i2pupdates input[type=text]{margin:5px 0 5px 10px;width:calc(100% - 210px);min-width:0;box-sizing:border-box}
-#i2pupdates input[name="devSU3URL"],#i2pupdates input[name="newsURL"],#i2pupdates input[name="zipURL"]{width:calc(100% - 210px) !important}
+#i2pupdates input[name="devSU3URL"],#i2pupdates input[name="newsURL"],#i2pupdates input[name="zipURL"]{width:calc(100% - 210px)!important}
 #i2pupdates textarea{margin:8px 0 8px 3px;height:76px;min-height:32px}
 #config_update form{margin-bottom:0}
 #config_update .suboption label[for="newsThroughProxy"]{margin-right:20px}
@@ -2463,8 +2466,12 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 p#pluginconfigtext{margin-top:11px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:12px}
 #sb_internals a,#sb_advanced a #sb_help a{max-width:200px}
-#sb_peers_condensed,#sb_tunnels_condensed,#homepage #sb_tunnels_condensed{margin-bottom:-10px}
 #sb_peers_condensed,#sb_tunnels_condensed{width:calc(100% + 11px)}
+#sb_peers_condensed,#sb_tunnels_condensed,#sb_services_condensed,#homepage #sb_tunnels_condensed{margin-bottom:-7px}
+#sidebar #sb_advancedgeneral[hidden] ~ #sb_peers_condensed,#sidebar #sb_tunnels_condensed{margin-bottom:-10px}
+#sb_advancedgeneral:not([hidden]) ~ #sb_services.collapsed{margin-bottom:-11px}
+#sidebar #sb_advancedgeneral[hidden] ~ #sb_services.collapsed{margin-bottom:-14px}
+#homepage #sb_shortgeneral~#sb_peers_condensed{margin-bottom:-10px}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
 #sb_warning+.sb_notice{margin-bottom:-6px}
 #sb_wrap{position:fixed!important}
@@ -2474,6 +2481,7 @@ p#pluginconfigtext{margin-top:11px}
 #sidebar #sb_CPUBar{margin-top:-4px}
 #sidebar #sb_internals.collapsed .sb_icon img,#sidebar #sb_advanced.collapsed .sb_icon img,#sidebar #sb_services.collapsed .sb_icon img{width:17px;height:17px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-13px}
+body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-10px}
 #sidebar,#sb_services.collapsed{margin-bottom:-14px}
 #sidebar #sb_routerControl{margin-top:-6px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-3px}
@@ -2639,7 +2647,6 @@ th.queue{white-space:nowrap}
 @media (min-width:1500px){
 body,button,input,select,th,.infohelp,.infowarn,.main,.main li b,.main td,.newscontent p,.news p,.percentBarText,.statusnotes,.tab,.tab2,.themelabel,.ui_lang,#configinfo,#configinfo th,#help code,#news p,#peerdefs,#profile_defs,#sidebar button.download,#sidebar .cancel,#sidebar .reload[value="restartImmediate"],#thresholds{font-size:10pt}
 body:not(#homepage) #sb_advancedgeneral:not([hidden])~#sb_tunnels{margin-bottom:-8px}
-body:not(#homepage) #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-2px}
 button.control{padding:14px}
 code,code a,pre,textarea,.applabel a,.main[id^="config_"] th,#changelog pre,#logs li,#news tt,#updateAvailable{font-size:9.5pt}
 pre,.footnote,div.news,.news,.links code,.main[id^="config_"] .encDests th,.sb_notice,.topness,#help code,#jardump td,#jardump th,#jobs li b,#jobs .jobcount,#jobs .joblog li,#jobs #schedjobs td,#jobstats td:first-child,#logs li,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,#sidebar td,#sidebar .sb_update b{font-size:9pt}
@@ -2653,7 +2660,6 @@ h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-s
 .netdb_header img[src^="/flags"]{width:32px}
 .netdb_header .peerFlag{transform:translateY(1px)}
 .newsAuthor{padding:0 0 0 14px;font-size:9.5pt;background-size:12px;background-position:left center}
-.percentBarOuter{width:232px}
 .percentBarText{margin-top:-1px}
 .sitemapLabel{min-height:16px}
 .subheading b{font-size:10.5pt}
@@ -2678,11 +2684,10 @@ h3#pconfig,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
 h3.ptitle,h3#webappconfiguration,h3#i2pclientconfig,p#clientconf.infohelp,#config_stats h3{margin-bottom:-14px}
 h4#updateplugins,#news p{font-size:10pt}
 #helptoc b{font-size:120%}
-#homepage #sb_advancedgeneral[hidden]~#sb_memoryBar{margin-bottom:6px}
-#homepage #sb_advancedgeneral:not([hidden])~#sb_memoryBar{margin-bottom:-2px}
 #homepage #sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:0}
 #homepage #sb_memoryBar+hr{margin-top:5px}
 #homepage #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
+#homepage #sb_shortgeneral~#sb_memoryBar.percentBarOuter{margin-bottom:-4px}
 #homepage #sb_peers tr:last-child td{padding-bottom:1px}
 #homepage #sb_queue tr:last-child td{padding-bottom:3px}
 #homepage #sb_tunnels tr:last-child td{padding-bottom:2px}
@@ -2719,6 +2724,8 @@ h4#updateplugins,#news p{font-size:10pt}
 #sb_warning+.sb_notice{margin-bottom:-3px}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
+#sidebar #sb_updateform{padding-bottom:1px}
+#homepage #sidebar #sb_updateform{padding-bottom:6px}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{transform:translateY(-1px)}
 #sidebar h3::after{min-height:19px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
 #sidebar h3 a{padding:4px 0 2px;font-size:11pt}
@@ -2726,16 +2733,22 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar hr[hidden]~h3{margin-top:-12px}
 #sidebar hr[hidden]~h4{margin-bottom:-4px}
 #sidebar hr[hidden]~#sb_advanced:not([hidden])~h3{margin-top:-9px}
-#sidebar hr[hidden]+#sb_CPUBar{margin-top:-7px}
+#sidebar hr[hidden]+#sb_CPUBar{margin-top:-9px}
+#sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-4px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-2px}
+#homepage #sb_advancedgeneral:not([hidden])~#sb_memoryBar{margin-bottom:-2px}
 #sidebar{margin-bottom:5px;width:228px}
 #sidebar .reload,#sidebar .stop{margin:0 3px -5px;padding-top:6px;padding-bottom:6px;min-width:110px}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
-#sidebar #sb_CPUBar{margin-top:-4px}
+#sidebar .percentBarOuter{margin:-6px 0 -7px -6px;width:238px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-8px}
-#sidebar #sb_logo{margin-top:4px;height:41px !important}
+body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-5px}
+#sidebar #sb_logo{margin-top:4px;height:41px!important}
 #sidebar #sb_newsheadings table{width:240px}
-#sidebar #sb_services.collapsed{margin-bottom:-9px}
+#sidebar #sb_advanced.collapsed,#sidebar #sb_internals.collapsed{margin-bottom:-8px!important}
+#sidebar #sb_peers_condensed{margin-bottom:-7px!important}
+#sidebar #sb_services.collapsed{margin-bottom:-9px!important}
+#homepage #sidebar #sb_advancedgeneral:not([hidden])~#sb_tunnels_condensed{margin-bottom:-10px!important}
 #sidebar #sb_shutdownStatus{padding:8px 4px 9px;line-height:1.2}
 #sidebar table[id^="sb_"]{width:238px}
 #statlist li a[href^="graph"]::before,#statlist li::before{margin:0 10px -30px -17px;height:6px;width:6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}

@@ -44,7 +44,7 @@ class RefreshRoutersJob extends JobImpl {
     /** rerun fairly often. 1000 routers in 50 minutes
      *  Don't go faster as this overloads the expl. OBEP / IBGW
      */
-    private final static long RERUN_DELAY_MS = 2*750; // 1.5 seconds * random value (see below)
+    private final static long RERUN_DELAY_MS = 2*1000; // 2 seconds * random value (see below)
     static final String PROP_RERUN_DELAY_MS = "router.refreshRouterDelay";
     static final String PROP_ROUTER_FRESHNESS = "router.refreshSkipIfYounger";
     static final String PROP_ROUTER_REFRESH_TIMEOUT = "router.refreshTimeout";
