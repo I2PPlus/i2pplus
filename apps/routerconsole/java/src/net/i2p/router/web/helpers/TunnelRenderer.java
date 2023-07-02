@@ -325,7 +325,7 @@ class TunnelRenderer {
                       "<th id=router data-sortable data-sort-method=natural>" + _t("Router") + "</th>" +
                       "<th id=version data-sortable data-sort-method=dotsep>" + _t("Version") + "</th>" +
                       "<th id=tier data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
-                      "<th id=address data-sortable data-sort-method=dotsep>" + _t("Address") + "</th>");
+                      "<th id=address data-sortable>" + _t("Address") + "</th>");
             if (enableReverseLookups()) {
                 out.write("<th id=domain data-sortable>" + _t("Domain") + "</th>");
             }
@@ -358,7 +358,7 @@ class TunnelRenderer {
                 out.write("</td><td>");
                 out.write("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
                 out.write(truncHash);
-                out.write("</td><td>");
+                out.write("</a></td><td>");
 /*
                 out.write("<tr class=lazy><td>");
                 out.write(netDbLink(h));
@@ -380,7 +380,10 @@ class TunnelRenderer {
                 out.write("</td><td><span class=ipaddress>");
                 if (info != null && ip != null) {
                     if (!ip.toString().equals("null")) {
-                        out.write(ip.toString());
+                        if (ip.toString().contains(":"))
+                            out.write("<span hidden>[IPv6]</span>" + ip.toString());
+                        else
+                            out.write(ip.toString());
 /*
                         out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" +
                                   _t("Lookup address on gwhois.org") + "\">" + ip.toString() + "</a>" +
@@ -473,7 +476,7 @@ class TunnelRenderer {
                       "<th id=router data-sortable data-sort-method=natural>" + _t("Router") + "</th>" +
                       "<th id=version data-sortable data-sort-method=dotsep>" + _t("Version") + "</th>" +
                       "<th id=tier data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
-                      "<th id=address title=\"Primary IP address\">Address</th>");
+                      "<th id=address data-sortable title=\"Primary IP address\">Address</th>");
             if (enableReverseLookups()) {
                 out.write("<th id=domain data-sortable>" + _t("Domain") + "</th>");
             }
@@ -496,7 +499,7 @@ class TunnelRenderer {
                 out.write("</td><td>");
                 out.write("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
                 out.write(truncHash);
-                out.write("</td><td>");
+                out.write("</a></td><td>");
                 //out.write(netDbLink(h));
                 if (v != null)
                     out.write("<span class=version title=\"" + _t("Show all routers with this version in the NetDb") +
@@ -511,7 +514,10 @@ class TunnelRenderer {
                 out.write("</td><td><span class=ipaddress>");
                 if (info != null && ip != null) {
                     if (!ip.toString().equals("null")) {
-                        out.write(ip.toString());
+                        if (ip.toString().contains(":"))
+                            out.write("<span hidden>[IPv6]</span>" + ip.toString());
+                        else
+                            out.write(ip.toString());
 /*
                         out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() +
                                   "+dns\" target=_blank title=\"" + _t("Lookup address on gwhois.org") +
