@@ -55,6 +55,7 @@ tfoot th{padding-bottom:4px}
 tr,.navbar,.mainsection,.lowersection{contain:layout}
 .iframed #navbar,.iframed .mainsection,.iframed #addSection,.iframed #createSection,.iframed #configSection,.iframed .configPanel{border-right:none;border-left:none;border-radius:0}
 #torrentDisplay label,#addTracker,#addTracker + tr,.toggleview,.configTitle,#navbar,img,input{user-select:none}
+#noload td{text-align:center}
 
 /* infohash */
 .infohash{margin-right:1px;vertical-align:middle;font-family:var(--monospaced);color:#070;border-radius:1px;user-select:all}
