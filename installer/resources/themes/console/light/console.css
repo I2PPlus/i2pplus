@@ -99,7 +99,6 @@ h4.sb_info{margin-top:-11px}
 #sb_advanced a,#sb_help a,#sb_internals a{padding:2px;display:inline-block;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #sb_advanced a:hover,#sb_help a:hover,#sb_internals a:hover{background:#ffd;border-radius:3px}
 #sb_advancedgeneral[hidden]~#sb_updatesection{margin-bottom:-2px}
-#sb_advancedgeneral:not([hidden])~#sb_updatesection{margin-bottom:-5px}
 #sb_internals{margin-bottom:-4px}
 #sb_internals td{padding:0}
 #sb_localtunnels:not([hidden])+#localtunnelSummary{display:none}
@@ -208,6 +207,7 @@ a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 .sb_notice:empty{display:none}
 .sb_notice,#sidebar #xhr hr+b{margin:-5px -5px -6px;padding:5px 6px;line-height:1.2;font-weight:700;border:1px solid #89f;border-radius:2px;box-shadow:0 0 1px #bbb,var(--highlight);background:#f2f2ff}
 .sb_notice+.sb_notice{margin-top:8px}
+.sb_info.sb_update+hr+.sb_info.sb_update,.sb_info.sb_update+hr+.sb_info.sb_update+hr{display:none}
 p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_warning{margin-bottom:11px;border-bottom:1px solid #afafcf}
 #sb_warning+hr{margin-top:6px}
@@ -2489,6 +2489,7 @@ body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_int
 #sidebar,#sb_services.collapsed{margin-bottom:-14px}
 #sidebar #sb_routerControl{margin-top:-6px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-3px}
+#sb_advancedgeneral:not([hidden])~#sb_updatesection{margin-bottom:-5px}
 #sitemap .applink img{padding-left:62px;padding-right:62px}
 #sitemap h3 img{margin-top:-8px;padding-right:6px}
 }
@@ -2741,7 +2742,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar hr[hidden]+#sb_CPUBar{margin-top:-9px}
 #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-4px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-2px}
-#homepage #sb_advancedgeneral:not([hidden])~#sb_memoryBar{margin-bottom:-2px}
+#homepage #sb_advancedgeneral:not([hidden])~#sb_memoryBar{margin-bottom:-4px}
 #sidebar{margin-bottom:5px;width:228px}
 #sidebar .reload,#sidebar .stop{margin:0 3px -5px;padding-top:6px;padding-bottom:6px;min-width:110px}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
@@ -2769,8 +2770,8 @@ body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_int
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
 #webappconfiguration a,#config_plugins .h3navlinks a{margin-top:-8px;padding:12px 8px 8px}
 #xhr>hr+#sb_shortgeneral{margin-top:-7px}
-#sidebar #sb_updateprogress+.percentBarOuter{width:232px;margin:-1px 2px -3px}
-#sidebar #sb_advancedgeneral[hidden]~h4.inProgress>#sb_updateprogress+.percentBarOuter{margin-bottom:0}
+#sidebar #sb_updateprogress+.percentBarOuter{width:232px;margin:-1px 2px 0}
+#sidebar #sb_advancedgeneral:not([hidden])~#sb_updatesection #sb_updateprogress+.percentBarOuter{margin-bottom:-3px}
 }
 
 @media (min-width:1634px){
