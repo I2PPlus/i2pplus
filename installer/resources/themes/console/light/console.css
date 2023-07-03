@@ -389,7 +389,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 .tab:hover{position:relative;z-index:60;box-shadow:inset 0 0 0 1px rgba(255,96,0,.7);background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
 .tab:active{box-shadow:inset 0 0 0 1px rgba(255,96,0,.4),inset 4px 4px 2px rgba(0,0,0,.4);background:linear-gradient(180deg,#e50,var(--hover))}
 .tab:active a,.tab a:active{color:#ffecdf;text-shadow:none}
-.tab2{padding:4px 12px;position:relative;z-index:50;color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,3px 3px 3px rgba(0,0,16,.5) inset;background:radial-gradient(at center bottom,rgba(128,128,172,.6) 0,rgba(0,0,0,0) 50%),linear-gradient(180deg,rgba(31,43,63,.7),rgba(31,43,63,.5)),linear-gradient( 90deg,#6288cb,#7fadff,#6288cb);pointer-events:none}
+.tab2{padding:5px 12px;position:relative;z-index:50;color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,3px 3px 3px rgba(0,0,16,.5) inset;background:radial-gradient(at center bottom,rgba(128,128,172,.6) 0,rgba(0,0,0,0) 50%),linear-gradient(180deg,rgba(31,43,63,.7),rgba(31,43,63,.5)),linear-gradient( 90deg,#6288cb,#7fadff,#6288cb);pointer-events:none}
 div[id^="config_"] .tab:not(:hover)::before{filter:saturate(.3)!important}
 
 /* main content div & variations */
@@ -1197,12 +1197,10 @@ h3+.statusnotes{margin-top:2px}
 #tunnels .percentBarInner{width:inherit;background:#77a}
 #tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:transparent}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
+#participatingTunnels #tunnels th{position:relative}
 
 /* transit summary */
 #tunnels .cc{display:none}
-#tunnels .peerFlag{margin:0;width:26px;height:20px;border-radius:3px;box-shadow:0 0 0 1px #bbc;background:#ddf}
-#tunnels .peerFlag::before{top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px)}
-#tunnels .peerFlag img{margin:0;padding:1px;width:24px;height:18px;border-radius:3px;box-shadow:var(--highlight)}
 #tunnels #transitSummary{margin-bottom:10px}
 #tunnels #transitSummary th,#tunnels #transitSummary td:not(.rbw){width:auto;min-width:unset;max-width:unset;vertical-align:middle;white-space:nowrap}
 #tunnels #transitSummary th{position:relative}
@@ -1219,6 +1217,9 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 .small img{margin:0;padding:0}
 .outbound{background-image:var(--out)}
 #tunnels #peercount{padding-left:30px;background:var(--hardhat) no-repeat 7px 6px/18px,var(--h3),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8) 25%)}
+#tunnels #tunnelPeerCount .peerFlag{margin:0;width:26px;height:20px;border-radius:3px;box-shadow:0 0 0 1px #bbc;background:#ddf}
+#tunnels #tunnelPeerCount .peerFlag::before{top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px)}
+#tunnels #tunnelPeerCount .peerFlag img{margin:0;padding:1px;width:24px;height:18px;border-radius:3px;box-shadow:var(--highlight)}
 #peercount a::after,#participating a::after{margin:1px 0 0 -2px;height:18px;width:18px;display:inline-block;background:var(--refresh) no-repeat center center;content:""}
 #peercount a:hover::after,#peercount a:focus::after,#participating a:hover::after,#participating a:focus::after{background:var(--refresh_hover) no-repeat center center}
 #peercount a img,#participating a img{opacity:0}
@@ -2453,6 +2454,7 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 #clock{font-size:16pt}
 #config_clients #i2pclientconfig a,#config_bandwidth #bwlimiter .h3navlinks{margin-top:-4px}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px}
+#confignav .tab2{margin-top:1px;height:39px}
 #consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type="password"]{width:184px}
 #enablefull label{margin-top:4px}
 #graphdisplay a{margin-top:-5px}
