@@ -56,7 +56,7 @@ class ProfileOrganizerRenderer {
         boolean ffmode = local != null && local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
-        long hideBefore = ffmode ? now - 60*1000 : !ffmode && mode == 2 ? now - 60*60*1000 : now - 10*60*1000;
+        long hideBefore = ffmode ? now - 15*60*1000 : !ffmode && mode == 2 ? now - 60*60*1000 : now - 15*60*1000;
 
         Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new HashComparator() : new ProfileComparator());
         int older = 0;
@@ -95,13 +95,8 @@ class ProfileOrganizerRenderer {
 
         if (mode < 2) {
             buf.append("<p id=profiles_overview class=infohelp>");
-            if (ffmode) {
-                buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.",
-                                    order.size()).replace(".", " (active in the last minute).")).append('\n');
-            } else {
-                buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.",
-                                    order.size()).replace(".", " (active in the last 10 minutes).")).append('\n');
-            }
+            buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.",
+                                order.size()).replace(".", " (active in the last 15 minutes).")).append('\n');
             if (older > 0)
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
             if (standard > 0)
@@ -181,11 +176,13 @@ class ProfileOrganizerRenderer {
                 String rl = ip != null ? getCanonicalHostName(ip) : null;
                 if (enableReverseLookups()) {
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
-                        buf.append("<span class=rlookup title=\"").append(rl).append("\">");
+                        buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(rl).append("\">");
                         buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")));
                     } else if (ip == "null" || ip == null) {
                         buf.append("<span>").append(_t("unknown"));
                     } else {
+                        if (ip != null && ip.contains(":"))
+                            buf.append("<span hidden>[IPv6]</span>");
                         buf.append("<span>").append(ip);
                     }
                     buf.append("</span>");
