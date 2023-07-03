@@ -2769,8 +2769,8 @@ body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_int
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
 #webappconfiguration a,#config_plugins .h3navlinks a{margin-top:-8px;padding:12px 8px 8px}
 #xhr>hr+#sb_shortgeneral{margin-top:-7px}
-#sb_updateprogress+.percentBarOuter{width:232px;margin:-1px 2px -3px}
-#sb_advancedgeneral[hidden]~h4.inProgress>#sb_updateprogress+.percentBarOuter{margin-bottom:0}
+#sidebar #sb_updateprogress+.percentBarOuter{width:232px;margin:-1px 2px -3px}
+#sidebar #sb_advancedgeneral[hidden]~h4.inProgress>#sb_updateprogress+.percentBarOuter{margin-bottom:0}
 }
 
 @media (min-width:1634px){
