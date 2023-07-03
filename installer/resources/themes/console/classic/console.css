@@ -2013,11 +2013,10 @@ span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active
 .direction .small{width:12px;margin-left:-2px}
 .rlookup{padding:0 2px 2px;display:inline-block;font-style:italic}
 .routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
-.router_id,.tunnel_local{width:64px;box-sizing:border-box}
+.tunnel_local{width:97px;box-sizing:border-box}
 .statusnotes{margin:-6px 0 7px;padding:8px 0;color:var(--ink);font-style:italic;font-size:9pt;text-align:center;border:var(--border);background:var(--bg)}
-.tunnel_id{margin-left:4px;padding:2px 4px;min-width:78px;display:inline-block;line-height:1.35;vertical-align:middle;text-align:right;border-radius:0;box-shadow:var(--box_border_badge);background:var(--badge)}
+.tunnel_id{margin-left:4px;padding:2px 4px;min-width:78px;display:inline-block;line-height:1.45;vertical-align:middle;text-align:right;border-radius:0;box-shadow:var(--box_border_badge);background:var(--hardhat) no-repeat 3px center / 16px,var(--badge)}
 .tunnel_id:empty{opacity:0}
-.tunnel_peer img{margin-bottom:-1px}
 .tunneldisplay td{padding-top:4px;padding-bottom:4px}
 .tunnel_peer:empty{vertical-align:middle}
 .tunnel_peer:empty::before{margin:1px 6px 1px 2px}
@@ -2405,6 +2404,7 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #sidebar h3 a,#netdboverview th{font-size:11pt}
 #sidebar button[type=submit],#sidebar .reload[value="restart"]{margin:2px 4px 1px;min-width:110px}
 #sidebar .percentBarOuter{margin-left:2px;width:239px}
+#sidebar #sb_updateprogress .percentBarOuter{width:236px}
 #sidebar .reload,#sidebar .stop{min-width:102px}
 #sidebar #sb_newsheadings td:last-child,#sidebar #sb_newsheadings tr:hover td:last-child{padding-bottom:5px;background-position:4px 6px}
 #sidebar table[id^="sb_"],#sb_newsheadings table{width:245px;min-width:245px}
