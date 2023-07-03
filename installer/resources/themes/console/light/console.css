@@ -845,7 +845,7 @@ h1::first-letter{font-size:112%}
 #banneduntilrestart td:last-child{text-align:center}
 #bannedips tr:nth-child(even){background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px)}
 #bannedips tr:nth-child(odd){background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px)}
-#sessionBanned {margin:11px auto 9px}
+#sessionBanned{margin:11px auto 9px}
 #profiles #sessionBanned th, #profiles #sessionBanned td{padding:6px 12px;text-align:left}
 #profiles #sessionBanned th:nth-child(4),#profiles #sessionBanned td:nth-child(4){text-align:right}
 #sessionBanned thead th{font-size:90%;text-align:left}
@@ -1084,7 +1084,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peers .tab,#peers .tab2{min-width:96px}
 #peers .edit a{margin:0;vertical-align:middle;box-shadow:var(--btn_shadow)}
 #peers .edit a:hover{margin:0;vertical-align:middle;border-color:var(--hover);box-shadow:var(--btn_shadow_hover)}
-#peers .tablefooter td {border-top:var(--border_inner);border-bottom:var(--border_inner)}
+#peers .tablefooter td{border-top:var(--border_inner);border-bottom:var(--border_inner)}
 #peers .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
@@ -2746,6 +2746,8 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar .reload,#sidebar .stop{margin:0 3px -5px;padding-top:6px;padding-bottom:6px;min-width:110px}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
 #sidebar .percentBarOuter{margin:-6px 0 -7px -6px;width:238px}
+#sb_updateprogress+.percentBarOuter.volatile{width:232px;margin:-1px 2px -3px}
+#sb_advancedgeneral[hidden]~#sb_updateprogress+.percentBarOuter.volatile{margin-bottom:0}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-8px}
 #sidebar #sb_logo{margin-top:4px;height:41px!important}
 #sidebar #sb_newsheadings table{width:240px}
