@@ -106,10 +106,10 @@ a.control:hover{color:var(--ink)}
 .control,.control:link,.control:visited,button{margin:2px 4px;padding:5px 8px;min-width:100px;text-align:center;white-space:nowrap;box-sizing:border-box;text-decoration:none;font-style:normal;font-weight:400;color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:linear-gradient(180deg,#fff,#efefff);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink);border:1px solid #f60;box-shadow:var(--btn_shadow_hover);background:linear-gradient(180deg,#eee,#fff);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 .control:active,button:active{box-shadow:var(--highlight),inset 2px 2px 2px #555;color:#4c526f}
-.control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}
-.control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.iconize:active{background-blend-mode:luminosity}
 .control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent!important;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
+.control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}
+.control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover)}
 .control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
@@ -161,8 +161,8 @@ a.control:hover{color:var(--ink)}
 #tunnelMessages{padding:0}
 
 /* index */
-.newTunnel{padding:7px;text-align:right;border-top:2px solid var(--border_inner);background:#fff}
-.newtunnel form{width:100%;text-align:right}
+.newTunnel{padding:0;text-align:right;background:#fff}
+.newTunnel form{margin-top:-1px;padding:8px 5px;width:100%;position:relative;box-sizing:border-box;text-align:right;border-top:var(--border_inner)}
 .newTunnel input,.newTunnel select,.newTunnel .control{margin:2px 4px 2px 2px}
 .tunnelControl{width:5%;white-space:nowrap;text-align:right}
 th.tunnelControl{text-align:center}
@@ -321,9 +321,9 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 @media (max-width:1500px){
 .control.create{margin-right:2px}
 .panel table:last-of-type{margin-bottom:1px}
+.newTunnel form{padding:6px 7px}
 #regDisabled{margin-bottom:4px}
 #countClient,#countServer{margin:-2px -3px 0 0;line-height:1.15}
-
 }
 
 @media (max-width:1300px){

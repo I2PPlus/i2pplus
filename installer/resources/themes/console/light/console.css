@@ -2464,6 +2464,7 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 #logs ul li{padding-left:46px;width:calc(100% - 44px);line-height:1.4}
 #pluginconfig{margin-top:-14px}
 p#pluginconfigtext{margin-top:11px}
+#profilelist th:nth-child(4),#profilelist td:nth-child(4){display:none}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:12px}
 #sb_internals a,#sb_advanced a #sb_help a{max-width:200px}
 #sb_peers_condensed,#sb_tunnels_condensed{width:calc(100% + 11px)}
@@ -2482,6 +2483,7 @@ p#pluginconfigtext{margin-top:11px}
 #sidebar #sb_internals.collapsed .sb_icon img,#sidebar #sb_advanced.collapsed .sb_icon img,#sidebar #sb_services.collapsed .sb_icon img{width:17px;height:17px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-13px}
 body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-10px}
+#sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:-4px}
 #sidebar,#sb_services.collapsed{margin-bottom:-14px}
 #sidebar #sb_routerControl{margin-top:-6px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-3px}
@@ -2538,6 +2540,7 @@ h4 .unbold{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:no
 h4 span[style="float:right;"] .unbold{max-width:300px}
 #certs h4,#certs h4>*{line-height:14px}
 #certs h4 span{display:inline-block;vertical-align:middle}
+#profilelist th:nth-child(3),#profilelist td:nth-child(3){display:none}
 }
 
 @media (max-width:1100px){
