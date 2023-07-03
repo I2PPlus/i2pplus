@@ -60,7 +60,7 @@
 --table:repeating-linear-gradient(135deg,rgba(248,248,255,.8) 2px,rgba(221,221,255,.3) 3px,#fff 5px) #fff;
 --th:linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
 --txtinput:linear-gradient(180deg,#f2f2ff,#fff);
---txt_shadow:1px 1px 1px rgba(255,255,255,.9);
+--txt_shadow:1px 1px 1px rgba(255,255,255,.75);
 --txtinput_shadow_focus:0 0 0 1px var(--hover) inset,0 0 0 2px #fff inset,3px 3px 3px rgba(0,0,0,.4) inset;
 --txtinput_shadow_search:var(--highlight),var(--btn_shadow_active);
 }

@@ -88,7 +88,7 @@ h4.sb_info{margin-top:-11px}
 .sb_info b{line-height:1.2}
 .sb table{margin:-8px -5px -5px;width:202px;position:relative;text-align:center;overflow:hidden;font-size:8pt;border:0;background-image:none;background-color:transparent}
 .sb table:not(#sb_localtunnels):not(#sb_services) tr::before{width:0;height:1px;position:absolute;z-index:99999;top:-1px;left:-1px;right:-1px;display:block;background:#f90;content:"";animation:bar .05s steps(3) reverse;will-change:transform}
-#clock{margin:-7px -10px -9px;padding:6px 0 4px;line-height:1;letter-spacing:.1em;font-size:17pt;font-weight:700;color:var(--ink);opacity:.9}
+#clock{margin:-5px -5px -6px;padding:6px 0 5px;line-height:1;letter-spacing:.1em;font-size:17pt;font-weight:700;color:var(--ink);box-shadow:0 0 0 1px #a7a7be,var(--bevel);opacity:.9}
 #clock::after{margin-left:3px;content:"UTC";display:inline-block;font-size:50%;vertical-align:middle}
 #error500 #sidebar img[src$="i2plogo.png"]{margin-bottom:-3px;width:186px}
 #sb_advanced,#sb_internals,#sb_help{margin:-9px -6px -6px;width:204px}
@@ -124,7 +124,7 @@ h4.sb_info{margin-top:-11px}
 #sb_logo a:hover img,#sb_logo a:focus{opacity:1;transition:ease filter .03s;filter:none}
 #sb_logo a img{outline:none}
 #sb_logo img{opacity:.9;transition:ease opacity .15s;margin:0;width:200px;height:auto;image-rendering:-webkit-optimize-contrast;filter:sepia(1) hue-rotate(190deg);transition:ease filter .05s;user-select:none}
-#sb_logo{margin:0 0 0 -5px;height:35px!important;padding:0 0 1px;text-align:center}
+#sb_logo{margin:0 0 0 -5px;height:38px!important;padding:0 0 1px;text-align:center}
 #sb_peersadvanced a:active b,#sb_peersadvanced a:visited:active b{color:#f90}
 #sb_peersadvanced a:hover b,#sb_peersadvanced a:visited:hover b{color:var(--hover)}
 #sb_peersadvanced .separator td{padding:0}
