@@ -48,12 +48,13 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
 
         if (_client != null) {
             TunnelPoolSettings clienttps = _context.tunnelManager().getInboundSettings(_client);
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Initializing client " + clienttps.getDestinationNickname() +
+            _clientNickname = clienttps != null ? clienttps.getDestinationNickname() : "UNKNOWN";
+            _msgIDBloomXor = clienttps != null ? clienttps.getMsgIdBloomXor() : RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
+            if (_log.shouldLog(Log.DEBUG)) {
+                _log.debug("Initializing client " + (clienttps != null ? clienttps.getDestinationNickname() : "UNKNOWN") +
                            " [ " + _client.toBase32().substring(0,12) + "..." + "] " +
-                           "\n* InboundMessageDistributor with tunnel pool settings: " + clienttps);
-            _clientNickname = clienttps.getDestinationNickname();
-            _msgIDBloomXor = clienttps.getMsgIdBloomXor();
+                           (clienttps != null ? "\n* InboundMessageDistributor with tunnel pool settings: " + clienttps : ""));
+            }
         } else {
             _clientNickname = "NULL/Expl";
             _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);

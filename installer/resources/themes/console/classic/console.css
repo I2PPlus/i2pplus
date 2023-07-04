@@ -2404,7 +2404,7 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #sidebar h3 a,#netdboverview th{font-size:11pt}
 #sidebar button[type=submit],#sidebar .reload[value="restart"]{margin:2px 4px 1px;min-width:110px}
 #sidebar .percentBarOuter{margin-left:2px;width:239px}
-#sidebar #sb_updateprogress .percentBarOuter{width:236px}
+#sidebar #sb_updateprogress~.percentBarOuter{width:236px}
 #sidebar .reload,#sidebar .stop{min-width:102px}
 #sidebar #sb_newsheadings td:last-child,#sidebar #sb_newsheadings tr:hover td:last-child{padding-bottom:5px;background-position:4px 6px}
 #sidebar table[id^="sb_"],#sb_newsheadings table{width:245px;min-width:245px}

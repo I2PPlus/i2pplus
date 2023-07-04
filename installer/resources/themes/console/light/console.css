@@ -88,7 +88,7 @@ h4.sb_info{margin-top:-11px}
 .sb_info b{line-height:1.2}
 .sb table{margin:-8px -5px -5px;width:202px;position:relative;text-align:center;overflow:hidden;font-size:8pt;border:0;background-image:none;background-color:transparent}
 .sb table:not(#sb_localtunnels):not(#sb_services) tr::before{width:0;height:1px;position:absolute;z-index:99999;top:-1px;left:-1px;right:-1px;display:block;background:#f90;content:"";animation:bar .05s steps(3) reverse;will-change:transform}
-#clock{margin:-7px -10px -9px;padding:6px 0 4px;line-height:1;letter-spacing:.1em;font-size:17pt;font-weight:700;color:var(--ink);opacity:.9}
+#clock{margin:-5px -5px -6px;padding:6px 0 5px;line-height:1;letter-spacing:.1em;font-size:17pt;font-weight:700;color:var(--ink);box-shadow:0 0 0 1px #a7a7be,var(--bevel);opacity:.9}
 #clock::after{margin-left:3px;content:"UTC";display:inline-block;font-size:50%;vertical-align:middle}
 #error500 #sidebar img[src$="i2plogo.png"]{margin-bottom:-3px;width:186px}
 #sb_advanced,#sb_internals,#sb_help{margin:-9px -6px -6px;width:204px}
@@ -99,7 +99,6 @@ h4.sb_info{margin-top:-11px}
 #sb_advanced a,#sb_help a,#sb_internals a{padding:2px;display:inline-block;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #sb_advanced a:hover,#sb_help a:hover,#sb_internals a:hover{background:#ffd;border-radius:3px}
 #sb_advancedgeneral[hidden]~#sb_updatesection{margin-bottom:-2px}
-#sb_advancedgeneral:not([hidden])~#sb_updatesection{margin-bottom:-5px}
 #sb_internals{margin-bottom:-4px}
 #sb_internals td{padding:0}
 #sb_localtunnels:not([hidden])+#localtunnelSummary{display:none}
@@ -125,7 +124,7 @@ h4.sb_info{margin-top:-11px}
 #sb_logo a:hover img,#sb_logo a:focus{opacity:1;transition:ease filter .03s;filter:none}
 #sb_logo a img{outline:none}
 #sb_logo img{opacity:.9;transition:ease opacity .15s;margin:0;width:200px;height:auto;image-rendering:-webkit-optimize-contrast;filter:sepia(1) hue-rotate(190deg);transition:ease filter .05s;user-select:none}
-#sb_logo{margin:0 0 0 -5px;height:35px!important;padding:0 0 1px;text-align:center}
+#sb_logo{margin:0 0 0 -5px;height:38px!important;padding:0 0 1px;text-align:center}
 #sb_peersadvanced a:active b,#sb_peersadvanced a:visited:active b{color:#f90}
 #sb_peersadvanced a:hover b,#sb_peersadvanced a:visited:hover b{color:var(--hover)}
 #sb_peersadvanced .separator td{padding:0}
@@ -208,6 +207,7 @@ a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 .sb_notice:empty{display:none}
 .sb_notice,#sidebar #xhr hr+b{margin:-5px -5px -6px;padding:5px 6px;line-height:1.2;font-weight:700;border:1px solid #89f;border-radius:2px;box-shadow:0 0 1px #bbb,var(--highlight);background:#f2f2ff}
 .sb_notice+.sb_notice{margin-top:8px}
+.sb_info.sb_update+hr+.sb_info.sb_update,.sb_info.sb_update+hr+.sb_info.sb_update+hr{display:none}
 p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_warning{margin-bottom:11px;border-bottom:1px solid #afafcf}
 #sb_warning+hr{margin-top:6px}
@@ -389,7 +389,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 .tab:hover{position:relative;z-index:60;box-shadow:inset 0 0 0 1px rgba(255,96,0,.7);background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
 .tab:active{box-shadow:inset 0 0 0 1px rgba(255,96,0,.4),inset 4px 4px 2px rgba(0,0,0,.4);background:linear-gradient(180deg,#e50,var(--hover))}
 .tab:active a,.tab a:active{color:#ffecdf;text-shadow:none}
-.tab2{padding:4px 12px;position:relative;z-index:50;color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,3px 3px 3px rgba(0,0,16,.5) inset;background:radial-gradient(at center bottom,rgba(128,128,172,.6) 0,rgba(0,0,0,0) 50%),linear-gradient(180deg,rgba(31,43,63,.7),rgba(31,43,63,.5)),linear-gradient( 90deg,#6288cb,#7fadff,#6288cb);pointer-events:none}
+.tab2{padding:5px 12px;position:relative;z-index:50;color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,3px 3px 3px rgba(0,0,16,.5) inset;background:radial-gradient(at center bottom,rgba(128,128,172,.6) 0,rgba(0,0,0,0) 50%),linear-gradient(180deg,rgba(31,43,63,.7),rgba(31,43,63,.5)),linear-gradient( 90deg,#6288cb,#7fadff,#6288cb);pointer-events:none}
 div[id^="config_"] .tab:not(:hover)::before{filter:saturate(.3)!important}
 
 /* main content div & variations */
@@ -845,7 +845,7 @@ h1::first-letter{font-size:112%}
 #banneduntilrestart td:last-child{text-align:center}
 #bannedips tr:nth-child(even){background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px)}
 #bannedips tr:nth-child(odd){background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px)}
-#sessionBanned {margin:11px auto 9px}
+#sessionBanned{margin:11px auto 9px}
 #profiles #sessionBanned th, #profiles #sessionBanned td{padding:6px 12px;text-align:left}
 #profiles #sessionBanned th:nth-child(4),#profiles #sessionBanned td:nth-child(4){text-align:right}
 #sessionBanned thead th{font-size:90%;text-align:left}
@@ -1084,7 +1084,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peers .tab,#peers .tab2{min-width:96px}
 #peers .edit a{margin:0;vertical-align:middle;box-shadow:var(--btn_shadow)}
 #peers .edit a:hover{margin:0;vertical-align:middle;border-color:var(--hover);box-shadow:var(--btn_shadow_hover)}
-#peers .tablefooter td {border-top:var(--border_inner);border-bottom:var(--border_inner)}
+#peers .tablefooter td{border-top:var(--border_inner);border-bottom:var(--border_inner)}
 #peers .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
@@ -1197,12 +1197,10 @@ h3+.statusnotes{margin-top:2px}
 #tunnels .percentBarInner{width:inherit;background:#77a}
 #tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:transparent}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
+#participatingTunnels #tunnels th{position:relative}
 
 /* transit summary */
 #tunnels .cc{display:none}
-#tunnels .peerFlag{margin:0;width:26px;height:20px;border-radius:3px;box-shadow:0 0 0 1px #bbc;background:#ddf}
-#tunnels .peerFlag::before{top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px)}
-#tunnels .peerFlag img{margin:0;padding:1px;width:24px;height:18px;border-radius:3px;box-shadow:var(--highlight)}
 #tunnels #transitSummary{margin-bottom:10px}
 #tunnels #transitSummary th,#tunnels #transitSummary td:not(.rbw){width:auto;min-width:unset;max-width:unset;vertical-align:middle;white-space:nowrap}
 #tunnels #transitSummary th{position:relative}
@@ -1219,6 +1217,9 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 .small img{margin:0;padding:0}
 .outbound{background-image:var(--out)}
 #tunnels #peercount{padding-left:30px;background:var(--hardhat) no-repeat 7px 6px/18px,var(--h3),linear-gradient(90deg,#fafaff 5%,rgba(231,231,255,.8) 25%)}
+#tunnels #tunnelPeerCount .peerFlag{margin:0;width:26px;height:20px;border-radius:3px;box-shadow:0 0 0 1px #bbc;background:#ddf}
+#tunnels #tunnelPeerCount .peerFlag::before{top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px)}
+#tunnels #tunnelPeerCount .peerFlag img{margin:0;padding:1px;width:24px;height:18px;border-radius:3px;box-shadow:var(--highlight)}
 #peercount a::after,#participating a::after{margin:1px 0 0 -2px;height:18px;width:18px;display:inline-block;background:var(--refresh) no-repeat center center;content:""}
 #peercount a:hover::after,#peercount a:focus::after,#participating a:hover::after,#participating a:focus::after{background:var(--refresh_hover) no-repeat center center}
 #peercount a img,#participating a img{opacity:0}
@@ -2453,6 +2454,7 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 #clock{font-size:16pt}
 #config_clients #i2pclientconfig a,#config_bandwidth #bwlimiter .h3navlinks{margin-top:-4px}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px}
+#confignav .tab2{margin-top:1px;height:39px}
 #consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type="password"]{width:184px}
 #enablefull label{margin-top:4px}
 #graphdisplay a{margin-top:-5px}
@@ -2464,6 +2466,7 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 #logs ul li{padding-left:46px;width:calc(100% - 44px);line-height:1.4}
 #pluginconfig{margin-top:-14px}
 p#pluginconfigtext{margin-top:11px}
+#profilelist th:nth-child(4),#profilelist td:nth-child(4){display:none}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:12px}
 #sb_internals a,#sb_advanced a #sb_help a{max-width:200px}
 #sb_peers_condensed,#sb_tunnels_condensed{width:calc(100% + 11px)}
@@ -2482,9 +2485,11 @@ p#pluginconfigtext{margin-top:11px}
 #sidebar #sb_internals.collapsed .sb_icon img,#sidebar #sb_advanced.collapsed .sb_icon img,#sidebar #sb_services.collapsed .sb_icon img{width:17px;height:17px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-13px}
 body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-10px}
+#sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:-4px}
 #sidebar,#sb_services.collapsed{margin-bottom:-14px}
 #sidebar #sb_routerControl{margin-top:-6px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-3px}
+#sb_advancedgeneral:not([hidden])~#sb_updatesection{margin-bottom:-5px}
 #sitemap .applink img{padding-left:62px;padding-right:62px}
 #sitemap h3 img{margin-top:-8px;padding-right:6px}
 }
@@ -2538,6 +2543,7 @@ h4 .unbold{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:no
 h4 span[style="float:right;"] .unbold{max-width:300px}
 #certs h4,#certs h4>*{line-height:14px}
 #certs h4 span{display:inline-block;vertical-align:middle}
+#profilelist th:nth-child(3),#profilelist td:nth-child(3){display:none}
 }
 
 @media (max-width:1100px){
@@ -2736,7 +2742,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar hr[hidden]+#sb_CPUBar{margin-top:-9px}
 #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-4px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-2px}
-#homepage #sb_advancedgeneral:not([hidden])~#sb_memoryBar{margin-bottom:-2px}
+#homepage #sb_advancedgeneral:not([hidden])~#sb_memoryBar{margin-bottom:-4px}
 #sidebar{margin-bottom:5px;width:228px}
 #sidebar .reload,#sidebar .stop{margin:0 3px -5px;padding-top:6px;padding-bottom:6px;min-width:110px}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
@@ -2764,6 +2770,8 @@ body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_int
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
 #webappconfiguration a,#config_plugins .h3navlinks a{margin-top:-8px;padding:12px 8px 8px}
 #xhr>hr+#sb_shortgeneral{margin-top:-7px}
+#sidebar #sb_updateprogress+.percentBarOuter{width:232px;margin:-1px 2px 0}
+#sidebar #sb_advancedgeneral:not([hidden])~#sb_updatesection #sb_updateprogress+.percentBarOuter{margin-bottom:-3px}
 }
 
 @media (min-width:1634px){
