@@ -385,8 +385,8 @@ input:not(:checked)+#tab_files{margin-bottom:-8px}
 input:not(:checked)+#tab_torrentedit{margin-bottom:-8px}
 body:not(.iframed) #snarkInfo~#commentSection{margin-top:-7px}
 .iframed input:checked+#tab_torrentedit{margin-bottom:-7px}
-.iframed input:not(:checked)+#tab_files{margin-bottom:-12px}
-.iframed input:not(:checked)+#tab_torrentedit{margin-bottom:-16px}
+.iframed input:not(:checked)+#tab_files{margin-bottom:-13px}
+.iframed input:not(:checked)+#tab_torrentedit{margin-bottom:-3px}
 .iframed #snarkInfo~#snarkFiles{margin:-13px 0 -9px}
 .snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
 .snarkFilename:hover .targetfile{display:inline-block}
