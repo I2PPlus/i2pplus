@@ -238,7 +238,7 @@ tr:hover .magnetLabel{opacity:1}
 .peerclient{padding-right:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .peerclient code{margin:0 3px 0 1px}
 .peerclient code::after{height:18px;display:inline-block;vertical-align:middle;content:""}
-.clientid{margin:0 0 1px -2px;padding:0 2px;width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:center;font-size:90%}
+.clientid{margin:0 0 0 -2px;padding:1.5px 2px 0;width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:center;font-size:85%}
 .clientversion{display:none}
 .peerinfo{background-color:#fffffd}
 .peerinfo td{border-bottom:1px solid #bbb}
@@ -298,10 +298,10 @@ tr:hover .magnetLabel{opacity:1}
 .percentBarInner,.uploaded{height:16px;vertical-align:middle;border-right:var(--border_hard);box-shadow:inset 0 0 0 1px #eee;background:var(--tr_hover)}
 .percentBarOuter,.percentbarInner,.percentBarText{font-weight:700}
 .percentBarInner{background:#7b9d84}
-.percentBarOuter{border:var(--border_hard);box-shadow:var(--btn_shadow_active);background:var(--bar)}
+.percentBarOuter{border:var(--border_hard);box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,0 3px 3px 3px rgba(0,0,0,.35) inset,0 -5px 3px 1px rgba(255,255,255,.2) inset;background:var(--bar)}
 .active .percentBarOuter{background:repeating-linear-gradient(135deg,#eee 1px,#eee 6px,#fff 6px,#fff 11px);background-size:400% 400%;will-change:transform}
 tr:not(.peerinfo).active.downloading .percentBarOuter{background:var(--bar_active)}
-tr:not(.peerinfo).active.downloading:hover .percentBarInner{background:#47d16a}
+tr:not(.peerinfo).active.downloading:hover .percentBarInner{background:#47d16a;will-change:transform}
 .active.downloading .percentBarOuter{animation:progress 1s linear both}
 .percentBarText{opacity:0}
 .peerinfo .percentBarOuter,.peerinfo .percentBarInner{height:9px}
