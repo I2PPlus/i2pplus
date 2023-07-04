@@ -237,7 +237,8 @@ tr:hover .magnetLabel{opacity:1}
 .peerclient,.peerclient code,.clientid{line-height:1.4;vertical-align:middle}
 .peerclient{padding-right:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .peerclient code{margin:0 3px 0 1px}
-.clientid{margin:0 0 1px -2px;padding:1px 2px;width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:center;font-size:90%}
+.peerclient code::after{height:18px;display:inline-block;vertical-align:middle;content:""}
+.clientid{margin:0 0 1px -2px;padding:0 2px;width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:center;font-size:90%}
 .clientversion{display:none}
 .peerinfo{background-color:#fffffd}
 .peerinfo td{border-bottom:1px solid #bbb}
