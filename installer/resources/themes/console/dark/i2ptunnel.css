@@ -221,6 +221,7 @@ td>input{margin-left:0}
 .tunnelStatus div:hover .tooltip{padding:6px 12px;min-width:140px;display:inline-block;line-height:1.5;left:0;position:absolute;bottom:calc(100% + 4px);z-index:99999;color:var(--ink);font-size:9pt;box-shadow:var(--bevel_hard);background:var(--badge)}
 .tunnelStatus div .tooltip hr{margin:2px 0 4px;height:0;display:block;border:0;border-top:1px solid #000;border-bottom:1px solid #141;opacity:.8}
 .tunnelType{width:25%}
+.tunnelType::first-letter{text-transform:uppercase}
 .iframed .buttons,.iframed .newTunnel{padding:5px 4px}
 #clientAuth th:first-child,#clientAuth td:first-child{width:50%}
 #clientAuth th:nth-child(2),#clientAuth td:nth-child(2){width:auto}
