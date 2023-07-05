@@ -226,15 +226,19 @@ tr:hover .magnetLabel{opacity:1}
 .infohash::selection{background:#393}
 .magnetLabel{margin-left:3px;padding-left:14px;padding-right:2px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;line-height:1.1;background:var(--tag) no-repeat left center/12px;opacity:.8}
 .noneLoaded td,.noneLoaded:hover td{text-align:center;font-size:10pt;font-weight:700;padding:15px;background:#eee}
-.peerCount{text-align:center;font-weight:700}
-.peerCount b{min-width:64px;display:inline-block;line-height:1.6;box-shadow:0 0 0 1px #bbb,var(--highlight);background:linear-gradient(180deg,#f2f2f2,#eee)}
+.peerCount{line-height:1;text-align:center;font-weight:700}
+.peerCount b{min-width:80px;display:inline-block;box-shadow:0 0 0 1px #bbb,var(--highlight);background:linear-gradient(180deg,#f2f2f2,#eee)}
+.stopped .peerCount b,.zero .peerCount b{padding:3px 0}
 .active .peerCount b{background:linear-gradient(180deg,#fff,#edd)}
-.peerCount .left,.peerCount .right{min-width:22px;display:inline-block;text-align:center}
+.peerCount .left,.peerCount .right{padding:5px 3px 3px;min-width:29px;display:inline-block;text-align:center;box-shadow:0 0 0 1px #bbb,var(--highlight),2px 2px 2px rgba(0,0,0,.3) inset}
+.peerCount .left{margin-left:1px}
+.peerCount .right{margin-right:1px}
 .peerdata>*{vertical-align:middle}
 .peerclient,.peerclient code,.clientid{line-height:1.4;vertical-align:middle}
 .peerclient{padding-right:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .peerclient code{margin:0 3px 0 1px}
-.clientid{margin:0 0 1px -2px;padding:1px 2px;width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:center;font-size:90%}
+.peerclient code::after{height:18px;display:inline-block;vertical-align:middle;content:""}
+.clientid{margin:0 0 0 -2px;padding:1.5px 2px 0;width:50px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:center;font-size:85%}
 .clientversion{display:none}
 .peerinfo{background-color:#fffffd}
 .peerinfo td{border-bottom:1px solid #bbb}
@@ -294,10 +298,10 @@ tr:hover .magnetLabel{opacity:1}
 .percentBarInner,.uploaded{height:16px;vertical-align:middle;border-right:var(--border_hard);box-shadow:inset 0 0 0 1px #eee;background:var(--tr_hover)}
 .percentBarOuter,.percentbarInner,.percentBarText{font-weight:700}
 .percentBarInner{background:#7b9d84}
-.percentBarOuter{border:var(--border_hard);box-shadow:var(--btn_shadow_active);background:var(--bar)}
+.percentBarOuter{border:var(--border_hard);box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,0 3px 3px 3px rgba(0,0,0,.35) inset,0 -5px 3px 1px rgba(255,255,255,.2) inset;background:var(--bar)}
 .active .percentBarOuter{background:repeating-linear-gradient(135deg,#eee 1px,#eee 6px,#fff 6px,#fff 11px);background-size:400% 400%;will-change:transform}
 tr:not(.peerinfo).active.downloading .percentBarOuter{background:var(--bar_active)}
-tr:not(.peerinfo).active.downloading:hover .percentBarInner{background:#47d16a}
+tr:not(.peerinfo).active.downloading:hover .percentBarInner{background:#47d16a;will-change:transform}
 .active.downloading .percentBarOuter{animation:progress 1s linear both}
 .percentBarText{opacity:0}
 .peerinfo .percentBarOuter,.peerinfo .percentBarInner{height:9px}
@@ -329,7 +333,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .dirInfo img[src$="priority.png"]{margin:0}
 .fileIcon{width:1%}
 .fileStatus{min-width:40px;text-align:center}
-.fileStatus img[src$="tick.svg"]{padding:4px;width:10px;height:10px;border-radius:50%;background:#595}
+.fileStatus img[src$="tick.svg"]{padding:4px;width:10px;height:10px;border-radius:50%;background:#171}
 .fileStatus .percentBarOuter,.fileStatus .percentBarInner,.fileStatus .percentBarText{width:80px}
 .fileStatus .percentBarOuter{margin:0 auto}
 .knownTracker input[type=radio]:disabled{opacity:.3}
@@ -368,6 +372,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 
 /* sections */
 .configTitle,.toggleview{margin:-1px;padding:8px 5px;display:block;text-transform:uppercase;font-weight:700;border:var(--border);display:block;transition:ease box-shadow .3s}
+.tab_label,.toggleview{font-weight:800}
 .toggleview{position:relative;z-index:10}
 .configTitle a{display:block}
 .configTitle a:hover,.toggleview:hover{text-decoration:none;cursor:pointer}
@@ -594,6 +599,7 @@ th img{max-height:20px}
 td.graphicStatus{background-size:24px auto}
 .snarkCommented{top:-1px;right:1px}
 .peerclient{width:90px}
+.peerCount .left,.peerCount .right{padding-top:4px}
 #torrents .infohash{width:60px}
 #screenlog li::before{margin-top:-1px}
 }

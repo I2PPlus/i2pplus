@@ -27,7 +27,7 @@ a img:hover,a img:focus{filter:saturate(200%) drop-shadow(0 0 2px #652787)}
 a:hover img,a:focus img{filter:drop-shadow(0 0 1px #652787);mix-blend-mode:normal}
 body{margin:2px;background:repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px,rgba(0,0,0,.7) 4px),var(--tile),var(--offline),#000010;background-size:100% 4px,171px 148px,0}
 body.iframed{margin:1px 0;background:var(--offline);background-size:0}
-hr{width:0;height:1px;margin:5px 0 7px 0;text-align:center;color:#3e3d4b;border:0 solid #3e3d4b;background:#3e3d4b}
+hr{width:0;height:1px;margin:5px 0 7px 0;border:0}
 img{margin:0 3px 1px 3px;vertical-align:middle;line-height:1;border:0}
 p{line-height:1.5}
 img:hover{line-height:1;border:0}
@@ -105,7 +105,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:.8}
 
 /* screenlog */
-#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:url(../ubergine/images/hat.png) no-repeat scroll right top,repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px),var(--snarkGraph) no-repeat,linear-gradient(180deg,#001,#000008);background-size:80px auto,100% 4px,calc(100% - 75px) calc(100% - 8px),100%;background-position:right -4px bottom -10px,center center,left bottom,center top;background-blend-mode:normal,overlay,normal,normal;scrollbar-color:#225 #001;scrollbar-width:thin}
+#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px),url(images/chimp.webp) no-repeat scroll right top,var(--snarkGraph) no-repeat,linear-gradient(180deg,#001,#000008);background-size:4px,96px auto,calc(100% - 90px) calc(100% - 8px),100%;background-position:center center,right -6px bottom -16px,left bottom,center top;background-blend-mode:overlay,normal,normal,normal;scrollbar-color:#225 #001;scrollbar-width:thin}
 .iframed #screenlog{margin-top:-5px}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:inset 0 0 0 1px #930}
