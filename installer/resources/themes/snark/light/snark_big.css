@@ -12,7 +12,7 @@ input[type],select,a.control{line-height:1.5}
 a.control,input[type=submit],input.accept{padding-top:2px;padding-bottom:2px;text-transform:uppercase;letter-spacing:.05em}
 a.control,input[type=submit],input.accept,th,#trackerselect tr:first-child td{font-weight:400;font-size:12pt}
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active{padding-top:4px;padding-bottom:2px;font-size:14pt;text-transform:uppercase;font-variant:normal}
-#configSection .configTitle a img{margin-left:6px}
+#tab_config a img{margin-left:6px}
 .configPanel .configTitle img{margin-top:-4px;margin-bottom:0;display:inline-block;height:20px;width:20px;mix-blend-mode:hard-light}
 #torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt;font-weight:400}
 #torrents code{font-size:9.5pt}

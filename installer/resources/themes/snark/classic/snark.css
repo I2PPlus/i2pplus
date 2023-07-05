@@ -388,7 +388,7 @@ tr:hover .txBarInner{background:linear-gradient(180deg,#efe,#dfd)}
 .configTitle a{display:inline-block;width:100%}
 .iframed .configTitle a{padding-bottom:0}
 .configPanel .configTitle,.configPanel .configTitle:hover{color:#676788;pointer-events:none}
-#configSection .configTitle{margin-bottom:-2px}
+#tab_config{margin-bottom:-2px}
 .configTitle a,.configTitle a:visited,.toggleview{outline:none;color:#676799;text-shadow:0 1px 1px var(--bg)}
 .configTitle a:hover,.configTitle a:focus,.toggleview:hover,.toggleview:hover .tab_label,.toggleview:focus,.toggleview:focus .tab_label{color:var(--hover);text-shadow:none;transition:ease box-shadow .05s}
 .configTitle a:active,input:active + .toggleview{color:#f90}

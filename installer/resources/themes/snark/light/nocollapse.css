@@ -35,7 +35,7 @@ div[class] input:checked + .toggleview,div[class] input:not(:checked) + .togglev
   background:linear-gradient(180deg,#fff,#eef);
 }
 
-#configSection .configTitle a{
+#tab_config a{
   padding:1px 0;
   margin:0 auto;
   text-align:center;
