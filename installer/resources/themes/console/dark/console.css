@@ -888,7 +888,7 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #floodfills .percentBarOuter,#floodfills .percentBarText{margin:0;width:calc(100% - 9px);vertical-align:middle}
 #floodfills .percentBarOuter{margin:-1px 0 1px;text-align:left;border:1px solid #700;box-shadow:0 0 0 1px #000,var(--highlight),inset 0 2px 2px rgba(0,0,0,.7);background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 5%,#200 5%,#200 10%) left center/100% 10%,linear-gradient(180deg,#000,#200);opacity:.9}
 #floodfills .percentBarOuter.nofail{background:#000}
-#floodfills .percentBarOuter.nofail{border:var(--border_soft)}
+#floodfills .percentBarOuter.nofail{border:var(--border)}
 #floodfills tr:hover .percentBarOuter,#floodfills tr:hover .percentBarInner{border-color:#900}
 #floodfills tr:hover .percentBarOuter.nofail,#floodfills tr:hover .nofail .percentBarInner{border-color:#252}
 #floodfills .percentBarInner{width:inherit;display:inline-block;border-right-color:#700;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,rgba(0,0,0,0)4px) repeat left center/2px 100%,linear-gradient(to right,rgba(16,0,0,.3),rgba(96,0,0,.3)72px),linear-gradient(180deg,#700 50%,#500)}
@@ -2312,7 +2312,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #routerlogs td p,#wrapperlogs td p{margin:0}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:0}
 #servicelogs{color:var(--ink)}
-#service_logs{margin:0;padding:4px 6px;width:calc(100% - 5px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;background:url(images/tank.webp) no-repeat right 18px bottom 10px/18% auto}
+#service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;background:url(images/tank.webp) no-repeat right 18px bottom 10px/18% auto}
 #wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
 #wrapperlogs tr:nth-child(2){background:rgba(0,16,0,.3)}
 #wrapperlogs tr:last-child td{padding:0}
