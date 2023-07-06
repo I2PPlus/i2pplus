@@ -148,7 +148,7 @@ tr:hover .destaddress{color:#333}
 #subscriptions h3,.headline#configure h3,.headline#addressbook h3,.headline h3{margin:-8px -5px -6px;padding:9px 5px 8px 30px}
 #subsLog.iframed pre{margin-bottom:10px}
 #subsLog h3 span{margin:2px 4px 0 0;float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:80%;opacity:.9}
-#subsLog pre{margin:0 auto -5px;padding-left:10px;width:calc(100% - 18px);line-height:16px;white-space:pre-wrap;box-shadow:var(--highlight);background:url(/themes/snark/ubergine/images/hat.png) no-repeat right 10px bottom -8px/auto 160px,repeating-linear-gradient(180deg,#fff,#fff 18px,#f2f2ff 18px,#f2f2ff 34px) left top/100%}
+#subsLog pre{margin:0 auto -5px;padding-left:10px;width:calc(100% - 18px);line-height:16px;white-space:pre-wrap;box-shadow:var(--highlight);background:url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 160px,repeating-linear-gradient(180deg,#fff,#fff 18px,#f2f2ff 18px,#f2f2ff 34px) left top/100%}
 .iframed div.help{border-radius:0 0 2px 2px}
 .iframed .headline{margin-top:6px}
 .iframed .page{margin:1px;padding:10px 10px 0;min-width:520px;overflow:hidden;background-color:transparent}

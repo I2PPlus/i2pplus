@@ -420,7 +420,7 @@ td.tabletextarea{padding:0;background:#fafaff}
 #newtabimg{margin-top:-1px;opacity:.65}
 #newtabimg:hover{opacity:.8;filter:drop-shadow(0 0 1px var(--hover))}
 #udpconnections{margin-bottom:4px}
-#warning2{background:linear-gradient(180deg,rgba(248,248,255,.5),rgba(240,240,255,.5)),url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom/auto 160px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px) #f8f8ff}
+#warning2{background:linear-gradient(180deg,rgba(248,248,255,.5),rgba(240,240,255,.5)),url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 160px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px) #f8f8ff}
 
 /* news */
 hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
@@ -572,7 +572,7 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 /* notifications */
 .error{color:#900}
 .error li{display:list-item;list-style:none;background:var(--err) no-repeat left center/16px}
-.messages{margin:15px 0;padding:15px;font-weight:700;line-height:1.3;box-shadow:var(--highlight);border:var(--border_inner);border-radius:2px;background:url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right/auto 100%,linear-gradient(90deg,#fafaff,#eef);filter:var(--filter_shadow)}
+.messages{margin:15px 0;padding:15px;font-weight:700;line-height:1.3;box-shadow:var(--highlight);border:var(--border_inner);border-radius:2px;background:url(/themes/snark/ubergine/images/hat.webp) no-repeat bottom right/auto 100%,linear-gradient(90deg,#fafaff,#eef);filter:var(--filter_shadow)}
 .messages ul{margin:0;padding:0}
 .messages li,.messages li:first-child,.error li:first-child,.error li{margin:0 10px 0 0;padding:0 0 0 24px;line-height:1.35;list-style:none;text-align:justify;font-weight:700;border:0;background:var(--err) no-repeat left center/16px}
 .messages li br+b{margin-left:6px}
@@ -583,7 +583,7 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .messages #newsDisplay a:last-child{margin-right:-5px;font-size:smaller}
 .notice{margin:0;padding:0;font-style:italic}
 .notice li{margin-right:15px;display:inline-block;list-style:none;background:var(--yes) no-repeat left center/16px}
-#config_update .messages{padding:20px 20px 20px 53px;background:var(--news) no-repeat 15px center/28px,url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right/auto 100%,var(--div_infohelp)}
+#config_update .messages{padding:20px 20px 20px 53px;background:var(--news) no-repeat 15px center/28px,url(/themes/snark/ubergine/images/hat.webp) no-repeat bottom right/auto 100%,var(--div_infohelp)}
 #events .messages{margin-bottom:0}
 #graphs .messages{margin-bottom:-5px}
 #messages li{color:var(--ink_light)}
@@ -643,7 +643,7 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #wrapperlogs{margin-bottom:5px;border-bottom-width:2px}
 #wrapperlogs .nologs{padding:11px 12px}
 #wrapperlogs tr:last-child td{padding:0}
-#wrapperlogs pre{margin:0;padding:3px 0 0 5px;width:calc(100% - 5px);max-height:600px;white-space:pre-wrap;word-wrap:break-word;overflow:auto;font-weight:500;will-change:transform}
+#service_logs{margin:0 0 -1px;padding:3px 0 0 5px;width:calc(100% - 5px);max-height:500px;white-space:pre-wrap;word-wrap:break-word;overflow:auto;font-weight:500;will-change:transform}
 #wrapperlogs p,#routerlogs p{margin:0;vertical-align:middle}
 
 /* critical */
@@ -1655,7 +1655,6 @@ p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no
 #netdblookup button.search{padding-left:22px;background:var(--search) no-repeat 6px center/12px,var(--btn)}
 #netdblookup button.search:hover{background:var(--search) no-repeat 6px center/12px,var(--btn_hover)}
 
-#wrapperlogs pre{max-height:500px;box-shadow:inset 0 0 0 1px #ddf,inset 0 0 0 2px #fff;background:url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px/auto 120px,#f3f3ff}
 .homelinkedit th,.homelinkedit td{padding-left:10px;padding-right:10px}
 .homelinkedit th:first-child,#sidebarconf th:first-child,#consolepass th:first-child{width:5%;text-align:center;font-size:0;background:var(--nuke) no-repeat center center/16px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 .homelinkedit tr:nth-last-child(n+2) td:nth-child(2){width:1%;max-width:32px;min-width:32px;text-align:center}
@@ -2242,7 +2241,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 #help td{line-height:1.5}
 #help td.infohelp,#help td.infowarn,#help td.infohelp:hover,#help td.infowarn:hover,#help #portfaq td.infohelp{padding:12px 15px 12px 50px;color:var(--ink);background-size:24px}
 #help #advancedsettings td:first-child,#help #faq td:first-child,#help #rootdir td:first-child{border-left:var(--border_inner)}
-#help #volunteer,#wrapperlogs pre{background:linear-gradient(180deg,#fafaff,rgba(248,248,255,.3)),url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px/auto 80%,repeating-linear-gradient(135deg,rgba(252,252,255,.5) 2px,rgba(221,221,255,.3) 3px,#fafaff 5px) #fafaff;box-shadow:var(--highlight)}
+#help #volunteer,#service_logs{background:linear-gradient(180deg,#fafaff,rgba(248,248,255,.3)),url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 120px,repeating-linear-gradient(135deg,rgba(252,252,255,.5) 2px,rgba(221,221,255,.3) 3px,#fafaff 5px) #fafaff;box-shadow:var(--highlight)}
 #reachabilityhelp{padding-bottom:15px}
 #sidebarhelp ul{margin-bottom:0;display:inline-block}
 #sidebarhelp ul:last-child{margin-bottom:5px}

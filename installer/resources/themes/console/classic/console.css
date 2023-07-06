@@ -1493,7 +1493,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #logs li span{margin:0 -2px;min-width:50px;display:inline-block;line-height:1.1;text-align:center;vertical-align:middle;border-radius:2px;opacity:.7}
 #criticallogs tr:first-child{display:none}
 #wrapperlogs tr:last-child td{padding:0 0 0 2px}
-#wrapperlogs pre{white-space:pre-wrap;word-break:break-all;margin:0;padding:0;width:100%;max-height:500px;overflow:auto}
+#service_logs{white-space:pre-wrap;word-break:break-all;margin:0;padding:0;width:100%;max-height:500px;overflow:auto}
 
 /* debug */
 .debug_container{margin-top:-14px;padding:10px 15px;border:var(--border)}
@@ -1862,7 +1862,7 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #portfaq tr{box-shadow:none}
 #tunnman{margin-bottom:6px}
 #volunteer .links{margin:-10px 10px 0}
-#volunteer{margin-top:20px;padding-bottom:0;background:linear-gradient(180deg,rgba(230,230,255,.5),rgba(230,230,255,.5)),url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom/auto 75%}
+#volunteer{margin-top:20px;padding-bottom:0;background:linear-gradient(180deg,rgba(230,230,255,.5),rgba(230,230,255,.5)),url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 75%}
 #volunteer ul li,#volunteer ul li:first-child{padding:2px 0}
 ul#reachability{padding-left:15px}
 
