@@ -233,7 +233,7 @@ td.trackerLink{text-align:right}
 .unchoked,.unchoked a:hover{color:#050}
 .choked,.idle{font-size:0;width:48px;display:inline-block;vertical-align:middle;text-align:center;line-height:0}
 .choked .left,.choked .right{min-width:0}
-.idle::after,.choked::after{width:8px;height:8px;display:inline-block;border-radius:50%;background:#373;content:""}
+.choked::after,.idle::after{width:8px;height:8px;display:inline-block;border-radius:50%;background:#373;content:""}
 .choked::after{background:#900}
 #torrents{margin-top:-1px}
 #torrents .RateUp,#torrents .RateDown,#torrents .torrentDownloaded,#torrents .torrentUploaded{text-align:center}
@@ -264,8 +264,8 @@ td.trackerLink{text-align:right}
 #torrents tfoot th:nth-child(n+2){text-align:center;white-space:nowrap}
 #torrents code{display:inline-block;letter-spacing:.1em;font-weight:700;color:var(--bg);border-radius:2px}
 #torrents tfoot th code{margin-left:3px;display:inline}
-#filterResults td{padding:10px 8px;text-align:center;font-weight:700;font-style:italic;border-top:var(--border);border-bottom:var(--border);box-shadow:var(--highlight);background:linear-gradient(180deg,var(--bg),#ebebff)}
-#filterResults,#filterResults td{animation:disappear .1s linear 2s both}
+#torrents .filtered:not(:hover){background:#fff!important}
+#torrents .filtered td{border-bottom:var(--border_soft)!important}
 
 /* torrent info */
 #torrentInfo{margin-bottom:0;border-bottom:var(--border);background:var(--bg3)}
