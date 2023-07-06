@@ -400,7 +400,7 @@ public class I2PSnarkServlet extends BasicServlet {
         File override = new File(themeBase + "override.css");
         int rnd = _context.random().nextInt(3);
         if (!isStandalone() && rnd == 0 && _manager.getTheme().equals("light")) {
-            out.write("<style type=text/css>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right center,repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat,var(--th);background-size:66px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right 5px bottom,center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
+            out.write("<style type=text/css>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom,repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat,var(--th);background-size:72px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
         }
         if (!isStandalone() && useSoraFont()) {
             out.write("<link rel=stylesheet type=text/css href=/themes/fonts/Sora.css>");
