@@ -81,11 +81,8 @@ table{background:#fff}
 td[colspan="2"] select#profile{width:calc(50% - 15px)}
 textarea[name="accessList"]{padding:4px 8px;height:32px}
 textarea[name="accessList"]:focus{height:80px}
-table#statusMessages textarea,table#statusMessages textarea:active{margin:0;height:80px;font-size:9pt;border:0;box-shadow:none}
 textarea{line-height:1.5;font-size:.9;border:var(--border);border-radius:2px;box-shadow:inset 1px 1px 1px #ddd;background:#fff}
 textarea:focus{box-shadow:inset 0 0 0 1px #89f,0 0 1px rgba(136,153,255,.4)}
-textarea#statusMessages{margin:0;padding:2px 4px 2px 8px;word-break:break-all;color:#070;border:0;border-radius:0;box-shadow:none}
-textarea#statusMessages:focus{caret-color:transparent}
 .editDisabled input[type=radio],.editDisabled label{cursor:not-allowed}
 .editDisabled input[type=radio]:checked{opacity:1}
 .editDisabled input[type=radio]:not(:checked){opacity:.4}
@@ -157,6 +154,11 @@ th.tunnelControl{text-align:center}
 #throttler input[type=text]{width:80px}
 #tunnelMessages{padding:0}
 #websiteName,#privKeyFile,#targetHost,.host{min-width:250px}
+
+/* screenlog */
+#statusMessages,#statusMessages:active{margin:0;height:80px;font-size:9pt;border:0;box-shadow:none}
+#statusMessages{margin:0;padding:2px 4px 2px 8px;word-break:break-all;color:#070;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 1px rgba(220,220,255,.4) inset;background:url(../../snark/ubergine/images/hat.webp) no-repeat right bottom/auto 95%,linear-gradient(180deg,#f2f2ff,#fff)}
+#statusMessages:focus{caret-color:transparent}
 
 /* buttons */
 button,input[type=submit],input[type="reset"],a.control{display:inline-block;font-family:var(--bodyfont);font-size:9pt;box-shadow:var(--btn_shadow);cursor:pointer}
