@@ -150,15 +150,10 @@ a.control:hover{color:var(--ink)}
 #oldName{width:30%;min-width:310px}
 #oldName{width:45%}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
-#statusMessages,#statusMessages:active{margin:0;height:80px;border:0;box-shadow:none}
-#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:500 8.5pt var(--monospaced);color:#070;border:0;border-radius:0;box-shadow:none;filter:none}
-#statusMessages:focus{background:#fafaff;box-shadow:none}
-#statusMessages::selection{color:#fff;background:#070}
 #targetHost,.host{width:30%;min-width:250px}
 #targetPort{margin-right:10px}
 #tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#encryptMode,#profile,#sigType{margin:5px;width:calc(100% - 10px)}
 #tunnelDepth,#tunnelVariance,#tunnelQuantity,#tunnelBackupQuantity,#tunnelDepthOut,#tunnelVarianceOut,#tunnelQuantityOut,#tunnelBackupQuantityOut,#localDestination,#customOptions,#name,#description,textarea[name="accessList"]{margin:0;width:100%;text-align:left}
-#tunnelMessages{padding:0}
 
 /* index */
 .newTunnel{padding:0;text-align:right;background:#fff}
@@ -210,6 +205,11 @@ th.tunnelControl{text-align:center}
 #screenlog .clearlog{border-left:var(--border_inner);background:rgba(255,255,255,.3) var(--close) no-repeat center center/16px}
 #screenlog .clearlog:hover{background:rgba(255,255,255.5) var(--close_hover) no-repeat center center/16px}
 #screenlog .clearlog:active{background:#f2f2f2 var(--close) no-repeat center center/14px}
+#statusMessages,#statusMessages:active{margin:0;height:80px;border:0;box-shadow:none}
+#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:500 8.5pt var(--monospaced);color:#070;border:0;border-radius:0;box-shadow:none;background:none;filter:none}
+#statusMessages:focus{background:#fafaff;box-shadow:none}
+#statusMessages::selection{color:#fff;background:#070}
+#tunnelMessages{padding:0;box-shadow:var(--highlight),0 0 2px 1px rgba(220,220,255,.5) inset;background:#fff url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 95%}
 
 /* edit */
 input[type=text].filemanager{background:#fafaff var(--files) no-repeat 8px center/15px}
