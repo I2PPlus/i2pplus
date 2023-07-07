@@ -434,7 +434,6 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 
 /* panel titles */
 .configPanel .configTitle{padding:4px 1px 3px;min-width:500px;font:bold 10pt var(--bodyfont);color:#f7e3fc;text-transform:uppercase;letter-spacing:.15em;text-shadow:0 0 1px #000;border:var(--border_hard);border-bottom:1px solid #212;border-top:none;box-shadow:inset 0 0 1px #545;background:linear-gradient(180deg,#545,#3d303d 50%,#101 51%,#190019 51%,#0d000d);filter:drop-shadow(0 1px 1px rgba(16,0,16,.5));pointer-events:none}
-.configPanel .configTitle img{animation:slide-right .25s linear forwards}
 .configTitle,.toggleview{margin:0 0 -3px;display:inline-block}
 .mainsection .configTitle{margin:-11px 0 -5px;padding:7 15px 6px;font-size:120%}
 .mainsection .toggleview{margin-top:-10px;display:block}
@@ -442,7 +441,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #tab_config:hover,.toggleview:hover,input:focus+.toggleview{background:linear-gradient(180deg,#656,#323 51%,#202 51%,#101);box-shadow:inset 0 0 1px #939}
 #tab_config:active,.toggleview:active{box-shadow:inset 0 0 1px #7f2f7f,inset 4px 4px 3px 3px rgba(0,0,0,.6);background:linear-gradient(0deg,#212,#101)}
 #tab_comments{margin-top:-1px}
-.iframed .configPanel .configTitle,.iframed .configPanel .configTitle:hover,.iframed .configPanel .configTitle:active{box-shadow:inset 0 0 1px #868}
+.iframed .configPanel .configTitle{box-shadow:inset 0 0 1px #868}
 .iframed #tab_config,.iframed .toggleview{border:1px solid #878;border-bottom:1px solid #767;border-top:none;box-shadow:inset 0 0 1px #868,inset 0 -2px 0 2px rgba(0,0,0,.3);filter:drop-shadow(0 1px 2px #101);transition:none}
 .iframed #configSection,.iframed .configPanel#trackers,.iframed .mainsection#snarkInfo{margin-bottom:0}
 .iframed #tab_config:hover,.iframed .toggleview:hover,.iframed input:focus+.toggleview{box-shadow:inset 0 0 1px #434,inset 0 -2px 0 2px rgba(0,0,0,.5)}
@@ -1029,7 +1028,8 @@ td.peerCount:empty::after{display:none}
 .canhide{display:none}
 .configPanel .configTitle{font-size:11pt}
 .dirInfoComplete{display:none}
-.iframed #pagenavtop{margin-top:1px}
+.iframed #pagenavtop{margin:1px 0 -2px}
+.iframed #torrentDisplay~#pagenavtop{margin:1px 0 2px}
 .snarkNav.nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:32px}
 .tab_label::after,#tab_addtorrent .tab_label::after,#tab_newtorrent .tab_label::after,#tab_config .tab_label::after,#tab_comments .tab_label::after,#tab_files .tab_label::after,#tab_torrentedit .tab_label::after,#tab_addtorrent:hover .tab_label::after,#tab_newtorrent:hover .tab_label::after,#tab_config:hover .tab_label::after,#tab_comments:hover .tab_label::after,#tab_torrentedit:hover .tab_label::after{width:15px;height:15px;background-size:13px}
 .torrentName a{max-width:320px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1205,7 +1205,8 @@ select[name$=".quantity"],select[name$=".length"]{min-width:95px}
 body,th,td,#commentInfo textarea,input[type=submit],input[type=reset],select,select option,button,a.control,#torrents a:not(#debugMode){font-size:9.5pt}
 th{font-size:9pt;background:#101}
 .debugConnection{margin:2px 4px;padding:1px 3px;display:inline-block;font-weight:700;color:#fff;border-radius:2px;box-shadow:0 0 0 1px #101;background:#003000}
-.iframed #pagenavtop{margin:2px 0 1px}
+.iframed #pagenavtop{margin:2px 0 -1px}
+.iframed #torrentDisplay~#pagenavtop{margin:2px 0 1px}
 .percentDownloaded{pointer-events:none}
 .snarkNav{font-size:10.5pt}
 .snarkNav:first-child,.snarkNav[href="/i2psnark/"]:last-child{padding-left:29px;background-position:8px center}
@@ -1236,8 +1237,7 @@ td.trackerLink img{padding:4px;width:18px;height:18px}
 th.graphicStatus{padding-left:4px}
 th,td,.choked,.unchoked{letter-spacing:0}
 .configOption::after{height:40px}
-.configPanel .configTitle,.configPanel .configTitle:hover{padding:6px 5px 5px;min-width:600px;font-size:11pt}
-.configPanel .configTitle img,#trackers .configTitle img{margin:-2px -2px 0 0}
+.configPanel .configTitle{padding:6px 5px 5px;min-width:600px;font-size:11pt}
 .configPanel textarea{height:30px}
 .debugConnStat{margin-right:5px}
 .debuginfo td{font-family:var(--monospaced);font-size:9pt;line-height:1.2}
@@ -1288,7 +1288,7 @@ th,td,.choked,.unchoked{letter-spacing:0}
 
 @media (min-width:1500px){
   @supports not (-moz-appearance:none){
-    .configPanel .configTitle,.configPanel .configTitle:hover{font-size:12.5pt}
+    .configPanel .configTitle{font-size:12.5pt}
     select{padding:6px 18px 6px 8px}
   }
 }
