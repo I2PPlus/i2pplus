@@ -105,7 +105,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:.8}
 
 /* screenlog */
-#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px) center center/4px,url(images/chimp.webp) no-repeat right -6px bottom -16px/96px auto,var(--snarkGraph) no-repeat left bottom,linear-gradient(180deg,#001,#000008);scrollbar-color:#225 #001;scrollbar-width:thin}
+#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px) center center/4px,url(images/chimp.webp) no-repeat right -6px bottom -16px/96px auto,var(--snarkGraph) no-repeat left bottom,linear-gradient(180deg,#001,#000008);scrollbar-color:#225 #001;scrollbar-width:thin;contain:paint}
 .iframed #screenlog{margin-top:-5px}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:inset 0 0 0 1px #930}
@@ -434,7 +434,8 @@ textarea:focus{color:#7166ff}
 .pagenavcontrols:hover img:not(.disable){mix-blend-mode:normal;opacity:.8}
 .pagenavcontrols img:not(.disable):hover{opacity:1}
 .pagenavcontrols img.disable{mix-blend-mode:luminosity;opacity:.3}
-#pagenavtop.pagenavcontrols{margin-bottom:-1px;padding:6px 0 4px;border:var(--border);background:linear-gradient(180deg,#001,#00000d)}
+#pagenavtop{margin:9px 0 -1px;padding:6px 0 4px;border:var(--border);background:linear-gradient(180deg,#001,#00000d)}
+#torrentDisplay~#pagenavtop{margin-top:-1px}
 #pagenavbottom .pagenavcontrols{margin:0;padding:5px 0 3px;border-top:var(--border)}
 .pagenavcontrols a{display:inline;background:var(--badge)}
 #pagenav{font-weight:700}
@@ -453,13 +454,11 @@ textarea:focus{color:#7166ff}
 #pagenavcontrols:hover #pagecount{color:#dfdfff;mix-blend-mode:normal}
 
 /* section panels */
-
 #createSection table,#addSection table{margin-left:auto;margin-right:auto;width:85%}
 #createSection td:first-child,#addSection td:first-child{padding-right:5px;padding-left:5px;width:120px;text-align:right;white-space:nowrap;font-weight:700}
 #createSection td:nth-child(n+2),#addSection td:nth-child(n+2){text-align:left}
 #createSection #trackerselect td:nth-child(n+2){text-align:center}
 #addSection{position:relative}
-
 #createSection #trackerselect{margin:8px auto 4px 5px;width:calc(100% - 150px);border:1px solid #120f35}
 #trackerselect tr{border-bottom:1px solid #120f35;background:#040408}
 #trackerselect tr:first-child td{font-weight:700;border-bottom:1px solid #120f35;background:linear-gradient(180deg,#080818,#000)}
@@ -469,7 +468,6 @@ textarea:focus{color:#7166ff}
 #trackerselect td:first-child,#trackerselect td:last-child{width:40%;font-weight:400}
 #createSection #trackerselect td:last-child{text-align:left}
 #trackerselect input{margin:3px}
-
 .configPanel td:first-child{font-weight:700}
 .trackerconfig th{padding:7px 5px;min-width:50px}
 .trackerconfig th:first-child{background:var(--nuke) no-repeat scroll center center/14px,var(--title)}

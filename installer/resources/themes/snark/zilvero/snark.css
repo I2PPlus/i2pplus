@@ -215,8 +215,8 @@ tr:hover .magnetLabel{opacity:1}
 .active.downloading .torrentAction,.active.downloading:hover .torrentAction,.active.RX .torrentAction,.active.RX:hover .torrentAction{background:var(--td_dl);animation:ease-in-out downloading .5s 3s forwards}
 .active.seeding .percentBarComplete{background:linear-gradient(90deg,rgba(0,0,0,0) 49%,#b39,rgba(0,0,0,0) 51%) #7e70a9;background-size:200%,100%}
 .active.seeding:hover .percentBarComplete{background:linear-gradient(90deg,rgba(0,0,0,0) 49%,#d5a,rgba(0,0,0,0) 51%) #7259c0;background-size:200%,100%}
-.choked .left,.choked .right,.idle .left,.idle .right{display:none;text-align:center;font-size:0}
-.choked,.idle,.unchoked{width:48px}
+.choked .left,.choked .right,.idle .left,.idle .right{display:none!important;text-align:center;font-size:0}
+.choked,.idle,.unchoked{width:48px;text-align:center}
 .choked::after,.idle::after{margin:0 20px;width:8px;height:8px;display:inline-block;border-radius:50%;background:#373;content:""}
 .choked::after{background:#900}
 .graphicStatus{width:48px}
@@ -273,7 +273,7 @@ tr:hover .magnetLabel{opacity:1}
 #torrents td.torrentName{padding-left:8px;width:99%;font-weight:700;white-space:normal}
 #torrents td img{margin:-1px 0;vertical-align:middle}
 #torrents tfoot tr:first-child th:nth-child(n+2){text-align:center;white-space:nowrap}
-#torrents tfoot th{padding:8px 5px;border-top:none;border-bottom:none;background:#fff}
+#torrents tfoot th{padding:7px 5px;border-top:none;border-bottom:none;background:#fff}
 #torrents .infohash{padding:2px 4px 2px 18px;display:inline-block;border-radius:1px;box-shadow:0 0 0 1px #7a7,var(--highlight);background:var(--hash) no-repeat 4px center/12px,linear-gradient(180deg,#efe,#e6ffe6)}
 #torrents .RateDown,#torrents .RateUp,#torrents .torrentETA{padding:2px 8px;min-width:80px;text-align:center;font-weight:700}
 #totals{margin-left:3px;white-space:nowrap}
