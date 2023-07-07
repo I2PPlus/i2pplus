@@ -777,7 +777,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         oldFile.delete();
         if (_log.shouldWarn())
-            _log.warn("Config migrated from " + oldFile + " to " + dir);
+            _log.warn("Legacy I2PSnark configuration file migrated from " + oldFile + " to " + dir);
         return dir;
     }
 
@@ -1551,12 +1551,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (_util.showStatusFilter() != showStatusFilter) {
             _config.setProperty(PROP_SHOW_STATUSFILTER, Boolean.toString(showStatusFilter));
-            if (showStatusFilter)
-                addMessage(_t("Torrent filter bar enabled."));
-            else
-                addMessage(_t("Torrent filter bar disabled."));
-            _util.setShowStatusFilter(showStatusFilter);
-            changed = true;
+            if (getRefreshDelaySeconds() > 0) {
+                if (showStatusFilter)
+                    addMessage(_t("Torrent filter bar enabled."));
+                else
+                    addMessage(_t("Torrent filter bar disabled."));
+                _util.setShowStatusFilter(showStatusFilter);
+                changed = true;
+            } else  if (showStatusFilter) {
+                addMessage(_t("Cannot enable filter bar when torrent refresh is disabled."));
+                changed = false;
+            }
         }
 
         if (_util.enableLightbox() != enableLightbox) {
@@ -1954,11 +1959,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             torrent.startTorrent();
             addMessageNoEscape(_t("Torrent added and started: {0}", link));
             if (!_context.isRouterContext())
-                System.out.println(_t("Torrent added and started: {0}", torrent.getBaseName()));
+                System.out.println(" • " + _t("Torrent added and started: {0}", torrent.getBaseName()));
         } else {
             addMessageNoEscape(_t("Torrent added: {0}", link));
             if (!_context.isRouterContext())
-                System.out.println(_t("Torrent added: {0}", torrent.getBaseName()));
+                System.out.println(" • " + _t("Torrent added: {0}", torrent.getBaseName()));
         }
         return true;
     }

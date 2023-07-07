@@ -643,7 +643,7 @@ public class I2PSnarkServlet extends BasicServlet {
         final long stats[] = new long[6];
         String peerParam = req.getParameter("p");
         String stParam = req.getParameter("st");
-
+        int refresh = _manager.getRefreshDelaySeconds();
         List<Snark> snarks = getSortedSnarks(req);
         boolean isForm = _manager.util().connected() || !snarks.isEmpty();
         boolean showStatusFilter = _manager.util().showStatusFilter();
@@ -652,10 +652,10 @@ public class I2PSnarkServlet extends BasicServlet {
               out.write("<form id=torrentlist class=filterbarActive action=\"_post\" method=POST target=processForm>\n");
             else
               out.write("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
-            if (showStatusFilter) {
+            // don't display filter bar if refresh disabled
+            if (showStatusFilter && refresh > 0) {
                 // selective display of torrents based on status
                 // this should probably be done via a query string, but for now prototyping in js
-                // then we can show all matches, not just those on page, and paginate as required
                 if (!snarks.isEmpty() && _manager.util().connected()) {
                     // ensure we hide torrent filter bar (if enabled) and js is disabled
                     out.write("<noscript><style type=text/css>.script{display:none}</style></noscript>\n");
@@ -699,7 +699,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam)));
             } catch (NumberFormatException nfe) {}
         }
-//        int pageSize = Math.max(_manager.getPageSize(), 5);
         int pageSize = _manager.getPageSize();
         String ps = req.getParameter("ps");
         if (ps == "null") {
@@ -710,7 +709,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (pageSize < 10)
             pageSize = 10;
-
         // move pagenav here so we can align it nicely without resorting to hacks
         if (isForm && total > 0 && (start > 0 || total > pageSize)) {
             out.write("<div class=pagenavcontrols id=pagenavtop>");
@@ -943,7 +941,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</a></span>");
         out.write("</th>\n");
         out.write("<th class=RateUp align=right>");
-        // FIXME only show icon when total up rate > 0 or no choked peers
+        // FIXME only show icon when total up rate > 0 and no choked peers
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isUploading = false;
             int end = Math.min(start + pageSize, snarks.size());
