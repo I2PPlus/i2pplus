@@ -674,7 +674,6 @@ form[action="events"]{background:#000}
 a[name="chelp"]:hover,a[name="help"]:hover,a[name="chelp"]:active,a[name="help"]:active{color:var(--ink);text-decoration:none;text-shadow:none}
 h3[id$="con"]{margin-bottom:-2px;border-radius:0;padding:8px 10px;font-size:10pt;word-spacing:.1em;letter-spacing:.08em;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%);border:var(--border)}
 h3[id="udpcon"]{width:auto}
-pre#activetransports{margin:0 20px 0 0;padding:15px 5px 5px 15px;width:calc(100% - 42px);border:var(--border);background:#000}
 span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .backlogged{line-height:0}
 .cells tbody tr:hover td,#profiles tbody tr:hover td{box-shadow:none}
@@ -839,7 +838,7 @@ td.ipv6{width:1%;max-width:24px}
 #view_profile .viewprofile{margin-right:6px}
 #view_profile .identicon{margin:0;width:27px;height:27px;position:absolute;top:2px;right:2px}
 #viewprofile td{padding:0}
-#viewprofile pre,pre#activetransports{margin:0;padding:20px 20px 0;width:calc(100% - 48px);line-height:20px;letter-spacing:.05em;text-shadow:var(--textshadow);border-left:7px solid #242;background:repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0,rgba(0,8,0,.6) 20px,rgba(0,20,0,.6) 20px,rgba(0,20,0,.6) 40px);background-size:100% 40px}
+#viewprofile pre,pre#activetransports{margin:0;padding:20px 20px 0;width:calc(100% - 48px);line-height:20px;letter-spacing:.05em;text-shadow:var(--textshadow);border:var(--border);border-left:7px solid #242;background:var(--silhouette) no-repeat right 12px bottom,repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0,rgba(0,8,0,.6) 20px,rgba(0,20,0,.6) 20px,rgba(0,20,0,.6) 40px);background-size:auto 90%,100% 40px}
 #viewprofile span{margin:-26px -1px -1px 0;padding:5px;float:right;border:var(--border);background:#000}
 #profiles_overview{margin-bottom:9px;background:url(../images/profile.svg) no-repeat 15px center/28px,var(--msg)}
 #peerprofiles+h3{margin-top:0}
@@ -888,7 +887,7 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #floodfills .percentBarOuter,#floodfills .percentBarText{margin:0;width:calc(100% - 9px);vertical-align:middle}
 #floodfills .percentBarOuter{margin:-1px 0 1px;text-align:left;border:1px solid #700;box-shadow:0 0 0 1px #000,var(--highlight),inset 0 2px 2px rgba(0,0,0,.7);background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 5%,#200 5%,#200 10%) left center/100% 10%,linear-gradient(180deg,#000,#200);opacity:.9}
 #floodfills .percentBarOuter.nofail{background:#000}
-#floodfills .percentBarOuter.nofail{border:var(--border_soft)}
+#floodfills .percentBarOuter.nofail{border:var(--border)}
 #floodfills tr:hover .percentBarOuter,#floodfills tr:hover .percentBarInner{border-color:#900}
 #floodfills tr:hover .percentBarOuter.nofail,#floodfills tr:hover .nofail .percentBarInner{border-color:#252}
 #floodfills .percentBarInner{width:inherit;display:inline-block;border-right-color:#700;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,rgba(0,0,0,0)4px) repeat left center/2px 100%,linear-gradient(to right,rgba(16,0,0,.3),rgba(96,0,0,.3)72px),linear-gradient(180deg,#700 50%,#500)}
@@ -2312,7 +2311,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #routerlogs td p,#wrapperlogs td p{margin:0}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:0}
 #servicelogs{color:var(--ink)}
-#service_logs{margin:0;padding:4px 6px;width:calc(100% - 5px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;background:url(images/tank.webp) no-repeat right 18px bottom 10px/18% auto}
+#service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;background:url(images/tank.webp) no-repeat right 18px bottom 10px/18% auto}
 #wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
 #wrapperlogs tr:nth-child(2){background:rgba(0,16,0,.3)}
 #wrapperlogs tr:last-child td{padding:0}
@@ -2382,7 +2381,7 @@ p+.twocol{margin:10px 25px}
 ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #advancedsettings,#browserconfig,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
 #changelog h2{margin:0 0 -11px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
-#changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);max-height:600px;overflow-y:scroll;border-left:var(--border);border-right:var(--border);background:#000}
+#changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);max-height:600px;overflow-y:scroll;font-size:10pt;text-shadow:1px 1px 1px rgba(0,0,0,.9);border-left:var(--border);border-right:var(--border);background:#000 url(images/tank.webp) no-repeat right 18px bottom 10px/180px auto}
 #changelog:hover pre{will-change:transform}
 #configinfo .infowarn{display:none}
 #configinfo{margin:0 auto 0;width:calc(100% - 20px);border:0}
@@ -2393,7 +2392,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #fullhistory a:hover{color:var(--hover)}
 #fullhistory a::before{width:19px;height:20px;display:inline-block;vertical-align:middle;background:var(--eye) no-repeat left 45%/16px;content:""}
 #fullhistory a:hover::before{background-image:var(--eye_hover)}
-#fullhistory{margin-top:-12px;margin-bottom:9px;padding:6px;position:relative;z-index:999;text-align:right;border:var(--border);background:#000}
+#fullhistory{margin-top:-14px;margin-bottom:10px;padding:10px;position:relative;z-index:999;text-align:right;border:var(--border);background:#000}
 #glossary b{font-size:110%}
 #help #advancedsettings{padding:0 15px 10px}
 #help #advancedsettings h2{margin:-1px -16px 15px}
@@ -2408,6 +2407,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #help td ul{margin:10px 10px 0}
 #help #terms{box-shadow:none}
 #i2pupdates td.infohelp code{user-select:all}
+#legal{background:#000 url(images/chimp.webp) no-repeat bottom right/180px}
 #advancedsettings h2,#browserconfig h2,#configurationhelp h2,#faq h2,#filterlist h2,#glossary h2,#legal h2,#newuserguide h2,#reachabilityhelp h2,#reseedhelp h2,#sidebarhelp h2,#themeoverride h2,#troubleshoot h2,#tunnman h2,#volunteer h2,#webhosting h2{margin:-1px -21px 10px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%)}
 #newuserguide div[lang]{margin:0;padding:0;box-shadow:none}
 #newuserguide{padding-bottom:20px}
@@ -2771,7 +2771,7 @@ th{font-size:8pt}
 @media (min-width:1400px){
 .statsName{border:1px solid #131}
 #statlist{padding:10px;columns:auto 540px;column-gap:10px;text-align:center}
-#help #changelog pre{margin-left:0;padding-left:10px;width:calc(100% - 22px);overflow-y:hidden;font-size:10pt;columns:515px auto;column-gap:30px;column-rule:var(--dotted)}
+#help #changelog pre{margin-left:0;padding-left:10px;width:calc(100% - 22px);overflow-y:hidden;font-size:10pt;columns:515px auto;column-gap:30px;column-rule:var(--dotted);background-size:300px}
 #help .confignav,#debug .confignav{position:sticky;top:0}
 #profiles #banlist{margin:3px -5px 0;padding:10px 5px;border:0}
 #statsWrap{margin-bottom:-10px}
@@ -2840,7 +2840,7 @@ span#newtab{margin-top:4px}
 #error500 #sb_logo img{margin-bottom:-5px}
 #error500 #warning2.sorry{margin-top:-1px}
 #floodfills th:first-child,#floodfills td:first-child{padding-right:3px;width:58px}
-#fullhistory{margin-top:-13px;text-align:right}
+#fullhistory{margin-top:-14px;text-align:right}
 #graphdisplay{margin-top:5px}
 #help .confignav{padding:0;position:sticky;top:-2px;z-index:999;will-change:transform}
 #help .tab,#help .tab2{margin-top:-1px;font-size:90%}

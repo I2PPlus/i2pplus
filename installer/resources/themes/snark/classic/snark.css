@@ -139,7 +139,7 @@ a.controld{display:none}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown) + a[href="/i2psnark"]:hover{opacity:.8}
 
 /* screenlog */
-#screenlog{margin:0;padding:3px 5px;width:auto;height:56px;overflow:hidden;text-align:left;border-bottom:var(--border);box-shadow:inset 0 0 0 1px #f2f2ff;background:url(images/hat.png) right -4px bottom -10px no-repeat,var(--snarkGraph) no-repeat,linear-gradient(180deg,rgba(240,240,255,.7),rgba(232,232,255,.7));background-size:auto 80px,calc(100% - 72px) calc(100% + 20px),100%;background-position:right -4px bottom -10px,left bottom 1px,center center,center top;background-blend-mode:normal,soft-light,normal}
+#screenlog{margin:0;padding:3px 5px;width:auto;height:56px;overflow:hidden;text-align:left;border-bottom:var(--border);box-shadow:inset 0 0 0 1px #f2f2ff;background:url(../ubergine/images/hat.webp) right -4px bottom -10px no-repeat,var(--snarkGraph) no-repeat,linear-gradient(180deg,rgba(240,240,255,.7),rgba(232,232,255,.7));background-size:auto 80px,calc(100% - 88px) calc(100% + 20px),100%;background-position:right -4px bottom -10px,left bottom 1px,center center,center top;background-blend-mode:normal,soft-light,normal}
 #screenlog:hover,#screenlog:focus{overflow:auto;overflow-x:hidden}
 #screenlog:focus{box-shadow:inset 0 0 0 1px #f90}
 #screenlog ul{margin:-2px 0 2px 0;padding:0 0 0 14px;list-style:none}
@@ -233,7 +233,7 @@ td.trackerLink{text-align:right}
 .unchoked,.unchoked a:hover{color:#050}
 .choked,.idle{font-size:0;width:48px;display:inline-block;vertical-align:middle;text-align:center;line-height:0}
 .choked .left,.choked .right{min-width:0}
-.idle::after,.choked::after{width:8px;height:8px;display:inline-block;border-radius:50%;background:#373;content:""}
+.choked::after,.idle::after{width:8px;height:8px;display:inline-block;border-radius:50%;background:#373;content:""}
 .choked::after{background:#900}
 #torrents{margin-top:-1px}
 #torrents .RateUp,#torrents .RateDown,#torrents .torrentDownloaded,#torrents .torrentUploaded{text-align:center}
@@ -264,8 +264,8 @@ td.trackerLink{text-align:right}
 #torrents tfoot th:nth-child(n+2){text-align:center;white-space:nowrap}
 #torrents code{display:inline-block;letter-spacing:.1em;font-weight:700;color:var(--bg);border-radius:2px}
 #torrents tfoot th code{margin-left:3px;display:inline}
-#filterResults td{padding:10px 8px;text-align:center;font-weight:700;font-style:italic;border-top:var(--border);border-bottom:var(--border);box-shadow:var(--highlight);background:linear-gradient(180deg,var(--bg),#ebebff)}
-#filterResults,#filterResults td{animation:disappear .1s linear 2s both}
+#torrents .filtered:not(:hover){background:#fff!important}
+#torrents .filtered td{border-bottom:var(--border_soft)!important}
 
 /* torrent info */
 #torrentInfo{margin-bottom:0;border-bottom:var(--border);background:var(--bg3)}
@@ -388,7 +388,7 @@ tr:hover .txBarInner{background:linear-gradient(180deg,#efe,#dfd)}
 .configTitle a{display:inline-block;width:100%}
 .iframed .configTitle a{padding-bottom:0}
 .configPanel .configTitle,.configPanel .configTitle:hover{color:#676788;pointer-events:none}
-#configSection .configTitle{margin-bottom:-2px}
+#tab_config{margin-bottom:-2px}
 .configTitle a,.configTitle a:visited,.toggleview{outline:none;color:#676799;text-shadow:0 1px 1px var(--bg)}
 .configTitle a:hover,.configTitle a:focus,.toggleview:hover,.toggleview:hover .tab_label,.toggleview:focus,.toggleview:focus .tab_label{color:var(--hover);text-shadow:none;transition:ease box-shadow .05s}
 .configTitle a:active,input:active + .toggleview{color:#f90}

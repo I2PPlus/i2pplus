@@ -166,7 +166,7 @@ input[type=text],input[type=password],textarea{color:var(--ink_darker);-webkit-t
 input[type=text]:focus,textarea:focus{color:var(--ink)}
 textarea{margin-left:4px;margin-right:4px;resize:none;box-sizing:border-box;font:bold 9pt var(--monospaced);border:1px solid #302b74;background:#001}
 textarea:focus{color:var(--ink);border:1px solid #6466a5;box-shadow:0 0 0 1px rgba(101,39,135,.5),0 0 2px 2px #202;background:#000;transition:ease filter .3s 0s}
-textarea#statusMessages,textarea#statusMessages:active,textarea#statusMessages:focus{margin:0;padding:2px 4px;width:100%;height:80px;font-size:8.5pt;color:#69f;border:0;border-radius:0;box-shadow:var(--highlight)}
+#statusMessages,#statusMessages:active,#statusMessages:focus{margin:0;padding:2px 4px;width:100%;height:80px;font-size:8.5pt;color:#69f;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 2px rgba(16,16,96,.4) inset;background:url(../dark/images/chimp.webp) no-repeat right bottom/auto 95%,linear-gradient(180deg,#000,#001)}
 .freetext[type=text][readonly],.freetext[type=text][readonly]:focus{color:#669;opacity:.8;cursor:default;border:1px solid #302b74;box-shadow:inset 2px 2px 1px #000;background:#000}
 .editDisabled input[type=radio],.editDisabled label{cursor:not-allowed}
 .editDisabled input[type=radio]:checked{opacity:1}
@@ -345,7 +345,7 @@ th{padding:7px 5px}
 @media (min-width:1300px){
 body,td,.control,select,input,textarea{font-size:10pt}
 td{padding:7px 5px}
-textarea#statusMessages,textarea#statusMessages:active,textarea#statusMessages:focus{font-size:9pt}
+#statusMessages,#statusMessages:active,#statusMessages:focus{font-size:9pt}
 #localDestination,.authentication{height:34px}
 }
 

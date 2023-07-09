@@ -111,7 +111,7 @@ input:focus::placeholder{opacity:0}
 label:not([disabled]):hover{color:var(--ink)}
 table{width:100%;border-spacing:0}
 th{font-size:9pt;font-weight:700;color:var(--ink_light)}
-textarea{width:100%;resize:none;font:500 9pt var(--monospaced);color:var(--ink_light);border:var(--border);box-shadow:var(--shadow_input);scrollbar-color:#acafb9 #f2f2ff}
+textarea{padding:4px 8px;width:100%;resize:none;font:500 9pt var(--monospaced);color:var(--ink_light);border:var(--border);box-shadow:var(--shadow_input);scrollbar-color:#acafb9 #f2f2ff}
 textarea:focus{color:var(--ink);box-shadow:var(--btn_shadow_active),0 0 0 1px rgba(255,96,0,.6)}
 select{padding:5px 20px 5px 5px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;font-family:var(--bodyfont);color:var(--ink_light);border:var(--border);border-radius:3px;box-shadow:var(--btn_shadow);background:var(--dropdown) no-repeat right 8px center/10px,var(--btn);cursor:pointer;appearance:none}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{border:var(--border);box-shadow:var(--highlight);background:var(--btn);color:var(--disabled);cursor:default;opacity:.7}

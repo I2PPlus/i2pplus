@@ -105,7 +105,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:.8}
 
 /* screenlog */
-#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px),url(images/chimp.webp) no-repeat scroll right top,var(--snarkGraph) no-repeat,linear-gradient(180deg,#001,#000008);background-size:4px,96px auto,calc(100% - 90px) calc(100% - 8px),100%;background-position:center center,right -6px bottom -16px,left bottom,center top;background-blend-mode:overlay,normal,normal,normal;scrollbar-color:#225 #001;scrollbar-width:thin}
+#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px) center center/4px,url(images/chimp.webp) no-repeat right -6px bottom -16px/96px auto,var(--snarkGraph) no-repeat left bottom,linear-gradient(180deg,#001,#000008);scrollbar-color:#225 #001;scrollbar-width:thin;contain:paint}
 .iframed #screenlog{margin-top:-5px}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:inset 0 0 0 1px #930}
@@ -368,7 +368,7 @@ video::-webkit-media-controls-timeline{padding:0 16px 16px}
 /* section headings */
 .snarkNewTorrent{font-size:9pt}
 .configTitle,.toggleview{margin:-1px 0 -5px 0;padding:4px 1px;min-width:300px;display:inline-block;letter-spacing:.15em;font-size:10pt;font-weight:700;text-align:center;text-shadow:0 0 1px #000;border:var(--border);border-radius:0 0 2px 2px;box-shadow:var(--highlight),inset 0 0 1px 1px #224;background:var(--tab)}
-#configSection .configTitle,.toggleview{font-size:0}
+#tab_config,.toggleview{font-size:0}
 .configTitle:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{box-shadow:inset 0 0 0 1px #101;background:var(--tab_hover)}
 .configTitle:active,.toggleview:active{box-shadow:var(--highlight),inset 0 0 0 1px #000,inset 3px 3px 3px 3px #000;background:var(--tab_active);transition:ease all .01s}
 .configPanel .configTitle{box-shadow:var(--highlight);background:var(--title);background-size:4px 100%,100%;pointer-events:none}
@@ -391,8 +391,8 @@ input:checked+.toggleview:active .tab_label::after{transform:rotate(-90deg);tran
 #tab_config .tab_label:hover::after{background:var(--config) no-repeat scroll center center/16px,linear-gradient(180deg,#003,#000 50%,#3f3f4a 50%,#31313a)}
 .toggleview:active .tab_label::after,#tab_config:active .tab_label::after{box-shadow:0 0 0 2px #321343;filter:drop-shadow(0 0 1px #461b5e);transform:rotate(90deg) scale(.9);transition:ease transform .01s}
 input:checked+.toggleview:active .tab_label::after{transform:scale(.9) rotate(-90deg);transition:linear transform .01s}
-.toggleview,#configSection .configTitle{min-width:300px;text-align:center}
-.toggleview,#configSection .configTitle a{font-size:0}
+.toggleview,#tab_config{min-width:300px;text-align:center}
+.toggleview,#tab_config a{font-size:0}
 .snarkConfig .configTitle a{display:inline-block;width:100%}
 
 #configs td:first-child,#commentInfo td:first-child,#userComments td:first-child{text-align:right}
@@ -434,7 +434,8 @@ textarea:focus{color:#7166ff}
 .pagenavcontrols:hover img:not(.disable){mix-blend-mode:normal;opacity:.8}
 .pagenavcontrols img:not(.disable):hover{opacity:1}
 .pagenavcontrols img.disable{mix-blend-mode:luminosity;opacity:.3}
-#pagenavtop.pagenavcontrols{margin-bottom:-1px;padding:6px 0 4px;border:var(--border);background:linear-gradient(180deg,#001,#00000d)}
+#pagenavtop{margin:9px 0 -1px;padding:6px 0 4px;border:var(--border);background:linear-gradient(180deg,#001,#00000d)}
+#torrentDisplay~#pagenavtop{margin-top:-1px}
 #pagenavbottom .pagenavcontrols{margin:0;padding:5px 0 3px;border-top:var(--border)}
 .pagenavcontrols a{display:inline;background:var(--badge)}
 #pagenav{font-weight:700}
@@ -453,13 +454,11 @@ textarea:focus{color:#7166ff}
 #pagenavcontrols:hover #pagecount{color:#dfdfff;mix-blend-mode:normal}
 
 /* section panels */
-
 #createSection table,#addSection table{margin-left:auto;margin-right:auto;width:85%}
 #createSection td:first-child,#addSection td:first-child{padding-right:5px;padding-left:5px;width:120px;text-align:right;white-space:nowrap;font-weight:700}
 #createSection td:nth-child(n+2),#addSection td:nth-child(n+2){text-align:left}
 #createSection #trackerselect td:nth-child(n+2){text-align:center}
 #addSection{position:relative}
-
 #createSection #trackerselect{margin:8px auto 4px 5px;width:calc(100% - 150px);border:1px solid #120f35}
 #trackerselect tr{border-bottom:1px solid #120f35;background:#040408}
 #trackerselect tr:first-child td{font-weight:700;border-bottom:1px solid #120f35;background:linear-gradient(180deg,#080818,#000)}
@@ -469,7 +468,6 @@ textarea:focus{color:#7166ff}
 #trackerselect td:first-child,#trackerselect td:last-child{width:40%;font-weight:400}
 #createSection #trackerselect td:last-child{text-align:left}
 #trackerselect input{margin:3px}
-
 .configPanel td:first-child{font-weight:700}
 .trackerconfig th{padding:7px 5px;min-width:50px}
 .trackerconfig th:first-child{background:var(--nuke) no-repeat scroll center center/14px,var(--title)}
@@ -904,7 +902,7 @@ a,th,thead th,tfoot th,td,select,select option,.snarkAddInfo,.snarkFileName,code
 .iframed #pagenavcontrols{transform:translateX(46px)}
 .percentDownloaded{pointer-events:none}
 .snarkNav{font-size:10.5pt}
-.toggleview,#configSection .configTitle{min-width:340px}
+.toggleview,#tab_config{min-width:340px}
 .trackerconfig input.trackername{max-width:180px;width:180px}
 .trackerconfig th:last-child,.trackerconfig td:last-child{padding-left:50px}
 .trackerhome,.trackerannounce,.knownTracker a{width:300px;max-width:300px}
@@ -920,7 +918,7 @@ td.graphicStatus img{margin-left:1px;height:24px}
 thead img,thead img:hover{max-height:22px}
 .configPanel .configTitle{font-size:12.5pt}
 .configTitle a{margin-bottom:0}
-.configTitle,.toggleview{min-width:340px}
+.configTitle,.toggleview,#tab_config{min-width:400px}
 .dirInfo{margin-bottom:0}
 .dirInfo tr:nth-child(n+2) td:first-child img:not(.thumb){margin-top:-2px;margin-bottom:-1px;width:22px;max-width:22px;height:22px;max-height:22px}
 .iframed .page{background:none}

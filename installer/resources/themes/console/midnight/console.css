@@ -1312,7 +1312,7 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #servicelogs a{padding-left:12px}
 #wrapperlogs{margin-bottom:10px;width:100%;overflow-x:scroll;table-layout:fixed}
 #wrapperlogs .nologs i{padding:12px}
-#wrapperlogs pre{margin:2px 0;width:100%;max-height:600px;white-space:pre-wrap;word-wrap:break-word;color:#a2a6d1}
+#service_logs{margin:2px 0;width:100%;max-height:600px;white-space:pre-wrap;word-wrap:break-word;color:#a2a6d1}
 #wrapperlogs tr:last-child td{padding:0 0 0 5px;background:rgba(10,10,34,.6)}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{padding:1px 2px;min-width:36px;max-width:36px;display:inline-block;overflow:hidden;line-height:.9;white-space:nowrap;text-overflow:ellipsis;text-align:center;color:#000;border-radius:2px}
 
@@ -1892,7 +1892,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 
 #cputype{display:inline-block;margin:-2px 2px -2px 0;padding:2px 5px;font-weight:700;text-transform:uppercase;border-radius:2px;background:#005}
 #stats ul ul{box-shadow:none;background:none}
-#wrapperlogs pre{max-height:500px;resize:none}
+#service_logs{max-height:500px;resize:none}
 
 #schedjobs ul{margin:0 -5px;columns:350px auto;column-gap:0}
 #skm_dest{white-space:nowrap;font-size:smaller;text-transform:none;letter-spacing:0}

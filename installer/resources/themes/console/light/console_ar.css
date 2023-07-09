@@ -308,7 +308,7 @@ textarea#advancedsettings,#i2pupdates textarea,#addkeyring textarea,#reseedconfi
 #logs table td:first-child{padding-right:15px}
 #logs #bugreports td.infohelp{padding:5px 65px 5px 0}
 #wrapperlogs{margin-bottom:-10px}
-#wrapperlogs pre{text-align:left;direction:ltr;width:100%;margin-right:-15px}
+#service_logs{text-align:left;direction:ltr;width:100%;margin-right:-15px}
 
 /* help */
 div[lang="ar"] p,div[lang="ar"] ul{padding:0 20px;font-size:11pt}
