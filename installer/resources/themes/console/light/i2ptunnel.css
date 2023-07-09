@@ -65,6 +65,7 @@ td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1p
 h2.error{padding-left:40px;background:var(--err) no-repeat left 5px center/24px,var(--h2) #fff;background-position:8px center,center center,center center}
 h2,h3{margin:10px 0 -1px;padding:9px 10px 7px 36px;position:relative;font-size:11.5pt;text-transform:uppercase;letter-spacing:.12em;word-spacing:.1em;color:var(--ink_light);border:var(--border_inner);box-shadow:var(--highlight);background:#fcfcff;background:linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(135deg,#fcfcff 5%,rgba(231,231,255,.8) 15%) #fff}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{background-size:18px,100%,100%;background-position:10px 60%,center center,center center}
+#clients h2,#servers h2{position:relative}
 #clients h2{background:var(--client) no-repeat left 10px center/18px,var(--h2) #fff}
 #clientTunnels th,#serverTunnels th{font-size:90%}
 #globalTunnelControl h2{background:var(--mouse) no-repeat left 10px center/18px,var(--h2) #fff}
@@ -303,9 +304,9 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 .iframed #ssl{margin-bottom:-5px}
 
 /* server/client count */
-#countClient,#countServer{margin:-1px -1px 0 0;float:right;text-transform:none}
+#countClient,#countServer{height:100%;position:absolute;top:1px;right:5px;display:flex;align-items:center;justify-content:right;line-height:1.7;text-transform:none}
 #countClient span:empty,#countServer span:empty{display:none}
-.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding:4px 6px 4px 28px;display:inline-block;letter-spacing:.1em;font-size:9pt;box-shadow:var(--highlight),0 0 0 1px #e2e2e9;background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
+.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){margin-left:5px;padding:4px 6px 4px 28px;display:inline-block;letter-spacing:.1em;font-size:9pt;box-shadow:var(--highlight),0 0 0 1px #e2e2e9;background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
 .standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
 .starting:not([hidden]){background-image:var(--local_inprogress),var(--badge)}
 .stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
@@ -323,10 +324,11 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 .panel table:last-of-type{margin-bottom:1px}
 .newTunnel form{padding:6px 7px}
 #regDisabled{margin-bottom:4px}
-#countClient,#countServer{margin:-2px -3px 0 0;line-height:1.15}
 }
 
 @media (max-width:1300px){
+.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){margin-left:5px}
+#countClient,#countServer{margin:-5px -5px 0 0;top:5px;right:11px;line-height:1.185}
 #serverTunnels .iconize,#clientTunnels .iconize{padding:12.5px 7px;min-width:48px;vertical-align:middle;font-size:0;background-size:12px,100%}
 #serverTunnels .preview.iconize,#clientTunnels .preview.iconize{min-width:64px;background-size:16px,100%}
 }
@@ -363,6 +365,10 @@ th{padding-top:7px;padding-bottom:7px}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{padding-left:42px;background-size:22px,100%,100%}
 }
 
+@media (min-width:1200px){
+.statusNotRunning,.statusRunning,.statusStarting,.statusStandby{background-size:auto 19px}
+}
+
 @media (min-width:1500px){
 body,select,.control,button.control,a.control,input,.freetext,textarea,.displayText{font-size:10pt}
 a.control,.control,.control.visited,button.control{padding-top:7px;padding-bottom:7px}
@@ -371,7 +377,6 @@ th{font-size:10.5pt}
 th .help::after{width:20px;height:20px;background-size:20px}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}
 .tunnelInfo .selectAll{max-width:none}
-.statusNotRunning,.statusRunning,.statusStarting,.statusStandby{background-size:auto 20px}
 #localDestination{height:34px}
 #registration .displayText{width:800px}
 #statusMessages{font-size:9pt}
