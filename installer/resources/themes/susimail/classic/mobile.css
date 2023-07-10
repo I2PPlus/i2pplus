@@ -4,11 +4,11 @@ body{margin:-1px 0 0}
 form{margin-bottom:5px}
 .page{min-width:560px;padding:0 5px 12px;border-radius:0;border-left:1px solid transparent;border-right:1px solid transparent}
 .notifications{margin:-1px 5px}
-.topbuttons{margin:-1px -6px;border-left:none;border-right:none}
+.topbuttons{margin:-1px -6px;border-left:0;border-right:0}
 .header,.footer{display:none}
-p.error,p.info{border-left:none;border-right:none}
+p.error,p.info{border-left:0;border-right:0}
 #dologin{width:500px;margin:22px auto 10px}
 #dologin h1{display:block}
-#prefsave{margin:10px -6px -17px;border-left:none;border-right:none}
+#prefsave{margin:10px -6px -17px;border-left:0;border-right:0}
 #mailbox td:nth-child(6),#mailbox th:nth-child(6),#mailbox td:nth-child(8),#mailbox th:nth-child(8){display:none}
 #newmail input[type=text],#composemail textarea{width:100%;min-width:360px}

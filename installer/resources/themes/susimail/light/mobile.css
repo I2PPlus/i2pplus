@@ -6,7 +6,7 @@ body{
 
 .page{
   min-width:560px;
-  padding:5px 5px 0 !important;
+  padding:5px 5px 0!important;
   border-radius:0;
 }
 
@@ -15,7 +15,7 @@ form{
 }
 
 #dologin{
-  width:500px !important;
+  width:500px!important;
 }
 
 .header,.footer{

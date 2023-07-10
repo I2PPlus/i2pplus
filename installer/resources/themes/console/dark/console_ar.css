@@ -34,7 +34,7 @@ table.netdbentry th:last-child,#leasesetdebug td:nth-child(2n+1){text-align:left
 td.optionsave{text-align:left}
 td{text-align:right}
 .leaseset th:first-child b{float:right}
-.leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:none}
+.leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:0}
 .leaseset th:last-child,.leaseset td:nth-child(2){text-align:left}
 .leaseset th{text-align:right}
 .main{margin:-1px 212px 5px 5px}
@@ -118,7 +118,7 @@ td{text-align:right}
 #sb_newsheadings td a{font-size:9pt;font-weight:700}
 #sb_newsheadings td,#sb_newsheadings tr:hover td{background-position:right 4px center;padding-right:22px;padding-left:8px;text-align:right}
 #sb_services td,#sb_internals td,#sb_advanced td{text-align:center}
-#sb_wrap{float:right !important;margin-right:-7px !important}
+#sb_wrap{float:right!important;margin-right:-7px!important}
 #schedjobs td{text-align:center}
 #sidebarconf select{margin-right:0;width:calc(100% - 5px)}
 #sidebarconf td:nth-child(3){text-align:left;padding-left:0}

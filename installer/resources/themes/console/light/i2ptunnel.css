@@ -229,18 +229,18 @@ input[type=text].username:focus,input[type=password].password:focus,input[type=t
 #filter{vertical-align:top}
 #keyringManager{margin:-2px 0;padding:3px 3px 3px 22px;float:right;font-size:90%;background:var(--keys) no-repeat left center;background-size:20px}
 #sigType[disabled]{padding-left:14px;background:var(--crypto) no-repeat left center/16px}
-#tunnelOpts tr,#tunnelOpts td:first-child,#throttler tr,#throttler th:first-child,#throttler td:first-child,#clientAuth tr,#clientAuth th:first-child,#clientAuth td:first-child{border-left:none}
-#tunnelOpts tr,#tunnelOpts td:first-child,#throttler tr,#throttler th:last-child,#throttler td:last-child,#clientAuth tr,#clientAuth th:last-child,#clientAuth td:last-child{border-right:none}
+#tunnelOpts tr,#tunnelOpts td:first-child,#throttler tr,#throttler th:first-child,#throttler td:first-child,#clientAuth tr,#clientAuth th:first-child,#clientAuth td:first-child{border-left:0}
+#tunnelOpts tr,#tunnelOpts td:first-child,#throttler tr,#throttler th:last-child,#throttler td:last-child,#clientAuth tr,#clientAuth th:last-child,#clientAuth td:last-child{border-right:0}
 #tunnelOpts td{padding:0;width:25%}
 #tunnelOpts table{border:0}
 #tunnelOpts table td{padding:4px 8px;border-bottom:var(--border_softer)}
-#tunnelOpts table tr:first-child td{border-top:none}
+#tunnelOpts table tr:first-child td{border-top:0}
 #tunnelOpts table tr:nth-child(even) td{padding:8px}
 #tunnelOpts table tr:nth-child(even) td:nth-child(n+2){border-left:var(--border_inner)}
 #tunnelOpts table tr:nth-child(odd) td{padding-left:5px;font-size:90%;border-bottom:var(--border_inner)}
 #tunnelOpts table tr:nth-child(2) td{border-bottom:var(--border_inner)}
 #tunnelOpts table tr:nth-child(3)td {border-top:var(--border_inner)}
-#tunnelOpts table tr:last-child td{border-bottom:none}
+#tunnelOpts table tr:last-child td{border-bottom:0}
 #tunnelOpts table td select {margin:0;width:100%}
 
 /* throttler */
@@ -250,7 +250,7 @@ td#throttle,#clientAuthConfig{padding:0;box-shadow:none}
 #throttler th{padding-left:20px}
 #throttler td{width:20%}
 #throttler td:first-child{width:20%;white-space:nowrap;text-align:right}
-#throttler tr:first-child th{border-top:none}
+#throttler tr:first-child th{border-top:0}
 #throttler tr:nth-child(odd),#wizardTunnelTypes tr:nth-child(odd),#wizardSummary tr:nth-child(odd),#clientAuth tr:nth-child(even){background:#f7f8ff;background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(211,211,255,.3) 3px,#fff 5px)}
 #throttler tr:nth-child(even),#wizardTunnelTypes tr:nth-child(even),#wizardSummary tr:nth-child(even),#clientAuth tr:nth-child(odd){background:#eef;background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(230,230,255,.3) 3px,#fff 5px)}
 #throttler tr:nth-child(2) td,#throttler tr:nth-child(6) td,#throttler tr:not(:nth-child(2)) td:first-child b,#throttler tr:not(:nth-child(6)) td:first-child b{font-size:90%}
@@ -262,7 +262,7 @@ td#throttle,#clientAuthConfig{padding:0;box-shadow:none}
 #clientAuth td:last-child{width:1%;text-align:center}
 #clientAuth td:last-child b{margin:0;padding:0 8px}
 #clientAuth th:first-child,#clientAuth td:first-child{width:50%}
-#clientAuth tr:first-child td{border-top:none}
+#clientAuth tr:first-child td{border-top:0}
 #clientAuth #leasesetKey{width:calc(100% - 20px)}
 #regDisabled{margin-bottom:3px}
 #registration table:first-of-type tr:nth-child(2) td,#registration table:first-of-type tr:nth-child(3) td{padding:10px 5px}

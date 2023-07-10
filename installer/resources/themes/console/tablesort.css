@@ -20,7 +20,7 @@ th[role=columnheader]:not([data-sort-method="none"])::after{
 }
 
 th[aria-sort=ascending]:not([data-sort-method="none"])::after{
-  border-top:none;
+  border-top:0;
   border-width:0 3px 3px;
 }
 

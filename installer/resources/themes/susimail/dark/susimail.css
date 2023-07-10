@@ -29,7 +29,7 @@ tr.mailbody,#message_full tr:first-child{background:#000800}
 p.mailbody + p.info{margin-top:-48px}
 span.coloured{color:#327bbf}
 div.header,.iframed .header{display:none}
-div.footer{margin:0 -1px -1px;border-top:none;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #040,inset 0 0 0 3px #000;background:linear-gradient(90deg,#000800 15%,#000 50%,#000800 85%)}
+div.footer{margin:0 -1px -1px;border-top:0;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #040,inset 0 0 0 3px #000;background:linear-gradient(90deg,#000800 15%,#000 50%,#000800 85%)}
 .iframed .footer{display:none}
 hr{margin:5px;width:100%;height:1px;border:0;background:#252;opacity:.5}
 .footer hr{display:none}
@@ -46,7 +46,7 @@ pre{margin-left:10px;margin-right:10px;font-size:9pt}
 .iframed .page{margin:0;padding:1px;min-width:620px;border:0;border-radius:0}
 th{font-weight:700;vertical-align:middle}
 .spacer{display:none}
-form{line-height:1.6;border-top:none}
+form{line-height:1.6;border-top:0}
 .header + form{border:var(--border);box-shadow:0 0 1px 1px #000}
 .iframed form{margin-bottom:8px;border:0;box-shadow:none}
 .iframed .header + form{margin-bottom:-10px;padding-bottom:17px}
@@ -57,7 +57,7 @@ form{line-height:1.6;border-top:none}
 .debugHeader pre{margin:5px 3px 6px 10px;line-height:1.3;white-space:pre-wrap;word-break:break-all;color:#bb0;text-shadow:var(--txt_shadow);opacity:.9}
 .debugHeader td{box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:rgba(0,0,0,.4)}
 #message_full{margin:0;padding:0;border-collapse:separate;border-spacing:0}
-.iframed #message_full{margin-bottom:-9px;border-bottom:none}
+.iframed #message_full{margin-bottom:-9px;border-bottom:0}
 #message_full tr:first-child{background:repeating-linear-gradient(180deg,#010 1px,#010 2px,#000 3px)}
 #mailhead{margin:0;padding:0}
 #mailhead tr:first-child{background:none}
@@ -263,7 +263,7 @@ h3#config{margin:0 0 20px;padding:10px;text-align:center;text-transform:uppercas
 .topbuttons{margin:-1px -1px 0;padding:5px 5px 4px;width:calc(100% - 10px);min-width:800px;display:inline-block;vertical-align:middle;white-space:nowrap;text-align:center;font-weight:700;border:var(--border);box-shadow:var(--bevel);background:var(--th)}
 .topbuttons#readmail{padding:5px 5px 8px}
 body:not(.iframed) .topbuttons{position:sticky;top:-1px;z-index:1000;background:var(--topnav)}
-.iframed .topbuttons{border-left:none;border-right:none}
+.iframed .topbuttons{border-left:0;border-right:0}
 .topbuttons > *{vertical-align:middle}
 
 /* float topbuttons,single line*/
@@ -284,8 +284,8 @@ tr.bottombuttons:empty{display:none}
 #composemail .bottombuttons{background:none;box-shadow:none}
 
 /* notifications */
-.notifications{margin:0 30%;padding:0 10px 2px;min-width:360px;position:fixed;top:0;left:0;right:0;z-index:9999;text-align:center;font-size:90%;text-shadow:var(--txt_shadow);border:1px solid #000;border-top:none;box-shadow:0 2px 2px 1px rgba(0,0,0,.5),inset 0 0 0 1px #040;background:#020 var(--no) no-repeat right 6px top 6px/14px;cursor:crosshair;animation:2s hide-up 4s ease-out forwards}
-.iframed .notifications{margin:-1px 30% 0;border:var(--border);border-top:none;border-radius:0 0 2px 2px;box-shadow:0 2px 2px 1px rgba(0,0,0,.5),inset 0 0 0 1px #010}
+.notifications{margin:0 30%;padding:0 10px 2px;min-width:360px;position:fixed;top:0;left:0;right:0;z-index:9999;text-align:center;font-size:90%;text-shadow:var(--txt_shadow);border:1px solid #000;border-top:0;box-shadow:0 2px 2px 1px rgba(0,0,0,.5),inset 0 0 0 1px #040;background:#020 var(--no) no-repeat right 6px top 6px/14px;cursor:crosshair;animation:2s hide-up 4s ease-out forwards}
+.iframed .notifications{margin:-1px 30% 0;border:var(--border);border-top:0;border-radius:0 0 2px 2px;box-shadow:0 2px 2px 1px rgba(0,0,0,.5),inset 0 0 0 1px #010}
 .notifications.msgerror{margin:0 20%}
 .notifications:hover{background:#020 var(--no_hover) no-repeat right 6px top 6px/14px}
 .notifications p.info,.notifications p.info b{text-align:center;font-size:10pt;text-shadow:none;color:var(--ink)}
@@ -295,7 +295,7 @@ td p.error{padding:10px}
 
 /* compose mail */
 #composemail{padding:4px 8px 12px;text-align:center;border-radius:0 0 2px 2px;background:#010;background:repeating-linear-gradient(90deg,rgba(0,32,0,.4),rgba(0,0,0,.4) 1px,rgba(0,0,0,.4) 2px),repeating-linear-gradient(180deg,rgba(0,0,0,.4) 1px,rgba(0,0,0,.4) 2px,rgba(0,64,0,.4) 3px),url(/themes/console/dark/images/camotile2.png)}
-.iframed #composemail{margin-bottom:-7px;border-bottom:none}
+.iframed #composemail{margin-bottom:-7px;border-bottom:0}
 #composemail hr{display:none}
 #composemail textarea{margin-bottom:7px;min-height:200px}
 #composemail textarea,#composemail input[type=text]{width:calc(100% - 20px);min-width:565px}
@@ -383,7 +383,7 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 #mailbox tr td{border-top:1px solid #020}
 .iframed #mailbox .bottombuttons td{padding:5px 3px}
 .iframed #mailbox{margin:0 0 -7px}
-.iframed #mailbox th:last-child,.iframed #mailbox td:last-child{border-right:none}
+.iframed #mailbox th:last-child,.iframed #mailbox td:last-child{border-right:0}
 .iframed #mailbox tr:last-child td{padding-bottom:3px}
 #viewmail .folders{padding:0 0 0 4px;top:0;right:-1px;border:var(--border);border-radius:0 0 0 3px;box-shadow:var(--highlight);background:var(--th)}
 #viewmail .folders{position:absolute}

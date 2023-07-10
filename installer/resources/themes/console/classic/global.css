@@ -77,7 +77,7 @@
 --visited:#6b6b94;
 }
 
-html,body{min-height:100%;box-shadow:none !important}
+html,body{min-height:100%;box-shadow:none!important}
 html{scrollbar-color:var(--scroll) var(--bodybg)}
 body{font:9pt var(--bodyfont);color:var(--ink);scrollbar-color:var(--scroll) var(--bg)}
 body.iframed{margin:0;overflow:hidden;background:none}

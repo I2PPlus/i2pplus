@@ -177,7 +177,7 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay labe
 #screenlog li::before{margin:-2px 3px 0 0;width:10px;height:10px;content:"";display:inline-block;vertical-align:middle;background:var(--bullet) no-repeat left center/10px}
 
 /* pagenav */
-.pagenavcontrols{padding:5px;border:var(--border);border-bottom:none}
+.pagenavcontrols{padding:5px;border:var(--border);border-bottom:0}
 .pagenavcontrols img{margin:0 3px;display:none}
 .pagenavcontrols span:not(#pagecount){margin:0 3px;border:var(--border);border-radius:1px;background-size:16px;background-repeat:no-repeat;background-position:center center;background-color:#fff}
 .pagenavcontrols span:not(#pagecount):hover{border:1px solid #b23}
@@ -264,7 +264,7 @@ tr:hover .magnetLabel{opacity:1}
 #torrents td,#torrents th{padding:5px}
 #torrents th.peerCount img{margin-left:8px}
 #torrents thead th,#torrents tfoot th,tr:hover #torrents thead th,tr:hover #torrents tfoot th{background:#fff}
-#torrents thead th{white-space:nowrap;text-align:center;font-size:8pt;border-top:none}
+#torrents thead th{white-space:nowrap;text-align:center;font-size:8pt;border-top:0}
 #torrents thead img{vertical-align:middle}
 #torrents thead a img{display:inline-block}
 #torrents td{width:1%;white-space:nowrap}
@@ -273,7 +273,7 @@ tr:hover .magnetLabel{opacity:1}
 #torrents td.torrentName{padding-left:8px;width:99%;font-weight:700;white-space:normal}
 #torrents td img{margin:-1px 0;vertical-align:middle}
 #torrents tfoot tr:first-child th:nth-child(n+2){text-align:center;white-space:nowrap}
-#torrents tfoot th{padding:7px 5px;border-top:none;border-bottom:none;background:#fff}
+#torrents tfoot th{padding:7px 5px;border-top:0;border-bottom:0;background:#fff}
 #torrents .infohash{padding:2px 4px 2px 18px;display:inline-block;border-radius:1px;box-shadow:0 0 0 1px #7a7,var(--highlight);background:var(--hash) no-repeat 4px center/12px,linear-gradient(180deg,#efe,#e6ffe6)}
 #torrents .RateDown,#torrents .RateUp,#torrents .torrentETA{padding:2px 8px;min-width:80px;text-align:center;font-weight:700}
 #totals{margin-left:3px;white-space:nowrap}
@@ -359,7 +359,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #torrentInfo img{max-height:16px;vertical-align:text-top;filter:saturate(0)}
 .magnetlink img,.torrentlink img{padding:1.5px 4px;vertical-align:middle;box-shadow:var(--highlight),var(--softborder);filter:none}
 #torrentInfo .nowrap{display:inline-block;white-space:nowrap;line-height:1.6}
-#setPriority th{padding:6px 3px 10px;text-align:right;border-top:none}
+#setPriority th{padding:6px 3px 10px;text-align:right;border-top:0}
 #metacomment{padding:2px}
 #torrentInfo .infohash{margin-top:1px;padding:2px 2px 2px 17px;line-height:1.2;vertical-align:middle;box-shadow:var(--highlight),var(--softborder);background-position:3px center}
 #torrentInfoStats img[src$="head_tx.png"],#torrentInfoStats img[src$="head_rx.png"]{margin-right:3px}
@@ -381,7 +381,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .toggle_input{position:absolute;opacity:0}
 input.toggle_input+label+hr+table{display:none}
 input.toggle_input:checked+label+hr+table{margin-top:20px;display:table}
-#torrentInfo,#commentInfo{border-top:none}
+#torrentInfo,#commentInfo{border-top:0}
 input:checked+#tab_comments{margin-bottom:-6px}
 input:checked+#tab_files{margin-bottom:-6px}
 input:checked+#tab_torrentedit{margin-bottom:-6px}
@@ -426,7 +426,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #createSection #trackerselect{margin:5px 0 8px 2px;width:100%;border:var(--border);border-collapse:separate;border-spacing:0;border-radius:4px}
 #createSection #trackerselect td{padding:8px;border-top:var(--border);border-right:var(--border)}
 #createSection #trackerselect td:first-child{font-weight:400}
-#createSection #trackerselect td:last-child{text-align:center;border-right:none}
+#createSection #trackerselect td:last-child{text-align:center;border-right:0}
 #createSection #trackerselect tr:first-child td{font-weight:700;border:0;background:#fff}
 #createSection #trackerselect .optbox{margin:0}
 #editSection+#commentSection{margin-top:-13px}
@@ -474,7 +474,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 .snarkCommented img{padding:0;height:9px;width:auto}
 #commentDeleteAction td{padding:8px 3px;border-top:var(--border)}
 #commentInfo th,#mediaContainer th{padding-left:5px;text-align:left}
-#commentInfo th{padding:2px 0 2px 5px;border-top:none}
+#commentInfo th{padding:2px 0 2px 5px;border-top:0}
 #commentInfo td:first-child,#commentInfo td:last-child,.commentDate{width:1%;white-space:nowrap}
 #commentInfo textarea{width:100%}
 #mediaContainer td{padding:20px 15px;text-align:center}
@@ -550,10 +550,10 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 .trackerconfig .default{display:none}
 .trackerconfig .delete,.trackerconfig .reload{margin:7px 12px 6px -3px;float:left}
 .trackerConfig .delete{margin-left:0}
-.trackerconfig th{border-bottom:none}
+.trackerconfig th{border-bottom:0}
 .trackerconfig th:first-child{background:var(--nuke) no-repeat center center/14px,var(--th)}
 .trackerconfig th:first-child,.knownTracker td:first-child,#addtracker td:first-child{border-left:var(--border)}
-.trackerConfig th{font-size:9pt;border-bottom:none}
+.trackerConfig th{font-size:9pt;border-bottom:0}
 .trackerconfig th:last-child,.knownTracker td:last-child,#addtracker td:last-child{border-right:var(--border)}
 .trackerConfig th:nth-child(2),.trackerConfig th:nth-child(3){text-align:left}
 .trackerconfig th:last-child{text-align:left}
@@ -579,7 +579,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #snarkLang{margin-right:4px;padding:4px 8px;font-weight:700;border-radius:1px;background:#ddd}
 #trackers td{padding:6px 4px 4px;border-top:var(--border);border-bottom:var(--border)}
 #trackers .info_tracker{vertical-align:text-bottom}
-#trackers .knownTracker td,#trackers #addtracker td,#trackers .trackerconfig td[colspan="7"]{border-bottom:none}
+#trackers .knownTracker td,#trackers #addtracker td,#trackers .trackerconfig td[colspan="7"]{border-bottom:0}
 #trackers .knownTracker td{min-width:100px}
 #trackers #addtracker td{padding-top:10px;padding-bottom:10px}
 
@@ -634,8 +634,8 @@ tr:hover td.trackerLink,tr:hover td.torrentDetails,tr:hover td.torrentName,tr:ho
 .torrentName{max-width:250px;white-space:nowrap;word-break:break-all;overflow:hidden;text-overflow:ellipsis}
 #torrentDisplay{display:flex}
 #torrentDisplay label{min-width:0;flex-grow:1}
-#torrentDisplay label:last-child{border-right:none}
-#torrentDisplay label[for="all"]{border-left:none}
+#torrentDisplay label:last-child{border-right:0}
+#torrentDisplay label[for="all"]{border-left:0}
 }
 
 @media (min-width:1500px){

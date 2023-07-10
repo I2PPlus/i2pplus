@@ -23,7 +23,7 @@ input#toggle_createtorrent:not(:checked) + label + hr + table,input#toggle_creat
   cursor:default;
   border:1px solid #212;
   border-bottom:1px solid #101;
-  border-top:none;
+  border-top:0;
   background:linear-gradient(180deg,#656,#323 51%,#202 51%,#101);
   box-shadow:inset 0 0 1px #838;
   filter:drop-shadow(0 1px 1px rgba(17,0,17,.6));
@@ -32,7 +32,7 @@ input#toggle_createtorrent:not(:checked) + label + hr + table,input#toggle_creat
 .iframed .toggleview,.iframed .toggleview:hover,.iframed .toggleview:focus,.iframed .toggleview:active{
   border:1px solid #878;
   border-bottom:1px solid #767;
-  border-top:none;
+  border-top:0;
   box-shadow:inset 0 0 1px #535;
   filter:drop-shadow(0 1px 2px #101);
 }

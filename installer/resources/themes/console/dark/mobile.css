@@ -23,5 +23,5 @@
 #sidebar #sb_routerControl{padding:10px;width:calc(100% - 20px)}
 #sidebar #sb_services a{padding:4px 10px}
 #sidebar table[id^="sb_"]{width:calc(100% - 17px);margin:-7px auto -11px}
-#sidebar table[id^="sb_"] td{padding:7px 10px !important;border-top:1px solid #000}
+#sidebar table[id^="sb_"] td{padding:7px 10px!important;border-top:1px solid #000}
 #sidebar td:first-child{max-width:none}

@@ -107,10 +107,10 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 #clientTunnels th:nth-child(n+2),#clientTunnels td:nth-child(n+2),#serverTunnels th:nth-child(n+2),#serverTunnels td:nth-child(n+2){text-align:center}
 #targetPort{margin-right:10px}
 #throttler th{padding-left:20px}
-#throttler th:last-child,#throttler td:last-child,#clientAuth th:last-child,#clientAuth td:last-child{border-right:none}
+#throttler th:last-child,#throttler td:last-child,#clientAuth th:last-child,#clientAuth td:last-child{border-right:0}
 #throttler td{width:20%}
 #throttler td:first-child{width:20%;white-space:nowrap;text-align:right}
-#throttler tr:first-child th,#clientAuth tr:first-child td{border-top:none}
+#throttler tr:first-child th,#clientAuth tr:first-child td{border-top:0}
 #throttler tr:nth-child(odd),#wizardTunnelTypes tr:nth-child(odd),#wizardSummary tr:nth-child(odd){background:#fff}
 #throttler tr:nth-child(even),#wizardTunnelTypes tr:nth-child(even),#wizardSummary tr:nth-child(even){background:#fafbff}
 #throttler input[type=text]{width:80px}
@@ -211,7 +211,7 @@ td[colspan="2"] select#profile{width:calc(50% - 15px)}
 #wizardTunnelTypes td:last-child{padding:10px 15px 10px 10px;text-align:justify;border:0}
 #wizardTunnelTypes select,#wizardPanel .freetext{margin-left:0}
 #wizardTunnelTypes,#wizardSummary{margin-top:-1px;border:0}
-#wizardSummary td:last-child{border-right:none}
+#wizardSummary td:last-child{border-right:0}
 #wizardTable td,#wizardPanel table td{border-top:1px solid #dfe1ec}
 #wizardTunnelTypes tr:last-child{background:var(--th)}
 #wizardPanel #name,#wizardPanel #description{margin:5px 0;width:300px}
@@ -230,7 +230,7 @@ td[colspan="2"] select#profile{width:calc(50% - 15px)}
 #clientAuth{width:100%;box-sizing:border-box}
 #clientAuth th:first-child,#clientAuth td:first-child{width:50%}
 #clientAuth th:nth-child(2),#clientAuth td:nth-child(2){width:auto }
-#clientAuth tr:first-child td{border-top:none}
+#clientAuth tr:first-child td{border-top:0}
 #clientAuth td:last-child{width:1%;text-align:center}
 #clientAuth td:last-child b{margin:0;padding:0 8px}
 #keyringManager{float:right}
@@ -247,10 +247,10 @@ td[colspan="2"] select#profile{width:calc(50% - 15px)}
 #tunnelEditPage #tunnelOpts table td{padding:2px 5px;border-bottom:var(--border_soft)}
 #tunnelEditPage #tunnelOpts table tr:nth-child(odd) td{padding:6px 5px;border-top:var(--border_soft);border-bottom:var(--border_soft)}
 #tunnelEditPage #tunnelOpts table{border:0}
-#tunnelEditPage #tunnelOpts table tr:first-child td{border-top:none}
-#tunnelEditPage #tunnelOpts table tr:last-child td{border-bottom:none}
-#tunnelEditPage #tunnelOpts table td:first-child{border-left:none}
-#tunnelEditPage #tunnelOpts table td:last-child{border-right:none}
+#tunnelEditPage #tunnelOpts table tr:first-child td{border-top:0}
+#tunnelEditPage #tunnelOpts table tr:last-child td{border-bottom:0}
+#tunnelEditPage #tunnelOpts table td:first-child{border-left:0}
+#tunnelEditPage #tunnelOpts table td:last-child{border-right:0}
 
 /* screenlog */
 #screenlog{position:relative;contain:paint}

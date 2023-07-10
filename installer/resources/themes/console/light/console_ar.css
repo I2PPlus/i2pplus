@@ -64,7 +64,7 @@ th a.script{float:left}
 .sb{margin-bottom:4px}
 .sb h4{text-align:center}
 .logo{float:right}
-.percentBarInner{border-left:1px solid #afafcf;border-right:none}
+.percentBarInner{border-left:1px solid #afafcf;border-right:0}
 .percentBarOuter{margin:-4px -3px -4px -5px;background:linear-gradient(to left,rgba(0,255,0,.05) 50%,rgba(255,255,0,.05) 75%,rgba(255,128,0,.05) 90%,rgba(255,0,0,.1)),repeating-linear-gradient(90deg,rgba(180,180,255,.7) 1px,rgba(180,180,255,.7) 2px,rgba(221,221,255,.7) 2px,rgba(221,221,255,.7) 4px)}
 .sb h3 a{font-size:120%}
 .sb h3,.sb h4{text-align:center}
@@ -161,7 +161,7 @@ table.leaseset:last-child,.netdbentry:last-child,#profile_defs{margin-bottom:-10
 .netdbentry th a img{margin-left:6px}
 #sybilnav li{padding:3px 24px 3px 3px;background:var(--eye) no-repeat right 5px center/16px,linear-gradient(90deg,#eef 30%,#fff)}
 .threatpoints+ul li{margin-right:20px}
-.leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:none}
+.leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:0}
 .sybil_routerinfo th img[src^="/flags"],.netdbentry th a img{margin-left:5px}
 .wideload .confignav{margin-left:-3px;margin-right:-35px}
 #floodfills,.statusnotes:last-child{margin-bottom:-10px}
@@ -192,7 +192,7 @@ p#profiles_overview,#profiles .widescroll+h3,#thresholds+h3,#profiles #banlist{m
 .tunnel_peer{text-align:left}
 .tunnel_local{margin-right:0;margin-left:4px;text-align:center}
 .tunnel_id:empty+.tunnel_cap{display:inline-block;margin-left:0;margin-right:12px}
-#tunnel_defs td:nth-child(3){border-right:none}
+#tunnel_defs td:nth-child(3){border-right:0}
 #tunnels .cells{text-align:center}
 
 /* configure */

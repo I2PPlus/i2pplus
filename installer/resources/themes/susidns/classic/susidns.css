@@ -42,7 +42,7 @@ textarea[name="config"],textarea[name="content"]{padding:2px 5px;height:200px;bo
 td.destinations textarea,td.destinations textarea:focus{margin:0 0 0 5px;padding:0;font:normal 8pt var(--monospaced);resize:none;border:0;border-left:1px solid #888;border-right:1px solid #888;border-radius:0;box-shadow:0 none;background:none}
 p.buttons{margin:0 -11px;padding:10px;border:var(--border);background:var(--bg)}
 #buttons,.buttons{text-align:right}
-#book+#buttons{margin:-12px 10px 23px;border:var(--border);border-top:none;border-bottom:none}
+#book+#buttons{margin:-12px 10px 23px;border:var(--border);border-top:0;border-bottom:0}
 #book p.buttons{margin-left:-11px}
 #config+#buttons{padding-top:21px}
 #config,form[action="subscriptions"] #content{margin:-11px -11px 0}
@@ -123,7 +123,7 @@ td.destinations{padding:0;max-width:50px}
 #host_details tr:hover{background:none}
 #host_details td{padding:7px 10px}
 #host_details td:first-child{padding-right:0;width:10%;white-space:nowrap;font-weight:700;text-align:right}
-#host_details td:last-child{width:90%;text-align:left;border-left:none;border-right:none}
+#host_details td:last-child{width:90%;text-align:left;border-left:0;border-right:0}
 #host_details td:last-child b{margin:0 5px 0 8px}
 #host_details td.destinations{background:none}
 #host_details .destaddress{font-family:var(--monospaced);word-break:break-all;white-space:normal}
@@ -225,7 +225,7 @@ p.messages{color:#fff;text-align:center;font-weight:700}
 .iframed .page{background:transparent;margin:0 1px;border:0}
 .iframed p.help{margin-top:-13px;padding-bottom:18px}
 .iframed p.buttons{margin-bottom:-4px}
-.iframed textarea[name="config"],.iframed textarea[name="content"]{border-left:none;border-right:none}
+.iframed textarea[name="config"],.iframed textarea[name="content"]{border-left:0;border-right:0}
 .iframed #add{margin-top:12px;background:transparent}
 .iframed #addressbook.headline h3{margin-top:-8px}
 .iframed #book+#buttons{margin:-11px 0 0}
@@ -235,12 +235,12 @@ p.messages{color:#fff;text-align:center;font-weight:700}
 .iframed #content h3:first-child{margin-top:10px}
 .iframed .fakebutton{margin-bottom:-2px}
 .iframed #helpconfig,.iframed #helpsubs{margin:-1px -12px -5px;}
-.iframed #helpsubs{margin-top:10px;border-left:none;border-right:none}
+.iframed #helpsubs{margin-top:10px;border-left:0;border-right:0}
 .iframed #helpconfig h3{margin:-1px 0}
 .iframed #subscriptions,.iframed #configure{margin-top:11px}
-.iframed #navi,.iframed h3,.iframed h4,.iframed #help,.iframed p.buttons{border-left:none;border-right:none}
+.iframed #navi,.iframed h3,.iframed h4,.iframed #help,.iframed p.buttons{border-left:0;border-right:0}
 .iframed #navi{margin-bottom:-12px;position:static}
-.iframed #content+#buttons,.iframed #config+#buttons{margin-top:-23px;border-left:none;border-right:none;background:var(--bg)}
+.iframed #content+#buttons,.iframed #config+#buttons{margin-top:-23px;border-left:0;border-right:0;background:var(--bg)}
 .iframed #visualid table{margin-bottom:13px}
 .iframed #visualid td[colspan="2"]{padding-bottom:0}
 

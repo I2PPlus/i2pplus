@@ -198,7 +198,7 @@ textarea:focus::placeholder{opacity:0}
 #subsLog h3 span{text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:90%;opacity:.9}
 
 /* identicon */
-#visualid h3{margin-top:-1px;border-left:none;border-right:none}
+#visualid h3{margin-top:-1px;border-left:0;border-right:0}
 #visualid{margin-top:-10px;border:var(--border);background:#001}
 #visualid table{margin-top:-15px;margin-bottom:-1px;width:100%;border-left:0;border-right:0;border-collapse:collapse}
 #visualid td[colspan="2"]{padding:17px 9px 15px;text-align:right;border-top:var(--border)}

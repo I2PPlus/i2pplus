@@ -40,7 +40,7 @@ img.sort.selected{border-radius:1px;box-shadow:0 0 0 1px var(--border_soft),inse
 .page{margin:0;padding:0 10px 10px;min-width:800px;line-height:1.6;text-align:center;font-size:9pt;border:var(--border);box-shadow:0 0 0 1px #eee;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.2)),url(/themes/console/classic/images/bg2.png) var(--bg3);background-size:100% 100%,120px 120px}
 #pagenavbottom{display:none}
 #pagenavbottom td{border-top:var(--border)}
-#pagenavbottom td table td{border-top:none}
+#pagenavbottom td table td{border-top:0}
 .pagenavcontrols td:nth-child(2){width:1%;white-space:nowrap;font-weight:700;font-size:110%;opacity:.7}
 #pagenav input:disabled{display:inline;opacity:.3}
 p.error,p.info{margin:-1px -11px;padding:15px 15px 15px 45px;display:block;line-height:1.2;text-align:left;font-weight:700;color:#900;border:var(--border);box-shadow:var(--highlight);background:#ffd var(--err) no-repeat 8px center/28px}
@@ -67,7 +67,7 @@ td.mailListAttachment img{display:none}
 td.mailListAttachment.isAttached{background-image:var(--attach);background-repeat:no-repeat;background-position:center center;background-size:14px}
 td.mailListDelete,td.mailListFlagged,td.mailListAttachment{width:24px;text-align:right}
 td p.info,td p.error{margin:-2px -3px}
-.topbuttons{margin:-1px -11px 10px;padding:6px 0 0;background:var(--bg);background:linear-gradient(180deg,#fff 0%,var(--bg3) 100%);border:var(--border);border-bottom:none}
+.topbuttons{margin:-1px -11px 10px;padding:6px 0 0;background:var(--bg);background:linear-gradient(180deg,#fff 0%,var(--bg3) 100%);border:var(--border);border-bottom:0}
 .topbuttons #mailboxcontrols,.topbuttons .folders{float:left;vertical-align:middle}
 .topbuttons #mailboxcontrols{margin-left:5px}
 .topbuttons #mailboxcontrols input,.topbuttons .folders input,.topbuttons .folders select{margin:0 1px 1px}
@@ -276,7 +276,7 @@ tr:hover .listDate{opacity:.9}
 .iframed #nukemail{top:230px}
 .iframed .page{margin:-6px 1px 11px;min-width:580px;border:0;box-shadow:none;background:transparent}
 .iframed p.mailbody{margin:0;padding:0 20px 10px}
-.iframed .topbuttons,.iframed p.error,.iframed p.info{margin:-1px -11px;border:var(--border);border-left:none;border-right:none}
+.iframed .topbuttons,.iframed p.error,.iframed p.info{margin:-1px -11px;border:var(--border);border-left:0;border-right:0}
 .iframed .topbuttons{margin-bottom:-2px;padding:6px 0 1px}
 .iframed .topbuttons .pagenavcontrols{border:0}
 .iframed .topbuttons .pagenavcontrols td{padding:0 5px}
