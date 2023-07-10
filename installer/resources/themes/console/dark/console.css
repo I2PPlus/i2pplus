@@ -1711,7 +1711,7 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 .themechoice:hover{border:1px solid var(--hover);background:#000}
 .themechoice .optbox,.langselect .optbox{position:absolute;opacity:0}
 .themechoice .optbox:checked+img{opacity:1;filter:none;transform:scale(0.8)}
-.themechoice img{padding:6px 0;opacity:.6}
+.themechoice img{padding:8px 0 6px;opacity:.75}
 .themechoice img,.langflag{animation:fade .15s ease .3s reverse both}
 .themechoice:hover img{filter:drop-shadow(0 0 1px var(--hover))}
 .themechoice:active img{transform:scale(0.8)}
