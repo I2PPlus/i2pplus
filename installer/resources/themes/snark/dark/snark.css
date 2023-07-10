@@ -428,6 +428,8 @@ td .commentAuthorName{margin:0 0 0 4px;padding:0 4px 0 22px;min-width:120px;max-
 #myRating{border-top:var(--border);border-bottom:var(--border)}
 #myRating td:empty{padding:0;border-top:0;border-bottom:0;display:none}
 #myRating td:empty::after{min-height:1px}
+#myRating .commentRating{text-align:left}
+#myRating .commentRating img{margin-top:-5px}
 #nameRequired,.commentAuthorName{display:inline-block;vertical-align:middle;line-height:28px}
 #nameRequired{margin-right:5px;float:right}
 #newRating select{width:90%}
