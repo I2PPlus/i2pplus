@@ -225,13 +225,13 @@ public class I2PDefaultServlet extends DefaultServlet
         buf.append("<!DOCTYPE HTML>\n<html>\n<head>\n<title>");
         buf.append(title);
         buf.append("</title>\n<meta charset=utf-8>\n");
-//        buf.append("<link href=\"jetty-dir.css\" rel=stylesheet type=text/css/>\n");
+//        buf.append("<link href=jetty-dir.css rel=stylesheet type=text/css>\n");
         buf.append(inlineCSS);
-        buf.append("<link href=\"/.resources/jetty-dir.css\" rel=stylesheet type=text/css/>\n")
+        buf.append("<link href=/.resources/jetty-dir.css rel=stylesheet type=text/css>\n")
            .append("</head>\n<body id=dirlist>\n<h1>").append(pwd).append("</h1>\n")
            .append(tableHeader);
         if (parent) {
-            buf.append("<tr><td class=\"name\"><a href=\"");
+            buf.append("<tr><td class=name><a href=\"");
             buf.append(URIUtil.addPaths(base,"../"));
             buf.append("\">Parent Directory</a></td><td class=lastmodified></td><td class=size></td></tr>\n");
         }
