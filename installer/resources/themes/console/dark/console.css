@@ -257,6 +257,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_localtunnels td[colspan="3"],#sidebar #sb_localtunnels tr:hover td[colspan="3"]{width:100%;line-height:12px;font-size:0;background-size:400%!important}
 #sidebar .testing,.tunnelBuildStatus.starting,#sb_localtunnels td[colspan="3"],#sidebar #routerdown td{color:#aa3;box-shadow:var(--highlight),inset 0 0 2px 1px #bb0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.5),rgba(0,0,0,.5) 10px,rgba(56,56,0,.5) 10px,rgba(48,48,0,.5) 20px) repeat center center/400%!important}
 #sidebar #routerdown td{padding:5px 0;width:100%;max-width:unset}
+
 /* tunnel build status */
 .tunnelBuildStatus{color:#ee9}
 .tunnelBuildStatus::before{margin:0 1px 0 -5px;width:16px;height:16px;display:inline-block;vertical-align:middle;border-radius:50%;content:"";transform:scale(.7) translateY(-1px)}
@@ -388,7 +389,7 @@ div[id^="config_"].main{padding-bottom:14px}
 #news p:nth-child(n+2),#newscontent p:nth-child(n+2){margin-top:8px}
 #newsStatus,#news #newsDisplay,#news #newsDisplay a{display:inline-block}
 #news ul{margin:10px 15px 15px;padding:12px 15px;list-style:none;border-radius:4px;box-shadow:var(--bevel_hard),var(--highlight_badge);background:var(--msg)}
-#homepage #news{position:relative;z-index:1;background:var(--newsbg),var(--radar) no-repeat right bottom/auto 250px,#000}
+#homepage #news{position:relative;z-index:1;background:var(--newsbg),url(images/dish.webp) no-repeat right 10px bottom/auto 250px,#000}
 #homepage #news::before{position:absolute;top:0;bottom:0;left:0;right:0;z-index:5;content:"";display:inline-block;width:100%;height:100%;background:rgba(0,18,0,.4)}
 #homepage .newsentry h3{margin-top:8px;box-shadow:none;background:var(--news) no-repeat 8px center/15px}
 
