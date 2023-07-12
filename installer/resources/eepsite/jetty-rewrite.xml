@@ -31,9 +31,141 @@
       <Call name="addRule">
         <Arg>
           <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
-            <Set name="pattern">/favicon.svg</Set>
+            <Set name="pattern">/favicon.ico</Set>
             <Set name="name">Cache-Control</Set>
-            <Set name="value">no-cache, private, max-age=2628000</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- soft cache html -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.html</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">no-cache, max-age=604800</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache css -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.css</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache png -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.png</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache jpg -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.jpg</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache gif -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.gif</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache webp -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.webp</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache svg -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.svg</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache ttf -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.ttf</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache woff -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.woff</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache woff2 -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.woff2</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
+            <Set name="terminating">true</Set>
+          </New>
+        </Arg>
+      </Call>
+
+      <!-- hard cache pdf -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">*.pdf</Set>
+            <Set name="name">Cache-Control</Set>
+            <Set name="value">max-age=604800, immutable</Set>
             <Set name="terminating">true</Set>
           </New>
         </Arg>
