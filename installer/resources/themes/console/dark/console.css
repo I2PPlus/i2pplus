@@ -1302,7 +1302,6 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 .sybil_distance tr:nth-child(n+2):hover{background:#000}
 .sybil_info,p.family,.threatpoints,p.hashdist,#sybil_totals,p.notfound{margin:3px 0;padding:5px 5px 5px 33px;font-weight:700;color:#cc0;border:var(--border);box-shadow:inset 0 0 0 1px #300;background:var(--eye) no-repeat 8px center/16px,linear-gradient(90deg,#000,#000800 80%,#001000)}
 .sybil_info,#sybil_totals{margin-bottom:10px;padding-left:35px;background-image:var(--eye_threat);background-size:20px,100%}
-.sybilinfo{line-height:1.4}
 .sybil_info+a[name]+table.sybil_routerinfo,p.hashdist+a[name]+table.sybil_routerinfo{margin-top:10px}
 .sybilinfo_container{padding:4px 5px}
 .sybilinfo_container b{color:#bb3}
@@ -1345,6 +1344,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #netdb .sybil_addresses table td:first-child{padding:8px 12px;border-right:var(--border)}
 #netdb .sybil_addresses table td:last-child{padding:6px 12px}
 #netdb .sybil_routerinfo table td:last-child{border-right:0}
+#netdb p.sybilinfo{padding:20px 20px 20px 58px;line-height:1.4;background:#000 var(--sybil) no-repeat 15px center/32px}
 #netdb .sybilScan td{padding:4px 20px;text-align:left;border:0}
 #netdb .sybilScan td:first-child{width:400px;white-space:nowrap;text-align:right}
 #pairs{margin-bottom:11px}
