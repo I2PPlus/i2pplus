@@ -1,6 +1,10 @@
 /* I2P+ Classic theme wizard specifics */
 /* Author: dr|z3d,2022 */
 
+#setupwizard{padding-left:calc(10% + 70px);background:url(images/wizard.webp) no-repeat 50px center/10% auto,var(--bg)}
+#setupwizard #bandwidthconfig td:first-child{white-space:normal}
+#setupwizard #messages{margin:0 0 10px 0;border:var(--border)}
+#setupwizard #webbrowser~p{margin:-11px 0 -1px;padding:20px;border:var(--border)}
 #wizardpage #sidebar .cancel{margin:4px 0 6px}
 #wizardpage #sidebar #sb_logo{height:44px!important}
 #wizardpage p{font-size:110%}
@@ -10,12 +14,12 @@
 #langsettings{margin-bottom:-1px;padding:6px 8px 5px}
 #langsettings label{display:inline-block}
 #flags.infohelp{margin-top:0}
-#bandwidth ~ p{margin-top:0;margin-bottom:0;border-left:var(--border);border-right:var(--border)}
-#bandwidth + h3 + p{margin-top:-11px;padding-top:12px}
-#bandwidth + h3 + p + p + p{padding-bottom:12px}
+#bandwidth~p{margin-top:0;margin-bottom:0;border-left:var(--border);border-right:var(--border)}
+#bandwidth+h3+p{margin-top:-11px;padding-top:12px}
+#bandwidth+h3+p+p+p{padding-bottom:12px}
 #bandwidth.infohelp{margin-top:0}
-#bandwidth ~ .wizardbuttons{margin-bottom:10px}
-#messages + form > #bandwidth.infohelp{margin-top:14px}
+#bandwidth~.wizardbuttons{margin-bottom:10px}
+#messages+form>#bandwidth.infohelp{margin-top:14px}
 #bandwidthTestRunning{margin:10px 0;padding:10px;width:calc(100% - 22px);text-align:center;font-style:italic;font-weight:700}
 .langselect{margin:3px 2px 4px;float:none}
 .optionsave{border:1px solid var(--border);background:none}
