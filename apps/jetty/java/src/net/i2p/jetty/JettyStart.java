@@ -66,6 +66,8 @@ public class JettyStart implements ClientApp {
     private static final String GZIP_DIR = "eepsite-jetty9.3";
     private static final String GZIP_CONFIG = "jetty-gzip.xml";
     private static final String MIN_GZIP_HANDLER_VER = "9.3";
+    private static final String REWRITE_DIR = "eepsite-jetty9";
+    private static final String REWRITE_CONFIG = "jetty-rewrite.xml";
     /**
      *  All args must be XML file names.
      *  Does not support any of the other argument types from org.mortbay.start.Main.
@@ -115,6 +117,37 @@ public class JettyStart implements ClientApp {
                     // copy jetty-gzip.xml over
                     File from = new File(_context.getBaseDir(), GZIP_DIR);
                     from = new File(from, GZIP_CONFIG);
+                    exists = FileUtil.copy(from, f, false, true);
+                }
+                if (exists) {
+                    // add to args
+                    String[] nargs = new String[args.length + 1];
+                    System.arraycopy(args, 0, nargs, 0, args.length);
+                    nargs[args.length] = f.getPath();
+                    args = nargs;
+                }
+            }
+            found = false;
+            for (int i = 0; i < args.length; i++) {
+                if (args[i].toLowerCase().endsWith(".properties"))
+                    continue;
+                if (args[i].toLowerCase().endsWith(REWRITE_CONFIG)) {
+                    found = true;
+                    break;
+                }
+                // save path to dir of other xml file for use below
+                File f = new File(args[i]);
+                File p = f.getParentFile();
+                if (p != null)
+                    path = p;
+            }
+            if (!found) {
+                File f = new File(path, REWRITE_CONFIG);
+                boolean exists = f.exists();
+                if (!exists && !_context.getBaseDir().equals(_context.getConfigDir())) {
+                    // copy jetty-rewrite.xml over
+                    File from = new File(_context.getBaseDir(), REWRITE_DIR);
+                    from = new File(from, REWRITE_CONFIG);
                     exists = FileUtil.copy(from, f, false, true);
                 }
                 if (exists) {
