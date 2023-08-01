@@ -45,8 +45,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private static final String DEFAULT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
                                                        String.valueOf(Router.CAPABILITY_BW32) +
                                                        String.valueOf(Router.CAPABILITY_BW64) +
-                                                       String.valueOf(Router.CAPABILITY_UNREACHABLE) + 
-                                                       String.valueOf(Router.CAPABILITY_CONGESTION_SEVERE);
+                                                       String.valueOf(Router.CAPABILITY_UNREACHABLE) +
+                                                       String.valueOf(Router.CAPABILITY_CONGESTION_MODERATE) +
+                                                       String.valueOf(Router.CAPABILITY_CONGESTION_SEVERE) +
+                                                       String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
     protected TunnelPeerSelector(RouterContext context) {
         super(context);
