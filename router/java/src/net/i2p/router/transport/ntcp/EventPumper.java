@@ -584,7 +584,10 @@ class EventPumper implements Runnable {
             ckey.attach(con);
             _transport.establishing(con);
         } catch (IOException ioe) {
-            _log.error("Error accepting NTCP connection", ioe);
+            if (ioe.toString().contains("reset by peer"))
+                _log.warn("Error accepting NTCP connection: " + ioe.getMessage());
+            else
+                _log.error("Error accepting NTCP connection", ioe);
         }
     }
 
