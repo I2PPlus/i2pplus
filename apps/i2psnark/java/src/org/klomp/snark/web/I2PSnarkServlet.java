@@ -774,7 +774,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</a>\n");
             }
         }
-        out.write("</th>\n<th id=torrentSort colspan=2 align=left>");
+        out.write("<th class=torrentLink colspan=2><input id=linkswitch class=\"optbox\" type=checkbox checked=\"\" hidden=hidden></th>\n");
+        out.write("<th id=torrentSort>");
         // cycle through sort by name or type
         boolean isTypeSort = false;
         if (showSort) {
@@ -799,10 +800,10 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         tx = _t("Torrent");
         if (!snarks.isEmpty()) {
-            out.write(toThemeImg("torrent", tx,
-                                 showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Torrent name"))) : tx));
-            if (showSort)
+            out.write(toThemeImg("torrent", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Torrent name"))) : tx));
+            if (showSort) {
                 out.write("</a></span>");
+            }
         }
         out.write("</th>\n<th class=torrentName></th>\n<th class=torrentETA align=right>");
         // FIXME: only show icon when actively downloading, not uploading
@@ -1028,17 +1029,17 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting() || !_manager.util().connected())
                 out.write("\" class=\"initializing");
-            out.write("\">\n<tr>\n<th id=torrentTotals align=left colspan=11></th></tr></tfoot>");
+            out.write("\">\n<tr>\n<th id=torrentTotals align=left colspan=12></th></tr></tfoot>");
         } else /** if (snarks.size() > 1) */ {
 
             // Add a pagenav to bottom of table if we have 50+ torrents per page
             // TODO: disable on pages where torrents is < 50 e.g. last page
             if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
-                out.write("<tr id=pagenavbottom><td colspan=11><div class=pagenavcontrols>");
+                out.write("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>");
                 writePageNav(out, req, start, pageSize, total, noThinsp);
                 out.write("</div></td></tr>\n</tbody>\n");
             }
-            out.write("<tfoot id=snarkFoot>\n<tr class=volatile>\n<th id=torrentTotals align=left colspan=5>");
+            out.write("<tfoot id=snarkFoot>\n<tr class=volatile>\n<th id=torrentTotals align=left colspan=6>");
             out.write("<span id=totals><span class=canhide>");
             out.write(_t("Totals"));
             out.write(":&nbsp;</span>");
@@ -1191,6 +1192,17 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</table>\n");
             if (isForm)
                 out.write("</form>\n");
+
+            // link/magnet toggle js and css placeholder
+            debug = false;
+            out.write("<style id=toggleLinks type=text/css></style>\n");
+            if (debug && _context.isRouterContext()) {
+                out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=/themes/js/toggleLinks.js></script>\n"); // debug
+            } else {
+                out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=\"" +
+                          _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
+            }
+
 /**
             // load torrentDisplay script here to ensure table has loaded into dom
             if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
@@ -2191,9 +2203,8 @@ public class I2PSnarkServlet extends BasicServlet {
                            "<td class=peerCount><b>";
             snarkStatus = "active starting processing";
         } else if (err != null && isRunning && curPeers == 0) {
-            statusString = toSVGWithDataTooltip("error", "", err) + "</td>\n" +
-                                 "<td class=peerCount><b><span class=right>" +
-                                 curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            statusString = toSVGWithDataTooltip("error", "", err) + "</td>\n" + "<td class=peerCount><b><span class=right>" +
+                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
             snarkStatus = "inactive downloading incomplete neterror";
         } else if (snark.isStarting()) {
             statusString = toSVGWithDataTooltip("stalled", "", _t("Starting")) + "</td>\n" +
@@ -2311,7 +2322,7 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<td class=graphicStatus align=center>");
         out.write(statusString);
 
-        // (i) icon column
+        // link column
         out.write("</b></td>\n<td class=trackerLink>");
         if (isValid) {
             String announce = meta.getAnnounce();
@@ -2326,6 +2337,30 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         String encodedBaseName = encodePath(fullBasename);
+        String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
+        // magnet column
+        out.write("</b></td>\n<td class=magnet>");
+        if (isValid && meta != null) {
+            String announce = meta.getAnnounce();
+            out.write("<a class=\"magnetlink\" href=\"" + MagnetURI.MAGNET_FULL + hex);
+            if (announce != null) {
+                out.write("&amp;tr=" + announce);
+            }
+            if (encodedBaseName != null) {
+                out.write("&amp;dn=" + encodedBaseName.replace(".torrent", "")
+                   .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
+            }
+            out.write("\" title=\"" + MagnetURI.MAGNET_FULL + hex);
+            if (announce != null) {
+                out.write("&amp;tr=" + announce);
+            }
+            if (encodedBaseName != null) {
+                out.write("&amp;dn=" + encodedBaseName.replace(".torrent", "")
+                   .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
+            }
+            out.write("\">" + toSVG("magnet", "") + "</a>");
+        }
+
         // File type icon column
         out.write("</td>\n<td class=torrentDetails>");
         if (isValid) {
