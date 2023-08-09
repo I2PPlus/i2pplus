@@ -248,6 +248,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 .torrentName a:active,.snarkFileName a:active{box-shadow:inset 3px 3px 3px 3px rgba(0,0,0,.3)}
 .torrentUploaded{padding-right:6px}
 .torrentUploaded .left{min-width:12px}
+.trackerLink{text-align:center}
 .trackerLink a:active img,.torrentDetails a:active img:not([src$="rateme.svg"]),.dirInfo td:first-child a:active img{box-shadow:var(--highlight),inset 0 0 1px 1px #f60,inset 3px 3px 3px 3px rgba(0,0,0,.8);transform:scale(.9)}
 .trackerLink a:hover img,.trackerLink a:focus img,.torrentDetails a:hover img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),.torrentDetails a:focus img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),.commentDetails a:hover img,.commentDetails a:focus img{border-radius:1px;box-shadow:var(--outline),inset 0 0 1px 1px #930;background:linear-gradient(180deg,#030 50%,#010 50%);filter:none}
 .trackerLink img,.torrentDetails img,.dirInfo td:first-child img{margin:0;padding:1px}
@@ -985,7 +986,7 @@ th.peerCount a img{margin-left:-20px}
 #torrents{margin-bottom:11px}
 #torrents td.torrentDetails img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){width:22px;height:22px}
 #torrents td.torrentDetails img[src$="rateme.svg"]{margin-top:-1px;margin-right:-2px;width:12px;height:12px}
-#torrents td.trackerLink img{padding:5px;width:19px;height:19px}
+/*#torrents td.trackerLink img{padding:5px 5px 5px 10px;width:19px;height:19px}*/
 #torrents thead img{margin:1px;max-height:22px}
 #torrents th.graphicStatus img{margin-left:3px}
 #torrents .torrentAction{padding:1px 3px}
