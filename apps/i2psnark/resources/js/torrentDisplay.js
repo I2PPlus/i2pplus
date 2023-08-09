@@ -301,6 +301,7 @@ function refreshFilters() {
   var pagesize = headers.get("X-Snark-Pagesize");
   var path = window.location.pathname;
   var query = window.location.search;
+  var screenlog = document.getElementById("screenlog");
   var storageFilter = "filter";
   if (!path.endsWith("i2psnark/")) {storageFilter = "filter_" + path.replace("/", "");}
   var storage = window.localStorage.getItem(storageFilter);
@@ -367,6 +368,6 @@ function refreshAll() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", checkIfVisible(), true);
+document.addEventListener("DOMContentLoaded", checkIfVisible, true);
 
 export {initFilterBar, checkFilterBar, refreshFilters};

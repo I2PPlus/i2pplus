@@ -4,6 +4,7 @@
 
 import {initFilterBar, checkFilterBar, refreshFilters} from "./torrentDisplay.js";
 import {onVisible} from "./onVisible.js";
+import {initLinkToggler} from "./toggleLinks.js";
 
 function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");
@@ -83,6 +84,7 @@ function refreshTorrents() {
         if (xhrsnark.status === 200) {
           if (torrents) {
             var torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
+            initLinkToggler();
           }
 
           if (down || noload) {
@@ -179,18 +181,17 @@ function refreshTorrents() {
           function clearQuery() {window.localStorage.removeItem("queryString");}
 
         } else {
-
           function noAjax() {
             var failMessage = "<div class=routerdown id=down><span>Router is down</span></div>";
             if (mainsection) {mainsection.innerHTML = failMessage;}
             else {snarkInfo.innerHTML = failMessage;}
           }
-
           setTimeout(noAjax, 5000);
         }
       }
     };
     xhrsnark.send();
+    initLinkToggler();
   }
 }
 
