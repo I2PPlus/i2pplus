@@ -375,7 +375,7 @@ public class I2PSnarkServlet extends BasicServlet {
                           "function updateIfVisible() {\n" +
                           "  if (!timerId) {\n" +
                           "    var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
-                          "   }\n" +
+                          "  }\n" +
                           "}\n" +
                           "if (main) {\n" +
                           "  onVisible(main, () => {updateIfVisible();});\n" +
@@ -385,6 +385,10 @@ public class I2PSnarkServlet extends BasicServlet {
                           "document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
                           "</script>\n");
             }
+            out.write("<script nonce=\"" + cspNonce + "\" type=module>\n");
+            out.write("  import {initLinkToggler} from \"/themes/js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
+            out.write("  document.addEventListener(\"DOMContentLoaded\", initLinkToggler, true);\n");
+            out.write("</script>\n");
         }
         // custom dialog boxes for javascript alerts
         //out.write("<script charset=utf-8 src=\"" + jsPfx + "/js/custom-alert.js\" type=text/javascript></script>\n");
@@ -1200,8 +1204,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=/themes/js/toggleLinks.js></script>\n"); // debug
             } else {
                 out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=\"" +
-                          _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
+                          _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\">\n");
             }
+            out.write("  import {initLinkToggler} from \"/themes/js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
+            out.write("  document.addEventListener(\"DOMContentLoaded\", initLinkToggler, true);\n");
+            out.write("</script>\n");
 
 /**
             // load torrentDisplay script here to ensure table has loaded into dom
@@ -2339,7 +2346,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String encodedBaseName = encodePath(fullBasename);
         String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
         // magnet column
-        out.write("</b></td>\n<td class=magnet>");
+        out.write("</td>\n<td class=magnet>");
         if (isValid && meta != null) {
             String announce = meta.getAnnounce();
             out.write("<a class=\"magnetlink\" href=\"" + MagnetURI.MAGNET_FULL + hex);

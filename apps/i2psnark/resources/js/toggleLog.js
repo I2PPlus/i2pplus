@@ -54,5 +54,7 @@ function initToggle() {
   sh.addEventListener("click", shrink, false);
   ex.addEventListener("click", expand, false);
 }
-sh.addEventListener("click", initToggle, false);
-ex.addEventListener("click", initToggle, false);
+document.addEventListener("DOMContentLoaded", () => {
+  sh.addEventListener("click", initToggle, false);
+  ex.addEventListener("click", initToggle, false);
+});

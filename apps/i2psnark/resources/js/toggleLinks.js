@@ -29,33 +29,35 @@ function initLinkToggler() {
       toggleCss.innerHTML = showSwitch;
       if (config) {
         toggle.checked = true;
+        toggle.setAttribute("checked", "checked")
         toggleCss.innerHTML = showSwitch + showMagnets;
       } else {
         toggle.checked = false;
-        toggle.removeAttribute("checked");
+        toggle.setAttribute("checked", "")
         toggleCss.innerHTML = showSwitch + showLinks;
       }
     }
   }
-
-  function linkToggle() {
-    if (toggle !== null) {
-       if (toggle.checked === true) {
-         window.localStorage.setItem("linkToggle", "on");
-         toggleCss.innerHTML = showSwitch + showMagnets;
-         toggle.setAttribute("checked", "")
-      } else {
-         toggle.setAttribute("checked", "checked")
-         toggleCss.innerHTML = showSwitch + showLinks;
-         window.localStorage.removeItem("linkToggle");
-      }
-    }
-  }
-
-  toggle.addEventListener("click", linkToggle, true);
-  document.addEventListener("DOMContentLoaded", initToggle, true);
-
 }
 
-initLinkToggler();
-export {initLinkToggler};
+function linkToggle() {
+  if (toggle !== null) {
+    if (toggle.checked) {
+      localStorage.setItem("linkToggle", "on");
+      toggle.setAttribute("checked", "")
+      toggle.click();
+      toggleCss.innerHTML = showSwitch + showMagnets;
+    } else {
+      toggle.setAttribute("checked", "checked")
+      toggle.click();
+      toggleCss.innerHTML = showSwitch + showLinks;
+      localStorage.removeItem("linkToggle");
+    }
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    initToggle();
+    toggle.addEventListener("click", linkToggle, true);
+  });
+}
+
+export {initLinkToggler, linkToggle};

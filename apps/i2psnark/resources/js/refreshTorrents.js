@@ -4,7 +4,7 @@
 
 import {initFilterBar, checkFilterBar, refreshFilters} from "./torrentDisplay.js";
 import {onVisible} from "./onVisible.js";
-import {initLinkToggler} from "./toggleLinks.js";
+import {initLinkToggler, linkToggle} from "./toggleLinks.js";
 
 function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");
@@ -85,6 +85,7 @@ function refreshTorrents() {
           if (torrents) {
             var torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
             initLinkToggler();
+            linkToggle();
           }
 
           if (down || noload) {
@@ -159,6 +160,8 @@ function refreshTorrents() {
                 thead.innerHTML = theadResponse.innerHTML;
               }
               setLinks();
+              initLinkToggler();
+              linkToggle();
             }
           }
 
@@ -169,6 +172,8 @@ function refreshTorrents() {
                 mainsection.innerHTML = mainsectionResponse.innerHTML;
               }
               setLinks();
+              initLinkToggler();
+              linkToggle();
 
             } else if (files) {
               var dirlistResponse = xhrsnark.responseXML.getElementById("dirlist");
@@ -192,6 +197,7 @@ function refreshTorrents() {
     };
     xhrsnark.send();
     initLinkToggler();
+    linkToggle();
   }
 }
 
