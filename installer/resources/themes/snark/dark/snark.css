@@ -255,6 +255,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 .trackerLink img{padding:4px;width:16px;height:16px;opacity:.7}
 .trackerLink,.torrentDetails{padding-left:0;padding-right:0;width:1%;white-space:nowrap;text-align:center;font-weight:700}
 .zero .peerCount b{display:none}
+#linkswitch:not(:checked)::before{opacity:1}
 #pagenav,th.torrentETA,th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,th.SnarkTorrentAction{text-align:center}
 #snarkhead th{background:none}
 #snarkhead tr{background:var(--title);background-size:4px 100%,100%}
