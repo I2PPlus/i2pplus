@@ -6,12 +6,12 @@ function initLinkToggler() {
                     "#torrents .magnetlink,#torrents .magnetlink a,#torrents .magnetlink img,#torrents .trackerlink{margin:0;padding:0;white-space:normal;border:0;box-shadow:none;background:none}";
   var showLinks =   "#torrents #linkswitch::before{background:url(/i2psnark/.resources/icons/link.svg) no-repeat center center/20px!important}" +
                     "#snarkTbody .magnet,#snarkTbody .magnet:empty{padding:0;width:0;font-size:0}#snarkTbody .magnet>*{display:none}" +
-                    "#snarkTbody .trackerLink{padding:4px 0 0 2px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .trackerLink>*{display:inline-block}" +
+                    "#snarkTbody .trackerLink{padding:0 4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .trackerLink>*{display:inline-block}" +
                     "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
                     "@media(min-width:1500px){#torrents td.trackerLink img{margin:0;width:20px!important;height:20px!important}";
   var showMagnets = "#torrents #linkswitch::before{background:url(/i2psnark/.resources/icons/magnet.svg) no-repeat center center/20px!important}" +
                     "#snarkTbody .trackerLink,#snarkTbody .trackerLink:empty{padding:0;width:0;font-size:0}#snarkTbody .trackerLink>*{display:none}" +
-                    "#snarkTbody .magnet{padding:4px 0 0 2px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .magnet>*{display:inline-block}" +
+                    "#snarkTbody .magnet{padding:0 4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .magnet>*{display:inline-block}" +
                     "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
                     "@media(min-width:1500px){#torrents td.magnet img{margin:0;width:20px!important;height:20px!important}}";
   var showSwitch =  "#linkswitch{display:inline-block!important;background:none}" +
@@ -66,12 +66,12 @@ function linkToggle() {
   var toggleCss = document.getElementById("toggleLinks");
   if (toggle !== null) {
     if (config === "links" || config === null) {
-      console.log("LinkToggle set to magnets");
+      //console.log("LinkToggle set to magnets");
       localStorage.setItem("linkToggle", "magnets");
       toggle.checked = false;
       toggleCss.innerHTML = showSwitch + showMagnets;
     } else {
-      console.log("LinkToggle set to links");
+      //console.log("LinkToggle set to links");
       localStorage.setItem("linkToggle", "links");
       toggle.checked = true;
       toggleCss.innerHTML = showSwitch + showLinks;
