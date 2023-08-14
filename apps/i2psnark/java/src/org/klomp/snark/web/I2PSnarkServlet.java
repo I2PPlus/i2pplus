@@ -1211,30 +1211,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // link/magnet toggle js and css placeholder
             debug = false;
             out.write("<style id=toggleLinks type=text/css></style>\n");
-/**
-            if (debug && _context.isRouterContext()) {
-                out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=/themes/js/toggleLinks.js>\n"); // debug
-            } else {
-                out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=\"" +
-                          _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\">\n");
-            }
-            //out.write("  import {initLinkToggler} from \"/themes/js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
-            out.write("  document.addEventListener(\"DOMContentLoaded\", initLinkToggler, true);\n");
-            out.write("</script>\n");
-**/
 
-/**
-            // load torrentDisplay script here to ensure table has loaded into dom
-            if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
-                if (debug && _context.isRouterContext()) {
-                    out.write("<script charset=utf-8 src=\"/themes/js/torrentDisplay.js?" + CoreVersion.VERSION +
-                              "\" type=module async></script>\n"); // debug
-                } else {
-                    out.write("<script charset=utf-8 src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION +
-                              "\" type=module async></script>\n");
-                }
-            }
-**/
             return start == 0;
     }
 
