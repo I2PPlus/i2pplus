@@ -15,9 +15,10 @@
 --highlight:inset 0 0 0 1px #ffefe6;
 --ink:#331700;
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
+--navbar:linear-gradient(180deg,#efefef,#cfc7c2,#bcb0a9);
 --nav_active:linear-gradient(180deg,#af9178,#dfb899);
---nav_hover:linear-gradient(180deg,#ffeadf 47%,#cfb6a8 50%);
---nav:linear-gradient(180deg,#fff7ef 47%,rgba(207,193,181,.6) 50%),repeating-linear-gradient(45deg,#75604e 1px,#a09286 1px,#bfafa2 2px);
+--nav_hover:linear-gradient(180deg,#ffeadf,#cfb6a8);
+--nav:linear-gradient(180deg,#fff7ef,#cfc7c2);
 --notify:linear-gradient(to bottom,rgba(0,0,0,0),#e9e5e2),var(--panel);
 --panel:linear-gradient(180deg,#dfd7d1,#cfc7c2);
 --row_even:linear-gradient(90deg,#998e88 3px,#e8dfda 3px);
@@ -70,7 +71,7 @@ tfoot tr:first-child th{vertical-align:middle;font-weight:700;color:#4d2200}
 #navbar,#screenlog,#addSection,#createSection,.configPanel{contain:content}
 
 /* top nav */
-#navbar{margin:-11px 0 10px 0;padding:12px 10px 11px;position:sticky;top:-2px;z-index:999;width:70%;border:var(--border);border-radius:0 0 2px 2px;box-shadow:var(--highlight),0 0 0 1px rgba(111,96,90,.3);background:linear-gradient(180deg,#efefef 50%,#cfc7c2 53%);text-align:center;transition:ease width .5s .5s}
+#navbar{margin:-11px 0 10px 0;padding:12px 10px 11px;position:sticky;top:-2px;z-index:999;width:70%;border:var(--border);border-radius:0 0 2px 2px;box-shadow:var(--highlight),0 0 0 1px rgba(111,96,90,.3);background:var(--navbar);text-align:center;transition:ease width .5s .5s}
 .iframed #navbar{margin:-6px 0;padding-top:10px;position:static;width:auto;border-radius:0;box-shadow:var(--highlight);background:var(--th)}
 #navbar a:not(:hover):not(:focus):not(:active){color:#3f271b}
 .snarkNav,.snarkNav:visited{margin:-3px -4px -4px 0;padding:4px 10px 4px 28px;display:inline-block;position:relative;z-index:30;line-height:1.3;font-family:var(--bodyfont);font-size:10pt;font-weight:700!important;color:#3f271b;text-shadow:0 0 1px #fff5ef;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;border:var(--border);border-radius:0;box-shadow:var(--highlight),inset 0 0 0 rgba(0,0,0,0),0 0 0 1px rgba(77,69,62,.1);background-size:17px,100%,100%,17px,17px;background-position:12px center,center center,center center;background-repeat:no-repeat;animation:fade-in .25s ease .5s both}
