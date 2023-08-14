@@ -365,10 +365,17 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (debug && _context.isRouterContext()) {
                     out.write("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
                     out.write("import {onVisible} from \"/themes/js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
+                    out.write("</script>\n");
+                    out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=/themes/js/toggleLinks.js></script>\n"); // debug
                 } else {
-                    out.write("import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
-                    out.write("import {onVisible} from \""  + _contextPath + WARBASE + "js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
+
+                    out.write("import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
+                    out.write("import {onVisible} from \"" + _contextPath + WARBASE + "js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
+                    out.write("</script>\n");
+                    out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=\"" +
+                              _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
                 }
+            } else {
                 out.write("var ajaxDelay = " + (delay * 1000) + ";\n" +
                           "var main = document.getElementById(\"mainsection\");\n" +
                           "var details = document.getElementById(\"snarkInfo\");\n" +
@@ -386,7 +393,11 @@ public class I2PSnarkServlet extends BasicServlet {
                           "</script>\n");
             }
             out.write("<script nonce=\"" + cspNonce + "\" type=module>\n");
-            out.write("  import {initLinkToggler} from \"/themes/js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
+            if (debug && _context.isRouterContext()) {
+                out.write("  import {initLinkToggler} from \"/themes/js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
+            } else {
+                out.write("  import {initLinkToggler} from \"" + _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
+            }
             out.write("  document.addEventListener(\"DOMContentLoaded\", initLinkToggler, true);\n");
             out.write("</script>\n");
         }
@@ -778,7 +789,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</a>\n");
             }
         }
-        out.write("<th class=torrentLink colspan=2><input id=linkswitch class=\"optbox\" type=checkbox checked=\"\" hidden=hidden></th>\n");
+        out.write("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>\n");
         out.write("<th id=torrentSort>");
         // cycle through sort by name or type
         boolean isTypeSort = false;
@@ -1200,15 +1211,17 @@ public class I2PSnarkServlet extends BasicServlet {
             // link/magnet toggle js and css placeholder
             debug = false;
             out.write("<style id=toggleLinks type=text/css></style>\n");
+/**
             if (debug && _context.isRouterContext()) {
-                out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=/themes/js/toggleLinks.js></script>\n"); // debug
+                out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=/themes/js/toggleLinks.js>\n"); // debug
             } else {
                 out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=\"" +
                           _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\">\n");
             }
-            out.write("  import {initLinkToggler} from \"/themes/js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
+            //out.write("  import {initLinkToggler} from \"/themes/js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
             out.write("  document.addEventListener(\"DOMContentLoaded\", initLinkToggler, true);\n");
             out.write("</script>\n");
+**/
 
 /**
             // load torrentDisplay script here to ensure table has loaded into dom
@@ -2588,7 +2601,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     continue;
                 out.write("<tr class=\"peerinfo " + snarkStatus + " volatile\">\n<td class=graphicStatus title=\"");
                 out.write(_t("Peer attached to swarm"));
-                out.write("\"></td><td class=peerdata colspan=4>");
+                out.write("\"></td><td class=peerdata colspan=5>");
                 PeerID pid = peer.getPeerID();
                 String ch = pid != null ? pid.toString() : "????";
                 if (ch.startsWith("WebSeed@")) {

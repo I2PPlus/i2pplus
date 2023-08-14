@@ -3,6 +3,7 @@
 /* License: AGPL3 or later */
 
 import {onVisible} from "./onVisible.js";
+import {initLinkToggler, linkToggle} from "./toggleLinks.js";
 
 function initFilterBar() {
 
@@ -28,7 +29,9 @@ function initFilterBar() {
   var screenlog = document.getElementById("screenlog");
   var seeding = document.querySelectorAll(".seeding");
   var stopped = document.querySelectorAll(".stopped");
+  var tbody = document.getElementById("snarkTbody");
   var tfoot = document.getElementById("snarkFoot");
+  var toggle = document.getElementById("linkswitch");
   var badge = document.getElementById("filtercount");
   var badges = document.querySelectorAll("#filtercount.badge");
   var torrentform = document.getElementById("torrentlist");
@@ -67,6 +70,7 @@ function initFilterBar() {
       else {pagenav.style.display = "";}
     }
     if (badge) {badges.forEach((element) => {element.remove();});}
+    initLinkToggler();
   }
 
   function showBadge() {
@@ -238,6 +242,7 @@ function initFilterBar() {
          btnAll.checked = true;
          showAll();
      }
+     initLinkToggler();
   }
 }
 
@@ -307,6 +312,7 @@ function refreshFilters() {
   var storage = window.localStorage.getItem(storageFilter);
   var url = ".ajax/xhr1.html";
   checkPagenav();
+  initLinkToggler();
 
   if (query) {
     if (storage !== null && filterbar) {
@@ -354,6 +360,7 @@ function refreshFilters() {
     }
   };
   xhrfilter.send();
+  initLinkToggler();
 }
 
 function checkIfVisible() {
@@ -363,8 +370,22 @@ function checkIfVisible() {
 
 function refreshAll() {
   var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
+  var filterbar = document.getElementById("torrentDisplay");
+  var tbody = document.getElementById("snarkTbody");
+  var tfoot = document.getElementById("snarkFoot");
+  var toggle = document.getElementById("linkswitch");
   if (mainsectionResponse !== null && mainsection !== mainsectionResponse) {
-    mainsection.innerHTML = mainsectionResponse.innerHTML;
+    var tbodyResponse = xhrsnark.responseXML.getElementById("snarkTbody");
+    var tfootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
+    //mainsection.innerHTML = mainsectionResponse.innerHTML;
+    tbody.innerHTML = tbodyResponse.innerHTML;
+    tfoot.innerHTML = tfootResponse.innerHTML;
+    if (filterbar !== null) {
+      filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
+      if (filterbar.innerHTML != filterbarResponse.innerHTML) {
+        filterbar.innerHTML = filterbarResponse.innerHTML;
+      }
+    }
   }
 }
 

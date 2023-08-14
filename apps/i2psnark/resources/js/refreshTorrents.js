@@ -4,7 +4,7 @@
 
 import {initFilterBar, checkFilterBar, refreshFilters} from "./torrentDisplay.js";
 import {onVisible} from "./onVisible.js";
-import {initLinkToggler, linkToggle} from "./toggleLinks.js";
+import {initLinkToggler} from "./toggleLinks.js";
 
 function refreshTorrents() {
   var complete = document.getElementsByClassName("completed");
@@ -72,6 +72,7 @@ function refreshTorrents() {
   var filterEnabled = localStorage.hasOwnProperty("filter");
 
   if (filterbar && filterEnabled) {
+    initLinkToggler();
     onVisible(filterbar, () => {
       checkFilterBar();
     });
@@ -85,7 +86,6 @@ function refreshTorrents() {
           if (torrents) {
             var torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
             initLinkToggler();
-            linkToggle();
           }
 
           if (down || noload) {
@@ -161,7 +161,6 @@ function refreshTorrents() {
               }
               setLinks();
               initLinkToggler();
-              linkToggle();
             }
           }
 
@@ -173,7 +172,6 @@ function refreshTorrents() {
               }
               setLinks();
               initLinkToggler();
-              linkToggle();
 
             } else if (files) {
               var dirlistResponse = xhrsnark.responseXML.getElementById("dirlist");
@@ -197,7 +195,6 @@ function refreshTorrents() {
     };
     xhrsnark.send();
     initLinkToggler();
-    linkToggle();
   }
 }
 
