@@ -214,6 +214,7 @@ th.peerCount a img{margin-left:-5px}
 .noneLoaded i{padding:15px 10px;display:inline-block;font-size:115%}
 .magnet,.trackerLink{padding:4px;width:1%;text-align:center}
 #mainsection #linkswitch,#mainsection #snarkTbody .magnet img,#mainsection #snarkTbody .trackerLink img{margin-left:4px}
+#linkswitch::before{margin:0 -4px 0 0!important;padding:0}
 .magnet a:hover,.trackerLink a:hover{transform:scale(1.2)}
 .trackerLink a:hover img{filter:none}
 .peerCount .left{padding-left:2px;text-align:left}
@@ -511,6 +512,10 @@ td.subHeaderPriority{padding:0 1px;font-size:7.5pt;font-weight:700;background-im
 .ParentDir img{padding-left:3px}
 .priorityIndicator{margin-right:5px;display:none}
 .snarkFileSize{padding-right:10px;white-space:nowrap}
+.magnetlink,#torrentInfo .infohash{margin:0 2px 0 3px;padding:4px 5px 4px 3px;vertical-align:middle;border-radius:1px;box-shadow:var(--outline);background:var(--badge)}
+.magnetlink:hover,.magnetlink:focus{box-shadow:var(--outline),inset 0 0 0 1px rgba(255,96,0,.5)}
+.torrentlink img:hover,.magnetlink img:hover{filter:none}
+th.torrentlink{text-align:left}
 #torrentInfo{border-bottom:var(--border);background:url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #010}
 #torrentInfo b{margin-right:3px}
 #torrentInfo img{margin:1px 0 1px 2px;max-height:16px;vertical-align:text-bottom}
@@ -527,10 +532,6 @@ td.subHeaderPriority{padding:0 1px;font-size:7.5pt;font-weight:700;background-im
 #torrentInfo td:first-child{padding:5px 8px}
 #torrentInfo td>*{vertical-align:middle}
 #torrentInfo .infohash::selection{background:#cc0;color:#000}
-.torrentlink,.magnetlink,#torrentInfo .infohash{margin:0 2px 0 3px;padding:4px 5px 4px 3px;vertical-align:middle;border-radius:1px;box-shadow:var(--outline);background:var(--badge)}
-.torrentlink:hover,.torrentlink:focus,.magnetlink:hover,.magnetlink:focus{box-shadow:var(--outline),inset 0 0 0 1px rgba(255,96,0,.5)}
-.torrentlink{margin-right:-3px}
-.torrentlink img:hover,.magnetlink img:hover{filter:none}
 #torrentInfo .infohash{margin:0 2px;padding:6px 3px 6px 24px;display:inline-block;line-height:1;background:var(--hash) no-repeat 7px center/14px,var(--badge)}
 #enableInOrder{margin-left:4px;margin-right:16px}
 #metainfo{padding:4px 9px 4px 7px;text-align:left;border:var(--border_soft);box-shadow:var(--highlight),inset 0 0 1px 1px #141,0 0 2px 2px rgba(0,0,0,.3);background:#000}
