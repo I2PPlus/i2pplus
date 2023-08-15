@@ -224,6 +224,7 @@ tr:hover .magnetLabel{opacity:1}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .infohash{padding:0 3px 0 15px;width:100px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;color:#393;font-family:var(--monospaced);border-radius:1px;background:#fff var(--hash) no-repeat left center/12px;user-select:all}
 .infohash::selection{background:#393}
+.magnet,.trackerLink{width:1%;text-align:center}
 .magnetLabel{margin-left:3px;padding-left:14px;padding-right:2px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;line-height:1.1;background:var(--tag) no-repeat left center/12px;opacity:.8}
 .noneLoaded td,.noneLoaded:hover td{text-align:center;font-size:10pt;font-weight:700;padding:15px;background:#eee}
 .peerCount{line-height:1;text-align:center;font-weight:700}

@@ -155,7 +155,7 @@ th.peerCount{text-align:center}
 .active .torrentAction,.active:hover .torrentAction{background:linear-gradient(to left,#cb4dcb 3px,rgba(0,0,0,0) 3px);animation:ease-in-out active .5s 3s forwards}
 .active.downloading .torrentAction,.active.downloading:hover .torrentAction,.active.RX .torrentAction,.active.RX:hover .torrentAction{background:linear-gradient(to left,#3d3 3px,rgba(0,0,0,0) 3px);animation:ease-in-out downloading .5s 3s forwards}
 .dirInfo td:first-child img:not(.thumb){margin:0 2px}
-.graphicStatus{width:1%;white-space:nowrap;text-align:center}
+.graphicStatus,.magnet{width:1%;white-space:nowrap;text-align:center}
 .graphicStatus img{width:auto;height:22px}
 .infohash{font-family:var(--monospaced);color:#050;user-select:all;margin-right:3px}
 .infohash::selection{color:#ff0;background:#171}

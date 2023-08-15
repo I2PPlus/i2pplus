@@ -137,6 +137,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 .RateUp,.RateDown,.torrentDownloaded,.torrentUploaded{padding:0 3px;line-height:.9}
 .rowEven,.rowOdd,.knownTracker,#trackerselect tr:nth-child(n+2) td{background:var(--row)}
 .rowOdd,.rowOdd td,.rowEven,.rowEven td,.peerinfo td,.knownTracker td{border-top:var(--border_inner)}
+.magnet,.trackerlink{padding:0 4px;width:1%;text-align:center}
 td.torrentDetails img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){width:20px;height:20px;max-width:20px;max-height:20px}
 td.trackerLink a:hover img,td.trackerLink a:focus img{opacity:1}
 td.trackerLink img{opacity:.75}

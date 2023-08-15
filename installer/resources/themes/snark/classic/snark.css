@@ -190,7 +190,7 @@ a.controld{display:none}
 .RateDown .left,.torrentUploaded .left,.RateUp .left{min-width:12px;display:inline-block;text-align:left}
 .RateDown .left,.RateUp .left{min-width:26px}
 .RateDown .right,.RateUp .right{min-width:36px;display:inline-block;text-align:right}
-.trackerLink,.torrentDetails,.commentDetails{padding-left:2px;padding-right:2px;width:1%;white-space:nowrap;text-align:center;font-weight:700}
+.trackerLink,.torrentDetails,.commentDetails,.magnet{padding-left:4px;padding-right:4px;width:1%;white-space:nowrap;vertical-align:middle;text-align:center;font-weight:700}
 .torrentDetails img{width:20px;height:20px}
 .torrentDetails a{padding:5px 2px;border-radius:2px}
 .torrentDetails a:hover,.torrentDetails a:focus,.commentDetails a:hover,.commentDetails a:focus,.dirInfo td:first-child a:hover,.dirInfo td:first-child a:focus{box-shadow:0 0 0 1px var(--hover);background:linear-gradient(180deg,var(--bg) 50%,var(--bg4) 50%);filter:none}
@@ -208,8 +208,8 @@ td.graphicStatus{padding-left:5px}
 .headerstatus{text-align:center}
 .headerpriority{padding-left:10px;text-align:left}
 .priority{font-size:8pt;min-width:160px;vertical-align:middle}
-.graphicStatus{width:1%}
-td.trackerLink{text-align:right}
+.graphicStatus,.magnet,.trackerLink{width:1%;text-align:center}
+.magnet a,.magnet img,.trackerLink a,.trackerLink img{margin:0;padding:0;display:inline-block;vertical-align:middle;line-height:0;font-size:0}
 .peerinfo{background:var(--bodybg)}
 .snarkFileName{padding:4px 0;text-align:left;font-weight:700}
 .snarkFileName a{font-weight:700}

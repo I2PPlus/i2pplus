@@ -182,7 +182,7 @@ tfoot .RateUp,tfoot .RateDown,td.RateUp,td.RateDown,tfoot .torrentUploaded,td.to
 .torrentName{padding:0 0 0 3px;text-align:left}
 .torrentUploaded:empty{text-align:center}
 .torrentUploaded,.RateUp{font-style:italic}
-.trackerLink{padding:0 4px;text-align:center}
+.trackerLink,.magnet{padding:0 4px;width:1%;text-align:center;}
 .trackerLink a:hover img,.trackerLink a:focus img,.torrentDetails a:hover img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),.torrentDetails a:focus img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),.dirInfo tr:first-child td:first-child a:hover img,.dirInfo tr:first-child td:first-child a:focus img{border:1px solid var(--hover);border-radius:2px;background:var(--btnAction);filter:none;mix-blend-mode:normal}
 .trackerLink a:active img,.torrentDetails a:active img,.dirInfo td:first-child a:active img{box-shadow:inset 2px 2px 2px #adadeb;transform:scale(.9)}
 .trackerLink img,.torrentDetails img,.commentDetails img{margin:0;padding:3px;height:19px;width:auto;border:1px solid transparent;filter:none}
