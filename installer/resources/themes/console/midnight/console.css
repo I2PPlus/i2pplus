@@ -1611,15 +1611,14 @@ h3 .b32{font-size:inherit}
 .tunnel_cap{padding:2px 3px;color:var(--ink)}
 .tunnel_cap:empty{border:0}
 .tunnel_cap:empty::after{content:"?"}
-.tunnel_id:not(:empty){margin-left:2px;padding:2px 8px 2px 18px;min-width:78px;display:inline-block;line-height:1.35;vertical-align:middle;text-align:right;border:var(--border_badge);box-shadow:var(--highlight);background:var(--hardhat) no-repeat 6px center/12px, var(--element)}
+.tunnel_id:not(:empty){margin-left:2px;padding:2px 8px 2px 18px;min-width:84px;display:inline-block;line-height:1.35;vertical-align:middle;text-align:right;border:var(--border_badge);box-shadow:var(--highlight);background:var(--hardhat) no-repeat 6px center/12px, var(--element)}
 .tunnel_local,span.b32{margin:0 3px;padding:2px;min-width:64px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
 span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
-.tunnel_local{padding:2px;min-width:102px;box-sizing:border-box;line-height:1.7;font-size:80%;text-transform:lowercase}
+.tunnel_local{margin:0;padding:1px 2px;width:103px;box-sizing:border-box;line-height:1.7;font-size:80%;text-transform:lowercase}
 .tunnel_peer{display:inline-block;vertical-align:middle}
 #tunnel_defs{margin-top:-1px;margin-bottom:10px}
 #tunnel_defs td{padding:8px}
 #tunnel_defs td:first-child{display:none!important}
-#tunnel_defs td:nth-child(even){width:1%;white-space:nowrap}
 #tunnel_defs td:nth-last-child(2){border-right:0!important}
 #tunnel_defs .tunnel_cap{margin:2px 8px}
 #tunnels h3.client{padding-left:34px;background:var(--client) no-repeat 8px center/19px,var(--title)}
@@ -1628,10 +1627,12 @@ span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 #tunnels h3 img{margin:0 4px 0 0}
 #tunnels h3.ping{padding-left:34px;background:var(--ping) no-repeat 8px center/19px,var(--title)}
 #tunnels h3.server{padding-left:34px;background:var(--server) no-repeat 8px center/19px,var(--title)}
-#tunnels #exploratory{padding-left:34px;background:var(--globe) no-repeat 8px center/19px,var(--title)}
-#tunnels #participating{padding-left:34px;background:var(--share) no-repeat 8px center/19px,var(--title)}
 #tunnels td:not(.rif):not(.rih):not(.rbw){padding:4px}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
+#tunnels #exploratory{padding-left:34px;background:var(--globe) no-repeat 8px center/19px,var(--title)}
+#tunnels #tunnel_defs td:nth-child(even){width:1%;white-space:nowrap;text-align:right}
+#tunnels #tunnel_defs td:nth-child(odd){text-align:left}
+#tunnels #participating{padding-left:34px;background:var(--share) no-repeat 8px center/19px,var(--title)}
 #tunnels img{font-size:0}
 #exploratorytunnels{margin-top:15px}
 .statusnotes{margin:-2px 0 5px 0;padding:10px;font-size:9pt;font-style:italic;text-align:center;border:var(--border_inner);box-shadow:var(--bevel);background:var(--notes)}
