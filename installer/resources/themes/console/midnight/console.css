@@ -518,7 +518,7 @@ div[id^="config_"].main{padding-bottom:14px}
 .news hr{margin:18px -20px 6px}
 .news{margin:-1px 3px 0 212px;padding:6px 20px 10px;min-width:600px;position:relative;z-index:10;text-align:right;font-size:8pt;border:var(--border);background:#000 var(--earth) no-repeat scroll bottom right;background-size:auto 220px}
 .news::before{content:"";display:inline-block;position:absolute;left:0;right:0;top:0;bottom:0;z-index:0;background:rgba(0,0,48,.4);pointer-events:none}
-#news .newscontent{border:var(--border_inner);margin:-11px 0 10px;padding:10px 25px 15px;box-shadow:var(--bevel);background:var(--earth) right -50px bottom -50px no-repeat,linear-gradient(135deg,#000010,#000);background-size:120px auto,100%}
+#news .newscontent{border:var(--border_inner);margin:-11px 0 10px;padding:10px 25px 18px;box-shadow:var(--bevel);background:var(--earth) right -50px bottom -50px no-repeat,linear-gradient(135deg,#000010,#000);background-size:120px auto,100%}
 #news .newscontent,#news #newsStatus,#news #newsDisplay,#news hr{position:relative;z-index:20}
 #newsDisplay a,#graphopts a,#routerinfo a,.graphstat,.graphstat:visited,#routerinformation tr:nth-child(n+2) a:not(#revision){margin:-2px;padding:3px 15px;display:inline-block;line-height:1;color:var(--a);border:var(--border_badge);border-radius:15px;box-shadow:0 0 1px rgba(0,0,0,.8),var(--highlight);background:var(--btn)}
 #newsDisplay a{margin:2px 0 -4px -4px;line-height:1.2}
@@ -539,7 +539,7 @@ div[id^="config_"].main{padding-bottom:14px}
 #news #newsStatus{padding-top:3px;margin-left:-10px}
 #newspage{margin:18px 5px}
 .news p,.newscontent p{margin-top:-5px;font-size:9pt;color:var(--ink);margin-bottom:0}
-.news p:nth-child(n+1),.newscontent p:nth-child(n+1){margin-top:5px}
+.news p:nth-child(n+1),.newscontent p:nth-child(n+1){margin-top:7px}
 #newsStatus,#news #newsDisplay,#news #newsDisplay a,#graphopts a,#routerinfo a{display:inline-block}
 #newsStatus,#news #newsDisplay a{font-size:8pt}
 #newsStatus{float:left;color:var(--ink)}
