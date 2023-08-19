@@ -186,8 +186,7 @@ public class Archive {
 
         int cdpIndex = 0;
 
-        for (Iterator<CDPStatusBlock> i = cdpStatusBlocks.iterator(); i.hasNext();) {
-            CDPStatusBlock cdp = i.next();
+        for (CDPStatusBlock cdp : cdpStatusBlocks) {
 
             s.print(sb);
             s.print(cdpIndex);
@@ -195,9 +194,7 @@ public class Archive {
 
             double value = cdp.value;
 
-            s.println(Double.isNaN(value)
-                    ? "NaN"
-                            : numberFormat.format(value));
+            s.println(Double.isNaN(value) ? "NaN" : numberFormat.format(value));
             s.print(sb);
             s.print(cdpIndex++);
             s.print("].unknown_datapoints = ");
@@ -223,8 +220,8 @@ public class Archive {
             s.println();
             s.println("\t\t<cdp_prep>");
 
-            for (int i = 0; i < cdpStatusBlocks.size(); i++) {
-                cdpStatusBlocks.get(i).toXml(s);
+            for (CDPStatusBlock cdpStatusBlock : cdpStatusBlocks) {
+                cdpStatusBlock.toXml(s);
             }
 
             s.println("\t\t</cdp_prep>");

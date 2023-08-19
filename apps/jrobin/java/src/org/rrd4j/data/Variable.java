@@ -395,13 +395,12 @@ public abstract class Variable {
             double SUMxx = 0.0;
             double lslslope;
 
-            for (int i = 0; i < values.length; i++) {
-                double value = values[i];
+            for (double value : values) {
 
                 if (!Double.isNaN(value)) {
                     cnt++;
 
-                    SUMx += lslstep;
+                    SUMx  += lslstep;
                     SUMxx += lslstep * lslstep;
                     SUMy  += value;
                     SUMxy += lslstep * value;
@@ -438,13 +437,12 @@ public abstract class Variable {
             double lslslope;
             double lslint;
 
-            for (int i = 0; i < values.length; i++) {
-                double value = values[i];
+            for (double value : values) {
 
                 if (!Double.isNaN(value)) {
                     cnt++;
 
-                    SUMx += lslstep;
+                    SUMx  += lslstep;
                     SUMxx += lslstep * lslstep;
                     SUMy  += value;
                     SUMxy += lslstep * value;
@@ -481,13 +479,12 @@ public abstract class Variable {
             double SUMyy = 0.0;
             double lslcorrel;
 
-            for (int i = 0; i < values.length; i++) {
-                double value = values[i];
+            for (double value : values) {
 
                 if (!Double.isNaN(value)) {
                     cnt++;
 
-                    SUMx += lslstep;
+                    SUMx  += lslstep;
                     SUMxx += lslstep * lslstep;
                     SUMy  += value;
                     SUMxy += lslstep * value;
