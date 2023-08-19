@@ -552,7 +552,6 @@ public abstract class RrdBackendFactory implements Closeable {
      * Determines if the header should be validated.
      *
      * @param uri Storage URI
-     * @throws java.io.IOException if header validation fails
      * @return a boolean.
      */
     protected boolean shouldValidateHeader(URI uri) throws IOException {

@@ -14,7 +14,7 @@ public class RrdAllocator {
         super();
     }
 
-    long allocate(long byteCount) throws IOException {
+    long allocate(long byteCount) {
         long pointer = allocationPointer;
         allocationPointer += byteCount;
         return pointer;
