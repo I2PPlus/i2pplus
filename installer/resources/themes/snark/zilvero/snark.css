@@ -606,6 +606,8 @@ td.graphicStatus{background-size:24px auto}
 }
 
 @media (max-width:1200px){
+.magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
+.magnet>*,.trackerLink>*,#torrents #snarkHead th.torrentLink>*{display:none!important}
 .magnetLabel{padding-left:12px;max-width:250px;background-size:11px}
 #torrents .infohash{width:64px}
 #screenlog{font-size:8.5pt}

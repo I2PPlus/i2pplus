@@ -798,6 +798,8 @@ td#bwHelp a{margin-left:2px}
 .configPanel .snarkConfigtitle{font-size:11pt}
 .dirInfoComplete{display:none}
 .fileStatus img[src*="clock"]{margin-top:4px}
+.magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
+.magnet>*,.trackerLink>*,#torrents #snarkHead th.torrentLink>*{display:none!important}
 .knownTracker a,#trackerselect a{display:inline-block;max-width:210px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .percentBarOuter{margin:2px auto}
 .percentBarText,.percentBarOuter{width:100px}
@@ -990,7 +992,6 @@ th.peerCount a img{margin-left:-20px}
 #torrents{margin-bottom:11px}
 #torrents td.torrentDetails img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){width:22px;height:22px}
 #torrents td.torrentDetails img[src$="rateme.svg"]{margin-top:-1px;margin-right:-2px;width:12px;height:12px}
-/*#torrents td.trackerLink img{padding:5px 5px 5px 10px;width:19px;height:19px}*/
 #torrents thead img{margin:1px;max-height:22px}
 #torrents th.graphicStatus img{margin-left:3px}
 #torrents .torrentAction{padding:1px 3px}

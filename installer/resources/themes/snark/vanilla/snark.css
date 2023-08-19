@@ -853,6 +853,8 @@ tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before
 .dirInfo td:first-child::before{min-height:20px}
 .lang_de .trackerhome,.lang_de .trackerannounce,.lang_de .knownTracker a,.lang_pl .trackerhome,.lang_pl .trackerannounce,.lang_pl .knownTracker a{width:180px;max-width:180px}
 .lang_ru .trackerhome,.lang_ru .trackerannounce,.lang_ru .knownTracker a{width:150px;max-width:150px}
+.magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
+.magnet>*,.trackerLink>*,#torrents #snarkHead th.torrentLink>*{display:none!important}
 .magnetLabel{max-width:280px}
 .peerinfo td,.debuginfo td{padding-top:2px;padding-bottom:2px}
 .torrentAction input[type=submit]{padding:10px;background-size:12px,100%,12px}

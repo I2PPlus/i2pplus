@@ -840,6 +840,8 @@ hr.debug{margin:3px 0 -5px;width:100%;display:none;background:#120f35}
 .dirInfo .percentBarText{line-height:1.4}
 .iframed .dirInfo .percentBarText{line-height:1.3}
 .knownTracker a,#trackerselect a{display:inline-block;overflow:hidden;text-overflow:ellipsis;max-width:210px;white-space:nowrap}
+.magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
+.magnet>*,.trackerLink>*,#torrents #snarkHead th.torrentLink>*{display:none!important}
 .magnetLabel{max-width:270px}
 .percentBarText,.percentBarOuter{width:100px}
 .snarkNav{padding-left:24px}

@@ -759,19 +759,21 @@ th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
 }
 
 @media (max-width:1199px){
-.torrentAction input[type=submit]{padding:10px;background-size:12px}
-#actionStopAll,#actionStartAll{padding:10px 17px}
-#snarkInfo{margin-bottom:-9px}
-#commentSection{margin-bottom:0}
-.trackerconfig th{padding-top:5px;padding-bottom:5px}
-#configs td:first-child::before{min-height:30px;content:""}
-.configOption{width:auto}
-.percentBarText{line-height:16px}
-#torrents tfoot tr:first-child{line-height:1}
 .canhide{display:none}
+.configOption{width:auto}
 .info_tracker{padding:0 6px 2px 18px}
-#torrentDisplay{top:39px}
+.magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
+.magnet>*,.trackerLink>*,#torrents #snarkHead th.torrentLink>*{display:none!important}
 .magnetLabel{max-width:240px}
+.percentBarText{line-height:16px}
+.torrentAction input[type=submit]{padding:10px;background-size:12px}
+.trackerconfig th{padding-top:5px;padding-bottom:5px}
+#actionStopAll,#actionStartAll{padding:10px 17px}
+#commentSection{margin-bottom:0}
+#configs td:first-child::before{min-height:30px;content:""}
+#snarkInfo{margin-bottom:-9px}
+#torrentDisplay{top:39px}
+#torrents tfoot tr:first-child{line-height:1}
 }
 
 @media (max-width:1100px){

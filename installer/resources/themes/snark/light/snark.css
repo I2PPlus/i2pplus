@@ -775,6 +775,8 @@ img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;v
 
 @media (max-width:1200px){
 .dirInfoComplete{display:none}
+.magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
+.magnet>*,.trackerLink>*,#torrents #snarkHead th.torrentLink>*{display:none!important}
 .nav_main,.snarkNav:not(.nav_tracker){padding-left:22px}
 .torrentName a{max-width:300px}
 .trackerLink{padding-right:8px}
