@@ -2,6 +2,7 @@
 /* License: AGPLv3 or later */
 
 import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
+import {stickySidebar} from "/js/stickySidebar.js";
 
 function refreshSidebar() {
   "use strict";
@@ -375,6 +376,7 @@ function refreshSidebar() {
 
   if (visible === "visible") {
     xhr.send();
+    stickySidebar();
   } else if (xhr.status !== null) {
     xhr.abort();
   }

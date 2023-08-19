@@ -9,18 +9,28 @@ function stickySidebar() {
   var sbWrap = document.getElementById("sb_wrap");
   var viewportHeight = window.visualViewport.height;
   var viewportWidth = window.visualViewport.width;
+  var sectionToggle = document.querySelector("toggleSection");
 
-  if (sbWrap) {
-    if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight) && viewportWidth > 1500) {
-      sbWrap.style.position = "sticky";
-      sbWrap.style.top = "5px";
-      sbWrap.classList.add("sticky");
-    } else {
-      sbWrap.style.position = null;
-      sbWrap.style.top = null;
-      sbWrap.classList.remove("sticky");
+  function calcHeight() {
+    if (sbWrap) {
+      if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight) && viewportWidth > 1500) {
+        sbWrap.style.position = "sticky";
+        sbWrap.style.top = "5px";
+        sbWrap.classList.add("sticky");
+      } else {
+        sbWrap.style.position = null;
+        sbWrap.style.top = null;
+        sbWrap.classList.remove("sticky");
+      }
     }
   }
+  calcHeight();
+
+  sbWrap.addEventListener("click", function(element) {
+    if (element.target.className === "toggleSection") {
+      calcHeight();
+    }
+  });
 }
 
 export {stickySidebar};
