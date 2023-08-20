@@ -76,6 +76,9 @@ function refreshTorrents() {
     onVisible(filterbar, () => {
       checkFilterBar();
     });
+    if (down || noload) {
+      refreshAll();
+    }
   } else if ((torrents || noload || down)) {
     xhrsnark.open("GET", url);
     xhrsnark.responseType = "document";
