@@ -1100,7 +1100,7 @@ class SummaryBarRenderer {
                    .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
                    .append(" (").append(_t("Current / Maximum")).append(")")
                    .append("\">" +
-                           "<td><a href=\"/tunnelsparticipating\"><b>")
+                           "<td><a href=\"/transit\"><b>")
                    .append(_t("Participating").replace("Participating","Transit"))
                    .append("</b></a></td><td class=digits><span>")
                    .append(partTunnels).append(" / ").append(maxTunnels)
@@ -1152,7 +1152,7 @@ class SummaryBarRenderer {
                .append("<a class=sb_icon id=service href=\"/tunnels#client_tunnels\" title=\"").append(_t("Service")).append(' ').append(_t("tunnels"))
                .append("\"><span><span class=badge>").append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
                .append("</span></span></a>\n")
-               .append("<a class=sb_icon id=transit href=\"/tunnelsparticipating\" title=\"").append(_t("Transit")).append(' ').append(_t("tunnels"))
+               .append("<a class=sb_icon id=transit href=\"/transit\" title=\"").append(_t("Transit")).append(' ').append(_t("tunnels"))
                .append("\"><span><span class=badge>").append(partTunnels).append("</span></span></a>\n")
                .append("<a class=sb_icon id=utility href=\"/tunnels#exploratory\" title=\"").append(_t("Utility")).append(' ').append(_t("tunnels"))
                .append("\"><span><span class=badge>").append(_helper.getInboundTunnels() + _helper.getOutboundTunnels())

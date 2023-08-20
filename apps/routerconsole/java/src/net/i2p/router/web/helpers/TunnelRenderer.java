@@ -150,7 +150,7 @@ class TunnelRenderer {
                 out.write(_t("Fastest Active Transit Tunnels"));
             else
                 out.write(_t("Most Recent Active Transit Tunnels"));
-            out.write("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelsparticipating\">" +
+            out.write("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/transit\">" +
                       _t("Refresh") + "</a></h3>\n");
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
