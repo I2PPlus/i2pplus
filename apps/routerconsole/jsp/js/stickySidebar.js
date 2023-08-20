@@ -25,9 +25,9 @@ function stickySidebar() {
         sbWrap.style.top = null;
         sbWrap.classList.remove("sticky");
       }
-      if (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight) {
-        console.log("Iframe height currently reported as:" + iframe.getBoundingClientRect().height);
-      }
+      //if (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight) {
+      //  console.log("Iframe height currently reported as:" + iframe.getBoundingClientRect().height);
+      //}
     }
   }
   calcHeight();
