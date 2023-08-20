@@ -10,10 +10,13 @@ function stickySidebar() {
   var viewportHeight = window.visualViewport.height;
   var viewportWidth = window.visualViewport.width;
   var sectionToggle = document.querySelector("toggleSection");
+  var iframe = document.querySelector(".embed");
 
   function calcHeight() {
     if (sbWrap) {
-      if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight) && viewportWidth > 1500) {
+//      if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight) && viewportWidth > 1500) {
+      if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight) ||
+          (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight)) {
         sbWrap.style.position = "sticky";
         sbWrap.style.top = "5px";
         sbWrap.classList.add("sticky");
@@ -21,6 +24,9 @@ function stickySidebar() {
         sbWrap.style.position = null;
         sbWrap.style.top = null;
         sbWrap.classList.remove("sticky");
+      }
+      if (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight) {
+        console.log("Iframe height currently reported as:" + iframe.getBoundingClientRect().height);
       }
     }
   }
