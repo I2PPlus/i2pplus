@@ -329,12 +329,12 @@ class SummaryBarRenderer {
         if (_helper.isI2PTunnelRunning()) {
             String tx = _t("Tunnel Manager");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/i2ptunnelmgr\" target=_top title=\"")
+            rbuf.append("<a href=\"/tunnelmanager\" target=_top title=\"")
                 .append(_t("Manage I2P client and server tunnels to access or provide network services"))
                 .append("\">")
                 .append(nbsp(tx))
                 .append("</a>\n")
-                .append("<a class=sb_icon target=_top href=/i2ptunnelmgr title=\"").append(tx)
+                .append("<a class=sb_icon target=_top href=/tunnelmanager title=\"").append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/tunnelmanager.svg></span></a>\n");
             svcs.put(tx, rbuf.toString());
         }

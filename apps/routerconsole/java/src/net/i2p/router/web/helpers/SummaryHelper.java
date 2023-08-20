@@ -799,7 +799,7 @@ public class SummaryHelper extends HelperBase {
         buf.append("<h3 id=sb_localTunnelsHeading");
         if (!link)
             buf.append(" class=unregistered");
-        buf.append("><a href=\"/i2ptunnelmgr\" target=_top title=\"")
+        buf.append("><a href=\"/tunnelmanager\" target=_top title=\"")
            .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
            .append("\">")
            .append(_t("Service Tunnels"))

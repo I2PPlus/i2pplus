@@ -105,7 +105,7 @@ class TunnelRenderer {
                     out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
                               _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
                 else /*if ((!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping"))*/
-                    out.write(" <a href=\"/i2ptunnelmgr\" title=\"" +
+                    out.write(" <a href=\"/tunnelmanager\" title=\"" +
                               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
                 writeGraphLinks(out, in, outPool);
                 out.write(" <a class=\"lsview\" href=\"/netdb?l=1#ls_" + client.toBase32().substring(0,4) + "\">" +
@@ -130,7 +130,7 @@ class TunnelRenderer {
                             out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
                                       _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
                         else
-                            out.write(" <a href=\"/i2ptunnelmgr\" title=\"" +
+                            out.write(" <a href=\"/tunnelmanager\" title=\"" +
                                       _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
                         out.write("</h3>\n");
                         }

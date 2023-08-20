@@ -53,7 +53,7 @@ public class HomeHelper extends HelperBase {
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
-        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "tunnelmanager.svg" + S +
+        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/tunnelmanager" + S + I + "tunnelmanager.svg" + S +
         _x("Webapps") + S + _x("Manage Router webapps") + S + "/configwebapps" + S + I + "webapps.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
@@ -73,7 +73,7 @@ public class HomeHelper extends HelperBase {
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
-        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "tunnelmanager.svg" + S +
+        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/tunnelmanager" + S + I + "tunnelmanager.svg" + S +
         _x("Webapps") + S + _x("Manage Router webapps") + S + "/configwebapps" + S + I + "webapps.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         _x("Wizard") + S + _x("Configuration and bandwidth tester") + S + "/wizard" + S + I + "wizard.svg" + S +
@@ -93,7 +93,7 @@ public class HomeHelper extends HelperBase {
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
-        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "tunnelmanager.svg" + S +
+        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/tunnelmanager" + S + I + "tunnelmanager.svg" + S +
         _x("Webapps") + S + _x("Manage Router webapps") + S + "/configwebapps" + S + I + "webapps.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
@@ -452,7 +452,7 @@ public class HomeHelper extends HelperBase {
                 } else if (url.equals("/torrents")) {
                     if (!pm.isRegistered(PortMapper.SVC_I2PSNARK))
                         continue;
-                } else if (url.equals("/i2ptunnelmgr")) {
+                } else if (url.equals("/i2ptunnelmgr") || url.equals("/tunnelmanager")) {
                     if (!pm.isRegistered(PortMapper.SVC_I2PTUNNEL))
                         continue;
                     // need both webapp and TCG, but we aren't refreshing
