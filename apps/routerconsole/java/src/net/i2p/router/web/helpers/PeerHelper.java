@@ -838,7 +838,7 @@ public class PeerHelper extends HelperBase {
         if (numPeers > 0) {
             buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=");
             if (debugmode) {
-                buf.append("7");
+                buf.append("6");
             } else {
                 buf.append("5");
             }
