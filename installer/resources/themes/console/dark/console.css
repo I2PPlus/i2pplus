@@ -2198,7 +2198,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #newfamily .infohelp{box-shadow:var(--bevel);background:var(--newfamily) no-repeat 15px center/28px,var(--msg)}
 #config_service .infohelp{text-align:left}
 #pluginconfig th:first-child{text-align:center}
-#pluginconfig td:first-child label{margin-left:6px;padding:3px 5px 3px 24px;min-width:100px;display:inline-block;text-align:left;font-weight:700;border-radius:2px 15px 15px 2px;box-shadow:0 0 0 1px #010,0 0 0 2px rgba(0,0,0,.7);background:var(--plugin) no-repeat 5px center/14px,linear-gradient(180deg,#020,#000);background-blend-mode:luminosity}
+#pluginconfig td:first-child label{margin-left:6px;padding:3px 5px 3px 24px;min-width:110px;display:inline-block;line-height:1.4;text-align:left;font-size:90%;font-weight:700;border-radius:2px 15px 15px 2px;box-shadow:0 0 0 1px #010,0 0 0 2px rgba(0,0,0,.7);background:var(--plugin) no-repeat 5px center/14px,linear-gradient(180deg,#020,#000);background-blend-mode:luminosity}
 #installPluginFile td:last-child,#installPluginUrl td:last-child,#newfamily table td:last-child,#joinfamily table td:last-child{padding:10px 5px 10px 10px;width:1%;white-space:nowrap;text-align:right}
 #reseedproxysslhostport,#updateProxyHostPort{columns:500px 2}
 #installPluginUrl form,#installPluginfile form{margin:2px 0 0}
