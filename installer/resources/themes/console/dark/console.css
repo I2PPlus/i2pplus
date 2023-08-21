@@ -713,7 +713,7 @@ td.ipv6{width:1%;max-width:24px}
 #peerdefs td{padding:4px;line-height:1.4;background:repeating-linear-gradient(180deg,#000,#000 1px,#000800 2px,#000800 3px)}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
 #peers #autorefresh{margin-right:4px}
-#peers td:nth-child(n+7) span:not(.left),#peers tfoot td:nth-child(n+7) span:not(.left){min-width:52px;display:inline-block;text-align:right}
+#peers td:nth-child(n+7) span:not(.left),#peers tfoot td:nth-child(n+7) span:not(.left){display:inline-block;text-align:right}
 #peers .caps{width:1%;white-space:nowrap;text-align:center}
 #peers .cells tbody td,#tunnels .cells,#profilelist td:not(.separator),#transportSummary tr:not(.tablefooter) td{box-shadow:var(--highlight);border-right:var(--border_softer)}
 #peers .confignav+h3{margin-top:12px}
