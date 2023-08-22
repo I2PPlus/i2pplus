@@ -28,8 +28,9 @@
 --row_odd:linear-gradient(90deg,#72665f 3px,#e0d9d5 3px);
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tab:linear-gradient(to top,#ffeadf,#cfb6a8);
+--tab_section:linear-gradient(180deg,#fff2e6,#dfd7d1);
+--tab_section_hover:linear-gradient(180deg,#fff7ef,#ddcabb 50%,#c4a38777 50%);
 --th:linear-gradient(180deg,#efefef,#cfc7c2);
---th_config:linear-gradient(180deg,#efefef 51%,#cfc7c2 52%);
 --th_config:linear-gradient(180deg,#f4f2f1,#cfc7c2 50%,#bcb0a9);
 }
 
@@ -401,9 +402,9 @@ textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:
 
 /* panel titles */
 .toggleview,#config,{will-change:transform}
-.toggleview,#tab_config{margin:-1px auto -3px;padding:4px 1px 2px;min-width:300px;display:inline-block;vertical-align:middle;text-shadow:0 0 1px #fff5ef;color:#444039;border:1px solid #111;border-top:0;box-shadow:0 0 2px rgba(77,69,62,.3),var(--highlight);background:linear-gradient(90deg,rgba(0,0,0,0),rgba(255,255,255,.2) 20%,rgba(255,255,255,.2) 80%,rgba(0,0,0,0)),linear-gradient(180deg,#fff7ef 50%,rgba(207,193,181,.6) 50%),repeating-linear-gradient(135deg,#75604e 1px,#a09286 1px,#bfafa2 2px)}
+.toggleview,#tab_config{margin:-1px auto -3px;padding:4px 1px 2px;min-width:300px;display:inline-block;vertical-align:middle;text-shadow:0 0 1px #fff5ef;color:#444039;border:1px solid #111;border-top:0;box-shadow:0 0 2px rgba(77,69,62,.3),var(--highlight);background:var(--tab_section)}
 #tab_config{margin-top:0;padding-top:3px}
-#tab_config:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{background:linear-gradient(180deg,#ffeadf 50%,#cfb6a8 50%)}
+#tab_config:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{background:var(--tab_section_hover)}
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.configPanel .configTitle:focus{margin:0 -11px;padding:5px 8px 5px 29px;display:block;letter-spacing:.15em;text-align:left;text-transform:uppercase;font-size:11pt;font-weight:700;color:#4d2200;border:1px solid #1f1400;border-top:0;border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:var(--snark) no-repeat 8px center,radial-gradient(circle at left bottom,#f9f8f2,#f7f6ee 400px);background-size:18px,100%;background-blend-mode:luminosity}
 .configTitle a{width:100%;display:inline-block}
 .snarkConfig{width:100%;font-size:8pt}
