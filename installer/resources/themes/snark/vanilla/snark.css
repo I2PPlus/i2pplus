@@ -29,7 +29,9 @@
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tab:linear-gradient(to top,#ffeadf,#cfb6a8);
 --tab_section:linear-gradient(180deg,#fff2e6,#dfd7d1);
+--tab_section:var(--th);
 --tab_section_hover:linear-gradient(180deg,#fff7ef,#ddcabb 50%,#c4a38777 50%);
+--tab_section_active:linear-gradient(180deg,#baa397,#e5d2c8);
 --th:linear-gradient(180deg,#efefef,#cfc7c2);
 --th_config:linear-gradient(180deg,#f4f2f1,#cfc7c2 50%,#bcb0a9);
 }
@@ -57,7 +59,6 @@ th,td{padding:4px 2px}
 th{font-size:8pt;color:var(--ink);border-top:var(--border_hard);border-bottom:var(--border_hard)}
 th,th b{line-height:1.2}
 th:first-child{padding-left:3px;text-align:left}
-th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visited:hover,td a:focus,td a:visited:focus{color:#df0067;filter:none}
 td{color:#453221}
 thead,tfoot{font-weight:700;color:#4d2200;background:var(--th)}
 thead a img,thead img{max-height:20px;opacity:.85;filter:saturate(.35);image-rendering:-webkit-optimize-contrast}
@@ -73,6 +74,7 @@ tfoot tr:first-child th{vertical-align:middle;font-weight:700;color:#4d2200}
 .right{text-align:right}
 .iframed .page{padding:0;border:0;box-shadow:none;background:none}
 #commentInfo th a:link,td a:link{word-wrap:break-word;text-decoration:none;font-weight:700;color:#cf0f00}
+th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visited:hover,td a:focus,td a:visited:focus{color:#df0067;filter:none}
 #navbar,#screenlog,#addSection,#createSection,.configPanel{contain:content}
 
 /* top nav */
@@ -250,7 +252,7 @@ td.torrentDetails{padding-left:0}
 .inactive .percentBarOuter{background:repeating-linear-gradient(90deg,#f8f2ec 1px,#f8f2ec 5px,#f2e5d9 6px,#f2e5d9 11px)}
 .inactive .percentBarText{color:#777}
 .inactive .torrentDownloaded .percentBarInner{background:linear-gradient(90deg,rgba(128,32,0,.15) 20px,rgba(128,128,0,.15) 50px,rgba(0,128,0,.15)),linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1)),rgba(255,255,255,.5)}
-.percentBarComplete{padding:1px 0;display:inline-block;min-width:84px;line-height:1.4;text-align:center;border-radius:20px;box-shadow:inset 0 0 0 1px #b5a79b,inset 0 2px 2px 2px rgba(239,231,224,.3),inset 0 -2px 2px 2px rgba(236,200,172,.3);background:linear-gradient(180deg,#fffbef,#dfd7d1)}
+.percentBarComplete{padding:3px 0 2px;display:inline-block;min-width:84px;line-height:1.5;vertical-align:middle;text-align:center;border-radius:20px;box-shadow:inset 0 0 0 1px #b5a79b,inset 0 2px 2px 2px rgba(239,231,224,.3),inset 0 -2px 2px 2px rgba(236,200,172,.3);background:linear-gradient(180deg,#fffbef,#dfd7d1)}
 .percentBarInner,.uploaded{height:16px;vertical-align:middle;border:0;border-right:1px solid #998;border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,247,239,.8) 50%,rgba(207,193,181,.9) 50%,rgba(207,193,181,1))}
 .percentBarOuter{margin:0;display:inline-block;border:1px solid #998;border-radius:1px;box-shadow:var(--highlight),inset 2px 2px 3px rgba(0,0,0,.4);background:repeating-linear-gradient(135deg,#fff7ef 1px,#fff7ef 5px,#efdfd1 6px,#efdfd1 11px);opacity:1}
 .percentBarOuter,.percentBarText{width:84px;vertical-align:middle}
@@ -404,8 +406,8 @@ textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:
 
 /* panel titles */
 .toggleview,#config,{will-change:transform}
-.toggleview,#tab_config{margin:-1px auto -3px;padding:4px 1px 2px;min-width:300px;display:inline-block;vertical-align:middle;text-shadow:0 0 1px #fff5ef;color:#444039;border:1px solid #111;border-top:0;box-shadow:0 0 2px rgba(77,69,62,.3),var(--highlight);background:var(--tab_section)}
-#tab_config{margin-top:0;padding-top:3px}
+.toggleview,#tab_config{margin:-1px auto -3px;padding:5px 1px 4px;min-width:360px;display:inline-block;vertical-align:middle;text-shadow:0 0 1px #fff5ef;color:#444039;border:1px solid #111;border-top:0;box-shadow:0 0 2px rgba(77,69,62,.3),var(--highlight);background:var(--tab_section)}
+#tab_config{margin-top:0;padding:3px 1px}
 #tab_config:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{background:var(--tab_section_hover)}
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.configPanel .configTitle:focus{margin:0 -11px;padding:5px 8px 5px 29px;display:block;letter-spacing:.15em;text-align:left;text-transform:uppercase;font-size:11pt;font-weight:700;color:#4d2200;border:1px solid #1f1400;border-top:0;border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:var(--snark) no-repeat 8px center,radial-gradient(circle at left bottom,#f9f8f2,#f7f6ee 400px);background-size:18px,100%;background-blend-mode:luminosity}
 .configTitle a{width:100%;display:inline-block}
@@ -413,7 +415,7 @@ textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:
 .toggleview img,.snarkConfig .configTitle img{display:none;opacity:0}
 .toggleview:hover::after,.toggleview:focus::after,#tab_config a:hover::after,#tab_config a:focus::after{mix-blend-mode:normal}
 .toggleview,#tab_config{font-size:0}
-.toggleview::after,#tab_config a::after{/*margin:-1px 0 1px;*/padding:2px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:1px solid #a39375;border-radius:50%;background:var(--add) no-repeat center center,var(--tab);background-size:18px,100%;opacity:1;content:"";mix-blend-mode:luminosity}
+.toggleview::after,#tab_config a::after{padding:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:1px solid #a39375;border-radius:50%;background:var(--add) no-repeat center center,var(--tab);background-size:18px,100%;opacity:1;content:"";mix-blend-mode:luminosity}
 .toggleview:hover::after{mix-blend-mode:normal}
 .toggleview[for="toggle_files"]::after{box-shadow:none;background:var(--folder) no-repeat center center,var(--tab);background-size:14px,100%}
 .toggleview[for="toggle_comments"]::after{box-shadow:none;background:var(--chat) no-repeat center center,var(--tab);background-size:14px,100%}
@@ -421,7 +423,7 @@ textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:
 .iframed .configPanel .configTitle,.iframed .configPanel .configTitle:hover,.iframed .configPanel .configTitle:active{border-radius:0}
 #tab_newtorrent::after{box-shadow:inset 0 0 0 2px #ffeadf;background:var(--wizard) no-repeat center center,var(--tab);background-size:18px,100%}
 #tab_config a::after{box-shadow:inset 0 0 0 2px #ffeadf;background:var(--configure) no-repeat center center,var(--tab);background-size:16px,100%}
-#tab_config:active,.toggleview:active{box-shadow:0 0 2px #4d453e,inset 0 0 0 1px #f0e9e4,inset 2px 2px 3px 1px #59513b;background:linear-gradient(180deg,#e5d2c8,#baa397)}
+#tab_config:active,.toggleview:active{box-shadow:0 0 2px #4d453e,inset 0 0 0 1px #f0e9e4,inset 2px 2px 3px 1px #59513b;background:var(--tab_section_active)}
 #tab_config a:active::after,.toggleview:active::after{transform:rotate(90deg) scale(.9);transition:ease transform .15s}
 input:checked+.toggleview:active::after{transform:rotate(-90deg) scale(.9);transition:ease transform .15s}
 
@@ -983,6 +985,7 @@ thead a img,thead img{max-height:21px}
 .nopeers.incomplete .peerCount b::before{border-color:transparent #aaa transparent transparent}
 .nopeers.incomplete .peerCount b{text-shadow:0 1px 1px #aaa;background:#aaa}
 .nopeers .peerCount b,.nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#333;text-shadow:0 1px 1px #aaa}
+.percentBarComplete{padding:3px 0 1px}
 .percentDownloaded{pointer-events:none;}
 .rowOdd td,.rowEven td{padding-top:4px;padding-bottom:4px}
 .snarkNav{padding:4px 8px 4px 26px;background-size:16px,100%,100%;background-position:8px center,center center,center center}
@@ -1014,7 +1017,7 @@ thead a img,thead img{max-height:22px}
 .nav_main,.nav_main:hover,.nav_main:focus,.nav_main:active,.nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum:active{padding-left:27px}
 .nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker:active{padding-left:25px;background-position:7px center,center center,center center}
 .peerinfo code{margin:1px 4px 1px 1px}
-.percentBarComplete{padding:2px 0 1px}
+.percentBarComplete{margin-top: -1px;padding:2px 0 1px;line-height:1.4}
 .RateUp{padding-right:15px}
 .snarkAddInfo,.configPanel td,.snarkNewTorrent td,.configPanel th,.configPanel td,.snarkNewTorrent td,select,select option,input,textarea,input[name="nofilter_dataDir"]{font-size:10pt}
 .snarkFileName:hover a{padding-right:0}
