@@ -335,8 +335,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .magnet a,.magnet a img,.trackerLink a,.trackerLink a img{margin:0;filter:none}
 .magnet img,.trackerLink img{opacity:.8}
 .magnet a:hover img,.trackerLink a:hover img,#linkswitch:hover{opacity:1;filter:none;transform:scale(1.2)}
-.magnet,.trackerLink{width:1%;text-align:center}
-.magnetlink,.torrentlink{margin:0 3px;padding:4px;display:inline-block;box-shadow:0 0 0 1px #101,inset 0 0 0 1px rgba(96,32,96,.3);background:var(--link)}
+.magnet,th.torrentLink,.trackerLink{width:1%;text-align:right!important}
+.magnetlink,.torrentlink{display:inline-block}
 .magnetLabel{display:inline-block;vertical-align:middle;font-style:italic;color:#aaa;-webkit-text-stroke:1px rgba(160,160,160,.3)}
 .mainsection .ParentDir{padding:0 3px;border:var(--border_hard);text-align:left;background:linear-gradient(180deg,#101,#170017)}
 .mainsection .ParentDir:hover,.mainsection .dirInfo tbody tr:first-child:hover td{background:linear-gradient(180deg,#58165e,#4a0d56)}
@@ -363,8 +363,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .torrentDetails img{border-radius:2px}
 .torrentDetails img,.dirInfo td:first-child img:not(.thumb){margin:-2px 1px;padding:4px;width:20px;height:20px;border:1px solid transparent}
 .torrentDetails{padding-left:0;padding-right:0;width:1%;white-space:nowrap;text-align:center;font-weight:700}
-.torrentlink:hover,.torrentlink:focus,.magnetlink:hover,.magnetlink:focus{box-shadow:0 0 0 1px #101,inset 0 0 0 1px rgba(255,96,0,.5)}
-
+.torrentLink{padding:0;text-align:right}
 #enableInOrder{margin-left:4px;margin-right:8px}
 #mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.resources/icons/video.png) no-repeat 8px center/16px,var(--th)}
 #mediaContainer th.audio{padding:8px 5px 8px 30px;background:url(/i2psnark/.resources/icons/music.png) no-repeat 8px center/16px,var(--th)}
@@ -1252,7 +1251,7 @@ body,button,code,input,input[type=reset],input[type=submit],input[name="nofilter
 textarea,#commentInfo textarea{font-size:9.5pt}
 td.graphicStatus img{height:24px}
 td.torrentDetails img,.dirInfo td:first-child img:not(.thumb){margin-top:-2px;margin-bottom:-2px;width:22px;height:22px}
-td.trackerLink img{padding:4px;width:18px;height:18px}
+td.magnet img,td.trackerLink img{width:20px;height:20px}
 th.graphicStatus{padding-left:4px}
 th,td,.choked,.unchoked{letter-spacing:0}
 .configOption::after{height:40px}
